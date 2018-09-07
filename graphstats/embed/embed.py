@@ -32,8 +32,6 @@ class Embedding:
 		Parameters:
 		-----------
 			graph: object
-			 Either array-like, (n_vertices, n_vertices) numpy matrix,
-			 or an object of type networkx.Graph.
 
 		Returns:
 		--------
@@ -42,4 +40,7 @@ class Embedding:
 			Y: array-like, shape (n_vertices, k)
 				if graph is not symmetric, the  right estimated latent
 				positions. if graph is symmetric, "None".
+
+		See Also:
+			import_graph, sklearn.decomposition.TruncatedSVD
 		"""
