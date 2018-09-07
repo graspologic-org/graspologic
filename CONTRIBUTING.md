@@ -48,6 +48,11 @@ We recommended that your contribution complies with the following rules before y
 -  At least one paragraph of narrative documentation with links to
    references in the literature (with PDF links when possible) and
    the example.
+-  Run an autoformatter, such as `yapf`
+  ```bash
+  $ pip install yapf
+  $ yapf path/to/module.py
+  ```
 -  No flake8 warnings, check with:
   ```bash
   $ pip install flake8
