@@ -26,6 +26,7 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
 
     Returns:
     --------
+    A dictionary containing the following:
         optimal_d: {int}
          the optimal number of embedding dimensions.
         optimal_lq: {float}
