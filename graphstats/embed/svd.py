@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# embed.py
+# svd.py
 # Created by Eric Bridgeford on 2018-09-07.
 # Email: ebridge2@jhu.edu
 # Copyright (c) 2018. All rights reserved.
