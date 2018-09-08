@@ -21,7 +21,7 @@ class Embedding:
 	def __init__(self, method=selectSVD, *args, **kwargs):
 		"""
 		A class for embedding a graph.
-		
+
 		Inputs:
 		-------
 			method: object (default selectSVD)
@@ -71,3 +71,4 @@ class Embedding:
 		See Also:
 			import_graph
 		"""
+		# call reduce_dim from your respective embedding technique.
