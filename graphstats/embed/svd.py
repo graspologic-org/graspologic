@@ -41,7 +41,8 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
         TruncatedSVD
     """
 
-    return (optimal_d, optimal_lq, ds, lqs)
+    return {'optimal_d': optimal_d, 'optimal_lq': optimal_lq,
+            'ds': ds, 'lqs': lqs}
 
 def SelectSVD(TruncatedSVD):
     """
