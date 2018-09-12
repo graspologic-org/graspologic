@@ -10,11 +10,11 @@ from sklearn.decomposition import TruncatedSVD
 
 def selectDim(X, method=TruncatedSVD, *args, **kwargs):
     """
-    A function to use Ghodsi et al. for dimensionality selection with
-    the SVD.
+    A function that uses likelihood profiling to determine the optimal 
+    number of embedding dimensions.
 
-    Inputs:
-    -------
+    Parameters
+    ----------
         X: {array-like}, shape (n_samples, n_features)
          The input data to select the optimal embedding dimensionality for.
         method: object (default TruncatedSVD)
@@ -24,8 +24,8 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
          options taken by the desired embedding method as key-worded
          arguments.
 
-    Returns:
-    --------
+    Returns
+    -------
     A dictionary containing the following:
         optimal_d: {int}
          the optimal number of embedding dimensions.
@@ -37,9 +37,17 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
         lqs: {array-like}, shape (n_components)
          the likelihood profile for all possible embedding dimensions
          ds.
-    See Also:
-    ---------
+
+    See Also
+    --------
         TruncatedSVD
+
+    References:
+    -----------
+    Automatic dimensionality selection from the scree plot via the use of 
+    profile likelihood
+    Zhu, Mu and Ghodsi, Ali. CSDA 2006. 
+    https://www.sciencedirect.com/science/article/pii/S0167947305002343
     """
 
     return {'optimal_d': optimal_d, 'optimal_lq': optimal_lq,
@@ -62,6 +70,7 @@ def SelectSVD(TruncatedSVD):
     a "naive" algorithm that uses ARPACK as an eigensolver on (X * X.T) or
     (X.T * X), whichever is more efficient.
     Read more in the :ref:`User Guide <LSA>`.
+
     Parameters
     ----------
     n_components : int, default = 2
@@ -86,6 +95,7 @@ def SelectSVD(TruncatedSVD):
         Tolerance for ARPACK. 0 means machine precision. Ignored by randomized
         SVD solver.
     Attributes
+
     ----------
     components_ : array, shape (n_components, n_features)
     explained_variance_ : array, shape (n_components,)
@@ -97,21 +107,7 @@ def SelectSVD(TruncatedSVD):
         The singular values corresponding to each of the selected components.
         The singular values are equal to the 2-norms of the ``n_components``
         variables in the lower-dimensional space.
-    Examples
-    --------
-    >>> from sklearn.decomposition import TruncatedSVD
-    >>> from sklearn.random_projection import sparse_random_matrix
-    >>> X = sparse_random_matrix(100, 100, density=0.01, random_state=42)
-    >>> svd = TruncatedSVD(n_components=5, n_iter=7, random_state=42)
-    >>> svd.fit(X)  # doctest: +NORMALIZE_WHITESPACE
-    TruncatedSVD(algorithm='randomized', n_components=5, n_iter=7,
-            random_state=42, tol=0.0)
-    >>> print(svd.explained_variance_ratio_)  # doctest: +ELLIPSIS
-    [0.0606... 0.0584... 0.0497... 0.0434... 0.0372...]
-    >>> print(svd.explained_variance_ratio_.sum())  # doctest: +ELLIPSIS
-    0.249...
-    >>> print(svd.singular_values_)  # doctest: +ELLIPSIS
-    [2.5841... 2.5245... 2.3201... 2.1753... 2.0443...]
+
     See also
     --------
     sklearn.decomposition.PCA, sklearn.decomposition.TruncatedSVD
@@ -120,6 +116,12 @@ def SelectSVD(TruncatedSVD):
     Finding structure with randomness: Stochastic algorithms for constructing
     approximate matrix decompositions
     Halko, et al., 2009 (arXiv:909) http://arxiv.org/pdf/0909.4061
+
+    Automatic dimensionality selection from the scree plot via the use of 
+    profile likelihood
+    Zhu, Mu and Ghodsi, Ali. CSDA 2006. 
+    https://www.sciencedirect.com/science/article/pii/S0167947305002343
+
     Notes
     -----
     SVD suffers from a problem called "sign indeterminacy", which means the

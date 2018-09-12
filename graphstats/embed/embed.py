@@ -10,7 +10,7 @@ import networkx as nx
 from abc import abstractmethod
 from graphstats.utils import import_graph
 from sklearn.decomposition import TruncatedSVD
-from graphstats.embed import selectSVD
+from graphstats.embed.svd import SelectSVD
 
 
 class Embedding:
@@ -22,8 +22,8 @@ class Embedding:
 		"""
 		A class for embedding a graph.
 
-		Inputs:
-		-------
+		Parameters
+		----------
 			method: object (default selectSVD)
 			args: list, optional (default None)
 			 options taken by the desired embedding method as arguments.
@@ -31,21 +31,21 @@ class Embedding:
 			 options taken by the desired embedding method as key-worded
 			 arguments.
 
-		See Also:
-		---------
-			graphstats.select.dim
+		See Also
+		--------
+			graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
 		"""
 		self.method=method
 		self.args = args
 		self.kwargs = kwargs
 
-	def reduce_dim(self, A):
+	def _reduce_dim(self, A):
 		"""
 		A function that reduces the dimensionality of an adjacency matrix
 		using the desired embedding method.
 
-		Parameters:
-		-----------
+		Parameters
+		----------
 			A: {array-like}, shape (n_vertices, n_vertices)
 			 the adjacency matrix to embed.
 		"""
@@ -56,19 +56,22 @@ class Embedding:
 		"""
 		A method for embedding.
 
-		Parameters:
-		-----------
+		Parameters
+		----------
 			graph: object
 
-		Returns:
-		--------
+		Returns
+		-------
 			X: array-like, shape (n_vertices, k)
 				the estimated latent positions.
 			Y: array-like, shape (n_vertices, k)
 				if graph is not symmetric, the  right estimated latent
 				positions. if graph is symmetric, "None".
 
-		See Also:
+		See Also
+		--------
 			import_graph
 		"""
-		# call reduce_dim from your respective embedding technique.
+		# call self._reduce_dim(A) from your respective embedding technique.
+		# import graph(s) to an adjacency matrix using import_graph function
+		# here

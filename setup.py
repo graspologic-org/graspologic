@@ -45,6 +45,6 @@ setup(
     packages=[
               PACKAGE_NAME,
     ],
-    install_requires=['numpy', 'networkx', 'sklearn', 'abc'],
+    install_requires=['numpy', 'networkx', 'sklearn'],
     url='https://github.com/neurodata/pygrapstats',
 )
