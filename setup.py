@@ -1,6 +1,10 @@
 import os
 import sys
-from setuptools import setup
+from setuptools import setup, find_packages
+from setuptools.command.install import install
+from subprocess import check_output, call
+from sys import platform
+
 
 PACKAGE_NAME = 'graphstats'
 DESCRIPTION = 'A set of python modules for graph statistics'
@@ -43,4 +47,6 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7'
-    ])
+    ],
+    packages=find_packages()
+)

@@ -9,37 +9,69 @@ import numpy as np
 import networkx as nx
 from abc import abstractmethod
 from graphstats.utils import import_graph
+from sklearn.decomposition import TruncatedSVD
+from svd import SelectSVD
+
 
 class Embedding:
 	"""
 	A base class for embedding methods.
 	"""
 
-	def __init__(self, k=None):
+	def __init__(self, method=selectSVD, *args, **kwargs):
 		"""
-		Inputs:
-			k: int, optional (default None)
-			 the desired number of embedding dimensions. If unspecified, uses
-			 the optimal k as determined by graphstats.dimselect.
+		A class for embedding a graph.
+
+		Parameters
+		----------
+			method: object (default selectSVD)
+			args: list, optional (default None)
+			 options taken by the desired embedding method as arguments.
+			kwargs: dict, optional (default None)
+			 options taken by the desired embedding method as key-worded
+			 arguments.
+
+		See Also
+		--------
+			graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
 		"""
-		self.k = k
+		self.method=method
+		self.args = args
+		self.kwargs = kwargs
+
+	def _reduce_dim(self, A):
+		"""
+		A function that reduces the dimensionality of an adjacency matrix
+		using the desired embedding method.
+
+		Parameters
+		----------
+			A: {array-like}, shape (n_vertices, n_vertices)
+			 the adjacency matrix to embed.
+		"""
+		self.method(A, *args, **kwargs)
 
 	@abstractmethod
 	def embed(self, graph):
 		"""
 		A method for embedding.
 
-		Parameters:
-		-----------
+		Parameters
+		----------
 			graph: object
-			 Either array-like, (n_vertices, n_vertices) numpy matrix,
-			 or an object of type networkx.Graph.
 
-		Returns:
-		--------
+		Returns
+		-------
 			X: array-like, shape (n_vertices, k)
 				the estimated latent positions.
 			Y: array-like, shape (n_vertices, k)
 				if graph is not symmetric, the  right estimated latent
 				positions. if graph is symmetric, "None".
+
+		See Also
+		--------
+			import_graph
 		"""
+		# call self._reduce_dim(A) from your respective embedding technique.
+		# import graph(s) to an adjacency matrix using import_graph function
+		# here
