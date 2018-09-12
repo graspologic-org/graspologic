@@ -10,7 +10,7 @@ import networkx as nx
 from abc import abstractmethod
 from graphstats.utils import import_graph
 from sklearn.decomposition import TruncatedSVD
-from graphstats.embed.svd import SelectSVD
+from svd import SelectSVD
 
 
 class Embedding:

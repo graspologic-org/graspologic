@@ -34,6 +34,5 @@ def import_graph(graph):
 	elif (type(graph) is np.ndarray):
 		pass
 	else:
-		raise TypeError("""You have not passed an object 
-			of class `nx.Graph` or `np.ndarray`""")
+		raise TypeError
 	return graph

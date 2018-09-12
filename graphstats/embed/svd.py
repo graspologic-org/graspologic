@@ -53,7 +53,8 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
     return {'optimal_d': optimal_d, 'optimal_lq': optimal_lq,
             'ds': ds, 'lqs': lqs}
 
-def SelectSVD(TruncatedSVD):
+
+class SelectSVD(TruncatedSVD):
     """
     A class that wraps Scikit-Learn's sklearn.decomposition.SVD method.
 
