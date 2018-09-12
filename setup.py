@@ -2,7 +2,7 @@
 
 import os
 import sys
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 from subprocess import check_output, call
 from sys import platform
@@ -42,9 +42,7 @@ setup(
       ' processing and analysis of graphs with specialized graph statistical algorithms.'),
     author='Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand, Brandon Duderstadt, Vivek Gopalakrishnan',
     author_email="ebridge2@jhu.edu",
-    packages=[
-              PACKAGE_NAME,
-    ],
+    packages=find_packages(),
     install_requires=['numpy', 'networkx', 'sklearn'],
     url='https://github.com/neurodata/pygrapstats',
 )

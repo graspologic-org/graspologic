@@ -29,4 +29,11 @@ def import_graph(graph):
 	---------
 		networkx.Graph, numpy.array
 	"""
+	if type(graph) is nx.Graph:
+		graph = nx.to_numpy_matrix(graph)
+	elif (type(graph) is np.ndarray):
+		pass
+	else:
+		raise TypeError("""You have not passed an object 
+			of class `nx.Graph` or `np.ndarray`""")
 	return graph
