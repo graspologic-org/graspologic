@@ -6,7 +6,6 @@ from graphstats.utils import utils as gus
 
 
 class TestInput(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         # simple ERxN graph
@@ -31,6 +30,3 @@ class TestInput(unittest.TestCase):
             gus.import_graph(a)
         with self.assertRaises(TypeError):
             gus.import_graph(None)
-
-if __name__ == '__main__':
-    unittest.main()
