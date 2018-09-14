@@ -13,65 +13,63 @@ from sklearn.decomposition import TruncatedSVD
 from svd import SelectSVD
 
 
-class Embedding:
-	"""
-	A base class for embedding methods.
-	"""
+class BaseEmbedder:
+    """
+    A base class for embedding a graph.
 
-	def __init__(self, method=selectSVD, *args, **kwargs):
-		"""
-		A class for embedding a graph.
+    Parameters
+    ----------
+    method: object (default selectSVD)
+    args: list, optional (default None)
+        options taken by the desired embedding method as arguments.
+    kwargs: dict, optional (default None)
+        options taken by the desired embedding method as key-worded
+        arguments.
 
-		Parameters
-		----------
-			method: object (default selectSVD)
-			args: list, optional (default None)
-			 options taken by the desired embedding method as arguments.
-			kwargs: dict, optional (default None)
-			 options taken by the desired embedding method as key-worded
-			 arguments.
+    See Also
+    --------
+    graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
+    """
 
-		See Also
-		--------
-			graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
-		"""
-		self.method=method
-		self.args = args
-		self.kwargs = kwargs
+    def __init__(self, method=selectSVD, *args, **kwargs):
+        self.method = method
+        self.args = args
+        self.kwargs = kwargs
 
-	def _reduce_dim(self, A):
-		"""
-		A function that reduces the dimensionality of an adjacency matrix
-		using the desired embedding method.
+    def _reduce_dim(self, A):
+        """
+        A function that reduces the dimensionality of an adjacency matrix
+        using the desired embedding method.
 
-		Parameters
-		----------
-			A: {array-like}, shape (n_vertices, n_vertices)
-			 the adjacency matrix to embed.
-		"""
-		self.method(A, *args, **kwargs)
+        Parameters
+        ----------
+        A: {array-like}, shape (n_vertices, n_vertices)
+            the adjacency matrix to embed.
+        """
+        self.method(A, *args, **kwargs)
 
-	@abstractmethod
-	def embed(self, graph):
-		"""
-		A method for embedding.
+    @abstractmethod
+    def embed(self, graph):
+        """
+        A method for embedding.
 
-		Parameters
-		----------
-			graph: object
+        Parameters
+        ----------
+        graph: object
 
-		Returns
-		-------
-			X: array-like, shape (n_vertices, k)
-				the estimated latent positions.
-			Y: array-like, shape (n_vertices, k)
-				if graph is not symmetric, the  right estimated latent
-				positions. if graph is symmetric, "None".
+        Returns
+        -------
+        X: array-like, shape (n_vertices, k)
+            the estimated latent positions.
+        Y: array-like, shape (n_vertices, k)
+            if graph is not symmetric, the  right estimated latent
+            positions. if graph is symmetric, "None".
 
-		See Also
-		--------
-			import_graph
-		"""
-		# call self._reduce_dim(A) from your respective embedding technique.
-		# import graph(s) to an adjacency matrix using import_graph function
-		# here
+        See Also
+        --------
+        import_graph
+        """
+        # call self._reduce_dim(A) from your respective embedding technique.
+        # import graph(s) to an adjacency matrix using import_graph function
+        # here
+        pass
