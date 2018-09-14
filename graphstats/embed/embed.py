@@ -49,7 +49,7 @@ class BaseEmbedder:
         self.method(A, *args, **kwargs)
 
     @abstractmethod
-    def embed(self, graph):
+    def fit(self, graph):
         """
         A method for embedding.
 
