@@ -7,10 +7,12 @@ from graphstats.simulations.simulations import er_nm
 
 class TestBaseEmbed(unittest.TestCase):
     
-    @classmethod
-    def setUpClass(cls):
-        # base embedding
-        cls.embed = BaseEmbed()
-
     def test_baseembed_er(self):
-        self.embed.fit(er_nm(10, 20))
+        k = 4
+        embed = BaseEmbed(k=k)
+        n = 10
+        M = 20
+        A = er_nm(n, M) + 5
+        embed._reduce_dim(A)
+        self.assertEqual(embed.lpm.X.shape, (n, k))
+        self.assertTrue(embed.lpm.is_symmetric())

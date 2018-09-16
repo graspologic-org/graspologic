@@ -6,6 +6,7 @@
 # Copyright (c) 2018. All rights reserved.
 
 from sklearn.decomposition import TruncatedSVD
+from scipy.sparse.linalg import svds
 
 
 def selectDim(X, method=TruncatedSVD, *args, **kwargs):
@@ -52,6 +53,33 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
     return {'optimal_d': optimal_d, 'optimal_lq': optimal_lq,
             'ds': ds, 'lqs': lqs}
 
+def selectSVD(X, k=None):
+    """
+    A function for performing svd using ZG2, X = U S Vt.
+
+    Parameters:
+        X: array-like, shape (n_samples, n_features)
+            the data to perform svd on.
+        k: int
+            the number of dimensions to embed into. Should have
+            k < min(X.shape).
+
+    Returns:
+        U: array-like, shape (n_samples, k)
+            the left singular vectors.
+        V: array-like, shape (n_samples, k)
+            the right singular vectors.
+        s: array-like, shape (k)
+            the singular values, as a 1d array.
+    """
+    if (k is None):
+        selectDim(X)
+    if k > min(X.shape):
+        msg = "k is {}, but min(X.shape) is {}."
+        msg = msg.format(k, min(X.shape))
+        raise ValueError(msg)
+    U, s, Vt = svds(X, k=k)
+    return(U, Vt.T, s)
 
 class SelectSVD(TruncatedSVD):
     """

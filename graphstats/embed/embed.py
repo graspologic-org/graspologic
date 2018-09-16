@@ -8,9 +8,9 @@
 import numpy as np
 import networkx as nx
 from abc import abstractmethod
-from graphstats.utils import import_graph
-from sklearn.decomposition import TruncatedSVD
-from .svd import SelectSVD
+from graphstats.utils import import_graph, is_symmetric
+from .svd import selectSVD
+from .lpm import LatentPosition
 
 
 class BaseEmbed:
@@ -20,6 +20,7 @@ class BaseEmbed:
     Parameters
     ----------
     method: object (default selectSVD)
+        the method to use for dimensionality reduction.
     args: list, optional (default None)
         options taken by the desired embedding method as arguments.
     kwargs: dict, optional (default None)
@@ -30,8 +31,7 @@ class BaseEmbed:
     --------
     graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
     """
-
-    def __init__(self, method=SelectSVD, *args, **kwargs):
+    def __init__(self, method=selectSVD, *args, **kwargs):
         self.method = method
         self.args = args
         self.kwargs = kwargs
@@ -46,7 +46,10 @@ class BaseEmbed:
         A: {array-like}, shape (n_vertices, n_vertices)
             the adjacency matrix to embed.
         """
-        self.method(A, *args, **kwargs)
+        X, Y, s = self.method(A, *self.args, **self.kwargs)
+        if is_symmetric(A):
+            Y = X.copy()
+        self.lpm = LatentPosition(X, Y, s)
 
     @abstractmethod
     def fit(self, graph):

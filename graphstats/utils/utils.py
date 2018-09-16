@@ -37,6 +37,12 @@ def import_graph(graph):
 		raise TypeError
 	return graph
 
+def is_symmetric(X):
+	if np.array_equal(X, X.T):
+		return True
+	else:
+		return False
+
 def symmetrize(graph, method='triu'):
 	"""
 	A function for forcing symmetry upon a graph.
