@@ -13,11 +13,10 @@ from sklearn.decomposition import TruncatedSVD
 from svd import SelectSVD
 
 
-class Embedding:
+class BaseEmbed:
 	"""
 	A base class for embedding methods.
 	"""
-
 	def __init__(self, method=selectSVD, *args, **kwargs):
 		"""
 		A class for embedding a graph.
@@ -52,7 +51,7 @@ class Embedding:
 		self.method(A, *args, **kwargs)
 
 	@abstractmethod
-	def embed(self, graph):
+	def fit(self, graph):
 		"""
 		A method for embedding.
 

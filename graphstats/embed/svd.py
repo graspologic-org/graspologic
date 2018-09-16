@@ -7,7 +7,6 @@
 
 from sklearn.decomposition import TruncatedSVD
 
-
 def selectDim(X, method=TruncatedSVD, *args, **kwargs):
     """
     A function that uses likelihood profiling to determine the optimal 
