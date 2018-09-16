@@ -2,7 +2,7 @@ import numpy as np
 from graphstats.utils import import_graph, symmetrize
 
 
-def zi_nm(n, M, wt=1, **kwargs):
+def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
     """
     A function for simulating from the zi(n, M, params) model, a graph
     with n vertices and M edges and edge-weight function wt.
@@ -14,10 +14,15 @@ def zi_nm(n, M, wt=1, **kwargs):
         M: int
             the number of edges, a value between
             1 and n(n-1)/2.
+        directed: boolean
+            whether or not the graph will be directed.
+        loops: boolean
+            whether to allow self-loops
         wt: object
             a weight function for each of the edges, taking
             only a size argument. This weight function will
-            be randomly assigned for selected edges.
+            be randomly assigned for selected edges. If 1,
+            graph produced is binary.
         kwargs: dictionary
             optional arguments for parameters that can be passed
             to weight function wt.
@@ -30,34 +35,61 @@ def zi_nm(n, M, wt=1, **kwargs):
         raise TypeError("M is not of type int.")
     if type(n) is not int:
         raise TypeError("n is not of type int.")
-    if M > n*(n-1)/2:
-        msg = "You have passed a number of edges, {}, exceeding n(n-1)/2, {}."
-        msg = msg.format(int(M), int(n^2))
+    # check for loopiness
+    if loops:
+        er_msg = "n^2"
+        Mmax = n**2
+    else:
+        # get all indices including diagonal
+        er_msg = "n(n-1)"
+        Mmax = n*(n-1)
+
+    A = np.zeros((n, n))
+    # check if directedness is desired
+    if directed:
+        if loops:
+            # use all of the indices
+            idx = np.where(~A)
+        else:
+            # use only the off-diagonal indices
+            idx = np.where(~np.eye(n, dtype=bool))
+    else:
+        # use upper-triangle indices, and ignore diagonal according
+        # to loops argument
+        idx = np.triu_indices(n, k=(loops=False))
+        er_msg += "/2"
+        Mmax = Mmax/2
+
+    # check whether M exceeds the maximum possible M
+    if M > Mmax:
+        msg = "You have passed a number of edges, {}, exceeding {}, {}."
+        msg = msg.format(int(M), er_msg, Mmax)
         raise ValueError(msg)
     if M < 0:
         msg = "You have passed a number of edges, {}, less than 0."
         msg = msg.format(msg)
         raise ValueError(msg)
-    A = np.zeros((n, n))
+
+    # check weight function
     if wt != 1:
         if not callable(wt):
             raise TypeError("You have not passed a function for wt.")
         # optionally, consider weighted model
         wt = wt(size=M, **kwargs)
-    # select M edges from upper right triangle of A, ignoring
-    # diagonal, to assign connectedness
-    # get triu in 1d coordinates by ravelling
-    triu = np.ravel_multi_index(np.triu_indices(A.shape[0], k=1), dims=A.shape)
+
+    # get idx in 1d coordinates by ravelling
+    triu = np.ravel_multi_index(idx, dims=A.shape)
     # choose M of them
     idx = np.random.choice(triu, size=M, replace=False)
     # unravel back
     triu = np.unravel_index(idx, dims=A.shape)
     # assign wt function value to each of the selected edges
     np.put(A, idx, wt)
-    return(symmetrize(A))
+    if not directed:
+        A = symmetrize(A)
+    return(A)
 
-
-def zi_np(n, M, wt='ER', **kwargs):
+def zi_np(n, M, wt='ER', directed=False, **kwargs):
     """
     A function for simulating from the zi(n, M, params) model, a graph
     with n vertices and M edges and edge-weight function wt.
@@ -69,6 +101,8 @@ def zi_np(n, M, wt='ER', **kwargs):
         M: int
             the number of edges, a value between
             1 and n(n-1)/2.
+        directed: boolean
+            whether or not the graph will be directed.
         wt: object
             a weight function for each of the edges, taking
             only a size argument. This weight function will
@@ -81,10 +115,12 @@ def zi_np(n, M, wt='ER', **kwargs):
     -------
         A: array-like, shape (n, n)
     """
+    # type checking
     if type(p) is not float:
         raise TypeError("p is not of type float.")
     if type(n) is not int:
         raise TypeError("n is not of type int.")
+    # check p
     if p < 0:
         msg = "You have passed a probability, {}, less than 0."
         msg = msg.format(float(p))
@@ -93,28 +129,64 @@ def zi_np(n, M, wt='ER', **kwargs):
         msg = "You have passed a probability, {}, greater than 1."
         msg = msg.format(float(p))
         raise ValueError(msg)
+
+    # check for loopiness
+    if loops:
+        er_msg = "n^2"
+        Mmax = n**2
+    else:
+        # get all indices including diagonal
+        er_msg = "n(n-1)"
+        Mmax = n*(n-1)
+
     A = np.zeros((n, n))
+    # check if directedness is desired
+    if directed:
+        if loops:
+            # use all of the indices
+            idx = np.where(~A)
+        else:
+            # use only the off-diagonal indices
+            idx = np.where(~np.eye(n, dtype=bool))
+    else:
+        # use upper-triangle indices, and ignore diagonal according
+        # to loops argument
+        idx = np.triu_indices(n, k=(loops=False))
+        er_msg += "/2"
+        Mmax = Mmax/2
+
+    if M > Mmax:
+        msg = "You have passed a number of edges, {}, exceeding {}, {}."
+        msg = msg.format(int(M), er_msg, Mmax)
+        raise ValueError(msg)
+    if M < 0:
+        msg = "You have passed a number of edges, {}, less than 0."
+        msg = msg.format(msg)
+        raise ValueError(msg)
+    if wt != 1:
+        if not callable(wt):
+            raise TypeError("You have not passed a function for wt.")
+        # optionally, consider weighted model
+        wt = wt(size=M, **kwargs)
+
     # select uniformly btwn 0 and 1; retain edges with pchosen < p
     # get triu in 1d coordinates by ravelling
-    triu = np.ravel_multi_index(np.triu_indices(A.shape[0], k=1), dims=A.shape)
+    triu = np.ravel_multi_index(idx, dims=A.shape)
     pchoice = np.random.uniform(size=len(triu))
     # connected with probability p
     triu = triu[pchoice < p]
     # unravel back
-    if wt != 'ER':
-        if not callable(wt):
-            raise TypeError("You have not passed a function for wt.")
-        # optionally, consider weighted model
-        wt = wt(size=len(triu), **kwargs)
     triu = np.unravel_index(idx, dims=A.shape)
     # assign wt function value to each of the selected edges
     np.put(A, idx, wt)
-    return(symmetrize(A))
+    if not directed:
+        A = symmetrize(A)
+    return(A)
 
 
 def er_nm(n, M):
     """
-    A function for simulating from the ER(n, M) model, a graph
+    A function for simulating from the ER(n, M) model, a simple graph
     with n vertices and M edges.
 
     Paramaters
@@ -133,11 +205,11 @@ def er_nm(n, M):
     -------
         A: array-like, shape (n, n)
     """
-    return(zi_nm(n, M, wt='ER'))
+    return(zi_nm(n, M, wt=1))
 
 def er_np(n, M, wt=None):
     """
-    A function for simulating from the ER(n, p) model, a graph
+    A function for simulating from the ER(n, p) model, a simple graph
     with n vertices and a probability p of edges being connected.
 
     Paramaters
@@ -156,4 +228,4 @@ def er_np(n, M, wt=None):
     -------
         A: array-like, shape (n, n)
     """
-    return(zi_np(n, p, wt='ER'))
+    return(zi_np(n, p, wt=1))
