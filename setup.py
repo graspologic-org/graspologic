@@ -15,7 +15,7 @@ AUTHOR_EMAIL = 'ebridge2@jhu.edu'
 URL = 'https://github.com/neurodata/pygrapstats'
 MINIMUM_PYTHON_VERSION = 3, 4  # Minimum of Python 3.4
 
-REQUIRED_PACKAGES = ['networkx>=2.1', 'numpy>=1.8.1', 'scikit-learn>=0.19.1']
+REQUIRED_PACKAGES = ['networkx>=2.1', 'numpy>=1.8.1', 'scikit-learn>=0.19.1', 'scipy>=1.1.0']
 VERSION = '0.0.1'
 
 
