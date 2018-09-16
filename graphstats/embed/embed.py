@@ -10,10 +10,10 @@ import networkx as nx
 from abc import abstractmethod
 from graphstats.utils import import_graph
 from sklearn.decomposition import TruncatedSVD
-from svd import SelectSVD
+from .svd import SelectSVD
 
 
-class BaseEmbedder:
+class BaseEmbed:
     """
     A base class for embedding a graph.
 
@@ -31,7 +31,7 @@ class BaseEmbedder:
     graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
     """
 
-    def __init__(self, method=selectSVD, *args, **kwargs):
+    def __init__(self, method=SelectSVD, *args, **kwargs):
         self.method = method
         self.args = args
         self.kwargs = kwargs

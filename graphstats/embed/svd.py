@@ -28,7 +28,7 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
     -------
     A dictionary containing the following:
         optimal_d: {int}
-         the optimal number of embedding dimensions.
+         the optmial number of embedding dimensions.
         optimal_lq: {float}
          the likelihood of the optimal number of embedding dimensions.
         ds: {array-like}, shape (n_components)
@@ -49,7 +49,6 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
     Zhu, Mu and Ghodsi, Ali. CSDA 2006. 
     https://www.sciencedirect.com/science/article/pii/S0167947305002343
     """
-
     return {'optimal_d': optimal_d, 'optimal_lq': optimal_lq,
             'ds': ds, 'lqs': lqs}
 
