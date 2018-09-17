@@ -35,8 +35,11 @@ def import_graph(graph):
     elif (type(graph) is np.ndarray):
         if not np.issubdtype(graph.dtype, np.floating):
             graph = graph.astype(np.float)
-        else:
-            pass
+        
+        if len(graph.shape) != 2:
+            raise ValueError('Matrix has improper number of dimensions')
+        elif graph.shape[0] != graph.shape[1]:
+            raise ValueError('Matrix is not square')
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
