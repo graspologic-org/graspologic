@@ -29,39 +29,6 @@ def import_graph(graph):
 	--------
 		networkx.Graph, numpy.array
 	"""
-<<<<<<< HEAD
-	if type(graph) is nx.Graph:
-		graph = nx.to_numpy_matrix(graph)
-	elif (type(graph) is np.ndarray):
-		pass
-	else:
-		raise TypeError
-	return graph
-
-def check_square(adj_mat):
-	"""
-	Function to ensure adjacency matrix is square
-
-	Parameters:
-	----------
-		adj_mat: numpy matrix
-
-	Raises:
-	------
-	ValueError
-		If the matrix is not square or has more than 2 dimensions
-	"""
-	# Believe this is unnecessary based on import func 
-	# if type(adj_mat) != np.ndarray:
-	# 	raise TypeError
-
-	shape = adj_mat.shape
-	if len(adj_mat.shape) != 2:
-		raise ValueError('Matrix has improper number of dimensions')
-	elif adj_mat[0] != adj_mat[1]:
-		raise ValueError('Matrix is not square')
-	
-=======
     if type(graph) is nx.Graph:
         graph = nx.to_numpy_matrix(graph)
     elif (type(graph) is np.ndarray):
@@ -113,4 +80,3 @@ def symmetrize(graph, method='triu'):
     # A = A + A' - diag(A)
     graph = graph + graph.T - np.diag(graph)
     return (graph)
->>>>>>> eb830a19dcb0b654d64d31d0f04e9ea24e14b10a
