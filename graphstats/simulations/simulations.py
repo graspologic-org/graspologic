@@ -9,6 +9,41 @@ import numpy as np
 from graphstats.utils import import_graph, symmetrize
 
 
+def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs):
+    """
+    A function for simulating from a weighted sbm.
+
+    Paramaters
+    ----------
+        n: list of int, shape (n_communities)
+            the number of vertices in each community. Communities
+            are assigned n[0], n[1], ...
+        P: array-like, shape (n_communities, n_communities)
+            the probability of an edge between each of the communities,
+            where P[i, j] indicates the 
+        directed: boolean
+            whether or not the graph will be directed.
+        loops: boolean
+            whether to allow self-loops for vertices.
+        Wt: object or array-like, shape (n_communities, n_communities)
+            + if Wt is an object, a weight function to use globally over
+            the sbm for assigning weights. 1 indicates to produce a binary
+            graph.
+            + if Wt is an array-like, a weight function for each of
+            the edge communities. Wt[i, j] corresponds to the weight function
+            between communities i and j. If the entry is a function, should
+            accept an argument for size. An entry of Wt[i, j] = 1 will produce a
+            binary subgraph over the i, j community.
+        Wtargs: dictionary or array-like, shape (n_communities, n_communities) 
+            
+
+    Returns
+    -------
+        A: array-like, shape (n, n)
+            the adjacency matrix.
+    """
+
+
 def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
     """
     A function for simulating from the zi(n, M, params) model, a graph
