@@ -8,69 +8,71 @@
 import numpy as np
 import networkx as nx
 from abc import abstractmethod
-from graphstats.utils import import_graph
-from sklearn.decomposition import TruncatedSVD
-from svd import SelectSVD
+from graphstats.utils import import_graph, is_symmetric
+from .svd import selectSVD
+from .lpm import LatentPosition
 
 
 class BaseEmbed:
-	"""
-	A base class for embedding methods.
-	"""
-	def __init__(self, method=selectSVD, *args, **kwargs):
-		"""
-		A class for embedding a graph.
+    """
+    A base class for embedding a graph.
 
-		Parameters
-		----------
-			method: object (default selectSVD)
-			args: list, optional (default None)
-			 options taken by the desired embedding method as arguments.
-			kwargs: dict, optional (default None)
-			 options taken by the desired embedding method as key-worded
-			 arguments.
+    Parameters
+    ----------
+    method: object (default selectSVD)
+        the method to use for dimensionality reduction.
+    args: list, optional (default None)
+        options taken by the desired embedding method as arguments.
+    kwargs: dict, optional (default None)
+        options taken by the desired embedding method as key-worded
+        arguments.
 
-		See Also
-		--------
-			graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
-		"""
-		self.method=method
-		self.args = args
-		self.kwargs = kwargs
+    See Also
+    --------
+    graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
+    """
 
-	def _reduce_dim(self, A):
-		"""
-		A function that reduces the dimensionality of an adjacency matrix
-		using the desired embedding method.
+    def __init__(self, method=selectSVD, *args, **kwargs):
+        self.method = method
+        self.args = args
+        self.kwargs = kwargs
 
-		Parameters
-		----------
-			A: {array-like}, shape (n_vertices, n_vertices)
-			 the adjacency matrix to embed.
-		"""
-		self.method(A, *args, **kwargs)
+    def _reduce_dim(self, A):
+        """
+        A function that reduces the dimensionality of an adjacency matrix
+        using the desired embedding method.
 
-	@abstractmethod
-	def fit(self, graph):
-		"""
-		A method for embedding.
+        Parameters
+        ----------
+        A: {array-like}, shape (n_vertices, n_vertices)
+            the adjacency matrix to embed.
+        """
+        X, Y, s = self.method(A, *self.args, **self.kwargs)
+        if is_symmetric(A):
+            Y = X.copy()
+        self.lpm = LatentPosition(X, Y, s)
 
-		Parameters
-		----------
-			graph: object
+    @abstractmethod
+    def fit(self, graph):
+        """
+        A method for embedding.
 
-		Returns
-		-------
-			X: array-like, shape (n_vertices, k)
-				the estimated latent positions.
-			Y: array-like, shape (n_vertices, k)
-				if graph is not symmetric, the  right estimated latent
-				positions. if graph is symmetric, "None".
+        Parameters
+        ----------
+        graph: object
 
-		See Also
-		--------
-			import_graph
-		"""
-		# call self._reduce_dim(A) from your respective embedding technique.
-		# import graph(s) to an adjacency matrix using import_graph function
-		# here
+        Returns
+        -------
+        lpm : LatentPosition object
+            Contains X (the estimated latent positions), Y (same as X if input is
+            undirected graph, or right estimated positions if directed graph), and d.
+
+        See Also
+        --------
+        import_graph, LatentPosition
+        """
+        # call self._reduce_dim(A) from your respective embedding technique.
+        # import graph(s) to an adjacency matrix using import_graph function
+        # here
+
+        return self.lpm
