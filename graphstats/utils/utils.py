@@ -32,7 +32,10 @@ def import_graph(graph):
     if type(graph) is nx.Graph:
         graph = nx.to_numpy_matrix(graph)
     elif (type(graph) is np.ndarray):
-        pass
+        if len(graph.shape) != 2:
+            raise ValueError('Matrix has improper number of dimensions')
+        elif graph.shape[0] != graph.shape[1]:
+            raise ValueError('Matrix is not square')
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))

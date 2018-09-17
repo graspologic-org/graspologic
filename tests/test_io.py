@@ -30,3 +30,11 @@ class TestInput(unittest.TestCase):
             gus.import_graph(a)
         with self.assertRaises(TypeError):
             gus.import_graph(None)
+
+    def test_nonsquare(self):
+        non_square = np.hstack((self.A, self.A))
+        with self.assertRaises(ValueError):
+            gus.import_graph(non_square)
+
+if __name__ == '__main__':
+    unittest.main()
