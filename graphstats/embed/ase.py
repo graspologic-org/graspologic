@@ -8,6 +8,7 @@
 from embed import BaseEmbed
 from utils import import_graph, check_square
 from svd import SelectSVD
+from sklearn.decomposition import TruncatedSVD
 import numpy as np 
 
 class ASEEmbedder(BaseEmbed):
