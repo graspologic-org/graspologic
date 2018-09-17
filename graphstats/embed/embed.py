@@ -31,6 +31,7 @@ class BaseEmbed:
     --------
     graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
     """
+
     def __init__(self, method=selectSVD, *args, **kwargs):
         self.method = method
         self.args = args
@@ -62,17 +63,16 @@ class BaseEmbed:
 
         Returns
         -------
-        X: array-like, shape (n_vertices, k)
-            the estimated latent positions.
-        Y: array-like, shape (n_vertices, k)
-            if graph is not symmetric, the  right estimated latent
-            positions. if graph is symmetric, "None".
+        lpm : LatentPosition object
+            Contains X (the estimated latent positions), Y (same as X if input is
+            undirected graph, or right estimated positions if directed graph), and d.
 
         See Also
         --------
-        import_graph
+        import_graph, LatentPosition
         """
         # call self._reduce_dim(A) from your respective embedding technique.
         # import graph(s) to an adjacency matrix using import_graph function
         # here
-        pass
+
+        return self.lpm

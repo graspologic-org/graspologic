@@ -11,30 +11,32 @@ import networkx as nx
 
 def import_graph(graph):
     """
-    A function for reading a graph and returning a shared
-    data type. Makes IO cleaner and easier.
+	A function for reading a graph and returning a shared
+	data type. Makes IO cleaner and easier.
 
-    Parameters:
-    -----------
-        graph: object
-         Either array-like, (n_vertices, n_vertices) numpy matrix,
-         or an object of type networkx.Graph.
+	Parameters
+	----------
+    graph: object
+        Either array-like, (n_vertices, n_vertices) numpy matrix,
+        or an object of type networkx.Graph.
 
-    Returns:
-    --------
-        graph: array-like, shape (n_vertices, n_vertices)
-         A graph.
-         
-    See Also:
-    ---------
-        networkx.Graph, numpy.array
-    """
+	Returns
+	-------
+    graph: array-like, shape (n_vertices, n_vertices)
+        A graph.
+		 
+	See Also
+	--------
+		networkx.Graph, numpy.array
+	"""
     if type(graph) is nx.Graph:
         graph = nx.to_numpy_matrix(graph)
     elif (type(graph) is np.ndarray):
         pass
     else:
-        raise TypeError
+        msg = "Input must be networkx.Graph or np.array, not {}.".format(
+            type(graph))
+        raise TypeError(msg)
     return graph
 
 def is_symmetric(X):
@@ -75,7 +77,7 @@ def symmetrize(graph, method='triu'):
     elif method is 'tril':
         graph = np.tril(graph)
     elif method is 'avg':
-        graph = (np.triu(graph) + np.tril(graph))/2
+        graph = (np.triu(graph) + np.tril(graph)) / 2
     else:
         msg = "You have not passed a valid parameter for the method."
         raise ValueError(msg)
