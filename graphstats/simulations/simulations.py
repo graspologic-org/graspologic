@@ -167,18 +167,19 @@ def zi_np(n, p, wt=1, directed=False, loops=False, **kwargs):
         er_msg += "/2"
         Mmax = Mmax/2
 
-    if wt != 1:
-        if not callable(wt):
-            raise TypeError("You have not passed a function for wt.")
-        # optionally, consider weighted model
-        wt = wt(size=M, **kwargs)
-
     # select uniformly btwn 0 and 1; retain edges with pchosen < p
     # get triu in 1d coordinates by ravelling
     triu = np.ravel_multi_index(idx, dims=A.shape)
     pchoice = np.random.uniform(size=len(triu))
     # connected with probability p
     triu = triu[pchoice < p]
+
+    if wt != 1:
+        if not callable(wt):
+            raise TypeError("You have not passed a function for wt.")
+        # optionally, consider weighted model
+        wt = wt(size=len(triu), **kwargs)
+
     # unravel back
     triu = np.unravel_index(triu, dims=A.shape)
     # assign wt function value to each of the selected edges
