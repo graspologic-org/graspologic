@@ -9,6 +9,11 @@ import numpy as np
 from graphstats.utils import import_graph, symmetrize
 
 
+def cartprod(*arrays):
+     N = len(arrays)
+     return np.transpose(np.meshgrid(*arrays, indexing='ij'), 
+                      np.roll(np.arange(N + 1), -1)).reshape(-1, N)
+
 def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
     """
     A function for simulating from a weighted sbm.
@@ -60,17 +65,18 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
     K = len(n)  # the number of communities
     counter = 0
     # get a list of community indices
+    cmties = []
     for i in range(0, K):
         cmties.append(range(counter, counter + n[i]))
-        counter += 1
+        counter += n[i]
     if type(P) != np.ndarray:
         raise TypeError("P is not an ndarray.")
     if P.shape != (K, K):
         er_msg = "P is not a square, len(n) x len(n) matrix. P of shape {}"
         er_msg = er_msg.format(P.shape)
         raise ValueError(er_msg)
-    if (not directed) and P != P.T:
-        raise ValueError("Specified undirected, but P suggests otherwise.")
+    if (not directed) and np.any(P != P.T):
+        raise ValueError("Specified undirected, but P is directed.")
     if type(Wt) == np.ndarray:
         if Wt.shape != (K, K):
             er_msg = "Wt is not a square, len(n) x len(n) matrix."
@@ -98,22 +104,26 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
         for j in jrange:
             wt = Wt[i, j]; wtargs = Wtargs[i, j]; p = P[i, j]
             # identify submatrix for community i, j
-            smtx = np.zeros((sum(n), sum(n)))
-            smtx[cmties[i], cmties[j]] = True
-            idx = np.where(smtx)
+            # cartesian product to identify edges for community i,j pair
+            cprod = cartprod(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
-            triu = np.ravel_multi_index(idx, dims=A.shape)
-            # choose M of them
-            triu = np.random.choice(triu, size=M, replace=False)
-            # unravel back
-            triu = np.unravel_index(triu, dims=A.shape)
+            triu = np.ravel_multi_index((cprod[:,0], cprod[:,1]), dims=A.shape)
+            pchoice = np.random.uniform(size=len(triu))
+            # connected with probability p
+            triu = triu[pchoice < p]
             if type(wt) is not int:
                 if not callable(wt):
                     raise TypeError("You have not passed a function for wt.")
                 wt = wt(size=len(triu), **wtargs)
+            triu = np.unravel_index(triu, dims=A.shape)
             A[triu] = wt
     if not loops:
         A = A - np.diag(np.diag(A))
+    if not directed:
+        A = symmetrize(A)
+    return(A)
+    if not loops:
+        A = remove_loops(A)
     if not directed:
         A = symmetrize(A)
     return(A)

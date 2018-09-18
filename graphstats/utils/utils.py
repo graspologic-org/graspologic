@@ -70,6 +70,7 @@ def symmetrize(graph, method='triu'):
     Returns
     -------
         graph: array-like, shape(n_vertices, n_vertices)
+            the graph with asymmetries removed.
     """
     graph = import_graph(graph)
     if method is 'triu':
@@ -84,3 +85,22 @@ def symmetrize(graph, method='triu'):
     # A = A + A' - diag(A)
     graph = graph + graph.T - np.diag(np.diag(graph))
     return(graph)
+
+def remove_loops(graph):
+    """
+    A function to remove loops from a graph.
+
+    Parameters
+    ----------
+        graph: object
+            Either array-like, (n_vertices, n_vertices) numpy matrix,
+            or an object of type networkx.Graph.
+
+    Returns
+    -------
+        graph: array-like, shape(n_vertices, n_vertices)
+            the graph with self-loops (edges between the same node) removed.
+    """
+    graph = import_graph(graph)
+    graph = graph - np.diag(np.diag(graph))
+    pass
