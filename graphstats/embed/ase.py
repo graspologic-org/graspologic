@@ -8,7 +8,7 @@
 from graphstats.embed.embed import BaseEmbed
 from graphstats.utils import import_graph
 
-class ASEEmbedder(BaseEmbed):
+class ASEEmbed(BaseEmbed):
     """
     Class for computing the adjacency spectral embedding of a graph 
     """
@@ -22,8 +22,8 @@ class ASEEmbedder(BaseEmbed):
             n_components: int, optional (defaults None) 
                 Number of embedding dimensions. If unspecified, uses graphstats.dimselect
         """ 
-
-        super.__init__(k=k,)
+        self.k = k
+        super().__init__(k=k)
     
     def fit(self, graph):
         A = import_graph(graph)
