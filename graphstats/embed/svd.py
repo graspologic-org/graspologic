@@ -49,6 +49,8 @@ def selectDim(X, method=TruncatedSVD, *args, **kwargs):
     Zhu, Mu and Ghodsi, Ali. CSDA 2006. 
     https://www.sciencedirect.com/science/article/pii/S0167947305002343
     """
+    raise NotImplementedError()
+
     return {
         'optimal_d': optimal_d,
         'optimal_lq': optimal_lq,
