@@ -298,7 +298,7 @@ class Test_WSBM(unittest.TestCase):
     def setUpClass(cls):
         # 60 vertex graph w one community having 20 and another
         # w 40 vertices
-        cls.n = [20, 40, 60]
+        cls.n = [40, 50, 60]
         cls.vcount = np.cumsum(cls.n)
         # define non-symmetric probability matrix as uneven
         cls.Pns = np.vstack(([0.6, 0.2, 0.3], [0.3, 0.4, 0.2], [0.2, 0.8, 0.1]))
@@ -307,6 +307,7 @@ class Test_WSBM(unittest.TestCase):
         cls.Psy = symmetrize(cls.Psy)
         
     def test_simple_sbm(self):
+        np.random.seed(12345)
         A = weighted_sbm(self.n, self.Psy)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
