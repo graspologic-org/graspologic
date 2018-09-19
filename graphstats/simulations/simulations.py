@@ -128,6 +128,36 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
         A = symmetrize(A)
     return(A)
 
+def binary_sbm(n, P, directed=False, loops=False):
+    """
+    A function for simulating from a simple sbm.
+
+    Paramaters
+    ----------
+        n: list of int, shape (n_communities)
+            the number of vertices in each community. Communities
+            are assigned n[0], n[1], ...
+        P: array-like, shape (n_communities, n_communities)
+            the probability of an edge between each of the communities,
+            where P[i, j] indicates the probability of a connection
+            between edges in communities [i, j]. 0 < P[i, j] < 1
+            for all i, j.
+        directed: boolean
+            whether or not the graph will be directed.
+        loops: boolean
+            whether to allow self-loops for vertices.
+            + if Wt is an array-like, a weight function for each of
+            the edge communities. Wt[i, j] corresponds to the weight function
+            between communities i and j. If the entry is a function, should
+            accept an argument for size. An entry of Wt[i, j] = 1 will produce a
+            binary subgraph over the i, j community.
+
+    Returns
+    -------
+        A: array-like, shape (n, n)
+            the adjacency matrix.
+    """
+    return(weighted_sbm(n, P, directed=directed, loops=loops))
 
 def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
     """
