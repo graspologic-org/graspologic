@@ -77,6 +77,12 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
         raise ValueError(er_msg)
     if (not directed) and np.any(P != P.T):
         raise ValueError("Specified undirected, but P is directed.")
+    if (not directed) and isinstance(Wt, np.ndarray):
+        if np.any(Wt != Wt.T):
+            raise ValueError("Specified undirected, but Wt is directed.")
+    if (not directed) and isinstance(Wtargs, np.ndarray):
+        if np.any(Wtargs != Wtargs.T):
+            raise ValueError("Specified undirected, but Wtargs is directed.")
     if type(Wt) == np.ndarray:
         if Wt.shape != (K, K):
             er_msg = "Wt is not a square, len(n) x len(n) matrix."

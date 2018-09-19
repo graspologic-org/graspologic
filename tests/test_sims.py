@@ -356,6 +356,8 @@ class Test_WSBM(unittest.TestCase):
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
 
+    # below are the expectations of the estimators for the relevant weight
+    # functions we exhaustively test
     def exp_normal(self, x):
         return({'loc': np.mean(x), 'scale': np.std(x)})
 
@@ -368,7 +370,7 @@ class Test_WSBM(unittest.TestCase):
     def exp_unif(self, x):
         return({'low': np.min(x), 'high': np.max(x)})
 
-    def test_weighted_sbm_multiwt_undirected_loopless(self):
+    def test_weighted_sbm_multiwt_directed_loopless(self):
         np.random.seed(12345)
         Wt = np.vstack(([np.random.normal, np.random.poisson],
             [np.random.exponential, np.random.uniform]))
@@ -396,3 +398,92 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(is_loopless(A))
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
+
+    def test_weighted_sbm_multiwt_undirected_loopless(self):
+        np.random.seed(12345)
+        Wt = np.vstack(([np.random.normal, np.random.poisson],
+            [np.random.poisson, np.random.uniform]))
+        Wtargs = np.vstack(([{'loc': 2, 'scale': 2}, {'lam': 5}],
+            [{'lam': 5}, {'low': 5, 'high': 10}]))
+        check = np.vstack(([self.exp_normal, self.exp_poisson],
+            [self.exp_poisson, self.exp_unif]))
+        A = weighted_sbm(self.n, self.Psy, Wt=Wt, directed=False, Wtargs=Wtargs)
+        for i in range(0, len(self.n)):
+            for j in range(0, len(self.n)):
+                irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
+                jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
+
+                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
+                    (self.vcount[j] - self.n[j]):self.vcount[j]]
+                if (i == j):
+                    block = remove_diagonal(block)
+                self.assertTrue(math.isclose(np.mean(block != 0),
+                    self.Psy[i, j], abs_tol=0.02))
+                fit = check[i, j](block[block != 0])
+                for k, v in fit.items():
+                    self.assertTrue(math.isclose(v, Wtargs[i, j][k],
+                        abs_tol=0.2))
+        self.assertTrue(is_symmetric(A))
+        self.assertTrue(is_loopless(A))
+        # check dimensions
+        self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
+
+    def test_weighted_sbm_multiwt_directed_loopy(self):
+        np.random.seed(12345)
+        Wt = np.vstack(([np.random.normal, np.random.poisson],
+            [np.random.exponential, np.random.uniform]))
+        Wtargs = np.vstack(([{'loc': 2, 'scale': 2}, {'lam': 5}],
+            [{'scale': 2}, {'low': 5, 'high': 10}]))
+        check = np.vstack(([self.exp_normal, self.exp_poisson],
+            [self.exp_exp, self.exp_unif]))
+        A = weighted_sbm(self.n, self.Psy, Wt=Wt, directed=True, loops=True,
+            Wtargs=Wtargs)
+        for i in range(0, len(self.n)):
+            for j in range(0, len(self.n)):
+                irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
+                jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
+
+                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
+                    (self.vcount[j] - self.n[j]):self.vcount[j]]
+                self.assertTrue(math.isclose(np.mean(block != 0),
+                    self.Psy[i, j], abs_tol=0.02))
+                fit = check[i, j](block[block != 0])
+                for k, v in fit.items():
+                    self.assertTrue(math.isclose(v, Wtargs[i, j][k],
+                        abs_tol=0.2))
+        self.assertFalse(is_symmetric(A))
+        self.assertFalse(is_loopless(A))
+        # check dimensions
+        self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
+
+    def test_weighted_sbm_multiwt_undirected_loopy(self):
+        np.random.seed(12345)
+        Wt = np.vstack(([np.random.normal, np.random.poisson],
+            [np.random.poisson, np.random.uniform]))
+        Wtargs = np.vstack(([{'loc': 2, 'scale': 2}, {'lam': 5}],
+            [{'lam': 5}, {'low': 5, 'high': 10}]))
+        check = np.vstack(([self.exp_normal, self.exp_poisson],
+            [self.exp_poisson, self.exp_unif]))
+        A = weighted_sbm(self.n, self.Psy, Wt=Wt, directed=False, loops=True,
+            Wtargs=Wtargs)
+        for i in range(0, len(self.n)):
+            for j in range(0, len(self.n)):
+                irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
+                jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
+
+                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
+                    (self.vcount[j] - self.n[j]):self.vcount[j]]
+                self.assertTrue(math.isclose(np.mean(block != 0),
+                    self.Psy[i, j], abs_tol=0.02))
+                fit = check[i, j](block[block != 0])
+                for k, v in fit.items():
+                    self.assertTrue(math.isclose(v, Wtargs[i, j][k],
+                        abs_tol=0.2))
+        self.assertTrue(is_symmetric(A))
+        self.assertFalse(is_loopless(A))
+        # check dimensions
+        self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
