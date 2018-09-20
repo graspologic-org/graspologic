@@ -30,7 +30,7 @@ def import_graph(graph):
 		networkx.Graph, numpy.array
 	"""
     if type(graph) is nx.Graph:
-        graph = nx.to_numpy_matrix(graph)
+        graph = nx.to_numpy_array(graph)
     elif (type(graph) is np.ndarray):
         pass
     else:
@@ -39,17 +39,20 @@ def import_graph(graph):
         raise TypeError(msg)
     return graph
 
+
 def is_symmetric(X):
     if np.array_equal(X, X.T):
         return True
     else:
         return False
 
+
 def is_loopless(X):
     if np.any(np.diag(X) != 0):
         return False
     else:
         return True
+
 
 def symmetrize(graph, method='triu'):
     """
@@ -84,7 +87,8 @@ def symmetrize(graph, method='triu'):
         raise ValueError(msg)
     # A = A + A' - diag(A)
     graph = graph + graph.T - np.diag(np.diag(graph))
-    return(graph)
+    return (graph)
+
 
 def remove_loops(graph):
     """
@@ -103,4 +107,4 @@ def remove_loops(graph):
     """
     graph = import_graph(graph)
     graph = graph - np.diag(np.diag(graph))
-    pass
+    return (graph)
