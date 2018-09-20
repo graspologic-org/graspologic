@@ -71,7 +71,6 @@ class OmnibusEmbed(BaseEmbed):
     :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
     using adjacency spectral embedding.
 
-
     Parameters
     ----------
     method: object (default selectSVD)
@@ -92,20 +91,20 @@ class OmnibusEmbed(BaseEmbed):
 
     def fit(self, graphs):
         """
-		Fit the model with graphs.
+        Fit the model with graphs.
 
-		Parameters
-		----------
+        Parameters
+        ----------
         graphs : list of graphs
             List of array-like, (n_vertices, n_vertices), or list of 
             networkx.Graph.
 
-		Returns
-		-------
+        Returns
+        -------
         lpm : LatentPosition object
             Contains X (the estimated latent positions), Y (same as X if input is
             undirected graph, or right estimated positions if directed graph), and d.
-		"""
+        """
         # Convert input to np.arrays
         graphs = list(map(import_graph, graphs))
 
