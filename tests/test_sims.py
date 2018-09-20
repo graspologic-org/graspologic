@@ -37,8 +37,8 @@ class Test_ER(unittest.TestCase):
         # symmetric, so summing will give us twice the ecount of
         # the full adjacency matrix
         dind = remove_diagonal(A)
-        self.assertTrue(math.isclose(dind.sum()/float(len(dind)),
-            self.p, abs_tol=0.02))
+        self.assertTrue(np.isclose(dind.sum()/float(len(dind)),
+            self.p, atol=0.02))
         self.assertTrue(A.shape == (self.n, self.n))
 
 
@@ -65,10 +65,10 @@ class Test_ZINM(unittest.TestCase):
 
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(Awt[Awt != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -92,10 +92,10 @@ class Test_ZINM(unittest.TestCase):
 
         dind = remove_diagonal(Awt)
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(dind[dind != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(dind[dind != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(dind[dind != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(dind[dind != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -120,10 +120,10 @@ class Test_ZINM(unittest.TestCase):
         self.assertTrue((Awt != 0).sum() + np.diag(Awt != 0).sum() == 2*self.M)
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(Awt[Awt != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -147,10 +147,10 @@ class Test_ZINM(unittest.TestCase):
 
         dind = remove_diagonal(Awt)
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(dind[dind != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(dind[dind != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(dind[dind != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(dind[dind != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -182,16 +182,16 @@ class Test_ZINP(unittest.TestCase):
         # check that correct number of edges assigned
         # sum of nonzero entries and correct for the fact that the diagonal
         # is part of the model now
-        self.assertTrue(math.isclose(Abin.sum()/float(np.prod(Abin.shape)),
-            self.p, abs_tol=0.02))
-        self.assertTrue(math.isclose((Awt != 0).sum()/float(np.prod(Awt.shape)),
-            self.p, abs_tol=0.02))
+        self.assertTrue(np.isclose(Abin.sum()/float(np.prod(Abin.shape)),
+            self.p, atol=0.02))
+        self.assertTrue(np.isclose((Awt != 0).sum()/float(np.prod(Awt.shape)),
+            self.p, atol=0.02))
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(Awt[Awt != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -212,16 +212,16 @@ class Test_ZINP(unittest.TestCase):
         # check that correct number of edges assigned
         dind = remove_diagonal(Abin)
         dindwt = remove_diagonal(Awt)
-        self.assertTrue(math.isclose(dind.sum()/float(len(dind)),
-            self.p, abs_tol=0.02))
-        self.assertTrue(math.isclose((dindwt != 0).sum()/float(len(dindwt)),
-            self.p, abs_tol=0.02))
+        self.assertTrue(np.isclose(dind.sum()/float(len(dind)),
+            self.p, atol=0.02))
+        self.assertTrue(np.isclose((dindwt != 0).sum()/float(len(dindwt)),
+            self.p, atol=0.02))
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(dindwt[dindwt != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(dindwt[dindwt != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(dindwt[dindwt != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(dindwt[dindwt != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -240,15 +240,15 @@ class Test_ZINP(unittest.TestCase):
         Awt = zi_np(self.n, self.p, loops=True, wt=self.wt,
             loc=self.mean, scale=self.std)
         # check that correct number of edges assigned
-        self.assertTrue(math.isclose(Abin.sum()/float(np.prod(Abin.shape)),
-            self.p, abs_tol=0.02))
-        self.assertTrue(math.isclose((Awt != 0).sum()/float(np.prod(Awt.shape)),
-            self.p, abs_tol=0.02))
+        self.assertTrue(np.isclose(Abin.sum()/float(np.prod(Abin.shape)),
+            self.p, atol=0.02))
+        self.assertTrue(np.isclose((Awt != 0).sum()/float(np.prod(Awt.shape)),
+            self.p, atol=0.02))
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(Awt[Awt != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -269,16 +269,16 @@ class Test_ZINP(unittest.TestCase):
         # check that correct number of edges assigned
         dind = remove_diagonal(Abin)
         dindwt = remove_diagonal(Awt)
-        self.assertTrue(math.isclose(dind.sum()/float(len(dind)),
-            self.p, abs_tol=0.02))
-        self.assertTrue(math.isclose((dindwt != 0).sum()/float(len(dindwt)),
-            self.p, abs_tol=0.02))
+        self.assertTrue(np.isclose(dind.sum()/float(len(dind)),
+            self.p, atol=0.02))
+        self.assertTrue(np.isclose((dindwt != 0).sum()/float(len(dindwt)),
+            self.p, atol=0.02))
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(math.isclose(np.mean(dindwt[dindwt != 0]), self.mean,
-            abs_tol=0.15))
-        self.assertTrue(math.isclose(np.std(dindwt[dindwt != 0]), self.std,
-            abs_tol=0.15))
+        self.assertTrue(np.isclose(np.mean(dindwt[dindwt != 0]), self.mean,
+            atol=0.15))
+        self.assertTrue(np.isclose(np.std(dindwt[dindwt != 0]), self.std,
+            atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -323,8 +323,8 @@ class Test_WSBM(unittest.TestCase):
                     (vcount[j] - n[j]):vcount[j]]
                 if (i == j):
                     block = remove_diagonal(block)
-                self.assertTrue(math.isclose(np.mean(block),
-                    Psy[i, j], abs_tol=0.02))
+                self.assertTrue(np.isclose(np.mean(block),
+                    Psy[i, j], atol=0.02))
         self.assertTrue(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -345,12 +345,12 @@ class Test_WSBM(unittest.TestCase):
                     (self.vcount[j] - self.n[j]):self.vcount[j]]
                 if (i == j):
                     block = remove_diagonal(block)
-                self.assertTrue(math.isclose(np.mean(block != 0),
-                    self.Psy[i, j], abs_tol=0.02))
-                self.assertTrue(math.isclose(np.mean(block[block != 0]),
-                    params['loc'], abs_tol=0.2))
-                self.assertTrue(math.isclose(np.std(block[block != 0]),
-                    params['scale'], abs_tol=0.2))
+                self.assertTrue(np.isclose(np.mean(block != 0),
+                    self.Psy[i, j], atol=0.02))
+                self.assertTrue(np.isclose(np.mean(block[block != 0]),
+                    params['loc'], atol=0.2))
+                self.assertTrue(np.isclose(np.std(block[block != 0]),
+                    params['scale'], atol=0.2))
         self.assertTrue(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -388,12 +388,12 @@ class Test_WSBM(unittest.TestCase):
                     (self.vcount[j] - self.n[j]):self.vcount[j]]
                 if (i == j):
                     block = remove_diagonal(block)
-                self.assertTrue(math.isclose(np.mean(block != 0),
-                    self.Psy[i, j], abs_tol=0.02))
+                self.assertTrue(np.isclose(np.mean(block != 0),
+                    self.Psy[i, j], atol=0.02))
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(math.isclose(v, Wtargs[i, j][k],
-                        abs_tol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
+                        atol=0.2))
         self.assertFalse(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -418,12 +418,12 @@ class Test_WSBM(unittest.TestCase):
                     (self.vcount[j] - self.n[j]):self.vcount[j]]
                 if (i == j):
                     block = remove_diagonal(block)
-                self.assertTrue(math.isclose(np.mean(block != 0),
-                    self.Psy[i, j], abs_tol=0.02))
+                self.assertTrue(np.isclose(np.mean(block != 0),
+                    self.Psy[i, j], atol=0.02))
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(math.isclose(v, Wtargs[i, j][k],
-                        abs_tol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
+                        atol=0.2))
         self.assertTrue(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -447,12 +447,12 @@ class Test_WSBM(unittest.TestCase):
 
                 block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
                     (self.vcount[j] - self.n[j]):self.vcount[j]]
-                self.assertTrue(math.isclose(np.mean(block != 0),
-                    self.Psy[i, j], abs_tol=0.02))
+                self.assertTrue(np.isclose(np.mean(block != 0),
+                    self.Psy[i, j], atol=0.02))
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(math.isclose(v, Wtargs[i, j][k],
-                        abs_tol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
+                        atol=0.2))
         self.assertFalse(is_symmetric(A))
         self.assertFalse(is_loopless(A))
         # check dimensions
@@ -476,12 +476,12 @@ class Test_WSBM(unittest.TestCase):
 
                 block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
                     (self.vcount[j] - self.n[j]):self.vcount[j]]
-                self.assertTrue(math.isclose(np.mean(block != 0),
-                    self.Psy[i, j], abs_tol=0.02))
+                self.assertTrue(np.isclose(np.mean(block != 0),
+                    self.Psy[i, j], atol=0.02))
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(math.isclose(v, Wtargs[i, j][k],
-                        abs_tol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
+                        atol=0.2))
         self.assertTrue(is_symmetric(A))
         self.assertFalse(is_loopless(A))
         # check dimensions
