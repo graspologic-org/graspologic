@@ -2,7 +2,7 @@ import unittest
 import graphstats as gs
 import numpy as np
 import networkx as nx
-from graphstats.embed.ase import ASEmbed
+from graphstats.embed.ase import AdjacencySpectralEmbed
 from graphstats.simulations.simulations import er_np, er_nm, weighted_sbm
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
@@ -40,16 +40,16 @@ def kmeans_comparison(data, labels, n_clusters):
     return aris
 
 
-class TestASEmbed(unittest.TestCase):
+class TestAdjacencySpectralEmbed(unittest.TestCase):
     
-    def test_ase_er(self):
-        k = 3
-        embed = ASEmbed(k=k)
+    def test_output_dim(self):
+        k = 4
+        embed = AdjacencySpectralEmbed(k=k)
         n = 10
         M = 20
         A = er_nm(n, M) + 5
         embed._reduce_dim(A)
-        self.assertEqual(embed.lpm.X.shape, (n, k))
+        self.assertEqual(embed.lpm.X.shape, (n, 4))
         self.assertTrue(embed.lpm.is_symmetric())
 
     def test_sbm_er_binary_undirected(self):
@@ -64,8 +64,8 @@ class TestASEmbed(unittest.TestCase):
             sbm = weighted_sbm(verts_per_community, P)
             er = er_np(verts, 0.5)
 
-            embed_sbm = ASEmbed(k=2)
-            embed_er = ASEmbed(k=2)
+            embed_sbm = AdjacencySpectralEmbed(k=2)
+            embed_er = AdjacencySpectralEmbed(k=2)
 
             labels_sbm = np.zeros((verts), dtype=np.int8)
             labels_er = np.zeros((verts), dtype=np.int8)
