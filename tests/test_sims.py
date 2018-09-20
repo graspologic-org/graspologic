@@ -4,7 +4,6 @@ import numpy as np
 import networkx as nx
 from graphstats.simulations.simulations import *
 from graphstats.utils.utils import is_symmetric, is_loopless
-import math
 
 
 def remove_diagonal(A):
