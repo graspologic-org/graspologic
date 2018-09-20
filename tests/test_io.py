@@ -9,20 +9,22 @@ class TestInput(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # simple ERxN graph
-        n = 15; p = 0.5
+        n = 15
+        p = 0.5
         cls.A = np.zeros((n, n))
-        nedge = int(round(n*n*p))
-        np.put(cls.A, np.random.choice(np.arange(0, n*n),
-            size=nedge, replace=False), np.random.normal(size=nedge))
+        nedge = int(round(n * n * p))
+        np.put(
+            cls.A,
+            np.random.choice(np.arange(0, n * n), size=nedge, replace=False),
+            np.random.normal(size=nedge))
 
     def test_graphin(self):
-        G = nx.from_numpy_matrix(self.A)
-        np.testing.assert_array_equal(nx.to_numpy_matrix(G),
-            gus.import_graph(G))
+        G = nx.from_numpy_array(self.A)
+        np.testing.assert_array_equal(
+            nx.to_numpy_array(G), gus.import_graph(G))
 
     def test_npin(self):
-        np.testing.assert_array_equal(self.A,
-                gus.import_graph(self.A))
+        np.testing.assert_array_equal(self.A, gus.import_graph(self.A))
 
     def test_wrongtypein(self):
         a = 5

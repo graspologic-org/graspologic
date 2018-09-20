@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+# lpm.py
+# Created by Eric Bridgeford on 2018-09-13.
+# Email: ebridge2@jhu.edu
+# Copyright (c) 2018. All rights reserved.
+
 import numpy as np
 
 
