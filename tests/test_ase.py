@@ -2,7 +2,7 @@ import unittest
 import graphstats as gs
 import numpy as np
 import networkx as nx
-from graphstats.embed.ase import ASEEmbed
+from graphstats.embed.ase import ASEmbed
 from graphstats.simulations.simulations import er_np, er_nm, weighted_sbm
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
@@ -40,11 +40,11 @@ def kmeans_comparison(data, labels, n_clusters):
     return aris
 
 
-class TestASEEmbed(unittest.TestCase):
+class TestASEmbed(unittest.TestCase):
     
     def test_ase_er(self):
         k = 3
-        embed = ASEEmbed(k=k)
+        embed = ASEmbed(k=k)
         n = 10
         M = 20
         A = er_nm(n, M) + 5
@@ -64,8 +64,8 @@ class TestASEEmbed(unittest.TestCase):
             sbm = weighted_sbm(verts_per_community, P)
             er = er_np(verts, 0.5)
 
-            embed_sbm = ASEEmbed(k=2)
-            embed_er = ASEEmbed(k=2)
+            embed_sbm = ASEmbed(k=2)
+            embed_er = ASEmbed(k=2)
 
             labels_sbm = np.zeros((verts), dtype=np.int8)
             labels_er = np.zeros((verts), dtype=np.int8)
