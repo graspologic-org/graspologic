@@ -7,6 +7,9 @@ import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
 from .embed import BaseEmbed
+from .svd import selectSVD
+#from ..utils import import_graph
+
 from ..utils import import_graph
 
 
@@ -15,7 +18,7 @@ def _check_valid_graphs(graphs):
     Checks if all graphs in list have same shapes.
 
     Raises an ValueError if there are more than one shape in the input list,
-    or if the list is empty.
+    or if the list is empty or has one element.
 
     Parameters
     ----------
@@ -25,8 +28,13 @@ def _check_valid_graphs(graphs):
     Raises
     ------
     ValueError
-        If all graphs do not have same shape, or input list is empty.
+        If all graphs do not have same shape, or input list is empty or has 
+        one element.
     """
+    if len(graphs) <= 1:
+        msg = "Omnibus embedding requires more than one graph."
+        raise ValueError(msg)
+
     shapes = set(map(np.shape, graphs))
 
     if len(shapes) > 1:
@@ -115,7 +123,7 @@ class OmnibusEmbed(BaseEmbed):
         omni_matrix = _get_omni_matrix(graphs)
 
         # Embed
-        _reduce_dim(omni_matrix)
+        self._reduce_dim(omni_matrix)
 
         return self.lpm
 
@@ -139,6 +147,6 @@ class OmnibusEmbed(BaseEmbed):
             out = np.dot(self.lpm.X, self.lpm.d)
         else:
             self.fit(graphs)
-            out = np.dot(self.lpm.X, self.lpm.d)
+            out = np.dot(self.lpm.X, np.diag(self.lpm.d**0.5))
 
         return out
