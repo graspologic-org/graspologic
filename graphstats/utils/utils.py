@@ -30,7 +30,7 @@ def import_graph(graph):
 		networkx.Graph, numpy.array
 	"""
     if type(graph) is nx.Graph:
-        graph = nx.to_numpy_matrix(graph)
+        graph = nx.to_numpy_array(graph)
     elif (type(graph) is np.ndarray):
         pass
     else:
@@ -47,26 +47,34 @@ def is_symmetric(X):
         return False
 
 
+def is_loopless(X):
+    if np.any(np.diag(X) != 0):
+        return False
+    else:
+        return True
+
+
 def symmetrize(graph, method='triu'):
     """
-	A function for forcing symmetry upon a graph.
+    A function for forcing symmetry upon a graph.
 
-	Parameters
-	----------
-    graph: object
-        Either array-like, (n_vertices, n_vertices) numpy matrix,
-        or an object of type networkx.Graph.
-    method: string
-        An option indicating which half of the edges to
-        retain when symmetrizing. Options are 'triu' for retaining
-        the upper right triangle, 'tril' for retaining the lower
-        left triangle, or 'avg' to retain the average weight between the
-        upper and lower right triangle, of the adjacency matrix.
+    Parameters
+    ----------
+        graph: object
+            Either array-like, (n_vertices, n_vertices) numpy matrix,
+            or an object of type networkx.Graph.
+        method: string
+            An option indicating which half of the edges to
+            retain when symmetrizing. Options are 'triu' for retaining
+            the upper right triangle, 'tril' for retaining the lower
+            left triangle, or 'avg' to retain the average weight between the
+            upper and lower right triangle, of the adjacency matrix.
 
-	Returns
-	-------
-    graph: array-like, shape(n_vertices, n_vertices)
-	"""
+    Returns
+    -------
+        graph: array-like, shape(n_vertices, n_vertices)
+            the graph with asymmetries removed.
+    """
     graph = import_graph(graph)
     if method is 'triu':
         graph = np.triu(graph)
@@ -78,5 +86,25 @@ def symmetrize(graph, method='triu'):
         msg = "You have not passed a valid parameter for the method."
         raise ValueError(msg)
     # A = A + A' - diag(A)
-    graph = graph + graph.T - np.diag(graph)
+    graph = graph + graph.T - np.diag(np.diag(graph))
+    return (graph)
+
+
+def remove_loops(graph):
+    """
+    A function to remove loops from a graph.
+
+    Parameters
+    ----------
+        graph: object
+            Either array-like, (n_vertices, n_vertices) numpy matrix,
+            or an object of type networkx.Graph.
+
+    Returns
+    -------
+        graph: array-like, shape(n_vertices, n_vertices)
+            the graph with self-loops (edges between the same node) removed.
+    """
+    graph = import_graph(graph)
+    graph = graph - np.diag(np.diag(graph))
     return (graph)

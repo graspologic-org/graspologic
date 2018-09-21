@@ -191,6 +191,6 @@ class SelectSVD(TruncatedSVD):
         """
         # TODO: comment out below to add dynamic dimensionality selection.
         #if self.n_components is None:
-        #	self.n_components = selectDim(X)
+        #   self.n_components = selectDim(X)
         self.fit_transform(X)
         return self
