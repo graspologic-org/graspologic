@@ -1,13 +1,13 @@
-
 # ase.py
 # Created by Ben Pedigo on 2018-09-15.
 # Email: bpedigo@jhu.edu
 
 # Eric Bridgeford
 
-from graphstats.embed.embed import BaseEmbed
-from graphstats.utils import import_graph
-from graphstats.embed.svd import selectSVD
+from .embed import BaseEmbed
+from .svd import selectSVD
+from ..utils import import_graph
+
 
 class AdjacencySpectralEmbed(BaseEmbed):
     """
@@ -57,10 +57,10 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
 
     """
-    
+
     def __init__(self, method=selectSVD, *args, **kwargs):
         super().__init__(method=method, *args, **kwargs)
-    
+
     def fit(self, graph):
         """
         Fit ASE model to input graph
@@ -88,5 +88,3 @@ class AdjacencySpectralEmbed(BaseEmbed):
         A = import_graph(graph)
         self._reduce_dim(A)
         return self.lpm
-        
-
