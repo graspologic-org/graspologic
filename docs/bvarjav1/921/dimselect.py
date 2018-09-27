@@ -15,7 +15,7 @@ from scipy.sparse.linalg import svds
 from .svd import selectSVD #relative?
 
 
-def profile_likelihood(data, n_elbows=1, threshold=0):
+def profile_likelihood(data, n_elbows=1, threshold=0, method=selectSVD, *args, **kwargs):
     """
     Generates profile likelihood from array based on Z&G.
 
@@ -29,6 +29,10 @@ def profile_likelihood(data, n_elbows=1, threshold=0):
         Number of likelihood elbows to return.
     method : object, optional
         Takes an object to calculate the svd
+    *args : list, optional
+        Takes additional parameters
+    **kwargs : dict, optional
+        Takes additional keyword parameters
 
     Returns
     -------
@@ -63,7 +67,7 @@ def profile_likelihood(data, n_elbows=1, threshold=0):
         raise ValueError(msg.format(n_elbows))
 
     # generate eigenvalues greater than the threshold
-    sing_vals = svds(data, k=min(data.shape)-1, return_singular_vectors=False)[::-1]
+    sing_vals = method(data, *args, **kwargs)
     L = sing_vals**2
     U = L[L > threshold]
     if L.ndim == 2:

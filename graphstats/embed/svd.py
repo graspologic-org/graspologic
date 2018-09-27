@@ -7,54 +7,115 @@
 
 from sklearn.decomposition import TruncatedSVD
 from scipy.sparse.linalg import svds
+import numpy as np
+from scipy.stats import norm
 
-def selectDim(X, method=TruncatedSVD, *args, **kwargs):
+def selectDim(data, n_elbows=1, threshold=0):
     """
-    A function that uses likelihood profiling to determine the optimal 
-    number of embedding dimensions.
+    Generates profile likelihood from array based on Z&G.
+
+    Returns an array of elbows and relevant information
 
     Parameters
     ----------
-        X: {array-like}, shape (n_samples, n_features)
-         The input data to select the optimal embedding dimensionality for.
-        method: object (default TruncatedSVD)
-        args: list, optional (default None)
-         options taken by the desired embedding method as arguments.
-        kwargs: dict, optional (default None)
-         options taken by the desired embedding method as key-worded
-         arguments.
+    data : array_like
+        The matrix of data we are trying to generate profile likelihoods for.
+    n_elbows : int, optional
+        Number of likelihood elbows to return.
+    method : object, optional
+        Takes an object to calculate the svd
 
     Returns
     -------
-    A dictionary containing the following:
-        optimal_d: {int}
-         the optmial number of embedding dimensions.
-        optimal_lq: {float}
-         the likelihood of the optimal number of embedding dimensions.
-        ds: {array-like}, shape (n_components)
-         the singular values associated with the decomposition of X,
-         from which optimal_d was chosen.
-        lqs: {array-like}, shape (n_components)
-         the likelihood profile for all possible embedding dimensions
-         ds.
+    elbows : array_like
+        ZG elbows which indicate subsequent optimal embedding dimensions.
+    likelihoods : array_like
+        Array of likelihoods of the optimal embedding dimensions.
+    sing_vals : array_like
+        The singular values of the data array post-threshold.
+    all_likelihoods : array_like
+        The likelihood profiles of all embedding dimensions.
 
-    See Also
-    --------
-        TruncatedSVD
+    Other Parameters
+    ----------------
+    threshold : float, optional
+        Ignores eigenvalues smaller than this.
 
-    References:
-    -----------
-    Automatic dimensionality selection from the scree plot via the use of 
-    profile likelihood
-    Zhu, Mu and Ghodsi, Ali. CSDA 2006. 
-    https://www.sciencedirect.com/science/article/pii/S0167947305002343
+    Raises
+    ------
+    ValueError
+        If n_elbows is :math:`< 1`.
+
+    References
+    ----------
+    .. [1] Zhu, M. and Ghodsi, A. (2006).
+        Automatic dimensionality selection from the scree plot via the use of profile likelihood.
+        Computational Statistics & Data Analysis, 51(2), pp.918-930.
+
     """
-    return {
-        'optimal_d': optimal_d,
-        'optimal_lq': optimal_lq,
-        'ds': ds,
-        'lqs': lqs
-    }
+    if n_elbows < 1:
+        msg = 'number of elbows should be an integer > 1, not {}'
+        raise ValueError(msg.format(n_elbows))
+
+    # generate eigenvalues greater than the threshold
+    sing_vals = svds(data, k=min(data.shape)-1, return_singular_vectors=False)[::-1]
+    L = sing_vals**2
+    L2 = L[L > threshold]
+    U = L2
+    if L.ndim == 2:
+        L = np.std(U, axis=0)
+
+    if len(U) == 0:
+        msg = 'no eigenvalues ({}) greater than threshold {}'
+        raise IndexError(msg.format(L, threshold))
+
+    elbows = []
+    if len(U) == 1:
+        return np.array(elbows.append(U[0]))+1
+
+    n = len(U)
+    all_l = []
+    elbow_l = []
+    while len(elbows) < n_elbows and len(U) > 1:
+        d = 1
+        sample_var = np.var(U, ddof=1)
+        sample_scale = sample_var**(1/2)
+        elbow = 0
+        likelihood_elbow = 0
+        l = []
+        while d < len(U):
+            mean_sig = np.mean(U[:d])
+            mean_noise = np.mean(U[d:])
+            sig_likelihood = 0
+            noise_likelihood = 0
+            for i in range(d):
+                sig_likelihood += norm.pdf(U[i], mean_sig, sample_scale)
+            for i in range(d, len(U)):
+                noise_likelihood += norm.pdf(U[i], mean_noise, sample_scale)
+
+            likelihood = noise_likelihood + sig_likelihood
+            l.append(likelihood)
+
+            if likelihood > likelihood_elbow:
+                likelihood_elbow = likelihood
+                elbow_l.append(likelihood)
+                elbow = d
+            d += 1
+        if len(elbows) == 0:
+            elbows.append(elbow)
+        else:
+            elbows.append(elbow + elbows[-1])
+        U = U[elbow:]
+        all_l.append(l)
+
+    if len(elbows) == n_elbows:
+        return np.array(elbows)+1, elbow_l, L2, all_l
+
+    if len(U) == 0:
+        return np.array(elbows)+1, elbow_l, L2, all_l
+    else:
+        elbows.append(n)
+        return np.array(elbows)+1, elbow_l, L2, all_l
 
 
 def selectSVD(X, k=None):
@@ -152,9 +213,9 @@ class SelectSVD(TruncatedSVD):
     approximate matrix decompositions
     Halko, et al., 2009 (arXiv:909) http://arxiv.org/pdf/0909.4061
 
-    Automatic dimensionality selection from the scree plot via the use of 
+    Automatic dimensionality selection from the scree plot via the use of
     profile likelihood
-    Zhu, Mu and Ghodsi, Ali. CSDA 2006. 
+    Zhu, Mu and Ghodsi, Ali. CSDA 2006.
     https://www.sciencedirect.com/science/article/pii/S0167947305002343
 
     Notes
