@@ -137,28 +137,3 @@ class OmnibusEmbed(BaseEmbed):
         self._reduce_dim(omni_matrix)
 
         return self.lpm
-
-    def fit_transform(self, graphs):
-        """
-        Fit the model with graphs and apply the embedding on graphs. 
-
-        n_dimension is either automatically determined or based on user input.
-
-        Parameters
-        ----------
-        graphs : list of graphs
-            List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph.
-
-        Returns
-        -------
-        out : array-like, shape (n_vertices * n_graphs, n_dimension)
-        """
-        try:
-            check_is_fitted(self, ['lpm'], all_or_any=all)
-            out = np.dot(self.lpm.X, np.diag(self.lpm.d**0.5))
-        except:
-            self.fit(graphs)
-            out = np.dot(self.lpm.X, np.diag(self.lpm.d**0.5))
-
-        return out
