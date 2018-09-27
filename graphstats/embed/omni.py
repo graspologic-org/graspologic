@@ -29,6 +29,10 @@ def _check_valid_graphs(graphs):
         If all graphs do not have same shape, or input list is empty or has 
         one element.
     """
+    if not (type(graphs) == list):
+        msg = "Input is not a list."
+        raise ValueError(msg)
+
     if len(graphs) <= 1:
         msg = "Omnibus embedding requires more than one graph."
         raise ValueError(msg)
