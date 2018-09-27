@@ -141,7 +141,9 @@ def adj2laplace(graph, form='normalized'):
         D_vec = np.sum(adj_matrix, axis=0)
         D_root = np.diag(D_vec ** -0.5)
         L = np.diag(D_vec) - adj_matrix
-        L = D_root @ L @ D_root
+        L = np.dot(D_root, L)
+        L = np.dot(L, D_root)
+        # L = D_root @ L @ D_root # not compatible with python 3.4
     else: 
         raise NotImplementedError()
 
