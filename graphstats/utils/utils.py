@@ -30,9 +30,14 @@ def import_graph(graph):
 		networkx.Graph, numpy.array
 	"""
     if type(graph) is nx.Graph:
-        graph = nx.to_numpy_array(graph)
+        graph = nx.to_numpy_array(
+            graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif (type(graph) is np.ndarray):
-        pass
+        # TODO: Compare to float subtype. If not float, then cast to float.
+        if graph.dtype == np.integer:
+            graph = graph.astype(np.float)
+        else:
+            pass
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
@@ -87,7 +92,7 @@ def symmetrize(graph, method='triu'):
         raise ValueError(msg)
     # A = A + A' - diag(A)
     graph = graph + graph.T - np.diag(np.diag(graph))
-    return (graph)
+    return graph
 
 
 def remove_loops(graph):
@@ -107,4 +112,4 @@ def remove_loops(graph):
     """
     graph = import_graph(graph)
     graph = graph - np.diag(np.diag(graph))
-    return (graph)
+    return graph

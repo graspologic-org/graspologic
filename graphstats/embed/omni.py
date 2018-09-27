@@ -8,8 +8,6 @@ from sklearn.utils.validation import check_is_fitted
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-#from ..utils import import_graph
-
 from ..utils import import_graph
 
 
@@ -51,19 +49,28 @@ def _get_omni_matrix(graphs):
 
     Parameters
     ----------
-    graphs : list of graphs
-        List of array-like, (n_vertices, n_vertices), or list of 
-        networkx.Graph.
+    graphs : list
+        List of array-like, (n_vertices, n_vertices).
 
     Returns
     -------
     out : 2d-array
         Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)
     """
-    n = len(graphs)
+    shape = graphs[0].shape
+    n = shape[0]  # number of vertices
+    m = len(graphs)  # number of graphs
 
-    out = (np.tile(np.hstack(graphs),
-                   (n, 1)) + np.tile(np.vstack(graphs), (1, n))) / 2
+    A = np.array(graphs, copy=False, ndmin=3)
+
+    # Do some numpy broadcasting magic.
+    # We do sum in 4d arrays and reduce to 2d array.
+    # Super fast and efficient
+    out = (A[:, :, None, :] + A.transpose(1, 0, 2)[None, :, :, :]).reshape(
+        n * m, -1)
+
+    # Averaging
+    out /= 2
 
     return out
 
@@ -114,7 +121,7 @@ class OmnibusEmbed(BaseEmbed):
             undirected graph, or right estimated positions if directed graph), and d.
         """
         # Convert input to np.arrays
-        graphs = list(map(import_graph, graphs))
+        graphs = [import_graph(g) for g in graphs]
 
         # Check if the input is valid
         _check_valid_graphs(graphs)
@@ -143,9 +150,10 @@ class OmnibusEmbed(BaseEmbed):
         -------
         out : array-like, shape (n_vertices * n_graphs, n_dimension)
         """
-        if check_is_fitted(self, ['lpm'], all_or_any=all):
+        try:
+            check_is_fitted(self, ['lpm'], all_or_any=all)
             out = np.dot(self.lpm.X, self.lpm.d)
-        else:
+        except:
             self.fit(graphs)
             out = np.dot(self.lpm.X, np.diag(self.lpm.d**0.5))
 

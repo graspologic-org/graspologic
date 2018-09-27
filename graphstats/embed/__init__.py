@@ -1,1 +1,3 @@
-from .omni import OmnibusEmbed, _get_omni_matrix
+from .omni import OmnibusEmbed
+
+__all__ = [OmnibusEmbed]
