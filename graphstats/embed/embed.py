@@ -82,7 +82,7 @@ class BaseEmbed:
 
     def fit_transform(self, graph):
         """
-        Fit the model with graphs and apply the embedding on graphs. 
+        Fit the model with graphs and apply the transformation. 
 
         n_dimension is either automatically determined or based on user input.
 
@@ -92,7 +92,7 @@ class BaseEmbed:
 
         Returns
         -------
-        out : array-like, shape (n_vertices * n_graphs, n_dimension)
+        out : array-like, shape (n_vertices, n_dimension)
         """
         try:
             check_is_fitted(self, ['lpm'], all_or_any=all)
