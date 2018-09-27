@@ -104,4 +104,4 @@ class BaseEmbed:
         -------
         out : array-like, shape (n_vertices, n_dimension)
         """
-        return self._fit_transform(self, graph)
+        return self._fit_transform(graph)
