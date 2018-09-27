@@ -21,7 +21,7 @@ def _check_valid_graphs(graphs):
     Parameters
     ----------
     graphs : list
-        List of array-like, (n_vertices, n_vertices).
+        List of array-like with shapes (n_vertices, n_vertices).
 
     Raises
     ------
@@ -50,7 +50,7 @@ def _get_omni_matrix(graphs):
     Parameters
     ----------
     graphs : list
-        List of array-like, (n_vertices, n_vertices).
+        List of array-like with shapes (n_vertices, n_vertices).
 
     Returns
     -------
