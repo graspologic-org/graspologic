@@ -156,7 +156,7 @@ class OmnibusEmbed(BaseEmbed):
         """
         try:
             check_is_fitted(self, ['lpm'], all_or_any=all)
-            out = np.dot(self.lpm.X, self.lpm.d)
+            out = np.dot(self.lpm.X, np.diag(self.lpm.d**0.5))
         except:
             self.fit(graphs)
             out = np.dot(self.lpm.X, np.diag(self.lpm.d**0.5))
