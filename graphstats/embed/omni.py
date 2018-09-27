@@ -142,11 +142,13 @@ class OmnibusEmbed(BaseEmbed):
         """
         Fit the model with graphs and apply the embedding on graphs. 
         n_dimension is either automatically determined or based on user input.
+
         Parameters
         ----------
         graphs : list of graphs
             List of array-like, (n_vertices, n_vertices), or list of 
             networkx.Graph.
+
         Returns
         -------
         out : array-like, shape (n_vertices * n_graphs, n_dimension)
