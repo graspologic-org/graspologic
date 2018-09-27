@@ -17,7 +17,7 @@ def import_graph(graph):
 	Parameters
 	----------
     graph: object
-        Either array-like, (n_vertices, n_vertices) numpy matrix,
+        Either array-like, shape (n_vertices, n_vertices) numpy array,
         or an object of type networkx.Graph.
 
 	Returns
@@ -33,8 +33,7 @@ def import_graph(graph):
         graph = nx.to_numpy_array(
             graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif (type(graph) is np.ndarray):
-        # TODO: Compare to float subtype. If not float, then cast to float.
-        if graph.dtype == np.integer:
+        if not np.issubdtype(graph.dtype, np.floating):
             graph = graph.astype(np.float)
         else:
             pass
