@@ -97,7 +97,7 @@ class BaseEmbed:
         try:
             check_is_fitted(self, ['lpm'], all_or_any=all)
         except:
-            self.fit(graphs)
+            self.fit(graph)
 
         out = self.lpm.transform()
         return out
