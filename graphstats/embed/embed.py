@@ -80,6 +80,16 @@ class BaseEmbed:
 
         return self.lpm
 
+    def _fit_transform(self, graph):
+        "Fits the model and returns the estimated latent positions"
+        try:
+            check_is_fitted(self, ['lpm'], all_or_any=all)
+        except:
+            self.fit(graph)
+
+        out = self.lpm.transform()
+        return out
+
     def fit_transform(self, graph):
         """
         Fit the model with graphs and apply the transformation. 
@@ -94,10 +104,4 @@ class BaseEmbed:
         -------
         out : array-like, shape (n_vertices, n_dimension)
         """
-        try:
-            check_is_fitted(self, ['lpm'], all_or_any=all)
-        except:
-            self.fit(graph)
-
-        out = self.lpm.transform()
-        return out
+        return self._fit_transform(self, graph)
