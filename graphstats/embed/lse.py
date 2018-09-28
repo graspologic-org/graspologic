@@ -1,20 +1,20 @@
 # ase.py
-# Created by Ben Pedigo on 2018-09-15.
+# Created by Ben Pedigo on 2018-09-26.
 # Email: bpedigo@jhu.edu
 
-# Eric Bridgeford
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph
+from ..utils import import_graph, adj2laplace
+import numpy as np
 
-
-class AdjacencySpectralEmbed(BaseEmbed):
+class LaplacianSpectralEmbed(BaseEmbed):
+    # TODO: update docstring
     """
-    Class for computing the adjacency spectral embedding of a graph 
+    Class for computing the laplacian spectral embedding of a graph 
     
-    The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation of 
-    the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce the dimensionality
+    The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation of 
+    the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce the dimensionality
     to the specified k, or if k is unspecified, can find a number of dimensions automatically
     (see graphstats.embed.svd.selectSVD).
 
@@ -40,7 +40,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     .. math:: A = U \Sigma V^T
 
-    is used to find an orthonormal basis for a matrix, which in our case is the adjacency
+    is used to find an orthonormal basis for a matrix, which in our case is the Laplacian
     matrix of the graph. These basis vectors (in the matrices U or V) are ordered according 
     to the amount of variance they explain in the original matrix. By selecting a subset of these
     basis vectors (through our choice of dimensionality reduction) we can find a lower dimensional 
@@ -62,8 +62,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
         super().__init__(method=method, *args, **kwargs)
 
     def fit(self, graph):
+        # TODO: update docstring
         """
-        Fit ASE model to input graph
+        Fit LSE model to input graph
 
         Parameters
         ----------
@@ -86,5 +87,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
        
         """
         A = import_graph(graph)
-        self._reduce_dim(A)
+        L_norm = adj2laplace(A, form='normalized')
+        self._reduce_dim(L_norm)
         return self.lpm

@@ -3,7 +3,7 @@ import graphstats as gs
 import numpy as np
 import networkx as nx
 from graphstats.utils import utils as gus
-
+from math import sqrt
 
 class TestInput(unittest.TestCase):
     @classmethod
@@ -32,6 +32,19 @@ class TestInput(unittest.TestCase):
             gus.import_graph(a)
         with self.assertRaises(TypeError):
             gus.import_graph(None)
+
+    def test_adj2laplace_normalized(self):
+        A = np.array([[0, 1, 0],
+                      [1, 0, 1],
+                      [0, 1, 0]])
+
+        expected_L_normed = ([[1, -1/(sqrt(2)), 0],
+                              [-1/(sqrt(2)), 1, -1/(sqrt(2))],
+                              [0, -1/(sqrt(2)), 1]])
+                              
+        L_normed = gus.adj2laplace(A, form='normalized')
+
+        self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
 
 if __name__ == '__main__':

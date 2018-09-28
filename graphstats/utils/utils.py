@@ -32,7 +32,10 @@ def import_graph(graph):
     if type(graph) is nx.Graph:
         graph = nx.to_numpy_array(graph)
     elif (type(graph) is np.ndarray):
-        pass
+        if len(graph.shape) != 2:
+            raise ValueError('Matrix has improper number of dimensions')
+        elif graph.shape[0] != graph.shape[1]:
+            raise ValueError('Matrix is not square')
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
@@ -108,3 +111,35 @@ def remove_loops(graph):
     graph = import_graph(graph)
     graph = graph - np.diag(np.diag(graph))
     return (graph)
+
+def adj2laplace(graph, form='normalized'):
+    """
+    A function to convert graph adjacency matrix to graph laplacian. 
+
+    Currently only supports normalized laplacian.
+
+    Parameters
+    ----------
+        graph: object
+            Either array-like, (n_vertices, n_vertices) numpy array,
+            or an object of type networkx.Graph.
+
+    Returns
+    -------
+        L: numpy.ndarray
+            2D (n_vertices, n_vertices) array representing graph 
+            laplacian of specified form
+    """
+    adj_matrix = import_graph(graph)
+
+    if form == 'normalized':
+        D_vec = np.sum(adj_matrix, axis=0)
+        D_root = np.diag(D_vec ** -0.5)
+        L = np.diag(D_vec) - adj_matrix
+        L = np.dot(D_root, L)
+        L = np.dot(L, D_root)
+        # L = D_root @ L @ D_root # not compatible with python 3.4
+    else: 
+        raise NotImplementedError()
+
+    return L

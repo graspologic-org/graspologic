@@ -12,7 +12,7 @@ with open('README.md', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 AUTHOR = 'Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand, Brandon Duderstadt',
 AUTHOR_EMAIL = 'ebridge2@jhu.edu'
-URL = 'https://github.com/neurodata/pygrapstats'
+URL = 'https://github.com/neurodata/graspy'
 MINIMUM_PYTHON_VERSION = 3, 4  # Minimum of Python 3.4
 
 REQUIRED_PACKAGES = ['networkx>=2.1', 'numpy>=1.8.1', 'scikit-learn>=0.19.1', 'scipy>=1.1.0']
