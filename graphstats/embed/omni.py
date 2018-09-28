@@ -100,6 +100,16 @@ class OmnibusEmbed(BaseEmbed):
         options taken by the desired embedding method as key-worded
         arguments.
 
+    Attributes
+    ----------
+    n_graphs_ : int
+        Number of graphs
+    n_vertices : int
+        Number of vertices in each graph
+    lpm : LatentPosition object
+        Contains X (the estimated latent positions), Y (same as X if input is
+        undirected graph, or right estimated positions if directed graph), and d.
+
     See Also
     --------
     graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
@@ -129,6 +139,10 @@ class OmnibusEmbed(BaseEmbed):
 
         # Check if the input is valid
         _check_valid_graphs(graphs)
+
+        # Save attributes
+        self.n_graphs_ = len(graphs)
+        self.n_vertices_ = graphs[0].shape[0]
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)
