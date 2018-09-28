@@ -32,7 +32,7 @@ def generate_data(n, seed=1):
 # Below tests omni matrix generation code
 def test_omni_matrix_ones_zeros():
     # Should get all ones
-    n_graphs = [2, 5, 100]  # Test for different number of graphs
+    n_graphs = [2, 5, 10]  # Test for different number of graphs
 
     for n in n_graphs:
         ones = [np.ones((10, 10)) for _ in range(n)]
@@ -81,7 +81,7 @@ def test_omni_matrix_symmetric():
     n = 15
     p = 0.4
 
-    n_graphs = [2, 5, 100]
+    n_graphs = [2, 5, 10]
     for n in n_graphs:
         graphs = [er_np(n, p) for _ in range(n)]
         output = _get_omni_matrix(graphs)
