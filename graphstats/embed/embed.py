@@ -5,12 +5,15 @@
 # Email: ebridge2@jhu.edu
 # Copyright (c) 2018. All rights reserved.
 
+from abc import abstractmethod
+
 import numpy as np
 import networkx as nx
-from abc import abstractmethod
-from graphstats.utils import import_graph, is_symmetric
-from .svd import selectSVD
+from sklearn.utils.validation import check_is_fitted
+
 from .lpm import LatentPosition
+from .svd import selectSVD
+from ..utils import import_graph, is_symmetric
 
 
 class BaseEmbed:
@@ -59,7 +62,7 @@ class BaseEmbed:
 
         Parameters
         ----------
-        graph: object
+        graph: np.ndarray or networkx.Graph
 
         Returns
         -------
@@ -76,3 +79,29 @@ class BaseEmbed:
         # here
 
         return self.lpm
+
+    def _fit_transform(self, graph):
+        "Fits the model and returns the estimated latent positions"
+        try:
+            check_is_fitted(self, ['lpm'], all_or_any=all)
+        except:
+            self.fit(graph)
+
+        out = self.lpm.transform()
+        return out
+
+    def fit_transform(self, graph):
+        """
+        Fit the model with graphs and apply the transformation. 
+
+        n_dimension is either automatically determined or based on user input.
+
+        Parameters
+        ----------
+        graph: np.ndarray or networkx.Graph
+
+        Returns
+        -------
+        out : array-like, shape (n_vertices, n_dimension)
+        """
+        return self._fit_transform(graph)
