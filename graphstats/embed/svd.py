@@ -10,12 +10,7 @@ from scipy.sparse.linalg import svds
 import numpy as np
 from scipy.stats import norm
 
-<<<<<<< HEAD
 def selectDim(data, n_elbows=1, threshold=0):
-=======
-
-def selectDim(X, method=TruncatedSVD, *args, **kwargs):
->>>>>>> 4b0389aba0a0ef80740fff8fc2049513654c5247
     """
     Generates profile likelihood from array based on Z&G.
 
@@ -152,7 +147,6 @@ def selectSVD(X, k=None):
         raise ValueError(msg)
     U, s, Vt = svds(X, k=k)
     return (U, Vt.T, s)
-<<<<<<< HEAD
 
 
 class SelectSVD(TruncatedSVD):
