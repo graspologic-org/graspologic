@@ -7,9 +7,21 @@ from .svd import selectSVD
 
 def _get_centering_matrix(n):
     """
-    Compute the centering matrix
+    Compute the centering array
+
+    Parameters
+    ----------
+    n : int
+        Size of centering array.
+
+    Returns
+    -------
+    out : 2d-array
+        Outputs a centering array of shape (n, n)
     """
-    return np.identity(n) - (1 / n) * np.ones((n, n))
+    out = np.identity(n) - (1 / n) * np.ones((n, n))
+
+    return out
 
 
 class ClassicalMDS(BaseEstimator):
@@ -83,6 +95,10 @@ class ClassicalMDS(BaseEstimator):
         ----------
         X : array-like, shape (n_samples, n_samples)
             Precomputed Euclidean dissimilarity matrix.
+
+        Returns
+        -------
+        X_new : array-like 
         """
         self.fit(X)
 
