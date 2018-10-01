@@ -6,13 +6,15 @@
 # Copyright (c) 2018. All rights reserved.
 
 import numpy as np
-from graphstats.utils import import_graph, symmetrize
+from ..utils import import_graph, symmetrize
 
 
 def cartprod(*arrays):
-     N = len(arrays)
-     return np.transpose(np.meshgrid(*arrays, indexing='ij'), 
-                      np.roll(np.arange(N + 1), -1)).reshape(-1, N)
+    N = len(arrays)
+    return np.transpose(
+        np.meshgrid(*arrays, indexing='ij'), np.roll(np.arange(N + 1),
+                                                     -1)).reshape(-1, N)
+
 
 def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
     """
@@ -91,7 +93,7 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
         if Wt.shape != Wtargs.shape:
             er_msg = "Wt is of shape {}, but Wtargs is of shape {}."
             er_msg += " They should have the same shape."
-            raise ValueError(er_msg) 
+            raise ValueError(er_msg)
     else:
         # reshape to make an ndarray for each community
         Wt = np.full(P.shape, Wt, dtype=object)
@@ -108,12 +110,15 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
         else:
             jrange = range(i, K)
         for j in jrange:
-            wt = Wt[i, j]; wtargs = Wtargs[i, j]; p = P[i, j]
+            wt = Wt[i, j]
+            wtargs = Wtargs[i, j]
+            p = P[i, j]
             # identify submatrix for community i, j
             # cartesian product to identify edges for community i,j pair
             cprod = cartprod(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
-            triu = np.ravel_multi_index((cprod[:,0], cprod[:,1]), dims=A.shape)
+            triu = np.ravel_multi_index(
+                (cprod[:, 0], cprod[:, 1]), dims=A.shape)
             pchoice = np.random.uniform(size=len(triu))
             # connected with probability p
             triu = triu[pchoice < p]
@@ -127,12 +132,13 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
         A = A - np.diag(np.diag(A))
     if not directed:
         A = symmetrize(A)
-    return(A)
+    return (A)
     if not loops:
         A = remove_loops(A)
     if not directed:
         A = symmetrize(A)
-    return(A)
+    return (A)
+
 
 def binary_sbm(n, P, directed=False, loops=False):
     """
@@ -163,7 +169,8 @@ def binary_sbm(n, P, directed=False, loops=False):
         A: array-like, shape (n, n)
             the adjacency matrix.
     """
-    return(weighted_sbm(n, P, directed=directed, loops=loops))
+    return (weighted_sbm(n, P, directed=directed, loops=loops))
+
 
 def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
     """
@@ -210,7 +217,7 @@ def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
     else:
         # get all indices including diagonal
         er_msg = "n(n-1)"
-        Mmax = n*(n-1)
+        Mmax = n * (n - 1)
 
     A = np.zeros((n, n))
     # check if directedness is desired
@@ -226,7 +233,7 @@ def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
         # to loops argument
         idx = np.triu_indices(n, k=int(loops == False))
         er_msg += "/2"
-        Mmax = Mmax/2
+        Mmax = Mmax / 2
 
     # check whether M exceeds the maximum possible M
     if M > Mmax:
@@ -255,7 +262,8 @@ def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
     A[triu] = wt
     if not directed:
         A = symmetrize(A)
-    return(A)
+    return (A)
+
 
 def zi_np(n, p, wt=1, directed=False, loops=False, **kwargs):
     """
@@ -313,7 +321,7 @@ def zi_np(n, p, wt=1, directed=False, loops=False, **kwargs):
     else:
         # get all indices including diagonal
         er_msg = "n(n-1)"
-        Mmax = n*(n-1)
+        Mmax = n * (n - 1)
 
     A = np.zeros((n, n))
     # check if directedness is desired
@@ -329,7 +337,7 @@ def zi_np(n, p, wt=1, directed=False, loops=False, **kwargs):
         # to loops argument
         idx = np.triu_indices(n, k=int(loops == False))
         er_msg += "/2"
-        Mmax = Mmax/2
+        Mmax = Mmax / 2
 
     # select uniformly btwn 0 and 1; retain edges with pchosen < p
     # get triu in 1d coordinates by ravelling
@@ -350,7 +358,8 @@ def zi_np(n, p, wt=1, directed=False, loops=False, **kwargs):
     A[triu] = wt
     if not directed:
         A = symmetrize(A)
-    return(A)
+    return (A)
+
 
 def er_nm(n, M):
     """
@@ -373,7 +382,8 @@ def er_nm(n, M):
     -------
         A: array-like, shape (n, n)
     """
-    return(zi_nm(n, M, wt=1))
+    return (zi_nm(n, M, wt=1))
+
 
 def er_np(n, p):
     """
@@ -392,4 +402,4 @@ def er_np(n, p):
     -------
         A: array-like, shape (n, n)
     """
-    return(zi_np(n, p, wt=1))
+    return (zi_np(n, p, wt=1))
