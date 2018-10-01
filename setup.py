@@ -5,7 +5,7 @@ from setuptools.command.install import install
 from subprocess import check_output, call
 from sys import platform
 
-PACKAGE_NAME = 'graphstats'
+PACKAGE_NAME = 'graspy'
 DESCRIPTION = 'A set of python modules for graph statistics'
 with open('README.md', 'r') as f:
     LONG_DESCRIPTION = f.read()
