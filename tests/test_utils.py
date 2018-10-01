@@ -1,8 +1,8 @@
 import unittest
-import graphstats as gs
+import graspy as gs
 import numpy as np
 import networkx as nx
-from graphstats.utils import utils as gus
+from graspy.utils import utils as gus
 
 
 class TestInput(unittest.TestCase):
