@@ -50,7 +50,7 @@ def _test_output_dim(self, method, *args, **kwargs):
     self.assertEqual(embed.lpm.X.shape, (n, 4))
     self.assertTrue(embed.lpm.is_symmetric())
 
-def _test_sbm_er_binary_undirected(self, method, *args, **kwargs):
+def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
     np.random.seed(8888)
         
     num_sims = 50
@@ -58,7 +58,6 @@ def _test_sbm_er_binary_undirected(self, method, *args, **kwargs):
     communities = 2 
 
     verts_per_community = [100, 100]
-    P = np.array([[0.8, 0.2], [0.2, 0.8]])
 
     sbm_wins = 0
     er_wins = 0
@@ -85,25 +84,31 @@ def _test_sbm_er_binary_undirected(self, method, *args, **kwargs):
         aris = _kmeans_comparison((X_sbm, X_er), (labels_sbm, labels_er), communities)
         sbm_wins = sbm_wins + (aris[0] > aris[1])
         er_wins = er_wins + (aris[0] < aris[1])
+    
     #print(sbm_wins)
     #print(er_wins)
+    
     self.assertTrue(sbm_wins > er_wins)    
 
 class TestAdjacencySpectralEmbed(unittest.TestCase):
     
     def test_output_dim(self):
         _test_output_dim(self, AdjacencySpectralEmbed)
-
+    
+    
     def test_sbm_er_binary_undirected(self):
-        _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed)
+        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed, P)
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
-
+    
+    
     def test_output_dim(self):
         _test_output_dim(self, LaplacianSpectralEmbed)
     
-    # def test_sbm_er_binary_undirected(self):
-    #     _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed)
+    def test_sbm_er_binary_undirected(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.3]])
+        _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P)
 
 if __name__ == '__main__': 
     unittest.main()
