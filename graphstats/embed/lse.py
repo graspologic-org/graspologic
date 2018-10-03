@@ -5,7 +5,7 @@
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph, adj2laplace
+from ..utils import import_graph, to_laplace
 import numpy as np
 
 class LaplacianSpectralEmbed(BaseEmbed):
@@ -60,14 +60,21 @@ class LaplacianSpectralEmbed(BaseEmbed):
     def __init__(self, method=selectSVD, *args, **kwargs):
         super().__init__(method=method, *args, **kwargs)
 
-    def fit(self, graph):
+    def fit(self, graph, form='I-DAD'):
         """
         Fit LSE model to input graph
+
+        By default, uses the Laplacian normalization of the form 
+        .. math:: L = I - D^{-1/2} A D^{-1/2}
 
         Parameters
         ----------
         graph : array_like or networkx.Graph
             input graph to embed. see graphstats.utils.import_graph
+
+        form : string 
+            specifies the type of Laplacian normalization to use
+            (currently supports 'I-DAD' only)
 
         Returns
         -------
@@ -78,13 +85,14 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
         See Also
         --------
-        graphstats.utils.import_graph, graphstats.embed.lpm, graphstats.embed.embed
+        graphstats.utils.import_graph, graphstats.embed.lpm, graphstats.embed.embed,
+        graphstats.utils.to_laplace
 
         Examples
         --------
        
         """
         A = import_graph(graph)
-        L_norm = adj2laplace(A, form='I-DAD')
+        L_norm = to_laplace(A, form=form)
         self._reduce_dim(L_norm)
         return self.lpm

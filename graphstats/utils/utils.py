@@ -33,13 +33,14 @@ def import_graph(graph):
         graph = nx.to_numpy_array(
             graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif (type(graph) is np.ndarray):
-        if not np.issubdtype(graph.dtype, np.floating):
-            graph = graph.astype(np.float)
-        
         if len(graph.shape) != 2:
             raise ValueError('Matrix has improper number of dimensions')
         elif graph.shape[0] != graph.shape[1]:
             raise ValueError('Matrix is not square')
+        
+        if not np.issubdtype(graph.dtype, np.floating):
+            graph = graph.astype(np.float)
+
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
@@ -117,7 +118,7 @@ def remove_loops(graph):
     
     return graph
 
-def adj2laplace(graph, form='I-DAD'):
+def to_laplace(graph, form='I-DAD'):
     """
     A function to convert graph adjacency matrix to graph laplacian. 
 
