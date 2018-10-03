@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.testing import assert_almost_equal
 
-from graphstats.embed.mds import ClassicalMDS
+from graspy.embed.mds import ClassicalMDS
 
 
 def test_output():
