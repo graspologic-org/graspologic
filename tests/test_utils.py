@@ -3,6 +3,7 @@ import graspy as gs
 import numpy as np
 import networkx as nx
 from graspy.utils import utils as gus
+from math import sqrt
 
 
 class TestInput(unittest.TestCase):
@@ -32,6 +33,21 @@ class TestInput(unittest.TestCase):
             gus.import_graph(a)
         with self.assertRaises(TypeError):
             gus.import_graph(None)
+
+    def test_to_laplace_IDAD(self):
+        A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+
+        expected_L_normed = ([[1, -1 / (sqrt(2)),
+                               0], [-1 / (sqrt(2)), 1, -1 / (sqrt(2))],
+                              [0, -1 / (sqrt(2)), 1]])
+
+        L_normed = gus.to_laplace(A, form='I-DAD')
+
+        self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
+
+    def test_to_laplace_unsuported(self):
+        with self.assertRaises(TypeError):
+            gus.to_laplace(self.A, form='MOM')
 
 
 if __name__ == '__main__':

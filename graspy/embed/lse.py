@@ -1,20 +1,19 @@
 # ase.py
-# Created by Ben Pedigo on 2018-09-15.
+# Created by Ben Pedigo on 2018-09-26.
 # Email: bpedigo@jhu.edu
 
-# Eric Bridgeford
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph
+from ..utils import import_graph, to_laplace
+import numpy as np
 
-
-class AdjacencySpectralEmbed(BaseEmbed):
+class LaplacianSpectralEmbed(BaseEmbed):
     """
-    Class for computing the adjacency spectral embedding of a graph 
+    Class for computing the laplacian spectral embedding of a graph 
     
-    The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation of 
-    the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce the dimensionality
+    The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation of 
+    the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce the dimensionality
     to the specified k, or if k is unspecified, can find a number of dimensions automatically
     (see graphstats.embed.svd.selectSVD).
 
@@ -40,7 +39,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     .. math:: A = U \Sigma V^T
 
-    is used to find an orthonormal basis for a matrix, which in our case is the adjacency
+    is used to find an orthonormal basis for a matrix, which in our case is the Laplacian
     matrix of the graph. These basis vectors (in the matrices U or V) are ordered according 
     to the amount of variance they explain in the original matrix. By selecting a subset of these
     basis vectors (through our choice of dimensionality reduction) we can find a lower dimensional 
@@ -61,14 +60,21 @@ class AdjacencySpectralEmbed(BaseEmbed):
     def __init__(self, method=selectSVD, *args, **kwargs):
         super().__init__(method=method, *args, **kwargs)
 
-    def fit(self, graph):
+    def fit(self, graph, form='I-DAD'):
         """
-        Fit ASE model to input graph
+        Fit LSE model to input graph
+
+        By default, uses the Laplacian normalization of the form 
+        .. math:: L = I - D^{-1/2} A D^{-1/2}
 
         Parameters
         ----------
         graph : array_like or networkx.Graph
             input graph to embed. see graphstats.utils.import_graph
+
+        form : string 
+            specifies the type of Laplacian normalization to use
+            (currently supports 'I-DAD' only)
 
         Returns
         -------
@@ -79,12 +85,14 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         See Also
         --------
-        graphstats.utils.import_graph, graphstats.embed.lpm, graphstats.embed.embed
+        graphstats.utils.import_graph, graphstats.embed.lpm, graphstats.embed.embed,
+        graphstats.utils.to_laplace
 
         Examples
         --------
        
         """
         A = import_graph(graph)
-        self._reduce_dim(A)
+        L_norm = to_laplace(A, form=form)
+        self._reduce_dim(L_norm)
         return self.lpm
