@@ -1,9 +1,9 @@
 import unittest
-import graphstats as gs
+import graspy as gs
 import numpy as np
 import networkx as nx
-from graphstats.simulations.simulations import *
-from graphstats.utils.utils import is_symmetric, is_loopless
+from graspy.simulations.simulations import *
+from graspy.utils.utils import is_symmetric, is_loopless
 
 
 def remove_diagonal(A):

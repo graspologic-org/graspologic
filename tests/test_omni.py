@@ -4,9 +4,9 @@ import networkx as nx
 from numpy import array_equal, allclose
 from numpy.linalg import norm
 
-from graphstats.embed.omni import OmnibusEmbed, _get_omni_matrix
-from graphstats.simulations.simulations import er_np
-from graphstats.utils.utils import symmetrize, is_symmetric
+from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
+from graspy.simulations.simulations import er_np
+from graspy.utils.utils import symmetrize, is_symmetric
 
 
 def generate_data(n, seed=1):

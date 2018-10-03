@@ -1,12 +1,12 @@
 import unittest
-import graphstats as gs
+import graspy as gs
 import numpy as np
 import networkx as nx
-from graphstats.embed.embed import BaseEmbed
-from graphstats.simulations.simulations import er_nm
+from graspy.embed.embed import BaseEmbed
+from graspy.simulations.simulations import er_nm
+
 
 class TestBaseEmbed(unittest.TestCase):
-    
     def test_baseembed_er(self):
         k = 4
         embed = BaseEmbed(k=k)

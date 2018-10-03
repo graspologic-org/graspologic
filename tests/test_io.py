@@ -1,8 +1,8 @@
 import unittest
-import graphstats as gs
+import graspy as gs
 import numpy as np
 import networkx as nx
-from graphstats.utils import utils as gus
+from graspy.utils import utils as gus
 
 
 class TestInput(unittest.TestCase):
@@ -32,3 +32,11 @@ class TestInput(unittest.TestCase):
             gus.import_graph(a)
         with self.assertRaises(TypeError):
             gus.import_graph(None)
+
+    def test_nonsquare(self):
+        non_square = np.hstack((self.A, self.A))
+        with self.assertRaises(ValueError):
+            gus.import_graph(non_square)
+
+if __name__ == '__main__':
+    unittest.main()
