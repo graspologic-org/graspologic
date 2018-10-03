@@ -9,7 +9,6 @@ from ..utils import import_graph, adj2laplace
 import numpy as np
 
 class LaplacianSpectralEmbed(BaseEmbed):
-    # TODO: update docstring
     """
     Class for computing the laplacian spectral embedding of a graph 
     
@@ -62,7 +61,6 @@ class LaplacianSpectralEmbed(BaseEmbed):
         super().__init__(method=method, *args, **kwargs)
 
     def fit(self, graph):
-        # TODO: update docstring
         """
         Fit LSE model to input graph
 
@@ -87,6 +85,6 @@ class LaplacianSpectralEmbed(BaseEmbed):
        
         """
         A = import_graph(graph)
-        L_norm = adj2laplace(A, form='normalized')
+        L_norm = adj2laplace(A, form='I-DAD')
         self._reduce_dim(L_norm)
         return self.lpm

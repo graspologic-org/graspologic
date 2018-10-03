@@ -106,6 +106,7 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         P = np.array([[0.8, 0.2], [0.2, 0.3]])
         _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P)
 
+
 if __name__ == '__main__': 
     unittest.main()
 

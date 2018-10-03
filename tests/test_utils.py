@@ -42,10 +42,13 @@ class TestInput(unittest.TestCase):
                               [-1/(sqrt(2)), 1, -1/(sqrt(2))],
                               [0, -1/(sqrt(2)), 1]])
                               
-        L_normed = gus.adj2laplace(A, form='normalized')
+        L_normed = gus.adj2laplace(A, form='I-DAD')
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
+    def test_adj2laplace_unsuported(self):
+        with self.assertRaises(TypeError):
+            gus.adj2laplace(self.A, form='MOM')
 
 if __name__ == '__main__':
     unittest.main()

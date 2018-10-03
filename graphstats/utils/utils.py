@@ -117,7 +117,7 @@ def remove_loops(graph):
     
     return graph
 
-def adj2laplace(graph, form='normalized'):
+def adj2laplace(graph, form='I-DAD'):
     """
     A function to convert graph adjacency matrix to graph laplacian. 
 
@@ -137,7 +137,7 @@ def adj2laplace(graph, form='normalized'):
     """
     adj_matrix = import_graph(graph)
 
-    if form == 'normalized':
+    if form == 'I-DAD':
         D_vec = np.sum(adj_matrix, axis=0)
         D_root = np.diag(D_vec ** -0.5)
         L = np.diag(D_vec) - adj_matrix
@@ -145,6 +145,6 @@ def adj2laplace(graph, form='normalized'):
         L = np.dot(L, D_root)
         # L = D_root @ L @ D_root # not compatible with python 3.4
     else: 
-        raise NotImplementedError()
+        raise TypeError('Unsuported Laplacian normalization')
 
     return L
