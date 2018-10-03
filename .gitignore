@@ -111,3 +111,4 @@ dmypy.json
 
 # misc
 .vscode/
+docs/bpedigo/ase_clustering.py
