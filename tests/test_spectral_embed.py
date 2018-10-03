@@ -1,12 +1,13 @@
 import unittest
-import graphstats as gs
+import graspy as gs
 import numpy as np
 import networkx as nx
-from graphstats.embed.ase import AdjacencySpectralEmbed
-from graphstats.embed.lse import LaplacianSpectralEmbed  
-from graphstats.simulations.simulations import er_np, er_nm, weighted_sbm
+from graspy.embed.ase import AdjacencySpectralEmbed
+from graspy.embed.lse import LaplacianSpectralEmbed
+from graspy.simulations.simulations import er_np, er_nm, weighted_sbm
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
+
 
 def _kmeans_comparison(data, labels, n_clusters):
     """
@@ -29,16 +30,17 @@ def _kmeans_comparison(data, labels, n_clusters):
             of k-means clustering on the i-th data/labels
 
     """
-    
-    if len(data) != len(labels): 
+
+    if len(data) != len(labels):
         raise ValueError('Must have same number of labels and data')
 
     aris = []
     for i in range(0, len(data)):
         kmeans_prediction = KMeans(n_clusters=n_clusters).fit_predict(data[i])
         aris.append(adjusted_rand_score(labels[i], kmeans_prediction))
-    
+
     return aris
+
 
 def _test_output_dim(self, method, *args, **kwargs):
     k = 4
@@ -50,15 +52,16 @@ def _test_output_dim(self, method, *args, **kwargs):
     self.assertEqual(embed.lpm.X.shape, (n, 4))
     self.assertTrue(embed.lpm.is_symmetric())
 
+
 def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
     np.random.seed(8888)
-        
+
     num_sims = 50
     verts = 200
-    communities = 2 
+    communities = 2
 
     verts_per_community = [100, 100]
-    
+
     sbm_wins = 0
     er_wins = 0
     for sim in range(0, num_sims):
@@ -81,15 +84,16 @@ def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
         self.assertEqual(X_sbm.shape, (verts, communities))
         self.assertEqual(X_er.shape, (verts, communities))
 
-        aris = _kmeans_comparison((X_sbm, X_er), (labels_sbm, labels_er), communities)
+        aris = _kmeans_comparison((X_sbm, X_er), (labels_sbm, labels_er),
+                                  communities)
         sbm_wins = sbm_wins + (aris[0] > aris[1])
         er_wins = er_wins + (aris[0] < aris[1])
     #print(sbm_wins)
     #print(er_wins)
-    self.assertTrue(sbm_wins > er_wins)    
+    self.assertTrue(sbm_wins > er_wins)
+
 
 class TestAdjacencySpectralEmbed(unittest.TestCase):
-    
     def test_output_dim(self):
         _test_output_dim(self, AdjacencySpectralEmbed)
 
@@ -97,17 +101,15 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         P = np.array([[0.8, 0.2], [0.2, 0.8]])
         _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed, P)
 
-class TestLaplacianSpectralEmbed(unittest.TestCase):
 
+class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
         _test_output_dim(self, LaplacianSpectralEmbed)
-    
+
     def test_sbm_er_binary_undirected(self):
         P = np.array([[0.8, 0.2], [0.2, 0.3]])
         _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P)
 
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     unittest.main()
-
-        
