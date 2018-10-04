@@ -164,7 +164,6 @@ def pass_to_ranks(graph, method='zero-boost'):
     else: 
         if method == 'zero-boost':
             if is_symmetric(graph):
-                
                 # start by working with half of the graph, since symmetric
                 triu = np.triu(graph)
                 non_zeros = triu[triu != 0]
@@ -176,7 +175,8 @@ def pass_to_ranks(graph, method='zero-boost'):
                     num_zeros = (len(graph[graph == 0]) - graph.shape[0])/2
                     possible_edges = graph.shape[0] * (graph.shape[0] - 1) / 2 
                 else: 
-                    raise NotImplementedError()
+                    num_zeros = (len(triu[triu == 0]) - graph.shape[0] * (graph.shape[0] - 1) / 2) 
+                    possible_edges = graph.shape[0] * (graph.shape[0] + 1) / 2
                 
                 # shift up by the number of zeros 
                 rank = rank + num_zeros
@@ -189,7 +189,9 @@ def pass_to_ranks(graph, method='zero-boost'):
                 graph = symmetrize(triu, method='triu')
                 
                 return graph
-
+            else: 
+                raise NotImplementedError()
+        
         elif method == 'Rgraphstats':
             raise NotImplementedError()
         else: 
