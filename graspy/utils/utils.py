@@ -147,12 +147,21 @@ def to_laplace(graph, form='I-DAD'):
 
 def pass_to_ranks(graph, method='zero-boost'):
     """
-    
+    Rescales edge weights of an adjacency matrix based on their relative rank in 
+    the graph. 
+
     Parameters
     ----------
         graph: Adjacency matrix 
         
-    
+        method: string, optional
+            'zero-boost' preserves the edge weight for all 0s, but ranks the other
+            edges as if the ranks of all 0 edges has been assigned. If there are 
+            10 0-valued edges, the lowest non-zero edge gets weight 11 / (number
+            of possible edges). Ties settled by the average of the weight that those
+            edges would have received. Number of possible edges is determined 
+            by the type of graph (loopless or looped, directed or undirected)
+
     """ 
     
     graph = import_graph(graph)
@@ -191,9 +200,7 @@ def pass_to_ranks(graph, method='zero-boost'):
                 return graph
             else: 
                 raise NotImplementedError()
-        
-        elif method == 'Rgraphstats':
-            raise NotImplementedError()
+
         else: 
             raise ValueError('Unsuported pass-to-ranks method')
 
