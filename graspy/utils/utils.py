@@ -49,18 +49,13 @@ def import_graph(graph):
 
 
 def is_symmetric(X):
-    if np.array_equal(X, X.T):
-        return True
-    else:
-        return False
-
+    return np.array_equal(X, X.T)
 
 def is_loopless(X):
-    if np.any(np.diag(X) != 0):
-        return False
-    else:
-        return True
-
+    return np.any(np.diag(X) != 0)
+    
+def is_unweighted(X): 
+    return ((a==0) | (a==1)).all()
 
 def symmetrize(graph, method='triu'):
     """
@@ -149,3 +144,48 @@ def to_laplace(graph, form='I-DAD'):
         raise TypeError('Unsuported Laplacian normalization')
 
     return L
+
+def pass_to_ranks(graph, method='zero-inflated'):
+    """
+    
+    Parameters
+    ----------
+        graph: Adjacency matrix 
+    2 * Rank / (num_edges + 1)
+    
+    
+    """ 
+    
+    graph = import_graph(graph)
+    graph_nonzero = graph[graph != 0]
+
+    # do nothing if the graph is unweighted
+    if is_unweighted(graph):
+        return graph
+    else: 
+        if method == 'zero-inflated':
+            if is_symmetric(graph):
+                triu = np.triu(graph)
+                non_zeros = triu[triu != 0]
+                rank = rankdata(non_zeros)
+                if is_loopless(graph):
+                    num_zeros = len(triu[np.triu_indices(triu)] == 0) - graph.shape[0]
+                    possible_edges = graph.shape[0] * (graph.shape[0] - 1) / 2 
+                rank = rank + num_zeros
+                rank = rank / possible_edges
+                graph[graph != 0] = rank 
+                return graph
+        elif method == 'Rgraphstats':
+            raise NotImplementedError()
+        else: 
+            raise ValueError('Unsuported pass-to-ranks method')
+
+#     if is_symmetric(graph): 
+
+#         print(graph.astype(int))
+#         rank = rankdata(graph)
+#         print(np.reshape(rank, (graph.shape[0], graph.shape[1])))
+#         rank = np.reshape(rank, (graph.shape[0], graph.shape[1])) - rank.min()
+#         print(rank)
+#         rank = 2 * rank / (graph_nonzero.shape[0] + 1)
+#         print(rank)
