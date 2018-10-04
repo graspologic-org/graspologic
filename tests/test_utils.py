@@ -49,6 +49,23 @@ class TestInput(unittest.TestCase):
         with self.assertRaises(TypeError):
             gus.to_laplace(self.A, form='MOM')
 
+    def test_ptr_loopless_zeroboost(self): 
+        A = np.array([[0, 1, 0, 60], 
+                      [1, 0, 400, 0],
+                      [0, 400, 0, 80],
+                      [60, 0, 80, 0]])
+        ptr_expected = np.array([[0, 0.5, 0, 4.0/6.0],
+                                 [0.5, 0, 1, 0],
+                                 [0, 1, 0, 5.0/6],
+                                 [4.0/6, 0, 5.0/6, 0]])
+        
+        ptr_out = gus.pass_to_ranks(A)
+        print(ptr_out)
+        self.assertTrue(np.allclose(ptr_out, ptr_expected, rtol=1e-04))
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

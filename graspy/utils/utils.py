@@ -52,7 +52,7 @@ def is_symmetric(X):
     return np.array_equal(X, X.T)
 
 def is_loopless(X):
-    return np.any(np.diag(X) != 0)
+    return not np.any(np.diag(X) != 0)
     
 def is_unweighted(X): 
     return ((X==0) | (X==1)).all()
@@ -145,14 +145,13 @@ def to_laplace(graph, form='I-DAD'):
 
     return L
 
-def pass_to_ranks(graph, method='zero-inflated'):
+def pass_to_ranks(graph, method='zero-boost'):
     """
     
     Parameters
     ----------
         graph: Adjacency matrix 
-    2 * Rank / (num_edges + 1)
-    
+        
     
     """ 
     
@@ -163,18 +162,34 @@ def pass_to_ranks(graph, method='zero-inflated'):
     if is_unweighted(graph):
         return graph
     else: 
-        if method == 'zero-inflated':
+        if method == 'zero-boost':
             if is_symmetric(graph):
+                
+                # start by working with half of the graph, since symmetric
                 triu = np.triu(graph)
                 non_zeros = triu[triu != 0]
                 rank = rankdata(non_zeros)
+                
+                num_zeros = 0
+                possible_edges = 0
                 if is_loopless(graph):
-                    num_zeros = len(triu[np.triu_indices(triu)] == 0) - graph.shape[0]
+                    num_zeros = (len(graph[graph == 0]) - graph.shape[0])/2
                     possible_edges = graph.shape[0] * (graph.shape[0] - 1) / 2 
+                else: 
+                    raise NotImplementedError()
+                
+                # shift up by the number of zeros 
                 rank = rank + num_zeros
+
+                # normalize by the number of possible edges for this kind of graph
                 rank = rank / possible_edges
-                graph[graph != 0] = rank 
+
+                # put back into matrix form and reflect over the diagonal
+                triu[triu != 0] = rank 
+                graph = symmetrize(triu, method='triu')
+                
                 return graph
+
         elif method == 'Rgraphstats':
             raise NotImplementedError()
         else: 
