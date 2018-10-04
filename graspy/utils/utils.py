@@ -55,7 +55,7 @@ def is_loopless(X):
     return np.any(np.diag(X) != 0)
     
 def is_unweighted(X): 
-    return ((a==0) | (a==1)).all()
+    return ((X==0) | (X==1)).all()
 
 def symmetrize(graph, method='triu'):
     """
