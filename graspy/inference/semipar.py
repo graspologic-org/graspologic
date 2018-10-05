@@ -3,7 +3,6 @@
 # 10.18.2018
 
 import numpy as np
-
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
 from ..simulations import rdpg_from_p, p_from_latent

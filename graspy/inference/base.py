@@ -1,5 +1,4 @@
 from abc import abstractmethod
-
 from sklearn.base import BaseEstimator
 
 
