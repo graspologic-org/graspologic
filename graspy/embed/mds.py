@@ -3,6 +3,7 @@ from scipy.sparse.linalg import svds
 from sklearn.base import BaseEstimator
 
 from .svd import selectSVD
+from ..utils import is_symmetric
 
 
 def _get_centering_matrix(n):
@@ -46,7 +47,7 @@ class ClassicalMDS(BaseEstimator):
     singular_values_ : array, shape (n_components,)
         The singular values corresponding to each of the selected components.
 
-    n_components_ : int
+    n_components : int
         Equals the parameter n_components, or n_features if n_components
         is None.
 
@@ -67,23 +68,29 @@ class ClassicalMDS(BaseEstimator):
         X : array-like, shape (n_samples, n_samples)
             Precomputed Euclidean dissimilarity matrix.
         """
-        # Handle n_components==None
+        if not is_symmetric(X):
+            msg = "X must be a symmetric array."
+            raise ValueError(msg)
+
+        # Handle n_components
         if self.n_components is None:
             # TODO: use dimselect here
             n_components = min(X.shape) - 1
+        elif self.n_components <= 0:
+            msg = "n_components must be >= 1 or None."
+            raise ValueError(msg)
         else:
             n_components = self.n_components
 
         n_vertices = X.shape[0]
 
         J = _get_centering_matrix(n_vertices)
-        B = J.dot(X**2).dot(J)
-        B *= -0.5
+        B = J.dot(X**2).dot(J) * -0.5
 
         U, V, D = selectSVD(B, k=n_components)
 
         self.components_ = U
-        self.singular_values_ = D
+        self.singular_values_ = D**0.5
 
         return self
 
@@ -102,6 +109,6 @@ class ClassicalMDS(BaseEstimator):
         """
         self.fit(X)
 
-        X_new = np.dot(self.components_, np.diag(self.singular_values_**0.5))
+        X_new = np.dot(self.components_, np.diag(self.singular_values_))
 
         return X_new
