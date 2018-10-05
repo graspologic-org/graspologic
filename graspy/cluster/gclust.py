@@ -87,6 +87,7 @@ class GaussianCluster(BaseCluster):
             msg = "n_components must be >= n_samples, but got \
                 n_components = {}, n_samples = {}".format(
                 self.max_components, X.shape[0])
+            raise ValueError(msg)
         elif self.max_components >= 1:
             max_components = self.max_components
         elif self.max_components is None:
