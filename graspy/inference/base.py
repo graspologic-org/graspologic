@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from sklearn.base import BaseEstimator
 
-
 class BaseInference(BaseEstimator):
     """
     Base class for inference tasks such as semiparametric and
