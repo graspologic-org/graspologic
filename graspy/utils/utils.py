@@ -165,7 +165,6 @@ def pass_to_ranks(graph, method='zero-boost'):
     """ 
     
     graph = import_graph(graph)
-    graph_nonzero = graph[graph != 0]
 
     # do nothing if the graph is unweighted
     if is_unweighted(graph):

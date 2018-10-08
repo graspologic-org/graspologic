@@ -88,7 +88,7 @@ class TestInput(unittest.TestCase):
             gus.pass_to_ranks(self.A, method='hazelnutcoffe')
         with self.assertRaises(NotImplementedError):
             A = self.A
-            A[2,0] = 1000 
+            A[2,0] = 1000 # make A asymmetric 
             gus.pass_to_ranks(A)
 
 if __name__ == '__main__':
