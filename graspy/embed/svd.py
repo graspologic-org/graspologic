@@ -263,5 +263,3 @@ class SelectSVD(TruncatedSVD):
         #   self.n_components = selectDim(X)
         self.fit_transform(X)
         return self
-=======
->>>>>>> 4b0389aba0a0ef80740fff8fc2049513654c5247
