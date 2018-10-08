@@ -98,9 +98,9 @@ def selectDim(data, n_elbows=1, threshold=0):
 
             if likelihood > likelihood_elbow:
                 likelihood_elbow = likelihood
-                elbow_l.append(likelihood)
                 elbow = d
             d += 1
+        elbow_l.append(likelihood_elbow)
         if len(elbows) == 0:
             elbows.append(elbow)
         else:
@@ -116,6 +116,14 @@ def selectDim(data, n_elbows=1, threshold=0):
     else:
         elbows.append(n)
         return np.array(elbows)+1, elbow_l, L2, all_l
+
+    return {
+        'optimal_d': np.array(elbows)+1,
+        'optimal_lq': elbow_l,
+        'ds': L2,
+        'lqs': all_l
+    }
+    raise NotImplementedError()
 
 
 def selectSVD(X, k=None):

@@ -5,13 +5,13 @@ from setuptools.command.install import install
 from subprocess import check_output, call
 from sys import platform
 
-PACKAGE_NAME = 'graphstats'
+PACKAGE_NAME = 'graspy'
 DESCRIPTION = 'A set of python modules for graph statistics'
 with open('README.md', 'r') as f:
     LONG_DESCRIPTION = f.read()
 AUTHOR = 'Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand, Brandon Duderstadt',
 AUTHOR_EMAIL = 'ebridge2@jhu.edu'
-URL = 'https://github.com/neurodata/pygrapstats'
+URL = 'https://github.com/neurodata/graspy'
 MINIMUM_PYTHON_VERSION = 3, 4  # Minimum of Python 3.4
 
 REQUIRED_PACKAGES = [
