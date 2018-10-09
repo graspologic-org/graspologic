@@ -1,16 +1,19 @@
 import numpy as np
-from sklearn.mixture import GaussianMixture
 from sklearn.metrics import adjusted_rand_score
+from sklearn.mixture import GaussianMixture
+from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseCluster
 
 
 class GaussianCluster(BaseCluster):
     """
-    Fits gaussian mixure model to the data. 
+    Gaussian Mixture Model (GMM)
 
-    Computes all possible models from one component to max_components. 
-    The best model is given by the lowest BIC score.
+    Representation of a Gaussian mixture model probability distribution. 
+    This class allows to estimate the parameters of a Gaussian mixture 
+    distribution. It computes all possible models from one component to 
+    max_components. The best model is given by the lowest BIC score.
 
     Parameters
     ----------
@@ -46,7 +49,7 @@ class GaussianCluster(BaseCluster):
     bic_ : list
         List of BIC values computed for all possible number of clusters
         given by range(1, max_components).
-    
+
     ari_ : list
         Only computed when y is given. List of ARI values computed for 
         all possible number of clusters given by range(1, max_components).
@@ -61,7 +64,9 @@ class GaussianCluster(BaseCluster):
         self.random_state = random_state
 
     def fit(self, X, y=None):
-        """Gaussian Mixture Model (GMM)
+        """
+        Fits gaussian mixure model to the data. 
+
 
         Estimate model parameters with the EM algorithm.
 
@@ -71,7 +76,7 @@ class GaussianCluster(BaseCluster):
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
         
-        y : array-like, shape (n_samples,), optional
+        y : array-like, shape (n_samples,), optional (default=None)
             List of labels for X if available. Used to compute
             ARI scores.
 
@@ -116,7 +121,8 @@ class GaussianCluster(BaseCluster):
                 aris.append(adjusted_rand_score(y, predictions))
 
         self.bic_ = bics
-        self.ari_ = aris
+        if y is not None:
+            self.ari_ = aris
         self.n_components_ = np.argmin(bics) + 1
         self.model_ = models[np.argmin(bics)]
 
@@ -133,7 +139,7 @@ class GaussianCluster(BaseCluster):
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
 
-        y : array-like, shape (n_samples,), optional
+        y : array-like, shape (n_samples,), optional (default=None)
             List of labels for X if available. Used to compute
             ARI scores.
 
@@ -141,6 +147,47 @@ class GaussianCluster(BaseCluster):
         -------
         labels : array, shape (n_samples,)
             Component labels.
+
+        ari : float
+            Adjusted Rand index. Only returned if y is given.
         """
         self.fit(X)
-        return self.model_.predict(X, y)
+        labels = self.model_.predict(X)
+
+        if y is None:
+            return labels
+        else:
+            ari = self.ari_(np.argmin(self.bic_))
+            return labels, ari
+
+    def predict(self, X, y=None):
+        """
+        Predict the labels for X using the model given by best BIC score.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            List of n_features-dimensional data points. Each row
+            corresponds to a single data point.
+
+        y : array-like, shape (n_samples,), optional (default=None)
+            List of labels for X if available. Used to compute
+            ARI scores.
+
+        Returns
+        -------
+        labels : array, shape (n_samples,)
+            Component labels.
+
+        ari : float
+            Adjusted Rand index. Only returned if y is given.
+        """
+        # Check if fit is already called
+        check_is_fitted(self, ['model_'], all_or_any=all)
+        labels = self.model_.predict(X)
+
+        if y is None:
+            return labels
+        else:
+            ari = adjusted_rand_score(y, labels)
+            return labels, ari

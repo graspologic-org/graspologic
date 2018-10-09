@@ -173,12 +173,6 @@ class OmnibusEmbed(BaseEmbed):
         """
         Computes test statistics based on each pairs 
 
-        Parameters
-        ----------
-        graphs : list of graphs
-            List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph.
-
         Returns
         -------
         out : array-like, shape (n_graphs, n_graphs)
