@@ -19,10 +19,25 @@ def pass_to_ranks(graph, method='zero-boost'):
                 of possible edges). Ties settled by the average of the weight that those
                 edges would have received. Number of possible edges is determined 
                 by the type of graph (loopless or looped, directed or undirected)
-            '
+            'simple-all': assigns ranks to all non-zero edges, settling ties using 
+                the average. Ranks are then scaled by 
+                    .. math:: \frac{2 rank(non-zero edges)}{n^2 + 1}
+                where n is the number of nodes
+            'simple-nonzero':
+                same as 'simple-all' but ranks are scaled by
+                    .. math:: \frac{2 rank(non-zero edges)}{num_nonzero + 1}
+
+    See also
+    --------
+        scipy.stats.rankdata
+
+    Returns
+    ------- 
+        graph: numpy.ndarray, shape(n_vertices, n_vertices)
+            Adjacency matrix of graph after being passed to ranks
     """ 
     
-    graph = import_graph(graph)
+    graph = import_graph(graph) # just for typechecking
 
     if is_unweighted(graph):
         return graph
