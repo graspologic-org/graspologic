@@ -123,6 +123,8 @@ class GaussianCluster(BaseCluster):
         self.bic_ = bics
         if y is not None:
             self.ari_ = aris
+        else:
+            self.ari_ = None
         self.n_components_ = np.argmin(bics) + 1
         self.model_ = models[np.argmin(bics)]
 
