@@ -7,7 +7,6 @@
 
 import numpy as np
 import networkx as nx
-from scipy.stats import rankdata 
 
 def import_graph(graph):
     """
@@ -139,76 +138,7 @@ def to_laplace(graph, form='I-DAD'):
         L = np.diag(D_vec) - adj_matrix
         L = np.dot(D_root, L)
         L = np.dot(L, D_root)
-        # L = D_root @ L @ D_root # not compatible with python 3.4
     else: 
         raise TypeError('Unsuported Laplacian normalization')
 
     return L
-
-def pass_to_ranks(graph, method='zero-boost'):
-    """
-    Rescales edge weights of an adjacency matrix based on their relative rank in 
-    the graph. 
-
-    Parameters
-    ----------
-        graph: Adjacency matrix 
-        
-        method: string, optional
-            'zero-boost' preserves the edge weight for all 0s, but ranks the other
-            edges as if the ranks of all 0 edges has been assigned. If there are 
-            10 0-valued edges, the lowest non-zero edge gets weight 11 / (number
-            of possible edges). Ties settled by the average of the weight that those
-            edges would have received. Number of possible edges is determined 
-            by the type of graph (loopless or looped, directed or undirected)
-
-    """ 
-    
-    graph = import_graph(graph)
-
-    # do nothing if the graph is unweighted
-    if is_unweighted(graph):
-        return graph
-    else: 
-        if method == 'zero-boost':
-            if is_symmetric(graph):
-                # start by working with half of the graph, since symmetric
-                triu = np.triu(graph)
-                non_zeros = triu[triu != 0]
-                rank = rankdata(non_zeros)
-                
-                num_zeros = 0
-                possible_edges = 0
-                if is_loopless(graph):
-                    num_zeros = (len(graph[graph == 0]) - graph.shape[0])/2
-                    possible_edges = graph.shape[0] * (graph.shape[0] - 1) / 2 
-                else: 
-                    num_zeros = (len(triu[triu == 0]) - graph.shape[0] * (graph.shape[0] - 1) / 2) 
-                    possible_edges = graph.shape[0] * (graph.shape[0] + 1) / 2
-                
-                # shift up by the number of zeros 
-                rank = rank + num_zeros
-
-                # normalize by the number of possible edges for this kind of graph
-                rank = rank / possible_edges
-
-                # put back into matrix form and reflect over the diagonal
-                triu[triu != 0] = rank 
-                graph = symmetrize(triu, method='triu')
-                
-                return graph
-            else: 
-                raise NotImplementedError()
-
-        else: 
-            raise ValueError('Unsuported pass-to-ranks method')
-
-#     if is_symmetric(graph): 
-
-#         print(graph.astype(int))
-#         rank = rankdata(graph)
-#         print(np.reshape(rank, (graph.shape[0], graph.shape[1])))
-#         rank = np.reshape(rank, (graph.shape[0], graph.shape[1])) - rank.min()
-#         print(rank)
-#         rank = 2 * rank / (graph_nonzero.shape[0] + 1)
-#         print(rank)
