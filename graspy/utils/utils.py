@@ -8,7 +8,6 @@
 import numpy as np
 import networkx as nx
 
-
 def import_graph(graph):
     """
 	A function for reading a graph and returning a shared
@@ -49,18 +48,13 @@ def import_graph(graph):
 
 
 def is_symmetric(X):
-    if np.array_equal(X, X.T):
-        return True
-    else:
-        return False
-
+    return np.array_equal(X, X.T)
 
 def is_loopless(X):
-    if np.any(np.diag(X) != 0):
-        return False
-    else:
-        return True
-
+    return not np.any(np.diag(X) != 0)
+    
+def is_unweighted(X): 
+    return ((X==0) | (X==1)).all()
 
 def symmetrize(graph, method='triu'):
     """
@@ -144,7 +138,6 @@ def to_laplace(graph, form='I-DAD'):
         L = np.diag(D_vec) - adj_matrix
         L = np.dot(D_root, L)
         L = np.dot(L, D_root)
-        # L = D_root @ L @ D_root # not compatible with python 3.4
     else: 
         raise TypeError('Unsuported Laplacian normalization')
 
