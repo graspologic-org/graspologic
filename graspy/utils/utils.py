@@ -136,10 +136,14 @@ def to_laplace(graph, form='I-DAD'):
             2D (n_vertices, n_vertices) array representing graph 
             laplacian of specified form
     """
+    valid_inputs = ['I-DAD', 'DAD']
+    if form not in valid_inputs:
+        raise TypeError('Unsuported Laplacian normalization')
+    
     adj_matrix = import_graph(graph)
-
     D_vec = np.sum(adj_matrix, axis=0)
     D_root = np.diag(D_vec ** -0.5)
+    
     if form == 'I-DAD':
         L = np.diag(D_vec) - adj_matrix
         L = np.dot(D_root, L)
@@ -147,6 +151,5 @@ def to_laplace(graph, form='I-DAD'):
     elif form == 'DAD':
         L = np.dot(D_root, adj_matrix)
         L = np.dot(L, D_root)
-    else: 
-        raise TypeError('Unsuported Laplacian normalization')
+    
     return L
