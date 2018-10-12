@@ -132,13 +132,15 @@ def to_laplace(graph, form='I-DAD'):
     """
     adj_matrix = import_graph(graph)
 
+    D_vec = np.sum(adj_matrix, axis=0)
+    D_root = np.diag(D_vec ** -0.5)
     if form == 'I-DAD':
-        D_vec = np.sum(adj_matrix, axis=0)
-        D_root = np.diag(D_vec ** -0.5)
         L = np.diag(D_vec) - adj_matrix
         L = np.dot(D_root, L)
         L = np.dot(L, D_root)
+    elif form == 'DAD':
+        L = np.dot(D_root, adj_matrix)
+        L = np.dot(L, D_root)
     else: 
         raise TypeError('Unsuported Laplacian normalization')
-
     return L
