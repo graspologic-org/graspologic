@@ -116,13 +116,19 @@ def to_laplace(graph, form='I-DAD'):
     """
     A function to convert graph adjacency matrix to graph laplacian. 
 
-    Currently only supports normalized laplacian.
+    Currently supports I-DAD and DAD laplacians, where D is the diagonal
+    matrix of degrees of each node raised to the -1/2 power, I is the 
+    identity matrix, and A is the adjacency matrix
 
     Parameters
     ----------
         graph: object
             Either array-like, (n_vertices, n_vertices) numpy array,
             or an object of type networkx.Graph.
+
+        form: string
+            I-DAD: computes L = I - D*A*D
+            DAD: computes L = D*A*D
 
     Returns
     -------
