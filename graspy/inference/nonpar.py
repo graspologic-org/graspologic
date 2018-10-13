@@ -30,5 +30,5 @@ class NonparametricTest(BaseInference):
     """
 
     def __init__(self, embedding='ase', n_components=None):
-        self.embedding = 'ase'
+        self.embedding = embedding
         self.n_components_ = n_components
