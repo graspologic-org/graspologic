@@ -32,11 +32,11 @@ class BaseInference(BaseEstimator):
         self.n_components = n_components
 
     @abstractmethod
-    def bootstrap(self):
+    def _bootstrap(self):
         pass
 
     @abstractmethod
-    def embed(self, X1, X2, n_componets):
+    def _embed(self, X1, X2, n_componets):
         """
         Computes the latent positions of input graphs
 
@@ -58,7 +58,7 @@ class BaseInference(BaseEstimator):
             raise ValueError(msg)
 
     @abstractmethod
-    def fit(self, X1, X2):
+    def fit(self, A1, A2):
         """
         Compute the test statistic and the null distribution.
 

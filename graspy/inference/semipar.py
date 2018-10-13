@@ -28,6 +28,26 @@ class SemiparamatricTest(BaseInference):
         dimensions are found by the Zhu and Godsi algorithm.
     """
 
-    def __init__(self, embedding='ase', n_components=None):
-        self.embedding = 'ase'
-        self.n_components_ = n_components
+    def __init__(self, embedding=AdjacenctSpectralEmbed, n_components=None, *args, **kwargs):
+        super().__init__(embedding=embedding, n_components=n_components, *args, **kwargs)
+
+    def _bootstrap():
+        
+    def _embed(A1, A2):
+        if embedding not in ['ase', 'lse', 'omnibus']: 
+            raise ValueError('Invalid embedding method "{}"'.format(embedding))
+        
+        if embedding == 'ase':
+            if n_components is None:
+                X1_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A1).lpm.X
+                X2_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A2).lpm.X
+            else: 
+                X1_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A1).lpm.X
+                X2_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A2).lpm.X
+
+    def fit(self, A1, A2):
+        X1_hat, X2_hat = _embed(A1, A2):
+
+
+
+    
