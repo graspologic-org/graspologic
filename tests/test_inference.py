@@ -27,9 +27,9 @@ class TestSemiparametricTest(unittest.TestCase):
                        [1, 0, 1],
                        [0, 1, 0]])
 
-        A2 = np.array([[1, 1, 1],
-                       [1, 1, 1],
-                       [1, 1, 1]])
+        A2 = np.array([[1000, 1, 0],
+                       [1 ,1, 1],
+                       [0, 1, 1000]])
 
         spt = SemiparametricTest()
         X_hats = spt._embed(A1, A2)
