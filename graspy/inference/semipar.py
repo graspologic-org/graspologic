@@ -33,16 +33,17 @@ class SemiparametricTest(BaseInference):
         super().__init__(embedding=embedding, n_components=n_components, *args, **kwargs)
         self.n_bootstraps = n_bootstraps
  
-    def _bootstrap(self, X_hats):
-        bootstrap_t = np.zeros((self.n_bootstraps))
+    def _bootstrap(self, X_hat):
+        t_bootstrap = np.zeros((self.n_bootstraps))
         for i in range(self.n_bootstraps):
-            f_norms = []
-            for sample in range(2):
-                X1_hat_simulated = er_nm(X_hats[sample].shape[0],2) # TODO: replace with RDPG sampled from X_hat
-                X2_hat_simulated = er_nm(X_hats[sample].shape[0],2)
-                f_norms.append(procrustes(X1_hat_simulated, X2_hat_simulated)[2])
-            bootstrap_t[i] = max(f_norms)
-        return bootstrap_t
+            X1_hat_simulated = er_nm(X_hat.shape[0],2) # TODO: replace with RDPG sampled from X_hat
+            X2_hat_simulated = er_nm(X_hat.shape[0],2)
+            f_norm = procrustes(X1_hat_simulated, X2_hat_simulated)[2] # TODO: swap out procrustes()[2] with other forms 
+                                                                       # to test orthogonal case and arbitrary diagonal case
+            t_bootstrap[i] = f_norm
+
+        
+        return 
 
     def _embed(self, A1, A2):
         if self.embedding not in ['ase', 'lse', 'omnibus']: 
@@ -68,6 +69,7 @@ class SemiparametricTest(BaseInference):
 
     def fit(self, A1, A2):
         X_hats = self._embed(A1, A2)
+        self._bootstrap(X_hats)
 
 
 
