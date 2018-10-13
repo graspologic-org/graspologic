@@ -83,7 +83,8 @@ def selectSVD(X, k=None):
     """
     if (k is None):
         selectDim(X)
-    if k > min(X.shape):
+    if k > min(X.shape): #TODO this method does not properly catch error if k=min(X.shape),
+                         # also may be unecessary (see svds error catching)
         msg = "k is {}, but min(X.shape) is {}."
         msg = msg.format(k, min(X.shape))
         raise ValueError(msg)

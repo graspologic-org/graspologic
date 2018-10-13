@@ -2,9 +2,10 @@ import numpy as np
 
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
+from ..simulations import er_nm
+from scipy.spatial import procrustes
 
-
-class SemiparamatricTest(BaseInference):
+class SemiparametricTest(BaseInference):
     """
     Two sample hypothesis test for the semiparamatric problem of determining
     whether two random dot product graphs have the same latent positions.
@@ -28,25 +29,45 @@ class SemiparamatricTest(BaseInference):
         dimensions are found by the Zhu and Godsi algorithm.
     """
 
-    def __init__(self, embedding=AdjacenctSpectralEmbed, n_components=None, *args, **kwargs):
+    def __init__(self, embedding='ase', n_components=2, n_bootstraps=100, *args, **kwargs):
         super().__init__(embedding=embedding, n_components=n_components, *args, **kwargs)
+        self.n_bootstraps = n_bootstraps
+ 
+    def _bootstrap(self, X_hats):
+        bootstrap_t = np.zeros((self.n_bootstraps))
+        for i in range(self.n_bootstraps):
+            f_norms = []
+            for sample in range(2):
+                X1_hat_simulated = er_nm(X_hats[sample].shape[0],2) # TODO: replace with RDPG sampled from X_hat
+                X2_hat_simulated = er_nm(X_hats[sample].shape[0],2)
+                f_norms.append(procrustes(X1_hat_simulated, X2_hat_simulated)[2])
+            bootstrap_t[i] = max(f_norms)
+        return bootstrap_t
 
-    def _bootstrap():
+    def _embed(self, A1, A2):
+        if self.embedding not in ['ase', 'lse', 'omnibus']: 
+            raise ValueError('Invalid embedding method "{}"'.format(self.embedding))
         
-    def _embed(A1, A2):
-        if embedding not in ['ase', 'lse', 'omnibus']: 
-            raise ValueError('Invalid embedding method "{}"'.format(embedding))
+        if self.n_components is None:
+            raise NotImplementedError('Wait for dimselect')
+
+        X1_hat = np.array([]) 
+        X2_hat = np.array([])
+        if self.embedding == 'ase':
+            X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
+            X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A2)
+        elif self.embedding == 'lse':
+            X1_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A1)
+            X2_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A2)
+        elif self.embedding == 'omnibus':
+            X_hat_compound = OmnibusEmbed(k=self.n_components).fit_transform([A1, A2])
+            X1_hat = X_hat_compound[:A1.shape[0],:]
+            X2_hat = X_hat_compound[A2.shape[1]:,:]
         
-        if embedding == 'ase':
-            if n_components is None:
-                X1_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A1).lpm.X
-                X2_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A2).lpm.X
-            else: 
-                X1_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A1).lpm.X
-                X2_hat = AdjacencySpectralEmbed(method=selectSVD).fit_transform(A2).lpm.X
+        return (X1_hat, X2_hat)
 
     def fit(self, A1, A2):
-        X1_hat, X2_hat = _embed(A1, A2):
+        X_hats = self._embed(A1, A2)
 
 
 
