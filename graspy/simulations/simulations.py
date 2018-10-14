@@ -403,3 +403,14 @@ def er_np(n, p):
         A: array-like, shape (n, n)
     """
     return (zi_np(n, p, wt=1))
+
+def rdpg(latent_positions):
+    """
+    """
+
+    P = np.dot(latent_positions, latent_positions.T)
+    P = np.ravel(P)
+    P[P < 0] = 0 # machine precision 0 can be negative sometimes? 
+    A = np.random.binomial(np.ones_like(P, dtype=int), P)
+    A = np.reshape(A, (latent_positions.shape[0], latent_positions.shape[0]))
+    return A
