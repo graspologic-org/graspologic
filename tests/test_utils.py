@@ -5,7 +5,6 @@ import networkx as nx
 from graspy.utils import utils as gus
 from math import sqrt
 
-
 class TestInput(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -49,6 +48,10 @@ class TestInput(unittest.TestCase):
         with self.assertRaises(TypeError):
             gus.to_laplace(self.A, form='MOM')
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_is_unweighted(self):
+        B = np.array([[0, 1, 0, 0], 
+                      [1, 0, 1, 0],
+                      [0, 1.0, 0, 0],
+                      [1, 0, 1, 0]])
+        self.assertTrue(gus.is_unweighted(B))
+        self.assertFalse(gus.is_unweighted(self.A))

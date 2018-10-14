@@ -88,8 +88,7 @@ def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
                                   communities)
         sbm_wins = sbm_wins + (aris[0] > aris[1])
         er_wins = er_wins + (aris[0] < aris[1])
-    #print(sbm_wins)
-    #print(er_wins)
+
     self.assertTrue(sbm_wins > er_wins)
 
 
