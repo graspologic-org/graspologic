@@ -16,7 +16,6 @@ def remove_diagonal(A):
     return(A[dind])
 
 class Test_ER(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.n = 20
