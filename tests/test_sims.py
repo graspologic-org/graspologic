@@ -647,6 +647,7 @@ class Test_RDPG(unittest.TestCase):
                       [1,1],
                       [1,0],
                       [1,0],])
+<<<<<<< HEAD
         A = rdpg_from_latent(X)
         self.assertTrue(A.shape, (5,5))
 
@@ -722,3 +723,11 @@ class Test_RDPG(unittest.TestCase):
         with self.assertRaises(ValueError):
             rdpg_from_p(x2) # wrong shape for P
 >>>>>>> typechecking and tests
+=======
+        X = X / np.linalg.norm(X, axis=0)
+        print(np.linalg.norm(X, axis=0))
+        print(np.linalg.norm(X, axis=1))
+        A = rdpg(X)
+        self.assertTrue(A.shape, (5,5))
+
+>>>>>>> added ipynb

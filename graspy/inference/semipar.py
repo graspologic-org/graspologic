@@ -114,8 +114,8 @@ class SemiparametricTest(BaseInference):
             raise NotImplementedError('Wait for dimselect') # TODO
 
         if self.embedding == 'ase':
-            X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit(A1).X
-            X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit(A2).X
+            X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
+            X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A2)
         elif self.embedding == 'lse':
             X1_hat = LaplacianSpectralEmbed(k=self.n_components).fit(A1).X
             X2_hat = LaplacianSpectralEmbed(k=self.n_components).fit(A2).X
