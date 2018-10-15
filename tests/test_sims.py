@@ -16,7 +16,6 @@ def remove_diagonal(A):
     return(A[dind])
 
 class Test_ER(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.n = 20
@@ -486,3 +485,25 @@ class Test_WSBM(unittest.TestCase):
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
+
+class Test_RDPG(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.n = [50, 70]
+        cls.Pns = np.vstack(([0.6, 0.2], [0.3, 0.4]))
+        # define symmetric probability as evenly weighted
+        cls.Psy = np.vstack(([0.6, 0.2], [0.3, 0.4]))
+        cls.Psy = symmetrize(cls.Psy)
+
+    def test_dimensions(self):
+        X = np.array([[1,1],
+                      [1,1],
+                      [1,1],
+                      [1,0],
+                      [1,0],])
+        X = X / np.linalg.norm(X, axis=0)
+        print(np.linalg.norm(X, axis=0))
+        print(np.linalg.norm(X, axis=1))
+        A = rdpg(X)
+        self.assertTrue(A.shape, (5,5))
+

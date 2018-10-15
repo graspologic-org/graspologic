@@ -17,3 +17,5 @@ class TestSemiparametricTest(unittest.TestCase):
         spt = SemiparametricTest()
         p = spt.fit(A1, A2)
         print(p)
+
+        

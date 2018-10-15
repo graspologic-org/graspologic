@@ -28,7 +28,7 @@ class BaseInference(BaseEstimator):
     def __init__(self, embedding='ase', n_components=None):
         self.embedding = embedding
         self.n_components = n_components
-
+        
     @abstractmethod
     def _bootstrap(self):
         pass
