@@ -112,3 +112,4 @@ dmypy.json
 # misc
 .vscode/
 docs/bpedigo/ase_clustering.py
+notebooks/bpedigo/test_semipar.py

@@ -407,10 +407,15 @@ def er_np(n, p):
 def rdpg(latent_positions):
     """
     """
-
     P = np.dot(latent_positions, latent_positions.T)
-    P = np.ravel(P)
-    P[P < 0] = 0 # machine precision 0 can be negative sometimes? 
-    A = np.random.binomial(np.ones_like(P, dtype=int), P)
-    A = np.reshape(A, (latent_positions.shape[0], latent_positions.shape[0]))
+    P[P < 0] =0# -1 * P[P < 0]
+    P = P - np.diag(np.diag(P))
+    # print(P.shape)
+    # print(P)
+    # print(P.max())
+    P = P / P.max()
+    A = np.zeros_like(P)
+    A = np.random.binomial(1, P)
+    A = symmetrize(A)
     return A
+

@@ -1,9 +1,11 @@
+
 import numpy as np
 
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
 from ..simulations import rdpg
 from scipy.spatial import procrustes
+from scipy.linalg import orthogonal_procrustes
 
 class SemiparametricTest(BaseInference):
     """
@@ -36,10 +38,13 @@ class SemiparametricTest(BaseInference):
     def _bootstrap(self, X_hat):
         t_bootstrap = np.zeros((self.n_bootstraps))
         for i in range(self.n_bootstraps):
-            X1_hat_simulated = rdpg(X_hat) 
-            X2_hat_simulated = rdpg(X_hat)
-            f_norm = procrustes(X1_hat_simulated, X2_hat_simulated)[2] # TODO: swap out procrustes()[2] with other forms 
+            A1_simulated = rdpg(X_hat) 
+            A2_simulated = rdpg(X_hat)
+            X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
+            # f_norm = procrustes(X1_hat_simulated, X2_hat_simulated)[2] # TODO: swap out procrustes()[2] with other forms 
                                                                        # to test orthogonal case and arbitrary diagonal case
+            R = orthogonal_procrustes(X1_hat_simulated, X2_hat_simulated)[0]
+            f_norm = np.linalg.norm(np.dot(X1_hat_simulated, R) - X2_hat_simulated)
             t_bootstrap[i] = f_norm
         
         return t_bootstrap
@@ -54,8 +59,8 @@ class SemiparametricTest(BaseInference):
         X1_hat = np.array([]) 
         X2_hat = np.array([])
         if self.embedding == 'ase':
-            X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit(A1).X
-            X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit(A2).X
+            X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
+            X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A2)
         elif self.embedding == 'lse':
             X1_hat = LaplacianSpectralEmbed(k=self.n_components).fit(A1).X
             X2_hat = LaplacianSpectralEmbed(k=self.n_components).fit(A2).X
@@ -73,12 +78,23 @@ class SemiparametricTest(BaseInference):
         T1_bootstrap = self._bootstrap(X_hats[0])
         T2_bootstrap = self._bootstrap(X_hats[1])
 
-        T_sample = procrustes(X_hats[0], X_hats[1])[2] # TODO: swap out procrustes()[2] with other forms 
+        # T_sample = procrustes(X_hats[0], X_hats[1])[2] # TODO: swap out procrustes()[2] with other forms 
                                                        # to test orthogonal case and arbitrary diagonal case
+        
+        R = orthogonal_procrustes(X_hats[0], X_hats[1])[0]
+        T_sample = np.linalg.norm(np.dot(X_hats[0], R) - X_hats[1])
 
-        p1 = len(T1_bootstrap[T1_bootstrap > T_sample] + 0.5) / self.n_bootstraps
-        p2 = len(T2_bootstrap[T2_bootstrap > T_sample] + 0.5) / self.n_bootstraps
+        p1 = (len(T1_bootstrap[T1_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
+        p2 = (len(T2_bootstrap[T2_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
 
         p = max(p1, p2)
+        
+        # at least for the sake of testing, I'm going to keep everything
+        self.T1_bootstrap = T1_bootstrap
+        self.T2_bootstrap = T2_bootstrap
+        self.T_sample = T_sample
+        self.p1 = p1
+        self.p2 = p2
+        self.p = p
 
         return p
