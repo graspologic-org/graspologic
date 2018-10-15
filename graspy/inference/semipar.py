@@ -62,10 +62,10 @@ class SemiparametricTest(BaseInference):
             X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
             X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A2)
         elif self.embedding == 'lse':
-            X1_hat = LaplacianSpectralEmbed(k=self.n_components).fit(A1).X
-            X2_hat = LaplacianSpectralEmbed(k=self.n_components).fit(A2).X
+            X1_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A1)
+            X2_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A2)
         elif self.embedding == 'omnibus':
-            X_hat_compound = OmnibusEmbed(k=self.n_components).fit([A1, A2]).X
+            X_hat_compound = OmnibusEmbed(k=self.n_components).fit_transform([A1, A2])
             X1_hat = X_hat_compound[:A1.shape[0],:]
             X2_hat = X_hat_compound[A2.shape[1]:,:]
         
