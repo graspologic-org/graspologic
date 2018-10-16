@@ -13,8 +13,25 @@ def test_input():
         mds = ClassicalMDS(n_components=100)
         mds.fit(X)
 
+    # Invalid n_components
     with pytest.raises(ValueError):
-        mds = ClassicalMDS(n_components=2)
+        mds = ClassicalMDS(n_components=-2)
+
+    with pytest.raises(TypeError):
+        mds = ClassicalMDS(n_components='1')
+
+    # Invalid dissimilarity
+    with pytest.raises(ValueError):
+        mds = ClassicalMDS(dissimilarity='abc')
+
+    # n_components > n_samples / n_elements
+    with pytest.raises(ValueError):
+        mds = ClassicalMDS(n_components=6)
+        mds.fit(X, n_elements=2)
+
+    # Must be square and symmetric matrix if precomputed dissimilarity
+    with pytest.raises(ValueError):
+        mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
         mds.fit(X)
 
 
@@ -36,7 +53,7 @@ def test_output():
     def use_fit_transform():
         A = np.ones((4, 4)) - np.identity(4)
 
-        mds = ClassicalMDS(n_components=3)
+        mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
         B = mds.fit_transform(A)
 
         Ahat = _compute_dissimilarity(B)
@@ -47,7 +64,7 @@ def test_output():
     def use_fit():
         A = np.ones((4, 4)) - np.identity(4)
 
-        mds = ClassicalMDS(n_components=3)
+        mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
         mds.fit(A)
         B = np.dot(mds.components_, np.diag(mds.singular_values_))
 
