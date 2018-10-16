@@ -95,10 +95,11 @@ class ClassicalMDS(BaseEstimator):
             Input data. If ``dissimilarity=='precomputed'``, the input should
             be the dissimilarity matrix.
         
-        n_elements : int
+        n_elements : int, optional, default: 1
             If n_elements > 1, it computes the pairwise euclidean distance between
-            matrices given by (n_elements, n_features). If n_elements = 1, it computes
-            distance between each pair of vectors.
+            matrices given by (n_elements, n_features). n_elements must divide evenly 
+            with n_samples in X. If n_elements = 1, it computes distance between each
+            pair of vectors.
 
         Returns
         -------
@@ -196,8 +197,9 @@ class ClassicalMDS(BaseEstimator):
 
         n_elements : int, optional, default: 1
             If n_elements > 1, it computes the pairwise euclidean distance between
-            matrices given by (n_elements, n_features). If n_elements = 1, it computes
-            distance between each pair of row vectors.
+            matrices given by (n_elements, n_features). n_elements must divide evenly 
+            with n_samples in X. If n_elements = 1, it computes distance between each
+            pair of vectors.
 
         Returns
         -------
