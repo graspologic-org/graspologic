@@ -44,6 +44,18 @@ class TestInput(unittest.TestCase):
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
+    def test_to_laplace_DAD(self):
+        A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+
+        expected_L_normed = ([[0, 1 /sqrt(2), 0],
+                              [1/sqrt(2), 0, 1/sqrt(2)],
+                              [0, 1/sqrt(2), 0 ]])
+
+        L_normed = gus.to_laplace(A, form='DAD')
+
+        self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
+
+
     def test_to_laplace_unsuported(self):
         with self.assertRaises(TypeError):
             gus.to_laplace(self.A, form='MOM')

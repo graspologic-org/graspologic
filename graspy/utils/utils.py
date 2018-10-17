@@ -116,7 +116,9 @@ def to_laplace(graph, form='I-DAD'):
     """
     A function to convert graph adjacency matrix to graph laplacian. 
 
-    Currently only supports normalized laplacian.
+    Currently supports I-DAD and DAD laplacians, where D is the diagonal
+    matrix of degrees of each node raised to the -1/2 power, I is the 
+    identity matrix, and A is the adjacency matrix
 
     Parameters
     ----------
@@ -124,21 +126,30 @@ def to_laplace(graph, form='I-DAD'):
             Either array-like, (n_vertices, n_vertices) numpy array,
             or an object of type networkx.Graph.
 
+        form: string
+            I-DAD: computes L = I - D*A*D
+            DAD: computes L = D*A*D
+
     Returns
     -------
         L: numpy.ndarray
             2D (n_vertices, n_vertices) array representing graph 
             laplacian of specified form
     """
+    valid_inputs = ['I-DAD', 'DAD']
+    if form not in valid_inputs:
+        raise TypeError('Unsuported Laplacian normalization')
+    
     adj_matrix = import_graph(graph)
-
+    D_vec = np.sum(adj_matrix, axis=0)
+    D_root = np.diag(D_vec ** -0.5)
+    
     if form == 'I-DAD':
-        D_vec = np.sum(adj_matrix, axis=0)
-        D_root = np.diag(D_vec ** -0.5)
         L = np.diag(D_vec) - adj_matrix
         L = np.dot(D_root, L)
         L = np.dot(L, D_root)
-    else: 
-        raise TypeError('Unsuported Laplacian normalization')
-
+    elif form == 'DAD':
+        L = np.dot(D_root, adj_matrix)
+        L = np.dot(L, D_root)
+    
     return L
