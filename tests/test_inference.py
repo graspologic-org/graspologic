@@ -1,3 +1,7 @@
+# Ben Pedigo 
+# bpedigo [at] jhu.edu
+# 10.18.2018
+
 import unittest
 import numpy as np
 from graspy.inference import SemiparametricTest

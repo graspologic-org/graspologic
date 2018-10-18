@@ -1,6 +1,6 @@
-
 # Ben Pedigo 
 # bpedigo [at] jhu.edu
+# 10.18.2018
 
 import numpy as np
 
@@ -45,9 +45,9 @@ class SemiparametricTest(BaseInference):
             raise TypeError()
         
         if n_bootstraps < 1:
-            raise ValueError('{} is invalid number of bootstrap simulations, must be greater than 1'.format(n_bootstraps))
+            raise ValueError('{} is invalid number of bootstraps, must be greater than 1'.format(n_bootstraps))
         if test_case not in ['rotation', 'scaling-rotation', 'diagonal-rotation']:
-            raise ValueError('test_case must be one of \'rotation\', \'scaling-rotation\', \'diagonal-rotation\'')
+            raise ValueError('test_case must be one of \'rotation\', \'scaling-rotation\',\'diagonal-rotation\'')
 
         super().__init__(embedding=embedding, n_components=n_components,)
         
