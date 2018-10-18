@@ -16,6 +16,26 @@ class TestSemiparametricTest(unittest.TestCase):
 
         spt = SemiparametricTest()
         p = spt.fit(A1, A2)
-        print(p)
 
-        
+    def test_input_checking(self):
+        with self.assertRaises(ValueError):
+            spt = SemiparametricTest(n_components=-100)
+        with self.assertRaises(ValueError):
+            SemiparametricTest(n_components=-100)
+        with self.assertRaises(ValueError):
+            spt = SemiparametricTest(test_case='oops')
+        with self.assertRaises(ValueError):
+            SemiparametricTest(n_bootstraps=-100)
+        with self.assertRaises(ValueError):
+            SemiparametricTest(embedding='oops')
+        with self.assertRaises(TypeError):
+            SemiparametricTest(n_bootstraps=0.5)
+        with self.assertRaises(TypeError):
+            SemiparametricTest(n_components=0.5)
+        with self.assertRaises(TypeError):
+            SemiparametricTest(embedding=6)
+        with self.assertRaises(TypeError):
+            SemiparametricTest(test_case=6)
+
+if __name__ == '__main__':
+    unittest.main()
