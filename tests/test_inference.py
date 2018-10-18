@@ -3,6 +3,7 @@ import numpy as np
 from graspy.inference import SemiparametricTest
 from graspy.embed import AdjacencySpectralEmbed
 
+
 class TestSemiparametricTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -43,8 +44,19 @@ class TestSemiparametricTest(unittest.TestCase):
         spt.fit(self.A1, self.A2)
         self.assertEqual(spt.T1_bootstrap.shape[0], 234)
     
-    
+    def test_bad_matrix_inputs(self):
+        spt = SemiparametricTest()
+        A1 = self.A1.copy()
+        A1[2,0] = 1 # make asymmetric
+        with self.assertRaises(NotImplementedError): # TODO : remove when we implement
+            spt.fit(A1, self.A2)
 
+        bad_matrix = [[1, 2]]
+        with self.assertRaises(TypeError):
+            spt.fit(bad_matrix, self.A2)
+
+        with self.assertRaises(ValueError):
+            spt.fit(self.A1[:2,:2], self.A2)
 
 if __name__ == '__main__':
     unittest.main()
