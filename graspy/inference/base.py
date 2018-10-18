@@ -26,6 +26,14 @@ class BaseInference(BaseEstimator):
     """
 
     def __init__(self, embedding='ase', n_components=None):
+        if type(embedding) is not str:
+            raise TypeError('embedding must be str')
+        if type(n_components) is not int and not None:
+            raise TypeError('n_components must be int')
+        if embedding not in ['ase', 'lse', 'omnibus']:
+            raise ValueError("{} is not a valid embedding method.".format(embedding))
+        if n_components <= 0 and not None:
+            raise ValueError('Cannot embed into {} dimensions, must be greater than 0'.format(n_components))
         self.embedding = embedding
         self.n_components = n_components
         
