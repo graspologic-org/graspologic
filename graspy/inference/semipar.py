@@ -139,9 +139,12 @@ class SemiparametricTest(BaseInference):
             raise ValueError('Input matrices do not have matching dimensions')
 =======
 
-        if is_symmetric(A1) or not is_symmetric(A2):
+        if not is_symmetric(A1) or not is_symmetric(A2):
             raise NotImplementedError()
         
+        if A1.shape != A2.shape:
+            raise ValueError('Input matrices do not have matching dimensions')
+
         X_hats = self._embed(A1, A2)
 >>>>>>> adding more typechecking
         

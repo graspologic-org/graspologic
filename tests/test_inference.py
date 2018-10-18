@@ -7,6 +7,7 @@ import numpy as np
 from graspy.inference import SemiparametricTest
 from graspy.embed import AdjacencySpectralEmbed
 
+
 class TestSemiparametricTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
