@@ -83,8 +83,6 @@ class SemiparametricTest(BaseInference):
         if self.n_components is None:
             raise NotImplementedError('Wait for dimselect')
 
-        X1_hat = np.array([]) 
-        X2_hat = np.array([])
         if self.embedding == 'ase':
             X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
             X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A2)
@@ -102,9 +100,12 @@ class SemiparametricTest(BaseInference):
         A1 = import_graph(A1)
         A2 = import_graph(A2)
 
-        if is_symmetric(A1) or not is_symmetric(A2):
+        if not is_symmetric(A1) or not is_symmetric(A2):
             raise NotImplementedError()
         
+        if A1.shape != A2.shape:
+            raise ValueError('Input matrices do not have matching dimensions')
+
         X_hats = self._embed(A1, A2)
         
         T1_bootstrap = self._bootstrap(X_hats[0])
