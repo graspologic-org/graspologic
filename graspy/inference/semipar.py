@@ -9,6 +9,7 @@ from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
 from ..simulations import rdpg
 from scipy.spatial import procrustes
 from scipy.linalg import orthogonal_procrustes
+from ..utils import import_graph, is_symmetric
 
 class SemiparametricTest(BaseInference):
     """
@@ -91,13 +92,19 @@ class SemiparametricTest(BaseInference):
             X1_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A1)
             X2_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A2)
         elif self.embedding == 'omnibus':
-            X_hat_compound = OmnibusEmbed(k=self.n_components).fit_transform([A1, A2])
+            X_hat_compound = OmnibusEmbed(k=self.n_components).fit_transform((A1, A2))
             X1_hat = X_hat_compound[:A1.shape[0],:]
             X2_hat = X_hat_compound[A2.shape[1]:,:]
         
         return (X1_hat, X2_hat)
 
     def fit(self, A1, A2):
+        A1 = import_graph(A1)
+        A2 = import_graph(A2)
+
+        if is_symmetric(A1) or not is_symmetric(A2):
+            raise NotImplementedError()
+        
         X_hats = self._embed(A1, A2)
         
         T1_bootstrap = self._bootstrap(X_hats[0])
@@ -110,8 +117,9 @@ class SemiparametricTest(BaseInference):
 
         p = max(p1, p2)
         
-        # TODO : what to store as fields here 
+        # TODO : what to store as fields here, or make _private fields
         # at least for the sake of testing, I'm going to keep everything
+        
         self.T1_bootstrap = T1_bootstrap
         self.T2_bootstrap = T2_bootstrap
         self.T_sample = T_sample
