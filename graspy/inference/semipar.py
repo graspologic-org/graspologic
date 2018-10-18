@@ -2,6 +2,9 @@
 # bpedigo [at] jhu.edu
 # 10.18.2018
 
+# Ben Pedigo 
+# bpedigo [at] jhu.edu
+
 import numpy as np
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
