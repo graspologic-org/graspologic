@@ -2,8 +2,6 @@
 # bpedigo [at] jhu.edu
 # 10.18.2018
 
-# Ben Pedigo 
-# bpedigo [at] jhu.edu
 
 import numpy as np
 from .base import BaseInference
@@ -132,21 +130,10 @@ class SemiparametricTest(BaseInference):
     def fit(self, A1, A2):
         A1 = import_graph(A1)
         A2 = import_graph(A2)
-<<<<<<< HEAD
         if not is_symmetric(A1) or not is_symmetric(A2):
             raise NotImplementedError() # TODO asymmetric case
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
-=======
-
-        if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()
-        
-        if A1.shape != A2.shape:
-            raise ValueError('Input matrices do not have matching dimensions')
-
-        X_hats = self._embed(A1, A2)
->>>>>>> adding more typechecking
         
         X_hats = self._embed(A1, A2)
         T_sample = self._difference_norm(X_hats[0], X_hats[1])
@@ -158,17 +145,10 @@ class SemiparametricTest(BaseInference):
         p2 = (len(T2_bootstrap[T2_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
 
         p = max(p1, p2)
-<<<<<<< HEAD
 
         # TODO : what to store as fields here, or make _private fields
         # at least for the sake of testing, I'm going to keep everything
 
-=======
-        
-        # TODO : what to store as fields here, or make _private fields
-        # at least for the sake of testing, I'm going to keep everything
-        
->>>>>>> adding more typechecking
         self.T1_bootstrap = T1_bootstrap
         self.T2_bootstrap = T2_bootstrap
         self.T_sample = T_sample
