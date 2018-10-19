@@ -81,7 +81,7 @@ class SemiparametricTest(BaseInference):
             raise ValueError('Invalid embedding method "{}"'.format(self.embedding))
         
         if self.n_components is None:
-            raise NotImplementedError('Wait for dimselect')
+            raise NotImplementedError('Wait for dimselect') # TODO 
 
         if self.embedding == 'ase':
             X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
@@ -101,7 +101,7 @@ class SemiparametricTest(BaseInference):
         A2 = import_graph(A2)
 
         if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()
+            raise NotImplementedError() # TODO asymmetric case
         
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
