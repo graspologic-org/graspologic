@@ -62,5 +62,23 @@ class TestSemiparametricTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             spt.fit(self.A1[:2,:2], self.A2)
 
+    def test_rotation_norm(self):
+        points1 = np.array([[0, 0], 
+                            [3, 0], 
+                            [3, -2]])
+        points2 = np.array([[0, 0],
+                            [0, 3],
+                            [2, 3]])
+        
+        spt = SemiparametricTest(embedding='ase', test_case='rotation')
+        n = spt._norm(points1, points2)
+        self.assertAlmostEqual(n, 0)
+        
+        spt = SemiparametricTest(embedding='lse', test_case='rotation')
+        n = spt._norm(points1, points2)
+        self.assertAlmostEqual(n, 0)
+
+        
+
 if __name__ == '__main__':
     unittest.main()
