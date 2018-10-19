@@ -22,6 +22,7 @@ class TestSemiparametricTest(unittest.TestCase):
     def test_fit_p(self):
         spt = SemiparametricTest()
         p = spt.fit(self.A1, self.A2)
+        # TODO : something 
 
     def test_bad_kwargs(self):
         with self.assertRaises(ValueError):
@@ -63,6 +64,7 @@ class TestSemiparametricTest(unittest.TestCase):
             spt.fit(self.A1[:2,:2], self.A2)
 
     def test_rotation_norm(self):
+        # two triangles rotated by 90 degrees
         points1 = np.array([[0, 0], 
                             [3, 0], 
                             [3, -2]])
@@ -78,7 +80,7 @@ class TestSemiparametricTest(unittest.TestCase):
         n = spt._norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
-        
+
 
 if __name__ == '__main__':
     unittest.main()
