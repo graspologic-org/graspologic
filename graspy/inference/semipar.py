@@ -35,6 +35,8 @@ class SemiparametricTest(BaseInference):
         dimensions are found by the Zhu and Godsi algorithm.
 
     test_case : string, {'rotation (default), 'scalar-rotation', 'diagonal-rotation'}
+        describes the exact form of the hypothesis to test when using 'ase' or 'lse' 
+        as an embedding method. Ignored if using 'omnibus'
     """
 
     def __init__(self, embedding='ase', n_components=2, n_bootstraps=1000, test_case='rotation',):
@@ -46,7 +48,7 @@ class SemiparametricTest(BaseInference):
 
         if n_bootstraps < 1:
             raise ValueError('{} is invalid number of bootstraps, must be greater than 1'.format(n_bootstraps))
-        if test_case not in ['rotation', 'scaling-rotation', 'diagonal-rotation']:
+        if test_case not in ['rotation', 'scalar-rotation', 'diagonal-rotation']:
             raise ValueError('test_case must be one of \'rotation\', \'scaling-rotation\',\'diagonal-rotation\'')
 
         super().__init__(embedding=embedding, n_components=n_components,)
@@ -60,18 +62,18 @@ class SemiparametricTest(BaseInference):
             A1_simulated = rdpg(X_hat)
             A2_simulated = rdpg(X_hat)
             X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
-            t_bootstrap[i] = self._norm(X1_hat_simulated, X2_hat_simulated)
+            t_bootstrap[i] = self._difference_norm(X1_hat_simulated, X2_hat_simulated)
 
         return t_bootstrap
 
-    def _norm(self, X1, X2):
+    def _difference_norm(self, X1, X2):
         if self.embedding in ['ase', 'lse']:
             if self.test_case == 'rotation':
                 R = orthogonal_procrustes(X1, X2)[0]
                 return np.linalg.norm(np.dot(X1, R) - X2)
             elif self.test_case == 'scalar-rotation':
-                X1 -= np.mean(X1, 0)
-                X2 -= np.mean(X2, 0)
+                X1 -= np.mean(X1, axis=0) 
+                X2 -= np.mean(X2, axis=0)
                 R = orthogonal_procrustes(X1, X2)[0]
                 return np.linalg.norm(np.dot(X1,R) - X2)
             elif self.test_case == 'diagonal-rotation':
@@ -134,7 +136,7 @@ class SemiparametricTest(BaseInference):
         T1_bootstrap = self._bootstrap(X_hats[0])
         T2_bootstrap = self._bootstrap(X_hats[1])
 
-        T_sample = self._norm(X_hats[0], X_hats[1])
+        T_sample = self._difference_norm(X_hats[0], X_hats[1])
 
         p1 = (len(T1_bootstrap[T1_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
         p2 = (len(T2_bootstrap[T2_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
