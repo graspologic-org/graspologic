@@ -170,7 +170,7 @@ class ClassicalMDS(BaseEstimator):
 
     def fit_transform(self, X):
         """
-        Fit the model with X and apply the dimensionality reduction on X.
+        Fit the data from X, and returns the embedded coordinates.
 
         Parameters
         ----------
@@ -184,8 +184,8 @@ class ClassicalMDS(BaseEstimator):
 
         Returns
         -------
-        X_new : array, shape (n_samples, n_components)
-            Fit the data from X, and returns the embedded coordinates
+        X_new : array-like, shape (n_samples, n_components)
+            Embedded input.
         """
         self.fit(X)
 
