@@ -66,6 +66,11 @@ class ClassicalMDS(BaseEstimator):
     See Also
     --------
     graphstats.embed.dimselect
+
+    References
+    ----------
+    Wickelmaier, Florian. "An introduction to MDS." Sound Quality Research Unit, 
+    Aalborg University, Denmark 46.5 (2003).
     """
 
     def __init__(self, n_components=None, dissimilarity='euclidean'):
