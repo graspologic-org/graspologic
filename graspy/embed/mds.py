@@ -142,6 +142,11 @@ class ClassicalMDS(BaseEstimator):
             msg = "n_elements must be >= 1, not {}.".format(n_elements)
             raise ValueError(msg)
 
+        # Check X
+        if not isinstance(X, np.ndarray):
+            msg = "X must be a 2d numpy array, not {}.".format(type(X))
+            raise ValueError(msg)
+
         # Handle shape of X
         if len(X.shape) != 2:
             msg = "X must be a 2d-array. Input has {} dimensions.".format(
