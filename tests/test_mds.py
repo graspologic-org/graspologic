@@ -29,6 +29,12 @@ def test_input():
         mds = ClassicalMDS(n_components=6)
         mds.fit(X, n_elements=2)
 
+    # Invalid input for fit function
+    with pytest.raises(ValueError):
+        X = 'bad_input'
+        mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
+        mds.fit(X)
+
     # Must be square and symmetric matrix if precomputed dissimilarity
     with pytest.raises(ValueError):
         mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
