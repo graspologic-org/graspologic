@@ -100,7 +100,7 @@ class ClassicalMDS(BaseEstimator):
         
         Returns
         -------
-        out : 2d-array, shape (n_samples // n_elements, n_samples // n_elements)
+        out : 2d-array, shape (n_samples, n_samples)
             A dissimilarity matrix based on Frobenous norms between pairs of
             matrices or vectors.
         """
@@ -184,7 +184,8 @@ class ClassicalMDS(BaseEstimator):
 
         Returns
         -------
-        X_new : array-like 
+        X_new : array, shape (n_samples, n_components)
+            Fit the data from X, and returns the embedded coordinates
         """
         self.fit(X)
 
