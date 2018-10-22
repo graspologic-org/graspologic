@@ -54,7 +54,7 @@ def plot_heatmap(X,
 
     if transform == 'log':
         #arr = np.log(arr, where=(arr > 0))
-        # hacky, but np.log(arr, where=arr>0) is really buggy
+        #hacky, but np.log(arr, where=arr>0) is really buggy
         arr = arr.copy()
         arr[arr > 0] = np.log(arr[arr > 0])
     elif transform == 'pass_to_ranks':
@@ -122,8 +122,8 @@ def plot_grid_plot(X,
         weights = graph[(cdx, rdx)]
         df = pd.DataFrame(
             np.vstack([cdx[::-1], rdx, weights]).T,
-            columns=['cdx', 'rdx', 'weights'])
-        df['labels'] = [labels[idx]] * len(cdx)
+            columns=['cdx', 'rdx', 'Weights'])
+        df['Type'] = [labels[idx]] * len(cdx)
         dfs.append(df)
 
     df = pd.concat(dfs, axis=0)
@@ -133,8 +133,8 @@ def plot_grid_plot(X,
             data=df,
             x='cdx',
             y='rdx',
-            hue='labels',
-            size='weights',
+            hue='Type',
+            size='Weights',
             sizes=(10, 200),
             alpha=0.7,
             palette=palette,
