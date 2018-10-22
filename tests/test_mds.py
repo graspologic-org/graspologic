@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_equal
 
 from graspy.embed.mds import ClassicalMDS
 
@@ -24,11 +24,6 @@ def test_input():
     with pytest.raises(ValueError):
         mds = ClassicalMDS(dissimilarity='abc')
 
-    # n_components > n_samples / n_elements
-    with pytest.raises(ValueError):
-        mds = ClassicalMDS(n_components=6)
-        mds.fit(X, n_elements=2)
-
     # Invalid input for fit function
     with pytest.raises(ValueError):
         X = 'bad_input'
@@ -41,6 +36,17 @@ def test_input():
         mds.fit(X)
 
 
+def test_tensor_input():
+    X = np.random.normal(size=(100, 5, 5))
+    mds = ClassicalMDS(n_components=3, dissimilarity='euclidean')
+    mds.fit(X)
+
+    assert_equal(mds.dissimilarity_matrix_.shape, (100, 100))
+
+    X_transformed = mds.fit_transform(X)
+    assert_equal(X_transformed.shape, (100, 3))
+
+
 def test_output():
     """
     Recover a 3D tetrahedron with distance 1 between all points
@@ -50,7 +56,6 @@ def test_output():
 
     def _compute_dissimilarity(arr):
         out = np.zeros((4, 4))
-
         for i in range(4):
             out[i] = np.linalg.norm(arr - arr[i], axis=1)
 
