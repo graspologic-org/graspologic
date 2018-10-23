@@ -404,18 +404,22 @@ def er_np(n, p):
     """
     return (zi_np(n, p, wt=1))
 
-def rdpg(latent_positions):
+def rdpg(latent_positions, mode='rescale', loops=False, symmetric=True):
     """
     """
     P = np.dot(latent_positions, latent_positions.T)
-    P[P < 0] =0# -1 * P[P < 0]
-    P = P - np.diag(np.diag(P))
-    # print(P.shape)
-    # print(P)
-    # print(P.max())
-    P = P / P.max()
-    A = np.zeros_like(P)
+    if mode == 'rescale':
+        if P.min() < 0:
+            P = P + P.min()
+        if P.max() > 1:
+            P = P / P.max()  
+    # should this be before or after the rescaling, could give diff answers
+    if not loops:
+        P = P - np.diag(np.diag(P))
+    P[P < 0] = 0
+    P[P > 1] = 1
     A = np.random.binomial(1, P)
-    A = symmetrize(A)
+    if symmetric:
+        A = symmetrize(A)
     return A
 
