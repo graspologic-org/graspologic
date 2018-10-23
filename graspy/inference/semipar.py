@@ -138,6 +138,7 @@ class SemiparametricTest(BaseInference):
 
         T_sample = self._difference_norm(X_hats[0], X_hats[1])
 
+        # Continuity correction - note that the +0.5 causes p > 1 sometimes # TODO 
         p1 = (len(T1_bootstrap[T1_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
         p2 = (len(T2_bootstrap[T2_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
 
