@@ -14,7 +14,7 @@ def generate_data(n=10, elbows=3, seed=1):
     d = np.zeros(xorth.shape[0])
     for i in range(0, len(d), int(len(d) / (elbows + 1))):
         d[:i] += 10
-    A = xorth.T @ np.diag(d) @ xorth
+    A = xorth.T.dot(np.diag(d)).dot(xorth)
     return A, d
 
 
