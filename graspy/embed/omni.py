@@ -168,28 +168,3 @@ class OmnibusEmbed(BaseEmbed):
         out : array-like, shape (n_vertices * n_graphs, n_dimension)
         """
         return self._fit_transform(graphs)
-
-    def get_dissimilarity(self):
-        """
-        Computes test statistics based on each pairs 
-
-        Returns
-        -------
-        out : array-like, shape (n_graphs, n_graphs)
-            A dissimilarity matrix based on Frobenous norms between pairs of
-            graphs.
-        """
-        # Check if fitted
-        check_is_fitted(self, ['lpm'], all_or_any=all)
-
-        n_graphs = self.n_graphs_
-        n_vertices = self.n_vertices_
-
-        zhat = self.lpm.transform()
-        zhat = zhat.reshape(n_graphs, n_vertices, -1)
-
-        out = np.zeros((n_graphs, n_graphs))
-        for i in range(n_graphs):
-            out[i] = np.linalg.norm(zhat - zhat[i], axis=(1, 2), ord='fro')
-
-        return out
