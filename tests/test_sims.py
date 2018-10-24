@@ -504,3 +504,4 @@ class Test_RDPG(unittest.TestCase):
         A = rdpg(X)
         self.assertTrue(A.shape, (5,5))
 
+    # def test_inputs():
