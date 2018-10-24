@@ -648,6 +648,7 @@ class Test_RDPG(unittest.TestCase):
                       [1,0],
                       [1,0],])
 <<<<<<< HEAD
+<<<<<<< HEAD
         A = rdpg_from_latent(X)
         self.assertTrue(A.shape, (5,5))
 
@@ -727,6 +728,8 @@ class Test_RDPG(unittest.TestCase):
         X = X / np.linalg.norm(X, axis=0)
         print(np.linalg.norm(X, axis=0))
         print(np.linalg.norm(X, axis=1))
+=======
+>>>>>>> updating rdpg
         A = rdpg(X)
         self.assertTrue(A.shape, (5,5))
 
