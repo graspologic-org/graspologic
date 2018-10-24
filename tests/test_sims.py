@@ -733,4 +733,8 @@ class Test_RDPG(unittest.TestCase):
         A = rdpg(X)
         self.assertTrue(A.shape, (5,5))
 
+<<<<<<< HEAD
 >>>>>>> added ipynb
+=======
+    # def test_inputs():
+>>>>>>> snail rdpg -> caterpillar rdpg
