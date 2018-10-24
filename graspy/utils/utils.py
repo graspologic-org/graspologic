@@ -84,13 +84,12 @@ def symmetrize(graph, method='triu'):
         graph = np.tril(graph)
     elif method is 'avg':
         graph = (np.triu(graph) + np.tril(graph)) / 2
+        
     else:
         msg = "You have not passed a valid parameter for the method."
         raise ValueError(msg)
     # A = A + A' - diag(A)
-    graph = graph + graph.T - np.diag(np.diag(graph))
-    return graph
-
+    return graph + graph.T - np.diag(np.diag(graph))
 
 def remove_loops(graph):
     """
