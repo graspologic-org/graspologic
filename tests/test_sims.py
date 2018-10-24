@@ -647,7 +647,7 @@ class Test_RDPG(unittest.TestCase):
                       [1,1],
                       [1,0],
                       [1,0],])
-        A = rdpg(X)
+        A = rdpg_from_latent(X)
         self.assertTrue(A.shape, (5,5))
 
 <<<<<<< HEAD

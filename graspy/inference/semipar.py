@@ -6,7 +6,7 @@ import numpy as np
 
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
-from ..simulations import rdpg
+from ..simulations import rdpg_from_p, p_from_latent
 from scipy.spatial import procrustes
 from scipy.linalg import orthogonal_procrustes
 from ..utils import import_graph, is_symmetric
@@ -59,8 +59,9 @@ class SemiparametricTest(BaseInference):
     def _bootstrap(self, X_hat):
         t_bootstrap = np.zeros((self.n_bootstraps))
         for i in range(self.n_bootstraps):
-            A1_simulated = rdpg(X_hat)
-            A2_simulated = rdpg(X_hat)
+            P = p_from_latent(X_hat)
+            A1_simulated = rdpg_from_p(P)
+            A2_simulated = rdpg_from_p(P)
             X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
             t_bootstrap[i] = self._difference_norm(X1_hat_simulated, X2_hat_simulated)
 
@@ -124,19 +125,15 @@ class SemiparametricTest(BaseInference):
     def fit(self, A1, A2):
         A1 = import_graph(A1)
         A2 = import_graph(A2)
-
         if not is_symmetric(A1) or not is_symmetric(A2):
             raise NotImplementedError() # TODO asymmetric case
-
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
-
+        
         X_hats = self._embed(A1, A2)
-
+        T_sample = self._difference_norm(X_hats[0], X_hats[1])
         T1_bootstrap = self._bootstrap(X_hats[0])
         T2_bootstrap = self._bootstrap(X_hats[1])
-
-        T_sample = self._difference_norm(X_hats[0], X_hats[1])
 
         # Continuity correction - note that the +0.5 causes p > 1 sometimes # TODO 
         p1 = (len(T1_bootstrap[T1_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
