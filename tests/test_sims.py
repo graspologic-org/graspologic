@@ -649,6 +649,7 @@ class Test_RDPG(unittest.TestCase):
                       [1,0],])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         A = rdpg_from_latent(X)
         self.assertTrue(A.shape, (5,5))
 
@@ -731,6 +732,9 @@ class Test_RDPG(unittest.TestCase):
 =======
 >>>>>>> updating rdpg
         A = rdpg(X)
+=======
+        A = rdpg_from_latent(X)
+>>>>>>> restructuring semipar
         self.assertTrue(A.shape, (5,5))
 
 <<<<<<< HEAD
