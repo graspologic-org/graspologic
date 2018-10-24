@@ -650,6 +650,7 @@ class Test_RDPG(unittest.TestCase):
         A = rdpg(X)
         self.assertTrue(A.shape, (5,5))
 
+<<<<<<< HEAD
     def test_inputs(self):
         x1 = np.array([[1,1],[1,1]])
         x2 = np.array([[1,1]])
@@ -707,3 +708,6 @@ class Test_RDPG(unittest.TestCase):
         g = rdpg(X, rescale=True, loops=False, directed=False)
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
+=======
+    # def test_inputs():
+>>>>>>> snail rdpg -> caterpillar rdpg
