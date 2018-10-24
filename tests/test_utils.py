@@ -18,6 +18,8 @@ class TestInput(unittest.TestCase):
             np.random.choice(np.arange(0, n * n), size=nedge, replace=False),
             np.random.normal(size=nedge))
 
+    # TODO : we should really have tests for other util functions
+
     def test_graphin(self):
         G = nx.from_numpy_array(self.A)
         np.testing.assert_array_equal(
