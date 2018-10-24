@@ -501,9 +501,6 @@ class Test_RDPG(unittest.TestCase):
                       [1,1],
                       [1,0],
                       [1,0],])
-        X = X / np.linalg.norm(X, axis=0)
-        print(np.linalg.norm(X, axis=0))
-        print(np.linalg.norm(X, axis=1))
         A = rdpg(X)
         self.assertTrue(A.shape, (5,5))
 

@@ -404,11 +404,47 @@ def er_np(n, p):
     """
     return (zi_np(n, p, wt=1))
 
-def rdpg(latent_positions, mode='rescale', loops=False, symmetric=True):
+def rdpg(X, Y=None, rescale=True, loops=False, symmetric=True):
     """
+    Generates a random dot product graph (RDPG) from a latent position
+    Note: currently only supports unweighted graphs
+
+    Parameters
+    ----------
+        X: numpy.ndarray, shape (n_vertices, n_dimensions)
+            latent positions from which to generate RDPG
+        Y: optional, None (default) or numpy.ndarray, shape (n_vertices, n_dimensions)
+            if not None, shape must be the same as X
+            if None, Y is set to X
+        rescale: optional, boolean (default is True)
+            Whether to rescale the probability matrix P. 
+            If the lowest value in P was less than 0, then all points
+            are shifted up by that lowest value. If after shifting, the highest
+            point in P is above 1, then all elements are divided by that value. 
+            If False, values in P outside of the range [0,1] will be clipped to 0 or 1. 
+        loops: optional, boolean (default is False)
+            Whether the output graph should allow connections on the diagonal
+            (self connections)
+        symmetric: optional, boolean (default is True)
+            Whether to force the output matrix to be symmetric (corresponding
+            to an undirected graph)
+
+    Returns
+    -------
+        A: numpy.ndarray, shape (n_vertices, n_dimensions)
+            Adjacency matrix generated with specified parameters
     """
-    P = np.dot(latent_positions, latent_positions.T)
-    if mode == 'rescale':
+    if Y is None:
+        Y = X
+    if type(X) is not np.ndarray or type(Y) is not np.ndarray:
+        raise TypeError('Latent positions must be numpy.ndarray')
+    if len(X.shape) != 2 or len(Y.shape) != 2:
+        raise ValueError('Latent positions must have dimension 2 (n_vertices, n_dimensions)')
+    if X.shape != Y.shape:
+        raise ValueError('Dimensions of latent positions X and Y must be the same')
+    
+    P = np.dot(X, Y.T)
+    if rescale:
         if P.min() < 0:
             P = P + P.min()
         if P.max() > 1:
@@ -416,6 +452,7 @@ def rdpg(latent_positions, mode='rescale', loops=False, symmetric=True):
     # should this be before or after the rescaling, could give diff answers
     if not loops:
         P = P - np.diag(np.diag(P))
+    # doing this regardless of rescale because of machine precision errors
     P[P < 0] = 0
     P[P > 1] = 1
     A = np.random.binomial(1, P)
