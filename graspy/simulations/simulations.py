@@ -6,8 +6,7 @@
 # Copyright (c) 2018. All rights reserved.
 
 import numpy as np
-from ..utils import import_graph, symmetrize
-
+from ..utils import import_graph, symmetrize, is_symmetric
 
 def cartprod(*arrays):
     N = len(arrays)
@@ -455,8 +454,13 @@ def rdpg(X, Y=None, rescale=True, loops=False, symmetric=True):
     # doing this regardless of rescale because of machine precision errors
     P[P < 0] = 0
     P[P > 1] = 1
-    A = np.random.binomial(1, P)
     if symmetric:
+        triu_inds = np.triu_indices(P.shape[0])
+        samples = np.random.binomial(1, P[triu_inds])
+        A = np.zeros_like(P)
+        A[triu_inds] = samples
         A = symmetrize(A)
+    else:
+        A = np.random.binomial(1, P)
     return A
 
