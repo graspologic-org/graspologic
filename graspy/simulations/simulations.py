@@ -490,6 +490,12 @@ def p_from_latent(X, Y=None, rescale=True, loops=False, **kwargs):
     return P
 
 def rdpg_from_p(P, symmetric=True, **kwargs):
+    if type(P) is not np.ndarray:
+        raise TypeError('P must be numpy.ndarray')
+    if len(P.shape) != 2:
+        raise ValueError('P must have dimension 2 (n_vertices, n_dimensions)')
+    if P.shape[0] != P.shape[1]:
+        raise ValueError('P must be a square matrix')
     if symmetric:
         # can cut down on sampling by ~half 
         triu_inds = np.triu_indices(P.shape[0])
