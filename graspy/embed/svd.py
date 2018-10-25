@@ -5,9 +5,8 @@
 # Email: ebridge2@jhu.edu
 # Copyright (c) 2018. All rights reserved.
 
-from sklearn.decomposition import TruncatedSVD
-from scipy.sparse.linalg import svds
 import numpy as np
+from scipy.sparse.linalg import svds
 from scipy.stats import norm
 
 
