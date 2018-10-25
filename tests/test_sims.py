@@ -504,4 +504,19 @@ class Test_RDPG(unittest.TestCase):
         A = rdpg_from_latent(X)
         self.assertTrue(A.shape, (5,5))
 
-    # def test_inputs():
+    def test_inputs(self):
+        x1 = np.array([[1,1],[1,1]])
+        x2 = np.array([[1,1]])
+        x3 = np.zeros((2,2,2))
+        with self.assertRaises(TypeError):
+            p_from_latent('hi') # wrong type
+        with self.assertRaises(ValueError):
+            p_from_latent(x1, x2) # dimension mismatch
+        with self.assertRaises(ValueError):
+            p_from_latent(x3) # wrong num dimensions
+        with self.assertRaises(TypeError):
+            rdpg_from_p('XD') # wrong type
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x3) # wrong num dimensions
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x2) # wrong shape for P
