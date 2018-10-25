@@ -90,7 +90,7 @@ def test_output_uniform():
     Generate two sets of synthetic eigenvalues based on two uniform distributions.
     The elbow must be at 50.
     """
-    np.random.seed = 9
+    np.random.seed(9)
     x1 = np.random.uniform(0, 45, 50)
     x2 = np.random.uniform(55, 100, 50)
     X = np.sort(np.hstack([x1, x2]))[::-1]
@@ -99,7 +99,7 @@ def test_output_uniform():
 
 
 def test_output_two_block_sbm():
-    np.random.seed = 10
+    np.random.seed(10)
     n_communities = [100, 100]
     P = np.array([[0.5, 0.1], [0.1, 0.5]])
     A = binary_sbm(n_communities, P)
