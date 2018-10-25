@@ -13,10 +13,10 @@ from scipy.stats import norm
 
 def _compute_likelihood(arr):
     """
+    Computes the log likelihoods based on normal distribution given 
+    a 1d-array of sorted values.
     """
     n_elements = len(arr)
-    if n_elements == 1:
-        return
     likelihoods = np.zeros(n_elements)
 
     for idx in range(1, n_elements + 1):
