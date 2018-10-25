@@ -115,7 +115,7 @@ class TestSemiparametricTest(unittest.TestCase):
         # rotated 90 degrees
         points2 = np.dot(points1, rotation)
         # scaled
-        points2 = 2.5 * points2
+        points2 = 2 * points2
 
         spt = SemiparametricTest(embedding='ase', test_case='scalar-rotation')
         n = spt._difference_norm(points1, points2)
