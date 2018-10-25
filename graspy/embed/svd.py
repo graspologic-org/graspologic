@@ -191,7 +191,8 @@ def selectSVD(X, k=None):
         the singular values, as a 1d array.
     """
     if (k is None):
-        select_dimension(X, n_elbows=2, threshold=None)
+        elbows, _ = select_dimension(X, n_elbows=2, threshold=None)
+        k = elbows[1]
     if k > min(
             X.shape
     ):  #TODO this method does not properly catch error if k=min(X.shape),
