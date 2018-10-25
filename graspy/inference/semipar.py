@@ -76,6 +76,7 @@ class SemiparametricTest(BaseInference):
                 R, s = orthogonal_procrustes(X1, X2)
                 return np.linalg.norm(s / np.sum(X1**2) * np.dot(X1, R) - X2)
             elif self.test_case == 'diagonal-rotation':
+                
                 raise NotImplementedError()
                 # normX1 = np.linalg.norm(X1, axis=1)
                 # normX2 =  np.linalg.norm(X2, axis=1)
