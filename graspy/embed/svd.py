@@ -169,17 +169,19 @@ def select_dimension(X,
         return elbows, values
 
 
-def selectSVD(X, k=None):
+def selectSVD(X, k=None, n_elbows=2):
     """
     A function for performing svd using ZG2, X = U S Vt.
 
     Parameters
     ----------
     X: array-like, shape (n_samples, n_features)
-        the data to perform svd on.
+        The data to perform svd on.
     k: int
-        the number of dimensions to embed into. Should have
-        k < min(X.shape).
+        The number of dimensions to embed into. Should have k < min(X.shape).
+    n_elbows: int, optional, default: 2
+        If `k=None`, then compute the optimal embedding dimension using
+        `select_dimension`. `k=elbows[-1]`.
 
     Returns
     -------
@@ -191,8 +193,8 @@ def selectSVD(X, k=None):
         the singular values, as a 1d array.
     """
     if (k is None):
-        elbows, _ = select_dimension(X, n_elbows=2, threshold=None)
-        k = elbows[1]
+        elbows, _ = select_dimension(X, n_elbows=n_elbows, threshold=None)
+        k = elbows[-1]
     if k > min(
             X.shape
     ):  #TODO this method does not properly catch error if k=min(X.shape),
