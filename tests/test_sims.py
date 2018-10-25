@@ -651,6 +651,9 @@ class Test_RDPG(unittest.TestCase):
         self.assertTrue(A.shape, (5,5))
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> typechecking and tests
     def test_inputs(self):
         x1 = np.array([[1,1],[1,1]])
         x2 = np.array([[1,1]])
@@ -662,6 +665,7 @@ class Test_RDPG(unittest.TestCase):
         with self.assertRaises(ValueError):
             p_from_latent(x3) # wrong num dimensions
         with self.assertRaises(TypeError):
+<<<<<<< HEAD
             sample_edges('XD') # wrong type
         with self.assertRaises(ValueError):
             sample_edges(x3) # wrong num dimensions
@@ -711,3 +715,10 @@ class Test_RDPG(unittest.TestCase):
 =======
     # def test_inputs():
 >>>>>>> snail rdpg -> caterpillar rdpg
+=======
+            rdpg_from_p('XD') # wrong type
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x3) # wrong num dimensions
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x2) # wrong shape for P
+>>>>>>> typechecking and tests
