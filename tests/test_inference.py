@@ -6,18 +6,19 @@ import unittest
 import numpy as np
 from graspy.inference import SemiparametricTest
 from graspy.embed import AdjacencySpectralEmbed
-
+from graspy.simulations import er_np
 
 class TestSemiparametricTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.A1 = np.array([[0, 1, 0],
-                           [1, 0, 1],
-                           [0, 1, 0]])
-
-        cls.A2 = np.array([[0, 1, 0],
-                           [1 ,0, 1],
-                           [0, 1, 0]])
+        # cls.A1 = np.array([[0, 1, 0],
+        #                    [1, 0, 1],
+        #                    [0, 1, 0]])
+        cls.A1 = er_np(20,.3)
+        cls.A2 = er_np(20,.3)
+        # cls.A2 = np.array([[0, 1, 0],
+        #                    [1 ,0, 1],
+        #                    [0, 1, 0]])
 
     def test_fit_p(self):
         spt = SemiparametricTest()
@@ -45,7 +46,7 @@ class TestSemiparametricTest(unittest.TestCase):
             SemiparametricTest(test_case=6)
 
     def test_n_bootstraps(self):
-        spt = SemiparametricTest(n_bootstraps=234)
+        spt = SemiparametricTest(n_bootstraps=234, n_components=None)
         spt.fit(self.A1, self.A2)
         self.assertEqual(spt.T1_bootstrap.shape[0], 234)
     

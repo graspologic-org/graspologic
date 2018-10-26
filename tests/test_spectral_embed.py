@@ -99,6 +99,13 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         P = np.array([[0.8, 0.2], [0.2, 0.8]])
         _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed, P)
 
+    def test_dimselect_embedding(self):        
+        n = 10
+        M = 20
+        A = er_nm(n, M) + 5
+        ase = AdjacencySpectralEmbed(k=None)
+        ase.fit_transform(A)
+        # print()
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
