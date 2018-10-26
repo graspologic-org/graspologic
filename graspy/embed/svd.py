@@ -50,7 +50,6 @@ def select_dimension(X,
     """
     Generates profile likelihood from array based on Zhu and Godsie method.
     Elbows correspond to the optimal embedding dimension.
-
     Parameters
     ----------
     X : 1d or 2d array-like
@@ -67,7 +66,6 @@ def select_dimension(X,
         be >= 0.
     return_likelihoods : bool, optional, default: False
         If True, returns the all likelihoods associated with each elbow. 
-
     Returns
     -------
     elbows : list
@@ -79,14 +77,12 @@ def select_dimension(X,
     likelihoods : list of array-like
         Array of likelihoods of the corresponding to each elbow. Only returned
         if `return_likelihoods` is True.
-
     References
     ----------
     .. [1] Zhu, M. and Ghodsi, A. (2006).
         Automatic dimensionality selection from the scree plot via the use of
         profile likelihood. Computational Statistics & Data Analysis, 51(2), 
         pp.918-930.
-
     """
     # Handle input data
     if not isinstance(X, np.ndarray):
@@ -144,10 +140,10 @@ def select_dimension(X,
     if len(D) == 0:
         msg = 'No values greater than threshold {}.'
         raise IndexError(msg.format(threshold))
-    elif len(D) <= n_elbows:
-        msg = 'n_elbows must between {}, the number of thresholded \
-        singular values'.format(len(D))
-
+    # elif len(D) <= n_elbows: # TODO error here where
+    #     msg = 'n_elbows must between {}, the number of thresholded \
+    #     singular values'.format(len(D))
+    #     raise ValueError(msg)
     idx = 0
     elbows = []
     values = []
@@ -171,7 +167,6 @@ def select_dimension(X,
 def selectSVD(X, k=None, n_elbows=2):
     """
     A function for performing svd using ZG2, X = U S Vt.
-
     Parameters
     ----------
     X: array-like, shape (n_samples, n_features)
@@ -181,7 +176,6 @@ def selectSVD(X, k=None, n_elbows=2):
     n_elbows: int, optional, default: 2
         If `k=None`, then compute the optimal embedding dimension using
         `select_dimension`. `k=elbows[-1]`.
-
     Returns
     -------
     U: array-like, shape (n_samples, k)
@@ -192,11 +186,14 @@ def selectSVD(X, k=None, n_elbows=2):
         the singular values, as a 1d array.
     """
     if (k is None):
-        selectDim(X)
-    if k > min(X.shape): #TODO this method does not properly catch error if k=min(X.shape),
-                         # also may be unecessary (see svds error catching)
+        elbows, _ = select_dimension(X, n_elbows=n_elbows, threshold=None)
+        k = elbows[-1]
+    if k > min(
+            X.shape
+    ):  #TODO this method does not properly catch error if k=min(X.shape),
+        # also may be unecessary (see svds error catching)
         msg = "k is {}, but min(X.shape) is {}."
         msg = msg.format(k, min(X.shape))
         raise ValueError(msg)
     U, s, Vt = svds(X, k=k)
-    return (U, Vt.T, s) # TODO what is the point in flipping the order of these? 
+    return (U, Vt.T, s)

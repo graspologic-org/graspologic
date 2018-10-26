@@ -5,7 +5,7 @@
 import numpy as np
 
 from .base import BaseInference
-from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
+from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg_from_p, p_from_latent
 from scipy.spatial import procrustes
 from scipy.linalg import orthogonal_procrustes
@@ -39,8 +39,7 @@ class SemiparametricTest(BaseInference):
         as an embedding method. Ignored if using 'omnibus'
     """
 
-    def __init__(self, embedding='ase', n_components=2, n_bootstraps=1000, test_case='rotation',):
-
+    def __init__(self, embedding='ase', n_components=None, n_bootstraps=1000, test_case='rotation',):
         if type(n_bootstraps) is not int:
             raise TypeError()
         if type(test_case) is not str:
@@ -110,10 +109,6 @@ class SemiparametricTest(BaseInference):
     def _embed(self, A1, A2):
         if self.embedding not in ['ase', 'lse', 'omnibus']:
             raise ValueError('Invalid embedding method "{}"'.format(self.embedding))
-
-        if self.n_components is None:
-            raise NotImplementedError('Wait for dimselect') # TODO
-
         if self.embedding == 'ase':
             X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
             X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A2)
