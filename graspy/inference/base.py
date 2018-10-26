@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from sklearn.base import BaseEstimator
+import numpy as np
 
 class BaseInference(BaseEstimator):
     """
@@ -28,8 +29,8 @@ class BaseInference(BaseEstimator):
     def __init__(self, embedding='ase', n_components=None):
         if type(embedding) is not str:
             raise TypeError('embedding must be str')
-        if (type(n_components) is not int) and (n_components is not None):
-            raise TypeError('n_components must be int')
+        if (not isinstance(n_components, (int, np.integer))) and (n_components is not None):
+            raise TypeError('n_components must be int or np.integer')
         if embedding not in ['ase', 'lse', 'omnibus']:
             raise ValueError("{} is not a valid embedding method.".format(embedding))
         if n_components is not None and n_components <= 0:

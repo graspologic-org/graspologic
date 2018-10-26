@@ -48,7 +48,7 @@ class SemiparametricTest(BaseInference):
         if n_bootstraps < 1:
             raise ValueError('{} is invalid number of bootstraps, must be greater than 1'.format(n_bootstraps))
         if test_case not in ['rotation', 'scalar-rotation', 'diagonal-rotation']:
-            raise ValueError('test_case must be one of \'rotation\', \'scaling-rotation\',\'diagonal-rotation\'')
+            raise ValueError('test_case must be one of \'rotation\', \'scalar-rotation\',\'diagonal-rotation\'')
 
         super().__init__(embedding=embedding, n_components=n_components,)
 
@@ -129,7 +129,12 @@ class SemiparametricTest(BaseInference):
             raise NotImplementedError() # TODO asymmetric case
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
-        
+        # need to make sure A1 and A2 will both be embeded in same num dims
+        # could be an argument for doing this in init but I think it makes sense here
+        num_dims1 = select_dimension(A1)[0][-1]
+        num_dims2 = select_dimension(A2)[0][-1]
+        self.n_components = max(num_dims1, num_dims2)
+
         X_hats = self._embed(A1, A2)
         T_sample = self._difference_norm(X_hats[0], X_hats[1])
         T1_bootstrap = self._bootstrap(X_hats[0])
