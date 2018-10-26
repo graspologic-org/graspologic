@@ -196,4 +196,4 @@ def selectSVD(X, k=None, n_elbows=2):
         msg = msg.format(k, min(X.shape))
         raise ValueError(msg)
     U, s, Vt = svds(X, k=k)
-    return (U, Vt.T, s)
+    return (U, Vt.T, s) # TODO what is the point in flipping the order of these? 
