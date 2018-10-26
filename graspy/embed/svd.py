@@ -134,6 +134,9 @@ def select_dimension(X,
     else:
         k = n_components
 
+    if k < 3:
+        raise UserWarning('Known bug with low values of k in dimselect function') # TODO
+
     # Check to see if svd is needed
     if X.ndim == 1:
         D = np.sort(X)[::-1]
