@@ -1,4 +1,4 @@
-# omni.py
+# plot.py
 # Created by Jaewon Chung on 2018-10-19.
 # Email: j1c@jhu.edu
 # Copyright (c) 2018. All rights reserved.
@@ -26,6 +26,8 @@ def plot_heatmap(X,
                  center=None,
                  cbar=True):
     """
+    Plots a graph as a heatmap.
+
     Parameters
     ----------
     X : nx.Graph or np.ndarray object
@@ -84,15 +86,17 @@ def plot_grid_plot(X,
                    height=10,
                    title=None,
                    context='talk',
-                   font_scale=1,
-                   xticklabels=False,
-                   yticklabels=False):
+                   font_scale=1):
     """
+    Plots multiple graphs as a grid, with intensity denoted by the size 
+    of dots on the grid.
+
     Parameters
     ----------
     X : list of nx.Graph or np.ndarray object
         List of nx.Graph or numpy arrays to plot
     transform : None, or one of {log, pass_to_ranks}
+    
     height : integers, optional, default: 10
         Height of figure in inches.
     title : str, optional, default: None
@@ -101,10 +105,6 @@ def plot_grid_plot(X,
         The name of a preconfigured set.
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font elements.
-    xticklabels, yticklabels : bool or list, optional
-        If True, plot the column names of the dataframe. If False, don’t plot the 
-        column names. If list-like, plot these alternate labels as the xticklabels.
-        If an integer, use the column names but plot only every n label. 
     """
 
     if isinstance(X, list):
@@ -112,7 +112,13 @@ def plot_grid_plot(X,
     else:
         graphs = [import_graph(X)]
 
-    # TODO: add transforms
+    if transform == 'log':
+        #arr = np.log(arr, where=(arr > 0))
+        #hacky, but np.log(arr, where=arr>0) is really buggy
+        arr = arr.copy()
+        arr[arr > 0] = np.log(arr[arr > 0])
+    elif transform == 'pass_to_ranks':
+        arr = pass_to_ranks(arr)
 
     palette = sns.color_palette('Set1', desat=0.75, n_colors=len(labels))
 
