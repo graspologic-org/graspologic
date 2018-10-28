@@ -75,7 +75,7 @@ def heatmap(X,
             arr = pass_to_ranks(arr, method=transform)
         else:
             msg = 'Transform must be one of {log, zero-boost, simple-all, \
-            simple-nonzero, not {}.'.format(transform)
+            simple-nonzero, not {}.'                                    .format(transform)
             raise ValueError(msg)
 
     # Handle figsize
@@ -95,7 +95,7 @@ def heatmap(X,
         raise TypeError(msg)
     elif not context in ['paper', 'notebook', 'talk', 'poster']:
         msg = 'context must be one of (paper, notebook, talk, poster), \
-            not {}.'.format(context)
+            not {}.'                    .format(context)
         raise ValueError(msg)
 
     # Handle font_scale
@@ -223,7 +223,7 @@ def gridplot(X,
             arr = pass_to_ranks(arr, method=transform)
         else:
             msg = 'Transform must be one of {log, zero-boost, simple-all, \
-            simple-nonzero, not {}.'.format(transform)
+            simple-nonzero, not {}.'                                    .format(transform)
             raise ValueError(msg)
 
     # Handle heights
@@ -233,13 +233,17 @@ def gridplot(X,
         raise TypeError(msg)
 
     # Handle title
-    if not isinstance(title, str):
-        msg = 'title must be a string, not {}.'.format(type(title))
-        raise TypeError(msg)
+    if title is not None:
+        if not isinstance(title, str):
+            msg = 'title must be a string, not {}.'.format(type(title))
+            raise TypeError(msg)
 
     # Handle context
-    if not context in ['paper', 'notebook', 'talk', 'poster']:
-        msg = 'context must be one of {paper, notebook, talk, poster}, \
+    if not isinstance(context, str):
+        msg = 'context must be a string, not {}.'.format(type(context))
+        raise TypeError(msg)
+    elif not context in ['paper', 'notebook', 'talk', 'poster']:
+        msg = 'context must be one of (paper, notebook, talk, poster), \
             not {}.'.format(context)
         raise ValueError(msg)
 

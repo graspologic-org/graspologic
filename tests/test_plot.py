@@ -86,41 +86,41 @@ def test_heatmap_output():
     fig = heatmap(X, cmap='gist_rainbow')
 
 
-def test_grid_plot_inputs():
+def test_gridplot_inputs():
     X = er_np(10, .5)
     labels = ['ER(10, 0.5)']
 
     with pytest.raises(TypeError):
-        grid_plot(X='input', labels=labels)
+        gridplot(X='input', labels=labels)
 
     with pytest.raises(ValueError):
-        grid_plot(X, labels=['a', 'b'])
+        gridplot(X, labels=['a', 'b'])
 
     # transform
     with pytest.raises(ValueError):
         transform = 'bad transform'
-        grid_plot(X, labels=labels, transform=transform)
+        gridplot(X, labels=labels, transform=transform)
 
     # height
     with pytest.raises(TypeError):
         height = 'bad figsize'
-        grid_plot(X, labels=labels, height=height)
+        gridplot(X, labels=labels, height=height)
 
     # title
     with pytest.raises(TypeError):
         title = 1
-        grid_plot(X, labels=labels, title=title)
+        gridplot(X, labels=labels, title=title)
 
     # context
     with pytest.raises(TypeError):
         context = 1
-        heatmap(X, context=context)
+        gridplot(X, labels=labels, context=context)
 
     with pytest.raises(ValueError):
         context = 'journal'
-        heatmap(X, context=context)
+        gridplot(X, labels=labels, context=context)
 
     # font_scale
     with pytest.raises(TypeError):
         font_scale = '1'
-        heatmap(X, font_scale=font_scale)
+        gridplot(X, labels=labels, font_scale=font_scale)
