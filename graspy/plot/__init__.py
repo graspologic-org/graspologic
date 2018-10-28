@@ -1,7 +1,9 @@
 import sys
+import matplotlib as mpl
 if sys.platform == 'darwin':
-    import matplotlib as mpl
     mpl.use('tkAgg')
+elif sys.platform == 'linux':
+    mpl.use('Agg')
 
 from .plot import heatmap, grid_plot
 
