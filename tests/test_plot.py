@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from graspy.plot.plot import heatmap, grid_plot
+from graspy.plot.plot import heatmap, gridplot
 from graspy.simulations.simulations import er_np
 
 
