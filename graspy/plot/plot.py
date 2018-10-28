@@ -79,19 +79,22 @@ def heatmap(X,
             raise ValueError(msg)
 
     # Handle figsize
-    if not isinstance(height, (int, float)):
-        msg = 'height must be an integer or float, not {}.'.format(
-            type(height))
+    if not isinstance(figsize, tuple):
+        msg = 'figsize must be a tuple, not {}.'.format(type(figsize))
         raise TypeError(msg)
 
     # Handle title
-    if not isinstance(title, str):
-        msg = 'title must be a string, not {}.'.format(type(title))
-        raise TypeError(msg)
+    if title is not None:
+        if not isinstance(title, str):
+            msg = 'title must be a string, not {}.'.format(type(title))
+            raise TypeError(msg)
 
     # Handle context
-    if not context in ['paper', 'notebook', 'talk', 'poster']:
-        msg = 'context must be one of {paper, notebook, talk, poster}, \
+    if not isinstance(context, str):
+        msg = 'context must be a string, not {}.'.format(type(context))
+        raise TypeError(msg)
+    elif not context in ['paper', 'notebook', 'talk', 'poster']:
+        msg = 'context must be one of (paper, notebook, talk, poster), \
             not {}.'.format(context)
         raise ValueError(msg)
 
@@ -133,10 +136,9 @@ def heatmap(X,
             raise TypeError(msg)
 
     # Handle cbar
-    if cbar is not None:
-        if not isinstance(center, bool):
-            msg = 'cbar must be a bool, not {}.'.format(type(center))
-            raise TypeError(msg)
+    if not isinstance(cbar, bool):
+        msg = 'cbar must be a bool, not {}.'.format(type(center))
+        raise TypeError(msg)
 
     with sns.plotting_context(context, font_scale=font_scale):
         fig = plt.figure(figsize=figsize)
@@ -171,6 +173,9 @@ def grid_plot(X,
     ----------
     X : list of nx.Graph or np.ndarray object
         List of nx.Graph or numpy arrays to plot
+    labels : list of str
+        List of strings, which are labels for each element in X. 
+        `len(X) == len(labels)`.
     transform : None, or string {log, zero-boost, simple-all, simple-nonzero}
         log :
             Plots the log of all nonzero numbers
@@ -198,6 +203,15 @@ def grid_plot(X,
         graphs = [import_graph(x) for x in X]
     else:
         graphs = [import_graph(X)]
+
+    # Handle labels
+    if not isinstance(labels, list):
+        msg = 'labels must be a list, not {}.'.format(type(labels))
+        raise TypeError(msg)
+    elif len(labels) != len(graphs):
+        msg = 'Expected {} elements in labels, but got {} instead.'.format(
+            len(graphs), len(labels))
+        raise ValueError(msg)
 
     if transform is not None:
         if transform == 'log':
