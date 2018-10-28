@@ -158,13 +158,13 @@ def heatmap(X,
     return fig
 
 
-def grid_plot(X,
-              labels,
-              transform=None,
-              height=10,
-              title=None,
-              context='talk',
-              font_scale=1):
+def gridplot(X,
+             labels,
+             transform=None,
+             height=10,
+             title=None,
+             context='talk',
+             font_scale=1):
     """
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
@@ -281,14 +281,48 @@ def grid_plot(X,
     return plot
 
 
-def pair_plot(X,
-              labels,
-              col_names=None,
-              figsize=(10, 10),
-              title=None,
-              context='talk',
-              font_scale=1,
-              xticklabels=False,
-              yticklabels=False):
+def pairplot(X,
+             labels=None,
+             col_names=None,
+             height=2.5,
+             title=None,
+             context='talk',
+             font_scale=1,
+             xticklabels=False,
+             yticklabels=False):
+    """
+    TODO: Update docstring
+    """
+    if col_names is None:
+        col_names = [
+            'Dimension {}'.format(i) for i in range(1, X.shape[1] + 1)
+        ]
 
-    pass
+    if labels is not None:
+        df_labels = pd.DataFrame(labels, columns=['labels'])
+        df = pd.concat([df_labels, df], axis=1)
+        df = pd.DataFrame(X, columns=col_names)
+    else:
+        df = pd.DataFrame(X, columns=col_names)
+
+    if not xticklabels:
+        xticklabels = []
+        xticks = []
+    if not yticklabels:
+        yticklabels = []
+        yticks = []
+
+    with sns.plotting_context(context, font_scale=font_scale):
+        if labels is not None:
+            pairs = sns.pairplot(
+                df, hue='labels', vars=col_names[:10], height=height)
+        else:
+            pairs = sns.pairplot(df, vars=col_names[:10], height=height)
+
+        pairs.set(
+            xticklabels=xticklabels,
+            xticks=xticks,
+            yticklabels=yticklabels,
+            yticks=yticks)
+
+    return pairs
