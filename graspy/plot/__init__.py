@@ -1,3 +1,3 @@
-from .plot import plot_heatmap, plot_grid_plot
+from .plot import heatmap, grid_plot
 
-__all__ = [plot_heatmap, plot_grid_plot]
+__all__ = [heatmap, grid_plot]
