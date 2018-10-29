@@ -1,3 +1,3 @@
 from .gclust import GaussianCluster
 
-__all__ = [GaussianCluster]
+__all__ = ['GaussianCluster']
