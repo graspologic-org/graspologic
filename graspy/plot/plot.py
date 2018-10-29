@@ -75,7 +75,7 @@ def heatmap(X,
             arr = pass_to_ranks(arr, method=transform)
         else:
             msg = 'Transform must be one of {log, zero-boost, simple-all, \
-            simple-nonzero, not {}.'                                    .format(transform)
+            simple-nonzero, not {}.'.format(transform)
             raise ValueError(msg)
 
     # Handle figsize
@@ -95,7 +95,7 @@ def heatmap(X,
         raise TypeError(msg)
     elif not context in ['paper', 'notebook', 'talk', 'poster']:
         msg = 'context must be one of (paper, notebook, talk, poster), \
-            not {}.'                    .format(context)
+            not {}.'.format(context)
         raise ValueError(msg)
 
     # Handle font_scale
@@ -141,7 +141,7 @@ def heatmap(X,
         raise TypeError(msg)
 
     with sns.plotting_context(context, font_scale=font_scale):
-        fig = plt.figure(figsize=figsize)
+        fig, ax = plt.subplots(figsize=figsize)
         plot = sns.heatmap(
             arr,
             cmap=cmap,
@@ -150,7 +150,8 @@ def heatmap(X,
             yticklabels=yticklabels,
             cbar_kws=CBAR_KWS,
             center=center,
-            cbar=cbar)
+            cbar=cbar,
+            ax=ax)
         if title is not None:
             plot.set_title(title)
         fig.tight_layout()
@@ -223,7 +224,7 @@ def gridplot(X,
             arr = pass_to_ranks(arr, method=transform)
         else:
             msg = 'Transform must be one of {log, zero-boost, simple-all, \
-            simple-nonzero, not {}.'                                    .format(transform)
+            simple-nonzero, not {}.'.format(transform)
             raise ValueError(msg)
 
     # Handle heights
@@ -304,8 +305,8 @@ def pairplot(X,
 
     if labels is not None:
         df_labels = pd.DataFrame(labels, columns=['labels'])
-        df = pd.concat([df_labels, df], axis=1)
         df = pd.DataFrame(X, columns=col_names)
+        df = pd.concat([df_labels, df], axis=1)
     else:
         df = pd.DataFrame(X, columns=col_names)
 
