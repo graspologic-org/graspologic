@@ -9,4 +9,4 @@ elif sys.platform == 'linux':
 
 from .plot import heatmap, gridplot, pairplot
 
-__all__ = [heatmap, gridplot, pairplot]
+__all__ = ['heatmap', 'gridplot', 'pairplot']

@@ -10,8 +10,72 @@ import seaborn as sns
 
 from ..utils import import_graph, pass_to_ranks
 
-# Global plotting settings
-CBAR_KWS = dict(shrink=0.7)
+
+def _check_common_inputs(figsize=None,
+                         height=None,
+                         title=None,
+                         context=None,
+                         font_scale=None,
+                         legend_name=None):
+    # Handle figsize
+    if figsize is not None:
+        if not isinstance(figsize, tuple):
+            msg = 'figsize must be a tuple, not {}.'.format(type(figsize))
+            raise TypeError(msg)
+
+    # Handle heights
+    if height is not None:
+        if not isinstance(height, (int, float)):
+            msg = 'height must be an integer or float, not {}.'.format(
+                type(height))
+            raise TypeError(msg)
+
+    # Handle title
+    if title is not None:
+        if not isinstance(title, str):
+            msg = 'title must be a string, not {}.'.format(type(title))
+            raise TypeError(msg)
+
+    # Handle context
+    if context is not None:
+        if not isinstance(context, str):
+            msg = 'context must be a string, not {}.'.format(type(context))
+            raise TypeError(msg)
+        elif not context in ['paper', 'notebook', 'talk', 'poster']:
+            msg = 'context must be one of (paper, notebook, talk, poster), \
+                not {}.'.format(context)
+            raise ValueError(msg)
+
+    # Handle font_scale
+    if font_scale is not None:
+        if not isinstance(font_scale, (int, float)):
+            msg = 'font_scale must be an integer or float, not {}.'.format(
+                type(font_scale))
+            raise TypeError(msg)
+
+    # Handle legend name
+    if legend_name is not None:
+        if not isinstance(legend_name, str):
+            msg = 'legend_name must be a string, not {}.'.format(
+                type(legend_name))
+            raise TypeError(msg)
+
+
+def _transform(arr, method):
+    if method is not None:
+        if method == 'log':
+            #arr = np.log(arr, where=(arr > 0))
+            #hacky, but np.log(arr, where=arr>0) is really buggy
+            arr = arr.copy()
+            arr[arr > 0] = np.log(arr[arr > 0])
+        elif method in ['zero-boost', 'simple-all', 'simple-nonzero']:
+            arr = pass_to_ranks(arr, method=method)
+        else:
+            msg = 'Transform must be one of {log, zero-boost, simple-all, \
+            simple-nonzero, not {}.'.format(method)
+            raise ValueError(msg)
+
+    return arr
 
 
 def heatmap(X,
@@ -53,7 +117,8 @@ def heatmap(X,
     context :  None, or one of {paper, notebook, talk (default), poster}
         The name of a preconfigured set.
     font_scale : float, optional, default: 1
-        Separate scaling factor to independently scale the size of the font elements.
+        Separate scaling factor to independently scale the size of the font
+        elements.
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
     cmap : str
@@ -63,46 +128,8 @@ def heatmap(X,
     cbar : bool, default: True
         Whether to draw a colorbar.
     """
-    arr = import_graph(X)
-
-    if transform is not None:
-        if transform == 'log':
-            #arr = np.log(arr, where=(arr > 0))
-            #hacky, but np.log(arr, where=arr>0) is really buggy
-            arr = arr.copy()
-            arr[arr > 0] = np.log(arr[arr > 0])
-        elif transform in ['zero-boost', 'simple-all', 'simple-nonzero']:
-            arr = pass_to_ranks(arr, method=transform)
-        else:
-            msg = 'Transform must be one of {log, zero-boost, simple-all, \
-            simple-nonzero, not {}.'.format(transform)
-            raise ValueError(msg)
-
-    # Handle figsize
-    if not isinstance(figsize, tuple):
-        msg = 'figsize must be a tuple, not {}.'.format(type(figsize))
-        raise TypeError(msg)
-
-    # Handle title
-    if title is not None:
-        if not isinstance(title, str):
-            msg = 'title must be a string, not {}.'.format(type(title))
-            raise TypeError(msg)
-
-    # Handle context
-    if not isinstance(context, str):
-        msg = 'context must be a string, not {}.'.format(type(context))
-        raise TypeError(msg)
-    elif not context in ['paper', 'notebook', 'talk', 'poster']:
-        msg = 'context must be one of (paper, notebook, talk, poster), \
-            not {}.'.format(context)
-        raise ValueError(msg)
-
-    # Handle font_scale
-    if not isinstance(font_scale, (int, float)):
-        msg = 'font_scale must be an integer or float, not {}.'.format(
-            type(font_scale))
-        raise TypeError(msg)
+    _check_common_inputs(
+        figsize=figsize, title=title, context=context, font_scale=font_scale)
 
     # Handle ticklabels
     if isinstance(xticklabels, list):
@@ -140,6 +167,12 @@ def heatmap(X,
         msg = 'cbar must be a bool, not {}.'.format(type(center))
         raise TypeError(msg)
 
+    arr = import_graph(X)
+    arr = _transform(arr, transform)
+
+    # Global plotting settings
+    CBAR_KWS = dict(shrink=0.7)
+
     with sns.plotting_context(context, font_scale=font_scale):
         fig, ax = plt.subplots(figsize=figsize)
         plot = sns.heatmap(
@@ -154,9 +187,8 @@ def heatmap(X,
             ax=ax)
         if title is not None:
             plot.set_title(title)
-        fig.tight_layout()
 
-    return fig
+    return plot
 
 
 def gridplot(X,
@@ -191,19 +223,24 @@ def gridplot(X,
         'simple-nonzero':
             Pass to ranks method. Same as 'simple-all' but ranks are scaled by
                 .. math:: \frac{2 rank(non-zero edges)}{num_nonzero + 1}
-    height : integers, optional, default: 10
+    height : int, optional, default: 10
         Height of figure in inches.
     title : str, optional, default: None
         Title of plot.
     context :  None, or one of {paper, notebook, talk (default), poster}
         The name of a preconfigured set.
     font_scale : float, optional, default: 1
-        Separate scaling factor to independently scale the size of the font elements.
+        Separate scaling factor to independently scale the size of the font
+        elements.
     """
+    _check_common_inputs(
+        height=height, title=title, context=context, font_scale=font_scale)
+
     if isinstance(X, list):
         graphs = [import_graph(x) for x in X]
     else:
-        graphs = [import_graph(X)]
+        msg = 'X must be a list, not {}.'.format(type(X))
+        raise TypeError(msg)
 
     # Handle labels
     if not isinstance(labels, list):
@@ -214,45 +251,7 @@ def gridplot(X,
             len(graphs), len(labels))
         raise ValueError(msg)
 
-    if transform is not None:
-        if transform == 'log':
-            #arr = np.log(arr, where=(arr > 0))
-            #hacky, but np.log(arr, where=arr>0) is really buggy
-            arr = arr.copy()
-            arr[arr > 0] = np.log(arr[arr > 0])
-        elif transform in ['zero-boost', 'simple-all', 'simple-nonzero']:
-            arr = pass_to_ranks(arr, method=transform)
-        else:
-            msg = 'Transform must be one of {log, zero-boost, simple-all, \
-            simple-nonzero, not {}.'.format(transform)
-            raise ValueError(msg)
-
-    # Handle heights
-    if not isinstance(height, (int, float)):
-        msg = 'height must be an integer or float, not {}.'.format(
-            type(height))
-        raise TypeError(msg)
-
-    # Handle title
-    if title is not None:
-        if not isinstance(title, str):
-            msg = 'title must be a string, not {}.'.format(type(title))
-            raise TypeError(msg)
-
-    # Handle context
-    if not isinstance(context, str):
-        msg = 'context must be a string, not {}.'.format(type(context))
-        raise TypeError(msg)
-    elif not context in ['paper', 'notebook', 'talk', 'poster']:
-        msg = 'context must be one of (paper, notebook, talk, poster), \
-            not {}.'.format(context)
-        raise ValueError(msg)
-
-    # Handle font_scale
-    if not isinstance(font_scale, (int, float)):
-        msg = 'font_scale must be an integer or float, not {}.'.format(
-            type(font_scale))
-        raise TypeError(msg)
+    graphs = [_transform(arr, transform) for arr in graphs]
 
     palette = sns.color_palette('Set1', desat=0.75, n_colors=len(labels))
 
@@ -287,47 +286,104 @@ def gridplot(X,
 
 
 def pairplot(X,
-             labels=None,
+             Y=None,
              col_names=None,
-             height=2.5,
              title=None,
+             legend_name=None,
+             variables=None,
+             height=2.5,
              context='talk',
-             font_scale=1,
-             xticklabels=False,
-             yticklabels=False):
+             font_scale=1):
     """
-    TODO: Update docstring
+    Plot pairwise relationships in a dataset.
+
+    Parameters
+    ----------
+    X : array-like, shape (n_samples, n_features)
+        Input data.
+    Y : array-like or list, shape (n_samples), optional
+        Labels that correspond to each sample in X.
+    col_names : array-like or list, shape (n_features), optional
+        Names or labels for each feature in X. If not provided, the default 
+        will be `Dimension 1, Dimension 2, etc`.
+    title : str, optional, default: None
+        Title of plot.
+    legend_name : str, optional, default: None
+        Title of the legend.
+    variables : list of variable names, optional
+        Variables to plot based on col_names, otherwise use every column with
+        a numeric datatype.
+    height : int, optional, default: 10
+        Height of figure in inches.
+    context :  None, or one of {paper, notebook, talk (default), poster}
+        The name of a preconfigured set.
+    font_scale : float, optional, default: 1
+        Separate scaling factor to independently scale the size of the font 
+        elements. 
     """
+    _check_common_inputs(
+        height=height,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+        legend_name=legend_name)
+
+    # Handle X
+    if not isinstance(X, (list, np.ndarray)):
+        msg = 'X must be array-like, not {}.'.format(type(X))
+        raise TypeError(msg)
+
+    # Handle Y
+    if Y is not None:
+        if not isinstance(Y, (list, np.ndarray)):
+            msg = 'Y must be array-like or list, not {}.'.format(type(Y))
+            raise TypeError(msg)
+        elif X.shape[0] != len(Y):
+            msg = 'Expected length {}, but got length {} instead for Y.'.format(
+                X.shape[0], len(Y))
+            raise ValueError(msg)
+
+    # Handle col_names
     if col_names is None:
         col_names = [
             'Dimension {}'.format(i) for i in range(1, X.shape[1] + 1)
         ]
+    elif not isinstance(col_names, list):
+        msg = 'col_names must be a list, not {}.'.format(type(col_names))
+        raise TypeError(msg)
+    elif X.shape[1] != len(col_names):
+        msg = 'Expected length {}, but got length {} instead for col_names.'.format(
+            X.shape[1], len(col_names))
+        raise ValueError(msg)
 
-    if labels is not None:
-        df_labels = pd.DataFrame(labels, columns=['labels'])
-        df = pd.DataFrame(X, columns=col_names)
-        df = pd.concat([df_labels, df], axis=1)
-    else:
-        df = pd.DataFrame(X, columns=col_names)
-
-    if not xticklabels:
-        xticklabels = []
-        xticks = []
-    if not yticklabels:
-        yticklabels = []
-        yticks = []
-
-    with sns.plotting_context(context, font_scale=font_scale):
-        if labels is not None:
-            pairs = sns.pairplot(
-                df, hue='labels', vars=col_names[:10], height=height)
+    # Handle variables
+    if variables is not None:
+        if len(variables) > len(col_names):
+            msg = 'variables cannot contain more elements than col_names.'
+            raise ValueError(msg)
         else:
-            pairs = sns.pairplot(df, vars=col_names[:10], height=height)
+            for v in variables:
+                if v not in col_names:
+                    msg = '{} is not a valid key.'.format(v)
+                    raise KeyError(msg)
+    else:
+        variables = col_names
 
-        pairs.set(
-            xticklabels=xticklabels,
-            xticks=xticks,
-            yticklabels=yticklabels,
-            yticks=yticks)
+    df = pd.DataFrame(X, columns=col_names)
+    if Y is not None:
+        if legend_name is None:
+            legend_name = 'Type'
+        df_labels = pd.DataFrame(Y, columns=[legend_name])
+        df = pd.concat([df_labels, df], axis=1)
+
+    with sns.plotting_context(context=context, font_scale=font_scale):
+        if Y is not None:
+            pairs = sns.pairplot(
+                df, hue=legend_name, vars=variables, height=height)
+        else:
+            pairs = sns.pairplot(df, vars=variables, height=height)
+        pairs.set(xticks=[], yticks=[])
+        pairs.fig.subplots_adjust(top=0.945)
+        pairs.fig.suptitle(title)
 
     return pairs
