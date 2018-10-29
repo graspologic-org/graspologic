@@ -113,3 +113,4 @@ dmypy.json
 .vscode/
 docs/bpedigo/ase_clustering.py
 notebooks/bvarjav1/921/sub-NDARAA075AMK_task-rest_bold.nii
+notebooks/bpedigo/emmons
