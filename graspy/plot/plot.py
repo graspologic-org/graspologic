@@ -293,7 +293,8 @@ def pairplot(X,
              variables=None,
              height=2.5,
              context='talk',
-             font_scale=1):
+             font_scale=1,
+             palette='Set1'):
     """
     Plot pairwise relationships in a dataset.
 
@@ -319,7 +320,10 @@ def pairplot(X,
         The name of a preconfigured set.
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font 
-        elements. 
+        elements.
+    palette : str, dict, optional, default: 'Set1'
+        Set of colors for mapping the `hue` variable. If a dict, keys should
+        be values in the hue variable.
     """
     _check_common_inputs(
         height=height,
@@ -379,9 +383,14 @@ def pairplot(X,
     with sns.plotting_context(context=context, font_scale=font_scale):
         if Y is not None:
             pairs = sns.pairplot(
-                df, hue=legend_name, vars=variables, height=height)
+                df,
+                hue=legend_name,
+                vars=variables,
+                height=height,
+                palette=palette)
         else:
-            pairs = sns.pairplot(df, vars=variables, height=height)
+            pairs = sns.pairplot(
+                df, vars=variables, height=height, palette=palette)
         pairs.set(xticks=[], yticks=[])
         pairs.fig.subplots_adjust(top=0.945)
         pairs.fig.suptitle(title)
