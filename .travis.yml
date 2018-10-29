@@ -11,6 +11,9 @@ matrix:
 cache: pip
 install:
   - pip install -r requirements.txt
-  - pip install pytest
+  - pip install pytest pytest-cov python-coveralls
 script:
-  - python -m pytest ./tests/
+  #- python -m pytest ./tests/
+  - py.test --cov=graspy
+after_sucess:
+  - coveralls
