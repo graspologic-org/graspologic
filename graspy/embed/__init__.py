@@ -4,5 +4,6 @@ from .lse import LaplacianSpectralEmbed
 from .mds import ClassicalMDS
 
 __all__ = [
-    ClassicalMDS, OmnibusEmbed, AdjacencySpectralEmbed, LaplacianSpectralEmbed
+    'ClassicalMDS', 'OmnibusEmbed', 'AdjacencySpectralEmbed',
+    'LaplacianSpectralEmbed'
 ]

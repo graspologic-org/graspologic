@@ -13,7 +13,8 @@ from scipy.stats import norm
 def _compute_likelihood(arr):
     """
     Computes the log likelihoods based on normal distribution given 
-    a 1d-array of sorted values.
+    a 1d-array of sorted values. If the input has no variance,
+    the likelihood will be nan.
     """
     n_elements = len(arr)
     likelihoods = np.zeros(n_elements)
@@ -22,16 +23,23 @@ def _compute_likelihood(arr):
         # split into two samples
         s1 = arr[:idx]
         s2 = arr[idx:]
-        if s2.size == 0:  # deal with when idx == n_elements
-            s2 = np.zeros(1)
+
+        # deal with when input only has 2 elements
+        if (s1.size == 1) & (s2.size == 1):
+            likelihoods[idx - 1] = -np.inf
+            continue
 
         # compute means
         mu1 = np.mean(s1)
-        mu2 = np.mean(s2)
+        if s2.size != 0:
+            mu2 = np.mean(s2)
+        else:
+            # Prevent numpy warning for taking mean of empty array
+            mu2 = -np.inf
 
         # compute pooled variance
         variance = ((np.sum((s1 - mu1)**2) + np.sum(
-            (s2 - mu2)**2))) / (n_elements - 2)
+            (s2 - mu2)**2))) / (n_elements - 1 - (idx < n_elements))
         std = np.sqrt(variance)
 
         # compute log likelihoods
@@ -86,7 +94,6 @@ def select_dimension(X,
         Automatic dimensionality selection from the scree plot via the use of
         profile likelihood. Computational Statistics & Data Analysis, 51(2), 
         pp.918-930.
-
     """
     # Handle input data
     if not isinstance(X, np.ndarray):
@@ -95,8 +102,8 @@ def select_dimension(X,
     if X.ndim > 2:
         msg = 'X must be a 1d or 2d-array, not {}d array.'.format(X.ndim)
         raise ValueError(msg)
-    elif np.min(X.shape) == 1:
-        msg = 'X is 2d-array and must have more than 1 samples or 1 features.'
+    elif np.min(X.shape) <= 1:
+        msg = 'X must have more than 1 samples or 1 features.'
         raise ValueError(msg)
 
     # Handle n_elbows
@@ -123,7 +130,7 @@ def select_dimension(X,
         if np.min(X.shape) == 1:
             k = 1
         else:  # per recommendation by Zhu & Godsie
-            k = np.floor(np.log2(np.min(X.shape)))
+            k = int(np.ceil(np.log2(np.min(X.shape))))
     elif not isinstance(n_components, int):
         msg = 'n_components must be an integer, not {}.'.format(
             type(n_components))
@@ -136,17 +143,15 @@ def select_dimension(X,
         D = np.sort(X)[::-1]
     elif X.ndim == 2:
         # Singular values in decreasing order
-        D = svds(A=X, k=k, return_singular_vectors=False)[::-1]
+        D = svds(A=X, k=k, return_singular_vectors=False)
+        D = np.sort(D)[::-1]
 
     if threshold is not None:
         D = D[D > threshold]
 
-    if len(D) == 0:
-        msg = 'No values greater than threshold {}.'
-        raise IndexError(msg.format(threshold))
-    elif len(D) <= n_elbows:
-        msg = 'n_elbows must between {}, the number of thresholded \
-        singular values'.format(len(D))
+        if len(D) == 0:
+            msg = 'No values greater than threshold {}.'
+            raise IndexError(msg.format(threshold))
 
     idx = 0
     elbows = []
@@ -154,12 +159,12 @@ def select_dimension(X,
     likelihoods = []
     for _ in range(n_elbows):
         arr = D[idx:]
-        if arr.size <= 2:  # Cant compute likelihoods with 2 numbers
+        if arr.size <= 1:  # Cant compute likelihoods with 1 numbers
             break
         lq = _compute_likelihood(arr)
         idx += (np.argmax(lq) + 1)
         elbows.append(idx)
-        values.append(idx - 1)
+        values.append(D[idx - 1])
         likelihoods.append(lq)
 
     if return_likelihoods:

@@ -72,8 +72,8 @@ def test_invalid_inputes():
 
 def test_output_synthetic():
     data, l = generate_data(10, 3)
-    elbows, _ = select_dimension(X=data, n_components=9, n_elbows=3)
-    assert_equal(elbows, [1, 5, 7])
+    elbows, _ = select_dimension(X=data, n_elbows=2)
+    assert_equal(elbows, [2, 4])
 
 
 def test_output_simple():
