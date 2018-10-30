@@ -8,12 +8,10 @@ from .base import BaseCluster
 
 class KMeansCluster(BaseCluster):
     """
-    KMeans
+    KMeans Cluster.
 
-    Representation of a Gaussian mixture model probability distribution. 
-    This class allows to estimate the parameters of a Gaussian mixture 
-    distribution. It computes all possible models from one component to 
-    max_clusters. The best model is given by the lowest BIC score.
+    It computes all possible models from one component to 
+    max_clusters. The best model is given by the lowest silhouette score.
 
     Parameters
     ----------
