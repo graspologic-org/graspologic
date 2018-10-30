@@ -42,54 +42,61 @@ def pass_to_ranks(graph, method='zero-boost'):
     if is_unweighted(graph):
         return graph
 
+    if graph.min() < 0:
+        raise UserWarning('Current pass-to-ranks on graphs with '
+            + 'negative weights will yield nonsensical results, especially with zero-boost')
+
     if method == 'zero-boost':
         if is_symmetric(graph):
             # start by working with half of the graph, since symmetric
             triu = np.triu(graph)
             non_zeros = triu[triu != 0]
-            rank = rankdata(non_zeros)
-            
-            num_zeros = 0
-            possible_edges = 0
+        else:
+            non_zeros = graph[graph != 0]
+        rank = rankdata(non_zeros)
+        
+        if is_symmetric(graph):
             if is_loopless(graph):
                 num_zeros = (len(graph[graph == 0]) - graph.shape[0]) / 2
                 possible_edges = graph.shape[0] * (graph.shape[0] - 1) / 2 
             else: 
                 num_zeros = (len(triu[triu == 0]) - graph.shape[0] * (graph.shape[0] - 1) / 2) 
                 possible_edges = graph.shape[0] * (graph.shape[0] + 1) / 2
-            
-            # shift up by the number of zeros 
-            rank = rank + num_zeros
+        else:
+            if is_loopless(graph):
+                # n^2 - num_nonzero - num_diagonal
+                num_zeros = graph.size - len(non_zeros) - graph.shape[0]
+                # n^2 - num_diagonal
+                possible_edges = graph.size - graph.shape[0]
+            else: 
+                num_zeros = graph.size - len(non_zeros)
+                possible_edges = graph.size
 
-            # normalize by the number of possible edges for this kind of graph
-            rank = rank / possible_edges
-
-            # put back into matrix form and reflect over the diagonal
+        # shift up by the number of zeros 
+        rank = rank + num_zeros
+        # normalize by the number of possible edges for this kind of graph
+        rank = rank / possible_edges
+        # put back into matrix form (and reflect over the diagonal if necessary)
+        if is_symmetric(graph):
             triu[triu != 0] = rank 
             graph = symmetrize(triu, method='triu')
-            
-            return graph
-        else: 
-            raise NotImplementedError()
-
-    elif method in ['simple-all', 'simple-nonzero']:
-        if is_symmetric(graph): 
-            non_zeros = graph[graph != 0]
-            rank = rankdata(non_zeros)
-
-            normalizer = 1
-            if method == 'simple-all':
-                normalizer = graph.shape[0] ** 2
-            elif method =='simple-nonzero':
-                normalizer = rank.shape[0]
-
-            rank = rank * 2/ (normalizer + 1)
-
+        else:
             graph[graph != 0] = rank
-            return graph    
-        else: 
-            raise NotImplementedError()       
-    
+        return graph
+    elif method in ['simple-all', 'simple-nonzero']:
+        non_zeros = graph[graph != 0]
+        rank = rankdata(non_zeros)
+
+        normalizer = 1
+        if method == 'simple-all':
+            normalizer = graph.shape[0] ** 2
+        elif method =='simple-nonzero':
+            normalizer = rank.shape[0]
+
+        rank = rank * 2/ (normalizer + 1)
+
+        graph[graph != 0] = rank
+        return graph    
     else: 
         raise ValueError('Unsuported pass-to-ranks method')
     
