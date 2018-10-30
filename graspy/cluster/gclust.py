@@ -59,6 +59,16 @@ class GaussianCluster(BaseCluster):
                  max_components=1,
                  covariance_type='full',
                  random_state=None):
+        if isinstance(max_components, int):
+            if max_components <= 0:
+                msg = "n_components must be >= 1 or None."
+                raise ValueError(msg)
+            else:
+                self.max_components = max_components
+        else:
+            msg = 'max_components must be an integer, not {}.'.format(
+                type(max_components))
+            raise TypeError(msg)
         self.max_components = max_components
         self.covariance_type = covariance_type
         self.random_state = random_state
@@ -85,18 +95,12 @@ class GaussianCluster(BaseCluster):
         self
         """
         # Deal with number of clusters
-        if self.max_components <= 0:
-            msg = "n_components must be >= 1 or None."
-            raise ValueError(msg)
-        elif self.max_components > X.shape[0]:
+        max_components = self.max_components
+        if max_components > X.shape[0]:
             msg = "n_components must be >= n_samples, but got \
                 n_components = {}, n_samples = {}".format(
                 self.max_components, X.shape[0])
             raise ValueError(msg)
-        elif self.max_components >= 1:
-            max_components = self.max_components
-        elif self.max_components is None:
-            max_components = 1
 
         # Get parameters
         random_state = self.random_state

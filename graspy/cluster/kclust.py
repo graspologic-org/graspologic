@@ -44,8 +44,17 @@ class KMeansCluster(BaseCluster):
         all possible number of clusters given by range(1, max_clusters).
     """
 
-    def __init__(self, max_clusters=1, random_state=None):
-        self.max_clusters = max_clusters
+    def __init__(self, max_clusters=2, random_state=None):
+        if isinstance(max_clusters, int):
+            if max_clusters <= 0:
+                msg = "n_components must be >= 1 or None."
+                raise ValueError(msg)
+            else:
+                self.max_clusters = max_clusters
+        else:
+            msg = 'max_clusters must be an integer, not {}.'.format(
+                type(max_clusters))
+            raise TypeError(msg)
         self.random_state = random_state
 
     def fit(self, X, y=None):
@@ -66,18 +75,13 @@ class KMeansCluster(BaseCluster):
         self
         """
         # Deal with number of clusters
-        if self.max_clusters <= 0:
-            msg = "n_components must be >= 1 or None."
-            raise ValueError(msg)
-        elif self.max_clusters > X.shape[0]:
+        if self.max_clusters > X.shape[0]:
             msg = "n_components must be >= n_samples, but got \
                 n_components = {}, n_samples = {}".format(
                 self.max_clusters, X.shape[0])
             raise ValueError(msg)
-        elif self.max_clusters >= 1:
+        else:
             max_clusters = self.max_clusters
-        elif self.max_clusters is None:
-            max_clusters = 1
 
         # Get parameters
         random_state = self.random_state
@@ -99,10 +103,12 @@ class KMeansCluster(BaseCluster):
 
         if y is not None:
             self.ari_ = aris
+            self.losses_ = losses
             self.n_clusters_ = np.argmax(aris) + 1
             self.model_ = models[np.argmax(aris)]
         else:
             self.ari_ = None
+            self.losses_ = losses
             self.n_clusters_ = np.argmin(losses) + 1
             self.model_ = models[np.argmin(losses)]
 
