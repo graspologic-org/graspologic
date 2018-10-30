@@ -44,7 +44,7 @@ def pass_to_ranks(graph, method='zero-boost'):
 
     if graph.min() < 0:
         raise UserWarning('Current pass-to-ranks on graphs with '
-            + 'negative weights will yield nonsensical results, especially with zero-boost')
+            + 'negative weights will yield nonsensical results, especially for zero-boost')
 
     if method == 'zero-boost':
         if is_symmetric(graph):
@@ -86,15 +86,11 @@ def pass_to_ranks(graph, method='zero-boost'):
     elif method in ['simple-all', 'simple-nonzero']:
         non_zeros = graph[graph != 0]
         rank = rankdata(non_zeros)
-
-        normalizer = 1
         if method == 'simple-all':
-            normalizer = graph.shape[0] ** 2
+            normalizer = graph.size
         elif method =='simple-nonzero':
             normalizer = rank.shape[0]
-
         rank = rank * 2/ (normalizer + 1)
-
         graph[graph != 0] = rank
         return graph    
     else: 
