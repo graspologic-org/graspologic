@@ -59,6 +59,16 @@ class GaussianCluster(BaseCluster):
                  max_components=1,
                  covariance_type='full',
                  random_state=None):
+        if isinstance(max_components, int):
+            if max_components <= 0:
+                msg = "n_components must be >= 1 or None."
+                raise ValueError(msg)
+            else:
+                self.max_components = max_components
+        else:
+            msg = 'max_components must be an integer, not {}.'.format(
+                type(max_components))
+            raise TypeError(msg)
         self.max_components = max_components
         self.covariance_type = covariance_type
         self.random_state = random_state
@@ -85,18 +95,12 @@ class GaussianCluster(BaseCluster):
         self
         """
         # Deal with number of clusters
-        if self.max_components <= 0:
-            msg = "n_components must be >= 1 or None."
-            raise ValueError(msg)
-        elif self.max_components > X.shape[0]:
+        max_components = self.max_components
+        if max_components > X.shape[0]:
             msg = "n_components must be >= n_samples, but got \
                 n_components = {}, n_samples = {}".format(
                 self.max_components, X.shape[0])
             raise ValueError(msg)
-        elif self.max_components >= 1:
-            max_components = self.max_components
-        elif self.max_components is None:
-            max_components = 1
 
         # Get parameters
         random_state = self.random_state
@@ -129,67 +133,3 @@ class GaussianCluster(BaseCluster):
         self.model_ = models[np.argmin(bics)]
 
         return self
-
-    def fit_predict(self, X, y=None):
-        """
-        Estimate model parameters using X and predict the labels for X
-        using the model given by best BIC score.
-
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            List of n_features-dimensional data points. Each row
-            corresponds to a single data point.
-
-        y : array-like, shape (n_samples,), optional (default=None)
-            List of labels for X if available. Used to compute
-            ARI scores.
-
-        Returns
-        -------
-        labels : array, shape (n_samples,)
-            Component labels.
-
-        ari : float
-            Adjusted Rand index. Only returned if y is given.
-        """
-        self.fit(X)
-        labels = self.model_.predict(X)
-
-        if y is None:
-            return labels
-        else:
-            ari = self.ari_(np.argmin(self.bic_))
-            return labels, ari
-
-    def predict(self, X, y=None):
-        """
-        Predict the labels for X using the model given by best BIC score.
-
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            List of n_features-dimensional data points. Each row
-            corresponds to a single data point.
-
-        y : array-like, shape (n_samples,), optional (default=None)
-            List of labels for X if available. Used to compute
-            ARI scores.
-
-        Returns
-        -------
-        labels : array, shape (n_samples,)
-            Component labels.
-
-        ari : float
-            Adjusted Rand index. Only returned if y is given.
-        """
-        # Check if fit is already called
-        check_is_fitted(self, ['model_'], all_or_any=all)
-        labels = self.model_.predict(X)
-
-        if y is None:
-            return labels
-        else:
-            ari = adjusted_rand_score(y, labels)
-            return labels, ari

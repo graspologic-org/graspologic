@@ -1,3 +1,7 @@
-from .gclust import GaussianCluster
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-__all__ = ['GaussianCluster']
+from .gclust import GaussianCluster
+from .kclust import KMeansCluster
+
+__all__ = ['GaussianCluster', 'KMeansCluster']
