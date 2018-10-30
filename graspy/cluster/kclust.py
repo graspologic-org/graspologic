@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score
+from sklearn.metrics import adjusted_rand_score, silhouette_score
 from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseCluster
@@ -35,19 +35,19 @@ class KMeansCluster(BaseCluster):
     model_ : KMeans object
         Fitted KMeans object fitted with optimal n_components.
 
-    losses_ : list
-        List of mean squared error values computed for all possible number 
-        of clusters given by range(1, max_clusters).
+    silhouette_ : list
+        List of silhouette scores computed for all possible number 
+        of clusters given by range(2, max_clusters).
 
     ari_ : list
         Only computed when y is given. List of ARI values computed for 
-        all possible number of clusters given by range(1, max_clusters).
+        all possible number of clusters given by range(2, max_clusters).
     """
 
     def __init__(self, max_clusters=2, random_state=None):
         if isinstance(max_clusters, int):
-            if max_clusters <= 0:
-                msg = "n_components must be >= 1 or None."
+            if max_clusters <= 1:
+                msg = "n_components must be >= 2 or None."
                 raise ValueError(msg)
             else:
                 self.max_clusters = max_clusters
@@ -88,28 +88,27 @@ class KMeansCluster(BaseCluster):
 
         # Compute all models
         models = []
-        losses = []
+        silhouettes = []
         aris = []
-        for n in range(1, max_clusters + 1):
+        for n in range(2, max_clusters + 1):
             model = KMeans(n_clusters=n, random_state=random_state)
 
             # Fit and compute values
-            model.fit(X)
+            predictions = model.fit_predict(X)
             models.append(model)
-            losses.append(model.inertia_)
+            silhouettes.append(silhouette_score(X, predictions))
             if y is not None:
-                predictions = model.predict(X)
                 aris.append(adjusted_rand_score(y, predictions))
 
         if y is not None:
             self.ari_ = aris
-            self.losses_ = losses
+            self.silhouette_ = silhouettes
             self.n_clusters_ = np.argmax(aris) + 1
             self.model_ = models[np.argmax(aris)]
         else:
             self.ari_ = None
-            self.losses_ = losses
-            self.n_clusters_ = np.argmin(losses) + 1
-            self.model_ = models[np.argmin(losses)]
+            self.silhouette_ = silhouettes
+            self.n_clusters_ = np.argmax(silhouettes) + 1
+            self.model_ = models[np.argmax(silhouettes)]
 
         return self

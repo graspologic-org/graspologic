@@ -68,4 +68,4 @@ def test_no_y():
     kclust = KMeansCluster(max_clusters=5)
     kclust.fit(X)
 
-    assert_equal(np.argmin(kclust.losses_), 4)
+    assert_equal(np.argmax(kclust.silhouette_), 0)
