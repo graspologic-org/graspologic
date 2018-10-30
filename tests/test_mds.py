@@ -8,6 +8,12 @@ from graspy.embed.mds import ClassicalMDS
 def test_input():
     X = np.random.normal(0, 1, size=(10, 3))
 
+    # X cannot be tensor when precomputed dissimilarity
+    with pytest.raises(ValueError):
+        tensor = np.random.normal(0, 1, size=(10, 3, 3))
+        mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
+        mds.fit(tensor)
+
     # n_components > n_samples
     with pytest.raises(ValueError):
         mds = ClassicalMDS(n_components=100)
@@ -26,9 +32,8 @@ def test_input():
 
     # Invalid input for fit function
     with pytest.raises(ValueError):
-        X = 'bad_input'
         mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
-        mds.fit(X)
+        mds.fit(X='bad_input')
 
     # Must be square and symmetric matrix if precomputed dissimilarity
     with pytest.raises(ValueError):

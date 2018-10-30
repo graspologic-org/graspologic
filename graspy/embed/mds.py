@@ -141,9 +141,6 @@ class ClassicalMDS(BaseEstimator):
         if n_samples <= self.n_components:
             msg = "n_components must be <= (n_samples / n_elements)."
             raise ValueError(msg)
-        elif self.n_components is None:
-            # TODO: use dimselect here
-            n_components = min(dissimilarity_matrix.shape) - 1
         else:
             n_components = self.n_components
 
