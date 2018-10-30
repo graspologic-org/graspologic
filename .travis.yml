@@ -15,5 +15,5 @@ install:
 script:
   #- python -m pytest ./tests/
   - pytest --cov=graspy -p no:warnings
-after_sucess:
+after_success:
   - codecov
