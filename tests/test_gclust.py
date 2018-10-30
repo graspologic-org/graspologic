@@ -12,6 +12,9 @@ def test_inputs():
     # Generate random data
     X = np.random.normal(0, 1, size=(100, 3))
 
+    with pytest.raises(TypeError):
+        gclust = GaussianCluster(max_components='1')
+
     # max_cluster > n_samples
     with pytest.raises(ValueError):
         gclust = GaussianCluster(1000)
@@ -38,6 +41,23 @@ def test_predict_without_fit():
     with pytest.raises(NotFittedError):
         gclust = GaussianCluster(max_components=2)
         gclust.predict(X)
+
+
+def test_no_y():
+    np.random.seed(2)
+
+    n = 100
+    d = 3
+
+    X1 = np.random.normal(2, .5, size=(n, d))
+    X2 = np.random.normal(-2, .5, size=(n, d))
+    X = np.vstack((X1, X2))
+
+    gclust = GaussianCluster(max_components=5)
+    gclust.fit(X)
+
+    bics = gclust.bic_
+    assert_equal(np.argmin(bics), 1)
 
 
 def test_outputs():
