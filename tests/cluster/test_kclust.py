@@ -8,6 +8,8 @@ from graspy.embed.ase import AdjacencySpectralEmbed
 from graspy.simulations.simulations import binary_sbm
 
 
+
+
 def test_inputs():
     # Generate random data
     X = np.random.normal(0, 1, size=(100, 3))

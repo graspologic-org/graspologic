@@ -35,7 +35,7 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
         self
         """
 
-    def predict(self, X, y=None):
+    def predict(self, X, y=None): # pragma: no cover
         """
         Predict clusters based on best model.
 
@@ -66,7 +66,7 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
             ari = adjusted_rand_score(y, labels)
             return labels, ari
 
-    def fit_predict(self, X, y=None):
+    def fit_predict(self, X, y=None): # pragma: no cover
         """
         Fit the models and predict clusters based on best model.
 
