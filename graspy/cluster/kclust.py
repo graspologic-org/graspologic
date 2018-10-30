@@ -59,8 +59,7 @@ class KMeansCluster(BaseCluster):
             corresponds to a single data point.
         
         y : array-like, shape (n_samples,), optional (default=None)
-            List of labels for X if available. Used to compute
-            ARI scores.
+            List of labels for X if available. Used to compute ARI scores.
 
         Returns
         -------

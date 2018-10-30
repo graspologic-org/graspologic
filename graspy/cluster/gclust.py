@@ -153,13 +153,13 @@ class GaussianCluster(BaseCluster):
         ari : float
             Adjusted Rand index. Only returned if y is given.
         """
-        self.fit(X)
-        labels = self.model_.predict(X)
+        self.fit(X, y)
 
         if y is None:
+            labels = self.predict(X, y)
             return labels
         else:
-            ari = self.ari_(np.argmin(self.bic_))
+            labels, ari = self.predict(X, y)
             return labels, ari
 
     def predict(self, X, y=None):

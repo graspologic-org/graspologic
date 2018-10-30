@@ -32,7 +32,6 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
         -------
         self
         """
-        return self
 
     @abstractmethod
     def predict(self, X, y=None):
@@ -56,7 +55,6 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
         ari : float
             Adjusted Rand index. Only returned if y is given.
         """
-        return labels, ari
 
     @abstractmethod
     def fit_predict(self, X, y=None):
@@ -81,4 +79,3 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
         ari : float
             Adjusted Rand index. Only returned if y is given.
         """
-        return labels, ari
