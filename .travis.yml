@@ -11,6 +11,9 @@ matrix:
 cache: pip
 install:
   - pip install -r requirements.txt
-  - pip install pytest
+  - pip install pytest pytest-cov codecov
 script:
-  - python -m pytest ./tests/
+  #- python -m pytest ./tests/
+  - pytest --cov=graspy -p no:warnings
+after_sucess:
+  - codecov
