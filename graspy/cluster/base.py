@@ -56,13 +56,14 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
         ari : float
             Adjusted Rand index. Only returned if y is given.
         """
-        self.fit(X, y)
+        # Check if fit is already called
+        check_is_fitted(self, ['model_'], all_or_any=all)
+        labels = self.model_.predict(X)
 
         if y is None:
-            labels = self.predict(X, y)
             return labels
         else:
-            labels, ari = self.predict(X, y)
+            ari = adjusted_rand_score(y, labels)
             return labels, ari
 
     def fit_predict(self, X, y=None):
@@ -87,12 +88,11 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
         ari : float
             Adjusted Rand index. Only returned if y is given.
         """
-        # Check if fit is already called
-        check_is_fitted(self, ['model_'], all_or_any=all)
-        labels = self.model_.predict(X)
+        self.fit(X, y)
 
         if y is None:
+            labels = self.predict(X, y)
             return labels
         else:
-            ari = adjusted_rand_score(y, labels)
+            labels, ari = self.predict(X, y)
             return labels, ari
