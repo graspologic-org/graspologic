@@ -86,7 +86,6 @@ class TestSemiparametricTest(unittest.TestCase):
 
     def test_diagonal_rotation_norm(self):
         with self.assertRaises(NotImplementedError): # TODO fix
-                
             # triangle in 2d
             points1 = np.array([[0, 0], 
                                 [3, 0], 
