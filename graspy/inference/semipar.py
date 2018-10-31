@@ -58,7 +58,7 @@ class SemiparametricTest(BaseInference):
     def _bootstrap(self, X_hat):
         t_bootstrap = np.zeros((self.n_bootstraps))
         for i in range(self.n_bootstraps):
-            P = p_from_latent(X_hat)
+            P = p_from_latent(X_hat, loops)
             A1_simulated = rdpg_from_p(P)
             A2_simulated = rdpg_from_p(P)
             X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
@@ -136,7 +136,6 @@ class SemiparametricTest(BaseInference):
             num_dims1 = select_dimension(A1)[0][-1]
             num_dims2 = select_dimension(A2)[0][-1]
             self.n_components = max(num_dims1, num_dims2)
-
         X_hats = self._embed(A1, A2)
         T_sample = self._difference_norm(X_hats[0], X_hats[1])
         T1_bootstrap = self._bootstrap(X_hats[0])

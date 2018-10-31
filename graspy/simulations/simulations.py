@@ -465,7 +465,7 @@ def er_np(n, p):
 #         A = np.random.binomial(1, P)
 #     return A
 
-def p_from_latent(X, Y=None, rescale=True, loops=False, **kwargs):
+def p_from_latent(X, Y=None, rescale=True, loops=True, **kwargs):
     if Y is None:
         Y = X
     if type(X) is not np.ndarray or type(Y) is not np.ndarray:
