@@ -138,11 +138,12 @@ class ClassicalMDS(BaseEstimator):
 
         n_samples = X.shape[0]
         # Handle n_components
-        if n_samples <= self.n_components:
-            msg = "n_components must be <= (n_samples / n_elements)."
-            raise ValueError(msg)
-        else:
-            n_components = self.n_components
+        if self.n_components is not None:
+            if n_samples <= self.n_components:
+                msg = "n_components must be <= n_samples."
+                raise ValueError(msg)
+
+        n_components = self.n_components
 
         # Handle dissimilarity
         if self.dissimilarity == 'precomputed':
