@@ -56,9 +56,9 @@ class SemiparametricTest(BaseInference):
         self.test_case = test_case
 
     def _bootstrap(self, X_hat):
-        t_bootstrap = np.zeros((self.n_bootstraps))
+        t_bootstrap = np.zeros(self.n_bootstraps)
         for i in range(self.n_bootstraps):
-            P = p_from_latent(X_hat, loops)
+            P = p_from_latent(X_hat)
             A1_simulated = rdpg_from_p(P)
             A2_simulated = rdpg_from_p(P)
             X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)

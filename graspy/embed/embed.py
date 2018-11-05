@@ -56,7 +56,7 @@ class BaseEmbed:
         self.lpm = LatentPosition(X, Y, s)
 
     @abstractmethod
-    def fit(self, graph):
+    def fit(self, graph): # pragma: no cover
         """
         A method for embedding.
 
