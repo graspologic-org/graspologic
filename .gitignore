@@ -116,3 +116,4 @@ notebooks/bvarjav1/921/sub-NDARAA075AMK_task-rest_bold.nii
 notebooks/bpedigo/emmons/SI 3 Synapse lists.xlsx
 notebooks/bpedigo/emmons/*.xls
 notebooks/bpedigo/emmons/*.csv
+*.pickle
