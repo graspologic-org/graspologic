@@ -119,3 +119,4 @@ notebooks/bpedigo/emmons/*.xls
 notebooks/bpedigo/emmons/*.csv
 notebooks/bpedigo/test_semipar.py
 notebooks/bpedigo/emmons
+*.pickle
