@@ -58,10 +58,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     """
 
-    def __init__(self, method=selectSVD, *args, **kwargs):
+    def __init__(self, form='DAD', method=selectSVD, *args, **kwargs):
         super().__init__(method=method, *args, **kwargs)
+        self.form = form
 
-    def fit(self, graph, form='I-DAD'):
+    def fit(self, graph):
         """
         Fit LSE model to input graph
 
@@ -95,6 +96,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
        
         """
         A = import_graph(graph)
-        L_norm = to_laplace(A, form=form)
+        if not is_symmetric(A):
+            raise ValueError('Laplacian spectral embedding not implemented/defined for directed graphs')
+        L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
         return self.lpm
