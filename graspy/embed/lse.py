@@ -4,7 +4,7 @@
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph, to_laplace
+from ..utils import import_graph, to_laplace, is_symmetric
 import numpy as np
 
 
