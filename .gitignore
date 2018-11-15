@@ -115,3 +115,4 @@ docs/bpedigo/ase_clustering.py
 notebooks/bvarjav1/921/sub-NDARAA075AMK_task-rest_bold.nii
 notebooks/bpedigo/test_semipar.py
 notebooks/bpedigo/emmons
+*.pickle
