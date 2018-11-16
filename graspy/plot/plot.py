@@ -123,9 +123,10 @@ def heatmap(X,
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
     cmap : str
-        Valid color map.
-    center : float, optional, default: None
+        Valid color map. Default is 'Blues' if all elements >= 0, 'RdBu' otherwise
+    center : float, optional
         The value at which to center the colormap when plotting divergant data.
+        Defaults to 0 if graph has positive and negative values, otherwise None
     cbar : bool, default: True
         Whether to draw a colorbar.
     """
@@ -171,6 +172,16 @@ def heatmap(X,
     arr = import_graph(X)
     arr = _transform(arr, transform)
 
+    # If no manual center and pos/negative values
+    if arr.min() < 0:
+        if cmap is None:
+            cmap = 'RdBu'
+        if center is None: 
+            center = 0
+    else: 
+        if cmap is None: 
+            cmap = 'Blues'      
+
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)
 
@@ -198,8 +209,14 @@ def gridplot(X,
              height=10,
              title=None,
              context='talk',
+<<<<<<< HEAD
              font_scale=1):
     r"""
+=======
+             font_scale=1,
+             alpha=0.7):
+    """
+>>>>>>> [#58] updated plotting kwargs
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
 
@@ -277,7 +294,7 @@ def gridplot(X,
             hue='Type',
             size='Weights',
             sizes=(10, 200),
-            alpha=0.7,
+            alpha=alpha,
             palette=palette,
             height=height)
         plot.ax.axis('off')
@@ -296,8 +313,14 @@ def pairplot(X,
              height=2.5,
              context='talk',
              font_scale=1,
+<<<<<<< HEAD
              palette='Set1'):
     r"""
+=======
+             palette='Set1',
+             alpha=0.7):
+    """
+>>>>>>> [#58] updated plotting kwargs
     Plot pairwise relationships in a dataset.
 
     Parameters
@@ -389,10 +412,15 @@ def pairplot(X,
                 hue=legend_name,
                 vars=variables,
                 height=height,
-                palette=palette)
+                palette=palette, 
+                alpha=alpha)
         else:
             pairs = sns.pairplot(
-                df, vars=variables, height=height, palette=palette)
+                df,
+                vars=variables,
+                height=height,
+                palette=palette, 
+                alpha=alpha)
         pairs.set(xticks=[], yticks=[])
         pairs.fig.subplots_adjust(top=0.945)
         pairs.fig.suptitle(title)
