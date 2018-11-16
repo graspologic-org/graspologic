@@ -171,6 +171,16 @@ def heatmap(X,
     arr = import_graph(X)
     arr = _transform(arr, transform)
 
+    # If no manual center and pos/negative values
+    if arr.min() < 0:
+        if cmap is None:
+            cmap = 'RdBu'
+        if center is None: 
+            center = 0
+    else: 
+        if cmap is None: 
+            cmap = 'Blues'      
+
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)
 
@@ -198,15 +208,11 @@ def gridplot(X,
              height=10,
              title=None,
              context='talk',
-<<<<<<< HEAD
-             font_scale=1):
-    r"""
-=======
              font_scale=1,
              alpha=0.7, 
              sizes=(10, 200)):
-    """
->>>>>>> [#58] updated plotting kwargs
+
+    r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
 
@@ -303,14 +309,9 @@ def pairplot(X,
              height=2.5,
              context='talk',
              font_scale=1,
-<<<<<<< HEAD
-             palette='Set1'):
-    r"""
-=======
              palette='Set1',
              alpha=0.7):
-    """
->>>>>>> [#58] updated plotting kwargs
+    r"""
     Plot pairwise relationships in a dataset.
 
     Parameters
