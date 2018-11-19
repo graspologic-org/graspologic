@@ -2,7 +2,6 @@
 # Created by Jaewon Chung on 2018-09-10.
 # Email: j1c@jhu.edu
 # Copyright (c) 2018. All rights reserved.
-
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
@@ -80,13 +79,13 @@ def _get_omni_matrix(graphs):
 
 
 class OmnibusEmbed(BaseEmbed):
-    """
+    r"""
     Omnibus embedding of arbitrary number of input graphs with matched vertex 
     sets.
 
     Given :math:`A_1, A_2, ..., A_m` a collection of (possibly weighted) adjacency 
     matrices of a collection :math:`m` undirected graphs with matched vertices. 
-    Then the :math:`(mn \times mn)` omnibus matrix has the subgraph where 
+    Then the :math:`(mn \times mn)` omnibus matrix, :math:`M`, has the subgraph where 
     :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
     using adjacency spectral embedding.
 

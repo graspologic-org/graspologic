@@ -37,7 +37,7 @@ class ClassicalMDS(BaseEstimator):
     n_components : int, or None
         Number of components to keep. If None, then it will run
         ``dimselect`` to find the optimal embedding dimension.
-    
+
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
         Dissimilarity measure to use:
 
@@ -50,22 +50,18 @@ class ClassicalMDS(BaseEstimator):
 
     Attributes
     ----------
+    n_components : int
+        Equals the parameter n_components, or n_features if n_components
+        is None.
+
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.
 
     singular_values_ : array, shape (n_components,)
         The singular values corresponding to each of the selected components.
-
-    n_components : int
-        Equals the parameter n_components, or n_features if n_components
-        is None.
-
+        
     dissimilarity_matrix_ : array, shape (n_features, n_features)
         Dissimilarity matrix 
-
-    See Also
-    --------
-    graphstats.embed.dimselect
 
     References
     ----------

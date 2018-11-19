@@ -7,7 +7,7 @@ from .base import BaseCluster
 
 
 class GaussianCluster(BaseCluster):
-    """
+    r"""
     Gaussian Mixture Model (GMM)
 
     Representation of a Gaussian mixture model probability distribution. 
@@ -20,23 +20,24 @@ class GaussianCluster(BaseCluster):
     max_components : int, defaults to 1.
         The maximum number of mixture components to consider.
 
-    covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}
+    covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
         String describing the type of covariance parameters to use.
         Must be one of:
-        'full'
+
+        - 'full'
             each component has its own general covariance matrix
-        'tied'
+        - 'tied'
             all components share the same general covariance matrix
-        'diag'
+        - 'diag'
             each component has its own diagonal covariance matrix
-        'spherical'
+        - 'spherical'
             each component has its own single variance
     
     random_state : int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used
-        by `np.random`.
+        by ``np.random``.
 
     Attributes
     ----------
