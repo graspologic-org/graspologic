@@ -9,7 +9,6 @@ import numpy as np
 import networkx as nx
 from functools import reduce
 
-
 def import_graph(graph):
     """
 	A function for reading a graph and returning a shared
@@ -52,10 +51,6 @@ def import_graph(graph):
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
         raise TypeError(msg)
-    if not is_fully_connected(graph): 
-        raise UserWarning('WARNING: the graph that has been input ' 
-                          + 'is not fully connected, GraSPy functions ' 
-                          + 'may not work as expected')
     return graph
 
 
