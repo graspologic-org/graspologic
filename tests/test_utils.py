@@ -88,5 +88,5 @@ class TestInput(unittest.TestCase):
                       [0, 1, 1, 0], 
                       [1, 1, 0, 0],
                       [0, 0, 0, 1]])
-        with self.assertRaises(UserWarning):
+        with self.assertRaises(ValueError):
             gus.import_graph(A)
