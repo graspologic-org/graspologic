@@ -91,7 +91,7 @@ def symmetrize(graph, method='triu'):
     graph: array-like, shape (n_vertices, n_vertices)
         the graph with asymmetries removed.
     """
-    graph = import_graph(graph)
+    # graph = import_graph(graph)
     if method is 'triu':
         graph = np.triu(graph)
     elif method is 'tril':

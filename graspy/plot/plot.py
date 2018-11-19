@@ -403,14 +403,14 @@ def pairplot(X,
                 vars=variables,
                 height=height,
                 palette=palette, 
-                alpha=alpha)
+                plot_kws=dict(alpha=alpha))
         else:
             pairs = sns.pairplot(
                 df,
                 vars=variables,
                 height=height,
                 palette=palette, 
-                alpha=alpha)
+                plot_kws=dict(alpha=alpha))
         pairs.set(xticks=[], yticks=[])
         pairs.fig.subplots_adjust(top=0.945)
         pairs.fig.suptitle(title)
