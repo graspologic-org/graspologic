@@ -157,8 +157,13 @@ def to_laplace(graph, form='I-DAD'):
     valid_inputs = ['I-DAD', 'DAD']
     if form not in valid_inputs:
         raise TypeError('Unsuported Laplacian normalization')
+<<<<<<< HEAD
 
+=======
+>>>>>>> shifted LSE directed protection [#58]
     adj_matrix = import_graph(graph)
+    if not is_symmetric(adj_matrix):
+        raise ValueError('Laplacian not implemented/defined for directed graphs')
     D_vec = np.sum(adj_matrix, axis=0)
     D_root = np.diag(D_vec**-0.5)
 
