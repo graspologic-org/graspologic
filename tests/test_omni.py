@@ -29,6 +29,7 @@ def generate_data(n, seed=1):
 
     return (X, A1, A2)
 
+
 # Below tests omni matrix generation code
 def test_omni_matrix_ones_zeros():
     # Should get all ones
@@ -47,10 +48,12 @@ def test_omni_matrix_ones_zeros():
 
 
 def test_omni_matrix_random():
-    expected_output = np.array(
-        [[0., 0., 1., 0., 0., 0.5], [0., 0., 0., 0., 0., 0.],
-         [1., 0., 0., 0.5, 0., 0.], [0., 0., 0.5, 0., 0., 0.],
-         [0., 0., 0., 0., 0., 0.], [0.5, 0., 0., 0., 0., 0.]])
+    expected_output = np.array([[0., 0., 1., 0., 0., 0.5],
+                                [0., 0., 0., 0., 0., 0.],
+                                [1., 0., 0., 0.5, 0., 0.],
+                                [0., 0., 0.5, 0., 0., 0.],
+                                [0., 0., 0., 0., 0., 0.],
+                                [0.5, 0., 0., 0., 0., 0.]])
 
     np.random.seed(2)
     graphs = [er_np(3, .3) for _ in range(2)]
@@ -94,6 +97,7 @@ def test_omni_embed():
     ABar is the lowest variance estimate of the latent positions X.
     OmniBar should be reasonablly close to ABar when n_vertices is high. 
     """
+
     def compute_bar(arr):
         n = arr.shape[0] // 2
         return (arr[:n] + arr[n:]) / 2
@@ -104,9 +108,10 @@ def test_omni_embed():
     np.random.seed(11)
     omni = OmnibusEmbed(k=3)
     OmniBar = compute_bar(omni.fit_transform([A1, A2]))
-    
+
     omni = OmnibusEmbed(k=3)
     ABar = compute_bar(omni.fit_transform([Abar, Abar]))
 
     tol = 1.e-2
-    assert allclose(norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol)
+    assert allclose(
+        norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol)

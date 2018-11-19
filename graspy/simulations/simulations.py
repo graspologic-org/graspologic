@@ -22,37 +22,37 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
 
     Paramaters
     ----------
-        n: list of int, shape (n_communities)
-            the number of vertices in each community. Communities
-            are assigned n[0], n[1], ...
-        P: array-like, shape (n_communities, n_communities)
-            the probability of an edge between each of the communities,
-            where P[i, j] indicates the probability of a connection
-            between edges in communities [i, j]. 0 < P[i, j] < 1
-            for all i, j.
-        directed: boolean
-            whether or not the graph will be directed.
-        loops: boolean
-            whether to allow self-loops for vertices.
-        Wt: object or array-like, shape (n_communities, n_communities)
-            + if Wt is an object, a weight function to use globally over
-            the sbm for assigning weights. 1 indicates to produce a binary
-            graph.
-            + if Wt is an array-like, a weight function for each of
-            the edge communities. Wt[i, j] corresponds to the weight function
-            between communities i and j. If the entry is a function, should
-            accept an argument for size. An entry of Wt[i, j] = 1 will produce a
-            binary subgraph over the i, j community.
-        Wtargs: dictionary or array-like, shape (n_communities, n_communities)
-            + if Wt is an object, Wtargs corresponds to the trailing arguments
-            to pass to the weight function.
-            + if Wt is an array-like, Wtargs[i, j] corresponds to trailing
-            arguments to pass to Wt[i, j].            
+    n: list of int, shape (n_communities)
+        the number of vertices in each community. Communities
+        are assigned n[0], n[1], ...
+    P: array-like, shape (n_communities, n_communities)
+        the probability of an edge between each of the communities,
+        where P[i, j] indicates the probability of a connection
+        between edges in communities [i, j]. 0 < P[i, j] < 1
+        for all i, j.
+    directed: boolean
+        whether or not the graph will be directed.
+    loops: boolean
+        whether to allow self-loops for vertices.
+    Wt: object or array-like, shape (n_communities, n_communities)
+        + if Wt is an object, a weight function to use globally over
+        the sbm for assigning weights. 1 indicates to produce a binary
+        graph.
+        + if Wt is an array-like, a weight function for each of
+        the edge communities. Wt[i, j] corresponds to the weight function
+        between communities i and j. If the entry is a function, should
+        accept an argument for size. An entry of Wt[i, j] = 1 will produce a
+        binary subgraph over the i, j community.
+    Wtargs: dictionary or array-like, shape (n_communities, n_communities)
+        + if Wt is an object, Wtargs corresponds to the trailing arguments
+        to pass to the weight function.
+        + if Wt is an array-like, Wtargs[i, j] corresponds to trailing
+        arguments to pass to Wt[i, j].            
 
     Returns
     -------
-        A: array-like, shape (n, n)
-            the adjacency matrix.
+    A: array-like, shape (n, n)
+        the adjacency matrix.
     """
     # type checking
     if type(n) is not list:
@@ -117,8 +117,8 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
             # cartesian product to identify edges for community i,j pair
             cprod = cartprod(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
-            triu = np.ravel_multi_index(
-                (cprod[:, 0], cprod[:, 1]), dims=A.shape)
+            triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]),
+                                        dims=A.shape)
             pchoice = np.random.uniform(size=len(triu))
             # connected with probability p
             triu = triu[pchoice < p]

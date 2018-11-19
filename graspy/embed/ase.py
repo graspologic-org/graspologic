@@ -31,8 +31,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     See Also
     --------
-    graphstats.embed.svd.selectSVD, graphstats.embed.svd.selectDim, 
-    graphstats.embed.embed.BaseEmbed
+    graspy.embed.selectSVD
+    graspy.embed.selectDim
 
     Notes
     -----
@@ -49,8 +49,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
     References
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-    Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-    Journal of the American Statistical Association, Vol. 107(499), 2012
+       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
+       Journal of the American Statistical Association, Vol. 107(499), 2012
 
     Examples
     --------
