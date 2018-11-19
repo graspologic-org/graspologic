@@ -171,16 +171,6 @@ def heatmap(X,
     arr = import_graph(X)
     arr = _transform(arr, transform)
 
-    # If no manual center and pos/negative values
-    if arr.min() < 0:
-        if cmap is None:
-            cmap = 'RdBu'
-        if center is None: 
-            center = 0
-    else: 
-        if cmap is None: 
-            cmap = 'Blues'      
-
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)
 
