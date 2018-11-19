@@ -16,7 +16,7 @@ help:
 	@echo "  html      to make standalone HTML files"
 
 clean:
-	-rm -rf build/*
+	-rm -rf _build/*
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)"
