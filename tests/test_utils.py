@@ -67,3 +67,26 @@ class TestInput(unittest.TestCase):
                       [1, 0, 1, 0]])
         self.assertTrue(gus.is_unweighted(B))
         self.assertFalse(gus.is_unweighted(self.A))
+
+    def test_is_fully_connected(self):
+        # graph where node at index [3] only connects to self
+        A = np.array([[1, 0, 1, 0], 
+                      [0, 1, 1, 0], 
+                      [1, 1, 0, 0],
+                      [0, 0, 0, 1]])
+        # fully connected graph
+        B = np.array([[1, 0, 1, 0], 
+                      [0, 1, 1, 0], 
+                      [1, 1, 0, 1],
+                      [0, 0, 0, 1]])           
+        self.assertFalse(gus.is_fully_connected(A))
+        self.assertTrue(gus.is_fully_connected(B))
+
+    def test_import_unconnected(self):
+        # graph where node at index [3] only connects to self
+        A = np.array([[1, 0, 1, 0], 
+                      [0, 1, 1, 0], 
+                      [1, 1, 0, 0],
+                      [0, 0, 0, 1]])
+        with self.assertRaises(UserWarning):
+            gus.import_graph(A)
