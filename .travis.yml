@@ -14,6 +14,7 @@ install:
 - pip install pytest pytest-cov codecov
 script:
 - pytest --cov=graspy -p no:warnings
+- sh docs/build_docs.sh
 after_success:
 - codecov
 
