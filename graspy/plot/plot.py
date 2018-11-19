@@ -86,8 +86,8 @@ def heatmap(X,
             font_scale=1,
             xticklabels=False,
             yticklabels=False,
-            cmap='Reds',
-            center=None,
+            cmap='RdBu_r',
+            center=0,
             cbar=True):
     """
     Plots a graph as a heatmap.
@@ -121,11 +121,10 @@ def heatmap(X,
         elements.
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
-    cmap : str
-        Valid color map. Default is 'Blues' if all elements >= 0, 'RdBu' otherwise
-    center : float, optional
-        The value at which to center the colormap when plotting divergant data.
-        Defaults to 0 if graph has positive and negative values, otherwise None
+    cmap : str, default: 'RdBu_r'
+        Valid matplotlib color map.
+    center : float, default: 0
+        The value at which to center the colormap
     cbar : bool, default: True
         Whether to draw a colorbar.
     """
@@ -171,16 +170,6 @@ def heatmap(X,
     arr = import_graph(X)
     arr = _transform(arr, transform)
 
-    # If no manual center and pos/negative values
-    if arr.min() < 0:
-        if cmap is None:
-            cmap = 'RdBu'
-        if center is None: 
-            center = 0
-    else: 
-        if cmap is None: 
-            cmap = 'Blues'      
-
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)
 
@@ -209,7 +198,8 @@ def gridplot(X,
              title=None,
              context='talk',
              font_scale=1,
-             alpha=0.7):
+             alpha=0.7, 
+             sizes=(10, 200)):
     """
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
@@ -286,7 +276,7 @@ def gridplot(X,
             y='rdx',
             hue='Type',
             size='Weights',
-            sizes=(10, 200),
+            sizes=sizes,
             alpha=alpha,
             palette=palette,
             height=height)
