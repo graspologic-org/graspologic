@@ -66,7 +66,7 @@ def test_omni_matrix_invalid_inputs():
         omni.fit(empty_list)
 
     with pytest.raises(ValueError):
-        wrong_shapes = [np.zeros((10, 10)), np.zeros((20, 20))]
+        wrong_shapes = [np.ones((10, 10)), np.ones((20, 20))]
         omni = OmnibusEmbed(k=2)
         omni.fit(wrong_shapes)
 
