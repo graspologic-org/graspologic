@@ -2,11 +2,11 @@
 # Created by Ben Pedigo on 2018-09-26.
 # Email: bpedigo@jhu.edu
 
-
 from .embed import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, to_laplace
 import numpy as np
+
 
 class LaplacianSpectralEmbed(BaseEmbed):
     """
@@ -30,8 +30,9 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     See Also
     --------
-    graphstats.embed.svd.selectSVD, graphstats.embed.svd.selectDim, 
-    graphstats.embed.embed.BaseEmbed
+    graspy.embed.selectSVD
+    graspy.embed.selectDim
+    graspy.embed.BaseEmbed
 
     Notes
     -----
@@ -48,8 +49,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
     References
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-    Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-    Journal of the American Statistical Association, Vol. 107(499), 2012
+       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
+       Journal of the American Statistical Association, Vol. 107(499), 2012
 
     Examples
     --------
@@ -64,7 +65,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
         """
         Fit LSE model to input graph
 
-        By default, uses the Laplacian normalization of the form 
+        By default, uses the Laplacian normalization of the form:
+
         .. math:: L = I - D^{-1/2} A D^{-1/2}
 
         Parameters
