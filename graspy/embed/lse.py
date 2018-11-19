@@ -5,7 +5,7 @@
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph, to_laplace, is_symmetric
+from ..utils import import_graph, to_laplace
 import numpy as np
 
 class LaplacianSpectralEmbed(BaseEmbed):
@@ -94,8 +94,6 @@ class LaplacianSpectralEmbed(BaseEmbed):
        
         """
         A = import_graph(graph)
-        if not is_symmetric(A):
-            raise ValueError('Laplacian spectral embedding not implemented/defined for directed graphs')
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
         return self.lpm
