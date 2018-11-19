@@ -45,6 +45,10 @@ def import_graph(graph):
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
         raise TypeError(msg)
+    if not is_fully_connected(graph): 
+        raise UserWarning('WARNING: the graph that has been input ' 
+                          + 'is not fully connected, GraSPy functions ' 
+                          + 'may not work as expected')
     return graph
 
 
@@ -167,3 +171,13 @@ def to_laplace(graph, form='I-DAD'):
         L = np.dot(L, D_root)
 
     return L
+
+def is_fully_connected(graph):
+    # remove loops to evaluate in/out degree just by summing
+    graph = graph - np.diag(np.diag(graph))
+    left_degree = np.sum(graph, axis=0)
+    right_degree = np.sum(graph, axis=1)
+    left_zeros = np.where(left_degree == 0)
+    right_zeros = np.where(right_degree == 0)
+    both = np.intersect1d(left_zeros, right_zeros)
+    return len(both) == 0
