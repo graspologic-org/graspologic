@@ -240,13 +240,6 @@ class TestInput(unittest.TestCase):
         vec2 = np.random.normal(0,1, (100,100))
         corr = np.corrcoef(vec1, vec2)
         self.assertTrue(gus.is_almost_symmetric(corr,atol=1e-15))
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.assertFalse(gus.is_symmetric(corr))
-=======
-        self.assertFalse(gus.is_symmetric(corr))
->>>>>>> add rdpg and almost symmetric
-=======
         self.assertFalse(gus.is_symmetric(corr))
     
     def test_augment_diagonal_undirected(self):
@@ -278,4 +271,4 @@ class TestInput(unittest.TestCase):
         expected[4,4] = 1.0/4
         A_aug = gus.augment_diagonal(A)
         np.testing.assert_array_equal(A_aug, expected)
->>>>>>> diag aug
+
