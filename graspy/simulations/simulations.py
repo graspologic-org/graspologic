@@ -517,7 +517,7 @@ def rdpg_from_p(P, symmetric=False, **kwargs):
         A = np.random.binomial(1, P)
     return A
 
-def rdpg_from_latent(X, Y=None, rescale=True, loops=True, symmetric=False, **kwargs):
+def rdpg_from_latent(X, Y=None, rescale=True, loops=True, symmetric=False):
     '''
     Samples a random graph based on the latent positions in X (and 
     optionally in Y)
@@ -564,5 +564,5 @@ def rdpg_from_latent(X, Y=None, rescale=True, loops=True, symmetric=False, **kwa
     
     '''
     
-    P = p_from_latent(X,Y,loops=loops,**kwargs)
-    return rdpg_from_p(P, **kwargs)
+    P = p_from_latent(X,Y,rescale=rescale, loops=loops)
+    return rdpg_from_p(P,symmetric=symmetric)

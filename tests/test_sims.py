@@ -2,7 +2,7 @@ import unittest
 import graspy as gs
 import numpy as np
 import networkx as nx
-from graspy.simulations.simulations import *
+from graspy.simulations import *
 from graspy.utils.utils import is_symmetric, is_loopless
 
 
