@@ -233,3 +233,11 @@ class TestInput(unittest.TestCase):
         lccs = gus.get_multigraph_lcc([f,g], return_inds=False)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(nx.to_numpy_array(graph), expected_mats[i])
+    
+    def test_is_almost_symmetric(self):
+        np.random.seed(8888)
+        vec1 = np.random.normal(0,1, (100,100))
+        vec2 = np.random.normal(0,1, (100,100))
+        corr = np.corrcoef(vec1, vec2)
+        self.assertTrue(gus.is_almost_symmetric(corr,atol=1e-15))
+        self.assertFalse(gus.is_symmetric(corr))

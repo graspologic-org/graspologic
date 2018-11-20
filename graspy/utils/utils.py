@@ -63,6 +63,9 @@ def is_loopless(X):
 def is_unweighted(X): 
     return ((X==0) | (X==1)).all()
 
+def is_almost_symmetric(X, atol=1e-15):
+    return np.allclose(X, X.T, atol=atol)
+
 def symmetrize(graph, method='triu'):
     """
     A function for forcing symmetry upon a graph.
@@ -97,7 +100,6 @@ def symmetrize(graph, method='triu'):
     # A = A + A' - diag(A)
     graph = graph + graph.T - np.diag(np.diag(graph))
     return graph
-
 
 def remove_loops(graph):
     """
