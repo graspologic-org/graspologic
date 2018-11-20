@@ -10,6 +10,7 @@ matrix:
       sudo: true
 cache: pip
 install:
+- sudo apt-get install pandoc
 - pip install -r requirements.txt
 - pip install pytest pytest-cov codecov
 script:
