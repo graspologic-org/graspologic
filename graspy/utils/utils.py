@@ -288,7 +288,9 @@ def get_multigraph_lcc(graphs, return_inds=False):
         else: 
             graph = graph.subgraph(inds_intersection)
         new_graphs.append(graph)
-    if type(graphs) == list:
-        return new_graphs
+    if type(graphs) != list:
+        new_graphs = np.stack(new_graphs)
+    if return_inds:
+        return new_graphs, inds_intersection
     else:
-        return np.stack(new_graphs)
+        return new_graphs
