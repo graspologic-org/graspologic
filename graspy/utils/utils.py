@@ -183,9 +183,9 @@ def is_fully_connected(graph):
 
     Parameters
     ----------
-        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            Input graph in any of the above specified formats. If np.ndarray, 
-            interpreted as an n x n adjacency matrix
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        Input graph in any of the above specified formats. If np.ndarray, 
+        interpreted as an n x n adjacency matrix
 
     Returns
     -------
@@ -217,23 +217,23 @@ def get_lcc(graph, return_inds=False):
 
     Parameters
     ----------
-        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            Input graph in any of the above specified formats. If np.ndarray, 
-            interpreted as an n x n adjacency matrix
-     
-        return_inds: boolean, default: False
-            Whether to return a np.ndarray containing the indices in the original
-            adjacency matrix that were kept and are now in the returned graph.
-            Ignored when input is networkx object
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        Input graph in any of the above specified formats. If np.ndarray, 
+        interpreted as an n x n adjacency matrix
     
+    return_inds: boolean, default: False
+        Whether to return a np.ndarray containing the indices in the original
+        adjacency matrix that were kept and are now in the returned graph.
+        Ignored when input is networkx object
+
     Returns
     -------
-        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            New graph of the largest connected component of the input parameter. 
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        New graph of the largest connected component of the input parameter. 
 
-        inds: (optional)
-            Indices from the original adjacency matrix that were kept after taking
-            the largest connected component 
+    inds: (optional)
+        Indices from the original adjacency matrix that were kept after taking
+        the largest connected component 
     '''
     
     input_ndarray = False
@@ -267,23 +267,22 @@ def get_multigraph_lcc(graphs, return_inds=False):
 
     Parameters
     ----------
-        graphs: list or np.ndarray
-            if list, each element must be an n x n np.ndarray adjacency matrix
-            
-     
-        return_inds: boolean, default: False
-            Whether to return a np.ndarray containing the indices in the original
-            adjacency matrix that were kept and are now in the returned graph.
-            Ignored when input is networkx object
+    graphs: list or np.ndarray
+        if list, each element must be an n x n np.ndarray adjacency matrix
+        
+    return_inds: boolean, default: False
+        Whether to return a np.ndarray containing the indices in the original
+        adjacency matrix that were kept and are now in the returned graph.
+        Ignored when input is networkx object
     
     Returns
     -------
-        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            New graph of the largest connected component of the input parameter. 
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        New graph of the largest connected component of the input parameter. 
 
-        inds: (optional)
-            Indices from the original adjacency matrix that were kept after taking
-            the largest connected component 
+    inds: (optional)
+        Indices from the original adjacency matrix that were kept after taking
+        the largest connected component 
     '''
     lcc_by_graph = []
     inds_by_graph = []
@@ -317,9 +316,9 @@ def augment_diagonal(graph):
 
     Parameters
     ----------
-        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            Input graph in any of the above specified formats. If np.ndarray, 
-            interpreted as an n x n adjacency matrix 
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        Input graph in any of the above specified formats. If np.ndarray, 
+        interpreted as an n x n adjacency matrix 
     '''
     graph = import_graph(graph)
     graph = remove_loops(graph)
