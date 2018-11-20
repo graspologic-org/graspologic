@@ -240,4 +240,8 @@ class TestInput(unittest.TestCase):
         vec2 = np.random.normal(0,1, (100,100))
         corr = np.corrcoef(vec1, vec2)
         self.assertTrue(gus.is_almost_symmetric(corr,atol=1e-15))
+<<<<<<< HEAD
         self.assertFalse(gus.is_symmetric(corr))
+=======
+        self.assertFalse(gus.is_symmetric(corr))
+>>>>>>> add rdpg and almost symmetric

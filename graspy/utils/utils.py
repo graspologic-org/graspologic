@@ -69,6 +69,9 @@ def is_unweighted(X):
 def is_almost_symmetric(X, atol=1e-15):
     return np.allclose(X, X.T, atol=atol)
 
+def is_almost_symmetric(X, atol=1e-15):
+    return np.allclose(X, X.T, atol=atol)
+
 def symmetrize(graph, method='triu'):
     """
     A function for forcing symmetry upon a graph.
