@@ -137,3 +137,99 @@ class TestInput(unittest.TestCase):
         np.testing.assert_array_equal(nodelist, expected_nodelist)
         lcc_matrix = gus.get_lcc(g)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
+
+    def test_multigraph_lcc_numpystack(self):
+        expected_g_matrix = np.array([[0, 1, 0, 0],
+                                      [0, 0, 1, 1],
+                                      [0, 0, 0, 0],
+                                      [0, 1, 0, 0]])
+        expected_f_matrix = np.array([[0, 1, 0, 0],
+                                      [1, 0, 1, 1],
+                                      [0, 0, 0, 0],
+                                      [0, 1, 0, 0]])
+        expected_mats = [expected_f_matrix, expected_g_matrix]
+        expected_nodelist = np.array([0, 2, 3, 5])
+        g = nx.DiGraph()
+        [g.add_node(i) for i in range(1,7)]
+        g.add_edge(1,3)
+        g.add_edge(3,4)
+        g.add_edge(3,4)
+        g.add_edge(3,6)
+        g.add_edge(6,3)
+        g.add_edge(4,2)
+        f = g.copy()
+        f.add_edge(5,4)
+        f.remove_edge(4,2)
+        f.add_edge(3,1)
+        f = nx.to_numpy_array(f)
+        g = nx.to_numpy_array(g)
+        lccs, nodelist = gus.get_multigraph_lcc(np.stack([f,g]), return_inds=True)
+        for i, graph in enumerate(lccs):
+            np.testing.assert_array_equal(graph, expected_mats[i])
+            np.testing.assert_array_equal(nodelist, expected_nodelist)
+        for i, graph in enumerate(lccs):
+            np.testing.assert_array_equal(graph, expected_mats[i])
+
+    def test_multigraph_lcc_numpylist(self):
+        expected_g_matrix = np.array([[0, 1, 0, 0],
+                                      [0, 0, 1, 1],
+                                      [0, 0, 0, 0],
+                                      [0, 1, 0, 0]])
+        expected_f_matrix = np.array([[0, 1, 0, 0],
+                                      [1, 0, 1, 1],
+                                      [0, 0, 0, 0],
+                                      [0, 1, 0, 0]])
+        expected_mats = [expected_f_matrix, expected_g_matrix]
+        expected_nodelist = np.array([0, 2, 3, 5])
+        g = nx.DiGraph()
+        [g.add_node(i) for i in range(1,7)]
+        g.add_edge(1,3)
+        g.add_edge(3,4)
+        g.add_edge(3,4)
+        g.add_edge(3,6)
+        g.add_edge(6,3)
+        g.add_edge(4,2)
+        f = g.copy()
+        f.add_edge(5,4)
+        f.remove_edge(4,2)
+        f.add_edge(3,1)
+        f = nx.to_numpy_array(f)
+        g = nx.to_numpy_array(g)
+        lccs, nodelist = gus.get_multigraph_lcc([f,g], return_inds=True)
+        for i, graph in enumerate(lccs):
+            np.testing.assert_array_equal(graph, expected_mats[i])
+            np.testing.assert_array_equal(nodelist, expected_nodelist)
+        lccs = gus.get_multigraph_lcc([f,g], return_inds=False)
+        for i, graph in enumerate(lccs):
+            np.testing.assert_array_equal(graph, expected_mats[i])
+
+    def test_multigraph_lcc_networkx(self):
+        expected_g_matrix = np.array([[0, 1, 0, 0],
+                                      [0, 0, 1, 1],
+                                      [0, 0, 0, 0],
+                                      [0, 1, 0, 0]])
+        expected_f_matrix = np.array([[0, 1, 0, 0],
+                                      [1, 0, 1, 1],
+                                      [0, 0, 0, 0],
+                                      [0, 1, 0, 0]])
+        expected_mats = [expected_f_matrix, expected_g_matrix]
+        expected_nodelist = np.array([1, 3, 4, 6])
+        g = nx.DiGraph()
+        [g.add_node(i) for i in range(1,7)]
+        g.add_edge(1,3)
+        g.add_edge(3,4)
+        g.add_edge(3,4)
+        g.add_edge(3,6)
+        g.add_edge(6,3)
+        g.add_edge(4,2)
+        f = g.copy()
+        f.add_edge(5,4)
+        f.remove_edge(4,2)
+        f.add_edge(3,1)
+        lccs, nodelist = gus.get_multigraph_lcc([f,g], return_inds=True)
+        for i, graph in enumerate(lccs):
+            np.testing.assert_array_equal(nx.to_numpy_array(graph), expected_mats[i])
+            np.testing.assert_array_equal(nodelist, expected_nodelist)
+        lccs = gus.get_multigraph_lcc([f,g], return_inds=False)
+        for i, graph in enumerate(lccs):
+            np.testing.assert_array_equal(nx.to_numpy_array(graph), expected_mats[i])
