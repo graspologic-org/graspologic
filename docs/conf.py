@@ -77,6 +77,7 @@ html_static_path = ['_static']
 modindex_common_prefix = ['graspy.']
 
 pygments_style = 'sphinx'
+smartquotes = False
 
 # Use RTD Theme
 import sphinx_rtd_theme
@@ -86,7 +87,7 @@ html_theme_options = {
     #'includehidden': False,
     'navigation_depth': 2,
     'collapse_navigation': False,
-    'navigation_depth': 3,
+    'navigation_depth': 4,
 }
 
 # Custom sidebar templates, must be a dictionary that maps document names

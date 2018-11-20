@@ -6,7 +6,8 @@ Reference
 .. toctree::
    :maxdepth: 2
 
+   simulations
    embed
    cluster
-   simulations
    plotting
+   utils

@@ -4,8 +4,14 @@ Plotting
 
 .. currentmodule:: graspy.plot
 
+Heatmap
+-------
 .. autofunction:: heatmap
 
-.. autofunction:: pairplot
-
+Gridplot
+--------
 .. autofunction:: gridplot
+
+Pairplot
+--------
+.. autofunction:: pairplot

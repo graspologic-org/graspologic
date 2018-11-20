@@ -89,27 +89,28 @@ def heatmap(X,
             cmap='Reds',
             center=None,
             cbar=True):
-    """
+    r"""
     Plots a graph as a heatmap.
 
     Parameters
     ----------
     X : nx.Graph or np.ndarray object
         Graph or numpy matrix to plot
-    transform : None, or string {log, zero-boost, simple-all, simple-nonzero}
-        log :
+    transform : None, or string {'log', 'zero-boost', 'simple-all', 'simple-nonzero'}
+
+        - 'log' :
             Plots the log of all nonzero numbers
-        zero-boost :
+        - 'zero-boost' :
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
-        'simple-all': 
+        - 'simple-all': 
             Pass to ranks method. Assigns ranks to all non-zero edges, settling 
             ties using the average. Ranks are then scaled by 
-                .. math:: \frac{2 rank(non-zero edges)}{n^2 + 1}
+            :math:`\frac{2 rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
-        'simple-nonzero':
-            Pass to ranks method. Same as 'simple-all' but ranks are scaled by
-                .. math:: \frac{2 rank(non-zero edges)}{num_nonzero + 1}
+        - 'simple-nonzero':
+            Pass to ranks method. Aame as simple-all, but ranks are scaled by
+            :math:`\frac{2 rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
     title : str, optional, default: None
@@ -198,7 +199,7 @@ def gridplot(X,
              title=None,
              context='talk',
              font_scale=1):
-    """
+    r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
 
@@ -209,20 +210,21 @@ def gridplot(X,
     labels : list of str
         List of strings, which are labels for each element in X. 
         `len(X) == len(labels)`.
-    transform : None, or string {log, zero-boost, simple-all, simple-nonzero}
-        log :
+    transform : None, or string {'log', 'zero-boost', 'simple-all', 'simple-nonzero'}
+
+        - 'log' :
             Plots the log of all nonzero numbers
-        zero-boost :
+        - 'zero-boost' :
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
-        'simple-all': 
+        - 'simple-all': 
             Pass to ranks method. Assigns ranks to all non-zero edges, settling 
             ties using the average. Ranks are then scaled by 
-                .. math:: \frac{2 rank(non-zero edges)}{n^2 + 1}
+            :math:`\frac{2 rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
-        'simple-nonzero':
-            Pass to ranks method. Same as 'simple-all' but ranks are scaled by
-                .. math:: \frac{2 rank(non-zero edges)}{num_nonzero + 1}
+        - 'simple-nonzero':
+            Pass to ranks method. Aame as simple-all, but ranks are scaled by
+            :math:`\frac{2 rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
     height : int, optional, default: 10
         Height of figure in inches.
     title : str, optional, default: None
@@ -295,7 +297,7 @@ def pairplot(X,
              context='talk',
              font_scale=1,
              palette='Set1'):
-    """
+    r"""
     Plot pairwise relationships in a dataset.
 
     Parameters
