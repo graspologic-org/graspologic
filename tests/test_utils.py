@@ -241,3 +241,33 @@ class TestInput(unittest.TestCase):
         corr = np.corrcoef(vec1, vec2)
         self.assertTrue(gus.is_almost_symmetric(corr,atol=1e-15))
         self.assertFalse(gus.is_symmetric(corr))
+    
+    def test_augment_diagonal_undirected(self):
+        A = np.array([[0, 1, 1, 0, 0],
+                      [1, 0, 0, 2, 1],
+                      [1, 0, 0, 1, 1],
+                      [0, 2, 1, 0, 0],
+                      [0, 1, 1, 0, 0]])
+        expected = A.copy().astype(float)
+        expected[0,0] = 2.0/4
+        expected[1,1] = 3.0/4
+        expected[2,2] = 3.0/4
+        expected[3,3] = 2.0/4
+        expected[4,4] = 2.0/4
+        A_aug = gus.augment_diagonal(A)
+        np.testing.assert_array_equal(A_aug, expected)
+
+    def test_augment_diagonal_directed(self):
+        A = np.array([[0, 1, 1, 0, 0],
+                      [0, 0, 0, 2, 1],
+                      [1, 0, 0, 1, 1],
+                      [0, 2, 0, 0, 0],
+                      [0, 0, 1, 0, 0]])
+        expected = A.copy().astype(float)
+        expected[0,0] = 2.0/4
+        expected[1,1] = 2.0/4
+        expected[2,2] = 3.0/4
+        expected[3,3] = 1.0/4
+        expected[4,4] = 1.0/4
+        A_aug = gus.augment_diagonal(A)
+        np.testing.assert_array_equal(A_aug, expected)
