@@ -164,6 +164,9 @@ class OmnibusEmbed(BaseEmbed):
 
         Returns
         -------
-        out : array-like, shape (n_vertices * n_graphs, n_dimension)
+        out : array-like, shape (n_vertices * n_graphs, n_dimension) if input 
+            graphs were symmetric. If graphs were directed, returns tuple of 
+            two arrays (same shape as above) where the first corresponds to the
+            left latent positions, and the right to the right latent positions
         """
         return self._fit_transform(graphs)
