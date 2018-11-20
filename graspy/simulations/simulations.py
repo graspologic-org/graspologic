@@ -400,3 +400,48 @@ def er_np(n, p):
     A: array-like, shape (n, n)
     """
     return (zi_np(n, p, wt=1))
+
+def p_from_latent(X, Y=None, rescale=True, loops=True, **kwargs):
+    if Y is None:
+        Y = X
+    if type(X) is not np.ndarray or type(Y) is not np.ndarray:
+        raise TypeError('Latent positions must be numpy.ndarray')
+    if len(X.shape) != 2 or len(Y.shape) != 2:
+        raise ValueError('Latent positions must have dimension 2 (n_vertices, n_dimensions)')
+    if X.shape != Y.shape:
+        raise ValueError('Dimensions of latent positions X and Y must be the same')
+    P = np.dot(X, Y.T)
+    # should this be before or after the rescaling, could give diff answers
+    if not loops:
+        P = P - np.diag(np.diag(P))   
+    if rescale:
+        if P.min() < 0:
+            P = P - P.min()
+        if P.max() > 1:
+            P = P / P.max()  
+    else: 
+        P[P < 0] = 0
+        P[P > 1] = 1
+    return P
+
+def rdpg_from_p(P, symmetric=True, **kwargs):
+    if type(P) is not np.ndarray:
+        raise TypeError('P must be numpy.ndarray')
+    if len(P.shape) != 2:
+        raise ValueError('P must have dimension 2 (n_vertices, n_dimensions)')
+    if P.shape[0] != P.shape[1]:
+        raise ValueError('P must be a square matrix')
+    if symmetric:
+        # can cut down on sampling by ~half 
+        triu_inds = np.triu_indices(P.shape[0])
+        samples = np.random.binomial(1, P[triu_inds])
+        A = np.zeros_like(P)
+        A[triu_inds] = samples
+        A = symmetrize(A)
+    else:
+        A = np.random.binomial(1, P)
+    return A
+
+def rdpg_from_latent(X, Y=None, rescale=True, loops=False, symmetric=True, **kwargs):
+    P = p_from_latent(X,Y,**kwargs)
+    return rdpg_from_p(P, **kwargs)

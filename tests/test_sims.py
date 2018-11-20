@@ -486,3 +486,80 @@ class Test_WSBM(unittest.TestCase):
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
+
+class Test_RDPG(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.n = [50, 70]
+        cls.Pns = np.vstack(([0.6, 0.2], [0.3, 0.4]))
+        # define symmetric probability as evenly weighted
+        cls.Psy = np.vstack(([0.6, 0.2], [0.3, 0.4]))
+        cls.Psy = symmetrize(cls.Psy)
+
+    def test_dimensions(self):
+        X = np.array([[1,1],
+                      [1,1],
+                      [1,1],
+                      [1,0],
+                      [1,0],])
+        A = rdpg_from_latent(X)
+        self.assertTrue(A.shape, (5,5))
+
+    def test_inputs(self):
+        x1 = np.array([[1,1],[1,1]])
+        x2 = np.array([[1,1]])
+        x3 = np.zeros((2,2,2))
+        with self.assertRaises(TypeError):
+            p_from_latent('hi') # wrong type
+        with self.assertRaises(ValueError):
+            p_from_latent(x1, x2) # dimension mismatch
+        with self.assertRaises(ValueError):
+            p_from_latent(x3) # wrong num dimensions
+        with self.assertRaises(TypeError):
+            rdpg_from_p('XD') # wrong type
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x3) # wrong num dimensions
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x2) # wrong shape for P
+    
+    def test_er_p_is_close(self):
+        np.random.seed(8888)
+        X = 0.5 * np.ones((100,2))
+        graphs = []
+        P = p_from_latent(X, rescale=True, loops=True)
+        for i in range(1000):
+            graphs.append(rdpg_from_p(P))
+        graphs = np.stack(graphs)
+        self.assertAlmostEqual(np.mean(graphs), 0.5, delta=0.001)
+        # mean_graph = np.mean(graphs, axis=0)
+        # this only seems to work as n_graphs -> 10000
+        # np.testing.assert_allclose(P, mean_graph, atol=0.05)
+    
+    def test_mini_sbm_p_is_close(self):
+        np.random.seed(8888)
+        blocks = np.array([[0.8, 0.1],
+                           [0.1, 0.5]])
+        X = np.array([[-0.87209812, -0.19860733],
+                      [-0.26405006,  0.65595546]])
+        graphs = []
+        P = p_from_latent(X, rescale=True, loops=True)
+        for i in range(10000):
+            graphs.append(rdpg_from_p(P, symmetric=False))
+        graphs = np.stack(graphs)
+        mean_graph = np.mean(graphs, axis=0)
+        # this atol should be ~5 stdev away
+        np.testing.assert_allclose(blocks, mean_graph, atol=0.025) 
+
+    # def test_mini_sbm_p_is_close(self):
+    #     # np.random.seed(8889)
+    #     blocks = np.array([[0.8, 0.1],
+    #                        [0.1, 0.5]])
+    #     X = np.array([[-0.87209812, -0.19860733],
+    #                   [-0.26405006,  0.65595546]])
+    #     graphs = []
+    #     P = p_from_latent(X, rescale=True, loops=True)
+    #     for i in range(10000):
+    #         graphs.append(rdpg_from_p(P, symmetric=False))
+    #     graphs = np.stack(graphs)
+    #     mean_graph = np.mean(graphs, axis=0)
+    #     np.testing.assert_allclose(blocks, mean_graph, atol=0.005)
