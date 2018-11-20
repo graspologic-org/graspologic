@@ -7,5 +7,3 @@ Dissimilarity Embedding
 Classical Multidimensional Scaling
 ----------------------------------
 .. autoclass:: ClassicalMDS
-   :members:
-   :inherited-members: 

@@ -18,98 +18,73 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'graspy'
-copyright = '2018, 1'
-author = '1'
+project = 'GraSPy'
+copyright = '2018'
+authors = u'NeuroData'
 
 # The short X.Y version
-version = ''
+version = '0.0.1'
 # The full version, including alpha/beta/rc tags
-release = '2'
+release = 'alpha'
 
-# -- General configuration ---------------------------------------------------
-
-# If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
-
-# Environment variable to know if the docs are being built on rtd.
-# on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+# -- Extension configuration -------------------------------------------------
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
     'sphinx.ext.mathjax',
     'numpydoc',
     'sphinx.ext.ifconfig',
+    'sphinx.ext.githubpages',
+    'sphinxcontrib.rawfiles',
 ]
 
-# Napoleon settings
-napoleon_use_ivar = True  # need for grouping class attriubtes
-napoleon_use_rtype = False
+# -- sphinxcontrib.rawfiles
+rawfiles = ['CNAME']
 
+# -- numpydoc
 # Below is needed to prevent errors
 numpydoc_show_class_members = False
 
-# generate autosummary pages
+# -- sphinx.ext.autosummary
 autosummary_generate = True
 
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+# -- sphinx.ext.autodoc
+autoclass_content = 'both'
+autodoc_default_flags = ['members', 'inherited-members']
+autodoc_member_order = 'bysource'  # default is alphabetical
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
+# -- sphinx.ext.intersphinx
+intersphinx_mapping = {
+    'numpy': ('https://docs.scipy.org/doc/numpy', None),
+    'python': ('https://docs.python.org/3', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
+    'sklearn': ('http://scikit-learn.org/dev', None),
+}
+
+# -- sphinx options ----------------------------------------------------------
 source_suffix = '.rst'
-
-# The master toctree document.
-master_doc = 'index'
-
-# A list of prefixs that are ignored when creating the module index. (new in Sphinx 0.6)
-modindex_common_prefix = ['graspy.']
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
-
-# If true, the current module name will be prepended to all description
-# unit titles (such as .. function::).
-# add_module_names = False
+master_doc = 'index'
+source_encoding = "utf-8"
 
 # -- Options for HTML output -------------------------------------------------
+# Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
+html_static_path = ['_static']
+modindex_common_prefix = ['graspy.']
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
+pygments_style = 'sphinx'
+
+# Use RTD Theme
 import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
 html_theme_options = {
     #'includehidden': False,
     'navigation_depth': 2,
-    'canonical_url': 'graspy.neurodata.io',
 }
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -150,14 +125,14 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'graspy.tex', 'graspy Documentation', '1', 'manual'),
+    (master_doc, 'graspy.tex', 'GraSPy Documentation', authors, 'manual'),
 ]
 
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'graspy', 'graspy Documentation', [author], 1)]
+man_pages = [(master_doc, 'graspy', 'graspy Documentation', [authors], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -165,7 +140,7 @@ man_pages = [(master_doc, 'graspy', 'graspy Documentation', [author], 1)]
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'graspy', 'graspy Documentation', author, 'graspy',
+    (master_doc, 'graspy', 'graspy Documentation', authors, 'graspy',
      'One line description of project.', 'Miscellaneous'),
 ]
 
@@ -185,10 +160,3 @@ epub_title = project
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
-
-# -- Extension configuration -------------------------------------------------
-
-# -- Options for intersphinx extension ---------------------------------------
-
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
