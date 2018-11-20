@@ -401,7 +401,7 @@ def er_np(n, p):
     """
     return (zi_np(n, p, wt=1))
 
-def p_from_latent(X, Y=None, rescale=True, loops=True):
+def p_from_latent(X, Y=None, rescale=True, loops=True, **kwargs):
     '''
     Gemerates a matrix of connection probabilities for a random graph
     based on a set of latent positions
@@ -468,7 +468,7 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
         P[P > 1] = 1
     return P
 
-def rdpg_from_p(P, symmetric=False):
+def rdpg_from_p(P, symmetric=False, **kwargs):
     '''
     Gemerates a binary random graph based on the P matrix provided
 
@@ -514,7 +514,7 @@ def rdpg_from_p(P, symmetric=False):
         A = np.random.binomial(1, P)
     return A
 
-def rdpg_from_latent(X, Y=None, rescale=True, loops=True, symmetric=False):
+def rdpg_from_latent(X, Y=None, rescale=True, loops=True, symmetric=False, **kwargs):
     '''
     Samples a random graph based on the latent positions in X (and 
     optionally in Y)
@@ -560,5 +560,5 @@ def rdpg_from_latent(X, Y=None, rescale=True, loops=True, symmetric=False):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     
     '''
-    P = p_from_latent(X,Y,loops=loops,rescale=rescale)
+    P = p_from_latent(X,Y,rescale=rescale, loops=loops)
     return rdpg_from_p(P,symmetric=symmetric)
