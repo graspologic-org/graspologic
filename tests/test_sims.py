@@ -549,17 +549,16 @@ class Test_RDPG(unittest.TestCase):
         mean_graph = np.mean(graphs, axis=0)
         # this atol should be ~5 stdev away
         np.testing.assert_allclose(blocks, mean_graph, atol=0.025) 
-
-    # def test_mini_sbm_p_is_close(self):
-    #     # np.random.seed(8889)
-    #     blocks = np.array([[0.8, 0.1],
-    #                        [0.1, 0.5]])
-    #     X = np.array([[-0.87209812, -0.19860733],
-    #                   [-0.26405006,  0.65595546]])
-    #     graphs = []
-    #     P = p_from_latent(X, rescale=True, loops=True)
-    #     for i in range(10000):
-    #         graphs.append(rdpg_from_p(P, symmetric=False))
-    #     graphs = np.stack(graphs)
-    #     mean_graph = np.mean(graphs, axis=0)
-    #     np.testing.assert_allclose(blocks, mean_graph, atol=0.005)
+    
+    def test_kwarg_passing(self):
+        np.random.seed(8888)
+        X = 0.5 * np.ones((300,2))
+        g = rdpg_from_latent(X, rescale=True, loops=True, symmetric=False)
+        self.assertFalse(is_symmetric(g))
+        self.assertFalse(is_loopless(g))
+        g = rdpg_from_latent(X, rescale=True, loops=False, symmetric=False)
+        self.assertFalse(is_symmetric(g))
+        self.assertTrue(is_loopless(g))
+        g = rdpg_from_latent(X, rescale=True, loops=False, symmetric=True)
+        self.assertTrue(is_symmetric(g))
+        self.assertTrue(is_loopless(g))
