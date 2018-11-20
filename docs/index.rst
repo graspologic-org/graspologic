@@ -30,8 +30,7 @@ algorithms.  Python has a vibrant and growing ecosystem of packages that
 GraSPy uses to provide more features such as numerical linear algebra and
 plotting.  In order to make the most out of GraSPy you will want to know how
 to write basic programs in Python.  Among the many guides to Python, we
-recommend the `Python documentation <https://docs.python.org/3/>`_ and the text
-by Alex Martelli [Martelli03]_.
+recommend the `Python documentation <https://docs.python.org/3/>`_.
 
 Free software
 -------------
@@ -59,8 +58,6 @@ GraSPy is a graph statistics package in python.
    reference/index
    news
    license
-   bibliography
-
 
 
 Indices and tables
