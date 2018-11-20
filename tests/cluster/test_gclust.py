@@ -104,7 +104,7 @@ def test_bic():
         A = binary_sbm(n=n_communites, P=P)
 
         # Embed to get latent positions
-        ase = AdjacencySpectralEmbed(k=5)
+        ase = AdjacencySpectralEmbed(n_components=5)
         X_hat = ase.fit_transform(A)
 
         # Compute clusters

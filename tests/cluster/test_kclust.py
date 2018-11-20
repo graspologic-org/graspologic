@@ -4,10 +4,6 @@ from numpy.testing import assert_allclose, assert_equal
 from sklearn.exceptions import NotFittedError
 
 from graspy.cluster.kclust import KMeansCluster
-from graspy.embed.ase import AdjacencySpectralEmbed
-from graspy.simulations.simulations import binary_sbm
-
-
 
 
 def test_inputs():

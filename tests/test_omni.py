@@ -65,17 +65,17 @@ def test_omni_matrix_random():
 def test_omni_matrix_invalid_inputs():
     with pytest.raises(ValueError):
         empty_list = []
-        omni = OmnibusEmbed(k=2)
+        omni = OmnibusEmbed(n_components=2)
         omni.fit(empty_list)
 
     with pytest.raises(ValueError):
         wrong_shapes = [np.ones((10, 10)), np.ones((20, 20))]
-        omni = OmnibusEmbed(k=2)
+        omni = OmnibusEmbed(n_components=2)
         omni.fit(wrong_shapes)
 
     with pytest.raises(TypeError):
         wrong_dtypes = [1, 2, 3]
-        omni = OmnibusEmbed(k=2)
+        omni = OmnibusEmbed(n_components=2)
         omni.fit(wrong_dtypes)
 
 
@@ -106,10 +106,10 @@ def test_omni_embed():
     Abar = (A1 + A2) / 2
 
     np.random.seed(11)
-    omni = OmnibusEmbed(k=3)
+    omni = OmnibusEmbed(n_components=3)
     OmniBar = compute_bar(omni.fit_transform([A1, A2]))
 
-    omni = OmnibusEmbed(k=3)
+    omni = OmnibusEmbed(n_components=3)
     ABar = compute_bar(omni.fit_transform([Abar, Abar]))
 
     tol = 1.e-2

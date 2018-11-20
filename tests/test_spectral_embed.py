@@ -105,20 +105,19 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         _test_output_dim(self, LaplacianSpectralEmbed)
 
     def test_sbm_er_binary_undirected(self):
-        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        P = np.array([[0.8, 0.2], [0.2, 0.3]])
         _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P)
 
     def test_no_directed(self):
-        f = np.array([[1, 2],
-                      [0, 1]])
+        f = np.array([[1, 2], [0, 1]])
         lse = LaplacianSpectralEmbed()
         with self.assertRaises(ValueError):
             lse.fit(f)
 
     def test_different_forms(self):
-        f = np.array([[1, 2],
-                      [2, 1]])
+        f = np.array([[1, 2], [2, 1]])
         lse = LaplacianSpectralEmbed(form='I-DAD')
+
 
 if __name__ == '__main__':
     unittest.main()

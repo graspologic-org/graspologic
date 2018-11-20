@@ -128,10 +128,8 @@ def select_dimension(X,
 
     # Handle n_components
     if n_components is None:
-        if np.min(X.shape) == 1:
-            k = 1
-        else:  # per recommendation by Zhu & Godsie
-            k = int(np.ceil(np.log2(np.min(X.shape))))
+        # per recommendation by Zhu & Godsie
+        k = int(np.ceil(np.log2(np.min(X.shape))))
     elif not isinstance(n_components, int):
         msg = 'n_components must be an integer, not {}.'.format(
             type(n_components))
@@ -144,8 +142,9 @@ def select_dimension(X,
         D = np.sort(X)[::-1]
     elif X.ndim == 2:
         # Singular values in decreasing order
-        D = svds(A=X, k=k, return_singular_vectors=False)
+        D = scipy.sparse.linalg.svds(A=X, k=k, return_singular_vectors=False)
         D = np.sort(D)[::-1]
+        #U, D, V = sklearn.utils.extmath.randomized_svd()
 
     if threshold is not None:
         D = D[D > threshold]
@@ -246,7 +245,7 @@ def selectSVD(X,
     if (algorithm == 'full') & (n_components > min(X.shape)):
         msg = "n_components must be <= min(X.shape)."
         raise ValueError(msg)
-    else:
+    elif algorithm == 'full':
         U, D, V = scipy.linalg.svd(X)
         U = U[:, :n_components]
         D = D[:n_components]
@@ -263,6 +262,7 @@ def selectSVD(X,
         U = U[:, idx]
         V = V[idx, :]
     elif algorithm == 'randomized':
-        U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components)
+        U, D, V = sklearn.utils.extmath.randomized_svd(
+            X, n_components, n_iter=n_iter)
 
     return U, D, V

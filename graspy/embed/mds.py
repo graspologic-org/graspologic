@@ -159,7 +159,7 @@ class ClassicalMDS(BaseEstimator):
         J = _get_centering_matrix(dissimilarity_matrix.shape[0])
         B = J.dot(dissimilarity_matrix**2).dot(J) * -0.5
 
-        U, V, D = selectSVD(B, k=n_components)
+        U, D, V = selectSVD(B, n_components=n_components)
 
         self.components_ = U
         self.singular_values_ = D**0.5
