@@ -69,9 +69,6 @@ def is_unweighted(X):
 def is_almost_symmetric(X, atol=1e-15):
     return np.allclose(X, X.T, atol=atol)
 
-def is_almost_symmetric(X, atol=1e-15):
-    return np.allclose(X, X.T, atol=atol)
-
 def symmetrize(graph, method='triu'):
     """
     A function for forcing symmetry upon a graph.
@@ -313,13 +310,27 @@ def get_multigraph_lcc(graphs, return_inds=False):
     else:
         return new_graphs
 
-def augment_diagonal(A):
-    A = import_graph(A)
-    A = remove_loops(A)
-    divisor = A.shape[0] - 1
+def augment_diagonal(graph):
+    '''
+    Replaces the diagonal of adjacency matrix with 
+    :math: \frac{degree}{num_verts - 1} for the degree associated
+    with each node. 
+
+    For directed graphs, the degree used is the out degree (number) of 
+    edges leaving the vertex. Ignores self-loops when calculating degree
+
+    Parameters
+    ----------
+        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            Input graph in any of the above specified formats. If np.ndarray, 
+            interpreted as an n x n adjacency matrix 
+    '''
+    graph = import_graph(graph)
+    graph = remove_loops(graph)
+    divisor = graph.shape[0] - 1
     # use out degree for directed graph 
     # ignore self loops in either case
-    degrees = np.count_nonzero(A, axis=1)
+    degrees = np.count_nonzero(graph, axis=1)
     diag = degrees / divisor
-    A += np.diag(diag)
-    return A
+    graph += np.diag(diag)
+    return graph
