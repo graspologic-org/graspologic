@@ -405,11 +405,53 @@ def er_np(n, p):
     return (zi_np(n, p, wt=1))
 
 def p_from_latent(X, Y=None, rescale=True, loops=True, **kwargs):
+    '''
+    Gemerates a matrix of connection probabilities for a random graph
+    based on a set of latent positions
+
+    If only X is given, the P matrix is calculated as :math:`P = XX^T`
+    If X and Y is given, then :math:`P = XY^T`
+    These operations correspond to the dot products between a set of latent
+    positions, so each row in X or Y represents the latent positions in  
+    :math:`\R^{num_columns}` for a single vertex in the random graph 
+    Note that this function may also rescale or clip the resulting P 
+    matrix to get probabilities between 0 and 1, or remove loops
+
+    Parameters
+    ----------
+        X: np.ndarray (2 dimensions, same shape as Y if given)
+            latent position from which to generate a P matrix
+            if Y is given, interpreted as the left latent position
+        Y: np.ndarray (2 dimensions, same shape as X)
+            right latent position from which to generate a P matrix
+        rescale: boolean (default True)
+            when rescale is True, will subtract the minimum value in 
+            P (if it is below 0) and divide by the maximum (if it is
+            above 1) to ensure that P has entries between 0 and 1. If
+            False, elements of P outside of [0, 1] will be clipped
+        loops: boolean (default True)
+            whether to allow elements on the diagonal (corresponding
+            to self connections in a graph) in the returned P matrix. 
+            If loops is False, these elements are removed prior to 
+            rescaling (see above) which may affect behavior
+
+    Returns
+    -------
+        P: np.ndarray (X.shape[0], X.shape[0])
+            A matrix representing the probabilities of connections between 
+            vertices in a random graph based on their latent positions
+
+    References
+    ----------
+    
+    '''
+
+    
     if Y is None:
         Y = X
     if type(X) is not np.ndarray or type(Y) is not np.ndarray:
         raise TypeError('Latent positions must be numpy.ndarray')
-    if len(X.shape) != 2 or len(Y.shape) != 2:
+    if X.ndim != 2 or Y.ndim != 2:
         raise ValueError('Latent positions must have dimension 2 (n_vertices, n_dimensions)')
     if X.shape != Y.shape:
         raise ValueError('Dimensions of latent positions X and Y must be the same')
