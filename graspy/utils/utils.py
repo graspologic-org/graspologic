@@ -165,14 +165,26 @@ def is_fully_connected(graph):
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case. 
 
-    Weakly connected is defined as whether one can get from any vertex v to 
-    and vertex u when ignoring the direction of the edges
+    Connected means one can get from any vertex u to vertex v by traversing
+    the graph. For a directed graph, weakly connected means that the graph 
+    is connected after it is converted to an unweighted graph (ignore the 
+    direction of each edge)
 
     Parameters
     ----------
         graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            Input graph in any of the above specified formats.
-    
+            Input graph in any of the above specified formats. If np.ndarray, 
+            interpreted as an n x n adjacency matrix
+
+    Returns
+    -------
+        boolean: True if the entire input graph is connected
+
+    References
+    ----------
+        http://mathworld.wolfram.com/ConnectedGraph.html
+        http://mathworld.wolfram.com/WeaklyConnectedDigraph.html
+
     '''
     if type(graph) is np.ndarray:
         if is_symmetric(graph):
@@ -186,6 +198,33 @@ def is_fully_connected(graph):
         return nx.is_weakly_connected(graph)
 
 def get_lcc(graph, return_inds=False):
+    '''
+    Finds the largest connected component for the input graph. 
+
+    The largest connected component is the fully connected subgraph
+    which has the most nodes. 
+
+    Parameters
+    ----------
+        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            Input graph in any of the above specified formats. If np.ndarray, 
+            interpreted as an n x n adjacency matrix
+     
+        return_inds: boolean, default: False
+            Whether to return a np.ndarray containing the indices in the original
+            adjacency matrix that were kept and are now in the returned graph.
+            Ignored when input is networkx object
+    
+    Returns
+    -------
+        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            New graph of the largest connected component of the input parameter. 
+
+        inds: (optional)
+            Indices from the original adjacency matrix that were kept after taking
+            the largest connected component 
+    '''
+    
     input_ndarray = False
     if type(graph) is np.ndarray:
         input_ndarray = True
@@ -202,11 +241,39 @@ def get_lcc(graph, return_inds=False):
         nodelist = list(graph.nodes)
     if input_ndarray:
         graph = nx.to_numpy_array(graph)
-        if return_inds:
-            return graph, nodelist
+    if return_inds:
+        return graph, nodelist
     return graph
 
 def get_multigraph_lcc(graphs, return_inds=False):
+    '''
+    Finds the intersection of multiple graphs's largest connected components. 
+
+    Computes the largest connected component for each graph that was input, and 
+    takes the intersection over all of these resulting graphs. Note that this 
+    does not guarantee finding the largest graph where every node is shared among
+    all of the input graphs.
+
+    Parameters
+    ----------
+        graphs: list or np.ndarray
+            if list, each element must be an n x n np.ndarray adjacency matrix
+            
+     
+        return_inds: boolean, default: False
+            Whether to return a np.ndarray containing the indices in the original
+            adjacency matrix that were kept and are now in the returned graph.
+            Ignored when input is networkx object
+    
+    Returns
+    -------
+        graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            New graph of the largest connected component of the input parameter. 
+
+        inds: (optional)
+            Indices from the original adjacency matrix that were kept after taking
+            the largest connected component 
+    '''
     lcc_by_graph = []
     inds_by_graph = []
     for graph in graphs:
@@ -216,7 +283,10 @@ def get_multigraph_lcc(graphs, return_inds=False):
     inds_intersection = reduce(np.intersect1d, inds_by_graph)
     new_graphs = []        
     for graph in graphs:
-        graph = graph[inds_intersection,:][:,inds_intersection]
+        if type(graph) is np.ndarray:
+            graph = graph[inds_intersection,:][:,inds_intersection]
+        else: 
+            graph = graph.subgraph(inds_intersection)
         new_graphs.append(graph)
     if type(graphs) == list:
         return new_graphs
