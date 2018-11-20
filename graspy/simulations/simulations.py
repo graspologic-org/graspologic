@@ -20,7 +20,7 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
     """
     A function for simulating from a weighted sbm.
 
-    Paramaters
+    Parameters
     ----------
     n: list of int, shape (n_communities)
         the number of vertices in each community. Communities
@@ -35,19 +35,17 @@ def weighted_sbm(n, P, Wt=1, directed=False, loops=False, Wtargs=None):
     loops: boolean
         whether to allow self-loops for vertices.
     Wt: object or array-like, shape (n_communities, n_communities)
-        + if Wt is an object, a weight function to use globally over
+        if Wt is an object, a weight function to use globally over
         the sbm for assigning weights. 1 indicates to produce a binary
-        graph.
-        + if Wt is an array-like, a weight function for each of
+        graph. If Wt is an array-like, a weight function for each of
         the edge communities. Wt[i, j] corresponds to the weight function
         between communities i and j. If the entry is a function, should
         accept an argument for size. An entry of Wt[i, j] = 1 will produce a
         binary subgraph over the i, j community.
     Wtargs: dictionary or array-like, shape (n_communities, n_communities)
-        + if Wt is an object, Wtargs corresponds to the trailing arguments
-        to pass to the weight function.
-        + if Wt is an array-like, Wtargs[i, j] corresponds to trailing
-        arguments to pass to Wt[i, j].            
+        if Wt is an object, Wtargs corresponds to the trailing arguments
+        to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
+        corresponds to trailing arguments to pass to Wt[i, j].            
 
     Returns
     -------
@@ -144,30 +142,29 @@ def binary_sbm(n, P, directed=False, loops=False):
     """
     A function for simulating from a simple sbm.
 
-    Paramaters
+    Parameters
     ----------
-        n: list of int, shape (n_communities)
-            the number of vertices in each community. Communities
-            are assigned n[0], n[1], ...
-        P: array-like, shape (n_communities, n_communities)
-            the probability of an edge between each of the communities,
-            where P[i, j] indicates the probability of a connection
-            between edges in communities [i, j]. 0 < P[i, j] < 1
-            for all i, j.
-        directed: boolean
-            whether or not the graph will be directed.
-        loops: boolean
-            whether to allow self-loops for vertices.
-            + if Wt is an array-like, a weight function for each of
-            the edge communities. Wt[i, j] corresponds to the weight function
-            between communities i and j. If the entry is a function, should
-            accept an argument for size. An entry of Wt[i, j] = 1 will produce a
-            binary subgraph over the i, j community.
+    n: list of int, shape (n_communities)
+        the number of vertices in each community. Communities
+        are assigned n[0], n[1], ...
+    P: array-like, shape (n_communities, n_communities)
+        the probability of an edge between each of the communities,
+        where P[i, j] indicates the probability of a connection
+        between edges in communities [i, j]. 0 < P[i, j] < 1
+        for all i, j.
+    directed: boolean
+        whether or not the graph will be directed.
+    loops: boolean
+        whether to allow self-loops for vertices. If Wt is an array-like, a 
+        weight function for each of the edge communities. Wt[i, j] corresponds 
+        to the weight function between communities i and j. If the entry is a 
+        function, should accept an argument for size. An entry of Wt[i, j] = 1 
+        will produce a binary subgraph over the i, j community.
 
     Returns
     -------
-        A: array-like, shape (n, n)
-            the adjacency matrix.
+    A: array-like, shape (n, n)
+        the adjacency matrix.
     """
     return (weighted_sbm(n, P, directed=directed, loops=loops))
 
@@ -177,30 +174,30 @@ def zi_nm(n, M, wt=1, directed=False, loops=False, **kwargs):
     A function for simulating from the zi(n, M, params) model, a graph
     with n vertices and M edges and edge-weight function wt.
 
-    Paramaters
+    Parameters
     ----------
-        n: int
-            the number of vertices
-        M: int
-            the number of edges, a value between
-            1 and n(n-1)/2.
-        directed: boolean
-            whether or not the graph will be directed.
-        loops: boolean
-            whether to allow self-loops for vertices.
-        wt: object
-            a weight function for each of the edges, taking
-            only a size argument. This weight function will
-            be randomly assigned for selected edges. If 1,
-            graph produced is binary.
-        kwargs: dictionary
-            optional arguments for parameters that can be passed
-            to weight function wt.
+    n: int
+        the number of vertices
+    M: int
+        the number of edges, a value between
+        1 and n(n-1)/2.
+    directed: boolean
+        whether or not the graph will be directed.
+    loops: boolean
+        whether to allow self-loops for vertices.
+    wt: object
+        a weight function for each of the edges, taking
+        only a size argument. This weight function will
+        be randomly assigned for selected edges. If 1,
+        graph produced is binary.
+    kwargs: dictionary
+        optional arguments for parameters that can be passed
+        to weight function wt.
 
     Returns
     -------
-        A: array-like, shape (n, n)
-            the adjacency matrix.
+    A: array-like, shape (n, n)
+        the adjacency matrix.
     """
     if type(M) is not int:
         raise TypeError("M is not of type int.")
@@ -270,30 +267,30 @@ def zi_np(n, p, wt=1, directed=False, loops=False, **kwargs):
     A function for simulating from the zi(n, M, params) model, a graph
     with n vertices and M edges and edge-weight function wt.
 
-    Paramaters
+    Parameters
     ----------
-        n: int
-            the number of vertices
-        p: float
-            the probability of an edge existing between two vertices,
-            between 0 and 1.
-        directed: boolean
-            whether or not the graph will be directed.
-        loops: boolean
-            whether to allow self-loops for vertices.
-        wt: object
-            a weight function for each of the edges, taking
-            only a size argument. This weight function will
-            be randomly assigned for selected edges. If 1,
-            graph produced is binary.
-        kwargs: dictionary
-            optional arguments for parameters that can be passed
-            to weight function wt.
+    n: int
+        the number of vertices
+    p: float
+        the probability of an edge existing between two vertices,
+        between 0 and 1.
+    directed: boolean
+        whether or not the graph will be directed.
+    loops: boolean
+        whether to allow self-loops for vertices.
+    wt: object
+        a weight function for each of the edges, taking
+        only a size argument. This weight function will
+        be randomly assigned for selected edges. If 1,
+        graph produced is binary.
+    kwargs: dictionary
+        optional arguments for parameters that can be passed
+        to weight function wt.
 
     Returns
     -------
-        A: array-like, shape (n, n)
-            the adjacency matrix.
+    A: array-like, shape (n, n)
+        the adjacency matrix.
     """
     # type checking
     if type(p) is not float:
@@ -366,17 +363,17 @@ def er_nm(n, M):
     A function for simulating from the ER(n, M) model, a simple graph
     with n vertices and M edges.
 
-    Paramaters
+    Parameters
     ----------
-        n: int
-            the number of vertices
-        M: int
-            the number of edges, a value between
-            1 and n(n-1)/2.
-        wt: object
-            a weight function for each of the edges, taking
-            only a size argument. This weight function will
-            be randomly assigned for selected edges.
+    n: int
+        the number of vertices
+    M: int
+        the number of edges, a value between
+        1 and n(n-1)/2.
+    wt: object
+        a weight function for each of the edges, taking
+        only a size argument. This weight function will
+        be randomly assigned for selected edges.
 
     Returns
     -------
@@ -390,16 +387,16 @@ def er_np(n, p):
     A function for simulating from the ER(n, p) model, a simple graph
     with n vertices and a probability p of edges being connected.
 
-    Paramaters
+    Parameters
     ----------
-        n: int
-            the number of vertices
-        p: float
-            the probability of an edge existing between two vertices,
-            between 0 and 1.
+    n: int
+        the number of vertices
+    p: float
+        the probability of an edge existing between two vertices,
+        between 0 and 1.
 
     Returns
     -------
-        A: array-like, shape (n, n)
+    A: array-like, shape (n, n)
     """
     return (zi_np(n, p, wt=1))

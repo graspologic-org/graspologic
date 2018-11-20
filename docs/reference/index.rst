@@ -4,9 +4,10 @@ Reference
 *********
 
 .. toctree::
-   :maxdepth: 3
-   
-   embed/index
-   cluster
+   :maxdepth: 2
+
    simulations
+   embed
+   cluster
    plotting
+   utils

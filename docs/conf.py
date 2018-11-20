@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.githubpages',
     'sphinxcontrib.rawfiles',
+    'nbsphinx',
 ]
 
 # -- sphinxcontrib.rawfiles
@@ -65,7 +66,7 @@ intersphinx_mapping = {
 
 # -- sphinx options ----------------------------------------------------------
 source_suffix = '.rst'
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 master_doc = 'index'
 source_encoding = "utf-8"
 
@@ -76,6 +77,7 @@ html_static_path = ['_static']
 modindex_common_prefix = ['graspy.']
 
 pygments_style = 'sphinx'
+smartquotes = False
 
 # Use RTD Theme
 import sphinx_rtd_theme
@@ -84,6 +86,8 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
     #'includehidden': False,
     'navigation_depth': 2,
+    'collapse_navigation': False,
+    'navigation_depth': 3,
 }
 
 # Custom sidebar templates, must be a dictionary that maps document names
