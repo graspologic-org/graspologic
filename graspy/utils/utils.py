@@ -53,21 +53,14 @@ def import_graph(graph):
         raise TypeError(msg)
     return graph
 
-
 def is_symmetric(X):
     return np.array_equal(X, X.T)
-
 
 def is_loopless(X):
     return not np.any(np.diag(X) != 0)
 
-
 def is_unweighted(X):
     return ((X == 0) | (X == 1)).all()
-
-
-def is_almost_symmetric(X, atol=1e-15):
-    return np.allclose(X, X.T, atol=atol)
 
 def is_almost_symmetric(X, atol=1e-15):
     return np.allclose(X, X.T, atol=atol)
