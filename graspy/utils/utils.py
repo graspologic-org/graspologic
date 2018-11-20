@@ -312,3 +312,14 @@ def get_multigraph_lcc(graphs, return_inds=False):
         return new_graphs, inds_intersection
     else:
         return new_graphs
+
+def augment_diagonal(A):
+    A = import_graph(A)
+    A = remove_loops(A)
+    divisor = A.shape[0] - 1
+    # use out degree for directed graph 
+    # ignore self loops in either case
+    degrees = np.count_nonzero(A, axis=1)
+    diag = degrees / divisor
+    A += np.diag(diag)
+    return A
