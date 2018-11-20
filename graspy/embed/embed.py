@@ -128,6 +128,10 @@ class BaseEmbed(BaseEstimator):
 
         Returns
         -------
-        out : array-like, shape (n_vertices, n_dimension)
+        out : np.ndarray, shape (n_vertices, n_dimension) OR tuple (len 2)
+            where both elements have shape (n_vertices, n_dimension)
+            A single np.ndarray represents the latent position of an undirected
+            graph, wheras a tuple represents the left and right latent positions 
+            for a directed graph
         """
         return self._fit_transform(graph)

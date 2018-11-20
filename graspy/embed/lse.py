@@ -78,6 +78,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
     """
 
     def __init__(self,
+                 form='DAD',
                  n_components=None,
                  n_elbows=2,
                  algorithm='randomized',
@@ -87,8 +88,9 @@ class LaplacianSpectralEmbed(BaseEmbed):
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter)
+        self.form = form
 
-    def fit(self, graph, form='I-DAD'):
+    def fit(self, graph):
         """
         Fit LSE model to input graph
 
@@ -118,6 +120,6 @@ class LaplacianSpectralEmbed(BaseEmbed):
         graphstats.utils.to_laplace
         """
         A = import_graph(graph)
-        L_norm = to_laplace(A, form=form)
+        L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
         return self
