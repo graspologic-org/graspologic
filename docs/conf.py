@@ -87,7 +87,7 @@ html_theme_options = {
     #'includehidden': False,
     'navigation_depth': 2,
     'collapse_navigation': False,
-    'navigation_depth': 4,
+    'navigation_depth': 3,
 }
 
 # Custom sidebar templates, must be a dictionary that maps document names
