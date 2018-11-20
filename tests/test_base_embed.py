@@ -8,11 +8,11 @@ from graspy.simulations.simulations import er_nm
 
 class TestBaseEmbed(unittest.TestCase):
     def test_baseembed_er(self):
-        k = 4
-        embed = BaseEmbed(k=k)
+        n_components = 4
+        embed = BaseEmbed(n_components=n_components)
         n = 10
         M = 20
         A = er_nm(n, M) + 5
         embed._reduce_dim(A)
-        self.assertEqual(embed.lpm.X.shape, (n, k))
-        self.assertTrue(embed.lpm.is_symmetric())
+        self.assertEqual(embed.latent_left_.shape, (n, n_components))
+        self.assertTrue(embed.latent_right_ is None)

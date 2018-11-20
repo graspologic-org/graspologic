@@ -3,6 +3,13 @@ Embedding
 
 .. currentmodule:: graspy.embed
 
+Decomposition
+-------------
+
+.. autofunction:: select_dimension
+
+.. autofunction:: selectSVD
+
 Single graph embedding
 ----------------------
 

@@ -6,7 +6,8 @@
 # Copyright (c) 2018. All rights reserved.
 
 import numpy as np
-from scipy.sparse.linalg import svds
+import scipy
+import sklearn
 from scipy.stats import norm
 
 
@@ -173,38 +174,95 @@ def select_dimension(X,
         return elbows, values
 
 
-def selectSVD(X, k=None, n_elbows=2):
-    """
-    A function for performing svd using ZG2, X = U S Vt.
+def selectSVD(X,
+              n_components=None,
+              n_elbows=2,
+              algorithm='randomized',
+              n_iter=5):
+    r"""
+    Dimensionality reduction using SVD.
+
+    Performs linear dimensionality reduction by using either full singular
+    value decomposition (SVD) or truncated SVD. Full SVD is performed using
+    SciPy's wrapper for ARPACK, while truncated SVD is performed using either 
+    SciPy's wrapper for LAPACK or Sklearn's implementation of randomized SVD.
+
+    It also performs optimal dimensionality selectiong using Zhu & Godsie algorithm
+    [1]_ if number of target dimension is not specified.
 
     Parameters
     ----------
-    X: array-like, shape (n_samples, n_features)
+    X : array-like, shape (n_samples, n_features)
         The data to perform svd on.
-    k: int
-        The number of dimensions to embed into. Should have k < min(X.shape).
-    n_elbows: int, optional, default: 2
-        If `k=None`, then compute the optimal embedding dimension using
-        `select_dimension`. `k=elbows[-1]`.
+    n_components : int or None, default = None
+        Desired dimensionality of output data. If "full", 
+        n_components must be <= min(X.shape). Otherwise, n_components must be
+        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``select_dimension`` using ``n_elbows`` argument.
+    n_elbows : int, optional, default: 2
+        If `n_compoents=None`, then compute the optimal embedding dimension using
+        `select_dimension`. Otherwise, ignored.
+    algorithm : {'full', 'truncated' (default), 'randomized'}, optional
+        SVD solver to use:
+
+        - 'full'
+            Computes full svd using ``scipy.linalg.svd``
+        - 'truncated'
+            Computes truncated svd using ``scipy.sparse.linalg.svd``
+        - 'randomized'
+            Computes randomized svd using 
+            ``sklearn.utils.extmath.randomized_svd``
+    n_iter : int, optional (default = 5)
+        Number of iterations for randomized SVD solver. Not used by 'full' or 
+        'truncated'. The default is larger than the default in randomized_svd 
+        to handle sparse matrices that may have large slowly decaying spectrum.
 
     Returns
     -------
-    U: array-like, shape (n_samples, k)
-        the left singular vectors.
-    V: array-like, shape (n_samples, k)
-        the right singular vectors.
-    s: array-like, shape (k)
-        the singular values, as a 1d array.
+    U: array-like, shape (n_samples, n_components)
+        Left singular vectors.
+    D: array-like, shape (n_components)
+        Singular values, as a 1d array.
+    V: array-like, shape (n_components, n_samples)
+        Right singular vectors.
+
+    References
+    ----------
+    .. [1] Zhu, M. and Ghodsi, A. (2006).
+        Automatic dimensionality selection from the scree plot via the use of
+        profile likelihood. Computational Statistics & Data Analysis, 51(2), 
+        pp.918-930.
     """
-    if (k is None):
-        elbows, _ = select_dimension(X, n_elbows=n_elbows, threshold=None)
-        k = elbows[-1]
-    if k > min(
-            X.shape
-    ):  #TODO this method does not properly catch error if k=min(X.shape),
-        # also may be unecessary (see svds error catching)
-        msg = "k is {}, but min(X.shape) is {}."
-        msg = msg.format(k, min(X.shape))
+    # Deal with algorithms
+    if algorithm not in ['full', 'truncated', 'randomized']:
+        msg = "algorithm must be one of {full, truncated, randomized}."
         raise ValueError(msg)
-    U, s, Vt = svds(X, k=k)
-    return (U, Vt.T, s)
+
+    if n_components is None:
+        elbows, _ = select_dimension(X, n_elbows=n_elbows, threshold=None)
+        n_components = elbows[-1]
+
+    # Check
+    if (algorithm == 'full') & (n_components > min(X.shape)):
+        msg = "n_components must be <= min(X.shape)."
+        raise ValueError(msg)
+    else:
+        U, D, V = scipy.linalg.svd(X)
+        U = U[:, :n_components]
+        D = D[:n_components]
+        V = V[:n_components, :]
+
+    if (algorithm in ['truncated', 'randomized'
+                      ]) & (n_components >= min(X.shape)):
+        msg = "n_components must be strictly < min(X.shape)."
+        raise ValueError(msg)
+    elif algorithm == 'truncated':
+        U, D, V = scipy.sparse.linalg.svds(X, k=n_components)
+        idx = np.argsort(D)[::-1]  # sort in decreasing order
+        D = D[idx]
+        U = U[:, idx]
+        V = V[idx, :]
+    elif algorithm == 'randomized':
+        U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components)
+
+    return U, D, V
