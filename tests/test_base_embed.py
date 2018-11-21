@@ -3,7 +3,7 @@ import graspy as gs
 import numpy as np
 import networkx as nx
 from graspy.embed.embed import BaseEmbed
-from graspy.simulations.simulations import er_nm, zi_nm
+from graspy.simulations.simulations import er_nm, weighted_er_nm
 
 
 class TestBaseEmbed(unittest.TestCase):
@@ -22,7 +22,7 @@ class TestBaseEmbed(unittest.TestCase):
         embed = BaseEmbed(n_components=n_components)
         n = 10
         M = 20
-        A = zi_nm(n, M, directed=True)
+        A = weighted_er_nm(n, M, directed=True)
         embed._reduce_dim(A)
         self.assertEqual(embed.latent_left_.shape, (n, n_components))
         self.assertEqual(embed.latent_right_.shape, (n, n_components))

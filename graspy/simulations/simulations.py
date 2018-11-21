@@ -1,8 +1,6 @@
 import numpy as np
 from ..utils import symmetrize
 
-import itertools
-
 
 def cartprod(*arrays):
     N = len(arrays)
@@ -134,7 +132,7 @@ def weighted_er_np(n, p, directed=False, loops=False, wt=1, **wtargs):
     return A
 
 
-def binary_er_np(n, p, directed=False, loops=False):
+def er_np(n, p, directed=False, loops=False):
     r"""
     Samples a binary Erdos Renyi (n, p) graph with specified edge probability.
 
@@ -271,7 +269,7 @@ def weighted_er_nm(n, m, directed=False, loops=False, wt=1, **wtargs):
     return A
 
 
-def binary_er_nm(n, m, directed=False, loops=False):
+def er_nm(n, m, directed=False, loops=False):
     r"""
     A function for simulating from the ER(n, M) model, a simple graph
     with n vertices and M edges.

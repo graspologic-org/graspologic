@@ -97,11 +97,11 @@ def test_bic():
     # Generate adjacency and labels
     n = 50
     n_communites = [n, n, n]
-    P = np.array([[0.8, 0.3, 0.2], [0.3, 0.8, 0.3], [0.2, 0.3, 0.8]])
+    p = np.array([[0.8, 0.3, 0.2], [0.3, 0.8, 0.3], [0.2, 0.3, 0.8]])
     y = np.repeat([1, 2, 3], repeats=n)
 
     for _ in range(num_sims):
-        A = binary_sbm(n=n_communites, P=P)
+        A = binary_sbm(n=n_communites, p=p)
 
         # Embed to get latent positions
         ase = AdjacencySpectralEmbed(n_components=5)

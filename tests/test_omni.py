@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 import networkx as nx
 from numpy import array_equal, allclose
+from numpy.testing import assert_allclose
 from numpy.linalg import norm
 
 from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
@@ -48,18 +49,18 @@ def test_omni_matrix_ones_zeros():
 
 
 def test_omni_matrix_random():
-    expected_output = np.array([[0., 0., 1., 0., 0., 0.5],
-                                [0., 0., 0., 0., 0., 0.],
-                                [1., 0., 0., 0.5, 0., 0.],
-                                [0., 0., 0.5, 0., 0., 0.],
-                                [0., 0., 0., 0., 0., 0.],
-                                [0.5, 0., 0., 0., 0., 0.]])
+    expected_output = np.array([[0., 1., 1., 0., 0.5, 0.5],
+                                [1., 0., 1., 0.5, 0., 1.],
+                                [1., 1., 0., 0.5, 1., 0.],
+                                [0., 0.5, 0.5, 0., 0., 0.],
+                                [0.5, 0., 1., 0., 0., 1.],
+                                [0.5, 1., 0., 0., 1., 0.]])
 
-    np.random.seed(2)
-    graphs = [er_np(3, .3) for _ in range(2)]
+    np.random.seed(4)
+    graphs = [er_np(3, .5) for _ in range(2)]
 
     A = _get_omni_matrix(graphs)
-    assert array_equal(A, expected_output)
+    assert_allclose(A, expected_output)
 
 
 def test_omni_matrix_invalid_inputs():

@@ -24,7 +24,7 @@ class Test_ER(unittest.TestCase):
         cls.p = 0.2
 
     def test_ernm(self):
-        A = binary_er_nm(self.n, self.M)
+        A = er_nm(self.n, self.M)
         # symmetric, so summing will give us twice the ecount of
         # the full adjacency matrix
         self.assertTrue(A.sum() == 2*self.M)
@@ -32,7 +32,7 @@ class Test_ER(unittest.TestCase):
 
     def test_ernp(self):
         np.random.seed(123456)
-        A = binary_er_np(self.n, self.p)
+        A = er_np(self.n, self.p)
         # symmetric, so summing will give us twice the ecount of
         # the full adjacency matrix
         dind = remove_diagonal(A)
@@ -135,7 +135,6 @@ class Test_ZINM(unittest.TestCase):
         self.assertTrue(Awt.shape == (self.n, self.n))
         pass
 
-
     def test_noloop_undirected(self):
         np.random.seed(12345)
         Abin = weighted_er_nm(self.n, self.M)
@@ -160,7 +159,39 @@ class Test_ZINM(unittest.TestCase):
         # check dimensions
         self.assertTrue(Abin.shape == (self.n, self.n))
         self.assertTrue(Awt.shape == (self.n, self.n))
-        pass
+
+    def test_bad_inputs(self):
+        with self.assertRaises(TypeError):
+            n = '10'
+            weighted_er_nm(n, self.M)
+
+        with self.assertRaises(ValueError):
+            n = -1
+            weighted_er_nm(n, self.M)
+
+        with self.assertRaises(TypeError):
+            m = 1.0
+            weighted_er_nm(self.n, m)
+
+        with self.assertRaises(ValueError):
+            m = -1
+            weighted_er_nm(self.n, m)
+
+        with self.assertRaises(TypeError):
+            loops = 'True'
+            weighted_er_nm(self.n, self.M, loops=loops)
+
+        with self.assertRaises(TypeError):
+            directed = 'True'
+            weighted_er_nm(self.n, self.M, directed=directed)
+
+        with self.assertRaises(TypeError):
+            wt = np.random
+            weighted_er_nm(self.n, self.M, wt=wt)
+
+        with self.assertRaises(ValueError):
+            m = 10000
+            weighted_er_nm(self.n, m)
 
 
 class Test_ZINP(unittest.TestCase):
@@ -288,7 +319,39 @@ class Test_ZINP(unittest.TestCase):
         # check dimensions
         self.assertTrue(Abin.shape == (self.n, self.n))
         self.assertTrue(Awt.shape == (self.n, self.n))
-        pass
+
+    def test_bad_inputs(self):
+        with self.assertRaises(TypeError):
+            n = '10'
+            weighted_er_np(n, self.p)
+
+        with self.assertRaises(ValueError):
+            n = -1
+            weighted_er_np(n, self.p)
+
+        with self.assertRaises(TypeError):
+            p = '1'
+            weighted_er_np(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = -.5
+            weighted_er_np(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = 5.0
+            weighted_er_np(self.n, p)
+
+        with self.assertRaises(TypeError):
+            loops = 'True'
+            weighted_er_np(self.n, self.p, loops=loops)
+
+        with self.assertRaises(TypeError):
+            directed = 'True'
+            weighted_er_np(self.n, self.p, directed=directed)
+
+        with self.assertRaises(TypeError):
+            wt = np.random
+            weighted_er_np(self.n, self.p, wt=wt)
 
 
 class Test_WSBM(unittest.TestCase):
@@ -487,6 +550,70 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
+    def test_bad_inputs(self):
+        with self.assertRaises(TypeError):
+            n = '1'
+            weighted_sbm(n, self.Psy)
+
+        with self.assertRaises(ValueError):
+            n = ['1', 10]
+            weighted_sbm(n, self.Psy)
+
+        with self.assertRaises(TypeError):
+            p = .5
+            weighted_sbm(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = [[.5]]
+            weighted_sbm(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = [[5, 5], [4, 4]]
+            weighted_sbm(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = ['str']
+            weighted_sbm(self.n, p)
+
+        with self.assertRaises(TypeError):
+            wt = '1'
+            weighted_sbm(self.n, self.Psy, wt=wt)
+
+        with self.assertRaises(TypeError):
+            wt = [[1]]
+            weighted_sbm(self.n, self.Psy, wt=wt)
+
+        with self.assertRaises(ValueError):
+            wtargs = [[1, 1], [1, 1]]
+            wt = [[1]]
+            weighted_sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
+        with self.assertRaises(ValueError):
+            wt = [[1, 1], [1, 1]]
+            wtargs = [[1, 1]]
+            weighted_sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
+        with self.assertRaises(TypeError):
+            wt = [[1, 1], [1, 1]]
+            wtargs = [[1, 1], [1, 1]]
+            weighted_sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
+        with self.assertRaises(ValueError):
+            weighted_sbm(self.n, self.Pns)
+
+        with self.assertRaises(ValueError):
+            wt = [[np.random.uniform, np.random.beta],
+                  [np.random.uniform, np.random.normal]]
+            wtargs = [[1, 1], [1, 1]]
+            weighted_sbm(self.n, self.Psy, wt = wt, wtargs=wtargs)
+
+        with self.assertRaises(ValueError):
+            wt = [[ np.random.uniform,np.random.uniform], 
+            [np.random.uniform, np.random.normal],]
+            wtargs = [[1, 2], [1, 1]]
+            weighted_sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
+
 class Test_RDPG(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -521,7 +648,7 @@ class Test_RDPG(unittest.TestCase):
             rdpg_from_p(x3) # wrong num dimensions
         with self.assertRaises(ValueError):
             rdpg_from_p(x2) # wrong shape for P
-    
+
     def test_er_p_is_close(self):
         np.random.seed(8888)
         X = 0.5 * np.ones((100,2))
@@ -534,7 +661,7 @@ class Test_RDPG(unittest.TestCase):
         # mean_graph = np.mean(graphs, axis=0)
         # this only seems to work as n_graphs -> 10000
         # np.testing.assert_allclose(P, mean_graph, atol=0.05)
-    
+
     def test_mini_sbm_p_is_close(self):
         np.random.seed(8888)
         blocks = np.array([[0.8, 0.1],
@@ -548,8 +675,8 @@ class Test_RDPG(unittest.TestCase):
         graphs = np.stack(graphs)
         mean_graph = np.mean(graphs, axis=0)
         # this atol should be ~5 stdev away
-        np.testing.assert_allclose(blocks, mean_graph, atol=0.025) 
-    
+        np.testing.assert_allclose(blocks, mean_graph, atol=0.025)
+
     def test_kwarg_passing(self):
         np.random.seed(8888)
         X = 0.5 * np.ones((300,2))
