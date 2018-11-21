@@ -36,7 +36,7 @@ class ClassicalMDS(BaseEstimator):
     ----------
     n_components : int, or None
         Number of components to keep. If None, then it will run
-        ``dimselect`` to find the optimal embedding dimension.
+        ``select_dimension`` to find the optimal embedding dimension.
 
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
         Dissimilarity measure to use:
@@ -51,8 +51,8 @@ class ClassicalMDS(BaseEstimator):
     Attributes
     ----------
     n_components : int
-        Equals the parameter n_components, or n_features if n_components
-        is None.
+        Equals the parameter n_components. If input n_components was None,
+        then equals the optimal embedding dimension.
 
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.
@@ -92,12 +92,12 @@ class ClassicalMDS(BaseEstimator):
 
         Parameters
         ----------
-        X : nd-array
+        X : array_like
             If ``dissimilarity=='precomputed'``, the input should be the 
             dissimilarity matrix with shape (n_samples, n_samples). If 
-            ``dissimilarity=='euclidean'``, then the input should be array 
-            with shape (n_samples, n_features) or a nd-array with shape 
-            (n_samples, n_features_1, n_features_2, ..., n_features_d).
+            ``dissimilarity=='euclidean'``, then the input should be 2d-array 
+            with shape (n_samples, n_features) or a 3d-array with shape 
+            (n_samples, n_features_1, n_features_2).
         
         Returns
         -------
@@ -108,9 +108,16 @@ class ClassicalMDS(BaseEstimator):
         shape = X.shape
         n_samples = shape[0]
 
+        if X.ndim == 2:
+            order = 2
+            axis = (1)
+        else:
+            order = 'fro'
+            axis = (1, 2)
+
         out = np.zeros((n_samples, n_samples))
         for i in range(n_samples):
-            out[i] = np.linalg.norm(X - X[i], axis=(1, 2), ord='fro')
+            out[i] = np.linalg.norm(X - X[i], axis=axis, ord=order)
 
         return out
 
@@ -120,16 +127,19 @@ class ClassicalMDS(BaseEstimator):
 
         Parameters
         ----------
-        X : nd-array
+        X : array_like
             If ``dissimilarity=='precomputed'``, the input should be the 
             dissimilarity matrix with shape (n_samples, n_samples). If 
-            ``dissimilarity=='euclidean'``, then the input should be array 
-            with shape (n_samples, n_features) or a nd-array with shape 
-            (n_samples, n_features_1, n_features_2, ..., n_features_d).
+            ``dissimilarity=='euclidean'``, then the input should be 2d-array 
+            with shape (n_samples, n_features) or a 3d-array with shape 
+            (n_samples, n_features_1, n_features_2).
         """
         # Check X type
         if not isinstance(X, np.ndarray):
             msg = "X must be a numpy array, not {}.".format(type(X))
+            raise ValueError(msg)
+        if X.ndim == 1:
+            msg = "X must be a 2d or 3d array. Consider reshaping to shape (-1, 1)."
             raise ValueError(msg)
 
         n_samples = X.shape[0]
@@ -161,6 +171,8 @@ class ClassicalMDS(BaseEstimator):
 
         U, D, V = selectSVD(B, n_components=n_components)
 
+        if n_components is None:
+            self.n_components = len(D)
         self.components_ = U
         self.singular_values_ = D**0.5
         self.dissimilarity_matrix_ = dissimilarity_matrix
