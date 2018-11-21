@@ -4,7 +4,7 @@ from numpy.testing import assert_equal
 from scipy.linalg import orth
 
 from graspy.embed.svd import select_dimension
-from graspy.simulations.simulations import binary_sbm
+from graspy.simulations.simulations import sbm
 
 
 def generate_data(n=10, elbows=3, seed=1):
@@ -103,7 +103,7 @@ def test_output_two_block_sbm():
     np.random.seed(10)
     n_communities = [100, 100]
     P = np.array([[0.5, 0.1], [0.1, 0.5]])
-    A = binary_sbm(n_communities, P)
+    A = sbm(n_communities, P)
 
     elbows, _ = select_dimension(A, n_elbows=2)
     assert_equal(elbows[0], 2)

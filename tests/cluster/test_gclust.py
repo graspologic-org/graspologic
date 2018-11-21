@@ -5,7 +5,7 @@ from sklearn.exceptions import NotFittedError
 
 from graspy.cluster.gclust import GaussianCluster
 from graspy.embed.ase import AdjacencySpectralEmbed
-from graspy.simulations.simulations import binary_sbm
+from graspy.simulations.simulations import sbm
 
 
 def test_inputs():
@@ -101,7 +101,7 @@ def test_bic():
     y = np.repeat([1, 2, 3], repeats=n)
 
     for _ in range(num_sims):
-        A = binary_sbm(n=n_communites, p=p)
+        A = sbm(n=n_communites, p=p)
 
         # Embed to get latent positions
         ase = AdjacencySpectralEmbed(n_components=5)
