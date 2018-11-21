@@ -143,9 +143,10 @@ class OmnibusEmbed(BaseEmbed):
 
         Parameters
         ----------
-        graphs : list of graphs
+        graphs : list of graphs, or array-like
             List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph.
+            networkx.Graph. If array-like, the shape must be 
+            (n_graphs, n_vertices, n_vertices)
 
         Returns
         -------

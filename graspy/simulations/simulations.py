@@ -9,7 +9,7 @@ def cartprod(*arrays):
                                                      -1)).reshape(-1, N)
 
 
-def sample_edges(P, directed, loops):
+def sample_edges(P, directed=False, loops=False):
     """
     Gemerates a binary random graph based on the P matrix provided
 
@@ -60,9 +60,9 @@ def sample_edges(P, directed, loops):
         return A - np.diag(np.diag(A))
 
 
-def weighted_er_np(n, p, directed=False, loops=False, wt=1, **wtargs):
+def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
     r"""
-    Samples a weighted Erdos Renyi (n, p) graph with specified edge probability.
+    Samples a Erdos Renyi (n, p) graph with specified edge probability.
 
     Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
     p of edges being connected.
@@ -132,34 +132,7 @@ def weighted_er_np(n, p, directed=False, loops=False, wt=1, **wtargs):
     return A
 
 
-def er_np(n, p, directed=False, loops=False):
-    r"""
-    Samples a binary Erdos Renyi (n, p) graph with specified edge probability.
-
-    Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
-    p of edges being connected.
-
-    Parameters
-    ----------
-    n: int
-        the number of vertices
-    p: float
-        the probability of an edge existing between two vertices,
-        between 0 and 1.
-    directed: boolean optional, default = False
-        Whether to create a directed graph or not.
-    loops: boolean optional, default = False
-        Whether to include self-loops or not.
-
-    Returns
-    -------
-    A : array-like, shape (n, n)
-        Sampled adjacency matrix
-    """
-    return weighted_er_np(n, p, directed, loops)
-
-
-def weighted_er_nm(n, m, directed=False, loops=False, wt=1, **wtargs):
+def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     r"""
     Samples a weighted Erdos Renyi (n, m) graph with specified number of edges.
 
@@ -269,30 +242,7 @@ def weighted_er_nm(n, m, directed=False, loops=False, wt=1, **wtargs):
     return A
 
 
-def er_nm(n, m, directed=False, loops=False):
-    r"""
-    A function for simulating from the ER(n, M) model, a simple graph
-    with n vertices and M edges.
-
-    Parameters
-    ----------
-    n: int
-        Number of vertices
-    m: int
-        Number of edges, a value between 1 and :math:`n^2`.
-    directed: boolean optional, default = False
-        Whether to create a directed graph or not.
-    loops: boolean optional, default = False
-        Whether to include self-loops or not.
-
-    Returns
-    -------
-    A: array-like, shape (n, n)
-    """
-    return weighted_er_nm(n, m)
-
-
-def weighted_sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     """
     n: list of int, shape (n_communities)
         the number of vertices in each community. Communities
@@ -424,34 +374,88 @@ def weighted_sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def binary_sbm(n, p, directed=False, loops=False):
-    """
-    A function for simulating from a simple sbm.
+def rdpg(X,
+         Y=None,
+         rescale=True,
+         directed=False,
+         loops=True,
+         wt=1,
+         wtargs=None):
+    '''
+    Samples a random graph based on the latent positions in X (and 
+    optionally in Y)
+
+    If only X is given, the P matrix is calculated as :math:`P = XX^T`
+    If X and Y is given, then :math:`P = XY^T`
+    These operations correspond to the dot products between a set of latent
+    positions, so each row in X or Y represents the latent positions in  
+    :math:`\R^{num_columns}` for a single vertex in the random graph 
+    Note that this function may also rescale or clip the resulting P 
+    matrix to get probabilities between 0 and 1, or remove loops.
+    A binary random graph is then sampled from the P matrix described 
+    by X (and possibly Y)
 
     Parameters
     ----------
-    n: list of int, shape (n_communities)
-        the number of vertices in each community. Communities
-        are assigned n[0], n[1], ...
-    p: array-like, shape (n_communities, n_communities)
-        the probability of an edge between each of the communities,
-        where p[i, j] indicates the probability of a connection
-        between edges in communities [i, j]. 0 < p[i, j] < 1
-        for all i, j.
-    directed: boolean
-        whether or not the graph will be directed.
-    loops: boolean
-        whether to allow self-loops for vertices.
+    X: np.ndarray (2 dimensions, same shape as Y if given)
+        latent position from which to generate a P matrix
+        if Y is given, interpreted as the left latent position
+    Y: np.ndarray (2 dimensions, same shape as X)
+        right latent position from which to generate a P matrix
+    rescale: boolean (default True)
+        when rescale is True, will subtract the minimum value in 
+        P (if it is below 0) and divide by the maximum (if it is
+        above 1) to ensure that P has entries between 0 and 1. If
+        False, elements of P outside of [0, 1] will be clipped
+    directed: boolean (default False)
+        Whether to force symmetry upon the resulting graph by only 
+        sampling from the upper triangle of P and then reflecting the
+        sampled values accross the diagonal
+    loops: boolean (default True)
+        whether to allow elements on the diagonal (corresponding
+        to self connections in a graph) in the returned P matrix. 
+        If loops is False, these elements are removed prior to 
+        rescaling (see above) which may affect behavior
+    wt: object
+        a weight function for each of the edges, taking
+        only a size argument. This weight function will
+        be randomly assigned for selected edges. If 1,
+        graph produced is binary.
+    wtargs: dictionary
+        optional arguments for parameters that can be passed
+        to weight function wt.
 
     Returns
     -------
-    A: array-like, shape (n, n)
-        the adjacency matrix.
-    """
-    return weighted_sbm(n, p, directed, loops)
+    P: np.ndarray (X.shape[0], X.shape[0])
+        A matrix representing the probabilities of connections between 
+        vertices in a random graph based on their latent positions
+
+    References
+    ----------
+    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
+       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
+       Journal of the American Statistical Association, Vol. 107(499), 2012
+    
+    '''
+    P = p_from_latent(X, Y, rescale=rescale, loops=loops)
+    A = sample_edges(P, directed=directed, loops=loops)
+
+    # check weight function
+    if (not np.issubdtype(type(wt), np.integer)) and (not np.issubdtyp(
+            type(wt), np.floating)):
+        if not callable(wt):
+            raise TypeError("You have not passed a function for wt.")
+
+    if not np.issubdtype(type(wt), np.number):
+        wts = wt(size=(np.count_nonzero(A)), **wtargs)
+        A[A > 0] = wts
+    else:
+        A *= wt
+    return A
 
 
-def p_from_latent(X, Y=None, rescale=True, loops=True, **kwargs):
+def p_from_latent(X, Y=None, rescale=True, loops=True):
     '''
     Gemerates a matrix of connection probabilities for a random graph
     based on a set of latent positions
@@ -519,106 +523,3 @@ def p_from_latent(X, Y=None, rescale=True, loops=True, **kwargs):
         P[P < 0] = 0
         P[P > 1] = 1
     return P
-
-
-def rdpg_from_p(P, symmetric=False, **kwargs):
-    '''
-    Gemerates a binary random graph based on the P matrix provided
-
-    Each element in P represents the probability of a connection between 
-    a vertex indexed by the row i and the column j. 
-
-    Parameters
-    ----------
-    P: np.ndarray (num_vertices, num_vertices)
-        Matrix of probabilities (between 0 and 1) for a random graph
-    symmetric: boolean (default False)
-        Whether to force symmetry upon the resulting graph by only 
-        sampling from the upper triangle of P and then reflecting the
-        sampled values accross the diagonal
-
-    Returns
-    -------
-    A: np.ndarray (num_vertices, num_vertices)
-        Binary adjacency matrix the same size as P representing a random
-        graph
-
-    References
-    ----------
-    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
-    
-    '''
-
-    if type(P) is not np.ndarray:
-        raise TypeError('P must be numpy.ndarray')
-    if len(P.shape) != 2:
-        raise ValueError('P must have dimension 2 (n_vertices, n_dimensions)')
-    if P.shape[0] != P.shape[1]:
-        raise ValueError('P must be a square matrix')
-    if symmetric:
-        # can cut down on sampling by ~half
-        triu_inds = np.triu_indices(P.shape[0])
-        samples = np.random.binomial(1, P[triu_inds])
-        A = np.zeros_like(P)
-        A[triu_inds] = samples
-        A = symmetrize(A)
-    else:
-        A = np.random.binomial(1, P)
-    return A
-
-
-def rdpg_from_latent(X,
-                     Y=None,
-                     rescale=True,
-                     loops=True,
-                     symmetric=False,
-                     **kwargs):
-    '''
-    Samples a random graph based on the latent positions in X (and 
-    optionally in Y)
-
-    If only X is given, the P matrix is calculated as :math:`P = XX^T`
-    If X and Y is given, then :math:`P = XY^T`
-    These operations correspond to the dot products between a set of latent
-    positions, so each row in X or Y represents the latent positions in  
-    :math:`\R^{num_columns}` for a single vertex in the random graph 
-    Note that this function may also rescale or clip the resulting P 
-    matrix to get probabilities between 0 and 1, or remove loops.
-    A binary random graph is then sampled from the P matrix described 
-    by X (and possibly Y)
-
-    Parameters
-    ----------
-    X: np.ndarray (2 dimensions, same shape as Y if given)
-        latent position from which to generate a P matrix
-        if Y is given, interpreted as the left latent position
-    Y: np.ndarray (2 dimensions, same shape as X)
-        right latent position from which to generate a P matrix
-    rescale: boolean (default True)
-        when rescale is True, will subtract the minimum value in 
-        P (if it is below 0) and divide by the maximum (if it is
-        above 1) to ensure that P has entries between 0 and 1. If
-        False, elements of P outside of [0, 1] will be clipped
-    loops: boolean (default True)
-        whether to allow elements on the diagonal (corresponding
-        to self connections in a graph) in the returned P matrix. 
-        If loops is False, these elements are removed prior to 
-        rescaling (see above) which may affect behavior
-
-    Returns
-    -------
-    P: np.ndarray (X.shape[0], X.shape[0])
-        A matrix representing the probabilities of connections between 
-        vertices in a random graph based on their latent positions
-
-    References
-    ----------
-    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
-    
-    '''
-    P = p_from_latent(X, Y, rescale=rescale, loops=loops)
-    return rdpg_from_p(P, symmetric=symmetric)

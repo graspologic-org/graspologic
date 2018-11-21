@@ -168,7 +168,7 @@ def heatmap(X,
         msg = 'cbar must be a bool, not {}.'.format(type(center))
         raise TypeError(msg)
 
-    arr = import_graph(X)
+    #arr = import_graph(X)
     arr = _transform(arr, transform)
 
     # Global plotting settings
@@ -199,9 +199,8 @@ def gridplot(X,
              title=None,
              context='talk',
              font_scale=1,
-             alpha=0.7, 
+             alpha=0.7,
              sizes=(10, 200)):
-
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
@@ -393,14 +392,14 @@ def pairplot(X,
                 hue=legend_name,
                 vars=variables,
                 height=height,
-                palette=palette, 
+                palette=palette,
                 plot_kws=dict(alpha=alpha))
         else:
             pairs = sns.pairplot(
                 df,
                 vars=variables,
                 height=height,
-                palette=palette, 
+                palette=palette,
                 plot_kws=dict(alpha=alpha))
         pairs.set(xticks=[], yticks=[])
         pairs.fig.subplots_adjust(top=0.945)
