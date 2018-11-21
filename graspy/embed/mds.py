@@ -157,7 +157,7 @@ class ClassicalMDS(BaseEstimator):
             dissimilarity_matrix = self._compute_euclidean_distances(X=X)
 
         J = _get_centering_matrix(dissimilarity_matrix.shape[0])
-        B = J.dot(dissimilarity_matrix**2).dot(J) * -0.5
+        B = J @ (dissimilarity_matrix**2) @ J - 0.5
 
         U, D, V = selectSVD(B, n_components=n_components)
 
@@ -188,6 +188,6 @@ class ClassicalMDS(BaseEstimator):
         """
         self.fit(X)
 
-        X_new = np.dot(self.components_, np.diag(self.singular_values_))
+        X_new = self.components_ @ np.diag(self.singular_values_)
 
         return X_new
