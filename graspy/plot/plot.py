@@ -168,8 +168,9 @@ def heatmap(X,
         msg = 'cbar must be a bool, not {}.'.format(type(center))
         raise TypeError(msg)
 
-    #arr = import_graph(X)
+    arr = import_graph(X)
     arr = _transform(arr, transform)
+    #arr = _transform(X, transform)
 
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)

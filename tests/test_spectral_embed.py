@@ -3,7 +3,7 @@ import graspy as gs
 import numpy as np
 from graspy.embed.ase import AdjacencySpectralEmbed
 from graspy.embed.lse import LaplacianSpectralEmbed
-from graspy.simulations.simulations import er_np, er_nm, weighted_sbm
+from graspy.simulations.simulations import er_np, er_nm, sbm
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
 
@@ -64,7 +64,7 @@ def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
     sbm_wins = 0
     er_wins = 0
     for sim in range(0, num_sims):
-        sbm = weighted_sbm(verts_per_community, P)
+        sbm_sample = sbm(verts_per_community, P)
         er = er_np(verts, 0.5)
         embed_sbm = method(n_components=2)
         embed_er = method(n_components=2)
@@ -74,7 +74,7 @@ def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
         labels_sbm[100:] = 1
         labels_er[100:] = 1
 
-        embed_sbm.fit(sbm)
+        embed_sbm.fit(sbm_sample)
         embed_er.fit(er)
 
         X_sbm = embed_sbm.latent_left_
