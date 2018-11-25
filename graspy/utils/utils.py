@@ -169,7 +169,7 @@ def to_laplace(graph, form='I-DAD'):
     elif form == 'DAD':
         L = np.dot(D_root, adj_matrix)
         L = np.dot(L, D_root)
-    return L
+    return symmetrize(L, method='avg') # sometimes machine prec. makes this necessary
 
 def is_fully_connected(graph):
     '''
