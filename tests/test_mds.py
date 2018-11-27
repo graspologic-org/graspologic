@@ -14,6 +14,11 @@ def test_input():
         mds = ClassicalMDS(n_components=3, dissimilarity='precomputed')
         mds.fit(tensor)
 
+    with pytest.raises(ValueError):
+        one_dimensional = np.random.normal(size=10)
+        mds = ClassicalMDS(n_components=2, dissimilarity='euclidean')
+        mds.fit(one_dimensional)
+
     # n_components > n_samples
     with pytest.raises(ValueError):
         mds = ClassicalMDS(n_components=100)
@@ -50,6 +55,16 @@ def test_tensor_input():
 
     X_transformed = mds.fit_transform(X)
     assert_equal(X_transformed.shape, (100, 3))
+
+
+def test_matrix_input():
+    X = np.random.normal(size=(100, 4))
+    mds = ClassicalMDS(n_components=None, dissimilarity='euclidean')
+    mds.fit(X)
+
+    assert_equal(mds.dissimilarity_matrix_.shape, (100, 100))
+
+    X_transformed = mds.fit_transform(X)
 
 
 def test_output():

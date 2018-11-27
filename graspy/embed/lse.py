@@ -19,14 +19,38 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     Parameters
     ----------
-    method: object (default `selectSVD`)
-        the method to use for dimensionality reduction.
-    args: list, optional (default None)
-        options taken by the desired embedding method as arguments.
-        See graphstats.embed.svd.selectSVD for default args
-    kwargs: dict, optional (default None)
-        options taken by the desired embedding method as key-worded
-        arguments. See graphstats.embed.svd.selectSVD for default kwargs
+    n_components : int or None, default = None
+        Desired dimensionality of output data. If "full", 
+        n_components must be <= min(X.shape). Otherwise, n_components must be
+        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``select_dimension`` using ``n_elbows`` argument.
+    n_elbows : int, optional, default: 2
+        If `n_compoents=None`, then compute the optimal embedding dimension using
+        `select_dimension`. Otherwise, ignored.
+    algorithm : {'full', 'truncated' (default), 'randomized'}, optional
+        SVD solver to use:
+
+        - 'full'
+            Computes full svd using ``scipy.linalg.svd``
+        - 'truncated'
+            Computes truncated svd using ``scipy.sparse.linalg.svd``
+        - 'randomized'
+            Computes randomized svd using 
+            ``sklearn.utils.extmath.randomized_svd``
+    n_iter : int, optional (default = 5)
+        Number of iterations for randomized SVD solver. Not used by 'full' or 
+        'truncated'. The default is larger than the default in randomized_svd 
+        to handle sparse matrices that may have large slowly decaying spectrum.
+
+    Attributes
+    ----------
+    latent_left_ : array, shape (n_samples, n_components)
+        Estimated left latent positions of the graph. 
+    latent_right_ : array, shape (n_samples, n_components), or None
+        Only computed when the graph is directed, or adjacency matrix is assymetric.
+        Estimated right latent positions of the graph. Otherwise, None.
+    singular_values_ : array, shape (n_components)
+        Singular values associated with the latent position matrices. 
 
     See Also
     --------
@@ -51,15 +75,19 @@ class LaplacianSpectralEmbed(BaseEmbed):
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-
-    Examples
-    --------
-
-
     """
 
-    def __init__(self, form='DAD', method=selectSVD, *args, **kwargs):
-        super().__init__(method=method, *args, **kwargs)
+    def __init__(self,
+                 form='DAD',
+                 n_components=None,
+                 n_elbows=2,
+                 algorithm='randomized',
+                 n_iter=5):
+        super().__init__(
+            n_components=n_components,
+            n_elbows=n_elbows,
+            algorithm=algorithm,
+            n_iter=n_iter)
         self.form = form
 
     def fit(self, graph):
@@ -90,12 +118,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
         --------
         graphstats.utils.import_graph, graphstats.embed.lpm, graphstats.embed.embed,
         graphstats.utils.to_laplace
-
-        Examples
-        --------
-       
         """
         A = import_graph(graph)
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
-        return self.lpm
+        return self

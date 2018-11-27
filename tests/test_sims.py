@@ -50,12 +50,14 @@ class Test_ZINM(unittest.TestCase):
         cls.wt = np.random.normal
         cls.mean = 2
         cls.std = 1
+        cls.wtargs = dict(loc=cls.mean, scale=cls.std)
+        cls.seed = 12345
 
     def test_loop_directed(self):
         np.random.seed(12345)
-        Abin = zi_nm(self.n, self.M, directed=True, loops=True)
-        Awt = zi_nm(self.n, self.M, directed=True, loops=True, wt=self.wt,
-            loc=self.mean, scale=self.std)
+        Abin = er_nm(self.n, self.M, directed=True, loops=True)
+        Awt = er_nm(self.n, self.M, directed=True, loops=True, wt=self.wt,
+            wtargs=self.wtargs)
         # check that correct number of edges assigned
         # sum of nonzero entries and correct for the fact that the diagonal
         # is part of the model now
@@ -65,9 +67,9 @@ class Test_ZINM(unittest.TestCase):
 
         # check that the nonzero edges have mean self.mean and var self.var
         self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            atol=0.15))
+            atol=0.2))
         self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
-            atol=0.15))
+            atol=0.2))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -82,9 +84,14 @@ class Test_ZINM(unittest.TestCase):
 
     def test_noloop_directed(self):
         np.random.seed(12345)
-        Abin = zi_nm(self.n, self.M, directed=True)
-        Awt = zi_nm(self.n, self.M, wt=self.wt, directed=True,
-            loc=self.mean, scale=self.std)
+        Abin = er_nm(self.n, self.M, directed=True)
+        Awt = er_nm(
+            self.n,
+            self.M,
+            wt=self.wt,
+            directed=True,
+            wtargs=self.wtargs,
+    )
         # check that correct number of edges assigned
         self.assertTrue(Abin.sum() == self.M)
         self.assertTrue((Awt != 0).sum() == self.M)
@@ -109,9 +116,8 @@ class Test_ZINM(unittest.TestCase):
 
     def test_loop_undirected(self):
         np.random.seed(12345)
-        Abin = zi_nm(self.n, self.M, loops=True)
-        Awt = zi_nm(self.n, self.M, loops=True, wt=self.wt,
-            loc=self.mean, scale=self.std)
+        Abin = er_nm(self.n, self.M, loops=True)
+        Awt = er_nm(self.n, self.M, loops=True, wt=self.wt, wtargs=self.wtargs)
         # check that correct number of edges assigned
         # sum of nonzero entries and correct for the fact that the diagonal
         # is part of the model now
@@ -135,11 +141,10 @@ class Test_ZINM(unittest.TestCase):
         self.assertTrue(Awt.shape == (self.n, self.n))
         pass
 
-
     def test_noloop_undirected(self):
         np.random.seed(12345)
-        Abin = zi_nm(self.n, self.M)
-        Awt = zi_nm(self.n, self.M, wt=self.wt, loc=self.mean, scale=self.std)
+        Abin = er_nm(self.n, self.M)
+        Awt = er_nm(self.n, self.M, wt=self.wt, wtargs=self.wtargs,)
         # check that correct number of edges assigned
         self.assertTrue(Abin.sum() == 2*self.M)
         self.assertTrue((Awt != 0).sum() == 2*self.M)
@@ -160,7 +165,39 @@ class Test_ZINM(unittest.TestCase):
         # check dimensions
         self.assertTrue(Abin.shape == (self.n, self.n))
         self.assertTrue(Awt.shape == (self.n, self.n))
-        pass
+
+    def test_bad_inputs(self):
+        with self.assertRaises(TypeError):
+            n = '10'
+            er_nm(n, self.M)
+
+        with self.assertRaises(ValueError):
+            n = -1
+            er_nm(n, self.M)
+
+        with self.assertRaises(TypeError):
+            m = 1.0
+            er_nm(self.n, m)
+
+        with self.assertRaises(ValueError):
+            m = -1
+            er_nm(self.n, m)
+
+        with self.assertRaises(TypeError):
+            loops = 'True'
+            er_nm(self.n, self.M, loops=loops)
+
+        with self.assertRaises(TypeError):
+            directed = 'True'
+            er_nm(self.n, self.M, directed=directed)
+
+        with self.assertRaises(TypeError):
+            wt = np.random
+            er_nm(self.n, self.M, wt=wt)
+
+        with self.assertRaises(ValueError):
+            m = 10000
+            er_nm(self.n, m)
 
 
 class Test_ZINP(unittest.TestCase):
@@ -172,25 +209,33 @@ class Test_ZINP(unittest.TestCase):
         cls.wt = np.random.normal
         cls.mean = 2
         cls.std = 1
+        cls.wtargs = dict(loc=cls.mean, scale=cls.std)
+        cls.seed = 123
 
     def test_loop_directed(self):
-        np.random.seed(12345)
-        Abin = zi_np(self.n, self.p, directed=True, loops=True)
-        Awt = zi_np(self.n, self.p, directed=True, loops=True, wt=self.wt,
-            loc=self.mean, scale=self.std)
+        np.random.seed(123)
+        Abin = er_np(self.n, self.p, directed=True, loops=True)
+        Awt = er_np(
+            self.n,
+            self.p,
+            directed=True,
+            loops=True,
+            wt=self.wt,
+            wtargs=self.wtargs,
+    )
         # check that correct number of edges assigned
         # sum of nonzero entries and correct for the fact that the diagonal
         # is part of the model now
         self.assertTrue(np.isclose(Abin.sum()/float(np.prod(Abin.shape)),
-            self.p, atol=0.02))
+            self.p, atol=0.1))
         self.assertTrue(np.isclose((Awt != 0).sum()/float(np.prod(Awt.shape)),
-            self.p, atol=0.02))
+            self.p, atol=0.1))
 
         # check that the nonzero edges have mean self.mean and var self.var
         self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            atol=0.15))
+            atol=0.2))
         self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
-            atol=0.15))
+            atol=0.2))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -201,26 +246,25 @@ class Test_ZINP(unittest.TestCase):
         # check dimensions
         self.assertTrue(Abin.shape == (self.n, self.n))
         self.assertTrue(Awt.shape == (self.n, self.n))
-        pass
 
     def test_noloop_directed(self):
         np.random.seed(12345)
-        Abin = zi_np(self.n, self.p, directed=True)
-        Awt = zi_np(self.n, self.p, wt=self.wt, directed=True,
-            loc=self.mean, scale=self.std)
+        Abin = er_np(self.n, self.p, directed=True)
+        Awt = er_np(
+            self.n, self.p, wt=self.wt, directed=True, wtargs=self.wtargs)
         # check that correct number of edges assigned
         dind = remove_diagonal(Abin)
         dindwt = remove_diagonal(Awt)
         self.assertTrue(np.isclose(dind.sum()/float(len(dind)),
-            self.p, atol=0.02))
+            self.p, atol=0.1))
         self.assertTrue(np.isclose((dindwt != 0).sum()/float(len(dindwt)),
-            self.p, atol=0.02))
+            self.p, atol=0.1))
 
         # check that the nonzero edges have mean self.mean and var self.var
         self.assertTrue(np.isclose(np.mean(dindwt[dindwt != 0]), self.mean,
-            atol=0.15))
+            atol=0.5))
         self.assertTrue(np.isclose(np.std(dindwt[dindwt != 0]), self.std,
-            atol=0.15))
+            atol=0.5))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -235,9 +279,14 @@ class Test_ZINP(unittest.TestCase):
 
     def test_loop_undirected(self):
         np.random.seed(12345)
-        Abin = zi_np(self.n, self.p, loops=True)
-        Awt = zi_np(self.n, self.p, loops=True, wt=self.wt,
-            loc=self.mean, scale=self.std)
+        Abin = er_np(self.n, self.p, loops=True)
+        Awt = er_np(
+            self.n,
+            self.p,
+            loops=True,
+            wt=self.wt,
+            wtargs=self.wtargs
+    )
         # check that correct number of edges assigned
         self.assertTrue(np.isclose(Abin.sum()/float(np.prod(Abin.shape)),
             self.p, atol=0.02))
@@ -263,8 +312,8 @@ class Test_ZINP(unittest.TestCase):
 
     def test_noloop_undirected(self):
         np.random.seed(123)
-        Abin = zi_np(self.n, self.p)
-        Awt = zi_np(self.n, self.p, wt=self.wt, loc=self.mean, scale=self.std)
+        Abin = er_np(self.n, self.p)
+        Awt = er_np(self.n, self.p, wt=self.wt, wtargs=self.wtargs)
         # check that correct number of edges assigned
         dind = remove_diagonal(Abin)
         dindwt = remove_diagonal(Awt)
@@ -288,7 +337,39 @@ class Test_ZINP(unittest.TestCase):
         # check dimensions
         self.assertTrue(Abin.shape == (self.n, self.n))
         self.assertTrue(Awt.shape == (self.n, self.n))
-        pass
+
+    def test_bad_inputs(self):
+        with self.assertRaises(TypeError):
+            n = '10'
+            er_np(n, self.p)
+
+        with self.assertRaises(ValueError):
+            n = -1
+            er_np(n, self.p)
+
+        with self.assertRaises(TypeError):
+            p = '1'
+            er_np(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = -.5
+            er_np(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = 5.0
+            er_np(self.n, p)
+
+        with self.assertRaises(TypeError):
+            loops = 'True'
+            er_np(self.n, self.p, loops=loops)
+
+        with self.assertRaises(TypeError):
+            directed = 'True'
+            er_np(self.n, self.p, directed=directed)
+
+        with self.assertRaises(TypeError):
+            wt = np.random
+            er_np(self.n, self.p, wt=wt)
 
 
 class Test_WSBM(unittest.TestCase):
@@ -304,15 +385,16 @@ class Test_WSBM(unittest.TestCase):
         # define symmetric probability as evenly weighted
         cls.Psy = np.vstack(([0.6, 0.2], [0.3, 0.4]))
         cls.Psy = symmetrize(cls.Psy)
+        cls.seed = 12345
 
-    def test_binary_sbm(self):
+    def test_sbm(self):
         n = [50, 60, 70]
         vcount = np.cumsum(n)
         # define symmetric probability as evenly weighted
         Psy = np.vstack(([0.6, 0.2, 0.3], [0.3, 0.4, 0.2], [0.2, 0.8, 0.1]))
         Psy = symmetrize(Psy)
         np.random.seed(12345)
-        A = binary_sbm(n, Psy)
+        A = sbm(n, Psy)
         for i in range(0, len(n)):
             for j in range(0, len(n)):
                 irange = np.arange(vcount[i] - n[i], vcount[i])
@@ -330,11 +412,11 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(n), np.sum(n)))
         pass
 
-    def test_weighted_sbm_singlewt_undirected_loopless(self):
+    def test_sbm_singlewt_undirected_loopless(self):
         np.random.seed(12345)
         wt = np.random.normal
         params = {'loc': 2, 'scale': 2}
-        A = weighted_sbm(self.n, self.Psy, Wt=wt, Wtargs=params)
+        A = sbm(self.n, self.Psy, wt=wt, wtargs=params)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
@@ -369,7 +451,7 @@ class Test_WSBM(unittest.TestCase):
     def exp_unif(self, x):
         return({'low': np.min(x), 'high': np.max(x)})
 
-    def test_weighted_sbm_multiwt_directed_loopless(self):
+    def test_sbm_multiwt_directed_loopless(self):
         np.random.seed(12345)
         Wt = np.vstack(([np.random.normal, np.random.poisson],
             [np.random.exponential, np.random.uniform]))
@@ -377,7 +459,7 @@ class Test_WSBM(unittest.TestCase):
             [{'scale': 2}, {'low': 5, 'high': 10}]))
         check = np.vstack(([self.exp_normal, self.exp_poisson],
             [self.exp_exp, self.exp_unif]))
-        A = weighted_sbm(self.n, self.Psy, Wt=Wt, directed=True, Wtargs=Wtargs)
+        A = sbm(self.n, self.Psy, wt=Wt, directed=True, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
@@ -399,7 +481,7 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
-    def test_weighted_sbm_multiwt_undirected_loopless(self):
+    def test_sbm_multiwt_undirected_loopless(self):
         np.random.seed(12345)
         Wt = np.vstack(([np.random.normal, np.random.poisson],
             [np.random.poisson, np.random.uniform]))
@@ -407,7 +489,7 @@ class Test_WSBM(unittest.TestCase):
             [{'lam': 5}, {'low': 5, 'high': 10}]))
         check = np.vstack(([self.exp_normal, self.exp_poisson],
             [self.exp_poisson, self.exp_unif]))
-        A = weighted_sbm(self.n, self.Psy, Wt=Wt, directed=False, Wtargs=Wtargs)
+        A = sbm(self.n, self.Psy, wt=Wt, directed=False, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
@@ -429,7 +511,7 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
-    def test_weighted_sbm_multiwt_directed_loopy(self):
+    def test_sbm_multiwt_directed_loopy(self):
         np.random.seed(12345)
         Wt = np.vstack(([np.random.normal, np.random.poisson],
             [np.random.exponential, np.random.uniform]))
@@ -437,8 +519,8 @@ class Test_WSBM(unittest.TestCase):
             [{'scale': 2}, {'low': 5, 'high': 10}]))
         check = np.vstack(([self.exp_normal, self.exp_poisson],
             [self.exp_exp, self.exp_unif]))
-        A = weighted_sbm(self.n, self.Psy, Wt=Wt, directed=True, loops=True,
-            Wtargs=Wtargs)
+        A = sbm(self.n, self.Psy, wt=Wt, directed=True, loops=True,
+            wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
@@ -458,7 +540,7 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
-    def test_weighted_sbm_multiwt_undirected_loopy(self):
+    def test_sbm_multiwt_undirected_loopy(self):
         np.random.seed(12345)
         Wt = np.vstack(([np.random.normal, np.random.poisson],
             [np.random.poisson, np.random.uniform]))
@@ -466,8 +548,8 @@ class Test_WSBM(unittest.TestCase):
             [{'lam': 5}, {'low': 5, 'high': 10}]))
         check = np.vstack(([self.exp_normal, self.exp_poisson],
             [self.exp_poisson, self.exp_unif]))
-        A = weighted_sbm(self.n, self.Psy, Wt=Wt, directed=False, loops=True,
-            Wtargs=Wtargs)
+        A = sbm(self.n, self.Psy, wt=Wt, directed=False, loops=True,
+            wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
@@ -486,6 +568,70 @@ class Test_WSBM(unittest.TestCase):
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
+
+    def test_bad_inputs(self):
+        with self.assertRaises(TypeError):
+            n = '1'
+            sbm(n, self.Psy)
+
+        with self.assertRaises(ValueError):
+            n = ['1', 10]
+            sbm(n, self.Psy)
+
+        with self.assertRaises(TypeError):
+            p = .5
+            sbm(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = [[.5]]
+            sbm(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = [[5, 5], [4, 4]]
+            sbm(self.n, p)
+
+        with self.assertRaises(ValueError):
+            p = ['str']
+            sbm(self.n, p)
+
+        with self.assertRaises(TypeError):
+            wt = '1'
+            sbm(self.n, self.Psy, wt=wt)
+
+        with self.assertRaises(TypeError):
+            wt = [[1]]
+            sbm(self.n, self.Psy, wt=wt)
+
+        with self.assertRaises(ValueError):
+            wtargs = [[1, 1], [1, 1]]
+            wt = [[1]]
+            sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
+        with self.assertRaises(ValueError):
+            wt = [[1, 1], [1, 1]]
+            wtargs = [[1, 1]]
+            sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
+        with self.assertRaises(TypeError):
+            wt = [[1, 1], [1, 1]]
+            wtargs = [[1, 1], [1, 1]]
+            sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
+        with self.assertRaises(ValueError):
+            sbm(self.n, self.Pns)
+
+        with self.assertRaises(ValueError):
+            wt = [[np.random.uniform, np.random.beta],
+                  [np.random.uniform, np.random.normal]]
+            wtargs = [[1, 1], [1, 1]]
+            sbm(self.n, self.Psy, wt = wt, wtargs=wtargs)
+
+        with self.assertRaises(ValueError):
+            wt = [[ np.random.uniform,np.random.uniform],
+            [np.random.uniform, np.random.normal],]
+            wtargs = [[1, 2], [1, 1]]
+            sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
+
 
 class Test_RDPG(unittest.TestCase):
     @classmethod
@@ -502,7 +648,7 @@ class Test_RDPG(unittest.TestCase):
                       [1,1],
                       [1,0],
                       [1,0],])
-        A = rdpg_from_latent(X)
+        A = rdpg(X)
         self.assertTrue(A.shape, (5,5))
 
     def test_inputs(self):
@@ -516,25 +662,25 @@ class Test_RDPG(unittest.TestCase):
         with self.assertRaises(ValueError):
             p_from_latent(x3) # wrong num dimensions
         with self.assertRaises(TypeError):
-            rdpg_from_p('XD') # wrong type
+            sample_edges('XD') # wrong type
         with self.assertRaises(ValueError):
-            rdpg_from_p(x3) # wrong num dimensions
+            sample_edges(x3) # wrong num dimensions
         with self.assertRaises(ValueError):
-            rdpg_from_p(x2) # wrong shape for P
-    
+            sample_edges(x2) # wrong shape for P
+
     def test_er_p_is_close(self):
         np.random.seed(8888)
         X = 0.5 * np.ones((100,2))
         graphs = []
         P = p_from_latent(X, rescale=True, loops=True)
         for i in range(1000):
-            graphs.append(rdpg_from_p(P))
+            graphs.append(sample_edges(P, directed=True, loops=True))
         graphs = np.stack(graphs)
         self.assertAlmostEqual(np.mean(graphs), 0.5, delta=0.001)
         # mean_graph = np.mean(graphs, axis=0)
         # this only seems to work as n_graphs -> 10000
         # np.testing.assert_allclose(P, mean_graph, atol=0.05)
-    
+
     def test_mini_sbm_p_is_close(self):
         np.random.seed(8888)
         blocks = np.array([[0.8, 0.1],
@@ -544,21 +690,21 @@ class Test_RDPG(unittest.TestCase):
         graphs = []
         P = p_from_latent(X, rescale=True, loops=True)
         for i in range(10000):
-            graphs.append(rdpg_from_p(P, symmetric=False))
+            graphs.append(sample_edges(P, directed=False, loops=True))
         graphs = np.stack(graphs)
         mean_graph = np.mean(graphs, axis=0)
         # this atol should be ~5 stdev away
-        np.testing.assert_allclose(blocks, mean_graph, atol=0.025) 
-    
+        np.testing.assert_allclose(blocks, mean_graph, atol=0.025)
+
     def test_kwarg_passing(self):
         np.random.seed(8888)
         X = 0.5 * np.ones((300,2))
-        g = rdpg_from_latent(X, rescale=True, loops=True, symmetric=False)
+        g = rdpg(X, rescale=True, loops=True, directed=True)
         self.assertFalse(is_symmetric(g))
         self.assertFalse(is_loopless(g))
-        g = rdpg_from_latent(X, rescale=True, loops=False, symmetric=False)
+        g = rdpg(X, rescale=True, loops=False, directed=True)
         self.assertFalse(is_symmetric(g))
         self.assertTrue(is_loopless(g))
-        g = rdpg_from_latent(X, rescale=True, loops=False, symmetric=True)
+        g = rdpg(X, rescale=True, loops=False, directed=False)
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
