@@ -35,7 +35,11 @@ class TestInput(unittest.TestCase):
             gus.import_graph(None)
 
     def test_to_laplace_IDAD(self):
-        A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+        A = np.array([
+            [0, 1, 0],
+            [1, 0, 1],
+            [0, 1, 0],
+        ])
 
         expected_L_normed = ([[1, -1 / (sqrt(2)), 0],
                               [-1 / (sqrt(2)), 1, -1 / (sqrt(2))],
@@ -61,29 +65,52 @@ class TestInput(unittest.TestCase):
             gus.to_laplace(self.A, form='MOM')
 
     def test_is_unweighted(self):
-        B = np.array([[0, 1, 0, 0], [1, 0, 1, 0], [0, 1.0, 0, 0], [1, 0, 1,
-                                                                   0]])
+        B = np.array([
+            [0, 1, 0, 0],
+            [1, 0, 1, 0],
+            [0, 1.0, 0, 0],
+            [1, 0, 1, 0],
+        ])
         self.assertTrue(gus.is_unweighted(B))
         self.assertFalse(gus.is_unweighted(self.A))
 
     def test_is_fully_connected(self):
         # graph where node at index [3] only connects to self
-        A = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 1]])
+        A = np.array([
+            [1, 0, 1, 0],
+            [0, 1, 1, 0],
+            [1, 1, 0, 0],
+            [0, 0, 0, 1],
+        ])
         # fully connected graph
-        B = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 1, 0, 1], [0, 0, 0, 1]])
+        B = np.array([
+            [1, 0, 1, 0],
+            [0, 1, 1, 0],
+            [1, 1, 0, 1],
+            [0, 0, 0, 1],
+        ])
         self.assertFalse(gus.is_fully_connected(A))
         self.assertTrue(gus.is_fully_connected(B))
 
     def test_import_unconnected(self):
         # graph where node at index [3] only connects to self
-        A = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 1]])
+        A = np.array([
+            [1, 0, 1, 0],
+            [0, 1, 1, 0],
+            [1, 1, 0, 0],
+            [0, 0, 0, 1],
+        ])
         with self.assertRaises(ValueError):
             gus.import_graph(A)
 
     def test_lcc_networkx(self):
-        expected_lcc_matrix = np.array([[0, 1, 1, 0, 0], [0, 0, 0, 0, 0],
-                                        [0, 0, 0, 1, 1], [0, 1, 0, 0, 0],
-                                        [0, 0, 1, 0, 0]])
+        expected_lcc_matrix = np.array([
+            [0, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1],
+            [0, 1, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+        ])
         expected_nodelist = np.array([1, 2, 3, 4, 6])
         g = nx.DiGraph()
         [g.add_node(i) for i in range(1, 7)]
@@ -103,9 +130,13 @@ class TestInput(unittest.TestCase):
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
     def test_lcc_numpy(self):
-        expected_lcc_matrix = np.array([[0, 1, 1, 0, 0], [0, 0, 0, 0, 0],
-                                        [0, 0, 0, 1, 1], [0, 1, 0, 0, 0],
-                                        [0, 0, 1, 0, 0]])
+        expected_lcc_matrix = np.array([
+            [0, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1],
+            [0, 1, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+        ])
         expected_nodelist = np.array([0, 1, 2, 3, 5])
         g = nx.DiGraph()
         [g.add_node(i) for i in range(1, 7)]
@@ -124,10 +155,18 @@ class TestInput(unittest.TestCase):
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
     def test_multigraph_lcc_numpystack(self):
-        expected_g_matrix = np.array([[0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0],
-                                      [0, 1, 0, 0]])
-        expected_f_matrix = np.array([[0, 1, 0, 0], [1, 0, 1, 1], [0, 0, 0, 0],
-                                      [0, 1, 0, 0]])
+        expected_g_matrix = np.array([
+            [0, 1, 0, 0],
+            [0, 0, 1, 1],
+            [0, 0, 0, 0],
+            [0, 1, 0, 0],
+        ])
+        expected_f_matrix = np.array([
+            [0, 1, 0, 0],
+            [1, 0, 1, 1],
+            [0, 0, 0, 0],
+            [0, 1, 0, 0],
+        ])
         expected_mats = [expected_f_matrix, expected_g_matrix]
         expected_nodelist = np.array([0, 2, 3, 5])
         g = nx.DiGraph()
@@ -182,10 +221,18 @@ class TestInput(unittest.TestCase):
             np.testing.assert_array_equal(graph, expected_mats[i])
 
     def test_multigraph_lcc_networkx(self):
-        expected_g_matrix = np.array([[0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0],
-                                      [0, 1, 0, 0]])
-        expected_f_matrix = np.array([[0, 1, 0, 0], [1, 0, 1, 1], [0, 0, 0, 0],
-                                      [0, 1, 0, 0]])
+        expected_g_matrix = np.array([
+            [0, 1, 0, 0],
+            [0, 0, 1, 1],
+            [0, 0, 0, 0],
+            [0, 1, 0, 0],
+        ])
+        expected_f_matrix = np.array([
+            [0, 1, 0, 0],
+            [1, 0, 1, 1],
+            [0, 0, 0, 0],
+            [0, 1, 0, 0],
+        ])
         expected_mats = [expected_f_matrix, expected_g_matrix]
         expected_nodelist = np.array([1, 3, 4, 6])
         g = nx.DiGraph()
@@ -219,8 +266,13 @@ class TestInput(unittest.TestCase):
         self.assertFalse(gus.is_symmetric(corr))
 
     def test_augment_diagonal_undirected(self):
-        A = np.array([[0, 1, 1, 0, 0], [1, 0, 0, 2, 1], [1, 0, 0, 1, 1],
-                      [0, 2, 1, 0, 0], [0, 1, 1, 0, 0]])
+        A = np.array([
+            [0, 1, 1, 0, 0],
+            [1, 0, 0, 2, 1],
+            [1, 0, 0, 1, 1],
+            [0, 2, 1, 0, 0],
+            [0, 1, 1, 0, 0],
+        ])
         expected = A.copy().astype(float)
         expected[0, 0] = 2.0 / 4
         expected[1, 1] = 3.0 / 4
@@ -231,8 +283,13 @@ class TestInput(unittest.TestCase):
         np.testing.assert_array_equal(A_aug, expected)
 
     def test_augment_diagonal_directed(self):
-        A = np.array([[0, 1, 1, 0, 0], [0, 0, 0, 2, 1], [1, 0, 0, 1, 1],
-                      [0, 2, 0, 0, 0], [0, 0, 1, 0, 0]])
+        A = np.array([
+            [0, 1, 1, 0, 0],
+            [0, 0, 0, 2, 1],
+            [1, 0, 0, 1, 1],
+            [0, 2, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+        ])
         expected = A.copy().astype(float)
         expected[0, 0] = 2.0 / 4
         expected[1, 1] = 2.0 / 4
