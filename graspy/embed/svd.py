@@ -219,11 +219,11 @@ def selectSVD(X,
     Returns
     -------
     U: array-like, shape (n_samples, n_components)
-        Left singular vectors.
+        Left singular vectors corresponding to singular values.
     D: array-like, shape (n_components)
-        Singular values, as a 1d array.
+        Singular values in decreasing order, as a 1d array.
     V: array-like, shape (n_components, n_samples)
-        Right singular vectors.
+        Right singular vectors corresponding to singular values.
 
     References
     ----------
