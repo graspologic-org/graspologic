@@ -22,7 +22,7 @@ def import_graph(graph):
 
 	Returns
 	-------
-    graph: array-like, shape (n_vertices, n_vertices)
+    out: array-like, shape (n_vertices, n_vertices)
         A graph.
 		 
 	See Also
@@ -34,24 +34,25 @@ def import_graph(graph):
             raise ValueError('Input graph is not fully connected, please use '
                             + 'graspy.utils.find_lcc() to generate a connected graph '
                             + 'before import')
-        graph = nx.to_numpy_array(
+        out = nx.to_numpy_array(
             graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif (type(graph) is np.ndarray):
         if len(graph.shape) != 2:
             raise ValueError('Matrix has improper number of dimensions')
         elif graph.shape[0] != graph.shape[1]:
             raise ValueError('Matrix is not square')
-        if not np.issubdtype(graph.dtype, np.floating):
-            graph = graph.astype(np.float)
         if not is_fully_connected(graph): 
             raise ValueError('Input graph is not fully connected, please use '
                             + 'graspy.utils.find_lcc() to generate a connected graph '
                             + 'before import')
+        out = graph.copy()
+        if not np.issubdtype(graph.dtype, np.floating):
+            out = out.astype(np.float)
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
         raise TypeError(msg)
-    return graph
+    return out
 
 def is_symmetric(X):
     return np.array_equal(X, X.T)
