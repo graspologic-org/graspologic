@@ -478,7 +478,7 @@ def p_from_latent(X, Y=None, rescale=True, loops=True, **kwargs):
     P = np.dot(X, Y.T)
     if rescale:
         if P.min() < 0:
-            P = P + P.min()
+            P = P - P.min()
         if P.max() > 1:
             P = P / P.max()  
     # should this be before or after the rescaling, could give diff answers
