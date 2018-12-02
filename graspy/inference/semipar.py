@@ -57,6 +57,7 @@ class SemiparametricTest(BaseInference):
     def _bootstrap(self, X_hat):
         t_bootstrap = np.zeros(self.n_bootstraps)
         for i in range(self.n_bootstraps):
+            # these look to be constraints from the paper
             A1_simulated = rdpg(X_hat, rescale=False, loops=False)
             A2_simulated = rdpg(X_hat, rescale=False, loops=False)
             X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
