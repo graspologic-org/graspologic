@@ -306,7 +306,7 @@ def get_multigraph_lcc(graphs, return_inds=False):
     else:
         return new_graphs
 
-def augment_diagonal(graph):
+def augment_diagonal(graph, weight=1):
     '''
     Replaces the diagonal of adjacency matrix with 
     :math: \frac{degree}{num_verts - 1} for the degree associated
@@ -327,6 +327,6 @@ def augment_diagonal(graph):
     # use out degree for directed graph 
     # ignore self loops in either case
     degrees = np.count_nonzero(graph, axis=1)
-    diag = degrees / divisor
+    diag = weight * degrees / divisor
     graph += np.diag(diag)
     return graph
