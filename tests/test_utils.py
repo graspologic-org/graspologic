@@ -60,6 +60,13 @@ class TestInput(unittest.TestCase):
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
+    def test_to_laplace_symmetric(self):
+        A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+
+        L_normed = gus.to_laplace(A, form='DAD')
+
+        self.assertTrue(gus.is_symmetric(L_normed))
+
     def test_to_laplace_unsuported(self):
         with self.assertRaises(TypeError):
             gus.to_laplace(self.A, form='MOM')
