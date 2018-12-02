@@ -647,16 +647,9 @@ class Test_RDPG(unittest.TestCase):
                       [1,1],
                       [1,0],
                       [1,0],])
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         A = rdpg_from_latent(X)
         self.assertTrue(A.shape, (5,5))
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> typechecking and tests
     def test_inputs(self):
         x1 = np.array([[1,1],[1,1]])
         x2 = np.array([[1,1]])
@@ -668,7 +661,6 @@ class Test_RDPG(unittest.TestCase):
         with self.assertRaises(ValueError):
             p_from_latent(x3) # wrong num dimensions
         with self.assertRaises(TypeError):
-<<<<<<< HEAD
             sample_edges('XD') # wrong type
         with self.assertRaises(ValueError):
             sample_edges(x3) # wrong num dimensions
@@ -715,35 +707,15 @@ class Test_RDPG(unittest.TestCase):
         g = rdpg(X, rescale=True, loops=False, directed=False)
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
-=======
-    # def test_inputs():
->>>>>>> snail rdpg -> caterpillar rdpg
-=======
             rdpg_from_p('XD') # wrong type
         with self.assertRaises(ValueError):
             rdpg_from_p(x3) # wrong num dimensions
         with self.assertRaises(ValueError):
             rdpg_from_p(x2) # wrong shape for P
->>>>>>> typechecking and tests
-=======
         X = X / np.linalg.norm(X, axis=0)
-        print(np.linalg.norm(X, axis=0))
-        print(np.linalg.norm(X, axis=1))
-=======
->>>>>>> updating rdpg
-        A = rdpg(X)
-=======
         A = rdpg_from_latent(X)
->>>>>>> restructuring semipar
         self.assertTrue(A.shape, (5,5))
 
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> added ipynb
-=======
-    # def test_inputs():
->>>>>>> snail rdpg -> caterpillar rdpg
-=======
     def test_inputs(self):
         x1 = np.array([[1,1],[1,1]])
         x2 = np.array([[1,1]])
@@ -760,4 +732,3 @@ class Test_RDPG(unittest.TestCase):
             rdpg_from_p(x3) # wrong num dimensions
         with self.assertRaises(ValueError):
             rdpg_from_p(x2) # wrong shape for P
->>>>>>> typechecking and tests

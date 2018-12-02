@@ -8,7 +8,6 @@ from graspy.inference import SemiparametricTest
 from graspy.embed import AdjacencySpectralEmbed
 from graspy.simulations import er_np
 
-
 class TestSemiparametricTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -54,7 +53,7 @@ class TestSemiparametricTest(unittest.TestCase):
     def test_bad_matrix_inputs(self):
         spt = SemiparametricTest()
         A1 = self.A1.copy()
-        A1[2,0] = 600 # make asymmetric
+        A1[2,0] = 1 # make asymmetric
         with self.assertRaises(NotImplementedError): # TODO : remove when we implement
             spt.fit(A1, self.A2)
 
@@ -84,29 +83,28 @@ class TestSemiparametricTest(unittest.TestCase):
         n = spt._difference_norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
-    # def test_diagonal_rotation_norm(self):
-    #     with self.assertRaises(NotImplementedError): # TODO fix
-    #         # triangle in 2d
-    #         points1 = np.array([[0, 0], 
-    #                             [3, 0], 
-    #                             [3, -2]], dtype=np.float64)
-    #         rotation = np.array([[0, 1],
-    #                             [-1, 0]])
-    #         # rotated 90 degrees
-    #         points2 = np.dot(points1, rotation)
-    #         # diagonally scaled
-    #         diagonal = np.array([[2, 0, 0], 
-    #                             [0, 3, 0],
-    #                             [0, 0, 2]])
-    #         points2 = np.dot(diagonal, points2)
+    def test_diagonal_rotation_norm(self):
+        # triangle in 2d
+        points1 = np.array([[0, 0], 
+                            [3, 0], 
+                            [3, -2]], dtype=np.float64)
+        rotation = np.array([[0, 1],
+                             [-1, 0]])
+        # rotated 90 degrees
+        points2 = np.dot(points1, rotation)
+        # diagonally scaled
+        diagonal = np.array([[2, 0, 0], 
+                            [0, 3, 0],
+                            [0, 0, 2]])
+        points2 = np.dot(diagonal, points2)
 
-    #         spt = SemiparametricTest(embedding='ase', test_case='diagonal-rotation')
-    #         n = spt._difference_norm(points1, points2)
-    #         self.assertAlmostEqual(n, 0)
-            
-    #         spt = SemiparametricTest(embedding='lse', test_case='diagonal-rotation')
-    #         n = spt._difference_norm(points1, points2)
-    #         self.assertAlmostEqual(n, 0)
+        spt = SemiparametricTest(embedding='ase', test_case='diagonal-rotation')
+        n = spt._difference_norm(points1, points2)
+        self.assertAlmostEqual(n, 0)
+        
+        spt = SemiparametricTest(embedding='lse', test_case='diagonal-rotation')
+        n = spt._difference_norm(points1, points2)
+        self.assertAlmostEqual(n, 0)
 
     def test_scalar_rotation_norm(self):
         # triangle in 2d
