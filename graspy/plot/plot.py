@@ -262,17 +262,18 @@ def gridplot(X,
 
     dfs = []
     for idx, graph in enumerate(graphs):
-        cdx, rdx = np.where(graph > 0)
-        weights = graph[(cdx, rdx)]
+        rdx, cdx = np.where(graph > 0)
+        weights = graph[(rdx, cdx)]
         df = pd.DataFrame(
-            np.vstack([cdx[::-1], rdx, weights]).T,
-            columns=['cdx', 'rdx', 'Weights'])
+            np.vstack([rdx, cdx, weights]).T,
+            columns=['rdx', 'cdx','Weights'])
         df['Type'] = [labels[idx]] * len(cdx)
         dfs.append(df)
 
     df = pd.concat(dfs, axis=0)
 
     with sns.plotting_context(context, font_scale=font_scale):
+        sns.set_style('white')
         plot = sns.relplot(
             data=df,
             x='cdx',
@@ -282,12 +283,18 @@ def gridplot(X,
             sizes=sizes,
             alpha=alpha,
             palette=palette,
-            height=height)
+            height=height,
+            facet_kws={'sharex':True,
+                       'sharey':True,
+                       'xlim':(0,graph.shape[0]),
+                       'ylim':(0,graph.shape[0]),})
         plot.ax.axis('off')
+        plot.ax.invert_yaxis()
         if title is not None:
             plot.set(title=title)
 
     return plot
+
 
 
 def pairplot(X,
