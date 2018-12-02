@@ -128,7 +128,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form='I-DAD'):
+def to_laplace(graph, form='DAD'):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
