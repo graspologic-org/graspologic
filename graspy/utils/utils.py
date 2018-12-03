@@ -128,7 +128,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form='I-DAD'):
+def to_laplace(graph, form='DAD'):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
@@ -170,7 +170,7 @@ def to_laplace(graph, form='I-DAD'):
     elif form == 'DAD':
         L = np.dot(D_root, adj_matrix)
         L = np.dot(L, D_root)
-    return symmetrize(L, method='avg')
+    return symmetrize(L, method='avg') # sometimes machine prec. makes this necessary
 
 def is_fully_connected(graph):
     '''
@@ -244,18 +244,20 @@ def get_lcc(graph, return_inds=False):
             g_object = nx.Graph()
         else:
             g_object = nx.DiGraph()
-        graph = nx.from_numpy_matrix(graph, create_using=g_object)
+        graph = nx.from_numpy_array(graph, create_using=g_object)
     if type(graph) in [nx.Graph, nx.MultiGraph]:
-        graph = max(nx.connected_component_subgraphs(graph), key=len)
+        lcc_nodes = max(nx.connected_components(graph), key=len)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
-        graph = max(nx.weakly_connected_component_subgraphs(graph), key=len)        
+        lcc_nodes = max(nx.weakly_connected_components(graph), key=len) 
+    lcc = graph.subgraph(lcc_nodes).copy()
+    lcc.remove_nodes_from([n for n in lcc if n not in lcc_nodes])
     if return_inds:
-        nodelist = list(graph.nodes)
+        nodelist = list(lcc_nodes)
     if input_ndarray:
-        graph = nx.to_numpy_array(graph)
+        lcc = nx.to_numpy_array(lcc)
     if return_inds:
-        return graph, nodelist
-    return graph
+        return lcc, nodelist
+    return lcc
 
 def get_multigraph_lcc(graphs, return_inds=False):
     '''
@@ -295,10 +297,21 @@ def get_multigraph_lcc(graphs, return_inds=False):
     new_graphs = []        
     for graph in graphs:
         if type(graph) is np.ndarray:
-            graph = graph[inds_intersection,:][:,inds_intersection]
+            lcc = graph[inds_intersection,:][:,inds_intersection]
         else: 
-            graph = graph.subgraph(inds_intersection)
-        new_graphs.append(graph)
+            lcc = graph.subgraph(inds_intersection).copy()
+            lcc.remove_nodes_from([n for n in lcc if n not in inds_intersection])
+        new_graphs.append(lcc)
+    # this is not guaranteed be connected after one iteration because taking the 
+    # intersection of nodes among graphs can cause some components to become 
+    # disconnected, so, we check for this and run again if necessary 
+    recurse = False
+    for new_graph in new_graphs:
+        if not is_fully_connected(new_graph):
+            recurse = True
+            break 
+    if recurse: 
+        new_graphs, inds_intersection = get_multigraph_lcc(new_graphs, return_inds=True) 
     if type(graphs) != list:
         new_graphs = np.stack(new_graphs)
     if return_inds:
@@ -306,7 +319,7 @@ def get_multigraph_lcc(graphs, return_inds=False):
     else:
         return new_graphs
 
-def augment_diagonal(graph):
+def augment_diagonal(graph, weight=1):
     '''
     Replaces the diagonal of adjacency matrix with 
     :math: \frac{degree}{num_verts - 1} for the degree associated
@@ -327,6 +340,6 @@ def augment_diagonal(graph):
     # use out degree for directed graph 
     # ignore self loops in either case
     degrees = np.count_nonzero(graph, axis=1)
-    diag = degrees / divisor
+    diag = weight * degrees / divisor
     graph += np.diag(diag)
     return graph
