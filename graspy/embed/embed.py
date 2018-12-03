@@ -83,7 +83,7 @@ class BaseEmbed(BaseEstimator):
             self.latent_right_ = None
 
     @abstractmethod
-    def fit(self, graph):
+    def fit(self, graph): # pragma: no cover
         """
         A method for embedding.
 

@@ -16,7 +16,6 @@ def remove_diagonal(A):
     return(A[dind])
 
 class Test_ER(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.n = 20
@@ -648,7 +647,7 @@ class Test_RDPG(unittest.TestCase):
                       [1,1],
                       [1,0],
                       [1,0],])
-        A = rdpg(X)
+        A = rdpg_from_latent(X)
         self.assertTrue(A.shape, (5,5))
 
     def test_inputs(self):
@@ -708,3 +707,28 @@ class Test_RDPG(unittest.TestCase):
         g = rdpg(X, rescale=True, loops=False, directed=False)
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
+            rdpg_from_p('XD') # wrong type
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x3) # wrong num dimensions
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x2) # wrong shape for P
+        X = X / np.linalg.norm(X, axis=0)
+        A = rdpg_from_latent(X)
+        self.assertTrue(A.shape, (5,5))
+
+    def test_inputs(self):
+        x1 = np.array([[1,1],[1,1]])
+        x2 = np.array([[1,1]])
+        x3 = np.zeros((2,2,2))
+        with self.assertRaises(TypeError):
+            p_from_latent('hi') # wrong type
+        with self.assertRaises(ValueError):
+            p_from_latent(x1, x2) # dimension mismatch
+        with self.assertRaises(ValueError):
+            p_from_latent(x3) # wrong num dimensions
+        with self.assertRaises(TypeError):
+            rdpg_from_p('XD') # wrong type
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x3) # wrong num dimensions
+        with self.assertRaises(ValueError):
+            rdpg_from_p(x2) # wrong shape for P

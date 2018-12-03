@@ -59,7 +59,6 @@ def select_dimension(X,
     """
     Generates profile likelihood from array based on Zhu and Godsie method.
     Elbows correspond to the optimal embedding dimension.
-
     Parameters
     ----------
     X : 1d or 2d array-like
@@ -76,7 +75,6 @@ def select_dimension(X,
         be >= 0.
     return_likelihoods : bool, optional, default: False
         If True, returns the all likelihoods associated with each elbow. 
-
     Returns
     -------
     elbows : list
@@ -88,7 +86,6 @@ def select_dimension(X,
     likelihoods : list of array-like
         Array of likelihoods of the corresponding to each elbow. Only returned
         if `return_likelihoods` is True.
-
     References
     ----------
     .. [1] Zhu, M. and Ghodsi, A. (2006).
@@ -136,6 +133,9 @@ def select_dimension(X,
         raise ValueError(msg)
     else:
         k = n_components
+
+    if k < 3:
+        raise UserWarning('Known bug with low values of k in dimselect function') # TODO
 
     # Check to see if svd is needed
     if X.ndim == 1:

@@ -100,6 +100,7 @@ def symmetrize(graph, method='triu'):
         graph = np.tril(graph)
     elif method is 'avg':
         graph = (np.triu(graph) + np.tril(graph)) / 2
+        
     else:
         msg = "You have not passed a valid parameter for the method."
         raise ValueError(msg)
