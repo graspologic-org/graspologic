@@ -19,7 +19,8 @@ def get_block_probs(eps):
     B[1,1] += eps
     return B
 
-def run_sim(Bx, By, n_components, n_bootstraps, sizes):
+def run_sim(Bx, By, n_components, n_bootstraps, sizes, seed):
+    np.random.seed(seed)
     A0 = sbm(sizes,Bx, loops=False)
     A1 = sbm(sizes,Bx, loops=False)
     A2 = sbm(sizes,By, loops=False)
@@ -57,19 +58,13 @@ def main(argv):
     for eps in epsilons:
         print('Epsilon = {}'.format(eps))
         By = get_block_probs(eps)
-        # test_nulls = []
-        # test_alts = []
-        p = Pool()
+        p = Pool(cpu_count() - 1)
+        seeds = [np.random.randint(1, 100000000) for _ in range(n_sims)]
         tests = [p.apply_async(run_sim,
-                 args=(Bx, By, n_components, n_bootstraps, sizes)) 
-                 for _ in range(n_sims)]
+                 args=(Bx, By, n_components, n_bootstraps, sizes, seeds[s])) 
+                 for s in range(n_sims)]
         outputs = [p.get() for p in tests]
         epsilon_outputs.append(outputs)
-        # for sim in range(n_sims):
-        #     tests = p.apply_async(run_sim, args=(Bx, By, n_components, n_bootstraps, sizes))
-            # spt_null, spt_alt = run_sim(Bx, By, n_components, n_bootstraps, sizes)
-            # test_nulls.append(spt_null)
-            # test_alts.append(spt_alt)
             
     params = {
               'comm_size':size,
