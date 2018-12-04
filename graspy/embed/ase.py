@@ -2,11 +2,11 @@
 # Created by Ben Pedigo on 2018-09-15.
 # Email: bpedigo@jhu.edu
 
-# Eric Bridgeford
+import warnings
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph
+from ..utils import import_graph, get_lcc
 
 
 class AdjacencySpectralEmbed(BaseEmbed):
@@ -42,6 +42,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    lcc : bool, optional (default=True)
+        Computes
 
     Attributes
     ----------
@@ -81,12 +83,14 @@ class AdjacencySpectralEmbed(BaseEmbed):
                  n_components=None,
                  n_elbows=2,
                  algorithm='randomized',
-                 n_iter=5):
+                 n_iter=5,
+                 lcc=True):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
-            n_iter=n_iter)
+            n_iter=n_iter,
+            lcc=lcc)
 
     def fit(self, graph):
         """
@@ -104,6 +108,15 @@ class AdjacencySpectralEmbed(BaseEmbed):
             undirected graph, or right estimated positions if directed graph), and d (eigenvalues
             if undirected graph, singular values if directed graph).
         """
+        if self.lcc:
+            graph = get_lcc(graph)  # get largest connected component
+        else:
+            if not is_fully_connected(graph):
+                msg = 'Input graph is not fully connected. Results may not be optimal.' +
+                      'You can operate on largest connected component by setting "lcc"' +
+                      'parameter to True.'
+                warnings.warn(msg, RuntimeWarning) 
+
         A = import_graph(graph)
         self._reduce_dim(A)
         return self

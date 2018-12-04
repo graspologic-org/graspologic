@@ -46,8 +46,10 @@ def pass_to_ranks(graph, method='zero-boost'):
         return graph
 
     if graph.min() < 0:
-        raise UserWarning('Current pass-to-ranks on graphs with '
-            + 'negative weights will yield nonsensical results, especially for zero-boost')
+        raise UserWarning(
+            'Current pass-to-ranks on graphs with ' +
+            'negative weights will yield nonsensical results, especially for zero-boost'
+        )
 
     if method == 'zero-boost':
         if is_symmetric(graph):
@@ -57,7 +59,7 @@ def pass_to_ranks(graph, method='zero-boost'):
         else:
             non_zeros = graph[graph != 0]
         rank = rankdata(non_zeros)
-        
+
         if is_symmetric(graph):
             if is_loopless(graph):
                 num_zeros = (len(graph[graph == 0]) - graph.shape[0]) / 2
@@ -72,17 +74,17 @@ def pass_to_ranks(graph, method='zero-boost'):
                 num_zeros = graph.size - len(non_zeros) - graph.shape[0]
                 # n^2 - num_diagonal
                 possible_edges = graph.size - graph.shape[0]
-            else: 
+            else:
                 num_zeros = graph.size - len(non_zeros)
                 possible_edges = graph.size
 
-        # shift up by the number of zeros 
+        # shift up by the number of zeros
         rank = rank + num_zeros
         # normalize by the number of possible edges for this kind of graph
         rank = rank / possible_edges
         # put back into matrix form (and reflect over the diagonal if necessary)
         if is_symmetric(graph):
-            triu[triu != 0] = rank 
+            triu[triu != 0] = rank
             graph = symmetrize(triu, method='triu')
         else:
             graph[graph != 0] = rank
@@ -92,10 +94,10 @@ def pass_to_ranks(graph, method='zero-boost'):
         rank = rankdata(non_zeros)
         if method == 'simple-all':
             normalizer = graph.size
-        elif method =='simple-nonzero':
+        elif method == 'simple-nonzero':
             normalizer = rank.shape[0]
-        rank = rank * 2/ (normalizer + 1)
+        rank = rank * 2 / (normalizer + 1)
         graph[graph != 0] = rank
-        return graph    
-    else: 
+        return graph
+    else:
         raise ValueError('Unsuported pass-to-ranks method')

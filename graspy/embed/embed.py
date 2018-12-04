@@ -53,11 +53,13 @@ class BaseEmbed(BaseEstimator):
                  n_components=None,
                  n_elbows=2,
                  algorithm='randomized',
-                 n_iter=5):
+                 n_iter=5,
+                 lcc=True):
         self.n_components = n_components
         self.n_elbows = n_elbows
         self.algorithm = algorithm
         self.n_iter = n_iter
+        self.lcc = lcc
 
     def _reduce_dim(self, A):
         """
