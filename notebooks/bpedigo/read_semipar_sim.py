@@ -3,7 +3,6 @@ import numpy as np
 from graspy.inference import SemiparametricTest
 from graspy.embed import AdjacencySpectralEmbed, select_dimension
 import warnings
-from graspy.simulations import binary_sbm, rdpg_from_latent
 from graspy.utils import symmetrize
 import time
 import sys
@@ -14,19 +13,31 @@ import seaborn as sns
 # f = open('2110072216651244771.pickle', 'rb')
 # f = open('931210899241672712.pickle', 'rb')
 # f = open('476622349264429854.pickle', 'rb')
-f = open('1562017897008903314.pickle', 'rb')
+f = open('127933127237990926.pickle', 'rb')
 d = pickle.load(f)
 f.close()
 print(d.keys())
 print(d['test_by_epsilon'][0][0])
+#%%
 tests_by_epsilon = d['test_by_epsilon']
 test_null_p = np.zeros((len(tests_by_epsilon[0]),2))
 test_alt_p = np.zeros((len(tests_by_epsilon[0]),2))
+sig = 0.05
+null_rej = 0
+alt_rej = 0
 for e, test_epsilon in enumerate(tests_by_epsilon):
     for t, test_group in enumerate(test_epsilon):
         test_null_p[t,e] = test_group[0].p
         test_alt_p[t,e] = test_group[1].p
+        null_rej += test_group[0].p < sig
+        alt_rej += test_group[1].p < sig
+e = 0
+print(np.sum(test_null_p[:,e] < sig) / 200)
+print(np.sum(test_alt_p[:,e] < sig) / 200)
+#%%
+print('Null mean')
 print(np.mean(test_null_p, axis=0))
+print('Alt mean')
 print(np.mean(test_alt_p, axis=0))
 print(np.var(test_null_p, axis=0))
 print(np.var(test_alt_p, axis=0))

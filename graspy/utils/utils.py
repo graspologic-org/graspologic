@@ -30,10 +30,10 @@ def import_graph(graph):
     networkx.Graph, numpy.array
 	"""
     if type(graph) in [nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph]:
-        if not is_fully_connected(graph): 
-            raise ValueError('Input graph is not fully connected, please use '
-                            + 'graspy.utils.find_lcc() to generate a connected graph '
-                            + 'before import')
+        # if not is_fully_connected(graph): 
+        #     raise ValueError('Input graph is not fully connected, please use '
+        #                     + 'graspy.utils.find_lcc() to generate a connected graph '
+        #                     + 'before import')
         out = nx.to_numpy_array(
             graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif (type(graph) is np.ndarray):
@@ -41,10 +41,10 @@ def import_graph(graph):
             raise ValueError('Matrix has improper number of dimensions')
         elif graph.shape[0] != graph.shape[1]:
             raise ValueError('Matrix is not square')
-        if not is_fully_connected(graph): 
-            raise ValueError('Input graph is not fully connected, please use '
-                            + 'graspy.utils.find_lcc() to generate a connected graph '
-                            + 'before import')
+        # if not is_fully_connected(graph): 
+        #     raise ValueError('Input graph is not fully connected, please use '
+        #                     + 'graspy.utils.find_lcc() to generate a connected graph '
+        #                     + 'before import')
         out = graph.copy()
         if not np.issubdtype(graph.dtype, np.floating):
             out = out.astype(np.float)
