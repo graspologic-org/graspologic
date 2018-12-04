@@ -9,6 +9,7 @@ import sys
 import getopt
 import pickle  
 from multiprocessing import Pool, cpu_count
+from functools import partial
 
 B_BASE = np.array([[0.5, 0.2],
                   [0.2, 0.5]])
@@ -20,6 +21,7 @@ def get_block_probs(eps):
     return B
 
 def run_sim(Bx, By, n_components, n_bootstraps, sizes, seed):
+    print(seed)
     np.random.seed(seed)
     A0 = sbm(sizes,Bx, loops=False)
     A1 = sbm(sizes,Bx, loops=False)
@@ -33,6 +35,8 @@ def run_sim(Bx, By, n_components, n_bootstraps, sizes, seed):
     return (spt_null, spt_alt)
 
 def main(argv):
+    t = time.clock()
+    np.random.seed(83450277)
     opts, args = getopt.getopt(argv, 'b:s:n:c:')
     n_components = None
     for opt, arg in opts:
@@ -58,12 +62,10 @@ def main(argv):
     for eps in epsilons:
         print('Epsilon = {}'.format(eps))
         By = get_block_probs(eps)
-        p = Pool(cpu_count() - 1)
         seeds = [np.random.randint(1, 100000000) for _ in range(n_sims)]
-        tests = [p.apply_async(run_sim,
-                 args=(Bx, By, n_components, n_bootstraps, sizes, seeds[s])) 
-                 for s in range(n_sims)]
-        outputs = [p.get() for p in tests]
+        run_sim_partial = partial(run_sim, Bx, By, n_components, n_bootstraps, sizes,)
+        with Pool(cpu_count() - 1) as p:
+            outputs = p.map(run_sim_partial, seeds)
         epsilon_outputs.append(outputs)
             
     params = {
@@ -74,12 +76,14 @@ def main(argv):
               'epsilons':epsilons,
               'B_base':B_BASE
               }
-
+    took = time.clock() - t
     output = {
               'test_by_epsilon':epsilon_outputs,
-              'params':params
+              'params':params,
+              'time':took
               }
 
+    print('Took {}'.format(took))
     job_id = str(hash(time.time()))
     print('File name: {}.pickle'.format(job_id))
     f = open(job_id + '.pickle', 'wb')
