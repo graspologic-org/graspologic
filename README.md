@@ -28,7 +28,7 @@ This package is supported for *Linux* and *macOS*. The package has been tested o
 + Windows: N/A
 
 ### Python Requirements
-This package is written for Python3. Currently, it is supported for Python 3.4, 3.5, 3.6, and 3.7.
+This package is written for Python3. Currently, it is supported for Python 3.5, 3.6, and 3.7.
 
 ### Python Dependencies
 ```
@@ -36,6 +36,7 @@ networkx
 numpy
 scikit-learn
 scipy
+seaborn
 ```
 
 # Installation Guide
