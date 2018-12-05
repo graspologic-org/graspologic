@@ -82,12 +82,14 @@ class LaplacianSpectralEmbed(BaseEmbed):
                  n_components=None,
                  n_elbows=2,
                  algorithm='randomized',
-                 n_iter=5):
+                 n_iter=5,
+                 lcc=True):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
-            n_iter=n_iter)
+            n_iter=n_iter,
+            lcc=lcc)
         self.form = form
 
     def fit(self, graph):
@@ -120,6 +122,16 @@ class LaplacianSpectralEmbed(BaseEmbed):
         graphstats.utils.to_laplace
         """
         A = import_graph(graph)
+
+        if self.lcc:
+            graph = get_lcc(graph)  # get largest connected component
+        else:
+            if not is_fully_connected(graph):
+                msg = """Input graph is not fully connected. Results may not \
+                be optimal. You can operate on largest connected component by \
+                setting 'lcc' parameter to True."""
+                warnings.warn(msg, UserWarning)
+
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
         return self

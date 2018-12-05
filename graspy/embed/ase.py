@@ -2,11 +2,9 @@
 # Created by Ben Pedigo on 2018-09-15.
 # Email: bpedigo@jhu.edu
 
-import warnings
-
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph, get_lcc
+from ..utils import import_graph, get_lcc, is_fully_connected
 
 
 class AdjacencySpectralEmbed(BaseEmbed):
@@ -105,18 +103,19 @@ class AdjacencySpectralEmbed(BaseEmbed):
         -------
         lpm : LatentPosition object
             Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d (eigenvalues
-            if undirected graph, singular values if directed graph).
+            undirected graph, or right estimated positions if directed graph), and d 
+            (eigenvalues if undirected graph, singular values if directed graph).
         """
+        A = import_graph(graph)
+
         if self.lcc:
             graph = get_lcc(graph)  # get largest connected component
         else:
             if not is_fully_connected(graph):
-                msg = 'Input graph is not fully connected. Results may not be optimal.' +
-                      'You can operate on largest connected component by setting "lcc"' +
-                      'parameter to True.'
-                warnings.warn(msg, RuntimeWarning) 
+                msg = """Input graph is not fully connected. Results may not \
+                be optimal. You can operate on largest connected component by \
+                setting 'lcc' parameter to True."""
+                warnings.warn(msg, UserWarning)
 
-        A = import_graph(graph)
         self._reduce_dim(A)
         return self

@@ -7,7 +7,7 @@ from sklearn.utils.validation import check_is_fitted
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph
+from ..utils import import_graph, get_lcc, is_fully_connected
 
 
 def _check_valid_graphs(graphs):
@@ -130,12 +130,14 @@ class OmnibusEmbed(BaseEmbed):
                  n_components=None,
                  n_elbows=2,
                  algorithm='randomized',
-                 n_iter=5):
+                 n_iter=5,
+                 lcc=False):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
-            n_iter=n_iter)
+            n_iter=n_iter,
+            lcc=lcc)
 
     def fit(self, graphs):
         """
@@ -163,6 +165,18 @@ class OmnibusEmbed(BaseEmbed):
         # Save attributes
         self.n_graphs_ = len(graphs)
         self.n_vertices_ = graphs[0].shape[0]
+
+        graphs = np.stack(graphs)
+        Abar = graphs.sum(axis=0)
+        if self.lcc:
+            _, idx = get_lcc(Abar, return_inds=True)
+            graphs = graphs[:, idx[:, None], idx]
+        else:
+            if not is_fully_connected(Abar):
+                msg = """Input graphs are not fully connected. Results may not \
+                be optimal. You can operate on largest connected component by \
+                setting 'lcc' parameter to True."""
+                warnings.warn(msg, UserWarning)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

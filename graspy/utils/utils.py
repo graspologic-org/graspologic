@@ -255,7 +255,7 @@ def get_lcc(graph, return_inds=False):
     lcc = graph.subgraph(lcc_nodes).copy()
     lcc.remove_nodes_from([n for n in lcc if n not in lcc_nodes])
     if return_inds:
-        nodelist = list(lcc_nodes)
+        nodelist = np.array(list(lcc_nodes))
     if input_ndarray:
         lcc = nx.to_numpy_array(lcc)
     if return_inds:
