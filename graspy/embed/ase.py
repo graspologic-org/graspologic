@@ -41,7 +41,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
     lcc : bool, optional (default=True)
-        Computes
+        If True, computes the largest connected component for the input graph.
 
     Attributes
     ----------
@@ -52,6 +52,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Estimated right latent positions of the graph. Otherwise, None.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices. 
+    indices_ : array, or None
+        If ``lcc`` is True, these are the indices of the vertices that were kept.
 
     See Also
     --------
@@ -101,21 +103,21 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d 
-            (eigenvalues if undirected graph, singular values if directed graph).
+        self : returns an instance of self.
         """
         A = import_graph(graph)
 
         if self.lcc:
-            graph = get_lcc(graph)  # get largest connected component
+            # get largest connected component
+            graph, idx = get_lcc(graph, return_inds=True)
+            self.indices_ = idx
         else:
             if not is_fully_connected(graph):
                 msg = """Input graph is not fully connected. Results may not \
                 be optimal. You can operate on largest connected component by \
                 setting 'lcc' parameter to True."""
                 warnings.warn(msg, UserWarning)
+            self.indices_ = None
 
         self._reduce_dim(A)
         return self

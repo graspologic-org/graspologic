@@ -106,6 +106,9 @@ class OmnibusEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    lcc : bool, optional (default=True)
+        If True, computes the largest connected component for the input graph
+        after finding the union of all input graphs.
 
     Attributes
     ----------
@@ -116,11 +119,15 @@ class OmnibusEmbed(BaseEmbed):
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph. 
     latent_right_ : array, shape (n_samples, n_components), or None
-        Only computed when the graph is directed, or adjacency matrix is assymetric.
-        Estimated right latent positions of the graph. Otherwise, None.
+        Only computed when the graph is directed, or adjacency matrix is 
+        asymmetric. Estimated right latent positions of the graph. Otherwise, 
+        None.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
- 
+    indices_ : array, or None
+        If ``lcc`` is True, these are the indices of the vertices that were 
+        kept.
+
     See Also
     --------
     graspy.embed.selectSVD, graspy.embed.selectDim
@@ -131,7 +138,7 @@ class OmnibusEmbed(BaseEmbed):
                  n_elbows=2,
                  algorithm='randomized',
                  n_iter=5,
-                 lcc=False):
+                 lcc=True):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
@@ -152,9 +159,7 @@ class OmnibusEmbed(BaseEmbed):
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d.
+        self : returns an instance of self.
         """
         # Convert input to np.arrays
         graphs = [import_graph(g) for g in graphs]
@@ -171,12 +176,14 @@ class OmnibusEmbed(BaseEmbed):
         if self.lcc:
             _, idx = get_lcc(Abar, return_inds=True)
             graphs = graphs[:, idx[:, None], idx]
+            self.indices_ = idx
         else:
             if not is_fully_connected(Abar):
                 msg = """Input graphs are not fully connected. Results may not \
                 be optimal. You can operate on largest connected component by \
                 setting 'lcc' parameter to True."""
                 warnings.warn(msg, UserWarning)
+            self.indices_ = None
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)
