@@ -6,21 +6,22 @@
 import numpy as np
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed, select_dimension
-from ..simulations import rdpg, p_from_latent
+from ..simulations import rdpg
 from scipy.spatial import procrustes
 from scipy.linalg import orthogonal_procrustes
 from ..utils import import_graph, is_symmetric
 
 class SemiparametricTest(BaseInference):
     """
-    Two sample hypothesis test for the semiparamatric problem of determining
-    whether two random dot product graphs have the same latent positions.
+    Two sample hypothesis test for the semiparametric problem of determining
+    whether two random dot product graphs have the same latent positions [1].
+
+    Currently, the function only supports undirected graphs
 
     Parameters
     ----------
     embedding : string, { 'ase' (default), 'lse', 'omnibus'}
         String describing the embedding method to use.
-        Must be one of:
         'ase'
             Embed each graph separately using adjacency spectral embedding
             and use Procrustes to align the embeddings.
@@ -34,12 +35,42 @@ class SemiparametricTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
 
-    test_case : string, {'rotation (default), 'scalar-rotation', 'diagonal-rotation'}
+    test_case : string, {'rotation' (default), 'scalar-rotation', 'diagonal-rotation'}
         describes the exact form of the hypothesis to test when using 'ase' or 'lse' 
-        as an embedding method. Ignored if using 'omnibus'
+        as an embedding method. Ignored if using 'omnibus'. Given two latent positions,
+        X1 and X2, and an orthogonal rotation matrix R that minimizes 
+        .. math:: \norm{X1 - X2 R}_F
+
+        - 'rotation'
+            .. math:: H_o: X1 = X2 R
+        - 'scalar-rotation'
+            .. math:: H_o: X1 = c X2 R
+            where `c` is an arbitrary scalar
+        - 'diagonal-rotation'
+            .. math:: H_o: X1 = D X2 R
+            where `D` is an arbitrary diagonal matrix
+
+    n_bootstraps : int, optional (default 500)
+        Number of bootstrap simulations to run to generate the null distribution
+
+    Examples
+    --------
+
+    See also
+    --------
+    graspy.embed.AdjacencySpectralEmbed
+    graspy.embed.LaplacianSpectralEmbed
+    graspy.embed.OmnibusEmbed
+    graspy.embed.selectSVD
+
+    References  
+    ----------
+    .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E. 
+       "A Semiparametric Two-Sample Hypothesis Testing Problem for Random Graphs"
+       Journal of Computational and Graphical Statistics, Vol. 26(2), 2017
     """
 
-    def __init__(self, embedding='ase', n_components=None, n_bootstraps=1000, test_case='rotation',):
+    def __init__(self, embedding='ase', n_components=None, n_bootstraps=500, test_case='rotation',):
         if type(n_bootstraps) is not int:
             raise TypeError()
         if type(test_case) is not str:
@@ -100,7 +131,6 @@ class SemiparametricTest(BaseInference):
             X_hat_compound = OmnibusEmbed(n_components=self.n_components).fit_transform((A1, A2))
             X1_hat = X_hat_compound[:A1.shape[0],:]
             X2_hat = X_hat_compound[A2.shape[0]:,:]
-
         return (X1_hat, X2_hat)
 
     def fit(self, A1, A2):
@@ -111,6 +141,7 @@ class SemiparametricTest(BaseInference):
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
         if self.n_components is None:
+            # get the last elbox from ZG for each and take the maximum
             num_dims1 = select_dimension(A1)[0][-1]
             num_dims2 = select_dimension(A2)[0][-1]
             self.n_components = max(num_dims1, num_dims2)
