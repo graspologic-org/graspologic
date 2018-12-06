@@ -99,16 +99,16 @@ class TestInput(unittest.TestCase):
         self.assertFalse(gus.is_fully_connected(A))
         self.assertTrue(gus.is_fully_connected(B))
 
-    def test_import_unconnected(self):
-        # graph where node at index [3] only connects to self
-        A = np.array([
-            [1, 0, 1, 0],
-            [0, 1, 1, 0],
-            [1, 1, 0, 0],
-            [0, 0, 0, 1],
-        ])
-        with self.assertRaises(ValueError):
-            gus.import_graph(A)
+    # def test_import_unconnected(self):
+    #     # graph where node at index [3] only connects to self
+    #     A = np.array([
+    #         [1, 0, 1, 0],
+    #         [0, 1, 1, 0],
+    #         [1, 1, 0, 0],
+    #         [0, 0, 0, 1],
+    #     ])
+    #     with self.assertRaises(ValueError):
+    #         gus.import_graph(A)
 
     def test_lcc_networkx(self):
         expected_lcc_matrix = np.array([
