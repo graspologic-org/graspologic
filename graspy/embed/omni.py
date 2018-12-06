@@ -130,7 +130,8 @@ class OmnibusEmbed(BaseEmbed):
 
     See Also
     --------
-    graspy.embed.selectSVD, graspy.embed.selectDim
+    graspy.embed.selectSVD
+    graspy.embed.select_dimension
     """
 
     def __init__(self,

@@ -58,7 +58,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     See Also
     --------
     graspy.embed.selectSVD
-    graspy.embed.selectDim
+    graspy.embed.select_dimension
 
     Notes
     -----

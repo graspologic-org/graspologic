@@ -53,12 +53,13 @@ class LaplacianSpectralEmbed(BaseEmbed):
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
     indices_ : array, or None
-        If `lcc` is True, these are the indices of the vertices that were kept.
+        If ``lcc`` is True, these are the indices of the vertices that were kept.
 
     See Also
     --------
     graspy.embed.selectSVD
     graspy.embed.select_dimension
+    graspy.utils.to_laplace
 
     Notes
     -----
@@ -113,10 +114,6 @@ class LaplacianSpectralEmbed(BaseEmbed):
         Returns
         -------
         self : returns an instance of self.
-
-        See Also
-        --------
-        graspy.utils.to_laplace
         """
         A = import_graph(graph)
 
