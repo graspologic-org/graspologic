@@ -1,19 +1,19 @@
 import numpy as np
 from scipy.spatial.distance import pdist
+from scipy.stats import norm
 
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed
-
+from ..utils import import_graph, is_symmetric, symmetrize
 
 class NonparametricTest(BaseInference):
     """
-    Two sample hypothesis test for the nonparametric problem of determining
-    whether two random dot product graphs have the same underlying
-    distributions.
+    Two sample hypothesis test for the nonparamatric problem of determining
+    whether two random dot product graphs have the same latent positions.
 
     Parameters
     ----------
-    embedding : { 'ase' (default), 'lse, 'omnibus'}
+    embedding : string, { 'ase' (default), 'lse', 'omnibus'}
         String describing the embedding method to use.
         Must be one of:
         'ase'
@@ -35,72 +35,73 @@ class NonparametricTest(BaseInference):
     monte_iter : 1000 (default), or Int
         Number of monte carlo iterations.
     """
-
-    def __init__(self, embedding='ase', n_components=None, n_bootstraps=200, monte_iter=1000):
+    def __init__(self, embedding='ase', n_components=None, n_bootstraps=200, n_monte=1000,):
         if type(n_bootstraps) is not int:
             raise TypeError()
+
         if n_bootstraps < 1:
-            raise ValueError('Must have a positive number of bootstraps, not {}'.format(n_bootstraps))
+            raise ValueError('{} is invalid number of bootstraps, must be greater than 1'.format(n_bootstraps))
+
         super().__init__(embedding=embedding, n_components=n_components,)
-        self.embedding = embedding
+        #self.embedding = embedding
+        #self.n_components = n_components
         self.n_bootstraps = n_bootstraps
+        self.n_monte = n_monte
+
+    def _bootstrap(self,x,y,n_boot=200):
+        z = np.concatenate((x,y))
+        boots = []
+        for _ in range(n_boot):
+            np.random.shuffle(z)
+            u = u_from_z(z,len(x))
+            boots.append(u)
+        return boots
+
+    def _u_from_z(self,z,n):
+        k = self._dist_matrix(z)
+        gk = np.exp(-k/np.median(k))
+        u = np.mean(gk[:n,:n]) + np.mean(gk[n:,n:]) -2*np.mean(gk[:n,n:])
+        return u
+
+    def _dist_matrix(self,z):
+        dists = pdist(z, 'euclidean')
+        zlen = len(z)
+        ind = np.triu_indices(zlen,k=1)
+        k = np.zeros((zlen,zlen))
+        k[ind] = dists
+        return symmetrize(k)
 
     def _embed(self, A1, A2):
         if self.embedding not in ['ase', 'lse', 'omnibus']:
             raise ValueError('Invalid embedding method "{}"'.format(self.embedding))
         if self.embedding == 'ase':
-            X1_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A1)
-            X2_hat = AdjacencySpectralEmbed(k=self.n_components).fit_transform(A2)
+            X1_hat = AdjacencySpectralEmbed(self.n_components).fit_transform(A1)
+            X2_hat = AdjacencySpectralEmbed(self.n_components).fit_transform(A2)
         elif self.embedding == 'lse':
-            X1_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A1)
-            X2_hat = LaplacianSpectralEmbed(k=self.n_components).fit_transform(A2)
+            X1_hat = LaplacianSpectralEmbed(self.n_components).fit_transform(A1)
+            X2_hat = LaplacianSpectralEmbed(self.n_components).fit_transform(A2)
         elif self.embedding == 'omnibus':
-            X_hat_compound = OmnibusEmbed(k=self.n_components).fit_transform((A1, A2))
+            X_hat_compound = OmnibusEmbed(self.n_components).fit_transform((A1, A2))
             X1_hat = X_hat_compound[:A1.shape[0],:]
             X2_hat = X_hat_compound[A2.shape[0]:,:]
+
         return (X1_hat, X2_hat)
 
-    def _gen_x1hat_x2hat(self,X1,X2):
-        #generate x matrix nxd and y matrix nxd
-        #generate A = bern(XXt) B = bern(YYt)
-        P1 = p_from_latent(X1)
-        A1 = rdpg_from_p(P1)
-        P2 = p_from_latent(X2)
-        A2 = rdpg_from_p(P2)
-        X1_hat, X2_hat = self._embed(A1, A2)
-        return (X1_hat, X2_hat)
+    def fit(self, A1, A2):
+        A1 = import_graph(A1)
+        A2 = import_graph(A2)
+        if not is_symmetric(A1) or not is_symmetric(A2):
+            raise NotImplementedError() # TODO asymmetric case
 
-    def _gen_kernel_embedding(self,Z):
-        dists = pdist(Z.T, 'euclidean')
-        all_d = np.concatenate((dists,dists,np.zeros(len(dists))))
-        dists = np.exp(-dists/np.median(all_d))
+        if self.n_components is None:
+            num_dims1 = select_dimension(A1)[0][-1]
+            num_dims2 = select_dimension(A2)[0][-1]
+            self.n_components = max(num_dims1, num_dims2)
 
-        zlen = z.shape[1]
-        ind = np.triu_indices(zlen,k=1)
-        k = np.zeros((zlen,zlen))
-        k[ind] = dists
-        return k
+        X_hats = self._embed(A1, A2)
+        U_sample = self._u_from_z(np.concatenate(X_hats), len(X_hats[0]))
+        U_bootstrap = self._bootstrap(X_hats[0],X_hats[1])
 
-    def _bootstrap(self, X1, X2):
-        t_bootstrap = np.zeros(self.n_bootstraps)
-        for i in range(self.n_bootstraps):
-            Z = np.concatenate((X1,X2),dim=1)
-            Z = Z[np.random.shuffle(np.transpose(Z))] #shuffle
-            k = self._gen_kernel_embedding(Z)
-            n = X1.shape[1]
-            m = X2.shape[1]
-            dist = np.mean(k[:n,:n]) + np.mean(k[n:,n:]) - 2*np.mean(k[n:,:n])
-            t_bootstrap[i] = dist
-        return t_bootstrap
-
-    def fit(self, X1, X2):
-        #t_monte = np.zeros(self.monte_iter) TODO p-value
-        #for i in range(self.monte_iter):
-        t_bootstrap = self._bootstrap(X1,X2)
-        X1_hat, X2_hat = self._gen_x1hat_x2hat(X,Y)
-        dist_hat = pdist(np.concatenate((X1_hat,X2_hat),axis=1).T, 'euclidean')
-
-        self.bootstrap = t_bootstrap
-        self.sample = dist_hat
-        #self.p = p
-        return #p
+        self.U_bootstrap = U_bootstrap
+        self.U_sample = U_sample
+        return U_sample
