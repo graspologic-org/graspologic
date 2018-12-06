@@ -12,7 +12,7 @@ from scipy.linalg import orthogonal_procrustes
 from ..utils import import_graph, is_symmetric
 
 class SemiparametricTest(BaseInference):
-    """
+    r"""
     Two sample hypothesis test for the semiparametric problem of determining
     whether two random dot product graphs have the same latent positions [1].
 
@@ -38,16 +38,16 @@ class SemiparametricTest(BaseInference):
     test_case : string, {'rotation' (default), 'scalar-rotation', 'diagonal-rotation'}
         describes the exact form of the hypothesis to test when using 'ase' or 'lse' 
         as an embedding method. Ignored if using 'omnibus'. Given two latent positions,
-        X1 and X2, and an orthogonal rotation matrix R that minimizes 
-        .. math:: \norm{X1 - X2 R}_F
+        :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that 
+        minimizes :math:`\norm{X1 - X2 R}_F`:
 
         - 'rotation'
-            .. math:: H_o: X1 = X2 R
+            .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
-            .. math:: H_o: X1 = c X2 R
+            .. math:: H_o: X_1 = c X_2 R
             where `c` is an arbitrary scalar
         - 'diagonal-rotation'
-            .. math:: H_o: X1 = D X2 R
+            .. math:: H_o: X_1 = D X_2 R
             where `D` is an arbitrary diagonal matrix
 
     n_bootstraps : int, optional (default 500)
@@ -136,6 +136,21 @@ class SemiparametricTest(BaseInference):
         return (X1_hat, X2_hat)
 
     def fit(self, A1, A2):
+        """
+        Fits the test to the two input graphs
+
+        Parameters
+        ----------
+        A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            The two graphs to run a hypothesis test on
+            If np.ndarray, shape must be `(n_vertices, n_vertices)` for both graphs, 
+            where `n_vertices` is the same for both
+        
+        Returns
+        -------
+        p : float
+            The p value corresponding to the specified hypothesis test
+        """
         A1 = import_graph(A1)
         A2 = import_graph(A2)
         if not is_symmetric(A1) or not is_symmetric(A2):
