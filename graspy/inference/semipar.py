@@ -2,7 +2,6 @@
 # bpedigo [at] jhu.edu
 # 10.18.2018
 
-
 import numpy as np
 from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed, select_dimension
@@ -10,6 +9,7 @@ from ..simulations import rdpg
 from scipy.spatial import procrustes
 from scipy.linalg import orthogonal_procrustes
 from ..utils import import_graph, is_symmetric
+
 
 class SemiparametricTest(BaseInference):
     r"""
@@ -72,21 +72,36 @@ class SemiparametricTest(BaseInference):
        Journal of Computational and Graphical Statistics, Vol. 26(2), 2017
     """
 
-    def __init__(self, embedding='ase', n_components=None, n_bootstraps=500, test_case='rotation',):
+    def __init__(
+            self,
+            embedding='ase',
+            n_components=None,
+            n_bootstraps=500,
+            test_case='rotation',
+    ):
         if type(n_bootstraps) is not int:
             raise TypeError()
         if type(test_case) is not str:
             raise TypeError()
         if n_bootstraps < 1:
-            raise ValueError('{} is invalid number of bootstraps, must be greater than 1'.format(n_bootstraps))
-        if test_case not in ['rotation', 'scalar-rotation', 'diagonal-rotation']:
-            raise ValueError('test_case must be one of \'rotation\', \'scalar-rotation\',\'diagonal-rotation\'')
+            raise ValueError(
+                '{} is invalid number of bootstraps, must be greater than 1'.
+                format(n_bootstraps))
+        if test_case not in [
+                'rotation', 'scalar-rotation', 'diagonal-rotation'
+        ]:
+            raise ValueError(
+                'test_case must be one of \'rotation\', \'scalar-rotation\',\'diagonal-rotation\''
+            )
 
-        super().__init__(embedding=embedding, n_components=n_components,)
+        super().__init__(
+            embedding=embedding,
+            n_components=n_components,
+        )
 
         self.n_bootstraps = n_bootstraps
         self.test_case = test_case
-        # paper uses these always, but could be kwargs. need to test
+        # paper uses these always, but could be kwargs eventually. need to test
         self.rescale = False
         self.loops = False
 
@@ -95,8 +110,10 @@ class SemiparametricTest(BaseInference):
         for i in range(self.n_bootstraps):
             A1_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
             A2_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
-            X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
-            t_bootstrap[i] = self._difference_norm(X1_hat_simulated, X2_hat_simulated)
+            X1_hat_simulated, X2_hat_simulated = self._embed(
+                A1_simulated, A2_simulated)
+            t_bootstrap[i] = self._difference_norm(X1_hat_simulated,
+                                                   X2_hat_simulated)
         return t_bootstrap
 
     def _difference_norm(self, X1, X2):
@@ -108,8 +125,8 @@ class SemiparametricTest(BaseInference):
                 R, s = orthogonal_procrustes(X1, X2)
                 return np.linalg.norm(s / np.sum(X1**2) * X1 @ R - X2)
             elif self.test_case == 'diagonal-rotation':
-                normX1 = np.sum(X1**2, axis=1) 
-                normX2 =  np.sum(X2**2, axis=1)
+                normX1 = np.sum(X1**2, axis=1)
+                normX2 = np.sum(X2**2, axis=1)
                 normX1[normX1 <= 1e-15] = 1
                 normX2[normX2 <= 1e-15] = 1
                 X1 = X1 / np.sqrt(normX1[:, None])
@@ -119,20 +136,26 @@ class SemiparametricTest(BaseInference):
         else:
             # in the omni case we don't need to align
             return np.linalg.norm(X1 - X2)
-        
+
     def _embed(self, A1, A2):
         if self.embedding not in ['ase', 'lse', 'omnibus']:
-            raise ValueError('Invalid embedding method "{}"'.format(self.embedding))
+            raise ValueError('Invalid embedding method "{}"'.format(
+                self.embedding))
         if self.embedding == 'ase':
-            X1_hat = AdjacencySpectralEmbed(n_components=self.n_components).fit_transform(A1)
-            X2_hat = AdjacencySpectralEmbed(n_components=self.n_components).fit_transform(A2)
+            X1_hat = AdjacencySpectralEmbed(
+                n_components=self.n_components).fit_transform(A1)
+            X2_hat = AdjacencySpectralEmbed(
+                n_components=self.n_components).fit_transform(A2)
         elif self.embedding == 'lse':
-            X1_hat = LaplacianSpectralEmbed(n_components=self.n_components).fit_transform(A1)
-            X2_hat = LaplacianSpectralEmbed(n_components=self.n_components).fit_transform(A2)
+            X1_hat = LaplacianSpectralEmbed(
+                n_components=self.n_components).fit_transform(A1)
+            X2_hat = LaplacianSpectralEmbed(
+                n_components=self.n_components).fit_transform(A2)
         elif self.embedding == 'omnibus':
-            X_hat_compound = OmnibusEmbed(n_components=self.n_components).fit_transform((A1, A2))
-            X1_hat = X_hat_compound[:A1.shape[0],:]
-            X2_hat = X_hat_compound[A2.shape[0]:,:]
+            X_hat_compound = OmnibusEmbed(
+                n_components=self.n_components).fit_transform((A1, A2))
+            X1_hat = X_hat_compound[:A1.shape[0], :]
+            X2_hat = X_hat_compound[A2.shape[0]:, :]
         return (X1_hat, X2_hat)
 
     def fit(self, A1, A2):
@@ -154,7 +177,7 @@ class SemiparametricTest(BaseInference):
         A1 = import_graph(A1)
         A2 = import_graph(A2)
         if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError() # TODO asymmetric case
+            raise NotImplementedError()  # TODO asymmetric case
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
         if self.n_components is None:
@@ -167,9 +190,11 @@ class SemiparametricTest(BaseInference):
         T1_bootstrap = self._bootstrap(X_hats[0])
         T2_bootstrap = self._bootstrap(X_hats[1])
 
-        # Continuity correction - note that the +0.5 causes p > 1 sometimes # TODO 
-        p1 = (len(T1_bootstrap[T1_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
-        p2 = (len(T2_bootstrap[T2_bootstrap >= T_sample]) + 0.5) / self.n_bootstraps
+        # Continuity correction - note that the +0.5 causes p > 1 sometimes # TODO
+        p1 = (len(T1_bootstrap[T1_bootstrap >= T_sample]) +
+              0.5) / self.n_bootstraps
+        p2 = (len(T2_bootstrap[T2_bootstrap >= T_sample]) +
+              0.5) / self.n_bootstraps
 
         p = max(p1, p2)
 
