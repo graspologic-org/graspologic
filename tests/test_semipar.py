@@ -84,10 +84,6 @@ class TestSemiparametricTest(unittest.TestCase):
         n = spt._difference_norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
-        spt = SemiparametricTest(embedding='lse', test_case='rotation')
-        n = spt._difference_norm(points1, points2)
-        self.assertAlmostEqual(n, 0)
-
     def test_diagonal_rotation_norm(self):
         # triangle in 2d
         points1 = np.array([
@@ -114,11 +110,6 @@ class TestSemiparametricTest(unittest.TestCase):
         n = spt._difference_norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
-        spt = SemiparametricTest(
-            embedding='lse', test_case='diagonal-rotation')
-        n = spt._difference_norm(points1, points2)
-        self.assertAlmostEqual(n, 0)
-
     def test_scalar_rotation_norm(self):
         # triangle in 2d
         points1 = np.array([
@@ -136,10 +127,6 @@ class TestSemiparametricTest(unittest.TestCase):
         points2 = 2 * points2
 
         spt = SemiparametricTest(embedding='ase', test_case='scalar-rotation')
-        n = spt._difference_norm(points1, points2)
-        self.assertAlmostEqual(n, 0)
-
-        spt = SemiparametricTest(embedding='lse', test_case='scalar-rotation')
         n = spt._difference_norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
