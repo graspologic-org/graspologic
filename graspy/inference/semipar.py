@@ -84,7 +84,7 @@ class SemiparametricTest(BaseInference):
 
         self.n_bootstraps = n_bootstraps
         self.test_case = test_case
-        # paper seems to use these always, but could be kwargs. need to test
+        # paper uses these always, but could be kwargs. need to test
         self.rescale = False
         self.loops = False
 

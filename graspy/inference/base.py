@@ -21,7 +21,7 @@ class BaseInference(BaseEstimator):
         'omnibus'
             Embed all graphs simultaneously using omnibus embedding.
 
-    n_components : None (default), or Int
+    n_components : None (default), or int
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
     """
