@@ -1,6 +1,7 @@
 # ase.py
 # Created by Ben Pedigo on 2018-09-15.
 # Email: bpedigo@jhu.edu
+import warnings
 
 from .embed import BaseEmbed
 from .svd import selectSVD
@@ -109,7 +110,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         if self.lcc:
             # get largest connected component
-            graph, idx = get_lcc(graph, return_inds=True)
+            A, idx = get_lcc(A, return_inds=True)
             self.indices_ = idx
         else:
             if not is_fully_connected(graph):

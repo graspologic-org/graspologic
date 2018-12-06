@@ -6,7 +6,7 @@ from numpy.testing import assert_allclose
 from numpy.linalg import norm
 
 from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
-from graspy.simulations.simulations import er_np
+from graspy.simulations.simulations import er_np, er_nm
 from graspy.utils.utils import symmetrize, is_symmetric
 
 
@@ -90,6 +90,18 @@ def test_omni_matrix_symmetric():
         graphs = [er_np(n, p) for _ in range(n)]
         output = _get_omni_matrix(graphs)
         assert is_symmetric(output)
+
+
+def test_omni_unconnected():
+    np.random.seed(4)
+    n = 100
+    m = 50
+
+    graphs = [er_nm(n, m) for _ in range(2)]
+    omni = OmnibusEmbed(lcc=False)
+
+    with pytest.warns(UserWarning):
+        omni.fit(graphs)
 
 
 def test_omni_embed():

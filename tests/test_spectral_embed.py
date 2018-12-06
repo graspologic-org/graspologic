@@ -99,6 +99,12 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         P = np.array([[0.8, 0.2], [0.2, 0.8]])
         _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed, P)
 
+    def test_unconnected_warning(self):
+        A = er_nm(100, 10)
+        with self.assertWarns(UserWarning):
+            ase = AdjacencySpectralEmbed(lcc=False)
+            ase.fit(A)
+
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
@@ -117,6 +123,14 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_different_forms(self):
         f = np.array([[1, 2], [2, 1]])
         lse = LaplacianSpectralEmbed(form='I-DAD')
+
+    def test_unconnected_warning(self):
+        n = [50, 50]
+        p = [[1, 0], [0, 1]]
+        A = sbm(n, p)
+        with self.assertWarns(UserWarning):
+            lse = LaplacianSpectralEmbed(lcc=False)
+            lse.fit(A)
 
 
 if __name__ == '__main__':

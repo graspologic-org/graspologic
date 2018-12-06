@@ -1,11 +1,11 @@
 # ase.py
 # Created by Ben Pedigo on 2018-09-26.
 # Email: bpedigo@jhu.edu
+import warnings
 
 from .embed import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, to_laplace, get_lcc, is_fully_connected
-import numpy as np
 
 
 class LaplacianSpectralEmbed(BaseEmbed):
@@ -119,10 +119,10 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
         if self.lcc:
             # get largest connected component
-            graph, idx = get_lcc(graph, return_inds=True)
+            A, idx = get_lcc(A, return_inds=True)
             self.indices_ = idx
         else:
-            if not is_fully_connected(graph):
+            if not is_fully_connected(A):
                 msg = """Input graph is not fully connected. Results may not \
                 be optimal. You can operate on largest connected component by \
                 setting 'lcc' parameter to True."""

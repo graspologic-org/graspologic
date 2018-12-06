@@ -2,6 +2,8 @@
 # Created by Jaewon Chung on 2018-09-10.
 # Email: j1c@jhu.edu
 # Copyright (c) 2018. All rights reserved.
+import warnings
+
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
