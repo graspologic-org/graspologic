@@ -58,7 +58,6 @@ class SemiparametricTest(BaseInference):
     See also
     --------
     graspy.embed.AdjacencySpectralEmbed
-    graspy.embed.LaplacianSpectralEmbed
     graspy.embed.OmnibusEmbed
     graspy.embed.selectSVD
 

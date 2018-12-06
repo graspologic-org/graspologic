@@ -136,6 +136,31 @@ class TestInput(unittest.TestCase):
         lcc_matrix = nx.to_numpy_array(lcc)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
+    def test_lcc_networkx_undirected(self):
+        expected_lcc_matrix = np.array([
+            [0, 1, 1, 0, 0],
+            [1, 0, 0, 1, 0],
+            [1, 0, 0, 1, 1],
+            [0, 1, 1, 0, 0],
+            [0, 0, 1, 0, 0],
+        ])
+        expected_nodelist = np.array([1, 2, 3, 4, 6])
+        g = nx.Graph()
+        [g.add_node(i) for i in range(1, 7)]
+        g.add_edge(1, 2)
+        g.add_edge(1, 3)
+        g.add_edge(3, 4)
+        g.add_edge(3, 6)
+        g.add_edge(6, 3)
+        g.add_edge(4, 2)
+        lcc, nodelist = gus.get_lcc(g, return_inds=True)
+        lcc_matrix = nx.to_numpy_array(lcc)
+        np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
+        np.testing.assert_array_equal(nodelist, expected_nodelist)
+        lcc = gus.get_lcc(g)
+        lcc_matrix = nx.to_numpy_array(lcc)
+        np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
+
     def test_lcc_numpy(self):
         expected_lcc_matrix = np.array([
             [0, 1, 1, 0, 0],
