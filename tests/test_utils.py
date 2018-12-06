@@ -332,3 +332,8 @@ class TestDiagonalAugment(unittest.TestCase):
         expected[4, 4] = 1.0 / 4
         A_aug = gus.augment_diagonal(A)
         np.testing.assert_array_equal(A_aug, expected)
+
+    def test_lcc_bad_matrix(self):
+        A = np.array([0, 1])
+        with self.assertRaises(ValueError):
+            gus.get_lcc(A)

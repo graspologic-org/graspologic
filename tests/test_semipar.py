@@ -5,18 +5,25 @@
 import unittest
 import numpy as np
 from graspy.inference import SemiparametricTest
-from graspy.embed import AdjacencySpectralEmbed
+from graspy.embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from graspy.simulations import er_np
+from graspy.utils import *
 
 
 class TestSemiparametricTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        np.random.seed(1234556)
         cls.A1 = er_np(20, .3)
         cls.A2 = er_np(20, .3)
 
-    def test_fit_p_works(self):
+    def test_fit_p_ase_works(self):
         spt = SemiparametricTest()
+        p = spt.fit(self.A1, self.A2)
+        pass
+
+    def test_fit_p_omni_works(self):
+        spt = SemiparametricTest(embedding='omnibus')
         p = spt.fit(self.A1, self.A2)
         pass
 
@@ -119,7 +126,10 @@ class TestSemiparametricTest(unittest.TestCase):
             [3, 0],
             [3, -2],
         ], dtype=np.float64)
-        rotation = np.array([[0, 1], [-1, 0],])
+        rotation = np.array([
+            [0, 1],
+            [-1, 0],
+        ])
         # rotated 90 degrees
         points2 = np.dot(points1, rotation)
         # scaled
@@ -135,6 +145,7 @@ class TestSemiparametricTest(unittest.TestCase):
 
     def test_SBM_epsilon(self):
         pass
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -158,6 +158,9 @@ def to_laplace(graph, form='DAD'):
     if form not in valid_inputs:
         raise TypeError('Unsuported Laplacian normalization')
     adj_matrix = import_graph(graph)
+    if not is_fully_connected(adj_matrix):
+        raise ValueError('Input graph is not fully connected' +
+                         ' so a Laplacian cannot be formed')
     if not is_symmetric(adj_matrix):
         raise ValueError(
             'Laplacian not implemented/defined for directed graphs')

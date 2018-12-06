@@ -20,13 +20,10 @@ class SemiparametricTest(BaseInference):
 
     Parameters
     ----------
-    embedding : string, { 'ase' (default), 'lse', 'omnibus'}
+    embedding : string, { 'ase' (default), 'omnibus'}
         String describing the embedding method to use.
         'ase'
             Embed each graph separately using adjacency spectral embedding
-            and use Procrustes to align the embeddings.
-        'lse'
-            Embed each graph separately using laplacian spectral embedding
             and use Procrustes to align the embeddings.
         'omnibus'
             Embed all graphs simultaneously using omnibus embedding.
@@ -39,13 +36,13 @@ class SemiparametricTest(BaseInference):
         describes the exact form of the hypothesis to test when using 'ase' or 'lse' 
         as an embedding method. Ignored if using 'omnibus'. Given two latent positions,
         :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that 
-        minimizes :math:`\norm{X1 - X2 R}_F`:
+        minimizes :math:`||X1 - X2 R||_F`:
 
         - 'rotation'
             .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
             .. math:: H_o: X_1 = c X_2 R
-            where `c` is an arbitrary scalar
+            where `c` is a scalar, `c > 0`
         - 'diagonal-rotation'
             .. math:: H_o: X_1 = D X_2 R
             where `D` is an arbitrary diagonal matrix
@@ -117,7 +114,7 @@ class SemiparametricTest(BaseInference):
         return t_bootstrap
 
     def _difference_norm(self, X1, X2):
-        if self.embedding in ['ase', 'lse']:
+        if self.embedding in ['ase']:
             if self.test_case == 'rotation':
                 R = orthogonal_procrustes(X1, X2)[0]
                 return np.linalg.norm(X1 @ R - X2)
@@ -138,18 +135,10 @@ class SemiparametricTest(BaseInference):
             return np.linalg.norm(X1 - X2)
 
     def _embed(self, A1, A2):
-        if self.embedding not in ['ase', 'lse', 'omnibus']:
-            raise ValueError('Invalid embedding method "{}"'.format(
-                self.embedding))
         if self.embedding == 'ase':
             X1_hat = AdjacencySpectralEmbed(
                 n_components=self.n_components).fit_transform(A1)
             X2_hat = AdjacencySpectralEmbed(
-                n_components=self.n_components).fit_transform(A2)
-        elif self.embedding == 'lse':
-            X1_hat = LaplacianSpectralEmbed(
-                n_components=self.n_components).fit_transform(A1)
-            X2_hat = LaplacianSpectralEmbed(
                 n_components=self.n_components).fit_transform(A2)
         elif self.embedding == 'omnibus':
             X_hat_compound = OmnibusEmbed(
