@@ -81,6 +81,11 @@ class TestInput(unittest.TestCase):
         self.assertTrue(gus.is_unweighted(B))
         self.assertFalse(gus.is_unweighted(self.A))
 
+    def test_unconnected_laplacian(self):
+        A = np.array([[0, 1, 0],[1, 0, 0],[0, 0, 0],])
+        with self.assertRaises(ValueError):
+            gus.to_laplace(A)
+            
     def test_is_fully_connected(self):
         # graph where node at index [3] only connects to self
         A = np.array([
