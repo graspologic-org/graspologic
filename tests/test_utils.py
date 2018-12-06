@@ -52,8 +52,8 @@ class TestInput(unittest.TestCase):
     def test_to_laplace_DAD(self):
         A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
-        expected_L_normed = ([[0, 1 / sqrt(2), 0],
-                              [1 / sqrt(2), 0, 1 / sqrt(2)],
+        expected_L_normed = ([[0, 1 / sqrt(2),
+                               0], [1 / sqrt(2), 0, 1 / sqrt(2)],
                               [0, 1 / sqrt(2), 0]])
 
         L_normed = gus.to_laplace(A, form='DAD')
@@ -305,3 +305,8 @@ class TestInput(unittest.TestCase):
         expected[4, 4] = 1.0 / 4
         A_aug = gus.augment_diagonal(A)
         np.testing.assert_array_equal(A_aug, expected)
+
+    def test_lcc_bad_matrix(self):
+        A = np.array([0, 1])
+        with self.assertRaises(ValueError):
+            gus.get_lcc(A)
