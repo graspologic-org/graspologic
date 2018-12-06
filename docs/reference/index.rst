@@ -11,3 +11,4 @@ Reference
    cluster
    plotting
    utils
+   inference
