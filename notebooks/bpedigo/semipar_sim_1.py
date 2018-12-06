@@ -21,7 +21,6 @@ def get_block_probs(eps):
     return B
 
 def run_sim(Bx, By, n_components, n_bootstraps, sizes, seed):
-    print(seed)
     np.random.seed(seed)
     A0 = sbm(sizes,Bx, loops=False)
     A1 = sbm(sizes,Bx, loops=False)
@@ -56,8 +55,8 @@ def main(argv):
     
     sizes = 2*[size]
     Bx = get_block_probs(0)
-    # epsilons = [0, 0.05, 0.1, 0.2]
-    epsilons = [0, 0.2]
+    epsilons = [0, 0.05, 0.1, 0.2]
+    # epsilons = [0, 0.2]
     epsilon_outputs = []
     for eps in epsilons:
         print('Epsilon = {}'.format(eps))
