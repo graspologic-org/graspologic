@@ -30,7 +30,7 @@ class SemiparametricTest(BaseInference):
         'omnibus'
             Embed all graphs simultaneously using omnibus embedding.
 
-    n_components : None (default), or Int
+    n_components : None (default), or int
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
 
@@ -53,13 +53,15 @@ class SemiparametricTest(BaseInference):
 
         self.n_bootstraps = n_bootstraps
         self.test_case = test_case
+        # paper seems to use these always, but could be kwargs. need to test
+        self.rescale = False
+        self.loops = False
 
     def _bootstrap(self, X_hat):
         t_bootstrap = np.zeros(self.n_bootstraps)
         for i in range(self.n_bootstraps):
-            # these look to be constraints from the paper
-            A1_simulated = rdpg(X_hat, rescale=False, loops=False)
-            A2_simulated = rdpg(X_hat, rescale=False, loops=False)
+            A1_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
+            A2_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
             X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
             t_bootstrap[i] = self._difference_norm(X1_hat_simulated, X2_hat_simulated)
         return t_bootstrap
@@ -68,43 +70,23 @@ class SemiparametricTest(BaseInference):
         if self.embedding in ['ase', 'lse']:
             if self.test_case == 'rotation':
                 R = orthogonal_procrustes(X1, X2)[0]
-                return np.linalg.norm(np.dot(X1, R) - X2)
+                return np.linalg.norm(X1 @ R - X2)
             elif self.test_case == 'scalar-rotation':
                 R, s = orthogonal_procrustes(X1, X2)
-                return np.linalg.norm(s / np.sum(X1**2) * np.dot(X1, R) - X2)
+                return np.linalg.norm(s / np.sum(X1**2) * X1 @ R - X2)
             elif self.test_case == 'diagonal-rotation':
-                raise NotImplementedError()
-                normX1 = np.linalg.norm(X1, axis=1)
-                normX2 =  np.linalg.norm(X2, axis=1)
+                normX1 = np.sum(X1**2, axis=1) 
+                normX2 =  np.sum(X2**2, axis=1)
                 normX1[normX1 <= 1e-15] = 1
                 normX2[normX2 <= 1e-15] = 1
-                # print(X1)
-                # print(normX1.shape)
-                # print(normX1[:, None])
-                X1 = np.divide(X1, normX1[:, None])
-                X2 = np.divide(X1, normX2[:, None])
-                R, s = orthogonal_procrustes(X1, X2)
-                X2 = np.dot(X2, R)
-                X2 = s / np.sum(X2**2) * X2
-                # X2 = X2
-                return np.linalg.norm(X1 - X2)
-            elif self.test_case == 'scalar-diagonal-rotation':
-                '''
-                X1 = X1-np.mean(X1, 0)
-                X2 = X1-np.mean(X2, 0)
-                normX1 = np.linalg.norm(X1)
-                normX2 =  np.linalg.norm(X2)
-                X1 /= normX1
-                X2 /= normX2
-                R,s = orthogonal_procrustes(X1, X2)
-                X2 = np.dot(X2, R.T)*s
-                return np.linalg.norm(X1 - X2)
-                '''
-                mx1, mx2, disparity = procrustes(X1,X2)
-                return disparity
+                X1 = X1 / np.sqrt(normX1[:, None])
+                X2 = X2 / np.sqrt(normX2[:, None])
+                R = orthogonal_procrustes(X1, X2)[0]
+                return np.linalg.norm(X1 @ R - X2)
         else:
+            # in the omni case we don't need to align
             return np.linalg.norm(X1 - X2)
-
+        
     def _embed(self, A1, A2):
         if self.embedding not in ['ase', 'lse', 'omnibus']:
             raise ValueError('Invalid embedding method "{}"'.format(self.embedding))
@@ -128,8 +110,6 @@ class SemiparametricTest(BaseInference):
             raise NotImplementedError() # TODO asymmetric case
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
-        # need to make sure A1 and A2 will both be embeded in same num dims
-        # could be an argument for doing this in init but I think it makes sense here
         if self.n_components is None:
             num_dims1 = select_dimension(A1)[0][-1]
             num_dims2 = select_dimension(A2)[0][-1]
