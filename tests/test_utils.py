@@ -52,8 +52,8 @@ class TestInput(unittest.TestCase):
     def test_to_laplace_DAD(self):
         A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
-        expected_L_normed = ([[0, 1 / sqrt(2), 0],
-                              [1 / sqrt(2), 0, 1 / sqrt(2)],
+        expected_L_normed = ([[0, 1 / sqrt(2),
+                               0], [1 / sqrt(2), 0, 1 / sqrt(2)],
                               [0, 1 / sqrt(2), 0]])
 
         L_normed = gus.to_laplace(A, form='DAD')
@@ -98,17 +98,6 @@ class TestInput(unittest.TestCase):
         ])
         self.assertFalse(gus.is_fully_connected(A))
         self.assertTrue(gus.is_fully_connected(B))
-
-    def test_import_unconnected(self):
-        # graph where node at index [3] only connects to self
-        A = np.array([
-            [1, 0, 1, 0],
-            [0, 1, 1, 0],
-            [1, 1, 0, 0],
-            [0, 0, 0, 1],
-        ])
-        with self.assertRaises(ValueError):
-            gus.import_graph(A)
 
     def test_lcc_networkx(self):
         expected_lcc_matrix = np.array([
