@@ -87,6 +87,15 @@ class NonparametricTest(BaseInference):
 
         return (X1_hat, X2_hat)
 
+    def _median_heuristic(self, X_hats): # TODO
+        X1_hat = X_hats[0]
+        X2_hat = X_hats[1]
+        X1_col_means = np.mean(X1_hat,axis=0)
+        X2_col_means = np.mean(X2_hat,axis=0)
+        col_means = np.multiply((X1_col_means, X2_col_means))
+        # TODO
+        return (X1_hat, X2_hat)
+
     def fit(self, A1, A2):
         A1 = import_graph(A1)
         A2 = import_graph(A2)
@@ -98,6 +107,8 @@ class NonparametricTest(BaseInference):
             num_dims2 = select_dimension(A2)[0][-1]
             self.n_components = max(num_dims1, num_dims2)
 
+        #monte = [] TODO
+        #for _ in range(self.n_monte): TODO
         X_hats = self._embed(A1, A2)
         U_sample = self._u_from_z(np.concatenate(X_hats), len(X_hats[0]))
         U_bootstrap = self._bootstrap(X_hats[0],X_hats[1])
