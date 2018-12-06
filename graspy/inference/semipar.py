@@ -55,6 +55,8 @@ class SemiparametricTest(BaseInference):
 
     Examples
     --------
+    >>> spt = SemiparametricTest(n_components=2, test_case='rotation')
+    >>> p = spt.fit(A1, A2)
 
     See also
     --------
