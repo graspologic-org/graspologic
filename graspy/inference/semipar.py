@@ -36,7 +36,7 @@ class SemiparametricTest(BaseInference):
         describes the exact form of the hypothesis to test when using 'ase' or 'lse' 
         as an embedding method. Ignored if using 'omnibus'. Given two latent positions,
         :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that 
-        minimizes :math:`||X1 - X2 R||_F`:
+        minimizes :math:`||X_1 - X_2 R||_F`:
 
         - 'rotation'
             .. math:: H_o: X_1 = X_2 R

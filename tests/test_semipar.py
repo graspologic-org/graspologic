@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from graspy.inference import SemiparametricTest
 from graspy.embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
-from graspy.simulations import er_np
+from graspy.simulations import er_np, sbm
 from graspy.utils import *
 
 
@@ -131,7 +131,27 @@ class TestSemiparametricTest(unittest.TestCase):
         self.assertAlmostEqual(n, 0)
 
     def test_SBM_epsilon(self):
-        pass
+        np.random.seed(12345678)
+        B1 = np.array([
+            [0.5, 0.2],
+            [0.2, 0.5],
+        ])
+
+        B2 = np.array([
+            [0.7, 0.2],
+            [0.2, 0.7],
+        ])
+        b_size = 200
+        A1 = sbm(2 * [b_size], B1)
+        A2 = sbm(2 * [b_size], B1)
+        A3 = sbm(2 * [b_size], B2)
+
+        spt_null = SemiparametricTest(n_components=2, n_bootstraps=10)
+        spt_alt = SemiparametricTest(n_components=2, n_bootstraps=10)
+        p_null = spt_null.fit(A1, A2)
+        p_alt = spt_alt.fit(A1, A3)
+        self.assertTrue(p_null > 0.05)
+        self.assertTrue(p_alt <= 0.05)
 
 
 if __name__ == '__main__':
