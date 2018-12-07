@@ -9,7 +9,7 @@ from ..utils import import_graph, get_lcc, is_fully_connected
 
 
 class AdjacencySpectralEmbed(BaseEmbed):
-    """
+    r"""
     Class for computing the adjacency spectral embedding of a graph 
     
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation of 
@@ -80,18 +80,19 @@ class AdjacencySpectralEmbed(BaseEmbed):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
 
-    def __init__(self,
-                 n_components=None,
-                 n_elbows=2,
-                 algorithm='randomized',
-                 n_iter=5,
-                 lcc=True):
+    def __init__(
+            self,
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
-            lcc=lcc)
+        )
 
     def fit(self, graph):
         """
@@ -108,17 +109,11 @@ class AdjacencySpectralEmbed(BaseEmbed):
         """
         A = import_graph(graph)
 
-        if self.lcc:
-            # get largest connected component
-            A, idx = get_lcc(A, return_inds=True)
-            self.indices_ = idx
-        else:
-            if not is_fully_connected(graph):
-                msg = """Input graph is not fully connected. Results may not \
-                be optimal. You can operate on largest connected component by \
-                setting 'lcc' parameter to True."""
-                warnings.warn(msg, UserWarning)
-            self.indices_ = None
+        if not is_fully_connected(A):
+            msg = """Input graph is not fully connected. Results may not \
+            be optimal. You can compute the largest connected component by \
+            using ``graspy.utils.get_lcc``."""
+            warnings.warn(msg, UserWarning)
 
         self._reduce_dim(A)
         return self

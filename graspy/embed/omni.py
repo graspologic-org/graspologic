@@ -108,9 +108,6 @@ class OmnibusEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
-    lcc : bool, optional (default=True)
-        If True, computes the largest connected component for the input graph
-        after finding the union of all input graphs.
 
     Attributes
     ----------
@@ -136,18 +133,19 @@ class OmnibusEmbed(BaseEmbed):
     graspy.embed.select_dimension
     """
 
-    def __init__(self,
-                 n_components=None,
-                 n_elbows=2,
-                 algorithm='randomized',
-                 n_iter=5,
-                 lcc=True):
+    def __init__(
+            self,
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
-            lcc=lcc)
+        )
 
     def fit(self, graphs):
         """
@@ -175,18 +173,13 @@ class OmnibusEmbed(BaseEmbed):
         self.n_vertices_ = graphs[0].shape[0]
 
         graphs = np.stack(graphs)
-        Abar = graphs.sum(axis=0)
-        if self.lcc:
-            _, idx = get_lcc(Abar, return_inds=True)
-            graphs = graphs[:, idx[:, None], idx]
-            self.indices_ = idx
-        else:
-            if not is_fully_connected(Abar):
-                msg = """Input graphs are not fully connected. Results may not \
-                be optimal. You can operate on largest connected component by \
-                setting 'lcc' parameter to True."""
-                warnings.warn(msg, UserWarning)
-            self.indices_ = None
+
+        # Check if Abar is connected
+        if not is_fully_connected(graphs.mean(axis=0)):
+            msg = r"""Input graphs are not fully connected. Results may not \
+            be optimal. You can compute the largest connected component by \
+            using ``graspy.utils.get_multigraph_lcc``."""
+            warnings.warn(msg, UserWarning)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

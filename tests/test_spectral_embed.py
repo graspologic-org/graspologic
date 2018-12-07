@@ -102,7 +102,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
     def test_unconnected_warning(self):
         A = er_nm(100, 10)
         with self.assertWarns(UserWarning):
-            ase = AdjacencySpectralEmbed(lcc=False)
+            ase = AdjacencySpectralEmbed()
             ase.fit(A)
 
 
@@ -129,7 +129,7 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         p = [[1, 0], [0, 1]]
         A = sbm(n, p)
         with self.assertWarns(UserWarning):
-            lse = LaplacianSpectralEmbed(lcc=False)
+            lse = LaplacianSpectralEmbed()
             lse.fit(A)
 
 

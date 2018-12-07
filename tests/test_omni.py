@@ -98,7 +98,7 @@ def test_omni_unconnected():
     m = 50
 
     graphs = [er_nm(n, m) for _ in range(2)]
-    omni = OmnibusEmbed(lcc=False)
+    omni = OmnibusEmbed()
 
     with pytest.warns(UserWarning):
         omni.fit(graphs)

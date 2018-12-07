@@ -263,7 +263,59 @@ def get_lcc(graph, return_inds=False):
     return lcc
 
 
-def get_multigraph_lcc(graphs, return_inds=False):
+def get_multigraph_union_lcc(graphs, return_inds=False):
+    """
+    Finds the union of all multiple graphs, then compute the largest connected
+    component.
+
+    Parameters
+    ----------
+    graphs: list or np.ndarray
+        List of array-like, (n_vertices, n_vertices), or list of np.ndarray
+        nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph.
+        
+    return_inds: boolean, default: False
+        Whether to return a np.ndarray containing the indices in the original
+        adjacency matrix that were kept and are now in the returned graph.
+        Ignored when input is networkx object
+    
+    Returns
+    -------
+    out : list or np.ndarray
+        If input was a list
+    """
+    if isinstance(graphs, list):
+        if not isinstance(graphs[0], np.ndarray):
+            raise NotImplementedError
+        out = [import_graph(g) for g in graphs]
+        if len(set(map(np.shape, arrays))) != 1:
+            msg = 'All input graphs must have the same size'
+            raise ValueError(msg)
+        bar = np.stack(out).mean(axis=0)
+    elif isinstance(graphs, np.ndarray):
+        shape = graphs.shape
+        if shape[1] != shape[2]:
+            msg = 'Input graphs must be square'
+            raise ValueError(msg)
+        bar = graphs.mean(axis=0)
+    else:
+        msg = 'Expected list or np.ndarray, but got {} instead.'.format(
+            type(graphs))
+        raise ValueError(msg)
+
+    _, idx = get_lcc(bar, return_inds=True)
+    if isinstance(graphs, np.ndarray):
+        idx = np.array(idx)
+        graphs[:, idx[:, None], idx]
+    elif isinstance(graphs, list):
+        if isinstance(graphs[0], np.ndarray):
+            graphs = [g[idx[:, None], idx] for g in graphs]
+    if return_inds:
+        return graphs, idx
+    return graphs
+
+
+def get_multigraph_intersect_lcc(graphs, return_inds=False):
     '''
     Finds the intersection of multiple graphs's largest connected components. 
 

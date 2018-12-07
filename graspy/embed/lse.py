@@ -9,7 +9,7 @@ from ..utils import import_graph, to_laplace, get_lcc, is_fully_connected
 
 
 class LaplacianSpectralEmbed(BaseEmbed):
-    """
+    r"""
     Class for computing the laplacian spectral embedding of a graph 
     
     The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation of 
@@ -80,19 +80,20 @@ class LaplacianSpectralEmbed(BaseEmbed):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
 
-    def __init__(self,
-                 form='DAD',
-                 n_components=None,
-                 n_elbows=2,
-                 algorithm='randomized',
-                 n_iter=5,
-                 lcc=True):
+    def __init__(
+            self,
+            form='DAD',
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
-            lcc=lcc)
+        )
         self.form = form
 
     def fit(self, graph):
@@ -117,17 +118,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
         """
         A = import_graph(graph)
 
-        if self.lcc:
-            # get largest connected component
-            A, idx = get_lcc(A, return_inds=True)
-            self.indices_ = idx
-        else:
-            if not is_fully_connected(A):
-                msg = """Input graph is not fully connected. Results may not \
-                be optimal. You can operate on largest connected component by \
-                setting 'lcc' parameter to True."""
-                warnings.warn(msg, UserWarning)
-            self.indices_ = None
+        if not is_fully_connected(A):
+            msg = """Input graph is not fully connected. Results may not \
+            be optimal. You can compute the largest connected component by \
+            using ``graspy.utils.get_lcc``."""
+            warnings.warn(msg, UserWarning)
 
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
