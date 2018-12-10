@@ -57,16 +57,6 @@ def test_tensor_input():
     assert_equal(X_transformed.shape, (100, 3))
 
 
-def test_matrix_input():
-    X = np.random.normal(size=(100, 4))
-    mds = ClassicalMDS(n_components=None, dissimilarity='euclidean')
-    mds.fit(X)
-
-    assert_equal(mds.dissimilarity_matrix_.shape, (100, 100))
-
-    X_transformed = mds.fit_transform(X)
-
-
 def test_output():
     """
     Recover a 3D tetrahedron with distance 1 between all points
@@ -104,5 +94,18 @@ def test_output():
         # Checks up to 7 decimal points
         assert_almost_equal(A, Ahat)
 
+    def use_euclidean():
+        A = np.array([[-7.62291243e-17, 6.12372436e-01, 4.95031815e-16],
+                      [-4.97243701e-01, -2.04124145e-01, -2.93397401e-01],
+                      [5.02711453e-01, -2.04124145e-01, -2.83926977e-01],
+                      [-5.46775198e-03, -2.04124145e-01, 5.77324378e-01]])
+
+        mds = ClassicalMDS(dissimilarity='euclidean')
+        B = mds.fit_transform(A)
+
+        target = np.ones((4, 4)) - np.identity(4)
+        assert_almost_equal(mds.dissimilarity_matrix_, target)
+
     use_fit_transform()
     use_fit()
+    use_euclidean()

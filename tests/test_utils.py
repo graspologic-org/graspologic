@@ -34,42 +34,56 @@ class TestInput(unittest.TestCase):
         with self.assertRaises(TypeError):
             gus.import_graph(None)
 
-    def test_to_laplace_IDAD(self):
-        A = np.array([
+
+class TestToLaplace(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.A = A = np.array([
             [0, 1, 0],
             [1, 0, 1],
             [0, 1, 0],
         ])
 
+    def test_to_laplace_IDAD(self):
         expected_L_normed = ([[1, -1 / (sqrt(2)), 0],
                               [-1 / (sqrt(2)), 1, -1 / (sqrt(2))],
                               [0, -1 / (sqrt(2)), 1]])
 
-        L_normed = gus.to_laplace(A, form='I-DAD')
+        L_normed = gus.to_laplace(self.A, form='I-DAD')
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
     def test_to_laplace_DAD(self):
-        A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
-
-        expected_L_normed = ([[0, 1 / sqrt(2), 0],
-                              [1 / sqrt(2), 0, 1 / sqrt(2)],
+        expected_L_normed = ([[0, 1 / sqrt(2),
+                               0], [1 / sqrt(2), 0, 1 / sqrt(2)],
                               [0, 1 / sqrt(2), 0]])
 
-        L_normed = gus.to_laplace(A, form='DAD')
+        L_normed = gus.to_laplace(self.A, form='DAD')
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
     def test_to_laplace_symmetric(self):
-        A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
-
-        L_normed = gus.to_laplace(A, form='DAD')
+        L_normed = gus.to_laplace(self.A, form='DAD')
 
         self.assertTrue(gus.is_symmetric(L_normed))
 
     def test_to_laplace_unsuported(self):
         with self.assertRaises(TypeError):
             gus.to_laplace(self.A, form='MOM')
+
+
+class TestChecks(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # simple ERxN graph
+        n = 15
+        p = 0.5
+        cls.A = np.zeros((n, n))
+        nedge = int(round(n * n * p))
+        np.put(
+            cls.A,
+            np.random.choice(np.arange(0, n * n), size=nedge, replace=False),
+            np.random.normal(size=nedge))
 
     def test_is_unweighted(self):
         B = np.array([
@@ -99,17 +113,16 @@ class TestInput(unittest.TestCase):
         self.assertFalse(gus.is_fully_connected(A))
         self.assertTrue(gus.is_fully_connected(B))
 
-    def test_import_unconnected(self):
-        # graph where node at index [3] only connects to self
-        A = np.array([
-            [1, 0, 1, 0],
-            [0, 1, 1, 0],
-            [1, 1, 0, 0],
-            [0, 0, 0, 1],
-        ])
-        with self.assertRaises(ValueError):
-            gus.import_graph(A)
+    def test_is_almost_symmetric(self):
+        np.random.seed(8888)
+        vec1 = np.random.normal(0, 1, (100, 100))
+        vec2 = np.random.normal(0, 1, (100, 100))
+        corr = np.corrcoef(vec1, vec2)
+        self.assertTrue(gus.is_almost_symmetric(corr, atol=1e-15))
+        self.assertFalse(gus.is_symmetric(corr))
 
+
+class TestLCC(unittest.TestCase):
     def test_lcc_networkx(self):
         expected_lcc_matrix = np.array([
             [0, 1, 1, 0, 0],
@@ -190,7 +203,7 @@ class TestInput(unittest.TestCase):
         f.add_edge(3, 1)
         f = nx.to_numpy_array(f)
         g = nx.to_numpy_array(g)
-        lccs, nodelist = gus.get_multigraph_lcc(
+        lccs, nodelist = gus.get_multigraph_intersect_lcc(
             np.stack([f, g]), return_inds=True)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
@@ -219,11 +232,12 @@ class TestInput(unittest.TestCase):
         f.add_edge(3, 1)
         f = nx.to_numpy_array(f)
         g = nx.to_numpy_array(g)
-        lccs, nodelist = gus.get_multigraph_lcc([f, g], return_inds=True)
+        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g],
+                                                          return_inds=True)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
-        lccs = gus.get_multigraph_lcc([f, g], return_inds=False)
+        lccs = gus.get_multigraph_intersect_lcc([f, g], return_inds=False)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
 
@@ -254,24 +268,37 @@ class TestInput(unittest.TestCase):
         f.add_edge(5, 4)
         f.remove_edge(4, 2)
         f.add_edge(3, 1)
-        lccs, nodelist = gus.get_multigraph_lcc([f, g], return_inds=True)
+        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g],
+                                                          return_inds=True)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(
                 nx.to_numpy_array(graph), expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
-        lccs = gus.get_multigraph_lcc([f, g], return_inds=False)
+        lccs = gus.get_multigraph_intersect_lcc([f, g], return_inds=False)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(
                 nx.to_numpy_array(graph), expected_mats[i])
 
-    def test_is_almost_symmetric(self):
-        np.random.seed(8888)
-        vec1 = np.random.normal(0, 1, (100, 100))
-        vec2 = np.random.normal(0, 1, (100, 100))
-        corr = np.corrcoef(vec1, vec2)
-        self.assertTrue(gus.is_almost_symmetric(corr, atol=1e-15))
-        self.assertFalse(gus.is_symmetric(corr))
+    def test_multigraph_union(self):
+        A = np.array([
+            [0, 1, 0],
+            [1, 0, 0],
+            [0, 0, 0],
+        ])
+        B = np.array([
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 1, 0],
+        ])
 
+        out_list = gus.get_multigraph_union_lcc([A, B])
+        out_tensor = gus.get_multigraph_union_lcc(np.stack([A, B]))
+
+        np.testing.assert_equal(out_list, [A, B])
+        np.testing.assert_array_equal(out_tensor, np.stack([A, B]))
+
+
+class TestDiagonalAugment(unittest.TestCase):
     def test_augment_diagonal_undirected(self):
         A = np.array([
             [0, 1, 1, 0, 0],

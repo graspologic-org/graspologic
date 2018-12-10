@@ -49,11 +49,13 @@ class BaseEmbed(BaseEstimator):
     graspy.embed.selectSVD, graspy.embed.select_dimension
     """
 
-    def __init__(self,
-                 n_components=None,
-                 n_elbows=2,
-                 algorithm='randomized',
-                 n_iter=5):
+    def __init__(
+            self,
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
         self.n_components = n_components
         self.n_elbows = n_elbows
         self.algorithm = algorithm

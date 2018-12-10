@@ -2,12 +2,14 @@
 # Created by Jaewon Chung on 2018-09-10.
 # Email: j1c@jhu.edu
 # Copyright (c) 2018. All rights reserved.
+import warnings
+
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph
+from ..utils import import_graph, get_lcc, is_fully_connected
 
 
 def _check_valid_graphs(graphs):
@@ -116,26 +118,34 @@ class OmnibusEmbed(BaseEmbed):
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph. 
     latent_right_ : array, shape (n_samples, n_components), or None
-        Only computed when the graph is directed, or adjacency matrix is assymetric.
-        Estimated right latent positions of the graph. Otherwise, None.
+        Only computed when the graph is directed, or adjacency matrix is 
+        asymmetric. Estimated right latent positions of the graph. Otherwise, 
+        None.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
- 
+    indices_ : array, or None
+        If ``lcc`` is True, these are the indices of the vertices that were 
+        kept.
+
     See Also
     --------
-    graspy.embed.selectSVD, graspy.embed.selectDim
+    graspy.embed.selectSVD
+    graspy.embed.select_dimension
     """
 
-    def __init__(self,
-                 n_components=None,
-                 n_elbows=2,
-                 algorithm='randomized',
-                 n_iter=5):
+    def __init__(
+            self,
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
-            n_iter=n_iter)
+            n_iter=n_iter,
+        )
 
     def fit(self, graphs):
         """
@@ -150,9 +160,7 @@ class OmnibusEmbed(BaseEmbed):
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d.
+        self : returns an instance of self.
         """
         # Convert input to np.arrays
         graphs = [import_graph(g) for g in graphs]
@@ -163,6 +171,15 @@ class OmnibusEmbed(BaseEmbed):
         # Save attributes
         self.n_graphs_ = len(graphs)
         self.n_vertices_ = graphs[0].shape[0]
+
+        graphs = np.stack(graphs)
+
+        # Check if Abar is connected
+        if not is_fully_connected(graphs.mean(axis=0)):
+            msg = r"""Input graphs are not fully connected. Results may not \
+            be optimal. You can compute the largest connected component by \
+            using ``graspy.utils.get_multigraph_union_lcc``."""
+            warnings.warn(msg, UserWarning)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

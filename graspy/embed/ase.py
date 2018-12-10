@@ -1,16 +1,15 @@
 # ase.py
 # Created by Ben Pedigo on 2018-09-15.
 # Email: bpedigo@jhu.edu
-
-# Eric Bridgeford
+import warnings
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph
+from ..utils import import_graph, get_lcc, is_fully_connected
 
 
 class AdjacencySpectralEmbed(BaseEmbed):
-    """
+    r"""
     Class for computing the adjacency spectral embedding of a graph 
     
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation of 
@@ -42,6 +41,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    lcc : bool, optional (default=True)
+        If True, computes the largest connected component for the input graph.
 
     Attributes
     ----------
@@ -52,11 +53,13 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Estimated right latent positions of the graph. Otherwise, None.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices. 
+    indices_ : array, or None
+        If ``lcc`` is True, these are the indices of the vertices that were kept.
 
     See Also
     --------
     graspy.embed.selectSVD
-    graspy.embed.selectDim
+    graspy.embed.select_dimension
 
     Notes
     -----
@@ -77,16 +80,19 @@ class AdjacencySpectralEmbed(BaseEmbed):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
 
-    def __init__(self,
-                 n_components=None,
-                 n_elbows=2,
-                 algorithm='randomized',
-                 n_iter=5):
+    def __init__(
+            self,
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
-            n_iter=n_iter)
+            n_iter=n_iter,
+        )
 
     def fit(self, graph):
         """
@@ -99,11 +105,15 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d (eigenvalues
-            if undirected graph, singular values if directed graph).
+        self : returns an instance of self.
         """
         A = import_graph(graph)
+
+        if not is_fully_connected(A):
+            msg = """Input graph is not fully connected. Results may not \
+            be optimal. You can compute the largest connected component by \
+            using ``graspy.utils.get_lcc``."""
+            warnings.warn(msg, UserWarning)
+
         self._reduce_dim(A)
         return self

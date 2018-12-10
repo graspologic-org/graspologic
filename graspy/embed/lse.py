@@ -1,21 +1,20 @@
 # ase.py
 # Created by Ben Pedigo on 2018-09-26.
 # Email: bpedigo@jhu.edu
+import warnings
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph, to_laplace
-import numpy as np
+from ..utils import import_graph, to_laplace, get_lcc, is_fully_connected
 
 
 class LaplacianSpectralEmbed(BaseEmbed):
-    """
+    r"""
     Class for computing the laplacian spectral embedding of a graph 
     
     The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation of 
     the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce the dimensionality
-    to the specified k, or if k is unspecified, can find a number of dimensions automatically
-    (see graphstats.embed.svd.selectSVD).
+    to the specified k, or if k is unspecified, can find a number of dimensions automatically.
 
     Parameters
     ----------
@@ -41,22 +40,26 @@ class LaplacianSpectralEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    lcc : bool, optional (default=True)
+        If True, computes the largest connected component for the input graph.
 
     Attributes
     ----------
     latent_left_ : array, shape (n_samples, n_components)
-        Estimated left latent positions of the graph. 
+        Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None
         Only computed when the graph is directed, or adjacency matrix is assymetric.
         Estimated right latent positions of the graph. Otherwise, None.
     singular_values_ : array, shape (n_components)
-        Singular values associated with the latent position matrices. 
+        Singular values associated with the latent position matrices.
+    indices_ : array, or None
+        If ``lcc`` is True, these are the indices of the vertices that were kept.
 
     See Also
     --------
     graspy.embed.selectSVD
-    graspy.embed.selectDim
-    graspy.embed.BaseEmbed
+    graspy.embed.select_dimension
+    graspy.utils.to_laplace
 
     Notes
     -----
@@ -77,17 +80,20 @@ class LaplacianSpectralEmbed(BaseEmbed):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
 
-    def __init__(self,
-                 form='DAD',
-                 n_components=None,
-                 n_elbows=2,
-                 algorithm='randomized',
-                 n_iter=5):
+    def __init__(
+            self,
+            form='DAD',
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
-            n_iter=n_iter)
+            n_iter=n_iter,
+        )
         self.form = form
 
     def fit(self, graph):
@@ -96,30 +102,28 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
         By default, uses the Laplacian normalization of the form:
 
-        .. math:: L = I - D^{-1/2} A D^{-1/2}
+        .. math:: L = D^{-1/2} A D^{-1/2}
 
         Parameters
         ----------
         graph : array_like or networkx.Graph
-            input graph to embed. see graphstats.utils.import_graph
+            Input graph to embed. see graphstats.utils.import_graph
 
-        form : string 
-            specifies the type of Laplacian normalization to use
-            (currently supports 'I-DAD' only)
+        form : {'DAD' (default), 'I-DAD'}, optional
+            Specifies the type of Laplacian normalization to use.
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d (eigenvalues
-            if undirected graph, singular values if directed graph).
-
-        See Also
-        --------
-        graphstats.utils.import_graph, graphstats.embed.lpm, graphstats.embed.embed,
-        graphstats.utils.to_laplace
+        self : returns an instance of self.
         """
         A = import_graph(graph)
+
+        if not is_fully_connected(A):
+            msg = """Input graph is not fully connected. Results may not \
+            be optimal. You can compute the largest connected component by \
+            using ``graspy.utils.get_lcc``."""
+            warnings.warn(msg, UserWarning)
+
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
         return self
