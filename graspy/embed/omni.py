@@ -178,7 +178,7 @@ class OmnibusEmbed(BaseEmbed):
         if not is_fully_connected(graphs.mean(axis=0)):
             msg = r"""Input graphs are not fully connected. Results may not \
             be optimal. You can compute the largest connected component by \
-            using ``graspy.utils.get_multigraph_lcc``."""
+            using ``graspy.utils.get_multigraph_union_lcc``."""
             warnings.warn(msg, UserWarning)
 
         # Create omni matrix
