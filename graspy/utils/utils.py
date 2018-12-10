@@ -287,8 +287,9 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
     if isinstance(graphs, list):
         if not isinstance(graphs[0], np.ndarray):
             raise NotImplementedError
+
         out = [import_graph(g) for g in graphs]
-        if len(set(map(np.shape, arrays))) != 1:
+        if len(set(map(np.shape, out))) != 1:
             msg = 'All input graphs must have the same size'
             raise ValueError(msg)
         bar = np.stack(out).mean(axis=0)
@@ -304,8 +305,9 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
         raise ValueError(msg)
 
     _, idx = get_lcc(bar, return_inds=True)
+    idx = np.array(idx)
+
     if isinstance(graphs, np.ndarray):
-        idx = np.array(idx)
         graphs[:, idx[:, None], idx]
     elif isinstance(graphs, list):
         if isinstance(graphs[0], np.ndarray):
