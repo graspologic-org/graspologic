@@ -51,6 +51,25 @@ class SemiparametricTest(BaseInference):
     n_bootstraps : int, optional (default 500)
         Number of bootstrap simulations to run to generate the null distribution
 
+    Attributes
+    ----------
+    sample1_null_distribution_, sample2_null_distribution : np.ndarray (n_bootstraps,)
+        The distribution of T statistics generated under the null, using the first and  
+        and second input graph, respectively. The latent positions of each sample graph 
+        are used independently to sample random dot product graphs, so two null 
+        distributions are generated
+    
+    sample_T_statistic_ : float
+        The observed difference between the embedded positions of the two input graphs
+        after an alignment (the type of alignment depends on `test_case`)
+
+    sample1_p_, sample2_p_ : float 
+        The p value estimated from the null distributions from sample 1 and sample 2. 
+
+    p_ : float 
+        The overall p value from the semiparametric test; this is the max of sample1_p_
+        and sample2_p_
+
     Examples
     --------
     >>> spt = SemiparametricTest(n_components=2, test_case='rotation')
@@ -175,26 +194,25 @@ class SemiparametricTest(BaseInference):
             num_dims2 = select_dimension(A2)[0][-1]
             self.n_components = max(num_dims1, num_dims2)
         X_hats = self._embed(A1, A2)
-        T_sample = self._difference_norm(X_hats[0], X_hats[1])
-        T1_bootstrap = self._bootstrap(X_hats[0])
-        T2_bootstrap = self._bootstrap(X_hats[1])
+        sample_T_statistic = self._difference_norm(X_hats[0], X_hats[1])
+        sample1_null_distribution = self._bootstrap(X_hats[0])
+        sample2_null_distribution = self._bootstrap(X_hats[1])
 
         # Continuity correction - note that the +0.5 causes p > 1 sometimes # TODO
-        p1 = (len(T1_bootstrap[T1_bootstrap >= T_sample]) +
-              0.5) / self.n_bootstraps
-        p2 = (len(T2_bootstrap[T2_bootstrap >= T_sample]) +
-              0.5) / self.n_bootstraps
+        sample1_p = (len(sample1_null_distribution[
+            sample1_null_distribution >= sample_T_statistic]) +
+                     0.5) / self.n_bootstraps
+        sample2_p = (len(sample2_null_distribution[
+            sample2_null_distribution >= sample_T_statistic]) +
+                     0.5) / self.n_bootstraps
 
-        p = max(p1, p2)
+        p = max(sample1_p, sample2_p)
 
-        # TODO : what to store as fields here, or make _private fields
-        # at least for the sake of testing, I'm going to keep everything
-
-        self.T1_bootstrap = T1_bootstrap
-        self.T2_bootstrap = T2_bootstrap
-        self.T_sample = T_sample
-        self.p1 = p1
-        self.p2 = p2
-        self.p = p
+        self.sample1_null_distribution_ = sample1_null_distribution
+        self.sample2_null_distribution_ = sample2_null_distribution
+        self.sample_T_statistic_ = sample_T_statistic
+        self.sample1_p_ = sample1_p
+        self.sample2_p_ = sample2_p
+        self.p_ = p
 
         return p
