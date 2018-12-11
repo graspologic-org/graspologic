@@ -53,7 +53,7 @@ class NonparametricTest(BaseInference):
         boots = []
         for _ in range(n_boot):
             np.random.shuffle(z)
-            u = u_from_z(z,len(x))
+            u = _u_from_z(z,len(x))
             boots.append(u)
         return boots
 
