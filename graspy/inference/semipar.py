@@ -3,11 +3,12 @@
 # 10.18.2018
 
 import numpy as np
-from .base import BaseInference
-from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, OmnibusEmbed, select_dimension
-from ..simulations import rdpg
-from scipy.spatial import procrustes
 from scipy.linalg import orthogonal_procrustes
+from scipy.spatial import procrustes
+
+from .base import BaseInference
+from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
+from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
 
 
@@ -153,9 +154,9 @@ class SemiparametricTest(BaseInference):
         Parameters
         ----------
         A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            The two graphs to run a hypothesis test on
-            If np.ndarray, shape must be `(n_vertices, n_vertices)` for both graphs, 
-            where `n_vertices` is the same for both
+            The two graphs to run a hypothesis test on.
+            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs, 
+            where ``n_vertices`` is the same for both
         
         Returns
         -------
@@ -169,7 +170,7 @@ class SemiparametricTest(BaseInference):
         if A1.shape != A2.shape:
             raise ValueError('Input matrices do not have matching dimensions')
         if self.n_components is None:
-            # get the last elbox from ZG for each and take the maximum
+            # get the last elbow from ZG for each and take the maximum
             num_dims1 = select_dimension(A1)[0][-1]
             num_dims2 = select_dimension(A2)[0][-1]
             self.n_components = max(num_dims1, num_dims2)
