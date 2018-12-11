@@ -95,6 +95,11 @@ class TestChecks(unittest.TestCase):
         self.assertTrue(gus.is_unweighted(B))
         self.assertFalse(gus.is_unweighted(self.A))
 
+    def test_unconnected_laplacian(self):
+        A = np.array([[0, 1, 0],[1, 0, 0],[0, 0, 0],])
+        with self.assertRaises(ValueError):
+            gus.to_laplace(A)
+            
     def test_is_fully_connected(self):
         # graph where node at index [3] only connects to self
         A = np.array([
@@ -137,6 +142,31 @@ class TestLCC(unittest.TestCase):
         g.add_edge(1, 2)
         g.add_edge(1, 3)
         g.add_edge(3, 4)
+        g.add_edge(3, 4)
+        g.add_edge(3, 6)
+        g.add_edge(6, 3)
+        g.add_edge(4, 2)
+        lcc, nodelist = gus.get_lcc(g, return_inds=True)
+        lcc_matrix = nx.to_numpy_array(lcc)
+        np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
+        np.testing.assert_array_equal(nodelist, expected_nodelist)
+        lcc = gus.get_lcc(g)
+        lcc_matrix = nx.to_numpy_array(lcc)
+        np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
+
+    def test_lcc_networkx_undirected(self):
+        expected_lcc_matrix = np.array([
+            [0, 1, 1, 0, 0],
+            [1, 0, 0, 1, 0],
+            [1, 0, 0, 1, 1],
+            [0, 1, 1, 0, 0],
+            [0, 0, 1, 0, 0],
+        ])
+        expected_nodelist = np.array([1, 2, 3, 4, 6])
+        g = nx.Graph()
+        [g.add_node(i) for i in range(1, 7)]
+        g.add_edge(1, 2)
+        g.add_edge(1, 3)
         g.add_edge(3, 4)
         g.add_edge(3, 6)
         g.add_edge(6, 3)
@@ -332,3 +362,8 @@ class TestDiagonalAugment(unittest.TestCase):
         expected[4, 4] = 1.0 / 4
         A_aug = gus.augment_diagonal(A)
         np.testing.assert_array_equal(A_aug, expected)
+
+    def test_lcc_bad_matrix(self):
+        A = np.array([0, 1])
+        with self.assertRaises(ValueError):
+            gus.get_lcc(A)

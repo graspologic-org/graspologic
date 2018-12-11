@@ -18,6 +18,14 @@ Embedding
 
    tutorials/embedding/Omnibus
 
+Inference
+===========================
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/inference/semipar
+
 Plotting
 ===========================
 
