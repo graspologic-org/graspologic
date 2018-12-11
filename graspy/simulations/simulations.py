@@ -13,15 +13,15 @@ def sample_edges(P, directed=False, loops=False):
     """
     Gemerates a binary random graph based on the P matrix provided
 
-    Each element in P represents the probability of a connection between 
-    a vertex indexed by the row i and the column j. 
+    Each element in P represents the probability of a connection between
+    a vertex indexed by the row i and the column j.
 
     Parameters
     ----------
     P: np.ndarray (num_vertices, num_vertices)
         Matrix of probabilities (between 0 and 1) for a random graph
     directed: boolean (default False)
-        Whether to force symmetry upon the resulting graph by only 
+        Whether to force symmetry upon the resulting graph by only
         sampling from the upper triangle of P and then reflecting the
         sampled values accross the diagonal
     loops: boolean
@@ -266,7 +266,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
         binary subgraph over the i, j community.
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
         if Wt is an object, Wtargs corresponds to the trailing arguments
-        to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
+        to pass to the weight function. If Wt is an array-like, Wtargs[i, j]
         corresponds to trailing arguments to pass to Wt[i, j].
     """
     # Check n
@@ -382,17 +382,17 @@ def rdpg(X,
          wt=1,
          wtargs=None):
     '''
-    Samples a random graph based on the latent positions in X (and 
+    Samples a random graph based on the latent positions in X (and
     optionally in Y)
 
     If only X is given, the P matrix is calculated as :math:`P = XX^T`
     If X and Y is given, then :math:`P = XY^T`
     These operations correspond to the dot products between a set of latent
-    positions, so each row in X or Y represents the latent positions in  
-    :math:`\R^{num_columns}` for a single vertex in the random graph 
-    Note that this function may also rescale or clip the resulting P 
+    positions, so each row in X or Y represents the latent positions in
+    :math:`\R^{num_columns}` for a single vertex in the random graph
+    Note that this function may also rescale or clip the resulting P
     matrix to get probabilities between 0 and 1, or remove loops.
-    A binary random graph is then sampled from the P matrix described 
+    A binary random graph is then sampled from the P matrix described
     by X (and possibly Y)
 
     Parameters
@@ -403,18 +403,18 @@ def rdpg(X,
     Y: np.ndarray (2 dimensions, same shape as X)
         right latent position from which to generate a P matrix
     rescale: boolean (default True)
-        when rescale is True, will subtract the minimum value in 
+        when rescale is True, will subtract the minimum value in
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
     directed: boolean (default False)
-        Whether to force symmetry upon the resulting graph by only 
+        Whether to force symmetry upon the resulting graph by only
         sampling from the upper triangle of P and then reflecting the
         sampled values accross the diagonal
     loops: boolean (default True)
         whether to allow elements on the diagonal (corresponding
-        to self connections in a graph) in the returned P matrix. 
-        If loops is False, these elements are removed prior to 
+        to self connections in a graph) in the returned P matrix.
+        If loops is False, these elements are removed prior to
         rescaling (see above) which may affect behavior
     wt: object
         a weight function for each of the edges, taking
@@ -428,7 +428,7 @@ def rdpg(X,
     Returns
     -------
     P: np.ndarray (X.shape[0], X.shape[0])
-        A matrix representing the probabilities of connections between 
+        A matrix representing the probabilities of connections between
         vertices in a random graph based on their latent positions
 
     References
@@ -436,7 +436,7 @@ def rdpg(X,
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-    
+
     '''
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
     A = sample_edges(P, directed=directed, loops=loops)
@@ -463,9 +463,9 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     If only X is given, the P matrix is calculated as :math:`P = XX^T`
     If X and Y is given, then :math:`P = XY^T`
     These operations correspond to the dot products between a set of latent
-    positions, so each row in X or Y represents the latent positions in  
-    :math:`\R^{num_columns}` for a single vertex in the random graph 
-    Note that this function may also rescale or clip the resulting P 
+    positions, so each row in X or Y represents the latent positions in
+    :math:`\R^{num_columns}` for a single vertex in the random graph
+    Note that this function may also rescale or clip the resulting P
     matrix to get probabilities between 0 and 1, or remove loops
 
     Parameters
@@ -476,20 +476,20 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     Y: np.ndarray (2 dimensions, same shape as X)
         right latent position from which to generate a P matrix
     rescale: boolean (default True)
-        when rescale is True, will subtract the minimum value in 
+        when rescale is True, will subtract the minimum value in
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
     loops: boolean (default True)
         whether to allow elements on the diagonal (corresponding
-        to self connections in a graph) in the returned P matrix. 
-        If loops is False, these elements are removed prior to 
+        to self connections in a graph) in the returned P matrix.
+        If loops is False, these elements are removed prior to
         rescaling (see above) which may affect behavior
 
     Returns
     -------
     P: np.ndarray (X.shape[0], X.shape[0])
-        A matrix representing the probabilities of connections between 
+        A matrix representing the probabilities of connections between
         vertices in a random graph based on their latent positions
 
     References
@@ -497,7 +497,7 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-    
+
     '''
     if Y is None:
         Y = X
@@ -523,3 +523,129 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
         P[P < 0] = 0
         P[P > 1] = 1
     return P
+
+def rho_ER(rho,p,n):
+    """
+    Parameters
+    ----------
+    rho : float, int
+        edge correlation between ER random graphs
+    p : float, int
+        probability of edge within graph
+    n : int, optional
+        number of vertices in graph
+
+    Returns
+    -------
+    A : array-like
+        The adjacency matrix of graph G1
+    B : array-like
+        The adjacency matrix of graph G2
+    """
+    if not np.issubdtype(type(p), np.floating):
+        raise TypeError("p is not of type float.")
+    elif p < 0:
+        msg = "You have passed a probability, {}, less than 0."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    elif p > 1:
+        msg = "You have passed a probability, {}, greater than 1."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    if not np.issubdtype(type(rho), np.floating):
+        raise TypeError("rho is not of type float.")
+    elif rho < -1:
+        msg = "You have passed a correlation, {}, less than -1."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    elif rho > 1:
+        msg = "You have passed a correlation, {}, greater than 1."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    if not np.issubdtype(type(n), np.integer):
+        raise TypeError("n is not of type int.")
+    elif n <= 0:
+        msg = 'n must be > 0.'
+        raise ValueError(msg)
+
+    nvec = [n]
+    pvec = np.array([[p]])
+    L = np.repeat(np.repeat(pvec,100,0),100,1)
+
+    A = binary_sbm(nvec, pvec)
+    B = np.random.binomial(1,(1-rho)*L + rho*A)
+    np.fill_diagonal(B,0)
+
+    return A,B
+
+def rho_sbm(k,rho,L,n):
+    """
+    Generates 2 adjacency matrices A,B of graphs G1, G2.
+    (G1,G2) are sampled from a rho-SBM(k,b,L) by the method described in [1].
+    The block membership function assumes the first n//k belong to block 1, and so on.
+
+    Parameters
+    ----------
+    rho : float, int
+        correlation between graphs.
+        0.0 <= rho <= 1.0
+    k : int
+        number of blocks of the rho-SBM.
+        k >= 1
+    L : array-like
+        edge probability matrix, each entry a float between 0 and 1.
+        L should be of size k by k.
+    n : int, optional, default = 100
+        number of vertices for each graph
+
+    Returns
+    -------
+    A : array-like
+        The adjacency matrix of graph G1
+    B : array-like
+        The adjacency matrix of graph G2
+
+    References
+    ----------
+    .. [1] Fishkind et. al (2012).
+        Seeded Graph Matching
+        arXiv:1209.0367v4
+    """
+    if not np.issubdtype(type(k), np.integer):
+        raise TypeError("k is not of type int.")
+    elif k <= 0:
+        msg = 'k must be > 0.'
+        raise ValueError(msg)
+    elif np.any(L < 0):
+        msg = "You have passed a probability, {}, less than 0."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    elif np.any(L > 1):
+        msg = "You have passed a probability, {}, greater than 1."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    if not(L.shape[0]==k and L.shape[1]==k):
+        msg = "Your edge probability matrix needs to be of shape (k,k), not {}"
+        msg = msg.format(L.shape)
+        raise ValueError(msg)
+    if not np.issubdtype(type(rho), np.floating):
+        raise TypeError("rho is not of type float.")
+    elif rho < -1:
+        msg = "You have passed a correlation, {}, less than -1."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    elif rho > 1:
+        msg = "You have passed a correlation, {}, greater than 1."
+        msg = msg.format(float(p))
+        raise ValueError(msg)
+    if not np.issubdtype(type(n), np.integer):
+        raise TypeError("n is not of type int.")
+    elif n <= 0:
+        msg = 'n must be > 0.'
+        raise ValueError(msg)
+    L = symmetrize(L)
+    A = binary_sbm([int(n/k)]*k, L)
+    BL = np.repeat(np.repeat(L,n//k,0),n//k,1)
+    B = np.random.binomial(1,(1-rho)*BL + rho*A)
+    np.fill_diagonal(B,0)
+    return A,B
