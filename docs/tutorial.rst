@@ -20,6 +20,9 @@ Embedding
 
 Inference
 ===========================
+Statistical testing on graphs requires specialized methodology in order to account 
+for the fact that the edges and nodes of a graph are dependent on one another. Below 
+are tutorials for robust statistical hypothesis testing on multiple graphs.
 
 .. toctree::
    :maxdepth: 1
