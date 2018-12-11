@@ -720,11 +720,11 @@ class Test_Rho(unittest.TestCase):
         cls.k = 2
 
     def test_er(self):
-        A, B = rho_er(1, self.p, self.n)
+        A, B = rho_er(1.0, self.p, self.n)
         self.assertTrue(A.shape == (self.n, self.n))
         self.assertTrue(B.shape == (self.n, self.n))
         # when rho is 1, the graphs should be the same
-        self.assertTrue(A == B)
+        self.assertTrue(np.all(A == B))
 
     def validate_er(self):
         A, B = rho_er(self.rho, self.p, self.n)
@@ -740,11 +740,11 @@ class Test_Rho(unittest.TestCase):
             [self.q,self.p]
         ])
         nvec = [self.n//self.k]*self.k
-        A, B = rho_sbm(self.rho, self.k, L, nvec)
+        A, B = rho_sbm(self.k, 1.0, L, self.n)
         self.assertTrue(A.shape == (self.n, self.n))
         self.assertTrue(B.shape == (self.n, self.n))
         # when rho is 1, the graphs should be the same
-        self.assertTrue(A == B)
+        self.assertTrue(np.all(A == B))
 
     def validate_sbm(self):
         L = np.array([
@@ -752,6 +752,6 @@ class Test_Rho(unittest.TestCase):
             [self.q,self.p]
         ])
         nvec = [self.n//self.k]*self.k
-        A, B = rho_sbm(self.rho, self.k, L, nvec)
+        A, B = rho_sbm(self.k, self.rho, L, nvec)
         # TODO : extimate edge correlation from Graphs
         # self.assertAlmostEqual(self.rho, calculated_rho)

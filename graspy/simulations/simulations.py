@@ -570,9 +570,10 @@ def rho_er(rho,p,n):
 
     nvec = [n]
     pvec = np.array([[p]])
-    L = np.repeat(np.repeat(pvec,100,0),100,1)
+    L = np.repeat(np.repeat(pvec,n,0),n,1)
 
-    A = binary_sbm(nvec, pvec)
+    A = sbm(nvec, pvec)
+    np.fill_diagonal(A,0)
     B = np.random.binomial(1,(1-rho)*L + rho*A)
     np.fill_diagonal(B,0)
 
@@ -638,13 +639,9 @@ def rho_sbm(k,rho,L,n):
         msg = "You have passed a correlation, {}, greater than 1."
         msg = msg.format(float(p))
         raise ValueError(msg)
-    if not np.issubdtype(type(n), np.integer):
-        raise TypeError("n is not of type int.")
-    elif n <= 0:
-        msg = 'n must be > 0.'
-        raise ValueError(msg)
+
     L = symmetrize(L)
-    A = binary_sbm([int(n/k)]*k, L)
+    A = sbm([int(n/k)]*k, L)
     BL = np.repeat(np.repeat(L,n//k,0),n//k,1)
     B = np.random.binomial(1,(1-rho)*BL + rho*A)
     np.fill_diagonal(B,0)

@@ -58,10 +58,10 @@ class NonparametricTest(BaseInference):
         self.n_bootstraps = n_bootstraps
         self.n_monte = n_monte
 
-    def _bootstrap(self, x, y, n_boot=200):
+    def _bootstrap(self, x, y):
         z = np.concatenate((x, y))
         boots = []
-        for _ in range(n_boot):
+        for _ in range(self.n_bootstraps):
             np.random.shuffle(z)
             u = self._u_from_z(z, len(x))
             boots.append(u)

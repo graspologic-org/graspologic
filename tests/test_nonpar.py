@@ -13,11 +13,12 @@ def gen():
     A2 = er_np(20, .3)
     return A1, A2
 
-def test_fit_p(A1, A2):
-    p = NonparametricTest().fit(gen())
+def test_fit_p():
+    A1, A2 = gen()
+    p = NonparametricTest().fit(A1, A2)
     # TODO : something
 
-def test_bad_kwargs(self):
+def test_bad_kwargs():
     with pytest.raises(ValueError):
         NonparametricTest(n_components=-100)
     with pytest.raises(ValueError):
@@ -35,18 +36,13 @@ def test_bad_kwargs(self):
     with pytest.raises(TypeError):
         NonparametricTest(test_case=6)
 
-def test_n_bootstraps(self):
-    spt = NonparametricTest(n_bootstraps=234)
-    spt.fit(gen())
-    self.assertEqual(spt.U_bootstrap.shape[0], 234)
+def test_n_bootstraps():
+    A1, A2 = gen()
+    npt = NonparametricTest(n_bootstraps=234)
+    npt.fit(A1, A2)
+    assert len(npt.U_bootstrap) == 234
 
-def test_bad_matrix_inputs(self):
+def test_bad_matrix_inputs():
     npt = NonparametricTest()
     A1, A2 = gen()
-
-    bad_matrix = [[1, 2]]
-    with self.assertRaises(TypeError):
-        npt.fit(bad_matrix, A2)
-
-    with self.assertRaises(ValueError):
-        npt.fit(A1[:2,:2], A2)
+    # svd indexerror?
