@@ -15,7 +15,8 @@ Embedding
 
 .. toctree::
    :maxdepth: 1
-
+   
+   tutorials/embedding/AdjacencySpectralEmbed
    tutorials/embedding/Omnibus
 
 Inference
