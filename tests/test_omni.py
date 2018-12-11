@@ -2,10 +2,11 @@ import pytest
 import numpy as np
 import networkx as nx
 from numpy import array_equal, allclose
+from numpy.testing import assert_allclose
 from numpy.linalg import norm
 
 from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
-from graspy.simulations.simulations import er_np
+from graspy.simulations.simulations import er_np, er_nm
 from graspy.utils.utils import symmetrize, is_symmetric
 
 
@@ -48,34 +49,34 @@ def test_omni_matrix_ones_zeros():
 
 
 def test_omni_matrix_random():
-    expected_output = np.array([[0., 0., 1., 0., 0., 0.5],
-                                [0., 0., 0., 0., 0., 0.],
-                                [1., 0., 0., 0.5, 0., 0.],
-                                [0., 0., 0.5, 0., 0., 0.],
-                                [0., 0., 0., 0., 0., 0.],
-                                [0.5, 0., 0., 0., 0., 0.]])
+    expected_output = np.array([[0., 1., 1., 0., 0.5, 0.5],
+                                [1., 0., 1., 0.5, 0., 1.],
+                                [1., 1., 0., 0.5, 1., 0.],
+                                [0., 0.5, 0.5, 0., 0., 0.],
+                                [0.5, 0., 1., 0., 0., 1.],
+                                [0.5, 1., 0., 0., 1., 0.]])
 
-    np.random.seed(2)
-    graphs = [er_np(3, .3) for _ in range(2)]
+    np.random.seed(4)
+    graphs = [er_np(3, .5) for _ in range(2)]
 
     A = _get_omni_matrix(graphs)
-    assert array_equal(A, expected_output)
+    assert_allclose(A, expected_output)
 
 
 def test_omni_matrix_invalid_inputs():
     with pytest.raises(ValueError):
         empty_list = []
-        omni = OmnibusEmbed(k=2)
+        omni = OmnibusEmbed(n_components=2)
         omni.fit(empty_list)
 
     with pytest.raises(ValueError):
         wrong_shapes = [np.ones((10, 10)), np.ones((20, 20))]
-        omni = OmnibusEmbed(k=2)
+        omni = OmnibusEmbed(n_components=2)
         omni.fit(wrong_shapes)
 
     with pytest.raises(TypeError):
         wrong_dtypes = [1, 2, 3]
-        omni = OmnibusEmbed(k=2)
+        omni = OmnibusEmbed(n_components=2)
         omni.fit(wrong_dtypes)
 
 
@@ -89,6 +90,18 @@ def test_omni_matrix_symmetric():
         graphs = [er_np(n, p) for _ in range(n)]
         output = _get_omni_matrix(graphs)
         assert is_symmetric(output)
+
+
+def test_omni_unconnected():
+    np.random.seed(4)
+    n = 100
+    m = 50
+
+    graphs = [er_nm(n, m) for _ in range(2)]
+    omni = OmnibusEmbed()
+
+    with pytest.warns(UserWarning):
+        omni.fit(graphs)
 
 
 def test_omni_embed():
@@ -106,10 +119,10 @@ def test_omni_embed():
     Abar = (A1 + A2) / 2
 
     np.random.seed(11)
-    omni = OmnibusEmbed(k=3)
+    omni = OmnibusEmbed(n_components=3)
     OmniBar = compute_bar(omni.fit_transform([A1, A2]))
 
-    omni = OmnibusEmbed(k=3)
+    omni = OmnibusEmbed(n_components=3)
     ABar = compute_bar(omni.fit_transform([Abar, Abar]))
 
     tol = 1.e-2

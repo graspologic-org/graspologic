@@ -1,10 +1,9 @@
 import unittest
 import graspy as gs
 import numpy as np
-import networkx as nx
 from graspy.embed.ase import AdjacencySpectralEmbed
 from graspy.embed.lse import LaplacianSpectralEmbed
-from graspy.simulations.simulations import er_np, er_nm, weighted_sbm
+from graspy.simulations.simulations import er_np, er_nm, sbm
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
 
@@ -43,14 +42,14 @@ def _kmeans_comparison(data, labels, n_clusters):
 
 
 def _test_output_dim(self, method, *args, **kwargs):
-    k = 4
-    embed = method(k=k)
+    n_components = 4
+    embed = method(n_components=n_components)
     n = 10
     M = 20
     A = er_nm(n, M) + 5
     embed._reduce_dim(A)
-    self.assertEqual(embed.lpm.X.shape, (n, 4))
-    self.assertTrue(embed.lpm.is_symmetric())
+    self.assertEqual(embed.latent_left_.shape, (n, 4))
+    self.assertTrue(embed.latent_right_ is None)
 
 
 def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
@@ -65,21 +64,21 @@ def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
     sbm_wins = 0
     er_wins = 0
     for sim in range(0, num_sims):
-        sbm = weighted_sbm(verts_per_community, P)
+        sbm_sample = sbm(verts_per_community, P)
         er = er_np(verts, 0.5)
-        embed_sbm = method(k=2)
-        embed_er = method(k=2)
+        embed_sbm = method(n_components=2)
+        embed_er = method(n_components=2)
 
         labels_sbm = np.zeros((verts), dtype=np.int8)
         labels_er = np.zeros((verts), dtype=np.int8)
         labels_sbm[100:] = 1
         labels_er[100:] = 1
 
-        embed_sbm.fit(sbm)
+        embed_sbm.fit(sbm_sample)
         embed_er.fit(er)
 
-        X_sbm = embed_sbm.lpm.X
-        X_er = embed_er.lpm.X
+        X_sbm = embed_sbm.latent_left_
+        X_er = embed_er.latent_left_
 
         self.assertEqual(X_sbm.shape, (verts, communities))
         self.assertEqual(X_er.shape, (verts, communities))
@@ -100,6 +99,12 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         P = np.array([[0.8, 0.2], [0.2, 0.8]])
         _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed, P)
 
+    def test_unconnected_warning(self):
+        A = er_nm(100, 10)
+        with self.assertWarns(UserWarning):
+            ase = AdjacencySpectralEmbed()
+            ase.fit(A)
+
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
@@ -110,16 +115,23 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P)
 
     def test_no_directed(self):
-        f = np.array([[1, 2],
-                      [0, 1]])
+        f = np.array([[1, 2], [0, 1]])
         lse = LaplacianSpectralEmbed()
         with self.assertRaises(ValueError):
             lse.fit(f)
 
     def test_different_forms(self):
-        f = np.array([[1, 2],
-                      [2, 1]])
+        f = np.array([[1, 2], [2, 1]])
         lse = LaplacianSpectralEmbed(form='I-DAD')
+
+    def test_unconnected_warning(self):
+        n = [50, 50]
+        p = [[1, 0], [0, 1]]
+        A = sbm(n, p)
+        with self.assertWarns(UserWarning):
+            lse = LaplacianSpectralEmbed()
+            lse.fit(A)
+
 
 if __name__ == '__main__':
     unittest.main()

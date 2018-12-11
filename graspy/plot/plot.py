@@ -170,6 +170,7 @@ def heatmap(X,
 
     arr = import_graph(X)
     arr = _transform(arr, transform)
+    #arr = _transform(X, transform)
 
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)
@@ -199,9 +200,8 @@ def gridplot(X,
              title=None,
              context='talk',
              font_scale=1,
-             alpha=0.7, 
+             alpha=0.7,
              sizes=(10, 200)):
-
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
@@ -262,17 +262,18 @@ def gridplot(X,
 
     dfs = []
     for idx, graph in enumerate(graphs):
-        cdx, rdx = np.where(graph > 0)
-        weights = graph[(cdx, rdx)]
+        rdx, cdx = np.where(graph > 0)
+        weights = graph[(rdx, cdx)]
         df = pd.DataFrame(
-            np.vstack([cdx[::-1], rdx, weights]).T,
-            columns=['cdx', 'rdx', 'Weights'])
+            np.vstack([rdx, cdx, weights]).T,
+            columns=['rdx', 'cdx','Weights'])
         df['Type'] = [labels[idx]] * len(cdx)
         dfs.append(df)
 
     df = pd.concat(dfs, axis=0)
 
     with sns.plotting_context(context, font_scale=font_scale):
+        sns.set_style('white')
         plot = sns.relplot(
             data=df,
             x='cdx',
@@ -282,12 +283,18 @@ def gridplot(X,
             sizes=sizes,
             alpha=alpha,
             palette=palette,
-            height=height)
+            height=height,
+            facet_kws={'sharex':True,
+                       'sharey':True,
+                       'xlim':(0,graph.shape[0]),
+                       'ylim':(0,graph.shape[0]),})
         plot.ax.axis('off')
+        plot.ax.invert_yaxis()
         if title is not None:
             plot.set(title=title)
 
     return plot
+
 
 
 def pairplot(X,
@@ -393,14 +400,14 @@ def pairplot(X,
                 hue=legend_name,
                 vars=variables,
                 height=height,
-                palette=palette, 
+                palette=palette,
                 plot_kws=dict(alpha=alpha))
         else:
             pairs = sns.pairplot(
                 df,
                 vars=variables,
                 height=height,
-                palette=palette, 
+                palette=palette,
                 plot_kws=dict(alpha=alpha))
         pairs.set(xticks=[], yticks=[])
         pairs.fig.subplots_adjust(top=0.945)

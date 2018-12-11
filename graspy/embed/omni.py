@@ -2,12 +2,14 @@
 # Created by Jaewon Chung on 2018-09-10.
 # Email: j1c@jhu.edu
 # Copyright (c) 2018. All rights reserved.
+import warnings
+
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
 from .embed import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph
+from ..utils import import_graph, get_lcc, is_fully_connected
 
 
 def _check_valid_graphs(graphs):
@@ -28,10 +30,6 @@ def _check_valid_graphs(graphs):
         If all graphs do not have same shape, or input list is empty or has 
         one element.
     """
-    if not (type(graphs) == list):
-        msg = "Input is not a list."
-        raise ValueError(msg)
-
     if len(graphs) <= 1:
         msg = "Omnibus embedding requires more than one graph."
         raise ValueError(msg)
@@ -40,9 +38,6 @@ def _check_valid_graphs(graphs):
 
     if len(shapes) > 1:
         msg = "There are {} different sizes of graphs.".format(len(shapes))
-        raise ValueError(msg)
-    elif len(shapes) == 0:
-        msg = "No input graphs found."
         raise ValueError(msg)
 
 
@@ -91,31 +86,66 @@ class OmnibusEmbed(BaseEmbed):
 
     Parameters
     ----------
-    method: object (default selectSVD)
-        the method to use for dimensionality reduction.
-    args: list, optional (default None)
-        options taken by the desired embedding method as arguments.
-    kwargs: dict, optional (default None)
-        options taken by the desired embedding method as key-worded
-        arguments.
+    n_components : int or None, default = None
+        Desired dimensionality of output data. If "full", 
+        n_components must be <= min(X.shape). Otherwise, n_components must be
+        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``select_dimension`` using ``n_elbows`` argument.
+    n_elbows : int, optional, default: 2
+        If `n_compoents=None`, then compute the optimal embedding dimension using
+        `select_dimension`. Otherwise, ignored.
+    algorithm : {'full', 'truncated' (default), 'randomized'}, optional
+        SVD solver to use:
+
+        - 'full'
+            Computes full svd using ``scipy.linalg.svd``
+        - 'truncated'
+            Computes truncated svd using ``scipy.sparse.linalg.svd``
+        - 'randomized'
+            Computes randomized svd using 
+            ``sklearn.utils.extmath.randomized_svd``
+    n_iter : int, optional (default = 5)
+        Number of iterations for randomized SVD solver. Not used by 'full' or 
+        'truncated'. The default is larger than the default in randomized_svd 
+        to handle sparse matrices that may have large slowly decaying spectrum.
 
     Attributes
     ----------
     n_graphs_ : int
         Number of graphs
-    n_vertices : int
+    n_vertices_ : int
         Number of vertices in each graph
-    lpm : LatentPosition object
-        Contains X (the estimated latent positions), Y (same as X if input is
-        undirected graph, or right estimated positions if directed graph), and d.
+    latent_left_ : array, shape (n_samples, n_components)
+        Estimated left latent positions of the graph. 
+    latent_right_ : array, shape (n_samples, n_components), or None
+        Only computed when the graph is directed, or adjacency matrix is 
+        asymmetric. Estimated right latent positions of the graph. Otherwise, 
+        None.
+    singular_values_ : array, shape (n_components)
+        Singular values associated with the latent position matrices.
+    indices_ : array, or None
+        If ``lcc`` is True, these are the indices of the vertices that were 
+        kept.
 
     See Also
     --------
-    graphstats.embed.svd.SelectSVD, graphstats.embed.svd.selectDim
+    graspy.embed.selectSVD
+    graspy.embed.select_dimension
     """
 
-    def __init__(self, method=selectSVD, *args, **kwargs):
-        super().__init__(method=selectSVD, *args, **kwargs)
+    def __init__(
+            self,
+            n_components=None,
+            n_elbows=2,
+            algorithm='randomized',
+            n_iter=5,
+    ):
+        super().__init__(
+            n_components=n_components,
+            n_elbows=n_elbows,
+            algorithm=algorithm,
+            n_iter=n_iter,
+        )
 
     def fit(self, graphs):
         """
@@ -123,15 +153,14 @@ class OmnibusEmbed(BaseEmbed):
 
         Parameters
         ----------
-        graphs : list of graphs
+        graphs : list of graphs, or array-like
             List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph.
+            networkx.Graph. If array-like, the shape must be 
+            (n_graphs, n_vertices, n_vertices)
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d.
+        self : returns an instance of self.
         """
         # Convert input to np.arrays
         graphs = [import_graph(g) for g in graphs]
@@ -143,13 +172,22 @@ class OmnibusEmbed(BaseEmbed):
         self.n_graphs_ = len(graphs)
         self.n_vertices_ = graphs[0].shape[0]
 
+        graphs = np.stack(graphs)
+
+        # Check if Abar is connected
+        if not is_fully_connected(graphs.mean(axis=0)):
+            msg = r"""Input graphs are not fully connected. Results may not \
+            be optimal. You can compute the largest connected component by \
+            using ``graspy.utils.get_multigraph_union_lcc``."""
+            warnings.warn(msg, UserWarning)
+
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)
 
         # Embed
         self._reduce_dim(omni_matrix)
 
-        return self.lpm
+        return self
 
     def fit_transform(self, graphs):
         """

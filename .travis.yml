@@ -1,6 +1,5 @@
 language: python
 python:
-- '3.4'
 - '3.5'
 - '3.6'
 matrix:
@@ -10,12 +9,10 @@ matrix:
       sudo: true
 cache: pip
 install:
-- sudo apt-get install pandoc
 - pip install -r requirements.txt
 - pip install pytest pytest-cov codecov
 script:
-- pytest --cov=graspy -p no:warnings
-- sh docs/build_docs.sh
+- pytest
 after_success:
 - codecov
 

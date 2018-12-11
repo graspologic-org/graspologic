@@ -9,6 +9,7 @@ import numpy as np
 import networkx as nx
 from functools import reduce
 
+
 def import_graph(graph):
     """
 	A function for reading a graph and returning a shared
@@ -22,7 +23,7 @@ def import_graph(graph):
 
 	Returns
 	-------
-    graph: array-like, shape (n_vertices, n_vertices)
+    out: array-like, shape (n_vertices, n_vertices)
         A graph.
 		 
 	See Also
@@ -30,40 +31,38 @@ def import_graph(graph):
     networkx.Graph, numpy.array
 	"""
     if type(graph) in [nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph]:
-        if not is_fully_connected(graph): 
-            raise ValueError('Input graph is not fully connected, please use '
-                            + 'graspy.utils.find_lcc() to generate a connected graph '
-                            + 'before import')
-        graph = nx.to_numpy_array(
+        out = nx.to_numpy_array(
             graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif (type(graph) is np.ndarray):
         if len(graph.shape) != 2:
             raise ValueError('Matrix has improper number of dimensions')
         elif graph.shape[0] != graph.shape[1]:
             raise ValueError('Matrix is not square')
+        out = graph.copy()
         if not np.issubdtype(graph.dtype, np.floating):
-            graph = graph.astype(np.float)
-        if not is_fully_connected(graph): 
-            raise ValueError('Input graph is not fully connected, please use '
-                            + 'graspy.utils.find_lcc() to generate a connected graph '
-                            + 'before import')
+            out = out.astype(np.float)
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(
             type(graph))
         raise TypeError(msg)
-    return graph
+    return out
+
 
 def is_symmetric(X):
     return np.array_equal(X, X.T)
 
+
 def is_loopless(X):
     return not np.any(np.diag(X) != 0)
+
 
 def is_unweighted(X):
     return ((X == 0) | (X == 1)).all()
 
+
 def is_almost_symmetric(X, atol=1e-15):
     return np.allclose(X, X.T, atol=atol)
+
 
 def symmetrize(graph, method='triu'):
     """
@@ -106,6 +105,7 @@ def symmetrize(graph, method='triu'):
     graph = graph + graph.T - np.diag(np.diag(graph))
     return graph
 
+
 def remove_loops(graph):
     """
     A function to remove loops from a graph.
@@ -127,7 +127,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form='I-DAD'):
+def to_laplace(graph, form='DAD'):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
@@ -159,9 +159,10 @@ def to_laplace(graph, form='I-DAD'):
         raise TypeError('Unsuported Laplacian normalization')
     adj_matrix = import_graph(graph)
     if not is_symmetric(adj_matrix):
-        raise ValueError('Laplacian not implemented/defined for directed graphs')
+        raise ValueError(
+            'Laplacian not implemented/defined for directed graphs')
     D_vec = np.sum(adj_matrix, axis=0)
-    D_root = np.diag(D_vec ** -0.5)
+    D_root = np.diag(D_vec**-0.5)
     if form == 'I-DAD':
         L = np.diag(D_vec) - adj_matrix
         L = np.dot(D_root, L)
@@ -169,7 +170,9 @@ def to_laplace(graph, form='I-DAD'):
     elif form == 'DAD':
         L = np.dot(D_root, adj_matrix)
         L = np.dot(L, D_root)
-    return L
+    return symmetrize(
+        L, method='avg')  # sometimes machine prec. makes this necessary
+
 
 def is_fully_connected(graph):
     '''
@@ -208,6 +211,7 @@ def is_fully_connected(graph):
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
         return nx.is_weakly_connected(graph)
 
+
 def get_lcc(graph, return_inds=False):
     '''
     Finds the largest connected component for the input graph. 
@@ -235,7 +239,7 @@ def get_lcc(graph, return_inds=False):
         Indices from the original adjacency matrix that were kept after taking
         the largest connected component 
     '''
-    
+
     input_ndarray = False
     if type(graph) is np.ndarray:
         input_ndarray = True
@@ -243,20 +247,77 @@ def get_lcc(graph, return_inds=False):
             g_object = nx.Graph()
         else:
             g_object = nx.DiGraph()
-        graph = nx.from_numpy_matrix(graph, create_using=g_object)
+        graph = nx.from_numpy_array(graph, create_using=g_object)
     if type(graph) in [nx.Graph, nx.MultiGraph]:
-        graph = max(nx.connected_component_subgraphs(graph), key=len)
+        lcc_nodes = max(nx.connected_components(graph), key=len)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
-        graph = max(nx.weakly_connected_component_subgraphs(graph), key=len)        
+        lcc_nodes = max(nx.weakly_connected_components(graph), key=len)
+    lcc = graph.subgraph(lcc_nodes).copy()
+    lcc.remove_nodes_from([n for n in lcc if n not in lcc_nodes])
     if return_inds:
-        nodelist = list(graph.nodes)
+        nodelist = np.array(list(lcc_nodes))
     if input_ndarray:
-        graph = nx.to_numpy_array(graph)
+        lcc = nx.to_numpy_array(lcc)
     if return_inds:
-        return graph, nodelist
-    return graph
+        return lcc, nodelist
+    return lcc
 
-def get_multigraph_lcc(graphs, return_inds=False):
+
+def get_multigraph_union_lcc(graphs, return_inds=False):
+    """
+    Finds the union of all multiple graphs, then compute the largest connected
+    component.
+
+    Parameters
+    ----------
+    graphs: list or np.ndarray
+        List of array-like, (n_vertices, n_vertices), or list of np.ndarray
+        nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph.
+        
+    return_inds: boolean, default: False
+        Whether to return a np.ndarray containing the indices in the original
+        adjacency matrix that were kept and are now in the returned graph.
+        Ignored when input is networkx object
+    
+    Returns
+    -------
+    out : list or np.ndarray
+        If input was a list
+    """
+    if isinstance(graphs, list):
+        if not isinstance(graphs[0], np.ndarray):
+            raise NotImplementedError
+
+        out = [import_graph(g) for g in graphs]
+        if len(set(map(np.shape, out))) != 1:
+            msg = 'All input graphs must have the same size'
+            raise ValueError(msg)
+        bar = np.stack(out).mean(axis=0)
+    elif isinstance(graphs, np.ndarray):
+        shape = graphs.shape
+        if shape[1] != shape[2]:
+            msg = 'Input graphs must be square'
+            raise ValueError(msg)
+        bar = graphs.mean(axis=0)
+    else:
+        msg = 'Expected list or np.ndarray, but got {} instead.'.format(
+            type(graphs))
+        raise ValueError(msg)
+
+    _, idx = get_lcc(bar, return_inds=True)
+    idx = np.array(idx)
+
+    if isinstance(graphs, np.ndarray):
+        graphs[:, idx[:, None], idx]
+    elif isinstance(graphs, list):
+        if isinstance(graphs[0], np.ndarray):
+            graphs = [g[idx[:, None], idx] for g in graphs]
+    if return_inds:
+        return graphs, idx
+    return graphs
+
+
+def get_multigraph_intersect_lcc(graphs, return_inds=False):
     '''
     Finds the intersection of multiple graphs's largest connected components. 
 
@@ -291,13 +352,26 @@ def get_multigraph_lcc(graphs, return_inds=False):
         lcc_by_graph.append(lcc)
         inds_by_graph.append(inds)
     inds_intersection = reduce(np.intersect1d, inds_by_graph)
-    new_graphs = []        
+    new_graphs = []
     for graph in graphs:
         if type(graph) is np.ndarray:
-            graph = graph[inds_intersection,:][:,inds_intersection]
-        else: 
-            graph = graph.subgraph(inds_intersection)
-        new_graphs.append(graph)
+            lcc = graph[inds_intersection, :][:, inds_intersection]
+        else:
+            lcc = graph.subgraph(inds_intersection).copy()
+            lcc.remove_nodes_from(
+                [n for n in lcc if n not in inds_intersection])
+        new_graphs.append(lcc)
+    # this is not guaranteed be connected after one iteration because taking the
+    # intersection of nodes among graphs can cause some components to become
+    # disconnected, so, we check for this and run again if necessary
+    recurse = False
+    for new_graph in new_graphs:
+        if not is_fully_connected(new_graph):
+            recurse = True
+            break
+    if recurse:
+        new_graphs, inds_intersection = get_multigraph_lcc(
+            new_graphs, return_inds=True)
     if type(graphs) != list:
         new_graphs = np.stack(new_graphs)
     if return_inds:
@@ -305,7 +379,8 @@ def get_multigraph_lcc(graphs, return_inds=False):
     else:
         return new_graphs
 
-def augment_diagonal(graph):
+
+def augment_diagonal(graph, weight=1):
     '''
     Replaces the diagonal of adjacency matrix with 
     :math: \frac{degree}{num_verts - 1} for the degree associated
@@ -323,9 +398,9 @@ def augment_diagonal(graph):
     graph = import_graph(graph)
     graph = remove_loops(graph)
     divisor = graph.shape[0] - 1
-    # use out degree for directed graph 
+    # use out degree for directed graph
     # ignore self loops in either case
     degrees = np.count_nonzero(graph, axis=1)
-    diag = degrees / divisor
+    diag = weight * degrees / divisor
     graph += np.diag(diag)
     return graph

@@ -1,6 +1,3 @@
-import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-
 from .gclust import GaussianCluster
 from .kclust import KMeansCluster
 

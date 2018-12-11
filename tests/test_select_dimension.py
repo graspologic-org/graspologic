@@ -4,7 +4,7 @@ from numpy.testing import assert_equal
 from scipy.linalg import orth
 
 from graspy.embed.svd import select_dimension
-from graspy.simulations.simulations import binary_sbm
+from graspy.simulations.simulations import sbm
 
 
 def generate_data(n=10, elbows=3, seed=1):
@@ -27,15 +27,11 @@ def test_invalid_inputes():
     # invalid n_elbows
     with pytest.raises(ValueError):
         bad_n_elbows = -2
-        select_dimension(X, threshold=bad_n_elbows)
+        select_dimension(X, n_elbows=bad_n_elbows)
 
     with pytest.raises(ValueError):
         bad_n_elbows = "string"
-        select_dimension(X, threshold=bad_n_elbows)
-
-    with pytest.raises(ValueError):
-        bad_n_elbows = [123]
-        select_dimension(X, threshold=bad_n_elbows)
+        select_dimension(X, n_elbows=bad_n_elbows)
 
     # invalid n_components
     with pytest.raises(ValueError):
@@ -55,6 +51,10 @@ def test_invalid_inputes():
         bad_threshold = "string"
         select_dimension(X, threshold=bad_threshold)
 
+    with pytest.raises(IndexError):
+        bad_threshold = 1000000
+        select_dimension(X, threshold=bad_threshold)
+
     # invalid X
     with pytest.raises(ValueError):
         bad_X = -2
@@ -72,7 +72,8 @@ def test_invalid_inputes():
 
 def test_output_synthetic():
     data, l = generate_data(10, 3)
-    elbows, _ = select_dimension(X=data, n_elbows=2)
+    elbows, _, _ = select_dimension(
+        X=data, n_elbows=2, return_likelihoods=True)
     assert_equal(elbows, [2, 4])
 
 
@@ -102,7 +103,7 @@ def test_output_two_block_sbm():
     np.random.seed(10)
     n_communities = [100, 100]
     P = np.array([[0.5, 0.1], [0.1, 0.5]])
-    A = binary_sbm(n_communities, P)
+    A = sbm(n_communities, P)
 
     elbows, _ = select_dimension(A, n_elbows=2)
     assert_equal(elbows[0], 2)
