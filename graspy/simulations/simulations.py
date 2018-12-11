@@ -524,7 +524,7 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
         P[P > 1] = 1
     return P
 
-def rho_ER(rho,p,n):
+def rho_er(rho,p,n):
     """
     Parameters
     ----------

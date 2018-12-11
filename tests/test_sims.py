@@ -713,21 +713,21 @@ class Test_Rho(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.rho = .5
+        cls.rho = 0.5
         cls.p = 0.8
         cls.n = 20
-        cls.q = .2
+        cls.q = 0.2
         cls.k = 2
 
     def test_er(self):
-        A, B = rho_ER(1, self.p, self.n)
+        A, B = rho_er(1, self.p, self.n)
         self.assertTrue(A.shape == (self.n, self.n))
         self.assertTrue(B.shape == (self.n, self.n))
         # when rho is 1, the graphs should be the same
         self.assertTrue(A == B)
 
     def validate_er(self):
-        A, B = rho_ER(self.rho, self.p, self.n)
+        A, B = rho_er(self.rho, self.p, self.n)
         A = A.ravel()
         B = B.ravel()
         x = np.vstack((A.ravel(),B.ravel()))
@@ -740,7 +740,7 @@ class Test_Rho(unittest.TestCase):
             [self.q,self.p]
         ])
         nvec = [self.n//self.k]*self.k
-        A, B = rho_SBM(self.rho, self.k, L, nvec)
+        A, B = rho_sbm(self.rho, self.k, L, nvec)
         self.assertTrue(A.shape == (self.n, self.n))
         self.assertTrue(B.shape == (self.n, self.n))
         # when rho is 1, the graphs should be the same
@@ -752,6 +752,6 @@ class Test_Rho(unittest.TestCase):
             [self.q,self.p]
         ])
         nvec = [self.n//self.k]*self.k
-        A, B = rho_SBM(self.rho, self.k, L, nvec)
+        A, B = rho_sbm(self.rho, self.k, L, nvec)
         # TODO : extimate edge correlation from Graphs
         # self.assertAlmostEqual(self.rho, calculated_rho)
