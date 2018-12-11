@@ -9,5 +9,7 @@ Reference
    simulations
    embed
    cluster
+   inference
    plotting
    utils
+   

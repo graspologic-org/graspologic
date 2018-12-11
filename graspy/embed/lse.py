@@ -118,12 +118,6 @@ class LaplacianSpectralEmbed(BaseEmbed):
         """
         A = import_graph(graph)
 
-        if not is_fully_connected(A):
-            msg = """Input graph is not fully connected. Results may not \
-            be optimal. You can compute the largest connected component by \
-            using ``graspy.utils.get_lcc``."""
-            warnings.warn(msg, UserWarning)
-
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
         return self
