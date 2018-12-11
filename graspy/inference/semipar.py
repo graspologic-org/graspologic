@@ -53,7 +53,7 @@ class SemiparametricTest(BaseInference):
 
     Attributes
     ----------
-    sample1_null_distribution_, sample2_null_distribution : np.ndarray (n_bootstraps,)
+    null_distribution_1_, null_distribution_2_ : np.ndarray (n_bootstraps,)
         The distribution of T statistics generated under the null, using the first and  
         and second input graph, respectively. The latent positions of each sample graph 
         are used independently to sample random dot product graphs, so two null 
@@ -63,12 +63,12 @@ class SemiparametricTest(BaseInference):
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on `test_case`)
 
-    sample1_p_, sample2_p_ : float 
+    p_value_1_, p_value_2_ : float 
         The p value estimated from the null distributions from sample 1 and sample 2. 
 
     p_ : float 
-        The overall p value from the semiparametric test; this is the max of sample1_p_
-        and sample2_p_
+        The overall p value from the semiparametric test; this is the max of p_value_1_
+        and p_value_2_
 
     Examples
     --------
@@ -195,24 +195,24 @@ class SemiparametricTest(BaseInference):
             self.n_components = max(num_dims1, num_dims2)
         X_hats = self._embed(A1, A2)
         sample_T_statistic = self._difference_norm(X_hats[0], X_hats[1])
-        sample1_null_distribution = self._bootstrap(X_hats[0])
-        sample2_null_distribution = self._bootstrap(X_hats[1])
+        null_distribution_1 = self._bootstrap(X_hats[0])
+        null_distribution_2 = self._bootstrap(X_hats[1])
 
         # Continuity correction - note that the +0.5 causes p > 1 sometimes # TODO
-        sample1_p = (len(sample1_null_distribution[
-            sample1_null_distribution >= sample_T_statistic]) +
-                     0.5) / self.n_bootstraps
-        sample2_p = (len(sample2_null_distribution[
-            sample2_null_distribution >= sample_T_statistic]) +
-                     0.5) / self.n_bootstraps
+        p_value_1 = (
+            len(null_distribution_1[null_distribution_1 >= sample_T_statistic])
+            + 0.5) / self.n_bootstraps
+        p_value_2 = (
+            len(null_distribution_2[null_distribution_2 >= sample_T_statistic])
+            + 0.5) / self.n_bootstraps
 
-        p = max(sample1_p, sample2_p)
+        p_value = max(p_value_1, p_value_2)
 
-        self.sample1_null_distribution_ = sample1_null_distribution
-        self.sample2_null_distribution_ = sample2_null_distribution
+        self.null_distribution_1_ = null_distribution_1
+        self.null_distribution_2_ = null_distribution_2
         self.sample_T_statistic_ = sample_T_statistic
-        self.sample1_p_ = sample1_p
-        self.sample2_p_ = sample2_p
-        self.p_ = p
+        self.p_value_1_ = p_value_1
+        self.p_value_2_ = p_value_2
+        self.p_value_ = p_value
 
-        return p
+        return p_value

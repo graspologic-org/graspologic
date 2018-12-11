@@ -50,7 +50,7 @@ class TestSemiparametricTest(unittest.TestCase):
     def test_n_bootstraps(self):
         spt = SemiparametricTest(n_bootstraps=234, n_components=None)
         spt.fit(self.A1, self.A2)
-        self.assertEqual(spt.sample1_null_distribution_.shape[0], 234)
+        self.assertEqual(spt.null_distribution_1_.shape[0], 234)
 
     def test_bad_matrix_inputs(self):
         spt = SemiparametricTest()
