@@ -30,4 +30,6 @@ The following tutorials present ways to visualize the graphs, such as its adjace
 .. toctree::
    :maxdepth: 1
 
-   tutorials/plotting/heatmap_gridplot
+   tutorials/plotting/heatmaps
+   tutorials/plotting/gridplot
+   tutorials/plotting/pairplot
