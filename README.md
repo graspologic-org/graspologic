@@ -9,7 +9,7 @@
 - [Overview](#overview)
 - [System Requirements](#system-requirements)
 - [Installation Guide](#installation-guide)
-- [Demo](#demo)
+- [Tutorials](#Tutorials)
 - [License](#license)
 - [Issues](https://github.com/neurodata/graspy/issues)
 
@@ -23,14 +23,15 @@ A graph, or network, provides a mathematically intuitive representation of data 
 ## Software requirements
 ### OS Requirements
 This package is supported for *Linux* and *macOS*. The package has been tested on the following systems:
-+ Linux: N/A
-+ macOS: N/A
-+ Windows: N/A
++ Linux: Ubuntu 16.04
++ macOS: Mojave (10.14.1)
++ Windows: 10 
 
 ### Python Requirements
 This package is written for Python3. Currently, it is supported for Python 3.5, 3.6, and 3.7.
 
 ### Python Dependencies
+`GraSPy` mainly depends on the Python scientific stack.
 ```
 networkx
 numpy
@@ -41,7 +42,9 @@ seaborn
 
 # Installation Guide
 ## Install from pip
-Coming soon!
+```
+pip install graspy
+```
 
 ## Install from Github
 ```
@@ -50,8 +53,8 @@ cd graspy
 python3 setup.py install
 ```
 
-# Demo
-List Jupyter notebooks here.
+# Tutorials
+Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) in the official website
 
 ## License
 This project is covered under the [Apache 2.0 License](https://github.com/neurodata/graspy/blob/master/LICENSE).
