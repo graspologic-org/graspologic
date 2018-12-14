@@ -3,15 +3,20 @@ Tutorial
 ********
 
 Simulations
-===========================
+===========
+The following tutorials present several random graph models, such as Erdos-Renyi model, 
+stochastic block model, and random dot product graph (RDPG) model. These models provide a basis for studying random graphs.
 
 .. toctree::
    :maxdepth: 1
-
-   tutorials/simulations/simulation_binary
+   
+   tutorials/simulations/erdos_renyi
+   tutorials/simulations/sbm
+   tutorials/simulations/rdpg
 
 Embedding
-===========================
+=========
+Inference on random graphs depends on low-dimensional Euclidean representation of the vertices of graphs, known as *graph embeddings*, typically given by spectral decompositions of adjacency or Laplacian matrices. Below are tutorials for computing graph embeddings of single graph and multiple graphs.
 
 .. toctree::
    :maxdepth: 1
@@ -30,9 +35,12 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
    tutorials/inference/semipar
 
 Plotting
-===========================
+========
+The following tutorials present ways to visualize the graphs, such as its adjacency matrix, and graph embeddings. 
 
 .. toctree::
    :maxdepth: 1
 
-   tutorials/plotting/heatmap_gridplot
+   tutorials/plotting/heatmaps
+   tutorials/plotting/gridplot
+   tutorials/plotting/pairplot

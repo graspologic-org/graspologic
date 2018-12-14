@@ -41,8 +41,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
-    lcc : bool, optional (default=True)
-        If True, computes the largest connected component for the input graph.
 
     Attributes
     ----------
