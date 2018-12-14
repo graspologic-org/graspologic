@@ -266,7 +266,7 @@ def gridplot(X,
         weights = graph[(rdx, cdx)]
         df = pd.DataFrame(
             np.vstack([rdx, cdx, weights]).T,
-            columns=['rdx', 'cdx','Weights'])
+            columns=['rdx', 'cdx', 'Weights'])
         df['Type'] = [labels[idx]] * len(cdx)
         dfs.append(df)
 
@@ -284,17 +284,18 @@ def gridplot(X,
             alpha=alpha,
             palette=palette,
             height=height,
-            facet_kws={'sharex':True,
-                       'sharey':True,
-                       'xlim':(0,graph.shape[0]),
-                       'ylim':(0,graph.shape[0]),})
+            facet_kws={
+                'sharex': True,
+                'sharey': True,
+                'xlim': (0, graph.shape[0]),
+                'ylim': (0, graph.shape[0]),
+            })
         plot.ax.axis('off')
         plot.ax.invert_yaxis()
         if title is not None:
             plot.set(title=title)
 
     return plot
-
 
 
 def pairplot(X,
@@ -386,12 +387,17 @@ def pairplot(X,
     else:
         variables = col_names
 
+    diag_kind = 'auto'
     df = pd.DataFrame(X, columns=col_names)
     if Y is not None:
         if legend_name is None:
             legend_name = 'Type'
         df_labels = pd.DataFrame(Y, columns=[legend_name])
         df = pd.concat([df_labels, df], axis=1)
+
+        names, counts = np.unique(Y, return_counts=True)
+        if counts.min() < 2:
+            diag_kind = 'hist'
 
     with sns.plotting_context(context=context, font_scale=font_scale):
         if Y is not None:
@@ -401,14 +407,16 @@ def pairplot(X,
                 vars=variables,
                 height=height,
                 palette=palette,
-                plot_kws=dict(alpha=alpha))
+                plot_kws=dict(alpha=alpha),
+                diag_kind=diag_kind)
         else:
             pairs = sns.pairplot(
                 df,
                 vars=variables,
                 height=height,
                 palette=palette,
-                plot_kws=dict(alpha=alpha))
+                plot_kws=dict(alpha=alpha),
+                diag_kind=diag_kind)
         pairs.set(xticks=[], yticks=[])
         pairs.fig.subplots_adjust(top=0.945)
         pairs.fig.suptitle(title)
