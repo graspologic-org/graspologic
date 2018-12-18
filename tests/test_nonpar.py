@@ -8,13 +8,18 @@ from graspy.inference import NonparametricTest
 from graspy.embed import AdjacencySpectralEmbed
 from graspy.simulations import er_np
 
-def gen():
+def gen(n=20):
     A1 = er_np(20, .3)
-    A2 = er_np(20, .3)
+    A2 = er_np(n, .3)
     return A1, A2
 
 def test_fit_p():
     A1, A2 = gen()
+    p = NonparametricTest().fit(A1, A2)
+    # TODO : something
+
+def test_fit_asymmetric_p():
+    A1, A2 = gen(30)
     p = NonparametricTest().fit(A1, A2)
     # TODO : something
 
