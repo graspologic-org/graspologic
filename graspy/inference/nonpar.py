@@ -32,16 +32,12 @@ class NonparametricTest(BaseInference):
 
     n_bootstraps : 200 (default), or Int
         Number of bootstrap iterations.
-
-    monte_iter : 1000 (default), or Int
-        Number of monte carlo iterations.
     """
 
     def __init__(self,
                  embedding='ase',
                  n_components=None,
-                 n_bootstraps=200,
-                 n_monte=1000):
+                 n_bootstraps=200,):
         if type(n_bootstraps) is not int:
             raise TypeError()
 
@@ -56,7 +52,6 @@ class NonparametricTest(BaseInference):
         # self.embedding = embedding
         # self.n_components = n_components
         self.n_bootstraps = n_bootstraps
-        self.n_monte = n_monte
 
     def _bootstrap(self, x, y):
         z = np.concatenate((x, y))
@@ -118,15 +113,13 @@ class NonparametricTest(BaseInference):
         A1 = import_graph(A1)
         A2 = import_graph(A2)
         if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()  # TODO asymmetric case
+            raise NotImplementedError()
 
         if self.n_components is None:
             num_dims1 = select_dimension(A1)[0][-1]
             num_dims2 = select_dimension(A2)[0][-1]
             self.n_components = max(num_dims1, num_dims2)
 
-        # monte = [] TODO
-        # for _ in range(self.n_monte): TODO
         X_hats = self._embed(A1, A2)
         X_hats = self._median_heuristic(X_hats)
         U_sample = self._u_from_z(np.concatenate(X_hats), len(X_hats[0]))
