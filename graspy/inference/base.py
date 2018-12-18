@@ -1,6 +1,8 @@
 from abc import abstractmethod
 from sklearn.base import BaseEstimator
 import numpy as np
+from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
+from ..embed import OmnibusEmbed, select_dimension
 
 class BaseInference(BaseEstimator):
     """
@@ -37,13 +39,13 @@ class BaseInference(BaseEstimator):
             raise ValueError('Cannot embed into {} dimensions, must be greater than 0'.format(n_components))
         self.embedding = embedding
         self.n_components = n_components
-        
+
     @abstractmethod
     def _bootstrap(self):
         pass
 
     @abstractmethod
-    def _embed(self, X1, X2, n_componets):
+    def _embed(self, A1, A2):
         """
         Computes the latent positions of input graphs
 
@@ -54,15 +56,29 @@ class BaseInference(BaseEstimator):
         X2_hat : array-like, shape(n_vertices, n_components)
             Estimated latent positions of X2
         """
-        if embedding == 'omnibus':
-            pass
-        elif embedding == 'ase':
-            pass
-        elif embedding == 'lse':
-            pass
+        if self.embedding not in ['ase', 'lse', 'omnibus']:
+            raise ValueError('Invalid embedding method "{}"'.format(
+                self.embedding))
+        if self.embedding == 'ase':
+            X1_hat = AdjacencySpectralEmbed(
+                self.n_components).fit_transform(A1)
+            X2_hat = AdjacencySpectralEmbed(
+                self.n_components).fit_transform(A2)
+        elif self.embedding == 'lse':
+            X1_hat = LaplacianSpectralEmbed(
+                self.n_components).fit_transform(A1)
+            X2_hat = LaplacianSpectralEmbed(
+                self.n_components).fit_transform(A2)
+        elif self.embedding == 'omnibus':
+            X_hat_compound = OmnibusEmbed(self.n_components).fit_transform(
+                (A1, A2))
+            X1_hat = X_hat_compound[:A1.shape[0], :]
+            X2_hat = X_hat_compound[A2.shape[0]:, :]
         else:
             msg = "{} is not a valid embedding method.".format(embedding)
             raise ValueError(msg)
+
+        return (X1_hat, X2_hat)
 
     @abstractmethod
     def fit(self, A1, A2):

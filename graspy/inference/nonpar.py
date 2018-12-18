@@ -2,8 +2,6 @@ import numpy as np
 from scipy.spatial.distance import pdist
 
 from .base import BaseInference
-from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
-from ..embed import OmnibusEmbed, select_dimension
 from ..utils import import_graph, is_symmetric, symmetrize
 
 
@@ -75,28 +73,6 @@ class NonparametricTest(BaseInference):
         k = np.zeros((zlen, zlen))
         k[ind] = dists
         return symmetrize(k)
-
-    def _embed(self, A1, A2):
-        if self.embedding not in ['ase', 'lse', 'omnibus']:
-            raise ValueError('Invalid embedding method "{}"'.format(
-                self.embedding))
-        if self.embedding == 'ase':
-            X1_hat = AdjacencySpectralEmbed(
-                self.n_components).fit_transform(A1)
-            X2_hat = AdjacencySpectralEmbed(
-                self.n_components).fit_transform(A2)
-        elif self.embedding == 'lse':
-            X1_hat = LaplacianSpectralEmbed(
-                self.n_components).fit_transform(A1)
-            X2_hat = LaplacianSpectralEmbed(
-                self.n_components).fit_transform(A2)
-        elif self.embedding == 'omnibus':
-            X_hat_compound = OmnibusEmbed(self.n_components).fit_transform(
-                (A1, A2))
-            X1_hat = X_hat_compound[:A1.shape[0], :]
-            X2_hat = X_hat_compound[A2.shape[0]:, :]
-
-        return (X1_hat, X2_hat)
 
     def _median_heuristic(self, X_hats):
         X1_hat = X_hats[0]
