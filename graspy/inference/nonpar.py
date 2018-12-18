@@ -3,7 +3,7 @@ from scipy.spatial.distance import pdist
 
 from .base import BaseInference
 from ..utils import import_graph, is_symmetric, symmetrize
-
+from ..embed import select_dimension
 
 class NonparametricTest(BaseInference):
     """

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from sklearn.base import BaseEstimator
 import numpy as np
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
-from ..embed import OmnibusEmbed, select_dimension
+from ..embed import OmnibusEmbed
 
 class BaseInference(BaseEstimator):
     """
