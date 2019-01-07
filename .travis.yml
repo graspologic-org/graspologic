@@ -10,7 +10,7 @@ matrix:
 cache: pip
 install:
 - pip install -r requirements.txt
-- pip install pytest pytest-cov codecov
+- pip install -U pytest pytest-cov codecov
 script:
 - pytest
 after_success:
