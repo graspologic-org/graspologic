@@ -25,6 +25,7 @@ Inference
    :maxdepth: 1
 
    tutorials/inference/semipar
+   tutorials/inference/nonpar
 
 Plotting
 ===========================
