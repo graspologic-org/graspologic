@@ -1,0 +1,80 @@
+---
+title: "NDMG Comparison"
+author: "Eric Bridgeford"
+date: "January 9, 2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(reshape2)
+library(data.table)
+```
+
+```{r setup, include=FALSE}
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+```
+
+# Loading
+
+```{r}
+ndmg.dwi.adj = as.matrix(read.csv('./ndmg-dwi.csv', sep=" ", header=FALSE))
+derek.dwi.adj = as.matrix(read.csv('./derek-dwi.csv', sep=" ", header=FALSE))
+ndmg.func.adj = as.matrix(read.csv('./ndmg-func.csv', sep=" ", header=FALSE))
+colnames(ndmg.dwi.adj) <- as.character(seq(1, dim(ndmg.dwi.adj)[1]))
+colnames(derek.dwi.adj) <- as.character(seq(1, dim(derek.dwi.adj)[1]))
+colnames(ndmg.func.adj) <- as.character(seq(1, dim(ndmg.func.adj)[1]))
+```
+
+```{r}
+ndmg.dwi.dat <- melt(ndmg.dwi.adj)
+derek.dwi.dat <- melt(derek.dwi.adj)
+ndmg.func.dat <- melt(ndmg.func.adj)
+```
+
+
+# Plotting
+
+
+```{r}
+titles=list("NDMG Diffusion", "Probabilistic Diffusion", "NDMG Functional")
+mtxs = list(ndmg.dwi.dat, derek.dwi.dat, ndmg.func.dat)
+plots = lapply(1:length(mtxs), function(i) {
+  mtx = mtxs[[i]]
+  ggplot(mtx, aes(x=Var1, y=Var2, fill=value)) +
+    geom_tile() +
+    scale_y_reverse() +
+    xlab("ROI") +
+    ylab("ROI") +
+    ggtitle(titles[[i]]) +
+    scale_fill_gradient(name="Connectivity", low="white", high="blue") +
+    theme_bw()
+})
+```
+
+```{r, fig.height=4, fig.width=5}
+sim_leg <- g_legend(plots[[1]])
+plots <- lapply(1:length(plots), function(i) {
+  if (i != 1) {
+    plots[[i]] <- plots[[i]] + theme(legend.position=NaN,
+        axis.text.y=element_text(colour = 'white'),
+        axis.ticks.y=element_line(colour = 'white'),
+        axis.title.x=element_text(colour = 'white'),
+        axis.title.y=element_text(colour = 'white'),
+        axis.text.x=element_text(colour = 'white'),
+        axis.ticks.x=element_line(colour = 'white'))
+  }
+  plots[[i]] <- plots[[i]] + guides(fill=FALSE)
+})
+
+grid.arrange(arrangeGrob(grobs=plots, nrow=2), sim_leg, ncol=2, widths=c(0.9, 0.2))
+```
