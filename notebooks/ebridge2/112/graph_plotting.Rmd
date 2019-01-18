@@ -1,0 +1,101 @@
+---
+title: "NDMG Comparison"
+author: "Eric Bridgeford"
+date: "January 9, 2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, message=FALSE}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(reshape2)
+library(data.table)
+require(igraph)
+require(scales)
+```
+
+```{r setup, include=FALSE}
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+```
+
+# Loading
+
+
+```{r}
+ndmg.dwi.adj = as.matrix(read.csv('./ndmgd.csv', sep=",", header=FALSE))
+derek.dwi.adj = as.matrix(read.csv('./natd.csv', sep=",", header=FALSE))
+ndmg.func.adj = as.matrix(read.csv('./ndmgf.csv', sep=",", header=FALSE))
+fmriprep.func.adj = as.matrix(read.csv('./fmriprep.csv', sep=",", header=FALSE))
+colnames(ndmg.dwi.adj) <- as.character(seq(1, dim(ndmg.dwi.adj)[1]))
+colnames(derek.dwi.adj) <- as.character(seq(1, dim(derek.dwi.adj)[1]))
+colnames(ndmg.func.adj) <- as.character(seq(1, dim(ndmg.func.adj)[1]))
+colnames(fmriprep.func.adj) <- as.character(seq(1, dim(fmriprep.func.adj)[1]))
+diag(ndmg.dwi.adj) <- 0
+
+ptr <- function(x) {
+  nz <- x[x != 0]
+  r <- rank(nz)*2/(length(nz) + 1)
+  x[x != 0] <- r
+  x <- (x - min(x))/(max(x) - min(x))
+  return(x)
+}
+
+ndmg.dwi.adj <- ptr(ndmg.dwi.adj)
+derek.dwi.adj <- ptr(derek.dwi.adj)
+#ndmg.dwi.adj <- (ndmg.dwi.adj - min(ndmg.dwi.adj))/(max(ndmg.dwi.adj) - min(ndmg.dwi.adj))
+#fmriprep.func.adj <- (fmriprep.func.adj - min(fmriprep.func.adj))/(max(fmriprep.func.adj) - min(fmriprep.func.adj))
+```
+
+```{r}
+ndmg.dwi.dat <- melt(ndmg.dwi.adj)
+derek.dwi.dat <- melt(derek.dwi.adj)
+ndmg.func.dat <- melt(ndmg.func.adj)
+fmriprep.func.dat <- melt(fmriprep.func.adj)
+```
+
+
+# Plotting
+
+
+```{r}
+titles=list("NDMG Diffusion", "Native Diffusion", "NDMG Functional", "fMRIprep Functional")
+mtxs = list(ndmg.dwi.dat, derek.dwi.dat, ndmg.func.dat, fmriprep.func.dat)
+plots = lapply(1:length(mtxs), function(i) {
+  mtx = mtxs[[i]]
+  ggplot(mtx, aes(x=Var1, y=Var2, fill=value)) +
+    geom_tile() +
+    scale_y_reverse(expand=c(0, 0)) +
+    xlab("ROI") +
+    ylab("ROI") +
+    ggtitle(titles[[i]]) +
+    scale_fill_gradient(name="Connectivity", low="white", high="blue") +
+    theme_bw() +
+    scale_x_continuous(expand=c(0, 0))
+})
+```
+
+```{r, fig.height=5, fig.width=6}
+sim_leg <- g_legend(plots[[1]])
+plots <- lapply(1:length(plots), function(i) {
+  if (i != 1) {
+    plots[[i]] <- plots[[i]] + theme(legend.position=NaN,
+        axis.text.y=element_text(colour = 'white'),
+        axis.ticks.y=element_line(colour = 'white'),
+        axis.title.x=element_text(colour = 'white'),
+        axis.title.y=element_text(colour = 'white'),
+        axis.text.x=element_text(colour = 'white'),
+        axis.ticks.x=element_line(colour = 'white'))
+  }
+  plots[[i]] <- plots[[i]] + guides(fill=FALSE)
+})
+
+grid.arrange(arrangeGrob(grobs=plots, nrow=2), sim_leg, ncol=2, widths=c(0.9, 0.2))
+```
