@@ -308,7 +308,7 @@ def pairplot(X,
              font_scale=1,
              palette='Set1',
              alpha=0.7,
-             size=1,
+             size=50,
              marker='.'):
     r"""
     Plot pairwise relationships in a dataset.
