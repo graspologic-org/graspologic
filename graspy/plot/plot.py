@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-
 from ..utils import import_graph, pass_to_ranks
 
 
@@ -308,7 +307,9 @@ def pairplot(X,
              context='talk',
              font_scale=1,
              palette='Set1',
-             alpha=0.7):
+             alpha=0.7,
+             size=50,
+             marker='.'):
     r"""
     Plot pairwise relationships in a dataset.
 
@@ -338,6 +339,13 @@ def pairplot(X,
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the `hue` variable. If a dict, keys should
         be values in the hue variable.
+    alpha : float, optional, default: 0.7
+        opacity value of plotter markers between 0 and 1 
+    size : float or int, optional, default: 50
+        size of plotted markers 
+    marker : string, optional, default: '.'
+        matplotlib style marker specification 
+        https://matplotlib.org/api/markers_api.html
     """
     _check_common_inputs(
         height=height,
@@ -398,7 +406,12 @@ def pairplot(X,
         names, counts = np.unique(Y, return_counts=True)
         if counts.min() < 2:
             diag_kind = 'hist'
-
+    plot_kws = dict(
+        alpha=alpha,
+        s=size,
+        # edgecolor=None, # could add this latter
+        linewidth=0,
+        marker=marker)
     with sns.plotting_context(context=context, font_scale=font_scale):
         if Y is not None:
             pairs = sns.pairplot(
@@ -407,16 +420,18 @@ def pairplot(X,
                 vars=variables,
                 height=height,
                 palette=palette,
-                plot_kws=dict(alpha=alpha),
-                diag_kind=diag_kind)
+                diag_kind=diag_kind,
+                plot_kws=plot_kws,
+            )
         else:
             pairs = sns.pairplot(
                 df,
                 vars=variables,
                 height=height,
                 palette=palette,
-                plot_kws=dict(alpha=alpha),
-                diag_kind=diag_kind)
+                diag_kind=diag_kind,
+                plot_kws=plot_kws,
+            )
         pairs.set(xticks=[], yticks=[])
         pairs.fig.subplots_adjust(top=0.945)
         pairs.fig.suptitle(title)
