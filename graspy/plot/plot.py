@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from ..utils import import_graph, pass_to_ranks
+from ..embed import selectSVD
 
 
 def _check_common_inputs(
@@ -200,7 +201,7 @@ def heatmap(
 
 def gridplot(
     X,
-    labels,
+    labels=None,  # TODO fix
     transform=None,
     height=10,
     title=None,
@@ -308,9 +309,10 @@ def gridplot(
     return plot
 
 
+# TODO would it be cool if pairplot reduced to single plot
 def pairplot(
     X,
-    Y=None,
+    labels=None,
     col_names=None,
     title=None,
     legend_name=None,
@@ -374,13 +376,13 @@ def pairplot(
         raise TypeError(msg)
 
     # Handle Y
-    if Y is not None:
-        if not isinstance(Y, (list, np.ndarray)):
-            msg = "Y must be array-like or list, not {}.".format(type(Y))
+    if labels is not None:
+        if not isinstance(labels, (list, np.ndarray)):
+            msg = "Y must be array-like or list, not {}.".format(type(labels))
             raise TypeError(msg)
-        elif X.shape[0] != len(Y):
+        elif X.shape[0] != len(labels):
             msg = "Expected length {}, but got length {} instead for Y.".format(
-                X.shape[0], len(Y)
+                X.shape[0], len(labels)
             )
             raise ValueError(msg)
 
@@ -411,13 +413,13 @@ def pairplot(
 
     diag_kind = "auto"
     df = pd.DataFrame(X, columns=col_names)
-    if Y is not None:
+    if labels is not None:
         if legend_name is None:
             legend_name = "Type"
-        df_labels = pd.DataFrame(Y, columns=[legend_name])
+        df_labels = pd.DataFrame(labels, columns=[legend_name])
         df = pd.concat([df_labels, df], axis=1)
 
-        names, counts = np.unique(Y, return_counts=True)
+        names, counts = np.unique(labels, return_counts=True)
         if counts.min() < 2:
             diag_kind = "hist"
     plot_kws = dict(
@@ -428,7 +430,7 @@ def pairplot(
         marker=marker,
     )
     with sns.plotting_context(context=context, font_scale=font_scale):
-        if Y is not None:
+        if labels is not None:
             pairs = sns.pairplot(
                 df,
                 hue=legend_name,
@@ -452,3 +454,137 @@ def pairplot(
         pairs.fig.suptitle(title)
 
     return pairs
+
+
+def _distplot(
+    data,
+    labels=None,
+    direction="out",
+    title="",
+    context="talk",
+    font_scale=1,
+    figsize=(10, 5),
+    palette="Set1",
+    xlabel="",
+    ylabel="Density",
+):
+
+    fig = plt.figure(figsize=figsize)
+    ax = plt.gca()
+    palette = sns.color_palette(palette)
+    with sns.plotting_context(context=context, font_scale=font_scale):
+        if labels is not None:
+            categories, counts = np.unique(labels, return_counts=True)
+            for i, cat in enumerate(categories):
+                cat_data = data[np.where(labels == cat)]
+                if counts[i] > 1 and cat_data.min() != cat_data.max():
+                    sns.distplot(cat_data, label=cat, hist=False, color=palette[i])
+                else:
+                    ax.axvline(cat_data[0], label=cat, color=palette[i])
+            plt.legend()
+        else:
+            if data.min() != data.max():
+                sns.distplot(data, hist=False)
+            else:
+                ax.axvline(data[0])
+
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+
+    return ax
+
+
+def degreeplot(
+    X,
+    labels=None,
+    direction="out",
+    title="Degree plot",
+    context="talk",
+    font_scale=1,
+    figsize=(10, 5),
+    palette="Set1",
+):
+    if direction == "out":
+        axis = 0
+    elif direction == "in":
+        axis = 1
+    else:
+        raise ValueError('direction must be either "out" or "in"')
+    degrees = np.count_nonzero(X, axis=axis)
+    ax = _distplot(
+        degrees,
+        labels=labels,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+        figsize=figsize,
+        palette=palette,
+        xlabel="Node degree",
+    )
+    return ax
+
+
+def edgeplot(
+    X,
+    labels=None,
+    nonzero=False,
+    title="Edge plot",
+    context="talk",
+    font_scale=1,
+    figsize=(10, 5),
+    palette="Set1",
+):
+    edges = X.ravel()
+    if nonzero:
+        edges = edges[edges != 0]
+    print(title)
+    ax = _distplot(
+        edges,
+        labels=labels,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+        figsize=figsize,
+        palette=palette,
+        xlabel="Edge weight",
+    )
+    return ax
+
+
+def screeplot(
+    X,
+    title="Scree plot",
+    context="talk",
+    font_scale=1,
+    figsize=(10, 5),
+    xlabel="Component",
+    ylabel="Variance explained",
+):
+    _, D, _ = selectSVD(X, n_components=X.shape[1], algorithm="full")
+    D /= D.sum()
+    fig = plt.figure(figsize=figsize)
+    ax = plt.gca()
+    with sns.plotting_context(context=context, font_scale=font_scale):
+        plt.plot(D)
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+    return ax
+
+
+def gmmplot(means, covariances, ax=None):
+    # TODO maybe
+    # not sure how to implement, should it just be private method
+    # called by pairplot?
+    return 1
+
+
+def grouped_heatmap():
+    # TODO maybe
+    return 1
+
+
+def grouped_gridplot():
+    # TODO maybe
+    return 1
