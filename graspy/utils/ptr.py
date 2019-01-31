@@ -97,7 +97,7 @@ def pass_to_ranks(graph, method="zero-boost"):
             normalizer = graph.size
         elif method == "simple-nonzero":
             normalizer = rank.shape[0]
-        rank = rank * 2 / (normalizer + 1)
+        rank = rank / (normalizer + 1)
         graph[graph != 0] = rank
         return graph
     else:
