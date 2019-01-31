@@ -17,7 +17,7 @@ plt.show()
 
 #%%
 
-screeplot(g,)
+edgeplot(g,labels=labels)
 #%%
 %matplotlib inline
 

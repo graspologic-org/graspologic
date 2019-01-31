@@ -202,7 +202,9 @@ def gridplot(
         context='talk',
         font_scale=1,
         alpha=0.7,
-        sizes=(10, 200)):
+        sizes=(10, 200),
+        palette='Set1',
+        legend_name='Type'):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
@@ -227,7 +229,7 @@ def gridplot(
             :math:`\frac{2 rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
         - 'simple-nonzero':
-            Pass to ranks method. Aame as simple-all, but ranks are scaled by
+            Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{2 rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
     height : int, optional, default: 10
         Height of figure in inches.
@@ -238,6 +240,7 @@ def gridplot(
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font
         elements.
+    legend_name : string
     """
     _check_common_inputs(
         height=height, title=title, context=context, font_scale=font_scale)
@@ -259,16 +262,16 @@ def gridplot(
 
     graphs = [_transform(arr, transform) for arr in graphs]
 
-    palette = sns.color_palette('Set1', desat=0.75, n_colors=len(labels))
+    # palette = sns.color_palette('Set1', desat=0.75, n_colors=len(labels))
 
     dfs = []
     for idx, graph in enumerate(graphs):
         rdx, cdx = np.where(graph > 0)
         weights = graph[(rdx, cdx)]
         df = pd.DataFrame(
-            np.vstack([rdx, cdx, weights]).T,
+            np.vstack([rdx + 0.5, cdx + 0.5, weights]).T,
             columns=['rdx', 'cdx', 'Weights'])
-        df['Type'] = [labels[idx]] * len(cdx)
+        df[legend_name] = [labels[idx]] * len(cdx)
         dfs.append(df)
 
     df = pd.concat(dfs, axis=0)
@@ -279,7 +282,7 @@ def gridplot(
             data=df,
             x='cdx',
             y='rdx',
-            hue='Type',
+            hue=legend_name,
             size='Weights',
             sizes=sizes,
             alpha=alpha,
@@ -288,9 +291,10 @@ def gridplot(
             facet_kws={
                 'sharex': True,
                 'sharey': True,
-                'xlim': (0, graph.shape[0]),
-                'ylim': (0, graph.shape[0]),
-            })
+                'xlim': (0, graph.shape[0] + 1),
+                'ylim': (0, graph.shape[0] + 1),
+            },
+        )
         plot.ax.axis('off')
         plot.ax.invert_yaxis()
         if title is not None:
@@ -456,20 +460,33 @@ def _distplot(data,
     fig = plt.figure(figsize=figsize)
     ax = plt.gca()
     palette = sns.color_palette(palette)
+    plt_kws = {'cumulative': True}
     with sns.plotting_context(context=context, font_scale=font_scale):
         if labels is not None:
             categories, counts = np.unique(labels, return_counts=True)
             for i, cat in enumerate(categories):
                 cat_data = data[np.where(labels == cat)]
                 if counts[i] > 1 and cat_data.min() != cat_data.max():
-                    sns.distplot(
-                        cat_data, label=cat, hist=False, color=palette[i])
+                    x = np.sort(cat_data)
+                    y = np.arange(len(x)) / float(len(x))
+                    plt.plot(x, y, label=cat, color=palette[i])
+                    # plt.plot(
+
+                    #     np.cumsum(cat_data) / cat_data.sum(),
+                    #     label=cat,
+                    #     color=palette[i])
+                    # sns.distplot(
+                    #     cat_data,
+                    #     label=cat,
+                    #     hist=False,
+                    #     color=palette[i],
+                    #     kde_kws=plt_kws)
                 else:
                     ax.axvline(cat_data[0], label=cat, color=palette[i])
             plt.legend()
         else:
             if data.min() != data.max():
-                sns.distplot(data, hist=False)
+                sns.distplot(data, hist=False, kde_kws=plt_kws)
             else:
                 ax.axvline(data[0])
 
@@ -516,9 +533,11 @@ def edgeplot(X,
              figsize=(10, 5),
              palette='Set1'):
     edges = X.ravel()
+    labels = np.tile(labels, (1, X.shape[1]))
+    labels = labels.ravel()
     if nonzero:
+        labels = labels[edges != 0]
         edges = edges[edges != 0]
-    print(title)
     ax = _distplot(
         edges,
         labels=labels,
@@ -540,10 +559,12 @@ def screeplot(X,
               ylabel='Variance explained'):
     _, D, _ = selectSVD(X, n_components=X.shape[1], algorithm='full')
     D /= D.sum()
+    x = np.sort(D)
+    y = np.arange(len(x)) / float(len(x))
     fig = plt.figure(figsize=figsize)
     ax = plt.gca()
     with sns.plotting_context(context=context, font_scale=font_scale):
-        plt.plot(D)
+        plt.plot(x, y)
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)

@@ -85,7 +85,7 @@ class BaseEmbed(BaseEstimator):
             self.latent_right_ = None
 
     @abstractmethod
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         A method for embedding.
 
@@ -118,7 +118,7 @@ class BaseEmbed(BaseEstimator):
         else:
             return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph):
+    def fit_transform(self, graph, y=None):
         """
         Fit the model with graphs and apply the transformation. 
 

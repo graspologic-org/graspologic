@@ -92,7 +92,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
             n_iter=n_iter,
         )
 
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         Fit ASE model to input graph
 

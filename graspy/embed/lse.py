@@ -94,7 +94,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         )
         self.form = form
 
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         Fit LSE model to input graph
 
