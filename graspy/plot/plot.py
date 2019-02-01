@@ -100,7 +100,7 @@ def heatmap(X,
 
         - 'log' :
             Plots the log of all nonzero numbers
-        - 'zero-boost' :
+        - 'zero-boost' :s
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
         - 'simple-all': 
@@ -193,18 +193,17 @@ def heatmap(X,
     return plot
 
 
-def gridplot(
-        X,
-        labels=None,  # TODO fix 
-        transform=None,
-        height=10,
-        title=None,
-        context='talk',
-        font_scale=1,
-        alpha=0.7,
-        sizes=(10, 200),
-        palette='Set1',
-        legend_name='Type'):
+def gridplot(X,
+             labels=None,
+             transform=None,
+             height=10,
+             title=None,
+             context='talk',
+             font_scale=1,
+             alpha=0.7,
+             sizes=(10, 200),
+             palette='Set1',
+             legend_name='Type'):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
