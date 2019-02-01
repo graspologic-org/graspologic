@@ -107,7 +107,7 @@ def heatmap(
 
         - 'log' :
             Plots the log of all nonzero numbers
-        - 'zero-boost' :
+        - 'zero-boost' :s
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
         - 'simple-all': 
