@@ -87,13 +87,15 @@ class BaseEmbed(BaseEstimator):
         return True
 
     @abstractmethod
-    def fit(self, graph, y):
+    def fit(self, graph, y=None):
         """
         A method for embedding.
 
         Parameters
         ----------
         graph: np.ndarray or networkx.Graph
+
+        y : Ignored
 
         Returns
         -------

@@ -140,7 +140,7 @@ class OmnibusEmbed(BaseEmbed):
             n_iter=n_iter,
         )
 
-    def fit(self, graphs):
+    def fit(self, graphs, y=None):
         """
         Fit the model with graphs.
 
@@ -150,6 +150,8 @@ class OmnibusEmbed(BaseEmbed):
             List of array-like, (n_vertices, n_vertices), or list of 
             networkx.Graph. If array-like, the shape must be 
             (n_graphs, n_vertices, n_vertices)
+        
+        y : Ignored
 
         Returns
         -------
@@ -182,7 +184,7 @@ class OmnibusEmbed(BaseEmbed):
 
         return self
 
-    def fit_transform(self, graphs):
+    def fit_transform(self, graphs, y=None):
         """
         Fit the model with graphs and apply the embedding on graphs. 
         n_dimension is either automatically determined or based on user input.
@@ -192,6 +194,8 @@ class OmnibusEmbed(BaseEmbed):
         graphs : list of graphs
             List of array-like, (n_vertices, n_vertices), or list of 
             networkx.Graph.
+
+        y : Ignored
 
         Returns
         -------

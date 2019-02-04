@@ -94,7 +94,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         )
         self.form = form
 
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         Fit LSE model to input graph
 
@@ -106,6 +106,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
         ----------
         graph : array_like or networkx.Graph
             Input graph to embed. see graphstats.utils.import_graph
+
+        y : Ignored
 
         form : {'DAD' (default), 'I-DAD'}, optional
             Specifies the type of Laplacian normalization to use.

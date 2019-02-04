@@ -122,7 +122,7 @@ class ClassicalMDS(BaseEstimator):
 
         return out
 
-    def fit(self, X):
+    def fit(self, X, y=None):
         """
         Fit the model with X.
 
@@ -134,6 +134,8 @@ class ClassicalMDS(BaseEstimator):
             ``dissimilarity=='euclidean'``, then the input should be 2d-array 
             with shape (n_samples, n_features) or a 3d-array with shape 
             (n_samples, n_features_1, n_features_2).
+        
+        y : Ignored
         """
         # Check X type
         if not isinstance(X, np.ndarray):
@@ -181,7 +183,7 @@ class ClassicalMDS(BaseEstimator):
 
         return self
 
-    def fit_transform(self, X):
+    def fit_transform(self, X, y=None):
         """
         Fit the data from X, and returns the embedded coordinates.
 
@@ -194,6 +196,8 @@ class ClassicalMDS(BaseEstimator):
             with shape (n_samples, n_features) or a nd-array with shape 
             (n_samples, n_features_1, n_features_2, ..., n_features_d). First
             axis of nd-array must be ``n_samples``.
+
+        y : Ignored
 
         Returns
         -------
