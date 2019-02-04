@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
-from .embed import BaseEmbed
+from .base import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, get_lcc, is_fully_connected
 

@@ -44,6 +44,11 @@ class BaseEmbed(BaseEstimator):
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
 
+    Attributes
+    ----------
+    n_components_ : int
+        Dimensionality of the embedded space.
+
     See Also
     --------
     graspy.embed.selectSVD, graspy.embed.select_dimension
@@ -67,8 +72,7 @@ class BaseEmbed(BaseEstimator):
         """
         U, D, V = selectSVD(A, n_components=self.n_components, n_elbows=self.n_elbows)
 
-        if self.n_components is None:
-            self.n_components = D.size
+        self.n_components_ = D.size
 
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
@@ -77,8 +81,13 @@ class BaseEmbed(BaseEstimator):
         else:
             self.latent_right_ = None
 
+    @property
+    def _pairwise(self):
+        """This is for sklearn compliance."""
+        return True
+
     @abstractmethod
-    def fit(self, graph):
+    def fit(self, graph, y):
         """
         A method for embedding.
 
@@ -111,7 +120,7 @@ class BaseEmbed(BaseEstimator):
         else:
             return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph):
+    def fit_transform(self, graph, y=None):
         """
         Fit the model with graphs and apply the transformation. 
 
@@ -120,6 +129,8 @@ class BaseEmbed(BaseEstimator):
         Parameters
         ----------
         graph: np.ndarray or networkx.Graph
+
+        y : Ignored
 
         Returns
         -------

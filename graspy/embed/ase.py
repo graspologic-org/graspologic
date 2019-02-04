@@ -3,7 +3,7 @@
 # Email: bpedigo@jhu.edu
 import warnings
 
-from .embed import BaseEmbed
+from .base import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, get_lcc, is_fully_connected
 
