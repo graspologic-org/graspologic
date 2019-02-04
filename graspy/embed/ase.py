@@ -78,13 +78,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
 
-    def __init__(
-            self,
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
-    ):
+    def __init__(self, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,

@@ -16,12 +16,12 @@ class TestInput(unittest.TestCase):
         np.put(
             cls.A,
             np.random.choice(np.arange(0, n * n), size=nedge, replace=False),
-            np.random.normal(size=nedge))
+            np.random.normal(size=nedge),
+        )
 
     def test_graphin(self):
         G = nx.from_numpy_array(self.A)
-        np.testing.assert_array_equal(
-            nx.to_numpy_array(G), gus.import_graph(G))
+        np.testing.assert_array_equal(nx.to_numpy_array(G), gus.import_graph(G))
 
     def test_npin(self):
         np.testing.assert_array_equal(self.A, gus.import_graph(self.A))
@@ -38,5 +38,6 @@ class TestInput(unittest.TestCase):
         with self.assertRaises(ValueError):
             gus.import_graph(non_square)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

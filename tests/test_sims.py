@@ -13,10 +13,10 @@ def remove_diagonal(A):
     eind = np.ravel_multi_index(np.where(np.eye(A.shape[1])), A.shape)
     # set difference of A indices and identity
     dind = np.unravel_index(np.setdiff1d(Aind, eind), A.shape)
-    return(A[dind])
+    return A[dind]
+
 
 class Test_ER(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.n = 20
@@ -27,7 +27,7 @@ class Test_ER(unittest.TestCase):
         A = er_nm(self.n, self.M)
         # symmetric, so summing will give us twice the ecount of
         # the full adjacency matrix
-        self.assertTrue(A.sum() == 2*self.M)
+        self.assertTrue(A.sum() == 2 * self.M)
         self.assertTrue(A.shape == (self.n, self.n))
 
     def test_ernp(self):
@@ -36,13 +36,11 @@ class Test_ER(unittest.TestCase):
         # symmetric, so summing will give us twice the ecount of
         # the full adjacency matrix
         dind = remove_diagonal(A)
-        self.assertTrue(np.isclose(dind.sum()/float(len(dind)),
-            self.p, atol=0.02))
+        self.assertTrue(np.isclose(dind.sum() / float(len(dind)), self.p, atol=0.02))
         self.assertTrue(A.shape == (self.n, self.n))
 
 
 class Test_ZINM(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.n = 20
@@ -56,20 +54,18 @@ class Test_ZINM(unittest.TestCase):
     def test_loop_directed(self):
         np.random.seed(12345)
         Abin = er_nm(self.n, self.M, directed=True, loops=True)
-        Awt = er_nm(self.n, self.M, directed=True, loops=True, wt=self.wt,
-            wtargs=self.wtargs)
+        Awt = er_nm(
+            self.n, self.M, directed=True, loops=True, wt=self.wt, wtargs=self.wtargs
+        )
         # check that correct number of edges assigned
         # sum of nonzero entries and correct for the fact that the diagonal
         # is part of the model now
         self.assertTrue(Abin.sum() == self.M)
         self.assertTrue((Awt != 0).sum() == self.M)
 
-
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            atol=0.2))
-        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
-            atol=0.2))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean, atol=0.2))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std, atol=0.2))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -85,23 +81,15 @@ class Test_ZINM(unittest.TestCase):
     def test_noloop_directed(self):
         np.random.seed(12345)
         Abin = er_nm(self.n, self.M, directed=True)
-        Awt = er_nm(
-            self.n,
-            self.M,
-            wt=self.wt,
-            directed=True,
-            wtargs=self.wtargs,
-    )
+        Awt = er_nm(self.n, self.M, wt=self.wt, directed=True, wtargs=self.wtargs)
         # check that correct number of edges assigned
         self.assertTrue(Abin.sum() == self.M)
         self.assertTrue((Awt != 0).sum() == self.M)
 
         dind = remove_diagonal(Awt)
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(dind[dind != 0]), self.mean,
-            atol=0.15))
-        self.assertTrue(np.isclose(np.std(dind[dind != 0]), self.std,
-            atol=0.15))
+        self.assertTrue(np.isclose(np.mean(dind[dind != 0]), self.mean, atol=0.15))
+        self.assertTrue(np.isclose(np.std(dind[dind != 0]), self.std, atol=0.15))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -121,14 +109,12 @@ class Test_ZINM(unittest.TestCase):
         # check that correct number of edges assigned
         # sum of nonzero entries and correct for the fact that the diagonal
         # is part of the model now
-        self.assertTrue(Abin.sum() + np.diag(Abin).sum() == 2*self.M)
-        self.assertTrue((Awt != 0).sum() + np.diag(Awt != 0).sum() == 2*self.M)
+        self.assertTrue(Abin.sum() + np.diag(Abin).sum() == 2 * self.M)
+        self.assertTrue((Awt != 0).sum() + np.diag(Awt != 0).sum() == 2 * self.M)
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            atol=0.15))
-        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
-            atol=0.15))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean, atol=0.15))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std, atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -144,17 +130,15 @@ class Test_ZINM(unittest.TestCase):
     def test_noloop_undirected(self):
         np.random.seed(12345)
         Abin = er_nm(self.n, self.M)
-        Awt = er_nm(self.n, self.M, wt=self.wt, wtargs=self.wtargs,)
+        Awt = er_nm(self.n, self.M, wt=self.wt, wtargs=self.wtargs)
         # check that correct number of edges assigned
-        self.assertTrue(Abin.sum() == 2*self.M)
-        self.assertTrue((Awt != 0).sum() == 2*self.M)
+        self.assertTrue(Abin.sum() == 2 * self.M)
+        self.assertTrue((Awt != 0).sum() == 2 * self.M)
 
         dind = remove_diagonal(Awt)
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(dind[dind != 0]), self.mean,
-            atol=0.15))
-        self.assertTrue(np.isclose(np.std(dind[dind != 0]), self.std,
-            atol=0.15))
+        self.assertTrue(np.isclose(np.mean(dind[dind != 0]), self.mean, atol=0.15))
+        self.assertTrue(np.isclose(np.std(dind[dind != 0]), self.std, atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -168,7 +152,7 @@ class Test_ZINM(unittest.TestCase):
 
     def test_bad_inputs(self):
         with self.assertRaises(TypeError):
-            n = '10'
+            n = "10"
             er_nm(n, self.M)
 
         with self.assertRaises(ValueError):
@@ -184,11 +168,11 @@ class Test_ZINM(unittest.TestCase):
             er_nm(self.n, m)
 
         with self.assertRaises(TypeError):
-            loops = 'True'
+            loops = "True"
             er_nm(self.n, self.M, loops=loops)
 
         with self.assertRaises(TypeError):
-            directed = 'True'
+            directed = "True"
             er_nm(self.n, self.M, directed=directed)
 
         with self.assertRaises(TypeError):
@@ -201,7 +185,6 @@ class Test_ZINM(unittest.TestCase):
 
 
 class Test_ZINP(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.n = 50
@@ -216,26 +199,21 @@ class Test_ZINP(unittest.TestCase):
         np.random.seed(123)
         Abin = er_np(self.n, self.p, directed=True, loops=True)
         Awt = er_np(
-            self.n,
-            self.p,
-            directed=True,
-            loops=True,
-            wt=self.wt,
-            wtargs=self.wtargs,
-    )
+            self.n, self.p, directed=True, loops=True, wt=self.wt, wtargs=self.wtargs
+        )
         # check that correct number of edges assigned
         # sum of nonzero entries and correct for the fact that the diagonal
         # is part of the model now
-        self.assertTrue(np.isclose(Abin.sum()/float(np.prod(Abin.shape)),
-            self.p, atol=0.1))
-        self.assertTrue(np.isclose((Awt != 0).sum()/float(np.prod(Awt.shape)),
-            self.p, atol=0.1))
+        self.assertTrue(
+            np.isclose(Abin.sum() / float(np.prod(Abin.shape)), self.p, atol=0.1)
+        )
+        self.assertTrue(
+            np.isclose((Awt != 0).sum() / float(np.prod(Awt.shape)), self.p, atol=0.1)
+        )
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            atol=0.2))
-        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
-            atol=0.2))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean, atol=0.2))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std, atol=0.2))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -250,21 +228,18 @@ class Test_ZINP(unittest.TestCase):
     def test_noloop_directed(self):
         np.random.seed(12345)
         Abin = er_np(self.n, self.p, directed=True)
-        Awt = er_np(
-            self.n, self.p, wt=self.wt, directed=True, wtargs=self.wtargs)
+        Awt = er_np(self.n, self.p, wt=self.wt, directed=True, wtargs=self.wtargs)
         # check that correct number of edges assigned
         dind = remove_diagonal(Abin)
         dindwt = remove_diagonal(Awt)
-        self.assertTrue(np.isclose(dind.sum()/float(len(dind)),
-            self.p, atol=0.1))
-        self.assertTrue(np.isclose((dindwt != 0).sum()/float(len(dindwt)),
-            self.p, atol=0.1))
+        self.assertTrue(np.isclose(dind.sum() / float(len(dind)), self.p, atol=0.1))
+        self.assertTrue(
+            np.isclose((dindwt != 0).sum() / float(len(dindwt)), self.p, atol=0.1)
+        )
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(dindwt[dindwt != 0]), self.mean,
-            atol=0.5))
-        self.assertTrue(np.isclose(np.std(dindwt[dindwt != 0]), self.std,
-            atol=0.5))
+        self.assertTrue(np.isclose(np.mean(dindwt[dindwt != 0]), self.mean, atol=0.5))
+        self.assertTrue(np.isclose(np.std(dindwt[dindwt != 0]), self.std, atol=0.5))
 
         # check loopless and undirected
         self.assertFalse(is_symmetric(Abin))
@@ -280,23 +255,17 @@ class Test_ZINP(unittest.TestCase):
     def test_loop_undirected(self):
         np.random.seed(12345)
         Abin = er_np(self.n, self.p, loops=True)
-        Awt = er_np(
-            self.n,
-            self.p,
-            loops=True,
-            wt=self.wt,
-            wtargs=self.wtargs
-    )
+        Awt = er_np(self.n, self.p, loops=True, wt=self.wt, wtargs=self.wtargs)
         # check that correct number of edges assigned
-        self.assertTrue(np.isclose(Abin.sum()/float(np.prod(Abin.shape)),
-            self.p, atol=0.02))
-        self.assertTrue(np.isclose((Awt != 0).sum()/float(np.prod(Awt.shape)),
-            self.p, atol=0.02))
+        self.assertTrue(
+            np.isclose(Abin.sum() / float(np.prod(Abin.shape)), self.p, atol=0.02)
+        )
+        self.assertTrue(
+            np.isclose((Awt != 0).sum() / float(np.prod(Awt.shape)), self.p, atol=0.02)
+        )
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean,
-            atol=0.15))
-        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std,
-            atol=0.15))
+        self.assertTrue(np.isclose(np.mean(Awt[Awt != 0]), self.mean, atol=0.15))
+        self.assertTrue(np.isclose(np.std(Awt[Awt != 0]), self.std, atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -309,7 +278,6 @@ class Test_ZINP(unittest.TestCase):
         self.assertTrue(Awt.shape == (self.n, self.n))
         pass
 
-
     def test_noloop_undirected(self):
         np.random.seed(123)
         Abin = er_np(self.n, self.p)
@@ -317,16 +285,14 @@ class Test_ZINP(unittest.TestCase):
         # check that correct number of edges assigned
         dind = remove_diagonal(Abin)
         dindwt = remove_diagonal(Awt)
-        self.assertTrue(np.isclose(dind.sum()/float(len(dind)),
-            self.p, atol=0.02))
-        self.assertTrue(np.isclose((dindwt != 0).sum()/float(len(dindwt)),
-            self.p, atol=0.02))
+        self.assertTrue(np.isclose(dind.sum() / float(len(dind)), self.p, atol=0.02))
+        self.assertTrue(
+            np.isclose((dindwt != 0).sum() / float(len(dindwt)), self.p, atol=0.02)
+        )
 
         # check that the nonzero edges have mean self.mean and var self.var
-        self.assertTrue(np.isclose(np.mean(dindwt[dindwt != 0]), self.mean,
-            atol=0.15))
-        self.assertTrue(np.isclose(np.std(dindwt[dindwt != 0]), self.std,
-            atol=0.15))
+        self.assertTrue(np.isclose(np.mean(dindwt[dindwt != 0]), self.mean, atol=0.15))
+        self.assertTrue(np.isclose(np.std(dindwt[dindwt != 0]), self.std, atol=0.15))
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(Abin))
@@ -340,7 +306,7 @@ class Test_ZINP(unittest.TestCase):
 
     def test_bad_inputs(self):
         with self.assertRaises(TypeError):
-            n = '10'
+            n = "10"
             er_np(n, self.p)
 
         with self.assertRaises(ValueError):
@@ -348,11 +314,11 @@ class Test_ZINP(unittest.TestCase):
             er_np(n, self.p)
 
         with self.assertRaises(TypeError):
-            p = '1'
+            p = "1"
             er_np(self.n, p)
 
         with self.assertRaises(ValueError):
-            p = -.5
+            p = -0.5
             er_np(self.n, p)
 
         with self.assertRaises(ValueError):
@@ -360,11 +326,11 @@ class Test_ZINP(unittest.TestCase):
             er_np(self.n, p)
 
         with self.assertRaises(TypeError):
-            loops = 'True'
+            loops = "True"
             er_np(self.n, self.p, loops=loops)
 
         with self.assertRaises(TypeError):
-            directed = 'True'
+            directed = "True"
             er_np(self.n, self.p, directed=directed)
 
         with self.assertRaises(TypeError):
@@ -373,7 +339,6 @@ class Test_ZINP(unittest.TestCase):
 
 
 class Test_WSBM(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         # 60 vertex graph w one community having 20 and another
@@ -400,12 +365,12 @@ class Test_WSBM(unittest.TestCase):
                 irange = np.arange(vcount[i] - n[i], vcount[i])
                 jrange = np.arange(vcount[j] - n[j], vcount[j])
 
-                block = A[(vcount[i] - n[i]):vcount[i],
-                    (vcount[j] - n[j]):vcount[j]]
-                if (i == j):
+                block = A[
+                    (vcount[i] - n[i]) : vcount[i], (vcount[j] - n[j]) : vcount[j]
+                ]
+                if i == j:
                     block = remove_diagonal(block)
-                self.assertTrue(np.isclose(np.mean(block),
-                    Psy[i, j], atol=0.02))
+                self.assertTrue(np.isclose(np.mean(block), Psy[i, j], atol=0.02))
         self.assertTrue(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -415,23 +380,28 @@ class Test_WSBM(unittest.TestCase):
     def test_sbm_singlewt_undirected_loopless(self):
         np.random.seed(12345)
         wt = np.random.normal
-        params = {'loc': 2, 'scale': 2}
+        params = {"loc": 2, "scale": 2}
         A = sbm(self.n, self.Psy, wt=wt, wtargs=params)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
                 jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
 
-                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
-                    (self.vcount[j] - self.n[j]):self.vcount[j]]
-                if (i == j):
+                block = A[
+                    (self.vcount[i] - self.n[i]) : self.vcount[i],
+                    (self.vcount[j] - self.n[j]) : self.vcount[j],
+                ]
+                if i == j:
                     block = remove_diagonal(block)
-                self.assertTrue(np.isclose(np.mean(block != 0),
-                    self.Psy[i, j], atol=0.02))
-                self.assertTrue(np.isclose(np.mean(block[block != 0]),
-                    params['loc'], atol=0.2))
-                self.assertTrue(np.isclose(np.std(block[block != 0]),
-                    params['scale'], atol=0.2))
+                self.assertTrue(
+                    np.isclose(np.mean(block != 0), self.Psy[i, j], atol=0.02)
+                )
+                self.assertTrue(
+                    np.isclose(np.mean(block[block != 0]), params["loc"], atol=0.2)
+                )
+                self.assertTrue(
+                    np.isclose(np.std(block[block != 0]), params["scale"], atol=0.2)
+                )
         self.assertTrue(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -440,41 +410,52 @@ class Test_WSBM(unittest.TestCase):
     # below are the expectations of the estimators for the relevant weight
     # functions we exhaustively test
     def exp_normal(self, x):
-        return({'loc': np.mean(x), 'scale': np.std(x)})
+        return {"loc": np.mean(x), "scale": np.std(x)}
 
     def exp_poisson(self, x):
-        return({'lam': np.mean(x)})
+        return {"lam": np.mean(x)}
 
     def exp_exp(self, x):
-        return({'scale': np.mean(x)})
+        return {"scale": np.mean(x)}
 
     def exp_unif(self, x):
-        return({'low': np.min(x), 'high': np.max(x)})
+        return {"low": np.min(x), "high": np.max(x)}
 
     def test_sbm_multiwt_directed_loopless(self):
         np.random.seed(12345)
-        Wt = np.vstack(([np.random.normal, np.random.poisson],
-            [np.random.exponential, np.random.uniform]))
-        Wtargs = np.vstack(([{'loc': 2, 'scale': 2}, {'lam': 5}],
-            [{'scale': 2}, {'low': 5, 'high': 10}]))
-        check = np.vstack(([self.exp_normal, self.exp_poisson],
-            [self.exp_exp, self.exp_unif]))
+        Wt = np.vstack(
+            (
+                [np.random.normal, np.random.poisson],
+                [np.random.exponential, np.random.uniform],
+            )
+        )
+        Wtargs = np.vstack(
+            (
+                [{"loc": 2, "scale": 2}, {"lam": 5}],
+                [{"scale": 2}, {"low": 5, "high": 10}],
+            )
+        )
+        check = np.vstack(
+            ([self.exp_normal, self.exp_poisson], [self.exp_exp, self.exp_unif])
+        )
         A = sbm(self.n, self.Psy, wt=Wt, directed=True, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
                 jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
 
-                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
-                    (self.vcount[j] - self.n[j]):self.vcount[j]]
-                if (i == j):
+                block = A[
+                    (self.vcount[i] - self.n[i]) : self.vcount[i],
+                    (self.vcount[j] - self.n[j]) : self.vcount[j],
+                ]
+                if i == j:
                     block = remove_diagonal(block)
-                self.assertTrue(np.isclose(np.mean(block != 0),
-                    self.Psy[i, j], atol=0.02))
+                self.assertTrue(
+                    np.isclose(np.mean(block != 0), self.Psy[i, j], atol=0.02)
+                )
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
-                        atol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k], atol=0.2))
         self.assertFalse(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -483,28 +464,36 @@ class Test_WSBM(unittest.TestCase):
 
     def test_sbm_multiwt_undirected_loopless(self):
         np.random.seed(12345)
-        Wt = np.vstack(([np.random.normal, np.random.poisson],
-            [np.random.poisson, np.random.uniform]))
-        Wtargs = np.vstack(([{'loc': 2, 'scale': 2}, {'lam': 5}],
-            [{'lam': 5}, {'low': 5, 'high': 10}]))
-        check = np.vstack(([self.exp_normal, self.exp_poisson],
-            [self.exp_poisson, self.exp_unif]))
+        Wt = np.vstack(
+            (
+                [np.random.normal, np.random.poisson],
+                [np.random.poisson, np.random.uniform],
+            )
+        )
+        Wtargs = np.vstack(
+            ([{"loc": 2, "scale": 2}, {"lam": 5}], [{"lam": 5}, {"low": 5, "high": 10}])
+        )
+        check = np.vstack(
+            ([self.exp_normal, self.exp_poisson], [self.exp_poisson, self.exp_unif])
+        )
         A = sbm(self.n, self.Psy, wt=Wt, directed=False, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
                 jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
 
-                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
-                    (self.vcount[j] - self.n[j]):self.vcount[j]]
-                if (i == j):
+                block = A[
+                    (self.vcount[i] - self.n[i]) : self.vcount[i],
+                    (self.vcount[j] - self.n[j]) : self.vcount[j],
+                ]
+                if i == j:
                     block = remove_diagonal(block)
-                self.assertTrue(np.isclose(np.mean(block != 0),
-                    self.Psy[i, j], atol=0.02))
+                self.assertTrue(
+                    np.isclose(np.mean(block != 0), self.Psy[i, j], atol=0.02)
+                )
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
-                        atol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k], atol=0.2))
         self.assertTrue(is_symmetric(A))
         self.assertTrue(is_loopless(A))
         # check dimensions
@@ -513,27 +502,37 @@ class Test_WSBM(unittest.TestCase):
 
     def test_sbm_multiwt_directed_loopy(self):
         np.random.seed(12345)
-        Wt = np.vstack(([np.random.normal, np.random.poisson],
-            [np.random.exponential, np.random.uniform]))
-        Wtargs = np.vstack(([{'loc': 2, 'scale': 2}, {'lam': 5}],
-            [{'scale': 2}, {'low': 5, 'high': 10}]))
-        check = np.vstack(([self.exp_normal, self.exp_poisson],
-            [self.exp_exp, self.exp_unif]))
-        A = sbm(self.n, self.Psy, wt=Wt, directed=True, loops=True,
-            wtargs=Wtargs)
+        Wt = np.vstack(
+            (
+                [np.random.normal, np.random.poisson],
+                [np.random.exponential, np.random.uniform],
+            )
+        )
+        Wtargs = np.vstack(
+            (
+                [{"loc": 2, "scale": 2}, {"lam": 5}],
+                [{"scale": 2}, {"low": 5, "high": 10}],
+            )
+        )
+        check = np.vstack(
+            ([self.exp_normal, self.exp_poisson], [self.exp_exp, self.exp_unif])
+        )
+        A = sbm(self.n, self.Psy, wt=Wt, directed=True, loops=True, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
                 jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
 
-                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
-                    (self.vcount[j] - self.n[j]):self.vcount[j]]
-                self.assertTrue(np.isclose(np.mean(block != 0),
-                    self.Psy[i, j], atol=0.02))
+                block = A[
+                    (self.vcount[i] - self.n[i]) : self.vcount[i],
+                    (self.vcount[j] - self.n[j]) : self.vcount[j],
+                ]
+                self.assertTrue(
+                    np.isclose(np.mean(block != 0), self.Psy[i, j], atol=0.02)
+                )
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
-                        atol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k], atol=0.2))
         self.assertFalse(is_symmetric(A))
         self.assertFalse(is_loopless(A))
         # check dimensions
@@ -542,27 +541,34 @@ class Test_WSBM(unittest.TestCase):
 
     def test_sbm_multiwt_undirected_loopy(self):
         np.random.seed(12345)
-        Wt = np.vstack(([np.random.normal, np.random.poisson],
-            [np.random.poisson, np.random.uniform]))
-        Wtargs = np.vstack(([{'loc': 2, 'scale': 2}, {'lam': 5}],
-            [{'lam': 5}, {'low': 5, 'high': 10}]))
-        check = np.vstack(([self.exp_normal, self.exp_poisson],
-            [self.exp_poisson, self.exp_unif]))
-        A = sbm(self.n, self.Psy, wt=Wt, directed=False, loops=True,
-            wtargs=Wtargs)
+        Wt = np.vstack(
+            (
+                [np.random.normal, np.random.poisson],
+                [np.random.poisson, np.random.uniform],
+            )
+        )
+        Wtargs = np.vstack(
+            ([{"loc": 2, "scale": 2}, {"lam": 5}], [{"lam": 5}, {"low": 5, "high": 10}])
+        )
+        check = np.vstack(
+            ([self.exp_normal, self.exp_poisson], [self.exp_poisson, self.exp_unif])
+        )
+        A = sbm(self.n, self.Psy, wt=Wt, directed=False, loops=True, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
                 irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
                 jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
 
-                block = A[(self.vcount[i] - self.n[i]):self.vcount[i],
-                    (self.vcount[j] - self.n[j]):self.vcount[j]]
-                self.assertTrue(np.isclose(np.mean(block != 0),
-                    self.Psy[i, j], atol=0.02))
+                block = A[
+                    (self.vcount[i] - self.n[i]) : self.vcount[i],
+                    (self.vcount[j] - self.n[j]) : self.vcount[j],
+                ]
+                self.assertTrue(
+                    np.isclose(np.mean(block != 0), self.Psy[i, j], atol=0.02)
+                )
                 fit = check[i, j](block[block != 0])
                 for k, v in fit.items():
-                    self.assertTrue(np.isclose(v, Wtargs[i, j][k],
-                        atol=0.2))
+                    self.assertTrue(np.isclose(v, Wtargs[i, j][k], atol=0.2))
         self.assertTrue(is_symmetric(A))
         self.assertFalse(is_loopless(A))
         # check dimensions
@@ -571,19 +577,19 @@ class Test_WSBM(unittest.TestCase):
 
     def test_bad_inputs(self):
         with self.assertRaises(TypeError):
-            n = '1'
+            n = "1"
             sbm(n, self.Psy)
 
         with self.assertRaises(ValueError):
-            n = ['1', 10]
+            n = ["1", 10]
             sbm(n, self.Psy)
 
         with self.assertRaises(TypeError):
-            p = .5
+            p = 0.5
             sbm(self.n, p)
 
         with self.assertRaises(ValueError):
-            p = [[.5]]
+            p = [[0.5]]
             sbm(self.n, p)
 
         with self.assertRaises(ValueError):
@@ -591,11 +597,11 @@ class Test_WSBM(unittest.TestCase):
             sbm(self.n, p)
 
         with self.assertRaises(ValueError):
-            p = ['str']
+            p = ["str"]
             sbm(self.n, p)
 
         with self.assertRaises(TypeError):
-            wt = '1'
+            wt = "1"
             sbm(self.n, self.Psy, wt=wt)
 
         with self.assertRaises(TypeError):
@@ -621,14 +627,18 @@ class Test_WSBM(unittest.TestCase):
             sbm(self.n, self.Pns)
 
         with self.assertRaises(ValueError):
-            wt = [[np.random.uniform, np.random.beta],
-                  [np.random.uniform, np.random.normal]]
+            wt = [
+                [np.random.uniform, np.random.beta],
+                [np.random.uniform, np.random.normal],
+            ]
             wtargs = [[1, 1], [1, 1]]
-            sbm(self.n, self.Psy, wt = wt, wtargs=wtargs)
+            sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
 
         with self.assertRaises(ValueError):
-            wt = [[ np.random.uniform,np.random.uniform],
-            [np.random.uniform, np.random.normal],]
+            wt = [
+                [np.random.uniform, np.random.uniform],
+                [np.random.uniform, np.random.normal],
+            ]
             wtargs = [[1, 2], [1, 1]]
             sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
 
@@ -643,34 +653,30 @@ class Test_RDPG(unittest.TestCase):
         cls.Psy = symmetrize(cls.Psy)
 
     def test_dimensions(self):
-        X = np.array([[1,1],
-                      [1,1],
-                      [1,1],
-                      [1,0],
-                      [1,0],])
+        X = np.array([[1, 1], [1, 1], [1, 1], [1, 0], [1, 0]])
         A = rdpg(X)
-        self.assertTrue(A.shape, (5,5))
+        self.assertTrue(A.shape, (5, 5))
 
     def test_inputs(self):
-        x1 = np.array([[1,1],[1,1]])
-        x2 = np.array([[1,1]])
-        x3 = np.zeros((2,2,2))
+        x1 = np.array([[1, 1], [1, 1]])
+        x2 = np.array([[1, 1]])
+        x3 = np.zeros((2, 2, 2))
         with self.assertRaises(TypeError):
-            p_from_latent('hi') # wrong type
+            p_from_latent("hi")  # wrong type
         with self.assertRaises(ValueError):
-            p_from_latent(x1, x2) # dimension mismatch
+            p_from_latent(x1, x2)  # dimension mismatch
         with self.assertRaises(ValueError):
-            p_from_latent(x3) # wrong num dimensions
+            p_from_latent(x3)  # wrong num dimensions
         with self.assertRaises(TypeError):
-            sample_edges('XD') # wrong type
+            sample_edges("XD")  # wrong type
         with self.assertRaises(ValueError):
-            sample_edges(x3) # wrong num dimensions
+            sample_edges(x3)  # wrong num dimensions
         with self.assertRaises(ValueError):
-            sample_edges(x2) # wrong shape for P
+            sample_edges(x2)  # wrong shape for P
 
     def test_er_p_is_close(self):
         np.random.seed(8888)
-        X = 0.5 * np.ones((100,2))
+        X = 0.5 * np.ones((100, 2))
         graphs = []
         P = p_from_latent(X, rescale=True, loops=True)
         for i in range(1000):
@@ -683,10 +689,8 @@ class Test_RDPG(unittest.TestCase):
 
     def test_mini_sbm_p_is_close(self):
         np.random.seed(8888)
-        blocks = np.array([[0.8, 0.1],
-                           [0.1, 0.5]])
-        X = np.array([[-0.87209812, -0.19860733],
-                      [-0.26405006,  0.65595546]])
+        blocks = np.array([[0.8, 0.1], [0.1, 0.5]])
+        X = np.array([[-0.87209812, -0.19860733], [-0.26405006, 0.65595546]])
         graphs = []
         P = p_from_latent(X, rescale=True, loops=True)
         for i in range(10000):
@@ -698,7 +702,7 @@ class Test_RDPG(unittest.TestCase):
 
     def test_kwarg_passing(self):
         np.random.seed(8888)
-        X = 0.5 * np.ones((300,2))
+        X = 0.5 * np.ones((300, 2))
         g = rdpg(X, rescale=True, loops=True, directed=True)
         self.assertFalse(is_symmetric(g))
         self.assertFalse(is_loopless(g))

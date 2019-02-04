@@ -69,19 +69,20 @@ class ClassicalMDS(BaseEstimator):
     Aalborg University, Denmark 46.5 (2003).
     """
 
-    def __init__(self, n_components=None, dissimilarity='euclidean'):
+    def __init__(self, n_components=None, dissimilarity="euclidean"):
         # Check inputs
         if n_components is not None:
             if not isinstance(n_components, int):
                 msg = "n_components must be an integer, not {}.".format(
-                    type(n_components))
+                    type(n_components)
+                )
                 raise TypeError(msg)
             elif n_components <= 0:
                 msg = "n_components must be >= 1 or None."
                 raise ValueError(msg)
         self.n_components = n_components
 
-        if dissimilarity not in ['euclidean', 'precomputed']:
+        if dissimilarity not in ["euclidean", "precomputed"]:
             msg = "Dissimilarity measure must be either 'euclidean' or 'precomputed'."
             raise ValueError(msg)
         self.dissimilarity = dissimilarity
@@ -110,9 +111,9 @@ class ClassicalMDS(BaseEstimator):
 
         if X.ndim == 2:
             order = 2
-            axis = (1)
+            axis = 1
         else:
-            order = 'fro'
+            order = "fro"
             axis = (1, 2)
 
         out = np.zeros((n_samples, n_samples))
@@ -152,29 +153,30 @@ class ClassicalMDS(BaseEstimator):
         n_components = self.n_components
 
         # Handle dissimilarity
-        if self.dissimilarity == 'precomputed':
+        if self.dissimilarity == "precomputed":
             # Handle shape of X if precomputed distance matrix
             if len(X.shape) != 2:
                 msg = "X must be a 2d-array. Input has {} dimensions.".format(
-                    len(X.shape))
+                    len(X.shape)
+                )
                 raise ValueError(msg)
             # Must be symmetric
             if not is_symmetric(X):
                 msg = "X must be a symmetric array if precomputed dissimilarity matrix."
                 raise ValueError(msg)
             dissimilarity_matrix = X
-        elif self.dissimilarity == 'euclidean':
+        elif self.dissimilarity == "euclidean":
             dissimilarity_matrix = self._compute_euclidean_distances(X=X)
 
         J = _get_centering_matrix(dissimilarity_matrix.shape[0])
-        B = J @ (dissimilarity_matrix**2) @ J * -0.5
+        B = J @ (dissimilarity_matrix ** 2) @ J * -0.5
 
         U, D, V = selectSVD(B, n_components=n_components)
 
         if n_components is None:
             self.n_components = len(D)
         self.components_ = U
-        self.singular_values_ = D**0.5
+        self.singular_values_ = D ** 0.5
         self.dissimilarity_matrix_ = dissimilarity_matrix
 
         return self

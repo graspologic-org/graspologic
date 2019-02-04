@@ -79,12 +79,12 @@ class LaplacianSpectralEmbed(BaseEmbed):
     """
 
     def __init__(
-            self,
-            form='DAD',
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
+        self,
+        form="DAD",
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
     ):
         super().__init__(
             n_components=n_components,

@@ -31,19 +31,17 @@ def import_graph(graph):
     networkx.Graph, numpy.array
 	"""
     if type(graph) in [nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph]:
-        out = nx.to_numpy_array(
-            graph, nodelist=sorted(graph.nodes), dtype=np.float)
-    elif (type(graph) is np.ndarray):
+        out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
+    elif type(graph) is np.ndarray:
         if len(graph.shape) != 2:
-            raise ValueError('Matrix has improper number of dimensions')
+            raise ValueError("Matrix has improper number of dimensions")
         elif graph.shape[0] != graph.shape[1]:
-            raise ValueError('Matrix is not square')
+            raise ValueError("Matrix is not square")
         out = graph.copy()
         if not np.issubdtype(graph.dtype, np.floating):
             out = out.astype(np.float)
     else:
-        msg = "Input must be networkx.Graph or np.array, not {}.".format(
-            type(graph))
+        msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
         raise TypeError(msg)
     return out
 
@@ -64,7 +62,7 @@ def is_almost_symmetric(X, atol=1e-15):
     return np.allclose(X, X.T, atol=atol)
 
 
-def symmetrize(graph, method='triu'):
+def symmetrize(graph, method="triu"):
     """
     A function for forcing symmetry upon a graph.
 
@@ -92,11 +90,11 @@ def symmetrize(graph, method='triu'):
         the graph with asymmetries removed.
     """
     # graph = import_graph(graph)
-    if method is 'triu':
+    if method is "triu":
         graph = np.triu(graph)
-    elif method is 'tril':
+    elif method is "tril":
         graph = np.tril(graph)
-    elif method is 'avg':
+    elif method is "avg":
         graph = (np.triu(graph) + np.tril(graph)) / 2
     else:
         msg = "You have not passed a valid parameter for the method."
@@ -127,7 +125,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form='DAD'):
+def to_laplace(graph, form="DAD"):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
@@ -154,31 +152,30 @@ def to_laplace(graph, form='DAD'):
         2D (n_vertices, n_vertices) array representing graph 
         laplacian of specified form
     """
-    valid_inputs = ['I-DAD', 'DAD']
+    valid_inputs = ["I-DAD", "DAD"]
     if form not in valid_inputs:
-        raise TypeError('Unsuported Laplacian normalization')
+        raise TypeError("Unsuported Laplacian normalization")
     adj_matrix = import_graph(graph)
     if not is_fully_connected(adj_matrix):
-        raise ValueError('Input graph is not fully connected' +
-                         ' so a Laplacian cannot be formed')
-    if not is_symmetric(adj_matrix):
         raise ValueError(
-            'Laplacian not implemented/defined for directed graphs')
+            "Input graph is not fully connected" + " so a Laplacian cannot be formed"
+        )
+    if not is_symmetric(adj_matrix):
+        raise ValueError("Laplacian not implemented/defined for directed graphs")
     D_vec = np.sum(adj_matrix, axis=0)
-    D_root = np.diag(D_vec**-0.5)
-    if form == 'I-DAD':
+    D_root = np.diag(D_vec ** -0.5)
+    if form == "I-DAD":
         L = np.diag(D_vec) - adj_matrix
         L = np.dot(D_root, L)
         L = np.dot(L, D_root)
-    elif form == 'DAD':
+    elif form == "DAD":
         L = np.dot(D_root, adj_matrix)
         L = np.dot(L, D_root)
-    return symmetrize(
-        L, method='avg')  # sometimes machine prec. makes this necessary
+    return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
 
 
 def is_fully_connected(graph):
-    '''
+    """
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case. 
 
@@ -202,7 +199,7 @@ def is_fully_connected(graph):
         http://mathworld.wolfram.com/ConnectedGraph.html
         http://mathworld.wolfram.com/WeaklyConnectedDigraph.html
 
-    '''
+    """
     if type(graph) is np.ndarray:
         if is_symmetric(graph):
             g_object = nx.Graph()
@@ -216,7 +213,7 @@ def is_fully_connected(graph):
 
 
 def get_lcc(graph, return_inds=False):
-    '''
+    """
     Finds the largest connected component for the input graph. 
 
     The largest connected component is the fully connected subgraph
@@ -241,7 +238,7 @@ def get_lcc(graph, return_inds=False):
     inds: (optional)
         Indices from the original adjacency matrix that were kept after taking
         the largest connected component 
-    '''
+    """
 
     input_ndarray = False
     if type(graph) is np.ndarray:
@@ -293,18 +290,17 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
 
         out = [import_graph(g) for g in graphs]
         if len(set(map(np.shape, out))) != 1:
-            msg = 'All input graphs must have the same size'
+            msg = "All input graphs must have the same size"
             raise ValueError(msg)
         bar = np.stack(out).mean(axis=0)
     elif isinstance(graphs, np.ndarray):
         shape = graphs.shape
         if shape[1] != shape[2]:
-            msg = 'Input graphs must be square'
+            msg = "Input graphs must be square"
             raise ValueError(msg)
         bar = graphs.mean(axis=0)
     else:
-        msg = 'Expected list or np.ndarray, but got {} instead.'.format(
-            type(graphs))
+        msg = "Expected list or np.ndarray, but got {} instead.".format(type(graphs))
         raise ValueError(msg)
 
     _, idx = get_lcc(bar, return_inds=True)
@@ -321,7 +317,7 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
 
 
 def get_multigraph_intersect_lcc(graphs, return_inds=False):
-    '''
+    """
     Finds the intersection of multiple graphs's largest connected components. 
 
     Computes the largest connected component for each graph that was input, and 
@@ -347,7 +343,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
     inds: (optional)
         Indices from the original adjacency matrix that were kept after taking
         the largest connected component 
-    '''
+    """
     lcc_by_graph = []
     inds_by_graph = []
     for graph in graphs:
@@ -361,8 +357,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
             lcc = graph[inds_intersection, :][:, inds_intersection]
         else:
             lcc = graph.subgraph(inds_intersection).copy()
-            lcc.remove_nodes_from(
-                [n for n in lcc if n not in inds_intersection])
+            lcc.remove_nodes_from([n for n in lcc if n not in inds_intersection])
         new_graphs.append(lcc)
     # this is not guaranteed be connected after one iteration because taking the
     # intersection of nodes among graphs can cause some components to become
@@ -374,7 +369,8 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
             break
     if recurse:
         new_graphs, inds_intersection = get_multigraph_intersect_lcc(
-            new_graphs, return_inds=True)
+            new_graphs, return_inds=True
+        )
     if type(graphs) != list:
         new_graphs = np.stack(new_graphs)
     if return_inds:
@@ -384,7 +380,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 
 
 def augment_diagonal(graph, weight=1):
-    '''
+    """
     Replaces the diagonal of adjacency matrix with 
     :math: \frac{degree}{num_verts - 1} for the degree associated
     with each node. 
@@ -397,7 +393,7 @@ def augment_diagonal(graph, weight=1):
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
         interpreted as an n x n adjacency matrix 
-    '''
+    """
     graph = import_graph(graph)
     graph = remove_loops(graph)
     divisor = graph.shape[0] - 1

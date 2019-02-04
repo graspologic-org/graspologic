@@ -1,3 +1,3 @@
 from .semipar import SemiparametricTest
 
-__all__ = ['SemiparametricTest']
+__all__ = ["SemiparametricTest"]

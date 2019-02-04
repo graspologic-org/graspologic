@@ -39,23 +39,22 @@ def _compute_likelihood(arr):
             mu2 = -np.inf
 
         # compute pooled variance
-        variance = ((np.sum((s1 - mu1)**2) + np.sum(
-            (s2 - mu2)**2))) / (n_elements - 1 - (idx < n_elements))
+        variance = ((np.sum((s1 - mu1) ** 2) + np.sum((s2 - mu2) ** 2))) / (
+            n_elements - 1 - (idx < n_elements)
+        )
         std = np.sqrt(variance)
 
         # compute log likelihoods
-        likelihoods[idx - 1] = np.sum(norm.logpdf(
-            s1, loc=mu1, scale=std)) + np.sum(
-                norm.logpdf(s2, loc=mu2, scale=std))
+        likelihoods[idx - 1] = np.sum(norm.logpdf(s1, loc=mu1, scale=std)) + np.sum(
+            norm.logpdf(s2, loc=mu2, scale=std)
+        )
 
     return likelihoods
 
 
-def select_dimension(X,
-                     n_components=None,
-                     n_elbows=2,
-                     threshold=None,
-                     return_likelihoods=False):
+def select_dimension(
+    X, n_components=None, n_elbows=2, threshold=None, return_likelihoods=False
+):
     """
     Generates profile likelihood from array based on Zhu and Godsie method.
     Elbows correspond to the optimal embedding dimension.
@@ -98,32 +97,32 @@ def select_dimension(X,
     """
     # Handle input data
     if not isinstance(X, np.ndarray):
-        msg = 'X must be a numpy array, not {}.'.format(type(X))
+        msg = "X must be a numpy array, not {}.".format(type(X))
         raise ValueError(msg)
     if X.ndim > 2:
-        msg = 'X must be a 1d or 2d-array, not {}d array.'.format(X.ndim)
+        msg = "X must be a 1d or 2d-array, not {}d array.".format(X.ndim)
         raise ValueError(msg)
     elif np.min(X.shape) <= 1:
-        msg = 'X must have more than 1 samples or 1 features.'
+        msg = "X must have more than 1 samples or 1 features."
         raise ValueError(msg)
 
     # Handle n_elbows
     if not isinstance(n_elbows, int):
-        msg = 'n_elbows must be an integer, not {}.'.format(type(n_elbows))
+        msg = "n_elbows must be an integer, not {}.".format(type(n_elbows))
         raise ValueError(msg)
     elif n_elbows < 1:
-        msg = 'number of elbows should be an integer > 1, not {}.'.format(
-            n_elbows)
+        msg = "number of elbows should be an integer > 1, not {}.".format(n_elbows)
         raise ValueError(msg)
 
     # Handle threshold
     if threshold is not None:
         if not isinstance(threshold, (int, float)):
-            msg = 'threshold must be an integer or a float, not {}.'.format(
-                type(threshold))
+            msg = "threshold must be an integer or a float, not {}.".format(
+                type(threshold)
+            )
             raise ValueError(msg)
         elif threshold < 0:
-            msg = 'threshold must be >= 0, not {}.'.format(threshold)
+            msg = "threshold must be >= 0, not {}.".format(threshold)
             raise ValueError(msg)
 
     # Handle n_components
@@ -131,8 +130,7 @@ def select_dimension(X,
         # per recommendation by Zhu & Godsie
         k = int(np.ceil(np.log2(np.min(X.shape))))
     elif not isinstance(n_components, int):
-        msg = 'n_components must be an integer, not {}.'.format(
-            type(n_components))
+        msg = "n_components must be an integer, not {}.".format(type(n_components))
         raise ValueError(msg)
     else:
         k = n_components
@@ -144,13 +142,13 @@ def select_dimension(X,
         # Singular values in decreasing order
         D = scipy.sparse.linalg.svds(A=X, k=k, return_singular_vectors=False)
         D = np.sort(D)[::-1]
-        #U, D, V = sklearn.utils.extmath.randomized_svd()
+        # U, D, V = sklearn.utils.extmath.randomized_svd()
 
     if threshold is not None:
         D = D[D > threshold]
 
         if len(D) == 0:
-            msg = 'No values greater than threshold {}.'
+            msg = "No values greater than threshold {}."
             raise IndexError(msg.format(threshold))
 
     idx = 0
@@ -162,7 +160,7 @@ def select_dimension(X,
         if arr.size <= 1:  # Cant compute likelihoods with 1 numbers
             break
         lq = _compute_likelihood(arr)
-        idx += (np.argmax(lq) + 1)
+        idx += np.argmax(lq) + 1
         elbows.append(idx)
         values.append(D[idx - 1])
         likelihoods.append(lq)
@@ -173,11 +171,7 @@ def select_dimension(X,
         return elbows, values
 
 
-def selectSVD(X,
-              n_components=None,
-              n_elbows=2,
-              algorithm='randomized',
-              n_iter=5):
+def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
     r"""
     Dimensionality reduction using SVD.
 
@@ -233,7 +227,7 @@ def selectSVD(X,
         pp.918-930.
     """
     # Deal with algorithms
-    if algorithm not in ['full', 'truncated', 'randomized']:
+    if algorithm not in ["full", "truncated", "randomized"]:
         msg = "algorithm must be one of {full, truncated, randomized}."
         raise ValueError(msg)
 
@@ -242,27 +236,25 @@ def selectSVD(X,
         n_components = elbows[-1]
 
     # Check
-    if (algorithm == 'full') & (n_components > min(X.shape)):
+    if (algorithm == "full") & (n_components > min(X.shape)):
         msg = "n_components must be <= min(X.shape)."
         raise ValueError(msg)
-    elif algorithm == 'full':
+    elif algorithm == "full":
         U, D, V = scipy.linalg.svd(X)
         U = U[:, :n_components]
         D = D[:n_components]
         V = V[:n_components, :]
 
-    if (algorithm in ['truncated', 'randomized'
-                      ]) & (n_components >= min(X.shape)):
+    if (algorithm in ["truncated", "randomized"]) & (n_components >= min(X.shape)):
         msg = "n_components must be strictly < min(X.shape)."
         raise ValueError(msg)
-    elif algorithm == 'truncated':
+    elif algorithm == "truncated":
         U, D, V = scipy.sparse.linalg.svds(X, k=n_components)
         idx = np.argsort(D)[::-1]  # sort in decreasing order
         D = D[idx]
         U = U[:, idx]
         V = V[idx, :]
-    elif algorithm == 'randomized':
-        U, D, V = sklearn.utils.extmath.randomized_svd(
-            X, n_components, n_iter=n_iter)
+    elif algorithm == "randomized":
+        U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components, n_iter=n_iter)
 
     return U, D, V

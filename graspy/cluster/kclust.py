@@ -50,8 +50,7 @@ class KMeansCluster(BaseCluster):
             else:
                 self.max_clusters = max_clusters
         else:
-            msg = 'max_clusters must be an integer, not {}.'.format(
-                type(max_clusters))
+            msg = "max_clusters must be an integer, not {}.".format(type(max_clusters))
             raise TypeError(msg)
         self.random_state = random_state
 
@@ -76,7 +75,8 @@ class KMeansCluster(BaseCluster):
         if self.max_clusters > X.shape[0]:
             msg = "n_components must be >= n_samples, but got \
                 n_components = {}, n_samples = {}".format(
-                self.max_clusters, X.shape[0])
+                self.max_clusters, X.shape[0]
+            )
             raise ValueError(msg)
         else:
             max_clusters = self.max_clusters

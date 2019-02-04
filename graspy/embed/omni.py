@@ -64,8 +64,7 @@ def _get_omni_matrix(graphs):
     # Do some numpy broadcasting magic.
     # We do sum in 4d arrays and reduce to 2d array.
     # Super fast and efficient
-    out = (A[:, :, None, :] + A.transpose(1, 0, 2)[None, :, :, :]).reshape(
-        n * m, -1)
+    out = (A[:, :, None, :] + A.transpose(1, 0, 2)[None, :, :, :]).reshape(n * m, -1)
 
     # Averaging
     out /= 2
@@ -133,13 +132,7 @@ class OmnibusEmbed(BaseEmbed):
     graspy.embed.select_dimension
     """
 
-    def __init__(
-            self,
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
-    ):
+    def __init__(self, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
