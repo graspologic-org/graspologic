@@ -93,7 +93,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Parameters
         ----------
         graph : array_like or networkx.Graph
-            input graph to embed. see graphstats.utils.import_graph
+            Input graph to embed.
 
         Returns
         -------
