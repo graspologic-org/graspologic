@@ -5,9 +5,11 @@
 # Email: ebridge2@jhu.edu
 # Copyright (c) 2018. All rights reserved.
 
+from functools import reduce
+
 import numpy as np
 import networkx as nx
-from functools import reduce
+from sklearn.utils import check_array
 
 
 def import_graph(graph):
@@ -30,16 +32,19 @@ def import_graph(graph):
 	--------
     networkx.Graph, numpy.array
 	"""
-    if type(graph) in [nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph]:
+    if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
-    elif type(graph) is np.ndarray:
-        if len(graph.shape) != 2:
-            raise ValueError("Matrix has improper number of dimensions")
-        elif graph.shape[0] != graph.shape[1]:
-            raise ValueError("Matrix is not square")
-        out = graph.copy()
-        if not np.issubdtype(graph.dtype, np.floating):
-            out = out.astype(np.float)
+    elif isinstance(graph, (np.ndarray, np.memmap)):
+        maximum = np.max(graph.shape)
+        out = check_array(
+            graph,
+            dtype=[np.float64, np.float32],
+            ensure_2d=True,
+            allow_nd=True,  # For omni tensor input
+            ensure_min_features=maximum,
+            ensure_min_samples=maximum,
+            copy=True,
+        )
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
         raise TypeError(msg)
