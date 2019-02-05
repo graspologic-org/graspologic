@@ -9,14 +9,17 @@ import pandas as pd
 import seaborn as sns
 from ..utils import import_graph, pass_to_ranks
 from ..embed import selectSVD
+from sklearn.utils import check_array, check_consistent_length
 
 
-def _check_common_inputs(figsize=None,
-                         height=None,
-                         title=None,
-                         context=None,
-                         font_scale=None,
-                         legend_name=None):
+def _check_common_inputs(
+        figsize=None,
+        height=None,
+        title=None,
+        context=None,
+        font_scale=None,
+        legend_name=None,
+):
     # Handle figsize
     if figsize is not None:
         if not isinstance(figsize, tuple):
@@ -504,10 +507,50 @@ def degreeplot(X,
                font_scale=1,
                figsize=(10, 5),
                palette='Set1'):
+    r"""
+    Plots the distribution of node degrees for the input graph. 
+    Allows for sets of node labels, will plot a distribution for each 
+    node category. 
+    
+    Parameters
+    ----------
+    X : np.ndarray (2D)
+        input graph 
+    labels : 1d np.ndarray or list, same length as dimensions of X
+        labels for different categories of graph nodes
+    direction : string, ('out', 'in')
+        for a directed graph, whether to plot out degree or in degree
+    title : string, default : 'Degree plot'
+        plot title 
+    context :  None, or one of {talk (default), paper, notebook, poster}
+        Seaborn plotting context
+    font_scale : float, optional, default: 1
+        Separate scaling factor to independently scale the size of the font 
+        elements.
+    palette : str, dict, optional, default: 'Set1'
+        Set of colors for mapping the `hue` variable. If a dict, keys should
+        be values in the hue variable.
+    figsize : tuple of length 2, default (10, 5)
+        size of the figure (width, height)
+
+    Returns 
+    ------- 
+    ax : matplotlib axis object
+    """
+    _check_common_inputs(
+        figsize=figsize,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+    )
+    check_array(X)
+    check_array(labels)
     if direction == 'out':
         axis = 0
+        check_consistent_length((X, labels))
     elif direction == 'in':
         axis = 1
+        check_consistent_length((X.T, labels))
     else:
         raise ValueError('direction must be either "out" or "in"')
     degrees = np.count_nonzero(X, axis=axis)
@@ -531,6 +574,45 @@ def edgeplot(X,
              font_scale=1,
              figsize=(10, 5),
              palette='Set1'):
+    r"""
+    Plots the distribution of edge weights for the input graph. 
+    Allows for sets of node labels, will plot edge weight distribution 
+    for each node category. 
+    
+    Parameters
+    ----------
+    X : np.ndarray (2D)
+        input graph 
+    labels : 1d np.ndarray or list, same length as dimensions of X
+        labels for different categories of graph nodes
+    nonzero : boolean, default: False
+        whether to restrict the edgeplot to only the non-zero edges
+    title : string, default : 'Degree plot'
+        plot title 
+    context :  None, or one of {talk (default), paper, notebook, poster}
+        Seaborn plotting context
+    font_scale : float, optional, default: 1
+        Separate scaling factor to independently scale the size of the font 
+        elements.
+    palette : str, dict, optional, default: 'Set1'
+        Set of colors for mapping the `hue` variable. If a dict, keys should
+        be values in the hue variable.
+    figsize : tuple of length 2, default (10, 5)
+        size of the figure (width, height)
+        
+    Returns 
+    ------- 
+    ax : matplotlib axis object
+    """
+    _check_common_inputs(
+        figsize=figsize,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+    )
+    check_array(X)
+    check_array(labels)
+    check_consistent_length((X, labels))
     edges = X.ravel()
     labels = np.tile(labels, (1, X.shape[1]))
     labels = labels.ravel()
@@ -554,34 +636,63 @@ def screeplot(X,
               context='talk',
               font_scale=1,
               figsize=(10, 5),
-              xlabel='Component',
-              ylabel='Variance explained'):
+              cumulative=True,
+              show_first=None):
+    r"""
+    Plots the distribution of singular values for a matrix, either showing the 
+    raw distribution or an empirical CDF (depending on `cumulative`)
+
+    Parameters
+    ----------
+    X : np.ndarray (2D)
+        input matrix 
+    title : string, default : 'Degree plot'
+        plot title 
+    context :  None, or one of {talk (default), paper, notebook, poster}
+        Seaborn plotting context
+    font_scale : float, optional, default: 1
+        Separate scaling factor to independently scale the size of the font 
+        elements.
+    figsize : tuple of length 2, default (10, 5)
+        size of the figure (width, height)
+    cumulative : boolean, default: True
+        whether or not to plot a cumulative cdf of singular values 
+    show_first : int or None, default: None 
+        whether to restrict the plot to the first `show_first` components
+
+    Returns
+    -------
+    ax : matplotlib axis object
+    """
+    _check_common_inputs(
+        figsize=figsize,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+    )
+    check_array(X)
+    if show_first is not None:
+        if not isinstance(show_first, int):
+            msg = 'show_first must be an int'
+            raise TypeError(msg)
+    if not isinstance(cumulative, bool):
+        msg = 'cumulative must be a boolean'
+        raise TypeError(msg)
     _, D, _ = selectSVD(X, n_components=X.shape[1], algorithm='full')
     D /= D.sum()
-    x = np.sort(D)
-    y = np.arange(len(x)) / float(len(x))
-    fig = plt.figure(figsize=figsize)
+    if show_first is None:
+        show_first = -1
+    if cumulative:
+        y = np.cumsum(D[:show_first])
+    else:
+        y = D[:show_first]
+    _ = plt.figure(figsize=figsize)
     ax = plt.gca()
+    xlabel = 'Component'
+    ylabel = 'Variance explained'
     with sns.plotting_context(context=context, font_scale=font_scale):
-        plt.plot(x, y)
+        plt.plot(y)
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
     return ax
-
-
-def gmmplot(means, covariances, ax=None):
-    # TODO maybe
-    # not sure how to implement, should it just be private method
-    # called by pairplot?
-    return 1
-
-
-def grouped_heatmap():
-    # TODO maybe
-    return 1
-
-
-def grouped_gridplot():
-    # TODO maybe
-    return 1
