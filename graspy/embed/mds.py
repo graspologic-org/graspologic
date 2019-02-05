@@ -142,40 +142,29 @@ class ClassicalMDS(BaseEstimator):
         if not isinstance(X, np.ndarray):
             msg = "X must be a numpy array, not {}.".format(type(X))
             raise ValueError(msg)
-        if X.ndim == 1:
-            msg = "X must be a 2d or 3d array. Consider reshaping to shape (-1, 1)."
-            raise ValueError(msg)
 
-        n_samples = X.shape[0]
-        # Handle n_components
         if self.n_components is not None:
-            if n_samples < self.n_components:
+            n_samples = X.shape[0]
+            if self.n_components > n_samples:
                 msg = "n_components must be <= n_samples."
-                print(X.shape, self.n_components)
                 raise ValueError(msg)
-
-        X = check_array(X, ensure_2d=True, copy=True)
-
-        n_components = self.n_components
 
         # Handle dissimilarity
         if self.dissimilarity == "precomputed":
-            # Handle shape of X if precomputed distance matrix
-            if len(X.shape) != 2:
-                msg = "X must be a 2d-array. Input has {} dimensions.".format(
-                    len(X.shape)
-                )
-                raise ValueError(msg)
+            dissimilarity_matrix = check_array(X, ensure_2d=True, allow_nd=False)
+
             # Must be symmetric
-            if not is_symmetric(X):
+            if not is_symmetric(dissimilarity_matrix):
                 msg = "X must be a symmetric array if precomputed dissimilarity matrix."
                 raise ValueError(msg)
-            dissimilarity_matrix = X
         elif self.dissimilarity == "euclidean":
+            X = check_array(X, ensure_2d=True, allow_nd=True)
             dissimilarity_matrix = self._compute_euclidean_distances(X=X)
 
         J = _get_centering_matrix(dissimilarity_matrix.shape[0])
         B = J @ (dissimilarity_matrix ** 2) @ J * -0.5
+
+        n_components = self.n_components
 
         if n_components == 1:
             algorithm = "full"
