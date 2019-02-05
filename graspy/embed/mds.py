@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.base import BaseEstimator
+from sklearn.utils import check_array
 
 from .svd import selectSVD
 from ..utils import is_symmetric
@@ -148,9 +149,12 @@ class ClassicalMDS(BaseEstimator):
         n_samples = X.shape[0]
         # Handle n_components
         if self.n_components is not None:
-            if n_samples <= self.n_components:
+            if n_samples < self.n_components:
                 msg = "n_components must be <= n_samples."
+                print(X.shape, self.n_components)
                 raise ValueError(msg)
+
+        X = check_array(X, ensure_2d=True, copy=True)
 
         n_components = self.n_components
 
@@ -173,10 +177,13 @@ class ClassicalMDS(BaseEstimator):
         J = _get_centering_matrix(dissimilarity_matrix.shape[0])
         B = J @ (dissimilarity_matrix ** 2) @ J * -0.5
 
-        U, D, V = selectSVD(B, n_components=n_components)
+        if n_components == 1:
+            algorithm = "full"
+        else:
+            algorithm = "randomized"
+        U, D, V = selectSVD(B, algorithm=algorithm, n_components=n_components)
 
-        if n_components is None:
-            self.n_components = len(D)
+        self.n_components_ = len(D)
         self.components_ = U
         self.singular_values_ = D ** 0.5
         self.dissimilarity_matrix_ = dissimilarity_matrix
