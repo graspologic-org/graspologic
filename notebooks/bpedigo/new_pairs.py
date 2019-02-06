@@ -14,10 +14,4 @@ labels = 25 * [0] + 25 * [1] + 25 * [2] + 24 * [-1] + [-2]
 
 plt.show()
 
-screeplot(g,)
-#%%
-%matplotlib inline
 
-#%%
-# %matplotlib inline
-labels.shape
