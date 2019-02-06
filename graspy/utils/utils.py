@@ -165,7 +165,7 @@ def to_laplace(graph, form="DAD"):
         raise ValueError(
             "Input graph is not fully connected" + " so a Laplacian cannot be formed"
         )
-    if not is_almost_symmetric(adj_matrix, atol=1e-10):
+    if not is_almost_symmetric(adj_matrix):
         raise ValueError("Laplacian not implemented/defined for directed graphs")
     D_vec = np.sum(adj_matrix, axis=0)
     D_root = np.diag(D_vec ** -0.5)
