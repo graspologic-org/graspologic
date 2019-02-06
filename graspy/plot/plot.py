@@ -10,6 +10,7 @@ import seaborn as sns
 from ..utils import import_graph, pass_to_ranks
 from ..embed import selectSVD
 from sklearn.utils import check_array, check_consistent_length
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def _check_common_inputs(
@@ -91,7 +92,9 @@ def heatmap(X,
             yticklabels=False,
             cmap='RdBu_r',
             center=0,
-            cbar=True):
+            cbar=True,
+            inner_hier_labels=None,
+            outer_hier_labels=None):
     r"""
     Plots a graph as a heatmap.
 
@@ -173,7 +176,12 @@ def heatmap(X,
 
     arr = import_graph(X)
     arr = _transform(arr, transform)
-    #arr = _transform(X, transform)
+    if inner_hier_labels is not None:
+        if outer_hier_labels is None:
+            arr = _sort_graph(arr, inner_hier_labels,
+                              np.ones_like(inner_hier_labels))
+        else:
+            arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels)
 
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)
@@ -192,7 +200,22 @@ def heatmap(X,
             ax=ax)
         if title is not None:
             plot.set_title(title)
-
+        if inner_hier_labels is not None:
+            if outer_hier_labels is not None:
+                plot.set_yticklabels([])
+                plot.set_xticklabels([])
+                _plot_groups(
+                    plot,
+                    arr[0].shape[0],
+                    inner_hier_labels,
+                    outer_hier_labels,
+                )
+            else:
+                _plot_groups(
+                    plot,
+                    arr[0].shape[0],
+                    inner_hier_labels,
+                )
     return plot
 
 
@@ -206,7 +229,9 @@ def gridplot(X,
              alpha=0.7,
              sizes=(10, 200),
              palette='Set1',
-             legend_name='Type'):
+             legend_name='Type',
+             inner_hier_labels=None,
+             outer_hier_labels=None):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
@@ -264,7 +289,20 @@ def gridplot(X,
 
     graphs = [_transform(arr, transform) for arr in graphs]
 
-    # palette = sns.color_palette('Set1', desat=0.75, n_colors=len(labels))
+    if inner_hier_labels is not None:
+        if outer_hier_labels is None:
+            graphs = [
+                _sort_graph(arr, inner_hier_labels,
+                            np.ones_like(inner_hier_labels)) for arr in graphs
+            ]
+        else:
+            graphs = [
+                _sort_graph(arr, inner_hier_labels, outer_hier_labels)
+                for arr in graphs
+            ]
+
+    if isinstance(palette, str):
+        palette = sns.color_palette(palette, desat=0.75, n_colors=len(labels))
 
     dfs = []
     for idx, graph in enumerate(graphs):
@@ -301,11 +339,19 @@ def gridplot(X,
         plot.ax.invert_yaxis()
         if title is not None:
             plot.set(title=title)
-
+    if inner_hier_labels is not None:
+        if outer_hier_labels is not None:
+            _plot_groups(plot.ax, graphs[0].shape[0], inner_hier_labels,
+                         outer_hier_labels)
+        else:
+            _plot_groups(
+                plot.ax,
+                graphs[0].shape[0],
+                inner_hier_labels,
+            )
     return plot
 
 
-# TODO would it be cool if pairplot reduced to single plot
 def pairplot(X,
              labels=None,
              col_names=None,
@@ -696,3 +742,144 @@ def screeplot(X,
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
     return ax
+
+
+# this will take in either
+# 1 or 2 sets of lists, same dimensions as graph
+def _sort_inds(inner_labels, outer_labels):
+    sort_df = pd.DataFrame(columns=('inner_labels', 'outer_labels'))
+    sort_df['inner_labels'] = inner_labels
+    if outer_labels is not None:
+        sort_df['outer_labels'] = outer_labels
+        sort_df.sort_values(
+            by=['outer_labels', 'inner_labels'],
+            kind='mergesort',
+            inplace=True)
+        outer_labels = sort_df['outer_labels']
+    inner_labels = sort_df['inner_labels']
+    sorted_inds = sort_df.index.values
+    return sorted_inds
+
+
+def _sort_graph(graph, inner_labels, outer_labels):
+    inds = _sort_inds(inner_labels, outer_labels)
+    graph = graph[inds, :][:, inds]
+    return graph
+
+
+def _get_freqs(inner_labels, outer_labels=None):
+    _, outer_freq = np.unique(outer_labels, return_counts=True)
+    outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
+
+    # for each group of outer labels, calculate the boundaries of the inner labels
+    inner_freq = np.array([])
+    for i in range(outer_freq.size):
+        start_ind = outer_freq_cumsum[i]
+        stop_ind = outer_freq_cumsum[i + 1]
+        _, temp_freq = np.unique(
+            inner_labels[start_ind:stop_ind], return_counts=True)
+        inner_freq = np.hstack([inner_freq, temp_freq])
+    inner_freq_cumsum = np.hstack((0, inner_freq.cumsum()))
+
+    return inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum
+
+
+# assume that the graph has already been plotted in sorted form
+def _plot_groups(ax, n_verts, inner_labels, outer_labels=None):
+    plot_outer = True
+    if outer_labels is None:
+        outer_labels = np.ones_like(inner_labels)
+        plot_outer = False
+    sorted_inds = _sort_inds(inner_labels, outer_labels)
+    inner_labels = inner_labels[sorted_inds]
+    outer_labels = outer_labels[sorted_inds]
+    inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum = _get_freqs(
+        inner_labels, outer_labels)
+
+    inner_unique = np.unique(inner_labels)
+    outer_unique = np.unique(outer_labels)
+
+    # sorted_graph = graph[sorted_inds, :][:, sorted_inds]
+
+    # draw lines
+    for x in inner_freq_cumsum:
+        ax.vlines(
+            x, 0, n_verts, linestyle='dashed', lw=.9, alpha=.25, zorder=3)
+        if x == inner_freq_cumsum[-1]:
+            x -= 1
+        ax.hlines(
+            x, 0, n_verts, linestyle='dashed', lw=.9, alpha=.25, zorder=3)
+
+    # generic curve that we will use for everything
+    lx = np.linspace(-np.pi / 2. + 0.05, np.pi / 2. - 0.05, 50)
+    tan = np.tan(lx)
+    curve = np.hstack((tan[::-1], tan))
+
+    divider = make_axes_locatable(ax)
+
+    # inner curve generation
+    inner_tick_loc = inner_freq.cumsum() - inner_freq / 2
+    inner_tick_width = inner_freq / 2
+    # outer curve generation
+    outer_tick_loc = outer_freq.cumsum() - outer_freq / 2
+    outer_tick_width = outer_freq / 2
+
+    # top inner curves
+    # ax_x = divider.new_vertical(
+    #     size="5%", pad=0.0, sharex=ax, pack_start=False)
+    ax_x = divider.new_vertical(size="5%", pad=0.0, pack_start=False)
+    ax.figure.add_axes(ax_x)
+    _plot_brackets(ax_x, np.tile(inner_unique,
+                                 len(outer_unique)), inner_tick_loc,
+                   inner_tick_width, curve, 'inner', 'x', n_verts)
+    # side inner curves
+    # ax_y = divider.new_horizontal(
+    #     size="5%", pad=0.0, sharey=ax, pack_start=True)
+    ax_y = divider.new_horizontal(size="5%", pad=0.0, pack_start=True)
+    ax.figure.add_axes(ax_y)
+    _plot_brackets(ax_y, np.tile(inner_unique,
+                                 len(outer_unique)), inner_tick_loc,
+                   inner_tick_width, curve, 'inner', 'y', n_verts)
+
+    if plot_outer:
+        # top outer curves
+        ax_x2 = divider.new_vertical(size="5%", pad=.25, pack_start=False)
+        ax.figure.add_axes(ax_x2)
+        _plot_brackets(ax_x2, outer_unique, outer_tick_loc, outer_tick_width,
+                       curve, 'outer', 'x', n_verts)
+        # side outer curves
+        ax_y2 = divider.new_horizontal(size="5%", pad=0.25, pack_start=True)
+        ax.figure.add_axes(ax_y2)
+        _plot_brackets(ax_y2, outer_unique, outer_tick_loc, outer_tick_width,
+                       curve, 'outer', 'y', n_verts)
+    return ax
+
+
+def _plot_brackets(ax, group_names, tick_loc, tick_width, curve, level, axis,
+                   max_size):
+    for x0, width in zip(tick_loc, tick_width):
+        x = np.linspace(x0 - width, x0 + width, 100)
+        if axis == 'x':
+            ax.plot(x, -curve, c='k')
+        elif axis == 'y':
+            ax.plot(curve, x, c='k')
+    ax.set_yticks([])
+    ax.set_xticks([])
+    ax.tick_params(axis=axis, which=u'both', length=0, pad=7)
+    for direction in ["left", "right", "bottom", "top"]:
+        ax.spines[direction].set_visible(False)
+    if axis == 'x':
+        ax.set_xticks(tick_loc)
+        ax.set_xticklabels(
+            group_names, fontsize=15, verticalalignment='center')
+        ax.xaxis.set_label_position('top')
+        ax.xaxis.tick_top()
+        ax.set_xlim(0, max_size)
+    elif axis == 'y':
+        ax.set_yticks(tick_loc)
+        ax.set_yticklabels(
+            group_names, fontsize=15, verticalalignment='center')
+        # ax.yaxis.set_label_position('top')
+        # ax.yaxis.tick_top()
+        ax.set_ylim(0, max_size)
+        ax.invert_yaxis()
