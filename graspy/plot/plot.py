@@ -590,7 +590,6 @@ def degreeplot(X,
         font_scale=font_scale,
     )
     check_array(X)
-    check_array(labels)
     if direction == 'out':
         axis = 0
         check_consistent_length((X, labels))
@@ -657,7 +656,6 @@ def edgeplot(X,
         font_scale=font_scale,
     )
     check_array(X)
-    check_array(labels)
     check_consistent_length((X, labels))
     edges = X.ravel()
     labels = np.tile(labels, (1, X.shape[1]))
@@ -744,8 +742,6 @@ def screeplot(X,
     return ax
 
 
-# this will take in either
-# 1 or 2 sets of lists, same dimensions as graph
 def _sort_inds(inner_labels, outer_labels):
     sort_df = pd.DataFrame(columns=('inner_labels', 'outer_labels'))
     sort_df['inner_labels'] = inner_labels
@@ -798,8 +794,6 @@ def _plot_groups(ax, n_verts, inner_labels, outer_labels=None):
 
     inner_unique = np.unique(inner_labels)
     outer_unique = np.unique(outer_labels)
-
-    # sorted_graph = graph[sorted_inds, :][:, sorted_inds]
 
     # draw lines
     for x in inner_freq_cumsum:
