@@ -139,6 +139,13 @@ def heatmap(
         The value at which to center the colormap
     cbar : bool, default: True
         Whether to draw a colorbar.
+    inner_hier_labels : array-like, length of X's first dimension, default: None
+        Categorical labeling of the nodes. If not None, will group the nodes 
+        according to these labels and plot the labels on the marginal
+    outer_hier_labels : array-like, length of X's first dimension, default: None
+        Categorical labeling of the nodes, ignored without `inner_hier_labels`
+        If not None, will plot these labels as the second level of a hierarchy on the
+        marginals 
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -265,7 +272,22 @@ def gridplot(
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font
         elements.
-    legend_name : string
+    palette : str, dict, optional, default: 'Set1'
+        Set of colors for mapping the `hue` variable. If a dict, keys should
+        be values in the hue variable
+    alpha : float [0, 1], default : 0.7
+        alpha value of plotted gridplot points
+    sizes : length 2 tuple, default: (10, 200)
+        min and max size to plot edge weights
+    legend_name : string, default: 'Type'
+        Name to plot above the legend
+    inner_hier_labels : array-like, length of X's first dimension, default: None
+        Categorical labeling of the nodes. If not None, will group the nodes 
+        according to these labels and plot the labels on the marginal
+    outer_hier_labels : array-like, length of X's first dimension, default: None
+        Categorical labeling of the nodes, ignored without `inner_hier_labels`
+        If not None, will plot these labels as the second level of a hierarchy on the
+        marginals
     """
     _check_common_inputs(
         height=height, title=title, context=context, font_scale=font_scale
