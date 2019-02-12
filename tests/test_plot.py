@@ -150,7 +150,11 @@ def test_pairplot_inputs():
         pairplot(X="test")
 
     with pytest.raises(ValueError):
+<<<<<<< HEAD
         pairplot(X=X, Y=["A"])
+=======
+        pairplot(X=X, labels=['A'])
+>>>>>>> tests passing
 
     with pytest.raises(TypeError):
         pairplot(X, col_names="A")

@@ -184,6 +184,8 @@ def heatmap(
         msg = "cbar must be a bool, not {}.".format(type(center))
         raise TypeError(msg)
 
+    check_consistent_length(X, inner_hier_labels, outer_hier_labels)
+
     arr = import_graph(X)
     arr = _transform(arr, transform)
     if inner_hier_labels is not None:
@@ -299,15 +301,7 @@ def gridplot(
         msg = "X must be a list, not {}.".format(type(X))
         raise TypeError(msg)
 
-    # Handle labels
-    if not isinstance(labels, list):
-        msg = "labels must be a list, not {}.".format(type(labels))
-        raise TypeError(msg)
-    elif len(labels) != len(graphs):
-        msg = "Expected {} elements in labels, but got {} instead.".format(
-            len(graphs), len(labels)
-        )
-        raise ValueError(msg)
+    check_consistent_length(X, labels, inner_hier_labels, outer_hier_labels)
 
     graphs = [_transform(arr, transform) for arr in graphs]
 
