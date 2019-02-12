@@ -522,17 +522,6 @@ def _distplot(
                     x = np.sort(cat_data)
                     y = np.arange(len(x)) / float(len(x))
                     plt.plot(x, y, label=cat, color=palette[i])
-                    # plt.plot(
-
-                    #     np.cumsum(cat_data) / cat_data.sum(),
-                    #     label=cat,
-                    #     color=palette[i])
-                    # sns.distplot(
-                    #     cat_data,
-                    #     label=cat,
-                    #     hist=False,
-                    #     color=palette[i],
-                    #     kde_kws=plt_kws)
                 else:
                     ax.axvline(cat_data[0], label=cat, color=palette[i])
             plt.legend()
@@ -727,8 +716,6 @@ def screeplot(
         raise TypeError(msg)
     _, D, _ = selectSVD(X, n_components=X.shape[1], algorithm="full")
     D /= D.sum()
-    if show_first is None:
-        show_first = -1
     if cumulative:
         y = np.cumsum(D[:show_first])
     else:
