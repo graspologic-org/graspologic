@@ -3,7 +3,7 @@
 # Email: bpedigo@jhu.edu
 import warnings
 
-from .embed import BaseEmbed
+from .base import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, get_lcc, is_fully_connected
 
@@ -78,13 +78,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
 
-    def __init__(
-            self,
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
-    ):
+    def __init__(self, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
@@ -92,14 +86,14 @@ class AdjacencySpectralEmbed(BaseEmbed):
             n_iter=n_iter,
         )
 
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         Fit ASE model to input graph
 
         Parameters
         ----------
         graph : array_like or networkx.Graph
-            input graph to embed. see graphstats.utils.import_graph
+            Input graph to embed.
 
         Returns
         -------

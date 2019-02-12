@@ -3,7 +3,7 @@
 # Email: bpedigo@jhu.edu
 import warnings
 
-from .embed import BaseEmbed
+from .base import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, to_laplace, get_lcc, is_fully_connected
 
@@ -18,14 +18,19 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     Parameters
     ----------
+    form : {'DAD' (default), 'I-DAD'}, optional
+            Specifies the type of Laplacian normalization to use.
+
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
+    
     n_elbows : int, optional, default: 2
         If `n_compoents=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
+
     algorithm : {'full', 'truncated' (default), 'randomized'}, optional
         SVD solver to use:
 
@@ -36,6 +41,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         - 'randomized'
             Computes randomized svd using 
             ``sklearn.utils.extmath.randomized_svd``
+
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
@@ -79,12 +85,12 @@ class LaplacianSpectralEmbed(BaseEmbed):
     """
 
     def __init__(
-            self,
-            form='DAD',
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
+        self,
+        form="DAD",
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
     ):
         super().__init__(
             n_components=n_components,
@@ -94,7 +100,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         )
         self.form = form
 
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         Fit LSE model to input graph
 
@@ -107,8 +113,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
         graph : array_like or networkx.Graph
             Input graph to embed. see graphstats.utils.import_graph
 
-        form : {'DAD' (default), 'I-DAD'}, optional
-            Specifies the type of Laplacian normalization to use.
+        y : Ignored
+
 
         Returns
         -------

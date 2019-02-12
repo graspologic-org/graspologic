@@ -5,8 +5,8 @@ from ..utils import symmetrize
 def cartprod(*arrays):
     N = len(arrays)
     return np.transpose(
-        np.meshgrid(*arrays, indexing='ij'), np.roll(np.arange(N + 1),
-                                                     -1)).reshape(-1, N)
+        np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
+    ).reshape(-1, N)
 
 
 def sample_edges(P, directed=False, loops=False):
@@ -39,11 +39,11 @@ def sample_edges(P, directed=False, loops=False):
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
     if type(P) is not np.ndarray:
-        raise TypeError('P must be numpy.ndarray')
+        raise TypeError("P must be numpy.ndarray")
     if len(P.shape) != 2:
-        raise ValueError('P must have dimension 2 (n_vertices, n_dimensions)')
+        raise ValueError("P must have dimension 2 (n_vertices, n_dimensions)")
     if P.shape[0] != P.shape[1]:
-        raise ValueError('P must be a square matrix')
+        raise ValueError("P must be a square matrix")
     if not directed:
         # can cut down on sampling by ~half
         triu_inds = np.triu_indices(P.shape[0])
@@ -105,7 +105,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
     elif n <= 0:
-        msg = 'n must be > 0.'
+        msg = "n must be > 0."
         raise ValueError(msg)
     if type(directed) is not bool:
         raise TypeError("directed is not of type bool.")
@@ -174,12 +174,12 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     if not np.issubdtype(type(m), np.integer):
         raise TypeError("m is not of type int.")
     elif m <= 0:
-        msg = 'm must be > 0.'
+        msg = "m must be > 0."
         raise ValueError(msg)
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
     elif n <= 0:
-        msg = 'n must be > 0.'
+        msg = "n must be > 0."
         raise ValueError(msg)
     if type(directed) is not bool:
         raise TypeError("directed is not of type bool.")
@@ -194,15 +194,15 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     # compute max number of edges to sample
     if loops:
         if directed:
-            max_edges = n**2
-            msg = 'n^2'
+            max_edges = n ** 2
+            msg = "n^2"
         else:
             max_edges = n * (n + 1) // 2
-            msg = 'n(n+1)/2'
+            msg = "n(n+1)/2"
     else:
         if directed:
             max_edges = n * (n - 1)
-            msg = 'n(n-1)'
+            msg = "n(n-1)"
         else:
             max_edges = n * (n - 1) // 2
             msg = "n(n-1)/2"
@@ -271,26 +271,25 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
-        msg = 'n must be a list or np.array, not {}.'.format(type(n))
+        msg = "n must be a list or np.array, not {}.".format(type(n))
         raise TypeError(msg)
     else:
         n = np.array(n)
         if not np.issubdtype(n.dtype, np.integer):
-            msg = 'There are non-integer elements in n'
+            msg = "There are non-integer elements in n"
             raise ValueError(msg)
 
     # Check p
     if not isinstance(p, (list, np.ndarray)):
-        msg = 'p must be a list or np.array, not {}.'.format(type(p))
+        msg = "p must be a list or np.array, not {}.".format(type(p))
         raise TypeError(msg)
     else:
         p = np.array(p)
         if not np.issubdtype(p.dtype, np.number):
-            msg = 'There are non-numeric elements in p'
+            msg = "There are non-numeric elements in p"
             raise ValueError(msg)
         elif p.shape != (n.size, n.size):
-            msg = "p is must have shape len(n) x len(n), not {}".format(
-                p.shape)
+            msg = "p is must have shape len(n) x len(n), not {}".format(p.shape)
             raise ValueError(msg)
         elif np.any(p < 0) or np.any(p > 1):
             msg = "Values in p must be in between 0 and 1."
@@ -299,12 +298,12 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     # Check wt and wtargs
     if not np.issubdtype(type(wt), np.number) and not callable(wt):
         if not isinstance(wt, (list, np.ndarray)):
-            msg = 'wt must be a numeric, list, or np.array, not{}'.format(
-                type(wt))
+            msg = "wt must be a numeric, list, or np.array, not{}".format(type(wt))
             raise TypeError(msg)
         if not isinstance(wtargs, (list, np.ndarray)):
-            msg = 'wtargs must be a numeric, list, or np.array, not{}'.format(
-                type(wtargs))
+            msg = "wtargs must be a numeric, list, or np.array, not{}".format(
+                type(wtargs)
+            )
             raise TypeError(msg)
 
         wt = np.array(wt, dtype=object)
@@ -314,13 +313,12 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
             msg = "wt must have size len(n) x len(n), not {}".format(wt.shape)
             raise ValueError(msg)
         if wtargs.shape != (n.size, n.size):
-            msg = "wtargs must have size len(n) x len(n), not {}".format(
-                wtargs.shape)
+            msg = "wtargs must have size len(n) x len(n), not {}".format(wtargs.shape)
             raise ValueError(msg)
         # check if each element is a function
         for element in wt.ravel():
             if not callable(element):
-                msg = '{} is not a callable function.'.format(element)
+                msg = "{} is not a callable function.".format(element)
                 raise TypeError(msg)
     else:
         wt = np.full(p.shape, wt, dtype=object)
@@ -357,8 +355,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
             # cartesian product to identify edges for community i,j pair
             cprod = cartprod(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
-            triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]),
-                                        dims=A.shape)
+            triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), dims=A.shape)
             pchoice = np.random.uniform(size=len(triu))
             # connected with probability p
             triu = triu[pchoice < block_p]
@@ -374,14 +371,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def rdpg(X,
-         Y=None,
-         rescale=True,
-         directed=False,
-         loops=True,
-         wt=1,
-         wtargs=None):
-    '''
+def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None):
+    """
     Samples a random graph based on the latent positions in X (and 
     optionally in Y)
 
@@ -437,13 +428,14 @@ def rdpg(X,
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
     
-    '''
+    """
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
     A = sample_edges(P, directed=directed, loops=loops)
 
     # check weight function
-    if (not np.issubdtype(type(wt), np.integer)) and (not np.issubdtyp(
-            type(wt), np.floating)):
+    if (not np.issubdtype(type(wt), np.integer)) and (
+        not np.issubdtyp(type(wt), np.floating)
+    ):
         if not callable(wt):
             raise TypeError("You have not passed a function for wt.")
 
@@ -456,7 +448,7 @@ def rdpg(X,
 
 
 def p_from_latent(X, Y=None, rescale=True, loops=True):
-    '''
+    """
     Gemerates a matrix of connection probabilities for a random graph
     based on a set of latent positions
 
@@ -498,18 +490,17 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
     
-    '''
+    """
     if Y is None:
         Y = X
     if type(X) is not np.ndarray or type(Y) is not np.ndarray:
-        raise TypeError('Latent positions must be numpy.ndarray')
+        raise TypeError("Latent positions must be numpy.ndarray")
     if X.ndim != 2 or Y.ndim != 2:
         raise ValueError(
-            'Latent positions must have dimension 2 (n_vertices, n_dimensions)'
+            "Latent positions must have dimension 2 (n_vertices, n_dimensions)"
         )
     if X.shape != Y.shape:
-        raise ValueError(
-            'Dimensions of latent positions X and Y must be the same')
+        raise ValueError("Dimensions of latent positions X and Y must be the same")
     P = X @ Y.T
     # should this be before or after the rescaling, could give diff answers
     if not loops:

@@ -2,7 +2,7 @@ import unittest
 import graspy as gs
 import numpy as np
 import networkx as nx
-from graspy.embed.embed import BaseEmbed
+from graspy.embed.base import BaseEmbed
 from graspy.simulations.simulations import er_nm
 
 

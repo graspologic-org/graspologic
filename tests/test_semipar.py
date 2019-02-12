@@ -14,8 +14,8 @@ class TestSemiparametricTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         np.random.seed(1234556)
-        cls.A1 = er_np(20, .3)
-        cls.A2 = er_np(20, .3)
+        cls.A1 = er_np(20, 0.3)
+        cls.A2 = er_np(20, 0.3)
 
     def test_fit_p_ase_works(self):
         spt = SemiparametricTest()
@@ -23,7 +23,7 @@ class TestSemiparametricTest(unittest.TestCase):
         pass
 
     def test_fit_p_omni_works(self):
-        spt = SemiparametricTest(embedding='omnibus')
+        spt = SemiparametricTest(embedding="omnibus")
         p = spt.fit(self.A1, self.A2)
         pass
 
@@ -33,11 +33,11 @@ class TestSemiparametricTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             SemiparametricTest(n_components=-100)
         with self.assertRaises(ValueError):
-            SemiparametricTest(test_case='oops')
+            SemiparametricTest(test_case="oops")
         with self.assertRaises(ValueError):
             SemiparametricTest(n_bootstraps=-100)
         with self.assertRaises(ValueError):
-            SemiparametricTest(embedding='oops')
+            SemiparametricTest(embedding="oops")
         with self.assertRaises(TypeError):
             SemiparametricTest(n_bootstraps=0.5)
         with self.assertRaises(TypeError):
@@ -56,8 +56,7 @@ class TestSemiparametricTest(unittest.TestCase):
         spt = SemiparametricTest()
         A1 = self.A1.copy()
         A1[2, 0] = 1  # make asymmetric
-        with self.assertRaises(
-                NotImplementedError):  # TODO : remove when we implement
+        with self.assertRaises(NotImplementedError):  # TODO : remove when we implement
             spt.fit(A1, self.A2)
 
         bad_matrix = [[1, 2]]
@@ -69,78 +68,46 @@ class TestSemiparametricTest(unittest.TestCase):
 
     def test_rotation_norm(self):
         # two triangles rotated by 90 degrees
-        points1 = np.array([
-            [0, 0],
-            [3, 0],
-            [3, -2],
-        ])
-        rotation = np.array([
-            [0, 1],
-            [-1, 0],
-        ])
+        points1 = np.array([[0, 0], [3, 0], [3, -2]])
+        rotation = np.array([[0, 1], [-1, 0]])
         points2 = np.dot(points1, rotation)
 
-        spt = SemiparametricTest(embedding='ase', test_case='rotation')
+        spt = SemiparametricTest(embedding="ase", test_case="rotation")
         n = spt._difference_norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
     def test_diagonal_rotation_norm(self):
         # triangle in 2d
-        points1 = np.array([
-            [0, 0],
-            [3, 0],
-            [3, -2],
-        ], dtype=np.float64)
-        rotation = np.array([
-            [0, 1],
-            [-1, 0],
-        ])
+        points1 = np.array([[0, 0], [3, 0], [3, -2]], dtype=np.float64)
+        rotation = np.array([[0, 1], [-1, 0]])
         # rotated 90 degrees
         points2 = np.dot(points1, rotation)
         # diagonally scaled
-        diagonal = np.array([
-            [2, 0, 0],
-            [0, 3, 0],
-            [0, 0, 2],
-        ])
+        diagonal = np.array([[2, 0, 0], [0, 3, 0], [0, 0, 2]])
         points2 = np.dot(diagonal, points2)
 
-        spt = SemiparametricTest(
-            embedding='ase', test_case='diagonal-rotation')
+        spt = SemiparametricTest(embedding="ase", test_case="diagonal-rotation")
         n = spt._difference_norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
     def test_scalar_rotation_norm(self):
         # triangle in 2d
-        points1 = np.array([
-            [0, 0],
-            [3, 0],
-            [3, -2],
-        ], dtype=np.float64)
-        rotation = np.array([
-            [0, 1],
-            [-1, 0],
-        ])
+        points1 = np.array([[0, 0], [3, 0], [3, -2]], dtype=np.float64)
+        rotation = np.array([[0, 1], [-1, 0]])
         # rotated 90 degrees
         points2 = np.dot(points1, rotation)
         # scaled
         points2 = 2 * points2
 
-        spt = SemiparametricTest(embedding='ase', test_case='scalar-rotation')
+        spt = SemiparametricTest(embedding="ase", test_case="scalar-rotation")
         n = spt._difference_norm(points1, points2)
         self.assertAlmostEqual(n, 0)
 
     def test_SBM_epsilon(self):
         np.random.seed(12345678)
-        B1 = np.array([
-            [0.5, 0.2],
-            [0.2, 0.5],
-        ])
+        B1 = np.array([[0.5, 0.2], [0.2, 0.5]])
 
-        B2 = np.array([
-            [0.7, 0.2],
-            [0.2, 0.7],
-        ])
+        B2 = np.array([[0.7, 0.2], [0.2, 0.7]])
         b_size = 200
         A1 = sbm(2 * [b_size], B1)
         A2 = sbm(2 * [b_size], B1)
@@ -154,5 +121,5 @@ class TestSemiparametricTest(unittest.TestCase):
         self.assertTrue(p_alt <= 0.05)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

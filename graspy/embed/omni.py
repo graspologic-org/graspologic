@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
-from .embed import BaseEmbed
+from .base import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, get_lcc, is_fully_connected
 
@@ -64,8 +64,7 @@ def _get_omni_matrix(graphs):
     # Do some numpy broadcasting magic.
     # We do sum in 4d arrays and reduce to 2d array.
     # Super fast and efficient
-    out = (A[:, :, None, :] + A.transpose(1, 0, 2)[None, :, :, :]).reshape(
-        n * m, -1)
+    out = (A[:, :, None, :] + A.transpose(1, 0, 2)[None, :, :, :]).reshape(n * m, -1)
 
     # Averaging
     out /= 2
@@ -133,13 +132,7 @@ class OmnibusEmbed(BaseEmbed):
     graspy.embed.select_dimension
     """
 
-    def __init__(
-            self,
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
-    ):
+    def __init__(self, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
@@ -147,7 +140,7 @@ class OmnibusEmbed(BaseEmbed):
             n_iter=n_iter,
         )
 
-    def fit(self, graphs):
+    def fit(self, graphs, y=None):
         """
         Fit the model with graphs.
 
@@ -157,6 +150,8 @@ class OmnibusEmbed(BaseEmbed):
             List of array-like, (n_vertices, n_vertices), or list of 
             networkx.Graph. If array-like, the shape must be 
             (n_graphs, n_vertices, n_vertices)
+        
+        y : Ignored
 
         Returns
         -------
@@ -189,7 +184,7 @@ class OmnibusEmbed(BaseEmbed):
 
         return self
 
-    def fit_transform(self, graphs):
+    def fit_transform(self, graphs, y=None):
         """
         Fit the model with graphs and apply the embedding on graphs. 
         n_dimension is either automatically determined or based on user input.
@@ -199,6 +194,8 @@ class OmnibusEmbed(BaseEmbed):
         graphs : list of graphs
             List of array-like, (n_vertices, n_vertices), or list of 
             networkx.Graph.
+
+        y : Ignored
 
         Returns
         -------
