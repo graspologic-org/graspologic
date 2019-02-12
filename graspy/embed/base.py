@@ -12,7 +12,7 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
 from .svd import selectSVD
-from ..utils import import_graph, is_symmetric
+from ..utils import import_graph, is_almost_symmetric
 
 
 class BaseEmbed(BaseEstimator):
@@ -76,7 +76,7 @@ class BaseEmbed(BaseEstimator):
 
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
-        if not is_symmetric(A):
+        if not is_almost_symmetric(A):
             self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
