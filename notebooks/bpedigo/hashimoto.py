@@ -35,32 +35,37 @@ def to_hashimoto(graph):
     return B, col
 
 
-n = [100, 100]
-p = [[0.1, 0.01], [0.02, 0.07]]
-A = graspy.simulations.sbm(n, p, directed=True)
+n = [200, 200]
+p = [[0.1, 0.01], [0.01, 0.07]]
+A = graspy.simulations.sbm(n, p, directed=False)
 graspy.plot.heatmap(A)
 len(A[A != 0])
 
 B, col = to_hashimoto(A)
 
-ase = graspy.embed.AdjacencySpectralEmbed(algorithm='truncated')
 X, Y = ase.fit_transform(A)
-graspy.plot.pairplot(
-    np.concatenate((X, Y), axis=1), labels=100 * ['1'] + 100 * ['2'])
+graspy.plot.pairplot(np.concatenate((X, Y), axis=1), labels=200 * ["1"] + 200 * ["2"])
 
 #%%
+ase = graspy.embed.AdjacencySpectralEmbed(n_components=4)
+
 X, Y = ase.fit_transform(B)
+X = np.concatenate((X, Y), axis=1)
+nodes_vec = np.zeros((A.shape[0], X.shape[1]))
+for dim in range(X.shape[1]):
+    s = X[:, dim]
+    for c, x in zip(col, s):
+        nodes_vec[c, dim] = x
+        # if x > 0:
 
-s = X[:, 0]
-nodes_vec = np.zeros(A.shape[0])
-for c, x in zip(col, s):
-    nodes[c] += x
+        # if x < 0:
+        #     nodes_vec[dim,c] -=
 
-# graspy.plot.pairplot(nodes, labels=100 * ['1'] + 100 * ['2'])
 
+graspy.plot.pairplot(nodes_vec)
 #%%
-import seaborn as sns
-sns.distplot(nodes[:100])
-sns.distplot(nodes[100:])
 
-#%%
+labels = np.array(200 * ["1"] + 200 * ["2"])
+l = labels[col]
+
+graspy.plot.pairplot(X, labels=l)
