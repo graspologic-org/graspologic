@@ -355,11 +355,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
             # cartesian product to identify edges for community i,j pair
             cprod = cartprod(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
-<<<<<<< HEAD
-            triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), dims=A.shape)
-=======
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
->>>>>>> tests passing
             pchoice = np.random.uniform(size=len(triu))
             # connected with probability p
             triu = triu[pchoice < block_p]
@@ -438,7 +434,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
 
     # check weight function
     if (not np.issubdtype(type(wt), np.integer)) and (
-        not np.issubdtyp(type(wt), np.floating)
+        not np.issubdtype(type(wt), np.floating)
     ):
         if not callable(wt):
             raise TypeError("You have not passed a function for wt.")
