@@ -32,7 +32,6 @@ def import_graph(graph):
 	--------
     networkx.Graph, numpy.array
 	"""
-<<<<<<< HEAD
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif isinstance(graph, (np.ndarray, np.memmap)):
@@ -46,18 +45,6 @@ def import_graph(graph):
             ensure_min_samples=maximum,
             copy=True,
         )
-=======
-    if type(graph) in [nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph]:
-        out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
-    elif type(graph) is np.ndarray:
-        if len(graph.shape) != 2:
-            raise ValueError("Matrix has improper number of dimensions")
-        elif graph.shape[0] != graph.shape[1]:
-            raise ValueError("Matrix is not square")
-        out = graph.copy()
-        if not np.issubdtype(graph.dtype, np.floating):
-            out = out.astype(np.float)
->>>>>>> ab53e172669d1c21edbc360b624adb3d8ce33927
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
         raise TypeError(msg)
@@ -178,11 +165,7 @@ def to_laplace(graph, form="DAD"):
         raise ValueError(
             "Input graph is not fully connected" + " so a Laplacian cannot be formed"
         )
-<<<<<<< HEAD
     if not is_almost_symmetric(adj_matrix):
-=======
-    if not is_symmetric(adj_matrix):
->>>>>>> ab53e172669d1c21edbc360b624adb3d8ce33927
         raise ValueError("Laplacian not implemented/defined for directed graphs")
     D_vec = np.sum(adj_matrix, axis=0)
     D_root = np.diag(D_vec ** -0.5)
