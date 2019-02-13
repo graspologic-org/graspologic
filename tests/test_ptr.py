@@ -7,6 +7,7 @@ class TestPTR(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 <<<<<<< HEAD
+<<<<<<< HEAD
         cls.loopless_undirected_input = np.array(
             [[0, 1, 60, 60], [1, 0, 400, 0], [60, 400, 0, 80], [60, 0, 80, 0]]
         )
@@ -158,6 +159,8 @@ class TestPTR(unittest.TestCase):
 
         _run_test(self, "simple-nonzero", self.looped_directed_input, ptr_expected)
 =======
+=======
+>>>>>>> ab53e172669d1c21edbc360b624adb3d8ce33927
         cls.loopless_undirected_input = np.array([[0, 1, 60, 60],
                                                   [1, 0, 400, 0],
                                                   [60, 400, 0, 80],
@@ -213,6 +216,7 @@ class TestPTR(unittest.TestCase):
                                        [0.1764706, 0, 1.1176471, 0],
                                        [0.5294118, 1.1176471, 0, 0.8823529],
                                        [0.5294118, 0, 0.8823529, 0]])
+<<<<<<< HEAD
 
         _run_test(self, 'simple-all', self.loopless_undirected_input,
                   ptr_expected)
@@ -224,6 +228,19 @@ class TestPTR(unittest.TestCase):
              [0.7647059, 1.3529412, 0.4705882, 1.1176471],
              [0.7647059, 0, 1.1176471, 0]])
 
+=======
+
+        _run_test(self, 'simple-all', self.loopless_undirected_input,
+                  ptr_expected)
+
+    def test_simpleall_looped_undirected(self):
+        ptr_expected = 0.5 * np.array(
+            [[0.1176471, 0.2941176, 0.7647059, 0.7647059],
+             [0.2941176, 0, 1.3529412, 0],
+             [0.7647059, 1.3529412, 0.4705882, 1.1176471],
+             [0.7647059, 0, 1.1176471, 0]])
+
+>>>>>>> ab53e172669d1c21edbc360b624adb3d8ce33927
         _run_test(self, 'simple-all', self.looped_undirected_input,
                   ptr_expected)
 
@@ -276,7 +293,10 @@ class TestPTR(unittest.TestCase):
 
         _run_test(self, 'simple-nonzero', self.looped_directed_input,
                   ptr_expected)
+<<<<<<< HEAD
 >>>>>>> tests passing
+=======
+>>>>>>> ab53e172669d1c21edbc360b624adb3d8ce33927
 
 
 def _run_test(self, methodstr, input_graph, expected):
@@ -285,8 +305,11 @@ def _run_test(self, methodstr, input_graph, expected):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 if __name__ == "__main__":
 =======
+=======
+>>>>>>> ab53e172669d1c21edbc360b624adb3d8ce33927
 if __name__ == '__main__':
 >>>>>>> tests passing
     unittest.main()
