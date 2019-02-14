@@ -1,3 +1,6 @@
+import sys
+
+
 import pytest
 import graspy as gs
 import numpy as np
@@ -93,14 +96,14 @@ class TestImportEdgelist:
     def test_vertices(self):
         expected_vertices = np.arange(0, 10)
 
-        _, A_vertices = gs.utils.import_edgelist(self.A_path, return_vertices=True)
-        _, B_vertices = gs.utils.import_edgelist(self.B_path, return_vertices=True)
+        _, A_vertices = gs.utils.import_edgelist(str(self.A_path), return_vertices=True)
+        _, B_vertices = gs.utils.import_edgelist(str(self.B_path), return_vertices=True)
 
         assert np.allclose(expected_vertices, A_vertices)
         assert np.allclose(expected_vertices, B_vertices)
 
     def test_no_graphs_found(self):
-        path = self.tmp_path / "invalid_edgelist.edgelist"
+        path = str(self.tmp_path / "invalid_edgelist.edgelist")
 
         with pytest.raises(ValueError):
             gs.utils.import_edgelist(path)
