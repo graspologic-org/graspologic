@@ -61,7 +61,7 @@ def import_edgelist(
 
     Parameters
     ----------
-    path : str
+    path : str, Path object
         Path to a file or directory. 
 
     delimiter : str, optional
@@ -82,9 +82,19 @@ def import_edgelist(
     graph : array-like, shape (n_vertices, n_vertices)
         Adjacency matrix of the graph created from edgelist.
     """
-    p = Path(path)
+    if isinstance(path, str):
+        p = Path(path)
+    elif isinstance(path, Path):
+        p = path
+    else:
+        raise TypeError(
+            "path variable must be either a string or Pathlib object, not {}.".format(
+                type(path)
+            )
+        )
+
     if p.is_dir():
-        files = p.glob("*." + extension)
+        files = sorted(p.glob("*." + extension))
         graphs = [nx.read_weighted_edgelist(G, nodetype=nodetype) for G in files]
 
         # doing this to avoid counting number of elemnts in iterator
@@ -94,12 +104,12 @@ def import_edgelist(
         vertices = reduce(np.union1d, [G.nodes for G in graphs])
         out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
     elif p.is_file():
-        G = nx.read_weighted_edgelist(path, nodetype=int, delimiter=delimiter)
-        vertices = np.sort(np.array(G.nodes))
+        G = nx.read_weighted_edgelist(path, nodetype=nodetype, delimiter=delimiter)
 
+        vertices = np.sort(np.array(G.nodes))
         out = import_graph(G)
     else:
-        raise ValueError("Invalid input")
+        raise ValueError("No graphs founds to import.")
 
     if return_vertices:
         return out, vertices
