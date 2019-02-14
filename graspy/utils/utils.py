@@ -6,6 +6,7 @@
 # Copyright (c) 2018. All rights reserved.
 
 from functools import reduce
+from pathlib import Path
 
 import numpy as np
 import networkx as nx
@@ -48,6 +49,51 @@ def import_graph(graph):
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
         raise TypeError(msg)
+    return out
+
+
+def import_edgelist(path, delimiter=None, nodetype=int, extension="edgelist"):
+    """
+    Function for reading an edgelist and returning a numpy array.
+    The order of nodes are sorted by node values.
+
+    Parameters
+    ----------
+    path : str
+        Path to a file or directory. 
+
+    delimiter : str, optional
+        Delimiter of edgelist. If None, whitespace.
+
+    nodetype : int (default), float, str, Python type, optional
+       Convert node data from strings to specified type
+
+    extension : str, optional
+        If ``path`` is a directory, then the function will convert all files
+        with matching extension. 
+
+    Returns
+    -------
+    graph : array-like, shape (n_vertices, n_vertices)
+        Adjacency matrix of the graph created from edgelist.
+    """
+    p = Path(path)
+    if p.is_dir():
+        files = p.glob("*." + extension)
+        graphs = [nx.read_weighted_edgelist(G, nodetype=nodetype) for G in files]
+
+        # doing this to avoid counting number of elemnts in iterator
+        if len(graphs) == 0:
+            raise ValueError("No files found")
+
+        vertices = reduce(np.union1d, [G.nodes for G in graphs])
+        out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
+    elif p.is_file():
+        G = nx.read_weighted_edgelist(path, nodetype=int, delimiter=delimiter)
+        out = import_graph(G)
+    else:
+        raise ValueError("Invalid input")
+
     return out
 
 
