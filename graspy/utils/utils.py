@@ -82,16 +82,7 @@ def import_edgelist(
     graph : array-like, shape (n_vertices, n_vertices)
         Adjacency matrix of the graph created from edgelist.
     """
-    if isinstance(path, str):
-        p = Path(path)
-    elif isinstance(path, Path):
-        p = path
-    else:
-        raise TypeError(
-            "path variable must be either a string or Pathlib object, not {}.".format(
-                type(path)
-            )
-        )
+    p = Path(path)
 
     if p.is_dir():
         files = sorted(p.glob("*." + extension))
