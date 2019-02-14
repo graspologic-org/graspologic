@@ -60,7 +60,7 @@ class TestImportEdgelist:
         self.B_path = tmp_path / "B.edgelist"
 
         nx.write_edgelist(G_A, str(self.A_path), data=False)
-        nx.write_weighted_edgelist(G_B, str(elf.B_path))
+        nx.write_weighted_edgelist(G_B, str(self.B_path))
 
     def test_in(self):
         A_from_edgelist = gs.utils.import_edgelist(self.A_path)
