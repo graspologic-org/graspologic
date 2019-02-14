@@ -52,7 +52,9 @@ def import_graph(graph):
     return out
 
 
-def import_edgelist(path, delimiter=None, nodetype=int, extension="edgelist"):
+def import_edgelist(
+    path, delimiter=None, nodetype=int, extension="edgelist", return_vertices=False
+):
     """
     Function for reading an edgelist and returning a numpy array.
     The order of nodes are sorted by node values.
@@ -72,6 +74,9 @@ def import_edgelist(path, delimiter=None, nodetype=int, extension="edgelist"):
         If ``path`` is a directory, then the function will convert all files
         with matching extension. 
 
+    return_vertices : bool, default=False, optional
+        Returns the union of all ind
+
     Returns
     -------
     graph : array-like, shape (n_vertices, n_vertices)
@@ -90,11 +95,16 @@ def import_edgelist(path, delimiter=None, nodetype=int, extension="edgelist"):
         out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
     elif p.is_file():
         G = nx.read_weighted_edgelist(path, nodetype=int, delimiter=delimiter)
+        vertices = np.sort(np.array(G.nodes))
+
         out = import_graph(G)
     else:
         raise ValueError("Invalid input")
 
-    return out
+    if return_vertices:
+        return out, vertices
+    else:
+        return out
 
 
 def is_symmetric(X):
