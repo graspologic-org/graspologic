@@ -119,7 +119,9 @@ class SemiparametricTest(BaseInference):
         for i in range(self.n_bootstraps):
             A1_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
             A2_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
-            X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
+            X1_hat_simulated, X2_hat_simulated = self._embed(
+                A1_simulated, A2_simulated, check_lcc=False
+            )
             t_bootstrap[i] = self._difference_norm(X1_hat_simulated, X2_hat_simulated)
         return t_bootstrap
 
@@ -144,7 +146,7 @@ class SemiparametricTest(BaseInference):
             # in the omni case we don't need to align
             return np.linalg.norm(X1 - X2)
 
-    def _embed(self, A1, A2):
+    def _embed(self, A1, A2, check_lcc=True):
         if self.embedding == "ase":
             X1_hat = AdjacencySpectralEmbed(
                 n_components=self.n_components
