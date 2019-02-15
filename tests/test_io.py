@@ -44,7 +44,6 @@ class TestImportGraph:
 class TestImportEdgelist:
     @pytest.fixture(autouse=True)
     def setup_class(self, tmp_path):
-        self.tmp_path = tmp_path
 
         n = 10
         p = 0.5
@@ -59,11 +58,12 @@ class TestImportEdgelist:
         G_A = nx.from_numpy_array(self.A)
         G_B = nx.from_numpy_array(self.B)
 
-        self.A_path = tmp_path / "A_unweighted.edgelist"
-        self.B_path = tmp_path / "B.edgelist"
+        self.A_path = str(tmp_path / "A_unweighted.edgelist")
+        self.B_path = str(tmp_path / "B.edgelist")
+        self.root = str(tmp_path)
 
-        nx.write_edgelist(G_A, str(self.A_path), data=False)
-        nx.write_weighted_edgelist(G_B, str(self.B_path))
+        nx.write_edgelist(G_A, self.A_path, data=False)
+        nx.write_weighted_edgelist(G_B, self.B_path)
 
     def test_in(self):
         A_from_edgelist = gs.utils.import_edgelist(self.A_path)
@@ -73,15 +73,7 @@ class TestImportEdgelist:
         assert np.allclose(B_from_edgelist, self.B)
 
     def test_multiple_in(self):
-        A_parent = self.A_path.parent
-        B_parent = self.B_path.parent
-
-        graphs = gs.utils.import_edgelist(A_parent)
-        assert len(graphs) == 2
-        assert np.allclose(graphs[0], self.A)
-        assert np.allclose(graphs[1], self.B)
-
-        graphs = gs.utils.import_edgelist(B_parent)
+        graphs = gs.utils.import_edgelist(self.root)
         assert len(graphs) == 2
         assert np.allclose(graphs[0], self.A)
         assert np.allclose(graphs[1], self.B)
@@ -103,7 +95,6 @@ class TestImportEdgelist:
         assert np.allclose(expected_vertices, B_vertices)
 
     def test_no_graphs_found(self):
-        path = str(self.tmp_path / "invalid_edgelist.edgelist")
-
+        path = str(self.root + "invalid_edgelist.edgelist")
         with pytest.raises(ValueError):
             gs.utils.import_edgelist(path)

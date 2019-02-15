@@ -61,8 +61,7 @@ def import_edgelist(
 
     Parameters
     ----------
-    path : str, Path object
-        Path to a file or directory. 
+    path : str
 
     delimiter : str, optional
         Delimiter of edgelist. If None, whitespace.
@@ -82,8 +81,11 @@ def import_edgelist(
     graph : array-like, shape (n_vertices, n_vertices)
         Adjacency matrix of the graph created from edgelist.
     """
-    p = Path(path)
+    # p = Path(path)
+    if not isinstance(path, str):
+        raise TypeError("path must be a string, not {}".format(type(path)))
 
+    p = Path(path)
     if p.is_dir():
         files = sorted(p.glob("*." + extension))
         graphs = [nx.read_weighted_edgelist(G, nodetype=nodetype) for G in files]
