@@ -149,10 +149,10 @@ class SemiparametricTest(BaseInference):
     def _embed(self, A1, A2, check_lcc=True):
         if self.embedding == "ase":
             X1_hat = AdjacencySpectralEmbed(
-                n_components=self.n_components
+                n_components=self.n_components, check_lcc=check_lcc
             ).fit_transform(A1)
             X2_hat = AdjacencySpectralEmbed(
-                n_components=self.n_components
+                n_components=self.n_components, check_lcc=check_lcc
             ).fit_transform(A2)
         elif self.embedding == "omnibus":
             X_hat_compound = OmnibusEmbed(n_components=self.n_components).fit_transform(
