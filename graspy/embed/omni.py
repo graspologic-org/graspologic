@@ -132,12 +132,20 @@ class OmnibusEmbed(BaseEmbed):
     graspy.embed.select_dimension
     """
 
-    def __init__(self, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
+    def __init__(
+        self,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        check_lcc=True,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            check_lcc=check_lcc,
         )
 
     def fit(self, graphs, y=None):
@@ -170,11 +178,14 @@ class OmnibusEmbed(BaseEmbed):
         graphs = np.stack(graphs)
 
         # Check if Abar is connected
-        if not is_fully_connected(graphs.mean(axis=0)):
-            msg = r"""Input graphs are not fully connected. Results may not \
-            be optimal. You can compute the largest connected component by \
-            using ``graspy.utils.get_multigraph_union_lcc``."""
-            warnings.warn(msg, UserWarning)
+        if self.check_lcc:
+            if not is_fully_connected(graphs.mean(axis=0)):
+                msg = (
+                    "Input graphs are not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspy.utils.get_multigraph_union_lcc``."
+                )
+                warnings.warn(msg, UserWarning)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

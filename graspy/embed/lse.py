@@ -91,12 +91,14 @@ class LaplacianSpectralEmbed(BaseEmbed):
         n_elbows=2,
         algorithm="randomized",
         n_iter=5,
+        check_lcc=True,
     ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            check_lcc=check_lcc,
         )
         self.form = form
 
@@ -115,12 +117,20 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
         y : Ignored
 
-
         Returns
         -------
         self : returns an instance of self.
         """
         A = import_graph(graph)
+
+        if self.check_lcc:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspy.utils.get_lcc``."
+                )
+                warnings.warn(msg, UserWarning)
 
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)
