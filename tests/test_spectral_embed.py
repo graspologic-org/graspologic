@@ -123,11 +123,11 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         f = np.array([[1, 2], [2, 1]])
         lse = LaplacianSpectralEmbed(form="I-DAD")
 
-    def test_unconnected_error(self):
+    def test_unconnected_warning(self):
         n = [50, 50]
         p = [[1, 0], [0, 1]]
         A = sbm(n, p)
-        with self.assertRaises(ValueError):
+        with self.assertWarns(UserWarning):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)
 
