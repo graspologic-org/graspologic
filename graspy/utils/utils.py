@@ -61,7 +61,7 @@ def import_edgelist(
 
     Parameters
     ----------
-    path : str
+    path : str, iterable
 
     delimiter : str, optional
         Delimiter of edgelist. If None, whitespace.
