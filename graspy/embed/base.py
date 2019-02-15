@@ -43,6 +43,9 @@ class BaseEmbed(BaseEstimator):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    check_lcc : bool , optional (defult =True)
+        Whether to check if input graph is connected. May result in non-optimal 
+        results if the graph is unconnected.
 
     Attributes
     ----------
