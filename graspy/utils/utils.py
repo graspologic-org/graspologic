@@ -160,22 +160,23 @@ def to_laplace(graph, form="DAD"):
     valid_inputs = ["I-DAD", "DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
-    adj_matrix = import_graph(graph)
-    if not is_fully_connected(adj_matrix):
-        raise ValueError(
-            "Input graph is not fully connected" + " so a Laplacian cannot be formed"
-        )
-    if not is_almost_symmetric(adj_matrix):
+    A = import_graph(graph)
+
+    if not is_almost_symmetric(A):
         raise ValueError("Laplacian not implemented/defined for directed graphs")
-    D_vec = np.sum(adj_matrix, axis=0)
-    D_root = np.diag(D_vec ** -0.5)
+
+    D_vec = np.sum(A, axis=0)
+
+    with np.errstate(divide="ignore"):
+        D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5
+    D_root[np.isinf(D_root)] = 0
+    D_root = np.diag(D_root)  # just change to sparse diag for sparse support
+
     if form == "I-DAD":
-        L = np.diag(D_vec) - adj_matrix
-        L = np.dot(D_root, L)
-        L = np.dot(L, D_root)
+        L = np.diag(D_vec) - A
+        L = D_root @ L @ D_root
     elif form == "DAD":
-        L = np.dot(D_root, adj_matrix)
-        L = np.dot(L, D_root)
+        L = D_root @ A @ D_root
     return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
 
 
