@@ -242,7 +242,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, *args):
     """
     n: list of int, shape (n_communities)
         the number of vertices in each community. Communities
@@ -268,6 +268,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
+    dc: numpy.random or array-like, shape (n_vertices)
+    *args: parameters if dc is a numpy.random function
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -335,6 +337,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
         if np.any(wtargs != wtargs.T):
             raise ValueError("Specified undirected, but Wtargs is directed.")
 
+    # Check dc TODO
+    if dc:
+        pass
+
     K = len(n)  # the number of communities
     counter = 0
     # get a list of community indices
@@ -343,6 +349,17 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
         cmties.append(range(counter, counter + n[i]))
         counter += n[i]
     A = np.zeros((sum(n), sum(n)))
+
+    # Initialize the degree corrected probability matrix
+    if dc and np.issubdtype(type(dc), np.random):
+        #Create the probability matrix for each vertex
+        dcProbs = [dc(*args) for _ in range(0,sum(n))]
+        for indices in cmties:
+            dcProbs[indices] /= sum(dcProbs[indices])
+    elif dc and isinstance(dc, list):
+        dcProbs = np.array(dc)
+    elif dc and isinstance(dc, np.ndarray):
+        dcProbs = dc
 
     for i in range(0, K):
         if directed:
@@ -360,8 +377,12 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]),
                                         dims=A.shape)
             pchoice = np.random.uniform(size=len(triu))
-            # connected with probability p
-            triu = triu[pchoice < block_p]
+            if dc:
+                # (v1,v2) connected with probability p*dcP[v1]*dcP[v2]
+                triu = triu[pchoice < block_p * dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]]
+            else:
+                # connected with probability p
+                triu = triu[pchoice < block_p]
             if type(block_wt) is not int:
                 block_wt = block_wt(size=len(triu), **block_wtargs)
             triu = np.unravel_index(triu, dims=A.shape)
@@ -442,7 +463,7 @@ def rdpg(X,
     A = sample_edges(P, directed=directed, loops=loops)
 
     # check weight function
-    if (not np.issubdtype(type(wt), np.integer)) and (not np.issubdtyp(
+    if (not np.issubdtype(type(wt), np.integer)) and (not np.issubdtype(
             type(wt), np.floating)):
         if not callable(wt):
             raise TypeError("You have not passed a function for wt.")
