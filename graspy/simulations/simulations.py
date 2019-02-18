@@ -242,7 +242,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, *args):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=None):
     """
     n: list of int, shape (n_communities)
         the number of vertices in each community. Communities
@@ -268,8 +268,15 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, *args):
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
-    dc: numpy.random or array-like, shape (n_vertices)
-    *args: parameters if dc is a numpy.random function
+    dc: function or array-like, shape (n_vertices)
+        if dc is a function, it should generate a random number to be used
+        as a weight to create a heterogenous degree distribution. A weight 
+        will be generated for each vertex, normalized so that the sum of weights 
+        in each block is 1. If dc is array-like, it should be of length sum(n)
+        and the elements in each block should sum to 1. Tt will be directly used 
+        as the weightings for each vertex.
+    dcargs: dictionary
+        if dc is a function, dcargs corresponds to its named arguments.
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -338,8 +345,13 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, *args):
             raise ValueError("Specified undirected, but Wtargs is directed.")
 
     # Check dc TODO
-    if dc:
-        pass
+    if dc is not None:
+        if callable(dc):
+            pass
+        elif isinstance(p, (list, np.ndarray)):
+            pass
+        else:
+            pass
 
     K = len(n)  # the number of communities
     counter = 0
@@ -351,14 +363,14 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, *args):
     A = np.zeros((sum(n), sum(n)))
 
     # Initialize the degree corrected probability matrix
-    if dc and np.issubdtype(type(dc), np.random):
+    if dc is not None and callable(dc):
         #Create the probability matrix for each vertex
-        dcProbs = [dc(*args) for _ in range(0,sum(n))]
+        dcProbs = np.array([dc(**dcargs) for _ in range(0,sum(n))], dtype='float')
         for indices in cmties:
-            dcProbs[indices] /= sum(dcProbs[indices])
-    elif dc and isinstance(dc, list):
+            dcProbs[list(indices)] /= sum(dcProbs[list(indices)])
+    elif dc is not None and isinstance(dc, list):
         dcProbs = np.array(dc)
-    elif dc and isinstance(dc, np.ndarray):
+    elif dc is not None and isinstance(dc, np.ndarray):
         dcProbs = dc
 
     for i in range(0, K):
@@ -377,9 +389,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, *args):
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]),
                                         dims=A.shape)
             pchoice = np.random.uniform(size=len(triu))
-            if dc:
-                # (v1,v2) connected with probability p*dcP[v1]*dcP[v2]
-                triu = triu[pchoice < block_p * dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]]
+            if dc is not None:
+                # (v1,v2) connected with probability p*k_i*k_j*dcP[v1]*dcP[v2]
+                triu = triu[pchoice < block_p * len(cmties[i]) * len(cmties[j]) * 
+                                        dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]]
             else:
                 # connected with probability p
                 triu = triu[pchoice < block_p]
