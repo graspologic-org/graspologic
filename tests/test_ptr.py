@@ -64,7 +64,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "zero-boost", self.looped_directed_input, ptr_expected)
 
     def test_simpleall_loopless_undirected(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0, 0.1764706, 0.5294118, 0.5294118],
                 [0.1764706, 0, 1.1176471, 0],
@@ -76,7 +76,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "simple-all", self.loopless_undirected_input, ptr_expected)
 
     def test_simpleall_looped_undirected(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0.1176471, 0.2941176, 0.7647059, 0.7647059],
                 [0.2941176, 0, 1.3529412, 0],
@@ -88,7 +88,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "simple-all", self.looped_undirected_input, ptr_expected)
 
     def test_simpleall_loopless_directed(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0, 0.1764706, 0.6470588, 0.6470588],
                 [0.1764706, 0, 0.9411765, 0],
@@ -99,7 +99,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "simple-all", self.loopless_directed_input, ptr_expected)
 
     def test_simpleall_looped_directed(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0.5882353, 0.1764706, 0.8823529, 0.8823529],
                 [0.1764706, 0, 1.1764706, 0],
@@ -110,7 +110,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "simple-all", self.looped_directed_input, ptr_expected)
 
     def test_simplenonzero_loopless_undirected(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0, 0.2727273, 0.8181818, 0.8181818],
                 [0.2727273, 0, 1.7272727, 0],
@@ -122,7 +122,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "simple-nonzero", self.loopless_undirected_input, ptr_expected)
 
     def test_simplenonzero_looped_undirected(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0.1538462, 0.3846154, 1, 1],
                 [0.3846154, 0, 1.7692308, 0],
@@ -134,7 +134,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "simple-nonzero", self.looped_undirected_input, ptr_expected)
 
     def test_simplenonzero_loopless_directed(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0, 0.2727273, 1, 1],
                 [0.2727273, 0, 1.4545455, 0],
@@ -146,7 +146,7 @@ class TestPTR(unittest.TestCase):
         _run_test(self, "simple-nonzero", self.loopless_directed_input, ptr_expected)
 
     def test_simplenonzero_looped_directed(self):
-        ptr_expected = np.array(
+        ptr_expected = 0.5 * np.array(
             [
                 [0.7692308, 0.2307692, 1.1538462, 1.1538462],
                 [0.2307692, 0, 1.5384615, 0],
