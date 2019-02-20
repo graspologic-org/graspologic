@@ -81,7 +81,7 @@ class OmnibusEmbed(BaseEmbed):
     matrices of a collection :math:`m` undirected graphs with matched vertices. 
     Then the :math:`(mn \times mn)` omnibus matrix, :math:`M`, has the subgraph where 
     :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
-    using adjacency spectral embedding.
+    using adjacency spectral embedding [1]_.
 
     Parameters
     ----------
@@ -107,6 +107,10 @@ class OmnibusEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    check_lcc : bool , optional (defult = True)
+        Whether to check if the average of all input graphs are connected. May result
+        in non-optimal results if the average graph is unconnected. If True and average
+        graph is unconnected, a UserWarning is thrown. 
 
     Attributes
     ----------
@@ -130,14 +134,29 @@ class OmnibusEmbed(BaseEmbed):
     --------
     graspy.embed.selectSVD
     graspy.embed.select_dimension
+
+    References
+    ----------
+    .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017, 
+       November).A central limit theorem for an omnibus embedding of multiple random 
+       dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International 
+       Conference on (pp. 964-967). IEEE.
     """
 
-    def __init__(self, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
+    def __init__(
+        self,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        check_lcc=True,
+    ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            check_lcc=check_lcc,
         )
 
     def fit(self, graphs, y=None):
@@ -170,11 +189,14 @@ class OmnibusEmbed(BaseEmbed):
         graphs = np.stack(graphs)
 
         # Check if Abar is connected
-        if not is_fully_connected(graphs.mean(axis=0)):
-            msg = r"""Input graphs are not fully connected. Results may not \
-            be optimal. You can compute the largest connected component by \
-            using ``graspy.utils.get_multigraph_union_lcc``."""
-            warnings.warn(msg, UserWarning)
+        if self.check_lcc:
+            if not is_fully_connected(graphs.mean(axis=0)):
+                msg = (
+                    "Input graphs are not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspy.utils.get_multigraph_union_lcc``."
+                )
+                warnings.warn(msg, UserWarning)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

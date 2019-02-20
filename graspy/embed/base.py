@@ -43,6 +43,10 @@ class BaseEmbed(BaseEstimator):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    check_lcc : bool , optional (defult =True)
+        Whether to check if input graph is connected. May result in non-optimal 
+        results if the graph is unconnected. Not checking for connectedness may 
+        result in faster computation.
 
     Attributes
     ----------
@@ -54,11 +58,19 @@ class BaseEmbed(BaseEstimator):
     graspy.embed.selectSVD, graspy.embed.select_dimension
     """
 
-    def __init__(self, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
+    def __init__(
+        self,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        check_lcc=True,
+    ):
         self.n_components = n_components
         self.n_elbows = n_elbows
         self.algorithm = algorithm
         self.n_iter = n_iter
+        self.check_lcc = check_lcc
 
     def _reduce_dim(self, A):
         """

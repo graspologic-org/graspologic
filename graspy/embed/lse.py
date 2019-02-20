@@ -47,6 +47,12 @@ class LaplacianSpectralEmbed(BaseEmbed):
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
 
+    check_lcc : bool , optional (defult = True)
+        Whether to check if input graph is connected. May result in non-optimal 
+        results if the graph is unconnected. If True and input is unconnected,
+        a UserWarning is thrown. Not checking for connectedness may result in 
+        faster computation.
+
     Attributes
     ----------
     latent_left_ : array, shape (n_samples, n_components)
@@ -75,7 +81,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
     matrix of the graph. These basis vectors (in the matrices U or V) are ordered according 
     to the amount of variance they explain in the original matrix. By selecting a subset of these
     basis vectors (through our choice of dimensionality reduction) we can find a lower dimensional 
-    space in which to represent the graph
+    space in which to represent the graph.
 
     References
     ----------
@@ -91,12 +97,14 @@ class LaplacianSpectralEmbed(BaseEmbed):
         n_elbows=2,
         algorithm="randomized",
         n_iter=5,
+        check_lcc=True,
     ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            check_lcc=check_lcc,
         )
         self.form = form
 
@@ -115,12 +123,20 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
         y : Ignored
 
-
         Returns
         -------
         self : returns an instance of self.
         """
         A = import_graph(graph)
+
+        if self.check_lcc:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspy.utils.get_lcc``."
+                )
+                warnings.warn(msg, UserWarning)
 
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)

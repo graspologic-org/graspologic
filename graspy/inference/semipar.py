@@ -119,7 +119,9 @@ class SemiparametricTest(BaseInference):
         for i in range(self.n_bootstraps):
             A1_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
             A2_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
-            X1_hat_simulated, X2_hat_simulated = self._embed(A1_simulated, A2_simulated)
+            X1_hat_simulated, X2_hat_simulated = self._embed(
+                A1_simulated, A2_simulated, check_lcc=False
+            )
             t_bootstrap[i] = self._difference_norm(X1_hat_simulated, X2_hat_simulated)
         return t_bootstrap
 
@@ -144,18 +146,18 @@ class SemiparametricTest(BaseInference):
             # in the omni case we don't need to align
             return np.linalg.norm(X1 - X2)
 
-    def _embed(self, A1, A2):
+    def _embed(self, A1, A2, check_lcc=True):
         if self.embedding == "ase":
             X1_hat = AdjacencySpectralEmbed(
-                n_components=self.n_components
+                n_components=self.n_components, check_lcc=check_lcc
             ).fit_transform(A1)
             X2_hat = AdjacencySpectralEmbed(
-                n_components=self.n_components
+                n_components=self.n_components, check_lcc=check_lcc
             ).fit_transform(A2)
         elif self.embedding == "omnibus":
-            X_hat_compound = OmnibusEmbed(n_components=self.n_components).fit_transform(
-                (A1, A2)
-            )
+            X_hat_compound = OmnibusEmbed(
+                n_components=self.n_components, check_lcc=check_lcc
+            ).fit_transform((A1, A2))
             X1_hat = X_hat_compound[: A1.shape[0], :]
             X2_hat = X_hat_compound[A2.shape[0] :, :]
         return (X1_hat, X2_hat)
