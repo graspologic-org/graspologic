@@ -45,7 +45,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Whether to check if input graph is connected. May result in non-optimal 
         results if the graph is unconnected. If True and input is unconnected,
         a UserWarning is thrown. Not checking for connectedness may result in 
-        faster computatoin.
+        faster computation.
 
     Attributes
     ----------
