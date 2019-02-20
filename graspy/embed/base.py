@@ -45,7 +45,8 @@ class BaseEmbed(BaseEstimator):
         to handle sparse matrices that may have large slowly decaying spectrum.
     check_lcc : bool , optional (defult =True)
         Whether to check if input graph is connected. May result in non-optimal 
-        results if the graph is unconnected.
+        results if the graph is unconnected. Not checking for connectedness may 
+        result in faster computation.
 
     Attributes
     ----------
