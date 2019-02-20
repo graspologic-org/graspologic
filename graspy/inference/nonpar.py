@@ -1,3 +1,7 @@
+# Bijan Varjavand
+# bpedigo [at] jhu.edu
+# 10.18.2018
+
 import numpy as np
 import networkx as nx
 
@@ -70,43 +74,48 @@ class NonparametricTest(BaseInference):
         tsvd = TSVD()
         vecs, vals = tsvd.fit(A).components_, tsvd.singular_values_
         vecs_2 = np.array([vecs[0, :], vecs[1, :]])
-        if vecs_2[0,0] < 0:
-            vecs_2 *= -1
         X_hat = vecs_2.T @ np.diag(vals[:2]**(1/2))
         return X_hat
 
-    def _bootstrap(X, Y, M, alpha = 0.05):
+    def _bootstrap(X, Y, M = self.n_bootstraps):
         N, _ = X.shape
-        M, _ = Y.shape
-
+        M2, _ = Y.shape
+        Z = np.concatenate((X,Y))
         statistics = np.zeros(M)
         for i in range(M):
-            bs_X = X[np.random.choice(np.arange(0,N), size = int(N/2), replace = False)]
-            bs_Y = Y[np.random.choice(np.arange(0,M), size = int(M/2), replace = False)]
-            statistics[i] = statistic(bs_X, bs_Y)
+            bs_Z = Z[np.random.choice(np.arange(0,N+M2), size = int(N+M2), replace = False)]
+            bs_X2 = bs_Z[:N,:]
+            bs_Y2 = bs_Z[N:,:]
+            statistics[i] = self._statistic(bs_X2, bs_Y2)
+        return statistics
 
-        sorted_ = np.sort(statistics)
-        rej_ind = int(np.ceil(((1 - alpha)*M)))
-        return sorted_[rej_ind]
+    def fit(A1,A2):
+        """
+        Fits the test to the two input graphs
 
-    # TODO calculate and return p-value
-    def estimated_power(n, eps, M, alpha, iters):
-        sizes, probsA, probsB, A1, A2 = gen_data(n, eps)
+        Parameters
+        ----------
+        A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            The two graphs to run a hypothesis test on.
 
-        X1_hat = ASE(A1)
-        X2_hat = ASE(A2)
-        critical_value = bootstrap(X1_hat, X2_hat, M, alpha)
+        Returns
+        -------
+        p : float
+            The p value corresponding to the specified hypothesis test
+        """
+        A1 = import_graph(A1)
+        A2 = import_graph(A2)
 
-        rejections = 0
-        for i in range(iters):
-            G3 = nx.stochastic_block_model(sizes, probsA)
-            A = nx.to_numpy_array(G3)
-            G4 = nx.stochastic_block_model(sizes, probsB)
-            B = nx.to_numpy_array(G4)
-            X_hat = ASE(A)
-            Y_hat = ASE(B)
+        X1_hat = self._ase(A1)
+        X2_hat = self._ase(A2)
+        X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
+        U = self._statistic(X_hat, Y_hat)
+        null_distribution = self._bootstrap(X1_hat, X2_hat)
 
-            U = statistic(X_hat, Y_hat)
-            if U > critical_value:
-                rejections += 1
-        return rejections/iters
+        self.null_distribution_ = null_distribution
+        self.sample_T_statistic_ = U
+        p_value = (
+            len(null_distribution[null_distribution >= U]) + 0.5
+        ) / self.n_bootstraps
+        self.p_value_ = p_value
+        return p_value
