@@ -55,33 +55,40 @@ def import_graph(graph):
 
 
 def import_edgelist(
-    path, delimiter=None, nodetype=int, extension="edgelist", return_vertices=False
+    path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
 ):
     """
-    Function for reading an edgelist and returning a numpy array.
-    The order of nodes are sorted by node values.
+    Function for reading a single or multiple edgelists. When importing multiple 
+    edgelists, the union of vertices from all graphs is computed so that each output
+    graph have matched vertex set. The order of nodes are sorted by node values.
 
     Parameters
     ----------
-    path : str, iterable
+    path : str, Path object, or iterable
+        If ``path`` is a directory, then the importing order will be sorted in 
+        alphabetical order.
+
+    extension : str, optional
+        If ``path`` is a directory, then the function will convert all files
+        with matching extension. 
 
     delimiter : str, optional
         Delimiter of edgelist. If None, whitespace.
 
     nodetype : int (default), float, str, Python type, optional
-       Convert node data from strings to specified type
-
-    extension : str, optional
-        If ``path`` is a directory, then the function will convert all files
-        with matching extension. 
+       Convert node data from strings to specified type.
 
     return_vertices : bool, default=False, optional
         Returns the union of all ind
 
     Returns
     -------
-    graph : array-like, shape (n_vertices, n_vertices)
-        Adjacency matrix of the graph created from edgelist.
+    graph : list of array-like, or array-like, shape (n_vertices, n_vertices)
+        If ``path`` is a directory, a list of arrays is returned. If ``path`` is a file,
+        an array is returned.
+
+    vertices : array-like, shape (n_vertices, )
+        An array of all vertices that were included in the graphs that are returned.
     """
     # p = Path(path)
     if not isinstance(path, (str, Path, Iterable)):
