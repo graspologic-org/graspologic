@@ -5,11 +5,13 @@
 # Email: ebridge2@jhu.edu
 # Copyright (c) 2018. All rights reserved.
 
+import warnings
+from collections import Iterable
 from functools import reduce
 from pathlib import Path
 
-import numpy as np
 import networkx as nx
+import numpy as np
 from sklearn.utils import check_array
 
 
@@ -82,27 +84,46 @@ def import_edgelist(
         Adjacency matrix of the graph created from edgelist.
     """
     # p = Path(path)
-    if not isinstance(path, str):
-        raise TypeError("path must be a string, not {}".format(type(path)))
+    if not isinstance(path, (str, Iterable)):
+        msg = "path must be a string or Iterable, not {}".format(type(path))
+        raise TypeError(msg)
 
-    p = Path(path)
-    if p.is_dir():
-        files = sorted(p.glob("*." + extension))
-        graphs = [nx.read_weighted_edgelist(G, nodetype=nodetype) for G in files]
+    # get a list of files to import
+    if isinstance(path, str):
+        p = Path(path)
+        if p.is_dir():
+            files = sorted(p.glob("*" + extension))
+        elif p.is_file():
+            files = [p]
+        else:
+            raise ValueError("No graphs founds to import.")
+    else:  # path is an iterable
+        files = [Path(f) for f in path]
 
-        # doing this to avoid counting number of elemnts in iterator
-        if len(graphs) == 0:
-            raise ValueError("No files found")
+    # Do this to potentially avoid dealing with generators
+    if len(files) == 0:
+        msg = "No files found with '{}' extension found.".format(extension)
+        raise ValueError(msg)
 
-        vertices = reduce(np.union1d, [G.nodes for G in graphs])
-        out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
-    elif p.is_file():
-        G = nx.read_weighted_edgelist(path, nodetype=nodetype, delimiter=delimiter)
+    graphs = [
+        nx.read_weighted_edgelist(f, nodetype=nodetype, delimiter=delimiter)
+        for f in files
+    ]
 
-        vertices = np.sort(np.array(G.nodes))
-        out = import_graph(G)
-    else:
-        raise ValueError("No graphs founds to import.")
+    if all(len(G.nodes) == 0 for G in graphs):
+        msg = (
+            "All graphs have 0 vertices. Please double check if proper "
+            + "'delimiter' is given."
+        )
+        warnings.warn(msg, UserWarning)
+
+    # Compute union of all vertices
+    vertices = np.sort(reduce(np.union1d, [G.nodes for G in graphs]))
+    out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
+
+    # only return adjacency matrix if input is only 1 graph
+    if len(out) == 1:
+        out = out[0]
 
     if return_vertices:
         return out, vertices

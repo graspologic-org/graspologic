@@ -1,10 +1,10 @@
 import sys
 
-
-import pytest
-import graspy as gs
-import numpy as np
 import networkx as nx
+import numpy as np
+import pytest
+
+import graspy as gs
 
 
 class TestImportGraph:
@@ -43,8 +43,7 @@ class TestImportGraph:
 
 class TestImportEdgelist:
     @pytest.fixture(autouse=True)
-    def setup_class(self, tmp_path):
-
+    def setup_class(self, tmpdir):
         n = 10
         p = 0.5
         wt = np.random.exponential
@@ -57,10 +56,11 @@ class TestImportEdgelist:
 
         G_A = nx.from_numpy_array(self.A)
         G_B = nx.from_numpy_array(self.B)
+        G_B = nx.relabel_nodes(G_B, lambda x: x + 10)  # relabel nodes to go from 10-19.
 
-        self.A_path = str(tmp_path / "A_unweighted.edgelist")
-        self.B_path = str(tmp_path / "B.edgelist")
-        self.root = str(tmp_path)
+        self.A_path = str(tmpdir / "A_unweighted.edgelist")
+        self.B_path = str(tmpdir / "B.edgelist")
+        self.root = str(tmpdir)
 
         nx.write_edgelist(G_A, self.A_path, data=False)
         nx.write_weighted_edgelist(G_B, self.B_path)
@@ -74,9 +74,16 @@ class TestImportEdgelist:
 
     def test_multiple_in(self):
         graphs = gs.utils.import_edgelist(self.root)
+        A = np.zeros((20, 20))
+        A[:10, :10] = self.A
+
+        B = np.zeros((20, 20))
+        B[10:, 10:] = self.B
+
         assert len(graphs) == 2
-        assert np.allclose(graphs[0], self.A)
-        assert np.allclose(graphs[1], self.B)
+        assert all(graph.shape == (20, 20) for graph in graphs)
+        assert np.allclose(graphs[0], A)
+        assert np.allclose(graphs[1], B)
 
     def test_wrongtypein(self):
         path = 5
@@ -86,15 +93,21 @@ class TestImportEdgelist:
             gs.utils.import_edgelist(None)
 
     def test_vertices(self):
-        expected_vertices = np.arange(0, 10)
+        expected_vertices_A = np.arange(0, 10)
+        expected_vertices_B = np.arange(10, 20)
 
-        _, A_vertices = gs.utils.import_edgelist(str(self.A_path), return_vertices=True)
-        _, B_vertices = gs.utils.import_edgelist(str(self.B_path), return_vertices=True)
+        _, A_vertices = gs.utils.import_edgelist(self.A_path, return_vertices=True)
+        _, B_vertices = gs.utils.import_edgelist(self.B_path, return_vertices=True)
 
-        assert np.allclose(expected_vertices, A_vertices)
-        assert np.allclose(expected_vertices, B_vertices)
+        assert np.allclose(expected_vertices_A, A_vertices)
+        assert np.allclose(expected_vertices_B, B_vertices)
 
     def test_no_graphs_found(self):
         path = str(self.root + "invalid_edgelist.edgelist")
         with pytest.raises(ValueError):
             gs.utils.import_edgelist(path)
+
+    def test_bad_delimiter(self):
+        delimiter = ","
+        with pytest.warns(UserWarning):
+            graphs = gs.utils.import_edgelist(self.root, delimiter=delimiter)
