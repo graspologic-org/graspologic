@@ -1,18 +1,18 @@
-# Contributing to pygraphstats
+# Contributing to GraSPy
 (adopted from sklearn)
 
 ## How to Contribute
-The preferred workflow for contributing to pygraphstats is to fork the main repository on GitHub, clone, and develop on a branch. Steps:
-1. Fork the [project repository](https://github.com/neurodata/pygraphstats)
+The preferred workflow for contributing to GraSPy is to fork the main repository on GitHub, clone, and develop on a branch. Steps:
+1. Fork the [project repository](https://github.com/neurodata/GraSPy)
    by clicking on the 'Fork' button near the top right of the page. This creates
    a copy of the code under your GitHub user account. For more details on
    how to fork a repository see [this guide](https://help.github.com/articles/fork-a-repo/).
 
-2. Clone your fork of the pygraphstats repo from your GitHub account to your local disk:
+2. Clone your fork of the GraSPy repo from your GitHub account to your local disk:
 
    ```bash
-   $ git clone git@github.com:YourLogin/pygraphstats.git
-   $ cd pygraphstats
+   $ git clone git@github.com:YourLogin/GraSPy.git
+   $ cd GraSPy
    ```
 
 3. Create a ``feature`` branch to hold your development changes:
@@ -48,15 +48,10 @@ We recommended that your contribution complies with the following rules before y
 -  At least one paragraph of narrative documentation with links to
    references in the literature (with PDF links when possible) and
    the example.
--  Run an autoformatter, such as `yapf`
+-  Run an autoformatter. We use `black` and would like for you to format all files using `black`. You can run the following lines to format your files.
   ```bash
-  $ pip install yapf
-  $ yapf path/to/module.py
-  ```
--  No flake8 warnings, check with:
-  ```bash
-  $ pip install flake8
-  $ flake8 path/to/module.py
+  $ pip install black
+  $ black path/to/module.py
   ```
 
 ## Guidelines
