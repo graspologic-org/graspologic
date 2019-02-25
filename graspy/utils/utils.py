@@ -72,8 +72,8 @@ def import_edgelist(
         If ``path`` is a directory, then the function will convert all files
         with matching extension. 
 
-    delimiter : str, optional
-        Delimiter of edgelist. If None, whitespace.
+    delimiter : str or None, default=None, optional
+        Delimiter of edgelist. If None, the delimiter is whitespace.
 
     nodetype : int (default), float, str, Python type, optional
        Convert node data from strings to specified type.
@@ -83,12 +83,13 @@ def import_edgelist(
 
     Returns
     -------
-    graph : list of array-like, or array-like, shape (n_vertices, n_vertices)
+    out : list of array-like, or array-like, shape (n_vertices, n_vertices)
         If ``path`` is a directory, a list of arrays is returned. If ``path`` is a file,
         an array is returned.
 
     vertices : array-like, shape (n_vertices, )
-        An array of all vertices that were included in the graphs that are returned.
+        If ``return_vertices`` == True, then returns an array of all vertices that were 
+        included in the output graphs. 
     """
     # p = Path(path)
     if not isinstance(path, (str, Path, Iterable)):
