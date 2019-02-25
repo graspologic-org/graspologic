@@ -5,10 +5,13 @@
 # Email: ebridge2@jhu.edu
 # Copyright (c) 2018. All rights reserved.
 
+import warnings
+from collections import Iterable
 from functools import reduce
+from pathlib import Path
 
-import numpy as np
 import networkx as nx
+import numpy as np
 from sklearn.utils import check_array
 
 
@@ -49,6 +52,90 @@ def import_graph(graph):
         msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
         raise TypeError(msg)
     return out
+
+
+def import_edgelist(
+    path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
+):
+    """
+    Function for reading a single or multiple edgelists. When importing multiple 
+    edgelists, the union of vertices from all graphs is computed so that each output
+    graph have matched vertex set. The order of nodes are sorted by node values.
+
+    Parameters
+    ----------
+    path : str, Path object, or iterable
+        If ``path`` is a directory, then the importing order will be sorted in 
+        alphabetical order.
+
+    extension : str, optional
+        If ``path`` is a directory, then the function will convert all files
+        with matching extension. 
+
+    delimiter : str or None, default=None, optional
+        Delimiter of edgelist. If None, the delimiter is whitespace.
+
+    nodetype : int (default), float, str, Python type, optional
+       Convert node data from strings to specified type.
+
+    return_vertices : bool, default=False, optional
+        Returns the union of all ind
+
+    Returns
+    -------
+    out : list of array-like, or array-like, shape (n_vertices, n_vertices)
+        If ``path`` is a directory, a list of arrays is returned. If ``path`` is a file,
+        an array is returned.
+
+    vertices : array-like, shape (n_vertices, )
+        If ``return_vertices`` == True, then returns an array of all vertices that were 
+        included in the output graphs. 
+    """
+    # p = Path(path)
+    if not isinstance(path, (str, Path, Iterable)):
+        msg = "path must be a string or Iterable, not {}".format(type(path))
+        raise TypeError(msg)
+
+    # get a list of files to import
+    if isinstance(path, (str, Path)):
+        p = Path(path)
+        if p.is_dir():
+            files = sorted(p.glob("*" + extension))
+        elif p.is_file():
+            files = [p]
+        else:
+            raise ValueError("No graphs founds to import.")
+    else:  # path is an iterable
+        files = [Path(f) for f in path]
+
+    if len(files) == 0:
+        msg = "No files found with '{}' extension found.".format(extension)
+        raise ValueError(msg)
+
+    graphs = [
+        nx.read_weighted_edgelist(f, nodetype=nodetype, delimiter=delimiter)
+        for f in files
+    ]
+
+    if all(len(G.nodes) == 0 for G in graphs):
+        msg = (
+            "All graphs have 0 vertices. Please double check if proper "
+            + "'delimiter' is given."
+        )
+        warnings.warn(msg, UserWarning)
+
+    # Compute union of all vertices
+    vertices = np.sort(reduce(np.union1d, [G.nodes for G in graphs]))
+    out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
+
+    # only return adjacency matrix if input is only 1 graph
+    if len(out) == 1:
+        out = out[0]
+
+    if return_vertices:
+        return out, vertices
+    else:
+        return out
 
 
 def is_symmetric(X):
