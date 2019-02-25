@@ -84,12 +84,12 @@ def import_edgelist(
         Adjacency matrix of the graph created from edgelist.
     """
     # p = Path(path)
-    if not isinstance(path, (str, Iterable)):
+    if not isinstance(path, (str, Path, Iterable)):
         msg = "path must be a string or Iterable, not {}".format(type(path))
         raise TypeError(msg)
 
     # get a list of files to import
-    if isinstance(path, str):
+    if isinstance(path, (str, Path)):
         p = Path(path)
         if p.is_dir():
             files = sorted(p.glob("*" + extension))
@@ -100,7 +100,6 @@ def import_edgelist(
     else:  # path is an iterable
         files = [Path(f) for f in path]
 
-    # Do this to potentially avoid dealing with generators
     if len(files) == 0:
         msg = "No files found with '{}' extension found.".format(extension)
         raise ValueError(msg)

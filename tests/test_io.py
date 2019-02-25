@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 import networkx as nx
 import numpy as np
@@ -68,6 +69,13 @@ class TestImportEdgelist:
     def test_in(self):
         A_from_edgelist = gs.utils.import_edgelist(self.A_path)
         B_from_edgelist = gs.utils.import_edgelist(self.B_path)
+
+        assert np.allclose(A_from_edgelist, self.A)
+        assert np.allclose(B_from_edgelist, self.B)
+
+    def test_in_Path_obj(self):
+        A_from_edgelist = gs.utils.import_edgelist(Path(self.A_path))
+        B_from_edgelist = gs.utils.import_edgelist(Path(self.B_path))
 
         assert np.allclose(A_from_edgelist, self.A)
         assert np.allclose(B_from_edgelist, self.B)
