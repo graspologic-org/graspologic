@@ -376,8 +376,8 @@ class Test_WSBM(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # 60 vertex graph w one community having 20 and another
-        # w 40 vertices
+        # 120 vertex graph w one community having 50 and another
+        # w 70 vertices
         cls.n = [50, 70]
         cls.vcount = np.cumsum(cls.n)
         # define non-symmetric probability matrix as uneven
@@ -569,6 +569,25 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
+    def test_sbm_dc_undirected_loopy(self):
+        np.random.seed(self.seed)
+        dc = np.array([np.random.power(3) for _ in range(sum(self.n))])
+        for i in range(0, len(self.n)):
+            dc[self.vcount[i] - self.n[i]:self.vcount[i]] /= sum(
+                dc[self.vcount[i] - self.n[i]:self.vcount[i]])
+        A = sbm(self.n, self.Psy, directed=False, loops=True,
+                dc=dc, dcargs=None)
+        communities = np.hstack([[comm]*self.n[comm] for comm in range(len(self.n))])
+        for i,ki in zip(range(sum(self.n)), communities):
+            degree = sum([A[i][j] for j in range(sum(self.n))])
+            theta_hat = degree / sum([self.Psy[ki][kj]*self.n[ki]*self.n[kj] 
+                                      for kj in range(len(self.n))])
+            self.assertTrue(np.isclose(theta_hat,dc[i],atol=0.01))
+        self.assertTrue(is_symmetric(A))
+        # check dimensions
+        self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
+
     def test_bad_inputs(self):
         with self.assertRaises(TypeError):
             n = '1'
@@ -632,6 +651,36 @@ class Test_WSBM(unittest.TestCase):
             wtargs = [[1, 2], [1, 1]]
             sbm(self.n, self.Psy, wt=wt, wtargs=wtargs)
 
+        with self.assertRaises(TypeError):
+            # Check that the paramters are a dict
+            dc = np.random.uniform
+            dcargs = [1,2]
+            sbm(self.n, self.Psy, dc=dc, dcargs=dcargs)
+
+        with self.assertRaises(ValueError):
+            # There are non-numeric elements in p
+            dc = ['1',1]
+            sbm(self.n, self.Psy, dc=dc)
+
+        with self.assertRaises(ValueError):
+            # dc must have size len(n)
+            dc = [1,1]
+            sbm(self.n, self.Psy, dc=dc)
+
+        with self.assertRaises(ValueError):
+            # Values in p must be in between 0 and 1.
+            dc = 2*np.ones(sum(self.n))
+            sbm(self.n, self.Psy, dc=dc)
+
+        with self.assertRaises(ValueError):
+            # Check that probabilities sum to 1 in each block
+            dc = np.ones(sum(self.n))
+            sbm(self.n, self.Psy, dc=dc)
+
+        with self.assertRaises(ValueError):
+            # dc must be a function, list, or np.array
+            dc = {'fail', 'me'}
+            sbm(self.n, self.Psy, dc=dc)
 
 class Test_RDPG(unittest.TestCase):
     @classmethod
