@@ -495,6 +495,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
         inds_intersection = inds_intersection[new_inds_intersection]
     if type(graphs) != list:
         new_graphs = np.stack(new_graphs)
+        inds_intersection = inds_intersection[new_inds_intersection]
     if return_inds:
         return new_graphs, inds_intersection
     else:

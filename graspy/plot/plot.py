@@ -11,10 +11,14 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+<<<<<<< HEAD
 from sklearn.utils import check_array, check_consistent_length
 
 from ..embed import selectSVD
 from ..utils import import_graph, pass_to_ranks
+=======
+from matplotlib import colors
+>>>>>>> trying heatmap color norm, intersect bug
 
 
 def _check_common_inputs(
