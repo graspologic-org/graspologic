@@ -11,6 +11,7 @@ from ..utils import import_graph, pass_to_ranks
 from ..embed import selectSVD
 from sklearn.utils import check_array, check_consistent_length
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib import colors
 
 
 def _check_common_inputs(
@@ -195,7 +196,7 @@ def heatmap(
             arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels)
 
     # Global plotting settings
-    CBAR_KWS = dict(shrink=0.7)
+    CBAR_KWS = dict(shrink=0.7, norm=colors.NoNorm)
 
     with sns.plotting_context(context, font_scale=font_scale):
         fig, ax = plt.subplots(figsize=figsize)
@@ -365,7 +366,6 @@ def gridplot(
     return plot
 
 
-# TODO would it be cool if pairplot reduced to single plot
 def pairplot(
     X,
     labels=None,
@@ -380,6 +380,7 @@ def pairplot(
     alpha=0.7,
     size=50,
     marker=".",
+    diag_kind="auto",
 ):
     r"""
     Plot pairwise relationships in a dataset.
@@ -467,7 +468,6 @@ def pairplot(
     else:
         variables = col_names
 
-    diag_kind = "auto"
     df = pd.DataFrame(X, columns=col_names)
     if labels is not None:
         if legend_name is None:
