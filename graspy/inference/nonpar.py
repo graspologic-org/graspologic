@@ -10,6 +10,7 @@ from ..utils import import_graph, is_symmetric, symmetrize
 from ..embed import select_dimension, AdjacencySpectralEmbed
 from sklearn.decomposition import TruncatedSVD as TSVD
 
+
 class NonparametricTest(BaseInference):
     """
     Two sample hypothesis test for the nonparamatric problem of determining
@@ -40,11 +41,10 @@ class NonparametricTest(BaseInference):
         Bandwidth to use for gaussian kernel. If None,
         the median heuristic will be used.
     """
-    def __init__(self,
-                 embedding='ase',
-                 n_components=None,
-                 n_bootstraps=200,
-                 bandwidth=None):
+
+    def __init__(
+        self, embedding="ase", n_components=None, n_bootstraps=200, bandwidth=None
+    ):
 
         if type(n_bootstraps) is not int:
             raise TypeError()
@@ -53,12 +53,10 @@ class NonparametricTest(BaseInference):
             raise TypeError()
 
         if n_bootstraps < 1:
-            msg = '{} is invalid number of bootstraps, must be greater than 1'
+            msg = "{} is invalid number of bootstraps, must be greater than 1"
             raise ValueError(msg.format(n_bootstraps))
 
-        super().__init__(
-            embedding = embedding,
-            n_components = n_components)
+        super().__init__(embedding=embedding, n_components=n_components)
         self.n_bootstraps = n_bootstraps
         self.bandwidth = bandwidth
         self.null_distribution_ = None
@@ -67,43 +65,45 @@ class NonparametricTest(BaseInference):
     def _gaussian_covariance(self, X, Y):
         diffs = np.expand_dims(X, 1) - np.expand_dims(Y, 0)
         if self.bandwidth == None:
-            self.bandwidth = np.median(diffs) #TODO
+            self.bandwidth = np.median(diffs)  # TODO
             self.bandwidth = 0.5
-        return np.exp(-0.5 * np.sum(diffs**2, axis=2) / self.bandwidth**2)
+        return np.exp(-0.5 * np.sum(diffs ** 2, axis=2) / self.bandwidth ** 2)
 
     def _statistic(self, X, Y):
         N, _ = X.shape
         M, _ = Y.shape
-        x_stat = np.sum(self._gaussian_covariance(X, X) - np.eye(N))/(N*(N-1))
-        y_stat = np.sum(self._gaussian_covariance(Y, Y) - np.eye(M))/(M*(M-1))
-        xy_stat = np.sum(self._gaussian_covariance(X, Y))/(N*M)
-        return x_stat - 2*xy_stat + x_stat
+        x_stat = np.sum(self._gaussian_covariance(X, X) - np.eye(N)) / (N * (N - 1))
+        y_stat = np.sum(self._gaussian_covariance(Y, Y) - np.eye(M)) / (M * (M - 1))
+        xy_stat = np.sum(self._gaussian_covariance(X, Y)) / (N * M)
+        return x_stat - 2 * xy_stat + x_stat
 
     def _ase(self, A, max_d):
-        ase = AdjacencySpectralEmbed(n_components = max_d, algorithm = 'randomized')
+        ase = AdjacencySpectralEmbed(n_components=max_d, algorithm="randomized")
         X_hat = ase.fit_transform(A)
         return X_hat
-    
+
     def _median_heuristic(self, X1, X2):
         X1 = np.array(X1)
         X2 = np.array(X2)
         X1_medians = np.median(X1, axis=0)
         X2_medians = np.median(X2, axis=0)
         val = np.multiply(X1_medians, X2_medians)
-        t = (val>0)*2-1
+        t = (val > 0) * 2 - 1
         print(t.shape, X1.shape)
-        X1 = np.multiply(t.reshape(-1,1).T,X1)
+        X1 = np.multiply(t.reshape(-1, 1).T, X1)
         return X1, X2
 
-    def _bootstrap(self, X, Y, M = 200):
+    def _bootstrap(self, X, Y, M=200):
         N, _ = X.shape
         M2, _ = Y.shape
-        Z = np.concatenate((X,Y))
+        Z = np.concatenate((X, Y))
         statistics = np.zeros(M)
         for i in range(M):
-            bs_Z = Z[np.random.choice(np.arange(0,N+M2), size = int(N+M2), replace = False)]
-            bs_X2 = bs_Z[:N,:]
-            bs_Y2 = bs_Z[N:,:]
+            bs_Z = Z[
+                np.random.choice(np.arange(0, N + M2), size=int(N + M2), replace=False)
+            ]
+            bs_X2 = bs_Z[:N, :]
+            bs_Y2 = bs_Z[N:, :]
             statistics[i] = self._statistic(bs_X2, bs_Y2)
         return statistics
 

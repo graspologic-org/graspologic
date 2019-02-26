@@ -41,7 +41,7 @@ class TestNonparametricTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             NonparametricTest(embedding=6)
         with self.assertRaises(TypeError):
-            NonparametricTest(bandwidth='oops')
+            NonparametricTest(bandwidth="oops")
 
     def test_n_bootstraps(self):
         npt = NonparametricTest(n_bootstraps=234, n_components=None)
