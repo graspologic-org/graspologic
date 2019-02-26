@@ -273,7 +273,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
         as a weight to create a heterogenous degree distribution. A weight 
         will be generated for each vertex, normalized so that the sum of weights 
         in each block is 1. If dc is array-like, it should be of length sum(n)
-        and the elements in each block should sum to 1. Tt will be directly used 
+        and the elements in each block should sum to 1. It will be directly used 
         as the weightings for each vertex.
     dcargs: dictionary
         if dc is a function, dcargs corresponds to its named arguments.
