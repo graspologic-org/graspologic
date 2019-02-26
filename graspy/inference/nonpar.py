@@ -75,7 +75,7 @@ class NonparametricTest(BaseInference):
         x_stat = np.sum(self._gaussian_covariance(X, X) - np.eye(N)) / (N * (N - 1))
         y_stat = np.sum(self._gaussian_covariance(Y, Y) - np.eye(M)) / (M * (M - 1))
         xy_stat = np.sum(self._gaussian_covariance(X, Y)) / (N * M)
-        return x_stat - 2 * xy_stat + x_stat
+        return x_stat - 2 * xy_stat + y_stat
 
     def _ase(self, A, max_d):
         ase = AdjacencySpectralEmbed(n_components=max_d, algorithm="randomized")
