@@ -89,7 +89,6 @@ class NonparametricTest(BaseInference):
         X2_medians = np.median(X2, axis=0)
         val = np.multiply(X1_medians, X2_medians)
         t = (val > 0) * 2 - 1
-        print(t.shape, X1.shape)
         X1 = np.multiply(t.reshape(-1, 1).T, X1)
         return X1, X2
 
@@ -136,7 +135,7 @@ class NonparametricTest(BaseInference):
         self.null_distribution_ = null_distribution
         self.sample_T_statistic_ = U
         p_value = (
-            len(null_distribution[null_distribution >= U]) + 0.5
+            len(null_distribution[null_distribution >= U])
         ) / self.n_bootstraps
         self.p_value_ = p_value
         return p_value
