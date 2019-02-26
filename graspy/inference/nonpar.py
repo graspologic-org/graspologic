@@ -7,8 +7,8 @@ import networkx as nx
 
 from .base import BaseInference
 from ..utils import import_graph, is_symmetric, symmetrize
-from ..embed import select_dimension
-from from sklearn.decomposition import TruncatedSVD as TSVD
+from ..embed import select_dimension, AdjacencySpectralEmbed
+from sklearn.decomposition import TruncatedSVD as TSVD
 
 class NonparametricTest(BaseInference):
     """
@@ -58,26 +58,32 @@ class NonparametricTest(BaseInference):
         # self.n_components = n_components
         self.n_bootstraps = n_bootstraps
 
-    def _gaussian_covariance(X, Y, bandwidth = 0.5):
+    def _gaussian_covariance(self, X, Y, bandwidth = 0.5):
         diffs = np.expand_dims(X, 1) - np.expand_dims(Y, 0)
         return np.exp(-0.5 * np.sum(diffs**2, axis=2) / bandwidth**2)
 
     def _statistic(self, X, Y):
         N, _ = X.shape
         M, _ = Y.shape
-        x_stat = np.sum(gaussian_covariance(X, X, 0.5) - np.eye(N))/(N*(N-1))
-        y_stat = np.sum(gaussian_covariance(Y, Y, 0.5) - np.eye(M))/(M*(M-1))
-        xy_stat = np.sum(gaussian_covariance(X, Y, 0.5))/(N*M)
+        x_stat = np.sum(self._gaussian_covariance(X, X, 0.5) - np.eye(N))/(N*(N-1))
+        y_stat = np.sum(self._gaussian_covariance(Y, Y, 0.5) - np.eye(M))/(M*(M-1))
+        xy_stat = np.sum(self._gaussian_covariance(X, Y, 0.5))/(N*M)
         return x_stat - 2*xy_stat + x_stat
 
-    def _ase(self, A):
-        tsvd = TSVD()
-        vecs, vals = tsvd.fit(A).components_, tsvd.singular_values_
-        vecs_2 = np.array([vecs[0, :], vecs[1, :]])
-        X_hat = vecs_2.T @ np.diag(vals[:2]**(1/2))
+    def _ase(self, A, max_d):
+        ase = AdjacencySpectralEmbed(n_components = max_d, algorithm = 'randomized')
+        X_hat = ase.fit_transform(A)
         return X_hat
+    
+    def _median_heuristic(self, X1, X2):
+        X1_medians = np.median(X1, axis=0)
+        X2_medians = np.median(X2, axis=0)
+        val = np.multiply(X1_medians, X2_medians)
+        t = (val>0)*2-1
+        X1 = np.multiply(t.reshape(-1,1).T,X1)
+        return X1, X2
 
-    def _bootstrap(X, Y, M = self.n_bootstraps):
+    def _bootstrap(self, X, Y, M = 200):
         N, _ = X.shape
         M2, _ = Y.shape
         Z = np.concatenate((X,Y))
@@ -89,7 +95,7 @@ class NonparametricTest(BaseInference):
             statistics[i] = self._statistic(bs_X2, bs_Y2)
         return statistics
 
-    def fit(A1,A2):
+    def fit(self, A1, A2):
         """
         Fits the test to the two input graphs
 
@@ -105,12 +111,14 @@ class NonparametricTest(BaseInference):
         """
         A1 = import_graph(A1)
         A2 = import_graph(A2)
-
-        X1_hat = self._ase(A1)
-        X2_hat = self._ase(A2)
+        A1_d = select_dimension(A1)[0][-1]
+        A2_d = select_dimension(A2)[0][-1]
+        max_d = max(A1_d, A2_d)
+        X1_hat = self._ase(A1, max_d)
+        X2_hat = self._ase(A2, max_d)
         X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
-        U = self._statistic(X_hat, Y_hat)
-        null_distribution = self._bootstrap(X1_hat, X2_hat)
+        U = self._statistic(X1_hat, X2_hat)
+        null_distribution = self._bootstrap(X1_hat, X2_hat, self.n_bootstraps)
 
         self.null_distribution_ = null_distribution
         self.sample_T_statistic_ = U
