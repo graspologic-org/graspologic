@@ -35,15 +35,21 @@ class NonparametricTest(BaseInference):
 
     n_bootstraps : 200 (default), or Int
         Number of bootstrap iterations.
+
+    bandwidth : None (default), of Float
+        Bandwidth to use for gaussian kernel. If None,
+        the median heuristic will be used.
     """
-    # TODO
-    #     - import graphs properly in the class-based structure
-    #     - "fix" LCC, then use graspy ASE
     def __init__(self,
                  embedding='ase',
                  n_components=None,
-                 n_bootstraps=200,):
+                 n_bootstraps=200,
+                 bandwidth=None):
+
         if type(n_bootstraps) is not int:
+            raise TypeError()
+
+        if bandwidth is not None and type(bandwidth) is not float:
             raise TypeError()
 
         if n_bootstraps < 1:
@@ -51,23 +57,26 @@ class NonparametricTest(BaseInference):
             raise ValueError(msg.format(n_bootstraps))
 
         super().__init__(
-            embedding=embedding,
-            n_components=n_components,
-        )
-        # self.embedding = embedding
-        # self.n_components = n_components
+            embedding = embedding,
+            n_components = n_components)
         self.n_bootstraps = n_bootstraps
+        self.bandwidth = bandwidth
+        self.null_distribution_ = None
+        self.sample_T_statistic_ = None
 
-    def _gaussian_covariance(self, X, Y, bandwidth = 0.5):
+    def _gaussian_covariance(self, X, Y):
         diffs = np.expand_dims(X, 1) - np.expand_dims(Y, 0)
-        return np.exp(-0.5 * np.sum(diffs**2, axis=2) / bandwidth**2)
+        if self.bandwidth == None:
+            self.bandwidth = np.median(diffs) #TODO
+            self.bandwidth = 0.5
+        return np.exp(-0.5 * np.sum(diffs**2, axis=2) / self.bandwidth**2)
 
     def _statistic(self, X, Y):
         N, _ = X.shape
         M, _ = Y.shape
-        x_stat = np.sum(self._gaussian_covariance(X, X, 0.5) - np.eye(N))/(N*(N-1))
-        y_stat = np.sum(self._gaussian_covariance(Y, Y, 0.5) - np.eye(M))/(M*(M-1))
-        xy_stat = np.sum(self._gaussian_covariance(X, Y, 0.5))/(N*M)
+        x_stat = np.sum(self._gaussian_covariance(X, X) - np.eye(N))/(N*(N-1))
+        y_stat = np.sum(self._gaussian_covariance(Y, Y) - np.eye(M))/(M*(M-1))
+        xy_stat = np.sum(self._gaussian_covariance(X, Y))/(N*M)
         return x_stat - 2*xy_stat + x_stat
 
     def _ase(self, A, max_d):
@@ -76,10 +85,13 @@ class NonparametricTest(BaseInference):
         return X_hat
     
     def _median_heuristic(self, X1, X2):
+        X1 = np.array(X1)
+        X2 = np.array(X2)
         X1_medians = np.median(X1, axis=0)
         X2_medians = np.median(X2, axis=0)
         val = np.multiply(X1_medians, X2_medians)
         t = (val>0)*2-1
+        print(t.shape, X1.shape)
         X1 = np.multiply(t.reshape(-1,1).T,X1)
         return X1, X2
 
@@ -109,8 +121,10 @@ class NonparametricTest(BaseInference):
         p : float
             The p value corresponding to the specified hypothesis test
         """
-        A1 = import_graph(A1)
-        A2 = import_graph(A2)
+        A1 = symmetrize(import_graph(A1))
+        A2 = symmetrize(import_graph(A2))
+        # if type(A1) != 'numpy.ndarray' or type(A2) != 'numpy.ndarray':
+        #     return TypeError()
         A1_d = select_dimension(A1)[0][-1]
         A2_d = select_dimension(A2)[0][-1]
         max_d = max(A1_d, A2_d)
@@ -119,7 +133,6 @@ class NonparametricTest(BaseInference):
         X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
         U = self._statistic(X1_hat, X2_hat)
         null_distribution = self._bootstrap(X1_hat, X2_hat, self.n_bootstraps)
-
         self.null_distribution_ = null_distribution
         self.sample_T_statistic_ = U
         p_value = (
