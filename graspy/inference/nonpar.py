@@ -1,5 +1,5 @@
 # Bijan Varjavand
-# bpedigo [at] jhu.edu
+# bvarjav1 [at] jhu.edu
 # 10.18.2018
 
 import numpy as np
