@@ -5,9 +5,14 @@
 # Email: ebridge2@jhu.edu
 # Copyright (c) 2018. All rights reserved.
 
-import numpy as np
-import networkx as nx
+import warnings
+from collections import Iterable
 from functools import reduce
+from pathlib import Path
+
+import networkx as nx
+import numpy as np
+from sklearn.utils import check_array
 
 
 def import_graph(graph):
@@ -30,22 +35,107 @@ def import_graph(graph):
 	--------
     networkx.Graph, numpy.array
 	"""
-    if type(graph) in [nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph]:
-        out = nx.to_numpy_array(
-            graph, nodelist=sorted(graph.nodes), dtype=np.float)
-    elif (type(graph) is np.ndarray):
-        if len(graph.shape) != 2:
-            raise ValueError('Matrix has improper number of dimensions')
-        elif graph.shape[0] != graph.shape[1]:
-            raise ValueError('Matrix is not square')
-        out = graph.copy()
-        if not np.issubdtype(graph.dtype, np.floating):
-            out = out.astype(np.float)
+    if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
+        out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
+    elif isinstance(graph, (np.ndarray, np.memmap)):
+        maximum = np.max(graph.shape)
+        out = check_array(
+            graph,
+            dtype=[np.float64, np.float32],
+            ensure_2d=True,
+            allow_nd=True,  # For omni tensor input
+            ensure_min_features=maximum,
+            ensure_min_samples=maximum,
+            copy=True,
+        )
     else:
-        msg = "Input must be networkx.Graph or np.array, not {}.".format(
-            type(graph))
+        msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
         raise TypeError(msg)
     return out
+
+
+def import_edgelist(
+    path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
+):
+    """
+    Function for reading a single or multiple edgelists. When importing multiple 
+    edgelists, the union of vertices from all graphs is computed so that each output
+    graph have matched vertex set. The order of nodes are sorted by node values.
+
+    Parameters
+    ----------
+    path : str, Path object, or iterable
+        If ``path`` is a directory, then the importing order will be sorted in 
+        alphabetical order.
+
+    extension : str, optional
+        If ``path`` is a directory, then the function will convert all files
+        with matching extension. 
+
+    delimiter : str or None, default=None, optional
+        Delimiter of edgelist. If None, the delimiter is whitespace.
+
+    nodetype : int (default), float, str, Python type, optional
+       Convert node data from strings to specified type.
+
+    return_vertices : bool, default=False, optional
+        Returns the union of all ind
+
+    Returns
+    -------
+    out : list of array-like, or array-like, shape (n_vertices, n_vertices)
+        If ``path`` is a directory, a list of arrays is returned. If ``path`` is a file,
+        an array is returned.
+
+    vertices : array-like, shape (n_vertices, )
+        If ``return_vertices`` == True, then returns an array of all vertices that were 
+        included in the output graphs. 
+    """
+    # p = Path(path)
+    if not isinstance(path, (str, Path, Iterable)):
+        msg = "path must be a string or Iterable, not {}".format(type(path))
+        raise TypeError(msg)
+
+    # get a list of files to import
+    if isinstance(path, (str, Path)):
+        p = Path(path)
+        if p.is_dir():
+            files = sorted(p.glob("*" + extension))
+        elif p.is_file():
+            files = [p]
+        else:
+            raise ValueError("No graphs founds to import.")
+    else:  # path is an iterable
+        files = [Path(f) for f in path]
+
+    if len(files) == 0:
+        msg = "No files found with '{}' extension found.".format(extension)
+        raise ValueError(msg)
+
+    graphs = [
+        nx.read_weighted_edgelist(f, nodetype=nodetype, delimiter=delimiter)
+        for f in files
+    ]
+
+    if all(len(G.nodes) == 0 for G in graphs):
+        msg = (
+            "All graphs have 0 vertices. Please double check if proper "
+            + "'delimiter' is given."
+        )
+        warnings.warn(msg, UserWarning)
+
+    # Compute union of all vertices
+    vertices = np.sort(reduce(np.union1d, [G.nodes for G in graphs]))
+    out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
+
+    # only return adjacency matrix if input is only 1 graph
+    if len(out) == 1:
+        out = out[0]
+
+    if return_vertices:
+        return out, vertices
+    else:
+        return out
 
 
 def is_symmetric(X):
@@ -64,7 +154,7 @@ def is_almost_symmetric(X, atol=1e-15):
     return np.allclose(X, X.T, atol=atol)
 
 
-def symmetrize(graph, method='triu'):
+def symmetrize(graph, method="triu"):
     """
     A function for forcing symmetry upon a graph.
 
@@ -92,11 +182,11 @@ def symmetrize(graph, method='triu'):
         the graph with asymmetries removed.
     """
     # graph = import_graph(graph)
-    if method is 'triu':
+    if method is "triu":
         graph = np.triu(graph)
-    elif method is 'tril':
+    elif method is "tril":
         graph = np.tril(graph)
-    elif method is 'avg':
+    elif method is "avg":
         graph = (np.triu(graph) + np.tril(graph)) / 2
     else:
         msg = "You have not passed a valid parameter for the method."
@@ -127,7 +217,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form='DAD'):
+def to_laplace(graph, form="DAD"):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
@@ -154,31 +244,31 @@ def to_laplace(graph, form='DAD'):
         2D (n_vertices, n_vertices) array representing graph 
         laplacian of specified form
     """
-    valid_inputs = ['I-DAD', 'DAD']
+    valid_inputs = ["I-DAD", "DAD"]
     if form not in valid_inputs:
-        raise TypeError('Unsuported Laplacian normalization')
-    adj_matrix = import_graph(graph)
-    if not is_fully_connected(adj_matrix):
-        raise ValueError('Input graph is not fully connected' +
-                         ' so a Laplacian cannot be formed')
-    if not is_symmetric(adj_matrix):
-        raise ValueError(
-            'Laplacian not implemented/defined for directed graphs')
-    D_vec = np.sum(adj_matrix, axis=0)
-    D_root = np.diag(D_vec**-0.5)
-    if form == 'I-DAD':
-        L = np.diag(D_vec) - adj_matrix
-        L = np.dot(D_root, L)
-        L = np.dot(L, D_root)
-    elif form == 'DAD':
-        L = np.dot(D_root, adj_matrix)
-        L = np.dot(L, D_root)
-    return symmetrize(
-        L, method='avg')  # sometimes machine prec. makes this necessary
+        raise TypeError("Unsuported Laplacian normalization")
+    A = import_graph(graph)
+
+    if not is_almost_symmetric(A):
+        raise ValueError("Laplacian not implemented/defined for directed graphs")
+
+    D_vec = np.sum(A, axis=0)
+
+    with np.errstate(divide="ignore"):
+        D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5
+    D_root[np.isinf(D_root)] = 0
+    D_root = np.diag(D_root)  # just change to sparse diag for sparse support
+
+    if form == "I-DAD":
+        L = np.diag(D_vec) - A
+        L = D_root @ L @ D_root
+    elif form == "DAD":
+        L = D_root @ A @ D_root
+    return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
 
 
 def is_fully_connected(graph):
-    '''
+    """
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case. 
 
@@ -202,13 +292,13 @@ def is_fully_connected(graph):
         http://mathworld.wolfram.com/ConnectedGraph.html
         http://mathworld.wolfram.com/WeaklyConnectedDigraph.html
 
-    '''
+    """
     if type(graph) is np.ndarray:
         if is_symmetric(graph):
             g_object = nx.Graph()
         else:
             g_object = nx.DiGraph()
-        graph = nx.from_numpy_matrix(graph, create_using=g_object)
+        graph = nx.from_numpy_array(graph, create_using=g_object)
     if type(graph) in [nx.Graph, nx.MultiGraph]:
         return nx.is_connected(graph)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
@@ -216,7 +306,7 @@ def is_fully_connected(graph):
 
 
 def get_lcc(graph, return_inds=False):
-    '''
+    """
     Finds the largest connected component for the input graph. 
 
     The largest connected component is the fully connected subgraph
@@ -241,7 +331,7 @@ def get_lcc(graph, return_inds=False):
     inds: (optional)
         Indices from the original adjacency matrix that were kept after taking
         the largest connected component 
-    '''
+    """
 
     input_ndarray = False
     if type(graph) is np.ndarray:
@@ -293,18 +383,17 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
 
         out = [import_graph(g) for g in graphs]
         if len(set(map(np.shape, out))) != 1:
-            msg = 'All input graphs must have the same size'
+            msg = "All input graphs must have the same size"
             raise ValueError(msg)
         bar = np.stack(out).mean(axis=0)
     elif isinstance(graphs, np.ndarray):
         shape = graphs.shape
         if shape[1] != shape[2]:
-            msg = 'Input graphs must be square'
+            msg = "Input graphs must be square"
             raise ValueError(msg)
         bar = graphs.mean(axis=0)
     else:
-        msg = 'Expected list or np.ndarray, but got {} instead.'.format(
-            type(graphs))
+        msg = "Expected list or np.ndarray, but got {} instead.".format(type(graphs))
         raise ValueError(msg)
 
     _, idx = get_lcc(bar, return_inds=True)
@@ -321,7 +410,7 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
 
 
 def get_multigraph_intersect_lcc(graphs, return_inds=False):
-    '''
+    """
     Finds the intersection of multiple graphs's largest connected components. 
 
     Computes the largest connected component for each graph that was input, and 
@@ -347,7 +436,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
     inds: (optional)
         Indices from the original adjacency matrix that were kept after taking
         the largest connected component 
-    '''
+    """
     lcc_by_graph = []
     inds_by_graph = []
     for graph in graphs:
@@ -361,8 +450,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
             lcc = graph[inds_intersection, :][:, inds_intersection]
         else:
             lcc = graph.subgraph(inds_intersection).copy()
-            lcc.remove_nodes_from(
-                [n for n in lcc if n not in inds_intersection])
+            lcc.remove_nodes_from([n for n in lcc if n not in inds_intersection])
         new_graphs.append(lcc)
     # this is not guaranteed be connected after one iteration because taking the
     # intersection of nodes among graphs can cause some components to become
@@ -374,7 +462,8 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
             break
     if recurse:
         new_graphs, inds_intersection = get_multigraph_intersect_lcc(
-            new_graphs, return_inds=True)
+            new_graphs, return_inds=True
+        )
     if type(graphs) != list:
         new_graphs = np.stack(new_graphs)
     if return_inds:
@@ -384,7 +473,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 
 
 def augment_diagonal(graph, weight=1):
-    '''
+    """
     Replaces the diagonal of adjacency matrix with 
     :math: \frac{degree}{num_verts - 1} for the degree associated
     with each node. 
@@ -397,7 +486,7 @@ def augment_diagonal(graph, weight=1):
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
         interpreted as an n x n adjacency matrix 
-    '''
+    """
     graph = import_graph(graph)
     graph = remove_loops(graph)
     divisor = graph.shape[0] - 1

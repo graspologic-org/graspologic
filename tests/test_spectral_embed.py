@@ -31,7 +31,7 @@ def _kmeans_comparison(data, labels, n_clusters):
     """
 
     if len(data) != len(labels):
-        raise ValueError('Must have same number of labels and data')
+        raise ValueError("Must have same number of labels and data")
 
     aris = []
     for i in range(0, len(data)):
@@ -83,8 +83,7 @@ def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
         self.assertEqual(X_sbm.shape, (verts, communities))
         self.assertEqual(X_er.shape, (verts, communities))
 
-        aris = _kmeans_comparison((X_sbm, X_er), (labels_sbm, labels_er),
-                                  communities)
+        aris = _kmeans_comparison((X_sbm, X_er), (labels_sbm, labels_er), communities)
         sbm_wins = sbm_wins + (aris[0] > aris[1])
         er_wins = er_wins + (aris[0] < aris[1])
 
@@ -122,16 +121,16 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
 
     def test_different_forms(self):
         f = np.array([[1, 2], [2, 1]])
-        lse = LaplacianSpectralEmbed(form='I-DAD')
+        lse = LaplacianSpectralEmbed(form="I-DAD")
 
-    def test_unconnected_error(self):
+    def test_unconnected_warning(self):
         n = [50, 50]
         p = [[1, 0], [0, 1]]
         A = sbm(n, p)
-        with self.assertRaises(ValueError):
+        with self.assertWarns(UserWarning):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

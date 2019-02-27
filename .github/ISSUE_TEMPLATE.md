@@ -1,4 +1,6 @@
+<!--
 The issue tracker is a tool to address bugs in GraSPy itself. If you'd like to report a bug in GraSPy, fill out the template below and provide any extra information that may be useful / related to your problem.
+-->
 
 ## Expected Behavior
 Tell us what should happen

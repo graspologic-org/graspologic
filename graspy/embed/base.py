@@ -12,7 +12,7 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
 from .svd import selectSVD
-from ..utils import import_graph, is_symmetric
+from ..utils import import_graph, is_almost_symmetric
 
 
 class BaseEmbed(BaseEstimator):
@@ -43,6 +43,15 @@ class BaseEmbed(BaseEstimator):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+    check_lcc : bool , optional (defult =True)
+        Whether to check if input graph is connected. May result in non-optimal 
+        results if the graph is unconnected. Not checking for connectedness may 
+        result in faster computation.
+
+    Attributes
+    ----------
+    n_components_ : int
+        Dimensionality of the embedded space.
 
     See Also
     --------
@@ -50,16 +59,18 @@ class BaseEmbed(BaseEstimator):
     """
 
     def __init__(
-            self,
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
+        self,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        check_lcc=True,
     ):
         self.n_components = n_components
         self.n_elbows = n_elbows
         self.algorithm = algorithm
         self.n_iter = n_iter
+        self.check_lcc = check_lcc
 
     def _reduce_dim(self, A):
         """
@@ -71,27 +82,32 @@ class BaseEmbed(BaseEstimator):
         A: array-like, shape (n_vertices, n_vertices)
             Adjacency matrix to embed.
         """
-        U, D, V = selectSVD(
-            A, n_components=self.n_components, n_elbows=self.n_elbows)
+        U, D, V = selectSVD(A, n_components=self.n_components, n_elbows=self.n_elbows)
 
-        if self.n_components is None:
-            self.n_components = D.size
+        self.n_components_ = D.size
 
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
-        if not is_symmetric(A):
+        if not is_almost_symmetric(A):
             self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
 
+    @property
+    def _pairwise(self):
+        """This is for sklearn compliance."""
+        return True
+
     @abstractmethod
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         A method for embedding.
 
         Parameters
         ----------
         graph: np.ndarray or networkx.Graph
+
+        y : Ignored
 
         Returns
         -------
@@ -118,7 +134,7 @@ class BaseEmbed(BaseEstimator):
         else:
             return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph):
+    def fit_transform(self, graph, y=None):
         """
         Fit the model with graphs and apply the transformation. 
 
@@ -127,6 +143,8 @@ class BaseEmbed(BaseEstimator):
         Parameters
         ----------
         graph: np.ndarray or networkx.Graph
+
+        y : Ignored
 
         Returns
         -------

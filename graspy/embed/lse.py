@@ -3,7 +3,7 @@
 # Email: bpedigo@jhu.edu
 import warnings
 
-from .embed import BaseEmbed
+from .base import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, to_laplace, get_lcc, is_fully_connected
 
@@ -18,14 +18,19 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     Parameters
     ----------
+    form : {'DAD' (default), 'I-DAD'}, optional
+            Specifies the type of Laplacian normalization to use.
+
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
+    
     n_elbows : int, optional, default: 2
         If `n_compoents=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
+
     algorithm : {'full', 'truncated' (default), 'randomized'}, optional
         SVD solver to use:
 
@@ -36,10 +41,17 @@ class LaplacianSpectralEmbed(BaseEmbed):
         - 'randomized'
             Computes randomized svd using 
             ``sklearn.utils.extmath.randomized_svd``
+
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+
+    check_lcc : bool , optional (defult = True)
+        Whether to check if input graph is connected. May result in non-optimal 
+        results if the graph is unconnected. If True and input is unconnected,
+        a UserWarning is thrown. Not checking for connectedness may result in 
+        faster computation.
 
     Attributes
     ----------
@@ -69,7 +81,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
     matrix of the graph. These basis vectors (in the matrices U or V) are ordered according 
     to the amount of variance they explain in the original matrix. By selecting a subset of these
     basis vectors (through our choice of dimensionality reduction) we can find a lower dimensional 
-    space in which to represent the graph
+    space in which to represent the graph.
 
     References
     ----------
@@ -79,22 +91,24 @@ class LaplacianSpectralEmbed(BaseEmbed):
     """
 
     def __init__(
-            self,
-            form='DAD',
-            n_components=None,
-            n_elbows=2,
-            algorithm='randomized',
-            n_iter=5,
+        self,
+        form="DAD",
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        check_lcc=True,
     ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            check_lcc=check_lcc,
         )
         self.form = form
 
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         Fit LSE model to input graph
 
@@ -107,14 +121,22 @@ class LaplacianSpectralEmbed(BaseEmbed):
         graph : array_like or networkx.Graph
             Input graph to embed. see graphstats.utils.import_graph
 
-        form : {'DAD' (default), 'I-DAD'}, optional
-            Specifies the type of Laplacian normalization to use.
+        y : Ignored
 
         Returns
         -------
         self : returns an instance of self.
         """
         A = import_graph(graph)
+
+        if self.check_lcc:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspy.utils.get_lcc``."
+                )
+                warnings.warn(msg, UserWarning)
 
         L_norm = to_laplace(A, form=self.form)
         self._reduce_dim(L_norm)

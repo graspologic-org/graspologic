@@ -3,7 +3,7 @@ from .utils import import_graph, is_unweighted, is_symmetric, is_loopless, symme
 from scipy.stats import rankdata
 
 
-def pass_to_ranks(graph, method='zero-boost'):
+def pass_to_ranks(graph, method="zero-boost"):
     r"""
     Rescales edge weights of an adjacency matrix based on their relative rank in 
     the graph. 
@@ -47,11 +47,11 @@ def pass_to_ranks(graph, method='zero-boost'):
 
     if graph.min() < 0:
         raise UserWarning(
-            'Current pass-to-ranks on graphs with ' +
-            'negative weights will yield nonsensical results, especially for zero-boost'
+            "Current pass-to-ranks on graphs with "
+            + "negative weights will yield nonsensical results, especially for zero-boost"
         )
 
-    if method == 'zero-boost':
+    if method == "zero-boost":
         if is_symmetric(graph):
             # start by working with half of the graph, since symmetric
             triu = np.triu(graph)
@@ -65,8 +65,9 @@ def pass_to_ranks(graph, method='zero-boost'):
                 num_zeros = (len(graph[graph == 0]) - graph.shape[0]) / 2
                 possible_edges = graph.shape[0] * (graph.shape[0] - 1) / 2
             else:
-                num_zeros = (len(triu[triu == 0]) -
-                             graph.shape[0] * (graph.shape[0] - 1) / 2)
+                num_zeros = (
+                    len(triu[triu == 0]) - graph.shape[0] * (graph.shape[0] - 1) / 2
+                )
                 possible_edges = graph.shape[0] * (graph.shape[0] + 1) / 2
         else:
             if is_loopless(graph):
@@ -85,19 +86,19 @@ def pass_to_ranks(graph, method='zero-boost'):
         # put back into matrix form (and reflect over the diagonal if necessary)
         if is_symmetric(graph):
             triu[triu != 0] = rank
-            graph = symmetrize(triu, method='triu')
+            graph = symmetrize(triu, method="triu")
         else:
             graph[graph != 0] = rank
         return graph
-    elif method in ['simple-all', 'simple-nonzero']:
+    elif method in ["simple-all", "simple-nonzero"]:
         non_zeros = graph[graph != 0]
         rank = rankdata(non_zeros)
-        if method == 'simple-all':
+        if method == "simple-all":
             normalizer = graph.size
-        elif method == 'simple-nonzero':
+        elif method == "simple-nonzero":
             normalizer = rank.shape[0]
-        rank = rank * 2 / (normalizer + 1)
+        rank = rank / (normalizer + 1)
         graph[graph != 0] = rank
         return graph
     else:
-        raise ValueError('Unsuported pass-to-ranks method')
+        raise ValueError("Unsuported pass-to-ranks method")

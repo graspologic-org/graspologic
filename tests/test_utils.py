@@ -17,12 +17,12 @@ class TestInput(unittest.TestCase):
         np.put(
             cls.A,
             np.random.choice(np.arange(0, n * n), size=nedge, replace=False),
-            np.random.normal(size=nedge))
+            np.random.normal(size=nedge),
+        )
 
     def test_graphin(self):
         G = nx.from_numpy_array(self.A)
-        np.testing.assert_array_equal(
-            nx.to_numpy_array(G), gus.import_graph(G))
+        np.testing.assert_array_equal(nx.to_numpy_array(G), gus.import_graph(G))
 
     def test_npin(self):
         np.testing.assert_array_equal(self.A, gus.import_graph(self.A))
@@ -38,38 +38,38 @@ class TestInput(unittest.TestCase):
 class TestToLaplace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.A = A = np.array([
-            [0, 1, 0],
-            [1, 0, 1],
-            [0, 1, 0],
-        ])
+        cls.A = A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
     def test_to_laplace_IDAD(self):
-        expected_L_normed = ([[1, -1 / (sqrt(2)), 0],
-                              [-1 / (sqrt(2)), 1, -1 / (sqrt(2))],
-                              [0, -1 / (sqrt(2)), 1]])
+        expected_L_normed = [
+            [1, -1 / (sqrt(2)), 0],
+            [-1 / (sqrt(2)), 1, -1 / (sqrt(2))],
+            [0, -1 / (sqrt(2)), 1],
+        ]
 
-        L_normed = gus.to_laplace(self.A, form='I-DAD')
+        L_normed = gus.to_laplace(self.A, form="I-DAD")
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
     def test_to_laplace_DAD(self):
-        expected_L_normed = ([[0, 1 / sqrt(2),
-                               0], [1 / sqrt(2), 0, 1 / sqrt(2)],
-                              [0, 1 / sqrt(2), 0]])
+        expected_L_normed = [
+            [0, 1 / sqrt(2), 0],
+            [1 / sqrt(2), 0, 1 / sqrt(2)],
+            [0, 1 / sqrt(2), 0],
+        ]
 
-        L_normed = gus.to_laplace(self.A, form='DAD')
+        L_normed = gus.to_laplace(self.A, form="DAD")
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
     def test_to_laplace_symmetric(self):
-        L_normed = gus.to_laplace(self.A, form='DAD')
+        L_normed = gus.to_laplace(self.A, form="DAD")
 
         self.assertTrue(gus.is_symmetric(L_normed))
 
     def test_to_laplace_unsuported(self):
         with self.assertRaises(TypeError):
-            gus.to_laplace(self.A, form='MOM')
+            gus.to_laplace(self.A, form="MOM")
 
 
 class TestChecks(unittest.TestCase):
@@ -83,38 +83,19 @@ class TestChecks(unittest.TestCase):
         np.put(
             cls.A,
             np.random.choice(np.arange(0, n * n), size=nedge, replace=False),
-            np.random.normal(size=nedge))
+            np.random.normal(size=nedge),
+        )
 
     def test_is_unweighted(self):
-        B = np.array([
-            [0, 1, 0, 0],
-            [1, 0, 1, 0],
-            [0, 1.0, 0, 0],
-            [1, 0, 1, 0],
-        ])
+        B = np.array([[0, 1, 0, 0], [1, 0, 1, 0], [0, 1.0, 0, 0], [1, 0, 1, 0]])
         self.assertTrue(gus.is_unweighted(B))
         self.assertFalse(gus.is_unweighted(self.A))
 
-    def test_unconnected_laplacian(self):
-        A = np.array([[0, 1, 0],[1, 0, 0],[0, 0, 0],])
-        with self.assertRaises(ValueError):
-            gus.to_laplace(A)
-            
     def test_is_fully_connected(self):
         # graph where node at index [3] only connects to self
-        A = np.array([
-            [1, 0, 1, 0],
-            [0, 1, 1, 0],
-            [1, 1, 0, 0],
-            [0, 0, 0, 1],
-        ])
+        A = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 1]])
         # fully connected graph
-        B = np.array([
-            [1, 0, 1, 0],
-            [0, 1, 1, 0],
-            [1, 1, 0, 1],
-            [0, 0, 0, 1],
-        ])
+        B = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 1, 0, 1], [0, 0, 0, 1]])
         self.assertFalse(gus.is_fully_connected(A))
         self.assertTrue(gus.is_fully_connected(B))
 
@@ -129,13 +110,15 @@ class TestChecks(unittest.TestCase):
 
 class TestLCC(unittest.TestCase):
     def test_lcc_networkx(self):
-        expected_lcc_matrix = np.array([
-            [0, 1, 1, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 1],
-            [0, 1, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-        ])
+        expected_lcc_matrix = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 1],
+                [0, 1, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+            ]
+        )
         expected_nodelist = np.array([1, 2, 3, 4, 6])
         g = nx.DiGraph()
         [g.add_node(i) for i in range(1, 7)]
@@ -155,13 +138,15 @@ class TestLCC(unittest.TestCase):
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
     def test_lcc_networkx_undirected(self):
-        expected_lcc_matrix = np.array([
-            [0, 1, 1, 0, 0],
-            [1, 0, 0, 1, 0],
-            [1, 0, 0, 1, 1],
-            [0, 1, 1, 0, 0],
-            [0, 0, 1, 0, 0],
-        ])
+        expected_lcc_matrix = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [1, 0, 0, 1, 0],
+                [1, 0, 0, 1, 1],
+                [0, 1, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+            ]
+        )
         expected_nodelist = np.array([1, 2, 3, 4, 6])
         g = nx.Graph()
         [g.add_node(i) for i in range(1, 7)]
@@ -180,13 +165,15 @@ class TestLCC(unittest.TestCase):
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
     def test_lcc_numpy(self):
-        expected_lcc_matrix = np.array([
-            [0, 1, 1, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 1],
-            [0, 1, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-        ])
+        expected_lcc_matrix = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 1],
+                [0, 1, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+            ]
+        )
         expected_nodelist = np.array([0, 1, 2, 3, 5])
         g = nx.DiGraph()
         [g.add_node(i) for i in range(1, 7)]
@@ -205,18 +192,12 @@ class TestLCC(unittest.TestCase):
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
     def test_multigraph_lcc_numpystack(self):
-        expected_g_matrix = np.array([
-            [0, 1, 0, 0],
-            [0, 0, 1, 1],
-            [0, 0, 0, 0],
-            [0, 1, 0, 0],
-        ])
-        expected_f_matrix = np.array([
-            [0, 1, 0, 0],
-            [1, 0, 1, 1],
-            [0, 0, 0, 0],
-            [0, 1, 0, 0],
-        ])
+        expected_g_matrix = np.array(
+            [[0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
+        )
+        expected_f_matrix = np.array(
+            [[0, 1, 0, 0], [1, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
+        )
         expected_mats = [expected_f_matrix, expected_g_matrix]
         expected_nodelist = np.array([0, 2, 3, 5])
         g = nx.DiGraph()
@@ -234,7 +215,8 @@ class TestLCC(unittest.TestCase):
         f = nx.to_numpy_array(f)
         g = nx.to_numpy_array(g)
         lccs, nodelist = gus.get_multigraph_intersect_lcc(
-            np.stack([f, g]), return_inds=True)
+            np.stack([f, g]), return_inds=True
+        )
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
@@ -242,10 +224,12 @@ class TestLCC(unittest.TestCase):
             np.testing.assert_array_equal(graph, expected_mats[i])
 
     def test_multigraph_lcc_numpylist(self):
-        expected_g_matrix = np.array([[0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0],
-                                      [0, 1, 0, 0]])
-        expected_f_matrix = np.array([[0, 1, 0, 0], [1, 0, 1, 1], [0, 0, 0, 0],
-                                      [0, 1, 0, 0]])
+        expected_g_matrix = np.array(
+            [[0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
+        )
+        expected_f_matrix = np.array(
+            [[0, 1, 0, 0], [1, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
+        )
         expected_mats = [expected_f_matrix, expected_g_matrix]
         expected_nodelist = np.array([0, 2, 3, 5])
         g = nx.DiGraph()
@@ -262,8 +246,7 @@ class TestLCC(unittest.TestCase):
         f.add_edge(3, 1)
         f = nx.to_numpy_array(f)
         g = nx.to_numpy_array(g)
-        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g],
-                                                          return_inds=True)
+        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g], return_inds=True)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
@@ -272,18 +255,12 @@ class TestLCC(unittest.TestCase):
             np.testing.assert_array_equal(graph, expected_mats[i])
 
     def test_multigraph_lcc_networkx(self):
-        expected_g_matrix = np.array([
-            [0, 1, 0, 0],
-            [0, 0, 1, 1],
-            [0, 0, 0, 0],
-            [0, 1, 0, 0],
-        ])
-        expected_f_matrix = np.array([
-            [0, 1, 0, 0],
-            [1, 0, 1, 1],
-            [0, 0, 0, 0],
-            [0, 1, 0, 0],
-        ])
+        expected_g_matrix = np.array(
+            [[0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
+        )
+        expected_f_matrix = np.array(
+            [[0, 1, 0, 0], [1, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
+        )
         expected_mats = [expected_f_matrix, expected_g_matrix]
         expected_nodelist = np.array([1, 3, 4, 6])
         g = nx.DiGraph()
@@ -298,28 +275,17 @@ class TestLCC(unittest.TestCase):
         f.add_edge(5, 4)
         f.remove_edge(4, 2)
         f.add_edge(3, 1)
-        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g],
-                                                          return_inds=True)
+        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g], return_inds=True)
         for i, graph in enumerate(lccs):
-            np.testing.assert_array_equal(
-                nx.to_numpy_array(graph), expected_mats[i])
+            np.testing.assert_array_equal(nx.to_numpy_array(graph), expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
         lccs = gus.get_multigraph_intersect_lcc([f, g], return_inds=False)
         for i, graph in enumerate(lccs):
-            np.testing.assert_array_equal(
-                nx.to_numpy_array(graph), expected_mats[i])
+            np.testing.assert_array_equal(nx.to_numpy_array(graph), expected_mats[i])
 
     def test_multigraph_union(self):
-        A = np.array([
-            [0, 1, 0],
-            [1, 0, 0],
-            [0, 0, 0],
-        ])
-        B = np.array([
-            [0, 0, 0],
-            [0, 0, 1],
-            [0, 1, 0],
-        ])
+        A = np.array([[0, 1, 0], [1, 0, 0], [0, 0, 0]])
+        B = np.array([[0, 0, 0], [0, 0, 1], [0, 1, 0]])
 
         out_list = gus.get_multigraph_union_lcc([A, B])
         out_tensor = gus.get_multigraph_union_lcc(np.stack([A, B]))
@@ -330,13 +296,15 @@ class TestLCC(unittest.TestCase):
 
 class TestDiagonalAugment(unittest.TestCase):
     def test_augment_diagonal_undirected(self):
-        A = np.array([
-            [0, 1, 1, 0, 0],
-            [1, 0, 0, 2, 1],
-            [1, 0, 0, 1, 1],
-            [0, 2, 1, 0, 0],
-            [0, 1, 1, 0, 0],
-        ])
+        A = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [1, 0, 0, 2, 1],
+                [1, 0, 0, 1, 1],
+                [0, 2, 1, 0, 0],
+                [0, 1, 1, 0, 0],
+            ]
+        )
         expected = A.copy().astype(float)
         expected[0, 0] = 2.0 / 4
         expected[1, 1] = 3.0 / 4
@@ -347,13 +315,15 @@ class TestDiagonalAugment(unittest.TestCase):
         np.testing.assert_array_equal(A_aug, expected)
 
     def test_augment_diagonal_directed(self):
-        A = np.array([
-            [0, 1, 1, 0, 0],
-            [0, 0, 0, 2, 1],
-            [1, 0, 0, 1, 1],
-            [0, 2, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-        ])
+        A = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [0, 0, 0, 2, 1],
+                [1, 0, 0, 1, 1],
+                [0, 2, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+            ]
+        )
         expected = A.copy().astype(float)
         expected[0, 0] = 2.0 / 4
         expected[1, 1] = 2.0 / 4

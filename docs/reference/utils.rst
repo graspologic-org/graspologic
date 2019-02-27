@@ -15,6 +15,8 @@ Helper Functions
 
 .. autofunction:: import_graph
 
+.. autofunction:: import_edgelist
+
 .. autofunction:: symmetrize
 
 .. autofunction:: remove_loops

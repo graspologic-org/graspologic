@@ -226,11 +226,11 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
         idx = np.triu_indices(n, k=int(loops == False))
 
     # get idx in 1d coordinates by ravelling
-    triu = np.ravel_multi_index(idx, dims=A.shape)
+    triu = np.ravel_multi_index(idx, A.shape)
     # choose M of them
     triu = np.random.choice(triu, size=m, replace=False)
     # unravel back
-    triu = np.unravel_index(triu, dims=A.shape)
+    triu = np.unravel_index(triu, A.shape)
     # check weight function
     if not np.issubdtype(type(wt), np.number):
         wt = wt(size=m, **wtargs)
@@ -407,7 +407,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
             # cartesian product to identify edges for community i,j pair
             cprod = cartprod(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
-            triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), dims=A.shape)
+            triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
             pchoice = np.random.uniform(size=len(triu))
             if dc is not None:
                 # (v1,v2) connected with probability p*k_i*k_j*dcP[v1]*dcP[v2]
@@ -422,7 +422,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
                 triu = triu[pchoice < block_p]
             if type(block_wt) is not int:
                 block_wt = block_wt(size=len(triu), **block_wtargs)
-            triu = np.unravel_index(triu, dims=A.shape)
+            triu = np.unravel_index(triu, A.shape)
             A[triu] = block_wt
 
     if not loops:
