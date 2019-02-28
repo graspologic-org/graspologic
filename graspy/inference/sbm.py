@@ -61,7 +61,10 @@ def estimate_sbm_parameters(A, K, directed=False):
     A : array_like
             Input adjacency matrix for which parameters are estimated.
     K : int
-        Number of blocks in your graph.
+            Number of blocks in your graph.
+    directed : boolean
+            whether or the graph is directed. default is False
+
 
     See Also
     --------
@@ -93,9 +96,9 @@ def estimate_sbm_parameters(A, K, directed=False):
     return n_hat, P_hat
 
 
-def estimate_dcsbm_parameters(A, K, directed=False):
+def estimate_dcsbm_parameters(A, K):
     """
-    Estimate parameters for given graph under the Degree-Corrected Stochastic Block Model.
+    Estimate parameters for given undirected graph under the Degree-Corrected Stochastic Block Model.
     
     The estimation is performed using Regularized Laplacian Spectral Embedding [1].
 
@@ -126,8 +129,6 @@ def estimate_dcsbm_parameters(A, K, directed=False):
            under the degree-corrected stochastic blockmodel." In Advances
            in Neural Information Processing Systems, pp. 3120-3128. 2013.
     """
-    if directed:
-        raise("Laplacian not implemented/defined for directed graphs")
     lse = LaplacianSpectralEmbed(form="R-DAD", n_components=K).fit_transform(A)
     gclust = GaussianCluster(K).fit(lse)
     n_hat = gclust.predict(lse)
