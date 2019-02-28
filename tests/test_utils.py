@@ -64,9 +64,9 @@ class TestToLaplace(unittest.TestCase):
 
     def test_to_laplace_RDAD(self):
         expected_L_normed = [
-            [0, 1 / sqrt(7/3.), 0],
-            [1 / sqrt(10/3.), 0, 1 / sqrt(10/3.)],
-            [0, 1 / sqrt(7/3.), 0],
+            [0, 3 / sqrt(70), 0],
+            [3 / sqrt(70), 0, 3 / sqrt(70)],
+            [0, 3 / sqrt(70), 0],
         ]
 
         L_normed = gus.to_laplace(self.A, form="R-DAD")
