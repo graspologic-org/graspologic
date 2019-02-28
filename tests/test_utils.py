@@ -62,6 +62,17 @@ class TestToLaplace(unittest.TestCase):
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
+    def test_to_laplace_RDAD(self):
+        expected_L_normed = [
+            [0, 1 / sqrt(7/3.), 0],
+            [1 / sqrt(10/3.), 0, 1 / sqrt(10/3.)],
+            [0, 1 / sqrt(7/3.), 0],
+        ]
+
+        L_normed = gus.to_laplace(self.A, form="R-DAD")
+
+        self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
+
     def test_to_laplace_symmetric(self):
         L_normed = gus.to_laplace(self.A, form="DAD")
 
