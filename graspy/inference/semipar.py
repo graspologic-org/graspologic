@@ -158,8 +158,8 @@ class SemiparametricTest(BaseInference):
             X_hat_compound = OmnibusEmbed(
                 n_components=self.n_components, check_lcc=check_lcc
             ).fit_transform((A1, A2))
-            X1_hat = X_hat_compound[: A1.shape[0], :]
-            X2_hat = X_hat_compound[A2.shape[0] :, :]
+            X1_hat = X_hat_compound[0]
+            X2_hat = X_hat_compound[1]
         return (X1_hat, X2_hat)
 
     def fit(self, A1, A2):
