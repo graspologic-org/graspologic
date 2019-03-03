@@ -13,7 +13,7 @@ def test_inputs():
     X = np.random.normal(0, 1, size=(100, 3))
 
     with pytest.raises(TypeError):
-        gclust = GaussianCluster(max_components='1')
+        gclust = GaussianCluster(max_components="1")
 
     # max_cluster > n_samples
     with pytest.raises(ValueError):
@@ -49,8 +49,8 @@ def test_no_y():
     n = 100
     d = 3
 
-    X1 = np.random.normal(2, .5, size=(n, d))
-    X2 = np.random.normal(-2, .5, size=(n, d))
+    X1 = np.random.normal(2, 0.5, size=(n, d))
+    X2 = np.random.normal(-2, 0.5, size=(n, d))
     X = np.vstack((X1, X2))
 
     gclust = GaussianCluster(max_components=5)
@@ -72,8 +72,8 @@ def test_outputs():
     num_sims = 10
 
     for _ in range(num_sims):
-        X1 = np.random.normal(2, .5, size=(n, d))
-        X2 = np.random.normal(-2, .5, size=(n, d))
+        X1 = np.random.normal(2, 0.5, size=(n, d))
+        X2 = np.random.normal(-2, 0.5, size=(n, d))
         X = np.vstack((X1, X2))
         y = np.repeat([0, 1], n)
 

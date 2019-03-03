@@ -14,35 +14,36 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+
+sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = 'GraSPy'
-copyright = '2018'
-authors = u'NeuroData'
+project = "GraSPy"
+copyright = "2018"
+authors = u"NeuroData"
 
 # The short X.Y version
-version = '0.0.1'
+version = "0.0.1"
 # The full version, including alpha/beta/rc tags
-release = 'alpha'
+release = "alpha"
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.mathjax',
-    'numpydoc',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.githubpages',
-    'sphinxcontrib.rawfiles',
-    'nbsphinx',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.mathjax",
+    "numpydoc",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.githubpages",
+    "sphinxcontrib.rawfiles",
+    "nbsphinx",
 ]
 
 # -- sphinxcontrib.rawfiles
-rawfiles = ['CNAME']
+rawfiles = ["CNAME"]
 
 # -- numpydoc
 # Below is needed to prevent errors
@@ -52,42 +53,43 @@ numpydoc_show_class_members = False
 autosummary_generate = True
 
 # -- sphinx.ext.autodoc
-autoclass_content = 'both'
-autodoc_default_flags = ['members', 'inherited-members']
-autodoc_member_order = 'bysource'  # default is alphabetical
+autoclass_content = "both"
+autodoc_default_flags = ["members", "inherited-members"]
+autodoc_member_order = "bysource"  # default is alphabetical
 
 # -- sphinx.ext.intersphinx
 intersphinx_mapping = {
-    'numpy': ('https://docs.scipy.org/doc/numpy', None),
-    'python': ('https://docs.python.org/3', None),
-    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
-    'sklearn': ('http://scikit-learn.org/dev', None),
+    "numpy": ("https://docs.scipy.org/doc/numpy", None),
+    "python": ("https://docs.python.org/3", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+    "sklearn": ("http://scikit-learn.org/dev", None),
 }
 
 # -- sphinx options ----------------------------------------------------------
-source_suffix = '.rst'
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
-master_doc = 'index'
+source_suffix = ".rst"
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
+master_doc = "index"
 source_encoding = "utf-8"
 
 # -- Options for HTML output -------------------------------------------------
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-html_static_path = ['_static']
-modindex_common_prefix = ['graspy.']
+templates_path = ["_templates"]
+html_static_path = ["_static"]
+modindex_common_prefix = ["graspy."]
 
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 smartquotes = False
 
 # Use RTD Theme
 import sphinx_rtd_theme
-html_theme = 'sphinx_rtd_theme'
+
+html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
     #'includehidden': False,
-    'navigation_depth': 2,
-    'collapse_navigation': False,
-    'navigation_depth': 3,
+    "navigation_depth": 2,
+    "collapse_navigation": False,
+    "navigation_depth": 3,
 }
 
 # Custom sidebar templates, must be a dictionary that maps document names
@@ -103,7 +105,7 @@ html_theme_options = {
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'graspydoc'
+htmlhelp_basename = "graspydoc"
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -111,15 +113,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -129,14 +128,14 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'graspy.tex', 'GraSPy Documentation', authors, 'manual'),
+    (master_doc, "graspy.tex", "GraSPy Documentation", authors, "manual")
 ]
 
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'graspy', 'graspy Documentation', [authors], 1)]
+man_pages = [(master_doc, "graspy", "graspy Documentation", [authors], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -144,8 +143,15 @@ man_pages = [(master_doc, 'graspy', 'graspy Documentation', [authors], 1)]
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'graspy', 'graspy Documentation', authors, 'graspy',
-     'One line description of project.', 'Miscellaneous'),
+    (
+        master_doc,
+        "graspy",
+        "graspy Documentation",
+        authors,
+        "graspy",
+        "One line description of project.",
+        "Miscellaneous",
+    )
 ]
 
 # -- Options for Epub output -------------------------------------------------
@@ -163,4 +169,4 @@ epub_title = project
 # epub_uid = ''
 
 # A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
+epub_exclude_files = ["search.html"]

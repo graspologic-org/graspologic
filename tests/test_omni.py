@@ -49,15 +49,19 @@ def test_omni_matrix_ones_zeros():
 
 
 def test_omni_matrix_random():
-    expected_output = np.array([[0., 1., 1., 0., 0.5, 0.5],
-                                [1., 0., 1., 0.5, 0., 1.],
-                                [1., 1., 0., 0.5, 1., 0.],
-                                [0., 0.5, 0.5, 0., 0., 0.],
-                                [0.5, 0., 1., 0., 0., 1.],
-                                [0.5, 1., 0., 0., 1., 0.]])
+    expected_output = np.array(
+        [
+            [0.0, 1.0, 1.0, 0.0, 0.5, 0.5],
+            [1.0, 0.0, 1.0, 0.5, 0.0, 1.0],
+            [1.0, 1.0, 0.0, 0.5, 1.0, 0.0],
+            [0.0, 0.5, 0.5, 0.0, 0.0, 0.0],
+            [0.5, 0.0, 1.0, 0.0, 0.0, 1.0],
+            [0.5, 1.0, 0.0, 0.0, 1.0, 0.0],
+        ]
+    )
 
     np.random.seed(4)
-    graphs = [er_np(3, .5) for _ in range(2)]
+    graphs = [er_np(3, 0.5) for _ in range(2)]
 
     A = _get_omni_matrix(graphs)
     assert_allclose(A, expected_output)
@@ -125,6 +129,5 @@ def test_omni_embed():
     omni = OmnibusEmbed(n_components=3)
     ABar = compute_bar(omni.fit_transform([Abar, Abar]))
 
-    tol = 1.e-2
-    assert allclose(
-        norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol)
+    tol = 1.0e-2
+    assert allclose(norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol)

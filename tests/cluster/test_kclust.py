@@ -11,7 +11,7 @@ def test_inputs():
     X = np.random.normal(0, 1, size=(100, 3))
 
     with pytest.raises(TypeError):
-        max_clusters = '1'
+        max_clusters = "1"
         kclust = KMeansCluster(max_clusters=max_clusters)
 
     # max_cluster < 0
@@ -40,8 +40,8 @@ def test_outputs_gaussians():
     d = 3
     num_sims = 10
     for _ in range(num_sims):
-        X1 = np.random.normal(2, .5, size=(n, d))
-        X2 = np.random.normal(-2, .5, size=(n, d))
+        X1 = np.random.normal(2, 0.5, size=(n, d))
+        X2 = np.random.normal(-2, 0.5, size=(n, d))
         X = np.vstack((X1, X2))
         y = np.repeat([0, 1], n)
 
@@ -57,8 +57,8 @@ def test_no_y():
     np.random.seed(2)
     n = 100
     d = 3
-    X1 = np.random.normal(2, .5, size=(n, d))
-    X2 = np.random.normal(-2, .5, size=(n, d))
+    X1 = np.random.normal(2, 0.5, size=(n, d))
+    X2 = np.random.normal(-2, 0.5, size=(n, d))
     X = np.vstack((X1, X2))
 
     kclust = KMeansCluster(max_clusters=5)

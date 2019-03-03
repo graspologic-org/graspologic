@@ -56,10 +56,7 @@ class GaussianCluster(BaseCluster):
         all possible number of clusters given by range(1, max_components).
     """
 
-    def __init__(self,
-                 max_components=1,
-                 covariance_type='full',
-                 random_state=None):
+    def __init__(self, max_components=1, covariance_type="full", random_state=None):
         if isinstance(max_components, int):
             if max_components <= 0:
                 msg = "n_components must be >= 1 or None."
@@ -67,8 +64,9 @@ class GaussianCluster(BaseCluster):
             else:
                 self.max_components = max_components
         else:
-            msg = 'max_components must be an integer, not {}.'.format(
-                type(max_components))
+            msg = "max_components must be an integer, not {}.".format(
+                type(max_components)
+            )
             raise TypeError(msg)
         self.max_components = max_components
         self.covariance_type = covariance_type
@@ -100,7 +98,8 @@ class GaussianCluster(BaseCluster):
         if max_components > X.shape[0]:
             msg = "n_components must be >= n_samples, but got \
                 n_components = {}, n_samples = {}".format(
-                self.max_components, X.shape[0])
+                self.max_components, X.shape[0]
+            )
             raise ValueError(msg)
 
         # Get parameters
@@ -115,7 +114,8 @@ class GaussianCluster(BaseCluster):
             model = GaussianMixture(
                 n_components=n,
                 covariance_type=covariance_type,
-                random_state=random_state)
+                random_state=random_state,
+            )
 
             # Fit and compute values
             model.fit(X)
