@@ -242,7 +242,7 @@ def to_laplace(graph, form="DAD", t=None):
             Computes :math:`L = D*A*D`
         - 'R-DAD'
             Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + t*I`
-    t: float
+    t: scalar
         Regularization parameter. Default is the average node degree.
 
     Returns
