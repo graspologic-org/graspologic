@@ -226,7 +226,7 @@ def to_laplace(graph, form="DAD"):
     identity matrix, and A is the adjacency matrix.
     
     R-DAD is regularized laplacian: where :math:`D_t = D + t*I`
-    t defaults to the average degree
+    t is the average node degree.
 
     Parameters
     ----------
