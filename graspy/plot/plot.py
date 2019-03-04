@@ -802,9 +802,9 @@ def _plot_groups(ax, n_verts, inner_labels, outer_labels=None):
 
     # draw lines
     for x in inner_freq_cumsum:
-        ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
         if x == inner_freq_cumsum[-1]:
-            x -= 1
+            x -= 0.2
+        ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
         ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
 
     # generic curve that we will use for everything
@@ -896,13 +896,15 @@ def _plot_brackets(ax, group_names, tick_loc, tick_width, curve, level, axis, ma
         ax.spines[direction].set_visible(False)
     if axis == "x":
         ax.set_xticks(tick_loc)
-        ax.set_xticklabels(group_names, fontsize=15, verticalalignment="center")
+        ax.set_xticklabels(group_names, fontsize=28, verticalalignment="center")
         ax.xaxis.set_label_position("top")
         ax.xaxis.tick_top()
+        ax.xaxis.labelpad = 30
         ax.set_xlim(0, max_size)
+        ax.tick_params(axis="x", which="major", pad=15)
     elif axis == "y":
         ax.set_yticks(tick_loc)
-        ax.set_yticklabels(group_names, fontsize=15, verticalalignment="center")
+        ax.set_yticklabels(group_names, fontsize=28, verticalalignment="center")
         # ax.yaxis.set_label_position('top')
         # ax.yaxis.tick_top()
         ax.set_ylim(0, max_size)
