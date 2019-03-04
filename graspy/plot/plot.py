@@ -11,14 +11,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-<<<<<<< HEAD
-from sklearn.utils import check_array, check_consistent_length
-
-from ..embed import selectSVD
-from ..utils import import_graph, pass_to_ranks
-=======
 from matplotlib import colors
->>>>>>> trying heatmap color norm, intersect bug
 
 
 def _check_common_inputs(
@@ -845,7 +838,11 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
     n_verts = graph.shape[0]
     # draw lines
     for x in inner_freq_cumsum:
+<<<<<<< HEAD
         if x != inner_freq_cumsum[0]:
+=======
+        if x == inner_freq_cumsum[-1]:
+>>>>>>> line tweak
             x -= 0.2
         ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
         ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
