@@ -221,7 +221,7 @@ def to_laplace(graph, form="DAD"):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
-    Currently supports I-DAD, DAD, and RDAD laplacians, where D is the diagonal
+    Currently supports I-DAD, DAD, and R-DAD laplacians, where D is the diagonal
     matrix of degrees of each node raised to the -1/2 power, I is the 
     identity matrix, and A is the adjacency matrix.
     
