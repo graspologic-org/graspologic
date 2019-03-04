@@ -217,7 +217,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form="DAD"):
+def to_laplace(graph, form="DAD", t=None):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
@@ -226,7 +226,7 @@ def to_laplace(graph, form="DAD"):
     identity matrix, and A is the adjacency matrix.
     
     R-DAD is regularized laplacian: where :math:`D_t = D + t*I`
-    t is the average node degree.
+    t defaults to the average node degree.
 
     Parameters
     ----------
@@ -242,6 +242,8 @@ def to_laplace(graph, form="DAD"):
             Computes :math:`L = D*A*D`
         - 'R-DAD'
             Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + t*I`
+    t: float
+        Regularization parameter. Default is the average node degree.
 
     Returns
     -------
@@ -266,8 +268,9 @@ def to_laplace(graph, form="DAD"):
     D_vec = np.sum(A, axis=0)
     # regularize laplacian with parameter
     # set to average degree
-    t = np.mean(D_vec)
     if form == "R-DAD":
+        if t == None:
+            t = np.mean(D_vec)
         D_vec += t
 
     with np.errstate(divide="ignore"):
