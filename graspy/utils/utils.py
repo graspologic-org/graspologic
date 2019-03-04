@@ -261,8 +261,6 @@ def to_laplace(graph, form="DAD", regularizer=None):
     valid_inputs = ["I-DAD", "DAD","R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
-    if not isinstance(regularizer, Number):
-        raise TypeError("Regularizer must be a scalar, not {}".format(type(regularizer)))
 
     A = import_graph(graph)
 
@@ -272,9 +270,11 @@ def to_laplace(graph, form="DAD", regularizer=None):
     D_vec = np.sum(A, axis=0)
     # regularize laplacian with parameter
     # set to average degree
+    if regularizer == None:
+        regularizer = np.mean(D_vec)
+    elif not isinstance(regularizer, Number):
+        raise TypeError("Regularizer must be a scalar, not {}".format(type(regularizer)))
     if form == "R-DAD":
-        if regularizer == None:
-            regularizer = np.mean(D_vec)
         D_vec += regularizer
 
     with np.errstate(divide="ignore"):
