@@ -248,7 +248,13 @@ def to_laplace(graph, form="DAD"):
     L: numpy.ndarray
         2D (n_vertices, n_vertices) array representing graph 
         laplacian of specified form
-    """
+	
+    References
+    ----------
+    .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
+           under the degree-corrected stochastic blockmodel." In Advances
+           in Neural Information Processing Systems, pp. 3120-3128. 2013
+    """	
     valid_inputs = ["I-DAD", "DAD","R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
