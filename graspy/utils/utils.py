@@ -7,6 +7,7 @@
 
 import warnings
 from collections import Iterable
+from numbers import Number
 from functools import reduce
 from pathlib import Path
 
@@ -217,7 +218,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form="DAD", t=None):
+def to_laplace(graph, form="DAD", regularizer=None):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
@@ -225,8 +226,8 @@ def to_laplace(graph, form="DAD", t=None):
     matrix of degrees of each node raised to the -1/2 power, I is the 
     identity matrix, and A is the adjacency matrix.
     
-    R-DAD is regularized laplacian: where :math:`D_t = D + t*I`
-    t defaults to the average node degree.
+    R-DAD is regularized laplacian: where :math:`D_t = D + regularizer*I`
+    regularizer defaults to the average node degree.
 
     Parameters
     ----------
@@ -241,8 +242,8 @@ def to_laplace(graph, form="DAD", t=None):
         - 'DAD'
             Computes :math:`L = D*A*D`
         - 'R-DAD'
-            Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + t*I`
-    t: scalar
+            Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + regularizer*I`
+    regularizer: scalar
         Regularization parameter. Default is the average node degree.
 
     Returns
@@ -260,6 +261,9 @@ def to_laplace(graph, form="DAD", t=None):
     valid_inputs = ["I-DAD", "DAD","R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
+    if not isinstance(regularizer, Number):
+        raise TypeError("Regularizer must be a scalar, not {}".format(type(regularizer)))
+
     A = import_graph(graph)
 
     if not is_almost_symmetric(A):
@@ -269,9 +273,9 @@ def to_laplace(graph, form="DAD", t=None):
     # regularize laplacian with parameter
     # set to average degree
     if form == "R-DAD":
-        if t == None:
-            t = np.mean(D_vec)
-        D_vec += t
+        if regularizer == None:
+            regularizer = np.mean(D_vec)
+        D_vec += regularizer
 
     with np.errstate(divide="ignore"):
         D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5

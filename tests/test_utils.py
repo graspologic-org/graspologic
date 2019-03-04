@@ -73,6 +73,16 @@ class TestToLaplace(unittest.TestCase):
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
+    def test_to_laplace_regularizer_kwarg(self):
+        expected_L_normed = [
+            [0, 1 / sqrt(6), 0],
+            [1 / sqrt(6), 0, 1 / sqrt(6)],
+            [0, 1 / sqrt(6), 0],
+        ]
+        L_normed = gus.to_laplace(self.A, form="R-DAD",regularizer=1.0)
+
+        self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
+
     def test_to_laplace_symmetric(self):
         L_normed = gus.to_laplace(self.A, form="DAD")
 
@@ -81,6 +91,12 @@ class TestToLaplace(unittest.TestCase):
     def test_to_laplace_unsuported(self):
         with self.assertRaises(TypeError):
             gus.to_laplace(self.A, form="MOM")
+
+    def test_to_laplace_unsuported_regularizer(self):
+        with self.assertRaises(TypeError):
+            gus.to_laplace(self.A, form="R-DAD", regularizer='2')
+        with self.assertRaises(TypeError):
+            gus.to_laplace(self.A, form="R-DAD", regularizer=[1,2,3])
 
 
 class TestChecks(unittest.TestCase):
