@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 from ..utils import symmetrize
 
 
@@ -273,7 +274,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
         as a weight to create a heterogenous degree distribution. A weight 
         will be generated for each vertex, normalized so that the sum of weights 
         in each block is 1. If dc is array-like, it should be of length sum(n)
-        and the elements in each block should sum to 1. It will be directly used 
+        and the elements in each block should sum to 1. If they don't sum to 1,
+        they will be normalized and a warning will be thrown. It will be directly used 
         as the weightings for each vertex.
     dcargs: dictionary
         if dc is a function, dcargs corresponds to its named arguments.
@@ -383,10 +385,9 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
         # Check that probabilities sum to 1 in each block
         for i in range(0, K):
             if not np.isclose(sum(dcProbs[cmties[i]]), 1, atol=1.0e-8):
-                msg = "Block {0} probabilities must sum to 1 not {1}.".format(
-                    i, sum(dcProbs[cmties[i]])
-                )
-                raise ValueError(msg)
+                msg = "Block {} probabilities should sum to 1, normalizing...".format(i)
+                warnings.warn(msg, UserWarning)
+                dcProbs[cmties[i]] /= sum(dcProbs[cmties[i]])
     elif dc is not None:
         msg = "dc must be a function, list, or np.array, not {}".format(type(dc))
         raise ValueError(msg)

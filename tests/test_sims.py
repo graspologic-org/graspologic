@@ -669,7 +669,7 @@ class Test_WSBM(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             # There are non-numeric elements in p
-            dc = ['1',1]
+            dc = ['1'] * sum(self.n)
             sbm(self.n, self.Psy, dc=dc)
 
         with self.assertRaises(ValueError):
@@ -682,7 +682,7 @@ class Test_WSBM(unittest.TestCase):
             dc = 2*np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)
 
-        with self.assertRaises(ValueError):
+        with self.assertWarns(UserWarning):
             # Check that probabilities sum to 1 in each block
             dc = np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)

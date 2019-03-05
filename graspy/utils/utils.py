@@ -217,13 +217,16 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form="DAD"):
+def to_laplace(graph, form="DAD", regularizer=None):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
-    Currently supports I-DAD and DAD laplacians, where D is the diagonal
+    Currently supports I-DAD, DAD, and R-DAD laplacians, where D is the diagonal
     matrix of degrees of each node raised to the -1/2 power, I is the 
-    identity matrix, and A is the adjacency matrix
+    identity matrix, and A is the adjacency matrix.
+    
+    R-DAD is regularized laplacian: where :math:`D_t = D + regularizer*I`
+    regularizer defaults to the average node degree.
 
     Parameters
     ----------
@@ -231,28 +234,50 @@ def to_laplace(graph, form="DAD"):
         Either array-like, (n_vertices, n_vertices) numpy array,
         or an object of type networkx.Graph.
 
-    form: {'I-DAD' (default), 'DAD'}, string, optional
+    form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
         
         - 'I-DAD'
             Computes :math:`L = I - D*A*D`
         - 'DAD'
             Computes :math:`L = D*A*D`
+        - 'R-DAD'
+            Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + regularizer*I`
+    regularizer: float
+        Regularization parameter that must be >= 0. Default is the average node degree.
+        Ignored if form is not 'R-DAD'.
 
     Returns
     -------
     L: numpy.ndarray
         2D (n_vertices, n_vertices) array representing graph 
         laplacian of specified form
-    """
-    valid_inputs = ["I-DAD", "DAD"]
+	
+    References
+    ----------
+    .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
+           under the degree-corrected stochastic blockmodel." In Advances
+           in Neural Information Processing Systems, pp. 3120-3128. 2013
+    """	
+    valid_inputs = ["I-DAD", "DAD","R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
+
     A = import_graph(graph)
 
     if not is_almost_symmetric(A):
         raise ValueError("Laplacian not implemented/defined for directed graphs")
 
     D_vec = np.sum(A, axis=0)
+    # regularize laplacian with parameter
+    # set to average degree
+    if form == "R-DAD":
+        if regularizer == None:
+            regularizer = np.mean(D_vec)
+        elif not isinstance(regularizer, (int, float)):
+            raise TypeError("Regularizer must be a int or float, not {}".format(type(regularizer)))
+        elif regularizer < 0:
+            raise ValueError("Regularizer must be greater than or equal to 0")
+        D_vec += regularizer
 
     with np.errstate(divide="ignore"):
         D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5
@@ -262,7 +287,7 @@ def to_laplace(graph, form="DAD"):
     if form == "I-DAD":
         L = np.diag(D_vec) - A
         L = D_root @ L @ D_root
-    elif form == "DAD":
+    elif form == "DAD" or form == "R-DAD":
         L = D_root @ A @ D_root
     return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
 
