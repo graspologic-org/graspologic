@@ -97,6 +97,8 @@ class TestToLaplace(unittest.TestCase):
             gus.to_laplace(self.A, form="R-DAD", regularizer='2')
         with self.assertRaises(TypeError):
             gus.to_laplace(self.A, form="R-DAD", regularizer=[1,2,3])
+        with self.assertRaises(ValueError):
+            gus.to_laplace(self.A, form="R-DAD", regularizer=-1.0)
 
 
 class TestChecks(unittest.TestCase):

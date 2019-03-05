@@ -243,8 +243,9 @@ def to_laplace(graph, form="DAD", regularizer=None):
             Computes :math:`L = D*A*D`
         - 'R-DAD'
             Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + regularizer*I`
-    regularizer: scalar
-        Regularization parameter. Default is the average node degree.
+    regularizer: float
+        Regularization parameter that must be >= 0. Default is the average node degree.
+        Ignored if form is not 'R-DAD'.
 
     Returns
     -------
@@ -270,11 +271,13 @@ def to_laplace(graph, form="DAD", regularizer=None):
     D_vec = np.sum(A, axis=0)
     # regularize laplacian with parameter
     # set to average degree
-    if regularizer == None:
-        regularizer = np.mean(D_vec)
-    elif not isinstance(regularizer, Number):
-        raise TypeError("Regularizer must be a scalar, not {}".format(type(regularizer)))
     if form == "R-DAD":
+        if regularizer == None:
+            regularizer = np.mean(D_vec)
+        elif not isinstance(regularizer, (int, float)):
+            raise TypeError("Regularizer must be a int or float, not {}".format(type(regularizer)))
+        elif regularizer < 0:
+            raise ValueError("Regularizer must be greater than 0")
         D_vec += regularizer
 
     with np.errstate(divide="ignore"):
