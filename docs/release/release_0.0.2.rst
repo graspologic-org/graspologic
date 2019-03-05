@@ -12,9 +12,11 @@ and our `tutorials <https://graspy.neurodata.io/tutorial.html>`_.
 Highlights
 ----------
 This release is the result of 3 months of work with over 10 pull requests by 5 contributors. Highlights include:
+
 - Nonparametric hypothesis testing method for non-vertex matched graphs.
 - Plotting updates to ``pairplot``, ``gridplot`` and ``heatmaps``.
-- New multiple graph embedding method called `JointRDPG`.
+- New multiple graph embedding method called ``JointRDPG``.
+- Sampling degree-correlcted stochatic block models (DC-SBM).
 
 Improvements
 ------------
@@ -26,11 +28,10 @@ Improvements
 
 API Changes
 -----------
-- ``check_lcc`` argument in ``AdjacencySpectralEmbed``, ``LaplacianSpectralEmbed``, and ``OmnibusEmbed`` classes, which
-    checks if input graph(s) are fully connected.
-- ``gridplot`` and ``heatmap`` now have a `inner_hier_labels` and `outer_hier_labels`, which are used for hierarchical labeling
-    of nodes.
-- ``to_laplace`` function now has `regularizer` arg for when form='R-DAD'.
+- ``check_lcc`` argument in ``AdjacencySpectralEmbed``, ``LaplacianSpectralEmbed``, and ``OmnibusEmbed`` classes, which checks if input graph(s) are fully connected when ``check_lcc`` is True.
+- ``gridplot`` and ``heatmap`` now have a ``inner_hier_labels`` and ``outer_hier_labels``, which are used for hierarchical labeling of nodes.
+- ``to_laplace`` function now has ``regularizer`` arg for when ``form`` is 'R-DAD'.
+- ``sbm`` function now has ``dc`` and ``dcargs`` arguments for sampling SBM with degree-correction.
 
 Deprecations
 ------------
