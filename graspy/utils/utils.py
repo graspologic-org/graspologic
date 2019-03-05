@@ -7,7 +7,6 @@
 
 import warnings
 from collections import Iterable
-from numbers import Number
 from functools import reduce
 from pathlib import Path
 
