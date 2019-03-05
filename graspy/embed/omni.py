@@ -162,10 +162,10 @@ class OmnibusEmbed(BaseEmbed):
 
         Parameters
         ----------
-        graphs : list of graphs, or array-like
-            List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph. If array-like, the shape must be 
-            (n_graphs, n_vertices, n_vertices)
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
         
         y : Ignored
 
@@ -219,10 +219,10 @@ class OmnibusEmbed(BaseEmbed):
 
         Parameters
         ----------
-        graphs : list of graphs, or array-like
-            List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph. If array-like, the shape must be 
-            (n_graphs, n_vertices, n_vertices)
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         y : Ignored
 
