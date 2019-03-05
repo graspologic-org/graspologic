@@ -277,7 +277,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
         elif not isinstance(regularizer, (int, float)):
             raise TypeError("Regularizer must be a int or float, not {}".format(type(regularizer)))
         elif regularizer < 0:
-            raise ValueError("Regularizer must be greater than 0")
+            raise ValueError("Regularizer must be greater than or equal to 0")
         D_vec += regularizer
 
     with np.errstate(divide="ignore"):
