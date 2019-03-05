@@ -79,7 +79,7 @@ class TestToLaplace(unittest.TestCase):
             [1 / sqrt(6), 0, 1 / sqrt(6)],
             [0, 1 / sqrt(6), 0],
         ]
-        L_normed = gus.to_laplace(self.A, form="R-DAD",regularizer=1.0)
+        L_normed = gus.to_laplace(self.A, form="R-DAD", regularizer=1.0)
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
@@ -94,9 +94,9 @@ class TestToLaplace(unittest.TestCase):
 
     def test_to_laplace_unsuported_regularizer(self):
         with self.assertRaises(TypeError):
-            gus.to_laplace(self.A, form="R-DAD", regularizer='2')
+            gus.to_laplace(self.A, form="R-DAD", regularizer="2")
         with self.assertRaises(TypeError):
-            gus.to_laplace(self.A, form="R-DAD", regularizer=[1,2,3])
+            gus.to_laplace(self.A, form="R-DAD", regularizer=[1, 2, 3])
         with self.assertRaises(ValueError):
             gus.to_laplace(self.A, form="R-DAD", regularizer=-1.0)
 
