@@ -673,7 +673,7 @@ class Test_WSBM(unittest.TestCase):
             sbm(self.n, self.Psy, dc=dc)
 
         with self.assertRaises(ValueError):
-            # dc must have size len(n)
+            # dc must have size sum(n)
             dc = [1,1]
             sbm(self.n, self.Psy, dc=dc)
 
