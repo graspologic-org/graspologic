@@ -19,7 +19,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
     Parameters
     ----------
     form : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional
-            Specifies the type of Laplacian normalization to use.
+        Specifies the type of Laplacian normalization to use.
 
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full", 
@@ -52,6 +52,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
         results if the graph is unconnected. If True and input is unconnected,
         a UserWarning is thrown. Not checking for connectedness may result in 
         faster computation.
+
+    regularizer: int, float or None, optional (default=None)
+        Constant to be added to the diagonal of degree matrix. If None, average 
+        node degree is added. If int or float, must be >= 0. Only used when 
+        ``form`` == 'R-DAD'.
 
     Attributes
     ----------
@@ -98,6 +103,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
+        regularizer=None,
     ):
         super().__init__(
             n_components=n_components,
