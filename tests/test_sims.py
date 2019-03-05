@@ -575,13 +575,13 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
-    def test_sbm_dc_undirected_loopy(self):
+    def test_sbm_dc_directed_loopy(self):
         np.random.seed(self.seed)
         dc = np.array([np.random.power(3) for _ in range(sum(self.n))])
         for i in range(0, len(self.n)):
             dc[self.vcount[i] - self.n[i]:self.vcount[i]] /= sum(
                 dc[self.vcount[i] - self.n[i]:self.vcount[i]])
-        A = sbm(self.n, self.Psy, directed=False, loops=True,
+        A = sbm(self.n, self.Psy, directed=True, loops=True,
                 dc=dc, dcargs=None)
         communities = np.hstack([[comm]*self.n[comm] for comm in range(len(self.n))])
         for i,ki in zip(range(sum(self.n)), communities):
@@ -589,7 +589,6 @@ class Test_WSBM(unittest.TestCase):
             theta_hat = degree / sum([self.Psy[ki][kj]*self.n[ki]*self.n[kj] 
                                       for kj in range(len(self.n))])
             self.assertTrue(np.isclose(theta_hat,dc[i],atol=0.01))
-        self.assertTrue(is_symmetric(A))
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
