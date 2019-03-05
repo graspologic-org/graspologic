@@ -18,7 +18,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     Parameters
     ----------
-    form : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional
+    form : {'DAD' (default), 'I-DAD'}, optional
             Specifies the type of Laplacian normalization to use.
 
     n_components : int or None, default = None

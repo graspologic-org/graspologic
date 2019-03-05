@@ -221,12 +221,9 @@ def to_laplace(graph, form="DAD"):
     r"""
     A function to convert graph adjacency matrix to graph laplacian. 
 
-    Currently supports I-DAD, DAD, and RDAD laplacians, where D is the diagonal
+    Currently supports I-DAD and DAD laplacians, where D is the diagonal
     matrix of degrees of each node raised to the -1/2 power, I is the 
-    identity matrix, and A is the adjacency matrix.
-    
-    R-DAD is regularized laplacian: where D = D + t*I
-    t defaults to the average degree
+    identity matrix, and A is the adjacency matrix
 
     Parameters
     ----------
@@ -234,14 +231,12 @@ def to_laplace(graph, form="DAD"):
         Either array-like, (n_vertices, n_vertices) numpy array,
         or an object of type networkx.Graph.
 
-    form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
+    form: {'I-DAD' (default), 'DAD'}, string, optional
         
         - 'I-DAD'
             Computes :math:`L = I - D*A*D`
         - 'DAD'
             Computes :math:`L = D*A*D`
-        - 'R-DAD'
-            Computes :math:`L = D_t*A*D_t` where D_t = D + t*I
 
     Returns
     -------
@@ -249,7 +244,7 @@ def to_laplace(graph, form="DAD"):
         2D (n_vertices, n_vertices) array representing graph 
         laplacian of specified form
     """
-    valid_inputs = ["I-DAD", "DAD","R-DAD"]
+    valid_inputs = ["I-DAD", "DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
     A = import_graph(graph)
@@ -258,11 +253,6 @@ def to_laplace(graph, form="DAD"):
         raise ValueError("Laplacian not implemented/defined for directed graphs")
 
     D_vec = np.sum(A, axis=0)
-    # regularize laplacian with parameter
-    # set to average degree
-    t = np.mean(D_vec)
-    if form == "R-DAD":
-        D_vec += t
 
     with np.errstate(divide="ignore"):
         D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5
@@ -272,7 +262,7 @@ def to_laplace(graph, form="DAD"):
     if form == "I-DAD":
         L = np.diag(D_vec) - A
         L = D_root @ L @ D_root
-    elif form == "DAD" or form == "R-DAD":
+    elif form == "DAD":
         L = D_root @ A @ D_root
     return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
 
