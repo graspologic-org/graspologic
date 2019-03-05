@@ -113,6 +113,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
             check_lcc=check_lcc,
         )
         self.form = form
+        self.regularizer = regularizer
 
     def fit(self, graph, y=None):
         """
@@ -144,6 +145,6 @@ class LaplacianSpectralEmbed(BaseEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
-        L_norm = to_laplace(A, form=self.form)
+        L_norm = to_laplace(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
         return self
