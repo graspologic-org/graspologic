@@ -64,7 +64,6 @@ class NonparametricTest(BaseInference):
     def _gaussian_covariance(self, X, Y):
         diffs = np.expand_dims(X, 1) - np.expand_dims(Y, 0)
         if self.bandwidth == None:
-            self.bandwidth = np.median(diffs)  # TODO
             self.bandwidth = 0.5
         return np.exp(-0.5 * np.sum(diffs ** 2, axis=2) / self.bandwidth ** 2)
 
