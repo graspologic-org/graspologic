@@ -2,14 +2,15 @@
 # Created by Vikram Chandrashekhar on 2019-03-05.
 # Email: vikramc@jhmi.edu
 
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+
 import numpy as np
 
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import adjusted_rand_score
 from sklearn.utils.validation import check_is_fitted
 
-class BaseSignalSubgraph(BaseEstimator):
+class BaseSignalSubgraph(ABC, BaseEstimator, ClassifierMixin):
     """
     Base Signal Subgraph class.
     """

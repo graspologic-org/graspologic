@@ -7,6 +7,7 @@ class VertexScreener(BaseSignalSubgraph):
         super.__init__()
     
     def fit(self):
+        
         pass
 
     def _fit_transform(self):
@@ -14,3 +15,8 @@ class VertexScreener(BaseSignalSubgraph):
 
     def fit_transform(self):
         pass
+    
+    def score(self):
+        pass
+
+    
