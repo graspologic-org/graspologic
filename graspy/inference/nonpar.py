@@ -3,12 +3,10 @@
 # 10.18.2018
 
 import numpy as np
-import networkx as nx
 
-from .base import BaseInference
+from ..embed import AdjacencySpectralEmbed, select_dimension
 from ..utils import import_graph, is_symmetric, symmetrize
-from ..embed import select_dimension, AdjacencySpectralEmbed
-from sklearn.decomposition import TruncatedSVD as TSVD
+from .base import BaseInference
 
 
 class NonparametricTest(BaseInference):
@@ -57,8 +55,6 @@ class NonparametricTest(BaseInference):
         super().__init__(embedding=embedding, n_components=n_components)
         self.n_bootstraps = n_bootstraps
         self.bandwidth = bandwidth
-        self.null_distribution_ = None
-        self.sample_T_statistic_ = None
         self.embedding = embedding
 
     def _gaussian_covariance(self, X, Y):
