@@ -41,7 +41,7 @@ class NonparametricTest(BaseInference):
     """
 
     def __init__(
-        self, embedding="ase", n_components=None, n_bootstraps=200, bandwidth=None,
+        self, embedding="ase", n_components=None, n_bootstraps=200, bandwidth=None
     ):
 
         if type(n_bootstraps) is not int:
@@ -79,11 +79,11 @@ class NonparametricTest(BaseInference):
         ase = AdjacencySpectralEmbed(n_components=max_d, algorithm="randomized")
         X_hat = ase.fit_transform(A)
         return X_hat
-    
+
     def _lse(self, A, max_d):
         lse = LaplacianSpectralEmbed(n_components=max_d)
         X_hat = lse.fit_transform(A)
-        reutrn X_hat
+        return X_hat
 
     def _median_heuristic(self, X1, X2):
         X1 = np.array(X1)
@@ -141,8 +141,6 @@ class NonparametricTest(BaseInference):
         null_distribution = self._bootstrap(X1_hat, X2_hat, self.n_bootstraps)
         self.null_distribution_ = null_distribution
         self.sample_T_statistic_ = U
-        p_value = (
-            len(null_distribution[null_distribution >= U])
-        ) / self.n_bootstraps
+        p_value = (len(null_distribution[null_distribution >= U])) / self.n_bootstraps
         self.p_value_ = p_value
         return p_value
