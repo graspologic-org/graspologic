@@ -225,8 +225,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     matrix of degrees of each node raised to the -1/2 power, I is the 
     identity matrix, and A is the adjacency matrix.
     
-    R-DAD is regularized laplacian: where :math:`D_t = D + regularizer*I`
-    regularizer defaults to the average node degree.
+    R-DAD is regularized laplacian: where :math:`D_t = D + regularizer*I`.
 
     Parameters
     ----------
@@ -242,9 +241,11 @@ def to_laplace(graph, form="DAD", regularizer=None):
             Computes :math:`L = D*A*D`
         - 'R-DAD'
             Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + regularizer*I`
-    regularizer: float
-        Regularization parameter that must be >= 0. Default is the average node degree.
-        Ignored if form is not 'R-DAD'.
+
+    regularizer: int, float or None, optional (default=None)
+        Constant to be added to the diagonal of degree matrix. If None, average 
+        node degree is added. If int or float, must be >= 0. Only used when 
+        ``form`` == 'R-DAD'.
 
     Returns
     -------
@@ -257,8 +258,8 @@ def to_laplace(graph, form="DAD", regularizer=None):
     .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
            under the degree-corrected stochastic blockmodel." In Advances
            in Neural Information Processing Systems, pp. 3120-3128. 2013
-    """	
-    valid_inputs = ["I-DAD", "DAD","R-DAD"]
+    """
+    valid_inputs = ["I-DAD", "DAD", "R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
 
@@ -274,7 +275,9 @@ def to_laplace(graph, form="DAD", regularizer=None):
         if regularizer == None:
             regularizer = np.mean(D_vec)
         elif not isinstance(regularizer, (int, float)):
-            raise TypeError("Regularizer must be a int or float, not {}".format(type(regularizer)))
+            raise TypeError(
+                "Regularizer must be a int or float, not {}".format(type(regularizer))
+            )
         elif regularizer < 0:
             raise ValueError("Regularizer must be greater than or equal to 0")
         D_vec += regularizer
