@@ -22,11 +22,6 @@ class TestNonparametricTest(unittest.TestCase):
         p = npt.fit(self.A1, self.A2)
         pass
 
-    def test_fit_p_omni_works(self):
-        npt = NonparametricTest(embedding="omnibus")
-        p = npt.fit(self.A1, self.A2)
-        pass
-
     def test_bad_kwargs(self):
         with self.assertRaises(ValueError):
             NonparametricTest(n_components=-100)

@@ -133,9 +133,11 @@ class NonparametricTest(BaseInference):
         if self.embedding == "ase":
             X1_hat = self._ase(A1, max_d)
             X2_hat = self._ase(A2, max_d)
-        elif self.embeddding == "lse":
+        elif self.embedding == "lse":
             X1_hat = self._lse(A1, max_d)
             X2_hat = self._lse(A2, max_d)
+        else:
+            raise ValueError()
         X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
         U = self._statistic(X1_hat, X2_hat)
         null_distribution = self._bootstrap(X1_hat, X2_hat, self.n_bootstraps)
