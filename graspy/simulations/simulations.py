@@ -372,12 +372,14 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
         dcProbs = np.array(dc)
         # Check size and element types
         if not np.issubdtype(dcProbs.dtype, np.float_) or not np.issubdtype(
-            dcProbs.dtype, np.number):
+            dcProbs.dtype, np.number
+        ):
             msg = "There are non-numeric elements in dc, {}".format(dcProbs.dtype)
             raise ValueError(msg)
         elif dcProbs.shape != (sum(n),):
             msg = "dc must have size equal to number vertices {0} not {1}".format(
-                sum(n),dcProbs.shape)
+                sum(n), dcProbs.shape
+            )
             raise ValueError(msg)
         elif np.any(dcProbs < 0) or np.any(dcProbs > 1):
             msg = "Values in dc must be in between 0 and 1."

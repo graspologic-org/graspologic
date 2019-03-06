@@ -579,16 +579,20 @@ class Test_WSBM(unittest.TestCase):
         np.random.seed(self.seed)
         dc = np.array([np.random.power(3) for _ in range(sum(self.n))])
         for i in range(0, len(self.n)):
-            dc[self.vcount[i] - self.n[i]:self.vcount[i]] /= sum(
-                dc[self.vcount[i] - self.n[i]:self.vcount[i]])
-        A = sbm(self.n, self.Psy, directed=True, loops=True,
-                dc=dc, dcargs=None)
-        communities = np.hstack([[comm]*self.n[comm] for comm in range(len(self.n))])
-        for i,ki in zip(range(sum(self.n)), communities):
+            dc[self.vcount[i] - self.n[i] : self.vcount[i]] /= sum(
+                dc[self.vcount[i] - self.n[i] : self.vcount[i]]
+            )
+        A = sbm(self.n, self.Psy, directed=True, loops=True, dc=dc, dcargs=None)
+        communities = np.hstack([[comm] * self.n[comm] for comm in range(len(self.n))])
+        for i, ki in zip(range(sum(self.n)), communities):
             degree = sum([A[i][j] for j in range(sum(self.n))])
-            theta_hat = degree / sum([self.Psy[ki][kj]*self.n[ki]*self.n[kj] 
-                                      for kj in range(len(self.n))])
-            self.assertTrue(np.isclose(theta_hat,dc[i],atol=0.01))
+            theta_hat = degree / sum(
+                [
+                    self.Psy[ki][kj] * self.n[ki] * self.n[kj]
+                    for kj in range(len(self.n))
+                ]
+            )
+            self.assertTrue(np.isclose(theta_hat, dc[i], atol=0.01))
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
@@ -663,22 +667,22 @@ class Test_WSBM(unittest.TestCase):
         with self.assertRaises(TypeError):
             # Check that the paramters are a dict
             dc = np.random.uniform
-            dcargs = [1,2]
+            dcargs = [1, 2]
             sbm(self.n, self.Psy, dc=dc, dcargs=dcargs)
 
         with self.assertRaises(ValueError):
             # There are non-numeric elements in p
-            dc = ['1'] * sum(self.n)
+            dc = ["1"] * sum(self.n)
             sbm(self.n, self.Psy, dc=dc)
 
         with self.assertRaises(ValueError):
             # dc must have size sum(n)
-            dc = [1,1]
+            dc = [1, 1]
             sbm(self.n, self.Psy, dc=dc)
 
         with self.assertRaises(ValueError):
             # Values in p must be in between 0 and 1.
-            dc = 2*np.ones(sum(self.n))
+            dc = 2 * np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)
 
         with self.assertWarns(UserWarning):
@@ -688,8 +692,9 @@ class Test_WSBM(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             # dc must be a function, list, or np.array
-            dc = {'fail', 'me'}
+            dc = {"fail", "me"}
             sbm(self.n, self.Psy, dc=dc)
+
 
 class Test_RDPG(unittest.TestCase):
     @classmethod
