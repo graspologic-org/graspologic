@@ -3,15 +3,18 @@
 # Email: j1c@jhu.edu
 # Copyright (c) 2018. All rights reserved.
 
+from operator import itemgetter
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from ..utils import import_graph, pass_to_ranks
-from ..embed import selectSVD
-from sklearn.utils import check_array, check_consistent_length
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib import colors
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from sklearn.utils import check_array, check_consistent_length
+
+from ..embed import selectSVD
+from ..utils import import_graph, pass_to_ranks
 
 
 def _check_common_inputs(
@@ -749,15 +752,27 @@ def screeplot(
 
 
 def _sort_inds(inner_labels, outer_labels):
+    # inner_freq, _, outer_freq, _ = _get_freqs(inner_labels, outer_labels)
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
     sort_df["inner_labels"] = inner_labels
     if outer_labels is not None:
         sort_df["outer_labels"] = outer_labels
-        sort_df.sort_values(
-            by=["outer_labels", "inner_labels"], kind="mergesort", inplace=True
-        )
-        outer_labels = sort_df["outer_labels"]
-    inner_labels = sort_df["inner_labels"]
+    #     sort_df.sort_values(
+    #         by=["outer_labels", "inner_labels"], kind="mergesort", inplace=True
+    #     )
+    #     outer_labels = sort_df["outer_labels"]
+    # inner_labels = sort_df["inner_labels"]
+    # print(inner_freq)
+    # print(outer_freq)
+    inner_label_counts, outer_label_counts = _get_freq_maps(inner_labels, outer_labels)
+    print(inner_label_counts)
+    sort_df["inner_counts"] = len(inner_labels) - inner_label_counts
+    sort_df["outer_counts"] = len(outer_labels) - outer_label_counts
+    sort_df.sort_values(
+        by=["outer_counts", "outer_labels", "inner_counts", "inner_labels"],
+        kind="mergesort",
+        inplace=True,
+    )
     sorted_inds = sort_df.index.values
     return sorted_inds
 
@@ -769,7 +784,7 @@ def _sort_graph(graph, inner_labels, outer_labels):
 
 
 def _get_freqs(inner_labels, outer_labels=None):
-    _, outer_freq = np.unique(outer_labels, return_counts=True)
+    _, outer_freq = _unique_like(outer_labels)
     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
 
     # for each group of outer labels, calculate the boundaries of the inner labels
@@ -777,11 +792,80 @@ def _get_freqs(inner_labels, outer_labels=None):
     for i in range(outer_freq.size):
         start_ind = outer_freq_cumsum[i]
         stop_ind = outer_freq_cumsum[i + 1]
-        _, temp_freq = np.unique(inner_labels[start_ind:stop_ind], return_counts=True)
+        _, temp_freq = _unique_like(inner_labels[start_ind:stop_ind])
         inner_freq = np.hstack([inner_freq, temp_freq])
     inner_freq_cumsum = np.hstack((0, inner_freq.cumsum()))
 
     return inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum
+
+
+def _get_freq_maps(inner_labels, outer_labels):
+    # give each set of labels a vector corresponding to its frequency
+    outer_unique, outer_inv, outer_freq = np.unique(
+        outer_labels, return_counts=True, return_inverse=True
+    )
+    outer_label_counts = outer_freq[outer_inv]
+
+    # inner_label_counts = np.zeros_like(outer_label_counts)
+
+    inner_unique, inner_inv, inner_freq = np.unique(
+        inner_labels, return_counts=True, return_inverse=True
+    )
+    inner_label_counts = inner_freq[inner_inv]
+    # outer_label_inds = np.where(outer_inv == 0)[0]
+    # first_inner_labels = inner_labels[outer_label_inds]
+    # first_inner_unique, temp_inv, temp_freq = np.unique(
+    #     temp_inner_labels, return_inverse=True, return_counts=True
+    # )
+    # for i, outer_label in enumerate(outer_unique):
+    #     outer_label_inds = np.where(outer_inv == i)[0]
+    #     temp_inner_labels = inner_labels[outer_label_inds]
+    #     temp_inner_unique, temp_inv, temp_freq = np.unique(
+    #         temp_inner_labels, return_inverse=True, return_counts=True
+    #     )
+    #     temp_inner_label_counts = temp_freq[temp_inv]
+    #     inner_label_counts[outer_label_inds] = temp_inner_label_counts
+
+    return inner_label_counts, outer_label_counts
+
+
+# def _get_freq_maps(inner_labels, outer_labels):
+#     outer_unique, outer_freq = np.unique(outer_labels, return_counts=True)
+#     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
+
+
+#     # for each group of outer labels, calculate the boundaries of the inner labels
+#     inner_freq = np.array([])
+#     inner_unique = np.array([])
+#     inner_label_counts = np.zeros(inner_labels.shape[0])
+#     for i in range(outer_freq.size):
+#         start_ind = outer_freq_cumsum[i]
+#         stop_ind = outer_freq_cumsum[i + 1]
+#         temp_inner_unique, temp_freq = np.unique(
+#             inner_labels[start_ind:stop_ind], return_counts=True
+#         )
+#         inner_freq = np.hstack([inner_freq, temp_freq])
+#         inner_unique = np.hstack([inner_unique, temp_inner_unique])
+#         temp_inner_map = dict(zip(inner_unique, inner_freq))
+#         temp_inner_mapped = itemgetter(*inner_labels[start_ind:stop_ind])(
+#             temp_inner_map
+#         )
+#         inner_label_counts[start_ind:stop_ind] = temp_inner_mapped
+
+#     print(inner_label_counts)
+#     outer_map = dict(zip(outer_unique, outer_freq))
+#     outer_label_counts = itemgetter(*outer_labels)(outer_map)
+
+#     return inner_label_counts, outer_label_counts
+
+
+def _unique_like(vals):
+    # gives output like
+    uniques, inds, counts = np.unique(vals, return_index=True, return_counts=True)
+    inds_sort = np.argsort(inds)
+    uniques = uniques[inds_sort]
+    counts = counts[inds_sort]
+    return uniques, counts
 
 
 # assume that the graph has already been plotted in sorted form
@@ -795,10 +879,19 @@ def _plot_groups(ax, n_verts, inner_labels, outer_labels=None):
     outer_labels = outer_labels[sorted_inds]
     inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum = _get_freqs(
         inner_labels, outer_labels
-    )
+    )  # wrong
 
-    inner_unique = np.unique(inner_labels)
-    outer_unique = np.unique(outer_labels)
+    # inner_unique, inner_ind = np.unique(inner_labels, return_index=True)
+    # inner_ind_sort = np.argsort(inner_ind)
+    # inner_unique = inner_unique[inner_ind_sort]
+    # inner_counts = inner_counts[inner_ind_sort]
+    # outer_unique, outer_ind = np.unique(outer_labels, return_index=True)
+    # outer_ind_sort = np.argsort(outer_ind)
+    # outer_unique = outer_unique[outer_ind_sort]
+    # outer_counts = outer_counts[outer_ind_sort]
+
+    inner_unique, _ = _unique_like(inner_labels)
+    outer_unique, _ = _unique_like(outer_labels)
 
     # draw lines
     for x in inner_freq_cumsum:
