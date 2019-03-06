@@ -18,7 +18,7 @@ class NonparametricTest(BaseInference):
 
     Parameters
     ----------
-    embedding : string, { 'ase' (default), 'lse', 'omnibus'}
+    embedding : string, { 'ase' (default), 'lse'}
         String describing the embedding method to use.
         Must be one of:
         'ase'
@@ -27,8 +27,6 @@ class NonparametricTest(BaseInference):
         'lse'
             Embed each graph separately using laplacian spectral embedding
             and use Procrustes to align the embeddings.
-        'omnibus'
-            Embed all graphs simultaneously using omnibus embedding.
 
     n_components : None (default), or Int
         Number of embedding dimensions. If None, the optimal embedding
@@ -43,7 +41,7 @@ class NonparametricTest(BaseInference):
     """
 
     def __init__(
-        self, embedding="ase", n_components=None, n_bootstraps=200, bandwidth=None
+        self, embedding="ase", n_components=None, n_bootstraps=200, bandwidth=None,
     ):
 
         if type(n_bootstraps) is not int:
@@ -61,6 +59,7 @@ class NonparametricTest(BaseInference):
         self.bandwidth = bandwidth
         self.null_distribution_ = None
         self.sample_T_statistic_ = None
+        self.embedding = embedding
 
     def _gaussian_covariance(self, X, Y):
         diffs = np.expand_dims(X, 1) - np.expand_dims(Y, 0)
@@ -81,6 +80,11 @@ class NonparametricTest(BaseInference):
         ase = AdjacencySpectralEmbed(n_components=max_d, algorithm="randomized")
         X_hat = ase.fit_transform(A)
         return X_hat
+    
+    def _lse(self, A, max_d):
+        lse = LaplacianSpectralEmbed(n_components=max_d)
+        X_hat = lse.fit_transform(A)
+        reutrn X_hat
 
     def _median_heuristic(self, X1, X2):
         X1 = np.array(X1)
@@ -127,8 +131,12 @@ class NonparametricTest(BaseInference):
         A1_d = select_dimension(A1)[0][-1]
         A2_d = select_dimension(A2)[0][-1]
         max_d = max(A1_d, A2_d)
-        X1_hat = self._ase(A1, max_d)
-        X2_hat = self._ase(A2, max_d)
+        if self.embedding == "ase":
+            X1_hat = self._ase(A1, max_d)
+            X2_hat = self._ase(A2, max_d)
+        elif self.embeddding == "lse":
+            X1_hat = self._lse(A1, max_d)
+            X2_hat = self._lse(A2, max_d)
         X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
         U = self._statistic(X1_hat, X2_hat)
         null_distribution = self._bootstrap(X1_hat, X2_hat, self.n_bootstraps)
