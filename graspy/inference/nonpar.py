@@ -5,7 +5,7 @@
 import numpy as np
 
 from ..embed import AdjacencySpectralEmbed, select_dimension
-from ..utils import import_graph, is_symmetric, symmetrize
+from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 
 
@@ -16,46 +16,38 @@ class NonparametricTest(BaseInference):
 
     Parameters
     ----------
-    embedding : string, { 'ase' (default), 'lse'}
-        String describing the embedding method to use.
-        Must be one of:
-        'ase'
-            Embed each graph separately using adjacency spectral embedding
-            and use Procrustes to align the embeddings.
-        'lse'
-            Embed each graph separately using laplacian spectral embedding
-            and use Procrustes to align the embeddings.
-
-    n_components : None (default), or Int
+    n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
 
-    n_bootstraps : 200 (default), or Int
+    n_bootstraps : int (default=200)
         Number of bootstrap iterations.
 
-    bandwidth : None (default), of Float
+    bandwidth : float, optional (default=0.5)
         Bandwidth to use for gaussian kernel. If None,
         the median heuristic will be used.
     """
 
-    def __init__(
-        self, embedding="ase", n_components=None, n_bootstraps=200, bandwidth=None
-    ):
+    def __init__(self, n_components=None, n_bootstraps=200, bandwidth=None):
+        if n_components is not None:
+            if not isinstance(n_components, int):
+                msg = "n_components must an int, not {}.".format(type(n_components))
+                raise TypeError(msg)
 
-        if type(n_bootstraps) is not int:
-            raise TypeError()
-
-        if bandwidth is not None and type(bandwidth) is not float:
-            raise TypeError()
-
-        if n_bootstraps < 1:
+        if not isinstance(n_bootstraps, int):
+            msg = "n_bootstraps must an int, not {}".format(type(n_bootstraps))
+            raise TypeError(msg)
+        elif n_bootstraps < 1:
             msg = "{} is invalid number of bootstraps, must be greater than 1"
             raise ValueError(msg.format(n_bootstraps))
 
-        super().__init__(embedding=embedding, n_components=n_components)
+        if bandwidth is not None and not isinstance(bandwidth, float):
+            msg = "bandwidth must an int, not {}".format(type(bandwidth))
+            raise TypeError(msg)
+
+        super().__init__(embedding="ase", n_components=n_components)
         self.n_bootstraps = n_bootstraps
         self.bandwidth = bandwidth
-        self.embedding = embedding
 
     def _gaussian_covariance(self, X, Y):
         diffs = np.expand_dims(X, 1) - np.expand_dims(Y, 0)
@@ -71,15 +63,14 @@ class NonparametricTest(BaseInference):
         xy_stat = np.sum(self._gaussian_covariance(X, Y)) / (N * M)
         return x_stat - 2 * xy_stat + y_stat
 
-    def _ase(self, A, max_d):
-        ase = AdjacencySpectralEmbed(n_components=max_d, algorithm="randomized")
-        X_hat = ase.fit_transform(A)
-        return X_hat
-
-    def _lse(self, A, max_d):
-        lse = LaplacianSpectralEmbed(n_components=max_d)
-        X_hat = lse.fit_transform(A)
-        return X_hat
+    def _embed(self, A1, A2):
+        X1_hat = AdjacencySpectralEmbed(n_components=self.n_components).fit_transform(
+            A1
+        )
+        X2_hat = AdjacencySpectralEmbed(n_components=self.n_components).fit_transform(
+            A2
+        )
+        return X1_hat, X2_hat
 
     def _median_heuristic(self, X1, X2):
         X1 = np.array(X1)
@@ -119,21 +110,19 @@ class NonparametricTest(BaseInference):
         p : float
             The p value corresponding to the specified hypothesis test
         """
-        A1 = symmetrize(import_graph(A1))
-        A2 = symmetrize(import_graph(A2))
-        # if type(A1) != 'numpy.ndarray' or type(A2) != 'numpy.ndarray':
-        #     return TypeError()
-        A1_d = select_dimension(A1)[0][-1]
-        A2_d = select_dimension(A2)[0][-1]
-        max_d = max(A1_d, A2_d)
-        if self.embedding == "ase":
-            X1_hat = self._ase(A1, max_d)
-            X2_hat = self._ase(A2, max_d)
-        elif self.embedding == "lse":
-            X1_hat = self._lse(A1, max_d)
-            X2_hat = self._lse(A2, max_d)
-        else:
-            raise ValueError()
+        A1 = import_graph(A1)
+        A2 = import_graph(A2)
+        if not is_symmetric(A1) or not is_symmetric(A2):
+            raise NotImplementedError()  # TODO asymmetric case
+        if A1.shape != A2.shape:
+            raise ValueError("Input graphs do not have matching dimensions")
+        if self.n_components is None:
+            # get the last elbow from ZG for each and take the maximum
+            num_dims1 = select_dimension(A1)[0][-1]
+            num_dims2 = select_dimension(A2)[0][-1]
+            self.n_components = max(num_dims1, num_dims2)
+
+        X1_hat, X2_hat = self._embed(A1, A2)
         X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
         U = self._statistic(X1_hat, X2_hat)
         null_distribution = self._bootstrap(X1_hat, X2_hat, self.n_bootstraps)
