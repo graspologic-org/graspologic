@@ -15,7 +15,7 @@ from .base import BaseInference
 class SemiparametricTest(BaseInference):
     r"""
     Two sample hypothesis test for the semiparametric problem of determining
-    whether two random dot product graphs have the same latent positions [1].
+    whether two random dot product graphs have the same latent positions [1]_.
 
     Currently, the function only supports undirected graphs
 
