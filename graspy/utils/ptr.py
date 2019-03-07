@@ -3,7 +3,7 @@ from .utils import import_graph, is_unweighted, is_symmetric, is_loopless, symme
 from scipy.stats import rankdata
 
 
-def pass_to_ranks(graph, method="zero-boost"):
+def pass_to_ranks(graph, method="simple-nonzero"):
     r"""
     Rescales edge weights of an adjacency matrix based on their relative rank in 
     the graph. 
@@ -12,7 +12,7 @@ def pass_to_ranks(graph, method="zero-boost"):
     ----------
     graph: Adjacency matrix 
     
-    method: {'zero-boost' (default), 'simple-all', 'simple-nonzero'} string, optional
+    method: {'zero-boost', 'simple-all', 'simple-nonzero' (default)} string, optional
         
         - 'zero-boost'
             preserves the edge weight for all 0s, but ranks the other
