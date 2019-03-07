@@ -12,8 +12,16 @@ def pass_to_ranks(graph, method="simple-nonzero"):
     ----------
     graph: Adjacency matrix 
     
-    method: {'zero-boost', 'simple-all', 'simple-nonzero' (default)} string, optional
+    method: {'simple-nonzero' (default), 'simple-all', 'zero-boost'} string, optional
         
+        - 'simple-nonzero'
+            same as simple-all, but ranks are scaled by
+            :math:`\frac{2 rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
+        - 'simple-all'
+            assigns ranks to all non-zero edges, settling ties using 
+            the average. Ranks are then scaled by 
+            :math:`\frac{2 rank(\text{non-zero edges})}{n^2 + 1}` 
+            where n is the number of nodes
         - 'zero-boost'
             preserves the edge weight for all 0s, but ranks the other
             edges as if the ranks of all 0 edges has been assigned. If there are 
@@ -21,14 +29,7 @@ def pass_to_ranks(graph, method="simple-nonzero"):
             of possible edges). Ties settled by the average of the weight that those
             edges would have received. Number of possible edges is determined 
             by the type of graph (loopless or looped, directed or undirected).
-        - 'simple-all'
-            assigns ranks to all non-zero edges, settling ties using 
-            the average. Ranks are then scaled by 
-            :math:`\frac{2 rank(\text{non-zero edges})}{n^2 + 1}` 
-            where n is the number of nodes
-        - 'simple-nonzero'
-            same as simple-all, but ranks are scaled by
-            :math:`\frac{2 rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
+        
 
     See also
     --------
