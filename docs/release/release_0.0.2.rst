@@ -15,7 +15,6 @@ This release is the result of 3 months of work with over 10 pull requests by 5 c
 
 - Nonparametric hypothesis testing method for non-vertex matched graphs.
 - Plotting updates to ``pairplot``, ``gridplot`` and ``heatmaps``.
-- New multiple graph embedding method called ``JointRDPG``.
 - Sampling degree-correlcted stochatic block models (DC-SBM).
 
 Improvements
@@ -25,6 +24,8 @@ Improvements
 - New Laplacian computing method ('R-DAD') by adding a constant to the diagonal degree matrix.
 - Semiparametric testing only checks for largest connected component (LCC) in the intial embeddings. 
 - Various tutorial latex fixes.
+- Various documentation clarifications.
+- More consistent documentation.
 
 API Changes
 -----------
