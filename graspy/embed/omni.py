@@ -126,9 +126,6 @@ class OmnibusEmbed(BaseEmbed):
         None.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
-    indices_ : array, or None
-        If ``lcc`` is True, these are the indices of the vertices that were 
-        kept.
 
     See Also
     --------
