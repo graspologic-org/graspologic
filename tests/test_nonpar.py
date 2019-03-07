@@ -3,11 +3,12 @@
 # 02.26.2019
 
 import unittest
+
 import numpy as np
-from graspy.inference import NonparametricTest
+
 from graspy.embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
+from graspy.inference import NonparametricTest
 from graspy.simulations import er_np, sbm
-from graspy.utils import *
 
 
 class TestNonparametricTest(unittest.TestCase):
@@ -20,21 +21,16 @@ class TestNonparametricTest(unittest.TestCase):
     def test_fit_p_ase_works(self):
         npt = NonparametricTest()
         p = npt.fit(self.A1, self.A2)
-        pass
 
     def test_bad_kwargs(self):
         with self.assertRaises(ValueError):
             NonparametricTest(n_components=-100)
         with self.assertRaises(ValueError):
             NonparametricTest(n_bootstraps=-100)
-        with self.assertRaises(ValueError):
-            NonparametricTest(embedding="oops")
         with self.assertRaises(TypeError):
             NonparametricTest(n_bootstraps=0.5)
         with self.assertRaises(TypeError):
             NonparametricTest(n_components=0.5)
-        with self.assertRaises(TypeError):
-            NonparametricTest(embedding=6)
         with self.assertRaises(TypeError):
             NonparametricTest(bandwidth="oops")
 
@@ -49,6 +45,24 @@ class TestNonparametricTest(unittest.TestCase):
         bad_matrix = [[1, 2]]
         with self.assertRaises(TypeError):
             npt.fit(bad_matrix, self.A2)
+
+    def test_directed_inputs(self):
+        np.random.seed(2)
+        A = er_np(100, 0.3, directed=True)
+        B = er_np(100, 0.3, directed=True)
+
+        npt = NonparametricTest()
+        with self.assertRaises(NotImplementedError):
+            npt.fit(A, B)
+
+    def test_different_sizes(self):
+        np.random.seed(3)
+        A = er_np(50, 0.3)
+        B = er_np(100, 0.3)
+
+        npt = NonparametricTest()
+        with self.assertRaises(ValueError):
+            npt.fit(A, B)
 
     def test_SBM_epsilon(self):
         np.random.seed(12345678)
