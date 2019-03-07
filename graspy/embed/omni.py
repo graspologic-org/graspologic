@@ -93,7 +93,7 @@ class OmnibusEmbed(BaseEmbed):
     n_elbows : int, optional, default: 2
         If `n_compoents=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
-    algorithm : {'full', 'truncated' (default), 'randomized'}, optional
+    algorithm : {'full', 'truncated', 'randomized' (default)}, optional
         SVD solver to use:
 
         - 'full'

@@ -195,7 +195,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     n_elbows : int, optional, default: 2
         If `n_compoents=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
-    algorithm : {'full', 'truncated' (default), 'randomized'}, optional
+    algorithm : {'full', 'truncated', 'randomized' (default)}, optional
         SVD solver to use:
 
         - 'full'
