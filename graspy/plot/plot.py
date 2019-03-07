@@ -9,11 +9,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-<<<<<<< HEAD
-from matplotlib import colors
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-=======
->>>>>>> working but ugly plot code
 from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.utils import check_array, check_consistent_length
@@ -752,38 +747,6 @@ def screeplot(
     return ax
 
 
-<<<<<<< HEAD
-def _sort_inds(graph, inner_labels, outer_labels):
-    sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
-    sort_df["inner_labels"] = inner_labels
-    sort_df["outer_labels"] = outer_labels
-
-    # get frequencies of the different labels so we can sort by them
-    inner_label_counts = _get_freq_vec(inner_labels)
-    outer_label_counts = _get_freq_vec(outer_labels)
-
-    # inverse counts so we can sort largest to smallest
-    # would rather do it this way so can still sort alphabetical for ties
-    sort_df["inner_counts"] = len(inner_labels) - inner_label_counts
-    sort_df["outer_counts"] = len(outer_labels) - outer_label_counts
-
-    # get node edge sums (not exactly degrees if weighted)
-    node_edgesums = graph.sum(axis=1) + graph.sum(axis=0)
-    sort_df["node_edgesums"] = node_edgesums.max() - node_edgesums
-
-    sort_df.sort_values(
-        by=[
-            "outer_counts",
-            "outer_labels",
-            "inner_counts",
-            "inner_labels",
-            "node_edgesums",
-        ],
-        kind="mergesort",
-        inplace=True,
-    )
-
-=======
 def _sort_inds(inner_labels, outer_labels):
     # inner_freq, _, outer_freq, _ = _get_freqs(inner_labels, outer_labels)
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
@@ -806,7 +769,6 @@ def _sort_inds(inner_labels, outer_labels):
         kind="mergesort",
         inplace=True,
     )
->>>>>>> working but ugly plot code
     sorted_inds = sort_df.index.values
     return sorted_inds
 
@@ -818,10 +780,6 @@ def _sort_graph(graph, inner_labels, outer_labels):
 
 
 def _get_freqs(inner_labels, outer_labels=None):
-<<<<<<< HEAD
-    # use this because unique would give alphabetical
-=======
->>>>>>> working but ugly plot code
     _, outer_freq = _unique_like(outer_labels)
     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
 
@@ -837,13 +795,6 @@ def _get_freqs(inner_labels, outer_labels=None):
     return inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum
 
 
-<<<<<<< HEAD
-def _get_freq_vec(vals):
-    # give each set of labels a vector corresponding to its frequency
-    _, inv, counts = np.unique(vals, return_counts=True, return_inverse=True)
-    count_vec = counts[inv]
-    return count_vec
-=======
 def _get_freq_maps(inner_labels, outer_labels):
     # give each set of labels a vector corresponding to its frequency
     outer_unique, outer_inv, outer_freq = np.unique(
@@ -902,7 +853,6 @@ def _get_freq_maps(inner_labels, outer_labels):
 #     outer_label_counts = itemgetter(*outer_labels)(outer_map)
 
 #     return inner_label_counts, outer_label_counts
->>>>>>> working but ugly plot code
 
 
 def _unique_like(vals):
@@ -928,13 +878,6 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
 
     inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum = _get_freqs(
         inner_labels, outer_labels
-<<<<<<< HEAD
-    )
-    inner_unique, _ = _unique_like(inner_labels)
-    outer_unique, _ = _unique_like(outer_labels)
-
-    n_verts = graph.shape[0]
-=======
     )  # wrong
 
     # inner_unique, inner_ind = np.unique(inner_labels, return_index=True)
@@ -949,14 +892,9 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
     inner_unique, _ = _unique_like(inner_labels)
     outer_unique, _ = _unique_like(outer_labels)
 
->>>>>>> working but ugly plot code
     # draw lines
     for x in inner_freq_cumsum:
-<<<<<<< HEAD
-        if x != inner_freq_cumsum[0]:
-=======
         if x == inner_freq_cumsum[-1]:
->>>>>>> line tweak
             x -= 0.2
         ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
         ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
