@@ -251,6 +251,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     SBM produces a graph with specified communities, in which each community can
     have different sizes and edge probabilities. 
 
+    Parameters
+    ----------
     n: list of int, shape (n_communities)
         Number of vertices in each community. Communities are assigned n[0], n[1], ...
     p: array-like, shape (n_communities, n_communities)
