@@ -20,7 +20,7 @@ def sample_edges(P, directed=False, loops=False):
     ----------
     P: np.ndarray, shape (num_vertices, num_vertices)
         Matrix of probabilities (between 0 and 1) for a random graph
-   directed: boolean, optional (default=False)
+    directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
     loops: boolean, optional (default=False)
