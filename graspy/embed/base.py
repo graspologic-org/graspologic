@@ -82,7 +82,13 @@ class BaseEmbed(BaseEstimator):
         A: array-like, shape (n_vertices, n_vertices)
             Adjacency matrix to embed.
         """
-        U, D, V = selectSVD(A, n_components=self.n_components, n_elbows=self.n_elbows)
+        U, D, V = selectSVD(
+            A,
+            n_components=self.n_components,
+            n_elbows=self.n_elbows,
+            algorithm=self.algorithm,
+            n_iter=self.n_iter,
+        )
 
         self.n_components_ = D.size
 
