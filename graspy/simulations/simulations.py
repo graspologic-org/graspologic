@@ -1,4 +1,5 @@
 import numpy as np
+
 from ..utils import symmetrize
 
 
@@ -18,7 +19,7 @@ def sample_edges(P, directed=False, loops=False):
 
     Parameters
     ----------
-    P: np.ndarray, shape (num_vertices, num_vertices)
+    P: np.ndarray, shape (n_vertices, n_vertices)
         Matrix of probabilities (between 0 and 1) for a random graph
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
@@ -29,7 +30,7 @@ def sample_edges(P, directed=False, loops=False):
 
     Returns
     -------
-    A: np.ndarray (num_vertices, num_vertices)
+    A: ndarray (n_vertices, n_vertices)
         Binary adjacency matrix the same size as P representing a random
         graph
 
@@ -90,7 +91,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
 
     Returns
     -------
-    A : array-like, shape (n, n)
+    A : ndarray, shape (n, n)
         Sampled adjacency matrix
     """
     if not np.issubdtype(type(p), np.floating):
@@ -162,7 +163,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
 
     Returns
     -------
-    A: array-like, shape (n, n)
+    A: ndarray, shape (n, n)
         Sampled adjacency matrix
 
     Examples
@@ -277,6 +278,11 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
+
+    Returns
+    -------
+    A: ndarray, shape (sum(n), sum(n))
+        Sampled adjacency matrix
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -424,7 +430,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
 
     Returns
     -------
-    A: np.ndarray (n_vertices, n_vertices)
+    A: ndarray (n_vertices, n_vertices)
         A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
 
@@ -486,7 +492,7 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
 
     Returns
     -------
-    P: np.ndarray (n_vertices, n_vertices)
+    P: ndarray (n_vertices, n_vertices)
         A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
 
