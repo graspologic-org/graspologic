@@ -73,8 +73,6 @@ class NonparametricTest(BaseInference):
         return X1_hat, X2_hat
 
     def _median_heuristic(self, X1, X2):
-        X1 = np.array(X1)
-        X2 = np.array(X2)
         X1_medians = np.median(X1, axis=0)
         X2_medians = np.median(X2, axis=0)
         val = np.multiply(X1_medians, X2_medians)
