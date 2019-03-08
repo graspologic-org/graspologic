@@ -12,7 +12,9 @@ from .base import BaseInference
 class NonparametricTest(BaseInference):
     """
     Two sample hypothesis test for the nonparamatric problem of determining
-    whether two random dot product graphs have the same latent positions.
+    whether two random dot product graphs have the same latent positions [2]_.
+
+    Currently, testing is only supported for undirected graphs.
 
     Parameters
     ----------
@@ -26,6 +28,24 @@ class NonparametricTest(BaseInference):
     bandwidth : float, optional (default=0.5)
         Bandwidth to use for gaussian kernel. If None,
         the median heuristic will be used.
+
+    Attributes
+    ----------
+    sample_T_statistic_ : float
+        The observed difference between the embedded latent positions of the two 
+        input graphs.
+
+    p_ : float
+        The overall p value from the nonparametric test.
+    
+    null_distribution_ : ndarray, shape (n_bootstraps, )
+        The distribution of T statistics generated under the null.
+
+    Reference
+    ---------
+    .. [2] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017). 
+        "A nonparametric two-sample hypothesis testing problem for random graphs."
+        Bernoulli, 23(3), 1599-1630.
     """
 
     def __init__(self, n_components=None, n_bootstraps=200, bandwidth=None):
@@ -64,12 +84,9 @@ class NonparametricTest(BaseInference):
         return x_stat - 2 * xy_stat + y_stat
 
     def _embed(self, A1, A2):
-        X1_hat = AdjacencySpectralEmbed(n_components=self.n_components).fit_transform(
-            A1
-        )
-        X2_hat = AdjacencySpectralEmbed(n_components=self.n_components).fit_transform(
-            A2
-        )
+        ase = AdjacencySpectralEmbed(n_components=self.n_components)
+        X1_hat = ase.fit_transform(A1)
+        X2_hat = ase.fit_transform(A2)
         return X1_hat, X2_hat
 
     def _median_heuristic(self, X1, X2):
@@ -105,7 +122,7 @@ class NonparametricTest(BaseInference):
 
         Returns
         -------
-        p : float
+        p_ : float
             The p value corresponding to the specified hypothesis test
         """
         A1 = import_graph(A1)
@@ -127,5 +144,5 @@ class NonparametricTest(BaseInference):
         self.null_distribution_ = null_distribution
         self.sample_T_statistic_ = U
         p_value = (len(null_distribution[null_distribution >= U])) / self.n_bootstraps
-        self.p_value_ = p_value
-        return p_value
+        self.p_ = p_value
+        return self.p_
