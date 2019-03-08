@@ -34,6 +34,7 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
    :maxdepth: 1
 
    tutorials/inference/semipar
+   tutorials/inference/nonpar
 
 Plotting
 ========
