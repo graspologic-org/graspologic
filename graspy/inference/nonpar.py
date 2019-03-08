@@ -41,8 +41,8 @@ class NonparametricTest(BaseInference):
     null_distribution_ : ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
 
-    Reference
-    ---------
+    References
+    ----------
     .. [2] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017). 
         "A nonparametric two-sample hypothesis testing problem for random graphs."
         Bernoulli, 23(3), 1599-1630.
