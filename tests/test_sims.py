@@ -575,9 +575,18 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
-    def test_sbm_dc_directed_loopy(self):
+    def test_sbm_dc_dcargs_directed_loopy(self):
         np.random.seed(self.seed)
-        dc = np.array([np.random.power(3) for _ in range(sum(self.n))])
+        funcs = [np.random.power, np.random.poisson]
+        dcargs = [{"a": 3}, {"lam": 5}]
+        dc = np.hstack(
+            (
+                [
+                    [funcs[i](**dcargs[i]) for _ in range(self.n[i])]
+                    for i in range(len(self.n))
+                ]
+            )
+        )
         for i in range(0, len(self.n)):
             dc[self.vcount[i] - self.n[i] : self.vcount[i]] /= sum(
                 dc[self.vcount[i] - self.n[i] : self.vcount[i]]
@@ -681,8 +690,8 @@ class Test_WSBM(unittest.TestCase):
             sbm(self.n, self.Psy, dc=dc)
 
         with self.assertRaises(ValueError):
-            # Values in p must be in between 0 and 1.
-            dc = 2 * np.ones(sum(self.n))
+            # Values in dc cannot be negative
+            dc = -1 * np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)
 
         with self.assertWarns(UserWarning):

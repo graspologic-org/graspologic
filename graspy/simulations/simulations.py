@@ -243,7 +243,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=None):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs={}):
     """
     n: list of int, shape (n_communities)
         the number of vertices in each community. Communities
@@ -277,8 +277,9 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
         and the elements in each block should sum to 1. If they don't sum to 1,
         they will be normalized and a warning will be thrown. It will be directly used 
         as the weightings for each vertex.
-    dcargs: dictionary
-        if dc is a function, dcargs corresponds to its named arguments.
+    dcargs: dictionary, optional
+        if dc is a function, dcargs corresponds to its named arguments. If not specified, 
+        dc will not be passed arguments.
 
     References
     ----------
@@ -371,18 +372,16 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
     elif isinstance(dc, (list, np.ndarray)):
         dcProbs = np.array(dc)
         # Check size and element types
-        if not np.issubdtype(dcProbs.dtype, np.float_) or not np.issubdtype(
-            dcProbs.dtype, np.number
-        ):
+        if not np.issubdtype(dcProbs.dtype, np.number):
             msg = "There are non-numeric elements in dc, {}".format(dcProbs.dtype)
             raise ValueError(msg)
         elif dcProbs.shape != (sum(n),):
-            msg = "dc must have size equal to number vertices {0} not {1}".format(
+            msg = "dc must have size equal to the number of vertices {0}, not {1}".format(
                 sum(n), dcProbs.shape
             )
             raise ValueError(msg)
-        elif np.any(dcProbs < 0) or np.any(dcProbs > 1):
-            msg = "Values in dc must be in between 0 and 1."
+        elif np.any(dcProbs < 0):
+            msg = "Values in dc cannot be negative."
             raise ValueError(msg)
         # Check that probabilities sum to 1 in each block
         for i in range(0, K):
@@ -414,11 +413,15 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs=No
             pchoice = np.random.uniform(size=len(triu))
             if dc is not None:
                 # (v1,v2) connected with probability p*k_i*k_j*dcP[v1]*dcP[v2]
+                num_edges = sum(pchoice < block_p)
+                edge_dist = dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]
+                # If the number edges greater than support of dc distribiton, pick fewer edges
+                if num_edges > sum(edge_dist > 0):
+                    msg = "More edges sampled than nonzero pairwise dc entries. Picking fewer edges"
+                    warnings.warn(msg, UserWarning)
+                    num_edges = sum(edge_dist > 0)
                 triu = np.random.choice(
-                    triu,
-                    size=sum(pchoice < block_p),
-                    replace=False,
-                    p=dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]],
+                    triu, size=num_edges, replace=False, p=edge_dist
                 )
             else:
                 # connected with probability p
