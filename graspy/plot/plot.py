@@ -894,7 +894,7 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
 
     # draw lines
     for x in inner_freq_cumsum:
-        if x == inner_freq_cumsum[-1]:
+        if x != inner_freq_cumsum[0]:
             x -= 0.2
         ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
         ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
