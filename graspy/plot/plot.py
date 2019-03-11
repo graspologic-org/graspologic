@@ -891,7 +891,7 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
     n_verts = graph.shape[0]
     # draw lines
     for x in inner_freq_cumsum:
-        if x == inner_freq_cumsum[-1]:
+        if x != inner_freq_cumsum[0]:
             x -= 0.2
         ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
         ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
@@ -973,7 +973,7 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
 
 def _plot_brackets(ax, group_names, tick_loc, tick_width, curve, level, axis, max_size):
     for x0, width in zip(tick_loc, tick_width):
-        x = np.linspace(x0 - width, x0 + width, 100)
+        x = np.linspace(x0 - width, x0 + width, 1000)
         if axis == "x":
             ax.plot(x, -curve, c="k")
         elif axis == "y":
