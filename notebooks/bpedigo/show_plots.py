@@ -25,7 +25,7 @@ labels2 = 40 * ["0"] + 100 * ["1"]
 labels1 = 10 * ["d"] + 30 * ["c"] + 50 * ["d"] + 25 * ["e"] + 25 * ["c"]
 labels1 = np.array(labels1)
 labels2 = np.array(labels2)
-heatmap(g, inner_hier_labels=labels1, outer_hier_labels=labels2)
+heatmap(g, inner_hier_labels=labels1, outer_hier_labels=labels2, figsize=(30, 30))
 
 
 def _get_freq_maps(inner_labels, outer_labels):
