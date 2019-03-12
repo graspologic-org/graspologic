@@ -575,14 +575,14 @@ class Test_WSBM(unittest.TestCase):
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
-    def test_sbm_dc_dcargs_directed_loopy(self):
+    def test_sbm_dc_dc_kws_directed_loopy_weights(self):
         np.random.seed(self.seed)
-        funcs = [np.random.power, np.random.poisson]
-        dcargs = [{"a": 3}, {"lam": 5}]
+        funcs = [np.random.power, np.random.uniform]
+        dc_kwss = [{"a": 3}, {"low": 5, "high": 10}]
         dc = np.hstack(
             (
                 [
-                    [funcs[i](**dcargs[i]) for _ in range(self.n[i])]
+                    [funcs[i](**dc_kwss[i]) for _ in range(self.n[i])]
                     for i in range(len(self.n))
                 ]
             )
@@ -591,7 +591,7 @@ class Test_WSBM(unittest.TestCase):
             dc[self.vcount[i] - self.n[i] : self.vcount[i]] /= sum(
                 dc[self.vcount[i] - self.n[i] : self.vcount[i]]
             )
-        A = sbm(self.n, self.Psy, directed=True, loops=True, dc=dc, dcargs=None)
+        A = sbm(self.n, self.Psy, directed=True, loops=True, dc=dc)
         communities = np.hstack([[comm] * self.n[comm] for comm in range(len(self.n))])
         for i, ki in zip(range(sum(self.n)), communities):
             degree = sum([A[i][j] for j in range(sum(self.n))])
@@ -604,6 +604,39 @@ class Test_WSBM(unittest.TestCase):
             self.assertTrue(np.isclose(theta_hat, dc[i], atol=0.01))
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
+
+    def test_sbm_dc_dc_kws_directed_loopy(self):
+        np.random.seed(self.seed)
+        funcs = [np.random.power, np.random.uniform]
+        dc_kwss = [{"a": 3}, {"low": 5, "high": 10}]
+        for i in range(len(funcs)):
+            A = sbm(
+                self.n,
+                self.Psy,
+                directed=True,
+                loops=True,
+                dc=funcs[i],
+                dc_kws=dc_kwss[i],
+            )
+            for i in range(0, len(self.n)):
+                for j in range(0, len(self.n)):
+                    irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
+                    jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
+
+                    block = A[
+                        (self.vcount[i] - self.n[i]) : self.vcount[i],
+                        (self.vcount[j] - self.n[j]) : self.vcount[j],
+                    ]
+                    if i == j:
+                        block = remove_diagonal(block)
+                    self.assertTrue(
+                        np.isclose(np.mean(block), self.Psy[i, j], atol=0.02)
+                    )
+            self.assertFalse(is_symmetric(A))
+            self.assertFalse(is_loopless(A))
+            # check dimensions
+            self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
     def test_bad_inputs(self):
@@ -676,8 +709,8 @@ class Test_WSBM(unittest.TestCase):
         with self.assertRaises(TypeError):
             # Check that the paramters are a dict
             dc = np.random.uniform
-            dcargs = [1, 2]
-            sbm(self.n, self.Psy, dc=dc, dcargs=dcargs)
+            dc_kws = [1, 2]
+            sbm(self.n, self.Psy, dc=dc, dc_kws=dc_kws)
 
         with self.assertRaises(ValueError):
             # There are non-numeric elements in p

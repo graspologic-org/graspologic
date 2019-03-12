@@ -243,7 +243,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs={}):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
     """
     n: list of int, shape (n_communities)
         the number of vertices in each community. Communities
@@ -270,15 +270,16 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs={}
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
     dc: function or array-like, shape (n_vertices)
-        if dc is a function, it should generate a random number to be used
+        if dc is a function, it should generate a non-negative number to be used
         as a weight to create a heterogenous degree distribution. A weight 
         will be generated for each vertex, normalized so that the sum of weights 
-        in each block is 1. If dc is array-like, it should be of length sum(n)
-        and the elements in each block should sum to 1. If they don't sum to 1,
-        they will be normalized and a warning will be thrown. It will be directly used 
-        as the weightings for each vertex.
-    dcargs: dictionary, optional
-        if dc is a function, dcargs corresponds to its named arguments. If not specified, 
+        in each block is 1. If dc is array-like, it should be of length n_vertices
+        and the weights in each block should sum to 1. If they don't sum to 1,
+        they will be normalized and a warning will be thrown. Each vertex has a
+        normalized weight which corresponds to the probability of a given edge in that 
+        block being incident to that vertex.
+    dc_kws: dictionary, optional
+        if dc is a function, dc_kws corresponds to its named arguments. If not specified, 
         dc will not be passed arguments.
 
     References
@@ -362,11 +363,11 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs={}
     # Check degree-corrected input parameters
     if callable(dc):
         # Check that the paramters are a dict
-        if not isinstance(dcargs, dict):
-            msg = "dcargs must be of type dict not{}".format(type(dcargs))
+        if not isinstance(dc_kws, dict):
+            msg = "dc_kws must be of type dict not{}".format(type(dc_kws))
             raise TypeError(msg)
         # Create the probability matrix for each vertex
-        dcProbs = np.array([dc(**dcargs) for _ in range(0, sum(n))], dtype="float")
+        dcProbs = np.array([dc(**dc_kws) for _ in range(0, sum(n))], dtype="float")
         for indices in cmties:
             dcProbs[indices] /= sum(dcProbs[indices])
     elif isinstance(dc, (list, np.ndarray)):
@@ -415,7 +416,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dcargs={}
                 # (v1,v2) connected with probability p*k_i*k_j*dcP[v1]*dcP[v2]
                 num_edges = sum(pchoice < block_p)
                 edge_dist = dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]
-                # If the number edges greater than support of dc distribiton, pick fewer edges
+                # If the number edges greater than support of dc distribution, pick fewer edges
                 if num_edges > sum(edge_dist > 0):
                     msg = "More edges sampled than nonzero pairwise dc entries. Picking fewer edges"
                     warnings.warn(msg, UserWarning)
