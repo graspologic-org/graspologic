@@ -116,3 +116,68 @@ def test_bic():
 
         assert_equal(2, np.argmin(bics))
         assert_allclose(1, aris[np.argmin(bics)])
+
+def test_covariances():
+    """
+    Easily separable two gaussian problem.
+    """
+    np.random.seed(2)
+
+    n = 100
+
+    mu1 = [-10, 0]
+    mu2 = [10, 0]
+
+    # Spherical 
+    cov1 = 2*np.eye(2)
+    cov2 = 2*np.eye(2)
+
+    X1 = np.random.multivariate_normal(mu1, cov1, n)
+    X2 = np.random.multivariate_normal(mu2, cov2, n)
+
+    X = np.concatenate((X1, X2))
+
+    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object.fit(X)
+    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 0)
+
+    # Diagonal
+    np.random.seed(10)
+    cov1 = np.diag([1, 1])
+    cov2 = np.diag([2, 1])
+
+    X1 = np.random.multivariate_normal(mu1, cov1, n)
+    X2 = np.random.multivariate_normal(mu2, cov2, n)
+
+    X = np.concatenate((X1, X2))
+
+    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object.fit(X)
+    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 1)
+
+    # Tied
+    cov1 = np.array([[2, 1], [1, 2]])
+    cov2 = np.array([[2, 1], [1, 2]])
+
+    X1 = np.random.multivariate_normal(mu1, cov1, n)
+    X2 = np.random.multivariate_normal(mu2, cov2, n)
+
+    X = np.concatenate((X1, X2))
+
+    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object.fit(X)
+    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 2)
+
+
+    # Full
+    cov1 = np.array([[2, -1], [-1, 2]])
+    cov2 = np.array([[2, 1], [1, 2]])
+
+    X1 = np.random.multivariate_normal(mu1, cov1, n)
+    X2 = np.random.multivariate_normal(mu2, cov2, n)
+
+    X = np.concatenate((X1, X2))
+
+    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object.fit(X)
+    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 3)
