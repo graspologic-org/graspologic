@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
 from sklearn.utils.validation import check_is_fitted
@@ -107,9 +108,59 @@ class GaussianCluster(BaseCluster):
         covariance_type = self.covariance_type
 
         # Compute all models
+        
+
+        if covariance_type == 'all':
+            covariances = ['spherical', 'diag', 'tied', 'full']
+
+            models = [[] for cov_type in covariances]
+            bics = [[] for cov_type in covariances]
+            aris = [[] for cov_type in covariances]
+
+            for n in range(1, max_components + 1):
+                for i, cov_type in enumerate(covariances):
+                    model = GaussianMixture(
+                        n_components=n,
+                        covariance_type=cov_type,
+                        random_state=random_state,
+                    )
+
+                    # Fit and compute values
+                    model.fit(X)
+                    models[i].append(model)
+                    bics[i].append(model.bic(X))
+                    if y is not None:
+                        predictions = model.predict(X)
+                        aris[i].append(adjusted_rand_score(y, predictions))
+
+
+            self.bic_ = pd.DataFrame(
+                np.array(bics).T, 
+                index=np.arange(1, max_components + 1), 
+                columns=covariances
+                )
+
+            if y is not None:
+                self.ari_ = pd.DataFrame(
+                    np.array(aris).T,
+                    index= np.arange(1, max_components + 1),
+                    columns=covariances
+                )
+            else:
+                self.ari_ = None
+
+            bic_mins = [min(bic) for bic in bics]
+            model_type_argmin = np.argmin(bic_mins)
+            self.n_components_ = np.argmin(bics[model_type_argmin]) + 1
+            self.model_ = models[np.argmin(bics[model_type_argmin])]
+
+            return self
+
+
         models = []
         bics = []
         aris = []
+
         for n in range(1, max_components + 1):
             model = GaussianMixture(
                 n_components=n,
