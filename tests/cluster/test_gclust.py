@@ -33,6 +33,22 @@ def test_inputs():
         gclust = GaussianCluster(max_components=-1)
         gclust.fit_predict(X)
 
+    with pytest.raises(ValueError):
+        gclust = GaussianCluster(min_components = -1)
+        gclust.fit(X)
+
+    with pytest.raises(ValueError):
+        gclust = GaussianCluster(max_components=-1)
+        gclust.fit_predict(X)
+
+    with pytest.raises(ValueError):
+        gclust = GaussianCluster(min_components = 2, max_components = 1)
+        gclust.fit(X)
+
+    with pytest.raises(ValueError):
+        gclust = GaussianCluster(min_components = 2, max_components = 1)
+        gclust.fit_predict(X)
+
 
 def test_predict_without_fit():
     # Generate random data
@@ -57,7 +73,7 @@ def test_no_y():
     gclust.fit(X)
 
     bics = gclust.bic_
-    assert_equal(np.argmin(bics), 1)
+    assert_equal(bics.iloc[:, 0].values.argmin(), 1)
 
 
 def test_outputs():
@@ -82,9 +98,12 @@ def test_outputs():
         bics = gclust.bic_
         aris = gclust.ari_
 
+        bic_argmin = bics.iloc[:, 0].values.argmin()
+
         # Assert that the two cluster model is the best
-        assert_equal(np.argmin(bics), 1)
-        assert_allclose(aris[np.argmin(bics)], 1)
+        assert_equal(bic_argmin, 1)
+        # The plus one is to adjust the index by min_components
+        assert_allclose(aris.iloc[:, 0][bic_argmin + 1], 1)
 
 
 def test_bic():
@@ -114,8 +133,12 @@ def test_bic():
         bics = gclust.bic_
         aris = gclust.ari_
 
-        assert_equal(2, np.argmin(bics))
-        assert_allclose(1, aris[np.argmin(bics)])
+        bic_argmin = bics.iloc[:, 0].values.argmin()
+
+        assert_equal(2, bic_argmin)
+        # The plus one is to adjust the index by min_components
+        assert_allclose(1, aris.iloc[:, 0][bic_argmin + 1])
+
 
 def test_covariances():
     """
