@@ -149,10 +149,15 @@ class GaussianCluster(BaseCluster):
             else:
                 self.ari_ = None
 
+            # Finding the minimum bic for each covariance structure
             bic_mins = [min(bic) for bic in bics]
+            bic_argmins = [np.argmin(bic) for bic in bics]
+
+            # Find the index for the minimum bic amongst all covariance structure
             model_type_argmin = np.argmin(bic_mins)
+
             self.n_components_ = np.argmin(bics[model_type_argmin]) + 1
-            self.model_ = models[np.argmin(bics[model_type_argmin])]
+            self.model_ = models[model_type_argmin][bic_argmins[model_type_argmin]]
 
             return self
 
