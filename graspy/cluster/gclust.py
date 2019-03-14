@@ -22,9 +22,13 @@ class GaussianCluster(BaseCluster):
     max_components : int, defaults to 1.
         The maximum number of mixture components to consider.
 
+    min_components : int, defaults to 1. 
+        The minimum number of mixture components to consider.
+        Must be less than max_components.
+
     covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
-        String describing the type of covariance parameters to use.
-        Must be one of:
+        String or list/array describing the type of covariance parameters to use.
+        If a string, it must be one of:
 
         - 'full'
             each component has its own general covariance matrix
@@ -34,6 +38,11 @@ class GaussianCluster(BaseCluster):
             each component has its own diagonal covariance matrix
         - 'spherical'
             each component has its own single variance
+        - 'all'
+            maximizes over ['spherical', 'diag', 'tied', 'full']
+
+        If a list/array, it must be a list/array of strings containing only
+            'spherical', 'tied', 'diag', and/or 'spherical'.
     
     random_state : int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;
@@ -58,7 +67,13 @@ class GaussianCluster(BaseCluster):
         all possible number of clusters given by range(1, max_components).
     """
 
-    def __init__(self, max_components=1, min_components=1, covariance_type="full", random_state=None):
+    def __init__(
+        self,
+        max_components=1,
+        min_components=1,
+        covariance_type="full",
+        random_state=None,
+    ):
         if isinstance(max_components, int):
             if max_components <= 0:
                 msg = "max_components must be >= 1 or None."
@@ -125,17 +140,17 @@ class GaussianCluster(BaseCluster):
         random_state = self.random_state
         covariance_type = self.covariance_type
 
-        if covariance_type == 'all':
-            covariances = ['spherical', 'diag', 'tied', 'full']
+        if covariance_type == "all":
+            covariances = ["spherical", "diag", "tied", "full"]
         elif type(covariance_type) is list:
             covariances = covariance_type
         else:
             covariances = [covariance_type]
 
         param_grid = dict(
-            covariance_type = covariances, 
-            n_components = range(min_components, max_components + 1),
-            random_state = [random_state]
+            covariance_type=covariances,
+            n_components=range(min_components, max_components + 1),
+            random_state=[random_state],
         )
 
         param_grid = list(ParameterGrid(param_grid))
@@ -154,16 +169,16 @@ class GaussianCluster(BaseCluster):
                 aris[i % n_components].append(adjusted_rand_score(y, predictions))
 
         self.bic_ = pd.DataFrame(
-            np.array(bics), 
-            index=np.arange(min_components, max_components + 1), 
-            columns=covariances
-            )
+            np.array(bics),
+            index=np.arange(min_components, max_components + 1),
+            columns=covariances,
+        )
 
         if y is not None:
             self.ari_ = pd.DataFrame(
                 np.array(aris),
                 index=np.arange(min_components, max_components + 1),
-                columns=covariances
+                columns=covariances,
             )
         else:
             self.ari_ = None
