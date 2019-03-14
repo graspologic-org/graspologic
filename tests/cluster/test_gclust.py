@@ -34,7 +34,7 @@ def test_inputs():
         gclust.fit_predict(X)
 
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(min_components = -1)
+        gclust = GaussianCluster(min_components=-1)
         gclust.fit(X)
 
     with pytest.raises(ValueError):
@@ -42,11 +42,11 @@ def test_inputs():
         gclust.fit_predict(X)
 
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(min_components = 2, max_components = 1)
+        gclust = GaussianCluster(min_components=2, max_components=1)
         gclust.fit(X)
 
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(min_components = 2, max_components = 1)
+        gclust = GaussianCluster(min_components=2, max_components=1)
         gclust.fit_predict(X)
 
 
@@ -151,9 +151,9 @@ def test_covariances():
     mu1 = [-10, 0]
     mu2 = [10, 0]
 
-    # Spherical 
-    cov1 = 2*np.eye(2)
-    cov2 = 2*np.eye(2)
+    # Spherical
+    cov1 = 2 * np.eye(2)
+    cov2 = 2 * np.eye(2)
 
     X1 = np.random.multivariate_normal(mu1, cov1, n)
     X2 = np.random.multivariate_normal(mu2, cov2, n)
@@ -190,7 +190,6 @@ def test_covariances():
     gclust_object = GaussianCluster(max_components=2, covariance_type="all")
     gclust_object.fit(X)
     assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 2)
-
 
     # Full
     cov1 = np.array([[2, -1], [-1, 2]])
