@@ -897,7 +897,7 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
         ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
 
     # generic curve that we will use for everything
-    lx = np.linspace(-np.pi / 2.0 + 0.05, np.pi / 2.0 - 0.05, 50)
+    lx = np.linspace(-np.pi / 2.0 + 0.05, np.pi / 2.0 - 0.05, 500)
     tan = np.tan(lx)
     curve = np.hstack((tan[::-1], tan))
 
