@@ -621,9 +621,6 @@ class Test_WSBM(unittest.TestCase):
             )
             for i in range(0, len(self.n)):
                 for j in range(0, len(self.n)):
-                    irange = np.arange(self.vcount[i] - self.n[i], self.vcount[i])
-                    jrange = np.arange(self.vcount[j] - self.n[j], self.vcount[j])
-
                     block = A[
                         (self.vcount[i] - self.n[i]) : self.vcount[i],
                         (self.vcount[j] - self.n[j]) : self.vcount[j],
@@ -637,6 +634,45 @@ class Test_WSBM(unittest.TestCase):
             self.assertFalse(is_loopless(A))
             # check dimensions
             self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
+
+    def test_sbm_multi_dc_dc_kws(self):
+        np.random.seed(self.seed)
+        dc = [np.random.power, np.random.uniform]
+        dc_kws = [{"a": 3}, {"low": 5, "high": 10}]
+        A = sbm(self.n, self.Psy, directed=True, loops=True, dc=dc, dc_kws=dc_kws)
+        for i in range(0, len(self.n)):
+            for j in range(0, len(self.n)):
+                block = A[
+                    (self.vcount[i] - self.n[i]) : self.vcount[i],
+                    (self.vcount[j] - self.n[j]) : self.vcount[j],
+                ]
+                if i == j:
+                    block = remove_diagonal(block)
+                self.assertTrue(np.isclose(np.mean(block), self.Psy[i, j], atol=0.02))
+        self.assertFalse(is_symmetric(A))
+        self.assertFalse(is_loopless(A))
+        # check dimensions
+        self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
+        pass
+
+    def test_sbm_multi_dc_empty_dc_kws(self):
+        np.random.seed(self.seed)
+        dc = [np.random.rayleigh, np.random.uniform]
+        A = sbm(self.n, self.Psy, directed=True, loops=True, dc=dc)
+        for i in range(0, len(self.n)):
+            for j in range(0, len(self.n)):
+                block = A[
+                    (self.vcount[i] - self.n[i]) : self.vcount[i],
+                    (self.vcount[j] - self.n[j]) : self.vcount[j],
+                ]
+                if i == j:
+                    block = remove_diagonal(block)
+                self.assertTrue(np.isclose(np.mean(block), self.Psy[i, j], atol=0.02))
+        self.assertFalse(is_symmetric(A))
+        self.assertFalse(is_loopless(A))
+        # check dimensions
+        self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))
         pass
 
     def test_bad_inputs(self):
@@ -736,6 +772,30 @@ class Test_WSBM(unittest.TestCase):
             # dc must be a function, list, or np.array
             dc = {"fail", "me"}
             sbm(self.n, self.Psy, dc=dc)
+
+        with self.assertRaises(ValueError):
+            # Check that the paramters are correct len
+            dc = [np.random.uniform]
+            dc_kws = {}
+            sbm(self.n, self.Psy, dc=dc, dc_kws=dc_kws)
+
+        with self.assertRaises(TypeError):
+            # dc_kws must be array-like
+            dc = [np.random.uniform] * len(self.n)
+            dc_kws = {"low": 0, "high": 1}
+            sbm(self.n, self.Psy, dc=dc, dc_kws=dc_kws)
+
+        with self.assertRaises(ValueError):
+            # dc_kws must be of correct length
+            dc = [np.random.uniform] * len(self.n)
+            dc_kws = [{}]
+            sbm(self.n, self.Psy, dc=dc, dc_kws=dc_kws)
+
+        with self.assertRaises(TypeError):
+            # dc_kws must be of correct length
+            dc = [np.random.uniform] * len(self.n)
+            dc_kws = [1] + [{}] * (len(self.n) - 1)
+            sbm(self.n, self.Psy, dc=dc, dc_kws=dc_kws)
 
 
 class Test_RDPG(unittest.TestCase):

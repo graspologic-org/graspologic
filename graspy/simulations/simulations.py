@@ -269,18 +269,22 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
-    dc: function or array-like, shape (n_vertices)
+    dc: function or array-like, shape (n_vertices) or (n_communities)
         if dc is a function, it should generate a non-negative number to be used
         as a weight to create a heterogenous degree distribution. A weight 
         will be generated for each vertex, normalized so that the sum of weights 
-        in each block is 1. If dc is array-like, it should be of length n_vertices
-        and the weights in each block should sum to 1. If they don't sum to 1,
-        they will be normalized and a warning will be thrown. Each vertex has a
-        normalized weight which corresponds to the probability of a given edge in that 
-        block being incident to that vertex.
-    dc_kws: dictionary, optional
-        if dc is a function, dc_kws corresponds to its named arguments. If not specified, 
-        dc will not be passed arguments.
+        in each block is 1. If dc is array-like and contains functions, it should be 
+        of length n_communities. Each function will generate the degree distribution
+        for its respective community. If dc is array-like and contains numbers, it 
+        should be of length n_vertices and the weights in each block should sum to 1. 
+        If they don't sum to 1, they will be normalized and a warning will be thrown. 
+        Each vertex has a normalized weight which corresponds to the probability of a 
+        given edge in that block being incident to that vertex.
+    dc_kws: dictionary or array-like, shape (n_communities), optional
+        if dc is a function, dc_kws corresponds to its named arguments. If dc is an
+        array-like containing functions, dc_kws corresponds to a dictionary of named
+        arguments for each function. If not specified, in either case all functions will 
+        assume their default parameters.
 
     References
     ----------
@@ -370,7 +374,9 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         dcProbs = np.array([dc(**dc_kws) for _ in range(0, sum(n))], dtype="float")
         for indices in cmties:
             dcProbs[indices] /= sum(dcProbs[indices])
-    elif isinstance(dc, (list, np.ndarray)):
+    elif isinstance(dc, (list, np.ndarray)) and np.issubdtype(
+        np.array(dc).dtype, np.number
+    ):
         dcProbs = np.array(dc)
         # Check size and element types
         if not np.issubdtype(dcProbs.dtype, np.number):
@@ -390,8 +396,46 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
                 msg = "Block {} probabilities should sum to 1, normalizing...".format(i)
                 warnings.warn(msg, UserWarning)
                 dcProbs[cmties[i]] /= sum(dcProbs[cmties[i]])
+    elif isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
+        dcFuncs = np.array(dc)
+        if dcFuncs.shape != (len(n),):
+            msg = "dc must have size equal to the number of blocks {0}, not {1}".format(
+                len(n), dcFuncs.shape
+            )
+            raise ValueError(msg)
+        # Check that the parameters type, length, and type
+        if not isinstance(dc_kws, (list, np.ndarray)):
+            # Allows for nonspecification of default parameters for all functions
+            if dc_kws == {}:
+                dc_kws = [{} for _ in range(0, len(n))]
+            else:
+                msg = "dc_kws must be of type list or np.ndarray, not {}".format(
+                    type(dc_kws)
+                )
+                raise TypeError(msg)
+        elif not len(dc_kws) == len(n):
+            msg = "dc_kws must have size equal to the number of blocks {0}, not {1}".format(
+                len(n), len(dc_kws)
+            )
+            raise ValueError(msg)
+        elif not all(type(kw) == dict for kw in dc_kws):
+            msg = "dc_kws elements must all be of type dict"
+            raise TypeError(msg)
+        # Create the probability matrix for each vertex
+        dcProbs = np.array(
+            [
+                dcFunc(**kws)
+                for dcFunc, kws, size in zip(dcFuncs, dc_kws, n)
+                for _ in range(0, size)
+            ],
+            dtype="float",
+        )
+        for indices in cmties:
+            dcProbs[indices] /= sum(dcProbs[indices])
     elif dc is not None:
-        msg = "dc must be a function, list, or np.array, not {}".format(type(dc))
+        msg = "dc must be a function or a list or np.array of numbers or callable functions, not {}".format(
+            type(dc)
+        )
         raise ValueError(msg)
 
     # End Checks, begin simulation
