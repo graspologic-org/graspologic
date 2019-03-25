@@ -285,19 +285,22 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
             should generate a non-negative number to be used as a degree correction to 
             create a heterogenous degree distribution. A weight will be generated for
             each vertex, normalized so that the sum of weights in each block is 1. 
-        - array-like of functions (length n_communities): 
+        - array-like of functions, shape (n_communities): 
             Each function will generate the degree distribution for its respective 
             community. 
-        - array-like of scalars (length n_vertices): 
+        - array-like of scalars, shape (n_vertices): 
             The weights in each block should sum to 1; otherwise, they will be normalized
             and a warning will be thrown. The scalar associated with each vertex is the 
             node's relative expected degree within its community. 
     
-    dc_kws: dictionary or array-like (shape n_communities), optional
-        if dc is a function, dc_kws corresponds to its named arguments. If dc is an
-        array-like containing functions, dc_kws corresponds to a dictionary of named
-        arguments for each function. If not specified, in either case all functions will 
-        assume their default parameters.
+    dc_kws: dictionary or array-like, shape (n_communities), optional
+        Ignored if `dc` is none or array of scalar.
+        If `dc` is a function, `dc_kws` corresponds to its named arguments. 
+        If `dc` is an array-like of functions, `dc_kws` should be an array-like (length
+        n_communities) of dictionary, where each dictionary is the named arguments 
+        for the corresponding function for that community. 
+        If not specified, in either case all functions will assume their default 
+        parameters.
 
     References
     ----------
