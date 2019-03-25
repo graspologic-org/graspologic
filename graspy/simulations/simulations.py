@@ -293,7 +293,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
             and a warning will be thrown. The scalar associated with each vertex is the 
             node's relative expected degree within its community. 
     
-    dc_kws: dictionary or array-like, shape (n_communities), optional
+    dc_kws: dictionary or array-like (shape n_communities), optional
         if dc is a function, dc_kws corresponds to its named arguments. If dc is an
         array-like containing functions, dc_kws corresponds to a dictionary of named
         arguments for each function. If not specified, in either case all functions will 
