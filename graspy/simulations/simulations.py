@@ -1,5 +1,8 @@
 import numpy as np
+<<<<<<< HEAD
 import warnings
+=======
+>>>>>>> Docstring updates (#130)
 
 from ..utils import symmetrize
 
@@ -279,6 +282,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
+<<<<<<< HEAD
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
         `dc` is used to generate a degree-corrected stochastic block model [1] in 
         which each node in the graph has a parameter to specify its expected degree
@@ -310,12 +314,17 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
         Degree-Corrected Stochastic Blockmodel," Advances in Neural Information 
         Processing Systems 26, 2013
+=======
+>>>>>>> Docstring updates (#130)
 
     Returns
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
+<<<<<<< HEAD
         
+=======
+>>>>>>> Docstring updates (#130)
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
