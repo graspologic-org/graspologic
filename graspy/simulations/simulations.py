@@ -280,7 +280,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
-        
+        `dc` is used to generate a degree-corrected stochastic block model [1]_ in 
+        which each node in the graph can has a parameter to specify its expected degree
+        relative to other nodes within its community.
+
         - function: 
             should generate a non-negative number to be used as a degree correction to 
             create a heterogenous degree distribution. A weight will be generated for
@@ -296,8 +299,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     dc_kws: dictionary or array-like, shape (n_communities), optional
         Ignored if `dc` is none or array of scalar.
         If `dc` is a function, `dc_kws` corresponds to its named arguments. 
-        If `dc` is an array-like of functions, `dc_kws` should be an array-like (length
-        n_communities) of dictionary, where each dictionary is the named arguments 
+        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape 
+        (n_communities), of dictionary. Each dictionary is the named arguments 
         for the corresponding function for that community. 
         If not specified, in either case all functions will assume their default 
         parameters.
