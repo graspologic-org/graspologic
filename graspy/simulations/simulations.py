@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 
 from ..utils import symmetrize
 
@@ -245,7 +246,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
     """
     Samples a graph from the stochastic block model (SBM). 
 
@@ -278,11 +279,43 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
+    dc: function or array-like, shape (n_vertices) or (n_communities), optional
+        `dc` is used to generate a degree-corrected stochastic block model [1] in 
+        which each node in the graph has a parameter to specify its expected degree
+        relative to other nodes within its community.
+
+        - function: 
+            should generate a non-negative number to be used as a degree correction to 
+            create a heterogenous degree distribution. A weight will be generated for
+            each vertex, normalized so that the sum of weights in each block is 1. 
+        - array-like of functions, shape (n_communities): 
+            Each function will generate the degree distribution for its respective 
+            community. 
+        - array-like of scalars, shape (n_vertices): 
+            The weights in each block should sum to 1; otherwise, they will be normalized
+            and a warning will be thrown. The scalar associated with each vertex is the 
+            node's relative expected degree within its community. 
+    
+    dc_kws: dictionary or array-like, shape (n_communities), optional
+        Ignored if `dc` is none or array of scalar.
+        If `dc` is a function, `dc_kws` corresponds to its named arguments. 
+        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape 
+        (n_communities), of dictionary. Each dictionary is the named arguments 
+        for the corresponding function for that community. 
+        If not specified, in either case all functions will assume their default 
+        parameters.
+
+    References
+    ----------
+    .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
+        Degree-Corrected Stochastic Blockmodel," Advances in Neural Information 
+        Processing Systems 26, 2013
 
     Returns
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
+        
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -313,10 +346,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     # Check wt and wtargs
     if not np.issubdtype(type(wt), np.number) and not callable(wt):
         if not isinstance(wt, (list, np.ndarray)):
-            msg = "wt must be a numeric, list, or np.array, not{}".format(type(wt))
+            msg = "wt must be a numeric, list, or np.array, not {}".format(type(wt))
             raise TypeError(msg)
         if not isinstance(wtargs, (list, np.ndarray)):
-            msg = "wtargs must be a numeric, list, or np.array, not{}".format(
+            msg = "wtargs must be a numeric, list, or np.array, not {}".format(
                 type(wtargs)
             )
             raise TypeError(msg)
@@ -355,6 +388,82 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     for i in range(0, K):
         cmties.append(range(counter, counter + n[i]))
         counter += n[i]
+
+    # Check degree-corrected input parameters
+    if callable(dc):
+        # Check that the paramters are a dict
+        if not isinstance(dc_kws, dict):
+            msg = "dc_kws must be of type dict not{}".format(type(dc_kws))
+            raise TypeError(msg)
+        # Create the probability matrix for each vertex
+        dcProbs = np.array([dc(**dc_kws) for _ in range(0, sum(n))], dtype="float")
+        for indices in cmties:
+            dcProbs[indices] /= sum(dcProbs[indices])
+    elif isinstance(dc, (list, np.ndarray)) and np.issubdtype(
+        np.array(dc).dtype, np.number
+    ):
+        dcProbs = np.array(dc)
+        # Check size and element types
+        if not np.issubdtype(dcProbs.dtype, np.number):
+            msg = "There are non-numeric elements in dc, {}".format(dcProbs.dtype)
+            raise ValueError(msg)
+        elif dcProbs.shape != (sum(n),):
+            msg = "dc must have size equal to the number of vertices {0}, not {1}".format(
+                sum(n), dcProbs.shape
+            )
+            raise ValueError(msg)
+        elif np.any(dcProbs < 0):
+            msg = "Values in dc cannot be negative."
+            raise ValueError(msg)
+        # Check that probabilities sum to 1 in each block
+        for i in range(0, K):
+            if not np.isclose(sum(dcProbs[cmties[i]]), 1, atol=1.0e-8):
+                msg = "Block {} probabilities should sum to 1, normalizing...".format(i)
+                warnings.warn(msg, UserWarning)
+                dcProbs[cmties[i]] /= sum(dcProbs[cmties[i]])
+    elif isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
+        dcFuncs = np.array(dc)
+        if dcFuncs.shape != (len(n),):
+            msg = "dc must have size equal to the number of blocks {0}, not {1}".format(
+                len(n), dcFuncs.shape
+            )
+            raise ValueError(msg)
+        # Check that the parameters type, length, and type
+        if not isinstance(dc_kws, (list, np.ndarray)):
+            # Allows for nonspecification of default parameters for all functions
+            if dc_kws == {}:
+                dc_kws = [{} for _ in range(0, len(n))]
+            else:
+                msg = "dc_kws must be of type list or np.ndarray, not {}".format(
+                    type(dc_kws)
+                )
+                raise TypeError(msg)
+        elif not len(dc_kws) == len(n):
+            msg = "dc_kws must have size equal to the number of blocks {0}, not {1}".format(
+                len(n), len(dc_kws)
+            )
+            raise ValueError(msg)
+        elif not all(type(kw) == dict for kw in dc_kws):
+            msg = "dc_kws elements must all be of type dict"
+            raise TypeError(msg)
+        # Create the probability matrix for each vertex
+        dcProbs = np.array(
+            [
+                dcFunc(**kws)
+                for dcFunc, kws, size in zip(dcFuncs, dc_kws, n)
+                for _ in range(0, size)
+            ],
+            dtype="float",
+        )
+        for indices in cmties:
+            dcProbs[indices] /= sum(dcProbs[indices])
+    elif dc is not None:
+        msg = "dc must be a function or a list or np.array of numbers or callable functions, not {}".format(
+            type(dc)
+        )
+        raise ValueError(msg)
+
+    # End Checks, begin simulation
     A = np.zeros((sum(n), sum(n)))
 
     for i in range(0, K):
@@ -372,8 +481,21 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
             # get idx in 1d coordinates by ravelling
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
             pchoice = np.random.uniform(size=len(triu))
-            # connected with probability p
-            triu = triu[pchoice < block_p]
+            if dc is not None:
+                # (v1,v2) connected with probability p*k_i*k_j*dcP[v1]*dcP[v2]
+                num_edges = sum(pchoice < block_p)
+                edge_dist = dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]
+                # If the number edges greater than support of dc distribution, pick fewer edges
+                if num_edges > sum(edge_dist > 0):
+                    msg = "More edges sampled than nonzero pairwise dc entries. Picking fewer edges"
+                    warnings.warn(msg, UserWarning)
+                    num_edges = sum(edge_dist > 0)
+                triu = np.random.choice(
+                    triu, size=num_edges, replace=False, p=edge_dist
+                )
+            else:
+                # connected with probability p
+                triu = triu[pchoice < block_p]
             if type(block_wt) is not int:
                 block_wt = block_wt(size=len(triu), **block_wtargs)
             triu = np.unravel_index(triu, A.shape)
