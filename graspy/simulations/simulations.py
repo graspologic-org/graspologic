@@ -279,17 +279,20 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
-    dc: function or array-like, shape (n_vertices) or (n_communities)
-        if dc is a function, it should generate a non-negative number to be used
-        as a weight to create a heterogenous degree distribution. A weight 
-        will be generated for each vertex, normalized so that the sum of weights 
-        in each block is 1. If dc is array-like and contains functions, it should be 
-        of length n_communities. Each function will generate the degree distribution
-        for its respective community. If dc is array-like and contains numbers, it 
-        should be of length n_vertices and the weights in each block should sum to 1. 
-        If they don't sum to 1, they will be normalized and a warning will be thrown. 
-        Each vertex has a normalized weight which corresponds to the probability of a 
-        given edge in that block being incident to that vertex.
+    dc: function or array-like, shape (n_vertices) or (n_communities), optional
+        
+        - function: 
+            should generate a non-negative number to be used as a degree correction to 
+            create a heterogenous degree distribution. A weight will be generated for
+            each vertex, normalized so that the sum of weights in each block is 1. 
+        - array-like of functions (length n_communities): 
+            Each function will generate the degree distribution for its respective 
+            community. 
+        - array-like of scalars (length n_vertices): 
+            The weights in each block should sum to 1; otherwise, they will be normalized
+            and a warning will be thrown. The scalar associated with each vertex is the 
+            node's relative expected degree within its community. 
+    
     dc_kws: dictionary or array-like, shape (n_communities), optional
         if dc is a function, dc_kws corresponds to its named arguments. If dc is an
         array-like containing functions, dc_kws corresponds to a dictionary of named
