@@ -280,8 +280,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
-        `dc` is used to generate a degree-corrected stochastic block model [1]_ in 
-        which each node in the graph can has a parameter to specify its expected degree
+        `dc` is used to generate a degree-corrected stochastic block model [1] in 
+        which each node in the graph has a parameter to specify its expected degree
         relative to other nodes within its community.
 
         - function: 
