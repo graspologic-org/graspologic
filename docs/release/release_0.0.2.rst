@@ -11,11 +11,12 @@ and our `tutorials <https://graspy.neurodata.io/tutorial.html>`_.
 
 Highlights
 ----------
-This release is the result of 3 months of work with over 10 pull requests by 5 contributors. Highlights include:
+This release is the result of 3 months of work with over 16 pull requests by 5 contributors. Highlights include:
 
 - Nonparametric hypothesis testing method for non-vertex matched graphs.
 - Plotting updates to ``pairplot``, ``gridplot`` and ``heatmaps``.
 - Sampling degree-correlcted stochatic block models (DC-SBM).
+- ``import_edgelist`` function for importing single or multiple edgelists.
 
 Improvements
 ------------
