@@ -6,7 +6,7 @@ Release Log
 
 GraSPy 0.0.2
 ------------
-Release date: 26 march 2019
+Release date: 26 March 2019
 Supports Python 3.5, 3.6, and 3.7.
 
 Release notes
