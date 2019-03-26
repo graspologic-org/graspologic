@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.csv
 
 # C extensions
 *.so
@@ -120,3 +121,4 @@ notebooks/bpedigo/emmons/*.csv
 notebooks/bpedigo/diag_procrust.py
 /graspy-env
 notebooks/bpedigo/new_pairs.py
+*.code-workspace

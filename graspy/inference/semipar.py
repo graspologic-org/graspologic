@@ -6,27 +6,28 @@ import numpy as np
 from scipy.linalg import orthogonal_procrustes
 from scipy.spatial import procrustes
 
-from .base import BaseInference
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
+from .base import BaseInference
 
 
 class SemiparametricTest(BaseInference):
     r"""
     Two sample hypothesis test for the semiparametric problem of determining
-    whether two random dot product graphs have the same latent positions [1].
+    whether two random dot product graphs have the same latent positions [1]_.
 
     Currently, the function only supports undirected graphs
 
     Parameters
     ----------
     embedding : string, { 'ase' (default), 'omnibus'}
-        String describing the embedding method to use.
-        'ase'
+        String describing the embedding method to use:
+
+        - 'ase'
             Embed each graph separately using adjacency spectral embedding
             and use Procrustes to align the embeddings.
-        'omnibus'
+        - 'omnibus'
             Embed all graphs simultaneously using omnibus embedding.
 
     n_components : None (default), or int
@@ -158,8 +159,8 @@ class SemiparametricTest(BaseInference):
             X_hat_compound = OmnibusEmbed(
                 n_components=self.n_components, check_lcc=check_lcc
             ).fit_transform((A1, A2))
-            X1_hat = X_hat_compound[: A1.shape[0], :]
-            X2_hat = X_hat_compound[A2.shape[0] :, :]
+            X1_hat = X_hat_compound[0]
+            X2_hat = X_hat_compound[1]
         return (X1_hat, X2_hat)
 
     def fit(self, A1, A2):

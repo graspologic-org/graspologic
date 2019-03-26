@@ -7,9 +7,9 @@ import warnings
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
+from ..utils import get_lcc, import_graph, is_fully_connected
 from .base import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph, get_lcc, is_fully_connected
 
 
 def _check_valid_graphs(graphs):
@@ -93,16 +93,16 @@ class OmnibusEmbed(BaseEmbed):
     n_elbows : int, optional, default: 2
         If `n_compoents=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
-    algorithm : {'full', 'truncated' (default), 'randomized'}, optional
+    algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
 
+        - 'randomized'
+            Computes randomized svd using 
+            ``sklearn.utils.extmath.randomized_svd``
         - 'full'
             Computes full svd using ``scipy.linalg.svd``
         - 'truncated'
             Computes truncated svd using ``scipy.sparse.linalg.svd``
-        - 'randomized'
-            Computes randomized svd using 
-            ``sklearn.utils.extmath.randomized_svd``
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
@@ -118,17 +118,14 @@ class OmnibusEmbed(BaseEmbed):
         Number of graphs
     n_vertices_ : int
         Number of vertices in each graph
-    latent_left_ : array, shape (n_samples, n_components)
+    latent_left_ : array, shape (n_graphs, n_vertices, n_components)
         Estimated left latent positions of the graph. 
-    latent_right_ : array, shape (n_samples, n_components), or None
+    latent_right_ : array, shape (n_graphs, n_vertices, n_components), or None
         Only computed when the graph is directed, or adjacency matrix is 
         asymmetric. Estimated right latent positions of the graph. Otherwise, 
         None.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
-    indices_ : array, or None
-        If ``lcc`` is True, these are the indices of the vertices that were 
-        kept.
 
     See Also
     --------
@@ -138,7 +135,7 @@ class OmnibusEmbed(BaseEmbed):
     References
     ----------
     .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017, 
-       November).A central limit theorem for an omnibus embedding of multiple random 
+       November). A central limit theorem for an omnibus embedding of multiple random 
        dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International 
        Conference on (pp. 964-967). IEEE.
     """
@@ -165,10 +162,10 @@ class OmnibusEmbed(BaseEmbed):
 
         Parameters
         ----------
-        graphs : list of graphs, or array-like
-            List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph. If array-like, the shape must be 
-            (n_graphs, n_vertices, n_vertices)
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
         
         y : Ignored
 
@@ -204,24 +201,34 @@ class OmnibusEmbed(BaseEmbed):
         # Embed
         self._reduce_dim(omni_matrix)
 
+        # Reshape to tensor
+        self.latent_left_ = self.latent_left_.reshape(
+            self.n_graphs_, self.n_vertices_, -1
+        )
+        if self.latent_right_ is not None:
+            self.latent_right_ = self.latent_right_.reshape(
+                self.n_graphs_, self.n_vertices_, -1
+            )
+
         return self
 
     def fit_transform(self, graphs, y=None):
         """
         Fit the model with graphs and apply the embedding on graphs. 
-        n_dimension is either automatically determined or based on user input.
+        n_components is either automatically determined or based on user input.
 
         Parameters
         ----------
-        graphs : list of graphs
-            List of array-like, (n_vertices, n_vertices), or list of 
-            networkx.Graph.
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         y : Ignored
 
         Returns
         -------
-        out : array-like, shape (n_vertices * n_graphs, n_dimension) if input 
+        out : array-like, shape (n_graphs, n_vertices, n_components) if input 
             graphs were symmetric. If graphs were directed, returns tuple of 
             two arrays (same shape as above) where the first corresponds to the
             left latent positions, and the right to the right latent positions
