@@ -13,10 +13,11 @@ Highlights
 ----------
 This release is the result of 3 months of work with over 16 pull requests by 5 contributors. Highlights include:
 
-- Nonparametric hypothesis testing method for non-vertex matched graphs.
+- Nonparametric hypothesis testing method for testing two non-vertex matched graphs.
 - Plotting updates to ``pairplot``, ``gridplot`` and ``heatmaps``.
 - Sampling degree-correlcted stochatic block models (DC-SBM).
 - ``import_edgelist`` function for importing single or multiple edgelists.
+- Enforcing ``Black`` formatting for the package.
 
 Improvements
 ------------
@@ -24,6 +25,7 @@ Improvements
 - ``gridplot`` and ``heatmap`` can now plot hierchical labels.
 - New Laplacian computing method ('R-DAD') by adding a constant to the diagonal degree matrix.
 - Semiparametric testing only checks for largest connected component (LCC) in the intial embeddings. 
+- Various bug fixes.
 - Various tutorial latex fixes.
 - Various documentation clarifications.
 - More consistent documentation.
