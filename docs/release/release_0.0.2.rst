@@ -43,8 +43,8 @@ None.
 
 Contributors to this release
 ----------------------------
-- Benjamin Pedigo
-- Jaewon Chung
-- Bijan Varjavand
-- Vikram Chandrashekhar
-- Ronan Perry
+- `Benjamin Pedigo <https://github.com/bdpedigo>`_
+- `Jaewon Chung <https://github.com/j1c>`_
+- `Bijan Varjavand <https://github.com/bvarjavand>`_
+- `Vikram Chandrashekhar <https://github.com/vikramc1>`_
+- `Ronan Perry <https://github.com/rflperry>`_
