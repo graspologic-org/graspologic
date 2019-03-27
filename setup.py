@@ -19,7 +19,7 @@ REQUIRED_PACKAGES = [
     "scipy>=1.1.0",
     "seaborn>=0.9.0",
 ]
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 
 def check_python_version():
