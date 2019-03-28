@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from graspy.plot.plot import heatmap, gridplot, pairplot
-from graspy.simulations.simulations import er_np
+from graspy.plot.plot import heatmap, gridplot, pairplot, _sort_inds
+from graspy.simulations.simulations import er_np, sbm
 
 
 def test_common_inputs():
@@ -176,3 +176,54 @@ def test_pairplot_outputs():
     fig = pairplot(
         X, Y, col_names, title="Test", height=1.5, variables=["Feature1", "Feature2"]
     )
+
+
+def test_sort_inds():
+    B = np.array(
+        [
+            [0, 0.2, 0.1, 0.1, 0.1],
+            [0.2, 0.8, 0.1, 0.3, 0.1],
+            [0.15, 0.1, 0, 0.05, 0.1],
+            [0.1, 0.1, 0.2, 1, 0.1],
+            [0.1, 0.2, 0.1, 0.1, 0.8],
+        ]
+    )
+
+    g = sbm([10, 30, 50, 25, 25], B, directed=True)
+    degrees = g.sum(axis=0) + g.sum(axis=1)
+    degree_sort_inds = np.argsort(degrees)
+    labels2 = 40 * ["0"] + 100 * ["1"]
+    labels1 = 10 * ["d"] + 30 * ["c"] + 50 * ["d"] + 25 * ["e"] + 25 * ["c"]
+    labels1 = np.array(labels1)
+    labels2 = np.array(labels2)
+    sorted_inds = _sort_inds(g, labels1, labels2)
+    # sort outer blocks first if given, sort by num verts in the block
+    # for inner hier, sort by num verts for that category across the entire graph
+    # ie if there are multiple inner hier across different outer blocks, sort
+    # by prevalence in the entire graph, not within block
+    # this is to make the ordering within outer block consistent
+    # within a block, sort by degree
+
+    # outer block order should thus be: 1, 0
+    # inner block order should thus be: d, c, e
+
+    # show that outer blocks are sorted correctly
+    labels2 = labels2[sorted_inds]
+    assert np.all(labels2[:100] == "1")
+    assert np.all(labels2[100:] == "0")
+
+    # show that inner blocks are sorted correctly
+    labels1 = labels1[sorted_inds]
+    assert np.all(labels1[:50] == "d")
+    assert np.all(labels1[50:75] == "c")
+    assert np.all(labels1[75:100] == "e")
+    assert np.all(labels1[100:110] == "d")
+    assert np.all(labels1[110:] == "c")
+
+    # show that within block, everything is in descending degree order
+    degrees = degrees[sorted_inds]
+    assert np.all(np.diff(degrees[:50]) <= 0)
+    assert np.all(np.diff(degrees[50:75]) <= 0)
+    assert np.all(np.diff(degrees[75:100]) <= 0)
+    assert np.all(np.diff(degrees[100:110]) <= 0)
+    assert np.all(np.diff(degrees[110:]) <= 0)
