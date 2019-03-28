@@ -762,7 +762,7 @@ def _sort_inds(graph, inner_labels, outer_labels):
     sort_df["outer_counts"] = len(outer_labels) - outer_label_counts
 
     # get node edge sums (not exactly degrees if weighted)
-    node_edgesums = _get_node_edgesums(graph)
+    node_edgesums = graph.sum(axis=1) + graph.sum(axis=0)
     sort_df["node_edgesums"] = node_edgesums.max() - node_edgesums
 
     sort_df.sort_values(
@@ -809,56 +809,6 @@ def _get_freq_vec(vals):
     _, inv, counts = np.unique(vals, return_counts=True, return_inverse=True)
     count_vec = counts[inv]
     return count_vec
-
-
-def _get_node_edgesums(A):
-    return A.sum(axis=1) + A.sum(axis=0)
-
-
-# def _get_blockweights(A, inner_freq_cumsum):
-#     block_sum = np.zeros(len(inner_freq_cumsum) - 1)
-#     for i in range(len(inner_freq_cumsum) - 1):
-#         out_sum = A[inner_freq_cumsum[i] : inner_freq_cumsum[i + 1]].sum(axis=0)
-#         in_sum = A[inner_freq_cumsum[i] : inner_freq_cumsum[i + 1]].sum(axis=1)
-#         block_sum[i] = out_sum + in_sum
-#     return block_sum
-
-
-# def _get_blockweight_vec(A, inner_labels, outer_labels):
-#     _, inner_freq_cumsum, _, outer_freq_cumsum = _get_freqs(inner_labels, outer_labels)
-#     block_sum = _get_blockweights(A, inner_freq_cumsum)
-
-#     return 1
-
-
-# def _get_freq_maps(inner_labels, outer_labels):
-#     outer_unique, outer_freq = np.unique(outer_labels, return_counts=True)
-#     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
-
-
-#     # for each group of outer labels, calculate the boundaries of the inner labels
-#     inner_freq = np.array([])
-#     inner_unique = np.array([])
-#     inner_label_counts = np.zeros(inner_labels.shape[0])
-#     for i in range(outer_freq.size):
-#         start_ind = outer_freq_cumsum[i]
-#         stop_ind = outer_freq_cumsum[i + 1]
-#         temp_inner_unique, temp_freq = np.unique(
-#             inner_labels[start_ind:stop_ind], return_counts=True
-#         )
-#         inner_freq = np.hstack([inner_freq, temp_freq])
-#         inner_unique = np.hstack([inner_unique, temp_inner_unique])
-#         temp_inner_map = dict(zip(inner_unique, inner_freq))
-#         temp_inner_mapped = itemgetter(*inner_labels[start_ind:stop_ind])(
-#             temp_inner_map
-#         )
-#         inner_label_counts[start_ind:stop_ind] = temp_inner_mapped
-
-#     print(inner_label_counts)
-#     outer_map = dict(zip(outer_unique, outer_freq))
-#     outer_label_counts = itemgetter(*outer_labels)(outer_map)
-
-#     return inner_label_counts, outer_label_counts
 
 
 def _unique_like(vals):

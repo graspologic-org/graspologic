@@ -252,6 +252,32 @@ class TestLCC(unittest.TestCase):
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
 
+    def test_multigraph_lcc_recurse_numpylist(self):
+        g = np.zeros((6, 6))
+        g[0, 2] = 1
+        g[2, 1] = 1
+        g[1, 3] = 1
+        g[3, 4] = 1
+        # unconnected 5 for this graph
+
+        f = np.zeros((6, 6))
+        f[0, 1] = 1
+        f[1, 3] = 1
+        f[3, 4] = 1
+        f[3, 5] = 1
+        f[5, 2] = 1
+
+        expected_g_lcc = expected_f_lcc = np.zeros((3, 3))
+        expected_g_lcc[0, 1] = 1
+        expected_g_lcc[1, 2] = 1
+        expected_mats = [expected_g_lcc, expected_f_lcc]
+        expected_nodelist = np.array([1, 3, 4])
+
+        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g], return_inds=True)
+        for i, graph in enumerate(lccs):
+            np.testing.assert_array_equal(graph, expected_mats[i])
+            np.testing.assert_array_equal(nodelist, expected_nodelist)
+
     def test_multigraph_lcc_numpylist(self):
         expected_g_matrix = np.array(
             [[0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0]]
