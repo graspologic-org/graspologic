@@ -10,3 +10,5 @@ import graspy.inference
 import graspy.plot
 import graspy.simulations
 import graspy.utils
+import graspy.models
+import graspy.datasets
