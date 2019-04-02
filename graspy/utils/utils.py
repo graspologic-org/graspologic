@@ -526,3 +526,4 @@ def augment_diagonal(graph, weight=1):
     diag = weight * degrees / divisor
     graph += np.diag(diag)
     return graph
+
