@@ -402,7 +402,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     elif isinstance(dc, (list, np.ndarray)) and np.issubdtype(
         np.array(dc).dtype, np.number
     ):
-        dcProbs = np.array(dc)
+        dcProbs = np.array(dc, dtype=float)
         # Check size and element types
         if not np.issubdtype(dcProbs.dtype, np.number):
             msg = "There are non-numeric elements in dc, {}".format(dcProbs.dtype)
@@ -455,8 +455,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
             ],
             dtype="float",
         )
+        # dcProbs = dcProbs.astype(float)
         for indices in cmties:
             dcProbs[indices] /= sum(dcProbs[indices])
+            # dcProbs[indices] = dcProbs / dcProbs[indices].sum()
     elif dc is not None:
         msg = "dc must be a function or a list or np.array of numbers or callable functions, not {}".format(
             type(dc)
