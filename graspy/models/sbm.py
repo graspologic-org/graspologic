@@ -82,7 +82,7 @@ class SBEstimator(BaseGraphEstimator):
             in_degree = np.count_nonzero(graph, axis=0)
             degree_corrections = out_degree + in_degree
             degree_corrections = degree_corrections.astype(float)
-            inds = np.append(inds, [degree_corrections.size])
+            # inds = np.append(inds, [degree_corrections.size])
             for i in block_inds:
                 block_degrees = degree_corrections[block_vert_inds[i]]
                 degree_corrections[block_vert_inds[i]] = degree_corrections[
