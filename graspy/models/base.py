@@ -14,6 +14,9 @@ class BaseGraphEstimator(BaseEstimator):
         self.loops = loops
 
     def bic(self, graph):
+        # first term should be ln(number of observations (edges)) * n_params
+        # second term is 2 * ln(likelihood)
+        # i.e. sum(ln(likelihood per edge))
         return 2 * np.log(self.n_verts) * self._n_parameters() - 2 * self.score(graph)
 
         # return
