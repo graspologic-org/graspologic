@@ -530,3 +530,8 @@ def augment_diagonal(graph, weight=1):
     graph += np.diag(diag)
     return graph
 
+
+def binarize(graph):
+    graph = import_graph(graph)
+    graph[graph > 0] = 1
+    return graph
