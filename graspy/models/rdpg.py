@@ -1,7 +1,7 @@
 from .base import BaseGraphEstimator
 from ..embed import AdjacencySpectralEmbed
 from ..simulations import rdpg, p_from_latent, sample_edges
-from ..utils import import_graph
+from ..utils import import_graph, augment_diagonal
 import numpy as np
 
 
@@ -22,7 +22,8 @@ class RDPGEstimator(BaseGraphEstimator):
         # allow all ase kwargs?
         graph = import_graph(graph)
         self.n_verts = graph.shape[0]
-
+        graph = augment_diagonal(graph, weight=100)
+        graph[graph == 0] += 1000 * 1 / graph.size
         ase = AdjacencySpectralEmbed(n_components=self.n_components)
         latent = ase.fit_transform(graph)
         # if len(latent) == 1:
