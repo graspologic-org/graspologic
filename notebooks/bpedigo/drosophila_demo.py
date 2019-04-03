@@ -9,7 +9,7 @@ left_adj, cell_labels = load_drosophila_left(return_labels=True)
 left_adj_uw = left_adj.copy()
 left_adj_uw[left_adj_uw > 0] = 1
 
-# heatmap(left_adj_uw, inner_hier_labels=cell_labels)
+heatmap(left_adj_uw, inner_hier_labels=cell_labels)
 
 models = [
     EREstimator(fit_degrees=False),
@@ -22,6 +22,15 @@ models = [
 
 for model in models:
     m = model.fit(left_adj, y=cell_labels)
+    heatmap(m.p_mat_, inner_hier_labels=cell_labels)
+    heatmap(m.sample(), inner_hier_labels=cell_labels)
+    s = m.sample()
+    print(m.bic(left_adj))
+
+#%%
+# debug version
+for model in models:
+    m = model.fit(left_adj, y=cell_labels)
     # heatmap(m.p_mat_, inner_hier_labels=cell_labels)
     # heatmap(m.sample(), inner_hier_labels=cell_labels)
     s = m.sample()
@@ -32,16 +41,16 @@ for model in models:
     # print(m._n_parameters())
     edge_log_likelihoods = m.score_samples(left_adj)
     inds = np.where(np.logical_and(np.isneginf(edge_log_likelihoods), left_adj == 0))
-    print(len(inds[0]))
-    print(np.isneginf(edge_log_likelihoods).sum())
+    # print(len(inds[0]))
+    # print(np.isneginf(edge_log_likelihoods).sum())
     edge_log_likelihoods[np.isneginf(edge_log_likelihoods)] = 0
-    print(edge_log_likelihoods.sum())
+    # print(edge_log_likelihoods.sum())
     p_mat = m.p_mat_
-    print(p_mat.max())
-    print(p_mat.min())
-    print(p_mat[p_mat == 1.0].sum())
-    print()
-    print()
+    # print(p_mat.max())
+    # print(p_mat.min())
+    # print(p_mat[p_mat == 1.0].sum())
+    # print()
+    # print()
 #%%
 # er = EREstimator(fit_degrees=False)
 # er.fit(left_adj)
