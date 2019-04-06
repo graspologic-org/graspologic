@@ -15,43 +15,46 @@ class BaseSignalSubgraph(ABC, BaseEstimator, ClassifierMixin):
     Base Signal Subgraph class.
     """
 
+    def __init__(
+        self,
+        
+    ):
+        self.n_components = n_components
+        self.n_elbows = n_elbows
+        self.algorithm = algorithm
+        self.n_iter = n_iter
+        self.check_lcc = check_lcc
+
     @abstractmethod
-    def fit(self, graph, y=None):
+    def fit(self, graphs, y):
         """
         A method for computing the signal subgraph.
 
         Parameters
         ----------
-        graph: np.ndarray or networkx.Graph
+        graphs: np.ndarray of adjacency matrices
 
-        y : Ignored
+        y : label for each graph in graphs
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d.
+        self : BaseSignalSubgraph object
+            Contains the signal subgraph vertices.
 
         See Also
         --------
-        import_graph, LatentPosition
+        
         """
         # call self._reduce_dim(A) from your respective embedding technique.
         # import graph(s) to an adjacency matrix using import_graph function
         # here
-
         return self
 
-    def _fit_transform(self, graph):
+    def _fit_transform(self, graph, y):
         "Fits the model and returns the signal subgraph"
-        self.fit(graph)
+        self.fit(graph, y)
 
-        if self.latent_right_ is None:
-            return self.latent_left_
-        else:
-            return self.latent_left_, self.latent_right_
-
-    def fit_transform(self, graph, y=None):
+    def fit_transform(self, graph, y):
         """
         Fit the model with graphs and apply the transformation. 
 
@@ -71,4 +74,4 @@ class BaseSignalSubgraph(ABC, BaseEstimator, ClassifierMixin):
             graph, wheras a tuple represents the left and right latent positions 
             for a directed graph
         """
-        return self._fit_transform(graph)
+        return self._fit_transform(graph, y)
