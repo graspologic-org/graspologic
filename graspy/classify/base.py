@@ -10,15 +10,13 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import adjusted_rand_score
 from sklearn.utils.validation import check_is_fitted
 
+
 class BaseSignalSubgraph(ABC, BaseEstimator, ClassifierMixin):
     """
     Base Signal Subgraph class.
     """
 
-    def __init__(
-        self,
-        
-    ):
+    def __init__(self,):
         self.n_components = n_components
         self.n_elbows = n_elbows
         self.algorithm = algorithm

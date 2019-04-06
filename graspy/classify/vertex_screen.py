@@ -4,21 +4,23 @@ from mgcpy.independence_tests.dcorr import DCorr
 from mgcpy.independence_tests.mgc import MGC
 import numpy as np
 
-class VertexScreener(BaseSignalSubgraph):
 
-    def __init__(self,num_vertices=20,distance_metric='mgc'):
+class VertexScreener(BaseSignalSubgraph):
+    def __init__(self, num_vertices=20, distance_metric="mgc"):
         self.distance_metric = distance_metric
         self.num_vertices = num_vertices
-    
-    def fit(self,graphs,y):
-        self._vertices,self._ts = self._screen_vertices(graphs,y)
-        num_vertices_ = np.array([len(i) for i in self._vertices],dtype='int')
-        self.vertices_of_interest = self._vertices[ np.nonzero(num_vertices_ == self.num_vertices)[0][0] ]
+
+    def fit(self, graphs, y):
+        self._vertices, self._ts = self._screen_vertices(graphs, y)
+        num_vertices_ = np.array([len(i) for i in self._vertices], dtype="int")
+        self.vertices_of_interest = self._vertices[
+            np.nonzero(num_vertices_ == self.num_vertices)[0][0]
+        ]
         return self
-    
-    def _get_distance_correlations(self,A,Y):
+
+    def _get_distance_correlations(self, A, Y):
         # A is of shape (num_samples,n_vertices,n_vertices)
-        if self.distance_metric == 'mgc':
+        if self.distance_metric == "mgc":
             # use mgc test statistic if chosen
             corr = MGC().test_statistic
         else:
@@ -27,12 +29,12 @@ class VertexScreener(BaseSignalSubgraph):
         c = []
         # for each vertex get the correlations
         for i in range(A.shape[1]):
-            cu = corr(A[:,i,:],Y)
+            cu = corr(A[:, i, :], Y)
             c.append(cu[0])
         return np.array(c)
-    
-    def _screen_vertices(self,A,Y,delta=0.5):
-        if self.distance_metric == 'mgc':
+
+    def _screen_vertices(self, A, Y, delta=0.5):
+        if self.distance_metric == "mgc":
             corr = MGC().test_statistic
         else:
             corr = DCorr().test_statistic
@@ -45,7 +47,7 @@ class VertexScreener(BaseSignalSubgraph):
         while len(V[k]) > 1:
             # get the correlation between the current vertex
             # list and the labels
-            c = self._get_distance_correlations(A[:,V[k][:,None],V[k]],Y)
+            c = self._get_distance_correlations(A[:, V[k][:, None], V[k]], Y)
             # t_k = np.quantile(c,delta)
             idx = np.argmin(c)
             V.append(V[k][np.arange(len(V[k])) != idx])
@@ -64,17 +66,15 @@ class VertexScreener(BaseSignalSubgraph):
             k += 1
         ts = []
         for i in range(len(V)):
-            A_vk = np.reshape(A[:,V[i][:,None],V[i]],(A.shape[0],-1))
-            ts.append(corr(A_vk,Y)[0])
-        return V,ts
+            A_vk = np.reshape(A[:, V[i][:, None], V[i]], (A.shape[0], -1))
+            ts.append(corr(A_vk, Y)[0])
+        return V, ts
 
-    def _fit_transform(self,graph,y):
+    def _fit_transform(self, graph, y):
         return self.vertices_of_interest
-            
-    def fit_transform(self,graphs,y):
-        return self._fit_transform(graphs,y)
-    
+
+    def fit_transform(self, graphs, y):
+        return self._fit_transform(graphs, y)
+
     def score(self):
         pass
-
-    
