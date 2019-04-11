@@ -193,9 +193,11 @@ def heatmap(
     arr = import_graph(X)
     arr = _transform(arr, transform)
     if inner_hier_labels is not None:
+        inner_hier_labels = np.array(inner_hier_labels)
         if outer_hier_labels is None:
             arr = _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels))
         else:
+            outer_hier_labels = np.array(outer_hier_labels)
             arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels)
 
     # Global plotting settings
