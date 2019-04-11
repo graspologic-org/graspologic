@@ -310,12 +310,14 @@ def gridplot(
     graphs = [_transform(arr, transform) for arr in graphs]
 
     if inner_hier_labels is not None:
+        inner_hier_labels = np.array(inner_hier_labels)
         if outer_hier_labels is None:
             graphs = [
                 _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels))
                 for arr in graphs
             ]
         else:
+            outer_hier_labels = np.array(outer_hier_labels)
             graphs = [
                 _sort_graph(arr, inner_hier_labels, outer_hier_labels) for arr in graphs
             ]
