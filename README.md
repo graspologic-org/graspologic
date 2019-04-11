@@ -1,4 +1,5 @@
 # GraSPy
+[![arXiv shield](https://img.shields.io/badge/arXiv-1904.05329-red.svg?style=flat)](https://arxiv.org/abs/1904.05329)
 [![Build Status](https://travis-ci.org/neurodata/graspy.svg?branch=master)](https://travis-ci.org/neurodata/graspy)
 [![codecov](https://codecov.io/gh/neurodata/graspy/branch/master/graph/badge.svg)](https://codecov.io/gh/neurodata/graspy)
 [![DOI](https://zenodo.org/badge/147768493.svg)](https://zenodo.org/badge/latestdoi/147768493)
