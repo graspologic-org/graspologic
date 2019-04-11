@@ -39,7 +39,6 @@ class VertexScreener(BaseSignalSubgraph):
         else:
             corr = DCorr().test_statistic
         corrs = []
-        # ths = []
         k = 0
         # create a list of the vertices
         V = [np.arange(len(A[-1]))]
@@ -48,21 +47,10 @@ class VertexScreener(BaseSignalSubgraph):
             # get the correlation between the current vertex
             # list and the labels
             c = self._get_distance_correlations(A[:, V[k][:, None], V[k]], Y)
-            # t_k = np.quantile(c,delta)
             idx = np.argmin(c)
             V.append(V[k][np.arange(len(V[k])) != idx])
-            # if none of the vertices are above the threshold
-            # if np.count_nonzero(c > t_k) == 0:
-            #     # remove the vertex with the lowest correlation
-            #     idx = np.argmin(c)
-            #     V.append(V[k][np.arange(len(V[k])) != idx])
-            # else:
-            #     # keep all the vertices above the threshold
-            #     V.append(V[k][c > t_k])
-            # # store the correlation for this iteration
+            # store the correlation for this iteration
             corrs.append(c)
-            # store the threshold for this iteration
-            # ths.append(t_k)
             k += 1
         ts = []
         for i in range(len(V)):
@@ -70,7 +58,8 @@ class VertexScreener(BaseSignalSubgraph):
             ts.append(corr(A_vk, Y)[0])
         return V, ts
 
-    def _fit_transform(self, graph, y):
+    def _fit_transform(self, graphs, y):
+        self.fit(graphs,y)
         return self.vertices_of_interest
 
     def fit_transform(self, graphs, y):

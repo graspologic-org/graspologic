@@ -16,13 +16,6 @@ class BaseSignalSubgraph(ABC, BaseEstimator, ClassifierMixin):
     Base Signal Subgraph class.
     """
 
-    def __init__(self,):
-        self.n_components = n_components
-        self.n_elbows = n_elbows
-        self.algorithm = algorithm
-        self.n_iter = n_iter
-        self.check_lcc = check_lcc
-
     @abstractmethod
     def fit(self, graphs, y):
         """
