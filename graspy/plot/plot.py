@@ -303,7 +303,9 @@ def gridplot(
         msg = "X must be a list, not {}.".format(type(X))
         raise TypeError(msg)
 
-    check_consistent_length(X, labels, inner_hier_labels, outer_hier_labels)
+    check_consistent_length(X, labels)
+    for g in X:
+        check_consistent_length(g, inner_hier_labels, outer_hier_labels)
 
     graphs = [_transform(arr, transform) for arr in graphs]
 
