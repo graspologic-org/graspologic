@@ -12,10 +12,35 @@ def test_inputs():
     # Generate random data
     X = np.random.normal(0, 1, size=(100, 3))
 
+    # empty constructor
     with pytest.raises(TypeError):
-        gclust = GaussianCluster(max_components="1")
+        gclust = GaussianCluster()
 
-    # max_cluster > n_samples
+    # min_components < 1
+    with pytest.raises(ValueError):
+        gclust = GaussianCluster(min_components=0)
+
+    # min_components integer
+    with pytest.raises(TypeError):
+        gclust = GaussianCluster(min_components="1")
+
+    # max_components < min_components
+    with pytest.raises(ValueError):
+        gclust = GaussianCluster(min_components=1, max_components=0)
+
+    # max_components integer
+    with pytest.raises(TypeError):
+        gclust = GaussianCluster(min_components=1, max_components="1")
+
+    # covariance type is not an array, string or list
+    with pytest.raises(TypeError):
+        gclust = GaussianCluster(min_components=1, covariance_type=1)
+
+    # covariance type is not in ['spherical', 'diag', 'tied', 'full']
+    with pytest.raises(ValueError):
+        gclust = GaussianCluster(min_components=1, covariance_type="graspy")
+
+    # min_cluster > n_samples when max_cluster is None
     with pytest.raises(ValueError):
         gclust = GaussianCluster(1000)
         gclust.fit(X)
@@ -24,29 +49,31 @@ def test_inputs():
         gclust = GaussianCluster(1000)
         gclust.fit_predict(X)
 
-    # max_cluster < 0
+    # max_cluster > n_samples when max_cluster is not None
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(max_components=-1)
+        gclust = GaussianCluster(10, 1001)
         gclust.fit(X)
 
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(max_components=-1)
+        gclust = GaussianCluster(10, 1001)
         gclust.fit_predict(X)
 
+    # min_cluster > n_samples when max_cluster is None
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(min_components=-1)
+        gclust = GaussianCluster(1000)
         gclust.fit(X)
 
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(max_components=-1)
+        gclust = GaussianCluster(10, 1001)
         gclust.fit_predict(X)
 
+    # min_cluster > n_samples when max_cluster is not None
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(min_components=2, max_components=1)
+        gclust = GaussianCluster(1000, 1001)
         gclust.fit(X)
 
     with pytest.raises(ValueError):
-        gclust = GaussianCluster(min_components=2, max_components=1)
+        gclust = GaussianCluster(1000, 1001)
         gclust.fit_predict(X)
 
 
@@ -55,7 +82,7 @@ def test_predict_without_fit():
     X = np.random.normal(0, 1, size=(100, 3))
 
     with pytest.raises(NotFittedError):
-        gclust = GaussianCluster(max_components=2)
+        gclust = GaussianCluster(min_components=2)
         gclust.predict(X)
 
 
@@ -69,7 +96,7 @@ def test_no_y():
     X2 = np.random.normal(-2, 0.5, size=(n, d))
     X = np.vstack((X1, X2))
 
-    gclust = GaussianCluster(max_components=5)
+    gclust = GaussianCluster(min_components=5)
     gclust.fit(X)
 
     bics = gclust.bic_
@@ -93,7 +120,7 @@ def test_outputs():
         X = np.vstack((X1, X2))
         y = np.repeat([0, 1], n)
 
-        gclust = GaussianCluster(max_components=5)
+        gclust = GaussianCluster(min_components=5)
         gclust.fit(X, y)
         bics = gclust.bic_
         aris = gclust.ari_
@@ -127,7 +154,7 @@ def test_bic():
         X_hat = ase.fit_transform(A)
 
         # Compute clusters
-        gclust = GaussianCluster(max_components=10)
+        gclust = GaussianCluster(min_components=10)
         gclust.fit(X_hat, y)
 
         bics = gclust.bic_
@@ -160,7 +187,7 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
     gclust_object.fit(X)
     assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 0)
 
@@ -174,7 +201,7 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
     gclust_object.fit(X)
     assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 1)
 
@@ -187,7 +214,7 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
     gclust_object.fit(X)
     assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 2)
 
@@ -200,6 +227,6 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(max_components=2, covariance_type="all")
+    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
     gclust_object.fit(X)
     assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 3)
