@@ -7,7 +7,6 @@ from sklearn.model_selection import ParameterGrid
 
 from .base import BaseCluster
 
-
 class GaussianCluster(BaseCluster):
     r"""
     Gaussian Mixture Model (GMM)
@@ -19,12 +18,12 @@ class GaussianCluster(BaseCluster):
 
     Parameters
     ----------
-    max_components : int, defaults to 1.
-        The maximum number of mixture components to consider.
-
     min_components : int, defaults to 1. 
         The minimum number of mixture components to consider.
-        Must be less than max_components.
+        Must be less than max_components if max_components is not None
+
+    max_components : int, defaults to None.
+        The maximum number of mixture components to consider. 
 
     covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
