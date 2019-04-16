@@ -6,9 +6,17 @@ from ..simulations import sbm, sample_edges
 
 
 class SBEstimator(BaseGraphEstimator):
-    def __init__(self, fit_weights=False, fit_degrees=False, directed=True, loops=True):
+    def __init__(
+        self,
+        fit_weights=False,
+        fit_degrees=False,
+        degree_directed=True,
+        directed=True,
+        loops=True,
+    ):
         super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
         self.fit_degrees = fit_degrees
+        self.degree_directed = degree_directed
 
     def fit(self, graph, y=None):
         """
@@ -30,7 +38,6 @@ class SBEstimator(BaseGraphEstimator):
 
         # at this point assume block assignments are known
 
-        # iterate over the blocks and calculate p
         # TODO: need to do this part in such a way as to align the labels
         # with a way that we can plot/sample
         block_labels, block_inv, block_sizes = np.unique(
@@ -49,7 +56,7 @@ class SBEstimator(BaseGraphEstimator):
 
         # TODO:
         # this is indexed in the same way as the internal model (unique)
-        # could use unique like here?
+        # could use unique_like here?
         self.block_members_ = np.array(block_members)
 
         block_vert_inds = []
@@ -78,26 +85,27 @@ class SBEstimator(BaseGraphEstimator):
         self.p_mat_ = p_mat
 
         if self.fit_degrees:
-            out_degree = np.count_nonzero(graph, axis=1)
-            in_degree = np.count_nonzero(graph, axis=0)
-            degree_corrections = out_degree + in_degree
-            degree_corrections = degree_corrections.astype(float)
-            # inds = np.append(inds, [degree_corrections.size])
+            out_degree = np.count_nonzero(graph, axis=1).astype(float)
+            in_degree = np.count_nonzero(graph, axis=0).astype(float)
+            if self.degree_directed:
+                degree_corrections = np.stack((out_degree, in_degree), axis=1)
+            else:
+                degree_corrections = out_degree + in_degree
+                # new axis just so we can index later
+                degree_corrections = degree_corrections[:, np.newaxis]
             for i in block_inds:
                 block_degrees = degree_corrections[block_vert_inds[i]]
-                degree_corrections[block_vert_inds[i]] = degree_corrections[
-                    block_vert_inds[i]
-                ] / np.mean(block_degrees)
-                # norm = np.mean(
-                #     np.outer(
-                #         degree_corrections[block_vert_inds[i]],
-                #         degree_corrections[block_vert_inds[i]],
-                #     )
-                # )
-                # print(norm)
+                degree_divisor = np.mean(block_degrees, axis=0)
+                if type(degree_divisor) is not np.float64:
+                    degree_divisor[degree_divisor == 0] = 1
+                degree_corrections[block_vert_inds[i]] = (
+                    degree_corrections[block_vert_inds[i]] / degree_divisor
+                )
 
             self.degree_corrections_ = degree_corrections
-            p_mat = p_mat * np.outer(degree_corrections, degree_corrections)
+            p_mat = p_mat * np.outer(
+                degree_corrections[:, 0], degree_corrections[:, -1]
+            )
             p_mat[p_mat > 1] = 1
             self.p_mat_ = p_mat
         else:
@@ -106,7 +114,6 @@ class SBEstimator(BaseGraphEstimator):
         if self.fit_weights:
             # TODO: something
             raise NotImplementedError("no weighted case yet")
-            # _fit_weights(graph)
 
         return self
 
@@ -126,7 +133,9 @@ class SBEstimator(BaseGraphEstimator):
         n_parameters += self.block_p_.size  # elements in block p matrix
         n_parameters += self.block_sizes_.size
         if self.fit_degrees:
-            n_parameters += self.n_verts  # one degree correction per vert is stored
+            n_parameters += (
+                self.degree_corrections_.size
+            )  # one degree correction per vert is stored
             # TODO: more than this? becasue now the position of verts w/in block matters
         return n_parameters
 
