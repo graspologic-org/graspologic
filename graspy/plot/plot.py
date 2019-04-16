@@ -103,6 +103,7 @@ def heatmap(
     cbar=True,
     inner_hier_labels=None,
     outer_hier_labels=None,
+    label_fontsize=30,
 ):
     r"""
     Plots a graph as a heatmap.
@@ -222,9 +223,15 @@ def heatmap(
             if outer_hier_labels is not None:
                 plot.set_yticklabels([])
                 plot.set_xticklabels([])
-                _plot_groups(plot, arr, inner_hier_labels, outer_hier_labels)
+                _plot_groups(
+                    plot,
+                    arr,
+                    inner_hier_labels,
+                    outer_hier_labels,
+                    fontsize=label_fontsize,
+                )
             else:
-                _plot_groups(plot, arr, inner_hier_labels)
+                _plot_groups(plot, arr, inner_hier_labels, fontsize=label_fontsize)
     return plot
 
 
@@ -827,7 +834,7 @@ def _unique_like(vals):
 
 
 # assume that the graph has already been plotted in sorted form
-def _plot_groups(ax, graph, inner_labels, outer_labels=None):
+def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
     plot_outer = True
     if outer_labels is None:
         outer_labels = np.ones_like(inner_labels)
@@ -880,6 +887,7 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
         "inner",
         "x",
         n_verts,
+        fontsize,
     )
     # side inner curves
     # ax_y = divider.new_horizontal(
@@ -895,11 +903,13 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
         "inner",
         "y",
         n_verts,
+        fontsize,
     )
 
     if plot_outer:
         # top outer curves
-        ax_x2 = divider.new_vertical(size="5%", pad=0.25, pack_start=False)
+        pad_scalar = 0.35 / 30 * fontsize
+        ax_x2 = divider.new_vertical(size="5%", pad=pad_scalar, pack_start=False)
         ax.figure.add_axes(ax_x2)
         _plot_brackets(
             ax_x2,
@@ -910,9 +920,10 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
             "outer",
             "x",
             n_verts,
+            fontsize,
         )
         # side outer curves
-        ax_y2 = divider.new_horizontal(size="5%", pad=0.25, pack_start=True)
+        ax_y2 = divider.new_horizontal(size="5%", pad=pad_scalar, pack_start=True)
         ax.figure.add_axes(ax_y2)
         _plot_brackets(
             ax_y2,
@@ -923,17 +934,22 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
             "outer",
             "y",
             n_verts,
+            fontsize,
         )
     return ax
 
 
-def _plot_brackets(ax, group_names, tick_loc, tick_width, curve, level, axis, max_size):
+def _plot_brackets(
+    ax, group_names, tick_loc, tick_width, curve, level, axis, max_size, fontsize
+):
     for x0, width in zip(tick_loc, tick_width):
         x = np.linspace(x0 - width, x0 + width, 1000)
         if axis == "x":
             ax.plot(x, -curve, c="k")
+            ax.patch.set_alpha(0)
         elif axis == "y":
             ax.plot(curve, x, c="k")
+            ax.patch.set_alpha(0)
     ax.set_yticks([])
     ax.set_xticks([])
     ax.tick_params(axis=axis, which=u"both", length=0, pad=7)
@@ -941,15 +957,15 @@ def _plot_brackets(ax, group_names, tick_loc, tick_width, curve, level, axis, ma
         ax.spines[direction].set_visible(False)
     if axis == "x":
         ax.set_xticks(tick_loc)
-        ax.set_xticklabels(group_names, fontsize=28, verticalalignment="center")
+        ax.set_xticklabels(group_names, fontsize=fontsize, verticalalignment="center")
         ax.xaxis.set_label_position("top")
         ax.xaxis.tick_top()
         ax.xaxis.labelpad = 30
         ax.set_xlim(0, max_size)
-        ax.tick_params(axis="x", which="major", pad=15)
+        ax.tick_params(axis="x", which="major", pad=5 + fontsize / 4)
     elif axis == "y":
         ax.set_yticks(tick_loc)
-        ax.set_yticklabels(group_names, fontsize=28, verticalalignment="center")
+        ax.set_yticklabels(group_names, fontsize=fontsize, verticalalignment="center")
         # ax.yaxis.set_label_position('top')
         # ax.yaxis.tick_top()
         ax.set_ylim(0, max_size)
