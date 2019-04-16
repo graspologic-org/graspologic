@@ -35,6 +35,14 @@ heatmap(
     label_fontsize=30,
 )
 
+gridplot(
+    [g],
+    inner_hier_labels=labels1,
+    outer_hier_labels=labels2,
+    # figsize=(20, 20),
+    label_fontsize=30,
+)
+
 
 def _get_freq_maps(inner_labels, outer_labels):
     outer_unique, outer_inv, outer_freq = np.unique(

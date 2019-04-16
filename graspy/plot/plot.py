@@ -249,6 +249,7 @@ def gridplot(
     legend_name="Type",
     inner_hier_labels=None,
     outer_hier_labels=None,
+    label_fontsize=30,
 ):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
@@ -312,6 +313,9 @@ def gridplot(
         msg = "X must be a list, not {}.".format(type(X))
         raise TypeError(msg)
 
+    if labels is None:
+        labels = np.arange(len(X))
+
     check_consistent_length(X, labels)
     for g in X:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
@@ -372,9 +376,15 @@ def gridplot(
             plot.set(title=title)
     if inner_hier_labels is not None:
         if outer_hier_labels is not None:
-            _plot_groups(plot.ax, graphs[0], inner_hier_labels, outer_hier_labels)
+            _plot_groups(
+                plot.ax,
+                graphs[0],
+                inner_hier_labels,
+                outer_hier_labels,
+                fontsize=label_fontsize,
+            )
         else:
-            _plot_groups(plot.ax, graphs[0], inner_hier_labels)
+            _plot_groups(plot.ax, graphs[0], inner_hier_labels, fontsize=label_fontsize)
     return plot
 
 
