@@ -1,7 +1,6 @@
 import os
 import sys
 from setuptools import setup, find_packages
-from setuptools.command.install import install
 from sys import platform
 
 PACKAGE_NAME = "graspy"
@@ -19,7 +18,12 @@ REQUIRED_PACKAGES = [
     "scipy>=1.1.0",
     "seaborn>=0.9.0",
 ]
-VERSION = "0.0.2"
+
+# Find GraSPy version.
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+for line in open(os.path.join(PROJECT_PATH, "graspy", "__init__.py")):
+    if line.startswith("__version__ = "):
+        VERSION = line.strip().split()[2][1:-1]
 
 
 def check_python_version():
