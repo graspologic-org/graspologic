@@ -11,10 +11,12 @@ from .base import BaseCluster
 class GaussianCluster(BaseCluster):
     r"""
     Gaussian Mixture Model (GMM)
+
     Representation of a Gaussian mixture model probability distribution. 
     This class allows to estimate the parameters of a Gaussian mixture 
     distribution. It computes all possible models from one component to 
     max_components. The best model is given by the lowest BIC score.
+
     Parameters
     ----------
     min_components : int, defaults to 1. 
@@ -24,6 +26,7 @@ class GaussianCluster(BaseCluster):
         max_components).
     max_components : int, defaults to 1.
         The maximum number of mixture components to consider.
+
     covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
         If a string, it must be one of:
@@ -129,6 +132,7 @@ class GaussianCluster(BaseCluster):
         """
         Fits gaussian mixure model to the data. 
         Estimate model parameters with the EM algorithm.
+        
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
@@ -138,6 +142,7 @@ class GaussianCluster(BaseCluster):
         y : array-like, shape (n_samples,), optional (default=None)
             List of labels for X if available. Used to compute
             ARI scores.
+
         Returns
         -------
         self
