@@ -10,3 +10,6 @@ import graspy.inference
 import graspy.plot
 import graspy.simulations
 import graspy.utils
+
+
+__version__ = "0.0.2"
