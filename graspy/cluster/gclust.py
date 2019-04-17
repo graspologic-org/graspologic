@@ -30,6 +30,7 @@ class GaussianCluster(BaseCluster):
     covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
         If a string, it must be one of:
+        
         - 'full'
             each component has its own general covariance matrix
         - 'tied'
@@ -132,7 +133,7 @@ class GaussianCluster(BaseCluster):
         """
         Fits gaussian mixure model to the data. 
         Estimate model parameters with the EM algorithm.
-        
+
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
