@@ -7,6 +7,9 @@ from .base import BaseEmbed
 from .svd import selectSVD
 from ..utils import import_graph, get_lcc, is_fully_connected
 
+import numpy as np
+from sklearn.utils.validation import check_is_fitted
+
 
 class AdjacencySpectralEmbed(BaseEmbed):
     r"""
@@ -79,6 +82,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
+    .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018). Out-of-sample 
+        extension of graph adjacency spectral embedding. PMLR: Proceedings of Machine Learning 
+        Research, 80, 2975-2984.
     """
 
     def __init__(
@@ -123,3 +129,69 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         self._reduce_dim(A)
         return self
+
+    def predict(self, X):
+        """
+        Embed out of sample vertices.
+
+        Parameters
+        ----------
+        X : array_like
+            m stacked similarity lists, where the jth entry of the ith row corresponds to
+            the similarity of the ith out of sample observation to the jth in sample
+            observation.
+
+        Returns
+        -------
+        oos_embedding : array, shape (m, d)
+            The embedding of the out of sample vertices.
+        """    
+
+        # Check if fit is already called
+        check_is_fitted(self, ["latent_left_"], all_or_any=all)
+
+        is_embedding = self.latent_left_
+        n = is_embedding.shape[0]
+
+        # Type checking
+        if isinstance(X, np.ndarray):
+            if X.ndim is 1:
+                X = X.reshape((1, -1))
+                X = X.T
+            elif X.ndim is 2:
+                if X.shape[1] == n:
+                    X = X.T
+                elif X.shape[0] != n:
+                    msg = (
+                        "Simlarity vectors must be of shape (m, n) or (n, m)."
+                    )
+                    raise ValueError(msg)
+            else:
+                msg = ( 
+                    "The dimension of array must be 1 or 2."
+                )
+        else:
+            msg = (
+                "Similarity vector must by an array."
+            )
+            raise TypeError(msg)
+
+        oos_embedding = X.T @ np.linalg.pinv(is_embedding).T
+
+        return oos_embedding
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
