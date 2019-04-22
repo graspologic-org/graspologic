@@ -308,7 +308,7 @@ def is_fully_connected(graph):
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an n x n adjacency matrix
+        interpreted as an :math: `n \times n` adjacency matrix
 
     Returns
     -------
@@ -343,7 +343,7 @@ def get_lcc(graph, return_inds=False):
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an n x n adjacency matrix
+        interpreted as an :math: `n \times n` adjacency matrix
     
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices in the original
@@ -448,7 +448,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
     Parameters
     ----------
     graphs: list or np.ndarray
-        if list, each element must be an n x n np.ndarray adjacency matrix
+        if list, each element must be an :math: `n \times n` np.ndarray adjacency matrix
         
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices in the original
@@ -502,7 +502,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 def augment_diagonal(graph, weight=1):
     """
     Replaces the diagonal of adjacency matrix with 
-    :math: \frac{degree}{num_verts - 1} for the degree associated
+    :math: `\frac{degree}{num_verts - 1}` for the degree associated
     with each node. 
 
     For directed graphs, the degree used is the out degree (number) of 
@@ -512,7 +512,7 @@ def augment_diagonal(graph, weight=1):
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an n x n adjacency matrix 
+        interpreted as an :math: `n \times n` adjacency matrix 
     """
     graph = import_graph(graph)
     graph = remove_loops(graph)
