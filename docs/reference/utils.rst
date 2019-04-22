@@ -25,7 +25,7 @@ Connected Components
 
 .. autofunction:: get_multigraph_union_lcc
 
-.. autofumction;: get_multigraph_intersect_lcc
+.. autofumction:: get_multigraph_intersect_lcc
 
 IO
 --
