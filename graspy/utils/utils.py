@@ -295,7 +295,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
 
 def is_fully_connected(graph):
-    """
+    r"""
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case. 
 
@@ -333,7 +333,7 @@ def is_fully_connected(graph):
 
 
 def get_lcc(graph, return_inds=False):
-    """
+    r"""
     Finds the largest connected component for the input graph. 
 
     The largest connected component is the fully connected subgraph
@@ -384,7 +384,7 @@ def get_lcc(graph, return_inds=False):
 
 
 def get_multigraph_union_lcc(graphs, return_inds=False):
-    """
+    r"""
     Finds the union of all multiple graphs, then compute the largest connected
     component.
 
@@ -437,7 +437,7 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
 
 
 def get_multigraph_intersect_lcc(graphs, return_inds=False):
-    """
+    r"""
     Finds the intersection of multiple graphs's largest connected components. 
 
     Computes the largest connected component for each graph that was input, and 
@@ -500,7 +500,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 
 
 def augment_diagonal(graph, weight=1):
-    """
+    r"""
     Replaces the diagonal of adjacency matrix with 
     :math: `\frac{degree}{num_verts - 1}` for the degree associated
     with each node. 
