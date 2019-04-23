@@ -488,9 +488,15 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
             recurse = True
             break
     if recurse:
-        new_graphs, inds_intersection = get_multigraph_intersect_lcc(
+        new_graphs, new_inds_intersection = get_multigraph_intersect_lcc(
             new_graphs, return_inds=True
         )
+        # new inds intersection are the indices of new_graph that were kept on recurse
+        # need to do this because indices could have shifted during recursion
+        if type(graphs[0]) is np.ndarray:
+            inds_intersection = inds_intersection[new_inds_intersection]
+        else:
+            inds_intersection = new_inds_intersection
     if type(graphs) != list:
         new_graphs = np.stack(new_graphs)
     if return_inds:
