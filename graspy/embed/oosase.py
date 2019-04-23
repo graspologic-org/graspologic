@@ -99,7 +99,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         in_sample_idx=None,
         connected_attempts=100,
         semi_supervised=False,
-        random_state=None
+        random_state=None,
     ):
         super().__init__(
             n_components=n_components,
@@ -110,7 +110,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         )
 
         if random_state is None:
-            random_state = np.random.randint(10**6)
+            random_state = np.random.randint(10 ** 6)
         np.random.seed(random_state)
 
         if in_sample_proportion <= 0 or in_sample_proportion > 1:
@@ -118,12 +118,12 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 msg = (
                     "must give either proportion of in sample indices or a list"
                     + "of in sample vertices"
-                    )
+                )
                 raise ValueError(msg)
-        self.connected_attempts=connected_attempts
-        self.semi_supervised=semi_supervised
-        self.in_sample_proportion=in_sample_proportion
-        self.in_sample_idx=in_sample_idx
+        self.connected_attempts = connected_attempts
+        self.semi_supervised = semi_supervised
+        self.in_sample_proportion = in_sample_proportion
+        self.in_sample_idx = in_sample_idx
 
     def fit(self, graph, y=None):
         """
@@ -142,9 +142,9 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         N = A.shape[0]
 
         if self.in_sample_proportion is None:
-            self.in_sample_proportion = len(self.in_sample_idx)/N
+            self.in_sample_proportion = len(self.in_sample_idx) / N
 
-        n = int(np.ceil(N*self.in_sample_proportion))
+        n = int(np.ceil(N * self.in_sample_proportion))
 
         if self.in_sample_idx is None:
             if self.in_sample_proportion == 1:
@@ -152,22 +152,27 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             else:
                 self.in_sample_idx = np.random.choice(N, n)
         else:
-            self.in_sample_proportion = len(self.in_sample_idx)/N
+            self.in_sample_proportion = len(self.in_sample_idx) / N
 
         in_sample_A = A[np.ix_(self.in_sample_idx, self.in_sample_idx)]
 
         if self.check_lcc:
             if self.in_sample_proportion < 1:
                 c = 0
-                while not is_fully_connected(in_sample_A) and c < self.connected_attempts:
+                while (
+                    not is_fully_connected(in_sample_A) and c < self.connected_attempts
+                ):
                     self.in_sample_idx = np.random.choice(N, n)
                     in_sample_A = A[np.ix_(self.in_sample_idx, self.in_sample_idx)]
-                    c+=1
+                    c += 1
                 if c == self.connected_attempts:
                     msg = (
-                        'Induced subgraph is not fully connected. Attempted to find connected' 
-                        + 'induced subgraph {} times. Results may not be optimal.'
-                        + 'Try increasing proportion of in sample vertices.'.format(connected_attempts))
+                        "Induced subgraph is not fully connected. Attempted to find connected"
+                        + "induced subgraph {} times. Results may not be optimal."
+                        + "Try increasing proportion of in sample vertices.".format(
+                            connected_attempts
+                        )
+                    )
                     warning.warn(msg, UserWarning)
             else:
                 if not is_fully_connected(A):
@@ -196,7 +201,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         -------
         oos_embedding : array, shape (m, d)
             The embedding of the out of sample vertices.
-        """    
+        """
 
         # Check if fit is already called
         check_is_fitted(self, ["latent_left_"], all_or_any=all)
@@ -205,16 +210,20 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         n = is_embedding.shape[0]
 
         # Type checking
-        check_array(X, ensure_2d=False, allow_nd=False, ensure_min_samples=1, ensure_min_features=n)
+        check_array(
+            X,
+            ensure_2d=False,
+            allow_nd=False,
+            ensure_min_samples=1,
+            ensure_min_features=n,
+        )
 
         if X.ndim is 1:
             X = X.reshape((1, -1))
             X = X.T
             m = 1
         elif X.shape[1] > n:
-            msg = (
-                "Similarity vector must be of length n"
-            )
+            msg = "Similarity vector must be of length n"
             raise ValueError(msg)
         else:
             m = X.shape[0]
@@ -232,7 +241,9 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         oos_embedding = X @ np.linalg.pinv(is_embedding).T
 
         if self.semi_supervised:
-            self.latent_left_ = np.concatenate((self.latent_left_, oos_embedding), axis=0)
+            self.latent_left_ = np.concatenate(
+                (self.latent_left_, oos_embedding), axis=0
+            )
 
         return oos_embedding
 
