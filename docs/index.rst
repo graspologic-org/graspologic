@@ -59,6 +59,14 @@ GraSPy is a graph statistics package in python.
    news
    license
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Useful Links
+
+   GraSPy @ GitHub <http://www.github.com/neurodata/graspy/>
+   GraSPy @ PyPI <https://pypi.org/project/graspy/>
+   Issue Tracker <https://github.com/neurodata/graspy/issues>
+
 
 Indices and tables
 ==================
