@@ -103,7 +103,7 @@ def heatmap(
     cbar=True,
     inner_hier_labels=None,
     outer_hier_labels=None,
-    label_fontsize=30,
+    hier_label_fontsize=30,
 ):
     r"""
     Plots a graph as a heatmap.
@@ -151,6 +151,9 @@ def heatmap(
         Categorical labeling of the nodes, ignored without `inner_hier_labels`
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals 
+    hier_label_fontsize : int
+        size (in points) of the text labels for the `inner_hier_labels` and 
+        `outer_hier_labels`.
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -228,10 +231,10 @@ def heatmap(
                     arr,
                     inner_hier_labels,
                     outer_hier_labels,
-                    fontsize=label_fontsize,
+                    fontsize=hier_label_fontsize,
                 )
             else:
-                _plot_groups(plot, arr, inner_hier_labels, fontsize=label_fontsize)
+                _plot_groups(plot, arr, inner_hier_labels, fontsize=hier_label_fontsize)
     return plot
 
 
@@ -249,7 +252,7 @@ def gridplot(
     legend_name="Type",
     inner_hier_labels=None,
     outer_hier_labels=None,
-    label_fontsize=30,
+    hier_label_fontsize=30,
 ):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
@@ -302,6 +305,9 @@ def gridplot(
         Categorical labeling of the nodes, ignored without `inner_hier_labels`
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals
+    hier_label_fontsize : int
+        size (in points) of the text labels for the `inner_hier_labels` and 
+        `outer_hier_labels`.
     """
     _check_common_inputs(
         height=height, title=title, context=context, font_scale=font_scale
@@ -381,10 +387,12 @@ def gridplot(
                 graphs[0],
                 inner_hier_labels,
                 outer_hier_labels,
-                fontsize=label_fontsize,
+                fontsize=hier_label_fontsize,
             )
         else:
-            _plot_groups(plot.ax, graphs[0], inner_hier_labels, fontsize=label_fontsize)
+            _plot_groups(
+                plot.ax, graphs[0], inner_hier_labels, fontsize=hier_label_fontsize
+            )
     return plot
 
 
