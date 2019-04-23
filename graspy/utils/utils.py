@@ -17,22 +17,21 @@ from sklearn.utils import check_array
 
 def import_graph(graph):
     """
-	A function for reading a graph and returning a shared
-	data type. Makes IO cleaner and easier.
+    A function for reading a graph and returning a shared data type. 
 
-	Parameters
-	----------
+    Parameters
+    ----------
     graph: object
         Either array-like, shape (n_vertices, n_vertices) numpy array,
         or an object of type networkx.Graph.
 
-	Returns
-	-------
+    Returns
+    -------
     out: array-like, shape (n_vertices, n_vertices)
         A graph.
-		 
-	See Also
-	--------
+        
+    See Also
+    --------
     networkx.Graph, numpy.array
 	"""
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):

@@ -1,4 +1,6 @@
 import numpy as np
+import warnings
+
 from ..utils import symmetrize
 
 
@@ -18,17 +20,18 @@ def sample_edges(P, directed=False, loops=False):
 
     Parameters
     ----------
-    P: np.ndarray (num_vertices, num_vertices)
+    P: np.ndarray, shape (n_vertices, n_vertices)
         Matrix of probabilities (between 0 and 1) for a random graph
-    directed: boolean (default False)
-        Whether to force symmetry upon the resulting graph by only 
-        sampling from the upper triangle of P and then reflecting the
-        sampled values accross the diagonal
-    loops: boolean
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+    loops: boolean, optional (default=False)
+        If False, no edges will be sampled in the diagonal. Otherwise, edges
+        are sampled in the diagonal.
 
     Returns
     -------
-    A: np.ndarray (num_vertices, num_vertices)
+    A: ndarray (n_vertices, n_vertices)
         Binary adjacency matrix the same size as P representing a random
         graph
 
@@ -70,26 +73,26 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
     Parameters
     ----------
     n: int
-        the number of vertices
+        Number of vertices
     p: float
-        the probability of an edge existing between two vertices,
-        between 0 and 1.
-    directed: boolean optional, default = False
-        Whether to create a directed graph or not.
-    loops: boolean optional, default = False
-        Whether to include self-loops or not.
-    wt: object
-        a weight function for each of the edges, taking
-        only a size argument. This weight function will
-        be randomly assigned for selected edges. If 1,
-        graph produced is binary.
-    wtargs: dictionary
-        optional arguments for parameters that can be passed
-        to weight function wt.
+        Probability of an edge existing between two vertices, between 0 and 1.
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+    loops: boolean, optional (default=False)
+        If False, no edges will be sampled in the diagonal. Otherwise, edges
+        are sampled in the diagonal.
+    wt: object, optional (default=1)
+        Weight function for each of the edges, taking only a size argument. 
+        This weight function will be randomly assigned for selected edges. 
+        If 1, graph produced is binary.
+    wtargs: dictionary, optional (default=None)
+        Optional arguments for parameters that can be passed
+        to weight function ``wt``.
 
     Returns
     -------
-    A : array-like, shape (n, n)
+    A : ndarray, shape (n, n)
         Sampled adjacency matrix
     """
     if not np.issubdtype(type(p), np.floating):
@@ -134,7 +137,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
 
 def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     r"""
-    Samples a weighted Erdos Renyi (n, m) graph with specified number of edges.
+    Samples an Erdos Renyi (n, m) graph with specified number of edges.
 
     Erdos Renyi (n, m) graph is a simple graph with n vertices and exactly m
     number of total edges.
@@ -145,22 +148,23 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
         Number of vertices
     m: int
         Number of edges, a value between 1 and :math:`n^2`.
-    directed: boolean optional, default = False
-        Whether to create a directed graph or not.
-    loops: boolean optional, default = False
-        Whether to include self-loops or not.
-    wt: object
-        a weight function for each of the edges, taking
-        only a size argument. This weight function will
-        be randomly assigned for selected edges. If 1,
-        graph produced is binary.
-    wtargs: dictionary
-        optional arguments for parameters that can be passed
-        to weight function wt.
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+    loops: boolean, optional (default=False)
+        If False, no edges will be sampled in the diagonal. Otherwise, edges
+        are sampled in the diagonal.
+    wt: object, optional (default=1)
+        Weight function for each of the edges, taking only a size argument. 
+        This weight function will be randomly assigned for selected edges. 
+        If 1, graph produced is binary.
+    wtargs: dictionary, optional (default=None)
+        Optional arguments for parameters that can be passed
+        to weight function ``wt``.
 
     Returns
     -------
-    A: array-like, shape (n, n)
+    A: ndarray, shape (n, n)
         Sampled adjacency matrix
 
     Examples
@@ -242,20 +246,27 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
     """
+    Samples a graph from the stochastic block model (SBM). 
+
+    SBM produces a graph with specified communities, in which each community can
+    have different sizes and edge probabilities. 
+
+    Parameters
+    ----------
     n: list of int, shape (n_communities)
-        the number of vertices in each community. Communities
-        are assigned n[0], n[1], ...
+        Number of vertices in each community. Communities are assigned n[0], n[1], ...
     p: array-like, shape (n_communities, n_communities)
-        the probability of an edge between each of the communities,
-        where p[i, j] indicates the probability of a connection
-        between edges in communities [i, j]. 0 < p[i, j] < 1
-        for all i, j.
-    directed: boolean
-        whether or not the graph will be directed.
-    loops: boolean
-        whether to allow self-loops for vertices.
+        Probability of an edge between each of the communities, where p[i, j] indicates 
+        the probability of a connection between edges in communities [i, j]. 
+        0 < p[i, j] < 1 for all i, j.
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+    loops: boolean, optional (default=False)
+        If False, no edges will be sampled in the diagonal. Otherwise, edges
+        are sampled in the diagonal.
     wt: object or array-like, shape (n_communities, n_communities)
         if Wt is an object, a weight function to use globally over
         the sbm for assigning weights. 1 indicates to produce a binary
@@ -268,6 +279,43 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
+    dc: function or array-like, shape (n_vertices) or (n_communities), optional
+        `dc` is used to generate a degree-corrected stochastic block model [1] in 
+        which each node in the graph has a parameter to specify its expected degree
+        relative to other nodes within its community.
+
+        - function: 
+            should generate a non-negative number to be used as a degree correction to 
+            create a heterogenous degree distribution. A weight will be generated for
+            each vertex, normalized so that the sum of weights in each block is 1. 
+        - array-like of functions, shape (n_communities): 
+            Each function will generate the degree distribution for its respective 
+            community. 
+        - array-like of scalars, shape (n_vertices): 
+            The weights in each block should sum to 1; otherwise, they will be normalized
+            and a warning will be thrown. The scalar associated with each vertex is the 
+            node's relative expected degree within its community. 
+    
+    dc_kws: dictionary or array-like, shape (n_communities), optional
+        Ignored if `dc` is none or array of scalar.
+        If `dc` is a function, `dc_kws` corresponds to its named arguments. 
+        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape 
+        (n_communities), of dictionary. Each dictionary is the named arguments 
+        for the corresponding function for that community. 
+        If not specified, in either case all functions will assume their default 
+        parameters.
+
+    References
+    ----------
+    .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
+        Degree-Corrected Stochastic Blockmodel," Advances in Neural Information 
+        Processing Systems 26, 2013
+
+    Returns
+    -------
+    A: ndarray, shape (sum(n), sum(n))
+        Sampled adjacency matrix
+        
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -298,10 +346,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     # Check wt and wtargs
     if not np.issubdtype(type(wt), np.number) and not callable(wt):
         if not isinstance(wt, (list, np.ndarray)):
-            msg = "wt must be a numeric, list, or np.array, not{}".format(type(wt))
+            msg = "wt must be a numeric, list, or np.array, not {}".format(type(wt))
             raise TypeError(msg)
         if not isinstance(wtargs, (list, np.ndarray)):
-            msg = "wtargs must be a numeric, list, or np.array, not{}".format(
+            msg = "wtargs must be a numeric, list, or np.array, not {}".format(
                 type(wtargs)
             )
             raise TypeError(msg)
@@ -340,6 +388,82 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
     for i in range(0, K):
         cmties.append(range(counter, counter + n[i]))
         counter += n[i]
+
+    # Check degree-corrected input parameters
+    if callable(dc):
+        # Check that the paramters are a dict
+        if not isinstance(dc_kws, dict):
+            msg = "dc_kws must be of type dict not{}".format(type(dc_kws))
+            raise TypeError(msg)
+        # Create the probability matrix for each vertex
+        dcProbs = np.array([dc(**dc_kws) for _ in range(0, sum(n))], dtype="float")
+        for indices in cmties:
+            dcProbs[indices] /= sum(dcProbs[indices])
+    elif isinstance(dc, (list, np.ndarray)) and np.issubdtype(
+        np.array(dc).dtype, np.number
+    ):
+        dcProbs = np.array(dc)
+        # Check size and element types
+        if not np.issubdtype(dcProbs.dtype, np.number):
+            msg = "There are non-numeric elements in dc, {}".format(dcProbs.dtype)
+            raise ValueError(msg)
+        elif dcProbs.shape != (sum(n),):
+            msg = "dc must have size equal to the number of vertices {0}, not {1}".format(
+                sum(n), dcProbs.shape
+            )
+            raise ValueError(msg)
+        elif np.any(dcProbs < 0):
+            msg = "Values in dc cannot be negative."
+            raise ValueError(msg)
+        # Check that probabilities sum to 1 in each block
+        for i in range(0, K):
+            if not np.isclose(sum(dcProbs[cmties[i]]), 1, atol=1.0e-8):
+                msg = "Block {} probabilities should sum to 1, normalizing...".format(i)
+                warnings.warn(msg, UserWarning)
+                dcProbs[cmties[i]] /= sum(dcProbs[cmties[i]])
+    elif isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
+        dcFuncs = np.array(dc)
+        if dcFuncs.shape != (len(n),):
+            msg = "dc must have size equal to the number of blocks {0}, not {1}".format(
+                len(n), dcFuncs.shape
+            )
+            raise ValueError(msg)
+        # Check that the parameters type, length, and type
+        if not isinstance(dc_kws, (list, np.ndarray)):
+            # Allows for nonspecification of default parameters for all functions
+            if dc_kws == {}:
+                dc_kws = [{} for _ in range(0, len(n))]
+            else:
+                msg = "dc_kws must be of type list or np.ndarray, not {}".format(
+                    type(dc_kws)
+                )
+                raise TypeError(msg)
+        elif not len(dc_kws) == len(n):
+            msg = "dc_kws must have size equal to the number of blocks {0}, not {1}".format(
+                len(n), len(dc_kws)
+            )
+            raise ValueError(msg)
+        elif not all(type(kw) == dict for kw in dc_kws):
+            msg = "dc_kws elements must all be of type dict"
+            raise TypeError(msg)
+        # Create the probability matrix for each vertex
+        dcProbs = np.array(
+            [
+                dcFunc(**kws)
+                for dcFunc, kws, size in zip(dcFuncs, dc_kws, n)
+                for _ in range(0, size)
+            ],
+            dtype="float",
+        )
+        for indices in cmties:
+            dcProbs[indices] /= sum(dcProbs[indices])
+    elif dc is not None:
+        msg = "dc must be a function or a list or np.array of numbers or callable functions, not {}".format(
+            type(dc)
+        )
+        raise ValueError(msg)
+
+    # End Checks, begin simulation
     A = np.zeros((sum(n), sum(n)))
 
     for i in range(0, K):
@@ -357,8 +481,21 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
             # get idx in 1d coordinates by ravelling
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
             pchoice = np.random.uniform(size=len(triu))
-            # connected with probability p
-            triu = triu[pchoice < block_p]
+            if dc is not None:
+                # (v1,v2) connected with probability p*k_i*k_j*dcP[v1]*dcP[v2]
+                num_edges = sum(pchoice < block_p)
+                edge_dist = dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]
+                # If the number edges greater than support of dc distribution, pick fewer edges
+                if num_edges > sum(edge_dist > 0):
+                    msg = "More edges sampled than nonzero pairwise dc entries. Picking fewer edges"
+                    warnings.warn(msg, UserWarning)
+                    num_edges = sum(edge_dist > 0)
+                triu = np.random.choice(
+                    triu, size=num_edges, replace=False, p=edge_dist
+                )
+            else:
+                # connected with probability p
+                triu = triu[pchoice < block_p]
             if type(block_wt) is not int:
                 block_wt = block_wt(size=len(triu), **block_wtargs)
             triu = np.unravel_index(triu, A.shape)
@@ -372,53 +509,50 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None):
 
 
 def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None):
-    """
+    r"""
     Samples a random graph based on the latent positions in X (and 
     optionally in Y)
 
-    If only X is given, the P matrix is calculated as :math:`P = XX^T`
-    If X and Y is given, then :math:`P = XY^T`
-    These operations correspond to the dot products between a set of latent
-    positions, so each row in X or Y represents the latent positions in  
-    :math:`\R^{num_columns}` for a single vertex in the random graph 
+    If only X :math:`\in\mathbb{R}^{n\times d}` is given, the P matrix is calculated as
+    :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then 
+    :math:`P = XY^T`. These operations correspond to the dot products between a set of 
+    latent positions, so each row in X or Y represents the latent positions in  
+    :math:`\mathbb{R}^{d}` for a single vertex in the random graph 
     Note that this function may also rescale or clip the resulting P 
     matrix to get probabilities between 0 and 1, or remove loops.
     A binary random graph is then sampled from the P matrix described 
-    by X (and possibly Y)
+    by X (and possibly Y).
 
     Parameters
     ----------
-    X: np.ndarray (2 dimensions, same shape as Y if given)
+    X: np.ndarray, shape (n_vertices, n_dimensions)
         latent position from which to generate a P matrix
         if Y is given, interpreted as the left latent position
-    Y: np.ndarray (2 dimensions, same shape as X)
+    Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
-    rescale: boolean (default True)
+    rescale: boolean, optional (default=True)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
-    directed: boolean (default False)
-        Whether to force symmetry upon the resulting graph by only 
-        sampling from the upper triangle of P and then reflecting the
-        sampled values accross the diagonal
-    loops: boolean (default True)
-        whether to allow elements on the diagonal (corresponding
-        to self connections in a graph) in the returned P matrix. 
-        If loops is False, these elements are removed prior to 
-        rescaling (see above) which may affect behavior
-    wt: object
-        a weight function for each of the edges, taking
-        only a size argument. This weight function will
-        be randomly assigned for selected edges. If 1,
-        graph produced is binary.
-    wtargs: dictionary
-        optional arguments for parameters that can be passed
-        to weight function wt.
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+    loops: boolean, optional (default=True)
+        If False, no edges will be sampled in the diagonal. Diagonal elements in P matrix
+        are removed prior to rescaling (see above) which may affect behavior. Otherwise,
+        edges are sampled in the diagonal.
+    wt: object, optional (default=1)
+        Weight function for each of the edges, taking only a size argument. 
+        This weight function will be randomly assigned for selected edges. 
+        If 1, graph produced is binary.
+    wtargs: dictionary, optional (default=None)
+        Optional arguments for parameters that can be passed
+        to weight function ``wt``.
 
     Returns
     -------
-    P: np.ndarray (X.shape[0], X.shape[0])
+    A: ndarray (n_vertices, n_vertices)
         A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
 
@@ -448,7 +582,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
 
 
 def p_from_latent(X, Y=None, rescale=True, loops=True):
-    """
+    r"""
     Gemerates a matrix of connection probabilities for a random graph
     based on a set of latent positions
 
@@ -456,23 +590,23 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     If X and Y is given, then :math:`P = XY^T`
     These operations correspond to the dot products between a set of latent
     positions, so each row in X or Y represents the latent positions in  
-    :math:`\R^{num_columns}` for a single vertex in the random graph 
+    :math:`\mathbb{R}^{num-columns}` for a single vertex in the random graph 
     Note that this function may also rescale or clip the resulting P 
     matrix to get probabilities between 0 and 1, or remove loops
 
     Parameters
     ----------
-    X: np.ndarray (2 dimensions, same shape as Y if given)
+    X: np.ndarray, shape (n_vertices, n_dimensions)
         latent position from which to generate a P matrix
         if Y is given, interpreted as the left latent position
-    Y: np.ndarray (2 dimensions, same shape as X)
+    Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
-    rescale: boolean (default True)
+    rescale: boolean, optional (default=True)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
-    loops: boolean (default True)
+    loops: boolean, optional (default=True)
         whether to allow elements on the diagonal (corresponding
         to self connections in a graph) in the returned P matrix. 
         If loops is False, these elements are removed prior to 
@@ -480,7 +614,7 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
 
     Returns
     -------
-    P: np.ndarray (X.shape[0], X.shape[0])
+    P: ndarray (n_vertices, n_vertices)
         A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
 
