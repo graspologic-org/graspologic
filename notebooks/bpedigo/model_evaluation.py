@@ -93,6 +93,12 @@ def evaluate_models(
     ax[0].set_xlabel("A priori models")
     ax[0].set_ylabel("-ln(Likelihood)")
     plt.suptitle(title, y=0.94)
+    plt.savefig(
+        "/Users/bpedigo/JHU_code/figs/DMS/likelihood.png",
+        format="png",
+        dpi=300,
+        facecolor="w",
+    )
 
     ###
     plt.figure()
@@ -105,6 +111,12 @@ def evaluate_models(
     ax[0].set_xlabel("A priori models")
     ax[0].set_ylabel("rBIC")
     plt.suptitle(title, y=0.94)
+    plt.savefig(
+        "/Users/bpedigo/JHU_code/figs/DMS/rBIC.png",
+        format="png",
+        dpi=300,
+        facecolor="w",
+    )
 
     ###
     plt.figure()
@@ -117,6 +129,12 @@ def evaluate_models(
     ax[0].set_xlabel("A priori models")
     ax[0].set_ylabel("rAIC")
     plt.suptitle(title, y=0.94)
+    plt.savefig(
+        "/Users/bpedigo/JHU_code/figs/DMS/rAIC.png",
+        format="png",
+        dpi=300,
+        facecolor="w",
+    )
 
     ###
     plt.figure()
@@ -129,6 +147,9 @@ def evaluate_models(
     ax[0].set_xlabel("A priori models")
     ax[0].set_ylabel("MSE")
     plt.suptitle(title, y=0.94)
+    plt.savefig(
+        "/Users/bpedigo/JHU_code/figs/DMS/MSE.png", format="png", dpi=300, facecolor="w"
+    )
 
     return bics, log_likelihoods
 
