@@ -12,7 +12,7 @@ class SBEstimator(BaseGraphEstimator):
         self,
         fit_weights=False,
         fit_degrees=False,
-        degree_directed=True,
+        degree_directed=False,
         directed=True,
         loops=True,
     ):

@@ -19,6 +19,9 @@ class BaseGraphEstimator(BaseEstimator):
         # i.e. sum(ln(likelihood per edge))
         return 2 * np.log(self.n_verts) * self._n_parameters() - 2 * self.score(graph)
 
+    def mse(self, graph):
+        return np.linalg.norm(graph - self.p_mat_) ** 2
+
     def aic(self, graph):
         return 2 * self._n_parameters() - 2 * self.score(graph)
         # return

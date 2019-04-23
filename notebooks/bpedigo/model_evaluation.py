@@ -1,6 +1,6 @@
 #%%
 from graspy.models import EREstimator, SBEstimator, RDPGEstimator
-from graspy.datasets import load_drosophila_left
+from graspy.datasets import load_drosophila_left, load_drosophila_right
 from graspy.plot import heatmap
 from graspy.utils import symmetrize, binarize
 import numpy as np
@@ -8,13 +8,26 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 ## Load data
-sns.set_context("talk")
-left_adj, cell_labels = load_drosophila_left(return_labels=True)
+plt.style.use("seaborn")
+sns.set_context("talk", font_scale=1.25)
+
+left_adj, left_cell_labels = load_drosophila_left(return_labels=True)
 left_adj_uw = left_adj.copy()
 left_adj_uw[left_adj_uw > 0] = 1
 
-left_adj_uw = symmetrize(left_adj_uw, method="avg")
+
+right_adj, right_cell_labels = load_drosophila_right(return_labels=True)
+right_adj_uw = right_adj.copy()
+right_adj_uw[right_adj_uw > 0] = 1
+
+# left_adj_uw = symmetrize(left_adj_uw, method="avg")
 left_adj_uw = binarize(left_adj_uw)
+
+color = "xkcd:blue green"
+color2 = "xkcd:pumpkin"
+color3 = "xkcd:dull purple"
+color4 = ""
+colors = sns.color_palette("muted", 4)
 
 
 def evaluate_models(
@@ -22,27 +35,30 @@ def evaluate_models(
 ):
 
     if plot_graphs:
-        heatmap(graph, inner_hier_labels=cell_labels)
+        heatmap(graph, inner_hier_labels=left_cell_labels)
 
     ## Set up models to test
     non_rdpg_models = [
         EREstimator(fit_degrees=False),
         EREstimator(fit_degrees=True),
+        EREstimator(fit_degrees=True, degree_directed=True),
         SBEstimator(fit_degrees=False),
         SBEstimator(fit_degrees=True),
+        SBEstimator(fit_degrees=True, degree_directed=True),
     ]
 
     d = [int(i) for i in np.logspace(min_comp, max_comp, n_comp)]
     rdpg_models = [RDPGEstimator(n_components=i) for i in d]
     models = non_rdpg_models + rdpg_models
 
-    names_nonRDPG = ["ER", "DCER", "SBM", "DCSBM"]
+    names_nonRDPG = ["ER", "DCER", "dDCER", "SBM", "DCSBM", "dDCSBM"]
     names_RDPG = ["RDPG {}".format(i) for i in d]
     names = names_nonRDPG + names_RDPG
 
     bics = []
     log_likelihoods = []
-
+    mses = []
+    aics = []
     ## Test models
     for model, name in zip(models, names):
         m = model.fit(graph, y=labels)
@@ -52,32 +68,77 @@ def evaluate_models(
         bic = m.bic(graph)
         log_likelihoods.append(m.score(graph))
         bics.append(bic)
+        mses.append(m.mse(graph))
+        aics.append(m.aic(graph))
         plt.show()
-
     bics = np.array(bics)
     log_likelihoods = np.array(log_likelihoods)
+    mses = np.array(mses)
+    aics = np.array(aics)
 
-    ## Plot results
+    ## Plot results ##################################################################
     plt.figure()
-    fig, ax = plt.subplots(1, 2, sharey=False, figsize=(10, 10))
-    sns.pointplot(names_nonRDPG, bics[:4], join=False, ax=ax[0])
-    sns.scatterplot(d, bics[4:])
-    ax[1].set_xlabel("RDPG - d")
-    ax[0].set_xlabel("A priori models")
-    ax[0].set_ylabel("rBIC")
-    plt.suptitle(title, y=0.94)
-
-    plt.figure()
-    fig, ax = plt.subplots(1, 2, sharey=False, figsize=(10, 10))
-    sns.pointplot(names_nonRDPG, -log_likelihoods[:4], join=False, ax=ax[0])
-    sns.scatterplot(d, -log_likelihoods[4:])
+    fig, ax = plt.subplots(1, 2, sharey=True, figsize=(20, 10))
+    sns.pointplot(
+        names_nonRDPG,
+        -log_likelihoods[: len(names_nonRDPG)],
+        join=False,
+        ax=ax[0],
+        color=colors[0],
+    )
+    sns.scatterplot(
+        d, -log_likelihoods[len(names_nonRDPG) :], color=colors[0], s=175, linewidth=0
+    )
     ax[1].set_xlabel("RDPG - d")
     ax[0].set_xlabel("A priori models")
     ax[0].set_ylabel("-ln(Likelihood)")
     plt.suptitle(title, y=0.94)
 
+    ###
+    plt.figure()
+    fig, ax = plt.subplots(1, 2, sharey=True, figsize=(20, 10))
+    sns.pointplot(
+        names_nonRDPG, bics[: len(names_nonRDPG)], join=False, ax=ax[0], color=colors[1]
+    )
+    sns.scatterplot(d, bics[len(names_nonRDPG) :], color=colors[1], s=175, linewidth=0)
+    ax[1].set_xlabel("RDPG - d")
+    ax[0].set_xlabel("A priori models")
+    ax[0].set_ylabel("rBIC")
+    plt.suptitle(title, y=0.94)
+
+    ###
+    plt.figure()
+    fig, ax = plt.subplots(1, 2, sharey=True, figsize=(20, 10))
+    sns.pointplot(
+        names_nonRDPG, aics[: len(names_nonRDPG)], join=False, ax=ax[0], color=colors[2]
+    )
+    sns.scatterplot(d, aics[len(names_nonRDPG) :], color=colors[2], s=175, linewidth=0)
+    ax[1].set_xlabel("RDPG - d")
+    ax[0].set_xlabel("A priori models")
+    ax[0].set_ylabel("rAIC")
+    plt.suptitle(title, y=0.94)
+
+    ###
+    plt.figure()
+    fig, ax = plt.subplots(1, 2, sharey=True, figsize=(20, 10))
+    sns.pointplot(
+        names_nonRDPG, mses[: len(names_nonRDPG)], join=False, ax=ax[0], color=colors[3]
+    )
+    sns.scatterplot(d, mses[len(names_nonRDPG) :], color=colors[3], s=175, linewidth=0)
+    ax[1].set_xlabel("RDPG - d")
+    ax[0].set_xlabel("A priori models")
+    ax[0].set_ylabel("MSE")
+    plt.suptitle(title, y=0.94)
+
     return bics, log_likelihoods
 
+
+left_bics, left_lls = evaluate_models(
+    left_adj_uw, labels=left_cell_labels, title="Drosophila left MB"
+)
+right_bics, right_lls = evaluate_models(
+    right_adj_uw, labels=right_cell_labels, title="Drosophila right MB"
+)
 
 #%% Set up some simulations
 from graspy.simulations import p_from_latent, sample_edges
@@ -209,3 +270,6 @@ graph_sims.append(graph)
 inds = np.array(int(n_verts / 2) * [0] + int(n_verts / 2) * [1])
 for graph, name in zip(graph_sims, names):
     evaluate_models(graph, inds, title=name)
+
+
+#%%
