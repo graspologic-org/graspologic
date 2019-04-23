@@ -1,6 +1,6 @@
-# ase.py
-# Created by Ben Pedigo on 2018-09-15.
-# Email: bpedigo@jhu.edu
+# oosase.py
+# Created by Hayden Helm on 2019-04-22.
+# Email: hhelm2@jhu.edu
 import warnings
 
 from .base import BaseEmbed
@@ -149,7 +149,10 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         if self.in_sample_idx is None:
             if self.in_sample_proportion == 1:
                 self.in_sample_idx = range(N)
-            self.in_sample_idx = np.random.choice(N, n)
+            else:
+                self.in_sample_idx = np.random.choice(N, n)
+        else:
+            self.in_sample_proportion = len(self.in_sample_idx)/N
 
         in_sample_A = A[np.ix_(self.in_sample_idx, self.in_sample_idx)]
 
@@ -160,7 +163,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                     self.in_sample_idx = np.random.choice(N, n)
                     in_sample_A = A[np.ix_(self.in_sample_idx, self.in_sample_idx)]
                     c+=1
-                if c == 1000:
+                if c == self.connected_attempts:
                     msg = (
                         'Induced subgraph is not fully connected. Attempted to find connected' 
                         + 'induced subgraph {} times. Results may not be optimal.'
@@ -175,7 +178,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                     )
                     warnings.warn(msg, UserWarning)
 
-        self._reduce_dim(A)
+        self._reduce_dim(in_sample_A)
         return self
 
     def predict(self, X):
@@ -216,31 +219,39 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         else:
             m = X.shape[0]
 
-        row_sums = np.sum(X, axis=0)
+        row_sums = np.sum(X, axis=1)
         if np.count_nonzero(row_sums) != m:
             msg = (
-                "At least one adjacency vector is the zero vector"
+                "At least one adjacency vector is the zero vector."
+                + " It is recommended to first embed nodes with non-zero adjacency vectors"
+                + " with self.semi_supervised = True and embed the nodes"
+                + " with zero adjacencies"
             )
             raise ValueError(msg)
 
-        oos_embedding = X.T @ np.linalg.pinv(is_embedding).T
+        oos_embedding = X @ np.linalg.pinv(is_embedding).T
 
         if self.semi_supervised:
-            self._latent_left = np.concatenate((self._latent_left, oos_embedding), axis=0)
+            self.latent_left_ = np.concatenate((self.latent_left_, oos_embedding), axis=0)
 
         return oos_embedding
 
     def fit_predict(self, graph):
+
         A = import_graph(graph)
         self.fit(A)
 
-        n = int(len(self.in_sample_idx)/self.in_sample_proportion)
-
-        out_sample_idx = [i in range(n) for i in range(n) if i not in self.in_sample_idx]
+        N = A.shape[0]
+        n = len(self.in_sample_idx)
+        out_sample_idx = [i for i in range(N) if i not in self.in_sample_idx]
+        print(out_sample_idx)
         oos = self.predict(A[np.ix_(out_sample_idx, self.in_sample_idx)])
 
-        embedding = np.zeros((n, self._latent_left.shape))
-        embedding[in_sample_idx] = self._latent_left
+        embedding = np.zeros((N, self.latent_left_.shape[1]))
+        embedding[self.in_sample_idx] = self.latent_left_[:n]
         embedding[out_sample_idx] = oos
+
+        if self.semi_supervised:
+            self.latent_left = embedding
 
         return embedding
