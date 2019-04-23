@@ -5,12 +5,20 @@ import numpy as np
 
 
 class EREstimator(SBEstimator):
-    def __init__(self, fit_weights=False, fit_degrees=False, directed=True, loops=True):
+    def __init__(
+        self,
+        fit_weights=False,
+        fit_degrees=False,
+        directed=True,
+        loops=True,
+        degree_directed=False,
+    ):
         super().__init__(
             fit_weights=fit_weights,
             fit_degrees=fit_degrees,
             directed=directed,
             loops=loops,
+            degree_directed=degree_directed,
         )
 
     def fit(self, graph, y=None):

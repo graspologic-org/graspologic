@@ -22,8 +22,9 @@ class RDPGEstimator(BaseGraphEstimator):
         # allow all ase kwargs?
         graph = import_graph(graph)
         self.n_verts = graph.shape[0]
-        graph = augment_diagonal(graph, weight=100)
-        graph[graph == 0] += 1000 * 1 / graph.size
+        graph = augment_diagonal(graph, weight=1)
+        graph += 1 / graph.size
+        # graph[graph == 0] += 1000 * 1 / graph.size
         ase = AdjacencySpectralEmbed(n_components=self.n_components)
         latent = ase.fit_transform(graph)
         # if len(latent) == 1:
