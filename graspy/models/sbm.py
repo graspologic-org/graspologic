@@ -41,8 +41,6 @@ class SBEstimator(BaseGraphEstimator):
         graph = import_graph(graph)
         self.n_verts = graph.shape[0]
 
-        # at this point assume block assignments are known
-
         # TODO: need to do this part in such a way as to align the labels
         # with a way that we can plot/sample
         block_labels, block_inv, block_sizes = np.unique(
@@ -83,7 +81,6 @@ class SBEstimator(BaseGraphEstimator):
 
         self.block_p_ = block_p
 
-        # block_map = cartprod(block_members, block_members).T
         block_map = cartprod(block_inv, block_inv).T
         p_by_edge = block_p[block_map[0], block_map[1]]
         p_mat = p_by_edge.reshape(graph.shape)
@@ -101,7 +98,7 @@ class SBEstimator(BaseGraphEstimator):
             for i in block_inds:
                 block_degrees = degree_corrections[block_vert_inds[i]]
                 degree_divisor = np.mean(block_degrees, axis=0)
-                if type(degree_divisor) is not np.float64:
+                if not isinstance(degree_divisor, np.float64):
                     degree_divisor[degree_divisor == 0] = 1
                 degree_corrections[block_vert_inds[i]] = (
                     degree_corrections[block_vert_inds[i]] / degree_divisor
@@ -118,7 +115,9 @@ class SBEstimator(BaseGraphEstimator):
 
         if self.fit_weights:
             # TODO: something
-            raise NotImplementedError("no weighted case yet")
+            raise NotImplementedError(
+                "Graph model is currently only implemented" + " for unweighted graphs."
+            )
 
         return self
 
@@ -143,57 +142,3 @@ class SBEstimator(BaseGraphEstimator):
             )  # one degree correction per vert is stored
             # TODO: more than this? becasue now the position of verts w/in block matters
         return n_parameters
-
-    # def score(self, graph):
-    #     return super().score(graph)
-
-    # def score_samples(self, graph):
-    #     """
-    #     Compute the weighted log probabilities for each sample.
-    #     """
-    #     # for each edge
-    #     # look up where you are in the sbm
-    #     #   if dcsbm, look up where you are in the dcvector
-    #     #   take the product of those for your indices
-    #     # for each non edge, also neet to find 1 - p...
-
-    #     # if we had the p matrix ....
-    #     # this would be as simple as
-    #     # where graph is the unweighted graph:
-    #     # P.ravel() <dot> graph * (1 - P.ravel()) <dot> (1 - graph)
-    #     bin_graph = binarize(graph)
-    #     p_mat = self.p_mat_
-    #     successes = np.multiply(p_mat, bin_graph)
-    #     failures = np.multiply((1 - p_mat), (1 - bin_graph))
-    #     likelihood = successes + failures
-    #     return np.log(likelihood)
-
-    # def score_samples(self, graph):
-    #     """
-    #     Compute the weighted log probabilities for each sample.
-    #     """
-    #     # for each edge
-    #     # look up where you are in the sbm
-    #     #   if dcsbm, look up where you are in the dcvector
-    #     #   take the product of those for your indices
-    #     # for each non edge, also neet to find 1 - p...
-
-    #     # if we had the p matrix ....
-    #     # this would be as simple as
-    #     # where graph is the unweighted graph:
-    #     # P.ravel() <dot> graph * (1 - P.ravel()) <dot> (1 - graph)
-
-    # def score(self, graph):
-    #     """
-    #     Compute the per-sample average log-likelihood of the given data X.
-    #     """
-    #     return self.score_samples(graph).mean()
-
-    # def bic(self, graph):
-    #     """
-    #     do bic
-    #     """
-    #     return 1
-
-    # def calc_p_matrix(self):
-
