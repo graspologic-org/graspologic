@@ -1,8 +1,10 @@
 from .base import BaseGraphEstimator, _calculate_p, _fit_weights, cartprod
-from ..utils import import_graph, binarize
+from ..utils import import_graph, binarize, is_almost_symmetric, augment_diagonal
 import itertools
 import numpy as np
 from ..simulations import sbm, sample_edges
+from ..cluster import GaussianCluster
+from ..embed import AdjacencySpectralEmbed
 
 
 class SBEstimator(BaseGraphEstimator):
@@ -24,11 +26,14 @@ class SBEstimator(BaseGraphEstimator):
         y : block assignments
         """
         if y is None:
-            # TODO:
-            # _fit_block_assignments(graph)
-            raise NotImplementedError("No a posteriori case yet")
-            # would have to do some kind of GMM thingy here
-            # vertex labels = ...
+            embed_graph = augment_diagonal(graph)
+            if is_almost_symmetric(graph):
+                latent = AdjacencySpectralEmbed().fit_transform(embed_graph)
+            else:
+                X, Y = AdjacencySpectralEmbed().fit_transform(embed_graph)
+                latent = np.concatenate((X, Y), axis=1)
+            gc = GaussianCluster()
+            vertex_labels = gc.fit_predict(latent)
         else:
             self.y = y
             vertex_labels = y
