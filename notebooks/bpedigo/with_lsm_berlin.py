@@ -208,9 +208,23 @@ def scatterplot(
             )
             pairs.axis("square")
         else:
+            fig, ax = plt.subplots(1, 1, figsize=(10, 10))
             pairs = sns.scatterplot(
-                df, vars=variables, height=height, palette=palette, plot_kws=plot_kws
+                data=df,
+                x="Dimension 1",
+                y="Dimension 2",
+                # vars=variables,
+                # height=height,
+                palette=palette,
+                # plot_kws=plot_kws,
+                markers=marker,
+                legend=False,
+                s=size,
+                alpha=alpha,
+                linewidth=0,
+                ax=ax,
             )
+            pairs.axis("square")
         pairs.set(xticks=[], yticks=[])
         # pairs.fig.subplots_adjust(top=0.945)
         # pairs.fig.suptitle(title)

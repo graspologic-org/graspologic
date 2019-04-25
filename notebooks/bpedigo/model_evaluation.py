@@ -23,10 +23,10 @@ right_adj_uw[right_adj_uw > 0] = 1
 # left_adj_uw = symmetrize(left_adj_uw, method="avg")
 left_adj_uw = binarize(left_adj_uw)
 
-color = "xkcd:blue green"
-color2 = "xkcd:pumpkin"
-color3 = "xkcd:dull purple"
-color4 = ""
+# color = "xkcd:blue green"
+# color2 = "xkcd:pumpkin"
+# color3 = "xkcd:dull purple"
+# color4 = ""
 colors = sns.color_palette("muted", 4)
 
 
