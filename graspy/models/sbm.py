@@ -15,6 +15,8 @@ class SBEstimator(BaseGraphEstimator):
         degree_directed=False,
         directed=True,
         loops=True,
+        cluster_kws={},
+        ase_kws={},
     ):
         super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
         self.fit_degrees = fit_degrees
@@ -29,10 +31,11 @@ class SBEstimator(BaseGraphEstimator):
             embed_graph = augment_diagonal(graph)
             if is_almost_symmetric(graph):
                 latent = AdjacencySpectralEmbed().fit_transform(embed_graph)
-            else:
-                X, Y = AdjacencySpectralEmbed().fit_transform(embed_graph)
+            if isinstance(latent, tuple):
                 latent = np.concatenate((X, Y), axis=1)
-            gc = GaussianCluster()
+            X, Y = AdjacencySpectralEmbed().fit_transform(embed_graph)
+
+            gc = GaussianCluster(**cluster_kws)
             vertex_labels = gc.fit_predict(latent)
         else:
             self.y = y
