@@ -5,6 +5,7 @@ import numpy as np
 from ..simulations import sbm, sample_edges
 from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed
+from sklearn.mixture import GaussianMixture
 
 
 class SBEstimator(BaseGraphEstimator):
@@ -21,6 +22,7 @@ class SBEstimator(BaseGraphEstimator):
         super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
         self.fit_degrees = fit_degrees
         self.degree_directed = degree_directed
+        self.cluster_kws = cluster_kws
 
     def fit(self, graph, y=None):
         """
@@ -29,13 +31,14 @@ class SBEstimator(BaseGraphEstimator):
         """
         if y is None:
             embed_graph = augment_diagonal(graph)
+            latent = AdjacencySpectralEmbed().fit_transform(embed_graph)
             if is_almost_symmetric(graph):
                 latent = AdjacencySpectralEmbed().fit_transform(embed_graph)
             if isinstance(latent, tuple):
-                latent = np.concatenate((X, Y), axis=1)
-            X, Y = AdjacencySpectralEmbed().fit_transform(embed_graph)
+                latent = np.concatenate(latent, axis=1)
 
-            gc = GaussianCluster(**cluster_kws)
+            # gc = GaussianCluster(*self.cluster_kws)
+            gc = GaussianMixture(n_components=self.cluster_kws[1])
             vertex_labels = gc.fit_predict(latent)
         else:
             self.y = y

@@ -103,6 +103,7 @@ def heatmap(
     cbar=True,
     inner_hier_labels=None,
     outer_hier_labels=None,
+    hier_label_fontsize=30,
 ):
     r"""
     Plots a graph as a heatmap.
@@ -150,6 +151,9 @@ def heatmap(
         Categorical labeling of the nodes, ignored without `inner_hier_labels`
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals 
+    hier_label_fontsize : int
+        size (in points) of the text labels for the `inner_hier_labels` and 
+        `outer_hier_labels`.
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -199,9 +203,10 @@ def heatmap(
         else:
             outer_hier_labels = np.array(outer_hier_labels)
             arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels)
-
+    else:
+        arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]))
     # Global plotting settings
-    CBAR_KWS = dict(shrink=0.7, norm=colors.NoNorm)
+    CBAR_KWS = dict(shrink=0.7,)# norm=colors.Normalize(vmin=0, vmax=1))
 
     with sns.plotting_context(context, font_scale=font_scale):
         fig, ax = plt.subplots(figsize=figsize)
@@ -216,15 +221,22 @@ def heatmap(
             cbar=cbar,
             ax=ax,
         )
+
         if title is not None:
             plot.set_title(title)
         if inner_hier_labels is not None:
             if outer_hier_labels is not None:
                 plot.set_yticklabels([])
                 plot.set_xticklabels([])
-                _plot_groups(plot, arr, inner_hier_labels, outer_hier_labels)
+                _plot_groups(
+                    plot,
+                    arr,
+                    inner_hier_labels,
+                    outer_hier_labels,
+                    fontsize=hier_label_fontsize,
+                )
             else:
-                _plot_groups(plot, arr, inner_hier_labels)
+                _plot_groups(plot, arr, inner_hier_labels, fontsize=hier_label_fontsize)
     return plot
 
 
@@ -242,6 +254,7 @@ def gridplot(
     legend_name="Type",
     inner_hier_labels=None,
     outer_hier_labels=None,
+    hier_label_fontsize=30,
 ):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
@@ -294,6 +307,9 @@ def gridplot(
         Categorical labeling of the nodes, ignored without `inner_hier_labels`
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals
+    hier_label_fontsize : int
+        size (in points) of the text labels for the `inner_hier_labels` and 
+        `outer_hier_labels`.
     """
     _check_common_inputs(
         height=height, title=title, context=context, font_scale=font_scale
@@ -304,6 +320,9 @@ def gridplot(
     else:
         msg = "X must be a list, not {}.".format(type(X))
         raise TypeError(msg)
+
+    if labels is None:
+        labels = np.arange(len(X))
 
     check_consistent_length(X, labels)
     for g in X:
@@ -365,9 +384,17 @@ def gridplot(
             plot.set(title=title)
     if inner_hier_labels is not None:
         if outer_hier_labels is not None:
-            _plot_groups(plot.ax, graphs[0], inner_hier_labels, outer_hier_labels)
+            _plot_groups(
+                plot.ax,
+                graphs[0],
+                inner_hier_labels,
+                outer_hier_labels,
+                fontsize=hier_label_fontsize,
+            )
         else:
-            _plot_groups(plot.ax, graphs[0], inner_hier_labels)
+            _plot_groups(
+                plot.ax, graphs[0], inner_hier_labels, fontsize=hier_label_fontsize
+            )
     return plot
 
 
@@ -753,21 +780,17 @@ def screeplot(
     return ax
 
 
-def _sort_inds(inner_labels, outer_labels):
-    # inner_freq, _, outer_freq, _ = _get_freqs(inner_labels, outer_labels)
+def _sort_inds(graph, inner_labels, outer_labels):
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
     sort_df["inner_labels"] = inner_labels
-    if outer_labels is not None:
-        sort_df["outer_labels"] = outer_labels
-    #     sort_df.sort_values(
-    #         by=["outer_labels", "inner_labels"], kind="mergesort", inplace=True
-    #     )
-    #     outer_labels = sort_df["outer_labels"]
-    # inner_labels = sort_df["inner_labels"]
-    # print(inner_freq)
-    # print(outer_freq)
-    inner_label_counts, outer_label_counts = _get_freq_maps(inner_labels, outer_labels)
-    print(inner_label_counts)
+    sort_df["outer_labels"] = outer_labels
+
+    # get frequencies of the different labels so we can sort by them
+    inner_label_counts = _get_freq_vec(inner_labels)
+    outer_label_counts = _get_freq_vec(outer_labels)
+
+    # inverse counts so we can sort largest to smallest
+    # would rather do it this way so can still sort alphabetical for ties
     sort_df["inner_counts"] = len(inner_labels) - inner_label_counts
     sort_df["outer_counts"] = len(outer_labels) - outer_label_counts
 
@@ -776,10 +799,17 @@ def _sort_inds(inner_labels, outer_labels):
     sort_df["node_edgesums"] = node_edgesums.max() - node_edgesums
 
     sort_df.sort_values(
-        by=["outer_counts", "outer_labels", "inner_counts", "inner_labels"],
+        by=[
+            "outer_counts",
+            "outer_labels",
+            "inner_counts",
+            "inner_labels",
+            "node_edgesums",
+        ],
         kind="mergesort",
         inplace=True,
     )
+
     sorted_inds = sort_df.index.values
     return sorted_inds
 
@@ -791,6 +821,7 @@ def _sort_graph(graph, inner_labels, outer_labels):
 
 
 def _get_freqs(inner_labels, outer_labels=None):
+    # use this because unique would give alphabetical
     _, outer_freq = _unique_like(outer_labels)
     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
 
@@ -806,7 +837,7 @@ def _get_freqs(inner_labels, outer_labels=None):
     return inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum
 
 
-def _get_freq_maps(inner_labels, outer_labels):
+def _get_freq_vec(vals):
     # give each set of labels a vector corresponding to its frequency
     _, inv, counts = np.unique(vals, return_counts=True, return_inverse=True)
     count_vec = counts[inv]
@@ -823,7 +854,7 @@ def _unique_like(vals):
 
 
 # assume that the graph has already been plotted in sorted form
-def _plot_groups(ax, graph, inner_labels, outer_labels=None):
+def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
     plot_outer = True
     if outer_labels is None:
         outer_labels = np.ones_like(inner_labels)
@@ -836,20 +867,11 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
 
     inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum = _get_freqs(
         inner_labels, outer_labels
-    )  # wrong
-
-    # inner_unique, inner_ind = np.unique(inner_labels, return_index=True)
-    # inner_ind_sort = np.argsort(inner_ind)
-    # inner_unique = inner_unique[inner_ind_sort]
-    # inner_counts = inner_counts[inner_ind_sort]
-    # outer_unique, outer_ind = np.unique(outer_labels, return_index=True)
-    # outer_ind_sort = np.argsort(outer_ind)
-    # outer_unique = outer_unique[outer_ind_sort]
-    # outer_counts = outer_counts[outer_ind_sort]
-
+    )
     inner_unique, _ = _unique_like(inner_labels)
     outer_unique, _ = _unique_like(outer_labels)
 
+    n_verts = graph.shape[0]
     # draw lines
     for x in inner_freq_cumsum:
         if x != inner_freq_cumsum[0]:
@@ -885,6 +907,7 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
         "inner",
         "x",
         n_verts,
+        fontsize,
     )
     # side inner curves
     # ax_y = divider.new_horizontal(
@@ -900,11 +923,13 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
         "inner",
         "y",
         n_verts,
+        fontsize,
     )
 
     if plot_outer:
         # top outer curves
-        ax_x2 = divider.new_vertical(size="5%", pad=0.25, pack_start=False)
+        pad_scalar = 0.35 / 30 * fontsize
+        ax_x2 = divider.new_vertical(size="5%", pad=pad_scalar, pack_start=False)
         ax.figure.add_axes(ax_x2)
         _plot_brackets(
             ax_x2,
@@ -915,9 +940,10 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
             "outer",
             "x",
             n_verts,
+            fontsize,
         )
         # side outer curves
-        ax_y2 = divider.new_horizontal(size="5%", pad=0.25, pack_start=True)
+        ax_y2 = divider.new_horizontal(size="5%", pad=pad_scalar, pack_start=True)
         ax.figure.add_axes(ax_y2)
         _plot_brackets(
             ax_y2,
@@ -928,17 +954,22 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None):
             "outer",
             "y",
             n_verts,
+            fontsize,
         )
     return ax
 
 
-def _plot_brackets(ax, group_names, tick_loc, tick_width, curve, level, axis, max_size):
+def _plot_brackets(
+    ax, group_names, tick_loc, tick_width, curve, level, axis, max_size, fontsize
+):
     for x0, width in zip(tick_loc, tick_width):
         x = np.linspace(x0 - width, x0 + width, 1000)
         if axis == "x":
             ax.plot(x, -curve, c="k")
+            ax.patch.set_alpha(0)
         elif axis == "y":
             ax.plot(curve, x, c="k")
+            ax.patch.set_alpha(0)
     ax.set_yticks([])
     ax.set_xticks([])
     ax.tick_params(axis=axis, which=u"both", length=0, pad=7)
@@ -946,15 +977,15 @@ def _plot_brackets(ax, group_names, tick_loc, tick_width, curve, level, axis, ma
         ax.spines[direction].set_visible(False)
     if axis == "x":
         ax.set_xticks(tick_loc)
-        ax.set_xticklabels(group_names, fontsize=28, verticalalignment="center")
+        ax.set_xticklabels(group_names, fontsize=fontsize, verticalalignment="center")
         ax.xaxis.set_label_position("top")
         ax.xaxis.tick_top()
         ax.xaxis.labelpad = 30
         ax.set_xlim(0, max_size)
-        ax.tick_params(axis="x", which="major", pad=15)
+        ax.tick_params(axis="x", which="major", pad=5 + fontsize / 4)
     elif axis == "y":
         ax.set_yticks(tick_loc)
-        ax.set_yticklabels(group_names, fontsize=28, verticalalignment="center")
+        ax.set_yticklabels(group_names, fontsize=fontsize, verticalalignment="center")
         # ax.yaxis.set_label_position('top')
         # ax.yaxis.tick_top()
         ax.set_ylim(0, max_size)
