@@ -206,7 +206,7 @@ def heatmap(
     else:
         arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]))
     # Global plotting settings
-    CBAR_KWS = dict(shrink=0.7,)# norm=colors.Normalize(vmin=0, vmax=1))
+    CBAR_KWS = dict(shrink=0.7)  # norm=colors.Normalize(vmin=0, vmax=1))
 
     with sns.plotting_context(context, font_scale=font_scale):
         fig, ax = plt.subplots(figsize=figsize)
