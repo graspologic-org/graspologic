@@ -1,6 +1,11 @@
 from .base import BaseGraphEstimator, _calculate_p, _fit_weights, cartprod
-from ..utils import import_graph, binarize, is_almost_symmetric, augment_diagonal
-import itertools
+from ..utils import (
+    import_graph,
+    binarize,
+    is_almost_symmetric,
+    augment_diagonal,
+    is_unweighted,
+)
 import numpy as np
 from ..simulations import sbm, sample_edges
 from ..cluster import GaussianCluster
@@ -16,44 +21,51 @@ class SBEstimator(BaseGraphEstimator):
         degree_directed=False,
         directed=True,
         loops=True,
+        n_components=None,
+        min_comm=1, 
+        max_comm=6, # TODO some more intelligent default here? 
         cluster_kws={},
-        ase_kws={},
+        embed_kws={},
     ):
         super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
         self.fit_degrees = fit_degrees
         self.degree_directed = degree_directed
         self.cluster_kws = cluster_kws
+        self.n_components = n_components
+        self.min_comm = min_comm
+        self.max_comm = max_comm
+        self.embed_kws = {}
+    
+    def _estimate_assignments(self, graph):
+        embed_graph = augment_diagonal(graph)  # TODO always?
+        # TODO other regularizations
+        # TODO regularized laplacians for finding communities?
+        latent = AdjacencySpectralEmbed(n_components=n_components, **self.embed_kws).fit_transform(embed_graph)
+        if isinstance(latent, tuple):
+            latent = np.concatenate(latent, axis=1)
+        gc = GaussianCluster(min_components=self.min_comm, max_components=self.max_comm, **self.cluster_kws)
+        vertex_assignments = gc.fit_predict(latent)
+        self.vertex_assignments_ = vertex_assignments
 
     def fit(self, graph, y=None):
         """
         graph : 
         y : block assignments
         """
-        if y is None:
-            embed_graph = augment_diagonal(graph)
-            latent = AdjacencySpectralEmbed().fit_transform(embed_graph)
-            if is_almost_symmetric(graph):
-                latent = AdjacencySpectralEmbed().fit_transform(embed_graph)
-            if isinstance(latent, tuple):
-                latent = np.concatenate(latent, axis=1)
-
-            # gc = GaussianCluster(*self.cluster_kws)
-            gc = GaussianMixture(n_components=self.cluster_kws[1])
-            vertex_labels = gc.fit_predict(latent)
-        else:
-            self.y = y
-            vertex_labels = y
-
         graph = import_graph(graph)
-        self.n_verts = graph.shape[0]
+        if not is_unweighted(graph):
+            raise NotImplementedError(
+                "Graph model is currently only implemented" + " for unweighted graphs."
+            )
+        # self.n_verts = graph.shape[0]
 
-        # TODO: need to do this part in such a way as to align the labels
-        # with a way that we can plot/sample
+        if y is None:
+            self._estimate_assignments(graph)
+            y = self.vertex_assignments_
+
         block_labels, block_inv, block_sizes = np.unique(
-            vertex_labels, return_inverse=True, return_counts=True
+            y, return_inverse=True, return_counts=True
         )
-        # TODO: could sort everything by size here?
-
         self.block_sizes_ = block_sizes
 
         n_blocks = len(block_labels)
@@ -63,13 +75,11 @@ class SBEstimator(BaseGraphEstimator):
         for bs, bl in zip(block_sizes, block_labels):
             block_members = block_members + bs * [bl]
 
-        # TODO:
-        # this is indexed in the same way as the internal model (unique)
-        # could use unique_like here?
-        self.block_members_ = np.array(block_members)
+        self.block_members_ = np.array(block_members) # TODO necessary?
 
         block_vert_inds = []
         for i in block_inds:
+            # get the inds from the original graph
             inds = np.where(block_inv == i)[0]
             block_vert_inds.append(inds)
 
@@ -90,34 +100,7 @@ class SBEstimator(BaseGraphEstimator):
         block_map = cartprod(block_inv, block_inv).T
         p_by_edge = block_p[block_map[0], block_map[1]]
         p_mat = p_by_edge.reshape(graph.shape)
-        self.p_mat_ = p_mat
-
-        if self.fit_degrees:
-            out_degree = np.count_nonzero(graph, axis=1).astype(float)
-            in_degree = np.count_nonzero(graph, axis=0).astype(float)
-            if self.degree_directed:
-                degree_corrections = np.stack((out_degree, in_degree), axis=1)
-            else:
-                degree_corrections = out_degree + in_degree
-                # new axis just so we can index later
-                degree_corrections = degree_corrections[:, np.newaxis]
-            for i in block_inds:
-                block_degrees = degree_corrections[block_vert_inds[i]]
-                degree_divisor = np.mean(block_degrees, axis=0)
-                if not isinstance(degree_divisor, np.float64):
-                    degree_divisor[degree_divisor == 0] = 1
-                degree_corrections[block_vert_inds[i]] = (
-                    degree_corrections[block_vert_inds[i]] / degree_divisor
-                )
-
-            self.degree_corrections_ = degree_corrections
-            p_mat = p_mat * np.outer(
-                degree_corrections[:, 0], degree_corrections[:, -1]
-            )
-            p_mat[p_mat > 1] = 1
-            self.p_mat_ = p_mat
-        else:
-            self.degree_corrections_ = None
+        self.p_mat_ = p_matd
 
         if self.fit_weights:
             # TODO: something
@@ -135,16 +118,76 @@ class SBEstimator(BaseGraphEstimator):
         #     directed=self.directed,
         #     dc=self.degree_corrections_,
         # )
+
+        # TODO at some point we may want to sample probabilistically here for the
+        # block memberships
         graph = sample_edges(self.p_mat_, directed=self.directed, loops=self.loops)
         return graph
 
     def _n_parameters(self):
         n_parameters = 0
         n_parameters += self.block_p_.size  # elements in block p matrix
-        n_parameters += self.block_sizes_.size
-        if self.fit_degrees:
-            n_parameters += (
-                self.degree_corrections_.size
-            )  # one degree correction per vert is stored
-            # TODO: more than this? becasue now the position of verts w/in block matters
+        n_parameters += self.block_sizes_.size # TODO - 1? 
+        return n_parameters
+
+
+class DCSBEstimator(BaseGraphEstimator):
+
+    def __init__(
+        degree_directed=False,
+        directed=True,
+        loops=True,
+        n_components=None,
+        min_comm=1, 
+        max_comm=6, # TODO some more intelligent default here? 
+        cluster_kws={},
+        embed_kws={},): 
+        super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
+        self.degree_directed = degree_directed
+        self.cluster_kws = cluster_kws
+        self.n_components = n_components
+        self.min_comm = min_comm
+        self.max_comm = max_comm
+        self.embed_kws = {}
+
+    def _estimate_assignments(self, graph):
+        # TODO
+        # do regularized laplacian embedding 
+        # 
+
+    def fit(self, graph, y=None):
+        out_degree = np.count_nonzero(graph, axis=1).astype(float)
+        in_degree = np.count_nonzero(graph, axis=0).astype(float)
+        if self.degree_directed:
+            degree_corrections = np.stack((out_degree, in_degree), axis=1)
+        else:
+            degree_corrections = out_degree + in_degree
+            # new axis just so we can index later
+            degree_corrections = degree_corrections[:, np.newaxis]
+        for i in block_inds:
+            block_degrees = degree_corrections[block_vert_inds[i]]
+            degree_divisor = np.mean(block_degrees, axis=0)
+            if not isinstance(degree_divisor, np.float64):
+                degree_divisor[degree_divisor == 0] = 1
+            degree_corrections[block_vert_inds[i]] = (
+                degree_corrections[block_vert_inds[i]] / degree_divisor
+            )
+
+        self.degree_corrections_ = degree_corrections
+        p_mat = p_mat * np.outer(
+            degree_corrections[:, 0], degree_corrections[:, -1]
+        )
+        p_mat[p_mat > 1] = 1
+        self.p_mat_ = p_mat
+        pass
+
+    def sample(self):
+        pass
+
+    def _n_parameters(self):
+        n_parameters = 0
+        n_parameters += self.block_p_.size  # elements in block p matrix
+        # n_parameters += self.block_sizes_.size
+        n_parameters += self.degree_corrections_.size + self.degree_corrections_.shape[0]
+        # TODO: more than this? becasue now the position of verts w/in block matters
         return n_parameters

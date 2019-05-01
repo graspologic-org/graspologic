@@ -533,5 +533,5 @@ def augment_diagonal(graph, weight=1):
 
 def binarize(graph):
     graph = import_graph(graph)
-    graph[graph > 0] = 1
+    graph[graph != 0] = 1
     return graph

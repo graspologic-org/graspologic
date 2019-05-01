@@ -24,7 +24,6 @@ class BaseGraphEstimator(BaseEstimator):
 
     def aic(self, graph):
         return 2 * self._n_parameters() - 2 * self.score(graph)
-        # return
 
     def score_samples(self, graph):
         """
@@ -42,22 +41,19 @@ class BaseGraphEstimator(BaseEstimator):
         # P.ravel() <dot> graph * (1 - P.ravel()) <dot> (1 - graph)
         bin_graph = binarize(graph)
         p_mat = self.p_mat_.copy()
+        # squish the probabilities that are degenerate
         c = 1 / graph.size
         p_mat[p_mat < c] = c
         p_mat[p_mat > 1 - c] = 1 - c
         successes = np.multiply(p_mat, bin_graph)  # TODO: use nonzero inds here
         failures = np.multiply((1 - p_mat), (1 - bin_graph))
         likelihood = successes + failures
-        # print(likelihood)
-        # print(self.p_mat_)
-        # return np.log(likelihood)
         return np.log(likelihood)
 
     def score(self, graph):
         """
         Compute the per-sample average log-likelihood of the given data X.
         """
-        # return self.score_samples(graph).mean()
         return np.sum(self.score_samples(graph))
 
     @property

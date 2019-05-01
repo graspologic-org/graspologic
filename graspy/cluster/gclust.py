@@ -69,7 +69,7 @@ class GaussianCluster(BaseCluster):
 
     def __init__(
         self,
-        min_components,
+        min_components=1,
         max_components=None,
         covariance_type="full",
         random_state=None,
