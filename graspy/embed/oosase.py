@@ -5,21 +5,24 @@ import warnings
 
 from .base import BaseEmbed
 from .svd import selectSVD
-from ..utils import import_graph, get_lcc, is_fully_connected
+from ..utils import import_graph, get_lcc, is_fully_connected, is_symmetric
 
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 from sklearn.utils import check_array
+import networkx as nx
 
 
 class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
     r"""
-    Class for computing the adjacency spectral embedding of a graph 
+    Class for computing the out of sample adjacency spectral embedding of a graph.
     
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation of 
     the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce the dimensionality
     to the specified k, or if k is unspecified, can find a number of dimensions automatically
-    (see graspy.embed.selectSVD).
+    (see graspy.embed.selectSVD). The out of sample adjacency spectral embedding (OOSASE) considers
+    the ASE of an induced subgraph of the original graph. To embed "out of sample" vertices, a projection
+    matrix learned from the in sample embedding is used [2]_.
 
     Parameters
     ----------
@@ -45,21 +48,28 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
-    check_lcc : bool , optional (defult = True)
+    check_lcc : bool , optional (default = True)
         Whether to check if input graph is connected. May result in non-optimal 
         results if the graph is unconnected. If True and input is unconnected,
         a UserWarning is thrown. Not checking for connectedness may result in 
         faster computation.
+    in_sample_proportion : float , optional (default = 1)
+        If in_sample_idx is None, the proportion of in sample vertices to use for
+        initial embedding.
+    in_sample_idx : array-like , optional (default = None)
+    connected_attempts : integer , optional (default = 1000)
+        Number of sets of indices 
+    semi_supervised : boolean , optional (default = False)
+    random_state : integer , optional (default = None)
+        Random seed used to generate in sample indices. If None, random_state
+        is a random integer between 0 and 10**6
 
     Attributes
     ----------
-    latent_left_ : array, shape (n_samples, n_components)
-        Estimated left latent positions of the graph. 
-    latent_right_ : array, shape (n_samples, n_components), or None
-        Only computed when the graph is directed, or adjacency matrix is assymetric.
-        Estimated right latent positions of the graph. Otherwise, None.
+    latent_left_ : array, shape (n_in_samples, n_components)
+        Estimated left latent positions of the graph.
     singular_values_ : array, shape (n_components)
-        Singular values associated with the latent position matrices. 
+        Singular values associated with the latent position matrices
 
     See Also
     --------
@@ -138,19 +148,44 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         -------
         self : returns an instance of self.
         """
+
+        if is instance(graph, np.ndarray):
+            check_array(graph)
+            graph = nx.Graph(graph).copy()
+
+        if is instance(graph, nx.Graph):
+            if not is_symmetric(graph):
+                msg = (
+                    'symmetric graphs only'
+                    )
+                raise ValueError(msg)
+            connected_comps = nx.connected_components(graph)
+            indices = [list(c) for c in connected_comps]
+            lens = np.array([len(c) for c in connected_comps])
+            if np.count_nonzero(lens - 1) != len(lens):
+                msg = (
+                    'singletons in graph'
+                    )
+                raise ValueError(msg)
+        elif:
+            msg = (
+                'only arrays and networkx graphs allowed'
+                )
+            raise TypeError(msg)
+
         A = import_graph(graph)
         N = A.shape[0]
 
         if self.in_sample_proportion is None:
             self.in_sample_proportion = len(self.in_sample_idx) / N
 
-        n = int(np.ceil(N * self.in_sample_proportion))
+        counts = [int(np.round(self.in_sample_proportion*i)) for i in lens]
 
         if self.in_sample_idx is None:
             if self.in_sample_proportion == 1:
                 self.in_sample_idx = range(N)
             else:
-                self.in_sample_idx = np.random.choice(N, n)
+                self.in_sample_idx = self._stratified_sample(connected_comps, counts)
         else:
             self.in_sample_proportion = len(self.in_sample_idx) / N
 
@@ -185,6 +220,40 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         self._reduce_dim(in_sample_A)
         return self
+
+    def _stratified_sample(self, lists, counts):
+        """
+        Stratified sampling.
+
+        Parameters
+        ----------
+        lists : list
+            A list of list of objects to sample from.
+
+        counts : array_like
+            An array or list of sample counts from each list in lists.
+
+        Returns
+        -------
+        sample : array
+            Stratified sample.
+        """
+        ints = np.sum(np.array([is not instance(c, int) for c in counts]))
+        if ints > 0:
+            msg = (
+                'integer counts only'
+                )
+            raise ValueError(msg)
+
+        len_lists = np.array([len(list_) for list_ in lists])
+        if np.sum(len_lists > counts) > 0:
+            msg = (
+                'trying to sample n > len(list) things'
+                )
+            raise ValueError(msg)
+
+        sample = np.concatenate([np.random.choice(lists[i], counts[i]) for i in range(len(lists))])
+        return sample
 
     def predict(self, X):
         """
@@ -248,6 +317,19 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         return oos_embedding
 
     def fit_predict(self, graph):
+        """
+        Perform both in sample and out of sample adjacency spectral embedding.
+
+        Parameters
+        ----------
+        graph : array-like or networkx.Graph
+            Input graph to embed.
+
+        Returns
+        -------
+        embedding : array
+            Embedding of all vertices in graph.
+        """
 
         A = import_graph(graph)
         self.fit(A)
@@ -255,7 +337,6 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         N = A.shape[0]
         n = len(self.in_sample_idx)
         out_sample_idx = [i for i in range(N) if i not in self.in_sample_idx]
-        print(out_sample_idx)
         oos = self.predict(A[np.ix_(out_sample_idx, self.in_sample_idx)])
 
         embedding = np.zeros((N, self.latent_left_.shape[1]))
