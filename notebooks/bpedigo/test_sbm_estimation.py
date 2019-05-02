@@ -1,6 +1,6 @@
 #%%
 from graspy.embed import AdjacencySpectralEmbed
-from graspy.models import SBEstimator
+from graspy.models import DCSBEstimator, SBEstimator
 from graspy.simulations import p_from_latent, sample_edges, sbm
 from graspy.utils import *
 
@@ -48,7 +48,7 @@ block_counts = n_total * np.array([0.2, 0.5, 0.2, 0.1])
 block_counts = block_counts.astype(int)
 labels = np.zeros(n_total, dtype=int)
 count = 0
-cluster_kws = {"max_components": 10}
+cluster_kws = {}
 for i, c in enumerate(block_counts):
     for j in range(c):
         labels[j + count] = i
@@ -71,6 +71,7 @@ for i in range(n_sims):
 print(np.sum(simple_error))
 print(np.sum(spectral_error))
 
+sbe.block_p_
 #%%
 n_verts = 200
 show_graphs = False
@@ -80,7 +81,7 @@ sample_kwargs = {}
 
 # dcsbm, 2 line, beta
 thetas = np.array([0.0 * np.pi, 0.4 * np.pi])
-distances = np.random.beta(1, 0.5, n_verts)
+distances = np.random.beta(1.5, 1, n_verts)
 vec1 = np.array([np.cos(thetas[0]), np.sin(thetas[0])])
 vec2 = np.array([np.cos(thetas[1]), np.sin(thetas[1])])
 latent1 = np.multiply(distances[: int(n_verts / 2)][:, np.newaxis], vec1[np.newaxis, :])
@@ -91,20 +92,55 @@ dcsbm_P = p_from_latent(latent, rescale=False, loops=False)
 graph = sample_edges(dcsbm_P, directed=False, loops=False)
 # graph = get_graph(latent, "DCSBM", labels=labels)
 
-#%%
+
 from graspy.plot import heatmap
 
 graph
 heatmap(graph, inner_hier_labels=labels)
 
-dcsbe = SBEstimator(fit_degrees=True, directed=False, loops=False)
+dcsbe = DCSBEstimator(directed=False, loops=False)
 dcsbe.fit(graph)
 dcsbe.degree_corrections_
 plt.figure()
 sns.distplot(dcsbe.degree_corrections_)
+plt.figure()
 sns.distplot(distances)
 p_hat = dcsbe.p_mat_
 
 np.linalg.norm(p_hat - dcsbm_P) ** 2
+# heatmap(dcsbe.p_mat_, inner_hier_labels=labels)
+# heatmap(dcsbm_P, inner_hier_labels=labels)
+import seaborn as sns
+
+
+plt.figure()
+sns.scatterplot(
+    x=latent[:, 0], y=latent[:, 1], hue=dcsbe.vertex_assignments_, linewidth=0
+)
 
 #%%
+from graspy.embed import LaplacianSpectralEmbed, AdjacencySpectralEmbed
+
+plt.figure()
+sns.scatterplot(x=latent[:, 0], y=latent[:, 1], hue=labels, linewidth=0)
+
+ase = AdjacencySpectralEmbed(n_components=2)
+lse = LaplacianSpectralEmbed(n_components=2, form="R-DAD", regularizer=1)
+ase_latent = ase.fit_transform(graph)
+lse_latent = lse.fit_transform(graph)
+
+plt.figure()
+sns.scatterplot(x=ase_latent[:, 0], y=ase_latent[:, 1], hue=labels, linewidth=0)
+plt.axis("square")
+
+plt.figure()
+sns.scatterplot(x=lse_latent[:, 0], y=lse_latent[:, 1], hue=labels, linewidth=0)
+plt.axis("square")
+vector_lengths = np.linalg.norm(ase_latent, axis=1)
+vector_lengths[vector_lengths == 0] = 1
+proj_latent = ase_latent / vector_lengths[:, np.newaxis]
+
+plt.figure()
+sns.scatterplot(x=proj_latent[:, 0], y=proj_latent[:, 1], hue=labels, linewidth=0)
+plt.axis("square")
+
