@@ -29,8 +29,8 @@ def sample_edges(P, directed=False, loops=False):
     """
     Gemerates a binary random graph based on the P matrix provided
 
-    Each element in P represents the probability of a connection between 
-    a vertex indexed by the row i and the column j. 
+    Each element in P represents the probability of a connection between
+    a vertex indexed by the row i and the column j.
 
     Parameters
     ----------
@@ -97,8 +97,8 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
     wt: object, optional (default=1)
-        Weight function for each of the edges, taking only a size argument. 
-        This weight function will be randomly assigned for selected edges. 
+        Weight function for each of the edges, taking only a size argument.
+        This weight function will be randomly assigned for selected edges.
         If 1, graph produced is binary.
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
@@ -169,8 +169,8 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
     wt: object, optional (default=1)
-        Weight function for each of the edges, taking only a size argument. 
-        This weight function will be randomly assigned for selected edges. 
+        Weight function for each of the edges, taking only a size argument.
+        This weight function will be randomly assigned for selected edges.
         If 1, graph produced is binary.
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
@@ -262,18 +262,18 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
 
 def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
     """
-    Samples a graph from the stochastic block model (SBM). 
+    Samples a graph from the stochastic block model (SBM).
 
     SBM produces a graph with specified communities, in which each community can
-    have different sizes and edge probabilities. 
+    have different sizes and edge probabilities.
 
     Parameters
     ----------
     n: list of int, shape (n_communities)
         Number of vertices in each community. Communities are assigned n[0], n[1], ...
     p: array-like, shape (n_communities, n_communities)
-        Probability of an edge between each of the communities, where p[i, j] indicates 
-        the probability of a connection between edges in communities [i, j]. 
+        Probability of an edge between each of the communities, where p[i, j] indicates
+        the probability of a connection between edges in communities [i, j].
         0 < p[i, j] < 1 for all i, j.
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
@@ -291,45 +291,45 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         binary subgraph over the i, j community.
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
         if Wt is an object, Wtargs corresponds to the trailing arguments
-        to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
+        to pass to the weight function. If Wt is an array-like, Wtargs[i, j]
         corresponds to trailing arguments to pass to Wt[i, j].
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
-        `dc` is used to generate a degree-corrected stochastic block model [1] in 
+        `dc` is used to generate a degree-corrected stochastic block model [1] in
         which each node in the graph has a parameter to specify its expected degree
         relative to other nodes within its community.
 
-        - function: 
-            should generate a non-negative number to be used as a degree correction to 
+        - function:
+            should generate a non-negative number to be used as a degree correction to
             create a heterogenous degree distribution. A weight will be generated for
-            each vertex, normalized so that the sum of weights in each block is 1. 
-        - array-like of functions, shape (n_communities): 
-            Each function will generate the degree distribution for its respective 
-            community. 
-        - array-like of scalars, shape (n_vertices): 
+            each vertex, normalized so that the sum of weights in each block is 1.
+        - array-like of functions, shape (n_communities):
+            Each function will generate the degree distribution for its respective
+            community.
+        - array-like of scalars, shape (n_vertices):
             The weights in each block should sum to 1; otherwise, they will be normalized
-            and a warning will be thrown. The scalar associated with each vertex is the 
-            node's relative expected degree within its community. 
-    
+            and a warning will be thrown. The scalar associated with each vertex is the
+            node's relative expected degree within its community.
+
     dc_kws: dictionary or array-like, shape (n_communities), optional
         Ignored if `dc` is none or array of scalar.
-        If `dc` is a function, `dc_kws` corresponds to its named arguments. 
-        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape 
-        (n_communities), of dictionary. Each dictionary is the named arguments 
-        for the corresponding function for that community. 
-        If not specified, in either case all functions will assume their default 
+        If `dc` is a function, `dc_kws` corresponds to its named arguments.
+        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape
+        (n_communities), of dictionary. Each dictionary is the named arguments
+        for the corresponding function for that community.
+        If not specified, in either case all functions will assume their default
         parameters.
 
     References
     ----------
-    .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
-        Degree-Corrected Stochastic Blockmodel," Advances in Neural Information 
+    .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the
+        Degree-Corrected Stochastic Blockmodel," Advances in Neural Information
         Processing Systems 26, 2013
 
     Returns
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
-        
+
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -524,17 +524,17 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
 
 def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None):
     r"""
-    Samples a random graph based on the latent positions in X (and 
+    Samples a random graph based on the latent positions in X (and
     optionally in Y)
 
     If only X :math:`\in\mathbb{R}^{n\times d}` is given, the P matrix is calculated as
-    :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then 
-    :math:`P = XY^T`. These operations correspond to the dot products between a set of 
-    latent positions, so each row in X or Y represents the latent positions in  
-    :math:`\mathbb{R}^{d}` for a single vertex in the random graph 
-    Note that this function may also rescale or clip the resulting P 
+    :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then
+    :math:`P = XY^T`. These operations correspond to the dot products between a set of
+    latent positions, so each row in X or Y represents the latent positions in
+    :math:`\mathbb{R}^{d}` for a single vertex in the random graph
+    Note that this function may also rescale or clip the resulting P
     matrix to get probabilities between 0 and 1, or remove loops.
-    A binary random graph is then sampled from the P matrix described 
+    A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
 
     Parameters
@@ -545,7 +545,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
     rescale: boolean, optional (default=True)
-        when rescale is True, will subtract the minimum value in 
+        when rescale is True, will subtract the minimum value in
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
@@ -557,8 +557,8 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
         are removed prior to rescaling (see above) which may affect behavior. Otherwise,
         edges are sampled in the diagonal.
     wt: object, optional (default=1)
-        Weight function for each of the edges, taking only a size argument. 
-        This weight function will be randomly assigned for selected edges. 
+        Weight function for each of the edges, taking only a size argument.
+        This weight function will be randomly assigned for selected edges.
         If 1, graph produced is binary.
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
@@ -567,7 +567,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
     Returns
     -------
     A: ndarray (n_vertices, n_vertices)
-        A matrix representing the probabilities of connections between 
+        A matrix representing the probabilities of connections between
         vertices in a random graph based on their latent positions
 
     References
@@ -575,7 +575,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-    
+
     """
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
     A = sample_edges(P, directed=directed, loops=loops)
@@ -603,9 +603,9 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     If only X is given, the P matrix is calculated as :math:`P = XX^T`
     If X and Y is given, then :math:`P = XY^T`
     These operations correspond to the dot products between a set of latent
-    positions, so each row in X or Y represents the latent positions in  
-    :math:`\mathbb{R}^{num-columns}` for a single vertex in the random graph 
-    Note that this function may also rescale or clip the resulting P 
+    positions, so each row in X or Y represents the latent positions in
+    :math:`\mathbb{R}^{num-columns}` for a single vertex in the random graph
+    Note that this function may also rescale or clip the resulting P
     matrix to get probabilities between 0 and 1, or remove loops
 
     Parameters
@@ -616,20 +616,20 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
     rescale: boolean, optional (default=True)
-        when rescale is True, will subtract the minimum value in 
+        when rescale is True, will subtract the minimum value in
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
     loops: boolean, optional (default=True)
         whether to allow elements on the diagonal (corresponding
-        to self connections in a graph) in the returned P matrix. 
-        If loops is False, these elements are removed prior to 
+        to self connections in a graph) in the returned P matrix.
+        If loops is False, these elements are removed prior to
         rescaling (see above) which may affect behavior
 
     Returns
     -------
     P: ndarray (n_vertices, n_vertices)
-        A matrix representing the probabilities of connections between 
+        A matrix representing the probabilities of connections between
         vertices in a random graph based on their latent positions
 
     References
@@ -637,7 +637,7 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-    
+
     """
     if Y is None:
         Y = X
@@ -662,3 +662,53 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
         P[P < 0] = 0
         P[P > 1] = 1
     return P
+
+def lsm(density_fn, curve_fn, n, rescale=True, directed=False, loops=False, wt=1, wtargs=None):
+    r"""
+    Samples a Latent Structure Model with a specified latent curve and latent curve distribution function
+
+    Parameters
+    ----------
+    density_fn: function
+        A function that returns a sample from the geodesic distribution on the latent curve
+        This function should have support (0, 1)
+    curve_fn: function
+        A function that maps a geodesic position to a latent position.
+        This function should have domain (0, 1) and an image that is a subset of a d dimensional unit hypersphere
+    rescale: boolean, optional (default=True)
+        when rescale is True, will subtract the minimum value in
+        P (if it is below 0) and divide by the maximum (if it is
+        above 1) to ensure that P has entries between 0 and 1. If
+        False, elements of P outside of [0, 1] will be clipped
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+    loops: boolean, optional (default=True)
+        If False, no edges will be sampled in the diagonal. Diagonal elements in P matrix
+        are removed prior to rescaling (see above) which may affect behavior. Otherwise,
+        edges are sampled in the diagonal.
+    wt: object, optional (default=1)
+        Weight function for each of the edges, taking only a size argument.
+        This weight function will be randomly assigned for selected edges.
+        If 1, graph produced is binary.
+    wtargs: dictionary, optional (default=None)
+        Optional arguments for parameters that can be passed
+        to weight function ``wt``.
+
+    Returns
+    -------
+    A: ndarray (n_vertices, n_vertices)
+        A matrix representing the probabilities of connections between
+        vertices in a random graph based on their latent positions
+
+    References
+    ----------
+    .. [2] Athreya, Avanti, et al. "On estimation and
+       inference in latent structure random graphs."
+       arXiv preprint arXiv:1806.01401, 2018
+    """
+    X = np.stack([curve_fn(density_fn()) for _ in range(n)])
+    X = np.squeeze(X)
+    return rdpg(
+        X, rescale=rescale, directed=directed, loops=loops, wt=wt, wtargs=wtargs
+        )
