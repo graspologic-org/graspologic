@@ -663,7 +663,17 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
         P[P > 1] = 1
     return P
 
-def lsm(density_fn, curve_fn, n, rescale=True, directed=False, loops=False, wt=1, wtargs=None):
+
+def lsm(
+    density_fn,
+    curve_fn,
+    n,
+    rescale=True,
+    directed=False,
+    loops=False,
+    wt=1,
+    wtargs=None,
+):
     r"""
     Samples a Latent Structure Model with a specified latent curve and latent curve distribution function
 
@@ -711,4 +721,4 @@ def lsm(density_fn, curve_fn, n, rescale=True, directed=False, loops=False, wt=1
     X = np.squeeze(X)
     return rdpg(
         X, rescale=rescale, directed=directed, loops=loops, wt=wt, wtargs=wtargs
-        )
+    )
