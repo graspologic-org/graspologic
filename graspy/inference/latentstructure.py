@@ -21,14 +21,6 @@ class LatentStructureTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
 
-    Attributes
-    ----------
-    null_distribution_1_, null_distribution_2_ : np.ndarray (n_bootstraps,)
-        The distribution of T statistics generated under the null, using the first and
-        and second input graph, respectively. The latent positions of each sample graph
-        are used independently to sample random dot product graphs, so two null
-        distributions are generated
-
     References
     ----------
     .. [2] Athreya, Avanti, et al. "On estimation and
@@ -114,6 +106,14 @@ class LatentStructureTest(BaseInference):
             The two graphs to run a hypothesis test on.
             If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
             where ``n_vertices`` is the same for both
+
+        initial_neighbors : int
+            The number of neighbors to begin the isomap kernel connectivity search at
+
+        use_min : boolean, optional (default=True)
+            Search for the min number of neighbors such that the isomap kernel is connected,
+            and use this as our kernel. Otherwise, builds a kernel out of only initial_neighbors
+            many neighbors of each point
 
         Returns
         -------
