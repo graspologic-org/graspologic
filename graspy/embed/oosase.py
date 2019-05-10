@@ -127,13 +127,14 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             if in_sample_idx is None:
                 msg = (
                     "must give either proportion of in sample indices or a list"
-                    + "of in sample vertices"
+                    + " of in sample vertices"
                 )
                 raise ValueError(msg)
         self.connected_attempts = connected_attempts
         self.semi_supervised = semi_supervised
         self.in_sample_proportion = in_sample_proportion
         self.in_sample_idx = in_sample_idx
+        self.streaming = False
 
     def fit(self, graph, y=None):
         """
@@ -149,111 +150,89 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         self : returns an instance of self.
         """
 
-        if is instance(graph, np.ndarray):
+        if isinstance(graph, np.ndarray):
             check_array(graph)
             graph = nx.Graph(graph).copy()
 
-        if is instance(graph, nx.Graph):
-            if not is_symmetric(graph):
+        if isinstance(graph, nx.Graph):
+            if nx.is_directed(graph):
+                self._directed = False
                 msg = (
-                    'symmetric graphs only'
-                    )
+                'symmetric graphs only'
+                )
                 raise ValueError(msg)
-            connected_comps = nx.connected_components(graph)
-            indices = [list(c) for c in connected_comps]
-            lens = np.array([len(c) for c in connected_comps])
-            if np.count_nonzero(lens - 1) != len(lens):
-                msg = (
-                    'singletons in graph'
-                    )
-                raise ValueError(msg)
-        elif:
+            else:
+                self._directed = True
+                # TODO
+        else:
             msg = (
                 'only arrays and networkx graphs allowed'
                 )
             raise TypeError(msg)
 
-        A = import_graph(graph)
-        N = A.shape[0]
+        print("finding nodes")
+
+        self._nodes = list(graph.nodes)
+
+        if self.check_lcc:
+            print("checking lcc large graph")
+            if not is_fully_connected(graph):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + " be optimal. You can compute the largest connected component by"
+                    + " using ``graspy.utils.get_lcc``."
+                )
+                warnings.warn(msg, UserWarning)
+
+        N = len(graph)
 
         if self.in_sample_proportion is None:
             self.in_sample_proportion = len(self.in_sample_idx) / N
-
-        counts = [int(np.round(self.in_sample_proportion*i)) for i in lens]
 
         if self.in_sample_idx is None:
             if self.in_sample_proportion == 1:
                 self.in_sample_idx = range(N)
             else:
-                self.in_sample_idx = self._stratified_sample(connected_comps, counts)
+                self.in_sample_idx = self.in_sample_idx = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
         else:
             self.in_sample_proportion = len(self.in_sample_idx) / N
 
-        in_sample_A = A[np.ix_(self.in_sample_idx, self.in_sample_idx)]
+        in_sample_G = graph.subgraph(self.in_sample_idx).copy()
 
         if self.check_lcc:
             if self.in_sample_proportion < 1:
                 c = 0
                 while (
-                    not is_fully_connected(in_sample_A) and c < self.connected_attempts
+                    not is_fully_connected(in_sample_G) and c < self.connected_attempts
                 ):
-                    self.in_sample_idx = np.random.choice(N, n)
-                    in_sample_A = A[np.ix_(self.in_sample_idx, self.in_sample_idx)]
+                    self.in_sample_idx = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
+                    in_sample_G = graph.subgraph(self.in_sample_idx).copy()
                     c += 1
+                    print("attempt: " + str(c), is_fully_connected(in_sample_G))
                 if c == self.connected_attempts:
                     msg = (
                         "Induced subgraph is not fully connected. Attempted to find connected"
-                        + "induced subgraph {} times. Results may not be optimal."
-                        + "Try increasing proportion of in sample vertices.".format(
-                            connected_attempts
-                        )
+                        + " induced subgraph {} times. Results may not be optimal.".format(self.connected_attempts)
+                        + " Try increasing proportion of in sample vertices."
                     )
-                    warning.warn(msg, UserWarning)
+                    warnings.warn(msg, UserWarning)
             else:
                 if not is_fully_connected(A):
                     msg = (
                         "Input graph is not fully connected. Results may not"
-                        + "be optimal. You can compute the largest connected component by"
-                        + "using ``graspy.utils.get_lcc``."
+                        + " be optimal. You can compute the largest connected component by"
+                        + " using ``graspy.utils.get_lcc``."
                     )
                     warnings.warn(msg, UserWarning)
 
+
+        print('pre-svd')
+        in_sample_A = nx.to_numpy_array(in_sample_G)
+
+        print('in sample adj mat in hand')
+
         self._reduce_dim(in_sample_A)
         return self
-
-    def _stratified_sample(self, lists, counts):
-        """
-        Stratified sampling.
-
-        Parameters
-        ----------
-        lists : list
-            A list of list of objects to sample from.
-
-        counts : array_like
-            An array or list of sample counts from each list in lists.
-
-        Returns
-        -------
-        sample : array
-            Stratified sample.
-        """
-        ints = np.sum(np.array([is not instance(c, int) for c in counts]))
-        if ints > 0:
-            msg = (
-                'integer counts only'
-                )
-            raise ValueError(msg)
-
-        len_lists = np.array([len(list_) for list_ in lists])
-        if np.sum(len_lists > counts) > 0:
-            msg = (
-                'trying to sample n > len(list) things'
-                )
-            raise ValueError(msg)
-
-        sample = np.concatenate([np.random.choice(lists[i], counts[i]) for i in range(len(lists))])
-        return sample
 
     def predict(self, X):
         """
@@ -268,15 +247,19 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         Returns
         -------
-        oos_embedding : array, shape (m, d)
-            The embedding of the out of sample vertices.
+        embedding : array, shape (m, d)
+            The emmbedding of the m out of sample vertices.
         """
 
         # Check if fit is already called
         check_is_fitted(self, ["latent_left_"], all_or_any=all)
 
-        is_embedding = self.latent_left_
-        n = is_embedding.shape[0]
+        if self._directed:
+            self.in_sample_embedding = np.concatenate((self.latent_left_, self.latent_right_), axis=1)
+        else:
+            self.in_sample_embedding = self.latent_left_
+
+        n = self.in_sample_embedding.shape[0]
 
         # Type checking
         check_array(
@@ -307,10 +290,10 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             )
             raise ValueError(msg)
 
-        oos_embedding = X @ np.linalg.pinv(is_embedding).T
+        oos_embedding = X @ np.linalg.pinv(self.in_sample_embedding).T
 
         if self.semi_supervised:
-            self.latent_left_ = np.concatenate(
+            self.in_sample_embedding = np.concatenate(
                 (self.latent_left_, oos_embedding), axis=0
             )
 
@@ -328,7 +311,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         Returns
         -------
         embedding : array
-            Embedding of all vertices in graph.
+            Embedding of n * m vertices in graph.
         """
 
         A = import_graph(graph)
@@ -339,11 +322,11 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         out_sample_idx = [i for i in range(N) if i not in self.in_sample_idx]
         oos = self.predict(A[np.ix_(out_sample_idx, self.in_sample_idx)])
 
-        embedding = np.zeros((N, self.latent_left_.shape[1]))
-        embedding[self.in_sample_idx] = self.latent_left_[:n]
+        embedding = np.zeros((N, self.in_sample_embedding.shape[1]))
+        embedding[self.in_sample_idx] = self.in_sample_embedding[:n]
         embedding[out_sample_idx] = oos
 
         if self.semi_supervised:
-            self.latent_left = embedding
+            self.in_sample_embedding = embedding
 
         return embedding
