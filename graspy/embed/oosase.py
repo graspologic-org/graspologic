@@ -197,34 +197,10 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         else:
             self.in_sample_proportion = len(self.in_sample_idx) / N
 
-        in_sample_G = graph.subgraph(self.in_sample_idx).copy()
-
         if self.check_lcc:
-            if self.in_sample_proportion < 1:
-                c = 0
-                while (
-                    not is_fully_connected(in_sample_G) and c < self.connected_attempts
-                ):
-                    self.in_sample_idx = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
-                    in_sample_G = graph.subgraph(self.in_sample_idx).copy()
-                    c += 1
-                    print("attempt: " + str(c), is_fully_connected(in_sample_G))
-                if c == self.connected_attempts:
-                    msg = (
-                        "Induced subgraph is not fully connected. Attempted to find connected"
-                        + " induced subgraph {} times. Results may not be optimal.".format(self.connected_attempts)
-                        + " Try increasing proportion of in sample vertices."
-                    )
-                    warnings.warn(msg, UserWarning)
-            else:
-                if not is_fully_connected(A):
-                    msg = (
-                        "Input graph is not fully connected. Results may not"
-                        + " be optimal. You can compute the largest connected component by"
-                        + " using ``graspy.utils.get_lcc``."
-                    )
-                    warnings.warn(msg, UserWarning)
+            self.in_sample_idx = self._connected_subgraph(self.in_sample_idx)
 
+        in_sample_G = graph.subgraph(self.in_sample_idx).copy()
 
         print('pre-svd')
         in_sample_A = nx.to_numpy_array(in_sample_G)
@@ -233,6 +209,36 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         self._reduce_dim(in_sample_A)
         return self
+
+    def _connected_subgraph(self, initial_index)
+        in_sample_G = graph.subgraph(initial_index).copy()
+
+        if self.in_sample_proportion < 1:
+            c = 0
+            while (
+                not is_fully_connected(in_sample_G) and c < self.connected_attempts
+            ):
+                self.in_sample_idx = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
+                in_sample_G = graph.subgraph(self.in_sample_idx).copy()
+                c += 1
+                print("attempt: " + str(c), is_fully_connected(in_sample_G))
+            if c == self.connected_attempts:
+                msg = (
+                    "Induced subgraph is not fully connected. Attempted to find connected"
+                    + " induced subgraph {} times. Results may not be optimal.".format(self.connected_attempts)
+                    + " Try increasing proportion of in sample vertices."
+                )
+                warnings.warn(msg, UserWarning)
+        else:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + " be optimal. You can compute the largest connected component by"
+                    + " using ``graspy.utils.get_lcc``."
+                )
+                warnings.warn(msg, UserWarning)
+
+        return self.in_sample_idx
 
     def predict(self, X):
         """
