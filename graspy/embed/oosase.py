@@ -54,9 +54,9 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         a UserWarning is thrown. Not checking for connectedness may result in 
         faster computation.
     in_sample_proportion : float , optional (default = 1)
-        If in_sample_idx is None, the proportion of in sample vertices to use for
+        If in_sample_id is None, the proportion of in sample vertices to use for
         initial embedding.
-    in_sample_idx : array-like , optional (default = None)
+    in_sample_id : array-like , optional (default = None)
     connected_attempts : integer , optional (default = 1000)
         Number of sets of indices 
     semi_supervised : boolean , optional (default = False)
@@ -124,7 +124,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         np.random.seed(random_state)
 
         if in_sample_proportion <= 0 or in_sample_proportion > 1:
-            if in_sample_idx is None:
+            if in_sample_id is None:
                 msg = (
                     "must give either proportion of in sample indices or a list"
                     + " of in sample vertices"
@@ -186,11 +186,11 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         if self.in_sample_proportion is None:
             self.in_sample_proportion = len(self.in_sample_id) / N
 
-        if self.in_sample_idx is None:
+        if self.in_sample_id is None:
             if self.in_sample_proportion == 1:
-                self.in_sample_id = range(N)
+                self.in_sample_id = self._nodes
             else:
-                self.in_sample_id = self.in_sample_id = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
+                self.in_sample_id = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
         else:
             self.in_sample_proportion = len(self.in_sample_id) / N
 
@@ -202,6 +202,8 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         self.id_to_index = dict(zip(self.in_sample_id, range(len(self.in_sample_id))))
         self.index_to_id = dict(zip(range(len(self.in_sample_id)), self.in_sample_id))
+
+        print('begin svd')
 
         self._reduce_dim(in_sample_A)
         return self
@@ -219,7 +221,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             while (
                 not (is_fully_connected(in_sample_G) and c < self.connected_attempts) and less_than_half
             ):
-                self.in_sample_idx = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
+                self.in_sample_id = np.random.choice(self._nodes, int(N*self.in_sample_proportion))
                 temp = graph.subgraph(self.in_sample_id).copy()
                 temp_lcc = max(nx.connected_components(temp), key=len)
                 if len(temp_lcc)/N > self.in_sample_proportion/2:
@@ -231,14 +233,6 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                     "Induced subgraph is not fully connected. Attempted to find connected"
                     + " induced subgraph {} times. Results may not be optimal.".format(self.connected_attempts)
                     + " Try increasing proportion of in sample vertices."
-                )
-                warnings.warn(msg, UserWarning)
-        else:
-            if not is_fully_connected(A):
-                msg = (
-                    "Input graph is not fully connected. Results may not"
-                    + " be optimal. You can compute the largest connected component by"
-                    + " using ``graspy.utils.get_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
 
@@ -339,7 +333,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         graph : array-like or networkx.Graph
             Input graph to embed.
         edge_weight_attr : string
-            
+
 
         Returns
         -------
