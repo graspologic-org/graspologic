@@ -143,11 +143,11 @@ def test_oosase():
 
     ase_object = OutOfSampleAdjacencySpectralEmbed()
 
-    in_sample_A = A[:int(np.ceil(0.8*n)), :int(np.ceil(0.8*n))]
-    X = A[int(np.ceil(0.8*n)):, :int(np.ceil(0.8*n))]
-    
+    in_sample_A = A[: int(np.ceil(0.8 * n)), : int(np.ceil(0.8 * n))]
+    X = A[int(np.ceil(0.8 * n)) :, : int(np.ceil(0.8 * n))]
+
     ase_object.fit(in_sample_A)
-    
+
     # X is an array
     with pytest.raises(TypeError):
         X_hat = ase_object.predict(0)
@@ -162,15 +162,15 @@ def test_oosase():
 
     # no tensors
     with pytest.raises(ValueError):
-        X_hat = ase_object.predict(np.ones((1,1,1)))
+        X_hat = ase_object.predict(np.ones((1, 1, 1)))
 
     # no zero rows 1-d
     with pytest.raises(ValueError):
-        X_hat = ase_object.predict(np.zeros(int(np.ceil(0.8*n))))
+        X_hat = ase_object.predict(np.zeros(int(np.ceil(0.8 * n))))
 
     # no zero rows 2-d
     with pytest.raises(ValueError):
-        X_hat = ase_object.predict(np.zeros((1000, int(np.ceil(0.8*n)))))
+        X_hat = ase_object.predict(np.zeros((1000, int(np.ceil(0.8 * n)))))
 
 
 if __name__ == "__main__":
