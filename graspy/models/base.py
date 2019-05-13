@@ -5,6 +5,7 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
 from ..utils import import_graph, is_almost_symmetric, binarize
+from ..simulations import sample_edges
 
 
 class BaseGraphEstimator(BaseEstimator):
@@ -69,13 +70,26 @@ class BaseGraphEstimator(BaseEstimator):
 
         return self
 
-    @abstractmethod
-    def sample(self):
+    def sample(self, n_samples=1):
         """
         sample 1 graph from the model 
         """
-        graph = 1
-        return graph
+        if not isinstance(n_samples, (int, float)):
+            raise TypeError("n_samples must be a scalar value")
+
+        if n_samples < 1:
+            raise ValueError(
+                "Invalid value for 'n_samples': %d . The sampling requires at "
+                "least one sample." % (n_samples)
+            )
+
+        n_verts = self.p_mat_.shape[0]
+        graphs = np.zeros((n_verts, n_verts, n_samples))
+        for i in range(n_samples):
+            graphs[:, :, i] = sample_edges(
+                self.p_mat_, directed=self.directed, loops=self.loops
+            )
+        return graphs
 
     @abstractmethod
     def _n_parameters(self):
@@ -90,9 +104,6 @@ def _calculate_p(block):
 
 def _fit_weights(block):
     return 1
-
-
-# def _product(*arrs):
 
 
 def cartprod(*arrays):

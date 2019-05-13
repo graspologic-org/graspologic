@@ -16,20 +16,16 @@ from sklearn.mixture import GaussianMixture
 def _get_block_indices(y):
     """
     y is a length n_verts vector of labels
+
+    returns a length n_verts vector in the same order as the input
+    indicates which block each node is
     """
     block_labels, block_inv, block_sizes = np.unique(
         y, return_inverse=True, return_counts=True
     )
-    # self.block_sizes_ = block_sizes
 
     n_blocks = len(block_labels)
     block_inds = range(n_blocks)
-
-    # block_members = []
-    # for bs, bl in zip(block_sizes, block_labels):
-    #     block_members = block_members + bs * [bl]
-    # block_members = np.array(block_members)
-    # self.block_members_ = np.array(block_members)  # TODO necessary?
 
     block_vert_inds = []
     for i in block_inds:
@@ -39,7 +35,7 @@ def _get_block_indices(y):
     return block_vert_inds, block_inds, block_inv
 
 
-def _calculate_block_p(graph, block_inds, block_vert_inds):
+def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
     n_blocks = len(block_inds)
     block_pairs = cartprod(block_inds, block_inds)
     block_p = np.zeros((n_blocks, n_blocks))
@@ -50,7 +46,10 @@ def _calculate_block_p(graph, block_inds, block_vert_inds):
         from_inds = block_vert_inds[from_block]
         to_inds = block_vert_inds[to_block]
         block = graph[from_inds, :][:, to_inds]
-        p = _calculate_p(block)
+        if return_counts:
+            p = np.count_nonzero(block)
+        else:
+            p = _calculate_p(block)
         block_p[from_block, to_block] = p
     return block_p
 
@@ -135,20 +134,6 @@ class SBEstimator(BaseGraphEstimator):
 
         return self
 
-    def sample(self):
-        # graph = sbm(
-        #     self.block_sizes_,
-        #     self.block_p_,
-        #     loops=self.loops,
-        #     directed=self.directed,
-        #     dc=self.degree_corrections_,
-        # )
-
-        # TODO at some point we may want to sample probabilistically here for the
-        # block memberships
-        graph = sample_edges(self.p_mat_, directed=self.directed, loops=self.loops)
-        return graph
-
     def _n_parameters(self):
         n_parameters = 0
         n_parameters += self.block_p_.size  # elements in block p matrix
@@ -177,9 +162,7 @@ class DCSBEstimator(BaseGraphEstimator):
         self.embed_kws = {}
 
     def _estimate_assignments(self, graph):
-        # TODO
-        # do regularized laplacian embedding
-        #
+        # TODO whether to use graph bic or gmm bic?
         lse = LaplacianSpectralEmbed(form="R-DAD", **self.embed_kws)
         latent = lse.fit_transform(graph)
         gc = GaussianCluster(
@@ -203,7 +186,7 @@ class DCSBEstimator(BaseGraphEstimator):
         if self.degree_directed:
             degree_corrections = np.stack((out_degree, in_degree), axis=1)
         else:
-            degree_corrections = out_degree + in_degree
+            degree_corrections = (out_degree + in_degree) / 2
             # new axis just so we can index later
             degree_corrections = degree_corrections[:, np.newaxis]
         for i in block_inds:
@@ -216,16 +199,15 @@ class DCSBEstimator(BaseGraphEstimator):
             )
         self.degree_corrections_ = degree_corrections
 
-        delta_block_mat = _calculate_block_p(graph, block_inds, block_vert_inds)
-        block_p = block_p / delta_block_mat
+        dc_mat = np.outer(degree_corrections[:, 0], degree_corrections[:, -1])
+        block_p = _calculate_block_p(
+            graph, block_inds, block_vert_inds, return_counts=True
+        )
         p_mat = _block_to_full(block_p, block_inv, graph.shape)
         p_mat = p_mat * np.outer(degree_corrections[:, 0], degree_corrections[:, -1])
-        # p_mat[p_mat > 1] = 1
         self.p_mat_ = p_mat
-        pass
-
-    def sample(self):
-        pass
+        self.block_p_ = block_p
+        return self
 
     def _n_parameters(self):
         n_parameters = 0
