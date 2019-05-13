@@ -163,7 +163,6 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 raise ValueError(msg)
             else:
                 self._directed = True
-                # TODO
         else:
             msg = (
                 'only arrays and networkx graphs allowed'
@@ -202,8 +201,6 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         self.id_to_index = dict(zip(self.in_sample_id, range(len(self.in_sample_id))))
         self.index_to_id = dict(zip(range(len(self.in_sample_id)), self.in_sample_id))
-
-        print('begin svd')
 
         self._reduce_dim(in_sample_A)
         return self
@@ -249,14 +246,13 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             the similarity of the ith out of sample observation to the jth in sample
             observation.
         ids : array_like, length m
-            If None and self.semi_supervised, then it is a no-op. Otherwise, the list
-            must be of appropriate length and contain the node ids for the out of 
-            sample nodes.
+            If self.semi_supervised the list must be of length m and contain the node ids for 
+            the nodes to embed. Otherwise, it is a no-op.
 
         Returns
         -------
         oos_embedding : array, shape (m, d)
-            The emmbedding of the m out of sample vertices.
+            The embedding of the m out of sample vertices.
         """
 
         # Check if fit is already called
@@ -308,12 +304,12 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 raise ValueError(msg)
             elif len(ids) != m:
                 msg = (
-                    "Length of node ids, {} ,does not match number of out of sample nodes, {}".format(len(ids), m)
+                    "Length of node ids, {}, does not match number of out of sample nodes, {}".format(len(ids), m)
                 )
                 raise ValueError(msg)
             else:
                 self.in_sample_embedding = np.concatenate(
-                    (self.latent_left_, oos_embedding), axis=0
+                    (self.in_sample_embedding, oos_embedding), axis=0
                 )
 
                 self.id_to_index.update(dict(zip(range(n, n+m), ids)))
@@ -333,12 +329,13 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         graph : array-like or networkx.Graph
             Input graph to embed.
         edge_weight_attr : string
+            The edge weight attribute. If None, it is assumed the graph is binary.
 
 
         Returns
         -------
         embedding : array
-            Embedding of n * m vertices in graph.
+            Embedding of n * m vertices.
         """
 
         self.fit(graph)
@@ -356,10 +353,10 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                         X[i, self._node_id_map[edge[1]]] += 1
                     else:
                         #this might be broken
-                        X[i, self._node_id_map[edge[1]]] += graph.get_edge_data(out_sample_id[i],edge[1],default=0)
+                        X[i, self._node_id_map[edge[1]]] += graph.get_edge_data(out_sample_id[i],edge[1],default=0)[edge_weight_attr]
 
         ## this is broken!
-        oos = self.predict(X)
+        oos = self.predict(X, ids=out_sample_id)
 
         all_nodes_in_order = np.concatenate((self.in_sample_id, out_sample_id))
 
