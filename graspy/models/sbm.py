@@ -1,4 +1,11 @@
-from .base import BaseGraphEstimator, _calculate_p, _fit_weights, cartprod
+from .base import (
+    BaseGraphEstimator,
+    _calculate_p,
+    _fit_weights,
+    cartprod,
+    _check_n_samples,
+    _n_to_labels,
+)
 from ..utils import (
     import_graph,
     binarize,
@@ -11,6 +18,8 @@ from ..simulations import sbm, sample_edges
 from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from sklearn.mixture import GaussianMixture
+from sklearn.utils import check_X_y
+from sklearn.utils.validation import check_is_fitted
 
 
 def _get_block_indices(y):
@@ -36,6 +45,13 @@ def _get_block_indices(y):
 
 
 def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
+    """
+    graph : input n x n graph 
+    block_inds : list of length n_communities
+    block_vert_inds : list of list, for each block index, gives every node in that block
+    return_counts : whether to calculate counts rather than proportions
+    """
+
     n_blocks = len(block_inds)
     block_pairs = cartprod(block_inds, block_inds)
     block_p = np.zeros((n_blocks, n_blocks))
@@ -55,6 +71,10 @@ def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
 
 
 def _block_to_full(block_mat, inverse, shape):
+    """
+    "blows up" a k x k matrix, where k is the number of communities, 
+    into a full n x n probability matrix
+    """
     block_map = cartprod(inverse, inverse).T
     mat_by_edge = block_mat[block_map[0], block_map[1]]
     full_mat = mat_by_edge.reshape(shape)
@@ -62,6 +82,28 @@ def _block_to_full(block_mat, inverse, shape):
 
 
 class SBEstimator(BaseGraphEstimator):
+    """
+    Stochastic Block Model 
+
+    The stochastic block model (SBM) represents each node as belonging to a block 
+    (or community). For a given potential edge between node :math:`i` and :math:`j`, 
+    the probability of an edge existing is specified by the block that nodes :math:`i`
+    and :math:`j` belong to:
+
+    ::math::`P_{ij} = B_\{tau_i}\{tau_j}`
+    
+    where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\{tau}` is an :math:`n_nodes` 
+    length vector specifying which block each node belongs to. 
+
+    Parameters
+    ----------
+    directed : boolean, optional 
+        whether to 
+    fit_weights : boolean, optional
+        whether to fit a distribution to the weights of the observed graph 
+        Currently not implemented
+    """
+
     def __init__(
         self,
         fit_weights=False,
@@ -85,7 +127,13 @@ class SBEstimator(BaseGraphEstimator):
         self.embed_kws = {}
 
     def _estimate_assignments(self, graph):
-        embed_graph = augment_diagonal(graph)  # TODO always?
+        """
+        Do some kind of clustering algorithm to estimate communities
+
+        There are many ways to do this, here is one
+        """
+        embed_graph = augment_diagonal(graph)
+        # TODO always?
         # TODO other regularizations
         # TODO regularized laplacians for finding communities?
         latent = AdjacencySpectralEmbed(
@@ -103,19 +151,36 @@ class SBEstimator(BaseGraphEstimator):
 
     def fit(self, graph, y=None):
         """
-        graph : 
-        y : block assignments
+        Fit the SBM model to a graph, optionally with known block labels
+
+        If y is `None`, the block assignments for each vertex will first be
+        estimated.
+
+        Parameters
+        ----------
+        graph : array_like or networkx.Graph
+            Input graph to fit
+
+        y : array_like, length graph.shape[0], optional
+            Categorical labels for the block assignments of the graph
+
         """
         graph = import_graph(graph)
+
         if not is_unweighted(graph):
             raise NotImplementedError(
                 "Graph model is currently only implemented" + " for unweighted graphs."
             )
-        # self.n_verts = graph.shape[0]
 
         if y is None:
             self._estimate_assignments(graph)
             y = self.vertex_assignments_
+
+            n_verts = graph.shape[0]
+            _, counts = np.unique(y, return_counts=True)
+            self.block_weights_ = counts / n_verts
+        else:
+            check_X_y(graph, y)
 
         block_vert_inds, block_inds, block_inv = _get_block_indices(y)
 
@@ -135,13 +200,60 @@ class SBEstimator(BaseGraphEstimator):
         return self
 
     def _n_parameters(self):
+        n_blocks = self.block_p_.shape[0]
         n_parameters = 0
-        n_parameters += self.block_p_.size  # elements in block p matrix
-        n_parameters += self.block_sizes_.size  # TODO - 1?
+        if self.directed:
+            n_parameters += n_blocks ** 2
+        else:
+            n_parameters += n_blocks * (n_blocks + 1) / 2
+        if hasattr(self, "vertex_assignments_"):
+            n_parameters += n_blocks - 1
         return n_parameters
+
+    def sample(self, n_samples=1):
+        """
+        Sample graphs (realizations) from the fitted model
+
+        Can only be called after the the model has been fit 
+
+        Parameters
+        ----------
+        n_samples : int (default 1), optional
+            The number of graphs to sample 
+        
+        Returns 
+        -------
+        graphs : np.array (n_samples, n_verts, n_verts)
+            Array of sampled graphs, where the first dimension 
+            indexes each sample, and the other dimensions represent
+            (n_verts x n_verts) adjacency matrices for the sampled graphs. 
+
+            Note that if only one sample is drawn, a (1, n_verts, n_verts) 
+            array will still be returned. 
+        """
+        if hasattr(self, "vertex_assignments_"):
+            check_is_fitted(self, "p_mat_")
+            _check_n_samples(n_samples)
+            n_verts = self.p_mat_.shape[0]
+
+            graphs = np.zeros((n_samples, n_verts, n_verts))
+            for i in range(n_samples):
+                block_proportions = np.random.multinomial(n_verts, self.block_weights_)
+                block_inv = _n_to_labels(block_proportions)
+                p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
+                graphs[i, :, :] = sample_edges(
+                    p_mat, directed=self.directed, loops=self.loops
+                )
+            return graphs
+        else:
+            return super().sample(n_samples=n_samples)
 
 
 class DCSBEstimator(BaseGraphEstimator):
+    """
+    Degree-corrected Stochastic Block Model
+    """
+
     def __init__(
         self,
         degree_directed=False,

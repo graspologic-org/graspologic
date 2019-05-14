@@ -8,6 +8,44 @@ from ..utils import import_graph, is_almost_symmetric, binarize
 from ..simulations import sample_edges
 
 
+def _calculate_p(block):
+    n_edges = np.count_nonzero(block)
+    return n_edges / block.size
+
+
+def _fit_weights(block):
+    return 1
+
+
+def cartprod(*arrays):
+    N = len(arrays)
+    return np.transpose(
+        np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
+    ).reshape(-1, N)
+
+
+def bic(l_hat, n_samples, n_params):
+    return np.log(n_samples) * n_params - 2 * np.log(l_hat)
+
+
+def _check_n_samples(n_samples):
+    if not isinstance(n_samples, (int, float)):
+        raise TypeError("n_samples must be a scalar value")
+    if n_samples < 1:
+        raise ValueError(
+            "Invalid value for 'n_samples': %d . The sampling requires at "
+            "least one sample." % (n_samples)
+        )
+
+
+def _n_to_labels(n):
+    n_cumsum = n.cumsum()
+    labels = np.zeros(n.sum(), dtype=np.int64)
+    for i in range(1, len(n)):
+        labels[n_cumsum[i - 1] : n_cumsum[i]] = i
+    return labels
+
+
 class BaseGraphEstimator(BaseEstimator):
     def __init__(self, fit_weights=False, directed=True, loops=True):
         self.fit_weights = fit_weights
@@ -74,19 +112,12 @@ class BaseGraphEstimator(BaseEstimator):
         """
         sample 1 graph from the model 
         """
-        if not isinstance(n_samples, (int, float)):
-            raise TypeError("n_samples must be a scalar value")
-
-        if n_samples < 1:
-            raise ValueError(
-                "Invalid value for 'n_samples': %d . The sampling requires at "
-                "least one sample." % (n_samples)
-            )
-
+        check_is_fitted(self, "p_mat_")
+        _check_n_samples(n_samples)
         n_verts = self.p_mat_.shape[0]
-        graphs = np.zeros((n_verts, n_verts, n_samples))
+        graphs = np.zeros((n_samples, n_verts, n_verts))
         for i in range(n_samples):
-            graphs[:, :, i] = sample_edges(
+            graphs[i, :, :] = sample_edges(
                 self.p_mat_, directed=self.directed, loops=self.loops
             )
         return graphs
@@ -95,23 +126,3 @@ class BaseGraphEstimator(BaseEstimator):
     def _n_parameters(self):
         n_parameters = 1
         return n_parameters
-
-
-def _calculate_p(block):
-    n_edges = np.count_nonzero(block)
-    return n_edges / block.size
-
-
-def _fit_weights(block):
-    return 1
-
-
-def cartprod(*arrays):
-    N = len(arrays)
-    return np.transpose(
-        np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
-    ).reshape(-1, N)
-
-
-def bic(l_hat, n_samples, n_params):
-    return np.log(n_samples) * n_params - 2 * np.log(l_hat)

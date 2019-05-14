@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 from graspy.embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
-from graspy.models import DCSBEstimator, SBEstimator
+from graspy.models import DCSBEstimator, SBEstimator, BaseGraphEstimator
 from graspy.plot import heatmap
 from graspy.simulations import p_from_latent, sample_edges, sbm
 from graspy.utils import *
@@ -152,4 +152,77 @@ b = dcsbm_P / np.outer(distances, distances)
 c = dcsbm_P / np.outer(d, d)
 heatmap(b, inner_hier_labels=labels)
 heatmap(c)
+#%% regular sbm
+from graspy.simulations import sbm
+import itertools
+import matplotlib.pyplot as plt
+import seaborn as sns
+from graspy.embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
+from graspy.models import DCSBEstimator, SBEstimator
+from graspy.plot import heatmap
+from graspy.simulations import p_from_latent, sample_edges, sbm
+from graspy.utils import *
+
+
+B = np.array(
+    [
+        [0.9, 0.2, 0.05, 0.1],
+        [0.1, 0.7, 0.1, 0.1],
+        [0.2, 0.4, 0.8, 0.5],
+        [0.1, 0.2, 0.1, 0.7],
+    ]
+)
+n = [100, 20, 30, 50]
+labels = np.array(
+    list(itertools.chain.from_iterable([m * [i] for i, m in enumerate(n)]))
+)
+
+g = sbm(n, B, directed=True, loops=False)
+sbe = SBEstimator(directed=True)
+sbe.fit(g, labels)
+sbe.block_p_
+sbe._n_parameters()
+g = sbe.sample(10)
+heatmap(g[0])
+
+
 #%%
+n = np.array([100, 20, 30, 50])
+
+
+def _n_to_labels(n):
+    n_cumsum = n.cumsum()
+    labels = np.zeros(n.sum())
+    for i in range(1, len(n)):
+        labels[n_cumsum[i - 1] : n_cumsum[i]] = i
+    return labels
+
+
+class YourDad:
+    def sample(self):
+        print("your dad")
+
+
+class YourMom(YourDad):
+    def __init__(self):
+        print()
+
+    def sample(self):
+        print("your mom")
+
+
+class Ay(YourMom):
+    def __init__(self, h):
+        super().__init__()
+        self.h = h
+
+    def sample(self):
+        if self.h == 10:
+            print("ayyyyy")
+
+        else:
+            super(Ay, self).sample()
+
+
+a = Ay(100)
+a.sample()
