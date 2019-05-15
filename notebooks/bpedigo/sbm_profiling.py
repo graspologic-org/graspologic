@@ -196,33 +196,3 @@ def _n_to_labels(n):
     for i in range(1, len(n)):
         labels[n_cumsum[i - 1] : n_cumsum[i]] = i
     return labels
-
-
-class YourDad:
-    def sample(self):
-        print("your dad")
-
-
-class YourMom(YourDad):
-    def __init__(self):
-        print()
-
-    def sample(self):
-        print("your mom")
-
-
-class Ay(YourMom):
-    def __init__(self, h):
-        super().__init__()
-        self.h = h
-
-    def sample(self):
-        if self.h == 10:
-            print("ayyyyy")
-
-        else:
-            super(Ay, self).sample()
-
-
-a = Ay(100)
-a.sample()

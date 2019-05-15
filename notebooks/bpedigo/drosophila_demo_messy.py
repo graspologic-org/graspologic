@@ -1,5 +1,5 @@
 #%%
-from graspy.models import EREstimator, SBEstimator, RDPGEstimator
+from graspy.models import SBEstimator, SBEstimator, RDPGEstimator
 from graspy.datasets import load_drosophila_left
 from graspy.plot import heatmap
 from graspy.utils import symmetrize, binarize
@@ -34,8 +34,8 @@ def evaluate_models(
 
     ## Set up models to test
     non_rdpg_models = [
-        EREstimator(fit_degrees=False),
-        EREstimator(fit_degrees=True),
+        SBEstimator(fit_degrees=False),
+        SBEstimator(fit_degrees=True),
         SBEstimator(fit_degrees=False),
         SBEstimator(fit_degrees=True),
     ]
@@ -159,7 +159,7 @@ ll_e = []
 p = 0.2
 for i in range(n_sims):
     g = er_np(100, p, directed=True, loops=True)
-    er = EREstimator(False)
+    er = SBEstimator(False)
     er = er.fit(g)
     log_likelihood_edges = er.score_samples(g)
     log_likelihood_mean = er.score(g)

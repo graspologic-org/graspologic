@@ -22,63 +22,29 @@ from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
 
 
-def _get_block_indices(y):
-    """
-    y is a length n_verts vector of labels
+def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kws):
+    if not isinstance(n_components, int) and not n_components is None:
+        raise TypeError("n_components must be an int or None")
+    elif not n_components is None and n_components < 1:
+        raise ValueError("n_components must be > 0")
 
-    returns a length n_verts vector in the same order as the input
-    indicates which block each node is
-    """
-    block_labels, block_inv, block_sizes = np.unique(
-        y, return_inverse=True, return_counts=True
-    )
+    if not isinstance(min_comm, int):
+        raise TypeError("min_comm must be an int")
+    elif min_comm < 1:
+        raise ValueError("min_comm must be > 0")
 
-    n_blocks = len(block_labels)
-    block_inds = range(n_blocks)
+    if not isinstance(max_comm, int):
+        raise TypeError("max_comm must be an int")
+    elif max_comm < 1:
+        raise ValueError("max_comm must be > 0")
+    elif max_comm < min_comm:
+        raise ValueError("max_comm must be >= min_comm")
 
-    block_vert_inds = []
-    for i in block_inds:
-        # get the inds from the original graph
-        inds = np.where(block_inv == i)[0]
-        block_vert_inds.append(inds)
-    return block_vert_inds, block_inds, block_inv
+    if not isinstance(cluster_kws, dict):
+        raise TypeError("cluster_kws must be a dict")
 
-
-def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
-    """
-    graph : input n x n graph 
-    block_inds : list of length n_communities
-    block_vert_inds : list of list, for each block index, gives every node in that block
-    return_counts : whether to calculate counts rather than proportions
-    """
-
-    n_blocks = len(block_inds)
-    block_pairs = cartprod(block_inds, block_inds)
-    block_p = np.zeros((n_blocks, n_blocks))
-
-    for p in block_pairs:
-        from_block = p[0]
-        to_block = p[1]
-        from_inds = block_vert_inds[from_block]
-        to_inds = block_vert_inds[to_block]
-        block = graph[from_inds, :][:, to_inds]
-        if return_counts:
-            p = np.count_nonzero(block)
-        else:
-            p = _calculate_p(block)
-        block_p[from_block, to_block] = p
-    return block_p
-
-
-def _block_to_full(block_mat, inverse, shape):
-    """
-    "blows up" a k x k matrix, where k is the number of communities, 
-    into a full n x n probability matrix
-    """
-    block_map = cartprod(inverse, inverse).T
-    mat_by_edge = block_mat[block_map[0], block_map[1]]
-    full_mat = mat_by_edge.reshape(shape)
-    return full_mat
+    if not isinstance(embed_kws, dict):
+        raise TypeError("embed_kws must be a dict")
 
 
 class SBEstimator(BaseGraphEstimator):
@@ -106,9 +72,6 @@ class SBEstimator(BaseGraphEstimator):
 
     def __init__(
         self,
-        fit_weights=False,
-        fit_degrees=False,
-        degree_directed=False,
         directed=True,
         loops=True,
         n_components=None,
@@ -117,14 +80,15 @@ class SBEstimator(BaseGraphEstimator):
         cluster_kws={},
         embed_kws={},
     ):
-        super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
-        self.fit_degrees = fit_degrees
-        self.degree_directed = degree_directed
+        super().__init__(directed=directed, loops=loops)
+
+        _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kws)
+
         self.cluster_kws = cluster_kws
         self.n_components = n_components
         self.min_comm = min_comm
         self.max_comm = max_comm
-        self.embed_kws = {}
+        self.embed_kws = embed_kws
 
     def _estimate_assignments(self, graph):
         """
@@ -176,9 +140,8 @@ class SBEstimator(BaseGraphEstimator):
             self._estimate_assignments(graph)
             y = self.vertex_assignments_
 
-            n_verts = graph.shape[0]
             _, counts = np.unique(y, return_counts=True)
-            self.block_weights_ = counts / n_verts
+            self.block_weights_ = counts / graph.shape[0]
         else:
             check_X_y(graph, y)
 
@@ -190,12 +153,6 @@ class SBEstimator(BaseGraphEstimator):
         p_mat = _block_to_full(block_p, block_inv, graph.shape)
 
         self.p_mat_ = p_mat
-
-        if self.fit_weights:
-            # TODO: something
-            raise NotImplementedError(
-                "Graph model is currently only implemented" + " for unweighted graphs."
-            )
 
         return self
 
@@ -252,6 +209,8 @@ class SBEstimator(BaseGraphEstimator):
 class DCSBEstimator(BaseGraphEstimator):
     """
     Degree-corrected Stochastic Block Model
+
+
     """
 
     def __init__(
@@ -266,6 +225,11 @@ class DCSBEstimator(BaseGraphEstimator):
         embed_kws={},
     ):
         super().__init__(directed=directed, loops=loops)
+        _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kws)
+
+        if not isinstance(degree_directed, bool):
+            raise TypeError("`degree_directed` must be of type bool")
+
         self.degree_directed = degree_directed
         self.cluster_kws = cluster_kws
         self.n_components = n_components
@@ -288,9 +252,10 @@ class DCSBEstimator(BaseGraphEstimator):
         if y is None:
             self._estimate_assignments(graph)
             y = self.vertex_assignments_
+            _, counts = np.unique(y, return_counts=True)
+            self.block_weights_ = counts / graph.shape[0]
 
         block_vert_inds, block_inds, block_inv = _get_block_indices(y)
-        # n_blocks = len(block_inds)
         block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
 
         out_degree = np.count_nonzero(graph, axis=1).astype(float)
@@ -303,7 +268,7 @@ class DCSBEstimator(BaseGraphEstimator):
             degree_corrections = degree_corrections[:, np.newaxis]
         for i in block_inds:
             block_degrees = degree_corrections[block_vert_inds[i]]
-            degree_divisor = np.sum(block_degrees, axis=0)  # was mean
+            degree_divisor = np.sum(block_degrees, axis=0)
             if not isinstance(degree_divisor, np.float64):
                 degree_divisor[degree_divisor == 0] = 1
             degree_corrections[block_vert_inds[i]] = (
@@ -311,7 +276,6 @@ class DCSBEstimator(BaseGraphEstimator):
             )
         self.degree_corrections_ = degree_corrections
 
-        dc_mat = np.outer(degree_corrections[:, 0], degree_corrections[:, -1])
         block_p = _calculate_block_p(
             graph, block_inds, block_vert_inds, return_counts=True
         )
@@ -322,11 +286,117 @@ class DCSBEstimator(BaseGraphEstimator):
         return self
 
     def _n_parameters(self):
+        n_blocks = self.block_p_.shape[0]
+
         n_parameters = 0
-        n_parameters += self.block_p_.size  # elements in block p matrix
-        # n_parameters += self.block_sizes_.size
-        n_parameters += (
-            self.degree_corrections_.size + self.degree_corrections_.shape[0]
-        )
-        # TODO: more than this? becasue now the position of verts w/in block matters
+        if self.directed:
+            n_parameters += n_blocks ** 2  # B matrix
+        else:
+            n_parameters += n_blocks * (n_blocks + 1) / 2  # Undirected B matrix
+        if hasattr(self, "vertex_assignments_"):
+            # TODO check on this or decide what other models to support
+            # n_parameters += n_blocks - 1  # whether Pi vector was fit
+            n_parameters += self.vertex_assignments_
+        n_parameters += self.degree_corrections_.size
         return n_parameters
+
+    def sample(self, n_samples=1):
+        """
+        Sample graphs (realizations) from the fitted model
+
+        Can only be called after the the model has been fit 
+
+        Parameters
+        ----------
+        n_samples : int (default 1), optional
+            The number of graphs to sample 
+        
+        Returns 
+        -------
+        graphs : np.array (n_samples, n_verts, n_verts)
+            Array of sampled graphs, where the first dimension 
+            indexes each sample, and the other dimensions represent
+            (n_verts x n_verts) adjacency matrices for the sampled graphs. 
+
+            Note that if only one sample is drawn, a (1, n_verts, n_verts) 
+            array will still be returned. 
+        """
+        if hasattr(self, "vertex_assignments_"):
+            check_is_fitted(self, "p_mat_")
+            _check_n_samples(n_samples)
+            n_verts = self.p_mat_.shape[0]
+
+            graphs = np.zeros((n_samples, n_verts, n_verts))
+            for i in range(n_samples):
+                block_proportions = np.random.multinomial(n_verts, self.block_weights_)
+                block_inv = _n_to_labels(block_proportions)
+                p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
+                graphs[i, :, :] = sample_edges(
+                    p_mat, directed=self.directed, loops=self.loops
+                )
+            return graphs
+        else:
+            return super().sample(n_samples=n_samples)
+
+
+def _get_block_indices(y):
+    """
+    y is a length n_verts vector of labels
+
+    returns a length n_verts vector in the same order as the input
+    indicates which block each node is
+    """
+    block_labels, block_inv, block_sizes = np.unique(
+        y, return_inverse=True, return_counts=True
+    )
+
+    n_blocks = len(block_labels)
+    block_inds = range(n_blocks)
+
+    block_vert_inds = []
+    for i in block_inds:
+        # get the inds from the original graph
+        inds = np.where(block_inv == i)[0]
+        block_vert_inds.append(inds)
+    return block_vert_inds, block_inds, block_inv
+
+
+def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
+    """
+    graph : input n x n graph 
+    block_inds : list of length n_communities
+    block_vert_inds : list of list, for each block index, gives every node in that block
+    return_counts : whether to calculate counts rather than proportions
+    """
+
+    n_blocks = len(block_inds)
+    block_pairs = cartprod(block_inds, block_inds)
+    block_p = np.zeros((n_blocks, n_blocks))
+
+    for p in block_pairs:
+        from_block = p[0]
+        to_block = p[1]
+        from_inds = block_vert_inds[from_block]
+        to_inds = block_vert_inds[to_block]
+        block = graph[from_inds, :][:, to_inds]
+        if return_counts:
+            p = np.count_nonzero(block)
+        else:
+            p = _calculate_p(block)
+        block_p[from_block, to_block] = p
+    return block_p
+
+
+def _block_to_full(block_mat, inverse, shape):
+    """
+    "blows up" a k x k matrix, where k is the number of communities, 
+    into a full n x n probability matrix
+
+    block mat : k x k 
+    inverse : array like length n, 
+    """
+    block_map = cartprod(inverse, inverse).T
+    mat_by_edge = block_mat[block_map[0], block_map[1]]
+    full_mat = mat_by_edge.reshape(shape)
+    return full_mat
+

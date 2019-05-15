@@ -41,11 +41,11 @@ heatmap(sb.sample())
 # other(graph, labels)
 
 #%%
-from graspy.models.er import EREstimator
+from graspy.models.er import SBEstimator
 from graspy.simulations import er_np
 
 graph = er_np(100, 0.24)
-er = EREstimator()
+er = SBEstimator()
 er.fit(graph)
 er.p_
 
