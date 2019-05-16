@@ -10,14 +10,29 @@ Transformations
 
 .. autofunction:: to_laplace
 
-Helper Functions
-----------------
+.. autofunction:: augment_diagonal
+
+.. autofunction:: symmetrize
+
+.. autofunction:: remove_loops
+
+Connected Components
+--------------------
+
+.. autofunction:: is_fully_connected
+
+.. autofunction:: get_lcc
+
+.. autofunction:: get_multigraph_union_lcc
+
+.. autofumction:: get_multigraph_intersect_lcc
+
+IO
+--
 
 .. autofunction:: import_graph
 
 .. autofunction:: import_edgelist
 
-.. autofunction:: symmetrize
 
-.. autofunction:: remove_loops
 
