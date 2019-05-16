@@ -12,7 +12,7 @@ class RDPGEstimator(BaseGraphEstimator):
         fit_degrees=False,
         directed=True,
         loops=True,
-        n_components=None,  # or, make this ase_lws?
+        n_components=None,
     ):
         super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
         self.fit_degrees = fit_degrees
