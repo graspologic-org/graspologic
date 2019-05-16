@@ -56,4 +56,3 @@ class RDPGEstimator(BaseGraphEstimator):
             return 2 * self.latent_[0].size
         else:
             return self.latent_.size
-

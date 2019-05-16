@@ -84,7 +84,7 @@ class SBEstimator(BaseGraphEstimator):
         loops=False,
         n_components=None,
         min_comm=1,
-        max_comm=6,  # TODO some more intelligent default here?
+        max_comm=10,
         cluster_kws={},
         embed_kws={},
     ):
@@ -105,9 +105,6 @@ class SBEstimator(BaseGraphEstimator):
         There are many ways to do this, here is one
         """
         embed_graph = augment_diagonal(graph)
-        # TODO always?
-        # TODO other regularizations
-        # TODO regularized laplacians for finding communities?
         latent = AdjacencySpectralEmbed(
             n_components=self.n_components, **self.embed_kws
         ).fit_transform(embed_graph)
@@ -246,7 +243,7 @@ class DCSBEstimator(BaseGraphEstimator):
         loops=False,
         n_components=None,
         min_comm=1,
-        max_comm=6,  # TODO some more intelligent default here?
+        max_comm=10,
         cluster_kws={},
         embed_kws={},
     ):
@@ -338,15 +335,13 @@ class DCSBEstimator(BaseGraphEstimator):
 
     def _n_parameters(self):
         n_blocks = self.block_p_.shape[0]
-
         n_parameters = 0
         if self.directed:
             n_parameters += n_blocks ** 2  # B matrix
         else:
             n_parameters += n_blocks * (n_blocks + 1) / 2  # Undirected B matrix
         if hasattr(self, "vertex_assignments_"):
-            # TODO check on this or decide what other models to support
-            # n_parameters += n_blocks - 1  # whether Pi vector was fit
+            # TODO other models where we sample a block comm and a dc
             n_parameters += self.vertex_assignments_
         n_parameters += self.degree_corrections_.size
         return n_parameters
@@ -450,4 +445,3 @@ def _block_to_full(block_mat, inverse, shape):
     mat_by_edge = block_mat[block_map[0], block_map[1]]
     full_mat = mat_by_edge.reshape(shape)
     return full_mat
-
