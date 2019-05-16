@@ -48,6 +48,7 @@ We recommended that your contribution complies with the following rules before y
 -  At least one paragraph of narrative documentation with links to
    references in the literature (with PDF links when possible) and
    the example.
+-  All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
 -  Run an autoformatter. We use `black` and would like for you to format all files using `black`. You can run the following lines to format your files.
   ```bash
   $ pip install black
@@ -56,7 +57,7 @@ We recommended that your contribution complies with the following rules before y
 
 ## Guidelines
 ### Coding Guidelines
-Uniformly formatted code makes it easier to share code ownership. The pygraphstats package closely follows the official Python guidelines detailed in [PEP8](https://www.python.org/dev/peps/pep-0008/) that detail how code should be formatted and indented. Please read it and follow it.
+Uniformly formatted code makes it easier to share code ownership. GraSPy package closely follows the official Python guidelines detailed in [PEP8](https://www.python.org/dev/peps/pep-0008/) that detail how code should be formatted and indented. Please read it and follow it.
 
 ### Docstring Guidelines
 Properly formatted docstrings is required for documentation generation by Sphinx. The pygraphstats package closely follows the numpydoc guidelines. Please read and follow the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html#overview) guidelines. Refer to the [example.py](https://numpydoc.readthedocs.io/en/latest/example.html#example) provided by numpydoc.

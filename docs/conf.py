@@ -24,7 +24,12 @@ copyright = "2018"
 authors = u"NeuroData"
 
 # The short X.Y version
-version = "0.0.1"
+# Find GraSPy version.
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+for line in open(os.path.join(PROJECT_PATH, "..", "graspy", "__init__.py")):
+    if line.startswith("__version__ = "):
+        version = line.strip().split()[2][1:-1]
+
 # The full version, including alpha/beta/rc tags
 release = "alpha"
 

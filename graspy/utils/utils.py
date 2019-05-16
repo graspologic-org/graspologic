@@ -1,9 +1,16 @@
-#!/usr/bin/env python
-
-# utils.py
-# Created by Eric Bridgeford on 2018-09-07.
-# Email: ebridge2@jhu.edu
-# Copyright (c) 2018. All rights reserved.
+# Copyright 2019 NeuroData (http://neurodata.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import warnings
 from collections import Iterable
@@ -295,7 +302,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
 
 def is_fully_connected(graph):
-    """
+    r"""
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case. 
 
@@ -308,7 +315,7 @@ def is_fully_connected(graph):
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an n x n adjacency matrix
+        interpreted as an :math:`n \times n` adjacency matrix
 
     Returns
     -------
@@ -333,7 +340,7 @@ def is_fully_connected(graph):
 
 
 def get_lcc(graph, return_inds=False):
-    """
+    r"""
     Finds the largest connected component for the input graph. 
 
     The largest connected component is the fully connected subgraph
@@ -343,7 +350,7 @@ def get_lcc(graph, return_inds=False):
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an n x n adjacency matrix
+        interpreted as an :math:`n \times n` adjacency matrix
     
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices in the original
@@ -384,7 +391,7 @@ def get_lcc(graph, return_inds=False):
 
 
 def get_multigraph_union_lcc(graphs, return_inds=False):
-    """
+    r"""
     Finds the union of all multiple graphs, then compute the largest connected
     component.
 
@@ -437,7 +444,7 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
 
 
 def get_multigraph_intersect_lcc(graphs, return_inds=False):
-    """
+    r"""
     Finds the intersection of multiple graphs's largest connected components. 
 
     Computes the largest connected component for each graph that was input, and 
@@ -448,7 +455,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
     Parameters
     ----------
     graphs: list or np.ndarray
-        if list, each element must be an n x n np.ndarray adjacency matrix
+        if list, each element must be an :math:`n \times n` np.ndarray adjacency matrix
         
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices in the original
@@ -506,9 +513,9 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 
 
 def augment_diagonal(graph, weight=1):
-    """
+    r"""
     Replaces the diagonal of adjacency matrix with 
-    :math: \frac{degree}{num_verts - 1} for the degree associated
+    :math:`\frac{degree}{nverts - 1}` for the degree associated
     with each node. 
 
     For directed graphs, the degree used is the out degree (number) of 
@@ -518,7 +525,7 @@ def augment_diagonal(graph, weight=1):
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an n x n adjacency matrix 
+        interpreted as an :math:`n \times n` adjacency matrix 
     """
     graph = import_graph(graph)
     graph = remove_loops(graph)

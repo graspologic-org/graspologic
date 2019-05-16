@@ -12,3 +12,5 @@ import graspy.simulations
 import graspy.utils
 import graspy.models
 import graspy.datasets
+
+__version__ = "0.0.2"
