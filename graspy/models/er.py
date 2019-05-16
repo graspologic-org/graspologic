@@ -28,7 +28,7 @@ class EREstimator(SBEstimator):
 
     References
     ----------
-    
+
     """
 
     def __init__(self, directed=True, loops=False):
@@ -47,6 +47,32 @@ class EREstimator(SBEstimator):
 
 
 class DCEREstimator(DCSBEstimator):
+    """
+    Degree-corrected Erdos-Reyni Model 
+
+    The Degree-corrected Erdos-Reyni (DCER) model is an extension of the ER model in 
+    which each node has an additional "promiscuity" parameter that determines its 
+    expected degree in the graph. 
+
+    ::math::`P_{ij} = \theta_i \theta_j p`
+
+    Parameters
+    ----------
+    directed : boolean, optional (default=True)
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
+        this determines whether to force symmetry upon the block probability matrix fit
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
+    loops : boolean, optional (default=False)
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
+    degree_directed : boolean 
+
+    References
+    ----------
+    
+    """
+
     def __init__(self, directed=True, loops=False, degree_directed=False):
         super().__init__(
             directed=directed, loops=loops, degree_directed=degree_directed

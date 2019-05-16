@@ -35,11 +35,12 @@ class GaussianCluster(BaseCluster):
     ----------
     min_components : int, defaults to 1. 
         The minimum number of mixture components to consider (unless
-        max_components=None, in which case the parameter is one the highest
-        number of mixture components to consider and must be less than
-        max_components).
+        max_components=None, in which case this is the maximum number of
+        components to consider). If max_componens is not None, min_components
+        must be less than or equal to max_components.
     max_components : int, defaults to 1.
-        The maximum number of mixture components to consider.
+        The maximum number of mixture components to consider. Must be greater 
+        than or equal to min_components.
 
     covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
@@ -83,7 +84,7 @@ class GaussianCluster(BaseCluster):
 
     def __init__(
         self,
-        min_components=1,
+        min_components=2,
         max_components=None,
         covariance_type="full",
         random_state=None,
@@ -102,8 +103,8 @@ class GaussianCluster(BaseCluster):
             if max_components <= 0:
                 msg = "max_components must be >= 1 or None."
                 raise ValueError(msg)
-            elif min_components >= max_components:
-                msg = "min_components must be strictly smaller than max_components."
+            elif min_components > max_components:
+                msg = "min_components must be less than or equal to max_components."
                 raise ValueError(msg)
         elif max_components is not None:
             msg = "max_components must be an integer or None, not {}.".format(
