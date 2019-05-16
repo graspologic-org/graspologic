@@ -12,6 +12,7 @@ from ..utils import (
     is_almost_symmetric,
     augment_diagonal,
     is_unweighted,
+    symmetrize,
 )
 import numpy as np
 from ..simulations import sbm, sample_edges
@@ -63,17 +64,24 @@ class SBEstimator(BaseGraphEstimator):
 
     Parameters
     ----------
-    directed : boolean, optional 
-        whether to 
-    fit_weights : boolean, optional
-        whether to fit a distribution to the weights of the observed graph 
-        Currently not implemented
+    directed : boolean, optional (default=True)
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
+        this determines whether to force symmetry upon the block probability matrix fit
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
+    loops : boolean, optional (default=False)
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
+
+    References
+    ----------
+
     """
 
     def __init__(
         self,
         directed=True,
-        loops=True,
+        loops=False,
         n_components=None,
         min_comm=1,
         max_comm=6,  # TODO some more intelligent default here?
@@ -133,7 +141,7 @@ class SBEstimator(BaseGraphEstimator):
 
         if not is_unweighted(graph):
             raise NotImplementedError(
-                "Graph model is currently only implemented" + " for unweighted graphs."
+                "Graph model is currently only implemented for unweighted graphs."
             )
 
         if y is None:
@@ -148,10 +156,14 @@ class SBEstimator(BaseGraphEstimator):
         block_vert_inds, block_inds, block_inv = _get_block_indices(y)
 
         block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
+
+        if not self.directed:
+            block_p = symmetrize(block_p)
         self.block_p_ = block_p
 
         p_mat = _block_to_full(block_p, block_inv, graph.shape)
-
+        if not self.loops:
+            p_mat -= np.diag(np.diag(p_mat))
         self.p_mat_ = p_mat
 
         return self
@@ -210,6 +222,20 @@ class DCSBEstimator(BaseGraphEstimator):
     """
     Degree-corrected Stochastic Block Model
 
+    Parameters
+    ----------
+    directed : boolean, optional (default=True)
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
+        this determines whether to force symmetry upon the block probability matrix fit
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
+    degree_directed : boolean, optional (default=False)
+        Whether to fit an "in" and "out" degree correction for each node. In the
+        degree_directed case, the fit model can have a different expected in and out 
+        degree for each node. 
+    loops : boolean, optional (default=False)
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
 
     """
 
@@ -217,7 +243,7 @@ class DCSBEstimator(BaseGraphEstimator):
         self,
         degree_directed=False,
         directed=True,
-        loops=True,
+        loops=False,
         n_components=None,
         min_comm=1,
         max_comm=6,  # TODO some more intelligent default here?
@@ -238,8 +264,10 @@ class DCSBEstimator(BaseGraphEstimator):
         self.embed_kws = {}
 
     def _estimate_assignments(self, graph):
-        # TODO whether to use graph bic or gmm bic?
-        lse = LaplacianSpectralEmbed(form="R-DAD", **self.embed_kws)
+        graph = symmetrize(graph, method="avg")
+        lse = LaplacianSpectralEmbed(
+            form="R-DAD", n_components=self.n_components, **self.embed_kws
+        )
         latent = lse.fit_transform(graph)
         gc = GaussianCluster(
             min_components=self.min_comm,
@@ -249,6 +277,26 @@ class DCSBEstimator(BaseGraphEstimator):
         self.vertex_assignments_ = gc.fit_predict(latent)
 
     def fit(self, graph, y=None):
+        """
+        Fit the DCSBM model to a graph, optionally with known block labels
+
+        If y is `None`, the block assignments for each vertex will first be
+        estimated.
+
+        Parameters
+        ----------
+        graph : array_like or networkx.Graph
+            Input graph to fit
+
+        y : array_like, length graph.shape[0], optional
+            Categorical labels for the block assignments of the graph
+
+        Returns
+        -------
+        self : DCSBEstimator object 
+            Fitted instance of self 
+        """
+        graph = import_graph(graph)
         if y is None:
             self._estimate_assignments(graph)
             y = self.vertex_assignments_
@@ -281,6 +329,9 @@ class DCSBEstimator(BaseGraphEstimator):
         )
         p_mat = _block_to_full(block_p, block_inv, graph.shape)
         p_mat = p_mat * np.outer(degree_corrections[:, 0], degree_corrections[:, -1])
+
+        if not self.loops:
+            p_mat -= np.diag(np.diag(p_mat))
         self.p_mat_ = p_mat
         self.block_p_ = block_p
         return self

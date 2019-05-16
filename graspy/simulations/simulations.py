@@ -1,6 +1,7 @@
 import numpy as np
 
 from ..utils import symmetrize
+import warnings
 
 
 def cartprod(*arrays):

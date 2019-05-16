@@ -3,6 +3,8 @@ from graspy.embed import AdjacencySpectralEmbed
 from graspy.models import DCSBEstimator, SBEstimator
 from graspy.simulations import p_from_latent, sample_edges, sbm
 from graspy.utils import *
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 def spectral_fit_sbm(graph, memberships):
