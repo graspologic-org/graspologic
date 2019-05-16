@@ -6,6 +6,31 @@ import numpy as np
 
 
 class EREstimator(SBEstimator):
+    """
+    Erdos-Reyni Model 
+
+    The Erdos-Reyni (ER) model is a simple random graph model in which the probability
+    of any potential edge in the graph existing is the same for any two nodes :math:`i`
+    and :math:`j`. 
+
+    ::math::`P_{ij} = p` for all i, j
+
+    Parameters
+    ----------
+    directed : boolean, optional (default=True)
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
+        this determines whether to force symmetry upon the block probability matrix fit
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
+    loops : boolean, optional (default=False)
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
+
+    References
+    ----------
+    
+    """
+
     def __init__(self, directed=True, loops=False):
         super().__init__(directed=directed, loops=loops)
 
