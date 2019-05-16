@@ -152,6 +152,8 @@ class SBEstimator(BaseGraphEstimator):
 
         block_vert_inds, block_inds, block_inv = _get_block_indices(y)
 
+        if not self.loops:
+            graph = graph - np.diag(np.diag(graph))
         block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
 
         if not self.directed:
@@ -301,6 +303,9 @@ class DCSBEstimator(BaseGraphEstimator):
             self.block_weights_ = counts / graph.shape[0]
 
         block_vert_inds, block_inds, block_inv = _get_block_indices(y)
+
+        if not self.loops:
+            graph = graph - np.diag(np.diag(graph))
         block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
 
         out_degree = np.count_nonzero(graph, axis=1).astype(float)

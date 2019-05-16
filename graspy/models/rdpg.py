@@ -1,34 +1,36 @@
 from .base import BaseGraphEstimator
 from ..embed import AdjacencySpectralEmbed
 from ..simulations import rdpg, p_from_latent, sample_edges
-from ..utils import import_graph, augment_diagonal
+from ..utils import import_graph, augment_diagonal, is_unweighted
 import numpy as np
 
 
 class RDPGEstimator(BaseGraphEstimator):
     def __init__(
         self,
-        fit_weights=False,
-        fit_degrees=False,
         directed=True,
-        loops=True,
+        loops=False,
         n_components=None,
+        ase_kws={},
+        diag_aug_weight=1,
+        plus_c_weight=1,
     ):
-        super().__init__(fit_weights=fit_weights, directed=directed, loops=loops)
-        self.fit_degrees = fit_degrees
+        super().__init__(directed=directed, loops=loops)
         self.n_components = n_components
+        self.ase_kws = ase_kws
+        self.diag_aug_weight = diag_aug_weight
+        self.plus_c_weight = plus_c_weight
 
     def fit(self, graph, y=None):
-        # allow all ase kwargs?
         graph = import_graph(graph)
-        self.n_verts = graph.shape[0]
-        graph = augment_diagonal(graph, weight=1)
-        graph += 1 / graph.size
-        # graph[graph == 0] += 1000 * 1 / graph.size
-        ase = AdjacencySpectralEmbed(n_components=self.n_components)
+        if not is_unweighted(graph):
+            raise NotImplementedError(
+                "Graph model is currently only implemented for unweighted graphs."
+            )
+        graph = augment_diagonal(graph, weight=self.diag_aug_weight)
+        graph += self.plus_c_weight / graph.size
+        ase = AdjacencySpectralEmbed(n_components=self.n_components, **self.ase_kws)
         latent = ase.fit_transform(graph)
-        # if len(latent) == 1:
-        #     latent = (latent, latent)
         self.latent_ = latent
         if type(self.latent_) == tuple:
             X = self.latent_[0]
@@ -36,20 +38,9 @@ class RDPGEstimator(BaseGraphEstimator):
         else:
             X = self.latent_
             Y = None
-        self.p_mat_ = p_from_latent(X, Y, rescale=False, loops=True)
-        # TODO should this loops be here
-        return self
+        self.p_mat_ = p_from_latent(X, Y, rescale=False, loops=self.loops)
 
-    def sample(self, n_samples=1):
-        # TODO: or more generally, should diagonal factor into the calculation of p for the other
-        #  models
-        # graph = rdpg(X, Y, loops=self.loops, directed=self.directed)
-        samples = []
-        for i in range(n_samples):
-            graph = sample_edges(self.p_mat_, loops=self.loops, directed=self.directed)
-            samples.append(graph)
-        samples = np.array(samples)
-        return np.squeeze(samples)
+        return self
 
     def _n_parameters(self):
         if type(self.latent_) == tuple:
