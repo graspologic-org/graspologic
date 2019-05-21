@@ -7,7 +7,7 @@ import unittest
 import numpy as np
 
 from graspy.embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
-from graspy.inference import NonparametricTest
+from graspy.inference import UnmatchedTest
 from graspy.simulations import er_np, sbm
 
 
@@ -19,28 +19,28 @@ class TestNonparametricTest(unittest.TestCase):
         cls.A2 = er_np(20, 0.3)
 
     def test_fit_p_ase_works(self):
-        npt = NonparametricTest()
+        npt = UnmatchedTest()
         p = npt.fit(self.A1, self.A2)
 
     def test_bad_kwargs(self):
         with self.assertRaises(ValueError):
-            NonparametricTest(n_components=-100)
+            UnmatchedTest(n_components=-100)
         with self.assertRaises(ValueError):
-            NonparametricTest(n_bootstraps=-100)
+            UnmatchedTest(n_bootstraps=-100)
         with self.assertRaises(TypeError):
-            NonparametricTest(n_bootstraps=0.5)
+            UnmatchedTest(n_bootstraps=0.5)
         with self.assertRaises(TypeError):
-            NonparametricTest(n_components=0.5)
+            UnmatchedTest(n_components=0.5)
         with self.assertRaises(TypeError):
-            NonparametricTest(bandwidth="oops")
+            UnmatchedTest(bandwidth="oops")
 
     def test_n_bootstraps(self):
-        npt = NonparametricTest(n_bootstraps=234, n_components=None)
+        npt = UnmatchedTest(n_bootstraps=234, n_components=None)
         npt.fit(self.A1, self.A2)
         self.assertEqual(npt.null_distribution_.shape[0], 234)
 
     def test_bad_matrix_inputs(self):
-        npt = NonparametricTest()
+        npt = UnmatchedTest()
 
         bad_matrix = [[1, 2]]
         with self.assertRaises(TypeError):
@@ -51,7 +51,7 @@ class TestNonparametricTest(unittest.TestCase):
         A = er_np(100, 0.3, directed=True)
         B = er_np(100, 0.3, directed=True)
 
-        npt = NonparametricTest()
+        npt = UnmatchedTest()
         with self.assertRaises(NotImplementedError):
             npt.fit(A, B)
 
@@ -60,7 +60,7 @@ class TestNonparametricTest(unittest.TestCase):
         A = er_np(50, 0.3)
         B = er_np(100, 0.3)
 
-        npt = NonparametricTest()
+        npt = UnmatchedTest()
         with self.assertRaises(ValueError):
             npt.fit(A, B)
 
@@ -74,8 +74,8 @@ class TestNonparametricTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
-        npt_null = NonparametricTest(n_components=2, n_bootstraps=100)
-        npt_alt = NonparametricTest(n_components=2, n_bootstraps=100)
+        npt_null = UnmatchedTest(n_components=2, n_bootstraps=100)
+        npt_alt = UnmatchedTest(n_components=2, n_bootstraps=100)
         p_null = npt_null.fit(A1, A2)
         p_alt = npt_alt.fit(A1, A3)
         self.assertTrue(p_null > 0.05)
