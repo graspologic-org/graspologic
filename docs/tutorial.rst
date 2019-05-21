@@ -33,8 +33,8 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
 .. toctree::
    :maxdepth: 1
 
-   tutorials/inference/semipar
-   tutorials/inference/nonpar
+   tutorials/inference/matched_test
+   tutorials/inference/unmatched_test
 
 Plotting
 ========
