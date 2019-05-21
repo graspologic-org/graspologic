@@ -366,3 +366,25 @@ graph = sample_edges(p_mat, directed=True, loops=False)
 dcsbe = DCSBEstimator(directed=True, loops=False)
 dcsbe.fit(graph)
 adjusted_rand_score(labels, dcsbe.vertex_assignments_)
+
+
+#%%
+np.random.seed(8888)
+B = np.array(
+    [
+        [0.9, 0.2, 0.05, 0.1],
+        [0.1, 0.7, 0.1, 0.1],
+        [0.2, 0.4, 0.8, 0.5],
+        [0.1, 0.2, 0.1, 0.7],
+    ]
+)
+n = np.array([1000, 1000, 500, 500])
+dc = np.random.beta(2, 5, size=n.sum())
+labels = _n_to_labels(n)
+p_mat = _block_to_full(B, labels, (n.sum(), n.sum()))
+p_mat = p_mat * np.outer(dc, dc)
+p_mat -= np.diag(np.diag(p_mat))
+g = sample_edges(p_mat, directed=True, loops=False)
+dcsbe = DCSBEstimator()
+dcsbe.fit(g)
+heatmap(dcsbe.p_mat_)

@@ -1,7 +1,6 @@
 from .base import (
     BaseGraphEstimator,
     _calculate_p,
-    _fit_weights,
     cartprod,
     _check_n_samples,
     _n_to_labels,
@@ -13,6 +12,7 @@ from ..utils import (
     augment_diagonal,
     is_unweighted,
     symmetrize,
+    remove_loops,
 )
 import numpy as np
 from ..simulations import sbm, sample_edges
@@ -153,7 +153,7 @@ class SBEstimator(BaseGraphEstimator):
         block_vert_inds, block_inds, block_inv = _get_block_indices(y)
 
         if not self.loops:
-            graph = graph - np.diag(np.diag(graph))
+            graph = remove_loops(graph)
         block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
 
         if not self.directed:
@@ -162,7 +162,7 @@ class SBEstimator(BaseGraphEstimator):
 
         p_mat = _block_to_full(block_p, block_inv, graph.shape)
         if not self.loops:
-            p_mat -= np.diag(np.diag(p_mat))
+            p_mat = remove_loops(graph)
         self.p_mat_ = p_mat
 
         return self
@@ -351,43 +351,46 @@ class DCSBEstimator(BaseGraphEstimator):
         n_parameters += self.degree_corrections_.size
         return n_parameters
 
-    def sample(self, n_samples=1):
-        """
-        Sample graphs (realizations) from the fitted model
+    # TODO need to define custom likelihood function for the case where we sample
+    # a block membership
 
-        Can only be called after the the model has been fit 
+    # def sample(self, n_samples=1):
+    #     """
+    #     Sample graphs (realizations) from the fitted model
 
-        Parameters
-        ----------
-        n_samples : int (default 1), optional
-            The number of graphs to sample 
-        
-        Returns 
-        -------
-        graphs : np.array (n_samples, n_verts, n_verts)
-            Array of sampled graphs, where the first dimension 
-            indexes each sample, and the other dimensions represent
-            (n_verts x n_verts) adjacency matrices for the sampled graphs. 
+    #     Can only be called after the the model has been fit
 
-            Note that if only one sample is drawn, a (1, n_verts, n_verts) 
-            array will still be returned. 
-        """
-        if hasattr(self, "vertex_assignments_"):
-            check_is_fitted(self, "p_mat_")
-            _check_n_samples(n_samples)
-            n_verts = self.p_mat_.shape[0]
+    #     Parameters
+    #     ----------
+    #     n_samples : int (default 1), optional
+    #         The number of graphs to sample
 
-            graphs = np.zeros((n_samples, n_verts, n_verts))
-            for i in range(n_samples):
-                block_proportions = np.random.multinomial(n_verts, self.block_weights_)
-                block_inv = _n_to_labels(block_proportions)
-                p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
-                graphs[i, :, :] = sample_edges(
-                    p_mat, directed=self.directed, loops=self.loops
-                )
-            return graphs
-        else:
-            return super().sample(n_samples=n_samples)
+    #     Returns
+    #     -------
+    #     graphs : np.array (n_samples, n_verts, n_verts)
+    #         Array of sampled graphs, where the first dimension
+    #         indexes each sample, and the other dimensions represent
+    #         (n_verts x n_verts) adjacency matrices for the sampled graphs.
+
+    #         Note that if only one sample is drawn, a (1, n_verts, n_verts)
+    #         array will still be returned.
+    #     """
+    #     if hasattr(self, "vertex_assignments_"):
+    #         check_is_fitted(self, "p_mat_")
+    #         _check_n_samples(n_samples)
+    #         n_verts = self.p_mat_.shape[0]
+
+    #         graphs = np.zeros((n_samples, n_verts, n_verts))
+    #         for i in range(n_samples):
+    #             block_proportions = np.random.multinomial(n_verts, self.block_weights_)
+    #             block_inv = _n_to_labels(block_proportions)
+    #             p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
+    #             graphs[i, :, :] = sample_edges(
+    #                 p_mat, directed=self.directed, loops=self.loops
+    #             )
+    #         return graphs
+    #     else:
+    #         return super().sample(n_samples=n_samples)
 
 
 def _get_block_indices(y):
