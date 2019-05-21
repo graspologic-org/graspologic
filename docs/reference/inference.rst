@@ -6,6 +6,6 @@ Inference
 Two-graph hypothesis testing
 ----------------------------
 
-.. autoclass:: SemiparametricTest
+.. autoclass:: MatchedTest
 
-.. autoclass:: NonparametricTest
+.. autoclass:: UnmatchedTest
