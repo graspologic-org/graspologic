@@ -160,14 +160,15 @@ class TestDCSBM:
 
         graphs = dcsbe.sample(n_samples=20)
         assert graphs.shape == (20, 3000, 3000)
-        # TODO worth checking for accuracy here too? 
+        # TODO worth checking for accuracy here too?
 
     def test_DCSBM_score(self):
-        # TODO 
-        
+        # TODO need to write down an explicit example for what this should be
+        return 1
 
     def test_DCSBM_score_samples(self):
-        # TODO 
+        # TODO
+        return 1
 
     def test_DCSBM_fit_supervised(self):
         p_mat = self.p_mat
@@ -239,6 +240,44 @@ class TestDCSBM:
         dcsbe.fit(graph)
         assert adjusted_rand_score(labels, dcsbe.vertex_assignments_) > 0.95
         assert_allclose(p_mat, dcsbe.p_mat_, atol=0.12)
+
+
+class TestRDPG:
+    @classmethod
+    def setup_class(cls):
+        np.random.seed(8888)
+        cls.graph = er_np(1000, 0.5)
+        # cls.p = 0.5
+        # cls.estimator = EREstimator(directed=True, loops=False)
+        # cls.estimator.fit(cls.graph)
+        # cls.p_hat = cls.estimator.p_
+
+    def test_RDPG_intputs(self):
+        rdpge = RDPGEstimator()
+
+        with pytest.raises(TypeError):
+            RDPGEstimator(loops=6)
+
+        with pytest.raises(ValueError):
+            rdpge.fit(self.graph[:, :99])
+
+        with pytest.raises(ValueError):
+            rdpge.fit(self.graph[..., np.newaxis])
+
+        with pytest.raises(TypeError):
+            RDPGEstimator(ase_kws=5)
+
+        with pytest.raises(TypeError):
+            RDPGEstimator(diag_aug_weight="f")
+
+        with pytest.raises(ValueError):
+            RDPGEstimator(diag_aug_weight=-1)
+
+        with pytest.raises(TypeError):
+            RDPGEstimator(plus_c_weight="F")
+
+        with pytest.raises(ValueError):
+            RDPGEstimator(plus_c_weight=-1)
 
 
 def _n_to_labels(n):

@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
-from ..utils import import_graph, is_almost_symmetric, binarize
+from ..utils import import_graph, is_almost_symmetric, binarize, is_unweighted
 from ..simulations import sample_edges
 
 
@@ -66,25 +66,24 @@ class BaseGraphEstimator(BaseEstimator):
     def score_samples(self, graph):
         """
         Compute the weighted log probabilities for each sample.
-        """
-        # for each edge
-        # look up where you are in the sbm
-        #   if dcsbm, look up where you are in the dcvector
-        #   take the product of those for your indices
-        # for each non edge, also neet to find 1 - p...
 
-        # if we had the p matrix ....
-        # this would be as simple as
-        # where graph is the unweighted graph:
+        Assumes the graph is indexed like the fit model... 
+        # TODO 
+        """
         # P.ravel() <dot> graph * (1 - P.ravel()) <dot> (1 - graph)
-        bin_graph = binarize(graph)
+        graph = import_graph(graph)
+        if not is_unweighted(graph):
+            raise ValueError("Model only implemented for unweighted graphs")
+
         p_mat = self.p_mat_.copy()
+
         # squish the probabilities that are degenerate
         c = 1 / graph.size
         p_mat[p_mat < c] = c
         p_mat[p_mat > 1 - c] = 1 - c
-        successes = np.multiply(p_mat, bin_graph)  # TODO: use nonzero inds here
-        failures = np.multiply((1 - p_mat), (1 - bin_graph))
+        # TODO: use nonzero inds here will be faster
+        successes = np.multiply(p_mat, graph)
+        failures = np.multiply((1 - p_mat), (1 - graph))
         likelihood = successes + failures
         return np.log(likelihood)
 

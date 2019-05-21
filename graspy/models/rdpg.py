@@ -8,14 +8,25 @@ import numpy as np
 class RDPGEstimator(BaseGraphEstimator):
     def __init__(
         self,
-        directed=True,
         loops=False,
         n_components=None,
         ase_kws={},
         diag_aug_weight=1,
         plus_c_weight=1,
     ):
-        super().__init__(directed=directed, loops=loops)
+        super().__init__(loops=loops)
+
+        if not isinstance(ase_kws, dict):
+            raise TypeError("ase_kws must be a dict")
+        if not isinstance(diag_aug_weight, (int, float)):
+            raise TypeError("diag_aug_weight must be a scalar")
+        if not isinstance(plus_c_weight, (int, float)):
+            raise TypeError("plus_c_weight must be a scalar")
+        if diag_aug_weight < 0:
+            raise ValueError("diag_aug_weight must be at least 0")
+        if plus_c_weight < 0:
+            raise ValueError("plus_c_weight must be at least 0")
+
         self.n_components = n_components
         self.ase_kws = ase_kws
         self.diag_aug_weight = diag_aug_weight

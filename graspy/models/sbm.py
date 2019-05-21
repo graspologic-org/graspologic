@@ -162,7 +162,7 @@ class SBEstimator(BaseGraphEstimator):
 
         p_mat = _block_to_full(block_p, block_inv, graph.shape)
         if not self.loops:
-            p_mat = remove_loops(graph)
+            p_mat = remove_loops(p_mat)
         self.p_mat_ = p_mat
 
         return self
@@ -215,6 +215,14 @@ class SBEstimator(BaseGraphEstimator):
             return graphs
         else:
             return super().sample(n_samples=n_samples)
+
+    # def score_samples(self, graph):
+    #     if hasattr(self, "vertex_assignmelts_"):
+    #         raise NotImplementedError(
+    #             "Likelihood not yet implemented for a posteriori SBM"
+    #         )
+    #     else:
+    #         super().score_samples(graph)
 
 
 class DCSBEstimator(BaseGraphEstimator):
