@@ -1,4 +1,4 @@
-from .semipar import SemiparametricTest
-from .nonpar import NonparametricTest
+from .matched import MatchedTest
+from .unmatched import UnmatchedTest
 
-__all__ = ["SemiparametricTest", "NonparametricTest"]
+__all__ = ["MatchedTest", "UnmatchedTest"]
