@@ -19,11 +19,13 @@ from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 
 
-class NonparametricTest(BaseInference):
+class UnmatchedTest(BaseInference):
     """
-    Two sample hypothesis test for the nonparamatric problem of determining
-    whether two random dot product graphs have the same latent positions [2]_.
-
+    Two-sample hypothesis test for the problem of determining whether two random 
+    dot product graphs have the same latent positions [2]_.
+    
+    This test can operate on two graphs where there is no known matching between
+    the vertices of the two graphs, or even when the number of vertices is different. 
     Currently, testing is only supported for undirected graphs.
 
     Parameters
@@ -46,7 +48,7 @@ class NonparametricTest(BaseInference):
         input graphs.
 
     p_ : float
-        The overall p value from the nonparametric test.
+        The overall p value from the test.
     
     null_distribution_ : ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
