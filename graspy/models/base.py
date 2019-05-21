@@ -13,10 +13,6 @@ def _calculate_p(block):
     return n_edges / block.size
 
 
-def _fit_weights(block):
-    return 1
-
-
 def cartprod(*arrays):
     N = len(arrays)
     return np.transpose(
