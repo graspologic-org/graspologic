@@ -14,15 +14,8 @@
 
 import numpy as np
 
-from ..utils import symmetrize
+from ..utils import symmetrize, cartprod
 import warnings
-
-
-def cartprod(*arrays):
-    N = len(arrays)
-    return np.transpose(
-        np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
-    ).reshape(-1, N)
 
 
 def sample_edges(P, directed=False, loops=False):

@@ -1,8 +1,8 @@
 import pytest
 import numpy as np
-from numpy.testing import assert_equal, assert_allclose
-from graspy.models import *
-from graspy.simulations import er_np, sbm, sample_edges, p_from_latent
+from numpy.testing import assert_allclose
+from graspy.models import EREstimator, DCSBEstimator, SBEstimator, RDPGEstimator
+from graspy.simulations import er_np, sbm, sample_edges
 from graspy.utils import cartprod
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError

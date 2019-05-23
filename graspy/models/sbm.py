@@ -1,26 +1,22 @@
-from .base import (
-    BaseGraphEstimator,
-    _calculate_p,
-    cartprod,
-    _check_n_samples,
-    _n_to_labels,
-)
-from ..utils import (
-    import_graph,
-    binarize,
-    is_almost_symmetric,
-    augment_diagonal,
-    is_unweighted,
-    symmetrize,
-    remove_loops,
-)
 import numpy as np
-from ..simulations import sbm, sample_edges
-from ..cluster import GaussianCluster
-from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
+
+from ..cluster import GaussianCluster
+from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
+from ..simulations import sample_edges, sbm
+from ..utils import (
+    augment_diagonal,
+    binarize,
+    cartprod,
+    import_graph,
+    is_almost_symmetric,
+    is_unweighted,
+    remove_loops,
+    symmetrize,
+)
+from .base import BaseGraphEstimator, _calculate_p, _check_n_samples, _n_to_labels
 
 
 def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kws):
