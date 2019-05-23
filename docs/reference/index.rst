@@ -7,9 +7,10 @@ Reference
    :maxdepth: 2
 
    simulations
+   models
    embed
    cluster
    inference
    plotting
+   datasets
    utils
-   
