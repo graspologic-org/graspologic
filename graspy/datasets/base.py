@@ -3,6 +3,33 @@ import numpy as np
 
 
 def load_drosophila_left(return_labels=False):
+    """
+    Load the left Drosophila larva mushroom body connectome
+
+    Optionally return cell type labels
+
+    Parameters
+    ----------
+    return_labels : bool, optional (default=False)
+        whether to have a second return value which is an array of
+        cell type labels for each node in the adjacency matrix
+
+    Returns
+    -------
+        graph : np.ndarray
+            Adjacency matrix of the connectome
+        labels : np.ndarray
+            Only returned if `return_labels` is true. Array of
+            string labels for each cell (vertex)
+
+    References
+    ----------
+    .. [1] Eichler, K., Li, F., Litwin-Kumar, A., Park, Y., Andrade, I.,
+           Schneider-Mizell, C. M., ... & Fetter, R. D. (2017). The
+           complete connectome of a learning and memory centre in an insect
+           brain. Nature, 548(7666), 175.
+    """
+
     module_path = dirname(__file__)
     folder = "drosophila"
     filename = "left_adjacency.csv"
@@ -18,6 +45,33 @@ def load_drosophila_left(return_labels=False):
 
 
 def load_drosophila_right(return_labels=False):
+    """
+    Load the right Drosophila larva mushroom body connectome
+
+    Optionally return cell type labels
+
+    Parameters
+    ----------
+    return_labels : bool, optional (default=False)
+        whether to have a second return value which is an array of
+        cell type labels for each node in the adjacency matrix
+
+    Returns
+    -------
+        graph : np.ndarray
+            Adjacency matrix of the connectome
+        labels : np.ndarray
+            Only returned if `return_labels` is true. Array of
+            string labels for each cell (vertex)
+
+    References
+    ----------
+    .. [1] Eichler, K., Li, F., Litwin-Kumar, A., Park, Y., Andrade, I.,
+           Schneider-Mizell, C. M., ... & Fetter, R. D. (2017). The
+           complete connectome of a learning and memory centre in an insect
+           brain. Nature, 548(7666), 175.
+    """
+
     module_path = dirname(__file__)
     folder = "drosophila"
     filename = "right_adjacency.csv"
