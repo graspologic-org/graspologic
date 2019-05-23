@@ -5,6 +5,7 @@ from graspy.models import *
 from graspy.simulations import er_np, sbm, sample_edges, p_from_latent
 from graspy.utils import cartprod
 from sklearn.metrics import adjusted_rand_score
+from sklearn.exceptions import NotFittedError
 
 
 class TestER:
@@ -41,6 +42,23 @@ class TestER:
 
         with pytest.raises(TypeError):
             self.estimator.sample(n_samples="nope")
+        g = er_np(100, 0.5)
+        estimator = EREstimator(directed=True, loops=False)
+        estimator.fit(g)
+        p_mat = np.full((100, 100), 0.5)
+        p_mat -= np.diag(np.diag(p_mat))
+        _test_sample(estimator, p_mat)
+
+    def test_ER_score_sample(self):
+        return 1
+        # TODO
+
+    def test_ER_score(self):
+        return 1
+        # TODO
+
+
+# TODO DCER
 
 
 class TestSBM:
@@ -123,6 +141,51 @@ class TestSBM:
         assert adjusted_rand_score(labels, sbe.vertex_assignments_) > 0.95
         assert_allclose(p_mat, sbe.p_mat_, atol=0.12)
 
+    def test_SBM_sample(self):
+        estimator = SBEstimator(directed=True, loops=False)
+        B = np.array([[0.9, 0.1], [0.1, 0.9]])
+        g = sbm([50, 50], B, directed=True)
+        labels = _n_to_labels([50, 50])
+        p_mat = _block_to_full(B, labels, (100, 100))
+        p_mat -= np.diag(np.diag(p_mat))
+        with pytest.raises(NotFittedError):
+            estimator.sample()
+
+        estimator.fit(g, y=labels)
+        with pytest.raises(ValueError):
+            estimator.sample(n_samples=-1)
+
+        with pytest.raises(TypeError):
+            estimator.sample(n_samples="nope")
+
+        _test_sample(estimator, p_mat)
+
+    # def test_SBM_score(self):
+    #     B = np.array([[0.75, 0.25], [0.25, 0.75]])
+    #     n_verts = 4
+    #     n = np.array([n_verts, n_verts])
+    #     tau = _n_to_labels(n)
+    #     p_mat = _block_to_full(B, tau, shape=(n_verts * 2, n_verts * 2))
+    #     g = sample_edges(p_mat)
+    #     estimator = SBEstimator()
+    #     estimator.fit(g, tau)
+    #     m11 = np.count_nonzero(B[:n_verts, :n_verts])
+    #     m12 = np.count_nonzero(B[:n_verts, n_verts:])
+    #     m21 = np.count_nonzero(B[n_verts:, :n_verts])
+    #     m22 = np.count_nonzero(B[n_verts:, n_verts:])
+    #     lik = np.zeros((n_verts, n_verts))
+    #     diag_mask = np.zeros_like(p_mat)
+    #     diag_mask[:n_verts, :n_verts] = 1
+    #     diag_mask[n_verts:, n_verts:] = 1
+    #     diag_mask = diag_mask.astype(bool)
+    #     lik[diag_mask][g[diag_mask] == 1] = 0.75
+    #     lik[diag_mask]
+    #     # lik = (m11 + m22) * np.log(0.75) + (m12 + m21) * np.log(0.25)
+    #     estimator.p_mat_ = p_mat
+    #     lik_hat = estimator.score_samples(g)
+    #     # assert_allclose(lik, lik_hat, rtol=0.01)
+    #     # TODO
+
 
 class TestDCSBM:
     @classmethod
@@ -146,21 +209,6 @@ class TestDCSBM:
         cls.p_mat = p_mat
         cls.labels = labels
         cls.g = g
-
-    def test_DCSBM_sample(self):
-        dcsbe = DCSBEstimator()
-        dcsbe.fit(self.g)
-        estimator = dcsbe
-
-        with pytest.raises(ValueError):
-            estimator.sample(n_samples=-1)
-
-        with pytest.raises(TypeError):
-            estimator.sample(n_samples="nope")
-
-        graphs = dcsbe.sample(n_samples=20)
-        assert graphs.shape == (20, 3000, 3000)
-        # TODO worth checking for accuracy here too?
 
     def test_DCSBM_score(self):
         # TODO need to write down an explicit example for what this should be
@@ -241,6 +289,29 @@ class TestDCSBM:
         assert adjusted_rand_score(labels, dcsbe.vertex_assignments_) > 0.95
         assert_allclose(p_mat, dcsbe.p_mat_, atol=0.12)
 
+    def test_DCSBM_sample(self):
+        estimator = DCSBEstimator(directed=True, loops=False)
+        B = np.array([[0.9, 0.1], [0.1, 0.9]])
+        dc = np.random.uniform(0.25, 0.75, size=400)
+        labels = _n_to_labels([200, 200])
+
+        p_mat = _block_to_full(B, labels, (400, 400))
+        p_mat = p_mat * np.outer(dc, dc)
+        p_mat -= np.diag(np.diag(p_mat))
+        g = sample_edges(p_mat, directed=True)
+
+        with pytest.raises(NotFittedError):
+            estimator.sample()
+
+        estimator.fit(g, y=labels)
+        with pytest.raises(ValueError):
+            estimator.sample(n_samples=-1)
+
+        with pytest.raises(TypeError):
+            estimator.sample(n_samples="nope")
+
+        _test_sample(estimator, p_mat, n_samples=3000, atol=0.2)
+
 
 class TestRDPG:
     @classmethod
@@ -279,8 +350,47 @@ class TestRDPG:
         with pytest.raises(ValueError):
             RDPGEstimator(plus_c_weight=-1)
 
+    def test_RDPG_fit(self):
+        np.random.seed(8888)
+        n_points = 2000
+        dists = np.random.uniform(0, 1, n_points)
+        points = hardy_weinberg(dists)
+
+        p_mat = points @ points.T
+        p_mat -= np.diag(np.diag(p_mat))
+        g = sample_edges(p_mat)
+
+        estimator = RDPGEstimator(loops=False, n_components=3)
+        estimator.fit(g)
+
+        assert_allclose(estimator.p_mat_, p_mat, atol=0.2)
+
+    def test_RDPG_sample(self):
+        np.random.seed(8888)
+        n_verts = 500
+        point1 = np.array([0.1, 0.9])
+        point2 = np.array([0.9, 0.1])
+        latent1 = np.tile(point1, reps=(n_verts, 1))
+        latent2 = np.tile(point2, reps=(n_verts, 1))
+        latent = np.concatenate((latent1, latent2), axis=0)
+        p_mat = latent @ latent.T
+        p_mat -= np.diag(np.diag(p_mat))
+        g = sample_edges(p_mat)
+        estimator = RDPGEstimator(n_components=2)
+        estimator.fit(g)
+        _test_sample(estimator, p_mat, atol=0.2, n_samples=200)
+
+    def test_RDPG_score(self):
+        return 1
+        # TODO
+
+    def test_RDPG_score_sample(self):
+        return 1
+        # TODO
+
 
 def _n_to_labels(n):
+    n = np.array(n)
     n_cumsum = n.cumsum()
     labels = np.zeros(n.sum(), dtype=np.int64)
     for i in range(1, len(n)):
@@ -300,3 +410,18 @@ def _block_to_full(block_mat, inverse, shape):
     mat_by_edge = block_mat[block_map[0], block_map[1]]
     full_mat = mat_by_edge.reshape(shape)
     return full_mat
+
+
+def _test_sample(estimator, p_mat, atol=0.1, n_samples=1000):
+    np.random.seed(8888)
+    graphs = estimator.sample(n_samples)
+    graph_mean = graphs.mean(axis=0)
+
+    assert_allclose(graph_mean, p_mat, atol=atol)
+
+
+def hardy_weinberg(theta):
+    """
+    Maps a value from [0, 1] to the hardy weinberg curve.
+    """
+    return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T

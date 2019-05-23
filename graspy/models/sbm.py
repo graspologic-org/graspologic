@@ -199,22 +199,22 @@ class SBEstimator(BaseGraphEstimator):
             Note that if only one sample is drawn, a (1, n_verts, n_verts) 
             array will still be returned. 
         """
-        if hasattr(self, "vertex_assignments_"):
-            check_is_fitted(self, "p_mat_")
-            _check_n_samples(n_samples)
-            n_verts = self.p_mat_.shape[0]
+        # if hasattr(self, "vertex_assignments_"):
+        #     check_is_fitted(self, "p_mat_")
+        #     _check_n_samples(n_samples)
+        #     n_verts = self.p_mat_.shape[0]
 
-            graphs = np.zeros((n_samples, n_verts, n_verts))
-            for i in range(n_samples):
-                block_proportions = np.random.multinomial(n_verts, self.block_weights_)
-                block_inv = _n_to_labels(block_proportions)
-                p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
-                graphs[i, :, :] = sample_edges(
-                    p_mat, directed=self.directed, loops=self.loops
-                )
-            return graphs
-        else:
-            return super().sample(n_samples=n_samples)
+        #     graphs = np.zeros((n_samples, n_verts, n_verts))
+        #     for i in range(n_samples):
+        #         block_proportions = np.random.multinomial(n_verts, self.block_weights_)
+        #         block_inv = _n_to_labels(block_proportions)
+        #         p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
+        #         graphs[i, :, :] = sample_edges(
+        #             p_mat, directed=self.directed, loops=self.loops
+        #         )
+        #     return graphs
+        # else:
+        return super().sample(n_samples=n_samples)
 
     # def score_samples(self, graph):
     #     if hasattr(self, "vertex_assignmelts_"):
