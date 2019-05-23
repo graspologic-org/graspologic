@@ -539,12 +539,18 @@ def augment_diagonal(graph, weight=1):
 
 
 def binarize(graph):
+    """
+    Binarize the input adjacency matrix
+    """
     graph = import_graph(graph)
     graph[graph != 0] = 1
     return graph
 
 
 def cartprod(*arrays):
+    """
+    Compute the cartesian product of multiple arrays
+    """
     N = len(arrays)
     return np.transpose(
         np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
