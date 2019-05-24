@@ -13,17 +13,6 @@ def _calculate_p(block):
     return n_edges / block.size
 
 
-def cartprod(*arrays):
-    N = len(arrays)
-    return np.transpose(
-        np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
-    ).reshape(-1, N)
-
-
-def bic(l_hat, n_samples, n_params):
-    return np.log(n_samples) * n_params - 2 * np.log(l_hat)
-
-
 def _check_n_samples(n_samples):
     if not isinstance(n_samples, (int, float)):
         raise TypeError("n_samples must be a scalar value")
@@ -52,16 +41,36 @@ class BaseGraphEstimator(BaseEstimator):
         self.loops = loops
 
     def bic(self, graph):
-        # first term should be ln(number of observations (edges)) * n_params
-        # second term is 2 * ln(likelihood)
-        # i.e. sum(ln(likelihood per edge))
+        """
+        Bayesian information criterion for the current model on the input graph.
+        
+        Parameters
+        ----------
+        graph : np.ndarray
+            Input graph
+        
+        Returns
+        -------
+        bic : float
+            The lower the better
+        """
         return 2 * np.log(self.n_verts) * self._n_parameters() - 2 * self.score(graph)
 
     def mse(self, graph):
+        """
+        Compute mean square error for the current model on the input graph
+        
+        Parameters
+        ----------
+        graph : np.ndarray
+            Input graph
+        
+        Returns
+        -------
+        mse : float
+            Mean square error for the model's 
+        """
         return np.linalg.norm(graph - self.p_mat_) ** 2
-
-    def aic(self, graph):
-        return 2 * self._n_parameters() - 2 * self.score(graph)
 
     def score_samples(self, graph):
         """

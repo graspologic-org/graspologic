@@ -51,7 +51,7 @@ class EREstimator(SBEstimator):
 
 
 class DCEREstimator(DCSBEstimator):
-    """
+    r"""
     Degree-corrected Erdos-Reyni Model 
 
     The Degree-corrected Erdos-Reyni (DCER) model is an extension of the ER model in 
