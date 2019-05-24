@@ -108,7 +108,24 @@ class BaseGraphEstimator(BaseEstimator):
 
     def sample(self, n_samples=1):
         """
-        sample 1 graph from the model 
+        Sample graphs (realizations) from the fitted model
+
+        Can only be called after the the model has been fit 
+
+        Parameters
+        ----------
+        n_samples : int (default 1), optional
+            The number of graphs to sample 
+
+        Returns 
+        -------
+        graphs : np.array (n_samples, n_verts, n_verts)
+            Array of sampled graphs, where the first dimension 
+            indexes each sample, and the other dimensions represent
+            (n_verts x n_verts) adjacency matrices for the sampled graphs. 
+
+            Note that if only one sample is drawn, a (1, n_verts, n_verts) 
+            array will still be returned. 
         """
         check_is_fitted(self, "p_mat_")
         _check_n_samples(n_samples)

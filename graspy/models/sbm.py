@@ -175,52 +175,6 @@ class SBEstimator(BaseGraphEstimator):
             n_parameters += n_blocks - 1
         return n_parameters
 
-    def sample(self, n_samples=1):
-        """
-        Sample graphs (realizations) from the fitted model
-
-        Can only be called after the the model has been fit 
-
-        Parameters
-        ----------
-        n_samples : int (default 1), optional
-            The number of graphs to sample 
-
-        Returns 
-        -------
-        graphs : np.array (n_samples, n_verts, n_verts)
-            Array of sampled graphs, where the first dimension 
-            indexes each sample, and the other dimensions represent
-            (n_verts x n_verts) adjacency matrices for the sampled graphs. 
-
-            Note that if only one sample is drawn, a (1, n_verts, n_verts) 
-            array will still be returned. 
-        """
-        # if hasattr(self, "vertex_assignments_"):
-        #     check_is_fitted(self, "p_mat_")
-        #     _check_n_samples(n_samples)
-        #     n_verts = self.p_mat_.shape[0]
-
-        #     graphs = np.zeros((n_samples, n_verts, n_verts))
-        #     for i in range(n_samples):
-        #         block_proportions = np.random.multinomial(n_verts, self.block_weights_)
-        #         block_inv = _n_to_labels(block_proportions)
-        #         p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
-        #         graphs[i, :, :] = sample_edges(
-        #             p_mat, directed=self.directed, loops=self.loops
-        #         )
-        #     return graphs
-        # else:
-        return super().sample(n_samples=n_samples)
-
-    # def score_samples(self, graph):
-    #     if hasattr(self, "vertex_assignmelts_"):
-    #         raise NotImplementedError(
-    #             "Likelihood not yet implemented for a posteriori SBM"
-    #         )
-    #     else:
-    #         super().score_samples(graph)
-
 
 class DCSBEstimator(BaseGraphEstimator):
     r"""
@@ -393,47 +347,6 @@ class DCSBEstimator(BaseGraphEstimator):
             n_parameters += self.vertex_assignments_
         n_parameters += self.degree_corrections_.size
         return n_parameters
-
-    # TODO need to define custom likelihood function for the case where we sample
-    # a block membership
-
-    # def sample(self, n_samples=1):
-    #     """
-    #     Sample graphs (realizations) from the fitted model
-
-    #     Can only be called after the the model has been fit
-
-    #     Parameters
-    #     ----------
-    #     n_samples : int (default 1), optional
-    #         The number of graphs to sample
-
-    #     Returns
-    #     -------
-    #     graphs : np.array (n_samples, n_verts, n_verts)
-    #         Array of sampled graphs, where the first dimension
-    #         indexes each sample, and the other dimensions represent
-    #         (n_verts x n_verts) adjacency matrices for the sampled graphs.
-
-    #         Note that if only one sample is drawn, a (1, n_verts, n_verts)
-    #         array will still be returned.
-    #     """
-    #     if hasattr(self, "vertex_assignments_"):
-    #         check_is_fitted(self, "p_mat_")
-    #         _check_n_samples(n_samples)
-    #         n_verts = self.p_mat_.shape[0]
-
-    #         graphs = np.zeros((n_samples, n_verts, n_verts))
-    #         for i in range(n_samples):
-    #             block_proportions = np.random.multinomial(n_verts, self.block_weights_)
-    #             block_inv = _n_to_labels(block_proportions)
-    #             p_mat = _block_to_full(self.block_p_, block_inv, self.p_mat_.shape)
-    #             graphs[i, :, :] = sample_edges(
-    #                 p_mat, directed=self.directed, loops=self.loops
-    #             )
-    #         return graphs
-    #     else:
-    #         return super().sample(n_samples=n_samples)
 
 
 def _get_block_indices(y):
