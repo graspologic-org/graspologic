@@ -1,5 +1,4 @@
 import unittest
-import graspy as gs
 import numpy as np
 import networkx as nx
 from graspy.utils import utils as gus
@@ -39,7 +38,7 @@ class TestInput(unittest.TestCase):
 class TestToLaplace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.A = A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+        cls.A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
     def test_to_laplace_IDAD(self):
         expected_L_normed = [

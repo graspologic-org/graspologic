@@ -1,6 +1,4 @@
-from .base import BaseGraphEstimator, _calculate_p
 from .sbm import SBEstimator, DCSBEstimator
-from ..simulations import sbm, er_np, sample_edges
 from ..utils import import_graph
 import numpy as np
 
@@ -60,7 +58,7 @@ class DCEREstimator(DCSBEstimator):
     which each node has an additional "promiscuity" parameter :math:`\theta_i` that 
     determines its expected degree in the graph. 
 
-    ::math::`P_{ij} = \theta_i \theta_j p`
+    :math:`P_{ij} = \theta_i \theta_j p`
 
     Parameters
     ----------
