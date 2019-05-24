@@ -48,7 +48,7 @@ class SBEstimator(BaseGraphEstimator):
     the probability of an edge existing is specified by the block that nodes :math:`i`
     and :math:`j` belong to:
 
-    :math:`P_{ij} = B_\{tau_i}\{tau_j}`
+    :math:`P_{ij} = B_{\tau_i \tau_j}`
 
     where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\tau` is an `n\_nodes` 
     length vector specifying which block each node belongs to. 
@@ -234,7 +234,7 @@ class DCSBEstimator(BaseGraphEstimator):
     allowing the vertices within a block to have heterogeneous expected degree 
     distributions: 
 
-    :math:`P_{ij} = \theta_i \theta_j B_\{tau_i}\{tau_j}`
+    :math:`P_{ij} = \theta_i \theta_j B_{\tau_i \tau_j}`
 
     where :math:`B \in \mathbb{[0, 1]}^{K x K}` :math:`\tau` is an `n\_nodes` 
     length vector specifying which block each node belongs to, and :math:`\theta`
@@ -244,7 +244,7 @@ class DCSBEstimator(BaseGraphEstimator):
     The `degree_directed` parameter of this model allows the degree correction 
     parameter to be different for the in and out degree of each node:  
 
-    :math:`P_{ij} = \theta_i \eta_j B_\{tau_i}\{tau_j}`
+    :math:`P_{ij} = \theta_i \eta_j B_{\tau_i \tau_j}`
 
     where :math:`\theta` and :math:`\eta` need not be the same.
         
