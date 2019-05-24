@@ -201,7 +201,7 @@ class DCSBEstimator(BaseGraphEstimator):
     :math:`P_{ij} = \theta_i \eta_j B_{\tau_i \tau_j}`
 
     where :math:`\theta` and :math:`\eta` need not be the same.
-        
+    
     Parameters
     ----------
     directed : boolean, optional (default=True)

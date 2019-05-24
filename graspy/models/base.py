@@ -44,6 +44,9 @@ class BaseGraphEstimator(BaseEstimator):
         """
         Bayesian information criterion for the current model on the input graph.
         
+        Note that this implicitly assumes the input graph is indexed like the 
+        fit model.
+
         Parameters
         ----------
         graph : np.ndarray
@@ -60,6 +63,9 @@ class BaseGraphEstimator(BaseEstimator):
         """
         Compute mean square error for the current model on the input graph
         
+        Note that this implicitly assumes the input graph is indexed like the 
+        fit model.
+
         Parameters
         ----------
         graph : np.ndarray
@@ -68,22 +74,21 @@ class BaseGraphEstimator(BaseEstimator):
         Returns
         -------
         mse : float
-            Mean square error for the model's 
+            Mean square error for the model's fit P matrix
         """
         return np.linalg.norm(graph - self.p_mat_) ** 2
 
     def score_samples(self, graph):
         """
-        Compute the weighted log probabilities for each sample.
+        Compute the weighted log probabilities for each potential edge.
 
-        Assumes the graph is indexed like the fit model... 
-        # TODO 
+        Note that this implicitly assumes the input graph is indexed like the 
+        fit model.
         """
         # P.ravel() <dot> graph * (1 - P.ravel()) <dot> (1 - graph)
         graph = import_graph(graph)
         if not is_unweighted(graph):
             raise ValueError("Model only implemented for unweighted graphs")
-
         p_mat = self.p_mat_.copy()
 
         # squish the probabilities that are degenerate
@@ -98,7 +103,11 @@ class BaseGraphEstimator(BaseEstimator):
 
     def score(self, graph):
         """
-        Compute the per-sample average log-likelihood of the given data X.
+        Compute the average log-likelihood over each potential edge of the 
+        given graph.
+
+        Note that this implicitly assumes the input graph is indexed like the 
+        fit model.
         """
         return np.sum(self.score_samples(graph))
 
