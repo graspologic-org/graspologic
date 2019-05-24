@@ -1,28 +1,23 @@
 import numpy as np
-from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_X_y
-from sklearn.utils.validation import check_is_fitted
 
 from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
-from ..simulations import sample_edges, sbm
 from ..utils import (
     augment_diagonal,
-    binarize,
     cartprod,
     import_graph,
-    is_almost_symmetric,
     is_unweighted,
     remove_loops,
     symmetrize,
 )
-from .base import BaseGraphEstimator, _calculate_p, _check_n_samples, _n_to_labels
+from .base import BaseGraphEstimator, _calculate_p
 
 
 def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kws):
-    if not isinstance(n_components, int) and not n_components is None:
+    if not isinstance(n_components, int) and n_components is not None:
         raise TypeError("n_components must be an int or None")
-    elif not n_components is None and n_components < 1:
+    elif n_components is not None and n_components < 1:
         raise ValueError("n_components must be > 0")
 
     if not isinstance(min_comm, int):
@@ -53,9 +48,9 @@ class SBEstimator(BaseGraphEstimator):
     the probability of an edge existing is specified by the block that nodes :math:`i`
     and :math:`j` belong to:
 
-    ::math::`P_{ij} = B_\{tau_i}\{tau_j}`
-    
-    where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\{tau}` is an :math:`n_nodes` 
+    :math:`P_{ij} = B_\{tau_i}\{tau_j}`
+
+    where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\tau` is an `n\_nodes` 
     length vector specifying which block each node belongs to. 
 
     Parameters
@@ -71,7 +66,8 @@ class SBEstimator(BaseGraphEstimator):
 
     References
     ----------
-
+    .. [1]  Holland, P. W., Laskey, K. B., & Leinhardt, S. (1983). Stochastic
+            blockmodels: First steps. Social networks, 5(2), 109-137.
     """
 
     def __init__(
@@ -184,7 +180,7 @@ class SBEstimator(BaseGraphEstimator):
         ----------
         n_samples : int (default 1), optional
             The number of graphs to sample 
-        
+
         Returns 
         -------
         graphs : np.array (n_samples, n_verts, n_verts)
@@ -225,6 +221,28 @@ class DCSBEstimator(BaseGraphEstimator):
     """
     Degree-corrected Stochastic Block Model
 
+    The degree-corrected stochastic block model (DCSBM) represents each node as 
+    belonging to a block (or community). For a given potential edge between node
+    :math:`i` and :math:`j`, the probability of an edge existing is specified by 
+    the block that nodes :math:`i` and :math:`j` belong to as in the SBM. However,
+    an additional "promiscuity" parameter :math:`\theta` is added for each node, 
+    allowing the vertices within a block to have heterogeneous expected degree 
+    distributions: 
+
+    :math:`P_{ij} = \theta_i \theta_j B_\{tau_i}\{tau_j}`
+
+    where :math:`B \in \mathbb{[0, 1]}^{K x K}` :math:`\tau` is an `n\_nodes` 
+    length vector specifying which block each node belongs to, and :math:`\theta`
+    is an `n\_nodes` length vector specifiying the degree correction for each
+    node. 
+
+    The `degree_directed` parameter of this model allows the degree correction 
+    parameter to be different for the in and out degree of each node:  
+
+    :math:`P_{ij} = \theta_i \eta_j B_\{tau_i}\{tau_j}`
+
+    where :math:`\theta` and :math:`\eta` need not be the same.
+        
     Parameters
     ----------
     directed : boolean, optional (default=True)
@@ -240,6 +258,17 @@ class DCSBEstimator(BaseGraphEstimator):
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
 
+    Notes
+    -----
+    Note that many examples in the literature describe the DCSBM as being sampled with a 
+    Poisson distribution. Here, we implement this model with a Bernoulli. When 
+    individual edge probabilities are relatively low these two distributions will yield 
+    similar results. 
+
+    References
+    ----------
+    .. [1]  Karrer, B., & Newman, M. E. (2011). Stochastic blockmodels and community
+            structure in networks. Physical review E, 83(1), 016107.
     """
 
     def __init__(

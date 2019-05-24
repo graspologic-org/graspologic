@@ -13,7 +13,7 @@ class EREstimator(SBEstimator):
     of any potential edge in the graph existing is the same for any two nodes :math:`i`
     and :math:`j`. 
 
-    ::math::`P_{ij} = p` for all i, j
+    :math:`P_{ij} = p` for all i, j
 
     Parameters
     ----------
