@@ -6,7 +6,11 @@ def load_drosophila_left(return_labels=False):
     """
     Load the left Drosophila larva mushroom body connectome
 
-    Optionally return cell type labels
+    The mushroom body is a learning and memory center in the fly 
+    brain which is involved in sensory integration and processing. 
+    This connectome was observed by electron microscopy and then
+    individial neurons were reconstructed; synaptic partnerships
+    between these neurons became the edges of the graph. 
 
     Parameters
     ----------
@@ -48,7 +52,11 @@ def load_drosophila_right(return_labels=False):
     """
     Load the right Drosophila larva mushroom body connectome
 
-    Optionally return cell type labels
+    The mushroom body is a learning and memory center in the fly 
+    brain which is involved in sensory integration and processing. 
+    This connectome was observed by electron microscopy and then
+    individial neurons were reconstructed; synaptic partnerships
+    between these neurons became the edges of the graph. 
 
     Parameters
     ----------
