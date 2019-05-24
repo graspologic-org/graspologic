@@ -111,14 +111,6 @@ class TestDCER:
 
     def test_DCER_sample(self):
         estimator = DCSBEstimator(directed=True, loops=False)
-        # p = 0.5
-        # dc = np.random.uniform(0.25, 0.75, size=400)
-        # labels = _n_to_labels([200, 200])
-
-        # p_mat = _block_to_full(B, labels, (400, 400))
-        # p_mat = p_mat * np.outer(dc, dc)
-        # p_mat -= np.diag(np.diag(p_mat))
-        # g = sample_edges(p_mat, directed=True)
         g = self.graph
         p_mat = self.p_mat
         with pytest.raises(NotFittedError):
