@@ -1,9 +1,15 @@
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose
-from graspy.models import EREstimator, DCSBEstimator, SBEstimator, RDPGEstimator
+from graspy.models import (
+    EREstimator,
+    DCSBEstimator,
+    SBEstimator,
+    RDPGEstimator,
+    DCEREstimator,
+)
 from graspy.simulations import er_np, sbm, sample_edges
-from graspy.utils import cartprod, is_symmetric
+from graspy.utils import cartprod
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
 
@@ -60,7 +66,79 @@ class TestER:
         assert self.estimator._n_parameters() == 1
 
 
-# TODO DCER
+class TestDCER:
+    @classmethod
+    def setup_class(cls):
+        np.random.seed(8888)
+        n = 1000
+        p = 0.5
+        dc = np.random.beta(2, 5, size=n)
+        p_mat = np.full((n, n), p)
+        p_mat = p_mat * np.outer(dc, dc)
+        p_mat -= np.diag(np.diag(p_mat))
+        graph = sample_edges(p_mat, directed=True, loops=False)
+        cls.p_mat = p_mat
+        cls.graph = graph
+
+    def test_DCER_score(self):
+        p_mat = self.p_mat
+        graph = self.graph
+        estimator = DCEREstimator()
+        _test_score(estimator, p_mat, graph)
+
+    def test_DCER_inputs(self):
+        with pytest.raises(TypeError):
+            DCEREstimator(directed="hey")
+
+        with pytest.raises(TypeError):
+            DCEREstimator(loops=6)
+
+        graph = er_np(100, 0.5)
+        dcere = DCEREstimator()
+
+        with pytest.raises(ValueError):
+            dcere.fit(graph[:, :99])
+
+        with pytest.raises(ValueError):
+            dcere.fit(graph[..., np.newaxis])
+
+    def test_DCER_fit(self):
+        graph = self.graph
+        p_mat = self.p_mat
+        dcsbe = DCSBEstimator(directed=True, loops=False)
+        dcsbe.fit(graph)
+        assert_allclose(p_mat, dcsbe.p_mat_, atol=0.12)
+
+    def test_DCER_sample(self):
+        estimator = DCSBEstimator(directed=True, loops=False)
+        # p = 0.5
+        # dc = np.random.uniform(0.25, 0.75, size=400)
+        # labels = _n_to_labels([200, 200])
+
+        # p_mat = _block_to_full(B, labels, (400, 400))
+        # p_mat = p_mat * np.outer(dc, dc)
+        # p_mat -= np.diag(np.diag(p_mat))
+        # g = sample_edges(p_mat, directed=True)
+        g = self.graph
+        p_mat = self.p_mat
+        with pytest.raises(NotFittedError):
+            estimator.sample()
+
+        estimator.fit(g)
+        with pytest.raises(ValueError):
+            estimator.sample(n_samples=-1)
+
+        with pytest.raises(TypeError):
+            estimator.sample(n_samples="nope")
+
+        _test_sample(estimator, p_mat, n_samples=1000, atol=0.2)
+
+    def test_DCER_nparams(self):
+        n_verts = 1000
+        graph = self.graph
+        e = DCEREstimator(directed=True)
+        e.fit(graph)
+        assert e._n_parameters() == (n_verts + 1)
 
 
 class TestSBM:
