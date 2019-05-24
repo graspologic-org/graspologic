@@ -1,8 +1,7 @@
 from .base import BaseGraphEstimator
 from ..embed import AdjacencySpectralEmbed
-from ..simulations import rdpg, p_from_latent, sample_edges
+from ..simulations import p_from_latent
 from ..utils import import_graph, augment_diagonal, is_unweighted
-import numpy as np
 
 
 class RDPGEstimator(BaseGraphEstimator):

@@ -40,7 +40,7 @@ def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kw
 
 
 class SBEstimator(BaseGraphEstimator):
-    """
+    r"""
     Stochastic Block Model 
 
     The stochastic block model (SBM) represents each node as belonging to a block 
@@ -63,6 +63,11 @@ class SBEstimator(BaseGraphEstimator):
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
+
+    See also
+    --------
+    graspy.models.DCSBEstimator
+    graspy.simulations.sbm
 
     References
     ----------
@@ -218,7 +223,7 @@ class SBEstimator(BaseGraphEstimator):
 
 
 class DCSBEstimator(BaseGraphEstimator):
-    """
+    r"""
     Degree-corrected Stochastic Block Model
 
     The degree-corrected stochastic block model (DCSBM) represents each node as 
@@ -257,6 +262,11 @@ class DCSBEstimator(BaseGraphEstimator):
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
+
+    See also
+    --------
+    graspy.models.SBEstimator
+    graspy.simulations.sbm
 
     Notes
     -----

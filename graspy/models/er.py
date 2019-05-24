@@ -26,9 +26,15 @@ class EREstimator(SBEstimator):
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
 
+    See also
+    --------
+    graspy.models.DCEREstimator
+    graspy.models.SBEstimator
+    graspy.simulations.er_np
+
     References
     ----------
-
+    .. [1] https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
     """
 
     def __init__(self, directed=True, loops=False):
@@ -51,8 +57,8 @@ class DCEREstimator(DCSBEstimator):
     Degree-corrected Erdos-Reyni Model 
 
     The Degree-corrected Erdos-Reyni (DCER) model is an extension of the ER model in 
-    which each node has an additional "promiscuity" parameter that determines its 
-    expected degree in the graph. 
+    which each node has an additional "promiscuity" parameter :math:`\theta_i` that 
+    determines its expected degree in the graph. 
 
     ::math::`P_{ij} = \theta_i \theta_j p`
 
@@ -67,10 +73,26 @@ class DCEREstimator(DCSBEstimator):
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
     degree_directed : boolean 
+        Whether to allow seperate degree correction parameters for the in and out degree
+        of each node. Ignored if `directed` is False.
+    
+    Notes
+    -----
+    The DCER model is rarely (if ever) mentioned in literature, though it is simply
+    a special case of the DCSBM where there is only one community.
+
+    See also
+    --------
+    graspy.models.DCSBEstimator
+    graspy.models.EREstimator
+    graspy.simulations.er_np
 
     References
     ----------
-    
+    .. [1] https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
+    .. [2]  Karrer, B., & Newman, M. E. (2011). Stochastic blockmodels and community
+            structure in networks. Physical review E, 83(1), 016107.
+
     """
 
     def __init__(self, directed=True, loops=False, degree_directed=False):

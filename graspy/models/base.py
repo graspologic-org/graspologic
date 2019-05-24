@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
-from ..utils import import_graph, is_almost_symmetric, binarize, is_unweighted
+from ..utils import import_graph, is_unweighted
 from ..simulations import sample_edges
 
 
