@@ -3,7 +3,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from graspy.models import EREstimator, DCSBEstimator, SBEstimator, RDPGEstimator
 from graspy.simulations import er_np, sbm, sample_edges
-from graspy.utils import cartprod
+from graspy.utils import cartprod, is_symmetric
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
 
@@ -14,6 +14,7 @@ class TestER:
         np.random.seed(8888)
         cls.graph = er_np(1000, 0.5)
         cls.p = 0.5
+        cls.p_mat = np.full((1000, 1000), 0.5)
         cls.estimator = EREstimator(directed=True, loops=False)
         cls.estimator.fit(cls.graph)
         cls.p_hat = cls.estimator.p_
@@ -49,19 +50,33 @@ class TestER:
         p_mat -= np.diag(np.diag(p_mat))
         _test_sample(estimator, p_mat)
 
-    def test_ER_score_sample(self):
-        return 1
-        # TODO
-
     def test_ER_score(self):
-        return 1
-        # TODO
+        p_mat = self.p_mat
+        graph = self.graph
+        estimator = EREstimator()
+        _test_score(estimator, p_mat, graph)
+
+    def test_ER_nparams(self):
+        assert self.estimator._n_parameters() == 1
 
 
 # TODO DCER
 
 
 class TestSBM:
+    @classmethod
+    def setup_class(cls):
+        estimator = SBEstimator(directed=True, loops=False)
+        B = np.array([[0.9, 0.1], [0.1, 0.9]])
+        g = sbm([50, 50], B, directed=True)
+        labels = _n_to_labels([50, 50])
+        p_mat = _block_to_full(B, labels, (100, 100))
+        p_mat -= np.diag(np.diag(p_mat))
+        cls.estimator = estimator
+        cls.p_mat = p_mat
+        cls.graph = g
+        cls.labels = labels
+
     def test_SBM_inputs(self):
         with pytest.raises(TypeError):
             SBEstimator(directed="hey")
@@ -142,12 +157,10 @@ class TestSBM:
         assert_allclose(p_mat, sbe.p_mat_, atol=0.12)
 
     def test_SBM_sample(self):
-        estimator = SBEstimator(directed=True, loops=False)
-        B = np.array([[0.9, 0.1], [0.1, 0.9]])
-        g = sbm([50, 50], B, directed=True)
-        labels = _n_to_labels([50, 50])
-        p_mat = _block_to_full(B, labels, (100, 100))
-        p_mat -= np.diag(np.diag(p_mat))
+        estimator = self.estimator
+        g = self.graph
+        p_mat = self.p_mat
+        labels = self.labels
         with pytest.raises(NotFittedError):
             estimator.sample()
 
@@ -170,6 +183,15 @@ class TestSBM:
         graph = sample_edges(p_mat)
         estimator = SBEstimator()
         _test_score(estimator, p_mat, graph)
+
+    def test_SBM_nparams(self):
+        e = self.estimator.fit(self.graph, y=self.labels)
+        assert e._n_parameters() == (1 + 4)
+        e.fit(self.graph)
+        assert e._n_parameters() == (1 + 4)
+        e = SBEstimator(directed=False)
+        e.fit(self.graph)
+        assert e._n_parameters() == (1 + 3)
 
 
 class TestDCSBM:
@@ -295,16 +317,43 @@ class TestDCSBM:
 
         _test_sample(estimator, p_mat, n_samples=3000, atol=0.2)
 
+    def test_DCSBM_nparams(self):
+        n_verts = 3000
+        n_class = 4
+        graph = self.g
+        labels = self.labels
+        e = DCSBEstimator(directed=True)
+        e.fit(graph)
+        assert e._n_parameters() == (n_verts + n_verts + n_class ** 2)
+
+        e = DCSBEstimator(directed=True)
+        e.fit(graph, y=labels)
+        assert e._n_parameters() == (n_verts + n_class ** 2)
+
+        e = DCSBEstimator(directed=True, degree_directed=True)
+        e.fit(graph, y=labels)
+        assert e._n_parameters() == (2 * n_verts + n_class ** 2)
+
+        e = DCSBEstimator(directed=False)
+        e.fit(graph, y=labels)
+        assert e._n_parameters() == (n_verts + 10)
+
 
 class TestRDPG:
     @classmethod
     def setup_class(cls):
         np.random.seed(8888)
-        cls.graph = er_np(1000, 0.5)
-        # cls.p = 0.5
-        # cls.estimator = EREstimator(directed=True, loops=False)
-        # cls.estimator.fit(cls.graph)
-        # cls.p_hat = cls.estimator.p_
+        n_verts = 500
+        point1 = np.array([0.1, 0.9])
+        point2 = np.array([0.9, 0.1])
+        latent1 = np.tile(point1, reps=(n_verts, 1))
+        latent2 = np.tile(point2, reps=(n_verts, 1))
+        latent = np.concatenate((latent1, latent2), axis=0)
+        p_mat = latent @ latent.T
+        p_mat -= np.diag(np.diag(p_mat))
+        g = sample_edges(p_mat)
+        cls.p_mat = p_mat
+        cls.graph = g
 
     def test_RDPG_intputs(self):
         rdpge = RDPGEstimator()
@@ -349,27 +398,28 @@ class TestRDPG:
         assert_allclose(estimator.p_mat_, p_mat, atol=0.2)
 
     def test_RDPG_sample(self):
-        np.random.seed(8888)
-        n_verts = 500
-        point1 = np.array([0.1, 0.9])
-        point2 = np.array([0.9, 0.1])
-        latent1 = np.tile(point1, reps=(n_verts, 1))
-        latent2 = np.tile(point2, reps=(n_verts, 1))
-        latent = np.concatenate((latent1, latent2), axis=0)
-        p_mat = latent @ latent.T
-        p_mat -= np.diag(np.diag(p_mat))
-        g = sample_edges(p_mat)
+        g = self.graph
+        p_mat = self.p_mat
         estimator = RDPGEstimator(n_components=2)
         estimator.fit(g)
         _test_sample(estimator, p_mat, atol=0.2, n_samples=200)
 
     def test_RDPG_score(self):
-        return 1
-        # TODO
+        p_mat = self.p_mat
+        graph = self.graph
+        estimator = RDPGEstimator()
+        _test_score(estimator, p_mat, graph)
 
-    def test_RDPG_score_sample(self):
-        return 1
-        # TODO
+    def test_RDPG_nparams(self):
+        n_verts = 1000
+        g = self.graph
+        e = RDPGEstimator(n_components=2)
+        e.fit(g)
+        assert e._n_parameters() == n_verts * 2
+        g[100:, 50:] = 1
+        e = RDPGEstimator(n_components=2)
+        e.fit(g)
+        assert e._n_parameters() == n_verts * 4
 
 
 def _n_to_labels(n):
@@ -409,7 +459,7 @@ def _test_score(estimator, p_mat, graph):
 
     g_rav = graph.ravel()
     p_rav = p_mat.ravel()
-    lik_rav = np.zeros_like(g_rav)
+    lik_rav = np.zeros(g_rav.shape)
     c = 1 / p_mat.size
     for i, (g, p) in enumerate(zip(g_rav, p_rav)):
         if p < c:
@@ -432,6 +482,3 @@ def hardy_weinberg(theta):
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
     return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
-
-
-pytest.main()
