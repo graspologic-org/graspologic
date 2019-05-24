@@ -57,6 +57,7 @@ class BaseGraphEstimator(BaseEstimator):
         bic : float
             The lower the better
         """
+        check_is_fitted(self, "p_mat_")
         return 2 * np.log(self.n_verts) * self._n_parameters() - 2 * self.score(graph)
 
     def mse(self, graph):
@@ -76,6 +77,7 @@ class BaseGraphEstimator(BaseEstimator):
         mse : float
             Mean square error for the model's fit P matrix
         """
+        check_is_fitted(self, "p_mat_")
         return np.linalg.norm(graph - self.p_mat_) ** 2
 
     def score_samples(self, graph):
@@ -85,6 +87,7 @@ class BaseGraphEstimator(BaseEstimator):
         Note that this implicitly assumes the input graph is indexed like the 
         fit model.
         """
+        check_is_fitted(self, "p_mat_")
         # P.ravel() <dot> graph * (1 - P.ravel()) <dot> (1 - graph)
         graph = import_graph(graph)
         if not is_unweighted(graph):
@@ -109,6 +112,7 @@ class BaseGraphEstimator(BaseEstimator):
         Note that this implicitly assumes the input graph is indexed like the 
         fit model.
         """
+        check_is_fitted(self, "p_mat_")
         return np.sum(self.score_samples(graph))
 
     @property
