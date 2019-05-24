@@ -40,7 +40,7 @@ def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kw
 
 
 class SBEstimator(BaseGraphEstimator):
-    r"""
+    """
     Stochastic Block Model 
 
     The stochastic block model (SBM) represents each node as belonging to a block 
