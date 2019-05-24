@@ -86,6 +86,16 @@ class BaseGraphEstimator(BaseEstimator):
 
         Note that this implicitly assumes the input graph is indexed like the 
         fit model.
+
+        Parameters
+        ----------
+        graph : np.ndarray
+            input graph
+
+        Returns
+        -------
+        sample_scores : np.ndarray (size of `graph`)
+            log-likelihood per potential edge in the graph
         """
         check_is_fitted(self, "p_mat_")
         # P.ravel() <dot> graph * (1 - P.ravel()) <dot> (1 - graph)
@@ -111,6 +121,16 @@ class BaseGraphEstimator(BaseEstimator):
 
         Note that this implicitly assumes the input graph is indexed like the 
         fit model.
+
+        Parameters
+        ----------
+        graph : np.ndarray
+            input graph
+
+        Returns
+        -------
+        score : float
+            sum of log-loglikelihoods for each potential edge in input graph
         """
         check_is_fitted(self, "p_mat_")
         return np.sum(self.score_samples(graph))
@@ -123,9 +143,8 @@ class BaseGraphEstimator(BaseEstimator):
     @abstractmethod
     def fit(self, graph, y=None):
         """
-        calculate the parameters for the given graph model 
+        Calculate the parameters for the given graph model 
         """
-
         return self
 
     def sample(self, n_samples=1):

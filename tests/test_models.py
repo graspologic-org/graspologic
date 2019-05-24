@@ -160,31 +160,16 @@ class TestSBM:
 
         _test_sample(estimator, p_mat)
 
-    # def test_SBM_score(self):
-    #     B = np.array([[0.75, 0.25], [0.25, 0.75]])
-    #     n_verts = 4
-    #     n = np.array([n_verts, n_verts])
-    #     tau = _n_to_labels(n)
-    #     p_mat = _block_to_full(B, tau, shape=(n_verts * 2, n_verts * 2))
-    #     g = sample_edges(p_mat)
-    #     estimator = SBEstimator()
-    #     estimator.fit(g, tau)
-    #     m11 = np.count_nonzero(B[:n_verts, :n_verts])
-    #     m12 = np.count_nonzero(B[:n_verts, n_verts:])
-    #     m21 = np.count_nonzero(B[n_verts:, :n_verts])
-    #     m22 = np.count_nonzero(B[n_verts:, n_verts:])
-    #     lik = np.zeros((n_verts, n_verts))
-    #     diag_mask = np.zeros_like(p_mat)
-    #     diag_mask[:n_verts, :n_verts] = 1
-    #     diag_mask[n_verts:, n_verts:] = 1
-    #     diag_mask = diag_mask.astype(bool)
-    #     lik[diag_mask][g[diag_mask] == 1] = 0.75
-    #     lik[diag_mask]
-    #     # lik = (m11 + m22) * np.log(0.75) + (m12 + m21) * np.log(0.25)
-    #     estimator.p_mat_ = p_mat
-    #     lik_hat = estimator.score_samples(g)
-    #     # assert_allclose(lik, lik_hat, rtol=0.01)
-    #     # TODO
+    def test_SBM_score(self):
+        # tests score() and score_sample()
+        B = np.array([[0.75, 0.25], [0.25, 0.75]])
+        n_verts = 4
+        n = np.array([n_verts, n_verts])
+        tau = _n_to_labels(n)
+        p_mat = _block_to_full(B, tau, shape=(n_verts * 2, n_verts * 2))
+        graph = sample_edges(p_mat)
+        estimator = SBEstimator()
+        _test_score(estimator, p_mat, graph)
 
 
 class TestDCSBM:
@@ -211,12 +196,10 @@ class TestDCSBM:
         cls.g = g
 
     def test_DCSBM_score(self):
-        # TODO need to write down an explicit example for what this should be
-        return 1
-
-    def test_DCSBM_score_samples(self):
-        # TODO
-        return 1
+        p_mat = self.p_mat
+        graph = self.g
+        estimator = DCSBEstimator()
+        _test_score(estimator, p_mat, graph)
 
     def test_DCSBM_fit_supervised(self):
         p_mat = self.p_mat
@@ -420,8 +403,35 @@ def _test_sample(estimator, p_mat, atol=0.1, n_samples=1000):
     assert_allclose(graph_mean, p_mat, atol=atol)
 
 
+def _test_score(estimator, p_mat, graph):
+    estimator.fit(graph)
+    estimator.p_mat_ = p_mat  # hack just for testing likelihood
+
+    g_rav = graph.ravel()
+    p_rav = p_mat.ravel()
+    lik_rav = np.zeros_like(g_rav)
+    c = 1 / p_mat.size
+    for i, (g, p) in enumerate(zip(g_rav, p_rav)):
+        if p < c:
+            p = c
+        if p > 1 - c:
+            p = 1 - c
+        if g == 1:
+            lik_rav[i] = p
+        else:
+            lik_rav[i] = 1 - p
+    lik = np.reshape(lik_rav, p_mat.shape)
+    lik[lik < 1e-10] = 1
+    lik = np.log(lik)
+    assert_allclose(lik, estimator.score_samples(graph))
+    assert np.sum(lik) == estimator.score(graph)
+
+
 def hardy_weinberg(theta):
     """
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
     return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
+
+
+pytest.main()
