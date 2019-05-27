@@ -14,7 +14,6 @@
 
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
-from scipy.spatial import procrustes
 
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
@@ -22,7 +21,7 @@ from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 
 
-class MatchedTest(BaseInference):
+class LatentPositionTest(BaseInference):
     r"""
     Two-sample hypothesis test for the problem of determining whether two random 
     dot product graphs have the same latent positions [1]_.
@@ -85,7 +84,7 @@ class MatchedTest(BaseInference):
 
     Examples
     --------
-    >>> spt = MatchedTest(n_components=2, test_case='rotation')
+    >>> spt = LatentPositionTest(n_components=2, test_case='rotation')
     >>> p = spt.fit(A1, A2)
 
     See also

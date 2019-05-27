@@ -19,10 +19,10 @@ from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 
 
-class UnmatchedTest(BaseInference):
+class LatentDistributionTest(BaseInference):
     """
     Two-sample hypothesis test for the problem of determining whether two random 
-    dot product graphs have the same latent positions [2]_.
+    dot product graphs have the same distributions of latent positions [2]_.
     
     This test can operate on two graphs where there is no known matching between
     the vertices of the two graphs, or even when the number of vertices is different. 
@@ -83,7 +83,7 @@ class UnmatchedTest(BaseInference):
 
     def _gaussian_covariance(self, X, Y):
         diffs = np.expand_dims(X, 1) - np.expand_dims(Y, 0)
-        if self.bandwidth == None:
+        if self.bandwidth is None:
             self.bandwidth = 0.5
         return np.exp(-0.5 * np.sum(diffs ** 2, axis=2) / self.bandwidth ** 2)
 

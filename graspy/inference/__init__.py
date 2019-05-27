@@ -1,4 +1,4 @@
-from .matched import MatchedTest
-from .unmatched import UnmatchedTest
+from .latent_position_test import LatentPositionTest
+from .latent_distribution_test import LatentDistributionTest
 
-__all__ = ["MatchedTest", "UnmatchedTest"]
+__all__ = ["LatentPositionTest", "LatentDistributionTest"]
