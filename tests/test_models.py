@@ -384,8 +384,8 @@ class TestDCSBM:
 
         with pytest.raises(TypeError):
             estimator.sample(n_samples="nope")
-
-        _test_sample(estimator, p_mat, n_samples=3000, atol=0.2)
+        estimator.p_mat_ = p_mat
+        _test_sample(estimator, p_mat, n_samples=1000, atol=0.1)
 
     def test_DCSBM_nparams(self):
         n_verts = 3000
