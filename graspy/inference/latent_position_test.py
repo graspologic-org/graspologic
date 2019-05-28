@@ -14,7 +14,6 @@
 
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
-from scipy.spatial import procrustes
 
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
@@ -22,12 +21,15 @@ from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 
 
-class SemiparametricTest(BaseInference):
+class LatentPositionTest(BaseInference):
     r"""
-    Two sample hypothesis test for the semiparametric problem of determining
-    whether two random dot product graphs have the same latent positions [1]_.
+    Two-sample hypothesis test for the problem of determining whether two random 
+    dot product graphs have the same latent positions [1]_.
 
-    Currently, the function only supports undirected graphs
+    This this test assumes that the two input graphs are vertex aligned, that is,
+    there is a known mapping between vertices in the two graphs and the input graphs
+    have their vertices sorted in the same order. Currently, the function only 
+    supports undirected graphs.
 
     Parameters
     ----------
@@ -78,12 +80,11 @@ class SemiparametricTest(BaseInference):
         The p value estimated from the null distributions from sample 1 and sample 2. 
 
     p_ : float 
-        The overall p value from the semiparametric test; this is the max of p_value_1_
-        and p_value_2_
+        The overall p value from the test; this is the max of p_value_1_ and p_value_2_
 
     Examples
     --------
-    >>> spt = SemiparametricTest(n_components=2, test_case='rotation')
+    >>> spt = LatentPositionTest(n_components=2, test_case='rotation')
     >>> p = spt.fit(A1, A2)
 
     See also

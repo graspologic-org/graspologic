@@ -6,6 +6,6 @@ Inference
 Two-graph hypothesis testing
 ----------------------------
 
-.. autoclass:: SemiparametricTest
+.. autoclass:: LatentPositionTest
 
-.. autoclass:: NonparametricTest
+.. autoclass:: LatentDistributionTest
