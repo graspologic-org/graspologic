@@ -251,7 +251,7 @@ class TestSBM:
         tau = _n_to_labels(n)
         p_mat = _block_to_full(B, tau, shape=(n_verts * 2, n_verts * 2))
         graph = sample_edges(p_mat)
-        estimator = SBEstimator()
+        estimator = SBEstimator(max_comm=4)
         _test_score(estimator, p_mat, graph)
 
     def test_SBM_nparams(self):
