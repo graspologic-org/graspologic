@@ -14,7 +14,6 @@
 
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
-from scipy.spatial import procrustes
 
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
@@ -114,7 +113,8 @@ class SemiparametricTest(BaseInference):
             )
         if test_case not in ["rotation", "scalar-rotation", "diagonal-rotation"]:
             raise ValueError(
-                "test_case must be one of 'rotation', 'scalar-rotation','diagonal-rotation'"
+                "test_case must be one of 'rotation', 'scalar-rotation',"
+                + "'diagonal-rotation'"
             )
 
         super().__init__(embedding=embedding, n_components=n_components)

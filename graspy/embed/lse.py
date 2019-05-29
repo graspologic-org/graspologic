@@ -15,17 +15,17 @@
 import warnings
 
 from .base import BaseEmbed
-from .svd import selectSVD
-from ..utils import import_graph, to_laplace, get_lcc, is_fully_connected
+from ..utils import import_graph, to_laplace, is_fully_connected
 
 
 class LaplacianSpectralEmbed(BaseEmbed):
     r"""
     Class for computing the laplacian spectral embedding of a graph 
     
-    The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation of 
-    the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce the dimensionality
-    to the specified k, or if k is unspecified, can find a number of dimensions automatically.
+    The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation
+    of the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce 
+    the dimensionality to the specified k, or if k is unspecified, can find a number
+    of dimensions automatically.
 
     Parameters
     ----------
@@ -90,11 +90,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     .. math:: A = U \Sigma V^T
 
-    is used to find an orthonormal basis for a matrix, which in our case is the Laplacian
-    matrix of the graph. These basis vectors (in the matrices U or V) are ordered according 
-    to the amount of variance they explain in the original matrix. By selecting a subset of these
-    basis vectors (through our choice of dimensionality reduction) we can find a lower dimensional 
-    space in which to represent the graph.
+    is used to find an orthonormal basis for a matrix, which in our case is the
+    Laplacian matrix of the graph. These basis vectors (in the matrices U or V) are 
+    ordered according to the amount of variance they explain in the original matrix. 
+    By selecting a subset of these basis vectors (through our choice of dimensionality
+    reduction) we can find a lower dimensional space in which to represent the graph.
 
     References
     ----------

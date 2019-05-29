@@ -40,7 +40,7 @@ def import_graph(graph):
     See Also
     --------
     networkx.Graph, numpy.array
-	"""
+    """
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif isinstance(graph, (np.ndarray, np.memmap)):
@@ -188,11 +188,11 @@ def symmetrize(graph, method="triu"):
         the graph with asymmetries removed.
     """
     # graph = import_graph(graph)
-    if method is "triu":
+    if method == "triu":
         graph = np.triu(graph)
-    elif method is "tril":
+    elif method == "tril":
         graph = np.tril(graph)
-    elif method is "avg":
+    elif method == "avg":
         graph = (np.triu(graph) + np.tril(graph)) / 2
     else:
         msg = "You have not passed a valid parameter for the method."
@@ -258,7 +258,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     L: numpy.ndarray
         2D (n_vertices, n_vertices) array representing graph 
         laplacian of specified form
-	
+
     References
     ----------
     .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
@@ -278,7 +278,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     # regularize laplacian with parameter
     # set to average degree
     if form == "R-DAD":
-        if regularizer == None:
+        if regularizer is None:
             regularizer = np.mean(D_vec)
         elif not isinstance(regularizer, (int, float)):
             raise TypeError(
