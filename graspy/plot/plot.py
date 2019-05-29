@@ -109,6 +109,8 @@ def heatmap(
     xticklabels=False,
     yticklabels=False,
     cmap="RdBu_r",
+    vmin=None,
+    vmax=None,
     center=0,
     cbar=True,
     inner_hier_labels=None,
@@ -150,6 +152,9 @@ def heatmap(
         If list-like, plot these alternate labels as the ticklabels.
     cmap : str, list of colors, or matplotlib.colors.Colormap, default: 'RdBu_r'
         Valid matplotlib color map.
+    vmin, vmax : floats, optional (default=None)
+        Values to anchor the colormap, otherwise they are inferred from the data and 
+        other keyword arguments.
     center : float, default: 0
         The value at which to center the colormap
     cbar : bool, default: True
@@ -230,6 +235,8 @@ def heatmap(
             center=center,
             cbar=cbar,
             ax=ax,
+            vmin=vmin,
+            vmax=vmax,
         )
         if title is not None:
             plot.set_title(title, pad=1.5 * font_scale + 1 * hier_label_fontsize + 30)
