@@ -103,6 +103,7 @@ class TestDCER:
             dcere.fit(graph[..., np.newaxis])
 
     def test_DCER_fit(self):
+        np.random.seed(8888)
         graph = self.graph
         p_mat = self.p_mat
         dcsbe = DCSBEstimator(directed=True, loops=False)
@@ -110,7 +111,8 @@ class TestDCER:
         assert_allclose(p_mat, dcsbe.p_mat_, atol=0.12)
 
     def test_DCER_sample(self):
-        estimator = DCSBEstimator(directed=True, loops=False)
+        np.random.seed(8888)
+        estimator = DCEREstimator(directed=True, loops=False)
         g = self.graph
         p_mat = self.p_mat
         with pytest.raises(NotFittedError):
@@ -122,7 +124,13 @@ class TestDCER:
 
         with pytest.raises(TypeError):
             estimator.sample(n_samples="nope")
-
+        B = 0.5
+        dc = np.random.uniform(0.25, 0.75, size=100)
+        p_mat = np.outer(dc, dc) * B
+        p_mat -= np.diag(np.diag(p_mat))
+        g = sample_edges(p_mat, directed=True)
+        estimator.fit(g)
+        estimator.p_mat_ = p_mat
         _test_sample(estimator, p_mat, n_samples=1000, atol=0.2)
 
     def test_DCER_nparams(self):
@@ -365,6 +373,7 @@ class TestDCSBM:
         assert_allclose(p_mat, dcsbe.p_mat_, atol=0.12)
 
     def test_DCSBM_sample(self):
+        np.random.seed(8888)
         estimator = DCSBEstimator(directed=True, loops=False)
         B = np.array([[0.9, 0.1], [0.1, 0.9]])
         dc = np.random.uniform(0.25, 0.75, size=100)
@@ -468,6 +477,7 @@ class TestRDPG:
         assert_allclose(estimator.p_mat_, p_mat, atol=0.2)
 
     def test_RDPG_sample(self):
+        np.random.seed(8888)
         g = self.graph
         p_mat = self.p_mat
         estimator = RDPGEstimator(n_components=2)
