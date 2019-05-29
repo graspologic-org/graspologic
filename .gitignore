@@ -111,16 +111,11 @@ venv.bak/
 dmypy.json
 
 # misc
+notebooks
 .vscode/
 docs/bpedigo/ase_clustering.py
-notebooks/bvarjav1/921/sub-NDARAA075AMK_task-rest_bold.nii
 *.pickle
-notebooks/bpedigo/emmons/SI 3 Synapse lists.xlsx
-notebooks/bpedigo/emmons/*.xls
-notebooks/bpedigo/emmons/*.csv
-notebooks/bpedigo/diag_procrust.py
 /graspy-env
-notebooks/bpedigo/new_pairs.py
 *.code-workspace
 *.png
 
