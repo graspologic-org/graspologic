@@ -388,7 +388,7 @@ def gridplot(
         plot.ax.axis("off")
         plot.ax.invert_yaxis()
         if title is not None:
-            plot.set(title=title)
+            plt.title(title, pad=1.5 * font_scale + 1 * hier_label_fontsize + 30)
     if inner_hier_labels is not None:
         if outer_hier_labels is not None:
             _plot_groups(
