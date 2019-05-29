@@ -230,7 +230,7 @@ def heatmap(
             ax=ax,
         )
         if title is not None:
-            plot.set_title(title)
+            plot.set_title(title, pad=1.5 * font_scale + 1 * hier_label_fontsize + 30)
         if inner_hier_labels is not None:
             if outer_hier_labels is not None:
                 plot.set_yticklabels([])
