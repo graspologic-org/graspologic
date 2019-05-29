@@ -239,7 +239,11 @@ def heatmap(
             vmax=vmax,
         )
         if title is not None:
-            plot.set_title(title, pad=1.5 * font_scale + 1 * hier_label_fontsize + 30)
+            if inner_hier_labels is not None:
+                pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
+            else:
+                pad = 1.5 * font_scale + 15
+            plot.set_title(title, pad=pad)
         if inner_hier_labels is not None:
             if outer_hier_labels is not None:
                 plot.set_yticklabels([])
@@ -397,7 +401,11 @@ def gridplot(
         plot.ax.axis("off")
         plot.ax.invert_yaxis()
         if title is not None:
-            plt.title(title, pad=1.5 * font_scale + 1 * hier_label_fontsize + 30)
+            if inner_hier_labels is not None:
+                pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
+            else:
+                pad = 1.5 * font_scale + 15
+            plt.title(title, pad=pad)
     if inner_hier_labels is not None:
         if outer_hier_labels is not None:
             _plot_groups(
