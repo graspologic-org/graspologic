@@ -367,10 +367,10 @@ class TestDCSBM:
     def test_DCSBM_sample(self):
         estimator = DCSBEstimator(directed=True, loops=False)
         B = np.array([[0.9, 0.1], [0.1, 0.9]])
-        dc = np.random.uniform(0.25, 0.75, size=400)
-        labels = _n_to_labels([200, 200])
+        dc = np.random.uniform(0.25, 0.75, size=100)
+        labels = _n_to_labels([50, 50])
 
-        p_mat = _block_to_full(B, labels, (400, 400))
+        p_mat = _block_to_full(B, labels, (100, 100))
         p_mat = p_mat * np.outer(dc, dc)
         p_mat -= np.diag(np.diag(p_mat))
         g = sample_edges(p_mat, directed=True)
