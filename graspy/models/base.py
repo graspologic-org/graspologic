@@ -172,9 +172,12 @@ class BaseGraphEstimator(BaseEstimator):
         _check_n_samples(n_samples)
         n_verts = self.p_mat_.shape[0]
         graphs = np.zeros((n_samples, n_verts, n_verts))
+        p_mat = self.p_mat_.copy()
+        p_mat[p_mat > 1] = 1
+        p_mat[p_mat < 0] = 0
         for i in range(n_samples):
             graphs[i, :, :] = sample_edges(
-                self.p_mat_, directed=self.directed, loops=self.loops
+                p_mat, directed=self.directed, loops=self.loops
             )
         return graphs
 
