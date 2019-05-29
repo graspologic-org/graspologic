@@ -123,3 +123,5 @@ notebooks/bpedigo/diag_procrust.py
 notebooks/bpedigo/new_pairs.py
 *.code-workspace
 *.png
+notebooks/bpedigo/ConnMatrixPre.mat
+notebooks/bpedigo/ashwin.py
