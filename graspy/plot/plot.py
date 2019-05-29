@@ -15,6 +15,7 @@
 from operator import itemgetter
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import Colormap
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -147,7 +148,7 @@ def heatmap(
         elements.
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
-    cmap : str, default: 'RdBu_r'
+    cmap : str, list of colors, or matplotlib.colors.Colormap, default: 'RdBu_r'
         Valid matplotlib color map.
     center : float, default: 0
         The value at which to center the colormap
@@ -186,8 +187,9 @@ def heatmap(
         raise TypeError(msg)
 
     # Handle cmap
-    if not isinstance(cmap, str):
-        msg = "cmap must be a string, not {}.".format(type(cmap))
+    if not isinstance(cmap, (str, list, Colormap)):
+        msg = "cmap must be a string, list of colors, or matplotlib.colors.Colormap,"
+        msg += " not {}.".format(type(cmap))
         raise TypeError(msg)
 
     # Handle center
