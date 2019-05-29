@@ -241,7 +241,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     else:
         # use upper-triangle indices, and ignore diagonal according
         # to loops argument
-        idx = np.triu_indices(n, k=int(loops == False))
+        idx = np.triu_indices(n, k=int(loops is False))
 
     # get idx in 1d coordinates by ravelling
     triu = np.ravel_multi_index(idx, A.shape)
@@ -306,9 +306,9 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
             Each function will generate the degree distribution for its respective 
             community. 
         - array-like of scalars, shape (n_vertices): 
-            The weights in each block should sum to 1; otherwise, they will be normalized
-            and a warning will be thrown. The scalar associated with each vertex is the 
-            node's relative expected degree within its community. 
+            The weights in each block should sum to 1; otherwise, they will be 
+            normalized and a warning will be thrown. The scalar associated with each
+            vertex is the node's relative expected degree within its community. 
     
     dc_kws: dictionary or array-like, shape (n_communities), optional
         Ignored if `dc` is none or array of scalar.
@@ -422,9 +422,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
             msg = "There are non-numeric elements in dc, {}".format(dcProbs.dtype)
             raise ValueError(msg)
         elif dcProbs.shape != (sum(n),):
-            msg = "dc must have size equal to the number of vertices {0}, not {1}".format(
-                sum(n), dcProbs.shape
-            )
+            msg = "dc must have size equal to the number of"
+            msg += " vertices {0}, not {1}".format(sum(n), dcProbs.shape)
             raise ValueError(msg)
         elif np.any(dcProbs < 0):
             msg = "Values in dc cannot be negative."
@@ -453,9 +452,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
                 )
                 raise TypeError(msg)
         elif not len(dc_kws) == len(n):
-            msg = "dc_kws must have size equal to the number of blocks {0}, not {1}".format(
-                len(n), len(dc_kws)
-            )
+            msg = "dc_kws must have size equal to"
+            msg += " the number of blocks {0}, not {1}".format(len(n), len(dc_kws))
             raise ValueError(msg)
         elif not all(type(kw) == dict for kw in dc_kws):
             msg = "dc_kws elements must all be of type dict"
@@ -472,9 +470,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         for indices in cmties:
             dcProbs[indices] /= sum(dcProbs[indices])
     elif dc is not None:
-        msg = "dc must be a function or a list or np.array of numbers or callable functions, not {}".format(
-            type(dc)
-        )
+        msg = "dc must be a function or a list or np.array of numbers or callable"
+        msg += " functions, not {}".format(type(dc))
         raise ValueError(msg)
 
     # End Checks, begin simulation
@@ -499,9 +496,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
                 # (v1,v2) connected with probability p*k_i*k_j*dcP[v1]*dcP[v2]
                 num_edges = sum(pchoice < block_p)
                 edge_dist = dcProbs[cprod[:, 0]] * dcProbs[cprod[:, 1]]
-                # If the number edges greater than support of dc distribution, pick fewer edges
+                # If n_edges greater than support of dc distribution, pick fewer edges
                 if num_edges > sum(edge_dist > 0):
-                    msg = "More edges sampled than nonzero pairwise dc entries. Picking fewer edges"
+                    msg = "More edges sampled than nonzero pairwise dc entries."
+                    msg += " Picking fewer edges"
                     warnings.warn(msg, UserWarning)
                     num_edges = sum(edge_dist > 0)
                 triu = np.random.choice(
@@ -553,9 +551,9 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
     loops: boolean, optional (default=True)
-        If False, no edges will be sampled in the diagonal. Diagonal elements in P matrix
-        are removed prior to rescaling (see above) which may affect behavior. Otherwise,
-        edges are sampled in the diagonal.
+        If False, no edges will be sampled in the diagonal. Diagonal elements in P 
+        matrix are removed prior to rescaling (see above) which may affect behavior.
+        Otherwise, edges are sampled in the diagonal.
     wt: object, optional (default=1)
         Weight function for each of the edges, taking only a size argument. 
         This weight function will be randomly assigned for selected edges. 

@@ -30,9 +30,6 @@ class BaseInference(BaseEstimator):
         'ase'
             Embed each graph separately using adjacency spectral embedding
             and use Procrustes to align the embeddings.
-        'lse'
-            Embed each graph separately using laplacian spectral embedding
-            and use Procrustes to align the embeddings.
         'omnibus'
             Embed all graphs simultaneously using omnibus embedding.
 
@@ -48,7 +45,7 @@ class BaseInference(BaseEstimator):
             n_components is not None
         ):
             raise TypeError("n_components must be int or np.integer")
-        if embedding not in ["ase", "lse", "omnibus"]:
+        if embedding not in ["ase", "omnibus"]:
             raise ValueError("{} is not a valid embedding method.".format(embedding))
         if n_components is not None and n_components <= 0:
             raise ValueError(
@@ -75,15 +72,6 @@ class BaseInference(BaseEstimator):
         X2_hat : array-like, shape(n_vertices, n_components)
             Estimated latent positions of X2
         """
-        if embedding == "omnibus":
-            pass
-        elif embedding == "ase":
-            pass
-        elif embedding == "lse":
-            pass
-        else:
-            msg = "{} is not a valid embedding method.".format(embedding)
-            raise ValueError(msg)
 
     @abstractmethod
     def fit(self, A1, A2):

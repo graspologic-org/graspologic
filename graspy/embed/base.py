@@ -16,10 +16,9 @@ from abc import abstractmethod
 
 import numpy as np
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import check_is_fitted
 
 from .svd import selectSVD
-from ..utils import import_graph, is_almost_symmetric
+from ..utils import is_almost_symmetric
 
 
 class BaseEmbed(BaseEstimator):
