@@ -1,3 +1,5 @@
+import numpy as np
+
 from .base import BaseGraphEstimator
 from ..embed import AdjacencySpectralEmbed
 from ..simulations import p_from_latent
@@ -102,9 +104,11 @@ class RDPGEstimator(BaseGraphEstimator):
             Y = self.latent_[1]
         else:
             X = self.latent_
-            Y = None
-        self.p_mat_ = p_from_latent(X, Y, rescale=False, loops=self.loops)
-
+            Y = self.latent_
+        p_mat = X @ Y.T
+        if not self.loops:
+            p_mat -= np.diag(np.diag(p_mat))
+        self.p_mat_ = p_mat
         return self
 
     def _n_parameters(self):

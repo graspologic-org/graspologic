@@ -171,7 +171,8 @@ class SBEstimator(BaseGraphEstimator):
             n_parameters += n_blocks ** 2
         else:
             n_parameters += n_blocks * (n_blocks + 1) / 2
-        n_parameters += n_blocks - 1
+        if hasattr(self, "vertex_assignments_"):
+            n_parameters += n_blocks - 1
         return n_parameters
 
 
@@ -342,8 +343,7 @@ class DCSBEstimator(BaseGraphEstimator):
         else:
             n_parameters += n_blocks * (n_blocks + 1) / 2  # Undirected B matrix
         if hasattr(self, "vertex_assignments_"):
-            # TODO other models where we sample a block comm and a dc
-            n_parameters += self.vertex_assignments_.size
+            n_parameters += n_blocks - 1
         n_parameters += self.degree_corrections_.size
         return n_parameters
 

@@ -264,9 +264,10 @@ class TestSBM:
 
     def test_SBM_nparams(self):
         e = self.estimator.fit(self.graph, y=self.labels)
-        assert e._n_parameters() == (1 + 4)
+        assert e._n_parameters() == (4)
+        e = SBEstimator()
         e.fit(self.graph)
-        assert e._n_parameters() == (1 + 4)
+        assert e._n_parameters() == (4 + 1)
         e = SBEstimator(directed=False)
         e.fit(self.graph)
         assert e._n_parameters() == (1 + 3)
@@ -403,7 +404,7 @@ class TestDCSBM:
         labels = self.labels
         e = DCSBEstimator(directed=True)
         e.fit(graph)
-        assert e._n_parameters() == (n_verts + n_verts + n_class ** 2)
+        assert e._n_parameters() == (n_verts + n_class - 1 + n_class ** 2)
 
         e = DCSBEstimator(directed=True)
         e.fit(graph, y=labels)
