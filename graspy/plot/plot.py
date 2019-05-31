@@ -34,6 +34,8 @@ def _check_common_inputs(
     context=None,
     font_scale=None,
     legend_name=None,
+    title_pad=None,
+    hier_label_fontsize=None,
 ):
     # Handle figsize
     if figsize is not None:
@@ -79,6 +81,18 @@ def _check_common_inputs(
             msg = "legend_name must be a string, not {}.".format(type(legend_name))
             raise TypeError(msg)
 
+    if hier_label_fontsize is not None:
+        if not isinstance(hier_label_fontsize, (int, float)):
+            msg = "hier_label_fontsize must be a scalar, not {}.".format(
+                type(legend_name)
+            )
+            raise TypeError(msg)
+
+    if title_pad is not None:
+        if not isinstance(title_pad, (int, float)):
+            msg = "title_pad must be a scalar, not {}.".format(type(legend_name))
+            raise TypeError(msg)
+
 
 def _transform(arr, method):
     if method is not None:
@@ -116,6 +130,8 @@ def heatmap(
     inner_hier_labels=None,
     outer_hier_labels=None,
     hier_label_fontsize=30,
+    ax=None,
+    title_pad=None,
 ):
     r"""
     Plots a graph as a heatmap.
@@ -169,9 +185,19 @@ def heatmap(
     hier_label_fontsize : int
         size (in points) of the text labels for the `inner_hier_labels` and 
         `outer_hier_labels`.
+    ax : matplotlib Axes, optional
+        Axes in which to draw the plot, otherwise will generate its own axes
+    title_pad : int, float or None, optional (default=None)
+        Custom padding to use for the distance of the title from the heatmap. Autoscales
+        if `None`
     """
     _check_common_inputs(
-        figsize=figsize, title=title, context=context, font_scale=font_scale
+        figsize=figsize,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+        hier_label_fontsize=hier_label_fontsize,
+        title_pad=title_pad,
     )
 
     # Handle ticklabels
@@ -224,7 +250,8 @@ def heatmap(
     CBAR_KWS = dict(shrink=0.7, norm=colors.NoNorm)
 
     with sns.plotting_context(context, font_scale=font_scale):
-        fig, ax = plt.subplots(figsize=figsize)
+        if ax is None:
+            fig, ax = plt.subplots(figsize=figsize)
         plot = sns.heatmap(
             arr,
             cmap=cmap,
@@ -239,11 +266,12 @@ def heatmap(
             vmax=vmax,
         )
         if title is not None:
-            if inner_hier_labels is not None:
-                pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
-            else:
-                pad = 1.5 * font_scale + 15
-            plot.set_title(title, pad=pad)
+            if title_pad is None:
+                if inner_hier_labels is not None:
+                    title_pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
+                else:
+                    title_pad = 1.5 * font_scale + 15
+            plot.set_title(title, pad=title_pad)
         if inner_hier_labels is not None:
             if outer_hier_labels is not None:
                 plot.set_yticklabels([])
@@ -275,6 +303,7 @@ def gridplot(
     inner_hier_labels=None,
     outer_hier_labels=None,
     hier_label_fontsize=30,
+    title_pad=None,
 ):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
@@ -330,9 +359,17 @@ def gridplot(
     hier_label_fontsize : int
         size (in points) of the text labels for the `inner_hier_labels` and 
         `outer_hier_labels`.
+    title_pad : int, float or None, optional (default=None)
+        Custom padding to use for the distance of the title from the heatmap. Autoscales
+        if `None`
     """
     _check_common_inputs(
-        height=height, title=title, context=context, font_scale=font_scale
+        height=height,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+        hier_label_fontsize=hier_label_fontsize,
+        title_pad=title_pad,
     )
 
     if isinstance(X, list):
@@ -401,11 +438,12 @@ def gridplot(
         plot.ax.axis("off")
         plot.ax.invert_yaxis()
         if title is not None:
-            if inner_hier_labels is not None:
-                pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
-            else:
-                pad = 1.5 * font_scale + 15
-            plt.title(title, pad=pad)
+            if title_pad is None:
+                if inner_hier_labels is not None:
+                    title_pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
+                else:
+                    title_pad = 1.5 * font_scale + 15
+            plt.title(title, pad=title_pad)
     if inner_hier_labels is not None:
         if outer_hier_labels is not None:
             _plot_groups(
