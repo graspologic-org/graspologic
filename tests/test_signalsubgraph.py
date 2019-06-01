@@ -12,6 +12,7 @@ class TestVertexScreener(unittest.TestCase):
     def setup_class(cls):
         # create a graph where the first 20
         # vertices are the signal  vertices
+        np.random.seed(0)
         K = 2
         sample_size = 200
         cls.n = [20, 80]
@@ -30,10 +31,10 @@ class TestVertexScreener(unittest.TestCase):
         classifier.fit(self.graphs, self.y)
 
         true_verticesofinterest = np.arange(20)
-        print(classifier.vertices_of_interest)
+        print(classifier.vertices_of_interest_)
         print(true_verticesofinterest)
         self.assertTrue(
-            checkEqual(classifier.vertices_of_interest, true_verticesofinterest)
+            checkEqual(classifier.vertices_of_interest_, true_verticesofinterest)
         )
 
 

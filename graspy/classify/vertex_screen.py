@@ -13,7 +13,7 @@ class VertexScreener(BaseSignalSubgraph):
     def fit(self, graphs, y):
         self._vertices, self._ts = self._screen_vertices(graphs, y)
         num_vertices_ = np.array([len(i) for i in self._vertices], dtype="int")
-        self.vertices_of_interest = self._vertices[
+        self.vertices_of_interest_ = self._vertices[
             np.nonzero(num_vertices_ == self.num_vertices)[0][0]
         ]
         return self
@@ -59,8 +59,9 @@ class VertexScreener(BaseSignalSubgraph):
         return V, ts
 
     def _fit_transform(self, graphs, y):
-        self.fit(graphs,y)
-        return self.vertices_of_interest
+        self.fit(graphs, y)
+        return graphs[:, self.vertices_of_interest_, self.vertices_of_interest_]
+        # return self.vertices_of_interest_
 
     def fit_transform(self, graphs, y):
         return self._fit_transform(graphs, y)

@@ -4,8 +4,6 @@
 
 from abc import ABC, abstractmethod
 
-import numpy as np
-
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import adjusted_rand_score
 from sklearn.utils.validation import check_is_fitted
