@@ -428,7 +428,7 @@ def pairplot(
     ----------
     X : array-like, shape (n_samples, n_features)
         Input data.
-    Y : array-like or list, shape (n_samples), optional
+    labels : array-like or list, shape (n_samples), optional
         Labels that correspond to each sample in X.
     col_names : array-like or list, shape (n_features), optional
         Names or labels for each feature in X. If not provided, the default 
