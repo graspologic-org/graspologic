@@ -115,7 +115,8 @@ class LatentPositionTest(BaseInference):
             )
         if test_case not in ["rotation", "scalar-rotation", "diagonal-rotation"]:
             raise ValueError(
-                "test_case must be one of 'rotation', 'scalar-rotation','diagonal-rotation'"
+                "test_case must be one of 'rotation', 'scalar-rotation',"
+                + "'diagonal-rotation'"
             )
 
         super().__init__(embedding=embedding, n_components=n_components)

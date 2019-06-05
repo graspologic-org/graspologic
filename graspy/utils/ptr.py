@@ -64,8 +64,8 @@ def pass_to_ranks(graph, method="simple-nonzero"):
 
     if graph.min() < 0:
         raise UserWarning(
-            "Current pass-to-ranks on graphs with "
-            + "negative weights will yield nonsensical results, especially for zero-boost"
+            "Current pass-to-ranks on graphs with negative"
+            + " weights will yield nonsensical results, especially for zero-boost"
         )
 
     if method == "zero-boost":

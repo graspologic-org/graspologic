@@ -16,7 +16,6 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
-from sklearn.utils.validation import check_is_fitted
 from sklearn.model_selection import ParameterGrid
 
 from .base import BaseCluster
@@ -76,9 +75,9 @@ class GaussianCluster(BaseCluster):
         given by range(min_components, max_components + 1) and all covariance
         structures given by covariance_type.
     ari_ : pandas.DataFrame
-        Only computed when y is given. Pandas Dataframe containing ARI values computed for 
-        all possible number of clusters given by range(min_components, max_components) and all
-        covariance structures given by covariance_type.
+        Only computed when y is given. Pandas Dataframe containing ARI values computed
+        for all possible number of clusters given by range(min_components,
+        max_components) and all covariance structures given by covariance_type.
     """
 
     def __init__(
@@ -116,7 +115,7 @@ class GaussianCluster(BaseCluster):
         elif isinstance(covariance_type, list):
             covariance_type = np.unique(covariance_type)
         elif isinstance(covariance_type, str):
-            if covariance_type is "all":
+            if covariance_type == "all":
                 covariance_type = ["spherical", "diag", "tied", "full"]
             else:
                 covariance_type = [covariance_type]
@@ -127,7 +126,10 @@ class GaussianCluster(BaseCluster):
 
         for cov in covariance_type:
             if cov not in ["spherical", "diag", "tied", "full"]:
-                msg = 'covariance structure must be one of ["spherical", "diag", "tied", "full"]'
+                msg = (
+                    "covariance structure must be one of "
+                    + '["spherical", "diag", "tied", "full"]'
+                )
                 msg += " not {}".format(cov)
                 raise ValueError(msg)
 
@@ -175,19 +177,17 @@ class GaussianCluster(BaseCluster):
 
         if upper_ncomponents > X.shape[0]:
             if self.max_components is None:
-                msg = "if max_components is None then min_components must be >= n_samples, "
-                msg += "but min_components = {}, n_samples = {}".format(
+                msg = "if max_components is None then min_components must be >= "
+                msg += "n_samples, but min_components = {}, n_samples = {}".format(
                     upper_ncomponents, X.shape[0]
                 )
             else:
-                msg = "max_components must be >= n_samples, but max_components = {}, n_samples = {}".format(
-                    upper_ncomponents, X.shape[0]
-                )
+                msg = "max_components must be >= n_samples, but max_components = "
+                msg += "{}, n_samples = {}".format(upper_ncomponents, X.shape[0])
             raise ValueError(msg)
         elif lower_ncomponents > X.shape[0]:
-            msg = "min_components must be <= n_samples, but min_components = {}, n_samples = {}".format(
-                upper_ncomponents, X.shape[0]
-            )
+            msg = "min_components must be <= n_samples, but min_components = "
+            msg += "{}, n_samples = {}".format(upper_ncomponents, X.shape[0])
             raise ValueError(msg)
 
         # Get parameters
