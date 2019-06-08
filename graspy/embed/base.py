@@ -98,7 +98,6 @@ class BaseEmbed(BaseEstimator):
         )
 
         self.n_components_ = D.size
-
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
         if not is_almost_symmetric(A):
@@ -168,3 +167,64 @@ class BaseEmbed(BaseEstimator):
             for a directed graph
         """
         return self._fit_transform(graph)
+
+
+class BaseEmbedMulti(BaseEmbed):
+    def __init__(
+        self,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        check_lcc=True,
+    ):
+        super().__init__(
+            n_components=n_components,
+            n_elbows=n_elbows,
+            algorithm=algorithm,
+            n_iter=n_iter,
+            check_lcc=check_lcc,
+        )
+
+    def _check_input_graphs(self, graphs):
+        """
+        Checks if all graphs in list have same shapes.
+
+        Raises an ValueError if there are more than one shape in the input list,
+        or if the list is empty or has one element.
+
+        Parameters
+        ----------
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
+
+        y : Ignored
+
+        Returns
+        -------
+        out : ndarray, shape (n_graphs, n_vertices, n_vertices) 
+
+        Raises
+        ------
+        ValueError
+            If all graphs do not have same shape, or input list is empty or has 
+            one element.
+        """
+        # Convert input to np.arrays
+        # This check is needed because np.stack will always duplicate array in memory.
+        if isinstance(graphs, (list, tuple)):
+            out = [import_graph(g) for g in graphs]
+            # out = np.stack(out)
+        elif isinstance(graphs, np.ndarray):
+            out = import_graph(graphs)
+        else:
+            msg = "Input must be a list or ndarray, not {}.".format(type(graphs))
+            raise TypeError(msg)
+
+        # Save attributes
+        self.n_graphs_ = len(out)
+        self.n_vertices_ = out[0].shape[0]
+
+        return out
