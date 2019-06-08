@@ -17,7 +17,7 @@ import warnings
 import numpy as np
 
 from ..utils import import_graph, is_fully_connected
-from .base import BaseEmbed
+from .base import BaseEmbedMulti
 
 
 def _get_omni_matrix(graphs):
