@@ -12,10 +12,6 @@ def test_inputs():
     # Generate random data
     X = np.random.normal(0, 1, size=(100, 3))
 
-    # empty constructor
-    with pytest.raises(TypeError):
-        gclust = GaussianCluster()
-
     # min_components < 1
     with pytest.raises(ValueError):
         gclust = GaussianCluster(min_components=0)

@@ -1,9 +1,9 @@
 import unittest
-import graspy as gs
 import numpy as np
 import networkx as nx
 from graspy.utils import utils as gus
 from math import sqrt
+from numpy.testing import assert_equal
 
 
 class TestInput(unittest.TestCase):
@@ -38,7 +38,7 @@ class TestInput(unittest.TestCase):
 class TestToLaplace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.A = A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+        cls.A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
     def test_to_laplace_IDAD(self):
         expected_L_normed = [
@@ -392,3 +392,10 @@ class TestDiagonalAugment(unittest.TestCase):
         A = np.array([0, 1])
         with self.assertRaises(ValueError):
             gus.get_lcc(A)
+
+
+def test_binarize():
+    g = np.array([[1, 2], [1, 1]])
+    g2 = gus.binarize(g)
+    g2_expected = np.ones_like(g)
+    assert_equal(g2, g2_expected)

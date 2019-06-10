@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -210,9 +211,10 @@ def heatmap(
         else:
             outer_hier_labels = np.array(outer_hier_labels)
             arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels)
-
+    else:
+        arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]))
     # Global plotting settings
-    CBAR_KWS = dict(shrink=0.7, norm=colors.NoNorm)
+    CBAR_KWS = dict(shrink=0.7)  # norm=colors.Normalize(vmin=0, vmax=1))
 
     with sns.plotting_context(context, font_scale=font_scale):
         fig, ax = plt.subplots(figsize=figsize)
@@ -227,6 +229,7 @@ def heatmap(
             cbar=cbar,
             ax=ax,
         )
+
         if title is not None:
             plot.set_title(title)
         if inner_hier_labels is not None:

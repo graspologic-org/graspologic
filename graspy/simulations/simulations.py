@@ -13,16 +13,9 @@
 # limitations under the License.
 
 import numpy as np
+
+from ..utils import symmetrize, cartprod
 import warnings
-
-from ..utils import symmetrize
-
-
-def cartprod(*arrays):
-    N = len(arrays)
-    return np.transpose(
-        np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
-    ).reshape(-1, N)
 
 
 def sample_edges(P, directed=False, loops=False):
@@ -329,7 +322,6 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
-        
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -416,7 +408,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     elif isinstance(dc, (list, np.ndarray)) and np.issubdtype(
         np.array(dc).dtype, np.number
     ):
-        dcProbs = np.array(dc)
+        dcProbs = np.array(dc, dtype=float)
         # Check size and element types
         if not np.issubdtype(dcProbs.dtype, np.number):
             msg = "There are non-numeric elements in dc, {}".format(dcProbs.dtype)
@@ -467,8 +459,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
             ],
             dtype="float",
         )
+        # dcProbs = dcProbs.astype(float)
         for indices in cmties:
             dcProbs[indices] /= sum(dcProbs[indices])
+            # dcProbs[indices] = dcProbs / dcProbs[indices].sum()
     elif dc is not None:
         msg = "dc must be a function or a list or np.array of numbers or callable"
         msg += " functions, not {}".format(type(dc))
