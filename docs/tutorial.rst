@@ -2,10 +2,20 @@
 Tutorial
 ********
 
+Models
+======
+The following tutorials present several random graph models: the Erdos-Renyi (ER) model, degree-corrected ER model,
+stochastic block model (SBM), degree-corrected SBM, and random dot product graph model. These models provide a basis for studying random graphs. All models are shown fit to the same dataset.
+
+.. toctree::
+   :maxdepth: 1
+   
+   tutorials/models/models
+   
 Simulations
 ===========
-The following tutorials present several random graph models, such as Erdos-Renyi model, 
-stochastic block model, and random dot product graph (RDPG) model. These models provide a basis for studying random graphs.
+The following tutorials demonstrate how to easily sample random graphs from graph models such as the Erdos-Renyi model, 
+stochastic block model, and random dot product graph (RDPG).
 
 .. toctree::
    :maxdepth: 1
@@ -23,7 +33,7 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
    
    tutorials/embedding/AdjacencySpectralEmbed
    tutorials/embedding/Omnibus
-
+   
 Inference
 ===========================
 Statistical testing on graphs requires specialized methodology in order to account 
