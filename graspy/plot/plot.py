@@ -14,6 +14,7 @@
 
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import Colormap
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -32,6 +33,8 @@ def _check_common_inputs(
     context=None,
     font_scale=None,
     legend_name=None,
+    title_pad=None,
+    hier_label_fontsize=None,
 ):
     # Handle figsize
     if figsize is not None:
@@ -77,6 +80,18 @@ def _check_common_inputs(
             msg = "legend_name must be a string, not {}.".format(type(legend_name))
             raise TypeError(msg)
 
+    if hier_label_fontsize is not None:
+        if not isinstance(hier_label_fontsize, (int, float)):
+            msg = "hier_label_fontsize must be a scalar, not {}.".format(
+                type(legend_name)
+            )
+            raise TypeError(msg)
+
+    if title_pad is not None:
+        if not isinstance(title_pad, (int, float)):
+            msg = "title_pad must be a scalar, not {}.".format(type(legend_name))
+            raise TypeError(msg)
+
 
 def _transform(arr, method):
     if method is not None:
@@ -107,11 +122,15 @@ def heatmap(
     xticklabels=False,
     yticklabels=False,
     cmap="RdBu_r",
+    vmin=None,
+    vmax=None,
     center=0,
     cbar=True,
     inner_hier_labels=None,
     outer_hier_labels=None,
     hier_label_fontsize=30,
+    ax=None,
+    title_pad=None,
 ):
     r"""
     Plots a graph as a heatmap.
@@ -146,8 +165,11 @@ def heatmap(
         elements.
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
-    cmap : str, default: 'RdBu_r'
+    cmap : str, list of colors, or matplotlib.colors.Colormap, default: 'RdBu_r'
         Valid matplotlib color map.
+    vmin, vmax : floats, optional (default=None)
+        Values to anchor the colormap, otherwise they are inferred from the data and 
+        other keyword arguments.
     center : float, default: 0
         The value at which to center the colormap
     cbar : bool, default: True
@@ -162,9 +184,19 @@ def heatmap(
     hier_label_fontsize : int
         size (in points) of the text labels for the `inner_hier_labels` and 
         `outer_hier_labels`.
+    ax : matplotlib Axes, optional
+        Axes in which to draw the plot, otherwise will generate its own axes
+    title_pad : int, float or None, optional (default=None)
+        Custom padding to use for the distance of the title from the heatmap. Autoscales
+        if `None`
     """
     _check_common_inputs(
-        figsize=figsize, title=title, context=context, font_scale=font_scale
+        figsize=figsize,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+        hier_label_fontsize=hier_label_fontsize,
+        title_pad=title_pad,
     )
 
     # Handle ticklabels
@@ -185,8 +217,9 @@ def heatmap(
         raise TypeError(msg)
 
     # Handle cmap
-    if not isinstance(cmap, str):
-        msg = "cmap must be a string, not {}.".format(type(cmap))
+    if not isinstance(cmap, (str, list, Colormap)):
+        msg = "cmap must be a string, list of colors, or matplotlib.colors.Colormap,"
+        msg += " not {}.".format(type(cmap))
         raise TypeError(msg)
 
     # Handle center
@@ -217,7 +250,8 @@ def heatmap(
     CBAR_KWS = dict(shrink=0.7)  # norm=colors.Normalize(vmin=0, vmax=1))
 
     with sns.plotting_context(context, font_scale=font_scale):
-        fig, ax = plt.subplots(figsize=figsize)
+        if ax is None:
+            fig, ax = plt.subplots(figsize=figsize)
         plot = sns.heatmap(
             arr,
             cmap=cmap,
@@ -228,10 +262,17 @@ def heatmap(
             center=center,
             cbar=cbar,
             ax=ax,
+            vmin=vmin,
+            vmax=vmax,
         )
 
         if title is not None:
-            plot.set_title(title)
+            if title_pad is None:
+                if inner_hier_labels is not None:
+                    title_pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
+                else:
+                    title_pad = 1.5 * font_scale + 15
+            plot.set_title(title, pad=title_pad)
         if inner_hier_labels is not None:
             if outer_hier_labels is not None:
                 plot.set_yticklabels([])
@@ -263,6 +304,7 @@ def gridplot(
     inner_hier_labels=None,
     outer_hier_labels=None,
     hier_label_fontsize=30,
+    title_pad=None,
 ):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
@@ -318,9 +360,17 @@ def gridplot(
     hier_label_fontsize : int
         size (in points) of the text labels for the `inner_hier_labels` and 
         `outer_hier_labels`.
+    title_pad : int, float or None, optional (default=None)
+        Custom padding to use for the distance of the title from the heatmap. Autoscales
+        if `None`
     """
     _check_common_inputs(
-        height=height, title=title, context=context, font_scale=font_scale
+        height=height,
+        title=title,
+        context=context,
+        font_scale=font_scale,
+        hier_label_fontsize=hier_label_fontsize,
+        title_pad=title_pad,
     )
 
     if isinstance(X, list):
@@ -389,7 +439,12 @@ def gridplot(
         plot.ax.axis("off")
         plot.ax.invert_yaxis()
         if title is not None:
-            plot.set(title=title)
+            if title_pad is None:
+                if inner_hier_labels is not None:
+                    title_pad = 1.5 * font_scale + 1 * hier_label_fontsize + 30
+                else:
+                    title_pad = 1.5 * font_scale + 15
+            plt.title(title, pad=title_pad)
     if inner_hier_labels is not None:
         if outer_hier_labels is not None:
             _plot_groups(

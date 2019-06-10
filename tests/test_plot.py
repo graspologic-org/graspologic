@@ -68,6 +68,18 @@ def test_common_inputs():
         yticklabels = ["{}".format(i) for i in range(5)]
         heatmap(X, xticklabels=xticklabels, yticklabels=yticklabels)
 
+    with pytest.raises(TypeError):
+        heatmap(X, title_pad="f")
+
+    with pytest.raises(TypeError):
+        gridplot([X], title_pad="f")
+
+    with pytest.raises(TypeError):
+        heatmap(X, hier_label_fontsize="f")
+
+    with pytest.raises(TypeError):
+        gridplot([X], hier_label_fontsize="f")
+
 
 def test_heatmap_inputs():
     """
