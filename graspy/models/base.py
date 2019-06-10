@@ -32,7 +32,7 @@ def _n_to_labels(n):
 
 
 class BaseGraphEstimator(BaseEstimator):
-    def __init__(self, directed=True, loops=True):
+    def __init__(self, directed=True, loops=False):
         if not isinstance(directed, bool):
             raise TypeError("`directed` must be of type bool")
         if not isinstance(loops, bool):
