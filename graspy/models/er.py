@@ -1,9 +1,9 @@
-from .sbm import SBEstimator, DCSBEstimator
+from .sbm import SBMEstimator, DCSBMEstimator
 from ..utils import import_graph
 import numpy as np
 
 
-class EREstimator(SBEstimator):
+class EREstimator(SBMEstimator):
     """
     Erdos-Reyni Model 
 
@@ -27,7 +27,7 @@ class EREstimator(SBEstimator):
     See also
     --------
     graspy.models.DCEREstimator
-    graspy.models.SBEstimator
+    graspy.models.SBMEstimator
     graspy.simulations.er_np
 
     References
@@ -50,7 +50,7 @@ class EREstimator(SBEstimator):
         return n_parameters
 
 
-class DCEREstimator(DCSBEstimator):
+class DCEREstimator(DCSBMEstimator):
     r"""
     Degree-corrected Erdos-Reyni Model 
 
@@ -81,7 +81,7 @@ class DCEREstimator(DCSBEstimator):
 
     See also
     --------
-    graspy.models.DCSBEstimator
+    graspy.models.DCSBMEstimator
     graspy.models.EREstimator
     graspy.simulations.er_np
 

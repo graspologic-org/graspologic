@@ -3,8 +3,8 @@ import numpy as np
 from numpy.testing import assert_allclose
 from graspy.models import (
     EREstimator,
-    DCSBEstimator,
-    SBEstimator,
+    DCSBMEstimator,
+    SBMEstimator,
     RDPGEstimator,
     DCEREstimator,
 )
@@ -106,7 +106,7 @@ class TestDCER:
         np.random.seed(8888)
         graph = self.graph
         p_mat = self.p_mat
-        dcsbe = DCSBEstimator(directed=True, loops=False)
+        dcsbe = DCSBMEstimator(directed=True, loops=False)
         dcsbe.fit(graph)
         assert_allclose(p_mat, dcsbe.p_mat_, atol=0.12)
 
@@ -144,7 +144,7 @@ class TestDCER:
 class TestSBM:
     @classmethod
     def setup_class(cls):
-        estimator = SBEstimator(directed=True, loops=False)
+        estimator = SBMEstimator(directed=True, loops=False)
         B = np.array([[0.9, 0.1], [0.1, 0.9]])
         g = sbm([50, 50], B, directed=True)
         labels = _n_to_labels([50, 50])
@@ -157,35 +157,35 @@ class TestSBM:
 
     def test_SBM_inputs(self):
         with pytest.raises(TypeError):
-            SBEstimator(directed="hey")
+            SBMEstimator(directed="hey")
 
         with pytest.raises(TypeError):
-            SBEstimator(loops=6)
+            SBMEstimator(loops=6)
 
         with pytest.raises(TypeError):
-            SBEstimator(n_components="XD")
+            SBMEstimator(n_components="XD")
 
         with pytest.raises(ValueError):
-            SBEstimator(n_components=-1)
+            SBMEstimator(n_components=-1)
 
         with pytest.raises(TypeError):
-            SBEstimator(min_comm="1")
+            SBMEstimator(min_comm="1")
 
         with pytest.raises(ValueError):
-            SBEstimator(min_comm=-1)
+            SBMEstimator(min_comm=-1)
 
         with pytest.raises(TypeError):
-            SBEstimator(max_comm="ay")
+            SBMEstimator(max_comm="ay")
 
         with pytest.raises(ValueError):
-            SBEstimator(max_comm=-1)
+            SBMEstimator(max_comm=-1)
 
         with pytest.raises(ValueError):
-            SBEstimator(min_comm=4, max_comm=2)
+            SBMEstimator(min_comm=4, max_comm=2)
 
         graph = er_np(100, 0.5)
         bad_y = np.zeros(99)
-        sbe = SBEstimator()
+        sbe = SBMEstimator()
         with pytest.raises(ValueError):
             sbe.fit(graph, y=bad_y)
 
@@ -196,10 +196,10 @@ class TestSBM:
             sbe.fit(graph[..., np.newaxis])
 
         with pytest.raises(TypeError):
-            SBEstimator(cluster_kws=1)
+            SBMEstimator(cluster_kws=1)
 
         with pytest.raises(TypeError):
-            SBEstimator(embed_kws=1)
+            SBMEstimator(embed_kws=1)
 
     def test_SBM_fit_supervised(self):
         np.random.seed(8888)
@@ -213,7 +213,7 @@ class TestSBM:
         )
         n = np.array([500, 500, 250, 250])
         g = sbm(n, B, directed=True, loops=False)
-        sbe = SBEstimator(directed=True, loops=False)
+        sbe = SBMEstimator(directed=True, loops=False)
         labels = _n_to_labels(n)
         sbe.fit(g, y=labels)
         B_hat = sbe.block_p_
@@ -229,7 +229,7 @@ class TestSBM:
         p_mat = _block_to_full(B, labels, (n_verts, n_verts))
         p_mat -= np.diag(np.diag(p_mat))
         graph = sample_edges(p_mat, directed=True, loops=False)
-        sbe = SBEstimator(directed=True, loops=False)
+        sbe = SBMEstimator(directed=True, loops=False)
         sbe.fit(graph)
         assert adjusted_rand_score(labels, sbe.vertex_assignments_) > 0.95
         assert_allclose(p_mat, sbe.p_mat_, atol=0.12)
@@ -259,16 +259,16 @@ class TestSBM:
         tau = _n_to_labels(n)
         p_mat = _block_to_full(B, tau, shape=(n_verts * 2, n_verts * 2))
         graph = sample_edges(p_mat, directed=True)
-        estimator = SBEstimator(max_comm=4)
+        estimator = SBMEstimator(max_comm=4)
         _test_score(estimator, p_mat, graph)
 
     def test_SBM_nparams(self):
         e = self.estimator.fit(self.graph, y=self.labels)
         assert e._n_parameters() == (4)
-        e = SBEstimator()
+        e = SBMEstimator()
         e.fit(self.graph)
         assert e._n_parameters() == (4 + 1)
-        e = SBEstimator(directed=False)
+        e = SBMEstimator(directed=False)
         e.fit(self.graph)
         assert e._n_parameters() == (1 + 3)
 
@@ -299,48 +299,48 @@ class TestDCSBM:
     def test_DCSBM_score(self):
         p_mat = self.p_mat
         graph = self.g
-        estimator = DCSBEstimator()
+        estimator = DCSBMEstimator()
         _test_score(estimator, p_mat, graph)
 
     def test_DCSBM_fit_supervised(self):
         p_mat = self.p_mat
         labels = self.labels
         g = self.g
-        dcsbe = DCSBEstimator(directed=True, loops=False)
+        dcsbe = DCSBMEstimator(directed=True, loops=False)
         dcsbe.fit(g, y=labels)
         assert_allclose(dcsbe.p_mat_, p_mat, atol=0.1)
 
     def test_DCSBM_inputs(self):
         with pytest.raises(TypeError):
-            DCSBEstimator(directed="hey")
+            DCSBMEstimator(directed="hey")
 
         with pytest.raises(TypeError):
-            DCSBEstimator(loops=6)
+            DCSBMEstimator(loops=6)
 
         with pytest.raises(TypeError):
-            DCSBEstimator(n_components="XD")
+            DCSBMEstimator(n_components="XD")
 
         with pytest.raises(ValueError):
-            DCSBEstimator(n_components=-1)
+            DCSBMEstimator(n_components=-1)
 
         with pytest.raises(TypeError):
-            DCSBEstimator(min_comm="1")
+            DCSBMEstimator(min_comm="1")
 
         with pytest.raises(ValueError):
-            DCSBEstimator(min_comm=-1)
+            DCSBMEstimator(min_comm=-1)
 
         with pytest.raises(TypeError):
-            DCSBEstimator(max_comm="ay")
+            DCSBMEstimator(max_comm="ay")
 
         with pytest.raises(ValueError):
-            DCSBEstimator(max_comm=-1)
+            DCSBMEstimator(max_comm=-1)
 
         with pytest.raises(ValueError):
-            DCSBEstimator(min_comm=4, max_comm=2)
+            DCSBMEstimator(min_comm=4, max_comm=2)
 
         graph = er_np(100, 0.5)
         bad_y = np.zeros(99)
-        dcsbe = DCSBEstimator()
+        dcsbe = DCSBMEstimator()
         with pytest.raises(ValueError):
             dcsbe.fit(graph, y=bad_y)
 
@@ -351,10 +351,10 @@ class TestDCSBM:
             dcsbe.fit(graph[..., np.newaxis])
 
         with pytest.raises(TypeError):
-            DCSBEstimator(cluster_kws=1)
+            DCSBMEstimator(cluster_kws=1)
 
         with pytest.raises(TypeError):
-            DCSBEstimator(embed_kws=1)
+            DCSBMEstimator(embed_kws=1)
 
     def test_DCSBM_fit_unsupervised(self):
         np.random.seed(12345)
@@ -368,14 +368,14 @@ class TestDCSBM:
         p_mat = p_mat * np.outer(distances, distances)
         p_mat -= np.diag(np.diag(p_mat))
         graph = sample_edges(p_mat, directed=True, loops=False)
-        dcsbe = DCSBEstimator(directed=True, loops=False)
+        dcsbe = DCSBMEstimator(directed=True, loops=False)
         dcsbe.fit(graph)
         assert adjusted_rand_score(labels, dcsbe.vertex_assignments_) > 0.95
         assert_allclose(p_mat, dcsbe.p_mat_, atol=0.12)
 
     def test_DCSBM_sample(self):
         np.random.seed(8888)
-        estimator = DCSBEstimator(directed=True, loops=False)
+        estimator = DCSBMEstimator(directed=True, loops=False)
         B = np.array([[0.9, 0.1], [0.1, 0.9]])
         dc = np.random.uniform(0.25, 0.75, size=100)
         labels = _n_to_labels([50, 50])
@@ -402,19 +402,19 @@ class TestDCSBM:
         n_class = 4
         graph = self.g
         labels = self.labels
-        e = DCSBEstimator(directed=True)
+        e = DCSBMEstimator(directed=True)
         e.fit(graph)
         assert e._n_parameters() == (n_verts + n_class - 1 + n_class ** 2)
 
-        e = DCSBEstimator(directed=True)
+        e = DCSBMEstimator(directed=True)
         e.fit(graph, y=labels)
         assert e._n_parameters() == (n_verts + n_class ** 2)
 
-        e = DCSBEstimator(directed=True, degree_directed=True)
+        e = DCSBMEstimator(directed=True, degree_directed=True)
         e.fit(graph, y=labels)
         assert e._n_parameters() == (2 * n_verts + n_class ** 2)
 
-        e = DCSBEstimator(directed=False)
+        e = DCSBMEstimator(directed=False)
         e.fit(graph, y=labels)
         assert e._n_parameters() == (n_verts + 10)
 

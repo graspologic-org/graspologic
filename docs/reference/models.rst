@@ -13,9 +13,9 @@ Erdos-Reyni models
 Stochastic block models
 -----------------------
 
-.. autoclass:: SBEstimator
+.. autoclass:: SBMEstimator
 
-.. autoclass:: DCSBEstimator
+.. autoclass:: DCSBMEstimator
 
 Latent position models
 ----------------------

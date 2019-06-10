@@ -39,7 +39,7 @@ def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kw
         raise TypeError("embed_kws must be a dict")
 
 
-class SBEstimator(BaseGraphEstimator):
+class SBMEstimator(BaseGraphEstimator):
     r"""
     Stochastic Block Model 
 
@@ -66,7 +66,7 @@ class SBEstimator(BaseGraphEstimator):
 
     See also
     --------
-    graspy.models.DCSBEstimator
+    graspy.models.DCSBMEstimator
     graspy.simulations.sbm
 
     References
@@ -117,7 +117,7 @@ class SBEstimator(BaseGraphEstimator):
 
     def fit(self, graph, y=None):
         """
-        Fit the SBM model to a graph, optionally with known block labels
+        Fit the SBM to a graph, optionally with known block labels
 
         If y is `None`, the block assignments for each vertex will first be
         estimated.
@@ -176,7 +176,7 @@ class SBEstimator(BaseGraphEstimator):
         return n_parameters
 
 
-class DCSBEstimator(BaseGraphEstimator):
+class DCSBMEstimator(BaseGraphEstimator):
     r"""
     Degree-corrected Stochastic Block Model
 
@@ -219,7 +219,7 @@ class DCSBEstimator(BaseGraphEstimator):
 
     See also
     --------
-    graspy.models.SBEstimator
+    graspy.models.SBMEstimator
     graspy.simulations.sbm
 
     Notes
@@ -274,7 +274,7 @@ class DCSBEstimator(BaseGraphEstimator):
 
     def fit(self, graph, y=None):
         """
-        Fit the DCSBM model to a graph, optionally with known block labels
+        Fit the DCSBM to a graph, optionally with known block labels
 
         If y is `None`, the block assignments for each vertex will first be
         estimated.
@@ -289,7 +289,7 @@ class DCSBEstimator(BaseGraphEstimator):
 
         Returns
         -------
-        self : DCSBEstimator object 
+        self : DCSBMEstimator object 
             Fitted instance of self 
         """
         graph = import_graph(graph)
