@@ -102,9 +102,11 @@ class RDPGEstimator(BaseGraphEstimator):
         if type(self.latent_) == tuple:
             X = self.latent_[0]
             Y = self.latent_[1]
+            self.directed = True
         else:
             X = self.latent_
             Y = self.latent_
+            self.directed = False
         p_mat = X @ Y.T
         if not self.loops:
             p_mat -= np.diag(np.diag(p_mat))

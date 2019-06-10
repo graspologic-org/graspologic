@@ -80,7 +80,7 @@ class BaseGraphEstimator(BaseEstimator):
         check_is_fitted(self, "p_mat_")
         return np.linalg.norm(graph - self.p_mat_) ** 2
 
-    def score_samples(self, graph):
+    def score_samples(self, graph, clip=None):
         """
         Compute the weighted log probabilities for each potential edge.
 
@@ -91,7 +91,13 @@ class BaseGraphEstimator(BaseEstimator):
         ----------
         graph : np.ndarray
             input graph
-
+        
+        clip : scalar or None, optional (default=None)
+            Values for which to clip probability matrix, entries less than c or more
+            than 1 - c are set to c or 1 - c, respectively.
+            If None, values will not be clipped in the likelihood calculation, which may
+            result in poorly behaved likelihoods depending on the model. 
+        
         Returns
         -------
         sample_scores : np.ndarray (size of `graph`)
@@ -104,10 +110,26 @@ class BaseGraphEstimator(BaseEstimator):
             raise ValueError("Model only implemented for unweighted graphs")
         p_mat = self.p_mat_.copy()
 
-        # squish the probabilities that are degenerate
-        c = 1 / graph.size
-        p_mat[p_mat < c] = c
-        p_mat[p_mat > 1 - c] = 1 - c
+        inds = None
+        if not self.directed and self.loops:
+            inds = np.triu_indices_from(graph)  # ignore lower half of graph, symmetric
+        elif not self.directed and not self.loops:
+            inds = np.triu_indices_from(graph, k=1)  # ignore the diagonal
+        elif self.directed and not self.loops:
+            xu, yu = np.triu_indices_from(graph, k=1)
+            xl, yl = np.tril_indices_from(graph, k=-1)
+            x = np.concatenate((xl, xu))
+            y = np.concatenate((yl, yu))
+            inds = (x, y)
+        if inds is not None:
+            p_mat = p_mat[inds]
+            graph = graph[inds]
+
+        # clip the probabilities that are degenerate
+        if clip is not None:
+            p_mat[p_mat < clip] = clip
+            p_mat[p_mat > 1 - clip] = 1 - clip
+
         # TODO: use nonzero inds here will be faster
         successes = np.multiply(p_mat, graph)
         failures = np.multiply((1 - p_mat), (1 - graph))

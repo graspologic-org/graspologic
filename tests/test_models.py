@@ -9,7 +9,7 @@ from graspy.models import (
     DCEREstimator,
 )
 from graspy.simulations import er_np, sbm, sample_edges
-from graspy.utils import cartprod
+from graspy.utils import cartprod, is_symmetric
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
 
@@ -59,7 +59,7 @@ class TestER:
     def test_ER_score(self):
         p_mat = self.p_mat
         graph = self.graph
-        estimator = EREstimator()
+        estimator = EREstimator(directed=False)
         _test_score(estimator, p_mat, graph)
 
     def test_ER_nparams(self):
@@ -254,11 +254,11 @@ class TestSBM:
     def test_SBM_score(self):
         # tests score() and score_sample()
         B = np.array([[0.75, 0.25], [0.25, 0.75]])
-        n_verts = 4
+        n_verts = 100
         n = np.array([n_verts, n_verts])
         tau = _n_to_labels(n)
         p_mat = _block_to_full(B, tau, shape=(n_verts * 2, n_verts * 2))
-        graph = sample_edges(p_mat)
+        graph = sample_edges(p_mat, directed=True)
         estimator = SBEstimator(max_comm=4)
         _test_score(estimator, p_mat, graph)
 
@@ -535,12 +535,25 @@ def _test_sample(estimator, p_mat, atol=0.1, n_samples=1000):
 
 
 def _test_score(estimator, p_mat, graph):
+    np.random.seed(8888)
+    graph = graph.copy()
+    p_mat = p_mat.copy()
     estimator.fit(graph)
     estimator.p_mat_ = p_mat  # hack just for testing likelihood
 
-    g_rav = graph.ravel()
-    p_rav = p_mat.ravel()
-    lik_rav = np.zeros(g_rav.shape)
+    if is_symmetric(graph):
+        inds = np.triu_indices_from(graph, k=1)
+    else:
+        xu, yu = np.triu_indices_from(graph, k=1)
+        xl, yl = np.tril_indices_from(graph, k=-1)
+        x = np.concatenate((xl, xu))
+        y = np.concatenate((yl, yu))
+        inds = (x, y)
+
+    p_rav = p_mat[inds]
+    g_rav = graph[inds]
+
+    lik = np.zeros(g_rav.shape)
     c = 1 / p_mat.size
     for i, (g, p) in enumerate(zip(g_rav, p_rav)):
         if p < c:
@@ -548,10 +561,11 @@ def _test_score(estimator, p_mat, graph):
         if p > 1 - c:
             p = 1 - c
         if g == 1:
-            lik_rav[i] = p
+            lik[i] = p
         else:
-            lik_rav[i] = 1 - p
-    lik = np.reshape(lik_rav, p_mat.shape)
+            lik[i] = 1 - p
+
+    # lik = np.reshape(lik_rav, p_mat.shape)
     lik[lik < 1e-10] = 1
     lik = np.log(lik)
     assert_allclose(lik, estimator.score_samples(graph))
