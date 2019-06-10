@@ -15,7 +15,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, silhouette_score
-from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseCluster
 
