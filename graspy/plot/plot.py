@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from operator import itemgetter
-
-from operator import itemgetter
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -59,7 +56,7 @@ def _check_common_inputs(
         if not isinstance(context, str):
             msg = "context must be a string, not {}.".format(type(context))
             raise TypeError(msg)
-        elif not context in ["paper", "notebook", "talk", "poster"]:
+        elif context not in ["paper", "notebook", "talk", "poster"]:
             msg = "context must be one of (paper, notebook, talk, poster), \
                 not {}.".format(
                 context
@@ -133,11 +130,11 @@ def heatmap(
         - 'simple-all': 
             Pass to ranks method. Assigns ranks to all non-zero edges, settling 
             ties using the average. Ranks are then scaled by 
-            :math:`\frac{2 rank(\text{non-zero edges})}{n^2 + 1}` 
+            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
         - 'simple-nonzero':
-            Pass to ranks method. Aame as simple-all, but ranks are scaled by
-            :math:`\frac{2 rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
+            Pass to ranks method. Same as simple-all, but ranks are scaled by
+            :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
     title : str, optional, default: None
@@ -288,11 +285,11 @@ def gridplot(
         - 'simple-all': 
             Pass to ranks method. Assigns ranks to all non-zero edges, settling 
             ties using the average. Ranks are then scaled by 
-            :math:`\frac{2 rank(\text{non-zero edges})}{n^2 + 1}` 
+            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
         - 'simple-nonzero':
             Pass to ranks method. Same as simple-all, but ranks are scaled by
-            :math:`\frac{2 rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
+            :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
     height : int, optional, default: 10
         Height of figure in inches.
     title : str, optional, default: None
@@ -432,7 +429,7 @@ def pairplot(
     ----------
     X : array-like, shape (n_samples, n_features)
         Input data.
-    Y : array-like or list, shape (n_samples), optional
+    labels : array-like or list, shape (n_samples), optional
         Labels that correspond to each sample in X.
     col_names : array-like or list, shape (n_features), optional
         Names or labels for each feature in X. If not provided, the default 
@@ -568,7 +565,7 @@ def _distplot(
     ylabel="Density",
 ):
 
-    fig = plt.figure(figsize=figsize)
+    plt.figure(figsize=figsize)
     ax = plt.gca()
     palette = sns.color_palette(palette)
     plt_kws = {"cumulative": True}
@@ -686,7 +683,7 @@ def edgeplot(
         labels for different categories of graph nodes
     nonzero : boolean, default: False
         whether to restrict the edgeplot to only the non-zero edges
-    title : string, default : 'Degree plot'
+    title : string, default : 'Edge plot'
         plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
@@ -744,7 +741,7 @@ def screeplot(
     ----------
     X : np.ndarray (2D)
         input matrix 
-    title : string, default : 'Degree plot'
+    title : string, default : 'Scree plot'
         plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
