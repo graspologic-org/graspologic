@@ -17,7 +17,7 @@ This release is the result of over 2 months of work with over 16 pull requests b
 - Optimization over covariance structures when using ``GaussianCluster``
 - Standardized sorting for visualizing graphs when using ``heatmap`` or ``gridplot``
 - Graph model classes for fitting several random graph models to input datasets
-- Improved customization for ``heatmaps`` and gridplots``
+- Improved customization for ``heatmaps`` and ``gridplots``
 
 
 Improvements
