@@ -17,8 +17,8 @@ from abc import abstractmethod
 import numpy as np
 from sklearn.base import BaseEstimator
 
+from ..utils import import_graph, is_almost_symmetric
 from .svd import selectSVD
-from ..utils import is_almost_symmetric
 
 
 class BaseEmbed(BaseEstimator):
