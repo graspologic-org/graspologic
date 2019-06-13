@@ -71,7 +71,17 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         Estimated left latent positions of the graph.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices
-    TODO
+    in_sample_embedding : array, shape (n_in_samples, n_components)
+        Spectral embedding of the in sample vertices.
+    _nodes : array-like
+        List of node names
+    directed : bool
+        True if the graph is directed
+    id_to_index : dict
+        Mapping from node id to node index (i.e. 'node_id0' -> 0)
+    index_to_id : dict
+        Mapping from node index to node id (i.e. 0 -> 'node_id0')
+
 
 
     See Also
@@ -137,7 +147,6 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         self.semi_supervised = semi_supervised
         self.in_sample_proportion = in_sample_proportion
         self.in_sample_idx = in_sample_idx
-        self.streaming = False
 
     def fit(self, graph, y=None):
         """
@@ -213,6 +222,19 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         return self
 
     def _connected_subgraph(self, graph):
+        """
+        Find a connected subgraph.
+
+        Parameters
+        ----------
+        graph : array_like or networkx.Graph
+            Input graph to embed.
+
+        Returns
+        -------
+        None
+
+        """
         N = len(graph)
         in_sample_G = graph.subgraph(self.in_sample_idx).copy()
 
