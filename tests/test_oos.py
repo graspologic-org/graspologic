@@ -55,7 +55,7 @@ def test_fit_predict():
     A = sbm(verts_per_community, P)
 
     ase_object1 = OutOfSampleAdjacencySpectralEmbed(
-        semi_supervised=True, in_sample_idx=range(int(np.ceil(0.8 * n)))
+        semi_supervised=True, in_sample_id=range(int(np.ceil(0.8 * n)))
     )
     ase_object1.fit(A)
     oos_A = A[int(np.ceil(0.8 * n)) :, : int(np.ceil(0.8 * n))]
@@ -64,7 +64,7 @@ def test_fit_predict():
 
     np.random.seed(8888)
     ase_object2 = OutOfSampleAdjacencySpectralEmbed(
-        semi_supervised=True, in_sample_idx=range(int(np.ceil(0.8 * n)))
+        semi_supervised=True, in_sample_id=range(int(np.ceil(0.8 * n)))
     )
     X_hat2 = ase_object2.fit_predict(A)
 
