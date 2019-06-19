@@ -1,28 +1,40 @@
-# oosase.py
-# Created by Hayden Helm on 2019-04-22.
-# Email: hhelm2@jhu.edu
+# Copyright 2019 NeuroData (http://neurodata.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import warnings
 
-from .base import BaseEmbed
-from .svd import selectSVD
-from ..utils import import_graph, get_lcc, is_fully_connected, is_symmetric
-
-import numpy as np
-from sklearn.utils.validation import check_is_fitted
-from sklearn.utils import check_array
 import networkx as nx
+import numpy as np
+from sklearn.utils import check_array
+from sklearn.utils.validation import check_is_fitted
+
+from graspy.utils import is_fully_connected
+
+from .base import BaseEmbed
 
 
 class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
     r"""
     Class for computing the out of sample adjacency spectral embedding of a graph.
     
-    The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation of 
-    the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce the dimensionality
-    to the specified k, or if k is unspecified, can find a number of dimensions automatically
-    (see graspy.embed.selectSVD). The out of sample adjacency spectral embedding (OOSASE) considers
-    the ASE of an induced subgraph of the original graph. To embed "out of sample" vertices, a projection
-    matrix learned from the in sample embedding is used [2]_.
+    The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation 
+    of the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce the 
+    dimensionality to the specified k, or if k is unspecified, can find a number of
+    dimensions automatically (see graspy.embed.selectSVD). The out of sample adjacency
+    spectral embedding (OOSASE) considers the ASE of an induced subgraph of the original
+    graph. To embed "out of sample" vertices, a projection matrix learned from the in
+    sample embedding is used [2]_.
 
     Parameters
     ----------
@@ -82,20 +94,20 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
     .. math:: A = U \Sigma V^T
 
-    is used to find an orthonormal basis for a matrix, which in our case is the adjacency
-    matrix of the graph. These basis vectors (in the matrices U or V) are ordered according 
-    to the amount of variance they explain in the original matrix. By selecting a subset of these
-    basis vectors (through our choice of dimensionality reduction) we can find a lower dimensional 
-    space in which to represent the graph.
+    is used to find an orthonormal basis for a matrix, which in our case is the
+    adjacency matrix of the graph. These basis vectors (in the matrices U or V) are
+    ordered according to the amount of variance they explain in the original matrix.
+    By selecting a subset of these basis vectors (through our choice of dimensionality
+    reduction) we can find a lower dimensional space in which to represent the graph.
 
     References
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-    .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018). Out-of-sample 
-        extension of graph adjacency spectral embedding. PMLR: Proceedings of Machine Learning 
-        Research, 80, 2975-2984.
+    .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
+        Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
+        of Machine Learning Research, 80, 2975-2984.
     """
 
     def __init__(
@@ -228,7 +240,8 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 c += 1
             if c == self.connected_attempts:
                 msg = (
-                    "Induced subgraph is not fully connected. Attempted to find connected"
+                    "Induced subgraph is not fully connected."
+                    + "Attempted to find connected"
                     + " induced subgraph {} times. Results may not be optimal.".format(
                         self.connected_attempts
                     )
@@ -245,12 +258,12 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         Parameters
         ----------
         X : array_like, shape (m, n)
-            m stacked similarity lists, where the jth entry of the ith row corresponds to
-            the similarity of the ith out of sample observation to the jth in sample
+            m stacked similarity lists, where the jth entry of the ith row corresponds
+            to the similarity of the ith out of sample observation to the jth in sample
             observation.
         ids : array_like, length m
-            If self.semi_supervised the list must be of length m and contain the node ids for 
-            the nodes to embed. Otherwise, it is a no-op.
+            If self.semi_supervised the list must be of length m and contain the node 
+            ids for the nodes to embed. Otherwise, it is a no-op.
 
         Returns
         -------
@@ -279,7 +292,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             ensure_min_features=n,
         )
 
-        if X.ndim is 1:
+        if X.ndim == 1:
             X = X.reshape((1, -1))
             X = X.T
             m = 1
@@ -293,8 +306,8 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         if np.count_nonzero(row_sums) != m:
             msg = (
                 "At least one adjacency vector is the zero vector."
-                + " It is recommended to first embed nodes with non-zero adjacency vectors"
-                + " with self.semi_supervised = True and embed the nodes"
+                + " It is recommended to first embed nodes with non-zero adjacency"
+                + " vectors with self.semi_supervised = True and embed the nodes"
                 + " with zero adjacencies"
             )
             raise ValueError(msg)
@@ -306,8 +319,11 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 msg = "Semi supervised embedding without node ids."
                 raise ValueError(msg)
             elif len(ids) != m:
-                msg = "Length of node ids, {}, does not match number of out of sample nodes, {}".format(
-                    len(ids), m
+                msg = (
+                    "Length of node ids,"
+                    + " {}, does not match number of out of sample nodes, {}".format(
+                        len(ids), m
+                    )
                 )
                 raise ValueError(msg)
             else:
@@ -360,7 +376,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                             out_sample_id[i], edge[1], default=0
                         )[edge_weight_attr]
 
-        ## this is broken!
+        # this is broken!
         oos = self.predict(X, ids=out_sample_id)
 
         all_nodes_in_order = np.concatenate((self.in_sample_id, out_sample_id))
