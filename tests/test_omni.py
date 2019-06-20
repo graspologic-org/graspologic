@@ -57,12 +57,17 @@ def test_omni_matrix_random():
             [0.0, 0.5, 0.5, 0.0, 0.0, 0.0],
             [0.5, 0.0, 1.0, 0.0, 0.0, 1.0],
             [0.5, 1.0, 0.0, 0.0, 1.0, 0.0],
+
         ]
     )
 
     np.random.seed(4)
-    graphs = [er_np(3, 0.5) for _ in range(2)]
-
+    dat_list =[[0., 1., 1.],
+               [1., 0., 1.],
+               [1., 1., 0.]],[[0., 0., 0.],
+                              [0., 0., 1.],
+                              [0., 1., 0.]]
+    graphs = np.array(dat_list)
     A = _get_omni_matrix(graphs)
     assert_allclose(A, expected_output)
 
