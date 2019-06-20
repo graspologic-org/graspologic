@@ -70,7 +70,7 @@ def sample_edges(P, directed=False, loops=False):
         return A - np.diag(np.diag(A))
 
 
-def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
+def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
     r"""
     Samples a Erdos Renyi (n, p) graph with specified edge probability.
 
@@ -80,7 +80,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
     Parameters
     ----------
     n: int
-        Number of vertices
+       Number of vertices
     p: float
         Probability of an edge existing between two vertices, between 0 and 1.
     directed: boolean, optional (default=False)
@@ -102,45 +102,22 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
     A : ndarray, shape (n, n)
         Sampled adjacency matrix
     """
-    if not np.issubdtype(type(p), np.floating):
-        raise TypeError("p is not of type float.")
-    elif p < 0:
-        msg = "You have passed a probability, {}, less than 0."
-        msg = msg.format(float(p))
-        raise ValueError(msg)
-    elif p > 1:
-        msg = "You have passed a probability, {}, greater than 1."
-        msg = msg.format(float(p))
-        raise ValueError(msg)
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
-    elif n <= 0:
-        msg = "n must be > 0."
-        raise ValueError(msg)
-    if type(directed) is not bool:
-        raise TypeError("directed is not of type bool.")
+    if not np.issubdtype(type(p), np.floating):
+        raise TypeError("p is not of type float.")
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
-
-    # check weight function
-    if not np.issubdtype(type(wt), np.number):
-        if not callable(wt):
-            raise TypeError("You have not passed a function for wt.")
-
-    probs = np.ones((n, n)) * p
-    A = sample_edges(probs, directed, loops)
-
-    if not np.issubdtype(type(wt), np.number):
-        weights = wt(size=int(A.sum()), **wtargs)
-        A[A == 1] = weights
-    else:
-        A *= wt
-
-    if not directed:
-        A = symmetrize(A)
-
-    return A
-
+    if type(directed) is not bool:
+        raise TypeError("directed is not of type bool.")
+    my_list = [n]
+    n = my_list
+    n_sbm = np.array(n)
+    my_list = [[p]]
+    p = my_list
+    p_sbm = np.array(p)
+    g = sbm (n_sbm, p_sbm, directed, loops, wt, wtargs, dc, dc_kws)
+    return g
 
 def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     r"""
