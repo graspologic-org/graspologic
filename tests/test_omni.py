@@ -1,6 +1,7 @@
-import pytest
-import numpy as np
+#!/usr/bin/env python
 import networkx as nx
+import numpy as np
+import pytest
 from numpy import array_equal, allclose
 from numpy.testing import assert_allclose
 from numpy.linalg import norm
@@ -8,7 +9,6 @@ from numpy.linalg import norm
 from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
 from graspy.simulations.simulations import er_np, er_nm
 from graspy.utils.utils import symmetrize, is_symmetric
-
 
 def generate_data(n, seed=1):
     """Generate data form dirichelet distribution with 
@@ -62,11 +62,10 @@ def test_omni_matrix_random():
     )
 
     np.random.seed(4)
-    dat_list =[[0., 1., 1.],
-               [1., 0., 1.],
-               [1., 1., 0.]],[[0., 0., 0.],
-                              [0., 0., 1.],
-                              [0., 1., 0.]]
+    dat_list = (
+        [[0.0, 1.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 0.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0]],
+    )
     graphs = np.array(dat_list)
     A = _get_omni_matrix(graphs)
     assert_allclose(A, expected_output)
