@@ -223,4 +223,3 @@ def test_covariances():
     gclust = GaussianCluster(min_components=2, covariance_type="all")
     gclust.fit(X)
     assert_equal(gclust.covariance_type_, "full")
-
