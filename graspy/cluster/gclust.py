@@ -111,9 +111,7 @@ class GaussianCluster(BaseCluster):
             )
             raise TypeError(msg)
 
-        if isinstance(covariance_type, np.ndarray):
-            covariance_type = np.unique(covariance_type)
-        elif isinstance(covariance_type, list):
+        if isinstance(covariance_type, (np.ndarray, list)):
             covariance_type = np.unique(covariance_type)
         elif isinstance(covariance_type, str):
             if covariance_type == "all":
@@ -138,8 +136,6 @@ class GaussianCluster(BaseCluster):
         for cov in ["spherical", "diag", "tied", "full"]:
             if cov in covariance_type:
                 new_covariance_type.append(cov)
-
-        new_covariance_type = np.array(new_covariance_type)
 
         self.min_components = min_components
         self.max_components = max_components
@@ -218,28 +214,28 @@ class GaussianCluster(BaseCluster):
                 )
 
         self.bic_ = pd.DataFrame(
-            np.array(bics),
+            bics,
             index=np.arange(lower_ncomponents, upper_ncomponents + 1),
             columns=self.covariance_type,
         )
 
         if y is not None:
             self.ari_ = pd.DataFrame(
-                np.array(aris),
+                aris,
                 index=np.arange(lower_ncomponents, upper_ncomponents + 1),
                 columns=self.covariance_type,
             )
         else:
             self.ari_ = None
 
-        # Finding the minimum bic for each covariance structure
-        bic_mins = [min(bic) for bic in bics]
-        bic_argmins = [np.argmin(bic) for bic in bics]
+        # Get the best cov type and its index within the dataframe
+        best_covariance = self.bic_.min(axis=0).idxmin()
+        best_covariance_idx = self.covariance_type.index(best_covariance)
 
-        # Find the index for the minimum bic amongst all covariance structures
-        model_type_argmin = np.argmin(bic_mins)
+        # Get the index best component for best_covariance
+        best_component = self.bic_.idxmin()[best_covariance]
 
-        self.n_components_ = np.argmin(bics[model_type_argmin]) + 1
-        self.model_ = models[model_type_argmin][bic_argmins[model_type_argmin]]
+        self.n_components_ = best_component
+        self.model_ = models[best_component - 1][best_covariance_idx]
 
         return self
