@@ -110,14 +110,11 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
         raise TypeError("loops is not of type bool.")
     if type(directed) is not bool:
         raise TypeError("directed is not of type bool.")
-    my_list = [n]
-    n = my_list
-    n_sbm = np.array(n)
-    my_list = [[p]]
-    p = my_list
-    p_sbm = np.array(p)
-    g = sbm (n_sbm, p_sbm, directed, loops, wt, wtargs, dc, dc_kws)
+    n_sbm = np.array([n])
+    p_sbm = np.array([[p]])
+    g = sbm(n_sbm, p_sbm, directed, loops, wt, wtargs, dc, dc_kws)
     return g
+
 
 def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     r"""
