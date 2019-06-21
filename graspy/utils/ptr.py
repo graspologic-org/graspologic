@@ -57,7 +57,7 @@ def pass_to_ranks(graph, method="simple-nonzero"):
         Adjacency matrix of graph after being passed to ranks
     """
 
-    graph = import_graph(graph)  # just for typechecking
+    graph = import_graph(graph, copy=True)  # just for typechecking
 
     if is_unweighted(graph):
         return graph

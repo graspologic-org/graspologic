@@ -22,7 +22,7 @@ import numpy as np
 from sklearn.utils import check_array
 
 
-def import_graph(graph):
+def import_graph(graph, copy=False):
     """
     A function for reading a graph and returning a shared data type. 
 
@@ -66,7 +66,7 @@ def import_graph(graph):
             allow_nd=True,  # For omni tensor input
             ensure_min_features=min_features,
             ensure_min_samples=min_samples,
-            copy=False,
+            copy=copy,
         )
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
