@@ -68,6 +68,8 @@ class GaussianCluster(BaseCluster):
     ----------
     n_components_ : int
         Optimal number of components based on BIC.
+    covariance_type_ : str
+        Optimal covariance type based on BIC.
     model_ : GaussianMixture object
         Fitted GaussianMixture object fitted with optimal numeber of components 
         and optimal covariance structure.
@@ -236,6 +238,7 @@ class GaussianCluster(BaseCluster):
         best_component = self.bic_.idxmin()[best_covariance]
 
         self.n_components_ = best_component
+        self.covariance_type_ = best_covariance
         self.model_ = models[best_component - 1][best_covariance_idx]
 
         return self

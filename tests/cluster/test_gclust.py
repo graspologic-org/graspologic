@@ -180,9 +180,9 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 0)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "spherical")
 
     # Diagonal
     np.random.seed(10)
@@ -194,9 +194,9 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 1)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "diag")
 
     # Tied
     cov1 = np.array([[2, 1], [1, 2]])
@@ -207,9 +207,9 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 2)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "tied")
 
     # Full
     cov1 = np.array([[2, -1], [-1, 2]])
@@ -220,6 +220,7 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 3)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "full")
+
