@@ -37,6 +37,7 @@ class GaussianCluster(BaseCluster):
         max_components=None, in which case this is the maximum number of
         components to consider). If max_componens is not None, min_components
         must be less than or equal to max_components.
+
     max_components : int, default=None.
         The maximum number of mixture components to consider. Must be greater 
         than or equal to min_components.
