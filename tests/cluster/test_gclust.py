@@ -95,8 +95,7 @@ def test_no_y():
     gclust = GaussianCluster(min_components=5)
     gclust.fit(X)
 
-    bics = gclust.bic_
-    assert_equal(bics.iloc[:, 0].values.argmin(), 1)
+    assert_equal(gclust.n_components_, 2)
 
 
 def test_outputs():
@@ -118,15 +117,14 @@ def test_outputs():
 
         gclust = GaussianCluster(min_components=5)
         gclust.fit(X, y)
-        bics = gclust.bic_
-        aris = gclust.ari_
 
-        bic_argmin = bics.iloc[:, 0].values.argmin()
+        n_components = gclust.n_components_
 
         # Assert that the two cluster model is the best
-        assert_equal(bic_argmin, 1)
-        # The plus one is to adjust the index by min_components
-        assert_allclose(aris.iloc[:, 0][bic_argmin + 1], 1)
+        assert_equal(n_components, 2)
+
+        # Asser that we get perfect clustering
+        assert_allclose(gclust.ari_.loc[n_components], 1)
 
 
 def test_bic():
@@ -153,14 +151,13 @@ def test_bic():
         gclust = GaussianCluster(min_components=10)
         gclust.fit(X_hat, y)
 
-        bics = gclust.bic_
-        aris = gclust.ari_
+        n_components = gclust.n_components_
 
-        bic_argmin = bics.iloc[:, 0].values.argmin()
+        # Assert that the three cluster model is the best
+        assert_equal(n_components, 3)
 
-        assert_equal(2, bic_argmin)
-        # The plus one is to adjust the index by min_components
-        assert_allclose(1, aris.iloc[:, 0][bic_argmin + 1])
+        # Asser that we get perfect clustering
+        assert_allclose(gclust.ari_.loc[n_components], 1)
 
 
 def test_covariances():
@@ -183,9 +180,9 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 0)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "spherical")
 
     # Diagonal
     np.random.seed(10)
@@ -197,9 +194,9 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 1)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "diag")
 
     # Tied
     cov1 = np.array([[2, 1], [1, 2]])
@@ -210,9 +207,9 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 2)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "tied")
 
     # Full
     cov1 = np.array([[2, -1], [-1, 2]])
@@ -223,6 +220,6 @@ def test_covariances():
 
     X = np.concatenate((X1, X2))
 
-    gclust_object = GaussianCluster(min_components=2, covariance_type="all")
-    gclust_object.fit(X)
-    assert_equal(gclust_object.bic_.iloc[1, :].values.argmin(), 3)
+    gclust = GaussianCluster(min_components=2, covariance_type="all")
+    gclust.fit(X)
+    assert_equal(gclust.covariance_type_, "full")
