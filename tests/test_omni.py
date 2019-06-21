@@ -10,6 +10,7 @@ from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
 from graspy.simulations.simulations import er_np, er_nm
 from graspy.utils.utils import symmetrize, is_symmetric
 
+
 def generate_data(n, seed=1):
     """Generate data form dirichelet distribution with 
     n numbers of points
