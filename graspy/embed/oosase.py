@@ -24,7 +24,7 @@ from graspy.utils import is_fully_connected
 from .base import BaseEmbed
 
 
-class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
+class OOSAdjacencySpectralEmbed(BaseEmbed):
     r"""
     Class for computing the out of sample adjacency spectral embedding of a graph.
     
@@ -69,25 +69,25 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         If in_sample_idx is None, the proportion of in sample vertices to use for
         initial embedding.
     in_sample_idx : array-like , optional (default = None)
-    connected_attempts : integer , optional (default = 1000)
+    connected_attempts : integer , optional (default = 100)
         Number of sets of indices generated to find a connected induced subgraph.
+        If the induced subgraph is not connected after connected_attempts then
+        a warning is thrown.
     semi_supervised : boolean , optional (default = False)
         If true, once an out-of-sample vertex is embedded it is considered to be
-        in-sample.
+        in-sample, and its' embeddding used for subsequent out-of-sample vertices.
     random_state : integer , optional (default = None)
-        Random seed used to generate in sample indices. If None, random_state
-        is a random integer between 0 and 10**6
+        Random seed used to generate in sample indices.
 
     Attributes
     ----------
-    latent_left_ : array, shape (n_in_samples, n_components)
-        Estimated left latent positions of the graph.
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices
-    in_sample_embedding : array, shape (n_in_samples, n_components)
-        Spectral embedding of the in sample vertices.
-    _nodes : array-like
-        List of node names
+    latent_left_ : array, shape (n_samples, n_components)
+        Estimated left latent positions of the graph. 
+    latent_right_ : array, shape (n_samples, n_components), or None
+        Only computed when the graph is directed, or adjacency matrix is assymetric.
+        Estimated right latent positions of the graph. Otherwise, None.
     directed : bool
         True if the graph is directed
     id_to_index : dict
@@ -181,9 +181,9 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         if isinstance(graph, nx.Graph):
             if nx.is_directed(graph):
-                self._directed = True
+                self.directed = True
             else:
-                self._directed = False
+                self.directed = False
         else:
             msg = "only arrays and networkx graphs allowed"
             raise TypeError(msg)
@@ -199,20 +199,20 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
-        N = len(graph)
+        n_verts = len(graph)
 
         if self.in_sample_proportion is None:
-            self.in_sample_proportion = len(self.in_sample_idx) / N
+            self.in_sample_proportion = len(self.in_sample_idx) / n_verts
 
         if self.in_sample_idx is None:
             if self.in_sample_proportion == 1:
                 self.in_sample_idx = self._nodes
             else:
                 self.in_sample_idx = np.random.choice(
-                    self._nodes, int(N * self.in_sample_proportion)
+                    self._nodes, int(n_verts * self.in_sample_proportion)
                 )
         else:
-            self.in_sample_proportion = len(self.in_sample_idx) / N
+            self.in_sample_proportion = len(self.in_sample_idx) / n_verts
 
         self._connected_subgraph(graph)
 
@@ -224,13 +224,6 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         self.index_to_id = dict(zip(range(len(self.in_sample_idx)), self.in_sample_idx))
 
         self._reduce_dim(in_sample_A)
-
-        if self._directed:
-            self.in_sample_embedding = np.concatenate(
-                (self.latent_left_, self.latent_right_), axis=1
-            )
-        else:
-            self.in_sample_embedding = self.latent_left_
 
         return self
 
@@ -248,7 +241,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         None
 
         """
-        N = len(graph)
+        n_verts = len(graph)
         in_sample_G = graph.subgraph(self.in_sample_idx).copy()
 
         if is_fully_connected(in_sample_G):
@@ -262,11 +255,11 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 and less_than_half
             ):
                 self.in_sample_idx = np.random.choice(
-                    self._nodes, int(N * self.in_sample_proportion)
+                    self._nodes, int(n_verts * self.in_sample_proportion)
                 )
                 temp = graph.subgraph(self.in_sample_idx).copy()
                 temp_lcc = max(nx.connected_components(temp), key=len)
-                if len(temp_lcc) / N > self.in_sample_proportion / 2:
+                if len(temp_lcc) / n_verts > self.in_sample_proportion / 2:
                     self.in_sample_idx = temp_lcc
                     less_than_half = False
                 c += 1
@@ -304,9 +297,16 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         """
 
         # Check if fit is already called
-        check_is_fitted(self, ["in_sample_embedding"], all_or_any=all)
+        check_is_fitted(self, ["latent_left_"], all_or_any=all)
 
-        n = self.in_sample_embedding.shape[0]
+        if self.directed:
+            in_sample_embedding = np.concatenate(
+                (self.latent_left_, self.latent_right_), axis=1
+            )
+        else:
+            in_sample_embedding = self.latent_left_
+
+        n_in_sample_verts, d = in_sample_embedding.shape
 
         # Type checking
         check_array(
@@ -314,13 +314,13 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             ensure_2d=False,
             allow_nd=False,
             ensure_min_samples=1,
-            ensure_min_features=n,
+            ensure_min_features=n_in_sample_verts,
         )
 
         if X.ndim == 1:
             X = X.reshape((1, -1))
             m = 1
-        elif X.shape[1] != n:
+        elif X.shape[1] != n_in_sample_verts:
             msg = "Similarity vector must be of length n"
             raise ValueError(msg)
         else:
@@ -336,12 +336,12 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
             )
             warnings.warn(msg, UserWarning)
 
-        oos_embedding = X @ np.linalg.pinv(self.in_sample_embedding).T
+        oos_embedding = X @ np.linalg.pinv(in_sample_embedding).T
 
         if self.semi_supervised:
             if ids is None:
-                if set(self.in_sample_idx) == set(range(n)):
-                    ids = np.arange(n, n + m)
+                if set(self.in_sample_idx) == set(range(n_in_sample_verts)):
+                    ids = np.arange(n_in_sample_verts, n_in_sample_verts + m)
                 else:
                     msg = "Semi supervised embedding without node ids."
                     raise ValueError(msg)
@@ -354,12 +354,22 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                 )
                 raise ValueError(msg)
 
-            self.in_sample_embedding = np.concatenate(
-                (self.in_sample_embedding, oos_embedding), axis=0
-            )
+            if self.directed:
+                self.latent_left_ = np.concatenate(
+                    (self.latent_left_, oos_embedding[:, : int(d / 2)])
+                )
+                self.right_left_ = np.concatenate(
+                    (self.right_left_, oos_embedding[:, int(d / 2) : d])
+                )
+            else:
+                self.latent_left_ = np.concatenate((self.latent_left_, oos_embedding))
 
-            self.id_to_index.update(dict(zip(range(n, n + m), ids)))
-            self.index_to_id.update(dict(zip(ids, range(n, n + m))))
+            self.id_to_index.update(
+                dict(zip(range(n_in_sample_verts, n_in_sample_verts + m), ids))
+            )
+            self.index_to_id.update(
+                dict(zip(ids, range(n_in_sample_verts, n_in_sample_verts + m)))
+            )
 
         return oos_embedding
 
@@ -386,8 +396,16 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         self.fit(graph)
 
-        N = len(graph)
-        n = len(self.in_sample_idx)
+        n_verts = len(graph)
+
+        if self.directed:
+            in_sample_embedding = np.concatenate(
+                (self.latent_left_, self.latent_right_), axis=1
+            )
+        else:
+            in_sample_embedding = self.latent_left_
+
+        n_in_sample_verts, d = in_sample_embedding.shape
 
         in_sample_names = [self.index_to_id[i] for i in self.in_sample_idx]
         out_sample_names = [i for i in self._nodes if i not in in_sample_names]
@@ -395,7 +413,7 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
         if isinstance(graph, nx.Graph):
             out_sample_edges = [graph.edges([os_id]) for os_id in out_sample_names]
 
-            X = np.zeros((N - n, n))
+            X = np.zeros((n_verts - n_in_sample_verts, n_in_sample_verts))
             for i in range(len(out_sample_id)):
                 for edge in out_sample_edges[i]:
                     if edge[1] in self.in_sample_idx:
@@ -403,12 +421,13 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
                             X[i, self._node_id_map[edge[1]]] += 1
                         else:
                             # this might be broken
-                            # BP : definitely broken, out_sample_id is undefined
                             X[i, self._node_id_map[edge[1]]] += graph.get_edge_data(
-                                out_sample_id[i], edge[1], default=0
+                                out_sample_names[i], edge[1], default=0
                             )[edge_weight_attr]
 
-        out_sample_idx = np.array([i for i in range(N) if i not in self.in_sample_idx])
+        out_sample_idx = np.array(
+            [i for i in range(n_verts) if i not in self.in_sample_idx]
+        )
         if isinstance(graph, np.ndarray):
             check_array(graph)
             X = graph[np.ix_(out_sample_idx, self.in_sample_idx)]
@@ -418,15 +437,20 @@ class OutOfSampleAdjacencySpectralEmbed(BaseEmbed):
 
         all_nodes_in_order = np.concatenate((self.in_sample_idx, out_sample_names))
 
-        embedding = np.zeros((N, self.in_sample_embedding.shape[1]))
-        embedding[:n] = self.in_sample_embedding[:n]
+        embedding = np.zeros((n_verts, in_sample_embedding.shape[1]))
+        embedding[:n_in_sample_verts] = in_sample_embedding[:n_in_sample_verts]
         embedding[out_sample_idx] = oos
 
-        self.index_to_id = dict(zip(range(N), all_nodes_in_order))
-        self.id_to_index = dict(zip(all_nodes_in_order, range(N)))
+        self.index_to_id = dict(zip(range(n_verts), all_nodes_in_order))
+        self.id_to_index = dict(zip(all_nodes_in_order, range(n_verts)))
 
         if self.semi_supervised:
-            self.in_sample_embedding = embedding
             self._nodes = all_nodes_in_order
+
+            if self.directed:
+                self.latent_left_ = embedding[:, : int(d / 2)]
+                self.latent_right_ = embedding[:, int(d / 2) : d]
+            else:
+                self.latent_left_ = embedding
 
         return embedding

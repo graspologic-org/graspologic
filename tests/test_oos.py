@@ -2,7 +2,7 @@ import unittest
 import pytest
 import graspy as gs
 import numpy as np
-from graspy.embed.oosase import OutOfSampleAdjacencySpectralEmbed
+from graspy.embed.oosase import OOSAdjacencySpectralEmbed
 from graspy.simulations.simulations import sbm
 
 
@@ -14,7 +14,7 @@ def test_oosase_predict():
     verts_per_community = [100, 100]
     A = sbm(verts_per_community, P)
 
-    ase_object = OutOfSampleAdjacencySpectralEmbed()
+    ase_object = OOSAdjacencySpectralEmbed()
 
     in_sample_A = A[: int(np.ceil(0.8 * n)), : int(np.ceil(0.8 * n))]
     X = A[int(np.ceil(0.8 * n)) :, : int(np.ceil(0.8 * n))]
@@ -46,16 +46,16 @@ def test_fit_predict():
     verts_per_community = [100, 100]
     A = sbm(verts_per_community, P)
 
-    ase_object1 = OutOfSampleAdjacencySpectralEmbed(
+    ase_object1 = OOSAdjacencySpectralEmbed(
         semi_supervised=True, in_sample_idx=range(int(np.ceil(0.8 * n)))
     )
     ase_object1.fit(A)
     oos_A = A[int(np.ceil(0.8 * n)) :, : int(np.ceil(0.8 * n))]
     oos_embed = ase_object1.predict(oos_A)
-    X_hat1 = ase_object1.in_sample_embedding
+    X_hat1 = ase_object1.latent_left_
 
     np.random.seed(8888)
-    ase_object2 = OutOfSampleAdjacencySpectralEmbed(
+    ase_object2 = OOSAdjacencySpectralEmbed(
         semi_supervised=True, in_sample_idx=range(int(np.ceil(0.8 * n)))
     )
     X_hat2 = ase_object2.fit_predict(A)
