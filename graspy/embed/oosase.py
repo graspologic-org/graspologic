@@ -391,7 +391,7 @@ class OOSAdjacencySpectralEmbed(BaseEmbed):
         Returns
         -------
         embedding : array
-            Embedding of n * m vertices.
+            Embedding of in sample and out of sample vertices.
         """
 
         self.fit(graph)
