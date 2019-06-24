@@ -46,8 +46,7 @@ def _get_omni_matrix(graphs):
     out = (A[:, :, None, :] + A.transpose(1, 0, 2)[None, :, :, :]).reshape(n * m, -1)
 
     # Averaging
-    # out /= 2
-    np.true_divide(out, 2, out=out)
+    out /= 2
 
     return out
 
