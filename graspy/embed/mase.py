@@ -15,7 +15,7 @@
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
-from ..utils import get_lcc, import_graph, is_almost_symmetric
+from ..utils import import_graph, is_almost_symmetric
 from .base import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
 
@@ -60,7 +60,7 @@ class MultipleASE(BaseEmbedMulti):
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
-    unscaled : bool, optional (default=True)
+    scaled : bool, optional (default=False)
         Whether to scale invidivual eigenvectors with eigenvalues in first embedding 
         stage.
 
@@ -90,10 +90,10 @@ class MultipleASE(BaseEmbedMulti):
         n_elbows=2,
         algorithm="randomized",
         n_iter=5,
-        unscaled=True,
+        scaled=False,
     ):
-        if not isinstance(unscaled, bool):
-            msg = "unscaled must be a boolean, not {}".format(unscaled)
+        if not isinstance(scaled, bool):
+            msg = "scaled must be a boolean, not {}".format(scaled)
             raise TypeError(msg)
 
         super().__init__(
@@ -102,7 +102,7 @@ class MultipleASE(BaseEmbedMulti):
             algorithm=algorithm,
             n_iter=n_iter,
         )
-        self.unscaled = unscaled
+        self.scaled = scaled
 
     def _reduce_dim(self, graphs):
         # first embed into log2(n_vertices) for each graph
@@ -132,7 +132,7 @@ class MultipleASE(BaseEmbedMulti):
         else:
             best_dimension = self.n_components
 
-        if self.unscaled:
+        if not self.scaled:
             Us = np.hstack([U[:, :best_dimension] for U in Us])
             Vs = np.hstack([V.T[:, :best_dimension] for V in Vs])
         else:
