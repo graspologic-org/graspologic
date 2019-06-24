@@ -240,6 +240,6 @@ class GaussianCluster(BaseCluster):
 
         self.n_components_ = best_component
         self.covariance_type_ = best_covariance
-        self.model_ = models[best_component - 1][best_covariance_idx]
+        self.model_ = models[best_component - self.min_components][best_covariance_idx]
 
         return self
