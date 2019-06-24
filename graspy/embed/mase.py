@@ -139,13 +139,13 @@ class MultipleASE(BaseEmbedMulti):
             # Equivalent to ASE
             Us = np.hstack(
                 [
-                    U[:, :best_dimension] @ np.diag(D[:best_dimension])
+                    U[:, :best_dimension] @ np.diag(np.sqrt(D[:best_dimension]))
                     for U, D in zip(Us, Ds)
                 ]
             )
             Vs = np.hstack(
                 [
-                    V.T[:, :best_dimension] @ np.diag(D[:best_dimension])
+                    V.T[:, :best_dimension] @ np.diag(np.sqrt(D[:best_dimension]))
                     for V, D in zip(Vs, Ds)
                 ]
             )
