@@ -219,7 +219,7 @@ class BaseEmbedMulti(BaseEmbed):
                     type(graphs), len(graphs)
                 )
                 raise ValueError(msg)
-            out = [import_graph(g) for g in graphs]
+            out = [import_graph(g, copy=False) for g in graphs]
         elif isinstance(graphs, np.ndarray):
             if graphs.ndim != 3:
                 msg = "Input tensor must be 3-dimensional, not {}-dimensional.".format(
@@ -231,7 +231,7 @@ class BaseEmbedMulti(BaseEmbed):
                     graphs.shape[0]
                 )
                 raise ValueError(msg)
-            out = import_graph(graphs)
+            out = import_graph(graphs, copy=False)
         else:
             msg = "Input must be a list or ndarray, not {}.".format(type(graphs))
             raise TypeError(msg)
