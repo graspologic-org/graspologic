@@ -22,7 +22,7 @@ import numpy as np
 from sklearn.utils import check_array
 
 
-def import_graph(graph, copy=False):
+def import_graph(graph, copy=True):
     """
     A function for reading a graph and returning a shared data type. 
 
@@ -31,6 +31,10 @@ def import_graph(graph, copy=False):
     graph: object
         Either array-like, shape (n_vertices, n_vertices) numpy array,
         or an object of type networkx.Graph.
+
+    copy: bool, (default=True)
+        Whether to return a copied version of array. If False and input is np.array,
+        the output returns the original input.
 
     Returns
     -------
