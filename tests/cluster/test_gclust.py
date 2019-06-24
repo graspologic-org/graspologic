@@ -98,7 +98,7 @@ def test_no_y():
     assert_equal(gclust.n_components_, 2)
 
 
-def test_outputs():
+def test_two_class():
     """
     Easily separable two gaussian problem.
     """
@@ -127,7 +127,29 @@ def test_outputs():
         assert_allclose(gclust.ari_.loc[n_components], 1)
 
 
-def test_bic():
+def test_five_class():
+    """
+    Easily separable five gaussian problem.
+    """
+    np.random.seed(10)
+
+    n = 100
+    mus = [[i * 5, 0] for i in range(5)]
+    cov = np.eye(2)  # balls
+
+    num_sims = 10
+
+    for _ in range(num_sims):
+        X = np.vstack([np.random.multivariate_normal(mu, cov, n) for mu in mus])
+
+        gclust = GaussianCluster(
+            min_components=3, max_components=10, covariance_type="all"
+        )
+        gclust.fit(X)
+        assert_equal(gclust.n_components_, 5)
+
+
+def test_ase_three_blocks():
     """
     Expect 3 clusters from a 3 block model
     """
