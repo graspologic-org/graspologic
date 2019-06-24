@@ -1,13 +1,9 @@
 import numpy as np
 import pytest
-from numpy import allclose, array_equal
-from numpy.linalg import norm
-from numpy.testing import assert_allclose
 
 from graspy.cluster.gclust import GaussianCluster
 from graspy.embed.mase import MultipleASE
 from graspy.simulations.simulations import er_np, sbm
-from graspy.utils.utils import is_symmetric, symmetrize
 
 
 def make_train_undirected(n=[20, 20], m=10):
@@ -142,5 +138,6 @@ def test_vertex():
     X = make_train_directed(n, m)
 
     left, right = MultipleASE(n_components=2, scaled=True).fit_transform(X)
-    gmm = GaussianCluster(1, 10).fit(np.hstack([left, right]))
+    res = np.hstack([left, right])
+    gmm = GaussianCluster(1, 10).fit(res)
     assert gmm.n_components_ == 2  # why is this 2?
