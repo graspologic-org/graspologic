@@ -214,9 +214,23 @@ class BaseEmbedMulti(BaseEmbed):
         # Convert input to np.arrays
         # This check is needed because np.stack will always duplicate array in memory.
         if isinstance(graphs, (list, tuple)):
+            if len(graphs) <= 1:
+                msg = "Input {} must have at least 2 graphs, not {}.".format(
+                    type(graphs), len(graphs)
+                )
+                raise ValueError(msg)
             out = [import_graph(g) for g in graphs]
-            # out = np.stack(out)
         elif isinstance(graphs, np.ndarray):
+            if graphs.ndim != 3:
+                msg = "Input tensor must be 3-dimensional, not {}-dimensional.".format(
+                    graphs.ndim
+                )
+                raise ValueError(msg)
+            elif graphs.shape[0] <= 1:
+                msg = "Input tensor must have at least 2 elements, not {}.".format(
+                    graphs.shape[0]
+                )
+                raise ValueError(msg)
             out = import_graph(graphs)
         else:
             msg = "Input must be a list or ndarray, not {}.".format(type(graphs))
