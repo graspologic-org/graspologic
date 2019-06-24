@@ -38,22 +38,30 @@ def make_train_directed(n=[20, 20], m=10):
 
 
 def test_bad_inputs():
+    np.random.seed(1)
+    single_graph = er_np(100, 0.2)
+    different_size_graphs = [er_np(100, 0.2)] + [er_np(200, 0.2)]
+
     with pytest.raises(TypeError):
         "Invalid unscaled"
-        unscaled = "1"
-        mase = MultipleASE(unscaled=unscaled)
+        mase = MultipleASE(scaled="1")
 
     with pytest.raises(ValueError):
         "Test single graph input"
-        np.random.seed(1)
-        A = er_np(100, 0.2)
-        MultipleASE().fit(A)
+        MultipleASE().fit(single_graph)
+
+    with pytest.raises(ValueError):
+        "Test 3-d tensor with 1 graph"
+        single_graph_tensor = single_graph.reshape(1, 100, -1)
+        MultipleASE().fit(single_graph_tensor)
+
+    with pytest.raises(ValueError):
+        "Empty list"
+        MultipleASE().fit([])
 
     with pytest.raises(ValueError):
         "Test graphs with different sizes"
-        np.random.seed(1)
-        A = [er_np(100, 0.2)] + [er_np(200, 0.2)]
-        MultipleASE().fit(A)
+        MultipleASE().fit(different_size_graphs)
 
 
 def test_graph_clustering():
@@ -84,9 +92,7 @@ def test_graph_clustering():
     np.random.seed(12)
     X = make_train_undirected(n, m)
 
-    res = (
-        MultipleASE(n_components=2, unscaled=False).fit(X).scores_.reshape((m * 4, -1))
-    )
+    res = MultipleASE(n_components=2, scaled=True).fit(X).scores_.reshape((m * 4, -1))
     gmm = GaussianCluster(10).fit(res)
     assert gmm.n_components_ == 4
 
@@ -94,9 +100,7 @@ def test_graph_clustering():
     np.random.seed(13)
     X = make_train_directed(n, m)
 
-    res = (
-        MultipleASE(n_components=2, unscaled=False).fit(X).scores_.reshape((m * 4, -1))
-    )
+    res = MultipleASE(n_components=2, scaled=True).fit(X).scores_.reshape((m * 4, -1))
     gmm = GaussianCluster(10).fit(res)
     assert gmm.n_components_ == 4
 
@@ -111,6 +115,7 @@ def test_vertex():
     m = 10
     X = make_train_undirected(n, m)
 
+    # undirected case
     res = MultipleASE(n_components=2).fit(X).latent_left_
     gmm = GaussianCluster(1, 10).fit(res)
     assert gmm.n_components_ == 2
@@ -124,19 +129,18 @@ def test_vertex():
     gmm = GaussianCluster(1, 10).fit(res)
     assert gmm.n_components_ == 4
 
-    # Scaled cases
-    # undirected case
+    # Scaled and undirected case
     np.random.seed(4)
     X = make_train_undirected(n, m)
 
-    res = MultipleASE(n_components=2, unscaled=False).fit_transform(X)
+    res = MultipleASE(n_components=2, scaled=True).fit_transform(X)
     gmm = GaussianCluster(1, 10).fit(res)
     assert gmm.n_components_ == 2
 
-    # directed case
+    # Scaled and directed case
     np.random.seed(5)
     X = make_train_directed(n, m)
 
-    left, right = MultipleASE(n_components=2, unscaled=False).fit_transform(X)
+    left, right = MultipleASE(n_components=2, scaled=True).fit_transform(X)
     gmm = GaussianCluster(1, 10).fit(np.hstack([left, right]))
     assert gmm.n_components_ == 2  # why is this 2?
