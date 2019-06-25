@@ -341,6 +341,7 @@ class Test_ZINP(unittest.TestCase):
             dc = np.array(np.random.power)
             er_np(self.n, self.p, dc=dc)
 
+
 class Test_WSBM(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
