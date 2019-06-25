@@ -99,16 +99,16 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     dc: function or array-like, shape (n_vertices)
         `dc` is used to generate a degree-corrected stochastic block model [1] in
         which each node in the graph has a parameter to specify its expected degree
-        relative to other nodes within its community.
+        relative to other nodes.
 
         - function:
             should generate a non-negative number to be used as a degree correction to
             create a heterogenous degree distribution. A weight will be generated for
-            each vertex, normalized so that the sum of weights in each block is 1.
+            each vertex, normalized so that the sum of weights is 1.
         - array-like of scalars, shape (n_vertices):
-            The weights in each block should sum to 1; otherwise, they will be
+            The weights should sum to 1; otherwise, they will be
             normalized and a warning will be thrown. The scalar associated with each
-            vertex is the node's relative expected degree within its community.
+            vertex is the node's relative expected degree.
 
     dc_kws: dictionary
         Ignored if `dc` is none or array of scalar.
@@ -123,7 +123,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
         Sampled adjacency matrix
     """
     if isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
-        raise TypeError("dc is not of type function or list")
+        raise TypeError("dc is not of type function or array-like of scalars")
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
     if not np.issubdtype(type(p), np.floating):
