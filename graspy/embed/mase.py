@@ -27,14 +27,16 @@ class MultipleASE(BaseEmbedMulti):
 
     For a population of undirected graphs, MASE assumes that the population of graphs 
     is sampled from :math:`VR^{(i)}V^T` where :math:`V \in \mathbb{R}^{n\times d}` and 
-    :math:`R^{(i)} \in \mathbb{R}^{d\times d}`. :math:`R^{(i)}` is allowed to vary 
-    for each graph, but are symmetric. All graphs share a common :math:`V`. 
+    :math:`R^{(i)} \in \mathbb{R}^{d\times d}`. Score matrices, :math:`R^{(i)}`, are 
+    allowed to vary for each graph, but are symmetric. All graphs share a common a 
+    latent position matrix :math:`V`. 
     
     For a population of directed graphs, MASE assumes that the population is sampled
     from :math:`UR^{(i)}V^T` where :math:`U \in \mathbb{R}^{n\times d_1}`, 
     :math:`V \in \mathbb{R}^{n\times d_2}`, and 
-    :math:`R^{(i)} \in \mathbb{R}^{d_1\times d_2}`. In this case, :math:`R^{(i)}` can be
-    assymetric and non-square, but still share a common :math:`U` and :math:`V`.
+    :math:`R^{(i)} \in \mathbb{R}^{d_1\times d_2}`. In this case, score matrices 
+    :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a 
+    common latent position matrices :math:`U` and :math:`V`.
 
     Parameters
     ----------
@@ -61,7 +63,7 @@ class MultipleASE(BaseEmbedMulti):
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
     scaled : bool, optional (default=False)
-        Whether to scale invidivual eigenvectors with eigenvalues in first embedding 
+        Whether to scale individual eigenvectors with eigenvalues in first embedding 
         stage.
 
     Attributes
@@ -76,7 +78,7 @@ class MultipleASE(BaseEmbedMulti):
         Estimated right latent positions of the graph. Only computed when the an input 
         graph is directed, or adjacency matrix is assymetric. Otherwise, None.
     scores_ : array, shape (n_samples, n_components, n_components)
-        Estimated :math:`\hat{R}` matrices. 
+        Estimated :math:`\hat{R}` matrices for each input graph.
 
     Notes
     -----
