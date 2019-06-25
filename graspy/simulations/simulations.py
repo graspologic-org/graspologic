@@ -96,12 +96,34 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
+    dc: function or array-like, shape (n_vertices)
+        `dc` is used to generate a degree-corrected stochastic block model [1] in
+        which each node in the graph has a parameter to specify its expected degree
+        relative to other nodes within its community.
+
+        - function:
+            should generate a non-negative number to be used as a degree correction to
+            create a heterogenous degree distribution. A weight will be generated for
+            each vertex, normalized so that the sum of weights in each block is 1.
+        - array-like of scalars, shape (n_vertices):
+            The weights in each block should sum to 1; otherwise, they will be
+            normalized and a warning will be thrown. The scalar associated with each
+            vertex is the node's relative expected degree within its community.
+
+    dc_kws: dictionary
+        Ignored if `dc` is none or array of scalar.
+        If `dc` is a function, `dc_kws` corresponds to its named arguments.
+        If not specified, in either case all functions will assume their default
+        parameters.
+
 
     Returns
     -------
     A : ndarray, shape (n, n)
         Sampled adjacency matrix
     """
+    if isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
+        raise TypeError("dc is not of type function or list")
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
     if not np.issubdtype(type(p), np.floating):
@@ -261,29 +283,29 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
-        `dc` is used to generate a degree-corrected stochastic block model [1] in 
+        `dc` is used to generate a degree-corrected stochastic block model [1] in
         which each node in the graph has a parameter to specify its expected degree
         relative to other nodes within its community.
 
-        - function: 
-            should generate a non-negative number to be used as a degree correction to 
+        - function:
+            should generate a non-negative number to be used as a degree correction to
             create a heterogenous degree distribution. A weight will be generated for
-            each vertex, normalized so that the sum of weights in each block is 1. 
-        - array-like of functions, shape (n_communities): 
-            Each function will generate the degree distribution for its respective 
-            community. 
-        - array-like of scalars, shape (n_vertices): 
-            The weights in each block should sum to 1; otherwise, they will be 
+            each vertex, normalized so that the sum of weights in each block is 1.
+        - array-like of functions, shape (n_communities):
+            Each function will generate the degree distribution for its respective
+            community.
+        - array-like of scalars, shape (n_vertices):
+            The weights in each block should sum to 1; otherwise, they will be
             normalized and a warning will be thrown. The scalar associated with each
-            vertex is the node's relative expected degree within its community. 
-    
+            vertex is the node's relative expected degree within its community.
+
     dc_kws: dictionary or array-like, shape (n_communities), optional
         Ignored if `dc` is none or array of scalar.
-        If `dc` is a function, `dc_kws` corresponds to its named arguments. 
-        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape 
-        (n_communities), of dictionary. Each dictionary is the named arguments 
-        for the corresponding function for that community. 
-        If not specified, in either case all functions will assume their default 
+        If `dc` is a function, `dc_kws` corresponds to its named arguments.
+        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape
+        (n_communities), of dictionary. Each dictionary is the named arguments
+        for the corresponding function for that community.
+        If not specified, in either case all functions will assume their default
         parameters.
 
     References
