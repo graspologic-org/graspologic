@@ -22,7 +22,7 @@ import numpy as np
 from sklearn.utils import check_array
 
 
-def import_graph(graph):
+def import_graph(graph, copy=True):
     """
     A function for reading a graph and returning a shared data type. 
 
@@ -31,6 +31,10 @@ def import_graph(graph):
     graph: object
         Either array-like, shape (n_vertices, n_vertices) numpy array,
         or an object of type networkx.Graph.
+
+    copy: bool, (default=True)
+        Whether to return a copied version of array. If False and input is np.array,
+        the output returns the original input.
 
     Returns
     -------
@@ -44,15 +48,29 @@ def import_graph(graph):
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif isinstance(graph, (np.ndarray, np.memmap)):
-        maximum = np.max(graph.shape)
+        shape = graph.shape
+        if len(shape) > 3:
+            msg = "Input tensor must have at most 3 dimensions, not {}.".format(
+                len(shape)
+            )
+            raise ValueError(msg)
+        elif len(shape) == 3:
+            if shape[1] != shape[2]:
+                msg = "Input tensor must have same number of vertices."
+                raise ValueError(msg)
+            min_features = shape[1]
+            min_samples = 2
+        else:
+            min_features = np.max(shape)
+            min_samples = min_features
         out = check_array(
             graph,
             dtype=[np.float64, np.float32],
             ensure_2d=True,
             allow_nd=True,  # For omni tensor input
-            ensure_min_features=maximum,
-            ensure_min_samples=maximum,
-            copy=True,
+            ensure_min_features=min_features,
+            ensure_min_samples=min_samples,
+            copy=copy,
         )
     else:
         msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
