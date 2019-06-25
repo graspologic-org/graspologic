@@ -1,14 +1,12 @@
-#!/usr/bin/env python
-import networkx as nx
 import numpy as np
 import pytest
-from numpy import array_equal, allclose
-from numpy.testing import assert_allclose
+from numpy import allclose, array_equal
 from numpy.linalg import norm
+from numpy.testing import assert_allclose
 
 from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
-from graspy.simulations.simulations import er_np, er_nm
-from graspy.utils.utils import symmetrize, is_symmetric
+from graspy.simulations.simulations import er_nm, er_np
+from graspy.utils.utils import is_symmetric, symmetrize
 
 
 def generate_data(n, seed=1):
