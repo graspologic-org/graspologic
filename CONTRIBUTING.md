@@ -50,22 +50,27 @@ We recommended that your contribution complies with the following rules before y
    the example.
 -  All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
 -  Ensure all tests are passing locally using `pytest`. Install the necessary packages by:
+   ```bash
+   $ pip install pytest pytest-cov
+   ```
 
-  ```bash
-  $ pip install pytest pytest-cov
-  ```
+   then run
 
-  then run
+   ```bash
+   $ pytest
+   ```
 
-  ```bash
-  $ pytest
-  ```
+   or you can run pytest on a single test file by
+
+   ```bash
+   $ pytest path/to/test.py
+   ```
 
 -  Run an autoformatter. We use `black` and would like for you to format all files using `black`. You can run the following lines to format your files.
-  ```bash
-  $ pip install black
-  $ black path/to/module.py
-  ```
+   ```bash
+   $ pip install black
+   $ black path/to/module.py
+   ```
 
 ## Guidelines
 ### Coding Guidelines
