@@ -70,7 +70,7 @@ def sample_edges(P, directed=False, loops=False):
         return A - np.diag(np.diag(A))
 
 
-def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
+def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
     r"""
     Samples a Erdos Renyi (n, p) graph with specified edge probability.
 
@@ -80,7 +80,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
     Parameters
     ----------
     n: int
-        Number of vertices
+       Number of vertices
     p: float
         Probability of an edge existing between two vertices, between 0 and 1.
     directed: boolean, optional (default=False)
@@ -96,50 +96,46 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None):
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
+    dc: function or array-like, shape (n_vertices)
+        `dc` is used to generate a degree-corrected Erdos Renyi Model in
+        which each node in the graph has a parameter to specify its expected degree
+        relative to other nodes.
+
+        - function:
+            should generate a non-negative number to be used as a degree correction to
+            create a heterogenous degree distribution. A weight will be generated for
+            each vertex, normalized so that the sum of weights is 1.
+        - array-like of scalars, shape (n_vertices):
+            The weights should sum to 1; otherwise, they will be
+            normalized and a warning will be thrown. The scalar associated with each
+            vertex is the node's relative expected degree.
+
+    dc_kws: dictionary
+        Ignored if `dc` is none or array of scalar.
+        If `dc` is a function, `dc_kws` corresponds to its named arguments.
+        If not specified, in either case all functions will assume their default
+        parameters.
+
 
     Returns
     -------
     A : ndarray, shape (n, n)
         Sampled adjacency matrix
     """
-    if not np.issubdtype(type(p), np.floating):
-        raise TypeError("p is not of type float.")
-    elif p < 0:
-        msg = "You have passed a probability, {}, less than 0."
-        msg = msg.format(float(p))
-        raise ValueError(msg)
-    elif p > 1:
-        msg = "You have passed a probability, {}, greater than 1."
-        msg = msg.format(float(p))
-        raise ValueError(msg)
+    if isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
+        raise TypeError("dc is not of type function or array-like of scalars")
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
-    elif n <= 0:
-        msg = "n must be > 0."
-        raise ValueError(msg)
-    if type(directed) is not bool:
-        raise TypeError("directed is not of type bool.")
+    if not np.issubdtype(type(p), np.floating):
+        raise TypeError("p is not of type float.")
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
-
-    # check weight function
-    if not np.issubdtype(type(wt), np.number):
-        if not callable(wt):
-            raise TypeError("You have not passed a function for wt.")
-
-    probs = np.ones((n, n)) * p
-    A = sample_edges(probs, directed, loops)
-
-    if not np.issubdtype(type(wt), np.number):
-        weights = wt(size=int(A.sum()), **wtargs)
-        A[A == 1] = weights
-    else:
-        A *= wt
-
-    if not directed:
-        A = symmetrize(A)
-
-    return A
+    if type(directed) is not bool:
+        raise TypeError("directed is not of type bool.")
+    n_sbm = np.array([n])
+    p_sbm = np.array([[p]])
+    g = sbm(n_sbm, p_sbm, directed, loops, wt, wtargs, dc, dc_kws)
+    return g
 
 
 def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
@@ -287,29 +283,29 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
-        `dc` is used to generate a degree-corrected stochastic block model [1] in 
+        `dc` is used to generate a degree-corrected stochastic block model [1] in
         which each node in the graph has a parameter to specify its expected degree
         relative to other nodes within its community.
 
-        - function: 
-            should generate a non-negative number to be used as a degree correction to 
+        - function:
+            should generate a non-negative number to be used as a degree correction to
             create a heterogenous degree distribution. A weight will be generated for
-            each vertex, normalized so that the sum of weights in each block is 1. 
-        - array-like of functions, shape (n_communities): 
-            Each function will generate the degree distribution for its respective 
-            community. 
-        - array-like of scalars, shape (n_vertices): 
-            The weights in each block should sum to 1; otherwise, they will be 
+            each vertex, normalized so that the sum of weights in each block is 1.
+        - array-like of functions, shape (n_communities):
+            Each function will generate the degree distribution for its respective
+            community.
+        - array-like of scalars, shape (n_vertices):
+            The weights in each block should sum to 1; otherwise, they will be
             normalized and a warning will be thrown. The scalar associated with each
-            vertex is the node's relative expected degree within its community. 
-    
+            vertex is the node's relative expected degree within its community.
+
     dc_kws: dictionary or array-like, shape (n_communities), optional
         Ignored if `dc` is none or array of scalar.
-        If `dc` is a function, `dc_kws` corresponds to its named arguments. 
-        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape 
-        (n_communities), of dictionary. Each dictionary is the named arguments 
-        for the corresponding function for that community. 
-        If not specified, in either case all functions will assume their default 
+        If `dc` is a function, `dc_kws` corresponds to its named arguments.
+        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape
+        (n_communities), of dictionary. Each dictionary is the named arguments
+        for the corresponding function for that community.
+        If not specified, in either case all functions will assume their default
         parameters.
 
     References
