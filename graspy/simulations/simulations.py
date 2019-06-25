@@ -97,7 +97,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
     dc: function or array-like, shape (n_vertices)
-        `dc` is used to generate a degree-corrected stochastic block model [1] in
+        `dc` is used to generate a degree-corrected Erdos Renyi Model in
         which each node in the graph has a parameter to specify its expected degree
         relative to other nodes.
 
