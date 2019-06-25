@@ -337,6 +337,9 @@ class Test_ZINP(unittest.TestCase):
             wt = np.random
             er_np(self.n, self.p, wt=wt)
 
+        with self.assertRaises(TypeError):
+            dc = np.array(np.random.power)
+            er_np(self.n, self.p, dc=dc)
 
 class Test_WSBM(unittest.TestCase):
     @classmethod
