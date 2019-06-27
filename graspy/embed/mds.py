@@ -65,7 +65,7 @@ class ClassicalMDS(BaseEstimator):
 
     Attributes
     ----------
-    n_components : int
+    n_components_ : int
         Equals the parameter n_components. If input n_components was None,
         then equals the optimal embedding dimension.
 
