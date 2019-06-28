@@ -141,8 +141,6 @@ class LatentDistributionTest(BaseInference):
         A2 = import_graph(A2)
         if not is_symmetric(A1) or not is_symmetric(A2):
             raise NotImplementedError()  # TODO asymmetric case
-        if A1.shape != A2.shape:
-            raise ValueError("Input graphs do not have matching dimensions)
         if self.n_components is None:
             # get the last elbow from ZG for each and take the maximum
             num_dims1 = select_dimension(A1)[0][-1]
