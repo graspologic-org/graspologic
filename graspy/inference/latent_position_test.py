@@ -26,7 +26,7 @@ class LatentPositionTest(BaseInference):
     Two-sample hypothesis test for the problem of determining whether two random 
     dot product graphs have the same latent positions [1]_.
 
-    This this test assumes that the two input graphs are vertex aligned, that is,
+    This test assumes that the two input graphs are vertex aligned, that is,
     there is a known mapping between vertices in the two graphs and the input graphs
     have their vertices sorted in the same order. Currently, the function only 
     supports undirected graphs.
