@@ -30,13 +30,8 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(n_bootstraps=0.5)
         with self.assertRaises(TypeError):
             LatentDistributionTest(n_components=0.5)
-        with self.assertRaises(TypeError):
-            LatentDistributionTest(bandwidth="oops")
-
-    def test_n_bootstraps(self):
-        npt = LatentDistributionTest(n_bootstraps=234, n_components=None)
-        npt.fit(self.A1, self.A2)
-        self.assertEqual(npt.null_distribution_.shape[0], 234)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(which_test="oops")
 
     def test_bad_matrix_inputs(self):
         npt = LatentDistributionTest()
@@ -58,10 +53,10 @@ class TestLatentDistributionTest(unittest.TestCase):
         np.random.seed(3)
         A = er_np(50, 0.3)
         B = er_np(100, 0.3)
-
         npt = LatentDistributionTest()
-        with self.assertRaises(ValueError):
-            npt.fit(A, B)
+        p = npt.fit(A,B)
+        print(p)
+        self.assertTrue(p > 0.05)
 
     def test_SBM_epsilon(self):
         np.random.seed(12345678)
@@ -73,8 +68,8 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
-        npt_null = LatentDistributionTest(n_components=2, n_bootstraps=100)
-        npt_alt = LatentDistributionTest(n_components=2, n_bootstraps=100)
+        npt_null = LatentDistributionTest(n_components=2)
+        npt_alt = LatentDistributionTest(n_components=2)
         p_null = npt_null.fit(A1, A2)
         p_alt = npt_alt.fit(A1, A3)
         self.assertTrue(p_null > 0.05)

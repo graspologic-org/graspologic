@@ -57,10 +57,6 @@ class BaseInference(BaseEstimator):
         self.n_components = n_components
 
     @abstractmethod
-    def _bootstrap(self):
-        pass
-
-    @abstractmethod
     def _embed(self, X1, X2, n_componets):
         """
         Computes the latent positions of input graphs
