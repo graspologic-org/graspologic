@@ -125,7 +125,7 @@ class mug2vec(BaseEstimator):
             graphs = [pass_to_ranks(g, self.pass_to_ranks) for g in graphs]
 
         omni = OmnibusEmbed(
-            n_components=self.omnibus_components, n_elbows=omnibus_n_elbows
+            n_components=self.omnibus_components, n_elbows=self.omnibus_n_elbows
         )
         omnibus_embedding = omni.fit_transform(graphs)
 
@@ -137,7 +137,7 @@ class mug2vec(BaseEstimator):
         self.components_ = ClassicalMDS().fit_transform(omnibus_embedding)
         self.cmds_components_ = self.components_.shape[-1]
 
-        return self.fit(graphs)
+        return self
 
     def fit_transform(self, graphs, y=None):
         """
