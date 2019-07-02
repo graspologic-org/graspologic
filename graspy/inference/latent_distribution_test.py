@@ -36,12 +36,12 @@ class LatentDistributionTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
 
-    n_bootstraps : int (default=200)
-        Number of bootstrap iterations.
+    method : string, {'dcorr' (default), 'mgc'}
 
-    bandwidth : float, optional (default=0.5)
-        Bandwidth to use for gaussian kernel. If None,
-        the median heuristic will be used.
+    pass_graph : bool, optional (default True)
+        If True, expects adjacency matrices as inputs. If False, expects latent positions as inputs.
+        Adjacency matrices are n x n ndarrays or networkx graph objects.
+        Latent positions are n x p ndarrays representing a set of points.
 
     Attributes
     ----------
@@ -49,15 +49,14 @@ class LatentDistributionTest(BaseInference):
         The distribution of T statistics generated under the null.
 
     sample_T_statistic_ : float
-        The observed difference between the embedded positions of the two input graphs
-        after an alignment (the type of alignment depends on `test_case`)
+        The observed difference between the embedded positions of the two input graphs.
 
     p_ : float
-        The overall p value from the test.
+        The p value from the test.
 
     Examples
     --------
-    >>> npt = LatentDistributionTest(n_components=2, which_test='mgc')
+    >>> npt = LatentDistributionTest(n_components=2, method='mgc')
     >>> p = npt.fit(A1, A2)
 
     See also
@@ -68,7 +67,7 @@ class LatentDistributionTest(BaseInference):
     """
     # TODO: reference Varjavand paper when it is on arxiv
 
-    def __init__(self, n_components=None, which_test="mgc", graph=False):
+    def __init__(self, n_components=None, method="mgc", pass_graph=True):
         if n_components is not None:
             if not isinstance(n_components, int):
                 msg = "n_components must an int, not {}.".format(type(n_components))
@@ -79,23 +78,29 @@ class LatentDistributionTest(BaseInference):
         if which_test not in ["mgc", "dcorr"]:
             msg = "{} is not a valid test, must be mgc or dcorr.".format(which_test)
             raise ValueError(msg)
-        super().__init__(embedding="ase", n_components=n_components)
-        self.which_test = which_test
-        self.graph = graph
+        super().__init__(embedding="ase", n_components=n_components, pass_graph=pass_graph)
+        self.method = method
+        self.symmetry = None
 
     def _k_sample_transform(self, x, y):
         u = np.concatenate([x, y], axis=0)
         v = np.concatenate([np.repeat(1, x.shape[0]), np.repeat(2, y.shape[0])], axis=0)
-        if len(u.shape) == 1:
+        if u.ndim == 1:
             u = u[..., np.newaxis]
-        if len(v.shape) == 1:
+        if v.ndim == 1:
             v = v[..., np.newaxis]
         return u, v
 
     def _embed(self, A1, A2):
         ase = AdjacencySpectralEmbed(n_components=self.n_components)
-        X1_hat = ase.fit_transform(A1)
-        X2_hat = ase.fit_transform(A2)
+        if self.symmetry:
+            X1_hat = ase.fit_transform(A1)
+            X2_hat = ase.fit_transform(A2)
+        else:
+            X1_hats = ase.fit_transform(A1)
+            X2_hats = ase.fit_transform(A2)
+            X1_hat = np.concatenate((X1_hats[0], X1_hats[1]), axis=1)
+            X2_hat = np.concatenate((X2_hats[0], X2_hats[1]), axis=1)
         return X1_hat, X2_hat
 
     def fit(self, A1, A2):
@@ -112,23 +117,28 @@ class LatentDistributionTest(BaseInference):
         p_ : float
             The p value corresponding to the specified hypothesis test
         """
-        if self.graph:
+        if self.pass_graph:
             A1 = import_graph(A1)
             A2 = import_graph(A2)
-            if not is_symmetric(A1) or not is_symmetric(A2):
-                raise NotImplementedError()  # TODO asymmetric case
+            if is_symmetric(A1) != is_symmetric(A2):
+                msg = "graphs have unequal parity of symmetry"
+                raise NotImplementedError(msg) # TODO fix this in future? Many cases.
+            if is_symmetric(A1):
+                self.symmetry = True
+            else:
+                self.symmetry = False
             if self.n_components is None:
                 num_dims1 = select_dimension(A1.astype(float))[0][-1]
                 num_dims2 = select_dimension(A2.astype(float))[0][-1]
                 self.n_components = max(num_dims1, num_dims2)
             X1_hat, X2_hat = self._embed(A1, A2)
             X1_hat, X2_hat = self._k_sample_transform(X1_hat, X2_hat)
-        else: #you already gave me stuff
+        else: #you already have latent positions
             X1_hat = A1
             X2_hat = A2
-        if self.which_test is "dcorr":
-            test = DCorr('ubiased')
-        elif self.which_test == "mgc":
+        if self.method == "dcorr":
+            test = DCorr('unbiased')
+        elif self.method == "mgc":
             test = MGC()
         t, t_meta = test.test_statistic(X1_hat, X2_hat, is_fast=False)
         p, p_meta = test.p_value(X1_hat, X2_hat, is_fast=False)

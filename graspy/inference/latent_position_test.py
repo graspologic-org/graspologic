@@ -23,12 +23,12 @@ from .base import BaseInference
 
 class LatentPositionTest(BaseInference):
     r"""
-    Two-sample hypothesis test for the problem of determining whether two random 
+    Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same latent positions [1]_.
 
     This this test assumes that the two input graphs are vertex aligned, that is,
     there is a known mapping between vertices in the two graphs and the input graphs
-    have their vertices sorted in the same order. Currently, the function only 
+    have their vertices sorted in the same order. Currently, the function only
     supports undirected graphs.
 
     Parameters
@@ -47,9 +47,9 @@ class LatentPositionTest(BaseInference):
         dimensions are found by the Zhu and Godsi algorithm.
 
     test_case : string, {'rotation' (default), 'scalar-rotation', 'diagonal-rotation'}
-        describes the exact form of the hypothesis to test when using 'ase' or 'lse' 
+        describes the exact form of the hypothesis to test when using 'ase' or 'lse'
         as an embedding method. Ignored if using 'omnibus'. Given two latent positions,
-        :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that 
+        :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that
         minimizes :math:`||X_1 - X_2 R||_F`:
 
         - 'rotation'
@@ -64,22 +64,27 @@ class LatentPositionTest(BaseInference):
     n_bootstraps : int, optional (default 500)
         Number of bootstrap simulations to run to generate the null distribution
 
+    pass_graph : bool, optional (default True)
+        If True, expects adjacency matrices as inputs. If False, expects latent positions as inputs.
+        Adjacency matrices are n x n ndarrays or networkx graph objects.
+        Latent positions are n x p ndarrays representing a set of points.
+
     Attributes
     ----------
     null_distribution_1_, null_distribution_2_ : np.ndarray (n_bootstraps,)
-        The distribution of T statistics generated under the null, using the first and  
-        and second input graph, respectively. The latent positions of each sample graph 
-        are used independently to sample random dot product graphs, so two null 
+        The distribution of T statistics generated under the null, using the first and
+        and second input graph, respectively. The latent positions of each sample graph
+        are used independently to sample random dot product graphs, so two null
         distributions are generated
-    
+
     sample_T_statistic_ : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on `test_case`)
 
-    p_value_1_, p_value_2_ : float 
-        The p value estimated from the null distributions from sample 1 and sample 2. 
+    p_value_1_, p_value_2_ : float
+        The p value estimated from the null distributions from sample 1 and sample 2.
 
-    p_ : float 
+    p_ : float
         The overall p value from the test; this is the max of p_value_1_ and p_value_2_
 
     Examples
@@ -93,15 +98,15 @@ class LatentPositionTest(BaseInference):
     graspy.embed.OmnibusEmbed
     graspy.embed.selectSVD
 
-    References  
+    References
     ----------
-    .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E. 
+    .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E.
        "A Semiparametric Two-Sample Hypothesis Testing Problem for Random Graphs"
        Journal of Computational and Graphical Statistics, Vol. 26(2), 2017
     """
 
     def __init__(
-        self, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation"
+        self, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation", pass_graph=True
     ):
         if type(n_bootstraps) is not int:
             raise TypeError()
@@ -119,7 +124,7 @@ class LatentPositionTest(BaseInference):
                 + "'diagonal-rotation'"
             )
 
-        super().__init__(embedding=embedding, n_components=n_components)
+        super().__init__(embedding=embedding, n_components=n_components, pass_graph=pass_graph)
 
         self.n_bootstraps = n_bootstraps
         self.test_case = test_case
@@ -183,26 +188,29 @@ class LatentPositionTest(BaseInference):
         ----------
         A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
             The two graphs to run a hypothesis test on.
-            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs, 
+            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
             where ``n_vertices`` is the same for both
-        
+
         Returns
         -------
         p : float
             The p value corresponding to the specified hypothesis test
         """
-        A1 = import_graph(A1)
-        A2 = import_graph(A2)
-        if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()  # TODO asymmetric case
-        if A1.shape != A2.shape:
-            raise ValueError("Input matrices do not have matching dimensions")
-        if self.n_components is None:
-            # get the last elbow from ZG for each and take the maximum
-            num_dims1 = select_dimension(A1)[0][-1]
-            num_dims2 = select_dimension(A2)[0][-1]
-            self.n_components = max(num_dims1, num_dims2)
-        X_hats = self._embed(A1, A2)
+        if self.pass_graph:
+            A1 = import_graph(A1)
+            A2 = import_graph(A2)
+            if not is_symmetric(A1) or not is_symmetric(A2):
+                raise NotImplementedError()  # TODO asymmetric case
+            if A1.shape != A2.shape:
+                raise ValueError("Input matrices do not have matching dimensions")
+            if self.n_components is None:
+                # get the last elbow from ZG for each and take the maximum
+                num_dims1 = select_dimension(A1)[0][-1]
+                num_dims2 = select_dimension(A2)[0][-1]
+                self.n_components = max(num_dims1, num_dims2)
+            X_hats = self._embed(A1, A2)
+        else:
+            X_hats = (A1, A2)
         sample_T_statistic = self._difference_norm(X_hats[0], X_hats[1])
         null_distribution_1 = self._bootstrap(X_hats[0])
         null_distribution_2 = self._bootstrap(X_hats[1])

@@ -38,7 +38,7 @@ class BaseInference(BaseEstimator):
         dimensions are found by the Zhu and Godsi algorithm.
     """
 
-    def __init__(self, embedding="ase", n_components=None):
+    def __init__(self, embedding="ase", n_components=None, pass_graph=True):
         if type(embedding) is not str:
             raise TypeError("embedding must be str")
         if (not isinstance(n_components, (int, np.integer))) and (
@@ -55,6 +55,7 @@ class BaseInference(BaseEstimator):
             )
         self.embedding = embedding
         self.n_components = n_components
+        self.pass_graph = pass_graph
 
     @abstractmethod
     def _embed(self, X1, X2, n_componets):
