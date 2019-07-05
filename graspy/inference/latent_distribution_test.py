@@ -72,11 +72,11 @@ class LatentDistributionTest(BaseInference):
             if not isinstance(n_components, int):
                 msg = "n_components must an int, not {}.".format(type(n_components))
                 raise TypeError(msg)
-        if type(which_test) is not str:
-            msg = "which_test must be a string, not {}.".format(type(which_test))
+        if type(method) is not str:
+            msg = "method must be a string, not {}.".format(type(method))
             raise TypeError(msg)
-        if which_test not in ["mgc", "dcorr"]:
-            msg = "{} is not a valid test, must be mgc or dcorr.".format(which_test)
+        if method not in ["mgc", "dcorr"]:
+            msg = "{} is not a valid test, must be mgc or dcorr.".format(method)
             raise ValueError(msg)
         super().__init__(embedding="ase", n_components=n_components, pass_graph=pass_graph)
         self.method = method
