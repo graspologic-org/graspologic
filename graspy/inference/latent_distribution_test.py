@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import numpy as np
+import logging
 
 from ..embed import AdjacencySpectralEmbed, select_dimension
 from ..utils import import_graph, is_symmetric
@@ -35,6 +36,9 @@ class LatentDistributionTest(BaseInference):
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
+
+    n_bootstraps : int, optional (default=200)
+        Number of bootstraps to perform when computing a p-value.
 
     method : string, {'dcorr' (default), 'mgc'}
 
@@ -67,11 +71,17 @@ class LatentDistributionTest(BaseInference):
     """
     # TODO: reference Varjavand paper when it is on arxiv
 
-    def __init__(self, n_components=None, method="mgc", pass_graph=True):
+    def __init__(self, n_components=None, n_bootstraps=200, method="mgc", pass_graph=True):
         if n_components is not None:
             if not isinstance(n_components, int):
                 msg = "n_components must an int, not {}.".format(type(n_components))
                 raise TypeError(msg)
+        if type(n_bootstraps) is not int:
+            msg = "n_bootstraps must be an int, not {}".format(type(method))
+            raise TypeError(msg)
+        if n_bootstraps <= 0:
+            msg = "n_bootstraps must be > 0, not {}".format(n_bootstraps)
+            raise ValueError(msg)
         if type(method) is not str:
             msg = "method must be a string, not {}.".format(type(method))
             raise TypeError(msg)
@@ -81,8 +91,11 @@ class LatentDistributionTest(BaseInference):
         super().__init__(embedding="ase", n_components=n_components, pass_graph=pass_graph)
         self.method = method
         self.symmetry = None
+        self.n_bootstraps = n_bootstraps
 
     def _k_sample_transform(self, x, y):
+        if x.shape[0] != y.shape[0]:
+            logging.warning('Results are not to be trusted for small N1/N2, or N1 not approximately N2!')
         u = np.concatenate([x, y], axis=0)
         v = np.concatenate([np.repeat(1, x.shape[0]), np.repeat(2, y.shape[0])], axis=0)
         if u.ndim == 1:
@@ -141,7 +154,7 @@ class LatentDistributionTest(BaseInference):
         elif self.method == "mgc":
             test = MGC()
         t, t_meta = test.test_statistic(X1_hat, X2_hat, is_fast=False)
-        p, p_meta = test.p_value(X1_hat, X2_hat, is_fast=False)
+        p, p_meta = test.p_value(X1_hat, X2_hat, replication_factor=self.n_bootstraps, is_fast=False)
         self.sample_T_statistic_ =  t
         self.null_distribution_ = list(p_meta)
         self.p_ = p
