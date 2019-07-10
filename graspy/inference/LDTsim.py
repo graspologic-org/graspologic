@@ -16,18 +16,20 @@ B = [[0.5, 0.2],
 B = symmetrize(B)
 k = 2
 tests = 1
-start = 50
-stop = 451
-diff = 100
+start = 100
+stop = 351
+diff1 = 100
+diff2 = 10
+reps = 4
 ns = []
 ms = []
 newms = []
 error_list = []
 temp = []
 
-for n in range(start, stop, diff):
+for n in range(start, stop, diff1):
     ns.append(n)
-    for m in range(n, n+stop-start, diff):
+    for m in range(n, n+(diff2*reps), diff2):
         cn = [n//k] * k
         cm = [m//k] * k
         A1 = sbm(cn, B)
