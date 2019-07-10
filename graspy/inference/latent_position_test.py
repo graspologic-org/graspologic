@@ -106,7 +106,12 @@ class LatentPositionTest(BaseInference):
     """
 
     def __init__(
-        self, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation", pass_graph=True
+        self,
+        embedding="ase",
+        n_components=None,
+        n_bootstraps=500,
+        test_case="rotation",
+        pass_graph=True,
     ):
         if type(n_bootstraps) is not int:
             raise TypeError()
@@ -124,7 +129,9 @@ class LatentPositionTest(BaseInference):
                 + "'diagonal-rotation'"
             )
 
-        super().__init__(embedding=embedding, n_components=n_components, pass_graph=pass_graph)
+        super().__init__(
+            embedding=embedding, n_components=n_components, pass_graph=pass_graph
+        )
 
         self.n_bootstraps = n_bootstraps
         self.test_case = test_case

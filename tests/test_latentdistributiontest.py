@@ -18,11 +18,11 @@ class TestLatentDistributionTest(unittest.TestCase):
         cls.A2 = er_np(20, 0.3)
 
     def test_fit_p_ase_works(self):
-        npt = LatentDistributionTest(method='dcorr')
+        npt = LatentDistributionTest(method="dcorr")
         p = npt.fit(self.A1, self.A2)
 
     def test_fit_mgc_works(self):
-        npt = LatentDistributionTest(method='mgc')
+        npt = LatentDistributionTest(method="mgc")
         p = npt.fit(self.A1, self.A2)
 
     def test_bad_kwargs(self):
@@ -53,9 +53,9 @@ class TestLatentDistributionTest(unittest.TestCase):
         np.random.seed(3)
         A = er_np(50, 0.3)
         B = er_np(100, 0.3)
-        npt = LatentDistributionTest(method='dcorr')
-        p = npt.fit(A,B)
-        #self.assertTrue(p < 0.05)
+        npt = LatentDistributionTest(method="dcorr")
+        p = npt.fit(A, B)
+        # self.assertTrue(p < 0.05)
         # CURRENTLY THIS IS SKETCHY SINCE WE KNOW DCORR/MGC IS AN INVALID TEST FOR N != M
         # FOR NOW WE SHOULD LET PEOPLE DO THIS, BUT RESULTS ARE NOT TO BE TRUSTED FOR SMALL N OR N NOT ~ M
 
@@ -69,11 +69,11 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
-        npt_null = LatentDistributionTest(n_components=2, method='dcorr')
-        npt_alt = LatentDistributionTest(n_components=2, method='dcorr')
+        npt_null = LatentDistributionTest(n_components=2, method="dcorr")
+        npt_alt = LatentDistributionTest(n_components=2, method="dcorr")
         p_null = npt_null.fit(A1, A2)
         p_alt = npt_alt.fit(A1, A3)
-        print('null:', p_null, 'alt:', p_alt)
+        print("null:", p_null, "alt:", p_alt)
         self.assertTrue(p_null > 0.05)
         self.assertTrue(p_alt <= 0.05)
 
