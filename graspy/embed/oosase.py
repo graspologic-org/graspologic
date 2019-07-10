@@ -145,10 +145,9 @@ class OOSAdjacencySpectralEmbed(BaseEmbed):
             check_lcc=check_lcc,
         )
 
-        if random_state is None:
-            random_state = np.random.randint(10 ** 6)
-        np.random.seed(random_state)
-
+        if random_state is not None:
+            random_state = np.random.randint(random_state)
+    
         if in_sample_proportion <= 0 or in_sample_proportion > 1:
             if in_sample_idx is None:
                 msg = (
