@@ -142,7 +142,11 @@ class LatentDistributionTest(BaseInference):
             X1_hat, X2_hat = k_sample_transform(X1_hat, X2_hat)
         else:  # you already have latent positions
             if type(A1) is not np.ndarray or type(A2) is not np.ndarray:
-                raise TypeError("Your inputs should be np arrays, not {} and {}".format(type(A1), type(A2)))
+                raise TypeError(
+                    "Your inputs should be np arrays, not {} and {}".format(
+                        type(A1), type(A2)
+                    )
+                )
             X1_hat = A1
             X2_hat = A2
             X1_hat, X2_hat = k_sample_transform(X1_hat, X2_hat)
