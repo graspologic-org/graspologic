@@ -18,6 +18,7 @@ import logging
 from ..embed import AdjacencySpectralEmbed, select_dimension
 from ..utils import import_graph, is_symmetric
 from .base import BaseInference
+from mgcpy.hypothesis_tests.transforms import k_sample_transform
 from mgcpy.independence_tests.mgc import MGC
 from mgcpy.independence_tests.dcorr import DCorr
 
@@ -43,8 +44,8 @@ class LatentDistributionTest(BaseInference):
     method : string, {'dcorr' (default), 'mgc'}
 
     pass_graph : bool, optional (default True)
-        If True, expects adjacency matrices as inputs. If False, expects latent positions as inputs.
-        Adjacency matrices are n x n ndarrays or networkx graph objects.
+        If True, expects graphs as inputs. If False, expects latent positions as inputs.
+        Graphs are n x n ndarrays or networkx graph objects.
         Latent positions are n x p ndarrays representing a set of points.
 
     Attributes
@@ -80,7 +81,7 @@ class LatentDistributionTest(BaseInference):
                 msg = "n_components must an int, not {}.".format(type(n_components))
                 raise TypeError(msg)
         if type(n_bootstraps) is not int:
-            msg = "n_bootstraps must be an int, not {}".format(type(method))
+            msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
             raise TypeError(msg)
         if n_bootstraps <= 0:
             msg = "n_bootstraps must be > 0, not {}".format(n_bootstraps)
@@ -91,29 +92,26 @@ class LatentDistributionTest(BaseInference):
         if method not in ["mgc", "dcorr"]:
             msg = "{} is not a valid test, must be mgc or dcorr.".format(method)
             raise ValueError(msg)
+        if type(pass_graph) is not bool:
+            msg = "pass_graph must be a bool, not {}".format(type(pass_graph))
+            raise TypeError(msg)
         super().__init__(
             embedding="ase", n_components=n_components, pass_graph=pass_graph
         )
         self.method = method
-        self.symmetry = None
         self.n_bootstraps = n_bootstraps
 
-    def _k_sample_transform(self, x, y):
-        if x.shape[0] != y.shape[0]:
-            logging.warning(
-                "Results are not to be trusted for small N1/N2, or N1 not approximately N2!"
-            )
-        u = np.concatenate([x, y], axis=0)
-        v = np.concatenate([np.repeat(1, x.shape[0]), np.repeat(2, y.shape[0])], axis=0)
-        if u.ndim == 1:
-            u = u[..., np.newaxis]
-        if v.ndim == 1:
-            v = v[..., np.newaxis]
-        return u, v
-
     def _embed(self, A1, A2):
+        if self.n_components is None:
+            num_dims1 = select_dimension(A1.astype(float))[0][-1]
+            num_dims2 = select_dimension(A2.astype(float))[0][-1]
+            self.n_components = max(num_dims1, num_dims2)
         ase = AdjacencySpectralEmbed(n_components=self.n_components)
-        if self.symmetry:
+        # check symmetry
+        if is_symmetric(A1) != is_symmetric(A2):
+            msg = "graphs have unequal parity of symmetry"
+            raise NotImplementedError(msg)  # TODO fix this in future? Many cases.
+        if is_symmetric(A1):
             X1_hat = ase.fit_transform(A1)
             X2_hat = ase.fit_transform(A2)
         else:
@@ -140,31 +138,22 @@ class LatentDistributionTest(BaseInference):
         if self.pass_graph:
             A1 = import_graph(A1)
             A2 = import_graph(A2)
-            if is_symmetric(A1) != is_symmetric(A2):
-                msg = "graphs have unequal parity of symmetry"
-                raise NotImplementedError(msg)  # TODO fix this in future? Many cases.
-            if is_symmetric(A1):
-                self.symmetry = True
-            else:
-                self.symmetry = False
-            if self.n_components is None:
-                num_dims1 = select_dimension(A1.astype(float))[0][-1]
-                num_dims2 = select_dimension(A2.astype(float))[0][-1]
-                self.n_components = max(num_dims1, num_dims2)
             X1_hat, X2_hat = self._embed(A1, A2)
-            X1_hat, X2_hat = self._k_sample_transform(X1_hat, X2_hat)
+            X1_hat, X2_hat = k_sample_transform(X1_hat, X2_hat)
         else:  # you already have latent positions
+            if type(A1) is not np.ndarray or type(A2) is not np.ndarray:
+                raise TypeError("Your inputs should be np arrays, not {} and {}".format(type(A1), type(A2)))
             X1_hat = A1
             X2_hat = A2
+            X1_hat, X2_hat = k_sample_transform(X1_hat, X2_hat)
         if self.method == "dcorr":
             test = DCorr("unbiased")
         elif self.method == "mgc":
             test = MGC()
-        t, t_meta = test.test_statistic(X1_hat, X2_hat, is_fast=False)
         p, p_meta = test.p_value(
             X1_hat, X2_hat, replication_factor=self.n_bootstraps, is_fast=False
         )
-        self.sample_T_statistic_ = t
-        self.null_distribution_ = list(p_meta)
+        self.sample_T_statistic_ = p_meta["test_statistic"]
+        self.null_distribution_ = p_meta["null_distribution"]
         self.p_ = p
         return self.p_

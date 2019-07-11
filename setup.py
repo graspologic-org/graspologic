@@ -57,4 +57,5 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     packages=find_packages(),
+    dependency_links=['git+https://github.com/neurodata/mgcpy.git#egg=master'],
 )

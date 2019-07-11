@@ -5,9 +5,11 @@
 import unittest
 
 import numpy as np
+import sys
 
 from graspy.inference import LatentDistributionTest
 from graspy.simulations import er_np, sbm
+from graspy.embed import AdjacencySpectralEmbed
 
 
 class TestLatentDistributionTest(unittest.TestCase):
@@ -16,29 +18,52 @@ class TestLatentDistributionTest(unittest.TestCase):
         np.random.seed(123456)
         cls.A1 = er_np(20, 0.3)
         cls.A2 = er_np(20, 0.3)
+        ase = AdjacencySpectralEmbed(n_components=1)
+        cls.E1 = ase.fit_transform(cls.A1)
+        cls.E2 = ase.fit_transform(cls.A2)
 
-    def test_fit_p_ase_works(self):
+    def test_graph(self):
         npt = LatentDistributionTest(method="dcorr")
         p = npt.fit(self.A1, self.A2)
+        print(npt.null_distribution_, file=sys.stderr)
+        print(npt.sample_T_statistic_, file=sys.stderr)
 
-    def test_fit_mgc_works(self):
+    def test_latent(self):
+        npt = LatentDistributionTest(method="dcorr", pass_graph=False)
+        p = npt.fit(self.E1, self.E2)
+
+    def test_mgc(self):
         npt = LatentDistributionTest(method="mgc")
         p = npt.fit(self.A1, self.A2)
 
     def test_bad_kwargs(self):
-        with self.assertRaises(ValueError):
-            LatentDistributionTest(n_components=-100)
         with self.assertRaises(TypeError):
             LatentDistributionTest(n_components=0.5)
         with self.assertRaises(ValueError):
+            LatentDistributionTest(n_components=-100)
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(n_bootstraps=0.5)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(n_bootstraps=-100)
+        with self.assertRaises(ValueError):
             LatentDistributionTest(method="oops")
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(pass_graph=1)
 
     def test_bad_matrix_inputs(self):
         npt = LatentDistributionTest()
-
         bad_matrix = [[1, 2]]
         with self.assertRaises(TypeError):
             npt.fit(bad_matrix, self.A2)
+
+    def test_bad_latent_inputs(self):
+        npt = LatentDistributionTest(pass_graph=False)
+        bad_matrix = [[1, 2]]
+        with self.assertRaises(TypeError):
+            npt.fit(bad_matrix, self.E2)
+        bad_matrix2 = np.array(bad_matrix)
+        with self.assertRaises(AssertionError):
+            npt.fit(bad_matrix2, self.E2)
 
     def test_directed_inputs(self):
         np.random.seed(2)
