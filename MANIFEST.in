@@ -1,0 +1,2 @@
+recursive-include graspy/datasets *.csv
+exclude tests/*
