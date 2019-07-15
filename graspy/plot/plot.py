@@ -137,8 +137,6 @@ def _process_graphs(
     """
     for g in graphs:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
-    
-    for g in graphs: 
 
     graphs = [_transform(arr, transform) for arr in graphs]
 
