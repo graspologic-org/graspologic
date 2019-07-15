@@ -119,21 +119,6 @@ def _process_graphs(
 ):
     """ Handles transformation and sorting of graphs for plotting
     
-    Parameters
-    ----------
-    graphs : [type]
-        [description]
-    inner_hier_labels : [type]
-        [description]
-    outer_hier_labels : [type]
-        [description]
-    sort_nodes : [type]
-        [description]
-    
-    Returns
-    -------
-    list
-        [description]
     """
     for g in graphs:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
@@ -425,6 +410,10 @@ def gridplot(
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if `None`
+    sort_nodes : boolean, optional (default=False)
+        whether or not to sort the nodes of the graph by the sum of edge weights
+        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
+        `sort_nodes` is `True`, will sort nodes this way within block. 
     """
     _check_common_inputs(
         height=height,
