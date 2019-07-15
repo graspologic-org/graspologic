@@ -190,6 +190,9 @@ def heatmap(
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if `None`
+    sort_nodes : boolean, optional (default=False)
+
+    
     """
     _check_common_inputs(
         figsize=figsize,
@@ -920,7 +923,7 @@ def _unique_like(vals):
 
 
 # assume that the graph has already been plotted in sorted form
-def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30,):
+def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
     plot_outer = True
     if outer_labels is None:
         outer_labels = np.ones_like(inner_labels)
@@ -938,12 +941,17 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30,):
     outer_unique, _ = _unique_like(outer_labels)
 
     n_verts = graph.shape[0]
+    print(inner_freq_cumsum)
+    axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
     # draw lines
-    for x in inner_freq_cumsum:
-        if x != inner_freq_cumsum[0]:
-            x -= 0.2
-        ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
-        ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
+    for x in inner_freq_cumsum[1:-1]:
+        ax.vlines(x, 0, n_verts, **axline_kws)
+        ax.hlines(x, 0, n_verts, **axline_kws)
+    # add specific lines for the borders of the plot
+    # ax.vlines(0, 0, n_verts, **axline_kws)
+    # ax.hlines(0, 0, n_verts, **axline_kws)
+    # ax.vlines(n_verts, 0, n_verts, **axline_kws)
+    # ax.hlines(n_verts, 0, n_verts, **axline_kws)
 
     # generic curve that we will use for everything
     lx = np.linspace(-np.pi / 2.0 + 0.05, np.pi / 2.0 - 0.05, 500)
