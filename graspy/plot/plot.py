@@ -18,7 +18,6 @@ from matplotlib.colors import Colormap
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.utils import check_array, check_consistent_length
 
@@ -115,6 +114,47 @@ def _transform(arr, method):
     return arr
 
 
+def _process_graphs(graphs, inner_hier_labels, outer_hier_labels, sort_nodes):
+    """ Handles transformation and sorting of graphs for plotting
+    
+    Parameters
+    ----------
+    graphs : [type]
+        [description]
+    inner_hier_labels : [type]
+        [description]
+    outer_hier_labels : [type]
+        [description]
+    sort_nodes : [type]
+        [description]
+    
+    Returns
+    -------
+    list
+        [description]
+    """
+    for g in graphs:
+        check_consistent_length(g, inner_hier_labels, outer_hier_labels)
+
+    graphs = [_transform(arr, transform) for arr in graphs]
+
+    if inner_hier_labels is not None:
+        inner_hier_labels = np.array(inner_hier_labels)
+        if outer_hier_labels is None:
+            outer_hier_labels = np.ones_like(inner_hier_labels)
+        else:
+            outer_hier_labels = np.array(outer_hier_labels)
+    else:
+        inner_hier_labels = np.ones(graphs[0].shape[0])
+        outer_hier_labels = np.ones_like(inner_hier_labels)
+
+    graphs = [
+        _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels), sort_nodes)
+        for arr in graphs
+    ]
+    return graphs 
+
+
 def heatmap(
     X,
     transform=None,
@@ -196,7 +236,9 @@ def heatmap(
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if `None`
     sort_nodes : boolean, optional (default=False)
-
+        whether or not to sort the nodes of the graph by the sum of edge weights
+        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
+        `sort_nodes` is `True`, will sort nodes this way within block. 
     
     """
     _check_common_inputs(
@@ -242,21 +284,25 @@ def heatmap(
         msg = "cbar must be a bool, not {}.".format(type(center))
         raise TypeError(msg)
 
-    check_consistent_length(X, inner_hier_labels, outer_hier_labels)
+    # check_consistent_length(X, inner_hier_labels, outer_hier_labels)
 
-    arr = import_graph(X)
-    arr = _transform(arr, transform)
-    if inner_hier_labels is not None:
-        inner_hier_labels = np.array(inner_hier_labels)
-        if outer_hier_labels is None:
-            arr = _sort_graph(
-                arr, inner_hier_labels, np.ones_like(inner_hier_labels), sort_nodes
-            )
-        else:
-            outer_hier_labels = np.array(outer_hier_labels)
-            arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels, sort_nodes)
-    else:
-        arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]), sort_nodes)
+    # arr = import_graph(X)
+    # arr = _transform(arr, transform)
+    # if inner_hier_labels is not None:
+    #     inner_hier_labels = np.array(inner_hier_labels)
+    #     if outer_hier_labels is None:
+    #         outer_hier_labels = np.ones_like
+    #         arr = _sort_graph(
+    #             arr, inner_hier_labels, , sort_nodes
+    #         )
+    #     else:
+    #         outer_hier_labels = np.array(outer_hier_labels)
+    #         arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels, sort_nodes)
+    # else:
+    #     arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]), sort_nodes)
+
+    arr = _process_graphs([X], inner_hier_labels, outer_hier_labels, sort_nodes)
+
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)  # norm=colors.Normalize(vmin=0, vmax=1))
 
@@ -316,6 +362,7 @@ def gridplot(
     outer_hier_labels=None,
     hier_label_fontsize=30,
     title_pad=None,
+    sort_nodes=False,
 ):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
@@ -394,6 +441,8 @@ def gridplot(
         labels = np.arange(len(X))
 
     check_consistent_length(X, labels)
+
+
     for g in X:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
 
@@ -402,15 +451,17 @@ def gridplot(
     if inner_hier_labels is not None:
         inner_hier_labels = np.array(inner_hier_labels)
         if outer_hier_labels is None:
-            graphs = [
-                _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels))
-                for arr in graphs
-            ]
+            outer_hier_labels = np.ones_like(inner_hier_labels)
         else:
             outer_hier_labels = np.array(outer_hier_labels)
-            graphs = [
-                _sort_graph(arr, inner_hier_labels, outer_hier_labels) for arr in graphs
-            ]
+    else:
+        inner_hier_labels = np.ones(graphs[0].shape[0])
+        outer_hier_labels = np.ones_like(inner_hier_labels)
+
+    graphs = [
+        _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels), sort_nodes)
+        for arr in graphs
+    ]
 
     if isinstance(palette, str):
         palette = sns.color_palette(palette, desat=0.75, n_colors=len(labels))
@@ -947,16 +998,21 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
 
     n_verts = graph.shape[0]
     print(inner_freq_cumsum)
-    axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
+    axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.25, zorder=3, color="grey")
     # draw lines
     for x in inner_freq_cumsum[1:-1]:
         ax.vlines(x, 0, n_verts, **axline_kws)
         ax.hlines(x, 0, n_verts, **axline_kws)
     # add specific lines for the borders of the plot
-    # ax.vlines(0, 0, n_verts, **axline_kws)
-    # ax.hlines(0, 0, n_verts, **axline_kws)
-    # ax.vlines(n_verts, 0, n_verts, **axline_kws)
-    # ax.hlines(n_verts, 0, n_verts, **axline_kws)
+    front_pad = 0.002
+    back_pad = 0.009
+    inv = ax.transAxes.inverted()
+    data_inv = inv.transform((0, 0))
+    print(data_inv)
+    ax.axvline(0 + front_pad, 0, 1, **axline_kws)
+    ax.axhline(0 + front_pad, 0, 1, **axline_kws)
+    ax.axvline(0.5, 0, 1, **axline_kws)
+    ax.axhline(1 - back_pad, 0, 1, **axline_kws)
 
     # generic curve that we will use for everything
     lx = np.linspace(-np.pi / 2.0 + 0.05, np.pi / 2.0 - 0.05, 500)
