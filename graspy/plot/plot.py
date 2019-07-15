@@ -1005,11 +1005,11 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
     outer_unique, _ = _unique_like(outer_labels)
 
     n_verts = graph.shape[0]
-    axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.25, zorder=3, color="grey")
+    axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.3, zorder=3, color="grey")
     # draw lines
     for x in inner_freq_cumsum[1:-1]:
-        ax.vlines(x, 0, n_verts, **axline_kws)
-        ax.hlines(x, 0, n_verts, **axline_kws)
+        ax.vlines(x, 0, n_verts + 1, **axline_kws)
+        ax.hlines(x, 0, n_verts + 1, **axline_kws)
 
     # add specific lines for the borders of the plot
     pad = 0.001
