@@ -131,6 +131,7 @@ def heatmap(
     hier_label_fontsize=30,
     ax=None,
     title_pad=None,
+    sort_nodes=False,
 ):
     r"""
     Plots a graph as a heatmap.
@@ -240,12 +241,14 @@ def heatmap(
     if inner_hier_labels is not None:
         inner_hier_labels = np.array(inner_hier_labels)
         if outer_hier_labels is None:
-            arr = _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels))
+            arr = _sort_graph(
+                arr, inner_hier_labels, np.ones_like(inner_hier_labels), sort_nodes
+            )
         else:
             outer_hier_labels = np.array(outer_hier_labels)
-            arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels)
+            arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels, sort_nodes)
     else:
-        arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]))
+        arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]), sort_nodes)
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)  # norm=colors.Normalize(vmin=0, vmax=1))
 
@@ -843,7 +846,7 @@ def screeplot(
     return ax
 
 
-def _sort_inds(graph, inner_labels, outer_labels):
+def _sort_inds(graph, inner_labels, outer_labels, sort_nodes):
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
     sort_df["inner_labels"] = inner_labels
     sort_df["outer_labels"] = outer_labels
@@ -861,24 +864,24 @@ def _sort_inds(graph, inner_labels, outer_labels):
     node_edgesums = graph.sum(axis=1) + graph.sum(axis=0)
     sort_df["node_edgesums"] = node_edgesums.max() - node_edgesums
 
-    sort_df.sort_values(
-        by=[
+    if sort_nodes:
+        by = [
             "outer_counts",
             "outer_labels",
             "inner_counts",
             "inner_labels",
             "node_edgesums",
-        ],
-        kind="mergesort",
-        inplace=True,
-    )
+        ]
+    else:
+        by = ["outer_counts", "outer_labels", "inner_counts", "inner_labels"]
+    sort_df.sort_values(by=by, kind="mergesort", inplace=True)
 
     sorted_inds = sort_df.index.values
     return sorted_inds
 
 
-def _sort_graph(graph, inner_labels, outer_labels):
-    inds = _sort_inds(graph, inner_labels, outer_labels)
+def _sort_graph(graph, inner_labels, outer_labels, sort_nodes):
+    inds = _sort_inds(graph, inner_labels, outer_labels, sort_nodes)
     graph = graph[inds, :][:, inds]
     return graph
 
@@ -917,13 +920,13 @@ def _unique_like(vals):
 
 
 # assume that the graph has already been plotted in sorted form
-def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
+def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30,):
     plot_outer = True
     if outer_labels is None:
         outer_labels = np.ones_like(inner_labels)
         plot_outer = False
 
-    sorted_inds = _sort_inds(graph, inner_labels, outer_labels)
+    sorted_inds = _sort_inds(graph, inner_labels, outer_labels, False)
 
     inner_labels = inner_labels[sorted_inds]
     outer_labels = outer_labels[sorted_inds]
