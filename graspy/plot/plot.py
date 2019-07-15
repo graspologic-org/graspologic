@@ -137,6 +137,8 @@ def _process_graphs(
     """
     for g in graphs:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
+    
+    for g in graphs: 
 
     graphs = [_transform(arr, transform) for arr in graphs]
 
@@ -288,7 +290,7 @@ def heatmap(
 
     # check_consistent_length(X, inner_hier_labels, outer_hier_labels)
 
-    # arr = import_graph(X)
+    arr = import_graph(X)
     # arr = _transform(arr, transform)
     # if inner_hier_labels is not None:
     #     inner_hier_labels = np.array(inner_hier_labels)
@@ -304,7 +306,7 @@ def heatmap(
     #     arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]), sort_nodes)
 
     arr = _process_graphs(
-        [X], inner_hier_labels, outer_hier_labels, transform, sort_nodes
+        [arr], inner_hier_labels, outer_hier_labels, transform, sort_nodes
     )[0]
 
     # Global plotting settings
@@ -943,7 +945,6 @@ def _sort_inds(graph, inner_labels, outer_labels, sort_nodes):
     sort_df.sort_values(by=by, kind="mergesort", inplace=True)
 
     sorted_inds = sort_df.index.values
-    print(type(sorted_inds))
     return sorted_inds
 
 
