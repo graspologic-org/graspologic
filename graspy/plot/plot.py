@@ -95,15 +95,18 @@ def _check_common_inputs(
 
 def _transform(arr, method):
     if method is not None:
-        if method == "log":
+        if method in ["log", "log10"]:
             # arr = np.log(arr, where=(arr > 0))
             # hacky, but np.log(arr, where=arr>0) is really buggy
             arr = arr.copy()
-            arr[arr > 0] = np.log(arr[arr > 0])
+            if method == "log":
+                arr[arr > 0] = np.log(arr[arr > 0])
+            else:
+                arr[arr > 0] = np.log10(arr[arr > 0])
         elif method in ["zero-boost", "simple-all", "simple-nonzero"]:
             arr = pass_to_ranks(arr, method=method)
         else:
-            msg = "Transform must be one of {log, zero-boost, simple-all, \
+            msg = "Transform must be one of {log, log10, zero-boost, simple-all, \
             simple-nonzero, not {}.".format(
                 method
             )
@@ -143,7 +146,9 @@ def heatmap(
     transform : None, or string {'log', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
-            Plots the log of all nonzero numbers
+            Plots the natural log of all nonzero numbers
+        - 'log10' : 
+            Plots the base 10 log of all nonzero numbers
         - 'zero-boost' :s
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
