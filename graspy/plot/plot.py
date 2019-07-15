@@ -271,22 +271,7 @@ def heatmap(
         msg = "cbar must be a bool, not {}.".format(type(center))
         raise TypeError(msg)
 
-    # check_consistent_length(X, inner_hier_labels, outer_hier_labels)
-
     arr = import_graph(X)
-    # arr = _transform(arr, transform)
-    # if inner_hier_labels is not None:
-    #     inner_hier_labels = np.array(inner_hier_labels)
-    #     if outer_hier_labels is None:
-    #         outer_hier_labels = np.ones_like
-    #         arr = _sort_graph(
-    #             arr, inner_hier_labels, , sort_nodes
-    #         )
-    #     else:
-    #         outer_hier_labels = np.array(outer_hier_labels)
-    #         arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels, sort_nodes)
-    # else:
-    #     arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]), sort_nodes)
 
     arr = _process_graphs(
         [arr], inner_hier_labels, outer_hier_labels, transform, sort_nodes
@@ -434,26 +419,6 @@ def gridplot(
         labels = np.arange(len(X))
 
     check_consistent_length(X, labels)
-
-    # for g in X:
-    #     check_consistent_length(g, inner_hier_labels, outer_hier_labels)
-
-    # graphs = [_transform(arr, transform) for arr in graphs]
-
-    # if inner_hier_labels is not None:
-    #     inner_hier_labels = np.array(inner_hier_labels)
-    #     if outer_hier_labels is None:
-    #         outer_hier_labels = np.ones_like(inner_hier_labels)
-    #     else:
-    #         outer_hier_labels = np.array(outer_hier_labels)
-    # else:
-    #     inner_hier_labels = np.ones(graphs[0].shape[0])
-    #     outer_hier_labels = np.ones_like(inner_hier_labels)
-
-    # graphs = [
-    #     _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels), sort_nodes)
-    #     for arr in graphs
-    # ]
 
     graphs = _process_graphs(
         X, inner_hier_labels, outer_hier_labels, transform, sort_nodes
