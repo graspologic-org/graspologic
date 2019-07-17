@@ -113,6 +113,8 @@ class LatentPositionTest(BaseInference):
         test_case="rotation",
         pass_graph=True,
     ):
+        if not isinstance(test_case, str):
+            raise TypeError("test_case must be a string")
         if test_case not in ["rotation", "scalar-rotation", "diagonal-rotation"]:
             raise ValueError(
                 "test_case must be one of 'rotation', 'scalar-rotation',"
