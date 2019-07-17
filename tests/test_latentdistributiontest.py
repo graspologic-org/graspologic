@@ -70,9 +70,8 @@ class TestLatentDistributionTest(unittest.TestCase):
         A = er_np(100, 0.3, directed=True)
         B = er_np(100, 0.3, directed=True)
 
-        npt = LatentDistributionTest(method="dcorr")
+        npt = LatentDistributionTest(method="dcorr", n_components=1)
         p = npt.fit(A, B)
-        print(p)
         self.assertTrue(p > 0.05)
 
     def test_different_sizes(self):
