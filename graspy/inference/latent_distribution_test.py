@@ -64,14 +64,27 @@ class LatentDistributionTest(BaseInference):
 
     Examples
     --------
-    >>> npt = LatentDistributionTest(n_components=2, method='mgc')
-    >>> p = npt.fit(A1, A2)
+    >>> lpt = LatentDistributionTest(n_components=2, method='mgc')
+    >>> p = lpt.fit(A1, A2)
 
     See also
     --------
     graspy.embed.AdjacencySpectralEmbed
     graspy.embed.OmnibusEmbed
     graspy.embed.selectSVD
+
+    References
+    ----------
+    .. [1] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017).
+           A nonparametric two-sample hypothesis testing problem for random graphs. 
+           Bernoulli, 23(3), 1599-1630.
+
+    .. [2] Shen, C., Priebe, C. E., & Vogelstein, J. T. (2019). From distance
+           correlation to multiscale graph correlation. Journal of the American
+           Statistical Association, 1-22.
+           
+    .. [3] Shen, C., & Vogelstein, J. T. (2018). The exact equivalence of distance and
+           kernel methods for hypothesis testing. arXiv preprint arXiv:1806.05514.
     """
 
     # TODO: reference Varjavand paper when it is on arxiv
