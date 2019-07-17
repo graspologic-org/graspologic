@@ -17,7 +17,7 @@ REQUIRED_PACKAGES = [
     "scikit-learn>=0.19.1",
     "scipy>=1.1.0",
     "seaborn>=0.9.0",
-    "mgcpy>=0.3.0"
+    "mgcpy @ git+https://github.com/neurodata/mgcpy",
 ]
 
 # Find GraSPy version.
@@ -57,5 +57,4 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     packages=find_packages(),
-    dependency_links=["https://github.com/neurodata/mgcpy.git#egg=master"],
 )
