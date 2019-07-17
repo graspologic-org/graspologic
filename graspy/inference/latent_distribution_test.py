@@ -48,8 +48,8 @@ class LatentDistributionTest(BaseInference):
 
     pass_graph : bool, optional (default True)
         If True, expects graphs as inputs. If False, expects latent positions as inputs.
-        Graphs are n x n ndarrays or networkx graph objects.
-        Latent positions are n x p ndarrays representing a set of points.
+        Graphs are :math:`n \times n` ndarrays (adjacency matrices) or networkx objects.
+        Latent positions are :math:`n \times p` ndarrays representing a set of points.
 
     Attributes
     ----------
