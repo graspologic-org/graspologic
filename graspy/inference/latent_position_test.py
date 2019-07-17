@@ -113,16 +113,6 @@ class LatentPositionTest(BaseInference):
         test_case="rotation",
         pass_graph=True,
     ):
-        if type(n_bootstraps) is not int:
-            raise TypeError()
-        if type(test_case) is not str:
-            raise TypeError()
-        if n_bootstraps < 1:
-            raise ValueError(
-                "{} is invalid number of bootstraps, must be greater than 1".format(
-                    n_bootstraps
-                )
-            )
         if test_case not in ["rotation", "scalar-rotation", "diagonal-rotation"]:
             raise ValueError(
                 "test_case must be one of 'rotation', 'scalar-rotation',"
@@ -130,10 +120,12 @@ class LatentPositionTest(BaseInference):
             )
 
         super().__init__(
-            embedding=embedding, n_components=n_components, pass_graph=pass_graph
+            embedding=embedding,
+            n_components=n_components,
+            pass_graph=pass_graph,
+            n_bootstraps=n_bootstraps,
         )
 
-        self.n_bootstraps = n_bootstraps
         self.test_case = test_case
         # paper uses these always, but could be kwargs eventually. need to test
         self.rescale = False

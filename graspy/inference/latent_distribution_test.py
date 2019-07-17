@@ -92,30 +92,17 @@ class LatentDistributionTest(BaseInference):
     def __init__(
         self, n_components=None, n_bootstraps=200, method="dcorr", pass_graph=True
     ):
-        if n_components is not None:
-            if not isinstance(n_components, int):
-                msg = "n_components must an int, not {}.".format(type(n_components))
-                raise TypeError(msg)
-        if type(n_bootstraps) is not int:
-            msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
-            raise TypeError(msg)
-        if n_bootstraps <= 0:
-            msg = "n_bootstraps must be > 0, not {}".format(n_bootstraps)
-            raise ValueError(msg)
         if type(method) is not str:
             msg = "method must be a string, not {}.".format(type(method))
             raise TypeError(msg)
         if method not in ["mgc", "dcorr"]:
             msg = "{} is not a valid test, must be mgc or dcorr.".format(method)
             raise ValueError(msg)
-        if type(pass_graph) is not bool:
-            msg = "pass_graph must be a bool, not {}".format(type(pass_graph))
-            raise TypeError(msg)
+
         super().__init__(
-            embedding="ase", n_components=n_components, pass_graph=pass_graph
+            n_components=n_components, pass_graph=pass_graph, n_bootstraps=n_bootstraps
         )
         self.method = method
-        self.n_bootstraps = n_bootstraps
 
     def _embed(self, A1, A2):
         if self.n_components is None:

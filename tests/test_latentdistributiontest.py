@@ -66,12 +66,13 @@ class TestLatentDistributionTest(unittest.TestCase):
             npt.fit(bad_matrix2, self.E2)
 
     def test_directed_inputs(self):
-        np.random.seed(2)
+        np.random.seed(4)
         A = er_np(100, 0.3, directed=True)
         B = er_np(100, 0.3, directed=True)
 
-        npt = LatentDistributionTest()
+        npt = LatentDistributionTest(method="dcorr")
         p = npt.fit(A, B)
+        print(p)
         self.assertTrue(p > 0.05)
 
     def test_different_sizes(self):

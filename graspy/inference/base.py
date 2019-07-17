@@ -38,7 +38,9 @@ class BaseInference(BaseEstimator):
         dimensions are found by the Zhu and Godsi algorithm.
     """
 
-    def __init__(self, embedding="ase", n_components=None, pass_graph=True):
+    def __init__(
+        self, embedding="ase", n_components=None, pass_graph=True, n_bootstraps=200
+    ):
         if type(embedding) is not str:
             raise TypeError("embedding must be str")
         if (not isinstance(n_components, (int, np.integer))) and (
@@ -47,15 +49,29 @@ class BaseInference(BaseEstimator):
             raise TypeError("n_components must be int or np.integer")
         if embedding not in ["ase", "omnibus"]:
             raise ValueError("{} is not a valid embedding method.".format(embedding))
+
         if n_components is not None and n_components <= 0:
             raise ValueError(
                 "Cannot embed into {} dimensions, must be greater than 0".format(
                     n_components
                 )
             )
+
+        if type(n_bootstraps) is not int:
+            msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
+            raise TypeError(msg)
+        if n_bootstraps <= 0:
+            msg = "n_bootstraps must be > 0, not {}".format(n_bootstraps)
+            raise ValueError(msg)
+
+        if type(pass_graph) is not bool:
+            msg = "pass_graph must be a bool, not {}".format(type(pass_graph))
+            raise TypeError(msg)
+
         self.embedding = embedding
         self.n_components = n_components
         self.pass_graph = pass_graph
+        self.n_bootstraps = n_bootstraps
 
     @abstractmethod
     def _embed(self, X1, X2, n_componets):
