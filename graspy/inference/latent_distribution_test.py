@@ -142,7 +142,7 @@ class LatentDistributionTest(BaseInference):
             A1 = import_graph(A1)
             A2 = import_graph(A2)
             X1_hat, X2_hat = self._embed(A1, A2)
-            X1_hat, X2_hat = k_sample_transform(X1_hat, X2_hat)
+            sample, indicator = k_sample_transform(X1_hat, X2_hat)
         else:  # you already have latent positions
             if type(A1) is not np.ndarray or type(A2) is not np.ndarray:
                 raise TypeError(
@@ -150,15 +150,13 @@ class LatentDistributionTest(BaseInference):
                         type(A1), type(A2)
                     )
                 )
-            X1_hat = A1
-            X2_hat = A2
-            X1_hat, X2_hat = k_sample_transform(X1_hat, X2_hat)
+            sample, indicator = k_sample_transform(A1, A2)
         if self.method == "dcorr":
             test = DCorr("unbiased")
         elif self.method == "mgc":
             test = MGC()
         p, p_meta = test.p_value(
-            X1_hat, X2_hat, replication_factor=self.n_bootstraps, is_fast=False
+            sample, indicator, replication_factor=self.n_bootstraps, is_fast=False
         )
         self.sample_T_statistic_ = p_meta["test_statistic"]
         self.null_distribution_ = p_meta["null_distribution"]
