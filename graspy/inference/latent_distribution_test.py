@@ -82,7 +82,7 @@ class LatentDistributionTest(BaseInference):
     .. [2] Shen, C., Priebe, C. E., & Vogelstein, J. T. (2019). From distance
            correlation to multiscale graph correlation. Journal of the American
            Statistical Association, 1-22.
-           
+
     .. [3] Shen, C., & Vogelstein, J. T. (2018). The exact equivalence of distance and
            kernel methods for hypothesis testing. arXiv preprint arXiv:1806.05514.
     """
@@ -90,7 +90,7 @@ class LatentDistributionTest(BaseInference):
     # TODO: reference Varjavand paper when it is on arxiv
 
     def __init__(
-        self, n_components=None, n_bootstraps=200, method="mgc", pass_graph=True
+        self, n_components=None, n_bootstraps=200, method="dcorr", pass_graph=True
     ):
         if n_components is not None:
             if not isinstance(n_components, int):
