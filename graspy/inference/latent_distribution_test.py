@@ -42,6 +42,9 @@ class LatentDistributionTest(BaseInference):
         Number of bootstraps to perform when computing a p-value.
 
     method : string, {'dcorr' (default), 'mgc'}
+        Which 2-sample test to use in order to detect differences between latent
+        position distributions. `dcorr` (distance correlation) is much faster, `mgc`
+        (multiscale graph correlation) is likely more powerful, but often slow.
 
     pass_graph : bool, optional (default True)
         If True, expects graphs as inputs. If False, expects latent positions as inputs.
