@@ -80,7 +80,8 @@ class mug2vec(BaseEstimator):
         then equals the optimal embedding dimension.
 
     embeddings_ : array, shape (n_components, n_features)
-        Principal axes in feature space from classical MDS.
+        Embeddings from the pipeline. Each graph is a point in ``n_features`` 
+        dimensions.
 
     See also
     --------
@@ -104,6 +105,19 @@ class mug2vec(BaseEstimator):
         self.cmds_components = cmds_components
         self.cmds_n_elbows = cmds_n_elbows
 
+    def _check_inputs(self):
+        variables = self.get_params()
+        variables.pop("pass_to_ranks")
+
+        for name, val in variables.items():
+            if val is not None:
+                if not isinstance(val, int):
+                    msg = "{} must be an int or None.".format(name)
+                    raise ValueError(msg)
+                elif val <= 0:
+                    msg = "{} must be > 0.".format(name)
+                    raise ValueError(msg)
+
     def fit(self, graphs, y=None):
         """
         Computes a vector for each graph.
@@ -114,13 +128,16 @@ class mug2vec(BaseEstimator):
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
-        
+
         y : Ignored
 
         Returns
         -------
         self : returns an instance of self.
         """
+        # Check these prior to PTR just in case
+        self._check_inputs()
+
         if pass_to_ranks is not None:
             graphs = [pass_to_ranks(g, self.pass_to_ranks) for g in graphs]
 
@@ -134,7 +151,7 @@ class mug2vec(BaseEstimator):
         cmds = ClassicalMDS(
             n_components=self.cmds_components, n_elbows=self.cmds_n_elbows
         )
-        self.components_ = ClassicalMDS().fit_transform(omnibus_embedding)
+        self.embeddings_ = cmds.fit_transform(omnibus_embedding)
         self.cmds_components_ = self.components_.shape[-1]
 
         return self
