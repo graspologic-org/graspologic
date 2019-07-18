@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from numpy.testing import assert_equal
 
 from graspy.cluster import GaussianCluster
@@ -32,3 +33,23 @@ def test_mug2vec():
     gmm.fit(xhat, labels)
 
     assert_equal(gmm.n_components_, 2)
+
+
+def test_inputs():
+    graphs, labels = generate_data()
+
+    mugs = mug2vec(omnibus_components=-1)
+    with pytest.raises(ValueError):
+        mugs.fit(graphs)
+
+    mugs = mug2vec(cmds_components=-1)
+    with pytest.raises(ValueError):
+        mugs.fit(graphs)
+
+    mugs = mug2vec(omnibus_n_elbows=-1)
+    with pytest.raises(ValueError):
+        mugs.fit(graphs)
+
+    mugs = mug2vec(cmds_n_elbows=-1)
+    with pytest.raises(ValueError):
+        mugs.fit(graphs)
