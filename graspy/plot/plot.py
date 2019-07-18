@@ -170,13 +170,13 @@ def heatmap(
     ----------
     X : nx.Graph or np.ndarray object
         Graph or numpy matrix to plot
-    transform : None, or string {'log', 'zero-boost', 'simple-all', 'simple-nonzero'}
+    transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
             Plots the natural log of all nonzero numbers
         - 'log10' : 
             Plots the base 10 log of all nonzero numbers
-        - 'zero-boost' :s
+        - 'zero-boost' :
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
         - 'simple-all': 
@@ -226,7 +226,6 @@ def heatmap(
         whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If `inner_hier_labels` is passed and 
         `sort_nodes` is `True`, will sort nodes this way within block. 
-    
     """
     _check_common_inputs(
         figsize=figsize,
@@ -349,10 +348,12 @@ def gridplot(
     labels : list of str
         List of strings, which are labels for each element in X. 
         `len(X) == len(labels)`.
-    transform : None, or string {'log', 'zero-boost', 'simple-all', 'simple-nonzero'}
+    transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
-            Plots the log of all nonzero numbers
+            Plots the natural log of all nonzero numbers
+        - 'log10' : 
+            Plots the base 10 log of all nonzero numbers
         - 'zero-boost' :
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
