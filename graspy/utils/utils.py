@@ -178,7 +178,7 @@ def is_almost_symmetric(X, atol=1e-15):
     return np.allclose(X, X.T, atol=atol)
 
 
-def symmetrize(graph, method="triu"):
+def symmetrize(graph, method="avg"):
     """
     A function for forcing symmetry upon a graph.
 
@@ -188,17 +188,18 @@ def symmetrize(graph, method="triu"):
         Either array-like, (n_vertices, n_vertices) numpy matrix,
         or an object of type networkx.Graph.
 
-    method: {'triu' (default), 'tril', 'avg'}, optional
+    method: {'avg' (default), 'triu', 'tril',}, optional
         An option indicating which half of the edges to
         retain when symmetrizing. 
 
+            - 'avg'
+                Retain the average weight between the upper and lower 
+                right triangle, of the adjacency matrix.
             - 'triu'
                 Retain the upper right triangle.
             - 'tril'
                 Retain the lower left triangle.
-            - 'avg'
-                Retain the average weight between the upper and lower 
-                right triangle, of the adjacency matrix.
+            
 
     Returns
     -------

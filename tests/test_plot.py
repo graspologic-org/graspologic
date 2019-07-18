@@ -208,7 +208,7 @@ def test_sort_inds():
     labels1 = 10 * ["d"] + 30 * ["c"] + 50 * ["d"] + 25 * ["e"] + 25 * ["c"]
     labels1 = np.array(labels1)
     labels2 = np.array(labels2)
-    sorted_inds = _sort_inds(g, labels1, labels2)
+    sorted_inds = _sort_inds(g, labels1, labels2, True)
     # sort outer blocks first if given, sort by num verts in the block
     # for inner hier, sort by num verts for that category across the entire graph
     # ie if there are multiple inner hier across different outer blocks, sort
