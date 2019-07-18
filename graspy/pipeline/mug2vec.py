@@ -152,7 +152,7 @@ class mug2vec(BaseEstimator):
             n_components=self.cmds_components, n_elbows=self.cmds_n_elbows
         )
         self.embeddings_ = cmds.fit_transform(omnibus_embedding)
-        self.cmds_components_ = self.components_.shape[-1]
+        self.cmds_components_ = self.embeddings_.shape[-1]
 
         return self
 
