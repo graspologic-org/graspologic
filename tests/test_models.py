@@ -538,6 +538,10 @@ def _test_score(estimator, p_mat, graph):
     np.random.seed(8888)
     graph = graph.copy()
     p_mat = p_mat.copy()
+    
+   if np.shape(p_mat)!=np.shape(graph):
+        raise ValueError("Input graph size must be the same size with P matrix")
+        
     estimator.fit(graph)
     estimator.p_mat_ = p_mat  # hack just for testing likelihood
 
