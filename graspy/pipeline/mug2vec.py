@@ -175,4 +175,4 @@ class mug2vec(BaseEstimator):
         """
         self.fit(graphs)
 
-        return self.components_
+        return self.embeddings_
