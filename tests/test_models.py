@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 from graspy.models import (
+    BaseGraphEstimator,
     EREstimator,
     DCSBMEstimator,
     SBMEstimator,
@@ -537,11 +538,7 @@ def _test_sample(estimator, p_mat, atol=0.1, n_samples=1000):
 def _test_score(estimator, p_mat, graph):
     np.random.seed(8888)
     graph = graph.copy()
-    p_mat = p_mat.copy()
-    
-   if np.shape(p_mat)!=np.shape(graph):
-        raise ValueError("Input graph size must be the same size with P matrix")
-        
+    p_mat = p_mat.copy()        
     estimator.fit(graph)
     estimator.p_mat_ = p_mat  # hack just for testing likelihood
 
@@ -581,3 +578,12 @@ def hardy_weinberg(theta):
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
     return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
+
+def test_score_samples():
+    est=BaseGraphEstimator()
+    graph=np.random.randint(0,2,(5,5))
+    p_mat_=np.random.rand(6,6)
+    est.p_mat_=p_mat_
+
+    with pytest.raises(ValueError):
+        est.score_samples(graph)
