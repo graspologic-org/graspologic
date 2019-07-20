@@ -20,6 +20,7 @@ import pandas as pd
 import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.utils import check_array, check_consistent_length
+from sklearn.preprocessing import Binarizer
 
 from ..embed import selectSVD
 from ..utils import import_graph, pass_to_ranks
@@ -104,6 +105,9 @@ def _transform(arr, method):
                 arr[arr > 0] = np.log10(arr[arr > 0])
         elif method in ["zero-boost", "simple-all", "simple-nonzero"]:
             arr = pass_to_ranks(arr, method=method)
+        elif method == "binarization":
+            transformer = Binarizer().fit(arr)
+            arr = transformer.transform(arr)
         else:
             msg = "Transform must be one of {log, log10, zero-boost, simple-all, \
             simple-nonzero, not {}.".format(
@@ -187,6 +191,9 @@ def heatmap(
         - 'simple-nonzero':
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
+        - 'binarization':
+            Binarize numpy array or matrix
+
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
     title : str, optional, default: None
@@ -365,6 +372,8 @@ def gridplot(
         - 'simple-nonzero':
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
+        - 'binarization':
+            Binarize numpy array or matrix
     height : int, optional, default: 10
         Height of figure in inches.
     title : str, optional, default: None
