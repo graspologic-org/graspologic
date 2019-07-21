@@ -110,9 +110,9 @@ class BaseGraphEstimator(BaseEstimator):
             raise ValueError("Model only implemented for unweighted graphs")
         p_mat = self.p_mat_.copy()
 
-        if np.shape(p_mat)!=np.shape(graph):
-            raise ValueError("Input graph size must be the same size with P matrix")      
-        
+        if np.shape(p_mat) != np.shape(graph):
+            raise ValueError("Input graph size must be the same size with P matrix")
+
         inds = None
         if not self.directed and self.loops:
             inds = np.triu_indices_from(graph)  # ignore lower half of graph, symmetric
