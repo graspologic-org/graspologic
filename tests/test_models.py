@@ -583,7 +583,7 @@ def test_score_samples():
     est=BaseGraphEstimator()
     graph=np.random.randint(0,2,(5,5))
     p_mat_=np.random.rand(6,6)
-    est.p_mat_=p_mat_
+    est.p_mat_=p_mat_.copy()
 
     with pytest.raises(ValueError):
         est.score_samples(graph)
