@@ -538,7 +538,7 @@ def _test_sample(estimator, p_mat, atol=0.1, n_samples=1000):
 def _test_score(estimator, p_mat, graph):
     np.random.seed(8888)
     graph = graph.copy()
-    p_mat = p_mat.copy()        
+    p_mat = p_mat.copy()
     estimator.fit(graph)
     estimator.p_mat_ = p_mat  # hack just for testing likelihood
 
@@ -579,11 +579,12 @@ def hardy_weinberg(theta):
     """
     return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
 
+
 def test_score_samples():
-    est=BaseGraphEstimator()
-    graph=np.random.randint(0,2,(5,5))
-    p_mat_=np.random.rand(6,6)
-    est.p_mat_=p_mat_.copy()
+    est = BaseGraphEstimator()
+    graph = np.random.randint(0, 2, (5, 5))
+    p_mat_ = np.random.rand(6, 6)
+    est.p_mat_ = p_mat_.copy()
 
     with pytest.raises(ValueError):
         est.score_samples(graph)
