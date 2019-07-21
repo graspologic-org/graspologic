@@ -109,7 +109,7 @@ def _transform(arr, method):
             transformer = Binarizer().fit(arr)
             arr = transformer.transform(arr)
         else:
-            msg = "Transform must be one of {log, log10, zero-boost, simple-all, \
+            msg = "Transform must be one of {log, log10, binarization, zero-boost, simple-all, \
             simple-nonzero, not {}.".format(
                 method
             )
