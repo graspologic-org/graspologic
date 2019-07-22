@@ -227,3 +227,14 @@ class MultipleASE(BaseEmbedMulti):
             left latent positions, and the right to the right latent positions
         """
         return self._fit_transform(graphs)
+
+    def transform(self, graphs):
+        try:
+            self.latent_left_
+        except NameError:
+            return self._fit_transform(graphs)
+        else:
+            if self.latent_right_ is None:
+                return self.latent_left_
+            else:
+                return self.latent_left_, self.latent_right_
