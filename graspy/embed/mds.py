@@ -43,15 +43,18 @@ class ClassicalMDS(BaseEstimator):
     """
     Classical multidimensional scaling (cMDS).
 
-    cMDS  seeks a low-dimensional representation of the data in
-    which the distances respect well the distances in the original
-    high-dimensional space.
+    cMDS seeks a low-dimensional representation of the data in which the distances 
+    respect well the distances in the original high-dimensional space.
 
     Parameters
     ----------
-    n_components : int, or None
+    n_components : int, or None (default=None)
         Number of components to keep. If None, then it will run
         ``select_dimension`` to find the optimal embedding dimension.
+
+    n_elbows : int, or None (default=2)
+        If `n_components=None`, then compute the optimal embedding dimension using
+        `select_dimension`. Otherwise, ignored.
 
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
         Dissimilarity measure to use:
@@ -65,7 +68,7 @@ class ClassicalMDS(BaseEstimator):
 
     Attributes
     ----------
-    n_components : int
+    n_components_ : int
         Equals the parameter n_components. If input n_components was None,
         then equals the optimal embedding dimension.
 
@@ -78,13 +81,17 @@ class ClassicalMDS(BaseEstimator):
     dissimilarity_matrix_ : array, shape (n_features, n_features)
         Dissimilarity matrix 
 
+    See Also
+    --------
+    graspy.embed.select_dimension
+
     References
     ----------
     Wickelmaier, Florian. "An introduction to MDS." Sound Quality Research Unit, 
     Aalborg University, Denmark 46.5 (2003).
     """
 
-    def __init__(self, n_components=None, dissimilarity="euclidean"):
+    def __init__(self, n_components=None, n_elbows=2, dissimilarity="euclidean"):
         # Check inputs
         if n_components is not None:
             if not isinstance(n_components, int):
@@ -101,6 +108,8 @@ class ClassicalMDS(BaseEstimator):
             msg = "Dissimilarity measure must be either 'euclidean' or 'precomputed'."
             raise ValueError(msg)
         self.dissimilarity = dissimilarity
+
+        self.n_elbows = n_elbows
 
     def _compute_euclidean_distances(self, X):
         """
@@ -184,7 +193,9 @@ class ClassicalMDS(BaseEstimator):
             algorithm = "full"
         else:
             algorithm = "randomized"
-        U, D, V = selectSVD(B, algorithm=algorithm, n_components=n_components)
+        U, D, V = selectSVD(
+            B, n_elbows=self.n_elbows, algorithm=algorithm, n_components=n_components
+        )
 
         self.n_components_ = len(D)
         self.components_ = U

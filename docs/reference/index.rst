@@ -14,3 +14,4 @@ Reference
    plotting
    datasets
    utils
+   pipeline
