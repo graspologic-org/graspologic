@@ -10,10 +10,11 @@
 **Gra**ph **S**tatistics in **Py**thon is a package for graph statistical algorithms.
 
 - [Overview](#overview)
-- [Documentation](#documentation)
+- [Documentation](https://graspy.neurodata.io/)
 - [System Requirements](#system-requirements)
 - [Installation Guide](#installation-guide)
-- [Tutorials](#Tutorials)
+- [Tutorials](https://graspy.neurodata.io/tutorial.html)
+- [Contributing](https://github.com/neurodata/graspy/blob/master/CONTRIBUTING.md)
 - [License](#license)
 - [Issues](https://github.com/neurodata/graspy/issues)
 
@@ -70,5 +71,5 @@ If you have an idea for an improvement not listed there, please
 [make an issue](https://github.com/neurodata/graspy/issues/new) first so you can discuss with the 
 developers. 
 
-## License
+# License
 This project is covered under the [Apache 2.0 License](https://github.com/neurodata/graspy/blob/master/LICENSE).
