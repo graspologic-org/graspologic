@@ -290,35 +290,42 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     A = import_graph(graph)
 
-    if not is_almost_symmetric(A):
-        raise ValueError("Laplacian not implemented/defined for directed graphs")
+     in_degree = np.sum(A, axis=0)
+    out_degree = np.sum(A, axis=1)
 
-    D_vec = np.sum(A, axis=0)
     # regularize laplacian with parameter
     # set to average degree
     if form == "R-DAD":
         if regularizer is None:
-            regularizer = np.mean(D_vec)
+            regularizer = 1
         elif not isinstance(regularizer, (int, float)):
             raise TypeError(
                 "Regularizer must be a int or float, not {}".format(type(regularizer))
             )
         elif regularizer < 0:
             raise ValueError("Regularizer must be greater than or equal to 0")
-        D_vec += regularizer
+        regularizer = regularizer * np.mean(out_degree)
+
+        in_degree += regularizer
+        out_degree += regularizer
 
     with np.errstate(divide="ignore"):
-        D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5
-    D_root[np.isinf(D_root)] = 0
-    D_root = np.diag(D_root)  # just change to sparse diag for sparse support
+        in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
+        out_root = 1 / np.sqrt(out_degree)
+
+    in_root[np.isinf(in_root)] = 0
+    out_root[np.isinf(out_root)] = 0
+
+    in_root = np.diag(in_root)  # just change to sparse diag for sparse support
+    out_root = np.diag(out_root)
 
     if form == "I-DAD":
         L = np.diag(D_vec) - A
         L = D_root @ L @ D_root
     elif form == "DAD" or form == "R-DAD":
-        L = D_root @ A @ D_root
-    return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
-
+        L = out_root @ A @ in_root
+    # return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
+    return L
 
 def is_fully_connected(graph):
     r"""
