@@ -25,7 +25,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation 
     of the graph based on its adjacency matrix :ref:`[1]`. It relies on an SVD to reduce
     the dimensionality to the specified k, or if k is unspecified, can find a number of 
-    dimensions automatically (see graspy.embed.selectSVD).
+    dimensions automatically (see :class:`~graspy.embed.selectSVD`).
 
     Parameters
     ----------
@@ -33,7 +33,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        ``select_dimension`` using ``n_elbows`` argument.
+        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
     n_elbows : int, optional, default: 2
         If ``n_components=None``, then compute the optimal embedding dimension using
         :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
