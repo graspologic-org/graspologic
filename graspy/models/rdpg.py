@@ -21,7 +21,7 @@ class RDPGEstimator(BaseGraphEstimator):
     where :math:`x_i` is the left latent position of node :math:`i`, and :math:`y_j` is 
     the right latent position of node :math:`j`. If the graph being modeled is
     is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via 
-    :class:`embed.AdjacencySpectralEmbed`.
+    :class:`graspy.embed.AdjacencySpectralEmbed`.
 
     Parameters
     ----------
