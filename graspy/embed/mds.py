@@ -53,7 +53,7 @@ class ClassicalMDS(BaseEstimator):
         ``select_dimension`` to find the optimal embedding dimension.
 
     n_elbows : int, or None (default=2)
-        If ``n_components=None`, then compute the optimal embedding dimension using
+        If ``n_components=None``, then compute the optimal embedding dimension using
         `:func:`~graspy.embed.select_dimension`. Otherwise, ignored.
 
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
