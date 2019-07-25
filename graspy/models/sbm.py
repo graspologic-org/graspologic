@@ -67,6 +67,23 @@ class SBMEstimator(BaseGraphEstimator):
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
 
+    n_components : int, optional (default=None)
+        Desired dimensionality of embedding for clustering to find communities.
+        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions 
+        will be chosen by :func:`~graspy.embed.select_dimension``.
+
+    min_comm : int, optional (default=1)
+        The minimum number of communities (blocks) to consider. 
+
+    max_comm : int, optional (default=10)
+        The maximum number of communities (blocks) to consider (inclusive).
+
+    cluster_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
+    
+    embed_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.embed.AdjacencySpectralEmbed`
+
     Attributes
     ----------
     block_p_ : np.ndarray, shape (n_blocks, n_blocks)
@@ -232,13 +249,32 @@ class DCSBMEstimator(BaseGraphEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
+
     degree_directed : boolean, optional (default=False)
         Whether to fit an "in" and "out" degree correction for each node. In the
         degree_directed case, the fit model can have a different expected in and out 
         degree for each node. 
+
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
+
+    n_components : int, optional (default=None)
+        Desired dimensionality of embedding for clustering to find communities.
+        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions 
+        will be chosen by :func:`~graspy.embed.select_dimension``.
+
+    min_comm : int, optional (default=1)
+        The minimum number of communities (blocks) to consider. 
+
+    max_comm : int, optional (default=10)
+        The maximum number of communities (blocks) to consider (inclusive).
+
+    cluster_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
+    
+    embed_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.embed.LaplacianSpectralEmbed`
 
     Attributes
     ----------
@@ -307,7 +343,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         self.embed_kws = {}
 
     def _estimate_assignments(self, graph):
-        graph = symmetrize(graph, method="avg")
+        graph = symmetrize(graph, method="avg")  # TODO use directed LSE
         lse = LaplacianSpectralEmbed(
             form="R-DAD", n_components=self.n_components, **self.embed_kws
         )
