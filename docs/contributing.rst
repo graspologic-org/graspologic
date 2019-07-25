@@ -65,7 +65,7 @@ before you submit a pull request:
 -  Ensure all tests are passing locally using ``pytest``. Install the necessary
    packages by: 
 
-   .. code::bash
+   .. code:: bash
 
       $ pip install pytest pytest-cov``
 
