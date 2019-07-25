@@ -2,7 +2,7 @@
 Tutorial
 ********
 
-.. _models_tutorial
+.. _models_tutorial:
 
 Models
 ======
