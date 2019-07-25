@@ -221,7 +221,7 @@ class MultipleASE(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_graphs, n_vertices, n_components) if input 
+        out : array-like, shape (n_vertices, n_components) if input 
             graphs were symmetric. If graphs were directed, returns tuple of 
             two arrays (same shape as above) where the first corresponds to the
             left latent positions, and the right to the right latent positions
