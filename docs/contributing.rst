@@ -67,7 +67,7 @@ before you submit a pull request:
 
    .. code::bash
 
-     $ pip install pytest pytest-cov``
+      $ pip install pytest pytest-cov``
 
    then run
 
