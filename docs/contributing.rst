@@ -7,7 +7,9 @@ How to Contribute
 -----------------
 
 The preferred workflow for contributing to GraSPy is to fork the main
-repository on GitHub, clone, and develop on a branch. Steps: 1. Fork the
+repository on GitHub, clone, and develop on a branch. Steps: 
+
+1. Fork the
 `project repository <https://github.com/neurodata/GraSPy>`__ by clicking
 on the ‘Fork’ button near the top right of the page. This creates a copy
 of the code under your GitHub user account. For more details on how to
@@ -50,30 +52,40 @@ Pull Request Checklist
 ----------------------
 
 We recommended that your contribution complies with the following rules
-before you submit a pull request: - Follow the
-`coding-guidelines <#guidelines>`__. - Give your pull request a helpful
+before you submit a pull request: 
+
+- Follow the
+`coding-guidelines <#guidelines>`__. 
+- Give your pull request a helpful
 title that summarises what your contribution does. In some cases
 ``Fix <ISSUE TITLE>`` is enough. ``Fix #<ISSUE NUMBER>`` is not enough.
 - All public methods should have informative docstrings with sample
-usage presented as doctests when appropriate. - At least one paragraph
+usage presented as doctests when appropriate. 
+- At least one paragraph
 of narrative documentation with links to references in the literature
-(with PDF links when possible) and the example. - All functions and
+(with PDF links when possible) and the example. 
+- All functions and
 classes must have unit tests. These should include, at the very least,
-type checking and ensuring correct computation/outputs. - Ensure all
+type checking and ensuring correct computation/outputs.
+- Ensure all
 tests are passing locally using ``pytest``. Install the necessary
-packages by: ``bash    $ pip install pytest pytest-cov``
+packages by: 
 
-then run
+      .. code::bash
+      
+         $ pip install pytest pytest-cov``
 
-.. code:: bash
+      then run
 
-   $ pytest
+      .. code:: bash
 
-or you can run pytest on a single test file by
+         $ pytest
 
-.. code:: bash
+      or you can run pytest on a single test file by
 
-   $ pytest path/to/test.py
+      .. code:: bash
+
+         $ pytest path/to/test.py
 
 -  Run an autoformatter. We use ``black`` and would like for you to
    format all files using ``black``. You can run the following lines to
