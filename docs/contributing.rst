@@ -1,10 +1,65 @@
 Contributing to GraSPy
 ======================
 
-(adopted from sklearn)
+(adopted from scikit-learn)
 
-How to Contribute
------------------
+Submitting a bug report or a feature request
+============================================
+
+We use GitHub issues to track all bugs and feature requests; feel free to open
+an issue if you have found a bug or wish to see a feature implemented.
+
+In case you experience issues using this package, do not hesitate to submit a
+ticket to the
+`Bug Tracker <https://github.com/neurodata/graspy/issues>`_. You are
+also welcome to post feature requests or pull requests.
+
+It is recommended to check that your issue complies with the
+following rules before submitting:
+
+-  Verify that your issue is not being currently addressed by other
+   `issues <https://github.com/neurodata/graspy/issues?q=>`_
+   or `pull requests <https://github.com/neurodata/graspy/pulls?q=>`_.
+
+-  If you are submitting a bug report, we strongly encourage you to follow the guidelines in
+   :ref:`filing_bugs`.
+
+.. _filing_bugs:
+
+How to make a good bug report
+-----------------------------
+
+When you submit an issue to `Github
+<https://github.com/neurodata/graspy/issues>`__, please do your best to
+follow these guidelines! This will make it a lot easier to provide you with good
+feedback:
+
+- The ideal bug report contains a **short reproducible code snippet**, this way
+  anyone can try to reproduce the bug easily (see `this
+  <https://stackoverflow.com/help/mcve>`_ for more details). If your snippet is
+  longer than around 50 lines, please link to a `gist
+  <https://gist.github.com>`_ or a github repo.
+
+- If not feasible to include a reproducible snippet, please be specific about
+  what **estimators and/or functions are involved and the shape of the data**.
+
+- If an exception is raised, please **provide the full traceback**.
+
+- Please include your **operating system type and version number**, as well as
+  your **Python and graspy versions**. This information
+  can be found by running the following code snippet::
+
+    import platform; print(platform.platform())
+    import sys; print("Python", sys.version)
+    import graspy; print("GraSPy", graspy.__version__)
+
+- Please ensure all **code snippets and error messages are formatted in
+  appropriate code blocks**.  See `Creating and highlighting code blocks
+  <https://help.github.com/articles/creating-and-highlighting-code-blocks>`_
+  for more details.
+
+Contributing Code
+=================
 
 The preferred workflow for contributing to GraSPy is to fork the main
 repository on GitHub, clone, and develop on a branch. Steps: 
@@ -90,10 +145,10 @@ before you submit a pull request:
       $ black path/to/module.py
 
 Guidelines
-----------
+==========
 
 Coding Guidelines
-~~~~~~~~~~~~~~~~~
+-----------------
 
 Uniformly formatted code makes it easier to share code ownership. GraSPy
 package closely follows the official Python guidelines detailed in
@@ -101,7 +156,7 @@ package closely follows the official Python guidelines detailed in
 code should be formatted and indented. Please read it and follow it.
 
 Docstring Guidelines
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 Properly formatted docstrings is required for documentation generation
 by Sphinx. The pygraphstats package closely follows the numpydoc
