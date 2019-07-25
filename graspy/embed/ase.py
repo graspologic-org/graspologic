@@ -46,7 +46,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
         - 'truncated'
-            Computes truncated svd using :func:`scipy.sparse.linalg.svd`
+            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
