@@ -64,6 +64,24 @@ class SBMEstimator(BaseGraphEstimator):
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
 
+    Attributes
+    ----------
+    block_p_ : np.ndarray, shape (n_blocks, n_blocks)
+        The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
+        represents the probability of an edge between block :math:`i` and block 
+        :math:`j`.
+
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled.
+
+    vertex_assignments_ : np.ndarray, shape (n_verts)
+        A vector of integer labels corresponding to the predicted block that each node 
+        belongs to if `y` was not passed during the call to `fit`. 
+
+    block_weights_ : np.ndarray, shape (n_blocks)
+        Contains the proportion of nodes that belong to each block in the fit model.
+
     See also
     --------
     graspy.models.DCSBMEstimator
@@ -216,6 +234,30 @@ class DCSBMEstimator(BaseGraphEstimator):
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
+
+    Attributes
+    ----------
+    block_p_ : np.ndarray, shape (n_blocks, n_blocks)
+        The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
+        represents the expected number of edges between block :math:`i` and block 
+        :math:`j`.
+
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled.
+
+    degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
+        Degree correction vector(s) :math:`theta`. If `degree_directed` parameter was
+        False, then will be of shape (n_verts, 1) and element `i` represents the degree
+        correction for node `i`. Otherwise, the first column contains out degree
+        corrections and the second column contains in degree corrections. 
+
+    vertex_assignments_ : np.ndarray, shape (n_verts)
+        A vector of integer labels corresponding to the predicted block that each node 
+        belongs to if `y` was not passed during the call to `fit`. 
+
+    block_weights_ : np.ndarray, shape (n_blocks)
+        Contains the proportion of nodes that belong to each block in the fit model.
 
     See also
     --------
