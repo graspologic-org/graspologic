@@ -2,6 +2,8 @@
 Tutorial
 ********
 
+.. _models_tutorial
+
 Models
 ======
 This tutorial presents several random graph models: the Erdos-Renyi (ER) model, degree-corrected ER model,

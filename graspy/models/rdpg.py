@@ -23,6 +23,8 @@ class RDPGEstimator(BaseGraphEstimator):
     is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via 
     :class:`~graspy.embed.AdjacencySpectralEmbed`.
 
+    Read more in the :ref:`tutorials <models_tutorial>`
+
     Parameters
     ----------
     loops : boolean, optional (default=False)
