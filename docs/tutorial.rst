@@ -13,6 +13,7 @@ stochastic block model (SBM), degree-corrected SBM, and random dot product graph
    :maxdepth: 1
    
    .. _models_tutorial:
+   
    tutorials/models/models
 
 .. _simulations_tutorials:
