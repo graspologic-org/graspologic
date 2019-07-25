@@ -64,7 +64,7 @@ python3 setup.py install
 Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) in the official website
 
 # Contributing to GraSPy
-We welcome contributions from anyone. Please see our [contribution guidelines](https://github.com/neurodata/graspy/blob/master/CONTRIBUTING.md) before making a pull request. Our 
+We welcome contributions from anyone. Please see our [contribution guidelines](https://graspy.neurodata.io/contributing.html) before making a pull request. Our 
 [issues](https://github.com/neurodata/graspy/issues) page is full of places we could use help! 
 If you have an idea for an improvement not listed there, please 
 [make an issue](https://github.com/neurodata/graspy/issues/new) first so you can discuss with the 
