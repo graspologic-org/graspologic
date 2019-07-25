@@ -24,6 +24,16 @@ class EREstimator(SBMEstimator):
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
 
+    Attributes
+    ----------
+    p_ : float
+        Value between 0 and 1 (inclusive) representing the probability of any edge in 
+        the ER graph model 
+
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled.         
+
     See also
     --------
     graspy.models.DCEREstimator
@@ -74,10 +84,26 @@ class DCEREstimator(DCSBMEstimator):
         Whether to allow seperate degree correction parameters for the in and out degree
         of each node. Ignored if `directed` is False.
     
+    Attributes
+    ----------
+    p_ : float
+        The :math:`p` parameter as described in the above model, which weights the
+        overall probability of connections between any two nodes.
+
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled.
+
+    degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
+        Degree correction vector(s) :math:`theta`. If `degree_directed` parameter was
+        False, then will be of shape (n_verts, 1) and element `i` represents the degree
+        correction for node `i`. Otherwise, the first column contains out degree
+        corrections and the second column contains in degree corrections. 
+
     Notes
     -----
-    The DCER model is rarely (if ever) mentioned in literature, though it is simply
-    a special case of the DCSBM where there is only one community.
+    The DCER model is rarely mentioned in literature, though it is simply a special case
+    of the DCSBM where there is only one community.
 
     See also
     --------
