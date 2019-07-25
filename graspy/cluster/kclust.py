@@ -24,7 +24,7 @@ class KMeansCluster(BaseCluster):
     KMeans Cluster.
 
     It computes all possible models from one component to 
-    max_clusters. The best model is given by the lowest silhouette score.
+    ``max_clusters``. The best model is given by the lowest silhouette score.
 
     Parameters
     ----------
@@ -32,7 +32,7 @@ class KMeansCluster(BaseCluster):
         The maximum number of mixture components to consider.
     
     random_state : int, RandomState instance or None, optional (default=None)
-        If int, random_state is the seed used by the random number generator;
+        If int, ``random_state`` is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used
         by `np.random`.
@@ -48,11 +48,11 @@ class KMeansCluster(BaseCluster):
 
     silhouette_ : list
         List of silhouette scores computed for all possible number 
-        of clusters given by range(2, max_clusters).
+        of clusters given by ``range(2, max_clusters)``.
 
     ari_ : list
         Only computed when y is given. List of ARI values computed for 
-        all possible number of clusters given by range(2, max_clusters).
+        all possible number of clusters given by ``range(2, max_clusters)``.
     """
 
     def __init__(self, max_clusters=2, random_state=None):
@@ -78,7 +78,7 @@ class KMeansCluster(BaseCluster):
             corresponds to a single data point.
         
         y : array-like, shape (n_samples,), optional (default=None)
-            List of labels for X if available. Used to compute ARI scores.
+            List of labels for `X` if available. Used to compute ARI scores.
 
         Returns
         -------

@@ -20,7 +20,7 @@ class EREstimator(SBMEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
-        
+
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
@@ -85,7 +85,7 @@ class DCEREstimator(DCSBMEstimator):
 
     degree_directed : boolean 
         Whether to allow seperate degree correction parameters for the in and out degree
-        of each node. Ignored if `directed` is False.
+        of each node. Ignored if ``directed`` is False.
     
     Attributes
     ----------
@@ -98,9 +98,9 @@ class DCEREstimator(DCSBMEstimator):
         sampled.
 
     degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
-        Degree correction vector(s) :math:`theta`. If `degree_directed` parameter was
+        Degree correction vector(s) :math:`theta`. If ``degree_directed`` parameter was
         False, then will be of shape (n_verts, 1) and element `i` represents the degree
-        correction for node `i`. Otherwise, the first column contains out degree
+        correction for node :math:`i`. Otherwise, the first column contains out degree
         corrections and the second column contains in degree corrections. 
 
     Notes
@@ -116,7 +116,7 @@ class DCEREstimator(DCSBMEstimator):
 
     References
     ----------
-    .. [1] https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
+    .. [1]  https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
     .. [2]  Karrer, B., & Newman, M. E. (2011). Stochastic blockmodels and community
             structure in networks. Physical review E, 83(1), 016107.
 

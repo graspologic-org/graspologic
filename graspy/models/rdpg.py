@@ -37,7 +37,7 @@ class RDPGEstimator(BaseGraphEstimator):
     
     ase_kws : dict, optional (default={})
         Dictionary of keyword arguments passed down to 
-        `graspy.embed.AdjacencySpectralEmbed`, which is used to fit the model.
+        :class:`~graspy.embed.AdjacencySpectralEmbed`, which is used to fit the model.
 
     diag_aug_weight : int or float, optional (default=1)
         Weighting used for diagonal augmentation, which is a form of regularization for 

@@ -66,8 +66,8 @@ class mug2vec(BaseEstimator):
         ``select_dimension`` using ``n_elbows`` argument.
 
     omnibus_n_elbows, cmds_n_elbows: int, optional, default: 2
-        If `n_components=None`, then compute the optimal embedding dimension using
-        `select_dimension`. Otherwise, ignored.
+        If ``n_components=None``, then compute the optimal embedding dimension using
+        ``select_dimension``. Otherwise, ignored.
     
     Attributes
     ----------

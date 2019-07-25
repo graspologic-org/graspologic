@@ -22,7 +22,7 @@ from .base import BaseInference
 class LatentDistributionTest(BaseInference):
     """
     Two-sample hypothesis test for the problem of determining whether two random 
-    dot product graphs have the same distributions of latent positions [2]_.
+    dot product graphs have the same distributions of latent positions [1]_.
     
     This test can operate on two graphs where there is no known matching between
     the vertices of the two graphs, or even when the number of vertices is different. 
@@ -55,7 +55,7 @@ class LatentDistributionTest(BaseInference):
 
     References
     ----------
-    .. [2] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017). 
+    .. [1] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017). 
         "A nonparametric two-sample hypothesis testing problem for random graphs."
         Bernoulli, 23(3), 1599-1630.
     """

@@ -60,7 +60,7 @@ class SBMEstimator(BaseGraphEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
-        
+
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
@@ -78,7 +78,7 @@ class SBMEstimator(BaseGraphEstimator):
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node 
-        belongs to if `y` was not passed during the call to `fit`. 
+        belongs to if ``y`` was not passed during the call to ``fit``. 
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
@@ -214,7 +214,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     is an `n\_nodes` length vector specifiying the degree correction for each
     node. 
 
-    The `degree_directed` parameter of this model allows the degree correction 
+    The ``degree_directed`` parameter of this model allows the degree correction 
     parameter to be different for the in and out degree of each node:  
 
     :math:`P_{ij} = \theta_i \eta_j B_{\tau_i \tau_j}`
@@ -249,13 +249,13 @@ class DCSBMEstimator(BaseGraphEstimator):
 
     degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
         Degree correction vector(s) :math:`theta`. If `degree_directed` parameter was
-        False, then will be of shape (n_verts, 1) and element `i` represents the degree
-        correction for node `i`. Otherwise, the first column contains out degree
-        corrections and the second column contains in degree corrections. 
+        False, then will be of shape (n_verts, 1) and element :math:`i` represents the 
+        degree correction for node :math:`i`. Otherwise, the first column contains out 
+        degree corrections and the second column contains in degree corrections. 
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node 
-        belongs to if `y` was not passed during the call to `fit`. 
+        belongs to if ``y`` was not passed during the call to ``fit``. 
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
@@ -332,7 +332,7 @@ class DCSBMEstimator(BaseGraphEstimator):
 
         Returns
         -------
-        self : DCSBMEstimator object 
+        self : ``DCSBMEstimator`` object 
             Fitted instance of self 
         """
         graph = import_graph(graph)

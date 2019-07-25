@@ -211,21 +211,21 @@ def heatmap(
         Categorical labeling of the nodes. If not None, will group the nodes 
         according to these labels and plot the labels on the marginal
     outer_hier_labels : array-like, length of X's first dimension, default: None
-        Categorical labeling of the nodes, ignored without `inner_hier_labels`
+        Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals 
     hier_label_fontsize : int
-        size (in points) of the text labels for the `inner_hier_labels` and 
-        `outer_hier_labels`.
+        size (in points) of the text labels for the ``inner_hier_labels`` and 
+        ``outer_hier_labels``.
     ax : matplotlib Axes, optional
         Axes in which to draw the plot, otherwise will generate its own axes
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if `None`
+        if ``None``
     sort_nodes : boolean, optional (default=False)
         whether or not to sort the nodes of the graph by the sum of edge weights
-        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
-        `sort_nodes` is `True`, will sort nodes this way within block. 
+        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
+        ``sort_nodes`` is ``True``, will sort nodes this way within block. 
     """
     _check_common_inputs(
         figsize=figsize,
@@ -347,7 +347,7 @@ def gridplot(
         List of nx.Graph or numpy arrays to plot
     labels : list of str
         List of strings, which are labels for each element in X. 
-        `len(X) == len(labels)`.
+        ``len(X) == len(labels)``.
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
@@ -375,7 +375,7 @@ def gridplot(
         Separate scaling factor to independently scale the size of the font
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable
     alpha : float [0, 1], default : 0.7
         alpha value of plotted gridplot points
@@ -387,19 +387,19 @@ def gridplot(
         Categorical labeling of the nodes. If not None, will group the nodes 
         according to these labels and plot the labels on the marginal
     outer_hier_labels : array-like, length of X's first dimension, default: None
-        Categorical labeling of the nodes, ignored without `inner_hier_labels`
+        Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals
     hier_label_fontsize : int
-        size (in points) of the text labels for the `inner_hier_labels` and 
-        `outer_hier_labels`.
+        size (in points) of the text labels for the ``inner_hier_labels`` and 
+        ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if `None`
+        if ``None``
     sort_nodes : boolean, optional (default=False)
         whether or not to sort the nodes of the graph by the sum of edge weights
-        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
-        `sort_nodes` is `True`, will sort nodes this way within block. 
+        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
+        ``sort_nodes`` is ``True``, will sort nodes this way within block. 
     """
     _check_common_inputs(
         height=height,
@@ -534,7 +534,7 @@ def pairplot(
         Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     alpha : float, optional, default: 0.7
         opacity value of plotter markers between 0 and 1 
@@ -710,7 +710,7 @@ def degreeplot(
         Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     figsize : tuple of length 2, default (10, 5)
         size of the figure (width, height)
@@ -776,7 +776,7 @@ def edgeplot(
         Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     figsize : tuple of length 2, default (10, 5)
         size of the figure (width, height)
@@ -820,7 +820,7 @@ def screeplot(
 ):
     r"""
     Plots the distribution of singular values for a matrix, either showing the 
-    raw distribution or an empirical CDF (depending on `cumulative`)
+    raw distribution or an empirical CDF (depending on ``cumulative``)
 
     Parameters
     ----------
@@ -838,7 +838,7 @@ def screeplot(
     cumulative : boolean, default: True
         whether or not to plot a cumulative cdf of singular values 
     show_first : int or None, default: None 
-        whether to restrict the plot to the first `show_first` components
+        whether to restrict the plot to the first ``show_first`` components
 
     Returns
     -------
