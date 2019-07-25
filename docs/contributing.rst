@@ -4,7 +4,7 @@ Contributing to GraSPy
 (adopted from scikit-learn)
 
 Submitting a bug report or a feature request
-============================================
+--------------------------------------------
 
 We use GitHub issues to track all bugs and feature requests; feel free to open
 an issue if you have found a bug or wish to see a feature implemented.
@@ -27,7 +27,7 @@ following rules before submitting:
 .. _filing_bugs:
 
 How to make a good bug report
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you submit an issue to `Github
 <https://github.com/neurodata/graspy/issues>`__, please do your best to
@@ -59,7 +59,7 @@ feedback:
   for more details.
 
 Contributing Code
-=================
+-----------------
 
 The preferred workflow for contributing to GraSPy is to fork the main
 repository on GitHub, clone, and develop on a branch. Steps: 
@@ -103,7 +103,7 @@ repository on GitHub, clone, and develop on a branch. Steps:
       $ git push -u origin my-feature
 
 Pull Request Checklist
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 We recommended that your contribution complies with the following rules
 before you submit a pull request: 
@@ -145,10 +145,10 @@ before you submit a pull request:
       $ black path/to/module.py
 
 Guidelines
-==========
+----------
 
 Coding Guidelines
------------------
+~~~~~~~~~~~~~~~~~
 
 Uniformly formatted code makes it easier to share code ownership. GraSPy
 package closely follows the official Python guidelines detailed in
@@ -156,7 +156,7 @@ package closely follows the official Python guidelines detailed in
 code should be formatted and indented. Please read it and follow it.
 
 Docstring Guidelines
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 Properly formatted docstrings is required for documentation generation
 by Sphinx. The pygraphstats package closely follows the numpydoc
