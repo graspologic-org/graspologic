@@ -62,7 +62,7 @@ cd graspy
 python3 setup.py install
 ```
 
-# Contributing to GraSPy
+# Contributing
 We welcome contributions from anyone. Please see our [contribution guidelines](https://graspy.neurodata.io/contributing.html) before making a pull request. Our 
 [issues](https://github.com/neurodata/graspy/issues) page is full of places we could use help! 
 If you have an idea for an improvement not listed there, please 
