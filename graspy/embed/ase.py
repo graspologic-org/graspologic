@@ -42,7 +42,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         - 'randomized'
             Computes randomized svd using 
-            :meth:`sklearn.utils.extmath.randomized_svd`
+            :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using ``scipy.linalg.svd``
         - 'truncated'
