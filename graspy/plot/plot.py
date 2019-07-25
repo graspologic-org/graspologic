@@ -504,6 +504,12 @@ def pairplot(
     r"""
     Plot pairwise relationships in a dataset.
 
+    For Euclidean data with more than 2 dimensions, pairplot will plot all possible
+    pairs of dimensions against each other, arranging the plots on a 2-d grid (i.e.) the 
+    plot in the 3rd row, 4th column would be 3rd dimension plotted against the 4th). The
+    diagonal of the grid displays the marginals of individual dimensions as histograms 
+    or KDEs. 
+
     Parameters
     ----------
     X : array-like, shape (n_samples, n_features)
