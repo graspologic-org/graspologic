@@ -15,3 +15,15 @@ Gridplot
 Pairplot
 --------
 .. autofunction:: pairplot
+
+Degreeplot
+----------
+.. autofunction:: degreeplot
+
+Edgeplot
+--------
+.. autofunction:: edgeplot
+
+Screeplot
+---------
+.. autofunction:: screeplot

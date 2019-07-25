@@ -60,7 +60,7 @@ def sample_edges(P, directed=False, loops=False):
         samples = np.random.binomial(1, P[triu_inds])
         A = np.zeros_like(P)
         A[triu_inds] = samples
-        A = symmetrize(A)
+        A = symmetrize(A, method="triu")
     else:
         A = np.random.binomial(1, P)
 
@@ -244,7 +244,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     A[triu] = wt
 
     if not directed:
-        A = symmetrize(A)
+        A = symmetrize(A, method="triu")
 
     return A
 
@@ -506,7 +506,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     if not loops:
         A = A - np.diag(np.diag(A))
     if not directed:
-        A = symmetrize(A)
+        A = symmetrize(A, method="triu")
     return A
 
 

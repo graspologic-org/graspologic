@@ -18,7 +18,6 @@ from matplotlib.colors import Colormap
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.utils import check_array, check_consistent_length
 
@@ -95,21 +94,52 @@ def _check_common_inputs(
 
 def _transform(arr, method):
     if method is not None:
-        if method == "log":
+        if method in ["log", "log10"]:
             # arr = np.log(arr, where=(arr > 0))
             # hacky, but np.log(arr, where=arr>0) is really buggy
             arr = arr.copy()
-            arr[arr > 0] = np.log(arr[arr > 0])
+            if method == "log":
+                arr[arr > 0] = np.log(arr[arr > 0])
+            else:
+                arr[arr > 0] = np.log10(arr[arr > 0])
         elif method in ["zero-boost", "simple-all", "simple-nonzero"]:
             arr = pass_to_ranks(arr, method=method)
         else:
-            msg = "Transform must be one of {log, zero-boost, simple-all, \
+            msg = "Transform must be one of {log, log10, zero-boost, simple-all, \
             simple-nonzero, not {}.".format(
                 method
             )
             raise ValueError(msg)
 
     return arr
+
+
+def _process_graphs(
+    graphs, inner_hier_labels, outer_hier_labels, transform, sort_nodes
+):
+    """ Handles transformation and sorting of graphs for plotting
+    
+    """
+    for g in graphs:
+        check_consistent_length(g, inner_hier_labels, outer_hier_labels)
+
+    graphs = [_transform(arr, transform) for arr in graphs]
+
+    if inner_hier_labels is not None:
+        inner_hier_labels = np.array(inner_hier_labels)
+        if outer_hier_labels is None:
+            outer_hier_labels = np.ones_like(inner_hier_labels)
+        else:
+            outer_hier_labels = np.array(outer_hier_labels)
+    else:
+        inner_hier_labels = np.ones(graphs[0].shape[0], dtype=int)
+        outer_hier_labels = np.ones_like(inner_hier_labels)
+
+    graphs = [
+        _sort_graph(arr, inner_hier_labels, outer_hier_labels, sort_nodes)
+        for arr in graphs
+    ]
+    return graphs
 
 
 def heatmap(
@@ -131,6 +161,7 @@ def heatmap(
     hier_label_fontsize=30,
     ax=None,
     title_pad=None,
+    sort_nodes=False,
 ):
     r"""
     Plots a graph as a heatmap.
@@ -139,11 +170,13 @@ def heatmap(
     ----------
     X : nx.Graph or np.ndarray object
         Graph or numpy matrix to plot
-    transform : None, or string {'log', 'zero-boost', 'simple-all', 'simple-nonzero'}
+    transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
-            Plots the log of all nonzero numbers
-        - 'zero-boost' :s
+            Plots the natural log of all nonzero numbers
+        - 'log10' : 
+            Plots the base 10 log of all nonzero numbers
+        - 'zero-boost' :
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
         - 'simple-all': 
@@ -189,6 +222,10 @@ def heatmap(
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if `None`
+    sort_nodes : boolean, optional (default=False)
+        whether or not to sort the nodes of the graph by the sum of edge weights
+        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
+        `sort_nodes` is `True`, will sort nodes this way within block. 
     """
     _check_common_inputs(
         figsize=figsize,
@@ -233,19 +270,12 @@ def heatmap(
         msg = "cbar must be a bool, not {}.".format(type(center))
         raise TypeError(msg)
 
-    check_consistent_length(X, inner_hier_labels, outer_hier_labels)
-
     arr = import_graph(X)
-    arr = _transform(arr, transform)
-    if inner_hier_labels is not None:
-        inner_hier_labels = np.array(inner_hier_labels)
-        if outer_hier_labels is None:
-            arr = _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels))
-        else:
-            outer_hier_labels = np.array(outer_hier_labels)
-            arr = _sort_graph(arr, inner_hier_labels, outer_hier_labels)
-    else:
-        arr = _sort_graph(arr, np.ones(arr.shape[0]), np.ones(arr.shape[0]))
+
+    arr = _process_graphs(
+        [arr], inner_hier_labels, outer_hier_labels, transform, sort_nodes
+    )[0]
+
     # Global plotting settings
     CBAR_KWS = dict(shrink=0.7)  # norm=colors.Normalize(vmin=0, vmax=1))
 
@@ -305,6 +335,7 @@ def gridplot(
     outer_hier_labels=None,
     hier_label_fontsize=30,
     title_pad=None,
+    sort_nodes=False,
 ):
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
@@ -317,10 +348,12 @@ def gridplot(
     labels : list of str
         List of strings, which are labels for each element in X. 
         `len(X) == len(labels)`.
-    transform : None, or string {'log', 'zero-boost', 'simple-all', 'simple-nonzero'}
+    transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
-            Plots the log of all nonzero numbers
+            Plots the natural log of all nonzero numbers
+        - 'log10' : 
+            Plots the base 10 log of all nonzero numbers
         - 'zero-boost' :
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
@@ -363,6 +396,10 @@ def gridplot(
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if `None`
+    sort_nodes : boolean, optional (default=False)
+        whether or not to sort the nodes of the graph by the sum of edge weights
+        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
+        `sort_nodes` is `True`, will sort nodes this way within block. 
     """
     _check_common_inputs(
         height=height,
@@ -383,23 +420,10 @@ def gridplot(
         labels = np.arange(len(X))
 
     check_consistent_length(X, labels)
-    for g in X:
-        check_consistent_length(g, inner_hier_labels, outer_hier_labels)
 
-    graphs = [_transform(arr, transform) for arr in graphs]
-
-    if inner_hier_labels is not None:
-        inner_hier_labels = np.array(inner_hier_labels)
-        if outer_hier_labels is None:
-            graphs = [
-                _sort_graph(arr, inner_hier_labels, np.ones_like(inner_hier_labels))
-                for arr in graphs
-            ]
-        else:
-            outer_hier_labels = np.array(outer_hier_labels)
-            graphs = [
-                _sort_graph(arr, inner_hier_labels, outer_hier_labels) for arr in graphs
-            ]
+    graphs = _process_graphs(
+        X, inner_hier_labels, outer_hier_labels, transform, sort_nodes
+    )
 
     if isinstance(palette, str):
         palette = sns.color_palette(palette, desat=0.75, n_colors=len(labels))
@@ -843,7 +867,7 @@ def screeplot(
     return ax
 
 
-def _sort_inds(graph, inner_labels, outer_labels):
+def _sort_inds(graph, inner_labels, outer_labels, sort_nodes):
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
     sort_df["inner_labels"] = inner_labels
     sort_df["outer_labels"] = outer_labels
@@ -861,24 +885,24 @@ def _sort_inds(graph, inner_labels, outer_labels):
     node_edgesums = graph.sum(axis=1) + graph.sum(axis=0)
     sort_df["node_edgesums"] = node_edgesums.max() - node_edgesums
 
-    sort_df.sort_values(
-        by=[
+    if sort_nodes:
+        by = [
             "outer_counts",
             "outer_labels",
             "inner_counts",
             "inner_labels",
             "node_edgesums",
-        ],
-        kind="mergesort",
-        inplace=True,
-    )
+        ]
+    else:
+        by = ["outer_counts", "outer_labels", "inner_counts", "inner_labels"]
+    sort_df.sort_values(by=by, kind="mergesort", inplace=True)
 
     sorted_inds = sort_df.index.values
     return sorted_inds
 
 
-def _sort_graph(graph, inner_labels, outer_labels):
-    inds = _sort_inds(graph, inner_labels, outer_labels)
+def _sort_graph(graph, inner_labels, outer_labels, sort_nodes):
+    inds = _sort_inds(graph, inner_labels, outer_labels, sort_nodes)
     graph = graph[inds, :][:, inds]
     return graph
 
@@ -918,13 +942,13 @@ def _unique_like(vals):
 
 # assume that the graph has already been plotted in sorted form
 def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
+    inner_labels = np.array(inner_labels)
     plot_outer = True
     if outer_labels is None:
         outer_labels = np.ones_like(inner_labels)
         plot_outer = False
 
-    sorted_inds = _sort_inds(graph, inner_labels, outer_labels)
-
+    sorted_inds = _sort_inds(graph, inner_labels, outer_labels, False)
     inner_labels = inner_labels[sorted_inds]
     outer_labels = outer_labels[sorted_inds]
 
@@ -935,12 +959,20 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
     outer_unique, _ = _unique_like(outer_labels)
 
     n_verts = graph.shape[0]
+    axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.3, zorder=3, color="grey")
     # draw lines
-    for x in inner_freq_cumsum:
-        if x != inner_freq_cumsum[0]:
-            x -= 0.2
-        ax.vlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
-        ax.hlines(x, 0, n_verts, linestyle="dashed", lw=0.9, alpha=0.25, zorder=3)
+    for x in inner_freq_cumsum[1:-1]:
+        ax.vlines(x, 0, n_verts + 1, **axline_kws)
+        ax.hlines(x, 0, n_verts + 1, **axline_kws)
+
+    # add specific lines for the borders of the plot
+    pad = 0.001
+    low = pad
+    high = 1 - pad
+    ax.plot((low, low), (low, high), transform=ax.transAxes, **axline_kws)
+    ax.plot((low, high), (low, low), transform=ax.transAxes, **axline_kws)
+    ax.plot((high, high), (low, high), transform=ax.transAxes, **axline_kws)
+    ax.plot((low, high), (high, high), transform=ax.transAxes, **axline_kws)
 
     # generic curve that we will use for everything
     lx = np.linspace(-np.pi / 2.0 + 0.05, np.pi / 2.0 - 0.05, 500)
@@ -957,8 +989,6 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
     outer_tick_width = outer_freq / 2
 
     # top inner curves
-    # ax_x = divider.new_vertical(
-    #     size="5%", pad=0.0, sharex=ax, pack_start=False)
     ax_x = divider.new_vertical(size="5%", pad=0.0, pack_start=False)
     ax.figure.add_axes(ax_x)
     _plot_brackets(
@@ -973,8 +1003,6 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
         fontsize,
     )
     # side inner curves
-    # ax_y = divider.new_horizontal(
-    #     size="5%", pad=0.0, sharey=ax, pack_start=True)
     ax_y = divider.new_horizontal(size="5%", pad=0.0, pack_start=True)
     ax.figure.add_axes(ax_y)
     _plot_brackets(
@@ -1049,7 +1077,5 @@ def _plot_brackets(
     elif axis == "y":
         ax.set_yticks(tick_loc)
         ax.set_yticklabels(group_names, fontsize=fontsize, verticalalignment="center")
-        # ax.yaxis.set_label_position('top')
-        # ax.yaxis.tick_top()
         ax.set_ylim(0, max_size)
         ax.invert_yaxis()
