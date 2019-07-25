@@ -23,8 +23,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
     Class for computing the adjacency spectral embedding of a graph 
     
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation 
-    of the graph based on its adjacency matrix [1]. It relies on an SVD to reduce the 
-    dimensionality to the specified k, or if k is unspecified, can find a number of 
+    of the graph based on its adjacency matrix :ref:`[1]`. It relies on an SVD to reduce
+    the dimensionality to the specified k, or if k is unspecified, can find a number of 
     dimensions automatically (see graspy.embed.selectSVD).
 
     Parameters
@@ -42,7 +42,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         - 'randomized'
             Computes randomized svd using 
-            ``sklearn.utils.extmath.randomized_svd``
+            :meth:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using ``scipy.linalg.svd``
         - 'truncated'

@@ -45,6 +45,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinxcontrib.rawfiles",
     "nbsphinx",
+    "sphinx.ext.intersphinx",
 ]
 
 # -- sphinxcontrib.rawfiles
