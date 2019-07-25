@@ -60,6 +60,7 @@ class SBMEstimator(BaseGraphEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
+        
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 

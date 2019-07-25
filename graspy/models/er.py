@@ -20,6 +20,7 @@ class EREstimator(SBMEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
+        
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
@@ -77,9 +78,11 @@ class DCEREstimator(DCSBMEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
+
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
+
     degree_directed : boolean 
         Whether to allow seperate degree correction parameters for the in and out degree
         of each node. Ignored if `directed` is False.
