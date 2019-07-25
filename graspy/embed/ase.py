@@ -35,8 +35,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
     n_elbows : int, optional, default: 2
-        If `n_components=None`, then compute the optimal embedding dimension using
-        `select_dimension`. Otherwise, ignored.
+        If ``n_components=None``, then compute the optimal embedding dimension using
+        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
 
@@ -44,9 +44,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
             Computes randomized svd using 
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
-            Computes full svd using ``scipy.linalg.svd``
+            Computes full svd using :func:`scipy.linalg.svd`
         - 'truncated'
-            Computes truncated svd using ``scipy.sparse.linalg.svd``
+            Computes truncated svd using :func:`scipy.sparse.linalg.svd`
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 

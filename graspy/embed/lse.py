@@ -134,7 +134,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         Parameters
         ----------
         graph : array_like or networkx.Graph
-            Input graph to embed. see graphstats.utils.import_graph
+            Input graph to embed. see graspy.utils.import_graph
 
         y : Ignored
 
