@@ -84,7 +84,7 @@ class MultipleASE(BaseEmbedMulti):
     latent_right_ : array, shape (n_samples, n_components), or None
         Estimated right latent positions of the graph. Only computed when the an input 
         graph is directed, or adjacency matrix is assymetric. Otherwise, None.
-        
+
     scores_ : array, shape (n_samples, n_components, n_components)
         Estimated :math:`\hat{R}` matrices for each input graph.
 

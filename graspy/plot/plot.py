@@ -166,10 +166,13 @@ def heatmap(
     r"""
     Plots a graph as a heatmap.
 
+    Read more in the :ref:`tutorials <plot_tutorials>`
+
     Parameters
     ----------
     X : nx.Graph or np.ndarray object
         Graph or numpy matrix to plot
+
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
@@ -187,41 +190,56 @@ def heatmap(
         - 'simple-nonzero':
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
+
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
+
     title : str, optional, default: None
         Title of plot.
+
     context :  None, or one of {paper, notebook, talk (default), poster}
         The name of a preconfigured set.
+
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font
         elements.
+
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
+
     cmap : str, list of colors, or matplotlib.colors.Colormap, default: 'RdBu_r'
         Valid matplotlib color map.
+
     vmin, vmax : floats, optional (default=None)
         Values to anchor the colormap, otherwise they are inferred from the data and 
         other keyword arguments.
+
     center : float, default: 0
         The value at which to center the colormap
+
     cbar : bool, default: True
         Whether to draw a colorbar.
+
     inner_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes. If not None, will group the nodes 
         according to these labels and plot the labels on the marginal
+
     outer_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals 
+
     hier_label_fontsize : int
         size (in points) of the text labels for the ``inner_hier_labels`` and 
         ``outer_hier_labels``.
+
     ax : matplotlib Axes, optional
         Axes in which to draw the plot, otherwise will generate its own axes
+
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if ``None``
+
     sort_nodes : boolean, optional (default=False)
         whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
@@ -340,6 +358,8 @@ def gridplot(
     r"""
     Plots multiple graphs as a grid, with intensity denoted by the size 
     of dots on the grid.
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
@@ -509,6 +529,8 @@ def pairplot(
     plot in the 3rd row, 4th column would be 3rd dimension plotted against the 4th). The
     diagonal of the grid displays the marginals of individual dimensions as histograms 
     or KDEs. 
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------

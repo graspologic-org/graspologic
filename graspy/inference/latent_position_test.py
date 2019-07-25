@@ -31,6 +31,8 @@ class LatentPositionTest(BaseInference):
     have their vertices sorted in the same order. Currently, the function only 
     supports undirected graphs.
 
+    Read more in the :ref:`tutorials <inference_tutorials>`
+
     Parameters
     ----------
     embedding : string, { 'ase' (default), 'omnibus'}

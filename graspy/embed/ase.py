@@ -27,6 +27,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
     the dimensionality to the specified k, or if k is unspecified, can find a number of 
     dimensions automatically (see :class:`~graspy.embed.selectSVD`).
 
+    Read more in the :ref:`tutorials <embed_tutorials>`
+
     Parameters
     ----------
     n_components : int or None, default = None

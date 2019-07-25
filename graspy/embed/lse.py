@@ -27,6 +27,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
     the dimensionality to the specified k, or if k is unspecified, can find a number
     of dimensions automatically.
 
+    Read more in the :ref:`tutorials <embed_tutorials>`
+
     Parameters
     ----------
     form : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional
@@ -77,7 +79,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
     latent_right_ : array, shape (n_samples, n_components), or None
         Only computed when the graph is directed, or adjacency matrix is assymetric.
         Estimated right latent positions of the graph. Otherwise, None.
-        
+
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
 

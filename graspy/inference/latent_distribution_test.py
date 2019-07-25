@@ -28,6 +28,8 @@ class LatentDistributionTest(BaseInference):
     the vertices of the two graphs, or even when the number of vertices is different. 
     Currently, testing is only supported for undirected graphs.
 
+    Read more in the :ref:`tutorials <inference_tutorials>`
+
     Parameters
     ----------
     n_components : int or None, optional (default=None)

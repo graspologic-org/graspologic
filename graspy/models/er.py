@@ -13,6 +13,8 @@ class EREstimator(SBMEstimator):
 
     :math:`P_{ij} = p` for all i, j
 
+    Read more in the :ref:`tutorials <models_tutorials>`
+
     Parameters
     ----------
     directed : boolean, optional (default=True)
@@ -70,6 +72,8 @@ class DCEREstimator(DCSBMEstimator):
     determines its expected degree in the graph. 
 
     :math:`P_{ij} = \theta_i \theta_j p`
+
+    Read more in the :ref:`tutorials <models_tutorials>`
 
     Parameters
     ----------

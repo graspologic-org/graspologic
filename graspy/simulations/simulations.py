@@ -77,25 +77,33 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
     p of edges being connected.
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     n: int
        Number of vertices
+
     p: float
         Probability of an edge existing between two vertices, between 0 and 1.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
+
     wt: object, optional (default=1)
         Weight function for each of the edges, taking only a size argument. 
         This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
+
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
+        
     dc: function or array-like, shape (n_vertices)
         `dc` is used to generate a degree-corrected Erdos Renyi Model in
         which each node in the graph has a parameter to specify its expected degree
@@ -145,22 +153,29 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     Erdos Renyi (n, m) graph is a simple graph with n vertices and exactly m
     number of total edges.
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     n: int
         Number of vertices
+
     m: int
         Number of edges, a value between 1 and :math:`n^2`.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
+
     wt: object, optional (default=1)
         Weight function for each of the edges, taking only a size argument. 
         This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
+
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
@@ -256,20 +271,26 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     SBM produces a graph with specified communities, in which each community can
     have different sizes and edge probabilities. 
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     n: list of int, shape (n_communities)
         Number of vertices in each community. Communities are assigned n[0], n[1], ...
+
     p: array-like, shape (n_communities, n_communities)
         Probability of an edge between each of the communities, where p[i, j] indicates 
         the probability of a connection between edges in communities [i, j]. 
         0 < p[i, j] < 1 for all i, j.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
+
     wt: object or array-like, shape (n_communities, n_communities)
         if Wt is an object, a weight function to use globally over
         the sbm for assigning weights. 1 indicates to produce a binary
@@ -278,10 +299,12 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         between communities i and j. If the entry is a function, should
         accept an argument for size. An entry of Wt[i, j] = 1 will produce a
         binary subgraph over the i, j community.
+
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
+
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
         `dc` is used to generate a degree-corrected stochastic block model [1] in
         which each node in the graph has a parameter to specify its expected degree
@@ -525,29 +548,37 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
     A binary random graph is then sampled from the P matrix described 
     by X (and possibly Y).
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     X: np.ndarray, shape (n_vertices, n_dimensions)
         latent position from which to generate a P matrix
         if Y is given, interpreted as the left latent position
+
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
+
     rescale: boolean, optional (default=True)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=True)
         If False, no edges will be sampled in the diagonal. Diagonal elements in P 
         matrix are removed prior to rescaling (see above) which may affect behavior.
         Otherwise, edges are sampled in the diagonal.
+
     wt: object, optional (default=1)
         Weight function for each of the edges, taking only a size argument. 
         This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
+
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
@@ -601,13 +632,16 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     X: np.ndarray, shape (n_vertices, n_dimensions)
         latent position from which to generate a P matrix
         if Y is given, interpreted as the left latent position
+
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
+
     rescale: boolean, optional (default=True)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
+
     loops: boolean, optional (default=True)
         whether to allow elements on the diagonal (corresponding
         to self connections in a graph) in the returned P matrix. 

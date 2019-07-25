@@ -62,6 +62,8 @@ class OmnibusEmbed(BaseEmbedMulti):
     :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
     using adjacency spectral embedding [1]_.
 
+    Read more in the :ref:`tutorials <embed_tutorials>`
+
     Parameters
     ----------
     n_components : int or None, default = None
