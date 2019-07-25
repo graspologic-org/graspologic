@@ -290,7 +290,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     A = import_graph(graph)
 
-     in_degree = np.sum(A, axis=0)
+    in_degree = np.sum(A, axis=0)
     out_degree = np.sum(A, axis=1)
 
     # regularize laplacian with parameter
@@ -326,6 +326,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
         L = out_root @ A @ in_root
     # return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
     return L
+
 
 def is_fully_connected(graph):
     r"""
