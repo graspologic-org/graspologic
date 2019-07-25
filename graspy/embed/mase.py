@@ -40,28 +40,32 @@ class MultipleASE(BaseEmbedMulti):
 
     Parameters
     ----------
-    n_components : int or None, (default=None)
-        Desired dimensionality of output data. If algorithm=="full", 
+    n_components : int or None, default = None
+        Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        `select_dimension`.
-    n_elbows : int, optional (default=2)
-        If `n_compoents=None`, then compute the optimal embedding dimension using
-        `select_dimension`. Otherwise, ignored.
-    algorithm : {'full', 'truncated', 'randomized' (default)}, optional
+        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+
+    n_elbows : int, optional, default: 2
+        If ``n_components=None``, then compute the optimal embedding dimension using
+        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+
+    algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
 
-        - 'full'
-            Computes full svd using ``scipy.linalg.svd``
-        - 'truncated'
-            Computes truncated svd using ``scipy.sparse.linalg.svd``
         - 'randomized'
             Computes randomized svd using 
-            ``sklearn.utils.extmath.randomized_svd``
-    n_iter : int, optional (default=5)
+            :func:`sklearn.utils.extmath.randomized_svd`
+        - 'full'
+            Computes full svd using :func:`scipy.linalg.svd`
+        - 'truncated'
+            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+
+    n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+
     scaled : bool, optional (default=False)
         Whether to scale individual eigenvectors with eigenvalues in first embedding 
         stage.
@@ -70,13 +74,17 @@ class MultipleASE(BaseEmbedMulti):
     ----------
     n_graphs_ : int
         Number of graphs
+
     n_vertices_ : int
         Number of vertices in each graph
+
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph. 
+
     latent_right_ : array, shape (n_samples, n_components), or None
         Estimated right latent positions of the graph. Only computed when the an input 
         graph is directed, or adjacency matrix is assymetric. Otherwise, None.
+        
     scores_ : array, shape (n_samples, n_components, n_components)
         Estimated :math:`\hat{R}` matrices for each input graph.
 
