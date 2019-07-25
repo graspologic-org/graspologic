@@ -340,7 +340,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         self.n_components = n_components
         self.min_comm = min_comm
         self.max_comm = max_comm
-        self.embed_kws = {}
+        self.embed_kws = embed_kws
 
     def _estimate_assignments(self, graph):
         graph = symmetrize(graph, method="avg")  # TODO use directed LSE
