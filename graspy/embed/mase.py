@@ -258,7 +258,7 @@ class MultipleASE(BaseEmbedMulti):
                 return self.latent_left_
             else:
                 return self.latent_left_, self.latent_right_
-    def get_score(self):
+    def get_scores(self):
         """
         Return the score matrices
         Parameters
@@ -266,4 +266,4 @@ class MultipleASE(BaseEmbedMulti):
         -------
         out : array-like, shape (n_graphs, n_vertices, n_components)
         """
-        return self.score_
+        return self.scores_
