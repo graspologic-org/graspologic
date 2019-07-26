@@ -23,6 +23,7 @@ from sklearn.model_selection import ParameterGrid
 
 from .base import BaseCluster
 
+
 class PyclustCluster(BaseCluster):
     """
     Pyclust Cluster.
@@ -130,8 +131,8 @@ class PyclustCluster(BaseCluster):
         self,
         min_components=2,
         max_components=None,
-        affinity = "all",
-        linkage = "all",
+        affinity="all",
+        linkage="all",
         covariance_type="all",
         random_state=None,
     ):
@@ -162,7 +163,7 @@ class PyclustCluster(BaseCluster):
             affinity = np.unique(affinity)
         elif isinstance(affinity, str):
             if affinity == "all":
-                affinity = ["euclidean","manhattan","cosine","none"]
+                affinity = ["euclidean", "manhattan", "cosine", "none"]
             else:
                 affinity = [affinity]
         else:
@@ -171,7 +172,7 @@ class PyclustCluster(BaseCluster):
             raise TypeError(msg)
 
         for aff in affinity:
-            if aff not in ["euclidean","manhattan","cosine","none"]:
+            if aff not in ["euclidean", "manhattan", "cosine", "none"]:
                 msg = (
                     "affinity must be one of "
                     + '["euclidean","manhattan","cosine","none"]'
@@ -251,20 +252,20 @@ class PyclustCluster(BaseCluster):
         """
         paramgrid_processed = []
         for params in paramgrid:
-            if params['affinity'] == 'none' and params['linkage'] != 'ward':
+            if params["affinity"] == "none" and params["linkage"] != "ward":
                 pass
-            elif params['linkage'] == 'ward' and params['affinity'] != 'euclidean':
+            elif params["linkage"] == "ward" and params["affinity"] != "euclidean":
                 pass
             else:
-                gm_keys = ['covariance_type', 'n_components', 'random_state']
-                gm_params = {key:params[key] for key in gm_keys}
+                gm_keys = ["covariance_type", "n_components", "random_state"]
+                gm_params = {key: params[key] for key in gm_keys}
 
-                ag_keys = ['affinity', 'linkage']
-                ag_params = {key:params[key] for key in ag_keys}
-                ag_params['n_clusters'] = params['n_components']
+                ag_keys = ["affinity", "linkage"]
+                ag_params = {key: params[key] for key in ag_keys}
+                ag_params["n_clusters"] = params["n_components"]
 
                 paramgrid_processed.append([ag_params, gm_params])
-        
+
         return paramgrid_processed
 
     def _labels_to_onehot(self, labels):
@@ -283,12 +284,12 @@ class PyclustCluster(BaseCluster):
             All other entries are zero.
         """
         n = len(labels)
-        k = max(labels)+1
-        onehot = np.zeros([n,k])
-        onehot[np.arange(n),labels] = 1
+        k = max(labels) + 1
+        onehot = np.zeros([n, k])
+        onehot[np.arange(n), labels] = 1
         return onehot
-    
-    def  _onehot_to_initialparams(self, X, onehot, cov_type):
+
+    def _onehot_to_initialparams(self, X, onehot, cov_type):
         """
         Computes cluster weigts, cluster means and cluster precisions from
         a given clustering.
@@ -305,22 +306,22 @@ class PyclustCluster(BaseCluster):
         """
         n = X.shape[0]
         weights, means, covariances = _estimate_gaussian_parameters(
-            X, onehot, 1e-06, cov_type)
+            X, onehot, 1e-06, cov_type
+        )
         weights /= n
 
-        precisions_cholesky_ = _compute_precision_cholesky(
-            covariances, cov_type)
+        precisions_cholesky_ = _compute_precision_cholesky(covariances, cov_type)
 
-        if cov_type=="tied":
+        if cov_type == "tied":
             c = precisions_cholesky_
-            precisions = np.dot(c,c.T)
-        elif cov_type=="diag":
+            precisions = np.dot(c, c.T)
+        elif cov_type == "diag":
             precisions = precisions_cholesky_
         else:
-            precisions = [np.dot(c,c.T) for c in precisions_cholesky_]
+            precisions = [np.dot(c, c.T) for c in precisions_cholesky_]
 
         return weights, means, precisions
-    
+
     def _increase_reg(self, reg):
         """
         Increase regularization factor by factor of 10.
@@ -338,7 +339,7 @@ class PyclustCluster(BaseCluster):
         if reg == 0:
             reg = 1e-06
         else:
-            reg = reg*10
+            reg = reg * 10
         return reg
 
     def fit(self, X, y=None):
@@ -362,7 +363,7 @@ class PyclustCluster(BaseCluster):
         self
         """
 
-         # Deal with number of clusters
+        # Deal with number of clusters
         if self.max_components is None:
             lower_ncomponents = 1
             upper_ncomponents = self.min_components
@@ -390,7 +391,7 @@ class PyclustCluster(BaseCluster):
 
         param_grid = dict(
             affinity=self.affinity,
-            linkage = self.linkage,
+            linkage=self.linkage,
             covariance_type=self.covariance_type,
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
             random_state=[random_state],
@@ -399,44 +400,57 @@ class PyclustCluster(BaseCluster):
         param_grid = list(ParameterGrid(param_grid))
         param_grid = self._process_paramgrid(param_grid)
 
+        results = pd.DataFrame(
+            columns=[
+                "model",
+                "bic",
+                "ari",
+                "n_components",
+                "affinity",
+                "linkage",
+                "covariance_type",
+                "reg_covar",
+            ]
+        )
 
-        results = pd.DataFrame(columns=['model','bic','ari','n_components','affinity','linkage','covariance_type','reg_covar'])
-        
         for params in param_grid:
-            if params[0]['affinity'] != 'none':
+            if params[0]["affinity"] != "none":
                 agg = AgglomerativeClustering(**params[0])
                 agg_clustering = agg.fit_predict(X)
                 onehot = self._labels_to_onehot(agg_clustering)
                 weights_init, means_init, precisions_init = self._onehot_to_initialparams(
-                    X, onehot, params[1]['covariance_type'])
+                    X, onehot, params[1]["covariance_type"]
+                )
                 gm_params = params[1]
-                gm_params['weights_init'] = weights_init
-                gm_params['means_init'] = means_init
-                gm_params['precisions_init'] = precisions_init
-                gm_params['reg_covar'] = 0
+                gm_params["weights_init"] = weights_init
+                gm_params["means_init"] = means_init
+                gm_params["precisions_init"] = precisions_init
+                gm_params["reg_covar"] = 0
             else:
                 gm_params = params[1]
-                gm_params['init_params'] = 'kmeans'
-                gm_params['reg_covar'] = 1e-6
+                gm_params["init_params"] = "kmeans"
+                gm_params["reg_covar"] = 1e-6
 
-            bic = np.inf #if none of the iterations converge, bic is set to inf
-            #below is the regularization scheme
-            while gm_params['reg_covar'] <= 1:
+            bic = np.inf  # if none of the iterations converge, bic is set to inf
+            # below is the regularization scheme
+            while gm_params["reg_covar"] <= 1:
                 model = GaussianMixture(**gm_params)
                 try:
                     model.fit(X)
                     predictions = model.predict(X)
-                    counts = [sum(predictions == i) for i in range(gm_params['n_components'])]
-                    #singleton clusters not allowed
+                    counts = [
+                        sum(predictions == i) for i in range(gm_params["n_components"])
+                    ]
+                    # singleton clusters not allowed
                     assert not any([count <= 1 for count in counts])
 
                 except ValueError:
-                    gm_params['reg_covar'] = self._increase_reg(gm_params['reg_covar'])
+                    gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
                     continue
                 except AssertionError:
-                    gm_params['reg_covar'] = self._increase_reg(gm_params['reg_covar'])
+                    gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
                     continue
-                #if the code gets here, then the model has been fit with no errors or singleton clusters
+                # if the code gets here, then the model has been fit with no errors or singleton clusters
                 bic = model.bic(X)
                 break
 
@@ -444,25 +458,32 @@ class PyclustCluster(BaseCluster):
                 predictions = model.predict(X)
                 ari = adjusted_rand_score(y, predictions)
             else:
-                ari = float('nan')
-            entry = pd.DataFrame({'model':[model],'bic':[bic],'ari':[ari],
-                'n_components':[gm_params['n_components']],
-                'affinity':[params[0]['affinity']],'linkage':[params[0]['linkage']],
-                'covariance_type':[gm_params['covariance_type']],
-                'reg_covar':[gm_params['reg_covar']]})
-            results = results.append(entry,ignore_index=True)
-            
-        self.results_ = results        
-        # Get the best cov type and its index within the dataframe
-        best_idx = results['bic'].idxmin()
+                ari = float("nan")
+            entry = pd.DataFrame(
+                {
+                    "model": [model],
+                    "bic": [bic],
+                    "ari": [ari],
+                    "n_components": [gm_params["n_components"]],
+                    "affinity": [params[0]["affinity"]],
+                    "linkage": [params[0]["linkage"]],
+                    "covariance_type": [gm_params["covariance_type"]],
+                    "reg_covar": [gm_params["reg_covar"]],
+                }
+            )
+            results = results.append(entry, ignore_index=True)
 
-        self.bic_ = results.loc[best_idx,'bic']
-        self.n_components_ = results.loc[best_idx,'n_components']
-        self.covariance_type_ = results.loc[best_idx,'covariance_type']
-        self.affinity_ = results.loc[best_idx,'affinity']
-        self.linkage_ = results.loc[best_idx,'linkage']
-        self.reg_covar_ = results.loc[best_idx,'reg_covar']
-        self.ari_ = results.loc[best_idx,'ari']
-        self.model_ = results.loc[best_idx,'model']
+        self.results_ = results
+        # Get the best cov type and its index within the dataframe
+        best_idx = results["bic"].idxmin()
+
+        self.bic_ = results.loc[best_idx, "bic"]
+        self.n_components_ = results.loc[best_idx, "n_components"]
+        self.covariance_type_ = results.loc[best_idx, "covariance_type"]
+        self.affinity_ = results.loc[best_idx, "affinity"]
+        self.linkage_ = results.loc[best_idx, "linkage"]
+        self.reg_covar_ = results.loc[best_idx, "reg_covar"]
+        self.ari_ = results.loc[best_idx, "ari"]
+        self.model_ = results.loc[best_idx, "model"]
 
         return self
