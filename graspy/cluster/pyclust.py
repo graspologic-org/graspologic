@@ -104,21 +104,26 @@ class PyclustCluster(BaseCluster):
 
     Attributes
     ----------
-    n_components_ : int
-        Optimal number of components based on BIC.
-    covariance_type_ : str
-        Optimal covariance type based on BIC.
-    model_ : GaussianMixture object
-        Fitted GaussianMixture object fitted with optimal numeber of components 
-        and optimal covariance structure.
-    bic_ : pandas.DataFrame
-        A pandas DataFrame of BIC values computed for all possible number of clusters
-        given by range(min_components, max_components + 1) and all covariance
-        structures given by covariance_type.
-    ari_ : pandas.DataFrame
-        Only computed when y is given. Pandas Dataframe containing ARI values computed
-        for all possible number of clusters given by range(min_components,
-        max_components) and all covariance structures given by covariance_type.
+    results_ : pandas.DataFrame
+        Contains exhaustive information about all the clustering runs.
+        Columns are:
+            'model' - fit GaussianMixture object
+            'bic' - Bayesian Information Criterion
+            'ari' - Adjusted Rand Index, nan if y is not given
+            'n_components' - number of clusters
+            'affinity' - affinity used in Agglomerative Clustering
+            'linkage' - linkage used in Agglomerative Clustering
+            'covariance_type' - covariance type used in GMM
+            'reg_covar' : regularization used in GMM
+
+    bic_ : the best (lowest) Bayesian Information Criterion
+    n_components_ : number of clusters in the model with the best BIC
+    covariance_type_ : covariance type in the model with the best BIC
+    affinity_ : affinity used in the model with the best BIC
+    linkage_ : linkage used in the model with the best BIC
+    reg_covar_ : regularization used in the model with the best BIC
+    ari_ : ARI from the model with the best BIC, nan if no y is given
+    model_ : GaussianMixture object with the best BIC
     """
 
     def __init__(
@@ -318,7 +323,7 @@ class PyclustCluster(BaseCluster):
     
     def _increase_reg(self, reg):
         """
-        Increase regularization factor.
+        Increase regularization factor by factor of 10.
 
         Parameters
         ----------
@@ -414,14 +419,15 @@ class PyclustCluster(BaseCluster):
                 gm_params['init_params'] = 'kmeans'
                 gm_params['reg_covar'] = 1e-6
 
-            bic = np.inf
+            bic = np.inf #if none of the iterations converge, bic is set to inf
+            #below is the regularization scheme
             while gm_params['reg_covar'] <= 1:
                 model = GaussianMixture(**gm_params)
                 try:
                     model.fit(X)
                     predictions = model.predict(X)
                     counts = [sum(predictions == i) for i in range(gm_params['n_components'])]
-
+                    #singleton clusters not allowed
                     assert not any([count <= 1 for count in counts])
 
                 except ValueError:
@@ -430,6 +436,7 @@ class PyclustCluster(BaseCluster):
                 except AssertionError:
                     gm_params['reg_covar'] = self._increase_reg(gm_params['reg_covar'])
                     continue
+                #if the code gets here, then the model has been fit with no errors or singleton clusters
                 bic = model.bic(X)
                 break
 
