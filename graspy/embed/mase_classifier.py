@@ -16,11 +16,11 @@ import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
 from ..utils import import_graph, is_almost_symmetric
-from .base import BaseEmbedMulti
+from .base_classifier import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
 
 
-class MultipleASE(BaseEmbedMulti):
+class MASEClassifier(BaseEmbedMulti):
     r"""
     Multiple Adjacency Spectral Embedding (MASE) embeds arbitrary number of input 
     graphs with matched vertex sets.
@@ -192,7 +192,7 @@ class MultipleASE(BaseEmbedMulti):
 
         # Check if undirected
         undirected = all(is_almost_symmetric(g) for g in graphs)
-
+        self.undirected = undirected
         # embed
         Uhat, Vhat = self._reduce_dim(graphs)
         self.latent_left_ = Uhat
@@ -227,3 +227,53 @@ class MultipleASE(BaseEmbedMulti):
             left latent positions, and the right to the right latent positions
         """
         return self._fit_transform(graphs)
+
+    def transform(self, graphs):
+        """
+        Fit the model with graphs if the graphs is not fitted and apply the embedding on graphs. 
+        n_components is either automatically determined or based on user input.
+
+        Parameters
+        ----------
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
+
+        y : Ignored
+
+        Returns
+        -------
+        out : array-like, shape (n_graphs, n_vertices, n_components) if input 
+            graphs were symmetric. If graphs were directed, returns tuple of 
+            two arrays (same shape as above) where the first corresponds to the
+            left latent positions, and the right to the right latent positions
+        """
+        graphs = self._check_input_graphs(graphs)
+        # Check if undirected
+        undirected = all(is_almost_symmetric(g) for g in graphs)
+        if self.undirected != undirected:
+            raise TypeError('The input graphs and the fitted graphs are not both undirected or directed.')
+        try:
+            self.latent_left_
+        except NameError:
+            raise NameError('You need to fit this MASE first.')
+        else:
+            if not undirected:
+                scores = self.latent_left_.T @ graphs @ self.latent_right_
+            else:
+                scores = self.latent_left_.T @ graphs @ self.latent_left_
+        return scores
+
+    def get_latent(self):
+        """
+        Return the score matrices
+        Parameters
+        Returns
+        -------
+        out : array-like, shape (n_graphs, n_vertices, n_components)
+        """
+        if self.latent_right_ is None:
+            return self.latent_left_
+        else:
+            return self.latent_left_, self.latent_right_
