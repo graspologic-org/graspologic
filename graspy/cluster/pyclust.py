@@ -278,7 +278,7 @@ class PyclustCluster(BaseCluster):
             All other entries are zero.
         """
         n = len(labels)
-        k = max(labels)
+        k = max(labels)+1
         onehot = np.zeros([n,k])
         onehot[np.arange(n),labels] = 1
         return onehot
@@ -398,7 +398,7 @@ class PyclustCluster(BaseCluster):
         results = pd.DataFrame(columns=['model','bic','ari','n_components','affinity','linkage','covariance_type','reg_covar'])
         
         for params in param_grid:
-            if params['affinity'] != 'none':
+            if params[0]['affinity'] != 'none':
                 agg = AgglomerativeClustering(**params[0])
                 agg_clustering = agg.fit_predict(X)
                 onehot = self._labels_to_onehot(agg_clustering)
@@ -417,17 +417,20 @@ class PyclustCluster(BaseCluster):
             bic = np.inf
             while gm_params['reg_covar'] <= 1:
                 model = GaussianMixture(**gm_params)
-                #try:
-                model.fit(X)
-                bic = model.bic(X)
-                #except:
-                #    pass
-                if y is not None:
+                try:
+                    model.fit(X)
                     predictions = model.predict(X)
                     counts = [sum(predictions == i) for i in range(gm_params['n_components'])]
-                    if any([count <= 1 for count in counts]):
-                        gm_params['reg_covar'] = self._increase_reg(gm_params['reg_covar'])
-                        pass
+
+                    assert not any([count <= 1 for count in counts])
+
+                except ValueError:
+                    gm_params['reg_covar'] = self._increase_reg(gm_params['reg_covar'])
+                    continue
+                except AssertionError:
+                    gm_params['reg_covar'] = self._increase_reg(gm_params['reg_covar'])
+                    continue
+                bic = model.bic(X)
                 break
 
             if y is not None:
@@ -435,17 +438,18 @@ class PyclustCluster(BaseCluster):
                 ari = adjusted_rand_score(y, predictions)
             else:
                 ari = float('nan')
-            entry = pd.DataFrame({'model':model,'bic':bic,'ari':ari,
-                'n_components':gm_params['num_components'],
-                'affinity':params[0]['affinity'],'linkage':params[0]['linkage'],
-                'covariance_type':gm_params['covariance_type'],
-                'reg_covar':gm_params['reg_covar']})
+            entry = pd.DataFrame({'model':[model],'bic':[bic],'ari':[ari],
+                'n_components':[gm_params['n_components']],
+                'affinity':[params[0]['affinity']],'linkage':[params[0]['linkage']],
+                'covariance_type':[gm_params['covariance_type']],
+                'reg_covar':[gm_params['reg_covar']]})
             results = results.append(entry,ignore_index=True)
             
         self.results_ = results        
         # Get the best cov type and its index within the dataframe
         best_idx = results['bic'].idxmin()
 
+        self.bic_ = results.loc[best_idx,'bic']
         self.n_components_ = results.loc[best_idx,'n_components']
         self.covariance_type_ = results.loc[best_idx,'covariance_type']
         self.affinity_ = results.loc[best_idx,'affinity']

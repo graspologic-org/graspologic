@@ -83,7 +83,7 @@ def test_predict_without_fit():
 
 
 def test_no_y():
-    np.random.seed(2)
+    np.random.seed(1)
 
     n = 100
     d = 3
@@ -102,7 +102,7 @@ def test_two_class():
     """
     Easily separable two gaussian problem.
     """
-    np.random.seed(2)
+    np.random.seed(1)
 
     n = 100
     d = 3
@@ -118,6 +118,9 @@ def test_two_class():
         pyclust = PyclustCluster(min_components=5)
         pyclust.fit(X, y)
 
+        r = pyclust.results_ 
+        print(r.loc[(r['covariance_type']==pyclust.covariance_type_) & (r['affinity']==pyclust.affinity_) & (r['linkage']==pyclust.linkage_)][['n_components','bic']])
+
         n_components = pyclust.n_components_
 
         # Assert that the two cluster model is the best
@@ -131,7 +134,7 @@ def test_five_class():
     """
     Easily separable five gaussian problem.
     """
-    np.random.seed(10)
+    np.random.seed(1)
 
     n = 100
     mus = [[i * 5, 0] for i in range(5)]
@@ -146,6 +149,7 @@ def test_five_class():
             min_components=3, max_components=10, covariance_type="all"
         )
         pyclust.fit(X)
+
         assert_equal(pyclust.n_components_, 5)
 
 
@@ -153,7 +157,7 @@ def test_ase_three_blocks():
     """
     Expect 3 clusters from a 3 block model
     """
-    np.random.seed(3)
+    np.random.seed(1)
     num_sims = 10
 
     # Generate adjacency and labels
@@ -179,14 +183,14 @@ def test_ase_three_blocks():
         assert_equal(n_components, 3)
 
         # Asser that we get perfect clustering
-        assert_allclose(pyclust.ari_.loc[n_components], 1)
+        assert_allclose(pyclust.ari_, 1)
 
 
 def test_covariances():
     """
     Easily separable two gaussian problem.
     """
-    np.random.seed(2)
+    np.random.seed(1)
 
     n = 100
 
