@@ -28,6 +28,22 @@ def test_inputs():
     with pytest.raises(TypeError):
         pyclust = PyclustCluster(min_components=1, max_components="1")
 
+    # affinity is not an array, string or list
+    with pytest.raises(TypeError):
+        pyclust = PyclustCluster(min_components=1, affinity=1)
+
+    # affinity is not in ['euclidean', 'manhattan', 'cosine', 'none']
+    with pytest.raises(ValueError):
+        pyclust = PyclustCluster(min_components=1, affinity="graspy")
+
+    # linkage is not an array, string or list
+    with pytest.raises(TypeError):
+        pyclust = PyclustCluster(min_components=1, linkage=1)
+
+    # linkage is not in ['single', 'average', 'complete', 'ward']
+    with pytest.raises(ValueError):
+        pyclust = PyclustCluster(min_components=1, linkage="graspy")
+
     # covariance type is not an array, string or list
     with pytest.raises(TypeError):
         pyclust = PyclustCluster(min_components=1, covariance_type=1)
@@ -117,9 +133,6 @@ def test_two_class():
 
         pyclust = PyclustCluster(min_components=5)
         pyclust.fit(X, y)
-
-        r = pyclust.results_ 
-        print(r.loc[(r['covariance_type']==pyclust.covariance_type_) & (r['affinity']==pyclust.affinity_) & (r['linkage']==pyclust.linkage_)][['n_components','bic']])
 
         n_components = pyclust.n_components_
 
