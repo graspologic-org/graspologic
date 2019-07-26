@@ -133,6 +133,7 @@ before you submit a pull request:
    or you can run pytest on a single test file by
 
    .. code:: bash
+   
       $ pytest path/to/test.py
 
 -  Run an autoformatter. We use ``black`` and would like for you to
