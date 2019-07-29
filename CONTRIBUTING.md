@@ -1,80 +1,39 @@
-# Contributing to GraSPy
-(adopted from sklearn)
+Contributing to GraSPy
+======================
 
-## How to Contribute
-The preferred workflow for contributing to GraSPy is to fork the main repository on GitHub, clone, and develop on a branch. Steps:
-1. Fork the [project repository](https://github.com/neurodata/GraSPy)
-   by clicking on the 'Fork' button near the top right of the page. This creates
-   a copy of the code under your GitHub user account. For more details on
-   how to fork a repository see [this guide](https://help.github.com/articles/fork-a-repo/).
+(adopted from scikit-learn)
 
-2. Clone your fork of the GraSPy repo from your GitHub account to your local disk:
+The latest contributing guide is available in the repository at
+`docs/contributing.rst`, or online at:
 
-   ```bash
-   $ git clone git@github.com:YourLogin/GraSPy.git
-   $ cd GraSPy
-   ```
+https://graspy.neurodata.io/contributing.html
 
-3. Create a ``feature`` branch to hold your development changes:
+There are many ways to contribute to GraSPy, with the most common ones
+being contribution of code or documentation to the project. Improving the
+documentation is no less important than improving the library itself. If you
+find a typo in the documentation, or have made improvements, do not hesitate to
+submit a GitHub pull request. Documentation can be found under the
+[doc/](https://github.com/neurodata/graspy/tree/master/doc) directory.
 
-   ```bash
-   $ git checkout -b my-feature
-   ```
+But there are many other ways to help. In particular answering queries on the
+[issue tracker](https://github.com/neurodata/graspy/issues), and
+investigating bugs are very valuable contributions that decrease the burden on 
+the project maintainers.
 
-   Always use a ``feature`` branch. It's good practice to never work on the ``master`` branch!
+Another way to contribute is to report issues you're facing, and give a "thumbs
+up" on issues that others reported and that are relevant to you. It also helps
+us if you spread the word: reference the project from your blog and articles,
+link to it from your website, or simply star it in GitHub to say "I use it".
 
-4. Develop the feature on your feature branch. Add changed files using ``git add`` and then ``git commit`` files:
+Quick links
+-----------
 
-   ```bash
-   $ git add modified_files
-   $ git commit
-   ```
+* [Submitting a bug report or feature request](http://graspy.neurodata.io/contributing.html#submitting-a-bug-report-or-a-feature-request)
+* [Contributing code](http://graspy.neurodata.io/contributing.html#contributing-code)
+* [Coding guidelines](http://graspy.neurodata.io/contributing.html#guidelines)
 
-   to record your changes in Git, then push the changes to your GitHub account with:
+Code of Conduct
+---------------
 
-   ```bash
-   $ git push -u origin my-feature
-   ```
-
-## Pull Request Checklist
-We recommended that your contribution complies with the following rules before you submit a pull request:
--  Follow the
-   [coding-guidelines](#guidelines).
--  Give your pull request a helpful title that summarises what your
-   contribution does. In some cases `Fix <ISSUE TITLE>` is enough.
-   `Fix #<ISSUE NUMBER>` is not enough.
--  All public methods should have informative docstrings with sample
-   usage presented as doctests when appropriate.
--  At least one paragraph of narrative documentation with links to
-   references in the literature (with PDF links when possible) and
-   the example.
--  All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
--  Ensure all tests are passing locally using `pytest`. Install the necessary packages by:
-   ```bash
-   $ pip install pytest pytest-cov
-   ```
-
-   then run
-
-   ```bash
-   $ pytest
-   ```
-
-   or you can run pytest on a single test file by
-
-   ```bash
-   $ pytest path/to/test.py
-   ```
-
--  Run an autoformatter. We use `black` and would like for you to format all files using `black`. You can run the following lines to format your files.
-   ```bash
-   $ pip install black
-   $ black path/to/module.py
-   ```
-
-## Guidelines
-### Coding Guidelines
-Uniformly formatted code makes it easier to share code ownership. GraSPy package closely follows the official Python guidelines detailed in [PEP8](https://www.python.org/dev/peps/pep-0008/) that detail how code should be formatted and indented. Please read it and follow it.
-
-### Docstring Guidelines
-Properly formatted docstrings is required for documentation generation by Sphinx. The pygraphstats package closely follows the numpydoc guidelines. Please read and follow the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html#overview) guidelines. Refer to the [example.py](https://numpydoc.readthedocs.io/en/latest/example.html#example) provided by numpydoc.
+We abide by the principles of openness, respect, and consideration of others
+of the Python Software Foundation: https://www.python.org/psf/codeofconduct/.

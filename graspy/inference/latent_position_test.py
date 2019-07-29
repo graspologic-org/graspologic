@@ -31,6 +31,8 @@ class LatentPositionTest(BaseInference):
     have their vertices sorted in the same order. Currently, the function only 
     supports undirected graphs.
 
+    Read more in the :ref:`tutorials <inference_tutorials>`
+
     Parameters
     ----------
     embedding : string, { 'ase' (default), 'omnibus'}
@@ -56,10 +58,10 @@ class LatentPositionTest(BaseInference):
             .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
             .. math:: H_o: X_1 = c X_2 R
-            where `c` is a scalar, `c > 0`
+            where :math:`c` is a scalar, :math:`c > 0`
         - 'diagonal-rotation'
             .. math:: H_o: X_1 = D X_2 R
-            where `D` is an arbitrary diagonal matrix
+            where :math:`D` is an arbitrary diagonal matrix
 
     n_bootstraps : int, optional (default 500)
         Number of bootstrap simulations to run to generate the null distribution
@@ -74,7 +76,7 @@ class LatentPositionTest(BaseInference):
     
     sample_T_statistic_ : float
         The observed difference between the embedded positions of the two input graphs
-        after an alignment (the type of alignment depends on `test_case`)
+        after an alignment (the type of alignment depends on ``test_case``)
 
     p_value_1_, p_value_2_ : float 
         The p value estimated from the null distributions from sample 1 and sample 2. 
