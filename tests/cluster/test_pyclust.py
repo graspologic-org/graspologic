@@ -97,6 +97,17 @@ def test_predict_without_fit():
         pyclust = PyclustCluster(min_components=2)
         pyclust.predict(X)
 
+def test_cosine_on_0():
+    X = np.array([[0, 1, 0],
+       [1, 0, 1],
+       [0, 0, 0],
+       [1, 1, 0],
+       [0, 0, 1]])
+
+    with pytest.raises(ValueError):
+        pyclust = PyclustCluster(min_components=3,affinity='all')
+        pyclust.fit(X)
+    
 
 def test_no_y():
     np.random.seed(1)
@@ -262,3 +273,5 @@ def test_covariances():
     pyclust = PyclustCluster(min_components=2, covariance_type="all")
     pyclust.fit(X)
     assert_equal(pyclust.covariance_type_, "full")
+
+
