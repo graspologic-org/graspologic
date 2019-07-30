@@ -124,11 +124,34 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
         If not specified, in either case all functions will assume their default
         parameters.
 
-
     Returns
     -------
     A : ndarray, shape (n, n)
         Sampled adjacency matrix
+
+    Examples
+    --------
+    >>> np.random.seed(1)
+    >>> n = 4
+    >>> p = 0.25
+
+    To sample a binary Erdos Renyi (n, p) graph:
+
+    >>> er_np(n, p)
+    array([[0., 0., 1., 0.],
+           [0., 0., 1., 0.],
+           [1., 1., 0., 0.],
+           [0., 0., 0., 0.]])
+
+    To sample a weighted Erdos Renyi (n, p) graph with Uniform(0, 1) distribution:
+
+    >>> wt = np.random.uniform
+    >>> wtargs = dict(low=0, high=1)
+    >>> er_np(n, p, wt=wt, wtargs=wtargs)
+    array([[0.        , 0.        , 0.95788953, 0.53316528],
+           [0.        , 0.        , 0.        , 0.        ],
+           [0.95788953, 0.        , 0.        , 0.31551563],
+           [0.53316528, 0.        , 0.31551563, 0.        ]])
     """
     if isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
         raise TypeError("dc is not of type function or array-like of scalars")
@@ -187,15 +210,27 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
 
     Examples
     --------
-    >>> n = 100
-    >>> m = 20
+    >>> np.random.seed(1)
+    >>> n = 4
+    >>> m = 4
+
+    To sample a binary Erdos Renyi (n, m) graph:
+
+    >>> er_nm(n, m)
+    array([[0., 1., 1., 1.],
+           [1., 0., 0., 1.],
+           [1., 0., 0., 0.],
+           [1., 1., 0., 0.]])
+
+    To sample a weighted Erdos Renyi (n, m) graph with Uniform(0, 1) distribution:
+
     >>> wt = np.random.uniform
     >>> wtargs = dict(low=0, high=1)
-    >>> A = er_nm(n, m, wt=wt, wtargs=wtargs)
-
-    Display results as a histogram:
-    >>> from graspy.plot import heatmap
-    >>> heatmap(A)
+    >>> er_nm(n, m, wt=wt, wtargs=wtargs)
+    array([[0.        , 0.66974604, 0.        , 0.38791074],
+           [0.66974604, 0.        , 0.        , 0.39658073],
+           [0.        , 0.        , 0.        , 0.93553907],
+           [0.38791074, 0.39658073, 0.93553907, 0.        ]])
     """
     if not np.issubdtype(type(m), np.integer):
         raise TypeError("m is not of type int.")
@@ -345,6 +380,34 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
+
+    Examples
+    --------
+    >>> np.random.seed(1)
+    >>> n = [3, 3]
+    >>> p = [[0.5, 0.1], [0.1, 0.5]]
+
+    To sample a binary 2-block SBM graph:
+
+    >>> sbm(n, p)
+    array([[0., 0., 1., 0., 0., 0.],
+           [0., 0., 1., 0., 0., 1.],
+           [1., 1., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 1., 0.],
+           [0., 0., 0., 1., 0., 0.],
+           [0., 1., 0., 0., 0., 0.]])
+
+    To sample a weighted 2-block SBM graph with Poisson(2) distribution:
+
+    >>> wt = np.random.poisson
+    >>> wtargs = dict(lam=2)
+    >>> sbm(n, p, wt=wt, wtargs=wtargs)
+    array([[0., 4., 0., 1., 0., 0.],
+           [4., 0., 0., 0., 0., 2.],
+           [0., 0., 0., 0., 0., 0.],
+           [1., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.],
+           [0., 2., 0., 0., 0., 0.]])
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -599,6 +662,33 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
     
+    Examples
+    --------
+    >>> np.random.seed(1)
+
+    Generate random latent positions using 2-dimensional Dirichlet distribution.
+
+    >>> X = np.random.dirichlet([1, 1], size=5)
+
+    Sample a binary RDPG using sampled latent positions.
+
+    >>> rdpg(X, loops=False)
+    array([[0., 1., 0., 0., 1.],
+           [1., 0., 0., 1., 1.],
+           [0., 0., 0., 1., 1.],
+           [0., 1., 1., 0., 0.],
+           [1., 1., 1., 0., 0.]])
+
+    Sample a weighted RDPG with Poisson(2) weight distribution
+
+    >>> wt = np.random.poisson
+    >>> wtargs = dict(lam=2)
+    >>> rdpg(X, loops=False, wt=wt, wtargs=wtargs)
+    array([[0., 4., 0., 2., 0.],
+           [1., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 2.],
+           [1., 0., 0., 0., 1.],
+           [0., 2., 2., 0., 0.]])
     """
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
     A = sample_edges(P, directed=directed, loops=loops)
