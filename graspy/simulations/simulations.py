@@ -190,8 +190,12 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     >>> n = 100
     >>> m = 20
     >>> wt = np.random.uniform
-    >>> wtargs = dict(low=1, high=2)
-    >>> A = weighted_er_nm(n, m, wt=wt, wtargs=wtargs)
+    >>> wtargs = dict(low=0, high=1)
+    >>> A = er_nm(n, m, wt=wt, wtargs=wtargs)
+
+    Display results as a histogram:
+    >>> from graspy.plot import heatmap
+    >>> heatmap(A)
     """
     if not np.issubdtype(type(m), np.integer):
         raise TypeError("m is not of type int.")
