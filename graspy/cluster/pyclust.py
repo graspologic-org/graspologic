@@ -385,12 +385,11 @@ class PyclustCluster(BaseCluster):
             msg = "min_components must be <= n_samples, but min_components = "
             msg += "{}, n_samples = {}".format(upper_ncomponents, X.shape[0])
             raise ValueError(msg)
-        #check if X contains the 0 vector
-        if np.any(~X.any(axis=1)) and ('cosine' in self.affinity):
+        # check if X contains the 0 vector
+        if np.any(~X.any(axis=1)) and ("cosine" in self.affinity):
             msg = "When using cosine affinity, X cannot contain the 0 vector, but "
             msg += "X[{},] is 0".format(np.where(~X.any(axis=1)))
             raise ValueError(msg)
-
 
         # Get parameters
         random_state = self.random_state
