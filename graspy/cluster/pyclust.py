@@ -195,7 +195,7 @@ class PyclustCluster(BaseCluster):
         for link in linkage:
             if link not in ["ward", "complete", "average", "single"]:
                 msg = (
-                    "covariance structure must be one of "
+                    "linkage must be one of "
                     + '["ward", "complete", "average", "single"]'
                 )
                 msg += " not {}".format(link)
