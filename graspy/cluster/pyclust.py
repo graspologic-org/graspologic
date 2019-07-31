@@ -456,7 +456,7 @@ class PyclustCluster(BaseCluster):
                     gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
                     continue
                 # if the code gets here, then the model has been fit with no errors or singleton clusters
-                bic = model.bic(X)
+                bic = model.bic(X) #*****************************
                 break
 
             if y is not None:
