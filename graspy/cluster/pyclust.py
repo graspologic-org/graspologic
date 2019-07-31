@@ -252,7 +252,7 @@ class PyclustCluster(BaseCluster):
         """
         paramgrid_processed = []
         for params in paramgrid:
-            if params["affinity"] == "none" and params["linkage"] != "ward":
+            if params["affinity"] == "none" and params["linkage"] != "complete":
                 pass
             elif params["linkage"] == "ward" and params["affinity"] != "euclidean":
                 pass
@@ -434,7 +434,7 @@ class PyclustCluster(BaseCluster):
             else:
                 gm_params = params[1]
                 gm_params["init_params"] = "kmeans"
-                gm_params["reg_covar"] = 1e-6
+                gm_params["reg_covar"] = 0
 
             bic = np.inf  # if none of the iterations converge, bic is set to inf
             # below is the regularization scheme
