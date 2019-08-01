@@ -44,6 +44,7 @@ This package is written for Python3. Currently, it is supported for Python 3.5, 
 ```
 networkx
 numpy
+pandas
 scikit-learn
 scipy
 seaborn
