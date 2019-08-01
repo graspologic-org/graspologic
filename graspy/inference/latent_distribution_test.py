@@ -141,10 +141,8 @@ class LatentDistributionTest(BaseInference):
         """
         A1 = import_graph(A1)
         A2 = import_graph(A2)
-        if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()  # TODO asymmetric case
-        if A1.shape != A2.shape:
-            raise ValueError("Input graphs do not have matching dimensions")
+        # if not is_symmetric(A1) or not is_symmetric(A2):
+        #     raise NotImplementedError()  # TODO asymmetric case
         if self.n_components is None:
             # get the last elbow from ZG for each and take the maximum
             num_dims1 = select_dimension(A1)[0][-1]
@@ -152,6 +150,11 @@ class LatentDistributionTest(BaseInference):
             self.n_components = max(num_dims1, num_dims2)
 
         X1_hat, X2_hat = self._embed(A1, A2)
+        if isinstance(X1_hat, tuple) and isinstance(X2_hat, tuple):
+            X1_hat = np.concatenate(X1_hat, axis=-1)
+            X2_hat = np.concatenate(X1_hat, axis=-1)
+        elif isinstance(X1_hat, tuple) ^ isinstance(X2_hat, tuple):
+            raise ValueError("Input graphs do not have same directedness")
         X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
         U = self._statistic(X1_hat, X2_hat)
         null_distribution = self._bootstrap(X1_hat, X2_hat, self.n_bootstraps)
