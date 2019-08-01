@@ -101,6 +101,9 @@ class LatentDistributionTest(BaseInference):
         ase = AdjacencySpectralEmbed(n_components=self.n_components)
         X1_hat = ase.fit_transform(A1)
         X2_hat = ase.fit_transform(A2)
+        if isinstance(X1_hat, tuple) and isinstance(X2_hat, tuple):
+            X1_hat = np.concatenate(X1_hat, axis=-1)
+            X2_hat = np.concatenate(X1_hat, axis=-1)
         return X1_hat, X2_hat
 
     def _median_heuristic(self, X1, X2):
