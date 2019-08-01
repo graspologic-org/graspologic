@@ -51,17 +51,8 @@ class TestLatentDistributionTest(unittest.TestCase):
         B = er_np(100, 0.3, directed=True)
 
         npt = LatentDistributionTest()
-        with self.assertRaises(NotImplementedError):
-            npt.fit(A, B)
-
-    def test_different_sizes(self):
-        np.random.seed(3)
-        A = er_np(50, 0.3)
-        B = er_np(100, 0.3)
-
-        npt = LatentDistributionTest()
-        with self.assertRaises(ValueError):
-            npt.fit(A, B)
+        p = npt.fit(A, B)
+        self.assertTrue(p > 0.05)
 
     def test_SBM_epsilon(self):
         np.random.seed(12345678)
