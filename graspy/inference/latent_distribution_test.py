@@ -103,7 +103,7 @@ class LatentDistributionTest(BaseInference):
         X2_hat = ase.fit_transform(A2)
         if isinstance(X1_hat, tuple) and isinstance(X2_hat, tuple):
             X1_hat = np.concatenate(X1_hat, axis=-1)
-            X2_hat = np.concatenate(X1_hat, axis=-1)
+            X2_hat = np.concatenate(X2_hat, axis=-1)
         return X1_hat, X2_hat
 
     def _median_heuristic(self, X1, X2):
@@ -155,7 +155,7 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = self._embed(A1, A2)
         if isinstance(X1_hat, tuple) and isinstance(X2_hat, tuple):
             X1_hat = np.concatenate(X1_hat, axis=-1)
-            X2_hat = np.concatenate(X1_hat, axis=-1)
+            X2_hat = np.concatenate(X2_hat, axis=-1)
         elif isinstance(X1_hat, tuple) ^ isinstance(X2_hat, tuple):
             raise ValueError("Input graphs do not have same directedness")
         X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
@@ -164,5 +164,7 @@ class LatentDistributionTest(BaseInference):
         self.null_distribution_ = null_distribution
         self.sample_T_statistic_ = U
         p_value = (len(null_distribution[null_distribution >= U])) / self.n_bootstraps
+        if p_value == 0:
+            p_value = 1 / self.n_bootstraps
         self.p_ = p_value
         return self.p_
