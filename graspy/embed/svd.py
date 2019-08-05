@@ -97,7 +97,7 @@ def select_dimension(
 
     References
     ----------
-    .. [1] Zhu, M. and Ghodsi, A. (2006).
+    .. [#1] Zhu, M. and Ghodsi, A. (2006).
         Automatic dimensionality selection from the scree plot via the use of
         profile likelihood. Computational Statistics & Data Analysis, 51(2), 
         pp.918-930.
@@ -198,20 +198,20 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        ``select_dimension`` using ``n_elbows`` argument.
+        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
     n_elbows : int, optional, default: 2
-        If `n_components=None`, then compute the optimal embedding dimension using
-        `select_dimension`. Otherwise, ignored.
+        If ``n_components=None``, then compute the optimal embedding dimension using
+        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
 
         - 'randomized'
             Computes randomized svd using 
-            ``sklearn.utils.extmath.randomized_svd``
+            :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
-            Computes full svd using ``scipy.linalg.svd``
+            Computes full svd using :func:`scipy.linalg.svd`
         - 'truncated'
-            Computes truncated svd using ``scipy.sparse.linalg.svd``
+            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 

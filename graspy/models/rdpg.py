@@ -16,10 +16,14 @@ class RDPGEstimator(BaseGraphEstimator):
     of nodes :math:`i` and :math:`j`, the probability of connection is the dot 
     product between their latent positions: 
 
-    :math:`P_{ij} = \langle x_i, x_j \rangle`
+    :math:`P_{ij} = \langle x_i, y_j \rangle`
 
-    where :math:`x_i` and :math:`x_j` are the latent positions of nodes :math:`i` and
-    :math:`j`, respectively.
+    where :math:`x_i` is the left latent position of node :math:`i`, and :math:`y_j` is 
+    the right latent position of node :math:`j`. If the graph being modeled is
+    is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via 
+    :class:`~graspy.embed.AdjacencySpectralEmbed`.
+
+    Read more in the :ref:`tutorials <models_tutorials>`
 
     Parameters
     ----------
@@ -33,7 +37,7 @@ class RDPGEstimator(BaseGraphEstimator):
     
     ase_kws : dict, optional (default={})
         Dictionary of keyword arguments passed down to 
-        `graspy.embed.AdjacencySpectralEmbed`, which is used to fit the model.
+        :class:`~graspy.embed.AdjacencySpectralEmbed`, which is used to fit the model.
 
     diag_aug_weight : int or float, optional (default=1)
         Weighting used for diagonal augmentation, which is a form of regularization for 
@@ -42,6 +46,20 @@ class RDPGEstimator(BaseGraphEstimator):
     plus_c_weight : int or float, optional (default=1)
         Weighting used for a constant scalar added to the adjacency matrix before 
         embedding as a form of regularization.
+
+    Attributes
+    ----------
+    latent_ : tuple, length 2, or np.ndarray, shape (n_verts, n_components)
+        The fit latent positions for the RDPG model. If a tuple, then the graph that was
+        input to fit was directed, and the first and second elements of the tuple are 
+        the left and right latent positions, respectively. The left and right latent
+        positions will both be of shape (n_verts, n_components). If `latent_` is an 
+        array, then the graph that was input to fit was undirected and the left and 
+        right latent positions are the same. 
+
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled. 
 
     See also
     --------

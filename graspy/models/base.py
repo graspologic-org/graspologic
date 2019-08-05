@@ -100,7 +100,7 @@ class BaseGraphEstimator(BaseEstimator):
         
         Returns
         -------
-        sample_scores : np.ndarray (size of `graph`)
+        sample_scores : np.ndarray (size of ``graph``)
             log-likelihood per potential edge in the graph
         """
         check_is_fitted(self, "p_mat_")

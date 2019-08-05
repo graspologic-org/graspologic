@@ -23,9 +23,11 @@ class AdjacencySpectralEmbed(BaseEmbed):
     Class for computing the adjacency spectral embedding of a graph 
     
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation 
-    of the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce the 
-    dimensionality to the specified k, or if k is unspecified, can find a number of 
-    dimensions automatically (see graspy.embed.selectSVD).
+    of the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce
+    the dimensionality to the specified k, or if k is unspecified, can find a number of 
+    dimensions automatically (see :class:`~graspy.embed.selectSVD`).
+
+    Read more in the :ref:`tutorials <embed_tutorials>`
 
     Parameters
     ----------
@@ -33,24 +35,28 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        ``select_dimension`` using ``n_elbows`` argument.
+        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+
     n_elbows : int, optional, default: 2
-        If `n_components=None`, then compute the optimal embedding dimension using
-        `select_dimension`. Otherwise, ignored.
+        If ``n_components=None``, then compute the optimal embedding dimension using
+        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
 
         - 'randomized'
             Computes randomized svd using 
-            ``sklearn.utils.extmath.randomized_svd``
+            :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
-            Computes full svd using ``scipy.linalg.svd``
+            Computes full svd using :func:`scipy.linalg.svd`
         - 'truncated'
-            Computes truncated svd using ``scipy.sparse.linalg.svd``
+            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
+
     check_lcc : bool , optional (defult = True)
         Whether to check if input graph is connected. May result in non-optimal 
         results if the graph is unconnected. If True and input is unconnected,

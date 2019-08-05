@@ -34,13 +34,13 @@ class GaussianCluster(BaseCluster):
     ----------
     min_components : int, default=2. 
         The minimum number of mixture components to consider (unless
-        max_components=None, in which case this is the maximum number of
-        components to consider). If max_componens is not None, min_components
-        must be less than or equal to max_components.
+        ``max_components=None``, in which case this is the maximum number of
+        components to consider). If ``max_componens`` is not None, ``min_components``
+        must be less than or equal to ``max_components``.
 
     max_components : int or None, default=None.
         The maximum number of mixture components to consider. Must be greater 
-        than or equal to min_components.
+        than or equal to ``min_components``.
 
     covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
@@ -60,7 +60,7 @@ class GaussianCluster(BaseCluster):
             'spherical', 'tied', 'diag', and/or 'spherical'.
     
     random_state : int, RandomState instance or None, optional (default=None)
-        If int, random_state is the seed used by the random number generator;
+        If int, ``random_state`` is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used
         by ``np.random``.
@@ -72,7 +72,7 @@ class GaussianCluster(BaseCluster):
     covariance_type_ : str
         Optimal covariance type based on BIC.
     model_ : GaussianMixture object
-        Fitted GaussianMixture object fitted with optimal numeber of components 
+        Fitted GaussianMixture object fitted with optimal number of components 
         and optimal covariance structure.
     bic_ : pandas.DataFrame
         A pandas DataFrame of BIC values computed for all possible number of clusters
@@ -80,8 +80,8 @@ class GaussianCluster(BaseCluster):
         structures given by covariance_type.
     ari_ : pandas.DataFrame
         Only computed when y is given. Pandas Dataframe containing ARI values computed
-        for all possible number of clusters given by range(min_components,
-        max_components) and all covariance structures given by covariance_type.
+        for all possible number of clusters given by ``r``ange(min_components,
+        max_components)`` and all covariance structures given by covariance_type.
     """
 
     def __init__(
