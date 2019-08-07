@@ -164,7 +164,7 @@ def heatmap(
     sort_nodes=False,
 ):
     r"""
-    Plots a graph as a heatmap.
+    Plots a graph as a color-encoded matrix.
 
     Read more in the :ref:`tutorials <plot_tutorials>`
 
@@ -241,7 +241,7 @@ def heatmap(
         if ``None``
 
     sort_nodes : boolean, optional (default=False)
-        whether or not to sort the nodes of the graph by the sum of edge weights
+        Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
         ``sort_nodes`` is ``True``, will sort nodes this way within block. 
     """
@@ -356,8 +356,11 @@ def gridplot(
     sort_nodes=False,
 ):
     r"""
-    Plots multiple graphs as a grid, with intensity denoted by the size 
-    of dots on the grid.
+    Plots multiple graphs on top of each other with dots as edges.
+
+    This function is useful for visualizing multiple graphs simultaneously.
+    The size of the dots correspond to the edge weights of the graphs, and 
+    colors represent input graphs.
 
     Read more in the :ref:`tutorials <plot_tutorials>`
 
@@ -417,7 +420,7 @@ def gridplot(
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if ``None``
     sort_nodes : boolean, optional (default=False)
-        whether or not to sort the nodes of the graph by the sum of edge weights
+        Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
         ``sort_nodes`` is ``True``, will sort nodes this way within block. 
     """
@@ -522,12 +525,12 @@ def pairplot(
     diag_kind="auto",
 ):
     r"""
-    Plot pairwise relationships in a dataset.
+    Draw scatter plots of high dimensional data.
 
-    For Euclidean data with more than 2 dimensions, pairplot will plot all possible
-    pairs of dimensions against each other, arranging the plots on a 2-d grid (i.e.) the 
+    For Euclidean data with more than two dimensions, pairplot will draw a 2-d scatterplot
+    for all pairs of dimensions, arranging the plots on a grid (i.e. the 
     plot in the 3rd row, 4th column would be 3rd dimension plotted against the 4th). The
-    diagonal of the grid displays the marginals of individual dimensions as histograms 
+    diagonal of the grid display the distributions of individual dimensions as histograms 
     or KDEs. 
 
     Read more in the :ref:`tutorials <plot_tutorials>`
