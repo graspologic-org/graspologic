@@ -56,5 +56,5 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     packages=find_packages(),
-    # include_package_data=True,
+    include_package_data=True,
 )
