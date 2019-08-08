@@ -230,7 +230,7 @@ def heatmap(
         marginals 
 
     hier_label_fontsize : int
-        size (in points) of the text labels for the ``inner_hier_labels`` and 
+        Size (in points) of the text labels for the ``inner_hier_labels`` and 
         ``outer_hier_labels``.
 
     ax : matplotlib Axes, optional
@@ -401,9 +401,9 @@ def gridplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable
     alpha : float [0, 1], default : 0.7
-        alpha value of plotted gridplot points
+        Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
-        min and max size to plot edge weights
+        Min and max size to plot edge weights
     legend_name : string, default: 'Type'
         Name to plot above the legend
     inner_hier_labels : array-like, length of X's first dimension, default: None
@@ -414,7 +414,7 @@ def gridplot(
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals
     hier_label_fontsize : int
-        size (in points) of the text labels for the ``inner_hier_labels`` and 
+        Size (in points) of the text labels for the ``inner_hier_labels`` and 
         ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
@@ -562,11 +562,11 @@ def pairplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     alpha : float, optional, default: 0.7
-        opacity value of plotter markers between 0 and 1 
+        Opacity value of plotter markers between 0 and 1 
     size : float or int, optional, default: 50
-        size of plotted markers 
+        Size of plotted markers 
     marker : string, optional, default: '.'
-        matplotlib style marker specification 
+        Matplotlib style marker specification 
         https://matplotlib.org/api/markers_api.html
     """
     _check_common_inputs(
@@ -724,11 +724,11 @@ def degreeplot(
     X : np.ndarray (2D)
         input graph 
     labels : 1d np.ndarray or list, same length as dimensions of X
-        labels for different categories of graph nodes
+        Labels for different categories of graph nodes
     direction : string, ('out', 'in')
-        for a directed graph, whether to plot out degree or in degree
+        Whether to plot out degree or in degree for a directed graph
     title : string, default : 'Degree plot'
-        plot title 
+        Plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
@@ -738,7 +738,7 @@ def degreeplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     figsize : tuple of length 2, default (10, 5)
-        size of the figure (width, height)
+        Size of the figure (width, height)
 
     Returns 
     ------- 
@@ -788,13 +788,13 @@ def edgeplot(
     Parameters
     ----------
     X : np.ndarray (2D)
-        input graph 
+        Input graph 
     labels : 1d np.ndarray or list, same length as dimensions of X
-        labels for different categories of graph nodes
+        Labels for different categories of graph nodes
     nonzero : boolean, default: False
-        whether to restrict the edgeplot to only the non-zero edges
+        Whether to restrict the edgeplot to only the non-zero edges
     title : string, default : 'Edge plot'
-        plot title 
+        Plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
@@ -804,7 +804,7 @@ def edgeplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     figsize : tuple of length 2, default (10, 5)
-        size of the figure (width, height)
+        Size of the figure (width, height)
         
     Returns 
     ------- 
@@ -850,20 +850,20 @@ def screeplot(
     Parameters
     ----------
     X : np.ndarray (2D)
-        input matrix 
+        Input matrix 
     title : string, default : 'Scree plot'
-        plot title 
+        Plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font 
         elements.
     figsize : tuple of length 2, default (10, 5)
-        size of the figure (width, height)
+        Size of the figure (width, height)
     cumulative : boolean, default: True
-        whether or not to plot a cumulative cdf of singular values 
+        Whether or not to plot a cumulative cdf of singular values 
     show_first : int or None, default: None 
-        whether to restrict the plot to the first ``show_first`` components
+        Whether to restrict the plot to the first ``show_first`` components
 
     Returns
     -------
