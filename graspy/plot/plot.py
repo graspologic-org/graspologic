@@ -166,6 +166,12 @@ def heatmap(
     r"""
     Plots a graph as a color-encoded matrix.
 
+    Nodes can be grouped by providing `inner_hier_labels` or both 
+    `inner_hier_labels` and `outer_hier_labels`. Nodes can also 
+    be sorted by the degree from largest to smallest degree nodes.
+    The nodes will be sorted within each group if labels are also 
+    provided.
+
     Read more in the :ref:`tutorials <plot_tutorials>`
 
     Parameters
@@ -525,13 +531,15 @@ def pairplot(
     diag_kind="auto",
 ):
     r"""
-    Draw scatter plots of high dimensional data.
+    Plot pairwise relationships in a dataset.
 
-    For Euclidean data with more than two dimensions, pairplot will draw a 2-d scatterplot
-    for all pairs of dimensions, arranging the plots on a grid (i.e. the 
-    plot in the 3rd row, 4th column would be 3rd dimension plotted against the 4th). The
-    diagonal of the grid display the distributions of individual dimensions as histograms 
-    or KDEs. 
+    By default, this function will create a grid of Axes such that each dimension 
+    in data will by shared in the y-axis across a single row and in the x-axis 
+    across a single column.
+    
+    The off-diagonal Axes show the pairwise relationships displayed as scatterplot. 
+    The diagonal Axes show the univariate distribution of the data for that 
+    dimension displayed as either a histogram or kernel density estimates (KDEs).
 
     Read more in the :ref:`tutorials <plot_tutorials>`
 
