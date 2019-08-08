@@ -27,14 +27,16 @@ class mug2vec(BaseEstimator):
     input graph. 
 
     Steps:
-
-    - Pass to ranks - ranks all edge weights from smallest to largest valued edges
-        then normalize by a constant.
-    - Omnibus embedding - jointly learns a low dimensional matrix representation for 
-        all graphs under the random dot product model (RDPG).
-    - Classical MDS (cMDS) - learns a feature vector for each graph by computing 
-        Euclidean distance between each pair of graph embeddings from omnibus embedding, 
-        followed by an eigen decomposition.
+    
+    1. Pass to ranks - ranks all edge weights from smallest to largest valued edges
+    then normalize by a constant.
+    
+    2. Omnibus embedding - jointly learns a low dimensional matrix representation for 
+    all graphs under the random dot product model (RDPG).
+    
+    3. Classical MDS (cMDS) - learns a feature vector for each graph by computing 
+    Euclidean distance between each pair of graph embeddings from omnibus embedding, 
+    followed by an eigen decomposition.
 
     Parameters
     ----------
