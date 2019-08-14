@@ -39,7 +39,7 @@ class PyclustCluster(BaseCluster):
     min_components : int, default=2. 
         The minimum number of mixture components to consider (unless
         max_components=None, in which case this is the maximum number of
-        components to consider). If max_componens is not None, min_components
+        components to consider). If max_components is not None, min_components
         must be less than or equal to max_components.
 
     max_components : int or None, default=None.
@@ -103,6 +103,17 @@ class PyclustCluster(BaseCluster):
         If None, the random number generator is the RandomState instance used
         by ``np.random``.
 
+    label_init : array-like, shape (n_samples,), optional (default=None)
+        List of labels for samples if available. Used to initialize the model.
+
+    max_iter : int, defaults to 100.
+        The maximum number of EM iterations to perform.
+
+    verbose : int, default to 0.
+        Enable verbose output. If 1 then it prints the current initialization and each iteration step.
+        If greater than 1 then it prints also the log probability and the time needed for each step.
+
+
     Attributes
     ----------
     results_ : pandas.DataFrame
@@ -135,6 +146,9 @@ class PyclustCluster(BaseCluster):
         linkage="all",
         covariance_type="all",
         random_state=None,
+        label_init=None,
+        max_iter=100,
+        verbose=0,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -227,12 +241,39 @@ class PyclustCluster(BaseCluster):
             if cov in covariance_type:
                 new_covariance_type.append(cov)
 
+        if isinstance(label_init, list):
+            label_init = np.array(label_init)
+        elif isinstance(label_init, np.ndarray):
+            if label_init.ndim > 2 or (
+                label_init.ndim == 2 and 1 not in label_init.shape
+            ):
+                msg = "label_init must be a one dimension array."
+                raise TypeError(msg)
+        elif label_init is not None:
+            msg = "label_init must be a 1-D numpy array, a list, or None,"
+            msg += "not {}".format(type(label_init))
+            raise TypeError(msg)
+
+        # Adjust elements in label_init to range(n_components of label_init)
+        if label_init is not None:
+            uni_label_init = np.unique(label_init)
+            n_components_init = np.size(uni_label_init)
+            labels_init = np.copy(label_init)
+            for i in range(n_components_init):
+                labels_init[np.argwhere(label_init == uni_label_init[i])] = i
+            labels_init = labels_init.astype(int)
+        else:
+            labels_init = None
+
         self.min_components = min_components
         self.max_components = max_components
         self.affinity = affinity
         self.linkage = linkage
         self.covariance_type = new_covariance_type
         self.random_state = random_state
+        self.label_init = labels_init
+        self.max_iter = max_iter
+        self.verbose = verbose
 
     def _process_paramgrid(self, paramgrid):
         """
@@ -291,7 +332,7 @@ class PyclustCluster(BaseCluster):
 
     def _onehot_to_initialparams(self, X, onehot, cov_type):
         """
-        Computes cluster weigts, cluster means and cluster precisions from
+        Computes cluster weights, cluster means and cluster precisions from
         a given clustering.
 
         Parameters
@@ -391,8 +432,16 @@ class PyclustCluster(BaseCluster):
             msg += "X[{},] is 0".format(np.where(~X.any(axis=1)))
             raise ValueError(msg)
 
+        label_init = self.label_init
+        if label_init is not None:
+            if label_init.size != X.shape[0]:
+                msg = "n_samples must be the same as the length of label_init"
+                raise ValueError(msg)
+
         # Get parameters
         random_state = self.random_state
+        max_iter = self.max_iter
+        verbose = self.verbose
 
         param_grid = dict(
             affinity=self.affinity,
@@ -419,7 +468,16 @@ class PyclustCluster(BaseCluster):
         )
 
         for params in param_grid:
-            if params[0]["affinity"] != "none":
+            if label_init is not None:
+                onehot = self._labels_to_onehot(label_init)
+                weights_init, means_init, precisions_init = self._onehot_to_initialparams(
+                    X, onehot, params[1]["covariance_type"]
+                )
+                gm_params = params[1]
+                gm_params["weights_init"] = weights_init
+                gm_params["means_init"] = means_init
+                gm_params["precisions_init"] = precisions_init
+            elif params[0]["affinity"] != "none":
                 agg = AgglomerativeClustering(**params[0])
                 agg_clustering = agg.fit_predict(X)
                 onehot = self._labels_to_onehot(agg_clustering)
@@ -430,11 +488,12 @@ class PyclustCluster(BaseCluster):
                 gm_params["weights_init"] = weights_init
                 gm_params["means_init"] = means_init
                 gm_params["precisions_init"] = precisions_init
-                gm_params["reg_covar"] = 0
             else:
                 gm_params = params[1]
                 gm_params["init_params"] = "kmeans"
-                gm_params["reg_covar"] = 0
+            gm_params["reg_covar"] = 0
+            gm_params["max_iter"] = max_iter
+            gm_params["verbose"] = verbose
 
             bic = np.inf  # if none of the iterations converge, bic is set to inf
             # below is the regularization scheme
@@ -456,7 +515,7 @@ class PyclustCluster(BaseCluster):
                     gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
                     continue
                 # if the code gets here, then the model has been fit with no errors or singleton clusters
-                bic = model.bic(X) #*****************************
+                bic = model.bic(X)  # *****************************
                 break
 
             if y is not None:
