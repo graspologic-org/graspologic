@@ -2,7 +2,6 @@ import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 from graspy.models import (
-    BaseGraphEstimator,
     EREstimator,
     DCSBMEstimator,
     SBMEstimator,
@@ -63,6 +62,9 @@ class TestER:
         estimator = EREstimator(directed=False)
         _test_score(estimator, p_mat, graph)
 
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=er_np(500, 0.5))
+
     def test_ER_nparams(self):
         assert self.estimator._n_parameters() == 1
 
@@ -86,6 +88,9 @@ class TestDCER:
         graph = self.graph
         estimator = DCEREstimator()
         _test_score(estimator, p_mat, graph)
+
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:500, 1:500])
 
     def test_DCER_inputs(self):
         with pytest.raises(TypeError):
@@ -263,6 +268,9 @@ class TestSBM:
         estimator = SBMEstimator(max_comm=4)
         _test_score(estimator, p_mat, graph)
 
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:100, 1:100])
+
     def test_SBM_nparams(self):
         e = self.estimator.fit(self.graph, y=self.labels)
         assert e._n_parameters() == (4)
@@ -302,6 +310,9 @@ class TestDCSBM:
         graph = self.g
         estimator = DCSBMEstimator()
         _test_score(estimator, p_mat, graph)
+
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:100, 1:100])
 
     def test_DCSBM_fit_supervised(self):
         p_mat = self.p_mat
@@ -492,6 +503,9 @@ class TestRDPG:
         estimator = RDPGEstimator()
         _test_score(estimator, p_mat, graph)
 
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:100, 1:100])
+
     def test_RDPG_nparams(self):
         n_verts = 1000
         g = self.graph
@@ -578,13 +592,3 @@ def hardy_weinberg(theta):
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
     return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
-
-
-def test_score_samples():
-    est = BaseGraphEstimator()
-    graph = np.random.randint(0, 2, (5, 5))
-    p_mat_ = np.random.rand(6, 6)
-    est.p_mat_ = p_mat_.copy()
-
-    with pytest.raises(ValueError):
-        est.score_samples(graph)
