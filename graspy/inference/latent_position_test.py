@@ -212,6 +212,11 @@ class LatentPositionTest(BaseInference):
             len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 0.5
         ) / self.n_bootstraps
 
+        if p_value_1 < 1 / self.n_bootstraps:
+            p_value_1 = 1 / self.n_bootstraps
+        if p_value_2 < 1 / self.n_bootstraps:
+            p_value_2 = 1 / self.n_bootstraps
+
         p_value = max(p_value_1, p_value_2)
 
         self.null_distribution_1_ = null_distribution_1
