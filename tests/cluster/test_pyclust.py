@@ -44,6 +44,10 @@ def test_inputs():
     with pytest.raises(ValueError):
         pyclust = PyclustCluster(min_components=1, linkage="graspy")
 
+    # euclidean is not an affinity option when ward is a linkage option
+    with pytest.raises(ValueError):
+        pyclust = PyclustCluster(min_components=1, affinity="manhattan", linkage="ward")
+
     # covariance type is not an array, string or list
     with pytest.raises(TypeError):
         pyclust = PyclustCluster(min_components=1, covariance_type=1)

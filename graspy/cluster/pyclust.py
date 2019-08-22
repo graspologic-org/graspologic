@@ -20,6 +20,7 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.mixture.gaussian_mixture import _estimate_gaussian_parameters
 from sklearn.mixture.gaussian_mixture import _compute_precision_cholesky
 from sklearn.model_selection import ParameterGrid
+import warnings
 
 from .base import BaseCluster
 
@@ -179,6 +180,13 @@ class PyclustCluster(BaseCluster):
                 )
                 msg += " not {}".format(aff)
                 raise ValueError(msg)
+        
+        if ("ward" in linkage) and not ("euclidean" in affinity):
+            msg = (
+                    'if "ward" is a linkage option, '
+                    + '"euclidean" must be an affinity option'
+                )
+            raise ValueError(msg)
 
         if isinstance(linkage, (np.ndarray, list)):
             linkage = np.unique(linkage)
@@ -252,7 +260,7 @@ class PyclustCluster(BaseCluster):
         """
         paramgrid_processed = []
         for params in paramgrid:
-            if params["affinity"] == "none" and params["linkage"] != "complete":
+            if params["affinity"] == "none" and params["linkage"] != paramgrid[0]["linkage"]:
                 pass
             elif params["linkage"] == "ward" and params["affinity"] != "euclidean":
                 pass
