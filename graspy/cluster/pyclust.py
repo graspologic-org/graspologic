@@ -493,7 +493,7 @@ class PyclustCluster(BaseCluster):
                 n = X.shape[0]
                 max_size = 2000
                 if n > max_size:  # if dataset is huge, agglomerate a subset
-                    subset_idxs = np.choice(np.arange(0, n), max_size)
+                    subset_idxs = np.random.choice(np.arange(0, n), max_size)
                     X_subset = X[subset_idxs, :]
                 else:
                     X_subset = X
