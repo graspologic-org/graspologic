@@ -180,12 +180,12 @@ class PyclustCluster(BaseCluster):
                 )
                 msg += " not {}".format(aff)
                 raise ValueError(msg)
-        
+
         if ("ward" in linkage) and not ("euclidean" in affinity):
             msg = (
-                    'if "ward" is a linkage option, '
-                    + '"euclidean" must be an affinity option'
-                )
+                'if "ward" is a linkage option, '
+                + '"euclidean" must be an affinity option'
+            )
             raise ValueError(msg)
 
         if isinstance(linkage, (np.ndarray, list)):
@@ -260,7 +260,10 @@ class PyclustCluster(BaseCluster):
         """
         paramgrid_processed = []
         for params in paramgrid:
-            if params["affinity"] == "none" and params["linkage"] != paramgrid[0]["linkage"]:
+            if (
+                params["affinity"] == "none"
+                and params["linkage"] != paramgrid[0]["linkage"]
+            ):
                 pass
             elif params["linkage"] == "ward" and params["affinity"] != "euclidean":
                 pass
@@ -464,7 +467,7 @@ class PyclustCluster(BaseCluster):
                     gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
                     continue
                 # if the code gets here, then the model has been fit with no errors or singleton clusters
-                bic = model.bic(X) #*****************************
+                bic = model.bic(X)  # *****************************
                 break
 
             if y is not None:
