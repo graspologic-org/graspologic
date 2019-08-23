@@ -500,7 +500,7 @@ class PyclustCluster(BaseCluster):
                 agg_clustering = agg.fit_predict(X_subset)
                 onehot = self._labels_to_onehot(agg_clustering)
                 weights_init, means_init, precisions_init = self._onehot_to_initialparams(
-                    X, onehot, params[1]["covariance_type"]
+                    X_subset, onehot, params[1]["covariance_type"]
                 )
                 gm_params = params[1]
                 gm_params["weights_init"] = weights_init
