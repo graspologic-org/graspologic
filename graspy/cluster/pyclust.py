@@ -490,7 +490,14 @@ class PyclustCluster(BaseCluster):
                 gm_params["precisions_init"] = precisions_init
             elif params[0]["affinity"] != "none":
                 agg = AgglomerativeClustering(**params[0])
-                agg_clustering = agg.fit_predict(X)
+                n = X.shape[0]
+                max_size = 2000
+                if n > max_size:  # if dataset is huge, agglomerate a subset
+                    subset_idxs = np.choice(np.arange(0, n), max_size)
+                    X_subset = X[subset_idxs, :]
+                else:
+                    X_subset = X
+                agg_clustering = agg.fit_predict(X_subset)
                 onehot = self._labels_to_onehot(agg_clustering)
                 weights_init, means_init, precisions_init = self._onehot_to_initialparams(
                     X, onehot, params[1]["covariance_type"]
