@@ -372,8 +372,8 @@ def gridplot(
         - 'simple-nonzero':
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
-        - 'binarization':
-            Binarize numpy array or matrix
+        - 'binarize':
+            Binarize input graph such that any edge weight greater than 0 becomes 1. 
     height : int, optional, default: 10
         Height of figure in inches.
     title : str, optional, default: None
