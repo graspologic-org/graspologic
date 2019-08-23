@@ -62,6 +62,9 @@ class TestER:
         estimator = EREstimator(directed=False)
         _test_score(estimator, p_mat, graph)
 
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=er_np(500, 0.5))
+
     def test_ER_nparams(self):
         assert self.estimator._n_parameters() == 1
 
@@ -85,6 +88,9 @@ class TestDCER:
         graph = self.graph
         estimator = DCEREstimator()
         _test_score(estimator, p_mat, graph)
+
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:500, 1:500])
 
     def test_DCER_inputs(self):
         with pytest.raises(TypeError):
@@ -262,6 +268,9 @@ class TestSBM:
         estimator = SBMEstimator(max_comm=4)
         _test_score(estimator, p_mat, graph)
 
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:100, 1:100])
+
     def test_SBM_nparams(self):
         e = self.estimator.fit(self.graph, y=self.labels)
         assert e._n_parameters() == (4)
@@ -301,6 +310,9 @@ class TestDCSBM:
         graph = self.g
         estimator = DCSBMEstimator()
         _test_score(estimator, p_mat, graph)
+
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:100, 1:100])
 
     def test_DCSBM_fit_supervised(self):
         p_mat = self.p_mat
@@ -490,6 +502,9 @@ class TestRDPG:
         graph = self.graph
         estimator = RDPGEstimator()
         _test_score(estimator, p_mat, graph)
+
+        with pytest.raises(ValueError):
+            estimator.score_samples(graph=graph[1:100, 1:100])
 
     def test_RDPG_nparams(self):
         n_verts = 1000
