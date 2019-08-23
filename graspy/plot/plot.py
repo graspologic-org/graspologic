@@ -105,7 +105,7 @@ def _transform(arr, method):
                 arr[arr > 0] = np.log10(arr[arr > 0])
         elif method in ["zero-boost", "simple-all", "simple-nonzero"]:
             arr = pass_to_ranks(arr, method=method)
-        elif method == "binarization":
+        elif method == "binarize":
             transformer = Binarizer().fit(arr)
             arr = transformer.transform(arr)
         else:
@@ -191,8 +191,8 @@ def heatmap(
         - 'simple-nonzero':
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
-        - 'binarization':
-            Binarize numpy array or matrix
+        - 'binarize':
+            Binarize input graph such that any edge weight greater than 0 becomes 1. 
 
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
