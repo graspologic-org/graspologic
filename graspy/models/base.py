@@ -111,7 +111,7 @@ class BaseGraphEstimator(BaseEstimator):
         p_mat = self.p_mat_.copy()
 
         if np.shape(p_mat) != np.shape(graph):
-            raise ValueError("Input graph size must be the same size with P matrix")
+            raise ValueError("Input graph size must be the same size as P matrix")
 
         inds = None
         if not self.directed and self.loops:
