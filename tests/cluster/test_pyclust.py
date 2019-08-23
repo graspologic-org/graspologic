@@ -92,6 +92,26 @@ def test_inputs():
         pyclust = PyclustCluster(1000, 1001)
         pyclust.fit_predict(X)
 
+    # label_init is not a 1-D array
+    with pytest.raises(TypeError):
+        pyclust = PyclustCluster(label_init=np.zeros([100, 2]))
+
+    # label_init is not 1-D array, a list or None.
+    with pytest.raises(TypeError):
+        pyclust = PyclustCluster(label_init="label")
+
+    # label_init length is not equal to n_samples
+    with pytest.raises(ValueError):
+        pyclust = PyclustCluster(label_init=np.zeros([50, 1]))
+        pyclust.fit(X)
+
+    with pytest.raises(ValueError):
+        pyclust = PyclustCluster(label_init=np.zeros([50, 1]))
+        pyclust.fit_predict(X)
+
+    with pytest.raises(TypeError):
+        pyclust = PyclustCluster(label_init=np.zeros([100, 2]), max_iter=-2)
+
 
 def test_predict_without_fit():
     # Generate random data
