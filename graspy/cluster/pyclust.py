@@ -300,15 +300,17 @@ class PyclustCluster(BaseCluster):
             The second dict include the options for GaussianMixture.
         """
         paramgrid_processed = []
+
         for params in paramgrid:
             if (
                 params["affinity"] == "none"
                 and params["linkage"] != paramgrid[0]["linkage"]
             ):
-                pass
-            elif params["linkage"] == "ward" and params["affinity"] != "euclidean":
-                pass
+                continue
+            elif params["linkage"] == "ward" and params["affinity"] != "euclidean" and params["affinity"] != "none":
+                continue
             else:
+                
                 gm_keys = ["covariance_type", "n_components", "random_state"]
                 gm_params = {key: params[key] for key in gm_keys}
 
