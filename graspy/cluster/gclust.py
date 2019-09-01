@@ -18,7 +18,7 @@ from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import ParameterGrid
 
-from .cluster.base import BaseCluster
+from .base import BaseCluster
 
 
 class GaussianCluster(BaseCluster):
