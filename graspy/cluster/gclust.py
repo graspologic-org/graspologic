@@ -115,7 +115,7 @@ class GaussianCluster(BaseCluster):
         reg_covar=1e-6,
         max_iter=100,
         n_init=1,
-        init_params='kmeans',
+        init_params="kmeans",
         random_state=None,
     ):
         if isinstance(min_components, int):
