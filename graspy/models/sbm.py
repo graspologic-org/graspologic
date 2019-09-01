@@ -53,6 +53,8 @@ class SBMEstimator(BaseGraphEstimator):
     where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\tau` is an `n\_nodes` 
     length vector specifying which block each node belongs to. 
 
+    Read more in the :ref:`tutorials <models_tutorials>`
+
     Parameters
     ----------
     directed : boolean, optional (default=True)
@@ -60,9 +62,45 @@ class SBMEstimator(BaseGraphEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
+
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
+
+    n_components : int, optional (default=None)
+        Desired dimensionality of embedding for clustering to find communities.
+        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions 
+        will be chosen by :func:`~graspy.embed.select_dimension``.
+
+    min_comm : int, optional (default=1)
+        The minimum number of communities (blocks) to consider. 
+
+    max_comm : int, optional (default=10)
+        The maximum number of communities (blocks) to consider (inclusive).
+
+    cluster_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
+    
+    embed_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.embed.AdjacencySpectralEmbed`
+
+    Attributes
+    ----------
+    block_p_ : np.ndarray, shape (n_blocks, n_blocks)
+        The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
+        represents the probability of an edge between block :math:`i` and block 
+        :math:`j`.
+
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled.
+
+    vertex_assignments_ : np.ndarray, shape (n_verts)
+        A vector of integer labels corresponding to the predicted block that each node 
+        belongs to if ``y`` was not passed during the call to ``fit``. 
+
+    block_weights_ : np.ndarray, shape (n_blocks)
+        Contains the proportion of nodes that belong to each block in the fit model.
 
     See also
     --------
@@ -195,13 +233,15 @@ class DCSBMEstimator(BaseGraphEstimator):
     is an `n\_nodes` length vector specifiying the degree correction for each
     node. 
 
-    The `degree_directed` parameter of this model allows the degree correction 
+    The ``degree_directed`` parameter of this model allows the degree correction 
     parameter to be different for the in and out degree of each node:  
 
     :math:`P_{ij} = \theta_i \eta_j B_{\tau_i \tau_j}`
 
     where :math:`\theta` and :math:`\eta` need not be the same.
     
+    Read more in the :ref:`tutorials <models_tutorials>`
+
     Parameters
     ----------
     directed : boolean, optional (default=True)
@@ -209,13 +249,56 @@ class DCSBMEstimator(BaseGraphEstimator):
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are 
         directed. 
+
     degree_directed : boolean, optional (default=False)
         Whether to fit an "in" and "out" degree correction for each node. In the
         degree_directed case, the fit model can have a different expected in and out 
         degree for each node. 
+
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
+
+    n_components : int, optional (default=None)
+        Desired dimensionality of embedding for clustering to find communities.
+        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions 
+        will be chosen by :func:`~graspy.embed.select_dimension``.
+
+    min_comm : int, optional (default=1)
+        The minimum number of communities (blocks) to consider. 
+
+    max_comm : int, optional (default=10)
+        The maximum number of communities (blocks) to consider (inclusive).
+
+    cluster_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
+    
+    embed_kws : dict, optional (default={})
+        Additional kwargs passed down to :class:`~graspy.embed.LaplacianSpectralEmbed`
+
+    Attributes
+    ----------
+    block_p_ : np.ndarray, shape (n_blocks, n_blocks)
+        The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
+        represents the expected number of edges between block :math:`i` and block 
+        :math:`j`.
+
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled.
+
+    degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
+        Degree correction vector(s) :math:`\theta`. If `degree_directed` parameter was
+        False, then will be of shape (n_verts, 1) and element :math:`i` represents the 
+        degree correction for node :math:`i`. Otherwise, the first column contains out 
+        degree corrections and the second column contains in degree corrections. 
+
+    vertex_assignments_ : np.ndarray, shape (n_verts)
+        A vector of integer labels corresponding to the predicted block that each node 
+        belongs to if ``y`` was not passed during the call to ``fit``. 
+
+    block_weights_ : np.ndarray, shape (n_blocks)
+        Contains the proportion of nodes that belong to each block in the fit model.
 
     See also
     --------
@@ -257,10 +340,10 @@ class DCSBMEstimator(BaseGraphEstimator):
         self.n_components = n_components
         self.min_comm = min_comm
         self.max_comm = max_comm
-        self.embed_kws = {}
+        self.embed_kws = embed_kws
 
     def _estimate_assignments(self, graph):
-        graph = symmetrize(graph, method="avg")
+        graph = symmetrize(graph, method="avg")  # TODO use directed LSE
         lse = LaplacianSpectralEmbed(
             form="R-DAD", n_components=self.n_components, **self.embed_kws
         )
@@ -289,7 +372,7 @@ class DCSBMEstimator(BaseGraphEstimator):
 
         Returns
         -------
-        self : DCSBMEstimator object 
+        self : ``DCSBMEstimator`` object 
             Fitted instance of self 
         """
         graph = import_graph(graph)

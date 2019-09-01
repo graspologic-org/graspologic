@@ -20,11 +20,11 @@ def load_drosophila_left(return_labels=False):
 
     Returns
     -------
-        graph : np.ndarray
-            Adjacency matrix of the connectome
-        labels : np.ndarray
-            Only returned if `return_labels` is true. Array of
-            string labels for each cell (vertex)
+    graph : np.ndarray
+        Adjacency matrix of the connectome
+    labels : np.ndarray
+        Only returned if ``return_labels`` is true. Array of
+        string labels for each cell (vertex)
 
     References
     ----------
@@ -66,11 +66,11 @@ def load_drosophila_right(return_labels=False):
 
     Returns
     -------
-        graph : np.ndarray
-            Adjacency matrix of the connectome
-        labels : np.ndarray
-            Only returned if `return_labels` is true. Array of
-            string labels for each cell (vertex)
+    graph : np.ndarray
+        Adjacency matrix of the connectome
+    labels : np.ndarray
+        Only returned if `return_labels` is true. Array of
+        string labels for each cell (vertex)
 
     References
     ----------

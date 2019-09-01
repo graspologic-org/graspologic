@@ -90,7 +90,7 @@ class BaseGraphEstimator(BaseEstimator):
         Parameters
         ----------
         graph : np.ndarray
-            input graph
+            Input graph. Must be same shape as model's ``p_mat_`` attribute
         
         clip : scalar or None, optional (default=None)
             Values for which to clip probability matrix, entries less than c or more
@@ -100,7 +100,7 @@ class BaseGraphEstimator(BaseEstimator):
         
         Returns
         -------
-        sample_scores : np.ndarray (size of `graph`)
+        sample_scores : np.ndarray (size of ``graph``)
             log-likelihood per potential edge in the graph
         """
         check_is_fitted(self, "p_mat_")
@@ -109,6 +109,9 @@ class BaseGraphEstimator(BaseEstimator):
         if not is_unweighted(graph):
             raise ValueError("Model only implemented for unweighted graphs")
         p_mat = self.p_mat_.copy()
+
+        if np.shape(p_mat) != np.shape(graph):
+            raise ValueError("Input graph size must be the same size as P matrix")
 
         inds = None
         if not self.directed and self.loops:
@@ -147,7 +150,7 @@ class BaseGraphEstimator(BaseEstimator):
         Parameters
         ----------
         graph : np.ndarray
-            input graph
+            Input graph. Must be same shape as model's ``p_mat_`` attribute
 
         Returns
         -------

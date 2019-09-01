@@ -13,15 +13,17 @@
 - [Documentation](#documentation)
 - [System Requirements](#system-requirements)
 - [Installation Guide](#installation-guide)
-- [Tutorials](#Tutorials)
+- [Contributing](#contributing)
 - [License](#license)
-- [Issues](https://github.com/neurodata/graspy/issues)
+- [Issues](#issues)
 
 # Overview
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.
 
-# Documenation
+# Documentation
 The official documentation with usage is at https://graspy.neurodata.io/
+
+Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) in the official website for more in depth usage.
 
 # System Requirements
 ## Hardware requirements
@@ -42,6 +44,7 @@ This package is written for Python3. Currently, it is supported for Python 3.5, 
 ```
 networkx
 numpy
+pandas
 scikit-learn
 scipy
 seaborn
@@ -60,8 +63,15 @@ cd graspy
 python3 setup.py install
 ```
 
-# Tutorials
-Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) in the official website
+# Contributing
+We welcome contributions from anyone. Please see our [contribution guidelines](https://graspy.neurodata.io/contributing.html) before making a pull request. Our 
+[issues](https://github.com/neurodata/graspy/issues) page is full of places we could use help! 
+If you have an idea for an improvement not listed there, please 
+[make an issue](https://github.com/neurodata/graspy/issues/new) first so you can discuss with the 
+developers. 
 
-## License
+# License
 This project is covered under the [Apache 2.0 License](https://github.com/neurodata/graspy/blob/master/LICENSE).
+
+# Issues
+We appreciate detailed bug reports and feature requests (though we appreciate pull requests even more!). Please visit our [issues](https://github.com/neurodata/graspy/issues) page if you have questions or ideas.

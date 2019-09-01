@@ -168,12 +168,21 @@ def heatmap(
     sort_nodes=False,
 ):
     r"""
-    Plots a graph as a heatmap.
+    Plots a graph as a color-encoded matrix.
+
+    Nodes can be grouped by providing `inner_hier_labels` or both 
+    `inner_hier_labels` and `outer_hier_labels`. Nodes can also 
+    be sorted by the degree from largest to smallest degree nodes.
+    The nodes will be sorted within each group if labels are also 
+    provided.
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
     X : nx.Graph or np.ndarray object
         Graph or numpy matrix to plot
+
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
@@ -196,43 +205,57 @@ def heatmap(
 
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
+
     title : str, optional, default: None
         Title of plot.
+
     context :  None, or one of {paper, notebook, talk (default), poster}
         The name of a preconfigured set.
+
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font
         elements.
+
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
+
     cmap : str, list of colors, or matplotlib.colors.Colormap, default: 'RdBu_r'
         Valid matplotlib color map.
+
     vmin, vmax : floats, optional (default=None)
         Values to anchor the colormap, otherwise they are inferred from the data and 
         other keyword arguments.
+
     center : float, default: 0
         The value at which to center the colormap
+
     cbar : bool, default: True
         Whether to draw a colorbar.
+
     inner_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes. If not None, will group the nodes 
         according to these labels and plot the labels on the marginal
+
     outer_hier_labels : array-like, length of X's first dimension, default: None
-        Categorical labeling of the nodes, ignored without `inner_hier_labels`
+        Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals 
+
     hier_label_fontsize : int
-        size (in points) of the text labels for the `inner_hier_labels` and 
-        `outer_hier_labels`.
+        Size (in points) of the text labels for the ``inner_hier_labels`` and 
+        ``outer_hier_labels``.
+
     ax : matplotlib Axes, optional
         Axes in which to draw the plot, otherwise will generate its own axes
+
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if `None`
+        if ``None``
+
     sort_nodes : boolean, optional (default=False)
-        whether or not to sort the nodes of the graph by the sum of edge weights
-        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
-        `sort_nodes` is `True`, will sort nodes this way within block. 
+        Whether or not to sort the nodes of the graph by the sum of edge weights
+        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
+        ``sort_nodes`` is ``True``, will sort nodes this way within block. 
     """
     _check_common_inputs(
         figsize=figsize,
@@ -345,8 +368,13 @@ def gridplot(
     sort_nodes=False,
 ):
     r"""
-    Plots multiple graphs as a grid, with intensity denoted by the size 
-    of dots on the grid.
+    Plots multiple graphs on top of each other with dots as edges.
+
+    This function is useful for visualizing multiple graphs simultaneously.
+    The size of the dots correspond to the edge weights of the graphs, and 
+    colors represent input graphs.
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
@@ -354,7 +382,7 @@ def gridplot(
         List of nx.Graph or numpy arrays to plot
     labels : list of str
         List of strings, which are labels for each element in X. 
-        `len(X) == len(labels)`.
+        ``len(X) == len(labels)``.
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log' :
@@ -384,31 +412,31 @@ def gridplot(
         Separate scaling factor to independently scale the size of the font
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable
     alpha : float [0, 1], default : 0.7
-        alpha value of plotted gridplot points
+        Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
-        min and max size to plot edge weights
+        Min and max size to plot edge weights
     legend_name : string, default: 'Type'
         Name to plot above the legend
     inner_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes. If not None, will group the nodes 
         according to these labels and plot the labels on the marginal
     outer_hier_labels : array-like, length of X's first dimension, default: None
-        Categorical labeling of the nodes, ignored without `inner_hier_labels`
+        Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals
     hier_label_fontsize : int
-        size (in points) of the text labels for the `inner_hier_labels` and 
-        `outer_hier_labels`.
+        Size (in points) of the text labels for the ``inner_hier_labels`` and 
+        ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if `None`
+        if ``None``
     sort_nodes : boolean, optional (default=False)
-        whether or not to sort the nodes of the graph by the sum of edge weights
-        (degree for an unweighted graph). If `inner_hier_labels` is passed and 
-        `sort_nodes` is `True`, will sort nodes this way within block. 
+        Whether or not to sort the nodes of the graph by the sum of edge weights
+        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
+        ``sort_nodes`` is ``True``, will sort nodes this way within block. 
     """
     _check_common_inputs(
         height=height,
@@ -513,6 +541,16 @@ def pairplot(
     r"""
     Plot pairwise relationships in a dataset.
 
+    By default, this function will create a grid of Axes such that each dimension 
+    in data will by shared in the y-axis across a single row and in the x-axis 
+    across a single column.
+    
+    The off-diagonal Axes show the pairwise relationships displayed as scatterplot. 
+    The diagonal Axes show the univariate distribution of the data for that 
+    dimension displayed as either a histogram or kernel density estimates (KDEs).
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
+
     Parameters
     ----------
     X : array-like, shape (n_samples, n_features)
@@ -537,14 +575,14 @@ def pairplot(
         Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     alpha : float, optional, default: 0.7
-        opacity value of plotter markers between 0 and 1 
+        Opacity value of plotter markers between 0 and 1 
     size : float or int, optional, default: 50
-        size of plotted markers 
+        Size of plotted markers 
     marker : string, optional, default: '.'
-        matplotlib style marker specification 
+        Matplotlib style marker specification 
         https://matplotlib.org/api/markers_api.html
     """
     _check_common_inputs(
@@ -702,21 +740,21 @@ def degreeplot(
     X : np.ndarray (2D)
         input graph 
     labels : 1d np.ndarray or list, same length as dimensions of X
-        labels for different categories of graph nodes
+        Labels for different categories of graph nodes
     direction : string, ('out', 'in')
-        for a directed graph, whether to plot out degree or in degree
+        Whether to plot out degree or in degree for a directed graph
     title : string, default : 'Degree plot'
-        plot title 
+        Plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     figsize : tuple of length 2, default (10, 5)
-        size of the figure (width, height)
+        Size of the figure (width, height)
 
     Returns 
     ------- 
@@ -766,23 +804,23 @@ def edgeplot(
     Parameters
     ----------
     X : np.ndarray (2D)
-        input graph 
+        Input graph 
     labels : 1d np.ndarray or list, same length as dimensions of X
-        labels for different categories of graph nodes
+        Labels for different categories of graph nodes
     nonzero : boolean, default: False
-        whether to restrict the edgeplot to only the non-zero edges
+        Whether to restrict the edgeplot to only the non-zero edges
     title : string, default : 'Edge plot'
-        plot title 
+        Plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the `hue` variable. If a dict, keys should
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     figsize : tuple of length 2, default (10, 5)
-        size of the figure (width, height)
+        Size of the figure (width, height)
         
     Returns 
     ------- 
@@ -823,25 +861,25 @@ def screeplot(
 ):
     r"""
     Plots the distribution of singular values for a matrix, either showing the 
-    raw distribution or an empirical CDF (depending on `cumulative`)
+    raw distribution or an empirical CDF (depending on ``cumulative``)
 
     Parameters
     ----------
     X : np.ndarray (2D)
-        input matrix 
+        Input matrix 
     title : string, default : 'Scree plot'
-        plot title 
+        Plot title 
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font 
         elements.
     figsize : tuple of length 2, default (10, 5)
-        size of the figure (width, height)
+        Size of the figure (width, height)
     cumulative : boolean, default: True
-        whether or not to plot a cumulative cdf of singular values 
+        Whether or not to plot a cumulative cdf of singular values 
     show_first : int or None, default: None 
-        whether to restrict the plot to the first `show_first` components
+        Whether to restrict the plot to the first ``show_first`` components
 
     Returns
     -------
