@@ -43,7 +43,7 @@ class PyclustCluster(BaseCluster):
         components to consider). If max_components is not None, min_components
         must be less than or equal to max_components.
 
-    max_components : int or None, default=None.
+    max_components : int or None, default=20.
         The maximum number of mixture components to consider. Must be greater 
         than or equal to min_components.
 
@@ -142,7 +142,7 @@ class PyclustCluster(BaseCluster):
     def __init__(
         self,
         min_components=2,
-        max_components=None,
+        max_components=20,
         affinity="all",
         linkage="all",
         covariance_type="all",
