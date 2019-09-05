@@ -25,9 +25,9 @@ import warnings
 from .base import BaseCluster
 
 
-class PyclustCluster(BaseCluster):
+class AutoGMMCluster(BaseCluster):
     """
-    Pyclust Cluster.
+    AutoGMM Cluster.
 
     Clustering algorithm using a hierarchical agglomerative clustering then Gaussian
     mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and 
