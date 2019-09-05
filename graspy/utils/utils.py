@@ -205,6 +205,17 @@ def symmetrize(graph, method="avg"):
     -------
     graph: array-like, shape (n_vertices, n_vertices)
         the graph with asymmetries removed.
+
+    Examples
+    --------
+    >>> a = np.array([
+    ...    [0, 1, 1], 
+    ...    [0, 0, 1], 
+    ...    [0, 0, 1]])
+    >>> symmetrize(a, method="triu")
+    array([[0, 1, 1],
+           [1, 0, 1],
+           [1, 1, 1]])
     """
     # graph = import_graph(graph)
     if method == "triu":
@@ -244,13 +255,13 @@ def remove_loops(graph):
 
 def to_laplace(graph, form="DAD", regularizer=None):
     r"""
-    A function to convert graph adjacency matrix to graph laplacian. 
+    A function to convert graph adjacency matrix to graph Laplacian. 
 
-    Currently supports I-DAD, DAD, and R-DAD laplacians, where D is the diagonal
+    Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal
     matrix of degrees of each node raised to the -1/2 power, I is the 
     identity matrix, and A is the adjacency matrix.
     
-    R-DAD is regularized laplacian: where :math:`D_t = D + regularizer*I`.
+    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer*I`.
 
     Parameters
     ----------
@@ -276,13 +287,25 @@ def to_laplace(graph, form="DAD", regularizer=None):
     -------
     L: numpy.ndarray
         2D (n_vertices, n_vertices) array representing graph 
-        laplacian of specified form
+        Laplacian of specified form
 
     References
     ----------
     .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
            under the degree-corrected stochastic blockmodel." In Advances
            in Neural Information Processing Systems, pp. 3120-3128. 2013
+
+    Examples
+    --------
+    >>> a = np.array([
+    ...    [0, 1, 1], 
+    ...    [1, 0, 0],  
+    ...    [1, 0, 0]])
+    >>> to_laplace(a, "DAD")
+    array([[0.        , 0.70710678, 0.70710678],
+           [0.70710678, 0.        , 0.        ],
+           [0.70710678, 0.        , 0.        ]])
+
     """
     valid_inputs = ["I-DAD", "DAD", "R-DAD"]
     if form not in valid_inputs:
@@ -338,13 +361,21 @@ def is_fully_connected(graph):
 
     Returns
     -------
-        boolean: True if the entire input graph is connected
+    boolean: True if the entire input graph is connected
 
     References
     ----------
-        http://mathworld.wolfram.com/ConnectedGraph.html
-        http://mathworld.wolfram.com/WeaklyConnectedDigraph.html
+    http://mathworld.wolfram.com/ConnectedGraph.html
+    http://mathworld.wolfram.com/WeaklyConnectedDigraph.html
 
+    Examples
+    --------
+    >>> a = np.array([
+    ...    [0, 1, 0], 
+    ...    [1, 0, 0], 
+    ...    [0, 0, 0]])
+    >>> is_fully_connected(a)
+    False
     """
     if type(graph) is np.ndarray:
         if is_symmetric(graph):
@@ -385,7 +416,6 @@ def get_lcc(graph, return_inds=False):
         Indices from the original adjacency matrix that were kept after taking
         the largest connected component 
     """
-
     input_ndarray = False
     if type(graph) is np.ndarray:
         input_ndarray = True
@@ -545,6 +575,22 @@ def augment_diagonal(graph, weight=1):
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
         interpreted as an :math:`n \times n` adjacency matrix 
+    
+    Returns
+    -------
+    graph: np.array
+        Adjacency matrix with average degrees added to the diagonal.
+
+    Examples
+    --------
+    >>> a = np.array([
+    ...    [0, 1, 1], 
+    ...    [1, 0, 0], 
+    ...    [1, 0, 0]])
+    >>> augment_diagonal(a)
+    array([[1. , 1. , 1. ],
+           [1. , 0.5, 0. ],
+           [1. , 0. , 0.5]])
     """
     graph = import_graph(graph)
     graph = remove_loops(graph)
@@ -559,7 +605,26 @@ def augment_diagonal(graph, weight=1):
 
 def binarize(graph):
     """
-    Binarize the input adjacency matrix
+    Binarize the input adjacency matrix.
+
+    Parameters
+    ----------
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        Input graph in any of the above specified formats. If np.ndarray, 
+        interpreted as an :math:`n \times n` adjacency matrix
+    
+    Returns
+    -------
+    graph: np.array
+        Adjacency matrix with all nonzero values transformed to one.
+
+    Examples
+    --------
+    >>> a = np.array([[0, 1, 2], [1, 0, 3], [2, 3, 0]])
+    >>> binarize(a)
+    array([[0., 1., 1.],
+           [1., 0., 1.],
+           [1., 1., 0.]])
     """
     graph = import_graph(graph)
     graph[graph != 0] = 1

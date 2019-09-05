@@ -84,11 +84,6 @@ class LatentPositionTest(BaseInference):
     p_ : float 
         The overall p value from the test; this is the max of p_value_1_ and p_value_2_
 
-    Examples
-    --------
-    >>> spt = LatentPositionTest(n_components=2, test_case='rotation')
-    >>> p = spt.fit(A1, A2)
-
     See also
     --------
     graspy.embed.AdjacencySpectralEmbed
@@ -216,6 +211,11 @@ class LatentPositionTest(BaseInference):
         p_value_2 = (
             len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 0.5
         ) / self.n_bootstraps
+
+        if p_value_1 < 1 / self.n_bootstraps:
+            p_value_1 = 1 / self.n_bootstraps
+        if p_value_2 < 1 / self.n_bootstraps:
+            p_value_2 = 1 / self.n_bootstraps
 
         p_value = max(p_value_1, p_value_2)
 
