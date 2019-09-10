@@ -307,10 +307,14 @@ class AutoGMMCluster(BaseCluster):
                 and params["linkage"] != paramgrid[0]["linkage"]
             ):
                 continue
-            elif params["linkage"] == "ward" and params["affinity"] != "euclidean" and params["affinity"] != "none":
+            elif (
+                params["linkage"] == "ward"
+                and params["affinity"] != "euclidean"
+                and params["affinity"] != "none"
+            ):
                 continue
             else:
-                
+
                 gm_keys = ["covariance_type", "n_components", "random_state"]
                 gm_params = {key: params[key] for key in gm_keys}
 

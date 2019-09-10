@@ -12,4 +12,4 @@ Gaussian Mixture Models Clustering
 ----------------------------------
 .. autoclass:: GaussianCluster
 
-.. autoclass:: PyclustCluster
+.. autoclass:: AutoGMMCluster
