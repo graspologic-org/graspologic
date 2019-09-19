@@ -9,6 +9,7 @@ import graspy.pipeline
 import graspy.plot
 import graspy.simulations
 import graspy.utils
+import graspy.classification
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
