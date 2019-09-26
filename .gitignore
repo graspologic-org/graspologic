@@ -120,4 +120,4 @@ docs/bpedigo/ase_clustering.py
 *.png
 notebooks/bpedigo
 
-*.ds_store
+*.DS_Store
