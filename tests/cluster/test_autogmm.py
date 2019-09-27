@@ -112,6 +112,10 @@ def test_inputs():
     with pytest.raises(TypeError):
         AutoGMM = AutoGMMCluster(label_init=np.zeros([100, 2]), max_iter=-2)
 
+    # criter = cic
+    with pytest.raises(ValueError):
+        AutoGMM = AutoGMMCluster(selection_criteria='cic')
+
 
 def test_predict_without_fit():
     # Generate random data
@@ -174,6 +178,34 @@ def test_two_class():
         # Asser that we get perfect clustering
         assert_allclose(AutoGMM.ari_, 1)
 
+def test_two_class_aic():
+    """
+    Easily separable two gaussian problem.
+    """
+    np.random.seed(1)
+
+    n = 100
+    d = 3
+
+    num_sims = 10
+
+    for _ in range(num_sims):
+        X1 = np.random.normal(2, 0.5, size=(n, d))
+        X2 = np.random.normal(-2, 0.5, size=(n, d))
+        X = np.vstack((X1, X2))
+        y = np.repeat([0, 1], n)
+
+        AutoGMM = AutoGMMCluster(max_components=5,selection_criteria='aic')
+        AutoGMM.fit(X, y)
+
+        n_components = AutoGMM.n_components_
+
+        # Assert that the two cluster model is the best
+        assert_equal(n_components, 2)
+
+        # Asser that we get perfect clustering
+        assert_allclose(AutoGMM.ari_, 1)
+
 
 def test_five_class():
     """
@@ -197,6 +229,27 @@ def test_five_class():
 
         assert_equal(AutoGMM.n_components_, 5)
 
+def test_five_class_aic():
+    """
+    Easily separable five gaussian problem.
+    """
+    np.random.seed(1)
+
+    n = 100
+    mus = [[i * 5, 0] for i in range(5)]
+    cov = np.eye(2)  # balls
+
+    num_sims = 10
+
+    for _ in range(num_sims):
+        X = np.vstack([np.random.multivariate_normal(mu, cov, n) for mu in mus])
+
+        AutoGMM = AutoGMMCluster(
+            min_components=3, max_components=10, covariance_type="all", selection_criteria='aic'
+        )
+        AutoGMM.fit(X)
+
+        assert_equal(AutoGMM.n_components_, 5)
 
 def test_ase_three_blocks():
     """
