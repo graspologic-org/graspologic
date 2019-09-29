@@ -162,7 +162,6 @@ def heatmap(
     ax=None,
     title_pad=None,
     sort_nodes=False,
-    **kwargs
 ):
     r"""
     Plots a graph as a color-encoded matrix.
@@ -251,8 +250,6 @@ def heatmap(
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
         ``sort_nodes`` is ``True``, will sort nodes this way within block. 
-
-    **kwargs: additional plotting arguments
     """
     _check_common_inputs(
         figsize=figsize,
