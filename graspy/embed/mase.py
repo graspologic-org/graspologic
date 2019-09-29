@@ -115,6 +115,22 @@ class MultipleASE(BaseEmbedMulti):
         self.scaled = scaled
 
     def _reduce_dim(self, graphs):
+        """
+        Dimensional reduction by embedding individual graphs based on the best embedding dimension
+
+        Parameters
+        ----------
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
+        
+
+        Returns
+        -------
+        Uhat, Vhar : array-like, second SVD for vertices
+      
+        """
         # first embed into log2(n_vertices) for each graph
         n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
 
