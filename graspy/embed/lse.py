@@ -23,7 +23,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
     Class for computing the laplacian spectral embedding of a graph 
     
     The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation
-    of the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce 
+    of the graph based on its Laplacian matrix. It relies on an SVD to reduce 
     the dimensionality to the specified k, or if k is unspecified, can find a number
     of dimensions automatically.
 
@@ -105,7 +105,12 @@ class LaplacianSpectralEmbed(BaseEmbed):
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
+       Journal of the American Statistical Association, Vol. 107(499), 2012.
+    .. [2] Von Luxburg, Ulrike. "A tutorial on spectral clustering," Statistics 
+        and computing, Vol. 17(4), pp. 395-416, 2007.
+    .. [3] Rohe, Karl, Sourav Chatterjee, and Bin Yu. "Spectral clustering and 
+        the high-dimensional stochastic blockmodel," The Annals of Statistics,
+        Vol. 39(4), pp. 1878-1915, 2011.
     """
 
     def __init__(
