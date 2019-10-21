@@ -39,7 +39,11 @@ class TestToLaplace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
-
+        cls.B = np.array([[0, 1, 1, 1],
+                          [0, 0, 0, 1],
+                          [0, 1, 0, 1],
+                          [0, 1, 1, 0]])
+        
     def test_to_laplace_IDAD(self):
         expected_L_normed = [
             [1, -1 / (sqrt(2)), 0],
@@ -99,6 +103,16 @@ class TestToLaplace(unittest.TestCase):
             gus.to_laplace(self.A, form="R-DAD", regularizer=[1, 2, 3])
         with self.assertRaises(ValueError):
             gus.to_laplace(self.A, form="R-DAD", regularizer=-1.0)
+            
+    def test_to_laplace_directed(self):
+        expected_L_normed = [
+            [0, 1 / 5, sqrt(5) / 10, 0.2],
+            [0, 0, 0, sqrt(15) / 15],
+            [0, sqrt(5) / 10, 0, sqrt(5) / 10],
+            [0, sqrt(5) / 10, 0.25, 0]
+        ]
+        L_normed = gus.to_laplace(self.B, form="R-DAD")
+        self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
 
 class TestChecks(unittest.TestCase):
