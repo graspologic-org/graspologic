@@ -21,7 +21,6 @@ import networkx as nx
 import numpy as np
 from sklearn.utils import check_array
 
-
 def import_graph(graph, copy=True):
     """
     A function for reading a graph and returning a shared data type. 
@@ -320,8 +319,8 @@ def to_laplace(graph, form="DAD", regularizer=None):
     out_root = np.diag(out_root)
 
     if form == "I-DAD":
-        L = np.diag(D_vec) - A
-        L = D_root @ L @ D_root
+        L = np.diag(in_degree) - A
+        L = in_root @ L @ in_root
     elif form == "DAD" or form == "R-DAD":
         L = out_root @ A @ in_root
     # return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
