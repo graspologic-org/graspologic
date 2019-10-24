@@ -574,7 +574,9 @@ def augment_diagonal(graph, weight=1):
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an :math:`n \times n` adjacency matrix 
+        interpreted as an :math:`n \times n` adjacency matrix
+    weight: int
+         Weight to be applied to each index.
     
     Returns
     -------

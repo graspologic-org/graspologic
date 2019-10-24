@@ -401,6 +401,25 @@ class TestDiagonalAugment(unittest.TestCase):
         A_aug = gus.augment_diagonal(A)
         np.testing.assert_array_equal(A_aug, expected)
 
+    def test_augment_diagonal_weighted(self):
+        A = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [1, 0, 0, 2, 1],
+                [1, 0, 0, 1, 1],
+                [0, 2, 1, 0, 0],
+                [0, 1, 1, 0, 0],
+            ]
+        )
+        expected = A.copy().astype(float)
+        expected[0, 0] = 3 * 2.0 / 4
+        expected[1, 1] = 3 * 3.0 / 4
+        expected[2, 2] = 3 * 3.0 / 4
+        expected[3, 3] = 3 * 2.0 / 4
+        expected[4, 4] = 3 * 2.0 / 4
+        A_aug = gus.augment_diagonal(A, weight=3)
+        np.testing.assert_array_equal(A_aug, expected)
+
     def test_lcc_bad_matrix(self):
         A = np.array([0, 1])
         with self.assertRaises(ValueError):
