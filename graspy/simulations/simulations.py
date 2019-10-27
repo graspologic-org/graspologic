@@ -303,7 +303,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
+def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}, labels=False):
     """
     Samples a graph from the stochastic block model (SBM). 
 
@@ -370,6 +370,10 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         If not specified, in either case all functions will assume their default
         parameters.
 
+    labels: boolean, optional (default=False)
+        If False, only output is adjacency matrix. Otherwise, an additional output will be
+        a row vector with length equal to the number of communities.
+
     References
     ----------
     .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
@@ -380,6 +384,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
+    label: ndarray, shape (1, len(n))
+        Label vector
 
     Examples
     --------
@@ -597,6 +603,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         A = A - np.diag(np.diag(A))
     if not directed:
         A = symmetrize(A, method="triu")
+    if labels:
+        return np.array(range(K+1))
     return A
 
 
