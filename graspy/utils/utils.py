@@ -21,6 +21,7 @@ import networkx as nx
 import numpy as np
 from sklearn.utils import check_array
 
+
 def import_graph(graph, copy=True):
     """
     A function for reading a graph and returning a shared data type. 
