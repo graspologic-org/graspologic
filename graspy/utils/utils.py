@@ -599,7 +599,7 @@ def augment_diagonal(graph, weight=1):
     divisor = graph.shape[0] - 1
     # use out degree for directed graph
     # ignore self loops in either case
-    degrees = np.count_nonzero(graph, axis=1)
+    degrees = np.sum(graph, axis=1)
     diag = weight * degrees / divisor
     graph += np.diag(diag)
     return graph
