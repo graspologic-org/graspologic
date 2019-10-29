@@ -105,10 +105,11 @@ class TestToLaplace(unittest.TestCase):
             [0, 1 / 5, sqrt(5) / 10, 0.2],
             [0, 0, 0, sqrt(15) / 15],
             [0, sqrt(5) / 10, 0, sqrt(5) / 10],
-            [0, sqrt(5) / 10, 0.25, 0]
+            [0, sqrt(5) / 10, 0.25, 0],
         ]
         L_normed = gus.to_laplace(self.B, form="R-DAD")
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
+
 
 class TestChecks(unittest.TestCase):
     @classmethod
