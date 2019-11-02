@@ -20,7 +20,7 @@ import warnings
 
 def sample_edges(P, directed=False, loops=False):
     """
-    Gemerates a binary random graph based on the P matrix provided
+    Generates a binary random graph based on the P matrix provided
 
     Each element in P represents the probability of a connection between 
     a vertex indexed by the row i and the column j. 
@@ -710,7 +710,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
 
 def p_from_latent(X, Y=None, rescale=True, loops=True):
     r"""
-    Gemerates a matrix of connection probabilities for a random graph
+    Generates a matrix of connection probabilities for a random graph
     based on a set of latent positions
 
     If only X is given, the P matrix is calculated as :math:`P = XX^T`
