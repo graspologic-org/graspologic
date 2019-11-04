@@ -1,5 +1,8 @@
 import unittest
-from simulations_sample_edges_corr import *
+from graspy.simulations import (
+    simulations_sample_edges_corr, 
+    sample_edges
+)
 import graspy.simulations
 import numpy as np
 import pytest
