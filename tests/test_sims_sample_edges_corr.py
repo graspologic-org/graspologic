@@ -3,7 +3,6 @@ from graspy.simulations import (
     simulations_sample_edges_corr, 
     sample_edges
 )
-import graspy.simulations
 import numpy as np
 import pytest
 import warnings
