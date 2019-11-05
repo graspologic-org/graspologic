@@ -7,7 +7,7 @@ import warnings
 class Test_Sample_Corr(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.n = 50
+        cls.n = 500
         cls.p = 0.5
         cls.rho = 0.3
 
@@ -23,7 +23,7 @@ class Test_Sample_Corr(unittest.TestCase):
         add[add != 2] = 0
         real_prob = add.sum() / (2 * self.n * (self.n - 1))
         real_rho = np.abs(real_prob - self.p**2) / (self.p - self.p**2)
-        self.assertTrue(np.isclose(self.rho, real_rho, atol = 0.05))
+        self.assertTrue(np.isclose(self.rho, real_rho, atol = 0.06))
         # check the similarity of g1 and g2
         judge = (g1 == g2)
         judge.astype(int)
