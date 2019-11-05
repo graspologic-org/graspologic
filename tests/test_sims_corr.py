@@ -1,13 +1,10 @@
 import unittest
-from graspy.simulations import (
-    simulations_sample_edges_corr, 
-    sample_edges
-)
+from graspy.simulations.simulations_corr import sample_edges_corr
 import numpy as np
 import pytest
 import warnings
 
-class Test_sample_corr(unittest.TestCase):
+class Test_Sample_Corr(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = 50
