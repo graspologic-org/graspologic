@@ -46,16 +46,18 @@ def sample_edges_corr(P, Rho, directed, loops):
     To sample a correlated graph pair based on P and Rho matrices:
 
     >>> sample_edges_corr(P,Rho,directed = False, loops = False)
-    array([[0. 1. 0. 0. 0.]
-           [1. 0. 0. 0. 0.]
-           [0. 0. 0. 0. 1.]
-           [0. 0. 0. 0. 1.]
-           [0. 0. 1. 1. 0.]]
-          [[0. 1. 0. 0. 0.]
-           [1. 0. 1. 0. 1.]
-           [0. 1. 0. 1. 1.]
-           [0. 0. 1. 0. 1.]
-           [0. 1. 1. 1. 0.]])
+    
+
+np.random.seed(1)...
+(array([[0., 1., 0., 0., 0.],
+        [1., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 1.],
+        [0., 0., 0., 0., 1.],
+        [0., 0., 1., 1., 0.]]), array([[0., 1., 0., 0., 0.],
+        [1., 0., 1., 0., 1.],
+        [0., 1., 0., 1., 1.],
+        [0., 0., 1., 0., 1.],
+        [0., 1., 1., 1., 0.]]))
     """
     G1 = sample_edges(P, directed = directed, loops = loops)
     G0 = G1.copy()
