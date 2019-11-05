@@ -1,7 +1,6 @@
 import numpy as np
 from graspy.simulations import sample_edges
-import copy
-import warnings
+
 
 def sample_edges_corr(P, Rho, directed, loops):
     """
