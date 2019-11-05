@@ -47,8 +47,6 @@ def sample_edges_corr(P, Rho, directed, loops):
 
     >>> sample_edges_corr(P,Rho,directed = False, loops = False)
     
-
-np.random.seed(1)...
 (array([[0., 1., 0., 0., 0.],
         [1., 0., 0., 0., 0.],
         [0., 0., 0., 0., 1.],
@@ -61,6 +59,6 @@ np.random.seed(1)...
     """
     G1 = sample_edges(P, directed = directed, loops = loops)
     G0 = G1.copy()
-    G0 = np.where(G0 == 1, P+Rho*(1-P), P*(1-Rho))
+    G0 = np.where(G0 == 1, P + Rho * (1 - P), P * (1 - Rho))
     G2 = sample_edges(G0, directed = directed, loops = loops)
     return G1, G2
