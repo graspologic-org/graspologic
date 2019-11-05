@@ -19,7 +19,9 @@ class FastApproximateQAP:
     """
     Fast Approximate QAP Algorithm (FAQ)
     The FAQ algorithm solves the Quadratic Assignment Problem (QAP) finding an alignment of the
-    vertices of two graphs which minimizes the number of induced edge disagreements
+    vertices of two graphs which minimizes the number of induced edge disagreements.
+    Implementation of Algorithm 1 from "Fast Approximate Quadratic Programming for Graph Matching":
+    (https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0121002&type=printable)
     
     Parameters
     ----------
