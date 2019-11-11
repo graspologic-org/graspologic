@@ -18,6 +18,14 @@ from ..utils import symmetrize, cartprod
 import warnings
 
 
+def _n_to_labels(n):
+    n_cumsum = n.cumsum()
+    labels = np.zeros(n.sum(), dtype=np.int64)
+    for i in range(1, len(n)):
+        labels[n_cumsum[i - 1] : n_cumsum[i]] = i
+    return labels
+
+
 def sample_edges(P, directed=False, loops=False):
     """
     Gemerates a binary random graph based on the P matrix provided
@@ -303,7 +311,17 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}, labels=False):
+def sbm(
+    n,
+    p,
+    directed=False,
+    loops=False,
+    wt=1,
+    wtargs=None,
+    dc=None,
+    dc_kws={},
+    labels=False,
+):
     """
     Samples a graph from the stochastic block model (SBM). 
 
@@ -372,7 +390,7 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
 
     labels: boolean, optional (default=False)
         If False, only output is adjacency matrix. Otherwise, an additional output will be
-        a row vector with length equal to the number of communities.
+        a calculated, a vector labeling each entry.
 
     References
     ----------
@@ -604,7 +622,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     if not directed:
         A = symmetrize(A, method="triu")
     if labels:
-        return np.array(range(K+1))
+        l = _n_to_labels(n)
+        return A, l
     return A
 
 
