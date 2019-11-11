@@ -94,6 +94,9 @@ class FastApproximateQAP:
         if A.shape[0] != B.shape[0]:
             msg = "Matrix entries must be of equal size"
             raise ValueError(msg)
+        elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
+            msg = "Matrix entries must be square"
+            raise ValueError(msg)
         elif (A >= 0).all() == False or (B >= 0).all() == False:
             msg = "Matrix entries must be greater than or equal to zero"
             raise ValueError(msg)
