@@ -35,8 +35,8 @@ class FastApproximateQAP:
         n_init automatically set to 1 if init_method = 'barycenter'
         
     init_method : string
-        The intial position chosen
-        "barycenter" : the noninformative “flat doubly stochastic matrix,” J=1*1^T/n, i.e the barycenter of
+        The initial position chosen
+        "barycenter" : the non-informative “flat doubly stochastic matrix,” J=1*1^T/n, i.e the barycenter of
         the feasible region
         "rand" : some random point near J, (J+K)/2, where K is some random doubly stochastic matrix
         
@@ -47,7 +47,7 @@ class FastApproximateQAP:
         The indices of the optimal permutation found via FAQ
         
     ofv_ : float
-        The objective function value of for the optimal permuation found
+        The objective function value of for the optimal permutation found
         
         
     References
@@ -167,4 +167,3 @@ class FastApproximateQAP:
             self.perm_inds_ = perm_inds_  # permutation indices
             self.ofv_ = ofv_  # objective function value
             return self
-
