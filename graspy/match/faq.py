@@ -1,15 +1,20 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
+# Copyright 2019 NeuroData (http://neurodata.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
 
 import numpy as np
 import math
-import matplotlib.pyplot as plt
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
-from scipy.optimize import minimize
 from sinkhorn_knopp import sinkhorn_knopp as skp
 
 sk = skp.SinkhornKnopp()
@@ -19,19 +24,19 @@ class FastApproximateQAP:
     """
     Fast Approximate QAP Algorithm (FAQ)
     The FAQ algorithm solves the Quadratic Assignment Problem (QAP) finding an alignment of the
-    vertices of two graphs which minimizes the number of induced edge disagreements.
-    Implementation of Algorithm 1 from "Fast Approximate Quadratic Programming for Graph Matching":
-    (https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0121002&type=printable)
+    vertices of two graphs which minimizes the number of induced edge disagreements [1].
+    
     
     Parameters
     ----------
     
     n_init : int
-        Number of random initializations of the starting permutation matrix that the FAQ algorithm will undergo
+        Number of random initializations of the starting permutation matrix that the FAQ algorithm will undergo.
+        n_init automatically set to 1 if init_method = 'barycenter'
         
     init_method : string
         The intial position chosen
-        "barycenter" : he noninformative “flat doubly stochastic matrix,” J=1*1^T/n, i.e the barycenter of 
+        "barycenter" : the noninformative “flat doubly stochastic matrix,” J=1*1^T/n, i.e the barycenter of
         the feasible region
         "rand" : some random point near J, (J+K)/2, where K is some random doubly stochastic matrix
         
@@ -45,6 +50,12 @@ class FastApproximateQAP:
         The objective function value of for the optimal permuation found
         
         
+    References
+    ----------
+    .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer, E. T. Harley, 
+        D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast approximate quadratic programming 
+        for graph matching,” PLOS one, vol. 10, no. 4, p. e0121002, 2015.
+
     """
 
     def __init__(self, n_init, init_method):
@@ -114,11 +125,11 @@ class FastApproximateQAP:
                 # OPTIMIZATION WHILE LOOP BEGINS
                 for i in range(30):
 
-                    delfp = (
+                    delta_f = (
                         A @ P @ Bt + At @ P @ B
                     )  # computing the gradient of f(P) = -tr(APB^tP^t)
                     rows, cols = linear_sum_assignment(
-                        delfp
+                        delta_f
                     )  # run hungarian algorithm on gradient(f(P))
                     Q = np.zeros((n, n))
                     Q[rows, cols] = 1  # initialize search direction matrix Q
@@ -153,3 +164,4 @@ class FastApproximateQAP:
             self.perm_inds_ = perm_inds_  # permutation indices
             self.ofv_ = ofv_  # objective function value
             return self
+
