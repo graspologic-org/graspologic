@@ -563,12 +563,11 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 
 def augment_diagonal(graph, weight=1):
     r"""
-    Replaces the diagonal of adjacency matrix with 
-    :math:`\frac{degree}{nverts - 1}` for the degree associated
-    with each node. 
+    Replaces the diagonal of adjacency matrix with the sum of the edge weight.
+    This is equivalent to the degree for a weighted network.
 
     For directed graphs, the degree used is the out degree (number) of 
-    edges leaving the vertex. Ignores self-loops when calculating degree
+    edges leaving the vertex. Ignores self-loops when calculating degree.
 
     Parameters
     ----------
