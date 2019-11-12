@@ -28,6 +28,17 @@ import numpy as np
 from sklearn import preprocessing
 
 from sklearn.cluster import KMeans
+from functools import wraps
+import time
+#def timethis(func):
+#    @wraps(func)
+#    def wrapper(*args, **kwargs):
+#        start = time.time()
+#        r = func(*args, **kwargs)cl
+#        end = time.time()
+#        print(func.__name__,1000*(end-start))
+#        return r
+#    return wrapper
 class CovariateAssistedSpectralEmbed(BaseEmbed):
     r"""
     Class for computing the laplacian spectral embedding of a graph 
@@ -125,7 +136,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         n_components=None,
         n_elbows=2,
         algorithm="randomized",
-        n_iter=50,
+        n_iter=5,
         check_lcc=True,
         regularizer=1,
         assortative=True,
@@ -146,6 +157,10 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         self.row_norm=row_norm
         self.n_points=n_points
         self.CCA=CCA
+        
+
+    
+#    @timethis
     def fit(self, graph, covariate_matrix,y=None):
         """
         Fit LSE model to input graph
@@ -181,13 +196,14 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         res=self.getCascClusters(L_norm, covariate_matrix,hmin,hmax, self.n_components,self.n_points, self.row_norm, self.assortative,self.CCA)
         
         return res
+#    @timethis
     def get_tuning_range(self,graphMatrix, covariates, nBlocks,assortative,CCA):
         nCov = covariates.shape[1]
         U, D, V = selectSVD(covariates,n_components=covariates.shape[1],n_elbows=self.n_elbows,algorithm='full')    
         min_tmp = np.min([nCov,nBlocks])
         singValCov = D[0:min_tmp]
         if assortative:
-            u1,d1,v1 = selectSVD(graphMatrix,n_components=graphMatrix.shape[0],n_elbows=self.n_elbows,algorithm='full',)
+            u1,d1,v1 = selectSVD(graphMatrix,n_components=nBlocks+1,n_elbows=self.n_elbows,algorithm='randomized',)
             tmp1 = nBlocks + 1
             eigenValGraph = d1[0:tmp1]
             if nCov > nBlocks:
@@ -196,7 +212,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
                 hmax = eigenValGraph[0]/singValCov[nCov-1]**2 
             hmin = (eigenValGraph[nBlocks-1] - eigenValGraph[nBlocks])/singValCov[0]**2
         else:
-            u1,d1,v1 = selectSVD(graphMatrix,n_components=graphMatrix.shape[0],n_elbows=self.n_elbows,algorithm='full',)
+            u1,d1,v1 = selectSVD(graphMatrix,n_components=nBlocks+1,n_elbows=self.n_elbows,algorithm='randomized',)
             tmp1 = nBlocks + 1
             eigenValGraph = d1[0:tmp1]**2
             if nCov > nBlocks :
@@ -205,7 +221,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
                 hmax = eigenValGraph[0]/singValCov[nCov-1]**2 
             hmin = (eigenValGraph[nBlocks-1] - eigenValGraph[nBlocks])/singValCov[0]**2
         return [hmax,hmin]
-   
+#    @timethis
     def getCascClusters(self,graphMat, covariates,hmin,hmax, nBlocks,nPoints, rowNorm, assortative,CCA):
     	
     	hTuningSeq = np.linspace(hmax,hmin,nPoints)
@@ -224,13 +240,13 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
     	hOpt = hTuningSeq[wcssVec.index(min(wcssVec))]
     	hOptResults = self.getCascResults(graphMat, covariates, hOpt, nBlocks, rowNorm,assortative,CCA)
     	return {'cluster':hOptResults['cluster'],'h':hOpt,'wcss':hOptResults['wcss'],'cascSvd':hOptResults['cascSvd']}
-    
+#    @timethis
     def getOrtho(self,graphMat, covariates, cascSvdEVec, cascSvdEVal,h, nBlocks):
     	orthoL=cascSvdEVec[:, (nBlocks-1)].transpose().dot(graphMat).dot(cascSvdEVec[:,(nBlocks-1)]).transpose()/cascSvdEVal[(nBlocks-1)]
     	orthoX=h*(cascSvdEVec[:, (nBlocks-1)].transpose().dot(covariates).dot(covariates.transpose()).dot(cascSvdEVec[:,(nBlocks-1)])/cascSvdEVal[(nBlocks-1)])
     	return [orthoL/(orthoL + orthoX),orthoX/(orthoL + orthoX)]
     
-    
+#    @timethis
     def getCascSvd(self,graphMat, covariates, hTuningParam, nBlocks, assortative,CCA):
         if CCA: 
             New_laplacian=np.dot(graphMat,covariates)
@@ -245,22 +261,26 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
             
                 New_laplacian=((np.dot(graphMat,graphMat)) + np.dot(hTuningParam * covariates,covariates.transpose()))
             
-            u2,d2,v2 = selectSVD(New_laplacian,n_components=New_laplacian.shape[0],n_elbows=self.n_elbows,algorithm='full')	
+            u2,d2,v2 = selectSVD(New_laplacian,n_components=nBlocks+1,n_elbows=self.n_elbows,algorithm='randomized')	
         
         eVec = u2[:, 0:nBlocks]
         eVal = d2[0:(nBlocks+1)]
     
         return {'eVec':eVec,'eVal':eVal}
+#    @timethis
     def getCascResults(self,graphMat, covariates, hTuningParam,nBlocks, rowNorm,assortative,CCA):
         cascSvd = self.getCascSvd(graphMat, covariates, hTuningParam, nBlocks, assortative,CCA)
-        ortho = self.getOrtho(graphMat, covariates, cascSvd['eVec'], cascSvd['eVal'],hTuningParam, nBlocks)
+        
         if rowNorm:
             cascSvd_tmp = cascSvd['eVec']/np.sqrt(sum(cascSvd['eVec']**2))
         else:
             cascSvd_tmp = cascSvd['eVec']
         kmeansResults=KMeans(n_clusters=nBlocks).fit(cascSvd_tmp)
         
-        #if(EVAL.shape()>nBlocks):
-        return {'orthoL':ortho[0],'orthoX':ortho[1],'wcss':kmeansResults.inertia_,'cluster':kmeansResults.labels_,'cascSvd':cascSvd_tmp}
-        #else:
-            #return {'orthoL':ortho[0],'orthoX':ortho[1],'wcss':kmeansResults.inertia_,'cluster':kmeansResults.labels_,'gapVec':cascSvd['eVal'][nBlocks-1]-0,'cascSvd':cascSvd_tmp}
+        if not CCA:
+            ortho = self.getOrtho(graphMat, covariates, cascSvd['eVec'], cascSvd['eVal'],hTuningParam, nBlocks)
+
+            return {'orthoL':ortho[0],'orthoX':ortho[1],'wcss':kmeansResults.inertia_,'cluster':kmeansResults.labels_,'cascSvd':cascSvd_tmp}
+    
+        else:
+            return {'orthoL':None,'orthoX':None,'wcss':kmeansResults.inertia_,'cluster':kmeansResults.labels_,'cascSvd':cascSvd_tmp}
