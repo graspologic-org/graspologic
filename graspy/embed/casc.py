@@ -1,256 +1,250 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 20 19:46:01 2019
-
-@author: jerryyao
-"""
-
-# Copyright 2019 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-import warnings
-
-from .base import BaseEmbed
-from ..utils import import_graph, to_laplace, is_fully_connected
-from .svd import selectSVD
+# casc
+#' Covariate Assisted Spectral Clustering
+#' 
+#' @param adjMat An adjacency matrix
+#' @param covMat A covariate matrix
+#' @param nBlocks The number of clusters
+#' @param nPoints Number of iterations to find the optimal tuning
+#' parameter.
+#' @param method The form of the adjacency matrix to be used.
+#' @param rowNorm True if row normalization should be
+#' done before running kmeans.
+#' @param center A boolean indicating if the covariate matrix columns
+#' should be centered.
+#' @param verbose A boolean indicating if casc output should include eigendecomposition.
+#' @param assortative A boolean indicating if the assortative version of casc should be used.
+#' @param randStarts Number of random restarts for kmeans.
+#'
+#' @export
+#' @return A list with node cluster assignments, the
+#' the value of the tuning parameter used, the within
+#' cluster sum of squares, and the eigengap.
+#'
+#' @keywords spectral clustering
 import numpy as np
 from sklearn import preprocessing
-
+from numpy import linalg as la
 from sklearn.cluster import KMeans
-class CovariateAssistedSpectralEmbed(BaseEmbed):
-    r"""
-    Class for computing the laplacian spectral embedding of a graph 
-    
-    The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation
-    of the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce 
-    the dimensionality to the specified k, or if k is unspecified, can find a number
-    of dimensions automatically.
+import scipy.sparse as sp
+import warnings
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+def casc(adjMat, covMat, nBlocks, nPoints = 100,method = "regLaplacian", rowNorm = False,center = False,assortative = False):
+	adjMat = getGraphMatrix(adjMat, method)
+	covMat = preprocessing.scale(covMat,with_mean=center)
+	res    = getCascClusters(adjMat, covMat, nBlocks, nPoints,rowNorm, assortative)
+	return res
 
-    Parameters
-    ----------
-    form : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional
-        Specifies the type of Laplacian normalization to use.
+def getCascClusters(graphMat, covariates, nBlocks,nPoints, rowNorm, assortative):
+	rangehTuning = getTuningRange(graphMat, covariates, nBlocks, assortative)
+	hTuningSeq = np.linspace(rangehTuning[0], rangehTuning[1],nPoints)
+	wcssVec = []
+	gapVec = []
+	orthoX = []
+	orthoL = []
+	for i in range(nPoints):
+		cascResults = getCascResults(graphMat, covariates, hTuningSeq[i],nBlocks, rowNorm, assortative)
+		orthoL.append(cascResults['orthoL'])
+		orthoX.append(cascResults['orthoX'])
+		wcssVec.append(cascResults['wcss'])
+		gapVec.append(cascResults['gapVec'])
+	hOpt = hTuningSeq[wcssVec.index(min(wcssVec))]
+	hOptResults = getCascResults(graphMat, covariates, hOpt, nBlocks, rowNorm,assortative)
+	return {'cluster':hOptResults['cluster'],'h':hOpt,'wcss':hOptResults['wcss'],'eigenGap':hOptResults['gapVec'],'cascSvd':hOptResults['cascSvd']}
 
-    n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
-        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+def getCascResults(graphMat, covariates, hTuningParam,nBlocks, rowNorm,assortative):
+	cascSvd = getCascSvd(graphMat, covariates, hTuningParam, nBlocks, assortative)
+	ortho = getOrtho(graphMat, covariates, cascSvd['eVec'], cascSvd['eVal'],hTuningParam, nBlocks)
+	if rowNorm:
+		cascSvd_tmp = cascSvd['eVec']/np.sqrt(sum(cascSvd['eVec']**2))
+	else:
+		cascSvd_tmp = cascSvd['eVec']
+	kmeansResults=KMeans(n_clusters=nBlocks).fit(cascSvd_tmp)
+	return {'orthoL':ortho[0],'orthoX':ortho[1],'wcss':kmeansResults.inertia_,'cluster':kmeansResults.labels_,'gapVec':cascSvd['eVal'][nBlocks-1]-cascSvd['eVal'][nBlocks],'cascSvd':cascSvd_tmp}
 
-    n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
-        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+def getOrtho(graphMat, covariates, cascSvdEVec, cascSvdEVal,h, nBlocks):
+	orthoL=cascSvdEVec[:, (nBlocks-1)].transpose().dot(graphMat).dot(cascSvdEVec[:,(nBlocks-1)]).transpose()/cascSvdEVal[(nBlocks-1)]
+	orthoX=h*(cascSvdEVec[:, (nBlocks-1)].transpose().dot(covariates).dot(covariates.transpose()).dot(cascSvdEVec[:,(nBlocks-1)])/cascSvdEVal[(nBlocks-1)])
+	return [orthoL/(orthoL + orthoX),orthoX/(orthoL + orthoX)]
 
-    algorithm : {'randomized' (default), 'full', 'truncated'}, optional
-        SVD solver to use:
+def getCascSvd(graphMat, covariates, hTuningParam, nBlocks, assortative):
+	if assortative:
+		def matmult(x, y):
+			if len(x.shape)<2:
+				res=(np.dot(graphMat,x) + np.dot(hTuningParam * covariates,np.dot(covariates.transpose(), x))).transpose()
+			else:
+				res=np.dot(graphMat,y) +  np.dot(hTuningParam * covariates, np.dot(covariates.transpose(), y))
+			return res
+	else:
+		def matmult(x, y):
+			if len(x.shape)<2:
+				res=(np.dot(graphMat,np.dot(graphMat,x)) + np.dot(hTuningParam * covariates, np.dot(covariates.transpose(), x))).transpose()
+			else:
+				res=np.dot(graphMat,np.dot(graphMat,y)) + np.dot(hTuningParam * covariates,np.dot(covariates.transpose(), y))
+			return res
+	S=irlb(graphMat,nBlocks + 1,mult=matmult)
+	eVec = S[0][:, 0:nBlocks]
+	eVal = S[1][0:(nBlocks+1)]
+	eVecKPlus = S[2][:,0:(nBlocks+1)]
+	return {'eVec':eVec,'eVal':eVal,'eVecKPlus':eVecKPlus}
 
-        - 'randomized'
-            Computes randomized svd using 
-            :func:`sklearn.utils.extmath.randomized_svd`
-        - 'full'
-            Computes full svd using :func:`scipy.linalg.svd`
-        - 'truncated'
-            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+def getTuningRange(graphMatrix, covariates, nBlocks,assortative):
+	nCov = covariates.shape[1]
+	u,d,v=la.svd(covariates,full_matrices=False)
+	min_tmp = np.min([nCov,nBlocks])
+	singValCov = d[0:min_tmp]
+	if assortative:
+		u1,d1,v1 = la.svd(graphMatrix,full_matrices=False)
+		tmp1 = nBlocks + 1
+		eigenValGraph = d1[0:tmp1]
+		if nCov > nBlocks:
+			hmax = eigenValGraph[0]/(singValCov[nBlocks-1]**2 - singValCov[nBlocks]**2) 
+		else:
+			hmax = eigenValGraph[0]/singValCov[nCov-1]**2 
+		hmin = (eigenValGraph[nBlocks-1] - eigenValGraph[nBlocks])/singValCov[0]**2
+	else:
+		u1,d1,v1 = la.svd(graphMatrix,full_matrices=False)
+		tmp1 = nBlocks + 1
+		eigenValGraph = d1[0:tmp1]**2
+		if nCov > nBlocks :
+			hmax = eigenValGraph[0]/(singValCov[nBlocks-1]**2 - singValCov[nBlocks]**2) 
+		else:
+			hmax = eigenValGraph[0]/singValCov[nCov-1]**2 
+		hmin = (eigenValGraph[nBlocks-1] - eigenValGraph[nBlocks])/singValCov[0]**2
+	return [hmax,hmin]
 
-    n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or 
-        'truncated'. The default is larger than the default in randomized_svd 
-        to handle sparse matrices that may have large slowly decaying spectrum.
+def getGraphMatrix(adjMat, method):
+	if method == 'regLaplacian' :
+		rSums = getRsum(adjMat)
+		tau = np.mean(rSums)
+		normMat = np.eye(len(rSums))* 1/np.sqrt(rSums + tau)
+		return np.dot(normMat,adjMat,normMat)
+	elif method == 'laplacian':
+		rSums = getRsum(adjMat)
+		normMat = np.eye(len(rSums))* 1/np.sqrt(rSums)
+		return np.dot(normMat,adjMat,normMat)
+	elif method == 'adjacency':
+		return adjMat
+	else:
+		print("Error: method =", method, "Not valid. Method = ['regLaplacian','laplacian','adjacency']")
+		return
 
-    check_lcc : bool , optional (defult = True)
-        Whether to check if input graph is connected. May result in non-optimal 
-        results if the graph is unconnected. If True and input is unconnected,
-        a UserWarning is thrown. Not checking for connectedness may result in 
-        faster computation.
+def getRsum(Mat):
+	Numrows=Mat.shape[0]
+	rsums=[]
+	for i in range(Numrows):
+		rsums.append(np.sum(Mat[i]))
+	return rsums
 
-    regularizer: int, float or None, optional (default=None)
-        Constant to be added to the diagonal of degree matrix. If None, average 
-        node degree is added. If int or float, must be >= 0. Only used when 
-        ``form`` == 'R-DAD'.
 
-    Attributes
-    ----------
-    latent_left_ : array, shape (n_samples, n_components)
-        Estimated left latent positions of the graph.
+# Compute A.dot(x) if t is False,
+#         A.transpose().dot(x)  otherwise.
 
-    latent_right_ : array, shape (n_samples, n_components), or None
-        Only computed when the graph is directed, or adjacency matrix is assymetric.
-        Estimated right latent positions of the graph. Otherwise, None.
 
-    singular_values_ : array, shape (n_components)
-        Singular values associated with the latent position matrices.
+# Simple utility function used to check linear dependencies during computation:
+def irlb(A,n,tol=0.0001,maxit=50,mult="NULL"):
+  if(mult == "NULL"):
+    def mult(A,x,t=False):
+      if(sp.issparse(A)):
+        m = A.shape[0]
+        n = A.shape[1]
+        if(t):
+          return(sp.csr_matrix(x).dot(A).transpose().todense().A[:,0])
+        return(A.dot(sp.csr_matrix(x).transpose()).todense().A[:,0])
+      if(t):
+        return(x.dot(A))
+      return(A.dot(x))
+  def orthog(Y,X):
+    dotY = mult(Y,X)
+    return (Y - mult(X,dotY))
+  def invcheck(x):
+    eps2  = 2*np.finfo(np.float).eps
+    if(x>eps2):
+      x = 1/x
+    else:
+      x = 0
+      warnings.warn("Ill-conditioning encountered, result accuracy may be poor")
+    return(x)
+  nu     = n
+  m      = A.shape[0]
+  n      = A.shape[1]
+  if(min(m,n)<2):
+    raise Exception("The input matrix must be at least 2x2.")
+  m_b    = min((nu+20, 3*nu, n))  # Working dimension size
+  mprod  = 0
+  it     = 0
+  j      = 0
+  k      = nu
+  smax   = 1
+  sparse = sp.issparse(A)
 
-    See Also
-    --------
-    graspy.embed.selectSVD
-    graspy.embed.select_dimension
-    graspy.utils.to_laplace
+  V  = np.zeros((n,m_b))
+  W  = np.zeros((m,m_b))
+  F  = np.zeros((n,1))
+  B  = np.zeros((m_b,m_b))
 
-    Notes
-    -----
-    The singular value decomposition: 
+  V[:,0]  = np.random.randn(n) # Initial vector
+  V[:,0]  = V[:,0]/np.linalg.norm(V)
 
-    .. math:: A = U \Sigma V^T
+  while(it < maxit):
+    if(it>0): j=k
+    W[:,j] = mult(A,V[:,j])
+    mprod+=1
+    if(it>0):
+      W[:,j] = orthog(W[:,j],W[:,0:j]) # NB W[:,0:j] selects columns 0,1,...,j-1
+    s = np.linalg.norm(W[:,j])
+    sinv = invcheck(s)
+    W[:,j] = sinv*W[:,j]
+    # Lanczos process
+    while(j<m_b):
+      F = mult(A,W[:,j])
+      mprod+=1
+      F = F - s*V[:,j]
+      F = orthog(F,V[:,0:j+1])
+      fn = np.linalg.norm(F)
+      fninv= invcheck(fn)
+      F  = fninv * F
+      if(j<m_b-1):
+        V[:,j+1] = F
+        B[j,j] = s
+        B[j,j+1] = fn 
+        W[:,j+1] = mult(A,V[:,j+1])
+        mprod+=1
+        # One step of classical Gram-Schmidt...
+        W[:,j+1] = W[:,j+1] - fn*W[:,j]
+        # ...with full reorthogonalization
+        W[:,j+1] = orthog(W[:,j+1],W[:,0:(j+1)])
+        s = np.linalg.norm(W[:,j+1])
+        sinv = invcheck(s) 
+        W[:,j+1] = sinv * W[:,j+1]
+      else:
+        B[j,j] = s
+      j+=1
+    # End of Lanczos process
+    S    = np.linalg.svd(B)
+    R    = fn * S[0][m_b-1,:] # Residuals
+    if(it<1):
+      smax = S[1][0]  # Largest Ritz value
+    else:
+      smax = max((S[1][0],smax))
 
-    is used to find an orthonormal basis for a matrix, which in our case is the
-    Laplacian matrix of the graph. These basis vectors (in the matrices U or V) are 
-    ordered according to the amount of variance they explain in the original matrix. 
-    By selecting a subset of these basis vectors (through our choice of dimensionality
-    reduction) we can find a lower dimensional space in which to represent the graph.
+    conv = sum(np.abs(R[0:nu]) < tol*smax)
+    if(conv < nu):  # Not coverged yet
+      k = max(conv+nu,k)
+      k = min(k,m_b-3)
+    else:
+      break
+    # Update the Ritz vectors
+    V[:,0:k] = V[:,0:m_b].dot(S[2].transpose()[:,0:k])
+    V[:,k] = F 
+    B = np.zeros((m_b,m_b))
+    # Improve this! There must be better way to assign diagonal...
+    for l in range(0,k):
+      B[l,l] = S[1][l]
+    B[0:k,k] = R[0:k]
+    # Update the left approximate singular vectors
+    W[:,0:k] = W[:,0:m_b].dot(S[0][:,0:k])
+    it+=1
 
-    References
-    ----------
-    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
-    """
-
-    def __init__(
-        self,
-        form="R-DAD",
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=50,
-        check_lcc=True,
-        regularizer=1,
-        assortative=True,
-        row_norm=False,
-        n_points=100
-    ):
-        super().__init__(
-            n_components=n_components,
-            n_elbows=n_elbows,
-            algorithm=algorithm,
-            n_iter=n_iter,
-            check_lcc=check_lcc,
-        )
-        self.form = form
-        self.regularizer = regularizer
-        self.assortative = assortative
-        self.row_norm=row_norm
-        self.n_points=n_points
-    def fit(self, graph, covariate_matrix,y=None):
-        """
-        Fit LSE model to input graph
-
-        By default, uses the Laplacian normalization of the form:
-
-        .. math:: L = D^{-1/2} A D^{-1/2}
-
-        Parameters
-        ----------
-        graph : array_like or networkx.Graph
-            Input graph to embed. see graspy.utils.import_graph
-
-        y : Ignored
-
-        Returns
-        -------
-        self : returns an instance of self.
-        """
-        A = import_graph(graph)
-        
-        if self.check_lcc:
-            if not is_fully_connected(A):
-                msg = (
-                    "Input graph is not fully connected. Results may not"
-                    + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspy.utils.get_lcc``."
-                )
-                warnings.warn(msg, UserWarning)
-
-        L_norm = to_laplace(A, form=self.form, regularizer=self.regularizer)
-        [hmax,hmin]=self.get_tuning_range(L_norm,covariate_matrix,self.n_components,self.assortative)
-        res=self.getCascClusters(L_norm, covariate_matrix,hmin,hmax, self.n_components,self.n_points, self.row_norm, self.assortative)
-        
-        return res
-    def get_tuning_range(self,graphMatrix, covariates, nBlocks,assortative):
-        nCov = covariates.shape[1]
-        U, D, V = selectSVD(covariates,n_components=covariates.shape[1],n_elbows=self.n_elbows,algorithm='full')    
-        min_tmp = np.min([nCov,nBlocks])
-        singValCov = D[0:min_tmp]
-        if assortative:
-            u1,d1,v1 = selectSVD(graphMatrix,n_components=graphMatrix.shape[0],n_elbows=self.n_elbows,algorithm='full',)
-            tmp1 = nBlocks + 1
-            eigenValGraph = d1[0:tmp1]
-            if nCov > nBlocks:
-                hmax = eigenValGraph[0]/(singValCov[nBlocks-1]**2 - singValCov[nBlocks]**2) 
-            else:
-                hmax = eigenValGraph[0]/singValCov[nCov-1]**2 
-            hmin = (eigenValGraph[nBlocks-1] - eigenValGraph[nBlocks])/singValCov[0]**2
-        else:
-            u1,d1,v1 = selectSVD(graphMatrix,n_components=graphMatrix.shape[0],n_elbows=self.n_elbows,algorithm='full',)
-            tmp1 = nBlocks + 1
-            eigenValGraph = d1[0:tmp1]**2
-            if nCov > nBlocks :
-                hmax = eigenValGraph[0]/(singValCov[nBlocks-1]**2 - singValCov[nBlocks]**2) 
-            else:
-                hmax = eigenValGraph[0]/singValCov[nCov-1]**2 
-            hmin = (eigenValGraph[nBlocks-1] - eigenValGraph[nBlocks])/singValCov[0]**2
-        return [hmax,hmin]
-   
-    def getCascClusters(self,graphMat, covariates,hmin,hmax, nBlocks,nPoints, rowNorm, assortative):
-    	
-    	hTuningSeq = np.linspace(hmax,hmin,nPoints)
-    	wcssVec = []
-    	gapVec = []
-    	orthoX = []
-    	orthoL = []
-        
-    	for i in range(nPoints):
-    		cascResults = self.getCascResults(graphMat, covariates, hTuningSeq[i],nBlocks, rowNorm, assortative)
-    		orthoL.append(cascResults['orthoL'])
-    		orthoX.append(cascResults['orthoX'])
-    		wcssVec.append(cascResults['wcss'])
-    		gapVec.append(cascResults['gapVec'])
-          
-    	hOpt = hTuningSeq[wcssVec.index(min(wcssVec))]
-    	hOptResults = self.getCascResults(graphMat, covariates, hOpt, nBlocks, rowNorm,assortative)
-    	return {'cluster':hOptResults['cluster'],'h':hOpt,'wcss':hOptResults['wcss'],'eigenGap':hOptResults['gapVec'],'cascSvd':hOptResults['cascSvd']}
-    
-    def getOrtho(self,graphMat, covariates, cascSvdEVec, cascSvdEVal,h, nBlocks):
-    	orthoL=cascSvdEVec[:, (nBlocks-1)].transpose().dot(graphMat).dot(cascSvdEVec[:,(nBlocks-1)]).transpose()/cascSvdEVal[(nBlocks-1)]
-    	orthoX=h*(cascSvdEVec[:, (nBlocks-1)].transpose().dot(covariates).dot(covariates.transpose()).dot(cascSvdEVec[:,(nBlocks-1)])/cascSvdEVal[(nBlocks-1)])
-    	return [orthoL/(orthoL + orthoX),orthoX/(orthoL + orthoX)]
-    
-    
-    def getCascSvd(self,graphMat, covariates, hTuningParam, nBlocks, assortative):
-        if assortative:
-    	
-            New_laplacian=(graphMat + np.dot(hTuningParam * covariates,covariates.transpose()))
-    			
-        else:
-            
-            New_laplacian=((np.dot(graphMat,graphMat)) + np.dot(hTuningParam * covariates,covariates.transpose()))
-            
-        u2,d2,v2 = selectSVD(New_laplacian,n_components=New_laplacian.shape[0],n_elbows=self.n_elbows,algorithm='full')	
-        
-        eVec = u2[:, 0:nBlocks]
-        eVal = d2[0:(nBlocks+1)]
-    
-        return {'eVec':eVec,'eVal':eVal}
-    def getCascResults(self,graphMat, covariates, hTuningParam,nBlocks, rowNorm,assortative):
-    	cascSvd = self.getCascSvd(graphMat, covariates, hTuningParam, nBlocks, assortative)
-    	ortho = self.getOrtho(graphMat, covariates, cascSvd['eVec'], cascSvd['eVal'],hTuningParam, nBlocks)
-    	if rowNorm:
-    		cascSvd_tmp = cascSvd['eVec']/np.sqrt(sum(cascSvd['eVec']**2))
-    	else:
-    		cascSvd_tmp = cascSvd['eVec']
-    	kmeansResults=KMeans(n_clusters=nBlocks).fit(cascSvd_tmp)
-    	return {'orthoL':ortho[0],'orthoX':ortho[1],'wcss':kmeansResults.inertia_,'cluster':kmeansResults.labels_,'gapVec':cascSvd['eVal'][nBlocks-1]-cascSvd['eVal'][nBlocks],'cascSvd':cascSvd_tmp}
-        
-    
+  U = W[:,0:m_b].dot(S[0][:,0:nu])
+  V = V[:,0:m_b].dot(S[2].transpose()[:,0:nu])
+  return((U,S[1][0:nu],V,it,mprod))
