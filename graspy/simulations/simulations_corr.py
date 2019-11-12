@@ -96,24 +96,24 @@ def sample_edges_er_corr(n, p, R, directed, loops):
     
     Examples
     --------
-    >>> np.random.seed(1)
+    >>> np.random.seed(2)
     >>> p = 0.5
     >>> rho = 0.3
-    >>> P = p * np.ones((5,5))
-    >>> Rho = rho * np.ones((5,5))
+    >>> n = 5
+    >>> R = rho * np.ones((n,n))
 
     To sample a correlated ER graph pair based on n, p and R matrices:
 
     >>> sample_edges_er_corr(n, p, R, directed=False, loops=False)
-    (array([[0., 1., 0., 0., 0.],
-        [1., 0., 0., 0., 0.],
-        [0., 0., 0., 0., 1.],
-        [0., 0., 0., 0., 1.],
-        [0., 0., 1., 1., 0.]]), array([[0., 1., 0., 0., 0.],
-        [1., 0., 1., 0., 1.],
-        [0., 1., 0., 1., 1.],
-        [0., 0., 1., 0., 1.],
-        [0., 1., 1., 1., 0.]]))
+    (array([[0., 0., 1., 0., 0.],
+        [0., 0., 0., 1., 0.],
+        [1., 0., 0., 1., 1.],
+        [0., 1., 1., 0., 1.],
+        [0., 0., 1., 1., 0.]]), array([[0., 1., 1., 1., 0.],
+        [1., 0., 0., 1., 0.],
+        [1., 0., 0., 1., 1.],
+        [1., 1., 1., 0., 1.],
+        [0., 0., 1., 1., 0.]]))
     """
     P = p * np.ones((n, n))
     G1, G2 = sample_edges_corr(P, R, directed=directed, loops=loops)
