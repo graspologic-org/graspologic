@@ -19,7 +19,6 @@ from scipy.optimize import minimize_scalar
 from .skp import SinkhornKnopp
 
 
-
 class FastApproximateQAP:
     """
     Fast Approximate QAP Algorithm (FAQ)
