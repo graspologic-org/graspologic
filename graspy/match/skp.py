@@ -38,34 +38,22 @@ class SinkhornKnopp:
     _D2 : 2d-array
         Diagonal matrix obtained after a stopping condition was met
         so that _D1.dot(P).dot(_D2) is close to doubly stochastic.
-    Example
-    -------
-    .. code-block:: python
-        >>> import numpy as np
-        >>> from sinkhorn_knopp import sinkhorn_knopp as skp
-        >>> sk = skp.SinkhornKnopp()
-        >>> P = [[.011, .15], [1.71, .1]]
-        >>> P_ds = sk.fit(P)
-        >>> P_ds
-        array([[ 0.06102561,  0.93897439],
-           [ 0.93809928,  0.06190072]])
-        >>> np.sum(P_ds, axis=0)
-        array([ 0.99912489,  1.00087511])
-        >>> np.sum(P_ds, axis=1)
-        array([ 1.,  1.])
+
     """
 
     def __init__(self, max_iter=1000, epsilon=1e-3):
-        assert isinstance(max_iter, int) or isinstance(max_iter, float),\
+        assert isinstance(max_iter, int) or isinstance(max_iter, float), (
             "max_iter is not of type int or float: %r" % max_iter
-        assert max_iter > 0,\
-            "max_iter must be greater than 0: %r" % max_iter
+        )
+        assert max_iter > 0, "max_iter must be greater than 0: %r" % max_iter
         self._max_iter = int(max_iter)
 
-        assert isinstance(epsilon, int) or isinstance(epsilon, float),\
+        assert isinstance(epsilon, int) or isinstance(epsilon, float), (
             "epsilon is not of type float or int: %r" % epsilon
-        assert epsilon > 0 and epsilon < 1,\
+        )
+        assert epsilon > 0 and epsilon < 1, (
             "epsilon must be between 0 and 1 exclusive: %r" % epsilon
+        )
         self._epsilon = epsilon
 
         self._stopping_condition = None
@@ -100,8 +88,7 @@ class SinkhornKnopp:
         r = np.ones((N, 1))
         pdotr = P.T.dot(r)
         total_support_warning_str = (
-            "Matrix P must have total support. "
-            "See documentation"
+            "Matrix P must have total support. " "See documentation"
         )
         if not np.all(pdotr != 0):
             warnings.warn(total_support_warning_str, UserWarning)
@@ -115,10 +102,12 @@ class SinkhornKnopp:
         del pdotr, pdotc
 
         P_eps = np.copy(P)
-        while np.any(np.sum(P_eps, axis=1) < min_thresh) \
-                or np.any(np.sum(P_eps, axis=1) > max_thresh) \
-                or np.any(np.sum(P_eps, axis=0) < min_thresh) \
-                or np.any(np.sum(P_eps, axis=0) > max_thresh):
+        while (
+            np.any(np.sum(P_eps, axis=1) < min_thresh)
+            or np.any(np.sum(P_eps, axis=1) > max_thresh)
+            or np.any(np.sum(P_eps, axis=0) < min_thresh)
+            or np.any(np.sum(P_eps, axis=0) > max_thresh)
+        ):
 
             c = 1 / P.T.dot(r)
             r = 1 / P.dot(c)
