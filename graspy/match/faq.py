@@ -10,14 +10,14 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
+# limitations under the License.
 
 import numpy as np
 import math
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
-from sinkhorn_knopp import sinkhorn_knopp as skp
+from .skp import SinkhornKnopp
 
-sk = skp.SinkhornKnopp()
 
 
 class FastApproximateQAP:
@@ -105,14 +105,14 @@ class FastApproximateQAP:
             n = A.shape[0]  # number of vertices in graphs
             At = np.transpose(A)  # A transpose
             Bt = np.transpose(B)  # B transpose
-            ofv_ = math.inf
-            perm_inds_ = np.zeros(n)
+            score = math.inf
+            perm_inds = np.zeros(n)
 
             for i in range(self.n_init):
 
                 # setting initialization matrix
                 if self.init_method == "rand":
-                    sk = skp.SinkhornKnopp()
+                    sk = SinkhornKnopp()
                     K = np.random.rand(
                         n, n
                     )  # generate a nxn matrix where each entry is a random integer [0,1]
@@ -156,14 +156,14 @@ class FastApproximateQAP:
                 )  # Project onto the set of permutation matrices
                 perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
                 perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
-                ofv_new = np.trace(
+                score_new = np.trace(
                     np.transpose(A) @ perm_mat_new @ B @ np.transpose(perm_mat_new)
                 )  # computing objective function value
 
-                if ofv_new < ofv_:  # minimizing
-                    ofv_ = ofv_new
-                    perm_inds_ = perm_inds_new
+                if score_new < score:  # minimizing
+                    score = score_new
+                    perm_inds = perm_inds_new
 
-            self.perm_inds_ = perm_inds_  # permutation indices
-            self.ofv_ = ofv_  # objective function value
+            self.perm_inds_ = perm_inds  # permutation indices
+            self.score_ = score  # objective function value
             return self
