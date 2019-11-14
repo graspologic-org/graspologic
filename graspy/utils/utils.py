@@ -598,8 +598,8 @@ def augment_diagonal(graph, weight=1):
 
     divisor = graph.shape[0] - 1
 
-    in_degrees = np.sum(graph, axis=0)
-    out_degrees = np.sum(graph, axis=1)
+    in_degrees = np.sum(np.abs(graph), axis=0)
+    out_degrees = np.sum(np.abs(graph), axis=1)
     degrees = (in_degrees + out_degrees) / 2
 
     diag = weight * degrees / divisor

@@ -372,7 +372,7 @@ class TestDiagonalAugment(unittest.TestCase):
     def test_augment_diagonal_directed(self):
         A = np.array(
             [
-                [0, 1, 1, 0, 0],
+                [0, 1, -1, 0, 0],
                 [0, 0, 0, 2, 1],
                 [1, 0, 0, 1, 1],
                 [0, 2, 0, 0, 0],

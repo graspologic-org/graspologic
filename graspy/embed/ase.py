@@ -75,11 +75,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
         before embedding. Empirically, this produces latent position estimates closer
         to the ground truth. 
 
-    ptr : bool, optional (default = True) 
-        Whether to perform pass-to-ranks on the adjacency matrix before embedding. If 
-        the graph is unweighted, this operation does nothing. If it is weighted, the 
-        edge weights are converted to the their relative rank among all edge weights, 
-        and then normalized to between 0 and 1. 
 
     Attributes
     ----------
@@ -123,7 +118,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
-        ptr=True,
     ):
         super().__init__(
             n_components=n_components,
@@ -136,10 +130,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
         if not isinstance(diag_aug, bool):
             raise TypeError("`diag_aug` must be of type bool")
         self.diag_aug = diag_aug
-
-        if not isinstance(ptr, bool):
-            raise TypeError("`ptr` must be of type bool")
-        self.ptr = ptr
 
     def fit(self, graph, y=None):
         """
