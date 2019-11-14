@@ -1,5 +1,4 @@
 import unittest
-import graspy as gs
 import numpy as np
 from graspy.embed.ase import AdjacencySpectralEmbed
 from graspy.embed.lse import LaplacianSpectralEmbed
