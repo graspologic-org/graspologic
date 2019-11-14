@@ -15,7 +15,7 @@
 import warnings
 
 from .base import BaseEmbed
-from ..utils import import_graph, is_fully_connected
+from ..utils import import_graph, is_fully_connected, augment_diagonal, pass_to_ranks
 
 
 class AdjacencySpectralEmbed(BaseEmbed):
@@ -104,6 +104,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
+        diag_aug=True,
+        ptr=True,
     ):
         super().__init__(
             n_components=n_components,
@@ -112,6 +114,14 @@ class AdjacencySpectralEmbed(BaseEmbed):
             n_iter=n_iter,
             check_lcc=check_lcc,
         )
+
+        if not isinstance(diag_aug, bool):
+            raise TypeError("`diag_aug` must be of type bool")
+        self.diag_aug = diag_aug
+
+        if not isinstance(ptr, bool):
+            raise TypeError("`ptr` must be of type bool")
+        self.ptr = ptr
 
     def fit(self, graph, y=None):
         """
@@ -136,6 +146,12 @@ class AdjacencySpectralEmbed(BaseEmbed):
                     + "using ``graspy.utils.get_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
+
+        if self.ptr:
+            A = pass_to_ranks(A, method="simple-nonzero")
+
+        if self.diag_aug:
+            A = augment_diagonal(A)
 
         self._reduce_dim(A)
         return self
