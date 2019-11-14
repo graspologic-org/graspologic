@@ -15,7 +15,13 @@
 import warnings
 
 from .base import BaseEmbed
-from ..utils import import_graph, is_fully_connected, augment_diagonal, pass_to_ranks
+from ..utils import (
+    import_graph,
+    is_fully_connected,
+    augment_diagonal,
+    pass_to_ranks,
+    is_unweighted,
+)
 
 
 class AdjacencySpectralEmbed(BaseEmbed):
@@ -57,11 +63,23 @@ class AdjacencySpectralEmbed(BaseEmbed):
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
 
-    check_lcc : bool , optional (defult = True)
+    check_lcc : bool , optional (default = True)
         Whether to check if input graph is connected. May result in non-optimal 
         results if the graph is unconnected. If True and input is unconnected,
         a UserWarning is thrown. Not checking for connectedness may result in 
         faster computation.
+
+    diag_aug : bool, optional (default = True)
+        Whether to replace the main diagonal of the adjacency matrix with a vector 
+        corresponding to the degree (or sum of edge weights for a weighted network) 
+        before embedding. Empirically, this produces latent position estimates closer
+        to the ground truth. 
+
+    ptr : bool, optional (default = True) 
+        Whether to perform pass-to-ranks on the adjacency matrix before embedding. If 
+        the graph is unweighted, this operation does nothing. If it is weighted, the 
+        edge weights are converted to the their relative rank among all edge weights, 
+        and then normalized to between 0 and 1. 
 
     Attributes
     ----------
@@ -148,7 +166,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
                 warnings.warn(msg, UserWarning)
 
         if self.ptr:
-            A = pass_to_ranks(A, method="simple-nonzero")
+            if not is_unweighted(A):  # just to avoid expensive ranking if unweighted
+                A = pass_to_ranks(A, method="simple-nonzero")
 
         if self.diag_aug:
             A = augment_diagonal(A)
