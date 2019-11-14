@@ -104,6 +104,12 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase = AdjacencySpectralEmbed()
             ase.fit(A)
 
+    def test_input_checks(self):
+        with self.assertRaises(TypeError):
+            ase = AdjacencySpectralEmbed(ptr=100)
+        with self.assertRaises(TypeError):
+            ase = AdjacencySpectralEmbed(diag_aug="over 9000")
+
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
