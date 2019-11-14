@@ -155,10 +155,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
-        if self.ptr:
-            if not is_unweighted(A):  # just to avoid expensive ranking if unweighted
-                A = pass_to_ranks(A, method="simple-nonzero")
-
         if self.diag_aug:
             A = augment_diagonal(A)
 
