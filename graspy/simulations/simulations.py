@@ -18,6 +18,14 @@ from ..utils import symmetrize, cartprod
 import warnings
 
 
+def _n_to_labels(n):
+    n_cumsum = n.cumsum()
+    labels = np.zeros(n.sum(), dtype=np.int64)
+    for i in range(1, len(n)):
+        labels[n_cumsum[i - 1] : n_cumsum[i]] = i
+    return labels
+
+
 def sample_edges(P, directed=False, loops=False):
     """
     Gemerates a binary random graph based on the P matrix provided
@@ -303,7 +311,17 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
+def sbm(
+    n,
+    p,
+    directed=False,
+    loops=False,
+    wt=1,
+    wtargs=None,
+    dc=None,
+    dc_kws={},
+    return_labels=False,
+):
     """
     Samples a graph from the stochastic block model (SBM). 
 
@@ -370,6 +388,11 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         If not specified, in either case all functions will assume their default
         parameters.
 
+    return_labels: boolean, optional (default=False)
+        If False, only output is adjacency matrix. Otherwise, an additional output will
+        be an array with length equal to the number of vertices in the graph, where each
+        entry in the array labels which block a vertex in the graph is in.
+
     References
     ----------
     .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
@@ -380,6 +403,8 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
+    labels: ndarray, shape (sum(n))
+        Label vector
 
     Examples
     --------
@@ -597,6 +622,9 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         A = A - np.diag(np.diag(A))
     if not directed:
         A = symmetrize(A, method="triu")
+    if return_labels:
+        labels = _n_to_labels(n)
+        return A, labels
     return A
 
 
