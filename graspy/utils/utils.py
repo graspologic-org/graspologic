@@ -563,19 +563,19 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 
 def augment_diagonal(graph, weight=1):
     r"""
-    Replaces the diagonal of adjacency matrix with the sum of the edge weight.
-    This is equivalent to the degree for a weighted network.
-
-    For directed graphs, the degree used is the out degree (number) of 
-    edges leaving the vertex. Ignores self-loops when calculating degree.
+    Replaces the diagonal of an adjacency matrix with :math:`\frac{d}{nverts - 1}` where
+    :math:`d` is the degree vector for an unweighted graph and the sum of edge weights 
+    for each node for a weighted graph. For a directed graph the in/out :math:`d` is 
+    averaged.
+    
 
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
         interpreted as an :math:`n \times n` adjacency matrix
-    weight: int
-         Weight to be applied to each index.
+    weight: float/int
+        scalar value to multiply the new diagonal vector by
     
     Returns
     -------
@@ -595,12 +595,16 @@ def augment_diagonal(graph, weight=1):
     """
     graph = import_graph(graph)
     graph = remove_loops(graph)
+
     divisor = graph.shape[0] - 1
-    # use out degree for directed graph
-    # ignore self loops in either case
-    degrees = np.sum(graph, axis=1)
+
+    in_degrees = np.sum(graph, axis=0)
+    out_degrees = np.sum(graph, axis=1)
+    degrees = (in_degrees + out_degrees) / 2
+
     diag = weight * degrees / divisor
     graph += np.diag(diag)
+
     return graph
 
 
