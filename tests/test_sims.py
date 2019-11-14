@@ -360,7 +360,7 @@ class Test_WSBM(unittest.TestCase):
         np.random.seed(1)
         n = [3, 3]
         p = [[0.5, 0.1], [0.1, 0.5]]
-        A, l = sbm(n, p, labels=True)
+        A, l = sbm(n, p, return_labels=True)
         label = [0, 0, 0, 1, 1, 1]
         self.assertTrue(np.allclose(l, label))
 

@@ -320,7 +320,7 @@ def sbm(
     wtargs=None,
     dc=None,
     dc_kws={},
-    labels=False,
+    return_labels=False,
 ):
     """
     Samples a graph from the stochastic block model (SBM). 
@@ -388,9 +388,10 @@ def sbm(
         If not specified, in either case all functions will assume their default
         parameters.
 
-    labels: boolean, optional (default=False)
-        If False, only output is adjacency matrix. Otherwise, an additional output will be
-        a calculated, a vector labeling each entry.
+    return_labels: boolean, optional (default=False)
+        If False, only output is adjacency matrix. Otherwise, an additional output will
+        be an array with length equal to the number of vertices in the graph, where each
+        entry in the array labels which block a vertex in the graph is in.
 
     References
     ----------
@@ -402,7 +403,7 @@ def sbm(
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
-    label: ndarray, shape (1, len(n))
+    labels: ndarray, shape (sum(n))
         Label vector
 
     Examples
@@ -621,9 +622,9 @@ def sbm(
         A = A - np.diag(np.diag(A))
     if not directed:
         A = symmetrize(A, method="triu")
-    if labels:
-        l = _n_to_labels(n)
-        return A, l
+    if return_labels:
+        labels = _n_to_labels(n)
+        return A, labels
     return A
 
 
