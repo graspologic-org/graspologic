@@ -20,7 +20,6 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.mixture.gaussian_mixture import _estimate_gaussian_parameters
 from sklearn.mixture.gaussian_mixture import _compute_precision_cholesky
 from sklearn.model_selection import ParameterGrid
-import warnings
 
 from .base import BaseCluster
 
