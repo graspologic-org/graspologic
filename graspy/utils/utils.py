@@ -261,16 +261,16 @@ def to_laplace(graph, form="DAD", regularizer=None):
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
         
         - 'I-DAD'
-            Computes :math:`L = I - D*A*D`
+            Computes :math:`L = I - D_i*A*D_i`
         - 'DAD'
-            Computes :math:`L = D*A*D`
+            Computes :math:`L = D_o*A*D_i`
         - 'R-DAD'
-            Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + regularizer*I`
+            Computes :math:`L = D_o^r*A*D_i^r` where :math:`D_o = D_o + regularizer * I`
+            and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
-        Constant to be added to the diagonal of degree matrix. If None, average 
-        node degree is added. If int or float, must be >= 0. Only used when 
-        ``form`` == 'R-DAD'.
+        Constant to add to the degree vector(s). If None, average node degree is added. 
+        If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
 
     Returns
     -------
@@ -297,14 +297,13 @@ def to_laplace(graph, form="DAD", regularizer=None):
     # set to average degree
     if form == "R-DAD":
         if regularizer is None:
-            regularizer = 1
+            regularizer = np.mean(out_degree)
         elif not isinstance(regularizer, (int, float)):
             raise TypeError(
                 "Regularizer must be a int or float, not {}".format(type(regularizer))
             )
         elif regularizer < 0:
             raise ValueError("Regularizer must be greater than or equal to 0")
-        regularizer = regularizer * np.mean(out_degree)
 
         in_degree += regularizer
         out_degree += regularizer
@@ -324,7 +323,10 @@ def to_laplace(graph, form="DAD", regularizer=None):
         L = in_root @ L @ in_root
     elif form == "DAD" or form == "R-DAD":
         L = out_root @ A @ in_root
-    # return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
+    if is_symmetric(A):
+        return symmetrize(
+            L, method="avg"
+        )  # sometimes machine prec. makes this necessary
     return L
 
 

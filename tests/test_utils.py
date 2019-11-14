@@ -75,9 +75,9 @@ class TestToLaplace(unittest.TestCase):
 
     def test_to_laplace_regularizer_kwarg(self):
         expected_L_normed = [
-            [0, 3 / sqrt(70), 0],
-            [3 / sqrt(70), 0, 3 / sqrt(70)],
-            [0, 3 / sqrt(70), 0],
+            [0, 1 / sqrt(6), 0],
+            [1 / sqrt(6), 0, 1 / sqrt(6)],
+            [0, 1 / sqrt(6), 0],
         ]
         L_normed = gus.to_laplace(self.A, form="R-DAD", regularizer=1.0)
 
