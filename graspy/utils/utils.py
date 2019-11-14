@@ -265,8 +265,8 @@ def to_laplace(graph, form="DAD", regularizer=None):
         - 'DAD'
             Computes :math:`L = D_o*A*D_i`
         - 'R-DAD'
-            Computes :math:`L = D_o^r*A*D_i^r` where :math:`D_o = D_o + regularizer * I`
-            and likewise for :math:`D_i`
+            Computes :math:`L = D_o^r*A*D_i^r` 
+            where :math:`D_o^r = D_o + regularizer * I` and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
         Constant to add to the degree vector(s). If None, average node degree is added. 
@@ -283,6 +283,10 @@ def to_laplace(graph, form="DAD", regularizer=None):
     .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
            under the degree-corrected stochastic blockmodel." In Advances
            in Neural Information Processing Systems, pp. 3120-3128. 2013
+
+    .. [2] Rohe, Karl, Tai Qin, and Bin Yu. "Co-clustering directed graphs to discover
+           asymmetries and directional communities." Proceedings of the National Academy
+           of Sciences 113.45 (2016): 12679-12684.
     """
     valid_inputs = ["I-DAD", "DAD", "R-DAD"]
     if form not in valid_inputs:
