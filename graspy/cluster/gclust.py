@@ -25,27 +25,27 @@ class GaussianCluster(BaseCluster):
     r"""
     Gaussian Mixture Model (GMM)
 
-    Representation of a Gaussian mixture model probability distribution. 
-    This class allows to estimate the parameters of a Gaussian mixture 
-    distribution. It computes all possible models from one component to 
+    Representation of a Gaussian mixture model probability distribution.
+    This class allows to estimate the parameters of a Gaussian mixture
+    distribution. It computes all possible models from one component to
     max_components. The best model is given by the lowest BIC score.
 
     Parameters
     ----------
-    min_components : int, default=2. 
+    min_components : int, default=2.
         The minimum number of mixture components to consider (unless
-        max_components=None, in which case this is the maximum number of
-        components to consider). If max_componens is not None, min_components
-        must be less than or equal to max_components.
+        ``max_components=None``, in which case this is the maximum number of
+        components to consider). If ``max_componens`` is not None, ``min_components``
+        must be less than or equal to ``max_components``.
 
     max_components : int or None, default=None.
-        The maximum number of mixture components to consider. Must be greater 
-        than or equal to min_components.
+        The maximum number of mixture components to consider. Must be greater
+        than or equal to ``min_components``.
 
     covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
         If a string, it must be one of:
-        
+
         - 'full'
             each component has its own general covariance matrix
         - 'tied'
@@ -58,12 +58,34 @@ class GaussianCluster(BaseCluster):
             considers all covariance structures in ['spherical', 'diag', 'tied', 'full']
         If a list/array, it must be a list/array of strings containing only
             'spherical', 'tied', 'diag', and/or 'spherical'.
-    
+
+        tol : float, defaults to 1e-3.
+            The convergence threshold. EM iterations will stop when the
+            lower bound average gain is below this threshold.
+
+        reg_covar : float, defaults to 1e-6.
+            Non-negative regularization added to the diagonal of covariance.
+            Allows to assure that the covariance matrices are all positive.
+
+        max_iter : int, defaults to 100.
+            The number of EM iterations to perform.
+
+        n_init : int, defaults to 1.
+            The number of initializations to perform. The best results are kept.
+
+        init_params : {'kmeans', 'random'}, defaults to 'kmeans'.
+            The method used to initialize the weights, the means and the
+            precisions.
+            Must be one of::
+                'kmeans' : responsibilities are initialized using kmeans.
+                'random' : responsibilities are initialized randomly.
+
     random_state : int, RandomState instance or None, optional (default=None)
-        If int, random_state is the seed used by the random number generator;
+        If int, ``random_state`` is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used
         by ``np.random``.
+
 
     Attributes
     ----------
@@ -72,7 +94,7 @@ class GaussianCluster(BaseCluster):
     covariance_type_ : str
         Optimal covariance type based on BIC.
     model_ : GaussianMixture object
-        Fitted GaussianMixture object fitted with optimal numeber of components 
+        Fitted GaussianMixture object fitted with optimal number of components
         and optimal covariance structure.
     bic_ : pandas.DataFrame
         A pandas DataFrame of BIC values computed for all possible number of clusters
@@ -80,8 +102,8 @@ class GaussianCluster(BaseCluster):
         structures given by covariance_type.
     ari_ : pandas.DataFrame
         Only computed when y is given. Pandas Dataframe containing ARI values computed
-        for all possible number of clusters given by range(min_components,
-        max_components) and all covariance structures given by covariance_type.
+        for all possible number of clusters given by ``r``ange(min_components,
+        max_components)`` and all covariance structures given by covariance_type.
     """
 
     def __init__(
@@ -89,6 +111,11 @@ class GaussianCluster(BaseCluster):
         min_components=2,
         max_components=None,
         covariance_type="full",
+        tol=1e-3,
+        reg_covar=1e-6,
+        max_iter=100,
+        n_init=1,
+        init_params="kmeans",
         random_state=None,
     ):
         if isinstance(min_components, int):
@@ -143,11 +170,16 @@ class GaussianCluster(BaseCluster):
         self.min_components = min_components
         self.max_components = max_components
         self.covariance_type = new_covariance_type
+        self.tol = tol
+        self.reg_covar = reg_covar
+        self.max_iter = max_iter
+        self.n_init = n_init
+        self.init_params = init_params
         self.random_state = random_state
 
     def fit(self, X, y=None):
         """
-        Fits gaussian mixure model to the data. 
+        Fits gaussian mixure model to the data.
         Estimate model parameters with the EM algorithm.
 
         Parameters
@@ -155,7 +187,7 @@ class GaussianCluster(BaseCluster):
         X : array-like, shape (n_samples, n_features)
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        
+
         y : array-like, shape (n_samples,), optional (default=None)
             List of labels for X if available. Used to compute
             ARI scores.
@@ -196,6 +228,11 @@ class GaussianCluster(BaseCluster):
         param_grid = dict(
             covariance_type=self.covariance_type,
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
+            tol=[self.tol],
+            reg_covar=[self.reg_covar],
+            max_iter=[self.max_iter],
+            n_init=[self.n_init],
+            init_params=[self.init_params],
             random_state=[random_state],
         )
 

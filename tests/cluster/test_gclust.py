@@ -92,7 +92,7 @@ def test_no_y():
     X2 = np.random.normal(-2, 0.5, size=(n, d))
     X = np.vstack((X1, X2))
 
-    gclust = GaussianCluster(min_components=5)
+    gclust = GaussianCluster(min_components=5, n_init=2)
     gclust.fit(X)
 
     assert_equal(gclust.n_components_, 2)

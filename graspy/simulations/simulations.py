@@ -18,6 +18,14 @@ from ..utils import symmetrize, cartprod
 import warnings
 
 
+def _n_to_labels(n):
+    n_cumsum = n.cumsum()
+    labels = np.zeros(n.sum(), dtype=np.int64)
+    for i in range(1, len(n)):
+        labels[n_cumsum[i - 1] : n_cumsum[i]] = i
+    return labels
+
+
 def sample_edges(P, directed=False, loops=False):
     """
     Gemerates a binary random graph based on the P matrix provided
@@ -77,25 +85,33 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
     p of edges being connected.
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     n: int
        Number of vertices
+
     p: float
         Probability of an edge existing between two vertices, between 0 and 1.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
+
     wt: object, optional (default=1)
         Weight function for each of the edges, taking only a size argument. 
         This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
+
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
+        
     dc: function or array-like, shape (n_vertices)
         `dc` is used to generate a degree-corrected Erdos Renyi Model in
         which each node in the graph has a parameter to specify its expected degree
@@ -116,11 +132,34 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
         If not specified, in either case all functions will assume their default
         parameters.
 
-
     Returns
     -------
     A : ndarray, shape (n, n)
         Sampled adjacency matrix
+
+    Examples
+    --------
+    >>> np.random.seed(1)
+    >>> n = 4
+    >>> p = 0.25
+
+    To sample a binary Erdos Renyi (n, p) graph:
+
+    >>> er_np(n, p)
+    array([[0., 0., 1., 0.],
+           [0., 0., 1., 0.],
+           [1., 1., 0., 0.],
+           [0., 0., 0., 0.]])
+
+    To sample a weighted Erdos Renyi (n, p) graph with Uniform(0, 1) distribution:
+
+    >>> wt = np.random.uniform
+    >>> wtargs = dict(low=0, high=1)
+    >>> er_np(n, p, wt=wt, wtargs=wtargs)
+    array([[0.        , 0.        , 0.95788953, 0.53316528],
+           [0.        , 0.        , 0.        , 0.        ],
+           [0.95788953, 0.        , 0.        , 0.31551563],
+           [0.53316528, 0.        , 0.31551563, 0.        ]])
     """
     if isinstance(dc, (list, np.ndarray)) and all(callable(f) for f in dc):
         raise TypeError("dc is not of type function or array-like of scalars")
@@ -145,22 +184,29 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     Erdos Renyi (n, m) graph is a simple graph with n vertices and exactly m
     number of total edges.
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     n: int
         Number of vertices
+
     m: int
         Number of edges, a value between 1 and :math:`n^2`.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
+
     wt: object, optional (default=1)
         Weight function for each of the edges, taking only a size argument. 
         This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
+
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
@@ -172,11 +218,27 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
 
     Examples
     --------
-    >>> n = 100
-    >>> m = 20
+    >>> np.random.seed(1)
+    >>> n = 4
+    >>> m = 4
+
+    To sample a binary Erdos Renyi (n, m) graph:
+
+    >>> er_nm(n, m)
+    array([[0., 1., 1., 1.],
+           [1., 0., 0., 1.],
+           [1., 0., 0., 0.],
+           [1., 1., 0., 0.]])
+
+    To sample a weighted Erdos Renyi (n, m) graph with Uniform(0, 1) distribution:
+
     >>> wt = np.random.uniform
-    >>> wtargs = dict(low=1, high=2)
-    >>> A = weighted_er_nm(n, m, wt=wt, wtargs=wtargs)
+    >>> wtargs = dict(low=0, high=1)
+    >>> er_nm(n, m, wt=wt, wtargs=wtargs)
+    array([[0.        , 0.66974604, 0.        , 0.38791074],
+           [0.66974604, 0.        , 0.        , 0.39658073],
+           [0.        , 0.        , 0.        , 0.93553907],
+           [0.38791074, 0.39658073, 0.93553907, 0.        ]])
     """
     if not np.issubdtype(type(m), np.integer):
         raise TypeError("m is not of type int.")
@@ -249,27 +311,43 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     return A
 
 
-def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
+def sbm(
+    n,
+    p,
+    directed=False,
+    loops=False,
+    wt=1,
+    wtargs=None,
+    dc=None,
+    dc_kws={},
+    return_labels=False,
+):
     """
     Samples a graph from the stochastic block model (SBM). 
 
     SBM produces a graph with specified communities, in which each community can
     have different sizes and edge probabilities. 
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     n: list of int, shape (n_communities)
         Number of vertices in each community. Communities are assigned n[0], n[1], ...
+
     p: array-like, shape (n_communities, n_communities)
         Probability of an edge between each of the communities, where p[i, j] indicates 
         the probability of a connection between edges in communities [i, j]. 
         0 < p[i, j] < 1 for all i, j.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
+
     wt: object or array-like, shape (n_communities, n_communities)
         if Wt is an object, a weight function to use globally over
         the sbm for assigning weights. 1 indicates to produce a binary
@@ -278,10 +356,12 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         between communities i and j. If the entry is a function, should
         accept an argument for size. An entry of Wt[i, j] = 1 will produce a
         binary subgraph over the i, j community.
+
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
         if Wt is an object, Wtargs corresponds to the trailing arguments
         to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
+
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
         `dc` is used to generate a degree-corrected stochastic block model [1] in
         which each node in the graph has a parameter to specify its expected degree
@@ -308,6 +388,11 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         If not specified, in either case all functions will assume their default
         parameters.
 
+    return_labels: boolean, optional (default=False)
+        If False, only output is adjacency matrix. Otherwise, an additional output will
+        be an array with length equal to the number of vertices in the graph, where each
+        entry in the array labels which block a vertex in the graph is in.
+
     References
     ----------
     .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
@@ -318,6 +403,36 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
     -------
     A: ndarray, shape (sum(n), sum(n))
         Sampled adjacency matrix
+    labels: ndarray, shape (sum(n))
+        Label vector
+
+    Examples
+    --------
+    >>> np.random.seed(1)
+    >>> n = [3, 3]
+    >>> p = [[0.5, 0.1], [0.1, 0.5]]
+
+    To sample a binary 2-block SBM graph:
+
+    >>> sbm(n, p)
+    array([[0., 0., 1., 0., 0., 0.],
+           [0., 0., 1., 0., 0., 1.],
+           [1., 1., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 1., 0.],
+           [0., 0., 0., 1., 0., 0.],
+           [0., 1., 0., 0., 0., 0.]])
+
+    To sample a weighted 2-block SBM graph with Poisson(2) distribution:
+
+    >>> wt = np.random.poisson
+    >>> wtargs = dict(lam=2)
+    >>> sbm(n, p, wt=wt, wtargs=wtargs)
+    array([[0., 4., 0., 1., 0., 0.],
+           [4., 0., 0., 0., 0., 2.],
+           [0., 0., 0., 0., 0., 0.],
+           [1., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.],
+           [0., 2., 0., 0., 0., 0.]])
     """
     # Check n
     if not isinstance(n, (list, np.ndarray)):
@@ -507,6 +622,9 @@ def sbm(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}
         A = A - np.diag(np.diag(A))
     if not directed:
         A = symmetrize(A, method="triu")
+    if return_labels:
+        labels = _n_to_labels(n)
+        return A, labels
     return A
 
 
@@ -525,29 +643,37 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
     A binary random graph is then sampled from the P matrix described 
     by X (and possibly Y).
 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+
     Parameters
     ----------
     X: np.ndarray, shape (n_vertices, n_dimensions)
         latent position from which to generate a P matrix
         if Y is given, interpreted as the left latent position
+
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
+
     rescale: boolean, optional (default=True)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=True)
         If False, no edges will be sampled in the diagonal. Diagonal elements in P 
         matrix are removed prior to rescaling (see above) which may affect behavior.
         Otherwise, edges are sampled in the diagonal.
+
     wt: object, optional (default=1)
         Weight function for each of the edges, taking only a size argument. 
         This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
+
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
@@ -564,6 +690,33 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
     
+    Examples
+    --------
+    >>> np.random.seed(1)
+
+    Generate random latent positions using 2-dimensional Dirichlet distribution.
+
+    >>> X = np.random.dirichlet([1, 1], size=5)
+
+    Sample a binary RDPG using sampled latent positions.
+
+    >>> rdpg(X, loops=False)
+    array([[0., 1., 0., 0., 1.],
+           [1., 0., 0., 1., 1.],
+           [0., 0., 0., 1., 1.],
+           [0., 1., 1., 0., 0.],
+           [1., 1., 1., 0., 0.]])
+
+    Sample a weighted RDPG with Poisson(2) weight distribution
+
+    >>> wt = np.random.poisson
+    >>> wtargs = dict(lam=2)
+    >>> rdpg(X, loops=False, wt=wt, wtargs=wtargs)
+    array([[0., 4., 0., 2., 0.],
+           [1., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 2.],
+           [1., 0., 0., 0., 1.],
+           [0., 2., 2., 0., 0.]])
     """
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
     A = sample_edges(P, directed=directed, loops=loops)
@@ -601,13 +754,16 @@ def p_from_latent(X, Y=None, rescale=True, loops=True):
     X: np.ndarray, shape (n_vertices, n_dimensions)
         latent position from which to generate a P matrix
         if Y is given, interpreted as the left latent position
+
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
+
     rescale: boolean, optional (default=True)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
+
     loops: boolean, optional (default=True)
         whether to allow elements on the diagonal (corresponding
         to self connections in a graph) in the returned P matrix. 

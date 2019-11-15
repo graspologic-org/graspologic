@@ -123,6 +123,7 @@ def test_heatmap_output():
     fig = heatmap(X, transform="zero-boost")
     fig = heatmap(X, transform="simple-all")
     fig = heatmap(X, transform="simple-nonzero")
+    fig = heatmap(X, transform="binarize")
     fig = heatmap(X, cmap="gist_rainbow")
 
 

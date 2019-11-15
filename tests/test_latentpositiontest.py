@@ -112,8 +112,8 @@ class TestLatentPositionTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
-        spt_null = LatentPositionTest(n_components=2, n_bootstraps=10)
-        spt_alt = LatentPositionTest(n_components=2, n_bootstraps=10)
+        spt_null = LatentPositionTest(n_components=2, n_bootstraps=100)
+        spt_alt = LatentPositionTest(n_components=2, n_bootstraps=100)
         p_null = spt_null.fit(A1, A2)
         p_alt = spt_alt.fit(A1, A3)
         self.assertTrue(p_null > 0.05)

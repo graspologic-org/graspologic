@@ -2,6 +2,8 @@
 Tutorial
 ********
 
+.. _models_tutorials:
+
 Models
 ======
 This tutorial presents several random graph models: the Erdos-Renyi (ER) model, degree-corrected ER model,
@@ -9,9 +11,11 @@ stochastic block model (SBM), degree-corrected SBM, and random dot product graph
 
 .. toctree::
    :maxdepth: 1
-   
+      
    tutorials/models/models
-   
+
+.. _simulations_tutorials:
+
 Simulations
 ===========
 The following tutorials demonstrate how to easily sample random graphs from graph models such as the Erdos-Renyi model, 
@@ -24,6 +28,8 @@ stochastic block model, and random dot product graph (RDPG).
    tutorials/simulations/sbm
    tutorials/simulations/rdpg
 
+.. _embed_tutorials:
+
 Embedding
 =========
 Inference on random graphs depends on low-dimensional Euclidean representation of the vertices of graphs, known as *graph embeddings*, typically given by spectral decompositions of adjacency or Laplacian matrices. Below are tutorials for computing graph embeddings of single graph and multiple graphs.
@@ -34,6 +40,8 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
    tutorials/embedding/AdjacencySpectralEmbed
    tutorials/embedding/Omnibus
    
+.. _inference_tutorials: 
+
 Inference
 ===========================
 Statistical testing on graphs requires specialized methodology in order to account 
@@ -45,6 +53,8 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
 
    tutorials/inference/latent_position_test
    tutorials/inference/latent_distribution_test
+
+.. _plot_tutorials: 
 
 Plotting
 ========

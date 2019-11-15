@@ -22,11 +22,13 @@ from .base import BaseInference
 class LatentDistributionTest(BaseInference):
     """
     Two-sample hypothesis test for the problem of determining whether two random 
-    dot product graphs have the same distributions of latent positions [2]_.
+    dot product graphs have the same distributions of latent positions [1]_.
     
     This test can operate on two graphs where there is no known matching between
     the vertices of the two graphs, or even when the number of vertices is different. 
     Currently, testing is only supported for undirected graphs.
+
+    Read more in the :ref:`tutorials <inference_tutorials>`
 
     Parameters
     ----------
@@ -55,7 +57,7 @@ class LatentDistributionTest(BaseInference):
 
     References
     ----------
-    .. [2] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017). 
+    .. [1] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017). 
         "A nonparametric two-sample hypothesis testing problem for random graphs."
         Bernoulli, 23(3), 1599-1630.
     """
@@ -99,6 +101,11 @@ class LatentDistributionTest(BaseInference):
         ase = AdjacencySpectralEmbed(n_components=self.n_components)
         X1_hat = ase.fit_transform(A1)
         X2_hat = ase.fit_transform(A2)
+        if isinstance(X1_hat, tuple) and isinstance(X2_hat, tuple):
+            X1_hat = np.concatenate(X1_hat, axis=-1)
+            X2_hat = np.concatenate(X2_hat, axis=-1)
+        elif isinstance(X1_hat, tuple) ^ isinstance(X2_hat, tuple):
+            raise ValueError("Input graphs do not have same directedness")
         return X1_hat, X2_hat
 
     def _median_heuristic(self, X1, X2):
@@ -139,10 +146,8 @@ class LatentDistributionTest(BaseInference):
         """
         A1 = import_graph(A1)
         A2 = import_graph(A2)
-        if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()  # TODO asymmetric case
-        if A1.shape != A2.shape:
-            raise ValueError("Input graphs do not have matching dimensions")
+        # if not is_symmetric(A1) or not is_symmetric(A2):
+        #     raise NotImplementedError()  # TODO asymmetric case
         if self.n_components is None:
             # get the last elbow from ZG for each and take the maximum
             num_dims1 = select_dimension(A1)[0][-1]
@@ -156,5 +161,7 @@ class LatentDistributionTest(BaseInference):
         self.null_distribution_ = null_distribution
         self.sample_T_statistic_ = U
         p_value = (len(null_distribution[null_distribution >= U])) / self.n_bootstraps
+        if p_value == 0:
+            p_value = 1 / self.n_bootstraps
         self.p_ = p_value
         return self.p_

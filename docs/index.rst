@@ -56,6 +56,7 @@ GraSPy is a graph statistics package in python.
    install
    tutorial
    reference/index
+   contributing
    news
    license
 
@@ -72,5 +73,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

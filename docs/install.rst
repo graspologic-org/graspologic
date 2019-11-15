@@ -42,6 +42,7 @@ GraSPy requires the following packages:
 
 - networkx
 - numpy
+- pandas
 - scikit-learn
 - scipy
 - seaborn

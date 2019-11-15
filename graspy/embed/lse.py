@@ -23,9 +23,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
     Class for computing the laplacian spectral embedding of a graph 
     
     The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation
-    of the graph based on its Laplacian matrix [1]_. It relies on an SVD to reduce 
+    of the graph based on its Laplacian matrix. It relies on an SVD to reduce 
     the dimensionality to the specified k, or if k is unspecified, can find a number
     of dimensions automatically.
+
+    Read more in the :ref:`tutorials <embed_tutorials>`
 
     Parameters
     ----------
@@ -36,22 +38,23 @@ class LaplacianSpectralEmbed(BaseEmbed):
         Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        ``select_dimension`` using ``n_elbows`` argument.
-    
+        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+
     n_elbows : int, optional, default: 2
-        If `n_components=None`, then compute the optimal embedding dimension using
-        `select_dimension`. Otherwise, ignored.
+        If ``n_components=None``, then compute the optimal embedding dimension using
+        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
 
         - 'randomized'
             Computes randomized svd using 
-            ``sklearn.utils.extmath.randomized_svd``
+            :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
-            Computes full svd using ``scipy.linalg.svd``
+            Computes full svd using :func:`scipy.linalg.svd`
         - 'truncated'
-            Computes truncated svd using ``scipy.sparse.linalg.svd``
+            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or 
         'truncated'. The default is larger than the default in randomized_svd 
@@ -72,9 +75,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
     ----------
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
+
     latent_right_ : array, shape (n_samples, n_components), or None
         Only computed when the graph is directed, or adjacency matrix is assymetric.
         Estimated right latent positions of the graph. Otherwise, None.
+
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
 
@@ -100,7 +105,12 @@ class LaplacianSpectralEmbed(BaseEmbed):
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
+       Journal of the American Statistical Association, Vol. 107(499), 2012.
+    .. [2] Von Luxburg, Ulrike. "A tutorial on spectral clustering," Statistics 
+        and computing, Vol. 17(4), pp. 395-416, 2007.
+    .. [3] Rohe, Karl, Sourav Chatterjee, and Bin Yu. "Spectral clustering and 
+        the high-dimensional stochastic blockmodel," The Annals of Statistics,
+        Vol. 39(4), pp. 1878-1915, 2011.
     """
 
     def __init__(
@@ -134,7 +144,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         Parameters
         ----------
         graph : array_like or networkx.Graph
-            Input graph to embed. see graphstats.utils.import_graph
+            Input graph to embed. see graspy.utils.import_graph
 
         y : Ignored
 
