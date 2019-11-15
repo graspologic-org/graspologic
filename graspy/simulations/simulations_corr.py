@@ -1,8 +1,8 @@
 import numpy as np
-from graspy.simulations import sample_edges
+from graspy.simulations import sample_edges, er_np
 
 
-def sample_edges_corr(P, R, directed, loops):
+def sample_edges_corr(P, r, directed, loops):
     """
     Generate a pair of correlated graphs with Bernoulli distribution.
     Both G1 and G2 are binary matrices. 
@@ -10,12 +10,15 @@ def sample_edges_corr(P, R, directed, loops):
     Parameters
     ----------
     P: np.ndarray, shape (n_vertices, n_vertices)
-        Matrix of probabilities (between 0 and 1) for a random graph
-    R: np.ndarray, shape (n_vertices, n_vertices)
-        Matrix to definite the correlation between graph1 and graph2
+        Matrix of probabilities (between 0 and 1) for a random graph.
+        
+    R: float
+        Probability of the correlation between the same vertices in two graphs.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
+
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
@@ -37,13 +40,12 @@ def sample_edges_corr(P, R, directed, loops):
     --------
     >>> np.random.seed(1)
     >>> p = 0.5
-    >>> rho = 0.3
+    >>> r = 0.3
     >>> P = p * np.ones((5,5))
-    >>> Rho = rho * np.ones((5,5))
 
     To sample a correlated graph pair based on P and Rho matrices:
 
-    >>> sample_edges_corr(P, Rho, directed = False, loops = False)
+    >>> sample_edges_corr(P, r, directed = False, loops = False)
     (array([[0., 1., 0., 0., 0.],
             [1., 0., 0., 0., 0.],
             [0., 0., 0., 0., 1.],
@@ -54,14 +56,33 @@ def sample_edges_corr(P, R, directed, loops):
             [0., 0., 1., 0., 1.],
             [0., 1., 1., 1., 0.]]))
     """
+    # test input
+    if type(P) is not np.ndarray:
+        raise TypeError("P must be numpy.ndarray")
+    if len(P.shape) != 2:
+        raise ValueError("P must have dimension 2 (n_vertices, n_dimensions)")
+    if P.shape[0] != P.shape[1]:
+        raise ValueError("P must be a square matrix")
+
+    if not np.issubdtype(type(r), np.floating):
+        raise TypeError("r is not of type float.")
+    elif r < 0 or r > 1:
+        msg = "r must between 0 and 1."
+        raise ValueError(msg)
+
+    if type(directed) is not bool:
+        raise TypeError("directed is not of type bool.")
+    if type(loops) is not bool:
+        raise TypeError("loops is not of type bool.")
+
     G1 = sample_edges(P, directed=directed, loops=loops)
     P2 = G1.copy()
-    P2 = np.where(P2 == 1, P + R * (1 - P), P * (1 - R))
+    P2 = np.where(P2 == 1, P + r * (1 - P), P * (1 - r))
     G2 = sample_edges(P2, directed=directed, loops=loops)
     return G1, G2
 
 
-def sample_edges_er_corr(n, p, R, directed, loops):
+def sample_edges_er_corr(n, p, r, directed, loops):
     """
     Generate a pair of correlated graphs with specified edge probability
     Both G1 and G2 are binary matrices. 
@@ -74,8 +95,8 @@ def sample_edges_er_corr(n, p, R, directed, loops):
     p: float
         Probability of an edge existing between two vertices, between 0 and 1.
     
-    R: np.ndarray, shape (n_vertices, n_vertices)
-        Matrix to definite the correlation between graph1 and graph2
+    R: float
+        Probability of the correlation between the same vertices in two graphs.
     
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
@@ -98,13 +119,12 @@ def sample_edges_er_corr(n, p, R, directed, loops):
     --------
     >>> np.random.seed(2)
     >>> p = 0.5
-    >>> rho = 0.3
+    >>> r = 0.3
     >>> n = 5
-    >>> R = rho * np.ones((n,n))
 
     To sample a correlated ER graph pair based on n, p and R matrices:
 
-    >>> sample_edges_er_corr(n, p, R, directed=False, loops=False)
+    >>> sample_edges_er_corr(n, p, r, directed=False, loops=False)
     (array([[0., 0., 1., 0., 0.],
         [0., 0., 0., 1., 0.],
         [1., 0., 0., 1., 1.],
@@ -115,6 +135,30 @@ def sample_edges_er_corr(n, p, R, directed, loops):
         [1., 1., 1., 0., 1.],
         [0., 0., 1., 1., 0.]]))
     """
+    # test input
+    if not np.issubdtype(type(n), np.integer):
+        raise TypeError("n is not of type int.")
+    elif n <= 0:
+        msg = "n must be > 0."
+        raise ValueError(msg)
+
+    if not np.issubdtype(type(p), np.floating):
+        raise TypeError("r is not of type float.")
+    elif p < 0 or p > 1:
+        msg = "p must between 0 and 1."
+        raise ValueError(msg)
+
+    if not np.issubdtype(type(r), np.floating):
+        raise TypeError("r is not of type float.")
+    elif r < 0 or r > 1:
+        msg = "r must between 0 and 1."
+        raise ValueError(msg)
+
+    if type(directed) is not bool:
+        raise TypeError("directed is not of type bool.")
+    if type(loops) is not bool:
+        raise TypeError("loops is not of type bool.")
+
     P = p * np.ones((n, n))
-    G1, G2 = sample_edges_corr(P, R, directed=directed, loops=loops)
+    G1, G2 = sample_edges_corr(P, r, directed=directed, loops=loops)
     return G1, G2
