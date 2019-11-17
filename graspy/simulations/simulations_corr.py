@@ -67,7 +67,7 @@ def sample_edges_corr(P, r, directed, loops):
     if not np.issubdtype(type(r), np.floating):
         raise TypeError("r is not of type float.")
     elif r < 0 or r > 1:
-        msg = "r must between 0 and 1."
+        msg = "r must be between 0 and 1."
         raise ValueError(msg)
 
     if type(directed) is not bool:
