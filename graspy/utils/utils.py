@@ -564,11 +564,10 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 def augment_diagonal(graph, weight=1):
     r"""
     Replaces the diagonal of an adjacency matrix with :math:`\frac{d}{nverts - 1}` where
-    :math:`d` is the degree vector for an unweighted graph and the sum of edge weights 
-    for each node for a weighted graph. For a directed graph the in/out :math:`d` is 
-    averaged.
+    :math:`d` is the degree vector for an unweighted graph and the sum of magnitude of 
+    edge weights for each node for a weighted graph. For a directed graph the in/out 
+    :math:`d` is averaged.
     
-
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
