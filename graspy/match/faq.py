@@ -22,38 +22,45 @@ from .skp import SinkhornKnopp
 class FastApproximateQAP:
     """
     Fast Approximate QAP Algorithm (FAQ)
-    The FAQ algorithm solves the Quadratic Assignment Problem (QAP) finding an alignment of the
-    vertices of two graphs which minimizes the number of induced edge disagreements [1].
+    The FAQ algorithm solves the Quadratic Assignment Problem (QAP) finding an
+    alignment of the vertices of two graphs which minimizes the number of induced
+    edge disagreements [1].
     
     
     Parameters
     ----------
     
     n_init : int
-        Number of random initializations of the starting permutation matrix that the FAQ algorithm will undergo.
-        n_init automatically set to 1 if init_method = 'barycenter'
+        Number of random initializations of the starting permutation matrix that
+        the FAQ algorithm will undergo. n_init automatically set to 1 if
+        init_method = 'barycenter'
         
     init_method : string
         The initial position chosen
-        "barycenter" : the non-informative “flat doubly stochastic matrix,” J=1*1^T/n, i.e the barycenter of
-        the feasible region
-        "rand" : some random point near J, (J+K)/2, where K is some random doubly stochastic matrix
+
+        "barycenter" : the non-informative “flat doubly stochastic matrix,”
+        J=1*1^T/n, i.e the barycenter of the feasible region
+
+        "rand" : some random point near J, (J+K)/2, where K is some random doubly
+        stochastic matrix
         
     Attributes
     ----------
     
-    perm_inds_ : array, size (n,1) where n is the number of vertices in the graphs fitted
-        The indices of the optimal permutation found via FAQ
+    perm_inds_ : array, size (n,) where n is the number of vertices in the graphs
+        fitted The indices of the optimal permutation on the nodes of B, found via
+        FAQ, to best minimize the objective function f(P) = trace((A^T)PB(P^T)).
         
     ofv_ : float
-        The objective function value of for the optimal permutation found
+        The objective function value of for the optimal permutation found.
         
         
     References
     ----------
-    .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer, E. T. Harley, 
-        D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast approximate quadratic programming 
-        for graph matching,” PLOS one, vol. 10, no. 4, p. e0121002, 2015.
+    .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer,
+    E. T. Harley, D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast
+    approximate quadratic programming for graph matching,” PLOS one, vol. 10, no. 4,
+    p. e0121002, 2015.
 
     """
 
@@ -73,18 +80,22 @@ class FastApproximateQAP:
             msg = 'Invalid "init_method" parameter string'
             raise ValueError(msg)
 
-    def fit(self, A, B):
+    def fit(self, A, B, max_iter):
         """
         Fits the model with two assigned adjacency matrices
         
         Parameters
         ---------
-        A : 2d-array, square
-            A square adjacency matrix
+        A : 2d-array, square, positive
+            A square, positive adjacency matrix
             
-        B : 2d-array, square
-            A square adjacency matrix
-        
+        B : 2d-array, square, positive
+            A square, positive adjacency matrix
+
+        max_iter : int
+            Integer specifying the max number of FW iterations.
+            FAQ typically converges with modest number of iterations, suggested
+            use 30.
         Returns
         -------
         
@@ -99,70 +110,95 @@ class FastApproximateQAP:
         elif (A >= 0).all() == False or (B >= 0).all() == False:
             msg = "Matrix entries must be greater than or equal to zero"
             raise ValueError(msg)
-        else:
 
-            n = A.shape[0]  # number of vertices in graphs
-            At = np.transpose(A)  # A transpose
-            Bt = np.transpose(B)  # B transpose
-            score = math.inf
-            perm_inds = np.zeros(n)
+        n = A.shape[0]  # number of vertices in graphs
+        At = np.transpose(A)  # A transpose
+        Bt = np.transpose(B)  # B transpose
+        score = math.inf
+        perm_inds = np.zeros(n)
 
-            for i in range(self.n_init):
+        for i in range(self.n_init):
 
-                # setting initialization matrix
-                if self.init_method == "rand":
-                    sk = SinkhornKnopp()
-                    K = np.random.rand(
-                        n, n
-                    )  # generate a nxn matrix where each entry is a random integer [0,1]
-                    for i in range(10):  # perform 10 iterations of Sinkhorn balancing
-                        K = sk.fit(K)
-                    J = np.ones((n, n)) / float(
-                        n
-                    )  # initialize J, a doubly stochastic barycenter
-                    P = (K + J) / 2
-                elif self.init_method == "barycenter":
-                    P = np.ones((n, n)) / float(n)
+            # setting initialization matrix
+            if self.init_method == "rand":
+                sk = SinkhornKnopp()
+                K = np.random.rand(
+                    n, n
+                )  # generate a nxn matrix where each entry is a random integer [0,1]
+                for i in range(10):  # perform 10 iterations of Sinkhorn balancing
+                    K = sk.fit(K)
+                J = np.ones((n, n)) / float(
+                    n
+                )  # initialize J, a doubly stochastic barycenter
+                P = (K + J) / 2
+            elif self.init_method == "barycenter":
+                P = np.ones((n, n)) / float(n)
 
-                # OPTIMIZATION WHILE LOOP BEGINS
-                for i in range(30):
+            # OPTIMIZATION WHILE LOOP BEGINS
+            for i in range(max_iter):
 
-                    delta_f = (
-                        A @ P @ Bt + At @ P @ B
-                    )  # computing the gradient of f(P) = -tr(APB^tP^t)
-                    rows, cols = linear_sum_assignment(
-                        delta_f
-                    )  # run hungarian algorithm on gradient(f(P))
-                    Q = np.zeros((n, n))
-                    Q[rows, cols] = 1  # initialize search direction matrix Q
+                delta_f = (
+                    A @ P @ Bt + At @ P @ B
+                )  # computing the gradient of f(P) = -tr(APB^tP^t)
+                rows, cols = linear_sum_assignment(
+                    delta_f
+                )  # run hungarian algorithm on gradient(f(P))
+                Q = np.zeros((n, n))
+                Q[rows, cols] = 1  # initialize search direction matrix Q
 
-                    def f(x):  # computing the original optimization function
-                        return np.trace(
-                            At
-                            @ (x * P + (1 - x) * Q)
-                            @ B
-                            @ np.transpose(x * P + (1 - x) * Q)
-                        )
+                def f(x):  # computing the original optimization function
+                    return np.trace(
+                        At
+                        @ (x * P + (1 - x) * Q)
+                        @ B
+                        @ np.transpose(x * P + (1 - x) * Q)
+                    )
 
-                    alpha = minimize_scalar(
-                        f, bounds=(0, 1), method="bounded"
-                    ).x  # computing the step size
-                    P = alpha * P + (1 - alpha) * Q  # Update P
-                # end of FW optimization loop
+                alpha = minimize_scalar(
+                    f, bounds=(0, 1), method="bounded"
+                ).x  # computing the step size
+                P = alpha * P + (1 - alpha) * Q  # Update P
+            # end of FW optimization loop
 
-                row, perm_inds_new = linear_sum_assignment(
-                    -P
-                )  # Project onto the set of permutation matrices
-                perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
-                perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
-                score_new = np.trace(
-                    np.transpose(A) @ perm_mat_new @ B @ np.transpose(perm_mat_new)
-                )  # computing objective function value
+            row, perm_inds_new = linear_sum_assignment(
+                -P
+            )  # Project onto the set of permutation matrices
+            perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
+            perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
+            score_new = np.trace(
+                np.transpose(A) @ perm_mat_new @ B @ np.transpose(perm_mat_new)
+            )  # computing objective function value
 
-                if score_new < score:  # minimizing
-                    score = score_new
-                    perm_inds = perm_inds_new
+            if score_new < score:  # minimizing
+                score = score_new
+                perm_inds = perm_inds_new
 
-            self.perm_inds_ = perm_inds  # permutation indices
-            self.score_ = score  # objective function value
-            return self
+        self.perm_inds_ = perm_inds  # permutation indices
+        self.score_ = score  # objective function value
+        return self
+
+    def fit_predict(self, A, B, max_iter):
+        """
+        Fits the model with two assigned adjacency matrices, returning optimal
+        permutation indices
+
+        Parameters
+        ---------
+        A : 2d-array, square, positive
+            A square, positive adjacency matrix
+
+        B : 2d-array, square, positive
+            A square, positive adjacency matrix
+
+        max_iter : int
+            Integer specifying the max number of FW iterations.
+            FAQ typically converges with modest number of iterations, suggested
+            use 30.
+        Returns
+        -------
+
+        perm_inds_ : 1-d array, some shuffling of [0, n_vert)
+            The optimal permutation indices to minimize the objective function
+        """
+        self.fit(A, B, max_iter)
+        return self.perm_inds_
