@@ -14,20 +14,21 @@
 
 import numpy as np
 import pandas as pd
+from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.mixture.gaussian_mixture import _estimate_gaussian_parameters
-from sklearn.mixture.gaussian_mixture import _compute_precision_cholesky
+from sklearn.mixture.gaussian_mixture import (
+    _compute_precision_cholesky,
+    _estimate_gaussian_parameters,
+)
 from sklearn.model_selection import ParameterGrid
-import warnings
 
 from .base import BaseCluster
 
 
 class AutoGMMCluster(BaseCluster):
     """
-    AutoGMM Cluster.
+    Automatic Gaussian Mixture Model (GMM) selection.
 
     Clustering algorithm using a hierarchical agglomerative clustering then Gaussian
     mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and 
@@ -43,7 +44,7 @@ class AutoGMMCluster(BaseCluster):
         components to consider). If max_components is not None, min_components
         must be less than or equal to max_components.
 
-    max_components : int or None, default=20.
+    max_components : int or None, default=10.
         The maximum number of mixture components to consider. Must be greater 
         than or equal to min_components.
 
@@ -110,15 +111,21 @@ class AutoGMMCluster(BaseCluster):
     label_init : array-like, shape (n_samples,), optional (default=None)
         List of labels for samples if available. Used to initialize the model.
 
-    max_iter : int, defaults to 100.
+    max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
     
     selection_criteria : bic or aic
         select the best model based on Bayesian Information Criterion (bic) or Aikake Information Criterion (aic)
 
-    verbose : int, default to 0.
-        Enable verbose output. If 1 then it prints the current initialization and each iteration step.
-        If greater than 1 then it prints also the log probability and the time needed for each step.
+    verbose : int, optional (default = 0)
+        Enable verbose output. If 1 then it prints the current initialization and each 
+        iteration step. If greater than 1 then it prints also the log probability and 
+        the time needed for each step.
+
+    max_agglom_size : int, optional (default = 2000)
+        The maximum number of datapoints on which to do agglomerative clustering as the 
+        initialization to GMM. If the number of datapoints is larger than this value, 
+        a random subset of the data is used for agglomerative initialization.
 
 
     Attributes
@@ -165,7 +172,7 @@ class AutoGMMCluster(BaseCluster):
     def __init__(
         self,
         min_components=2,
-        max_components=20,
+        max_components=10,
         affinity="all",
         linkage="all",
         covariance_type="all",
@@ -174,6 +181,7 @@ class AutoGMMCluster(BaseCluster):
         max_iter=100,
         verbose=0,
         selection_criteria="bic",
+        max_agglom_size=2000
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -302,6 +310,11 @@ class AutoGMMCluster(BaseCluster):
         else:
             labels_init = None
 
+        if not isinstance(max_agglom_size, int):
+            raise TypeError("`max_agglom_size` must be an int")
+        if max_agglom_size < 2:
+            raise ValueError("Must use at least 2 points for `max_agglom_size`")
+
         self.min_components = min_components
         self.max_components = max_components
         self.affinity = affinity
@@ -312,6 +325,7 @@ class AutoGMMCluster(BaseCluster):
         self.max_iter = max_iter
         self.verbose = verbose
         self.selection_criteria = selection_criteria
+        self.max_agglom_size = max_agglom_size
 
     def _process_paramgrid(self, paramgrid):
         """
@@ -499,7 +513,7 @@ class AutoGMMCluster(BaseCluster):
         )
 
         param_grid = list(ParameterGrid(param_grid))
-        param_grid = self._process_paramgrid(param_grid)
+        param_grid = _process_paramgrid(param_grid)
 
         results = pd.DataFrame(
             columns=[
@@ -516,8 +530,8 @@ class AutoGMMCluster(BaseCluster):
 
         for params in param_grid:
             if label_init is not None:
-                onehot = self._labels_to_onehot(label_init)
-                weights_init, means_init, precisions_init = self._onehot_to_initialparams(
+                onehot = _labels_to_onehot(label_init)
+                weights_init, means_init, precisions_init = _onehot_to_initial_params(
                     X, onehot, params[1]["covariance_type"]
                 )
                 gm_params = params[1]
@@ -527,15 +541,17 @@ class AutoGMMCluster(BaseCluster):
             elif params[0]["affinity"] != "none":
                 agg = AgglomerativeClustering(**params[0])
                 n = X.shape[0]
-                max_size = 2000
-                if n > max_size:  # if dataset is huge, agglomerate a subset
-                    subset_idxs = np.random.choice(np.arange(0, n), max_size)
+
+                if n > self.max_agglom_size:  # if dataset is huge, agglomerate a subset
+                    subset_idxs = np.random.choice(
+                        np.arange(0, n), self.max_agglom_size
+                    )
                     X_subset = X[subset_idxs, :]
                 else:
                     X_subset = X
                 agg_clustering = agg.fit_predict(X_subset)
-                onehot = self._labels_to_onehot(agg_clustering)
-                weights_init, means_init, precisions_init = self._onehot_to_initialparams(
+                onehot = _labels_to_onehot(agg_clustering)
+                weights_init, means_init, precisions_init = _onehot_to_initial_params(
                     X_subset, onehot, params[1]["covariance_type"]
                 )
                 gm_params = params[1]
@@ -563,10 +579,10 @@ class AutoGMMCluster(BaseCluster):
                     assert not any([count <= 1 for count in counts])
 
                 except ValueError:
-                    gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
+                    gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
                     continue
                 except AssertionError:
-                    gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
+                    gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
                     continue
                 # if the code gets here, then the model has been fit with no errors or singleton clusters
                 if self.selection_criteria == "bic":
@@ -608,3 +624,125 @@ class AutoGMMCluster(BaseCluster):
         self.model_ = results.loc[best_idx, "model"]
 
         return self
+
+
+def _increase_reg(reg):
+    """
+    Increase regularization factor by factor of 10.
+
+    Parameters
+    ----------
+    reg: float
+        Current regularization factor.
+
+    Returns
+    -------
+    reg : float
+        Increased regularization
+    """
+    if reg == 0:
+        reg = 1e-06
+    else:
+        reg = reg * 10
+    return reg
+
+
+def _onehot_to_initial_params(self, X, onehot, cov_type):
+    """
+    Computes cluster weights, cluster means and cluster precisions from
+    a given clustering.
+
+    Parameters
+    ----------
+    X : array-like, shape (n_samples, n_features)
+        List of n_features-dimensional data points. Each row
+        corresponds to a single data point.
+    onehot : ndarray, shape (n_samples, n_clusters)
+        Each row has a 1 indicating cluster membership, other entries are 0.
+    cov_type : {'full', 'tied', 'diag', 'spherical'}
+        Covariance type for Gaussian mixture model
+    """
+    n = X.shape[0]
+    weights, means, covariances = _estimate_gaussian_parameters(
+        X, onehot, 1e-06, cov_type
+    )
+    weights /= n
+
+    precisions_cholesky_ = _compute_precision_cholesky(covariances, cov_type)
+
+    if cov_type == "tied":
+        c = precisions_cholesky_
+        precisions = np.dot(c, c.T)
+    elif cov_type == "diag":
+        precisions = precisions_cholesky_
+    else:
+        precisions = [np.dot(c, c.T) for c in precisions_cholesky_]
+
+    return weights, means, precisions
+
+
+def _labels_to_onehot(labels):
+    """
+    Converts labels to one-hot format.
+
+    Parameters
+    ----------
+    labels : ndarray, shape (n_samples,)
+        Cluster labels
+
+    Returns
+    -------
+    onehot : ndarray, shape (n_samples, n_clusters)
+        Each row has a single one indicating cluster membership.
+        All other entries are zero.
+    """
+    n = len(labels)
+    k = max(labels) + 1
+    onehot = np.zeros([n, k])
+    onehot[np.arange(n), labels] = 1
+    return onehot
+
+
+def _process_paramgrid(paramgrid):
+    """
+        Removes combinations of affinity and linkage that are not possible.
+
+        Parameters
+        ----------
+        paramgrid : list of dicts
+            Each dict has the keys 'affinity', 'covariance_type', 'linkage',
+            'n_components', and 'random_state'
+
+        Returns
+        -------
+        paramgrid_processed : list pairs of dicts
+            For each pair, the first dict are the options for AgglomerativeClustering.
+            The second dict include the options for GaussianMixture.
+        """
+    paramgrid_processed = []
+
+    for params in paramgrid:
+        if (
+            params["affinity"] == "none"
+            and params["linkage"] != paramgrid[0]["linkage"]
+        ):
+            continue
+        elif (
+            params["linkage"] == "ward"
+            and params["affinity"] != "euclidean"
+            and params["affinity"] != "none"
+        ):
+            continue
+        else:
+
+            gm_keys = ["covariance_type", "n_components", "random_state"]
+            gm_params = {key: params[key] for key in gm_keys}
+
+            ag_keys = ["affinity", "linkage"]
+            ag_params = {key: params[key] for key in ag_keys}
+            ag_params["n_clusters"] = params["n_components"]
+
+            paramgrid_processed.append([ag_params, gm_params])
+
+    return paramgrid_processed
+
