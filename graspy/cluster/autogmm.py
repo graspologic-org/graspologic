@@ -31,8 +31,8 @@ class AutoGMMCluster(BaseCluster):
 
     Clustering algorithm using a hierarchical agglomerative clustering then Gaussian
     mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and 
-    cluster numbers are used and the clustering with the best Bayesian Information
-    Criterion (BIC) is chosen.
+    cluster numbers are used and the clustering with the best selection
+    criterion (bic/aic) is chosen.
 
 
     Parameters
@@ -99,7 +99,10 @@ class AutoGMMCluster(BaseCluster):
             'spherical', 'tied', 'diag', and/or 'spherical'.
     
     random_state : int, RandomState instance or None, optional (default=None)
-        If int, random_state is the seed used by the random number generator;
+        There is randomness in k-means initialization of
+        sklearn.mixture.GaussianMixture. For experiments, we need to control this.
+        This parameter is passed to sklearn's GaussianMixture to control the random state.
+        If int, random_state is used as the random number generator seed;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used
         by ``np.random``.
@@ -109,6 +112,9 @@ class AutoGMMCluster(BaseCluster):
 
     max_iter : int, defaults to 100.
         The maximum number of EM iterations to perform.
+    
+    selection_criteria : bic or aic
+        select the best model based on Bayesian Information Criterion (bic) or Aikake Information Criterion (aic)
 
     verbose : int, default to 0.
         Enable verbose output. If 1 then it prints the current initialization and each iteration step.
@@ -120,23 +126,40 @@ class AutoGMMCluster(BaseCluster):
     results_ : pandas.DataFrame
         Contains exhaustive information about all the clustering runs.
         Columns are:
-            'model' - fit GaussianMixture object
-            'bic' - Bayesian Information Criterion
-            'ari' - Adjusted Rand Index, nan if y is not given
-            'n_components' - number of clusters
-            'affinity' - affinity used in Agglomerative Clustering
-            'linkage' - linkage used in Agglomerative Clustering
-            'covariance_type' - covariance type used in GMM
-            'reg_covar' : regularization used in GMM
+            'model' : GaussianMixture object
+                GMM clustering fit to the data
+            'bic/aic' : float
+                Bayesian Information Criterion
+            'ari' : float or nan
+                Adjusted Rand Index between GMM classification, and true classification, nan if y is not given
+            'n_components' : int
+                number of clusters
+            'affinity' : {'euclidean','manhattan','cosine','none'}
+                affinity used in Agglomerative Clustering
+            'linkage' : {'ward','complete','average','single'}
+                linkage used in Agglomerative Clustering
+            'covariance_type' : {'full', 'tied', 'diag', 'spherical'}
+                covariance type used in GMM
+            'reg_covar' : float
+                regularization used in GMM
 
-    bic_ : the best (lowest) Bayesian Information Criterion
-    n_components_ : number of clusters in the model with the best BIC
-    covariance_type_ : covariance type in the model with the best BIC
-    affinity_ : affinity used in the model with the best BIC
-    linkage_ : linkage used in the model with the best BIC
-    reg_covar_ : regularization used in the model with the best BIC
-    ari_ : ARI from the model with the best BIC, nan if no y is given
-    model_ : GaussianMixture object with the best BIC
+    criter_ : the best (lowest) Bayesian Information Criterion
+    n_components_ : number of clusters in the model with the best bic/aic
+    covariance_type_ : covariance type in the model with the best bic/aic
+    affinity_ : affinity used in the model with the best bic/aic
+    linkage_ : linkage used in the model with the best bic/aic
+    reg_covar_ : regularization used in the model with the best bic/aic
+    ari_ : ARI from the model with the best bic/aic, nan if no y is given
+    model_ : GaussianMixture object with the best bic/aic
+
+    This algorithm was strongly inspired by mclust, a clustering package in R:
+    
+    Jeffrey D. Banfield and Adrian E. Raftery. Model-based gaussian and non-gaussian clustering.
+    Biometrics, 49:803–821, 1993.
+
+    Abhijit Dasgupta and Adrian E. Raftery. Detecting features in spatial point processes with clutter
+    via model-based clustering. Journal of the American Statistical Association, 93(441):294–302,
+    1998.
     """
 
     def __init__(
@@ -150,6 +173,7 @@ class AutoGMMCluster(BaseCluster):
         label_init=None,
         max_iter=100,
         verbose=0,
+        selection_criteria="bic",
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -262,6 +286,11 @@ class AutoGMMCluster(BaseCluster):
             msg += "not {}".format(type(label_init))
             raise TypeError(msg)
 
+        if selection_criteria not in ["aic", "bic"]:
+            msg = "selection_criteria must be one of " + '["aic, "bic"]'
+            msg += " not {}".format(selection_criteria)
+            raise ValueError(msg)
+
         # Adjust elements in label_init to range(n_components of label_init)
         if label_init is not None:
             uni_label_init = np.unique(label_init)
@@ -282,6 +311,7 @@ class AutoGMMCluster(BaseCluster):
         self.label_init = labels_init
         self.max_iter = max_iter
         self.verbose = verbose
+        self.selection_criteria = selection_criteria
 
     def _process_paramgrid(self, paramgrid):
         """
@@ -474,7 +504,7 @@ class AutoGMMCluster(BaseCluster):
         results = pd.DataFrame(
             columns=[
                 "model",
-                "bic",
+                "bic/aic",
                 "ari",
                 "n_components",
                 "affinity",
@@ -519,7 +549,7 @@ class AutoGMMCluster(BaseCluster):
             gm_params["max_iter"] = max_iter
             gm_params["verbose"] = verbose
 
-            bic = np.inf  # if none of the iterations converge, bic is set to inf
+            criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
             # below is the regularization scheme
             while gm_params["reg_covar"] <= 1:
                 model = GaussianMixture(**gm_params)
@@ -539,7 +569,10 @@ class AutoGMMCluster(BaseCluster):
                     gm_params["reg_covar"] = self._increase_reg(gm_params["reg_covar"])
                     continue
                 # if the code gets here, then the model has been fit with no errors or singleton clusters
-                bic = model.bic(X)  # *****************************
+                if self.selection_criteria == "bic":
+                    criter = model.bic(X)
+                else:
+                    criter = model.aic(X)
                 break
 
             if y is not None:
@@ -550,7 +583,7 @@ class AutoGMMCluster(BaseCluster):
             entry = pd.DataFrame(
                 {
                     "model": [model],
-                    "bic": [bic],
+                    "bic/aic": [criter],
                     "ari": [ari],
                     "n_components": [gm_params["n_components"]],
                     "affinity": [params[0]["affinity"]],
@@ -563,9 +596,9 @@ class AutoGMMCluster(BaseCluster):
 
         self.results_ = results
         # Get the best cov type and its index within the dataframe
-        best_idx = results["bic"].idxmin()
+        best_idx = results["bic/aic"].idxmin()
 
-        self.bic_ = results.loc[best_idx, "bic"]
+        self.criter_ = results.loc[best_idx, "bic/aic"]
         self.n_components_ = results.loc[best_idx, "n_components"]
         self.covariance_type_ = results.loc[best_idx, "covariance_type"]
         self.affinity_ = results.loc[best_idx, "affinity"]
