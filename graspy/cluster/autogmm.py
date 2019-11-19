@@ -327,123 +327,6 @@ class AutoGMMCluster(BaseCluster):
         self.selection_criteria = selection_criteria
         self.max_agglom_size = max_agglom_size
 
-    def _process_paramgrid(self, paramgrid):
-        """
-        Removes combinations of affinity and linkage that are not possible.
-
-        Parameters
-        ----------
-        paramgrid : list of dicts
-            Each dict has the keys 'affinity', 'covariance_type', 'linkage',
-            'n_components', and 'random_state'
-
-        Returns
-        -------
-        paramgrid_processed : list pairs of dicts
-            For each pair, the first dict are the options for AgglomerativeClustering.
-            The second dict include the options for GaussianMixture.
-        """
-        paramgrid_processed = []
-
-        for params in paramgrid:
-            if (
-                params["affinity"] == "none"
-                and params["linkage"] != paramgrid[0]["linkage"]
-            ):
-                continue
-            elif (
-                params["linkage"] == "ward"
-                and params["affinity"] != "euclidean"
-                and params["affinity"] != "none"
-            ):
-                continue
-            else:
-
-                gm_keys = ["covariance_type", "n_components", "random_state"]
-                gm_params = {key: params[key] for key in gm_keys}
-
-                ag_keys = ["affinity", "linkage"]
-                ag_params = {key: params[key] for key in ag_keys}
-                ag_params["n_clusters"] = params["n_components"]
-
-                paramgrid_processed.append([ag_params, gm_params])
-
-        return paramgrid_processed
-
-    def _labels_to_onehot(self, labels):
-        """
-        Converts labels to one-hot format.
-
-        Parameters
-        ----------
-        labels : ndarray, shape (n_samples,)
-            Cluster labels
-
-        Returns
-        -------
-        onehot : ndarray, shape (n_samples, n_clusters)
-            Each row has a single one indicating cluster membership.
-            All other entries are zero.
-        """
-        n = len(labels)
-        k = max(labels) + 1
-        onehot = np.zeros([n, k])
-        onehot[np.arange(n), labels] = 1
-        return onehot
-
-    def _onehot_to_initialparams(self, X, onehot, cov_type):
-        """
-        Computes cluster weights, cluster means and cluster precisions from
-        a given clustering.
-
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            List of n_features-dimensional data points. Each row
-            corresponds to a single data point.
-        onehot : ndarray, shape (n_samples, n_clusters)
-            Each row has a 1 indicating cluster membership, other entries are 0.
-        cov_type : {'full', 'tied', 'diag', 'spherical'}
-            Covariance type for Gaussian mixture model
-        """
-        n = X.shape[0]
-        weights, means, covariances = _estimate_gaussian_parameters(
-            X, onehot, 1e-06, cov_type
-        )
-        weights /= n
-
-        precisions_cholesky_ = _compute_precision_cholesky(covariances, cov_type)
-
-        if cov_type == "tied":
-            c = precisions_cholesky_
-            precisions = np.dot(c, c.T)
-        elif cov_type == "diag":
-            precisions = precisions_cholesky_
-        else:
-            precisions = [np.dot(c, c.T) for c in precisions_cholesky_]
-
-        return weights, means, precisions
-
-    def _increase_reg(self, reg):
-        """
-        Increase regularization factor by factor of 10.
-
-        Parameters
-        ----------
-        reg: float
-            Current regularization factor.
-
-        Returns
-        -------
-        reg : float
-            Increased regularization
-        """
-        if reg == 0:
-            reg = 1e-06
-        else:
-            reg = reg * 10
-        return reg
-
     def fit(self, X, y=None):
         """
         Fits gaussian mixture model to the data.
@@ -647,7 +530,7 @@ def _increase_reg(reg):
     return reg
 
 
-def _onehot_to_initial_params(self, X, onehot, cov_type):
+def _onehot_to_initial_params(X, onehot, cov_type):
     """
     Computes cluster weights, cluster means and cluster precisions from
     a given clustering.
