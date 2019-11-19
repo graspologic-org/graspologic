@@ -450,7 +450,7 @@ class AutoGMMCluster(BaseCluster):
 
             criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
             # below is the regularization scheme
-            while gm_params["reg_covar"] <= 1:
+            while gm_params["reg_covar"] <= 1 and criter == np.inf:
                 model = GaussianMixture(**gm_params)
                 try:
                     model.fit(X)
