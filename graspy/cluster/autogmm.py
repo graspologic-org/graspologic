@@ -181,7 +181,7 @@ class AutoGMMCluster(BaseCluster):
         max_iter=100,
         verbose=0,
         selection_criteria="bic",
-        max_agglom_size=2000
+        max_agglom_size=2000,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -628,4 +628,3 @@ def _process_paramgrid(paramgrid):
             paramgrid_processed.append([ag_params, gm_params])
 
     return paramgrid_processed
-
