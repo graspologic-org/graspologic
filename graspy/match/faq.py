@@ -71,12 +71,7 @@ class FastApproximateQAP:
 
     """
 
-    def __init__(
-        self,
-        n_init=1,
-        init_method="barycenter",
-        max_iter=30
-    ):
+    def __init__(self, n_init=1, init_method="barycenter", max_iter=30):
 
         if n_init > 0 and type(n_init) is int:
             self.n_init = n_init
