@@ -14,6 +14,7 @@
 
 import numpy as np
 import math
+import random
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
 from .skp import SinkhornKnopp
@@ -30,12 +31,12 @@ class FastApproximateQAP:
     Parameters
     ----------
     
-    n_init : int
+    n_init : int, positive (default = 1)
         Number of random initializations of the starting permutation matrix that
         the FAQ algorithm will undergo. n_init automatically set to 1 if
         init_method = 'barycenter'
         
-    init_method : string
+    init_method : string (default = 'barycenter')
         The initial position chosen
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
@@ -43,18 +44,24 @@ class FastApproximateQAP:
 
         "rand" : some random point near J, (J+K)/2, where K is some random doubly
         stochastic matrix
-        
+
+    max_iter : int, positive (default = 30)
+        Integer specifying the max number of FW iterations.
+        FAQ typically converges with modest number of iterations
+
     Attributes
     ----------
     
     perm_inds_ : array, size (n,) where n is the number of vertices in the graphs
-        fitted The indices of the optimal permutation on the nodes of B, found via
+        fitted.
+        The indices of the optimal permutation on the nodes of B, found via
         FAQ, to best minimize the objective function f(P) = trace((A^T)PB(P^T)).
+
         
-    ofv_ : float
+    score_ : float
         The objective function value of for the optimal permutation found.
         
-        
+
     References
     ----------
     .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer,
@@ -64,7 +71,12 @@ class FastApproximateQAP:
 
     """
 
-    def __init__(self, n_init, init_method):
+    def __init__(
+        self,
+        n_init=1,
+        init_method="barycenter",
+        max_iter=30
+    ):
 
         if n_init > 0 and type(n_init) is int:
             self.n_init = n_init
@@ -75,12 +87,17 @@ class FastApproximateQAP:
             self.init_method = "rand"
         elif init_method == "barycenter":
             self.init_method = "barycenter"
-            n_init = 1
+            self.n_init = 1
         else:
             msg = 'Invalid "init_method" parameter string'
             raise ValueError(msg)
+        if max_iter > 0 and type(max_iter) is int:
+            self.max_iter = max_iter
+        else:
+            msg = '"max_iter" must be a positive integer'
+            raise TypeError(msg)
 
-    def fit(self, A, B, max_iter):
+    def fit(self, A, B):
         """
         Fits the model with two assigned adjacency matrices
         
@@ -92,10 +109,6 @@ class FastApproximateQAP:
         B : 2d-array, square, positive
             A square, positive adjacency matrix
 
-        max_iter : int
-            Integer specifying the max number of FW iterations.
-            FAQ typically converges with modest number of iterations, suggested
-            use 30.
         Returns
         -------
         
@@ -112,6 +125,11 @@ class FastApproximateQAP:
             raise ValueError(msg)
 
         n = A.shape[0]  # number of vertices in graphs
+        node_shuffle = list(np.sort(random.sample(list(range(n)), n)))
+        P_shuffle = np.zeros((n, n))
+        # shuffle to avoid results from inputs that were already matched
+        P_shuffle[list(range(n)), node_shuffle] = 1
+        A = P_shuffle @ A @ np.transpose(P_shuffle)
         At = np.transpose(A)  # A transpose
         Bt = np.transpose(B)  # B transpose
         score = math.inf
@@ -135,7 +153,7 @@ class FastApproximateQAP:
                 P = np.ones((n, n)) / float(n)
 
             # OPTIMIZATION WHILE LOOP BEGINS
-            for i in range(max_iter):
+            for i in range(self.max_iter):
 
                 delta_f = (
                     A @ P @ Bt + At @ P @ B
@@ -160,6 +178,8 @@ class FastApproximateQAP:
                 P = alpha * P + (1 - alpha) * Q  # Update P
             # end of FW optimization loop
 
+            P = np.transpose(P_shuffle) @ P @ P_shuffle
+            A = np.transpose(P_shuffle) @ A @ P_shuffle
             row, perm_inds_new = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
@@ -177,7 +197,7 @@ class FastApproximateQAP:
         self.score_ = score  # objective function value
         return self
 
-    def fit_predict(self, A, B, max_iter):
+    def fit_predict(self, A, B):
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
@@ -190,15 +210,11 @@ class FastApproximateQAP:
         B : 2d-array, square, positive
             A square, positive adjacency matrix
 
-        max_iter : int
-            Integer specifying the max number of FW iterations.
-            FAQ typically converges with modest number of iterations, suggested
-            use 30.
         Returns
         -------
 
         perm_inds_ : 1-d array, some shuffling of [0, n_vert)
             The optimal permutation indices to minimize the objective function
         """
-        self.fit(A, B, max_iter)
+        self.fit(A, B)
         return self.perm_inds_
