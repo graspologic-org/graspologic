@@ -49,7 +49,13 @@ class FastApproximateQAP:
         Integer specifying the max number of FW iterations.
         FAQ typically converges with modest number of iterations
 
-    shuffle_input : bool (default = 'True')
+    shuffle_input : bool (default = True)
+        Gives users the option to shuffle the nodes of A matrix to avoid results
+        from inputs that were already matched
+
+    eps : float (default = 0.1)
+        A positive, threshold stopping criteria such that FW continues to iterate
+        while Frobenius norm of (P[i]-P[i+1]) > eps
 
     Attributes
     ----------
@@ -195,7 +201,7 @@ class FastApproximateQAP:
                     f, bounds=(0, 1), method="bounded"
                 ).x  # computing the step size
                 P_i1 = alpha * P + (1 - alpha) * Q  # Update P
-                grad_P = np.linalg.norm(P_i1 - P)
+                grad_P = np.linalg.norm(P - P_i1)
                 P = P_i1
                 n_iter += 1
             # end of FW optimization loop
