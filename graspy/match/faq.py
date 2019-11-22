@@ -49,6 +49,8 @@ class FastApproximateQAP:
         Integer specifying the max number of FW iterations.
         FAQ typically converges with modest number of iterations
 
+    shuffle : bool (default = 'True')
+
     Attributes
     ----------
     
@@ -71,7 +73,9 @@ class FastApproximateQAP:
 
     """
 
-    def __init__(self, n_init=1, init_method="barycenter", max_iter=30):
+    def __init__(
+        self, n_init=1, init_method="barycenter", max_iter=30, shuffle=True, eps=0.1
+    ):
 
         if n_init > 0 and type(n_init) is int:
             self.n_init = n_init
@@ -90,6 +94,16 @@ class FastApproximateQAP:
             self.max_iter = max_iter
         else:
             msg = '"max_iter" must be a positive integer'
+            raise TypeError(msg)
+        if type(shuffle) is bool:
+            self.shuffle = shuffle
+        else:
+            msg = '"shuffle" must be a boolean'
+            raise TypeError(msg)
+        if eps > 0 and type(eps) is float:
+            self.eps = eps
+        else:
+            msg = '"eps" must be a positive float'
             raise TypeError(msg)
 
     def fit(self, A, B):
@@ -120,11 +134,14 @@ class FastApproximateQAP:
             raise ValueError(msg)
 
         n = A.shape[0]  # number of vertices in graphs
-        node_shuffle = list(np.sort(random.sample(list(range(n)), n)))
-        P_shuffle = np.zeros((n, n))
-        # shuffle to avoid results from inputs that were already matched
-        P_shuffle[list(range(n)), node_shuffle] = 1
-        A = P_shuffle @ A @ np.transpose(P_shuffle)
+
+        if self.shuffle:
+            node_shuffle = list(np.sort(random.sample(list(range(n)), n)))
+            P_shuffle = np.zeros((n, n))
+            # shuffle to avoid results from inputs that were already matched
+            P_shuffle[list(range(n)), node_shuffle] = 1
+            A = P_shuffle @ A @ np.transpose(P_shuffle)
+
         At = np.transpose(A)  # A transpose
         Bt = np.transpose(B)  # B transpose
         score = math.inf
@@ -150,7 +167,7 @@ class FastApproximateQAP:
                 P = np.ones((n, n)) / float(n)
 
             # OPTIMIZATION WHILE LOOP BEGINS
-            while grad_P < 0.01 and n_iter < 50:
+            while grad_P > self.eps and n_iter < self.max_iter:
 
                 delta_f = (
                     A @ P @ Bt + At @ P @ B
@@ -178,8 +195,10 @@ class FastApproximateQAP:
                 n_iter += 1
             # end of FW optimization loop
 
-            P = np.transpose(P_shuffle) @ P @ P_shuffle
-            A = np.transpose(P_shuffle) @ A @ P_shuffle
+            if self.shuffle:
+                P = np.transpose(P_shuffle) @ P @ P_shuffle
+                A = np.transpose(P_shuffle) @ A @ P_shuffle
+
             row, perm_inds_new = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
