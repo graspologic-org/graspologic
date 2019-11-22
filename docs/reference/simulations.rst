@@ -13,3 +13,5 @@ Simulations
 .. autofunction:: sbm
 
 .. autofunction:: rdpg
+
+.. autofunction:: corr
