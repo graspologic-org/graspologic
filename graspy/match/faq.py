@@ -129,6 +129,8 @@ class FastApproximateQAP:
         Bt = np.transpose(B)  # B transpose
         score = math.inf
         perm_inds = np.zeros(n)
+        grad_P = 1  # gradient of P
+        n_iter = 0  # number of FW iterations
 
         for i in range(self.n_init):
 
@@ -148,7 +150,7 @@ class FastApproximateQAP:
                 P = np.ones((n, n)) / float(n)
 
             # OPTIMIZATION WHILE LOOP BEGINS
-            for i in range(self.max_iter):
+            while grad_P < 0.01 and n_iter < 50:
 
                 delta_f = (
                     A @ P @ Bt + At @ P @ B
@@ -170,7 +172,10 @@ class FastApproximateQAP:
                 alpha = minimize_scalar(
                     f, bounds=(0, 1), method="bounded"
                 ).x  # computing the step size
-                P = alpha * P + (1 - alpha) * Q  # Update P
+                P_i1 = alpha * P + (1 - alpha) * Q  # Update P
+                grad_P = np.linalg.norm(P_i1 - P)
+                P = P_i1
+                n_iter += 1
             # end of FW optimization loop
 
             P = np.transpose(P_shuffle) @ P @ P_shuffle
