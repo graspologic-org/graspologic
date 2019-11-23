@@ -228,20 +228,20 @@ def sbm_corr(n, p, r, directed, loops):
     >>> p = [[0.5, 0.1], [0.1, 0.5]]
     >>> r = 0.3
 
-    To sample a correlated ER graph pair based on n, p and R matrices:
+    To sample a correlated SBM graph pair based on n, p and R matrices:
 
     >>> sbm_corr(n, p, r, directed=False, loops=False)
-    (array([[0., 0., 1., 0., 1., 0.],
+    (array([[0., 1., 0., 0., 0., 0.],
+        [1., 0., 0., 0., 0., 0.],
         [0., 0., 0., 0., 0., 0.],
-        [1., 0., 0., 0., 1., 0.],
-        [0., 0., 0., 0., 1., 1.],
-        [1., 0., 1., 1., 0., 1.],
-        [0., 0., 0., 1., 1., 0.]]), array([[0., 0., 1., 0., 1., 0.],
+        [0., 0., 0., 0., 0., 1.],
         [0., 0., 0., 0., 0., 0.],
-        [1., 0., 0., 0., 1., 0.],
-        [0., 0., 0., 0., 1., 1.],
-        [1., 0., 1., 1., 0., 1.],
-        [0., 0., 0., 1., 1., 0.]]))
+        [0., 0., 0., 1., 0., 0.]]), array([[0., 1., 0., 0., 0., 0.],
+        [1., 0., 0., 1., 1., 0.],
+        [0., 0., 0., 0., 0., 0.],
+        [0., 1., 0., 0., 0., 1.],
+        [0., 1., 0., 0., 0., 0.],
+        [0., 0., 0., 1., 0., 0.]]))
     """
     # test input
     # Check n
@@ -269,8 +269,8 @@ def sbm_corr(n, p, r, directed, loops):
         elif np.any(p < 0) or np.any(p > 1):
             msg = "Values in p must be in between 0 and 1."
             raise ValueError(msg)
-    
-    # Check r
+
+    # check r
     if not np.issubdtype(type(r), np.floating):
         raise TypeError("r is not of type float.")
     elif r < 0 or r > 1:
@@ -283,14 +283,15 @@ def sbm_corr(n, p, r, directed, loops):
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
 
-    P = np.zeros((np.sum(n),np.sum(n)))
+    P = np.zeros((np.sum(n), np.sum(n)))
     block_indices = np.insert(np.cumsum(np.array(n)), 0, 0)
     p = np.mat(p)
-    for i in range(p.shape[0]): # row number
-        for j in range(p.shape[1]): # column number
-            P[block_indices[i]:block_indices[i+1],
-                block_indices[j]:block_indices[j+1]] = p[i, j]
+    for i in range(p.shape[0]):  # row number
+        for j in range(p.shape[1]):  # column number
+            P[
+                block_indices[i] : block_indices[i + 1],
+                block_indices[j] : block_indices[j + 1],
+            ] = p[i, j]
     R = r * np.ones((np.sum(n), np.sum(n)))
     G1, G2 = sample_edges_corr(P, R, directed=False, loops=False)
     return G1, G2
-
