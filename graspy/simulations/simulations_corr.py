@@ -286,8 +286,8 @@ def sbm_corr(n, p, r, directed, loops):
     P = np.zeros((np.sum(n), np.sum(n)))
     block_indices = np.insert(np.cumsum(np.array(n)), 0, 0)
     p = np.mat(p)
-    for i in range(p.shape[0]):  # row number
-        for j in range(p.shape[1]):  # column number
+    for i in range(p.shape[0]):  # for each row
+        for j in range(p.shape[1]):  # for each column
             P[
                 block_indices[i] : block_indices[i + 1],
                 block_indices[j] : block_indices[j + 1],
