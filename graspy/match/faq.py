@@ -14,7 +14,6 @@
 
 import numpy as np
 import math
-import random
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
 from .skp import SinkhornKnopp
@@ -147,7 +146,7 @@ class FastApproximateQAP:
         n = A.shape[0]  # number of vertices in graphs
 
         if self.shuffle_input:
-            node_shuffle_input = list(np.sort(random.sample(list(range(n)), n)))
+            node_shuffle_input = np.random.permutation(n)
             P_shuffle_input = np.zeros((n, n))
             # shuffle_input to avoid results from inputs that were already matched
             P_shuffle_input[list(range(n)), node_shuffle_input] = 1
@@ -206,10 +205,6 @@ class FastApproximateQAP:
                 n_iter += 1
             # end of FW optimization loop
 
-            if self.shuffle_input:
-                P = np.transpose(P_shuffle_input) @ P @ P_shuffle_input
-                A = np.transpose(P_shuffle_input) @ A @ P_shuffle_input
-
             row, perm_inds_new = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
@@ -221,7 +216,12 @@ class FastApproximateQAP:
 
             if score_new < score:  # minimizing
                 score = score_new
-                perm_inds = perm_inds_new
+                if self.shuffle_input:
+                    perm_inds = [0] * n
+                    for i in range(n):
+                        perm_inds[node_shuffle_input[i]] = perm_inds_new[i]
+                else:
+                    perm_inds = perm_inds_new
 
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
