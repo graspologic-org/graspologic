@@ -161,12 +161,14 @@ class AutoGMMCluster(BaseCluster):
 
     This algorithm was strongly inspired by mclust, a clustering package in R:
     
-    Jeffrey D. Banfield and Adrian E. Raftery. Model-based gaussian and non-gaussian clustering.
-    Biometrics, 49:803–821, 1993.
+    References
+    ----------
+    .. [1] Jeffrey D. Banfield and Adrian E. Raftery. Model-based gaussian and
+       non-gaussian clustering. Biometrics, 49:803–821, 1993.
 
-    Abhijit Dasgupta and Adrian E. Raftery. Detecting features in spatial point processes with clutter
-    via model-based clustering. Journal of the American Statistical Association, 93(441):294–302,
-    1998.
+    .. [2] Abhijit Dasgupta and Adrian E. Raftery. Detecting features in spatial point
+       processes with clutter via model-based clustering. Journal of the American
+       Statistical Association, 93(441):294–302, 1998.
     """
 
     def __init__(
