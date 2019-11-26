@@ -156,13 +156,27 @@ class AutoGMMCluster(BaseCluster):
                 regularization used in GMM
 
     criter_ : the best (lowest) Bayesian Information Criterion
-    n_components_ : number of clusters in the model with the best bic/aic
-    covariance_type_ : covariance type in the model with the best bic/aic
-    affinity_ : affinity used in the model with the best bic/aic
-    linkage_ : linkage used in the model with the best bic/aic
-    reg_covar_ : regularization used in the model with the best bic/aic
-    ari_ : ARI from the model with the best bic/aic, nan if no y is given
-    model_ : GaussianMixture object with the best bic/aic
+
+    n_components_ : int
+        number of clusters in the model with the best bic/aic
+
+    covariance_type_ : str
+        covariance type in the model with the best bic/aic
+
+    affinity_ : str
+        affinity used in the model with the best bic/aic
+
+    linkage_ : str 
+        linkage used in the model with the best bic/aic
+    
+    reg_covar_ : float 
+        regularization used in the model with the best bic/aic
+
+    ari_ : float
+        ARI from the model with the best bic/aic, nan if no y is given
+
+    model_ : :class:`sklearn.mixture.GaussianMixture`
+        object with the best bic/aic
 
     See Also
     --------
