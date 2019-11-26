@@ -100,9 +100,9 @@ class AutoGMMCluster(BaseCluster):
             'spherical', 'tied', 'diag', and/or 'spherical'.
     
     random_state : int, RandomState instance or None, optional (default=None)
-        There is randomness in k-means initialization of
-        sklearn.mixture.GaussianMixture. For experiments, we need to control this.
-        This parameter is passed to sklearn's GaussianMixture to control the random state.
+        There is randomness in k-means initialization of 
+        :class:`sklearn.mixture.GaussianMixture`. This parameter is passed to 
+        :class:`~sklearn.mixture.GaussianMixture` to control the random state.
         If int, random_state is used as the random number generator seed;
         If RandomState instance, random_state is the random number generator;
         If None, the random number generator is the RandomState instance used
@@ -115,7 +115,8 @@ class AutoGMMCluster(BaseCluster):
         The maximum number of EM iterations to perform.
     
     selection_criteria : bic or aic
-        select the best model based on Bayesian Information Criterion (bic) or Aikake Information Criterion (aic)
+        select the best model based on Bayesian Information Criterion (bic) or 
+        Aikake Information Criterion (aic)
 
     verbose : int, optional (default = 0)
         Enable verbose output. If 1 then it prints the current initialization and each 
@@ -138,7 +139,8 @@ class AutoGMMCluster(BaseCluster):
             'bic/aic' : float
                 Bayesian Information Criterion
             'ari' : float or nan
-                Adjusted Rand Index between GMM classification, and true classification, nan if y is not given
+                Adjusted Rand Index between GMM classification, and true classification,
+                nan if y is not given
             'n_components' : int
                 number of clusters
             'affinity' : {'euclidean','manhattan','cosine','none'}
@@ -159,8 +161,15 @@ class AutoGMMCluster(BaseCluster):
     ari_ : ARI from the model with the best bic/aic, nan if no y is given
     model_ : GaussianMixture object with the best bic/aic
 
-    This algorithm was strongly inspired by mclust, a clustering package in R:
-    
+    See Also
+    --------
+    graspy.cluster.GaussianCluster
+    graspy.cluster.KMeansCluster
+
+    Notes
+    -----
+    This algorithm was strongly inspired by mclust, a clustering package in R
+
     References
     ----------
     .. [1] Jeffrey D. Banfield and Adrian E. Raftery. Model-based gaussian and
@@ -469,7 +478,8 @@ class AutoGMMCluster(BaseCluster):
                 except AssertionError:
                     gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
                     continue
-                # if the code gets here, then the model has been fit with no errors or singleton clusters
+                # if the code gets here, then the model has been fit with no errors or
+                # singleton clusters
                 if self.selection_criteria == "bic":
                     criter = model.bic(X)
                 else:
