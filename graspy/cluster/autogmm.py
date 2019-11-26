@@ -62,8 +62,9 @@ class AutoGMMCluster(BaseCluster):
             no agglomeration - GMM is initialized with k-means
         - 'all'
             considers all affinities in ['euclidean','manhattan','cosine','none']
+
         If a list/array, it must be a list/array of strings containing only
-            'euclidean', 'manhattan', 'cosine', and/or 'none'.
+        'euclidean', 'manhattan', 'cosine', and/or 'none'.
 
     linkage : {'ward','complete','average','single', 'all' (default)}, optional
         String or list/array describing the type of linkages to use in agglomeration.
@@ -78,9 +79,10 @@ class AutoGMMCluster(BaseCluster):
         - 'single'
             single linkage
         - 'all'
-           considers all linkages in ['ward','complete','average','single']
+            considers all linkages in ['ward','complete','average','single']
+
         If a list/array, it must be a list/array of strings containing only
-            'ward', 'complete', 'average', and/or 'single'.
+        'ward', 'complete', 'average', and/or 'single'.
         
     covariance_type : {'full', 'tied', 'diag', 'spherical', 'all' (default)} , optional
         String or list/array describing the type of covariance parameters to use.
@@ -96,8 +98,9 @@ class AutoGMMCluster(BaseCluster):
             each component has its own single variance
         - 'all'
             considers all covariance structures in ['spherical', 'diag', 'tied', 'full']
+
         If a list/array, it must be a list/array of strings containing only
-            'spherical', 'tied', 'diag', and/or 'spherical'.
+        'spherical', 'tied', 'diag', and/or 'spherical'.
     
     random_state : int, RandomState instance or None, optional (default=None)
         There is randomness in k-means initialization of 
