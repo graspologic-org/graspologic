@@ -14,4 +14,6 @@ Simulations
 
 .. autofunction:: rdpg
 
-.. autofunction:: corr
+.. autofunction:: er_corr
+
+.. autofunction:: sbm_corr
