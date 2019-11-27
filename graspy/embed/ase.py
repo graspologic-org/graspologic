@@ -1,162 +1,138 @@
-# Copyright 2019 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+import numpy as np
 
-import warnings
-
-from .base import BaseEmbed
-from ..utils import (
-    import_graph,
-    is_fully_connected,
-    augment_diagonal,
-    pass_to_ranks,
-    is_unweighted,
-)
+from .base import BaseGraphEstimator
+from ..embed import AdjacencySpectralEmbed
+from ..simulations import p_from_latent
+from ..utils import import_graph, augment_diagonal, is_unweighted
 
 
-class AdjacencySpectralEmbed(BaseEmbed):
+class RDPGEstimator(BaseGraphEstimator):
     r"""
-    Class for computing the adjacency spectral embedding of a graph 
-    
-    The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation 
-    of the graph based on its adjacency matrix [1]_. It relies on an SVD to reduce
-    the dimensionality to the specified k, or if k is unspecified, can find a number of 
-    dimensions automatically (see :class:`~graspy.embed.selectSVD`).
+    Random Dot Product Graph
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+    Under the random dot product graph model, each node is assumed to have a
+    "latent position" in some :math:`d`-dimensional Euclidian space. This vector 
+    dictates that node's probability of connection to other nodes. For a given pair
+    of nodes :math:`i` and :math:`j`, the probability of connection is the dot 
+    product between their latent positions: 
+
+    :math:`P_{ij} = \langle x_i, y_j \rangle`
+
+    where :math:`x_i` is the left latent position of node :math:`i`, and :math:`y_j` is 
+    the right latent position of node :math:`j`. If the graph being modeled is
+    is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via 
+    :class:`~graspy.embed.AdjacencySpectralEmbed`.
+
+    Read more in the :ref:`tutorials <models_tutorials>`
 
     Parameters
     ----------
-    n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
-        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+    loops : boolean, optional (default=False)
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
 
-    n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
-        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+    n_components : int, optional (default=None)
+        The dimensionality of the latent space used to model the graph. If None, the
+        method of Zhu and Godsie will be used to select an embedding dimension. 
+    
+    ase_kws : dict, optional (default={})
+        Dictionary of keyword arguments passed down to 
+        :class:`~graspy.embed.AdjacencySpectralEmbed`, which is used to fit the model.
 
-    algorithm : {'randomized' (default), 'full', 'truncated'}, optional
-        SVD solver to use:
+    diag_aug_weight : int or float, optional (default=1)
+        Weighting used for diagonal augmentation, which is a form of regularization for 
+        fitting the RDPG model. 
 
-        - 'randomized'
-            Computes randomized svd using 
-            :func:`sklearn.utils.extmath.randomized_svd`
-        - 'full'
-            Computes full svd using :func:`scipy.linalg.svd`
-        - 'truncated'
-            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
-
-    n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or 
-        'truncated'. The default is larger than the default in randomized_svd 
-        to handle sparse matrices that may have large slowly decaying spectrum.
-
-    check_lcc : bool , optional (default = True)
-        Whether to check if input graph is connected. May result in non-optimal 
-        results if the graph is unconnected. If True and input is unconnected,
-        a UserWarning is thrown. Not checking for connectedness may result in 
-        faster computation.
-
-    diag_aug : bool, optional (default = True)
-        Whether to replace the main diagonal of the adjacency matrix with a vector 
-        corresponding to the degree (or sum of edge weights for a weighted network) 
-        before embedding. Empirically, this produces latent position estimates closer
-        to the ground truth. 
-
+    plus_c_weight : int or float, optional (default=1)
+        Weighting used for a constant scalar added to the adjacency matrix before 
+        embedding as a form of regularization.
 
     Attributes
     ----------
-    latent_left_ : array, shape (n_samples, n_components)
-        Estimated left latent positions of the graph. 
-    latent_right_ : array, shape (n_samples, n_components), or None
-        Only computed when the graph is directed, or adjacency matrix is assymetric.
-        Estimated right latent positions of the graph. Otherwise, None.
-    singular_values_ : array, shape (n_components)
-        Singular values associated with the latent position matrices. 
+    latent_ : tuple, length 2, or np.ndarray, shape (n_verts, n_components)
+        The fit latent positions for the RDPG model. If a tuple, then the graph that was
+        input to fit was directed, and the first and second elements of the tuple are 
+        the left and right latent positions, respectively. The left and right latent
+        positions will both be of shape (n_verts, n_components). If `latent_` is an 
+        array, then the graph that was input to fit was undirected and the left and 
+        right latent positions are the same. 
 
-    See Also
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled. 
+
+    See also
     --------
-    graspy.embed.selectSVD
-    graspy.embed.select_dimension
-
-    Notes
-    -----
-    The singular value decomposition: 
-
-    .. math:: A = U \Sigma V^T
-
-    is used to find an orthonormal basis for a matrix, which in our case is the 
-    adjacency matrix of the graph. These basis vectors (in the matrices U or V) are 
-    ordered according to the amount of variance they explain in the original matrix. 
-    By selecting a subset of these basis vectors (through our choice of dimensionality
-    reduction) we can find a lower dimensional space in which to represent the graph.
+    graspy.simulations.rdpg
+    graspy.embed.AdjacencySpectralEmbed
+    graspy.utils.augment_diagonal
 
     References
     ----------
-    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
+    .. [1] Athreya, A., Fishkind, D. E., Tang, M., Priebe, C. E., Park, Y.,
+           Vogelstein, J. T., ... & Sussman, D. L. (2018). Statistical inference
+           on random dot product graphs: a survey. Journal of Machine Learning 
+           Research, 18(226), 1-92.
+
+    .. [2] Zhu, M. and Ghodsi, A. (2006).
+           Automatic dimensionality selection from the scree plot via the use of
+           profile likelihood. Computational Statistics & Data Analysis, 51(2), 
+           pp.918-930.
     """
 
     def __init__(
         self,
+        loops=False,
         n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        diag_aug=True,
+        ase_kws={},
+        diag_aug_weight=1,
+        plus_c_weight=1,
     ):
-        super().__init__(
-            n_components=n_components,
-            n_elbows=n_elbows,
-            algorithm=algorithm,
-            n_iter=n_iter,
-            check_lcc=check_lcc,
-        )
+        super().__init__(loops=loops)
 
-        if not isinstance(diag_aug, bool):
-            raise TypeError("`diag_aug` must be of type bool")
-        self.diag_aug = diag_aug
+        if not isinstance(ase_kws, dict):
+            raise TypeError("ase_kws must be a dict")
+        if not isinstance(diag_aug_weight, (int, float)):
+            raise TypeError("diag_aug_weight must be a scalar")
+        if not isinstance(plus_c_weight, (int, float)):
+            raise TypeError("plus_c_weight must be a scalar")
+        if diag_aug_weight < 0:
+            raise ValueError("diag_aug_weight must be at least 0")
+        if plus_c_weight < 0:
+            raise ValueError("plus_c_weight must be at least 0")
+
+        self.n_components = n_components
+        self.ase_kws = ase_kws
+        self.diag_aug_weight = diag_aug_weight
+        self.plus_c_weight = plus_c_weight
 
     def fit(self, graph, y=None):
-        """
-        Fit ASE model to input graph
-
-        Parameters
-        ----------
-        graph : array_like or networkx.Graph
-            Input graph to embed.
-
-        Returns
-        -------
-        self : returns an instance of self.
-        """
-        A = import_graph(graph)
-
-        if self.check_lcc:
-            if not is_fully_connected(A):
-                msg = (
-                    "Input graph is not fully connected. Results may not"
-                    + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspy.utils.get_lcc``."
-                )
-                warnings.warn(msg, UserWarning)
-
-        if self.diag_aug:
-            A = augment_diagonal(A)
-
-        self._reduce_dim(A)
+        graph = import_graph(graph)
+        if not is_unweighted(graph):
+            raise NotImplementedError(
+                "Graph model is currently only implemented for unweighted graphs."
+            )
+        graph = augment_diagonal(graph, weight=self.diag_aug_weight)
+        graph += self.plus_c_weight / graph.size
+        ase = AdjacencySpectralEmbed(n_components=self.n_components, **self.ase_kws)
+        latent = ase.fit_transform(graph)
+        self.latent_ = latent
+        if type(self.latent_) == tuple:
+            X = self.latent_[0]
+            Y = self.latent_[1]
+            self.directed = True
+        else:
+            X = self.latent_
+            Y = self.latent_
+            self.directed = False
+        p_mat = X @ Y.T
+        if not self.loops:
+            p_mat -= np.diag(np.diag(p_mat))
+        self.p_mat_ = p_mat
         return self
+
+    def _n_parameters(self):
+        if type(self.latent_) == tuple:
+            return 2 * self.latent_[0].size
+        else:
+            return self.latent_.size
