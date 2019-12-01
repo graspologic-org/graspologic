@@ -171,8 +171,8 @@ def er_corr(n, p, r, directed, loops):
     # check r
     if not np.issubdtype(type(r), np.floating):
         raise TypeError("r is not of type float.")
-    elif r < 0 or r > 1:
-        msg = "r must between 0 and 1."
+    elif r < -1 or r > 1:
+        msg = "r must between -1 and 1."
         raise ValueError(msg)
 
     # check directed and loops
@@ -273,8 +273,8 @@ def sbm_corr(n, p, r, directed, loops):
     # check r
     if not np.issubdtype(type(r), np.floating):
         raise TypeError("r is not of type float.")
-    elif r < 0 or r > 1:
-        msg = "r must between 0 and 1."
+    elif r < -1 or r > 1:
+        msg = "r must between -1 and 1."
         raise ValueError(msg)
 
     # check directed and loops
