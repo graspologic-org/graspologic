@@ -98,7 +98,7 @@ class Test_ER_Corr(unittest.TestCase):
             er_corr(self.n, p, self.r, directed=False, loops=False)
 
         with self.assertRaises(ValueError):
-            r = -0.5
+            r = -2.0
             er_corr(self.n, self.p, r, directed=False, loops=False)
 
         with self.assertRaises(ValueError):
@@ -117,7 +117,7 @@ class Test_ER_Corr(unittest.TestCase):
         add = g1 + g2
         add[add != 2] = 0
         output_prob = add.sum() / (2 * self.n * (self.n - 1))
-        output_r = np.abs(output_prob - self.p ** 2) / (self.p - self.p ** 2)
+        output_r = (output_prob - self.p ** 2) / (self.p - self.p ** 2)
         self.assertTrue(np.isclose(self.r, output_r, atol=0.06))
 
         # check the similarity of g1 and g2
@@ -168,7 +168,7 @@ class Test_SBM_Corr(unittest.TestCase):
             sbm_corr(self.n, p, self.r, directed=False, loops=False)
 
         with self.assertRaises(ValueError):
-            r = -0.5
+            r = -2.0
             sbm_corr(self.n, self.p, r, directed=False, loops=False)
 
         with self.assertRaises(ValueError):
@@ -183,8 +183,8 @@ class Test_SBM_Corr(unittest.TestCase):
 
     def test_sbm_corr(self):
         g1, g2 = sbm_corr(self.n, self.p, self.r, directed=False, loops=False)
-        a1, a2 = g1[0 : self.n[0], 0 : self.n[0]], g1[0 : self.n[0], (self.n[0] + 1) :]
-        b1, b2 = g2[0 : self.n[0], 0 : self.n[0]], g2[0 : self.n[0], (self.n[0] + 1) :]
+        a1, a2 = g1[0 : self.n[0], 0 : self.n[0]], g1[0 : self.n[0], self.n[0] :]
+        b1, b2 = g2[0 : self.n[0], 0 : self.n[0]], g2[0 : self.n[0], self.n[0] :]
         pb1, pb2 = (
             b1.sum() / (self.n[0] * (self.n[0] - 1)),
             b2.sum() / (self.n[0] * self.n[1]),
@@ -198,13 +198,13 @@ class Test_SBM_Corr(unittest.TestCase):
         add1 = a1 + b1
         add1[add1 != 2] = 0
         k1 = (add1.sum() / 2) / (self.n[0] * (self.n[0] - 1))
-        l1 = np.abs((k1 - 0.5 ** 2) / (0.5 - 0.5 ** 2))
+        l1 = (k1 - self.p[0][0] ** 2) / (self.p[0][0] - self.p[0][0] ** 2)
         add2 = a2 + b2
         add2[add2 != 2] = 0
         k2 = (add2.sum() / 2) / (self.n[0] * self.n[1])
-        l2 = np.abs((k2 - 0.2 ** 2) / (0.2 - 0.2 ** 2))
-        self.assertTrue(np.isclose(l1, self.r, atol=0.05))
-        self.assertTrue(np.isclose(l2, self.r, atol=0.05))
+        l2 = (k2 - self.p[0][1] ** 2) / (self.p[0][1] - self.p[0][1] ** 2)
+        r = (l1 + l2) / 2
+        self.assertTrue(np.isclose(r, self.r, atol=0.05))
 
         # check the dimension of input P and Rho
         self.assertTrue(g1.shape == (np.sum(self.n), np.sum(self.n)))
