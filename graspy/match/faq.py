@@ -156,8 +156,6 @@ class FastApproximateQAP:
         Bt = np.transpose(B)  # B transpose
         score = math.inf
         perm_inds = np.zeros(n)
-        grad_P = 1  # gradient of P
-        n_iter = 0  # number of FW iterations
 
         for i in range(self.n_init):
 
@@ -175,6 +173,9 @@ class FastApproximateQAP:
                 P = (K + J) / 2
             elif self.init_method == "barycenter":
                 P = np.ones((n, n)) / float(n)
+
+            grad_P = 1  # gradient of P
+            n_iter = 0  # number of FW iterations
 
             # OPTIMIZATION WHILE LOOP BEGINS
             while grad_P > self.eps and n_iter < self.max_iter:
