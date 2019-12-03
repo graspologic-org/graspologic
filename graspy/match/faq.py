@@ -147,10 +147,12 @@ class FastApproximateQAP:
 
         if self.shuffle_input:
             node_shuffle_input = np.random.permutation(n)
-            P_shuffle_input = np.zeros((n, n))
+            A = A[np.ix_(node_shuffle_input,node_shuffle_input)]
+            #P_shuffle_input = np.zeros((n, n))
             # shuffle_input to avoid results from inputs that were already matched
-            P_shuffle_input[list(range(n)), node_shuffle_input] = 1
-            A = P_shuffle_input @ A @ np.transpose(P_shuffle_input)
+            #P_shuffle_input[list(range(n)), node_shuffle_input] = 1
+            #A = P_shuffle_input @ A @ np.transpose(P_shuffle_input)
+
 
         At = np.transpose(A)  # A transpose
         Bt = np.transpose(B)  # B transpose
@@ -174,7 +176,7 @@ class FastApproximateQAP:
             elif self.init_method == "barycenter":
                 P = np.ones((n, n)) / float(n)
 
-            grad_P = 1  # gradient of P
+            grad_P = math.inf  # gradient of P
             n_iter = 0  # number of FW iterations
 
             # OPTIMIZATION WHILE LOOP BEGINS
@@ -218,11 +220,20 @@ class FastApproximateQAP:
             if score_new < score:  # minimizing
                 score = score_new
                 if self.shuffle_input:
-                    perm_inds = [0] * n
-                    for i in range(n):
-                        perm_inds[node_shuffle_input[i]] = perm_inds_new[i]
+                    perm_inds = np.array([0]*n)
+                    perm_inds[node_shuffle_input] = perm_inds_new
                 else:
                     perm_inds = perm_inds_new
+
+        if self.shuffle_input:
+            node_unshuffle_input = np.array(range(n))
+            node_unshuffle_input[node_shuffle_input] = np.array(range(n))
+            A = A[np.ix_(node_unshuffle_input, node_unshuffle_input)]
+            perm_mat = np.zeros((n, n))
+            perm_mat[row, perm_inds] = 1
+            score = np.trace(
+                np.transpose(A) @ perm_mat @ B @ np.transpose(perm_mat)
+            )
 
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
