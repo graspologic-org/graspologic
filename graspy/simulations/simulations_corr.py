@@ -175,6 +175,15 @@ def er_corr(n, p, r, directed, loops):
         msg = "r must between -1 and 1."
         raise ValueError(msg)
 
+    # check the relation between r and p
+    if p + r * (1 - p) < 0:
+        msg = "p + r * (1 - p) should be biiger than 0"
+        raise ValueError(msg)
+
+    if p * (1 - r) < 0:
+        msg = "p * (1 - r) should be biiger than 0"
+        raise ValueError(msg)
+
     # check directed and loops
     if type(directed) is not bool:
         raise TypeError("directed is not of type bool.")
@@ -276,6 +285,17 @@ def sbm_corr(n, p, r, directed, loops):
     elif r < -1 or r > 1:
         msg = "r must between -1 and 1."
         raise ValueError(msg)
+
+    # check the relation between r and p
+    for i in range(np.array(p).shape[0]):
+        for j in range(np.array(p).shape[1]):
+            if p[i][j] + r * (1 - p[i][j]) < 0:
+                msg = "p + r * (1 - p) should be bigger than 0"
+                raise ValueError(msg)
+
+            elif p[i][j] * (1 - r) < 0:
+                msg = "p * (1 - r) should be bigger than 0"
+                raise ValueError(msg)
 
     # check directed and loops
     if type(directed) is not bool:
