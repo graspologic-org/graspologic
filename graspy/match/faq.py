@@ -211,10 +211,10 @@ class FastApproximateQAP:
             row, perm_inds_new = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
-            perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
-            perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
+            #perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
+            #perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
             score_new = np.trace(
-                np.transpose(A) @ perm_mat_new @ B @ np.transpose(perm_mat_new)
+                np.transpose(A) @ B[np.ix_(perm_inds_new,perm_inds_new)]
             )  # computing objective function value
 
             if score_new < score:  # minimizing
@@ -229,11 +229,12 @@ class FastApproximateQAP:
             node_unshuffle_input = np.array(range(n))
             node_unshuffle_input[node_shuffle_input] = np.array(range(n))
             A = A[np.ix_(node_unshuffle_input, node_unshuffle_input)]
-            perm_mat = np.zeros((n, n))
-            perm_mat[row, perm_inds] = 1
             score = np.trace(
-                np.transpose(A) @ perm_mat @ B @ np.transpose(perm_mat)
+                np.transpose(A) @ B[np.ix_(perm_inds,perm_inds)]
             )
+            #perm_mat = np.zeros((n, n))
+            #perm_mat[row, perm_inds] = 1
+            #np.transpose(A) @ perm_mat @ B @ np.transpose(perm_mat)
 
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
