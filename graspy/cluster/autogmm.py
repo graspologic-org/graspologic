@@ -43,10 +43,14 @@ class AutoGMMCluster(BaseCluster):
         max_components=None, in which case this is the maximum number of
         components to consider). If max_components is not None, min_components
         must be less than or equal to max_components.
+        If label_init is given, min_components must match number of unique labels
+        in label_init.
 
     max_components : int or None, default=10.
         The maximum number of mixture components to consider. Must be greater 
         than or equal to min_components.
+        If label_init is given, min_components must match number of unique labels
+        in label_init.
 
     affinity : {'euclidean','manhattan','cosine','none', 'all' (default)}, optional
         String or list/array describing the type of affinities to use in agglomeration.
@@ -113,6 +117,8 @@ class AutoGMMCluster(BaseCluster):
 
     label_init : array-like, shape (n_samples,), optional (default=None)
         List of labels for samples if available. Used to initialize the model.
+        If provided, min_components and max_components must match the number of 
+        unique labels given here.
 
     max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
@@ -331,6 +337,12 @@ class AutoGMMCluster(BaseCluster):
         if label_init is not None:
             uni_label_init = np.unique(label_init)
             n_components_init = np.size(uni_label_init)
+
+            if min_components != n_components_init or max_components != n_components_init:
+                msg = "min_components and max_components must equal "
+                msg += " the number of init labels: {}".format(n_components_init)
+                raise ValueError(msg)
+
             labels_init = np.copy(label_init)
             for i in range(n_components_init):
                 labels_init[np.argwhere(label_init == uni_label_init[i])] = i
@@ -391,7 +403,7 @@ class AutoGMMCluster(BaseCluster):
                     upper_ncomponents, X.shape[0]
                 )
             else:
-                msg = "max_components must be >= n_samples, but max_components = "
+                msg = "max_components must be <= n_samples, but max_components = "
                 msg += "{}, n_samples = {}".format(upper_ncomponents, X.shape[0])
             raise ValueError(msg)
         elif lower_ncomponents > X.shape[0]:
