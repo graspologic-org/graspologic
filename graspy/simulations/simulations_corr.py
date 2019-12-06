@@ -286,7 +286,7 @@ def sbm_corr(n, p, r, directed, loops):
         msg = "r must between -1 and 1."
         raise ValueError(msg)
 
-    # check the relation between r and p
+    # limit the relation between r and p
     for i in range(np.array(p).shape[0]):
         for j in range(np.array(p).shape[1]):
             if p[i][j] + r * (1 - p[i][j]) < 0:

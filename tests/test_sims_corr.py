@@ -48,10 +48,11 @@ class Test_Sample_Corr(unittest.TestCase):
         )
 
         # check rho
-        add = g1 + g2
-        add[add != 2] = 0
-        output_prob = add.sum() / (2 * self.n * (self.n - 1))
-        output_r = np.abs(output_prob - self.p ** 2) / (self.p - self.p ** 2)
+        k1 = g1.copy()
+        k2 = g2.copy()
+        k1 = k1[np.where(~np.eye(k1.shape[0], dtype=bool))]
+        k2 = k2[np.where(~np.eye(k2.shape[0], dtype=bool))]
+        output_r = np.corrcoef(k1, k2)[0, 1]
         self.assertTrue(np.isclose(self.r, output_r, atol=0.06))
 
         # check the similarity of g1 and g2
@@ -114,10 +115,11 @@ class Test_ER_Corr(unittest.TestCase):
         )
 
         # check rho
-        add = g1 + g2
-        add[add != 2] = 0
-        output_prob = add.sum() / (2 * self.n * (self.n - 1))
-        output_r = (output_prob - self.p ** 2) / (self.p - self.p ** 2)
+        k1 = g1.copy()
+        k2 = g2.copy()
+        k1 = k1[np.where(~np.eye(k1.shape[0], dtype=bool))]
+        k2 = k2[np.where(~np.eye(k2.shape[0], dtype=bool))]
+        output_r = np.corrcoef(k1, k2)[0, 1]
         self.assertTrue(np.isclose(self.r, output_r, atol=0.06))
 
         # check the similarity of g1 and g2
@@ -195,16 +197,14 @@ class Test_SBM_Corr(unittest.TestCase):
         self.assertTrue(np.isclose(self.p1[0][1], pb2, atol=0.05))
 
         # check rho
-        add1 = a1 + b1
-        add1[add1 != 2] = 0
-        k1 = (add1.sum() / 2) / (self.n[0] * (self.n[0] - 1))
-        l1 = (k1 - self.p[0][0] ** 2) / (self.p[0][0] - self.p[0][0] ** 2)
-        add2 = a2 + b2
-        add2[add2 != 2] = 0
-        k2 = (add2.sum() / 2) / (self.n[0] * self.n[1])
-        l2 = (k2 - self.p[0][1] ** 2) / (self.p[0][1] - self.p[0][1] ** 2)
-        r = (l1 + l2) / 2
-        self.assertTrue(np.isclose(r, self.r, atol=0.05))
+        a1 = a1[np.where(~np.eye(a1.shape[0], dtype=bool))]
+        b1 = b1[np.where(~np.eye(a2.shape[0], dtype=bool))]
+        a2 = a2.flatten()
+        b2 = b2.flatten()
+        m1 = np.corrcoef(a1, b1)[0, 1]
+        m2 = np.corrcoef(a2, b2)[0, 1]
+        avr = (m1 + m2) / 2
+        self.assertTrue(np.isclose(avr, self.r, atol=0.05))
 
         # check the dimension of input P and Rho
         self.assertTrue(g1.shape == (np.sum(self.n), np.sum(self.n)))
