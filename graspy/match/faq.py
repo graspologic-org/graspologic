@@ -147,12 +147,11 @@ class FastApproximateQAP:
 
         if self.shuffle_input:
             node_shuffle_input = np.random.permutation(n)
-            A = A[np.ix_(node_shuffle_input,node_shuffle_input)]
-            #P_shuffle_input = np.zeros((n, n))
+            A = A[np.ix_(node_shuffle_input, node_shuffle_input)]
+            # P_shuffle_input = np.zeros((n, n))
             # shuffle_input to avoid results from inputs that were already matched
-            #P_shuffle_input[list(range(n)), node_shuffle_input] = 1
-            #A = P_shuffle_input @ A @ np.transpose(P_shuffle_input)
-
+            # P_shuffle_input[list(range(n)), node_shuffle_input] = 1
+            # A = P_shuffle_input @ A @ np.transpose(P_shuffle_input)
 
         At = np.transpose(A)  # A transpose
         Bt = np.transpose(B)  # B transpose
@@ -211,16 +210,16 @@ class FastApproximateQAP:
             row, perm_inds_new = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
-            #perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
-            #perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
+            # perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
+            # perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
             score_new = np.trace(
-                np.transpose(A) @ B[np.ix_(perm_inds_new,perm_inds_new)]
+                np.transpose(A) @ B[np.ix_(perm_inds_new, perm_inds_new)]
             )  # computing objective function value
 
             if score_new < score:  # minimizing
                 score = score_new
                 if self.shuffle_input:
-                    perm_inds = np.array([0]*n)
+                    perm_inds = np.array([0] * n)
                     perm_inds[node_shuffle_input] = perm_inds_new
                 else:
                     perm_inds = perm_inds_new
@@ -229,12 +228,10 @@ class FastApproximateQAP:
             node_unshuffle_input = np.array(range(n))
             node_unshuffle_input[node_shuffle_input] = np.array(range(n))
             A = A[np.ix_(node_unshuffle_input, node_unshuffle_input)]
-            score = np.trace(
-                np.transpose(A) @ B[np.ix_(perm_inds,perm_inds)]
-            )
-            #perm_mat = np.zeros((n, n))
-            #perm_mat[row, perm_inds] = 1
-            #np.transpose(A) @ perm_mat @ B @ np.transpose(perm_mat)
+            score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
+            # perm_mat = np.zeros((n, n))
+            # perm_mat[row, perm_inds] = 1
+            # np.transpose(A) @ perm_mat @ B @ np.transpose(perm_mat)
 
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
