@@ -116,24 +116,33 @@ def test_inputs():
     with pytest.raises(ValueError):
         AutoGMM = AutoGMMCluster(selection_criteria="cic")
 
+
 def test_labels_init():
     X = np.random.normal(0, 1, size=(5, 3))
 
     with pytest.raises(ValueError):
-        AutoGMM = AutoGMMCluster(min_components=1,max_components=1,label_init=np.array([0,0,0,0,1]))
-        AutoGMM.fit_predict(X)
-    
-    with pytest.raises(ValueError):
-        AutoGMM = AutoGMMCluster(min_components=1,max_components=2,label_init=np.array([0,0,0,0,1]))
+        AutoGMM = AutoGMMCluster(
+            min_components=1, max_components=1, label_init=np.array([0, 0, 0, 0, 1])
+        )
         AutoGMM.fit_predict(X)
 
     with pytest.raises(ValueError):
-        AutoGMM = AutoGMMCluster(min_components=2,max_components=3,label_init=np.array([0,0,0,0,1]))
+        AutoGMM = AutoGMMCluster(
+            min_components=1, max_components=2, label_init=np.array([0, 0, 0, 0, 1])
+        )
         AutoGMM.fit_predict(X)
 
-    AutoGMM = AutoGMMCluster(min_components=2,max_components=2,label_init=np.array([0,0,0,0,1]))
+    with pytest.raises(ValueError):
+        AutoGMM = AutoGMMCluster(
+            min_components=2, max_components=3, label_init=np.array([0, 0, 0, 0, 1])
+        )
+        AutoGMM.fit_predict(X)
+
+    AutoGMM = AutoGMMCluster(
+        min_components=2, max_components=2, label_init=np.array([0, 0, 0, 0, 1])
+    )
     AutoGMM.fit_predict(X)
-    
+
 
 def test_predict_without_fit():
     # Generate random data

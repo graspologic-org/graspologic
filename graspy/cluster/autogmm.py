@@ -123,7 +123,7 @@ class AutoGMMCluster(BaseCluster):
     max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
     
-    selection_criteria : bic or aic
+    selection_criteria : str {"bic" or "aic"}, optional, (default="bic")
         select the best model based on Bayesian Information Criterion (bic) or 
         Aikake Information Criterion (aic)
 
@@ -353,9 +353,9 @@ class AutoGMMCluster(BaseCluster):
         else:
             labels_init = None
 
-        if not isinstance(max_agglom_size, int):
-            raise TypeError("`max_agglom_size` must be an int")
-        if max_agglom_size < 2:
+        if not isinstance(max_agglom_size, int) and max_agglom_size is not None:
+            raise TypeError("`max_agglom_size` must be an int or None")
+        if max_agglom_size is not None and max_agglom_size < 2:
             raise ValueError("Must use at least 2 points for `max_agglom_size`")
 
         self.min_components = min_components
@@ -468,13 +468,13 @@ class AutoGMMCluster(BaseCluster):
                 agg = AgglomerativeClustering(**params[0])
                 n = X.shape[0]
 
-                if n > self.max_agglom_size:  # if dataset is huge, agglomerate a subset
+                if self.max_agglom_size is None or n <= self.max_agglom_size:
+                    X_subset = X
+                else:  # if dataset is huge, agglomerate a subset
                     subset_idxs = np.random.choice(
                         np.arange(0, n), self.max_agglom_size
                     )
                     X_subset = X[subset_idxs, :]
-                else:
-                    X_subset = X
                 agg_clustering = agg.fit_predict(X_subset)
                 onehot = _labels_to_onehot(agg_clustering)
                 weights_init, means_init, precisions_init = _onehot_to_initial_params(
