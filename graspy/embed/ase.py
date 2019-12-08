@@ -15,7 +15,13 @@
 import warnings
 
 from .base import BaseEmbed
-from ..utils import import_graph, is_fully_connected
+from ..utils import (
+    import_graph,
+    is_fully_connected,
+    augment_diagonal,
+    pass_to_ranks,
+    is_unweighted,
+)
 
 
 class AdjacencySpectralEmbed(BaseEmbed):
@@ -57,11 +63,18 @@ class AdjacencySpectralEmbed(BaseEmbed):
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
 
-    check_lcc : bool , optional (defult = True)
+    check_lcc : bool , optional (default = True)
         Whether to check if input graph is connected. May result in non-optimal 
         results if the graph is unconnected. If True and input is unconnected,
         a UserWarning is thrown. Not checking for connectedness may result in 
         faster computation.
+
+    diag_aug : bool, optional (default = True)
+        Whether to replace the main diagonal of the adjacency matrix with a vector 
+        corresponding to the degree (or sum of edge weights for a weighted network) 
+        before embedding. Empirically, this produces latent position estimates closer
+        to the ground truth. 
+
 
     Attributes
     ----------
@@ -104,6 +117,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
+        diag_aug=True,
     ):
         super().__init__(
             n_components=n_components,
@@ -112,6 +126,10 @@ class AdjacencySpectralEmbed(BaseEmbed):
             n_iter=n_iter,
             check_lcc=check_lcc,
         )
+
+        if not isinstance(diag_aug, bool):
+            raise TypeError("`diag_aug` must be of type bool")
+        self.diag_aug = diag_aug
 
     def fit(self, graph, y=None):
         """
@@ -136,6 +154,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
                     + "using ``graspy.utils.get_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
+
+        if self.diag_aug:
+            A = augment_diagonal(A)
 
         self._reduce_dim(A)
         return self

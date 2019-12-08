@@ -114,7 +114,9 @@ class RDPGEstimator(BaseGraphEstimator):
             )
         graph = augment_diagonal(graph, weight=self.diag_aug_weight)
         graph += self.plus_c_weight / graph.size
-        ase = AdjacencySpectralEmbed(n_components=self.n_components, **self.ase_kws)
+        ase = AdjacencySpectralEmbed(
+            n_components=self.n_components, diag_aug=False, **self.ase_kws
+        )
         latent = ase.fit_transform(graph)
         self.latent_ = latent
         if type(self.latent_) == tuple:

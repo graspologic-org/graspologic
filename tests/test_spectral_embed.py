@@ -1,5 +1,4 @@
 import unittest
-import graspy as gs
 import numpy as np
 from graspy.embed.ase import AdjacencySpectralEmbed
 from graspy.embed.lse import LaplacianSpectralEmbed
@@ -103,6 +102,11 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         with self.assertWarns(UserWarning):
             ase = AdjacencySpectralEmbed()
             ase.fit(A)
+
+    def test_input_checks(self):
+        with self.assertRaises(TypeError):
+            ase = AdjacencySpectralEmbed(diag_aug="over 9000")
+            ase.fit()
 
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
