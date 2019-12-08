@@ -338,7 +338,10 @@ class AutoGMMCluster(BaseCluster):
             uni_label_init = np.unique(label_init)
             n_components_init = np.size(uni_label_init)
 
-            if min_components != n_components_init or max_components != n_components_init:
+            if (
+                min_components != n_components_init
+                or max_components != n_components_init
+            ):
                 msg = "min_components and max_components must equal "
                 msg += " the number of init labels: {}".format(n_components_init)
                 raise ValueError(msg)
