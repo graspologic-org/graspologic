@@ -132,10 +132,11 @@ class AutoGMMCluster(BaseCluster):
         iteration step. If greater than 1 then it prints also the log probability and 
         the time needed for each step.
 
-    max_agglom_size : int, optional (default = 2000)
+    max_agglom_size : int or None, optional (default = 2000)
         The maximum number of datapoints on which to do agglomerative clustering as the 
         initialization to GMM. If the number of datapoints is larger than this value, 
-        a random subset of the data is used for agglomerative initialization.
+        a random subset of the data is used for agglomerative initialization. If None,
+        all data is used for agglomerative clustering for initialization.
 
 
     Attributes
