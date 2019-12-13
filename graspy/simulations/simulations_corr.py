@@ -16,6 +16,43 @@ import numpy as np
 from graspy.simulations import sample_edges, er_np, sbm
 
 
+def check_dirloop(directed, loops):
+    if type(directed) is not bool:
+        raise TypeError("directed is not of type bool.")
+    if type(loops) is not bool:
+        raise TypeError("loops is not of type bool.")
+
+
+def check_r(r):
+    if not np.issubdtype(type(r), np.floating):
+        raise TypeError("r is not of type float.")
+    elif r < -1 or r > 1:
+        msg = "r must between -1 and 1."
+        raise ValueError(msg)
+
+
+def check_rel_er(p, r):
+    if p + r * (1 - p) < 0:
+        msg = "p + r * (1 - p) should be bigger than 0"
+        raise ValueError(msg)
+
+    if p * (1 - r) < 0:
+        msg = "p * (1 - r) should be bigger than 0"
+        raise ValueError(msg)
+
+
+def check_rel_sbm(p, r):
+    for i in range(np.array(p).shape[0]):
+        for j in range(np.array(p).shape[1]):
+            if p[i][j] + r * (1 - p[i][j]) < 0:
+                msg = "p + r * (1 - p) should be bigger than 0"
+                raise ValueError(msg)
+
+            elif p[i][j] * (1 - r) < 0:
+                msg = "p * (1 - r) should be bigger than 0"
+                raise ValueError(msg)
+
+
 def sample_edges_corr(P, R, directed, loops):
     """
     Generate a pair of correlated graphs with Bernoulli distribution.
@@ -89,10 +126,7 @@ def sample_edges_corr(P, R, directed, loops):
         raise ValueError("R must be a square matrix")
 
     # check directed and loops
-    if type(directed) is not bool:
-        raise TypeError("directed is not of type bool.")
-    if type(loops) is not bool:
-        raise TypeError("loops is not of type bool.")
+    check_dirloop(directed, loops)
 
     G1 = sample_edges(P, directed=directed, loops=loops)
     P2 = G1.copy()
@@ -169,26 +203,13 @@ def er_corr(n, p, r, directed, loops):
         raise ValueError(msg)
 
     # check r
-    if not np.issubdtype(type(r), np.floating):
-        raise TypeError("r is not of type float.")
-    elif r < -1 or r > 1:
-        msg = "r must between -1 and 1."
-        raise ValueError(msg)
+    check_r(r)
 
     # check the relation between r and p
-    if p + r * (1 - p) < 0:
-        msg = "p + r * (1 - p) should be biiger than 0"
-        raise ValueError(msg)
-
-    if p * (1 - r) < 0:
-        msg = "p * (1 - r) should be biiger than 0"
-        raise ValueError(msg)
+    check_rel_er(p, r)
 
     # check directed and loops
-    if type(directed) is not bool:
-        raise TypeError("directed is not of type bool.")
-    if type(loops) is not bool:
-        raise TypeError("loops is not of type bool.")
+    check_dirloop(directed, loops)
 
     P = p * np.ones((n, n))
     R = r * np.ones((n, n))
@@ -280,28 +301,13 @@ def sbm_corr(n, p, r, directed, loops):
             raise ValueError(msg)
 
     # check r
-    if not np.issubdtype(type(r), np.floating):
-        raise TypeError("r is not of type float.")
-    elif r < -1 or r > 1:
-        msg = "r must between -1 and 1."
-        raise ValueError(msg)
+    check_r(r)
 
-    # limit the relation between r and p
-    for i in range(np.array(p).shape[0]):
-        for j in range(np.array(p).shape[1]):
-            if p[i][j] + r * (1 - p[i][j]) < 0:
-                msg = "p + r * (1 - p) should be bigger than 0"
-                raise ValueError(msg)
-
-            elif p[i][j] * (1 - r) < 0:
-                msg = "p * (1 - r) should be bigger than 0"
-                raise ValueError(msg)
+    # check the relation between r and p
+    check_rel_sbm(p, r)
 
     # check directed and loops
-    if type(directed) is not bool:
-        raise TypeError("directed is not of type bool.")
-    if type(loops) is not bool:
-        raise TypeError("loops is not of type bool.")
+    check_dirloop(directed, loops)
 
     P = np.zeros((np.sum(n), np.sum(n)))
     block_indices = np.insert(np.cumsum(np.array(n)), 0, 0)

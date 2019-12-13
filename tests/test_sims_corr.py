@@ -55,15 +55,6 @@ class Test_Sample_Corr(unittest.TestCase):
         output_r = np.corrcoef(k1, k2)[0, 1]
         self.assertTrue(np.isclose(self.r, output_r, atol=0.06))
 
-        # check the similarity of g1 and g2
-        judge = g1 == g2
-        judge.astype(int)
-        output_sim = (np.sum(judge) - self.n) / (self.n * (self.n - 1))
-        expected_sim = self.p * (self.p + self.r * (1 - self.p)) + (1 - self.p) * (
-            1 - self.p * (1 - self.r)
-        )
-        self.assertTrue(np.isclose(expected_sim, output_sim, atol=0.05))
-
         # check the dimension of input P and Rho
         self.assertTrue(g1.shape == (self.n, self.n))
         self.assertTrue(g2.shape == (self.n, self.n))
@@ -121,15 +112,6 @@ class Test_ER_Corr(unittest.TestCase):
         k2 = k2[np.where(~np.eye(k2.shape[0], dtype=bool))]
         output_r = np.corrcoef(k1, k2)[0, 1]
         self.assertTrue(np.isclose(self.r, output_r, atol=0.06))
-
-        # check the similarity of g1 and g2
-        judge = g1 == g2
-        judge.astype(int)
-        output_sim = (np.sum(judge) - self.n) / (self.n * (self.n - 1))
-        expected_sim = self.p * (self.p + self.r * (1 - self.p)) + (1 - self.p) * (
-            1 - self.p * (1 - self.r)
-        )
-        self.assertTrue(np.isclose(expected_sim, output_sim, atol=0.05))
 
         # check the dimension of input P and Rho
         self.assertTrue(g1.shape == (self.n, self.n))
