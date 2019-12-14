@@ -1,7 +1,7 @@
 from .ase import AdjacencySpectralEmbed
 from .lse import LaplacianSpectralEmbed
 from .mase import MultipleASE
-from.casc import CovariateAssistedSpectralEmbed
+from .casc import CovariateAssistedSpectralEmbed
 from .mds import ClassicalMDS
 from .omni import OmnibusEmbed
 from .svd import select_dimension, selectSVD

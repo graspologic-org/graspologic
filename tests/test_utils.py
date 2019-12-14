@@ -362,7 +362,7 @@ class TestDiagonalAugment(unittest.TestCase):
         )
         expected = A.copy().astype(float)
         expected[0, 0] = 2.0 / 4
-        expected[1, 1] = 4.0 / 4
+        expected[1, 1] = 3.0 / 4
         expected[2, 2] = 3.0 / 4
         expected[3, 3] = 3.0 / 4
         expected[4, 4] = 2.0 / 4
