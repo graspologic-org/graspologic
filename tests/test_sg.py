@@ -47,7 +47,7 @@ class TestConstructContingency(unittest.TestCase):
         A = np.ones((1, 1, 5))
         A[:, :, 1::2] = 0
         ys = np.array([1, 0, 1, 0, 0])
-        cmat = construct_contingency(A, ys)
+        cmat = sg.construct_contingency(A, ys)
         ver = np.array([[[[1, 2], [2, 0]]]], dtype=float)
         np.testing.assert_array_equal(cmat, ver)
 
@@ -55,21 +55,19 @@ class TestConstructContingency(unittest.TestCase):
         A = [[[1 for i in range(5)] for j in range(5)] for k in range(5)]
         ys = [1, 1, 1, 1, 1]
         with self.assertRaises(TypeError):
-            sg.estimate_signal_subgraph(A, np.ones(5), 1)
-        with self.assertRaises(TypeError):
-            sg.estimate_signal_subgraph(np.ones((5, 5, 5)), ys, 1)
+            sg.construct_contingency(A, np.ones(5))
 
     def test_construct_contingency_bad_size(self):
         with self.assertRaises(ValueError):
-            sg.estimate_signal_subgraph(np.ones((5, 5)), np.ones(5), 1)
+            sg.construct_contingency(np.ones((5, 5)), np.ones(5))
         with self.assertRaises(ValueError):
-            sg.estimate_signal_subgraph(np.ones((3, 4, 2)), np.ones(2), 1)
+            sg.construct_contingency(np.ones((3, 4, 2)), np.ones(2))
 
     def test_construct_contingency_bad_len(self):
         A = np.ones((3, 3, 3))
         with self.assertRaises(ValueError):
-            sg.estimate_signal_subgraph(A, np.ones((3, 3)), 1)
+            sg.construct_contingency(A, np.ones((3, 3)))
         with self.assertRaises(ValueError):
-            sg.estimate_signal_subgraph(A, np.array([0, 1, 2]), 1)
+            sg.construct_contingency(A, np.array([0, 1, 2]))
         with self.assertRaises(ValueError):
-            sg.estimate_signal_subgraph(A, np.ones(2), 1)
+            sg.construct_contingency(A, np.ones(2))
