@@ -82,10 +82,10 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
 
     References
     ----------
-    .. [1]N. Binkiewicz, J. T. Vogelstein, K. Rohe, Covariate-assisted spectral
+    .. [1] N. Binkiewicz, J. T. Vogelstein, K. Rohe, Covariate-assisted spectral
        clustering, Biometrika, Volume 104, Issue 2, June 2017, Pages 361–377
        
-    .. [2]Augmented Implicitly Restarted Lanczos Bidiagonalization Methods,
+    .. [2] Augmented Implicitly Restarted Lanczos Bidiagonalization Methods,
        J. Baglama and L. Reichel, SIAM J. Sci. Comput. 2005
     """
 
