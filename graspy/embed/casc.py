@@ -24,9 +24,7 @@ from sklearn.cluster import KMeans
 class CovariateAssistedSpectralEmbed(BaseEmbed):
     r"""
     Class performs Covaariates Assisted Spectual Embedding and Clustering
-    
-    .. math:: A = U \Sigma V^T
-    
+        
     Class for computing the k-means clustering results of a graph with the 
     Laplacian Matrix and Covariates Matrix generated from regression.[1]_.It 
     use the a weighted sum of Laplacian Matrix and Covariates :
