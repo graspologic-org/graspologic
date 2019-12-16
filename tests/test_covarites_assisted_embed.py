@@ -16,6 +16,13 @@ from graspy.simulations.simulations import er_np, er_nm, sbm
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score as ARI
 
+"""
+All these tests uses :
+A SBM model generated adjacency matrix with very few nodes and significant different block probability
+A covarites matrix where covarite probability is significantlly differently different between blocks.
+If casc is correctly installed , it will perform 100% correct clustering on this case.
+"""
+
 
 def test_casc_cca():
 
