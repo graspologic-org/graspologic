@@ -77,7 +77,6 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
     graspy.embed.selectSVD
     graspy.embed.select_dimension
     graspy.utils.to_laplace
-    https://github.com/bwlewis/irlbpy
     sklearn.cluster.KMeans
     
 
