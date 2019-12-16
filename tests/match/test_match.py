@@ -22,8 +22,10 @@ class TestFAQ:
             FAQ(shuffle_input="hey")
         with pytest.raises(TypeError):
             FAQ(eps=-1)
+        with pytest.raises(TypeError):
+            FAQ(gmp="hey")
 
-    def __get_AB(self, qap_prob):
+    def _get_AB(self, qap_prob):
         with open("tests/match/qapdata/" + qap_prob + ".dat") as f:
             f = [int(elem) for elem in f.read().split()]
 
@@ -36,53 +38,53 @@ class TestFAQ:
         return A, B
 
     def test_barycenter(self):
-        A, B = self.__get_AB("lipa20a")
+        A, B = self._get_AB("lipa20a")
         lipa20a = self.barycenter.fit(A, B)
         score = lipa20a.score_
         assert 3683 <= score < 3900
 
-        A, B = self.__get_AB("lipa20b")
+        A, B = self._get_AB("lipa20b")
         lipa20b = self.barycenter.fit(A, B)
         score = lipa20b.score_
         assert score == 27076
 
-        A, B = self.__get_AB("lipa30a")
+        A, B = self._get_AB("lipa30a")
         lipa30a = self.barycenter.fit(A, B)
         score = lipa30a.score_
         assert 13178 <= score < 13650
 
-        A, B = self.__get_AB("lipa30b")
+        A, B = self._get_AB("lipa30b")
         lipa30b = self.barycenter.fit(A, B)
         score = lipa30b.score_
         assert score == 151426
 
-        A, B = self.__get_AB("lipa40a")
+        A, B = self._get_AB("lipa40a")
         lipa40a = self.barycenter.fit(A, B)
         score = lipa40a.score_
         assert 31538 <= score < 32300
 
-        A, B = self.__get_AB("lipa40b")
+        A, B = self._get_AB("lipa40b")
         lipa40b = self.barycenter.fit(A, B)
         score = lipa40b.score_
         assert score == 476581
 
-        A, B = self.__get_AB("lipa50a")
+        A, B = self._get_AB("lipa50a")
         lipa50a = self.barycenter.fit(A, B)
         score = lipa50a.score_
         assert 62093 <= score < 63300
 
-        A, B = self.__get_AB("lipa50b")
+        A, B = self._get_AB("lipa50b")
         lipa50b = self.barycenter.fit(A, B)
         score = lipa50b.score_
         assert score == 1210244
 
     def test_rand(self):
-        A, B = self.__get_AB("chr12c")
+        A, B = self._get_AB("chr12c")
         chr12c = self.rand.fit(A, B)
         score = chr12c.score_
         assert 11156 <= score < 13500
 
-        A, B = self.__get_AB("chr15a")
+        A, B = self._get_AB("chr15a")
         chr15a = self.rand.fit(A, B)
         score = chr15a.score_
         assert 9896 <= score < 11500
@@ -100,42 +102,24 @@ class TestSinkhornKnopp:
         with pytest.raises(ValueError):
             SK(epsilon=2)
 
-    def __make_M(self, n):
-        M = np.zeros((2 * n, n ** 2))
-        row = 0
-        for i in range(n):
-            for j in range(n):
-                M[row, i * n + j] = 1
-                M[row + 1, i + n * j] = 1
-            row += 2
-        return M
-
     def test_SK(self):
 
         # Epsilon = 1e-3
         sk = SK()
         P = np.asarray([[1, 2], [3, 4]])
-        Pt = sk.fit(P)
         n = P.shape[0]
-        M = self.__make_M(n)
-        one = np.ones(2 * n)
+        Pt = sk.fit(P)
 
-        f = (
-            M @ Pt.flatten()
-        )  # multiplying by matrix which computes all row and col sums
+        f = np.concatenate((np.sum(Pt, axis=0), np.sum(Pt, axis=1)), axis=None)
         f1 = [round(x, 5) for x in f]
-        assert (f1 == one).all()
+        assert (f1 == np.ones(2 * n)).all()
 
         # Epsilon = 1e-8
         sk = SK(epsilon=1e-8)
         P = np.asarray([[1.4, 0.2, 4], [3, 4, 0.7], [0.4, 6, 1]])
-        Pt = sk.fit(P)
         n = P.shape[0]
-        M = self.__make_M(n)
-        one = np.ones(2 * n)
+        Pt = sk.fit(P)
 
-        f = (
-            M @ Pt.flatten()
-        )  # multiplying by matrix which computes all row and col sums
+        f = np.concatenate((np.sum(Pt, axis=0), np.sum(Pt, axis=1)), axis=None)
         f1 = [round(x, 5) for x in f]
-        assert (f1 == one).all()
+        assert (f1 == np.ones(2 * n)).all()
