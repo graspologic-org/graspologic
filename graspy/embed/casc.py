@@ -26,13 +26,13 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
     Class for computing the k-means clustering results of a graph with the 
     Laplacian Matrix and Covariates Matrix generated from regression.[1]_.It 
     use the a weighted sum of Laplacian Matrix and Covariates :
-    .. math::L'=L+h*X(XT) 
+    .. math:: L'=L+h*X(XT) 
     or 
-    .. math::L'=L^2+h*X(XT)
+    .. math:: L'=L^2+h*X(XT)
     depending on if the graph is assortative.It relies on an 
     optimized implicitly restarted Lanczos bidiagonalization SVD decomposition 
     to cluster the
-    nodes of the graph in to k clusters[1][2]_.
+    nodes of the graph in to k clusters[1]_[2]_.
     
     
 
@@ -61,7 +61,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         Constant to be added to the diagonal of degree matrix. If None, average
         node degree is added. If int or float, must be >= 0. Only used when 
         ``form`` == 'R-DAD'.
-    rownorm : bool , optional (default=False)
+    row_norm : bool , optional (default=False)
         if True .The clastering process will be based on row-normlized singular
         vectors.
     cca : bool , optional (default=False)
@@ -82,10 +82,10 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
 
     References
     ----------
-        [1]N. Binkiewicz, J. T. Vogelstein, K. Rohe, Covariate-assisted spectral
+    .. [1]N. Binkiewicz, J. T. Vogelstein, K. Rohe, Covariate-assisted spectral
         clustering, Biometrika, Volume 104, Issue 2, June 2017, Pages 361–377, 
         https://doi.org/10.1093/biomet/asx008
-        [2]Augmented Implicitly Restarted Lanczos Bidiagonalization Methods,
+    .. [2]Augmented Implicitly Restarted Lanczos Bidiagonalization Methods,
         J. Baglama and L. Reichel, SIAM J. Sci. Comput. 2005
     """
 
@@ -338,7 +338,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
                         )
                     return res
 
-            u2, d2, v2, it, pr = self.irlb(graph_mat, n_blocks + 1, matmult)
+            u2, d2, v2, it, pr = self._irlb(graph_mat, n_blocks + 1, matmult)
 
         eVec = u2[:, 0:n_blocks]
         eVal = d2[0 : (n_blocks + 1)]
@@ -402,7 +402,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
             return np.asarray(A.transpose().dot(x)).ravel()
         return np.asarray(A.dot(x)).ravel()
 
-    def orthog(self, Y, X):
+    def _orthog(self, Y, X):
         """Orthogonalize a vector or matrix Y against the columns of the matrix X.
         This function requires that the column dimension of Y is less than X and
         that Y and X have the same number of rows.
@@ -419,7 +419,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
             warnings.warn("Ill-conditioning encountered, result accuracy may be poor")
             return 0.0
 
-    def irlb(
+    def _irlb(
         self,
         A,
         n,
@@ -521,7 +521,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
 
             if it > 0:
                 # NB W[:,0:j] selects columns 0,1,...,j-1
-                W[:, j] = self.orthog(W[:, j], W[:, 0:j])
+                W[:, j] = self._orthog(W[:, j], W[:, 0:j])
             s = np.linalg.norm(W[:, j])
             sinv = self.invcheck(s)
             W[:, j] = sinv * W[:, j]
@@ -541,7 +541,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
                 if center is not None:
                     F = F - np.sum(W[:, j]) * center
                 F = F - s * V[:, j]
-                F = self.orthog(F, V[:, 0 : (j + 1)])
+                F = self._orthog(F, V[:, 0 : (j + 1)])
                 fn = np.linalg.norm(F)
                 fninv = self.invcheck(fn)
                 F = fninv * F
@@ -567,7 +567,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
                     # One step of classical Gram-Schmidt...
                     W[:, j + 1] = W[:, j + 1] - fn * W[:, j]
                     # ...with full reorthogonalization
-                    W[:, j + 1] = self.orthog(W[:, j + 1], W[:, 0 : (j + 1)])
+                    W[:, j + 1] = self._orthog(W[:, j + 1], W[:, 0 : (j + 1)])
                     s = np.linalg.norm(W[:, j + 1])
                     sinv = self.invcheck(s)
                     W[:, j + 1] = sinv * W[:, j + 1]
