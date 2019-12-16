@@ -2,9 +2,10 @@ import pytest
 import numpy as np
 import math
 from graspy.match import FastApproximateQAP as FAQ
+from graspy.match import SinkhornKnopp as SK
 
 
-class TestMatch:
+class TestFAQ:
     @classmethod
     def setup_class(cls):
         cls.barycenter = FAQ()
@@ -85,3 +86,56 @@ class TestMatch:
         chr15a = self.rand.fit(A, B)
         score = chr15a.score_
         assert 9896 <= score < 11500
+
+
+class TestSinkhornKnopp:
+    @classmethod
+    def test_SK_inputs(self):
+        with pytest.raises(TypeError):
+            SK(max_iter=True)
+        with pytest.raises(ValueError):
+            SK(max_iter=-1)
+        with pytest.raises(TypeError):
+            SK(epsilon=True)
+        with pytest.raises(ValueError):
+            SK(epsilon=2)
+
+    def __make_M(self, n):
+        M = np.zeros((2 * n, n ** 2))
+        row = 0
+        for i in range(n):
+            for j in range(n):
+                M[row, i * n + j] = 1
+                M[row + 1, i + n * j] = 1
+            row += 2
+        return M
+
+    def test_SK(self):
+
+        # Epsilon = 1e-3
+        sk = SK()
+        P = np.asarray([[1, 2], [3, 4]])
+        Pt = sk.fit(P)
+        n = P.shape[0]
+        M = self.__make_M(n)
+        one = np.ones(2 * n)
+
+        f = (
+            M @ Pt.flatten()
+        )  # multiplying by matrix which computes all row and col sums
+        f1 = [round(x, 5) for x in f]
+        assert (f1 == one).all()
+
+        # Epsilon = 1e-8
+        sk = SK(epsilon=1e-8)
+        P = np.asarray([[1.4, 0.2, 4], [3, 4, 0.7], [0.4, 6, 1]])
+        Pt = sk.fit(P)
+        n = P.shape[0]
+        M = self.__make_M(n)
+        one = np.ones(2 * n)
+
+        f = (
+            M @ Pt.flatten()
+        )  # multiplying by matrix which computes all row and col sums
+        f1 = [round(x, 5) for x in f]
+        assert (f1 == one).all()
