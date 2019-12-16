@@ -113,7 +113,7 @@ def sample_edges_corr(P, R, directed, loops):
     if type(P) is not np.ndarray:
         raise TypeError("P must be numpy.ndarray")
     if len(P.shape) != 2:
-        raise ValueError("P must have dimension 2 (n_vertices, n_dimensions)")
+        raise ValueError("P must have dimension 2 (n_vertices, n_vertices)")
     if P.shape[0] != P.shape[1]:
         raise ValueError("P must be a square matrix")
 
@@ -121,7 +121,7 @@ def sample_edges_corr(P, R, directed, loops):
     if type(R) is not np.ndarray:
         raise TypeError("R must be numpy.ndarray")
     if len(R.shape) != 2:
-        raise ValueError("R must have dimension 2 (n_vertices, n_dimensions)")
+        raise ValueError("R must have dimension 2 (n_vertices, n_vertices)")
     if R.shape[0] != P.shape[1]:
         raise ValueError("R must be a square matrix")
 
