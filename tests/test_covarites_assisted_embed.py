@@ -17,6 +17,7 @@ from sklearn.metrics import adjusted_rand_score as ARI
 
 
 class TestStringMethods(unittest.TestCase):
+    @classmethod
     def _testcasc_cca(self, *args, **kwargs):
         A = [
             [
@@ -1539,5 +1540,4 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(ResultARI, 1)
 
 
-if __name__ == "__main__":
-    unittest.main()
+
