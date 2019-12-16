@@ -58,7 +58,7 @@ def sample_edges_corr(P, R, directed, loops):
     >>> R = r * np.ones((5, 5))
     >>> P = p * np.ones((5, 5))
 
-    To sample a correlated graph pair based on P and Rho matrices:
+    To sample a correlated graph pair based on P and R matrices:
 
     >>> sample_edges_corr(P, R, directed = False, loops = False)
     (array([[0., 1., 0., 0., 0.],
@@ -140,7 +140,7 @@ def er_corr(n, p, r, directed, loops):
     >>> r = 0.3
     >>> n = 5
 
-    To sample a correlated ER graph pair based on n, p and R matrices:
+    To sample a correlated ER graph pair based on n, p and r:
 
     >>> er_corr(n, p, r, directed=False, loops=False)
     (array([[0., 0., 1., 0., 0.],
@@ -237,7 +237,7 @@ def sbm_corr(n, p, r, directed, loops):
     >>> p = [[0.5, 0.1], [0.1, 0.5]]
     >>> r = 0.3
 
-    To sample a correlated SBM graph pair based on n, p and R matrices:
+    To sample a correlated SBM graph pair based on n, p and r:
 
     >>> sbm_corr(n, p, r, directed=False, loops=False)
     (array([[0., 1., 0., 0., 0., 0.],
