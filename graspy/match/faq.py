@@ -39,9 +39,9 @@ class FastApproximateQAP:
         The initial position chosen
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
-        :math: `J=1*1^T /n` , i.e the barycenter of the feasible region
+        :math:`J=1*1^T /n` , i.e the barycenter of the feasible region
 
-        "rand" : some random point near :math: `J, (J+K)` /2, where K is some random doubly
+        "rand" : some random point near :math:`J, (J+K)` /2, where K is some random doubly
         stochastic matrix
 
     max_iter : int, positive (default = 30)
@@ -54,7 +54,7 @@ class FastApproximateQAP:
 
     eps : float (default = 0.1)
         A positive, threshold stopping criteria such that FW continues to iterate
-        while Frobenius norm of :math : `(P_{i}-P_{i+1}) > eps`
+        while Frobenius norm of :math:`(P_{i}-P_{i+1}) > eps`
 
 
     gmp : bool (default = False)
@@ -68,7 +68,7 @@ class FastApproximateQAP:
     perm_inds_ : array, size (n,) where n is the number of vertices in the graphs
         fitted.
         The indices of the optimal permutation on the nodes of B, found via
-        FAQ, to best minimize the objective function :math: `f(P) = trace((A^T )PB(P^ T))`.
+        FAQ, to best minimize the objective function :math:`f(P) = trace((A^T )PB(P^ T))`.
 
         
     score_ : float
