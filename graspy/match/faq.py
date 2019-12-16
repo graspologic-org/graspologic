@@ -91,7 +91,7 @@ class FastApproximateQAP:
         max_iter=30,
         shuffle_input=True,
         eps=0.1,
-        gmp="False",
+        gmp=False,
     ):
 
         if n_init > 0 and type(n_init) is int:
@@ -122,11 +122,11 @@ class FastApproximateQAP:
         else:
             msg = '"eps" must be a positive float'
             raise TypeError(msg)
-        if gmp is bool:
+        if type(gmp) is bool:
             self.gmp = gmp
         else:
-            gmp = '"gmp" must be a boolean'
-            raise TypeError(gmp)
+            msg = '"gmp" must be a boolean'
+            raise TypeError(msg)
 
     def fit(self, A, B):
         """
