@@ -16,6 +16,7 @@ import numpy as np
 import math
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
+from sklearn.utils import check_array
 from .skp import SinkhornKnopp
 
 
@@ -41,7 +42,7 @@ class FastApproximateQAP:
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
         :math:`J=1*1^T /n` , i.e the barycenter of the feasible region
 
-        "rand" : some random point near :math:`J, (J+K)` /2, where K is some random doubly
+        "rand" : some random point near :math:`J, (J+K)/2`, where K is some random doubly
         stochastic matrix
 
     max_iter : int, positive (default = 30)
@@ -68,7 +69,7 @@ class FastApproximateQAP:
     perm_inds_ : array, size (n,) where n is the number of vertices in the graphs
         fitted.
         The indices of the optimal permutation on the nodes of B, found via
-        FAQ, to best minimize the objective function :math:`f(P) = trace((A^T )PB(P^ T))`.
+        FAQ, to best minimize the objective function :math:`f(P) = trace(A^T PB(P^T )`.
 
         
     score_ : float
@@ -145,16 +146,9 @@ class FastApproximateQAP:
         
         self : returns an instance of self
         """
-        if A.shape[0] != B.shape[0]:
-            msg = "Matrix entries must be of equal size"
-            raise ValueError(msg)
-        elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
-            msg = "Matrix entries must be square"
-            raise ValueError(msg)
-        elif (A >= 0).all() == False or (B >= 0).all() == False:
-            msg = "Matrix entries must be greater than or equal to zero"
-            raise ValueError(msg)
 
+        A = check_array(A, copy=True, ensure_2d=True)
+        B = check_array(B, copy=True, ensure_2d=True)
         n = A.shape[0]  # number of vertices in graphs
 
         if self.shuffle_input:
