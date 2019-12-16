@@ -15,7 +15,8 @@ Single graph embedding
 
 .. autoclass:: AdjacencySpectralEmbed
 .. autoclass:: LaplacianSpectralEmbed
-.. py:class:: CovariateAssistedSpectralEmbed
+.. autoclass:: CovariateAssistedSpectralEmbed
+   :members: fit  
 
 
 Multiple graph embedding
