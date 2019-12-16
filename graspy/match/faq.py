@@ -39,9 +39,9 @@ class FastApproximateQAP:
         The initial position chosen
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
-        J=1*1^T/n, i.e the barycenter of the feasible region
+        :math: `J=1*1^T /n` , i.e the barycenter of the feasible region
 
-        "rand" : some random point near J, (J+K)/2, where K is some random doubly
+        "rand" : some random point near :math: `J, (J+K)` /2, where K is some random doubly
         stochastic matrix
 
     max_iter : int, positive (default = 30)
@@ -54,7 +54,13 @@ class FastApproximateQAP:
 
     eps : float (default = 0.1)
         A positive, threshold stopping criteria such that FW continues to iterate
-        while Frobenius norm of (P[i]-P[i+1]) > eps
+        while Frobenius norm of :math : `(P_{i}-P_{i+1}) > eps`
+
+
+    gmp : bool (default = False)
+        Gives users the option to the Graph Matching Problem (GMP) rather than
+        the Quadratic Assignment (QAP). This is accomplished through trivial
+        negation of the objective function.
 
     Attributes
     ----------
@@ -62,7 +68,7 @@ class FastApproximateQAP:
     perm_inds_ : array, size (n,) where n is the number of vertices in the graphs
         fitted.
         The indices of the optimal permutation on the nodes of B, found via
-        FAQ, to best minimize the objective function f(P) = trace((A^T)PB(P^T)).
+        FAQ, to best minimize the objective function :math: `f(P) = trace((A^T )PB(P^ T))`.
 
         
     score_ : float
@@ -85,6 +91,7 @@ class FastApproximateQAP:
         max_iter=30,
         shuffle_input=True,
         eps=0.1,
+        gmp="False",
     ):
 
         if n_init > 0 and type(n_init) is int:
@@ -115,6 +122,11 @@ class FastApproximateQAP:
         else:
             msg = '"eps" must be a positive float'
             raise TypeError(msg)
+        if gmp is bool:
+            self.gmp = gmp
+        else:
+            gmp = '"gmp" must be a boolean'
+            raise TypeError(gmp)
 
     def fit(self, A, B):
         """
@@ -148,11 +160,10 @@ class FastApproximateQAP:
         if self.shuffle_input:
             node_shuffle_input = np.random.permutation(n)
             A = A[np.ix_(node_shuffle_input, node_shuffle_input)]
-            # P_shuffle_input = np.zeros((n, n))
             # shuffle_input to avoid results from inputs that were already matched
-            # P_shuffle_input[list(range(n)), node_shuffle_input] = 1
-            # A = P_shuffle_input @ A @ np.transpose(P_shuffle_input)
-
+        min = 1
+        if self.gmp:
+            min = -1
         At = np.transpose(A)  # A transpose
         Bt = np.transpose(B)  # B transpose
         score = math.inf
@@ -185,13 +196,13 @@ class FastApproximateQAP:
                     A @ P @ Bt + At @ P @ B
                 )  # computing the gradient of f(P) = -tr(APB^tP^t)
                 rows, cols = linear_sum_assignment(
-                    delta_f
+                    min * delta_f
                 )  # run hungarian algorithm on gradient(f(P))
                 Q = np.zeros((n, n))
                 Q[rows, cols] = 1  # initialize search direction matrix Q
 
                 def f(x):  # computing the original optimization function
-                    return np.trace(
+                    return min * np.trace(
                         At
                         @ (x * P + (1 - x) * Q)
                         @ B
@@ -210,8 +221,7 @@ class FastApproximateQAP:
             row, perm_inds_new = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
-            # perm_mat_new = np.zeros((n, n))  # initiate a nxn matrix of zeros
-            # perm_mat_new[row, perm_inds_new] = 1  # set indices of permutation to 1
+
             score_new = np.trace(
                 np.transpose(A) @ B[np.ix_(perm_inds_new, perm_inds_new)]
             )  # computing objective function value
@@ -229,9 +239,6 @@ class FastApproximateQAP:
             node_unshuffle_input[node_shuffle_input] = np.array(range(n))
             A = A[np.ix_(node_unshuffle_input, node_unshuffle_input)]
             score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
-            # perm_mat = np.zeros((n, n))
-            # perm_mat[row, perm_inds] = 1
-            # np.transpose(A) @ perm_mat @ B @ np.transpose(perm_mat)
 
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
