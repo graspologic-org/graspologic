@@ -26,9 +26,9 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
     Class for computing the k-means clustering results of a graph with the 
     Laplacian Matrix and Covariates Matrix generated from regression.[1]_.It 
     use the a weighted sum of Laplacian Matrix and Covariates :
-    .. math:: L'=L+h*X(XT) 
+    .. math:: L'=L+h*XX^T 
     or 
-    .. math:: L'=L^2+h*X(XT)
+    .. math:: L'=L^2+h*XX^T
     depending on if the graph is assortative.It relies on an 
     optimized implicitly restarted Lanczos bidiagonalization SVD decomposition 
     to cluster the
@@ -83,10 +83,10 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
     References
     ----------
     .. [1]N. Binkiewicz, J. T. Vogelstein, K. Rohe, Covariate-assisted spectral
-        clustering, Biometrika, Volume 104, Issue 2, June 2017, Pages 361–377, 
-        https://doi.org/10.1093/biomet/asx008
+       clustering, Biometrika, Volume 104, Issue 2, June 2017, Pages 361–377
+       
     .. [2]Augmented Implicitly Restarted Lanczos Bidiagonalization Methods,
-        J. Baglama and L. Reichel, SIAM J. Sci. Comput. 2005
+       J. Baglama and L. Reichel, SIAM J. Sci. Comput. 2005
     """
 
     def __init__(
