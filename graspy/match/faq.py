@@ -69,7 +69,7 @@ class FastApproximateQAP:
     perm_inds_ : array, size (n,) where n is the number of vertices in the graphs
         fitted.
         The indices of the optimal permutation on the nodes of B, found via
-        FAQ, to best minimize the objective function :math:`f(P) = trace(A^T PB(P^T )`.
+        FAQ, to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
 
         
     score_ : float
@@ -79,9 +79,9 @@ class FastApproximateQAP:
     References
     ----------
     .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer,
-    E. T. Harley, D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast
-    approximate quadratic programming for graph matching,” PLOS one, vol. 10, no. 4,
-    p. e0121002, 2015.
+           E. T. Harley, D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast
+           approximate quadratic programming for graph matching,” PLOS one, vol. 10,
+           no. 4, p. e0121002, 2015.
 
     """
 
