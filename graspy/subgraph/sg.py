@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.stats import fisher_exact
 
+
 class SignalSubgraph:
     """
     Estimate the signal-subgraph of a set of labeled graph samples.
@@ -28,9 +29,12 @@ class SignalSubgraph:
     .. [1] J. T. Vogelstein, W. R. Gray, R. J. Vogelstein, and C. E. Priebe, "Graph Classification using Signal-Subgraphs: Applications in Statistical Connectomics," arXiv:1108.1427v2 [stat.AP], 2012.
     
     """
-    def __init__(self,graphs,labels):
+
+    def __init__(self, graphs, labels):
         if not isinstance(graphs, np.ndarray):
-            msg = "Input array 'graphs' must be np.ndarray, not {}.".format(type(graphs))
+            msg = "Input array 'graphs' must be np.ndarray, not {}.".format(
+                type(graphs)
+            )
             raise TypeError(msg)
         if not isinstance(labels, (list, np.ndarray)):
             msg = "Input vector 'labels' must be list or np.ndarray, not {}.".format(
@@ -72,8 +76,8 @@ class SignalSubgraph:
                 b = sum(self.graphs[i, j, :]) - a
                 out[i, j, :, :] = [[a, rowsum0 - a], [b, rowsum1 - b]]
         self.contmat = out
-        
-    def fit(self,constraints):
+
+    def fit(self, constraints):
         """
         Fit the signal-subgraph estimator according to the constraints given.
 
@@ -147,7 +151,8 @@ class SignalSubgraph:
             raise TypeError(msg)
         self.sigsub = sigsub
         return self
-    def fit_transform(self,constraints,return_mask = False):
+
+    def fit_transform(self, constraints, return_mask=False):
         """
         A function to return the indices of the signal-subgraph. If *return_mask* is True, also returns a mask for the signal-subgraph.
 
@@ -169,9 +174,8 @@ class SignalSubgraph:
         self.fit(constraints)
         verts = np.shape(self.graphs)[0]
         if return_mask:
-            mask = np.full((verts,verts),False)
+            mask = np.full((verts, verts), False)
             mask[self.sigsub] = True
             return self.sigsub, mask
         else:
             return self.sigsub
-
