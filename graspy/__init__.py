@@ -9,7 +9,7 @@ import graspy.pipeline
 import graspy.plot
 import graspy.simulations
 import graspy.utils
-import graspy.subgraphing
+import graspy.subgraph
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
