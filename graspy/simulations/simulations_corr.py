@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import numpy as np
-from graspy.simulations import sample_edges, er_np, sbm
+from graspy.simulations import sample_edges, sbm
 
 
 def check_dirloop(directed, loops):
@@ -311,13 +311,12 @@ def sbm_corr(n, p, r, directed, loops):
 
     P = np.zeros((np.sum(n), np.sum(n)))
     block_indices = np.insert(np.cumsum(np.array(n)), 0, 0)
-    p = np.mat(p)
-    for i in range(p.shape[0]):  # for each row
-        for j in range(p.shape[1]):  # for each column
+    for i in range(np.array(p).shape[0]):  # for each row
+        for j in range(np.array(p).shape[1]):  # for each column
             P[
                 block_indices[i] : block_indices[i + 1],
                 block_indices[j] : block_indices[j + 1],
-            ] = p[i, j]
+            ] = p[i][j]
     R = r * np.ones((np.sum(n), np.sum(n)))
     G1, G2 = sample_edges_corr(P, R, directed=False, loops=False)
     return G1, G2
