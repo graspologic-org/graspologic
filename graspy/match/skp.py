@@ -78,8 +78,8 @@ class SinkhornKnopp:
     References
     ----------
     .. [1] Sinkhorn, Richard & Knopp, Paul. (1967). "Concerning nonnegative
-    matrices and doubly stochastic matrices," Pacific Journal of Mathematics.
-    21. 10.2140/pjm.1967.21.343.
+           matrices and doubly stochastic matrices," Pacific Journal of
+           Mathematics. 21. 10.2140/pjm.1967.21.343.
     """
 
     def __init__(self, max_iter=1000, epsilon=1e-3):
