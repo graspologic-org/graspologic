@@ -24,6 +24,8 @@ class TestFAQ:
             FAQ(eps=-1)
         with pytest.raises(TypeError):
             FAQ(gmp="hey")
+        with pytest.raises(ValueError):
+            FAQ().fit(np.random.random((3, 4)), np.random.random((3, 4)))
 
     def _get_AB(self, qap_prob):
         with open("tests/match/qapdata/" + qap_prob + ".dat") as f:
