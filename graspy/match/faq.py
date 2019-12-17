@@ -66,8 +66,7 @@ class FastApproximateQAP:
     Attributes
     ----------
     
-    perm_inds_ : array, size (n,) where n is the number of vertices in the graphs
-        fitted.
+    perm_inds_ : array, size (n,) where n is the number of vertices in the graphs fitted.
         The indices of the optimal permutation on the nodes of B, found via
         FAQ, to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
 
@@ -155,9 +154,9 @@ class FastApproximateQAP:
             node_shuffle_input = np.random.permutation(n)
             A = A[np.ix_(node_shuffle_input, node_shuffle_input)]
             # shuffle_input to avoid results from inputs that were already matched
-        min = 1
+        obj_func_scalar = 1
         if self.gmp:
-            min = -1
+            obj_func_scalar = -1
         At = np.transpose(A)  # A transpose
         Bt = np.transpose(B)  # B transpose
         score = math.inf
@@ -190,13 +189,13 @@ class FastApproximateQAP:
                     A @ P @ Bt + At @ P @ B
                 )  # computing the gradient of f(P) = -tr(APB^tP^t)
                 rows, cols = linear_sum_assignment(
-                    min * delta_f
+                    obj_func_scalar * delta_f
                 )  # run hungarian algorithm on gradient(f(P))
                 Q = np.zeros((n, n))
                 Q[rows, cols] = 1  # initialize search direction matrix Q
 
                 def f(x):  # computing the original optimization function
-                    return min * np.trace(
+                    return obj_func_scalar * np.trace(
                         At
                         @ (x * P + (1 - x) * Q)
                         @ B
