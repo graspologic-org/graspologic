@@ -14,7 +14,7 @@ class TestEstimateSubgraph(unittest.TestCase):
         for ind in range(10):
             if ys[ind] == 1:
                 A[:, :, ind] = blank
-        test_model = sg.SignalSubgraph(A,ys)
+        test_model = sg.SignalSubgraph(A, ys)
         estsub = test_model.fit_transform([5, 1])
         ver = np.ones((10, 10))
         ver[estsub] = 0
@@ -29,7 +29,7 @@ class TestEstimateSubgraph(unittest.TestCase):
         for ind in range(10):
             if ys[ind] == 1:
                 A[:, :, ind] = blank
-        test_model = sg.SignalSubgraph(A,ys)
+        test_model = sg.SignalSubgraph(A, ys)
         estsub = test_model.fit_transform(5)
         ver = np.ones((10, 10))
         ver[estsub] = 0
@@ -38,7 +38,7 @@ class TestEstimateSubgraph(unittest.TestCase):
     def test_fit_bad_constraints(self):
         A = np.ones((5, 5, 5))
         ys = np.ones(5)
-        test_model = sg.SignalSubgraph(A,ys)
+        test_model = sg.SignalSubgraph(A, ys)
         with self.assertRaises(TypeError):
             test_model.fit([1])
         with self.assertRaises(TypeError):
@@ -48,7 +48,7 @@ class TestEstimateSubgraph(unittest.TestCase):
         A = np.ones((1, 1, 5))
         A[:, :, 1::2] = 0
         ys = np.array([1, 0, 1, 0, 0])
-        test_model = sg.SignalSubgraph(A,ys)
+        test_model = sg.SignalSubgraph(A, ys)
         test_model._SignalSubgraph__construct_contingency()
         cmat = test_model.contmat
         ver = np.array([[[[1, 2], [2, 0]]]], dtype=float)
