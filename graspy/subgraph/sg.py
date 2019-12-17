@@ -72,7 +72,7 @@ class SignalSubgraph:
         rowsum0 = len(self.labels) - rowsum1
         for i in range(nverts):
             for j in range(nverts):
-                a = sum(self.graphs[i, j, labels == 0])
+                a = sum(self.graphs[i, j, self.labels == 0])
                 b = sum(self.graphs[i, j, :]) - a
                 out[i, j, :, :] = [[a, rowsum0 - a], [b, rowsum1 - b]]
         self.contmat = out
