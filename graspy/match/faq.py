@@ -145,18 +145,30 @@ class FastApproximateQAP:
         
         self : returns an instance of self
         """
-
         A = check_array(A, copy=True, ensure_2d=True)
         B = check_array(B, copy=True, ensure_2d=True)
+
+        if A.shape[0] != B.shape[0]:
+            msg = "Matrix entries must be of equal size"
+            raise ValueError(msg)
+        elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
+            msg = "Matrix entries must be square"
+            raise ValueError(msg)
+        elif (A >= 0).all() == False or (B >= 0).all() == False:
+            msg = "Matrix entries must be greater than or equal to zero"
+            raise ValueError(msg)
+
         n = A.shape[0]  # number of vertices in graphs
 
         if self.shuffle_input:
             node_shuffle_input = np.random.permutation(n)
             A = A[np.ix_(node_shuffle_input, node_shuffle_input)]
             # shuffle_input to avoid results from inputs that were already matched
+
         obj_func_scalar = 1
         if self.gmp:
             obj_func_scalar = -1
+
         At = np.transpose(A)  # A transpose
         Bt = np.transpose(B)  # B transpose
         score = math.inf
