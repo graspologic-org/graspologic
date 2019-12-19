@@ -16,7 +16,7 @@ Single graph embedding
 .. autoclass:: AdjacencySpectralEmbed
 .. autoclass:: LaplacianSpectralEmbed
 .. autoclass:: CovariateAssistedSpectralEmbed
-  :members: fit()
+
 
 
 Multiple graph embedding
