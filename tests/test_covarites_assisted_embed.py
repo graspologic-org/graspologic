@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Nov 17 20:13:45 2019
-
-@author: jerryyao
-"""
-
 import pytest
 import graspy as gs
 import numpy as np
