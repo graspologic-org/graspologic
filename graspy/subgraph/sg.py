@@ -12,25 +12,56 @@ class SignalSubgraph:
     Parameters
     ----------
     graphs: array-like, shape (n_vertices, n_vertices, s_samples)
-        A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.
-        
+        A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.      
     labels: vector, length (s_samples)
         A vector of class labels. There must be a maximum of two classes.
          
     Attributes
     ----------
-    contmat: array-like, shape (n_vertices, n_vertices, 2, 2)
+    contmat_: array-like, shape (n_vertices, n_vertices, 2, 2)
         An array that stores the 2-by-2 contingency matrix for each point in the graph samples.
-    sigsub: tuple, shape (2, n_edges)
+    sigsub_: tuple, shape (2, n_edges)
         A tuple of a row index array and column index array, where n_edges is the size of the signal-subgraph determined by *constraints*.
-    
+    mask_: array-like, shape (n_vertices, n_vertices)
+        An array of boolean values. Entries are true for edges that are in the signal subgraph. 
+
     References
     ----------
     .. [1] J. T. Vogelstein, W. R. Gray, R. J. Vogelstein, and C. E. Priebe, "Graph Classification using Signal-Subgraphs: Applications in Statistical Connectomics," arXiv:1108.1427v2 [stat.AP], 2012.
     
     """
+    def __construct_contingency(self):
+        nverts = np.shape(self.graphs)[0]
+        out = np.zeros((nverts, nverts, 2, 2))
+        rowsum1 = sum(self.labels)
+        rowsum0 = len(self.labels) - rowsum1
+        for i in range(nverts):
+            for j in range(nverts):
+                a = sum(self.graphs[i, j, self.labels == 0])
+                b = sum(self.graphs[i, j, :]) - a
+                out[i, j, :, :] = [[a, rowsum0 - a], [b, rowsum1 - b]]
+        self.contmat_ = out
 
-    def __init__(self, graphs, labels):
+    def fit(self, graphs, labels, constraints):
+        """
+        Fit the signal-subgraph estimator according to the constraints given.
+
+        Parameters
+        ----------
+        graphs: array-like, shape (n_vertices, n_vertices, s_samples)
+            A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.   
+        labels: vector, length (s_samples)
+            A vector of class labels. There must be a maximum of two classes.
+        constraints: int or vector
+            The constraints that will be imposed onto the estimated signal-subgraph.
+            
+            If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
+            If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
+        
+        Returns
+        -------
+        self: returns an instance of self
+        """
         if not isinstance(graphs, np.ndarray):
             msg = "Input array 'graphs' must be np.ndarray, not {}.".format(
                 type(graphs)
@@ -65,39 +96,11 @@ class SignalSubgraph:
             self.graphs = graphs
             self.labels = labels
 
-    def __construct_contingency(self):
-        nverts = np.shape(self.graphs)[0]
-        out = np.zeros((nverts, nverts, 2, 2))
-        rowsum1 = sum(self.labels)
-        rowsum0 = len(self.labels) - rowsum1
-        for i in range(nverts):
-            for j in range(nverts):
-                a = sum(self.graphs[i, j, self.labels == 0])
-                b = sum(self.graphs[i, j, :]) - a
-                out[i, j, :, :] = [[a, rowsum0 - a], [b, rowsum1 - b]]
-        self.contmat = out
-
-    def fit(self, constraints):
-        """
-        Fit the signal-subgraph estimator according to the constraints given.
-
-        Parameters
-        ----------
-        constraints: int or vector
-            The constraints that will be imposed onto the estimated signal-subgraph.
-            
-            If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
-            If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
-        
-        Returns
-        -------
-        self: returns an instance of self
-        """
         self.__construct_contingency()
         verts = np.shape(self.graphs)[0]
         sigmat = np.array(
             [
-                [fisher_exact(self.contmat[i, j, :, :])[1] for j in range(verts)]
+                [fisher_exact(self.contmat_[i, j, :, :])[1] for j in range(verts)]
                 for i in range(verts)
             ]
         )
@@ -149,15 +152,19 @@ class SignalSubgraph:
         else:
             msg = "Input constraints must be an int for the incoherent signal-subgraph estimator, or a vector of length 2 for the coherent subgraph estimator."
             raise TypeError(msg)
-        self.sigsub = sigsub
+        self.sigsub_ = sigsub
         return self
 
-    def fit_transform(self, constraints, return_mask=False):
+    def fit_transform(self, graphs, labels, constraints):
         """
         A function to return the indices of the signal-subgraph. If *return_mask* is True, also returns a mask for the signal-subgraph.
 
         Parameters
         ----------
+        graphs: array-like, shape (n_vertices, n_vertices, s_samples)
+            A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.     
+        labels: vector, length (s_samples)
+            A vector of class labels. There must be a maximum of two classes.
         constraints: int or vector
             The constraints that will be imposed onto the estimated signal-subgraph.
             
@@ -168,14 +175,10 @@ class SignalSubgraph:
         -------
         sigsub: tuple
             Contains an array of row indices and an array of column indices.
-        mask: array-like, shape (n_vertices, n_vertices), optional
-            A mask for the signal-subgraph.
         """
-        self.fit(constraints)
+        self.fit(graphs, labels, constraints)
         verts = np.shape(self.graphs)[0]
-        if return_mask:
-            mask = np.full((verts, verts), False)
-            mask[self.sigsub] = True
-            return self.sigsub, mask
-        else:
-            return self.sigsub
+        mask = np.full((verts, verts), False)
+        mask[self.sigsub_] = True
+        self.mask_ = mask
+        return self.sigsub_
