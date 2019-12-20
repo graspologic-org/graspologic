@@ -30,6 +30,7 @@ class SignalSubgraph:
     .. [1] J. T. Vogelstein, W. R. Gray, R. J. Vogelstein, and C. E. Priebe, "Graph Classification using Signal-Subgraphs: Applications in Statistical Connectomics," arXiv:1108.1427v2 [stat.AP], 2012.
     
     """
+
     def __construct_contingency(self):
         nverts = np.shape(self.graphs)[0]
         out = np.zeros((nverts, nverts, 2, 2))
