@@ -14,9 +14,6 @@
 
 import numpy as np
 import numbers
-from sklearn.utils import check_array
-from mgcpy.independence_tests.mgc import MGC
-from mgc.independence import Dcorr, RV, CCA
 
 from .base import BaseSubgraph
 
