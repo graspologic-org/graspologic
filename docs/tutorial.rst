@@ -66,7 +66,7 @@ values and the estimated signal subgraph.
    :maxdepth: 1
       
    tutorials/subgraph/NonItScreen
-      tutorials/subgraph/ItScreen
+   tutorials/subgraph/ItScreen
 
 .. _plot_tutorials:
 
