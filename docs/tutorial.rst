@@ -54,7 +54,21 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
    tutorials/inference/latent_position_test
    tutorials/inference/latent_distribution_test
 
-.. _plot_tutorials: 
+.. _subgraph_tutorials:
+
+Subgraph
+========
+Statistical estimation of the signal subgraph for a set of graphs of multiple classes,
+done both iteratively and non-iteratively. Below are tutorials for finding the correlation
+values and the estimated signal subgraph.
+
+.. toctree::
+   :maxdepth: 1
+      
+   tutorials/subgraph/NonItScreen
+      tutorials/subgraph/ItScreen
+
+.. _plot_tutorials:
 
 Plotting
 ========
