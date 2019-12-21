@@ -17,7 +17,8 @@ REQUIRED_PACKAGES = [
     "scikit-learn>=0.19.1",
     "scipy>=1.4.0",
     "seaborn>=0.9.0",
-    "mgc",
+    "matplotlib>=3.0.0",
+    "mgc"
 ]
 
 # Find GraSPy version.
