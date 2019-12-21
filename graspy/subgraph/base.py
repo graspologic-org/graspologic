@@ -17,7 +17,8 @@ from abc import abstractmethod
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
-from mgcpy.independence_tests.mgc import MGC
+from scipy.stats import multiscale_graphcorr
+
 from mgc.independence import Dcorr, RV, CCA
 
 
@@ -104,9 +105,8 @@ class BaseSubgraph(BaseEstimator):
 
             # Statistical measurement chosen by the user
             if self.opt == "mgc":
-                mgc = MGC()
-                c_u, independence_test_metadata = mgc.test_statistic(mat, y)
-                corrs[i][0] = c_u
+                c_u, p_value, mgc_dict = multiscale_graphcorr(mat, y, reps=1)
+
             else:
                 if self.opt == "dcorr":
                     test = Dcorr()
@@ -115,7 +115,8 @@ class BaseSubgraph(BaseEstimator):
                 else:
                     test = CCA()
                 c_u = test._statistic(mat, y)
-                corrs[i][0] = c_u
+
+            corrs[i][0] = c_u
 
         return corrs
 
