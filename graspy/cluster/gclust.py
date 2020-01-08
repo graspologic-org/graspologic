@@ -110,7 +110,7 @@ class GaussianCluster(BaseCluster):
         self,
         min_components=2,
         max_components=None,
-        covariance_type="full",
+        covariance_type="all",
         tol=1e-3,
         reg_covar=1e-6,
         max_iter=100,
