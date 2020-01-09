@@ -155,14 +155,6 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         -------
         self : returns an instance of self.
         
-        Returns a dict containing following keywords:
-        cluster : Clustering labels
-        
-        h : optimized tuning parameter
-        
-        wcss : kmeans_results.inertia_ of the Kmeans clustering
-        
-        casc_svd : Svd dict containing the Svd decomposation resluts. 
         """
         A = import_graph(graph)
 
@@ -193,7 +185,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
             self.cca,
         )
         self.latent_left_=res['casc_svd']
-        self.labels_=res['clusters']
+        self.labels_=res['cluster']
         self.opt_h_=res['h']
         self.inertia_=res['wcss']
         return self
@@ -207,6 +199,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         ----------
         graph : array_like or networkx.Graph
             Input graph to embed. see graspy.utils.import_graph
+            
         covariate:array_like ,shape(n_verts,n_covariates)
             Bernoulli Covariate Matrix of a graph. 
 
@@ -231,10 +224,12 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         ----------
         graph : array_like or networkx.Graph
             Input graph to embed. see graspy.utils.import_graph
+            
         covariate:array_like ,shape(n_verts,n_covariates)
             Bernoulli Covariate Matrix of a graph. 
 
         y : Ignored
+        
         return_full : bool , optional (default=True)
             If True, returns the detailed clustering information including 
             optimized turning parameter, embedding results and inertia. Else
@@ -244,11 +239,14 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         -------
         labels_ : np.ndarray, shape (n_vertices)
             Component labels of vertices.
+            
         latent_left_ : np.ndarray, shape (n_vertices, n_dimension)
             A single np.ndarray represents the latent position of an undirected
             graph
+            
         opt_h_ : double
             optimized tuning parameter.
+            
         inertia_ : double
             kmeans_results.inertia_ of the Kmeans clustering
             
