@@ -50,7 +50,7 @@ def test_casc_cca():
     casc = CovariateAssistedSpectralEmbed(
         n_components=2, assortative=True, cca=True, check_lcc=False
     )
-    casc_results = casc.fit_predict(np.array(A), covarites,y=None,return_all=False)
+    casc_results = casc.fit_predict(np.array(A), covarites, y=None, return_all=False)
     ans = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ResultARI = ARI(casc_results, ans)
 
@@ -90,7 +90,7 @@ def test_casc_assort():
     casc = CovariateAssistedSpectralEmbed(
         n_components=2, assortative=True, cca=False, check_lcc=False
     )
-    casc_results = casc.fit_predict(np.array(A), covarites,y=None,return_all=False)
+    casc_results = casc.fit_predict(np.array(A), covarites, y=None, return_all=False)
     ans = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ResultARI = ARI(casc_results, ans)
     assert ResultARI == 1
@@ -129,7 +129,7 @@ def test_casc_non_assort():
     casc = CovariateAssistedSpectralEmbed(
         n_components=2, assortative=False, cca=False, check_lcc=False
     )
-    casc_results = casc.fit_predict(np.array(A), covarites,y=None,return_all=False)
+    casc_results = casc.fit_predict(np.array(A), covarites, y=None, return_all=False)
     ans = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ResultARI = ARI(casc_results, ans)
     assert ResultARI == 1
