@@ -74,6 +74,16 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         If True uses assortative CASC method. For SBM models assortative means 
         within-block probability is higher than trans-block probability.see[1]_.
     
+    Attributes
+    ----------
+    latent_left_ : array, shape (n_samples, n_components)
+        Estimated left latent positions of the graph.
+    labels_ :  array, shape (n_samples)
+        Estimated clusters of the graph nodes.
+    opt_h_ : double
+        optimized tuning parameter.
+    inertia_ : double
+        kmeans_results.inertia_ of the Kmeans clustering
   
 
     See Also
@@ -120,6 +130,10 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         self.row_norm = row_norm
         self.n_points = n_points
         self.cca = cca
+        self.labels_=None
+        self.opt_h_=None
+        self.inertia_=None
+        
 
     #    @timethis
     def fit(self, graph, covariate_matrix, y=None):
@@ -139,6 +153,8 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
 
         Returns
         -------
+        self : returns an instance of self.
+        
         Returns a dict containing following keywords:
         cluster : Clustering labels
         
@@ -176,9 +192,73 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
             self.assortative,
             self.cca,
         )
+        self.latent_left_=res['casc_svd']
+        self.labels_=res['clusters']
+        self.opt_h_=res['h']
+        self.inertia_=res['wcss']
+        return self
+    def fit_transform(self, graph, covariate_matrix, y=None):
+        """
+        Fit the CASC model with graphs and apply the transformation.
 
-        return res
+        
 
+        Parameters
+        ----------
+        graph : array_like or networkx.Graph
+            Input graph to embed. see graspy.utils.import_graph
+        covariate:array_like ,shape(n_verts,n_covariates)
+            Bernoulli Covariate Matrix of a graph. 
+
+        y : Ignored
+        
+
+        Returns
+        -------
+        out : np.ndarray, shape (n_vertices, n_dimension)
+            A single np.ndarray represents the latent position of an undirected
+            graph
+        """
+        self.fit(graph, covariate_matrix, y=None)
+        return self.latent_left_
+    def fit_predict(self, graph, covariate_matrix, y=None, return_full=True):
+        """
+        Fit the CASC model with graphs and predict clusters.
+
+        
+
+        Parameters
+        ----------
+        graph : array_like or networkx.Graph
+            Input graph to embed. see graspy.utils.import_graph
+        covariate:array_like ,shape(n_verts,n_covariates)
+            Bernoulli Covariate Matrix of a graph. 
+
+        y : Ignored
+        return_full : bool , optional (default=True)
+            If True, returns the detailed clustering information including 
+            optimized turning parameter, embedding results and inertia. Else
+            returns labels only.
+
+        Returns
+        -------
+        labels_ : np.ndarray, shape (n_vertices)
+            Component labels of vertices.
+        latent_left_ : np.ndarray, shape (n_vertices, n_dimension)
+            A single np.ndarray represents the latent position of an undirected
+            graph
+        opt_h_ : double
+            optimized tuning parameter.
+        inertia_ : double
+            kmeans_results.inertia_ of the Kmeans clustering
+            
+        """
+        
+        self.fit(graph, covariate_matrix, y=None)
+        if return_full:
+            return self.labels_,self.latent_left_,self.opt_h_,self.inertia_
+        else:
+            return self.labels_
     def get_tuning_range(self, graph_matrix, covariates, n_blocks, assortative, cca):
         n_cov = covariates.shape[1]
 
