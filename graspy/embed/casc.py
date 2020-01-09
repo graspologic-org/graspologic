@@ -130,10 +130,9 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         self.row_norm = row_norm
         self.n_points = n_points
         self.cca = cca
-        self.labels_=None
-        self.opt_h_=None
-        self.inertia_=None
-        
+        self.labels_ = None
+        self.opt_h_ = None
+        self.inertia_ = None
 
     #    @timethis
     def fit(self, graph, covariate_matrix, y=None):
@@ -184,11 +183,12 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
             self.assortative,
             self.cca,
         )
-        self.latent_left_=res['casc_svd']
-        self.labels_=res['cluster']
-        self.opt_h_=res['h']
-        self.inertia_=res['wcss']
+        self.latent_left_ = res["casc_svd"]
+        self.labels_ = res["cluster"]
+        self.opt_h_ = res["h"]
+        self.inertia_ = res["wcss"]
         return self
+
     def fit_transform(self, graph, covariate_matrix, y=None):
         """
         Fit the CASC model with graphs and apply the transformation.
@@ -214,6 +214,7 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
         """
         self.fit(graph, covariate_matrix, y=None)
         return self.latent_left_
+
     def fit_predict(self, graph, covariate_matrix, y=None, return_full=True):
         """
         Fit the CASC model with graphs and predict clusters.
@@ -251,12 +252,13 @@ class CovariateAssistedSpectralEmbed(BaseEmbed):
             kmeans_results.inertia_ of the Kmeans clustering
             
         """
-        
+
         self.fit(graph, covariate_matrix, y=None)
         if return_full:
-            return self.labels_,self.latent_left_,self.opt_h_,self.inertia_
+            return self.labels_, self.latent_left_, self.opt_h_, self.inertia_
         else:
             return self.labels_
+
     def get_tuning_range(self, graph_matrix, covariates, n_blocks, assortative, cca):
         n_cov = covariates.shape[1]
 
