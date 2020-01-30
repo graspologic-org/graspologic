@@ -272,16 +272,16 @@ def to_laplace(graph, form="DAD", regularizer=None):
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
         
         - 'I-DAD'
-            Computes :math:`L = I - D*A*D`
+            Computes :math:`L = I - D_i*A*D_i`
         - 'DAD'
-            Computes :math:`L = D*A*D`
+            Computes :math:`L = D_o*A*D_i`
         - 'R-DAD'
-            Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + regularizer*I`
+            Computes :math:`L = D_o^r*A*D_i^r` 
+            where :math:`D_o^r = D_o + regularizer * I` and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
-        Constant to be added to the diagonal of degree matrix. If None, average 
-        node degree is added. If int or float, must be >= 0. Only used when 
-        ``form`` == 'R-DAD'.
+        Constant to add to the degree vector(s). If None, average node degree is added. 
+        If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
 
     Returns
     -------
@@ -294,6 +294,10 @@ def to_laplace(graph, form="DAD", regularizer=None):
     .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
            under the degree-corrected stochastic blockmodel." In Advances
            in Neural Information Processing Systems, pp. 3120-3128. 2013
+
+    .. [2] Rohe, Karl, Tai Qin, and Bin Yu. "Co-clustering directed graphs to discover
+           asymmetries and directional communities." Proceedings of the National Academy
+           of Sciences 113.45 (2016): 12679-12684.
 
     Examples
     --------
@@ -313,34 +317,44 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     A = import_graph(graph)
 
-    if not is_almost_symmetric(A):
-        raise ValueError("Laplacian not implemented/defined for directed graphs")
+    in_degree = np.sum(A, axis=0)
+    out_degree = np.sum(A, axis=1)
 
-    D_vec = np.sum(A, axis=0)
     # regularize laplacian with parameter
     # set to average degree
     if form == "R-DAD":
         if regularizer is None:
-            regularizer = np.mean(D_vec)
+            regularizer = np.mean(out_degree)
         elif not isinstance(regularizer, (int, float)):
             raise TypeError(
                 "Regularizer must be a int or float, not {}".format(type(regularizer))
             )
         elif regularizer < 0:
             raise ValueError("Regularizer must be greater than or equal to 0")
-        D_vec += regularizer
+
+        in_degree += regularizer
+        out_degree += regularizer
 
     with np.errstate(divide="ignore"):
-        D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5
-    D_root[np.isinf(D_root)] = 0
-    D_root = np.diag(D_root)  # just change to sparse diag for sparse support
+        in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
+        out_root = 1 / np.sqrt(out_degree)
+
+    in_root[np.isinf(in_root)] = 0
+    out_root[np.isinf(out_root)] = 0
+
+    in_root = np.diag(in_root)  # just change to sparse diag for sparse support
+    out_root = np.diag(out_root)
 
     if form == "I-DAD":
-        L = np.diag(D_vec) - A
-        L = D_root @ L @ D_root
+        L = np.diag(in_degree) - A
+        L = in_root @ L @ in_root
     elif form == "DAD" or form == "R-DAD":
-        L = D_root @ A @ D_root
-    return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
+        L = out_root @ A @ in_root
+    if is_symmetric(A):
+        return symmetrize(
+            L, method="avg"
+        )  # sometimes machine prec. makes this necessary
+    return L
 
 
 def is_fully_connected(graph):
