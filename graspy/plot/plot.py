@@ -252,7 +252,7 @@ def heatmap(
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
         ``sort_nodes`` is ``True``, will sort nodes this way within block. 
 
-    **kwargs : additional plotting arguments
+    **kwargs : additional plotting arguments passed to Seaborn's ``heatmap``
     """
     _check_common_inputs(
         figsize=figsize,
