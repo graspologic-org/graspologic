@@ -159,7 +159,7 @@ class FastApproximateQAP:
             raise ValueError(msg)
 
         n = A.shape[0]  # number of vertices in graphs
-        
+
         if self.shuffle_input:
             node_shuffle_input = np.random.permutation(n)
             A = A[np.ix_(node_shuffle_input, node_shuffle_input)]
