@@ -231,7 +231,7 @@ class FastApproximateQAP:
                 np.transpose(A) @ B[np.ix_(perm_inds_new, perm_inds_new)]
             )  # computing objective function value
 
-            if score_new < score:  # minimizing
+            if obj_func_scalar * score_new < obj_func_scalar * score:  # minimizing
                 score = score_new
                 if self.shuffle_input:
                     perm_inds = np.array([0] * n)
