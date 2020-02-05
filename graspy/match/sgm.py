@@ -96,7 +96,7 @@ class SeededGraphMatching:
         gmp=False,
     ):
 
-        if n_init > 0 and type(n_init) is int:
+        if type(n_init) is int and n_init > 0:
             self.n_init = n_init
         else:
             msg = '"n_init" must be a positive integer'
@@ -184,19 +184,17 @@ class SeededGraphMatching:
         obj_func_scalar = 1
         if self.gmp:
             obj_func_scalar = -1
-
-        p_A = np.concatenate(
-            [W1, np.array([x for x in range(n) if x not in W1])], axis=None
-        )
-        p_B = np.concatenate(
-            [W2, np.array([x for x in range(n) if x not in W2])], axis=None
-        )
+        W1_c = np.array([x for x in range(n) if x not in W1])
+        W2_c = np.array([x for x in range(n) if x not in W2])
+        p_A = np.concatenate([W1, W1_c], axis=None)
+        p_B = np.concatenate([W2, W2_c], axis=None)
         A = A[np.ix_(p_A, p_A)]
         B = B[np.ix_(p_B, p_B)]
         if self.shuffle_input:
             node_shuffle_input = np.concatenate(
                 (np.arange(n_seeds), np.random.permutation(np.arange(n_seeds, n)))
             )
+
             A = A[np.ix_(node_shuffle_input, node_shuffle_input)]
             # shuffle_input to avoid results from inputs that were already matched
 
@@ -246,17 +244,19 @@ class SeededGraphMatching:
                 rows, cols = linear_sum_assignment(
                     obj_func_scalar * delta_f
                 )  # run hungarian algorithm on gradient(f(P))
-                Q = np.zeros((n, n))
+                Q = np.zeros((n_unseed, n_unseed))
                 Q[rows, cols] = 1  # initialize search direction matrix Q
 
                 def f(x):  # computing the original optimization function
-                    return obj_func_scalar * np.trace(
-                        np.transpose(A)
-                        @ np.stack(
-                            (
-                                np.hstack((B11, B12 @ np.transpose(P))),
-                                np.hstack((P @ B21, P @ B22 @ np.transpose(P))),
-                            )
+                    return (
+                        obj_func_scalar * np.trace(A11T @ B11)
+                        + np.trace(np.transpose(x * P + (1 - x) * Q) @ A21 @ B21T)
+                        + np.trace(np.transpose(x * P + (1 - x) * Q) @ A12T @ B12)
+                        + np.trace(
+                            A22T
+                            @ (x * P + (1 - x) * Q)
+                            @ B22
+                            @ np.transpose(x * P + (1 - x) * Q)
                         )
                     )
 
@@ -275,6 +275,7 @@ class SeededGraphMatching:
             perm_inds_new = np.concatenate(
                 (np.arange(n_seeds), np.array([x + n_seeds for x in col]))
             )
+
             score_new = np.trace(
                 np.transpose(A) @ B[np.ix_(perm_inds_new, perm_inds_new)]
             )  # computing objective function value
@@ -285,8 +286,12 @@ class SeededGraphMatching:
                     perm_inds = np.array([0] * n)
                     perm_inds[node_shuffle_input] = perm_inds_new
                     perm_inds[p_A] = perm_inds
+
                 else:
-                    perm_inds[p_A] = perm_inds_new
+                    perm_inds = np.array([0] * n)
+                    perm_inds[W1] = W2
+                    perm_inds[W1_c] = W2_c[col]
+                    perm_inds = perm_inds.astype(int)
 
         if self.shuffle_input:
             node_unshuffle_input = np.array(range(n))
@@ -295,10 +300,10 @@ class SeededGraphMatching:
             score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
 
         p_A_unshuffle = np.array(range(n))
-        p_B_unshuffle = np.array(range(n))
         p_A_unshuffle[p_A] = np.array(range(n))
-        p_B_unshuffle[p_B] = np.array(range(n))
         A = A[np.ix_(p_A_unshuffle, p_A_unshuffle)]
+        p_B_unshuffle = np.array(range(n))
+        p_B_unshuffle[p_B] = np.array(range(n))
         B = B[np.ix_(p_B_unshuffle, p_B_unshuffle)]
         score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
 
