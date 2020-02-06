@@ -184,19 +184,18 @@ class SeededGraphMatching:
         obj_func_scalar = 1
         if self.gmp:
             obj_func_scalar = -1
+
+        if self.shuffle_input:
+            W2_c = np.random.permutation(np.array([x for x in range(n) if x not in W2]))
+            # shuffle_input to avoid results from inputs that were already matched
+        else:
+            W2_c = np.array([x for x in range(n) if x not in W2])
+
         W1_c = np.array([x for x in range(n) if x not in W1])
-        W2_c = np.array([x for x in range(n) if x not in W2])
         p_A = np.concatenate([W1, W1_c], axis=None)
         p_B = np.concatenate([W2, W2_c], axis=None)
         A = A[np.ix_(p_A, p_A)]
         B = B[np.ix_(p_B, p_B)]
-        if self.shuffle_input:
-            node_shuffle_input = np.concatenate(
-                (np.arange(n_seeds), np.random.permutation(np.arange(n_seeds, n)))
-            )
-
-            A = A[np.ix_(node_shuffle_input, node_shuffle_input)]
-            # shuffle_input to avoid results from inputs that were already matched
 
         A11 = A[:n_seeds, :n_seeds]
         A12 = A[:n_seeds, n_seeds:]
@@ -282,22 +281,9 @@ class SeededGraphMatching:
 
             if obj_func_scalar * score_new < obj_func_scalar * score:  # minimizing
                 score = score_new
-                if self.shuffle_input:
-                    perm_inds = np.array([0] * n)
-                    perm_inds[node_shuffle_input] = perm_inds_new
-                    perm_inds[p_A] = perm_inds
-
-                else:
-                    perm_inds = np.array([0] * n)
-                    perm_inds[W1] = W2
-                    perm_inds[W1_c] = W2_c[col]
-                    perm_inds = perm_inds.astype(int)
-
-        if self.shuffle_input:
-            node_unshuffle_input = np.array(range(n))
-            node_unshuffle_input[node_shuffle_input] = np.array(range(n))
-            A = A[np.ix_(node_unshuffle_input, node_unshuffle_input)]
-            score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
+                perm_inds = np.array([0] * n)
+                perm_inds[p_A] = p_B[perm_inds_new]
+                perm_inds = perm_inds.astype(int)
 
         p_A_unshuffle = np.array(range(n))
         p_A_unshuffle[p_A] = np.array(range(n))
