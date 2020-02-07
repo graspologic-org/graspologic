@@ -196,7 +196,7 @@ class TestSGM:
         W2 = [pi[z] for z in W1]
         chr15a = self.rand.fit(A, B, W1, W2)
         score = chr15a.score_
-        assert 9896 <= score < 10500
+        assert 9896 <= score < 10000
 
 
 
