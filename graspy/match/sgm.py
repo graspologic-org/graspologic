@@ -17,6 +17,7 @@ import math
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
 from sklearn.utils import check_array
+from sklearn.utils import column_or_1d
 from .skp import SinkhornKnopp
 
 
@@ -157,6 +158,8 @@ class SeededGraphMatching:
         """
         A = check_array(A, copy=True, ensure_2d=True)
         B = check_array(B, copy=True, ensure_2d=True)
+        W1 = column_or_1d(W1)
+        W2 = column_or_1d(W2)
 
         if A.shape[0] != B.shape[0]:
             msg = "Adjacency matrices must be of equal size"
@@ -297,7 +300,7 @@ class SeededGraphMatching:
         self.score_ = score  # objective function value
         return self
 
-    def fit_predict(self, A, B):
+    def fit_predict(self, A, B, W1, W2):
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
@@ -310,11 +313,19 @@ class SeededGraphMatching:
         B : 2d-array, square, positive
             A square, positive adjacency matrix
 
+        W1 : 1d-array, shape (m , 1) where m <= n
+            An array where each entry is a node in A
+
+        W2 : 1d-array, shape (m , 1) where m <= n
+            An array where each entry is a node in B
+            The elements of W1 and W2 are seeds, creating a fixed
+            seeding of W1 -> W2
+
         Returns
         -------
 
         perm_inds_ : 1-d array, some shuffling of [0, n_vert)
             The optimal permutation indices to minimize the objective function
         """
-        self.fit(A, B)
+        self.fit(A, B, W1, W2)
         return self.perm_inds_
