@@ -99,6 +99,7 @@ class TestFAQ:
         score = chr15a.score_
         assert 9896 <= score < 11500
 
+
 class TestSGM:
     @classmethod
     def setup_class(cls):
@@ -119,13 +120,30 @@ class TestSGM:
         with pytest.raises(TypeError):
             SGM(gmp="hey")
         with pytest.raises(ValueError):
-            SGM().fit(np.random.random((3, 4)), np.random.random((3, 4)),np.arange(2),np.arange(2))
+            SGM().fit(
+                np.random.random((3, 4)),
+                np.random.random((3, 4)),
+                np.arange(2),
+                np.arange(2),
+            )
         with pytest.raises(ValueError):
-            SGM().fit(np.random.random((3, 3)), np.random.random((4, 4)),np.arange(2),np.arange(2))
+            SGM().fit(
+                np.random.random((3, 3)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+            )
         with pytest.raises(ValueError):
-            SGM().fit(np.random.random((3, 4)), np.random.random((3, 4)),np.arange(2),np.arange(2))
+            SGM().fit(
+                np.random.random((3, 4)),
+                np.random.random((3, 4)),
+                np.arange(2),
+                np.arange(2),
+            )
         with pytest.raises(ValueError):
-            SGM().fit(-1 * np.identity(3), -1 * np.identity(3),np.arange(2),np.arange(2))
+            SGM().fit(
+                -1 * np.identity(3), -1 * np.identity(3), np.arange(2), np.arange(2)
+            )
         with pytest.raises(ValueError):
             SGM().fit(np.identity(3), np.identity(3), np.identity(3), np.arange(2))
         with pytest.raises(ValueError):
@@ -133,14 +151,15 @@ class TestSGM:
         with pytest.raises(ValueError):
             SGM().fit(np.identity(3), np.identity(3), np.arange(5), np.arange(5))
         with pytest.raises(ValueError):
-            SGM().fit(np.identity(3), np.identity(3), -1 * np.arange(2), -1 * np.arange(2))
-
+            SGM().fit(
+                np.identity(3), np.identity(3), -1 * np.arange(2), -1 * np.arange(2)
+            )
 
     def _get_AB(self, qap_prob):
         with open("tests/match/qapdata/" + qap_prob + ".dat") as f:
             f = [int(elem) for elem in f.read().split()]
 
-                    # adjusting
+            # adjusting
             f = np.array(f[1:])
             n = int(math.sqrt(len(f) / 2))
             f = f.reshape(2 * n, n)
@@ -154,11 +173,11 @@ class TestSGM:
         pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
         W1 = np.sort(random.sample(list(range(n)), 3))
         W2 = [pi[z] for z in W1]
-        chr12c = self.barycenter.fit(A, B,W1,W2)
+        chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
         assert 11156 <= score < 20000
 
-        W1 = np.sort(random.sample(list(range(n)), n-1))
+        W1 = np.sort(random.sample(list(range(n)), n - 1))
         W2 = [pi[z] for z in W1]
         chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
@@ -166,7 +185,7 @@ class TestSGM:
 
         A, B = self._get_AB("chr15a")
         n = A.shape[0]
-        pi = np.array([5,10,8,13,12,11,14,2,4,6,7,15,3,1,9]) - [1] * n
+        pi = np.array([5, 10, 8, 13, 12, 11, 14, 2, 4, 6, 7, 15, 3, 1, 9]) - [1] * n
         W1 = np.sort(random.sample(list(range(n)), 3))
         W2 = [pi[z] for z in W1]
         chr15a = self.barycenter.fit(A, B, W1, W2)
@@ -197,8 +216,6 @@ class TestSGM:
         chr15a = self.rand.fit(A, B, W1, W2)
         score = chr15a.score_
         assert 9896 <= score < 10000
-
-
 
 
 class TestSinkhornKnopp:
