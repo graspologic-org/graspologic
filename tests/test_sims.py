@@ -356,6 +356,14 @@ class Test_WSBM(unittest.TestCase):
         cls.Psy = symmetrize(cls.Psy)
         cls.seed = 12345
 
+    def test_sbm_label(self):
+        np.random.seed(1)
+        n = [3, 3]
+        p = [[0.5, 0.1], [0.1, 0.5]]
+        A, l = sbm(n, p, return_labels=True)
+        label = [0, 0, 0, 1, 1, 1]
+        self.assertTrue(np.allclose(l, label))
+
     def test_sbm(self):
         n = [50, 60, 70]
         vcount = np.cumsum(n)

@@ -233,6 +233,11 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         profile likelihood. Computational Statistics & Data Analysis, 51(2), 
         pp.918-930.
     """
+    # Added in order to pass check estimator, must include words "one sample"
+    if X.shape[0] == 1:
+        msg = "Input data has only one sample (node)"
+        raise ValueError(msg)
+
     # Deal with algorithms
     if algorithm not in ["full", "truncated", "randomized"]:
         msg = "algorithm must be one of {full, truncated, randomized}."
