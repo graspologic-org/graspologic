@@ -188,7 +188,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     SciPy's wrapper for LAPACK or Sklearn's implementation of randomized SVD.
 
     It also performs optimal dimensionality selectiong using Zhu & Godsie algorithm
-    [1]_ if number of target dimension is not specified.
+    if number of target dimension is not specified.
 
     Parameters
     ----------

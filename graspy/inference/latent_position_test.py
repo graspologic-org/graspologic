@@ -24,7 +24,7 @@ from .base import BaseInference
 class LatentPositionTest(BaseInference):
     r"""
     Two-sample hypothesis test for the problem of determining whether two random 
-    dot product graphs have the same latent positions [1]_.
+    dot product graphs have the same latent positions.
 
     This test assumes that the two input graphs are vertex aligned, that is,
     there is a known mapping between vertices in the two graphs and the input graphs
