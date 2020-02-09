@@ -163,18 +163,74 @@ def import_edgelist(
 
 
 def is_symmetric(X):
+    """
+    A function for determining if a graph is symmetric.
+
+    Parameters
+    ----------
+    X: object
+        Either array-like, shape (n_vertices, n_vertices) numpy array,
+        or an object of type networkx.Graph.
+
+    Returns
+    -------
+    boolean: True if the graph is symmetric.
+    """
     return np.array_equal(X, X.T)
 
 
 def is_loopless(X):
+    """
+    A function for determining if a graph contains no loops.
+
+    Parameters
+    ----------
+    X: object
+        Either array-like, shape (n_vertices, n_vertices) numpy array,
+        or an object of type networkx.Graph.
+
+    Returns
+    -------
+    boolean: True if the graph contains no loops.
+    """
     return not np.any(np.diag(X) != 0)
 
 
 def is_unweighted(X):
+    """
+    A function for determining if a graph is unweighted.
+
+    Parameters
+    ----------
+    X: object
+        Either array-like, shape (n_vertices, n_vertices) numpy array,
+        or an object of type networkx.Graph.
+
+    Returns
+    -------
+    boolean: True if the graph is weighted.
+    """
     return ((X == 0) | (X == 1)).all()
 
 
 def is_almost_symmetric(X, atol=1e-15):
+    """
+    A function for determining if a graph is close to symmetric within
+    a given tolerance.
+
+    Parameters
+    ----------
+    X: object
+        Either array-like, shape (n_vertices, n_vertices) numpy array,
+        or an object of type networkx.Graph.
+
+    atol: float, optional (default=1e-15)
+        Acceptable deviation from perfect symmetry.
+
+    Returns
+    -------
+    boolean: True if the graph is symmetric within tolerance.
+    """
     return np.allclose(X, X.T, atol=atol)
 
 
