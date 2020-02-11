@@ -131,7 +131,7 @@ class SeededGraphMatching:
             msg = '"gmp" must be a boolean'
             raise TypeError(msg)
 
-    def fit(self, A, B, W1, W2):
+    def fit(self, A, B, W1=[], W2=[]):
         """
         Fits the model with two assigned adjacency matrices
 
@@ -195,8 +195,8 @@ class SeededGraphMatching:
             W2_c = np.array([x for x in range(n) if x not in W2])
 
         W1_c = np.array([x for x in range(n) if x not in W1])
-        p_A = np.concatenate([W1, W1_c], axis=None)
-        p_B = np.concatenate([W2, W2_c], axis=None)
+        p_A = np.concatenate([W1, W1_c], axis=None).astype(int)
+        p_B = np.concatenate([W2, W2_c], axis=None).astype(int)
         A = A[np.ix_(p_A, p_A)]
         B = B[np.ix_(p_B, p_B)]
 
@@ -223,16 +223,16 @@ class SeededGraphMatching:
             if self.init_method == "rand":
                 sk = SinkhornKnopp()
                 K = np.random.rand(
-                    n - n_seeds, n - n_seeds
+                    n_unseed, n_unseed
                 )  # generate a nxn matrix where each entry is a random integer [0,1]
                 for i in range(10):  # perform 10 iterations of Sinkhorn balancing
                     K = sk.fit(K)
-                J = np.ones((n - n_seeds, n - n_seeds)) / float(
-                    n - n_seeds
+                J = np.ones((n_unseed, n_unseed)) / float(
+                    n_unseed
                 )  # initialize J, a doubly stochastic barycenter
                 P = (K + J) / 2
             elif self.init_method == "barycenter":
-                P = np.ones((n - n_seeds, n - n_seeds)) / float(n - n_seeds)
+                P = np.ones((n_unseed, n_unseed)) / float(n_unseed)
 
             const_sum = A21 @ np.transpose(B21) + np.transpose(A12) @ B12
             grad_P = math.inf  # gradient of P
