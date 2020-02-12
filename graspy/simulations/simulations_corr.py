@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import numpy as np
-from graspy.simulations import sample_edges, sbm
+from graspy.simulations import sample_edges
 
 
 def check_dirloop(directed, loops):
