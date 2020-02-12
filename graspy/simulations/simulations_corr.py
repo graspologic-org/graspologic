@@ -318,5 +318,5 @@ def sbm_corr(n, p, r, directed=False, loops=False):
                 block_indices[j] : block_indices[j + 1],
             ] = p[i][j]
     R = r * np.ones((np.sum(n), np.sum(n)))
-    G1, G2 = sample_edges_corr(P, R, directed=False, loops=False)
+    G1, G2 = sample_edges_corr(P, R, directed=directed, loops=loops)
     return G1, G2
