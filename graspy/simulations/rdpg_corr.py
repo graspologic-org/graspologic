@@ -54,11 +54,6 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
         A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
 
-    References
-    ----------
-    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
     
     Examples
     --------
@@ -67,15 +62,15 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
     >>> X = np.random.dirichlet([1, 1], size=5)
     Sample a binary RDPG pair using sampled latent positions.
     >>> rdpg_corr(X,Y=None,0.3, rescale=False, directed=False, loops=False)
-    array([[0., 1., 0., 1., 0.],
-           [1., 0., 0., 1., 1.],
-           [0., 0., 0., 0., 0.],
-           [1., 1., 0., 0., 0.],
-           [0., 1., 0., 0., 0.]]), array([[0., 1., 0., 1., 0.],
-           [1., 0., 0., 0., 1.],
-           [0., 0., 0., 0., 0.],
-           [1., 0., 0., 0., 0.],
-           [0., 1., 0., 0., 0.]])
+    (array([[0., 1., 0., 1., 0.],
+            [1., 0., 0., 1., 1.],
+            [0., 0., 0., 0., 0.],
+            [1., 1., 0., 0., 0.],
+            [0., 1., 0., 0., 0.]]), array([[0., 1., 0., 1., 0.],
+            [1., 0., 0., 0., 1.],
+            [0., 0., 0., 0., 0.],
+            [1., 0., 0., 0., 0.],
+            [0., 1., 0., 0., 0.]]))
     """
     # check r
     if not np.issubdtype(type(r), np.floating):
