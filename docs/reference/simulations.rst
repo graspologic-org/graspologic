@@ -19,3 +19,4 @@ Simulations
 .. autofunction:: sbm_corr
 
 .. autofunction:: rdpg_corr
+

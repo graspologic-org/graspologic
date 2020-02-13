@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import numpy as np
-from graspy.simulations import sample_edges, sbm
+from graspy.simulations import sample_edges
 
 
 def check_dirloop(directed, loops):
@@ -53,7 +53,7 @@ def check_rel_sbm(p, r):
                 raise ValueError(msg)
 
 
-def sample_edges_corr(P, R, directed, loops):
+def sample_edges_corr(P, R, directed=False, loops=False):
     """
     Generate a pair of correlated graphs with Bernoulli distribution.
     Both G1 and G2 are binary matrices. 
@@ -135,7 +135,7 @@ def sample_edges_corr(P, R, directed, loops):
     return G1, G2
 
 
-def er_corr(n, p, r, directed, loops):
+def er_corr(n, p, r, directed=False, loops=False):
     """
     Generate a pair of correlated graphs with specified edge probability
     Both G1 and G2 are binary matrices. 
@@ -217,7 +217,7 @@ def er_corr(n, p, r, directed, loops):
     return G1, G2
 
 
-def sbm_corr(n, p, r, directed, loops):
+def sbm_corr(n, p, r, directed=False, loops=False):
     """
     Generate a pair of correlated graphs with specified edge probability
     Both G1 and G2 are binary matrices. 

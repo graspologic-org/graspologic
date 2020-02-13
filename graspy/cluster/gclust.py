@@ -42,10 +42,12 @@ class GaussianCluster(BaseCluster):
         The maximum number of mixture components to consider. Must be greater
         than or equal to ``min_components``.
 
-    covariance_type : {'full' (default), 'tied', 'diag', 'spherical'}, optional
+    covariance_type : {'all' (default), 'full', 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
         If a string, it must be one of:
-
+        
+        - 'all'
+            considers all covariance structures in ['spherical', 'diag', 'tied', 'full']
         - 'full'
             each component has its own general covariance matrix
         - 'tied'
@@ -54,8 +56,6 @@ class GaussianCluster(BaseCluster):
             each component has its own diagonal covariance matrix
         - 'spherical'
             each component has its own single variance
-        - 'all'
-            considers all covariance structures in ['spherical', 'diag', 'tied', 'full']
         If a list/array, it must be a list/array of strings containing only
             'spherical', 'tied', 'diag', and/or 'spherical'.
 
@@ -110,7 +110,7 @@ class GaussianCluster(BaseCluster):
         self,
         min_components=2,
         max_components=None,
-        covariance_type="full",
+        covariance_type="all",
         tol=1e-3,
         reg_covar=1e-6,
         max_iter=100,

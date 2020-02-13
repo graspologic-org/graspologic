@@ -30,6 +30,7 @@ stochastic block model, and random dot product graph (RDPG).
    tutorials/simulations/corr
    tutorials/simulations/rdpg_corr
 
+
 .. _embed_tutorials:
 
 Embedding
