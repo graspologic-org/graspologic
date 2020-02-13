@@ -61,7 +61,7 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
     Generate random latent positions using 2-dimensional Dirichlet distribution.
     >>> X = np.random.dirichlet([1, 1], size=5)
     Sample a binary RDPG pair using sampled latent positions.
-    >>> rdpg_corr(X,Y=None,0.3, rescale=False, directed=False, loops=False)
+    >>> rdpg_corr(X, None, 0.3, rescale=False, directed=False, loops=False)
     (array([[0., 1., 0., 1., 0.],
             [1., 0., 0., 1., 1.],
             [0., 0., 0., 0., 0.],
