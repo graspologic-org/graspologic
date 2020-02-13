@@ -53,14 +53,23 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
     G2: ndarray (n_vertices, n_vertices)
         A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
-
+        
+    References
+    ----------
+    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
+       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
+       Journal of the American Statistical Association, Vol. 107(499), 2012
     
     Examples
     --------
     >>> np.random.seed(1234)
-    Generate random latent positions using 2-dimensional Dirichlet distribution.
+    
+    To gnerate random latent positions using 2-dimensional Dirichlet distribution:
+    
     >>> X = np.random.dirichlet([1, 1], size=5)
-    Sample a binary RDPG pair using sampled latent positions.
+    
+    To sample a correlated RDPG graph pair:
+    
     >>> rdpg_corr(X, None, 0.3, rescale=False, directed=False, loops=False)
     (array([[0., 1., 0., 1., 0.],
             [1., 0., 0., 1., 1.],
