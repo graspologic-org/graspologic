@@ -223,7 +223,7 @@ class AutoGMMCluster(BaseCluster):
         verbose=0,
         selection_criteria="bic",
         max_agglom_size=2000,
-        n_jobs=1,
+        n_jobs=None,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -448,14 +448,14 @@ class AutoGMMCluster(BaseCluster):
         else:
             ari = float("nan")
         results = {
-            "model": [model],
-            "bic/aic": [criter],
-            "ari": [ari],
-            "n_components": [gm_params["n_components"]],
-            "affinity": [params[0]["affinity"]],
-            "linkage": [params[0]["linkage"]],
-            "covariance_type": [gm_params["covariance_type"]],
-            "reg_covar": [gm_params["reg_covar"]],
+            "model": model,
+            "bic/aic": criter,
+            "ari": ari,
+            "n_components": gm_params["n_components"],
+            "affinity": params[0]["affinity"],
+            "linkage": params[0]["linkage"],
+            "covariance_type": gm_params["covariance_type"],
+            "reg_covar": gm_params["reg_covar"],
         }
         return results
 
@@ -525,8 +525,11 @@ class AutoGMMCluster(BaseCluster):
         param_grid = list(ParameterGrid(param_grid))
         param_grid = _process_paramgrid(param_grid)
 
+        def _fit_for_data(p):
+            return self._fit_cluster(X, y, p)
+
         results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
-            delayed(self._fit_cluster(X, y, p) for p in param_grid)
+            delayed(_fit_for_data)(p) for p in param_grid
         )
 
         results = pd.DataFrame(results)
