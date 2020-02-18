@@ -15,9 +15,10 @@
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
+from sklearn.metrics import pairwise_distances
 
 from .svd import selectSVD
-from ..utils import is_symmetric
+from ..utils import is_almost_symmetric
 
 
 def _get_centering_matrix(n):
@@ -111,41 +112,6 @@ class ClassicalMDS(BaseEstimator):
 
         self.n_elbows = n_elbows
 
-    def _compute_euclidean_distances(self, X):
-        """
-        Computes pairwise distance between row vectors or matrices
-
-        Parameters
-        ----------
-        X : array_like
-            If ``dissimilarity=='precomputed'``, the input should be the 
-            dissimilarity matrix with shape (n_samples, n_samples). If 
-            ``dissimilarity=='euclidean'``, then the input should be 2d-array 
-            with shape (n_samples, n_features) or a 3d-array with shape 
-            (n_samples, n_features_1, n_features_2).
-        
-        Returns
-        -------
-        out : 2d-array, shape (n_samples, n_samples)
-            A dissimilarity matrix based on Frobenous norms between pairs of
-            matrices or vectors.
-        """
-        shape = X.shape
-        n_samples = shape[0]
-
-        if X.ndim == 2:
-            order = 2
-            axis = 1
-        else:
-            order = "fro"
-            axis = (1, 2)
-
-        out = np.zeros((n_samples, n_samples))
-        for i in range(n_samples):
-            out[i] = np.linalg.norm(X - X[i], axis=axis, ord=order)
-
-        return out
-
     def fit(self, X, y=None):
         """
         Fit the model with X.
@@ -177,12 +143,12 @@ class ClassicalMDS(BaseEstimator):
             dissimilarity_matrix = check_array(X, ensure_2d=True, allow_nd=False)
 
             # Must be symmetric
-            if not is_symmetric(dissimilarity_matrix):
+            if not is_almost_symmetric(dissimilarity_matrix):
                 msg = "X must be a symmetric array if precomputed dissimilarity matrix."
                 raise ValueError(msg)
         elif self.dissimilarity == "euclidean":
             X = check_array(X, ensure_2d=True, allow_nd=True)
-            dissimilarity_matrix = self._compute_euclidean_distances(X=X)
+            dissimilarity_matrix = pairwise_distances(X, metric="euclidean")
 
         J = _get_centering_matrix(dissimilarity_matrix.shape[0])
         B = J @ (dissimilarity_matrix ** 2) @ J * -0.5
