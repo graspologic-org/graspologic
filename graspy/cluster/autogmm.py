@@ -378,7 +378,7 @@ class AutoGMMCluster(BaseCluster):
         self.selection_criteria = selection_criteria
         self.max_agglom_size = max_agglom_size
 
-    def _cluster(self, X, y, params):
+    def _fit_cluster(self, X, y, params):
         label_init = self.label_init
         if label_init is not None:
             onehot = _labels_to_onehot(label_init)
@@ -525,7 +525,7 @@ class AutoGMMCluster(BaseCluster):
         param_grid = _process_paramgrid(param_grid)
 
         results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
-            delayed(self._cluster(X, y, p) for p in param_grid)
+            delayed(self._fit_cluster(X, y, p) for p in param_grid)
         )
 
         results = pd.DataFrame(results)
