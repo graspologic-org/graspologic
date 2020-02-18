@@ -35,7 +35,7 @@ def _get_centering_matrix(n):
     out : 2d-array
         Outputs a centering array of shape (n, n)
     """
-    out = np.identity(n) - (1 / n) * np.ones((n, n))
+    out = np.identity(n) - np.full((n, n), (1 / n))
 
     return out
 
