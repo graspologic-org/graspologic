@@ -377,6 +377,7 @@ class AutoGMMCluster(BaseCluster):
         self.verbose = verbose
         self.selection_criteria = selection_criteria
         self.max_agglom_size = max_agglom_size
+        self.n_jobs = n_jobs
 
     def _fit_cluster(self, X, y, params):
         label_init = self.label_init
