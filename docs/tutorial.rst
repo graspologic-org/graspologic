@@ -86,7 +86,7 @@ Subgraph
 ========
 The following tutorial demonstrates how to estimate the signal-subgraph of samples of a graph/class model according to either the coherent or incoherent estimator models.
 
-..toctree::
+.. toctree::
    :maxdepth: 1
 
    tutorials/subgraph/subgraph
