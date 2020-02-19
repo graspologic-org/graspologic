@@ -66,3 +66,15 @@ The following tutorials present ways to visualize the graphs, such as its adjace
    tutorials/plotting/heatmaps
    tutorials/plotting/gridplot
    tutorials/plotting/pairplot
+
+.. _matching_tutorials:
+
+Matching
+========
+The following is a brief tutorials how to use the graph matching algorithm,
+the Fast Approximate Quadratic assignment algorithm..
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/matching/faq
