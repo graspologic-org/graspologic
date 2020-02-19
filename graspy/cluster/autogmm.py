@@ -413,7 +413,6 @@ class AutoGMMCluster(BaseCluster):
             gm_params["init_params"] = "kmeans"
         gm_params["reg_covar"] = 0
         gm_params["max_iter"] = self.max_iter
-        gm_params["verbose"] = self.verbose
 
         criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
         # below is the regularization scheme
