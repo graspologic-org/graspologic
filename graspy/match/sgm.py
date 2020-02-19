@@ -184,9 +184,13 @@ class SeededGraphMatching:
         n_seeds = W1.shape[0]  # number of seeds
         n_unseed = n - n_seeds
 
+        score = math.inf
+        perm_inds = np.zeros(n)
+
         obj_func_scalar = 1
         if self.gmp:
             obj_func_scalar = -1
+            score = 0
 
         if self.shuffle_input:
             W2_c = np.random.permutation(np.array([x for x in range(n) if x not in W2]))
@@ -214,8 +218,7 @@ class SeededGraphMatching:
         B21T = np.transpose(B21)
         B22T = np.transpose(B22)
 
-        score = math.inf
-        perm_inds = np.zeros(n)
+        
 
         for i in range(self.n_init):
 
@@ -251,7 +254,7 @@ class SeededGraphMatching:
 
                 def f(x):  # computing the original optimization function
                     return (
-                        obj_func_scalar * np.trace(A11T @ B11)
+                        obj_func_scalar * (np.trace(A11T @ B11)
                         + np.trace(np.transpose(x * P + (1 - x) * Q) @ A21 @ B21T)
                         + np.trace(np.transpose(x * P + (1 - x) * Q) @ A12T @ B12)
                         + np.trace(
@@ -260,6 +263,7 @@ class SeededGraphMatching:
                             @ B22
                             @ np.transpose(x * P + (1 - x) * Q)
                         )
+                                           )
                     )
 
                 alpha = minimize_scalar(
@@ -286,8 +290,8 @@ class SeededGraphMatching:
                 score = score_new
                 perm_inds = np.array([0] * n)
                 perm_inds[p_A] = p_B[perm_inds_new]
-                perm_inds = perm_inds.astype(int)
 
+        perm_inds = perm_inds.astype(int)
         p_A_unshuffle = np.array(range(n))
         p_A_unshuffle[p_A] = np.array(range(n))
         A = A[np.ix_(p_A_unshuffle, p_A_unshuffle)]
