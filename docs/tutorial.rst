@@ -66,14 +66,3 @@ The following tutorials present ways to visualize the graphs, such as its adjace
    tutorials/plotting/heatmaps
    tutorials/plotting/gridplot
    tutorials/plotting/pairplot
-
-.. _subgraph_tutorials:
-
-Subgraph
-========
-The following tutorial demonstrates how to estimate the signal-subgraph of samples of a graph/class model according to either the coherent or incoherent estimator models.
-
-..toctree::
-   :maxdepth: 1
-
-   tutorials/subgraph/subgraph
