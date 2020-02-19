@@ -1,5 +1,5 @@
 # GraSPy
-[![arXiv shield](https://img.shields.io/badge/arXiv-1904.05329-red.svg?style=flat)](https://arxiv.org/abs/1904.05329)
+[![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 [![Downloads shield](https://img.shields.io/pypi/dm/graspy.svg)](https://pypi.org/project/graspy/)
 [![Build Status](https://travis-ci.org/neurodata/graspy.svg?branch=master)](https://travis-ci.org/neurodata/graspy)
 [![codecov](https://codecov.io/gh/neurodata/graspy/branch/master/graph/badge.svg)](https://codecov.io/gh/neurodata/graspy)
@@ -75,3 +75,8 @@ This project is covered under the [Apache 2.0 License](https://github.com/neurod
 
 # Issues
 We appreciate detailed bug reports and feature requests (though we appreciate pull requests even more!). Please visit our [issues](https://github.com/neurodata/graspy/issues) page if you have questions or ideas.
+
+# Citing GraSPy
+If you find GraSPy useful in your work, please cite the package via the [GraSPy paper](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
+
+> Chung, J., Pedigo, B. D., Bridgeford, E. W., Varjavand, B. K., Helm, H. S., & Vogelstein, J. T. (2019). GraSPy: Graph Statistics in Python. Journal of Machine Learning Research, 20(158), 1-7.

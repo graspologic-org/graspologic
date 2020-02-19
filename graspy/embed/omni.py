@@ -60,7 +60,7 @@ class OmnibusEmbed(BaseEmbedMulti):
     matrices of a collection :math:`m` undirected graphs with matched vertices. 
     Then the :math:`(mn \times mn)` omnibus matrix, :math:`M`, has the subgraph where 
     :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
-    using adjacency spectral embedding [1]_.
+    using adjacency spectral embedding.
 
     Read more in the :ref:`tutorials <embed_tutorials>`
 

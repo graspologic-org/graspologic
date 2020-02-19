@@ -22,7 +22,7 @@ from .base import BaseInference
 class LatentDistributionTest(BaseInference):
     """
     Two-sample hypothesis test for the problem of determining whether two random 
-    dot product graphs have the same distributions of latent positions [1]_.
+    dot product graphs have the same distributions of latent positions.
     
     This test can operate on two graphs where there is no known matching between
     the vertices of the two graphs, or even when the number of vertices is different. 
