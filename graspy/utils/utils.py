@@ -272,16 +272,16 @@ def to_laplace(graph, form="DAD", regularizer=None):
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
         
         - 'I-DAD'
-            Computes :math:`L = I - D*A*D`
+            Computes :math:`L = I - D_i*A*D_i`
         - 'DAD'
-            Computes :math:`L = D*A*D`
+            Computes :math:`L = D_o*A*D_i`
         - 'R-DAD'
-            Computes :math:`L = D_t*A*D_t` where :math:`D_t = D + regularizer*I`
+            Computes :math:`L = D_o^r*A*D_i^r` 
+            where :math:`D_o^r = D_o + regularizer * I` and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
-        Constant to be added to the diagonal of degree matrix. If None, average 
-        node degree is added. If int or float, must be >= 0. Only used when 
-        ``form`` == 'R-DAD'.
+        Constant to add to the degree vector(s). If None, average node degree is added. 
+        If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
 
     Returns
     -------
@@ -294,6 +294,10 @@ def to_laplace(graph, form="DAD", regularizer=None):
     .. [1] Qin, Tai, and Karl Rohe. "Regularized spectral clustering
            under the degree-corrected stochastic blockmodel." In Advances
            in Neural Information Processing Systems, pp. 3120-3128. 2013
+
+    .. [2] Rohe, Karl, Tai Qin, and Bin Yu. "Co-clustering directed graphs to discover
+           asymmetries and directional communities." Proceedings of the National Academy
+           of Sciences 113.45 (2016): 12679-12684.
 
     Examples
     --------
@@ -313,34 +317,44 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     A = import_graph(graph)
 
-    if not is_almost_symmetric(A):
-        raise ValueError("Laplacian not implemented/defined for directed graphs")
+    in_degree = np.sum(A, axis=0)
+    out_degree = np.sum(A, axis=1)
 
-    D_vec = np.sum(A, axis=0)
     # regularize laplacian with parameter
     # set to average degree
     if form == "R-DAD":
         if regularizer is None:
-            regularizer = np.mean(D_vec)
+            regularizer = np.mean(out_degree)
         elif not isinstance(regularizer, (int, float)):
             raise TypeError(
                 "Regularizer must be a int or float, not {}".format(type(regularizer))
             )
         elif regularizer < 0:
             raise ValueError("Regularizer must be greater than or equal to 0")
-        D_vec += regularizer
+
+        in_degree += regularizer
+        out_degree += regularizer
 
     with np.errstate(divide="ignore"):
-        D_root = 1 / np.sqrt(D_vec)  # this is 10x faster than ** -0.5
-    D_root[np.isinf(D_root)] = 0
-    D_root = np.diag(D_root)  # just change to sparse diag for sparse support
+        in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
+        out_root = 1 / np.sqrt(out_degree)
+
+    in_root[np.isinf(in_root)] = 0
+    out_root[np.isinf(out_root)] = 0
+
+    in_root = np.diag(in_root)  # just change to sparse diag for sparse support
+    out_root = np.diag(out_root)
 
     if form == "I-DAD":
-        L = np.diag(D_vec) - A
-        L = D_root @ L @ D_root
+        L = np.diag(in_degree) - A
+        L = in_root @ L @ in_root
     elif form == "DAD" or form == "R-DAD":
-        L = D_root @ A @ D_root
-    return symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
+        L = out_root @ A @ in_root
+    if is_symmetric(A):
+        return symmetrize(
+            L, method="avg"
+        )  # sometimes machine prec. makes this necessary
+    return L
 
 
 def is_fully_connected(graph):
@@ -563,18 +577,18 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 
 def augment_diagonal(graph, weight=1):
     r"""
-    Replaces the diagonal of adjacency matrix with 
-    :math:`\frac{degree}{nverts - 1}` for the degree associated
-    with each node. 
-
-    For directed graphs, the degree used is the out degree (number) of 
-    edges leaving the vertex. Ignores self-loops when calculating degree
-
+    Replaces the diagonal of an adjacency matrix with :math:`\frac{d}{nverts - 1}` where
+    :math:`d` is the degree vector for an unweighted graph and the sum of magnitude of 
+    edge weights for each node for a weighted graph. For a directed graph the in/out 
+    :math:`d` is averaged.
+    
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray, 
-        interpreted as an :math:`n \times n` adjacency matrix 
+        interpreted as an :math:`n \times n` adjacency matrix
+    weight: float/int
+        scalar value to multiply the new diagonal vector by
     
     Returns
     -------
@@ -594,12 +608,16 @@ def augment_diagonal(graph, weight=1):
     """
     graph = import_graph(graph)
     graph = remove_loops(graph)
+
     divisor = graph.shape[0] - 1
-    # use out degree for directed graph
-    # ignore self loops in either case
-    degrees = np.count_nonzero(graph, axis=1)
+
+    in_degrees = np.sum(np.abs(graph), axis=0)
+    out_degrees = np.sum(np.abs(graph), axis=1)
+    degrees = (in_degrees + out_degrees) / 2
+
     diag = weight * degrees / divisor
     graph += np.diag(diag)
+
     return graph
 
 

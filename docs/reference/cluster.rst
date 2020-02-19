@@ -11,3 +11,5 @@ K-Means Clustering
 Gaussian Mixture Models Clustering
 ----------------------------------
 .. autoclass:: GaussianCluster
+
+.. autoclass:: AutoGMMCluster

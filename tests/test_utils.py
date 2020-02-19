@@ -39,6 +39,7 @@ class TestToLaplace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+        cls.B = np.array([[0, 1, 1, 1], [0, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 0]])
 
     def test_to_laplace_IDAD(self):
         expected_L_normed = [
@@ -48,7 +49,6 @@ class TestToLaplace(unittest.TestCase):
         ]
 
         L_normed = gus.to_laplace(self.A, form="I-DAD")
-
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
     def test_to_laplace_DAD(self):
@@ -99,6 +99,16 @@ class TestToLaplace(unittest.TestCase):
             gus.to_laplace(self.A, form="R-DAD", regularizer=[1, 2, 3])
         with self.assertRaises(ValueError):
             gus.to_laplace(self.A, form="R-DAD", regularizer=-1.0)
+
+    def test_to_laplace_directed(self):
+        expected_L_normed = [
+            [0, 1 / 5, sqrt(5) / 10, 0.2],
+            [0, 0, 0, sqrt(15) / 15],
+            [0, sqrt(5) / 10, 0, sqrt(5) / 10],
+            [0, sqrt(5) / 10, 0.25, 0],
+        ]
+        L_normed = gus.to_laplace(self.B, form="R-DAD")
+        self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
 
 class TestChecks(unittest.TestCase):
@@ -362,9 +372,9 @@ class TestDiagonalAugment(unittest.TestCase):
         )
         expected = A.copy().astype(float)
         expected[0, 0] = 2.0 / 4
-        expected[1, 1] = 3.0 / 4
+        expected[1, 1] = 4.0 / 4
         expected[2, 2] = 3.0 / 4
-        expected[3, 3] = 2.0 / 4
+        expected[3, 3] = 3.0 / 4
         expected[4, 4] = 2.0 / 4
         A_aug = gus.augment_diagonal(A)
         np.testing.assert_array_equal(A_aug, expected)
@@ -372,7 +382,7 @@ class TestDiagonalAugment(unittest.TestCase):
     def test_augment_diagonal_directed(self):
         A = np.array(
             [
-                [0, 1, 1, 0, 0],
+                [0, 1, -1, 0, 0],
                 [0, 0, 0, 2, 1],
                 [1, 0, 0, 1, 1],
                 [0, 2, 0, 0, 0],
@@ -380,11 +390,11 @@ class TestDiagonalAugment(unittest.TestCase):
             ]
         )
         expected = A.copy().astype(float)
-        expected[0, 0] = 2.0 / 4
-        expected[1, 1] = 2.0 / 4
-        expected[2, 2] = 3.0 / 4
-        expected[3, 3] = 1.0 / 4
-        expected[4, 4] = 1.0 / 4
+        expected[0, 0] = 1.5 / 4
+        expected[1, 1] = 3 / 4
+        expected[2, 2] = 2.5 / 4
+        expected[3, 3] = 2.5 / 4
+        expected[4, 4] = 1.5 / 4
         A_aug = gus.augment_diagonal(A)
         np.testing.assert_array_equal(A_aug, expected)
 

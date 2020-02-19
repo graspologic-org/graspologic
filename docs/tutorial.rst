@@ -78,4 +78,8 @@ the Fast Approximate Quadratic assignment algorithm..
 .. toctree::
    :maxdepth: 1
 
+<<<<<<< HEAD
    tutorials/matching/faq
+=======
+   tutorials/matching/faq
+>>>>>>> cb0997a42a035f5321ba378f291a2c97766c7d68

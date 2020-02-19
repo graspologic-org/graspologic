@@ -1,5 +1,4 @@
 import unittest
-import graspy as gs
 import numpy as np
 from graspy.embed.ase import AdjacencySpectralEmbed
 from graspy.embed.lse import LaplacianSpectralEmbed
@@ -104,6 +103,11 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase = AdjacencySpectralEmbed()
             ase.fit(A)
 
+    def test_input_checks(self):
+        with self.assertRaises(TypeError):
+            ase = AdjacencySpectralEmbed(diag_aug="over 9000")
+            ase.fit()
+
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
@@ -112,12 +116,6 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_sbm_er_binary_undirected(self):
         P = np.array([[0.8, 0.2], [0.2, 0.3]])
         _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P)
-
-    def test_no_directed(self):
-        f = np.array([[1, 2], [0, 1]])
-        lse = LaplacianSpectralEmbed()
-        with self.assertRaises(ValueError):
-            lse.fit(f)
 
     def test_different_forms(self):
         f = np.array([[1, 2], [2, 1]])

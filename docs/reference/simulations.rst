@@ -13,3 +13,7 @@ Simulations
 .. autofunction:: sbm
 
 .. autofunction:: rdpg
+
+.. autofunction:: er_corr
+
+.. autofunction:: sbm_corr
