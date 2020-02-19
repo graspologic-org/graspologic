@@ -78,8 +78,15 @@ the Fast Approximate Quadratic assignment algorithm..
 .. toctree::
    :maxdepth: 1
 
-<<<<<<< HEAD
    tutorials/matching/faq
-=======
-   tutorials/matching/faq
->>>>>>> cb0997a42a035f5321ba378f291a2c97766c7d68
+
+.. _subgraph_tutorials:
+
+Subgraph
+========
+The following tutorial demonstrates how to estimate the signal-subgraph of samples of a graph/class model according to either the coherent or incoherent estimator models.
+
+..toctree::
+   :maxdepth: 1
+
+   tutorials/subgraph/subgraph
