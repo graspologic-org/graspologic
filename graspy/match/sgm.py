@@ -218,8 +218,6 @@ class SeededGraphMatching:
         B21T = np.transpose(B21)
         B22T = np.transpose(B22)
 
-        
-
         for i in range(self.n_init):
 
             # setting initialization matrix
@@ -253,8 +251,8 @@ class SeededGraphMatching:
                 Q[rows, cols] = 1  # initialize search direction matrix Q
 
                 def f(x):  # computing the original optimization function
-                    return (
-                        obj_func_scalar * (np.trace(A11T @ B11)
+                    return obj_func_scalar * (
+                        np.trace(A11T @ B11)
                         + np.trace(np.transpose(x * P + (1 - x) * Q) @ A21 @ B21T)
                         + np.trace(np.transpose(x * P + (1 - x) * Q) @ A12T @ B12)
                         + np.trace(
@@ -263,7 +261,6 @@ class SeededGraphMatching:
                             @ B22
                             @ np.transpose(x * P + (1 - x) * Q)
                         )
-                                           )
                     )
 
                 alpha = minimize_scalar(
