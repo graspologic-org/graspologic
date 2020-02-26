@@ -22,6 +22,7 @@ from sklearn.mixture.gaussian_mixture import (
     _estimate_gaussian_parameters,
 )
 from sklearn.model_selection import ParameterGrid
+from joblib import Parallel, delayed
 
 from .base import BaseCluster
 
@@ -138,6 +139,11 @@ class AutoGMMCluster(BaseCluster):
         a random subset of the data is used for agglomerative initialization. If None,
         all data is used for agglomerative clustering for initialization.
 
+    n_jobs : int or None, optional (default = None)
+        The number of jobs to use for the computation. This works by computing each of
+        the initialization runs in parallel. None means 1 unless in a 
+        ``joblib.parallel_backend context``. -1 means using all processors. 
+        See https://scikit-learn.org/stable/glossary.html#term-n-jobs for more details.
 
     Attributes
     ----------
@@ -217,6 +223,7 @@ class AutoGMMCluster(BaseCluster):
         verbose=0,
         selection_criteria="bic",
         max_agglom_size=2000,
+        n_jobs=None,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -370,6 +377,86 @@ class AutoGMMCluster(BaseCluster):
         self.verbose = verbose
         self.selection_criteria = selection_criteria
         self.max_agglom_size = max_agglom_size
+        self.n_jobs = n_jobs
+
+    def _fit_cluster(self, X, y, params):
+        label_init = self.label_init
+        if label_init is not None:
+            onehot = _labels_to_onehot(label_init)
+            weights_init, means_init, precisions_init = _onehot_to_initial_params(
+                X, onehot, params[1]["covariance_type"]
+            )
+            gm_params = params[1]
+            gm_params["weights_init"] = weights_init
+            gm_params["means_init"] = means_init
+            gm_params["precisions_init"] = precisions_init
+        elif params[0]["affinity"] != "none":
+            agg = AgglomerativeClustering(**params[0])
+            n = X.shape[0]
+
+            if self.max_agglom_size is None or n <= self.max_agglom_size:
+                X_subset = X
+            else:  # if dataset is huge, agglomerate a subset
+                subset_idxs = np.random.choice(np.arange(0, n), self.max_agglom_size)
+                X_subset = X[subset_idxs, :]
+            agg_clustering = agg.fit_predict(X_subset)
+            onehot = _labels_to_onehot(agg_clustering)
+            weights_init, means_init, precisions_init = _onehot_to_initial_params(
+                X_subset, onehot, params[1]["covariance_type"]
+            )
+            gm_params = params[1]
+            gm_params["weights_init"] = weights_init
+            gm_params["means_init"] = means_init
+            gm_params["precisions_init"] = precisions_init
+        else:
+            gm_params = params[1]
+            gm_params["init_params"] = "kmeans"
+        gm_params["reg_covar"] = 0
+        gm_params["max_iter"] = self.max_iter
+
+        criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
+        # below is the regularization scheme
+        while gm_params["reg_covar"] <= 1 and criter == np.inf:
+            model = GaussianMixture(**gm_params)
+            try:
+                model.fit(X)
+                predictions = model.predict(X)
+                counts = [
+                    sum(predictions == i) for i in range(gm_params["n_components"])
+                ]
+                # singleton clusters not allowed
+                assert not any([count <= 1 for count in counts])
+
+            except ValueError:
+                gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
+                continue
+            except AssertionError:
+                gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
+                continue
+            # if the code gets here, then the model has been fit with no errors or
+            # singleton clusters
+            if self.selection_criteria == "bic":
+                criter = model.bic(X)
+            else:
+                criter = model.aic(X)
+            break
+
+        if y is not None:
+            predictions = model.predict(X)
+            ari = adjusted_rand_score(y, predictions)
+        else:
+            ari = float("nan")
+        results = {
+            "model": model,
+            "bic/aic": criter,
+            "ari": ari,
+            "n_components": gm_params["n_components"],
+            "affinity": params[0]["affinity"],
+            "linkage": params[0]["linkage"],
+            "covariance_type": gm_params["covariance_type"],
+            "reg_covar": gm_params["reg_covar"],
+        }
+        return results
 
     def fit(self, X, y=None):
         """
@@ -426,117 +513,25 @@ class AutoGMMCluster(BaseCluster):
                 msg = "n_samples must be the same as the length of label_init"
                 raise ValueError(msg)
 
-        # Get parameters
-        random_state = self.random_state
-        max_iter = self.max_iter
-        verbose = self.verbose
-
         param_grid = dict(
             affinity=self.affinity,
             linkage=self.linkage,
             covariance_type=self.covariance_type,
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
-            random_state=[random_state],
+            random_state=[self.random_state],
         )
 
         param_grid = list(ParameterGrid(param_grid))
         param_grid = _process_paramgrid(param_grid)
 
-        results = pd.DataFrame(
-            columns=[
-                "model",
-                "bic/aic",
-                "ari",
-                "n_components",
-                "affinity",
-                "linkage",
-                "covariance_type",
-                "reg_covar",
-            ]
+        def _fit_for_data(p):
+            return self._fit_cluster(X, y, p)
+
+        results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
+            delayed(_fit_for_data)(p) for p in param_grid
         )
 
-        for params in param_grid:
-            if label_init is not None:
-                onehot = _labels_to_onehot(label_init)
-                weights_init, means_init, precisions_init = _onehot_to_initial_params(
-                    X, onehot, params[1]["covariance_type"]
-                )
-                gm_params = params[1]
-                gm_params["weights_init"] = weights_init
-                gm_params["means_init"] = means_init
-                gm_params["precisions_init"] = precisions_init
-            elif params[0]["affinity"] != "none":
-                agg = AgglomerativeClustering(**params[0])
-                n = X.shape[0]
-
-                if self.max_agglom_size is None or n <= self.max_agglom_size:
-                    X_subset = X
-                else:  # if dataset is huge, agglomerate a subset
-                    subset_idxs = np.random.choice(
-                        np.arange(0, n), self.max_agglom_size
-                    )
-                    X_subset = X[subset_idxs, :]
-                agg_clustering = agg.fit_predict(X_subset)
-                onehot = _labels_to_onehot(agg_clustering)
-                weights_init, means_init, precisions_init = _onehot_to_initial_params(
-                    X_subset, onehot, params[1]["covariance_type"]
-                )
-                gm_params = params[1]
-                gm_params["weights_init"] = weights_init
-                gm_params["means_init"] = means_init
-                gm_params["precisions_init"] = precisions_init
-            else:
-                gm_params = params[1]
-                gm_params["init_params"] = "kmeans"
-            gm_params["reg_covar"] = 0
-            gm_params["max_iter"] = max_iter
-            gm_params["verbose"] = verbose
-
-            criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
-            # below is the regularization scheme
-            while gm_params["reg_covar"] <= 1 and criter == np.inf:
-                model = GaussianMixture(**gm_params)
-                try:
-                    model.fit(X)
-                    predictions = model.predict(X)
-                    counts = [
-                        sum(predictions == i) for i in range(gm_params["n_components"])
-                    ]
-                    # singleton clusters not allowed
-                    assert not any([count <= 1 for count in counts])
-
-                except ValueError:
-                    gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
-                    continue
-                except AssertionError:
-                    gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
-                    continue
-                # if the code gets here, then the model has been fit with no errors or
-                # singleton clusters
-                if self.selection_criteria == "bic":
-                    criter = model.bic(X)
-                else:
-                    criter = model.aic(X)
-                break
-
-            if y is not None:
-                predictions = model.predict(X)
-                ari = adjusted_rand_score(y, predictions)
-            else:
-                ari = float("nan")
-            entry = pd.DataFrame(
-                {
-                    "model": [model],
-                    "bic/aic": [criter],
-                    "ari": [ari],
-                    "n_components": [gm_params["n_components"]],
-                    "affinity": [params[0]["affinity"]],
-                    "linkage": [params[0]["linkage"]],
-                    "covariance_type": [gm_params["covariance_type"]],
-                    "reg_covar": [gm_params["reg_covar"]],
-                }
-            )
-            results = results.append(entry, ignore_index=True)
+        results = pd.DataFrame(results)
 
         self.results_ = results
         # Get the best cov type and its index within the dataframe

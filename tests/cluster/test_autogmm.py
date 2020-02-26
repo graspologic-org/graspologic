@@ -206,6 +206,35 @@ def test_two_class():
         assert_allclose(AutoGMM.ari_, 1)
 
 
+def test_two_class_parallel():
+    """
+    Easily separable two gaussian problem.
+    """
+    np.random.seed(1)
+
+    n = 100
+    d = 3
+
+    num_sims = 10
+
+    for _ in range(num_sims):
+        X1 = np.random.normal(2, 0.5, size=(n, d))
+        X2 = np.random.normal(-2, 0.5, size=(n, d))
+        X = np.vstack((X1, X2))
+        y = np.repeat([0, 1], n)
+
+        AutoGMM = AutoGMMCluster(max_components=5, n_jobs=2)
+        AutoGMM.fit(X, y)
+
+        n_components = AutoGMM.n_components_
+
+        # Assert that the two cluster model is the best
+        assert_equal(n_components, 2)
+
+        # Asser that we get perfect clustering
+        assert_allclose(AutoGMM.ari_, 1)
+
+
 def test_two_class_aic():
     """
     Easily separable two gaussian problem.
