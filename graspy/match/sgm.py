@@ -59,17 +59,17 @@ class SeededGraphMatching:
         while Frobenius norm of :math:`(P_{i}-P_{i+1}) > eps`
 
 
-    gmp : bool (default = False)
-        Gives users the option to the Graph Matching Problem (GMP) rather than
-        the Quadratic Assignment (QAP). This is accomplished through trivial
+    gmp : bool (default = True)
+        Gives users the option to the Quadratic Assignment (QAP)rather than the
+        Graph Matching Problem (GMP). This is accomplished through trivial
         negation of the objective function.
 
     Attributes
     ----------
 
     perm_inds_ : array, size (n,) where n is the number of vertices in the graphs fitted.
-        The indices of the optimal permutation on the nodes of B, found via
-        FAQ, to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
+        The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
+        found via SGM, to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
 
 
     score_ : float
@@ -78,10 +78,8 @@ class SeededGraphMatching:
 
     References
     ----------
-    .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer,
-           E. T. Harley, D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast
-           approximate quadratic programming for graph matching,” PLOS one, vol. 10,
-           no. 4, p. e0121002, 2015.
+    .. [1] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
+           Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
 
 
 
@@ -94,7 +92,7 @@ class SeededGraphMatching:
         max_iter=30,
         shuffle_input=True,
         eps=0.1,
-        gmp=False,
+        gmp=True,
     ):
 
         if type(n_init) is int and n_init > 0:
@@ -143,10 +141,10 @@ class SeededGraphMatching:
         B : 2d-array, square, positive
             A square, positive adjacency matrix
 
-        W1 : 1d-array, shape (m , 1) where m <= n
+        W1 : 1d-array, shape (m , 1) where m <= n (default = [])
             An array where each entry is a node in A
 
-        W2 : 1d-array, shape (m , 1) where m <= n
+        W2 : 1d-array, shape (m , 1) where m <= n (default = [])
             An array where each entry is a node in B
             The elements of W1 and W2 are seeds, creating a fixed
             seeding of W1 -> W2
@@ -178,6 +176,11 @@ class SeededGraphMatching:
             raise ValueError(msg)
         elif (W1 >= 0).all() == False or (W2 >= 0).all() == False:
             msg = "Seed array entries must be greater than or equal to zero"
+            raise ValueError(msg)
+        elif (W1 <= (A.shape[0] - 1)).all() == False or (
+            W2 <= (A.shape[0] - 1)
+        ).all() == False:
+            msg = "Seed array entries must be less than or equal to n-1"
             raise ValueError(msg)
 
         n = A.shape[0]  # number of vertices in graphs
