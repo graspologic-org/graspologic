@@ -24,7 +24,7 @@ from .skp import SinkhornKnopp
 class SeededGraphMatching:
     """
     Seeded Graph Matching Algorithm (SGM)
-    The seeded graph matching problem is a variation of graph matching
+     The seeded graph matching problem is a variation of graph matching
      in which part of the matching is fixed. This algorithm is a modification
      of FAQ, an algorithm also implemented in this package[1].
 
