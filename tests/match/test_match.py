@@ -103,8 +103,8 @@ class TestFAQ:
 class TestSGM:
     @classmethod
     def setup_class(cls):
-        cls.barycenter = SGM()
-        cls.rand = SGM(n_init=100, init_method="rand")
+        cls.barycenter = SGM(gmp=False)
+        cls.rand = SGM(n_init=100, init_method="rand", gmp=False)
 
     def test_SGM_inputs(self):
         with pytest.raises(TypeError):
