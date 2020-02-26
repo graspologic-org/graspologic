@@ -97,7 +97,7 @@ class TestFAQ:
         A, B = self._get_AB("chr15a")
         chr15a = self.rand.fit(A, B)
         score = chr15a.score_
-        assert 9896 <= score < 11500
+        assert 9896 <= score < 12000
 
 
 class TestSGM:
@@ -175,7 +175,7 @@ class TestSGM:
         W2 = [pi[z] for z in W1]
         chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
-        assert 11156 <= score < 20000
+        assert 11156 <= score < 21000
 
         W1 = np.sort(random.sample(list(range(n)), n - 1))
         W2 = [pi[z] for z in W1]
@@ -186,11 +186,11 @@ class TestSGM:
         A, B = self._get_AB("chr15a")
         n = A.shape[0]
         pi = np.array([5, 10, 8, 13, 12, 11, 14, 2, 4, 6, 7, 15, 3, 1, 9]) - [1] * n
-        W1 = np.sort(random.sample(list(range(n)), 3))
+        W1 = np.sort(random.sample(list(range(n)), 4))
         W2 = [pi[z] for z in W1]
         chr15a = self.barycenter.fit(A, B, W1, W2)
         score = chr15a.score_
-        assert 9896 <= score < 20000
+        assert 9896 <= score < 21000
 
         W1 = np.sort(random.sample(list(range(n)), n - 1))
         W2 = [pi[z] for z in W1]
@@ -206,7 +206,7 @@ class TestSGM:
         W2 = [pi[z] for z in W1]
         chr12c = self.rand.fit(A, B, W1, W2)
         score = chr12c.score_
-        assert 11156 <= score < 12000
+        assert 11156 <= score < 12500
 
         A, B = self._get_AB("chr15a")
         n = A.shape[0]
