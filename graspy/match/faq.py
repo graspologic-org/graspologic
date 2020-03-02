@@ -26,16 +26,14 @@ class FastApproximateQAP:
     The FAQ algorithm solves the Quadratic Assignment Problem (QAP) finding an
     alignment of the vertices of two graphs which minimizes the number of induced
     edge disagreements [1].
-    
-    
+
     Parameters
     ----------
-    
     n_init : int, positive (default = 1)
         Number of random initializations of the starting permutation matrix that
         the FAQ algorithm will undergo. n_init automatically set to 1 if
         init_method = 'barycenter'
-        
+
     init_method : string (default = 'barycenter')
         The initial position chosen
 
@@ -65,15 +63,13 @@ class FastApproximateQAP:
 
     Attributes
     ----------
-    
     perm_inds_ : array, size (n,) where n is the number of vertices in the graphs fitted.
         The indices of the optimal permutation on the nodes of B, found via
         FAQ, to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
 
-        
     score_ : float
         The objective function value of for the optimal permutation found.
-        
+
 
     References
     ----------
@@ -131,18 +127,17 @@ class FastApproximateQAP:
     def fit(self, A, B):
         """
         Fits the model with two assigned adjacency matrices
-        
+
         Parameters
-        ---------
+        ----------
         A : 2d-array, square, positive
             A square, positive adjacency matrix
-            
+
         B : 2d-array, square, positive
             A square, positive adjacency matrix
 
         Returns
         -------
-        
         self : returns an instance of self
         """
         A = check_array(A, copy=True, ensure_2d=True)
@@ -255,7 +250,7 @@ class FastApproximateQAP:
         permutation indices
 
         Parameters
-        ---------
+        ----------
         A : 2d-array, square, positive
             A square, positive adjacency matrix
 
@@ -264,7 +259,6 @@ class FastApproximateQAP:
 
         Returns
         -------
-
         perm_inds_ : 1-d array, some shuffling of [0, n_vert)
             The optimal permutation indices to minimize the objective function
         """

@@ -59,10 +59,9 @@ class ClassicalMDS(BaseEstimator):
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
         Dissimilarity measure to use:
 
-        - 'euclidean':
+        - 'euclidean'
             Pairwise Euclidean distances between points in the dataset.
-
-        - 'precomputed':
+        - 'precomputed'
             Pre-computed dissimilarities are passed directly to ``fit`` and
             ``fit_transform``.
 
@@ -77,7 +76,7 @@ class ClassicalMDS(BaseEstimator):
 
     singular_values_ : array, shape (n_components,)
         The singular values corresponding to each of the selected components.
-        
+
     dissimilarity_matrix_ : array, shape (n_features, n_features)
         Dissimilarity matrix 
 
@@ -123,7 +122,7 @@ class ClassicalMDS(BaseEstimator):
             ``dissimilarity=='euclidean'``, then the input should be 2d-array 
             with shape (n_samples, n_features) or a 3d-array with shape 
             (n_samples, n_features_1, n_features_2).
-        
+
         Returns
         -------
         out : 2d-array, shape (n_samples, n_samples)
@@ -158,7 +157,7 @@ class ClassicalMDS(BaseEstimator):
             ``dissimilarity=='euclidean'``, then the input should be 2d-array 
             with shape (n_samples, n_features) or a 3d-array with shape 
             (n_samples, n_features_1, n_features_2).
-        
+
         y : Ignored
         """
         # Check X type

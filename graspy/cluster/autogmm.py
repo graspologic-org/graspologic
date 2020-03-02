@@ -36,10 +36,9 @@ class AutoGMMCluster(BaseCluster):
     cluster numbers are used and the clustering with the best selection
     criterion (bic/aic) is chosen.
 
-
     Parameters
     ----------
-    min_components : int, default=2. 
+    min_components : int, default=2.
         The minimum number of mixture components to consider (unless
         max_components=None, in which case this is the maximum number of
         components to consider). If max_components is not None, min_components
@@ -48,7 +47,7 @@ class AutoGMMCluster(BaseCluster):
         in label_init.
 
     max_components : int or None, default=10.
-        The maximum number of mixture components to consider. Must be greater 
+        The maximum number of mixture components to consider. Must be greater
         than or equal to min_components.
         If label_init is given, min_components must match number of unique labels
         in label_init.
@@ -88,11 +87,11 @@ class AutoGMMCluster(BaseCluster):
 
         If a list/array, it must be a list/array of strings containing only
         'ward', 'complete', 'average', and/or 'single'.
-        
+
     covariance_type : {'full', 'tied', 'diag', 'spherical', 'all' (default)} , optional
         String or list/array describing the type of covariance parameters to use.
         If a string, it must be one of:
-        
+
         - 'full'
             each component has its own general covariance matrix
         - 'tied'
@@ -106,7 +105,7 @@ class AutoGMMCluster(BaseCluster):
 
         If a list/array, it must be a list/array of strings containing only
         'spherical', 'tied', 'diag', and/or 'spherical'.
-    
+
     random_state : int, RandomState instance or None, optional (default=None)
         There is randomness in k-means initialization of 
         :class:`sklearn.mixture.GaussianMixture`. This parameter is passed to 
@@ -123,7 +122,7 @@ class AutoGMMCluster(BaseCluster):
 
     max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
-    
+
     selection_criteria : str {"bic" or "aic"}, optional, (default="bic")
         select the best model based on Bayesian Information Criterion (bic) or 
         Aikake Information Criterion (aic)
@@ -181,7 +180,7 @@ class AutoGMMCluster(BaseCluster):
 
     linkage_ : str 
         linkage used in the model with the best bic/aic
-    
+
     reg_covar_ : float 
         regularization used in the model with the best bic/aic
 
