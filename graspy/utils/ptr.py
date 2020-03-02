@@ -20,39 +20,38 @@ from scipy.stats import rankdata
 def pass_to_ranks(graph, method="simple-nonzero"):
     r"""
     Rescales edge weights of an adjacency matrix based on their relative rank in 
-    the graph. 
+    the graph.
 
     Parameters
     ----------
-    graph: Adjacency matrix 
-    
+    graph: array_like or networkx.Graph
+        Adjacency matrix
+
     method: {'simple-nonzero' (default), 'simple-all', 'zero-boost'} string, optional
-        
+
         - 'simple-nonzero'
-            assigns ranks to all non-zero edges, settling ties using 
-            the average. Ranks are then scaled by 
+            assigns ranks to all non-zero edges, settling ties using
+            the average. Ranks are then scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
         - 'simple-all'
-            assigns ranks to all non-zero edges, settling ties using 
-            the average. Ranks are then scaled by 
-            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}` 
+            assigns ranks to all non-zero edges, settling ties using
+            the average. Ranks are then scaled by
+            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`
             where n is the number of nodes
         - 'zero-boost'
             preserves the edge weight for all 0s, but ranks the other
             edges as if the ranks of all 0 edges has been assigned. If there are 
             10 0-valued edges, the lowest non-zero edge gets weight 11 / (number
             of possible edges). Ties settled by the average of the weight that those
-            edges would have received. Number of possible edges is determined 
+            edges would have received. Number of possible edges is determined
             by the type of graph (loopless or looped, directed or undirected).
-        
-        
-        
+
     See also
     --------
     scipy.stats.rankdata
 
     Returns
-    ------- 
+    -------
     graph: numpy.ndarray, shape(n_vertices, n_vertices)
         Adjacency matrix of graph after being passed to ranks
     """

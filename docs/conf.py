@@ -54,6 +54,8 @@ rawfiles = ["CNAME"]
 # -- numpydoc
 # Below is needed to prevent errors
 numpydoc_show_class_members = False
+numpydoc_attributes_as_param_list = True
+numpydoc_use_blockquotes = True
 
 # -- sphinx.ext.autosummary
 autosummary_generate = True

@@ -26,11 +26,11 @@ from ..utils import (
 
 class AdjacencySpectralEmbed(BaseEmbed):
     r"""
-    Class for computing the adjacency spectral embedding of a graph 
-    
+    Class for computing the adjacency spectral embedding of a graph.
+
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation 
     of the graph based on its adjacency matrix. It relies on an SVD to reduce
-    the dimensionality to the specified k, or if k is unspecified, can find a number of 
+    the dimensionality to the specified k, or if k is unspecified, can find a number of
     dimensions automatically (see :class:`~graspy.embed.selectSVD`).
 
     Read more in the :ref:`tutorials <embed_tutorials>`
@@ -51,7 +51,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         SVD solver to use:
 
         - 'randomized'
-            Computes randomized svd using 
+            Computes randomized svd using
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
@@ -59,21 +59,21 @@ class AdjacencySpectralEmbed(BaseEmbed):
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
 
     n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or 
-        'truncated'. The default is larger than the default in randomized_svd 
+        Number of iterations for randomized SVD solver. Not used by 'full' or
+        'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
 
     check_lcc : bool , optional (default = True)
-        Whether to check if input graph is connected. May result in non-optimal 
+        Whether to check if input graph is connected. May result in non-optimal
         results if the graph is unconnected. If True and input is unconnected,
-        a UserWarning is thrown. Not checking for connectedness may result in 
+        a UserWarning is thrown. Not checking for connectedness may result in
         faster computation.
 
     diag_aug : bool, optional (default = True)
         Whether to replace the main diagonal of the adjacency matrix with a vector 
         corresponding to the degree (or sum of edge weights for a weighted network) 
         before embedding. Empirically, this produces latent position estimates closer
-        to the ground truth. 
+        to the ground truth.
 
 
     Attributes
@@ -84,7 +84,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Only computed when the graph is directed, or adjacency matrix is assymetric.
         Estimated right latent positions of the graph. Otherwise, None.
     singular_values_ : array, shape (n_components)
-        Singular values associated with the latent position matrices. 
+        Singular values associated with the latent position matrices.
 
     See Also
     --------
@@ -93,13 +93,13 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     Notes
     -----
-    The singular value decomposition: 
+    The singular value decomposition:
 
     .. math:: A = U \Sigma V^T
 
-    is used to find an orthonormal basis for a matrix, which in our case is the 
-    adjacency matrix of the graph. These basis vectors (in the matrices U or V) are 
-    ordered according to the amount of variance they explain in the original matrix. 
+    is used to find an orthonormal basis for a matrix, which in our case is the
+    adjacency matrix of the graph. These basis vectors (in the matrices U or V) are
+    ordered according to the amount of variance they explain in the original matrix.
     By selecting a subset of these basis vectors (through our choice of dimensionality
     reduction) we can find a lower dimensional space in which to represent the graph.
 
@@ -142,7 +142,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         Returns
         -------
-        self : returns an instance of self.
+        self : object
+            Returns an instance of self.
         """
         A = import_graph(graph)
 
