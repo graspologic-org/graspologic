@@ -43,15 +43,15 @@ class BaseEmbed(BaseEstimator):
         - 'truncated'
             Computes truncated svd using ``scipy.sparse.linalg.svd``
         - 'randomized'
-            Computes randomized svd using 
+            Computes randomized svd using
             ``sklearn.utils.extmath.randomized_svd``
     n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or 
-        'truncated'. The default is larger than the default in randomized_svd 
+        Number of iterations for randomized SVD solver. Not used by 'full' or
+        'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
     check_lcc : bool , optional (defult =True)
-        Whether to check if input graph is connected. May result in non-optimal 
-        results if the graph is unconnected. Not checking for connectedness may 
+        Whether to check if input graph is connected. May result in non-optimal
+        results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
 
     Attributes
@@ -154,13 +154,12 @@ class BaseEmbed(BaseEstimator):
         Parameters
         ----------
         graph: np.ndarray or networkx.Graph
-
-        y : Ignored
+            Input graph to embed.
 
         Returns
         -------
         out : np.ndarray, shape (n_vertices, n_dimension) OR tuple (len 2)
-            where both elements have shape (n_vertices, n_dimension)
+            Where both elements have shape (n_vertices, n_dimension)
             A single np.ndarray represents the latent position of an undirected
             graph, wheras a tuple represents the left and right latent positions 
             for a directed graph
@@ -198,8 +197,6 @@ class BaseEmbedMulti(BaseEmbed):
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
-
-        y : Ignored
 
         Returns
         -------

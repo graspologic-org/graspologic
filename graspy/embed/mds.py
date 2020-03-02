@@ -78,7 +78,7 @@ class ClassicalMDS(BaseEstimator):
         The singular values corresponding to each of the selected components.
 
     dissimilarity_matrix_ : array, shape (n_features, n_features)
-        Dissimilarity matrix 
+        Dissimilarity matrix
 
     See Also
     --------
@@ -152,13 +152,16 @@ class ClassicalMDS(BaseEstimator):
         Parameters
         ----------
         X : array_like
-            If ``dissimilarity=='precomputed'``, the input should be the 
-            dissimilarity matrix with shape (n_samples, n_samples). If 
-            ``dissimilarity=='euclidean'``, then the input should be 2d-array 
-            with shape (n_samples, n_features) or a 3d-array with shape 
+            If ``dissimilarity=='precomputed'``, the input should be the
+            dissimilarity matrix with shape (n_samples, n_samples). If
+            ``dissimilarity=='euclidean'``, then the input should be 2d-array
+            with shape (n_samples, n_features) or a 3d-array with shape
             (n_samples, n_features_1, n_features_2).
 
-        y : Ignored
+        Returns
+        -------
+        self : object
+            Returns an instance of self.
         """
         # Check X type
         if not isinstance(X, np.ndarray):
@@ -216,8 +219,6 @@ class ClassicalMDS(BaseEstimator):
             with shape (n_samples, n_features) or a nd-array with shape 
             (n_samples, n_features_1, n_features_2, ..., n_features_d). First
             axis of nd-array must be ``n_samples``.
-
-        y : Ignored
 
         Returns
         -------

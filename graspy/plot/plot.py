@@ -255,9 +255,10 @@ def heatmap(
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
-        ``sort_nodes`` is ``True``, will sort nodes this way within block. 
+        ``sort_nodes`` is ``True``, will sort nodes this way within block.
 
-    **kwargs : additional plotting arguments passed to Seaborn's ``heatmap``
+    **kwargs : dict, optional
+        additional plotting arguments passed to Seaborn's ``heatmap``
     """
     _check_common_inputs(
         figsize=figsize,
@@ -762,6 +763,7 @@ def degreeplot(
     Returns
     -------
     ax : matplotlib axis object
+        Output plot
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -828,6 +830,7 @@ def edgeplot(
     Returns
     -------
     ax : matplotlib axis object
+        Output plot
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -887,6 +890,7 @@ def screeplot(
     Returns
     -------
     ax : matplotlib axis object
+        Output plot
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale

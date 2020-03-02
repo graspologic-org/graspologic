@@ -149,23 +149,24 @@ class AutoGMMCluster(BaseCluster):
     results_ : pandas.DataFrame
         Contains exhaustive information about all the clustering runs.
         Columns are:
-            'model' : GaussianMixture object
-                GMM clustering fit to the data
-            'bic/aic' : float
-                Bayesian Information Criterion
-            'ari' : float or nan
-                Adjusted Rand Index between GMM classification, and true classification,
-                nan if y is not given
-            'n_components' : int
-                number of clusters
-            'affinity' : {'euclidean','manhattan','cosine','none'}
-                affinity used in Agglomerative Clustering
-            'linkage' : {'ward','complete','average','single'}
-                linkage used in Agglomerative Clustering
-            'covariance_type' : {'full', 'tied', 'diag', 'spherical'}
-                covariance type used in GMM
-            'reg_covar' : float
-                regularization used in GMM
+
+        'model' : GaussianMixture object
+            GMM clustering fit to the data
+        'bic/aic' : float
+            Bayesian Information Criterion
+        'ari' : float or nan
+            Adjusted Rand Index between GMM classification, and true classification,
+            nan if y is not given
+        'n_components' : int
+            number of clusters
+        'affinity' : {'euclidean','manhattan','cosine','none'}
+            affinity used in Agglomerative Clustering
+        'linkage' : {'ward','complete','average','single'}
+            linkage used in Agglomerative Clustering
+        'covariance_type' : {'full', 'tied', 'diag', 'spherical'}
+            covariance type used in GMM
+        'reg_covar' : float
+            regularization used in GMM
 
     criter_ : the best (lowest) Bayesian Information Criterion
 
@@ -178,10 +179,10 @@ class AutoGMMCluster(BaseCluster):
     affinity_ : str
         affinity used in the model with the best bic/aic
 
-    linkage_ : str 
+    linkage_ : str
         linkage used in the model with the best bic/aic
 
-    reg_covar_ : float 
+    reg_covar_ : float
         regularization used in the model with the best bic/aic
 
     ari_ : float
@@ -468,14 +469,15 @@ class AutoGMMCluster(BaseCluster):
         X : array-like, shape (n_samples, n_features)
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        
+
         y : array-like, shape (n_samples,), optional (default=None)
             List of labels for X if available. Used to compute
             ARI scores.
 
         Returns
         -------
-        self
+        self : object
+            Returns an instance of self.
         """
 
         # Deal with number of clusters
