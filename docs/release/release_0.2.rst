@@ -11,7 +11,7 @@ and our `tutorials <https://graspy.neurodata.io/tutorial.html>`_.
 
 Highlights
 ----------
-This release is the result of over 8 months of work with over 24 pull requests by 
+This release is the result of over 8 months of work with over 25 pull requests by 
 10 contributors. Highlights include:
 
 - Added ``AutoGMMCluster`` in ``cluster`` submodule. ``AutoGMMCluster`` is Python equivalent to ``mclust`` in R.
@@ -22,7 +22,9 @@ This release is the result of over 8 months of work with over 24 pull requests b
 Improvements
 ------------
 - Diagonal augmentation is default behavior in AdjacencySpectralEmbed.
+- Added functionality in ``to_laplace`` to allow for directed graphs.
 - Updated docstrings.
+- Updated documentation website.
 - Various bug fixes.
 
 API Changes
