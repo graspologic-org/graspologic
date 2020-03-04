@@ -1,5 +1,4 @@
-from .faq import FastApproximateQAP
-from .sgm import SeededGraphMatching
+from .gmp import GraphMatch
 from .skp import SinkhornKnopp
 
-__all__ = ["FastApproximateQAP", "SeededGraphMatching", "SinkhornKnopp"]
+__all__ = ["GraphMatch", "SinkhornKnopp"]
