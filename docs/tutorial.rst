@@ -72,8 +72,8 @@ The following tutorials present ways to visualize the graphs, such as its adjace
 
 Matching
 ========
-The following tutorials demonstrate how to use the graph matching algorithms,
-the Fast Approximate Quadratic assignment algorithm, and the Seeded graph matching algorithm.
+The following tutorials demonstrate how to use the graph matching functionality,
+including an introduction to the module, and how to utilize the seeding feature.
 
 .. toctree::
    :maxdepth: 1
