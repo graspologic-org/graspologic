@@ -3,6 +3,10 @@ Matching
 
 .. currentmodule:: graspy.match
 
+Graph Matching
+--------------------
+.. autoclass:: GraphMatch
+
 Fast Approximate QAP
 --------------------
 .. autoclass:: FastApproximateQAP
