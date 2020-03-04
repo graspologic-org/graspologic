@@ -304,9 +304,9 @@ class GraphMatch:
                 perm_inds[permutation_A] = permutation_B[perm_inds_new]
 
         perm_inds = perm_inds.astype(int)
-        permutation_A_unshuffle = self._unshuffle(permutation_A,n)
+        permutation_A_unshuffle = self._unshuffle(permutation_A, n)
         A = A[np.ix_(permutation_A_unshuffle, permutation_A_unshuffle)]
-        permutation_B_unshuffle = self._unshuffle(permutation_B,n)
+        permutation_B_unshuffle = self._unshuffle(permutation_B, n)
         B = B[np.ix_(permutation_B_unshuffle, permutation_B_unshuffle)]
         score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
 
