@@ -83,12 +83,12 @@ class GraphMatch:
     References
     ----------
     .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer,
-           E. T. Harley, D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast
-           approximate quadratic programming for graph matching,” PLOS one, vol. 10,
-           no. 4, p. e0121002, 2015.
+        E. T. Harley, D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast
+        approximate quadratic programming for graph matching,” PLOS one, vol. 10,
+        no. 4, p. e0121002, 2015.
 
        [2] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
-           Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
+        Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
 
 
 
