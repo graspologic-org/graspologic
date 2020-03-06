@@ -23,7 +23,7 @@ from .skp import SinkhornKnopp
 
 class GraphMatch:
     """
-    Graph Matching Algorithm (SGM)
+    Graph Matching Algorithm
      The following code is an algorithm to solve the Graph Matching Problem
      and the Quadratic Assignment Problem through an implementation of the
      Fast Approximate QAP Algorithm (FAQ) [1].
@@ -82,12 +82,12 @@ class GraphMatch:
 
     References
     ----------
-    .. [1] J. T. Vogelstein, J. M. Conroy, V. Lyzinski, L. J. Podrazik, S. G. Kratzer,
-        E. T. Harley, D. E. Fishkind, R. J. Vogelstein, and C. E. Priebe, “Fast
+    .. [1] J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,
+        E.T. Harley, D.E. Fishkind, R.J. Vogelstein, and C.E. Priebe, “Fast
         approximate quadratic programming for graph matching,” PLOS one, vol. 10,
         no. 4, p. e0121002, 2015.
 
-       [2] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
+    .. [2] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
         Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
 
 
@@ -234,7 +234,6 @@ class GraphMatch:
         B22T = np.transpose(B22)
 
         for i in range(self.n_init):
-
             # setting initialization matrix
             if self.init_method == "rand":
                 sk = SinkhornKnopp()
@@ -256,6 +255,7 @@ class GraphMatch:
 
             # OPTIMIZATION WHILE LOOP BEGINS
             while grad_P > self.eps and n_iter < self.max_iter:
+
                 delta_f = (
                     const_sum + A22 @ P @ B22T + A22T @ P @ B22
                 )  # computing the gradient of f(P) = -tr(APB^tP^t)
