@@ -47,10 +47,6 @@ class TestGMP:
                 np.arange(2),
             )
         with pytest.raises(ValueError):
-            GMP().fit(
-                -1 * np.identity(3), -1 * np.identity(3), np.arange(2), np.arange(2)
-            )
-        with pytest.raises(ValueError):
             GMP().fit(np.identity(3), np.identity(3), np.identity(3), np.arange(2))
         with pytest.raises(ValueError):
             GMP().fit(np.identity(3), np.identity(3), np.arange(1), np.arange(2))
@@ -130,12 +126,6 @@ class TestGMP:
         score = chr12c.score_
         assert 11156 <= score < 13500
 
-        A, B = self._get_AB("chr15a")
-        chr15a = self.rand.fit(A, B)
-        score = chr15a.score_
-        assert 9896 <= score < 12000
-
-        A, B = self._get_AB("chr12c")
         n = A.shape[0]
         pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
         W1 = [4, 8, 10]
@@ -145,6 +135,10 @@ class TestGMP:
         assert 11156 <= score < 12500
 
         A, B = self._get_AB("chr15a")
+        chr15a = self.rand.fit(A, B)
+        score = chr15a.score_
+        assert 9896 <= score < 12000
+
         n = A.shape[0]
         pi = np.array([5, 10, 8, 13, 12, 11, 14, 2, 4, 6, 7, 15, 3, 1, 9]) - [1] * n
         W1 = [0, 5, 11, 14]
