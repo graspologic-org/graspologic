@@ -145,10 +145,10 @@ class GraphMatch:
         Parameters
         ---------
         A : 2d-array, square, positive
-            A square, positive adjacency matrix
+            A square adjacency matrix
 
         B : 2d-array, square, positive
-            A square, positive adjacency matrix
+            A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in A
@@ -174,9 +174,6 @@ class GraphMatch:
             raise ValueError(msg)
         elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
             msg = "Adjacency matrix entries must be square"
-            raise ValueError(msg)
-        elif (A >= 0).all() == False or (B >= 0).all() == False:
-            msg = "Adjacency matrix entries must be greater than or equal to zero"
             raise ValueError(msg)
         elif seeds_A.shape[0] != seeds_B.shape[0]:
             msg = "Seed arrays must be of equal size"
