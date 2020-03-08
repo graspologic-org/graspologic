@@ -202,15 +202,12 @@ class GraphMatch:
             obj_func_scalar = -1
             score = 0
 
+        seeds_B_c = np.setdiff1d(range(n), seeds_B)
         if self.shuffle_input:
-            seeds_B_c = np.random.permutation(
-                np.array([x for x in range(n) if x not in seeds_B])
-            )
+            seeds_B_c = np.random.permutation(seeds_B_c)
             # shuffle_input to avoid results from inputs that were already matched
-        else:
-            seeds_B_c = np.array([x for x in range(n) if x not in seeds_B])
 
-        seeds_A_c = np.array([x for x in range(n) if x not in seeds_A])
+        seeds_A_c = np.setdiff1d(range(n), seeds_A)
         permutation_A = np.concatenate([seeds_A, seeds_A_c], axis=None).astype(int)
         permutation_B = np.concatenate([seeds_B, seeds_B_c], axis=None).astype(int)
         A = A[np.ix_(permutation_A, permutation_A)]
