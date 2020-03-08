@@ -53,29 +53,27 @@ class GraphMatch:
         stochastic matrix
 
     max_iter : int, positive (default = 30)
-        Integer specifying the max number of FW iterations.
-        FAQ typically converges with modest number of iterations
+        Integer specifying the max number of Franke-Wolfe iterations.
+        FAQ typically converges with modest number of iterations.
 
     shuffle_input : bool (default = True)
         Gives users the option to shuffle the nodes of A matrix to avoid results
-        from inputs that were already matched
+        from inputs that were already matched.
 
     eps : float (default = 0.1)
         A positive, threshold stopping criteria such that FW continues to iterate
         while Frobenius norm of :math:`(P_{i}-P_{i+1}) > eps`
 
-
     gmp : bool (default = True)
-        Gives users the option to the Quadratic Assignment (QAP)rather than the
-        Graph Matching Problem (GMP). This is accomplished through trivial
-        negation of the objective function.
+        Gives users the option to solve QAP rather than the Graph Matching Problem
+        (GMP). This is accomplished through trivial negation of the objective function.
 
     Attributes
     ----------
 
-    perm_inds_ : array, size (n,) where n is the number of vertices in the graphs fitted.
+    perm_inds_ : array, size (n,) where n is the number of vertices in the fitted graphs.
         The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
-        found via SGM, to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
+        to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
 
 
     score_ : float
