@@ -180,12 +180,13 @@ class GraphMatch:
         elif seeds_A.shape[0] > A.shape[0]:
             msg = "There cannot be more seeds than there are nodes"
             raise ValueError(msg)
-        elif (seeds_A >= 0).all() == False or (seeds_B >= 0).all() == False:
+        elif not (seeds_A >= 0).all() or not (seeds_B >= 0).all():
             msg = "Seed array entries must be greater than or equal to zero"
             raise ValueError(msg)
-        elif (seeds_A <= (A.shape[0] - 1)).all() == False or (
-            seeds_B <= (A.shape[0] - 1)
-        ).all() == False:
+        elif (
+            not (seeds_A <= (A.shape[0] - 1)).all()
+            or not (seeds_B <= (A.shape[0] - 1)).all()
+        ):
             msg = "Seed array entries must be less than or equal to n-1"
             raise ValueError(msg)
 
@@ -296,13 +297,12 @@ class GraphMatch:
 
             if obj_func_scalar * score_new < obj_func_scalar * score:  # minimizing
                 score = score_new
-                perm_inds = np.array([0] * n)
+                perm_inds = np.zeros(n, dtype=int)
                 perm_inds[permutation_A] = permutation_B[perm_inds_new]
 
-        perm_inds = perm_inds.astype(int)
-        permutation_A_unshuffle = self._unshuffle(permutation_A, n)
+        permutation_A_unshuffle = _unshuffle(permutation_A, n)
         A = A[np.ix_(permutation_A_unshuffle, permutation_A_unshuffle)]
-        permutation_B_unshuffle = self._unshuffle(permutation_B, n)
+        permutation_B_unshuffle = _unshuffle(permutation_B, n)
         B = B[np.ix_(permutation_B_unshuffle, permutation_B_unshuffle)]
         score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
 
@@ -324,12 +324,12 @@ class GraphMatch:
             A square, positive adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in A
+            An array where each entry is an index of a node in `A`.
 
         seeds_B : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in B
-            The elements of seeds_A and seeds_B are seeds, creating a fixed
-            seeding of seeds_A -> seeds_B
+            An array where each entry is an index of a node in `B` The elements of
+            `seeds_A` and `seeds_B` are vertices which are known to be matched, that is,
+            `seeds_A[i]` is matched to vertex `seeds_B[i]`.
 
         Returns
         -------
@@ -339,7 +339,8 @@ class GraphMatch:
         self.fit(A, B, seeds_A, seeds_B)
         return self.perm_inds_
 
-    def _unshuffle(self, array, n):
-        unshuffle = np.array(range(n))
-        unshuffle[array] = np.array(range(n))
-        return unshuffle
+
+def _unshuffle(array, n):
+    unshuffle = np.array(range(n))
+    unshuffle[array] = np.array(range(n))
+    return unshuffle
