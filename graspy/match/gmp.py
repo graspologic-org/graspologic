@@ -151,13 +151,12 @@ class GraphMatch:
             A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in A
+            An array where each entry is an index of a node in `A`.
 
         seeds_B : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in B
-
-            The elements of seeds_A and seeds_B are seeds, creating a fixed
-            seeding of seeds_A -> seeds_B
+            An array where each entry is an index of a node in `B` The elements of
+            `seeds_A` and `seeds_B` are vertices which are known to be matched, that is,
+            `seeds_A[i]` is matched to vertex `seeds_B[i]`.
 
         Returns
         -------
