@@ -213,6 +213,7 @@ class GraphMatch:
         A = A[np.ix_(permutation_A, permutation_A)]
         B = B[np.ix_(permutation_B, permutation_B)]
 
+        # definitions according to Seeded Graph Matching [2].
         A11 = A[:n_seeds, :n_seeds]
         A12 = A[:n_seeds, n_seeds:]
         A21 = A[n_seeds:, :n_seeds]
