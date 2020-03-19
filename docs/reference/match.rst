@@ -3,9 +3,9 @@ Matching
 
 .. currentmodule:: graspy.match
 
-Fast Approximate QAP
+Graph Matching
 --------------------
-.. autoclass:: FastApproximateQAP
+.. autoclass:: GraphMatch
 
 Sinkhorn-Knopp Algorithm
 ------------------------
