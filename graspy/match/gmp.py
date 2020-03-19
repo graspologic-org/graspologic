@@ -159,10 +159,6 @@ class GraphMatch:
 
         Returns
         -------
-<<<<<<< HEAD:graspy/match/gmp.py
-
-=======
->>>>>>> origin/master:graspy/match/faq.py
         self : returns an instance of self
         """
         A = check_array(A, copy=True, ensure_2d=True)
