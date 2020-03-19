@@ -95,7 +95,7 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
         raise TypeError("loops is not of type bool.")
 
     # check dimensions
-    if Y != None:
+    if Y is not None:
         if type(X) is not np.ndarray or type(Y) is not np.ndarray:
             raise TypeError("Latent positions must be numpy.ndarray")
         if X.ndim != 2 or Y.ndim != 2:
@@ -108,7 +108,7 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
         Y = X
 
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
-    n = np.size(P[0])
-    R = r * np.ones((n, n))
+    n = P.shape[0]
+    R = np.full((n, n), r)
     G1, G2 = sample_edges_corr(P, R, directed=directed, loops=loops)
     return G1, G2
