@@ -122,7 +122,6 @@ def _process_graphs(
     graphs, inner_hier_labels, outer_hier_labels, transform, sort_nodes
 ):
     """ Handles transformation and sorting of graphs for plotting
-    
     """
     for g in graphs:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
@@ -166,14 +165,15 @@ def heatmap(
     ax=None,
     title_pad=None,
     sort_nodes=False,
+    **kwargs
 ):
     r"""
     Plots a graph as a color-encoded matrix.
 
-    Nodes can be grouped by providing `inner_hier_labels` or both 
-    `inner_hier_labels` and `outer_hier_labels`. Nodes can also 
+    Nodes can be grouped by providing `inner_hier_labels` or both
+    `inner_hier_labels` and `outer_hier_labels`. Nodes can also
     be sorted by the degree from largest to smallest degree nodes.
-    The nodes will be sorted within each group if labels are also 
+    The nodes will be sorted within each group if labels are also
     provided.
 
     Read more in the :ref:`tutorials <plot_tutorials>`
@@ -185,22 +185,22 @@ def heatmap(
 
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
-        - 'log' :
+        - 'log'
             Plots the natural log of all nonzero numbers
-        - 'log10' : 
+        - 'log10'
             Plots the base 10 log of all nonzero numbers
-        - 'zero-boost' :
+        - 'zero-boost'
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
-        - 'simple-all': 
+        - 'simple-all'
             Pass to ranks method. Assigns ranks to all non-zero edges, settling 
-            ties using the average. Ranks are then scaled by 
-            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}` 
+            ties using the average. Ranks are then scaled by
+            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`
             where n is the number of nodes
-        - 'simple-nonzero':
+        - 'simple-nonzero'
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
-        - 'binarize':
+        - 'binarize'
             Binarize input graph such that any edge weight greater than 0 becomes 1. 
 
     figsize : tuple of integers, optional, default: (10, 10)
@@ -255,7 +255,10 @@ def heatmap(
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
-        ``sort_nodes`` is ``True``, will sort nodes this way within block. 
+        ``sort_nodes`` is ``True``, will sort nodes this way within block.
+
+    **kwargs : dict, optional
+        additional plotting arguments passed to Seaborn's ``heatmap``
     """
     _check_common_inputs(
         figsize=figsize,
@@ -324,6 +327,7 @@ def heatmap(
             ax=ax,
             vmin=vmin,
             vmax=vmax,
+            **kwargs
         )
 
         if title is not None:
@@ -385,22 +389,22 @@ def gridplot(
         ``len(X) == len(labels)``.
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
-        - 'log' :
+        - 'log'
             Plots the natural log of all nonzero numbers
-        - 'log10' : 
+        - 'log10'
             Plots the base 10 log of all nonzero numbers
-        - 'zero-boost' :
+        - 'zero-boost'
             Pass to ranks method. preserves the edge weight for all 0s, but ranks 
             the other edges as if the ranks of all 0 edges has been assigned. 
-        - 'simple-all': 
+        - 'simple-all'
             Pass to ranks method. Assigns ranks to all non-zero edges, settling 
             ties using the average. Ranks are then scaled by 
             :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
-        - 'simple-nonzero':
+        - 'simple-nonzero'
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
-        - 'binarize':
+        - 'binarize'
             Binarize input graph such that any edge weight greater than 0 becomes 1. 
     height : int, optional, default: 10
         Height of figure in inches.
@@ -580,7 +584,7 @@ def pairplot(
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1 
     size : float or int, optional, default: 50
-        Size of plotted markers 
+        Size of plotted markers.
     marker : string, optional, default: '.'
         Matplotlib style marker specification 
         https://matplotlib.org/api/markers_api.html
@@ -731,20 +735,20 @@ def degreeplot(
     palette="Set1",
 ):
     r"""
-    Plots the distribution of node degrees for the input graph. 
-    Allows for sets of node labels, will plot a distribution for each 
-    node category. 
-    
+    Plots the distribution of node degrees for the input graph.
+    Allows for sets of node labels, will plot a distribution for each
+    node category.
+
     Parameters
     ----------
     X : np.ndarray (2D)
-        input graph 
+        input graph
     labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
     direction : string, ('out', 'in')
         Whether to plot out degree or in degree for a directed graph
     title : string, default : 'Degree plot'
-        Plot title 
+        Plot title
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
@@ -756,9 +760,10 @@ def degreeplot(
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
-    Returns 
-    ------- 
+    Returns
+    -------
     ax : matplotlib axis object
+        Output plot
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -797,20 +802,20 @@ def edgeplot(
     palette="Set1",
 ):
     r"""
-    Plots the distribution of edge weights for the input graph. 
-    Allows for sets of node labels, will plot edge weight distribution 
-    for each node category. 
-    
+    Plots the distribution of edge weights for the input graph.
+    Allows for sets of node labels, will plot edge weight distribution
+    for each node category.
+
     Parameters
     ----------
     X : np.ndarray (2D)
-        Input graph 
+        Input graph
     labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
     nonzero : boolean, default: False
         Whether to restrict the edgeplot to only the non-zero edges
     title : string, default : 'Edge plot'
-        Plot title 
+        Plot title
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
@@ -821,10 +826,11 @@ def edgeplot(
         be values in the hue variable.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
-        
-    Returns 
-    ------- 
+
+    Returns
+    -------
     ax : matplotlib axis object
+        Output plot
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -866,24 +872,25 @@ def screeplot(
     Parameters
     ----------
     X : np.ndarray (2D)
-        Input matrix 
+        Input matrix
     title : string, default : 'Scree plot'
-        Plot title 
+        Plot title
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
-        Separate scaling factor to independently scale the size of the font 
+        Separate scaling factor to independently scale the size of the font
         elements.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
     cumulative : boolean, default: True
-        Whether or not to plot a cumulative cdf of singular values 
-    show_first : int or None, default: None 
+        Whether or not to plot a cumulative cdf of singular values
+    show_first : int or None, default: None
         Whether to restrict the plot to the first ``show_first`` components
 
     Returns
     -------
     ax : matplotlib axis object
+        Output plot
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale

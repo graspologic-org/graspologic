@@ -189,12 +189,11 @@ class MultipleASE(BaseEmbedMulti):
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
-        
-        y : Ignored
 
         Returns
         -------
-        self : returns an instance of self.
+        self : object
+            Returns an instance of self.
         """
         graphs = self._check_input_graphs(graphs)
 
@@ -224,8 +223,6 @@ class MultipleASE(BaseEmbedMulti):
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
-
-        y : Ignored
 
         Returns
         -------

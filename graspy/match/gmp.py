@@ -142,7 +142,7 @@ class GraphMatch:
         Fits the model with two assigned adjacency matrices
 
         Parameters
-        ---------
+        ----------
         A : 2d-array, square, positive
             A square adjacency matrix
 
@@ -159,7 +159,10 @@ class GraphMatch:
 
         Returns
         -------
+<<<<<<< HEAD:graspy/match/gmp.py
 
+=======
+>>>>>>> origin/master:graspy/match/faq.py
         self : returns an instance of self
         """
         A = check_array(A, copy=True, ensure_2d=True)
@@ -313,7 +316,7 @@ class GraphMatch:
         permutation indices
 
         Parameters
-        ---------
+        ----------
         A : 2d-array, square, positive
             A square, positive adjacency matrix
 
@@ -330,8 +333,8 @@ class GraphMatch:
 
         Returns
         -------
-
-        self : returns an instance of self
+        perm_inds_ : 1-d array, some shuffling of [0, n_vert)
+            The optimal permutation indices to minimize the objective function
         """
         self.fit(A, B, seeds_A, seeds_B)
         return self.perm_inds_

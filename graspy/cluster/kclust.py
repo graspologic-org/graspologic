@@ -30,7 +30,7 @@ class KMeansCluster(BaseCluster):
     ----------
     max_clusters : int, defaults to 1.
         The maximum number of mixture components to consider.
-    
+
     random_state : int, RandomState instance or None, optional (default=None)
         If int, ``random_state`` is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
@@ -42,7 +42,7 @@ class KMeansCluster(BaseCluster):
     n_clusters_ : int
         Optimal number of components. If y is given, it is based on largest 
         ARI. Otherwise, it is based on smallest loss.
-    
+
     model_ : KMeans object
         Fitted KMeans object fitted with optimal n_components.
 
@@ -76,7 +76,7 @@ class KMeansCluster(BaseCluster):
         X : array-like, shape (n_samples, n_features)
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        
+
         y : array-like, shape (n_samples,), optional (default=None)
             List of labels for `X` if available. Used to compute ARI scores.
 

@@ -23,7 +23,9 @@ deploy:
   user: "j1c"
   password:
     secure: YlLbfPTKZuzhGECU3pYH3pOBdJnF59//e2Y3Ibg7IPbCYhGAwd4QG4fkKboLI5YMaR28CtpKwL7KrwWJpGfDfh+F+mvxalYHNp5xbM9+VHHGvPsabV2wHHmFIEKR1y2YkHW4fcfiELMjP9clVFJcXMzqOF4AAMLZJZpujVBxQLNk8YWapCHpwln6iGVj21iTMWOKTGRVPuRBf76hmGgqyJDftdJ52DCfR8d/6VL0EUh9iKrDN445gjT54EettyZfdSv/MhC7w9mg8Uhtf8qrAPn8/6Kt8QLKYpovFcm+qOPXkM8GiXRXAo70Yx9i/iORNCWHbwfzdmf3jUQ/Ea3XUuaCxBW3voA9ijMQQuYhtUFfO4oXyKyl1EUVjARORTVhlZKnoSfugv5zTyS+dqok5TGDJcMySHjSg6BzunDI2m5a1SPZVkB9dc3SYIonPPxvP/WzuvnRTmnn1GLRvS4RP+nQihGBcjJmAItvMDVmTkSkNufw1eBzjpZM78UXP0WAUPPSCrS+t9NwnZZPOCBoTpEhONtmBIPdq2e4zTdj+DfSvFfRX8UktgFg70ItrrGN9YTbN2VsVC9YDGOquQ549V5tc1k6t+Gp6VWRSzxKWwP9E7qvdYLMPkRd0bQIYQY7Gy1/3HFFP8dpulW3ITWPSGogCuNpmhkRqdRNztokvBg=
+  skip_existing: true
   on:
+    branch: master
     tags: true
     repo: neurodata/graspy
     python: '3.6'
