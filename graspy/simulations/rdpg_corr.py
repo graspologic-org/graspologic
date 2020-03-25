@@ -2,9 +2,9 @@ import numpy as np
 from graspy.simulations import p_from_latent, sample_edges_corr
 
 
-def rdpg_corr(X, Y, r, rescale, directed, loops):
+def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     """
-    Samples a random graph based on the latent positions in X (and 
+    Samples a random graph pair based on the latent positions in X (and 
     optionally in Y)
     If only X :math:`\in\mathbb{R}^{n\times d}` is given, the P matrix is calculated as
     :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then 
@@ -33,7 +33,7 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
-        False, elements of P outside of [0, 1] will be clipped
+        False, elements of P outside of [0, 1] will be clipped.
 
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
@@ -53,33 +53,33 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
     G2: ndarray (n_vertices, n_vertices)
         A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
-        
+
     References
     ----------
-    .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
+    .. [1] Vince Lyzinski, Donniell E Fishkind profile imageDonniell E. Fishkind, Carey E Priebe.
+       "Seeded graph matching for correlated Erdös-Rényi graphs".
+       The Journal of Machine Learning Research, January 2014
     
     Examples
     --------
     >>> np.random.seed(1234)
-    
-    To gnerate random latent positions using 2-dimensional Dirichlet distribution:
-    
+
+    To generate random latent positions using 2-dimensional Dirichlet distribution.
+
     >>> X = np.random.dirichlet([1, 1], size=5)
-    
+
     To sample a correlated RDPG graph pair:
-    
+
     >>> rdpg_corr(X, None, 0.3, rescale=False, directed=False, loops=False)
-    (array([[0., 1., 0., 1., 0.],
-            [1., 0., 0., 1., 1.],
-            [0., 0., 0., 0., 0.],
-            [1., 1., 0., 0., 0.],
-            [0., 1., 0., 0., 0.]]), array([[0., 1., 0., 1., 0.],
-            [1., 0., 0., 0., 1.],
-            [0., 0., 0., 0., 0.],
-            [1., 0., 0., 0., 0.],
-            [0., 1., 0., 0., 0.]]))
+    array([[0., 1., 0., 1., 0.],
+           [1., 0., 0., 1., 1.],
+           [0., 0., 0., 0., 0.],
+           [1., 1., 0., 0., 0.],
+           [0., 1., 0., 0., 0.]]), array([[0., 1., 0., 1., 0.],
+           [1., 0., 0., 0., 1.],
+           [0., 0., 0., 0., 0.],
+           [1., 0., 0., 0., 0.],
+           [0., 1., 0., 0., 0.]]))
     """
     # check r
     if not np.issubdtype(type(r), np.floating):
@@ -94,8 +94,8 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
 
-    # check dimensions
-    if Y is not None:
+    # check dimensions of X and Y
+    if Y != None:
         if type(X) is not np.ndarray or type(Y) is not np.ndarray:
             raise TypeError("Latent positions must be numpy.ndarray")
         if X.ndim != 2 or Y.ndim != 2:
@@ -108,7 +108,7 @@ def rdpg_corr(X, Y, r, rescale, directed, loops):
         Y = X
 
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
-    n = P.shape[0]
-    R = np.full((n, n), r)
+    n = np.size(P[0])
+    R = r * np.ones((n, n))
     G1, G2 = sample_edges_corr(P, R, directed=directed, loops=loops)
     return G1, G2
