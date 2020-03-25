@@ -109,6 +109,6 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
 
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
     n = P.shape[0]
-     R = np.full((n, n), r)
+    R = np.full((n, n), r)
     G1, G2 = sample_edges_corr(P, R, directed=directed, loops=loops)
     return G1, G2
