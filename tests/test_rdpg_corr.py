@@ -1,5 +1,5 @@
 import unittest
-from graspy.simulations.simulations import sample_edges, rdpg, p_from_latent
+from graspy.simulations.simulations import sample_edges, p_from_latent
 from graspy.simulations.rdpg_corr import rdpg_corr
 import numpy as np
 import pytest
@@ -14,6 +14,7 @@ class Test_RDPG_Corr(unittest.TestCase):
         cls.X = np.random.dirichlet([20, 20], size=300)
 
     def test_dimensions(self):
+        np.random.seed(1234)
         A, B = rdpg_corr(
             self.X, self.Y, self.r, rescale=False, directed=False, loops=False
         )
@@ -37,10 +38,18 @@ class Test_RDPG_Corr(unittest.TestCase):
         with self.assertRaises(ValueError):
             sample_edges(x2)  # wrong shape for P
 
+        if any(self.X[self.X > 1]) or any(self.X[self.X < -1]):  # wrong values for P
+            raise ValueError("P values should be less than 1 and bigger than -1")
+
     def test_rdpg_corr(self):
+        np.random.seed(123)
         g1, g2 = rdpg_corr(
             self.X, self.Y, self.r, rescale=False, directed=False, loops=False
         )
+
+        # check the dimention of g1, g2
+        self.assertTrue(g1.shape == (self.X.shape[0], self.X.shape[0]))
+        self.assertTrue(g1.shape == (self.X.shape[0], self.X.shape[0]))
 
         # check rho
         g1 = g1[np.where(~np.eye(g1.shape[0], dtype=bool))]
