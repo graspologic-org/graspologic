@@ -71,15 +71,15 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     To sample a correlated RDPG graph pair:
 
     >>> rdpg_corr(X, None, 0.3, rescale=False, directed=False, loops=False)
-    array([[0., 1., 0., 1., 0.],
-           [1., 0., 0., 1., 1.],
-           [0., 0., 0., 0., 0.],
-           [1., 1., 0., 0., 0.],
-           [0., 1., 0., 0., 0.]]), array([[0., 1., 0., 1., 0.],
-           [1., 0., 0., 0., 1.],
-           [0., 0., 0., 0., 0.],
-           [1., 0., 0., 0., 0.],
-           [0., 1., 0., 0., 0.]]))
+    (array([[0., 1., 0., 1., 0.],
+            [1., 0., 0., 1., 1.],
+            [0., 0., 0., 0., 0.],
+            [1., 1., 0., 0., 0.],
+            [0., 1., 0., 0., 0.]]), array([[0., 1., 0., 1., 0.],
+            [1., 0., 0., 0., 1.],
+            [0., 0., 0., 0., 0.],
+            [1., 0., 0., 0., 0.],
+            [0., 1., 0., 0., 0.]])))
     """
     # check r
     if not np.issubdtype(type(r), np.floating):
@@ -108,7 +108,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
         Y = X
 
     P = p_from_latent(X, Y, rescale=rescale, loops=loops)
-    n = np.size(P[0])
-    R = r * np.ones((n, n))
+    n = P.shape[0]
+     R = np.full((n, n), r)
     G1, G2 = sample_edges_corr(P, R, directed=directed, loops=loops)
     return G1, G2
