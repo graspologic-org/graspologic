@@ -63,14 +63,13 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     Examples
     --------
     >>> np.random.seed(1234)
-
-    To generate random latent positions using 2-dimensional Dirichlet distribution.
-
     >>> X = np.random.dirichlet([1, 1], size=5)
+    >>> Y = None
 
-    To sample a correlated RDPG graph pair:
+    Generate random latent positions using 2-dimensional Dirichlet distribution.
+    Then sample a correlated RDPG graph pair:
 
-    >>> rdpg_corr(X, None, 0.3, rescale=False, directed=False, loops=False)
+    >>> rdpg_corr(X, Y, 0.3, rescale=False, directed=False, loops=False)
     (array([[0., 1., 0., 1., 0.],
             [1., 0., 0., 1., 1.],
             [0., 0., 0., 0., 0.],
