@@ -55,4 +55,19 @@ class Test_RDPG_Corr(unittest.TestCase):
         g1 = g1[np.where(~np.eye(g1.shape[0], dtype=bool))]
         g2 = g2[np.where(~np.eye(g2.shape[0], dtype=bool))]
         correlation = np.corrcoef(g1, g2)[0, 1]
-        self.assertTrue(np.isclose(correlation, self.r, atol=0.05))
+        self.assertTrue(np.isclose(correlation, self.r, atol=0.01))
+
+    # check P
+    def test_p_is_close(self):
+        P = p_from_latent(self.X, self.Y, rescale=False, loops=False)
+        if any(P[P > 1]) or any(P[P < -1]):  # wrong values for P
+            raise ValueError("P values should be less than 1 and bigger than -1")
+
+        np.random.seed(8888)
+        X = 0.5 * np.ones((100, 2))
+        graphs = []
+        P = p_from_latent(X, rescale=True, loops=True)
+        for i in range(1000):
+            graphs.append(sample_edges(P, directed=True, loops=True))
+        graphs = np.stack(graphs)
+        self.assertAlmostEqual(np.mean(graphs), 0.5, delta=0.01)
