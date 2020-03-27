@@ -64,10 +64,20 @@ class Test_RDPG_Corr(unittest.TestCase):
             raise ValueError("P values should be less than 1 and bigger than -1")
 
         np.random.seed(8888)
-        X = 0.5 * np.ones((100, 2))
-        graphs = []
-        P = p_from_latent(X, rescale=True, loops=True)
+        dim = 300
+
+        graphs1 = []
+        graphs2 = []
+        # P = p_from_latent(X, rescale=True, loops=True)
         for i in range(1000):
-            graphs.append(sample_edges(P, directed=True, loops=True))
-        graphs = np.stack(graphs)
-        self.assertAlmostEqual(np.mean(graphs), 0.5, delta=0.01)
+            g1, g2 = rdpg_corr(
+                self.X, self.Y, self.r, rescale=False, directed=True, loops=True
+            )
+            p1 = sum(g1) / dim
+            graphs1.append(p1)
+            p2 = sum(g2) / dim
+            graphs2.append(p2)
+        graphs1 = np.stack(graphs1)
+        graphs2 = np.stack(graphs2)
+        self.assertAlmostEqual(np.mean(graphs1), 0.5, delta=0.01)
+        self.assertAlmostEqual(np.mean(graphs2), 0.5, delta=0.01)
