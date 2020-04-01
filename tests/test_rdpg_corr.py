@@ -59,24 +59,22 @@ class Test_RDPG_Corr(unittest.TestCase):
 
     # check P
     def test_p_is_close(self):
-        P = p_from_latent(self.X, self.Y, rescale=True, loops=True)
+        P = p_from_latent(self.X, self.Y, rescale=False, loops=True)
         if any(P[P > 1]) or any(P[P < -1]):  # wrong values for P
             raise ValueError("P values should be less than 1 and bigger than -1")
 
         np.random.seed(8888)
         graphs1 = []
         graphs2 = []
-        P = []
         for i in range(1000):
-            p = p_from_latent(self.X, self.Y, rescale=True, loops=True)
             g1, g2 = rdpg_corr(
                 self.X, self.Y, self.r, rescale=False, directed=True, loops=True
             )
-            P.append(p)
             graphs1.append(g1)
             graphs2.append(g2)
-        P = np.stack(P)
         graphs1 = np.stack(graphs1)
         graphs2 = np.stack(graphs2)
-        self.assertAlmostEqual(np.mean(graphs1), np.mean(P), delta=0.01)
-        self.assertAlmostEqual(np.mean(graphs2), np.mean(P), delta=0.01)
+        np.testing.assert_allclose(np.mean(graphs1, axis=0), P, atol=0.1)
+        np.testing.assert_allclose(np.mean(graphs2, axis=0), P, atol=0.1)
+        np.testing.assert_allclose(np.mean(np.mean(graphs1, axis=0) - P), 0, atol=1e-4)
+        np.testing.assert_allclose(np.mean(np.mean(graphs2, axis=0) - P), 0, atol=1e-4)
