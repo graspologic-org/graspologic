@@ -3,7 +3,7 @@ from graspy.simulations import p_from_latent, sample_edges_corr
 
 
 def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
-    """
+    r"""
     Samples a random graph pair based on the latent positions in X (and 
     optionally in Y)
     If only X :math:`\in\mathbb{R}^{n\times d}` is given, the P matrix is calculated as
