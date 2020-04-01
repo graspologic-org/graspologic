@@ -136,3 +136,12 @@ class BaseSubgraph(BaseEstimator):
         """
 
         return self
+    
+from abc import ABC, abstractmethod
+
+from sklearn.base import BaseEstimator, ClassifierMixin
+
+class BaseClassify(ABC, BaseEstimator, ClassifierMixin):
+    """
+    Base classification class.
+    """
