@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.spatial import cdist
+from scipy.spatial.distance import cdist
 
 def euclidean(x):
     """Default euclidean distance function calculation"""
@@ -11,4 +11,5 @@ def gaussian(x):
     mask = np.ones(l1.shape, dtype=bool)
     np.fill_diagonal(mask, 0)
     gamma = 1.0 / (2 * (np.median(l1[mask]) ** 2))
-    return np.exp(-gamma * cdist(x, x, "sqeuclidean"))
+    K = np.exp(-gamma * cdist(x, x, "sqeuclidean"))
+    return 1 - K/np.max(K)

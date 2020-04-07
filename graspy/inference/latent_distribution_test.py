@@ -19,6 +19,8 @@ from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 from .dists import euclidean
 from hyppo.ksample import KSample
+from scipy.stats import multiscale_graphcorr
+from joblib import Parallel, delayed
 
 class LatentDistributionTest(BaseInference):
     """
@@ -61,6 +63,7 @@ class LatentDistributionTest(BaseInference):
     null_distribution_ : None or ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
         None if an approximation of the p-value is used.
+        The MGC test always returns a null distribution.
 
     References
     ----------
@@ -75,7 +78,7 @@ class LatentDistributionTest(BaseInference):
             msg = "test must be a str, not {}".format(type(test))
             raise TypeError(msg)
         elif test not in supported_tests:
-            mgs = "test must be one of {}".format(supported_tests)
+            msg = "test must be one of {}".format(supported_tests)
             raise ValueError(msg)
 
         if not callable(distance):
@@ -104,6 +107,8 @@ class LatentDistributionTest(BaseInference):
             raise NotImplementedError() # TODO env error parallelizing
 
         super().__init__(embedding="ase", n_components=n_components)
+        self.test_name = test
+        self.distance = distance
         self.test = KSample(test, compute_distance=distance)
         self.n_bootstraps = n_bootstraps
         self.num_workers = num_workers
@@ -127,11 +132,19 @@ class LatentDistributionTest(BaseInference):
             raise ValueError("Input graphs do not have same directedness")
         return X1_hat, X2_hat
 
-    def _perm_stat(x, y):
+    def _median_heuristic(self, X1, X2):
+        X1_medians = np.median(X1, axis=0)
+        X2_medians = np.median(X2, axis=0)
+        val = np.multiply(X1_medians, X2_medians)
+        t = (val > 0) * 2 - 1
+        X1 = np.multiply(t.reshape(-1, 1).T, X1)
+        return X1, X2
+
+    def _perm_stat(self, x, y):
         permy = np.random.permutation(y)
         return self.test._statistic(x, permy)
 
-    def _bootstrap(x, y, reps, workers=1):
+    def _bootstrap(self, x, y, reps, workers=1):
         """
         Calculate the p-value via permutation test.
         """
@@ -175,14 +188,23 @@ class LatentDistributionTest(BaseInference):
         A1 = import_graph(A1)
         A2 = import_graph(A2)
         X1_hat, X2_hat = self._embed(A1, A2)
+        X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
+        x = np.array(X1_hat)
+        y = np.array(X2_hat)
 
-        if return_null_dist:
-            data = self._bootstrap(x, y, reps=self.n_bootstraps,
-                                                      workers=self.num_workers)
+        if self.test_name is "MGC":
+            data = multiscale_graphcorr(x, y, self.distance,
+                    reps=self.n_bootstraps, workers=self.num_workers,
+                    is_twosamp=True)
+            self.null_distribution_ = data[2]["null_dist"]
         else:
-            data = self.test.test(X1_hat, X2_hat, reps=self.n_bootstraps,
-                                          workers=self.num_workers)
-            self.null_distribution_ = None
+            if return_null_dist:
+                data = self._bootstrap(x, y,
+                    self.n_bootstraps, self.num_workers)
+            else:
+                data = self.test.test(x, y,
+                    reps=self.n_bootstraps, workers=self.num_workers)
+                self.null_distribution_ = None
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
 
