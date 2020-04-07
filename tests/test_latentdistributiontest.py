@@ -10,6 +10,7 @@ from graspy.inference import LatentDistributionTest
 from graspy.inference.dists import euclidean, gaussian
 from graspy.simulations import er_np, sbm
 
+
 class TestLatentDistributionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -82,11 +83,11 @@ class TestLatentDistributionTest(unittest.TestCase):
 
         for test in self.tests:
             ldt_null = LatentDistributionTest(
-                    test, euclidean, n_components=2, n_bootstraps=50
-                    )
+                test, euclidean, n_components=2, n_bootstraps=50
+            )
             ldt_alt = LatentDistributionTest(
-                    test, euclidean, n_components=2, n_bootstraps=50
-                    )
+                test, euclidean, n_components=2, n_bootstraps=50
+            )
             p_null = ldt_null.fit(A1, A2)
             p_alt = ldt_alt.fit(A1, A3)
             self.assertTrue(p_null > 0.05)
@@ -104,11 +105,11 @@ class TestLatentDistributionTest(unittest.TestCase):
 
         for test in self.tests:
             ldt_null = LatentDistributionTest(
-                    test, gaussian, n_components=2, n_bootstraps=50
-                    )
+                test, gaussian, n_components=2, n_bootstraps=50
+            )
             ldt_alt = LatentDistributionTest(
-                    test, gaussian, n_components=2, n_bootstraps=50
-                    )
+                test, gaussian, n_components=2, n_bootstraps=50
+            )
             p_null = ldt_null.fit(A1, A2)
             p_alt = ldt_alt.fit(A1, A3)
             self.assertTrue(p_null > 0.05)

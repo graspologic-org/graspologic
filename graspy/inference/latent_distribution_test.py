@@ -22,6 +22,7 @@ from hyppo.ksample import KSample
 from scipy.stats import multiscale_graphcorr
 from joblib import Parallel, delayed
 
+
 class LatentDistributionTest(BaseInference):
     """
     Two-sample hypothesis test for the problem of determining whether two random
@@ -72,7 +73,15 @@ class LatentDistributionTest(BaseInference):
         "hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package."
         arXiv:1907.02088.
     """
-    def __init__(self, test, distance=euclidean, n_components=None, n_bootstraps=200, num_workers=1):
+
+    def __init__(
+        self,
+        test,
+        distance=euclidean,
+        n_components=None,
+        n_bootstraps=200,
+        num_workers=1,
+    ):
         supported_tests = ["CCA", "Dcorr", "HHG", "RV", "Hsic", "MGC"]
         if not isinstance(test, str):
             msg = "test must be a str, not {}".format(type(test))
@@ -104,7 +113,7 @@ class LatentDistributionTest(BaseInference):
             msg = "{} is invalid number of workers, must be greater than 0"
             raise ValueError(msg.format(num_workers))
         elif num_workers > 1:
-            raise NotImplementedError() # TODO env error parallelizing
+            raise NotImplementedError()  # TODO env error parallelizing
 
         super().__init__(embedding="ase", n_components=n_components)
         self.test_name = test
@@ -183,7 +192,9 @@ class LatentDistributionTest(BaseInference):
             The p value corresponding to the specified hypothesis test
         """
         if not isinstance(return_null_dist, bool):
-            msg = "return_null_dist must be a bool, not {}".format(type(return_null_dist))
+            msg = "return_null_dist must be a bool, not {}".format(
+                type(return_null_dist)
+            )
             raise TypeError(msg)
         A1 = import_graph(A1)
         A2 = import_graph(A2)
@@ -193,17 +204,22 @@ class LatentDistributionTest(BaseInference):
         y = np.array(X2_hat)
 
         if self.test_name is "MGC":
-            data = multiscale_graphcorr(x, y, self.distance,
-                    reps=self.n_bootstraps, workers=self.num_workers,
-                    is_twosamp=True)
+            data = multiscale_graphcorr(
+                x,
+                y,
+                self.distance,
+                reps=self.n_bootstraps,
+                workers=self.num_workers,
+                is_twosamp=True,
+            )
             self.null_distribution_ = data[2]["null_dist"]
         else:
             if return_null_dist:
-                data = self._bootstrap(x, y,
-                    self.n_bootstraps, self.num_workers)
+                data = self._bootstrap(x, y, self.n_bootstraps, self.num_workers)
             else:
-                data = self.test.test(x, y,
-                    reps=self.n_bootstraps, workers=self.num_workers)
+                data = self.test.test(
+                    x, y, reps=self.n_bootstraps, workers=self.num_workers
+                )
                 self.null_distribution_ = None
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
