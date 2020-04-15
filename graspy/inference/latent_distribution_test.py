@@ -176,9 +176,7 @@ class LatentDistributionTest(BaseInference):
         x = np.array(X1_hat)
         y = np.array(X2_hat)
 
-        data = self.test.test(
-                x, y, reps=self.n_bootstraps, workers=self.num_workers
-                )
+        data = self.test.test(x, y, reps=self.n_bootstraps, workers=self.num_workers)
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
         self.null_distribution_ = self.test.indep_test.null_dist
