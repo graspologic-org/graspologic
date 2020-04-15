@@ -63,13 +63,14 @@ class LatentDistributionTest(BaseInference):
 
     null_distribution_ : None or ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
-        None if an approximation of the p-value is used.
-        The MGC test always returns a null distribution.
 
     References
     ----------
-    .. [1] Panda, S., Palaniappan, S., Xiong, J., Bridgeford, E., Mehta, R.,
-        Shen, C., & Vogelstein, J. (2019).
+    .. [1] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017).
+        "A nonparametric two-sample hypothesis testing problem for random graphs."
+        Bernoulli, 23(3), 1599-1630.
+
+    .. [2] Panda, S., Palaniappan, S., Xiong, J., Bridgeford, E., Mehta, R., Shen, C., & Vogelstein, J. (2019).
         "hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package."
         arXiv:1907.02088.
     """
@@ -116,7 +117,6 @@ class LatentDistributionTest(BaseInference):
             raise NotImplementedError()  # TODO env error parallelizing
 
         super().__init__(embedding="ase", n_components=n_components)
-        self.test_name = test
         self.distance = distance
         self.test = KSample(test, compute_distance=distance)
         self.n_bootstraps = n_bootstraps
@@ -125,8 +125,8 @@ class LatentDistributionTest(BaseInference):
     def _embed(self, A1, A2):
         if not is_symmetric(A1) or not is_symmetric(A2):
             raise NotImplementedError()  # TODO asymmetric case
+
         if self.n_components is None:
-            # get the last elbow from ZG for each and take the maximum
             num_dims1 = select_dimension(A1)[0][-1]
             num_dims2 = select_dimension(A2)[0][-1]
             self.n_components = max(num_dims1, num_dims2)
@@ -134,44 +134,26 @@ class LatentDistributionTest(BaseInference):
         ase = AdjacencySpectralEmbed(n_components=self.n_components)
         X1_hat = ase.fit_transform(A1)
         X2_hat = ase.fit_transform(A2)
+
         if isinstance(X1_hat, tuple) and isinstance(X2_hat, tuple):
             X1_hat = np.concatenate(X1_hat, axis=-1)
             X2_hat = np.concatenate(X2_hat, axis=-1)
         elif isinstance(X1_hat, tuple) ^ isinstance(X2_hat, tuple):
             raise ValueError("Input graphs do not have same directedness")
+
         return X1_hat, X2_hat
 
-    def _median_heuristic(self, X1, X2):
+    def _median_sign_flips(self, X1, X2):
         X1_medians = np.median(X1, axis=0)
         X2_medians = np.median(X2, axis=0)
         val = np.multiply(X1_medians, X2_medians)
+
         t = (val > 0) * 2 - 1
         X1 = np.multiply(t.reshape(-1, 1).T, X1)
+
         return X1, X2
 
-    def _perm_stat(self, x, y):
-        permy = np.random.permutation(y)
-        return self.test._statistic(x, permy)
-
-    def _bootstrap(self, x, y, reps, workers=1):
-        """
-        Calculate the p-value via permutation test.
-        """
-        stat = self.test._statistic(x, y)
-
-        null_dist = np.array(
-            Parallel(n_jobs=workers)(
-                [delayed(self._perm_stat)(x, y) for rep in range(reps)]
-            )
-        )
-        p_value = (null_dist >= stat).sum() / reps
-        if p_value == 0:
-            p_value = 1 / reps
-
-        self.null_distribution_ = null_dist
-        return stat, p_value
-
-    def fit(self, A1, A2, return_null_dist=False):
+    def fit(self, A1, A2):
         """
         Fits the test to the two input graphs
 
@@ -180,48 +162,25 @@ class LatentDistributionTest(BaseInference):
         A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
             The two graphs to run a hypothesis test on.
 
-        return_null_dist : bool (default=False)
-            Flag whether to save the null distribution via permutation test.
-            If False, uses a faster approximation of the p-value where possile,
-            and saves ``self.null_distribution_`` as ``None``.
-            MGC has no approximation and will always return a null distribution.
-
         Returns
         -------
         p_value : float
             The p value corresponding to the specified hypothesis test
         """
-        if not isinstance(return_null_dist, bool):
-            msg = "return_null_dist must be a bool, not {}".format(
-                type(return_null_dist)
-            )
-            raise TypeError(msg)
         A1 = import_graph(A1)
         A2 = import_graph(A2)
+
         X1_hat, X2_hat = self._embed(A1, A2)
-        X1_hat, X2_hat = self._median_heuristic(X1_hat, X2_hat)
+        X1_hat, X2_hat = self._median_sign_flips(X1_hat, X2_hat)
+
         x = np.array(X1_hat)
         y = np.array(X2_hat)
 
-        if self.test_name is "MGC":
-            data = multiscale_graphcorr(
-                x,
-                y,
-                self.distance,
-                reps=self.n_bootstraps,
-                workers=self.num_workers,
-                is_twosamp=True,
-            )
-            self.null_distribution_ = data[2]["null_dist"]
-        else:
-            if return_null_dist:
-                data = self._bootstrap(x, y, self.n_bootstraps, self.num_workers)
-            else:
-                data = self.test.test(
-                    x, y, reps=self.n_bootstraps, workers=self.num_workers
+        data = self.test.test(
+                x, y, reps=self.n_bootstraps, workers=self.num_workers
                 )
-                self.null_distribution_ = None
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
+        self.null_distribution_ = self.test.indep_test.null_dist
 
         return self.p_value_

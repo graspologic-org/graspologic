@@ -51,7 +51,7 @@ class TestLatentDistributionTest(unittest.TestCase):
     def test_n_bootstraps(self):
         for test in self.tests:
             ldt = LatentDistributionTest(test, n_bootstraps=123)
-            ldt.fit(self.A1, self.A2, return_null_dist=True)
+            ldt.fit(self.A1, self.A2)
             self.assertEqual(ldt.null_distribution_.shape[0], 123)
 
     def test_bad_matrix_inputs(self):
