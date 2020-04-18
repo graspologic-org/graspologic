@@ -87,6 +87,10 @@ class BaseConnectomics(BaseEstimator):
 
         return graphs, y
 
+    def _unzip_graphs(self, graphs, y):
+        """Separate graphs by class."""
+        samples = [graphs[y == label] for label in self.classes_]
+        return samples
     @abstractmethod
     def fit(self, graphs, y):
         """
