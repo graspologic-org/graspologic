@@ -9,13 +9,22 @@
 
 **Gra**ph **S**tatistics in **Py**thon is a package for graph statistical algorithms.
 
+- [GraSPy](#graspy)
 - [Overview](#overview)
 - [Documentation](#documentation)
 - [System Requirements](#system-requirements)
+  - [Hardware requirements](#hardware-requirements)
+  - [Software requirements](#software-requirements)
+    - [OS Requirements](#os-requirements)
+    - [Python Requirements](#python-requirements)
+    - [Python Dependencies](#python-dependencies)
 - [Installation Guide](#installation-guide)
+  - [Install from pip](#install-from-pip)
+  - [Install from Github](#install-from-github)
 - [Contributing](#contributing)
 - [License](#license)
 - [Issues](#issues)
+- [Citing GraSPy](#citing-graspy)
 
 # Overview
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.
@@ -48,6 +57,7 @@ pandas
 scikit-learn
 scipy
 seaborn
+hyppo
 ```
 
 # Installation Guide
