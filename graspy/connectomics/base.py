@@ -93,6 +93,7 @@ class BaseConnectomics(BaseEstimator):
         return samples
 
     def _are_directed(self, graphs):
+        """Check if all graphs are directed."""
         return np.array_equal(graphs, np.transpose(graphs, (0, 2, 1)))
 
     @abstractmethod
