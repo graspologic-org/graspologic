@@ -87,11 +87,6 @@ class BaseConnectomics(BaseEstimator):
 
         return graphs, y
 
-    def _unzip_graphs(self, graphs, y):
-        """Separate graphs by class."""
-        samples = [graphs[y == label] for label in self.classes_]
-        return samples
-
     def _are_directed(self, graphs):
         """Check if all graphs are directed."""
         return np.array_equal(graphs, np.transpose(graphs, (0, 2, 1)))
