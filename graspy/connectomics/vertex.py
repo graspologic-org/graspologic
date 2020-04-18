@@ -66,7 +66,8 @@ class VertexTest(BaseConnectomics):
 
         # Calculate p-values for each vertex
         pvals = Parallel(n_jobs=workers)(
-            delayed(self._test)(vertex, embedding, y) for vertex in range(self.n_vertices_)
+            delayed(self._test)(vertex, embedding, y)
+            for vertex in range(self.n_vertices_)
         )
 
         # Construct dataframe of results

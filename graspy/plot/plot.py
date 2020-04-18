@@ -971,7 +971,7 @@ def pvalplot(
     with sns.plotting_context(context=context, font_scale=font_scale):
         ax.scatter(range(n_comparisons), pvalues, s=3)
         ax.hline(bonferroni_correction, color="black")
-        axs[1, 0].set(title=title, ylabel=r"$\log_{10}$(p-value)")
+        ax.set(title=title, ylabel=r"$\log_{10}$(p-value)")
 
     return ax
 
