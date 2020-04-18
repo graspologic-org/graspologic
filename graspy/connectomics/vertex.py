@@ -36,7 +36,7 @@ class VertexTest(BaseConnectomics):
         vertex = [samples[y == label] for label in self.classes_]
         _, pvalue = KSample("MGC").test(*vertex)
 
-    def fit(self, graphs, y, workers=-1):
+    def fit(self, graphs, y, num_workers=-1):
         """
         Calculate the significance of edges between populations using MGC.
 
@@ -48,7 +48,7 @@ class VertexTest(BaseConnectomics):
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
         y : array-like of shape (n_samples,)
             Label vector relative to graphs.
-        workers : int, optional (default=1)
+        num_workers : int, optional (default=1)
             The number of cores to parallelize the p-value computation over.
             Supply -1 to use all cores available to the Process.
 
@@ -65,7 +65,7 @@ class VertexTest(BaseConnectomics):
         embedding = omni.fit_transform(graphs)
 
         # Calculate p-values for each vertex
-        pvals = Parallel(n_jobs=workers)(
+        pvals = Parallel(n_jobs=num_workers)(
             delayed(self._test)(vertex, embedding, y)
             for vertex in range(self.n_vertices_)
         )
