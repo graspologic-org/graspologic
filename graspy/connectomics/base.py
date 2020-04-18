@@ -91,6 +91,10 @@ class BaseConnectomics(BaseEstimator):
         """Separate graphs by class."""
         samples = [graphs[y == label] for label in self.classes_]
         return samples
+
+    def _are_directed(self, graphs):
+        return np.array_equal(graphs, np.transpose(graphs, (0, 2, 1)))
+
     @abstractmethod
     def fit(self, graphs, y):
         """
