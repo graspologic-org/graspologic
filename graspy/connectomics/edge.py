@@ -22,7 +22,8 @@ from .base import BaseConnectomics
 
 class EdgeTest(BaseConnectomics):
     """
-    TODO: Write documentation.
+    Edge significance test for an arbitrary number of input graphs with
+    matched vertex sets.
     """
 
     def __init__():
@@ -34,9 +35,26 @@ class EdgeTest(BaseConnectomics):
         edge = [samples[y == label] for label in self.classes_]
         _, pvalue = KSample("MGC").test(*edge)
 
-    def fit(self, graphs, y, n_jobs=-1):
+    def fit(self, graphs, y, workers=-1):
         """
-        TODO: Write documentation.
+        Calculate the significance of edges between populations using MGC.
+
+        Parameters
+        ----------
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
+        y : array-like of shape (n_samples,)
+            Label vector relative to graphs.
+        workers : int, optional (default=1)
+            The number of cores to parallelize the p-value computation over.
+            Supply -1 to use all cores available to the Process.
+
+        Returns
+        -------
+        pvals : pd.DataFrame
+            Dataframe of the p-value for each edge.
         """
 
         graphs, y = self._check_input_graphs(graphs, y)
@@ -48,7 +66,7 @@ class EdgeTest(BaseConnectomics):
             indices = zip(*np.triu_indices(self.n_vertices_, 1))
 
         # Calculate a p-value for each edge
-        pvals = Parallel(n_jobs=n_jobs)(
+        pvals = Parallel(n_jobs=workers)(
             delayed(self._test)(i, j, graphs, y) for (i, j) in indices
         )
 
