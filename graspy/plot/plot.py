@@ -921,6 +921,61 @@ def screeplot(
     return ax
 
 
+def pvalplot(
+    pvalues,
+    alpha=0.05,
+    title="Rank-Ordered P-Values",
+    context="talk",
+    font_scale=1,
+    figsize=(10, 5),
+):
+    r"""
+    Plots the distribution of p-values for a multi-comparison significance
+    test with Bonferroni correction.
+
+    Parameters
+    ----------
+    pvalues : array-like, shape (n_comparisons,)
+        Input matrix
+    alpha : float in (0, 1), optional (default=0.05)
+        Significance level, or probability of rejecting a true null hypothesis
+    title : string, optional (default='Rank-Ordered P-Values')
+        Plot title
+    context :  None, or one of {talk (default), paper, notebook, poster}
+        Seaborn plotting context
+    font_scale : float, optional, default: 1
+        Separate scaling factor to independently scale the size of the font
+        elements.
+    figsize : tuple of length 2, default (10, 5)
+        Size of the figure (width, height)
+
+    Returns
+    -------
+    ax : matplotlib axis object
+        Output plot
+    """
+    _check_common_inputs(
+        figsize=figsize, title=title, context=context, font_scale=font_scale
+    )
+
+    # Determine Bonferroni correction
+    n_comparisons = len(pvalues)
+    bonferroni_correction = alpha / n_comparisons
+
+    # Log10-transform p-values
+    pvalues = np.log10(pvalues)
+    bonferroni_correction = np.log10(bonferroni_correction)
+
+    # Make the figure
+    fig, ax = plt.subplots(figsize=figsize)
+    with sns.plotting_context(context=context, font_scale=font_scale):
+        ax.scatter(range(n_comparisons), pvalues, s=3)
+        ax.hline(bonferroni_correction, color="black")
+        axs[1, 0].set(title=title, ylabel=r"$\log_{10}$(p-value)")
+
+    return ax
+
+
 def _sort_inds(graph, inner_labels, outer_labels, sort_nodes):
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
     sort_df["inner_labels"] = inner_labels
