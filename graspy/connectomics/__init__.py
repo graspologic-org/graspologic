@@ -1,3 +1,4 @@
 from .edge import EdgeTest
+from .vertex import VertexTest
 
-__all__ = ["EdgeTest"]
+__all__ = ["EdgeTest", "VertexTest"]
