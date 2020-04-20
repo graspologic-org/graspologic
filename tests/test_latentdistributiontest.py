@@ -7,7 +7,6 @@ import unittest
 import numpy as np
 
 from graspy.inference import LatentDistributionTest
-from graspy.inference.dists import euclidean, gaussian
 from graspy.simulations import er_np, sbm
 
 
@@ -15,8 +14,8 @@ class TestLatentDistributionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         np.random.seed(123456)
-        cls.tests = ["Dcorr", "MGC"]
-        cls.dists = [euclidean, gaussian]
+        cls.tests = ["dcorr", "mgc"]
+        cls.dists = ["euclidean", "gaussian"]
         cls.A1 = er_np(20, 0.3)
         cls.A2 = er_np(20, 0.3)
 
@@ -30,23 +29,23 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             LatentDistributionTest(test="foo")
         with self.assertRaises(ValueError):
-            LatentDistributionTest(test="Dcorr", n_components=-100)
+            LatentDistributionTest(test="dcorr", n_components=-100)
         with self.assertRaises(ValueError):
-            LatentDistributionTest(test="Dcorr", n_bootstraps=-100)
+            LatentDistributionTest(test="dcorr", n_bootstraps=-100)
         with self.assertRaises(ValueError):
-            LatentDistributionTest(test="Dcorr", num_workers=-1)
+            LatentDistributionTest(test="dcorr", num_workers=-1)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test=0)
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="Dcorr", distance=0)
+            LatentDistributionTest(test="dcorr", distance=0)
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="Dcorr", n_bootstraps=0.5)
+            LatentDistributionTest(test="dcorr", n_bootstraps=0.5)
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="Dcorr", n_components=0.5)
+            LatentDistributionTest(test="dcorr", n_components=0.5)
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="Dcorr", num_workers=0.5)
+            LatentDistributionTest(test="dcorr", num_workers=0.5)
         with self.assertRaises(NotImplementedError):
-            LatentDistributionTest(test="Dcorr", num_workers=4)
+            LatentDistributionTest(test="dcorr", num_workers=4)
 
     def test_n_bootstraps(self):
         for test in self.tests:
@@ -55,7 +54,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             self.assertEqual(ldt.null_distribution_.shape[0], 123)
 
     def test_bad_matrix_inputs(self):
-        ldt = LatentDistributionTest("Dcorr")
+        ldt = LatentDistributionTest("dcorr")
 
         bad_matrix = [[1, 2]]
         with self.assertRaises(TypeError):
@@ -66,7 +65,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         A = er_np(100, 0.3, directed=True)
         B = er_np(100, 0.3, directed=True)
 
-        ldt = LatentDistributionTest("Dcorr")
+        ldt = LatentDistributionTest("dcorr")
         with self.assertRaises(NotImplementedError):
             p = ldt.fit(A, B)
         # self.assertTrue(p > 0.05)
@@ -83,10 +82,10 @@ class TestLatentDistributionTest(unittest.TestCase):
 
         for test in self.tests:
             ldt_null = LatentDistributionTest(
-                test, euclidean, n_components=2, n_bootstraps=50
+                test, "euclidean", n_components=2, n_bootstraps=50
             )
             ldt_alt = LatentDistributionTest(
-                test, euclidean, n_components=2, n_bootstraps=50
+                test, "euclidean", n_components=2, n_bootstraps=50
             )
             p_null = ldt_null.fit(A1, A2)
             p_alt = ldt_alt.fit(A1, A3)
@@ -105,10 +104,10 @@ class TestLatentDistributionTest(unittest.TestCase):
 
         for test in self.tests:
             ldt_null = LatentDistributionTest(
-                test, gaussian, n_components=2, n_bootstraps=50
+                test, "gaussian", n_components=2, n_bootstraps=50
             )
             ldt_alt = LatentDistributionTest(
-                test, gaussian, n_components=2, n_bootstraps=50
+                test, "gaussian", n_components=2, n_bootstraps=50
             )
             p_null = ldt_null.fit(A1, A2)
             p_alt = ldt_alt.fit(A1, A3)

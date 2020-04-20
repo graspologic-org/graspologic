@@ -17,7 +17,7 @@ import numpy as np
 from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph, is_symmetric
 from .base import BaseInference
-from .dists import euclidean
+from sklearn.metrics import pairwise_distances
 from hyppo.ksample import KSample
 from scipy.stats import multiscale_graphcorr
 from joblib import Parallel, delayed
@@ -36,11 +36,13 @@ class LatentDistributionTest(BaseInference):
 
     Parameters
     ----------
-    test : str, one of ["CCA", "Dcorr", "HHG", "RV", "Hsic", "MGC"]
-        Independence test to use.
+    test : str
+        Independence test to use, one of ["CCA", "Dcorr", "HHG", "RV", "Hsic", "MGC"].
 
-    distance : function, (default=`function <euclidean>`)
-        Distance function to use.
+    metric : str or function, (default="euclidean")
+        Distance metric to use, either a callable or a valid string.
+        The callable should behave similarly to sklearn.metrics.pairwise_distances.
+        Valid strings: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise_distances.html.
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
@@ -78,22 +80,59 @@ class LatentDistributionTest(BaseInference):
     def __init__(
         self,
         test,
-        distance=euclidean,
+        metric="euclidean",
         n_components=None,
         n_bootstraps=200,
         num_workers=1,
     ):
-        supported_tests = ["CCA", "Dcorr", "HHG", "RV", "Hsic", "MGC"]
+
+        _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
+        _VALID_METRICS = [
+            "euclidean",
+            "l2",
+            "l1",
+            "manhattan",
+            "cityblock",
+            "braycurtis",
+            "canberra",
+            "chebyshev",
+            "correlation",
+            "cosine",
+            "dice",
+            "hamming",
+            "jaccard",
+            "kulsinski",
+            "mahalanobis",
+            "matching",
+            "minkowski",
+            "rogerstanimoto",
+            "russellrao",
+            "seuclidean",
+            "sokalmichener",
+            "sokalsneath",
+            "sqeuclidean",
+            "yule",
+            "wminkowski",
+            "nan_euclidean",
+            "haversine",
+            "gaussian",
+        ]
+
         if not isinstance(test, str):
             msg = "test must be a str, not {}".format(type(test))
             raise TypeError(msg)
-        elif test not in supported_tests:
-            msg = "test must be one of {}".format(supported_tests)
+        elif test not in _VALID_TESTS:
+            msg = "Unknown test {}. Valid tests are {}".format(test, _VALID_TESTS)
             raise ValueError(msg)
 
-        if not callable(distance):
-            msg = "distance must be a callable function, not {}".format(type(distance))
+        if not isinstance(metric, str) and not callable(metric):
+            msg = "Metric must be str or callable, not {}".format(type(metric))
             raise TypeError(msg)
+        elif metric not in _VALID_METRICS and not callable(metric):
+            msg = "Unknown metric {}. Valid metrics are {}, or a callable".format(
+                metric, _VALID_METRICS
+            )
+            raise ValueError(msg)
 
         if n_components is not None:
             if not isinstance(n_components, int):
@@ -117,8 +156,23 @@ class LatentDistributionTest(BaseInference):
             raise NotImplementedError()  # TODO env error parallelizing
 
         super().__init__(embedding="ase", n_components=n_components)
-        self.distance = distance
-        self.test = KSample(test, compute_distance=distance)
+
+        hyppo_input = ["CCA", "Dcorr", "HHG", "RV", "Hsic", "MGC"]
+        conv_dict = dict(zip(_VALID_TESTS, hyppo_input))
+        test = conv_dict[test]
+
+        if callable(metric):
+            self.test = KSample(test, compute_distance=metric)
+        else:
+            if metric is "gaussian":
+                self.test = KSample(test, compute_distance=self._medial_gaussian_kernel)
+            else:
+
+                def dist_func(X, Y=None, metric=metric):
+                    return pairwise_distances(X, Y=None, metric=metric)
+
+                self.test = KSample(test, compute_distance=dist_func)
+
         self.n_bootstraps = n_bootstraps
         self.num_workers = num_workers
 
@@ -142,6 +196,15 @@ class LatentDistributionTest(BaseInference):
             raise ValueError("Input graphs do not have same directedness")
 
         return X1_hat, X2_hat
+
+    def _medial_gaussian_kernel(self, x):
+        """Baseline medial gaussian kernel similarity calculation"""
+        l1 = pairwise_distances(x, x, "cityblock")
+        mask = np.ones(l1.shape, dtype=bool)
+        np.fill_diagonal(mask, 0)
+        gamma = 1.0 / (2 * (np.median(l1[mask]) ** 2))
+        K = np.exp(-gamma * pairwise_distances(x, x, "sqeuclidean"))
+        return 1 - K / np.max(K)
 
     def _median_sign_flips(self, X1, X2):
         X1_medians = np.median(X1, axis=0)
