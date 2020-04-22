@@ -17,7 +17,7 @@ import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
-from sklearn.mixture.gaussian_mixture import (
+from sklearn.mixture._gaussian_mixture import (
     _compute_precision_cholesky,
     _estimate_gaussian_parameters,
 )
