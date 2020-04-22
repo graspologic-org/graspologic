@@ -22,11 +22,13 @@ from sklearn.mixture._gaussian_mixture import (
     _estimate_gaussian_parameters,
 )
 from sklearn.model_selection import ParameterGrid
+from sklearn.utils._testing import ignore_warnings
+from sklearn.exceptions import ConvergenceWarning
 from joblib import Parallel, delayed
 
 from .base import BaseCluster
 
-
+@ignore_warnings(category=ConvergenceWarning)
 class AutoGMMCluster(BaseCluster):
     """
     Automatic Gaussian Mixture Model (GMM) selection.
