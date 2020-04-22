@@ -27,7 +27,6 @@ from sklearn.exceptions import ConvergenceWarning
 from joblib import Parallel, delayed
 
 from .base import BaseCluster
-
 @ignore_warnings(category=ConvergenceWarning)
 class AutoGMMCluster(BaseCluster):
     """
