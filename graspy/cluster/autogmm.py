@@ -506,9 +506,10 @@ class AutoGMMCluster(BaseCluster):
             raise ValueError(msg)
         # check if X contains the 0 vector
         if np.any(~X.any(axis=1)) and ("cosine" in self.affinity):
-            msg = "When using cosine affinity, X cannot contain the 0 vector, but "
-            msg += "X[{},] is 0".format(np.where(~X.any(axis=1)))
-            raise ValueError(msg)
+            if isinstance(self.affinity, np.ndarray):
+                self.affinity = np.delete(self.affinity, np.argwhere(self.affinity == "cosine"))
+            if isinstance(self.affinity, list):
+                self.affinity.remove("cosine")
 
         label_init = self.label_init
         if label_init is not None:
