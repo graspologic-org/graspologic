@@ -628,7 +628,7 @@ def sbm(
     return A
 
 
-def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None):
+def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=None):
     r"""
     Samples a random graph based on the latent positions in X (and 
     optionally in Y)
@@ -736,7 +736,7 @@ def rdpg(X, Y=None, rescale=True, directed=False, loops=True, wt=1, wtargs=None)
     return A
 
 
-def p_from_latent(X, Y=None, rescale=True, loops=True):
+def p_from_latent(X, Y=None, rescale=False, loops=True):
     r"""
     Gemerates a matrix of connection probabilities for a random graph
     based on a set of latent positions
