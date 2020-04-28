@@ -654,7 +654,7 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
 
-    rescale: boolean, optional (default=True)
+    rescale: boolean, optional (default=False)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
@@ -664,7 +664,7 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
 
-    loops: boolean, optional (default=True)
+    loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Diagonal elements in P 
         matrix are removed prior to rescaling (see above) which may affect behavior.
         Otherwise, edges are sampled in the diagonal.
@@ -758,7 +758,7 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
     Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional
         right latent position from which to generate a P matrix
 
-    rescale: boolean, optional (default=True)
+    rescale: boolean, optional (default=False)
         when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
