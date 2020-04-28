@@ -29,7 +29,6 @@ from joblib import Parallel, delayed
 from .base import BaseCluster
 
 
-@ignore_warnings(category=ConvergenceWarning)
 class AutoGMMCluster(BaseCluster):
     """
     Automatic Gaussian Mixture Model (GMM) selection.
@@ -382,6 +381,7 @@ class AutoGMMCluster(BaseCluster):
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
 
+    @ignore_warnings(category=ConvergenceWarning)
     def _fit_cluster(self, X, y, params):
         label_init = self.label_init
         if label_init is not None:
@@ -461,6 +461,7 @@ class AutoGMMCluster(BaseCluster):
         }
         return results
 
+    @ignore_warnings(category=ConvergenceWarning)
     def fit(self, X, y=None):
         """
         Fits gaussian mixture model to the data.
@@ -531,6 +532,7 @@ class AutoGMMCluster(BaseCluster):
         param_grid = list(ParameterGrid(param_grid))
         param_grid = _process_paramgrid(param_grid)
 
+        @ignore_warnings(category=ConvergenceWarning)
         def _fit_for_data(p):
             return self._fit_cluster(X, y, p)
 
