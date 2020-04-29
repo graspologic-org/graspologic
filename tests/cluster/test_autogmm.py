@@ -156,7 +156,7 @@ def test_predict_without_fit():
 def test_cosine_on_0():
     X = np.array([[0, 1, 0], [1, 0, 1], [0, 0, 0], [1, 1, 0], [0, 0, 1]])
 
-    with pytest.raises(ValueError):
+    with pytest.warns(UserWarning):
         AutoGMM = AutoGMMCluster(min_components=3, affinity="all")
         AutoGMM.fit(X)
 
