@@ -25,6 +25,7 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.utils._testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
 from joblib import Parallel, delayed
+import warnings
 
 from .base import BaseCluster
 
