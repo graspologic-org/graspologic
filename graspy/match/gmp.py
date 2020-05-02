@@ -18,7 +18,7 @@ from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
-from .skp import SinkhornKnopp
+from graspy.match.skp import SinkhornKnopp
 from joblib import Parallel, delayed
 
 
@@ -295,10 +295,7 @@ class GraphMatch:
 
         score_new = np.array(score_new)
         minimizer = np.min(obj_func_scalar * score_new)
-        if obj_func_scalar == 1:
-            index = np.argmin(score_new)
-        else:
-            index = np.argmax(score_new)
+        index = np.argmin(obj_func_scalar * score_new)
 
         score = minimizer  # minimizing
         perm_inds = np.zeros(n, dtype=int)
