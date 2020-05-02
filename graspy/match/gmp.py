@@ -19,6 +19,7 @@ from scipy.optimize import minimize_scalar
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
 from .skp import SinkhornKnopp
+from joblib import Parallel, delayed
 
 
 class GraphMatch:
@@ -26,13 +27,11 @@ class GraphMatch:
     This class solves the Graph Matching Problem and the Quadratic Assignment Problem
     (QAP) through an implementation of the Fast Approximate QAP Algorithm (FAQ) (these
     two problems are the same up to a sign change) [1].
-
     This algorithm can be thought of as finding an alignment of the vertices of two 
     graphs which minimizes the number of induced edge disagreements, or, in the case
     of weighted graphs, the sum of squared differences of edge weight disagreements.
     The option to add seeds (known vertex correspondence between some nodes) is also
     available [2].
-
 
     Parameters
     ----------
@@ -44,10 +43,8 @@ class GraphMatch:
 
     init_method : string (default = 'barycenter')
         The initial position chosen
-
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
         :math:`J=1*1^T /n` , i.e the barycenter of the feasible region
-
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random doubly
         stochastic matrix
 
@@ -74,22 +71,18 @@ class GraphMatch:
         The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
         to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
 
-
     score_ : float
         The objective function value of for the optimal permutation found.
 
-
     References
     ----------
+    
     .. [1] J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,
         E.T. Harley, D.E. Fishkind, R.J. Vogelstein, and C.E. Priebe, “Fast
         approximate quadratic programming for graph matching,” PLOS one, vol. 10,
         no. 4, p. e0121002, 2015.
-
     .. [2] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
         Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
-
-
 
     """
 
@@ -161,6 +154,7 @@ class GraphMatch:
         -------
         self : returns an instance of self
         """
+
         A = check_array(A, copy=True, ensure_2d=True)
         B = check_array(B, copy=True, ensure_2d=True)
         seeds_A = column_or_1d(seeds_A)
@@ -226,7 +220,7 @@ class GraphMatch:
         B21T = np.transpose(B21)
         B22T = np.transpose(B22)
 
-        for i in range(self.n_init):
+        def forloop(init_num):
             # setting initialization matrix
             if self.init_method == "rand":
                 sk = SinkhornKnopp()
@@ -280,7 +274,7 @@ class GraphMatch:
                 n_iter += 1
             # end of FW optimization loop
 
-            row, col = linear_sum_assignment(
+            _, col = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
             perm_inds_new = np.concatenate(
@@ -290,11 +284,25 @@ class GraphMatch:
             score_new = np.trace(
                 np.transpose(A) @ B[np.ix_(perm_inds_new, perm_inds_new)]
             )  # computing objective function value
+            return score_new, perm_inds_new
+            # end of the forloop function
 
-            if obj_func_scalar * score_new < obj_func_scalar * score:  # minimizing
-                score = score_new
-                perm_inds = np.zeros(n, dtype=int)
-                perm_inds[permutation_A] = permutation_B[perm_inds_new]
+        par = Parallel(n_jobs=-1)
+        score_new, perm_inds_new = map(
+            list,
+            zip(*par([delayed(forloop)(init_num) for init_num in range(self.n_init)])),
+        )
+
+        score_new = np.array(score_new)
+        minimizer = np.min(obj_func_scalar * score_new)
+        if obj_func_scalar == 1:
+            index = np.argmin(score_new)
+        else:
+            index = np.argmax(score_new)
+
+        score = minimizer  # minimizing
+        perm_inds = np.zeros(n, dtype=int)
+        perm_inds[permutation_A] = permutation_B[perm_inds_new[index]]
 
         permutation_A_unshuffle = _unshuffle(permutation_A, n)
         A = A[np.ix_(permutation_A_unshuffle, permutation_A_unshuffle)]
