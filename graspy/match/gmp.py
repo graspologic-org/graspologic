@@ -290,7 +290,14 @@ class GraphMatch:
         par = Parallel(n_jobs=-1)
         score_new, perm_inds_new = map(
             list,
-            zip(*par([delayed(_fit_single_init)(init_num) for init_num in range(self.n_init)])),
+            zip(
+                *par(
+                    [
+                        delayed(_fit_single_init)(init_num)
+                        for init_num in range(self.n_init)
+                    ]
+                )
+            ),
         )
 
         score_new = np.array(score_new)
