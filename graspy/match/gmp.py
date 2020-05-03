@@ -18,7 +18,7 @@ from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
-from graspy.match.skp import SinkhornKnopp
+from .skp import SinkhornKnopp
 from joblib import Parallel, delayed
 
 
@@ -220,7 +220,7 @@ class GraphMatch:
         B21T = np.transpose(B21)
         B22T = np.transpose(B22)
 
-        def forloop(init_num):
+        def _fit_single_init(init_num):
             # setting initialization matrix
             if self.init_method == "rand":
                 sk = SinkhornKnopp()
@@ -285,12 +285,12 @@ class GraphMatch:
                 np.transpose(A) @ B[np.ix_(perm_inds_new, perm_inds_new)]
             )  # computing objective function value
             return score_new, perm_inds_new
-            # end of the forloop function
+            # end of the _fit_single_init function
 
         par = Parallel(n_jobs=-1)
         score_new, perm_inds_new = map(
             list,
-            zip(*par([delayed(forloop)(init_num) for init_num in range(self.n_init)])),
+            zip(*par([delayed(_fit_single_init)(init_num) for init_num in range(self.n_init)])),
         )
 
         score_new = np.array(score_new)
