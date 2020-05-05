@@ -534,7 +534,6 @@ class AutoGMMCluster(BaseCluster):
         param_grid = list(ParameterGrid(param_grid))
         param_grid = _process_paramgrid(param_grid)
 
-        @ignore_warnings(category=ConvergenceWarning)
         def _fit_for_data(p):
             return self._fit_cluster(X, y, p)
 
