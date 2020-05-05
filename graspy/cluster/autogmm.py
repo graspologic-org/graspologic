@@ -462,7 +462,6 @@ class AutoGMMCluster(BaseCluster):
         }
         return results
 
-    @ignore_warnings(category=ConvergenceWarning)
     def fit(self, X, y=None):
         """
         Fits gaussian mixture model to the data.
