@@ -18,9 +18,7 @@ from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
-
-# from .skp import SinkhornKnopp
-from graspy.match.skp import SinkhornKnopp
+from .skp import SinkhornKnopp
 from joblib import Parallel, delayed
 
 
@@ -137,11 +135,6 @@ class GraphMatch:
             self.gmp = gmp
         else:
             msg = '"gmp" must be a boolean'
-            raise TypeError(msg)
-        if (n_jobs > 0 and type(n_jobs) is int) or n_jobs == -1:
-            self.n_jobs = n_jobs
-        else:
-            msg = '"n_jobs" must be greater than -1'
             raise TypeError(msg)
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
