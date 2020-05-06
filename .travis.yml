@@ -2,8 +2,9 @@ dist: xenial
 language: python
 python:
 - '3.6'
-matrix:
+jobs:
   include:
+    - python: 3.6
     - python: 3.7
     - python: 3.8
 cache: pip
