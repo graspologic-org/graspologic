@@ -64,6 +64,9 @@ class GraphMatch:
         Gives users the option to solve QAP rather than the Graph Matching Problem
         (GMP). This is accomplished through trivial negation of the objective function.
 
+    par : bool (default = True)
+        Gives users the option to 
+
     Attributes
     ----------
 
@@ -93,7 +96,7 @@ class GraphMatch:
         max_iter=30,
         shuffle_input=True,
         eps=0.1,
-        gmp=True,
+        gmp=True
     ):
 
         if type(n_init) is int and n_init > 0:
