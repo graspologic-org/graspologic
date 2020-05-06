@@ -136,6 +136,7 @@ class GraphMatch:
         else:
             msg = '"gmp" must be a boolean'
             raise TypeError(msg)
+        self.n_jobs = n_jobs
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
         """
