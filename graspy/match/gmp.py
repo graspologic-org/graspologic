@@ -18,7 +18,9 @@ from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
-from .skp import SinkhornKnopp
+
+# from .skp import SinkhornKnopp
+from graspy.match.skp import SinkhornKnopp
 from joblib import Parallel, delayed
 
 
@@ -66,8 +68,7 @@ class GraphMatch:
 
     n_jobs : int, bigger than -1 (default = -1)
         Integer specifying the number of jobs to run in parallel.
-
-    parallel : bool (default = True)
+        When n_jobs = 1, it will run in the serial way.
         Gives users the option to run GMP or FAQ with the help of parallel algorithm.
 
 
@@ -102,7 +103,6 @@ class GraphMatch:
         eps=0.1,
         gmp=True,
         n_jobs=-1,
-        parallel=True,
     ):
 
         if type(n_init) is int and n_init > 0:
@@ -138,14 +138,10 @@ class GraphMatch:
         else:
             msg = '"gmp" must be a boolean'
             raise TypeError(msg)
-        if n_jobs > -2 and type(n_jobs) is int:
+        if (n_jobs > 0 and type(n_jobs) is int) or n_jobs == -1:
             self.n_jobs = n_jobs
         else:
             msg = '"n_jobs" must be greater than -1'
-        if type(parallel) is bool:
-            self.parallel = parallel
-        else:
-            msg = '"parallel" must be a boolean'
             raise TypeError(msg)
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
@@ -305,17 +301,9 @@ class GraphMatch:
             return score_new, perm_inds_new
             # end of the _fit_single_init function
 
-        if self.parallel == True:
-            par = Parallel(n_jobs=-1)
-            out = par([delayed(_fit_single_init)() for i in range(self.n_init)])
-            score_new, perm_inds_new = map(list, zip(*out))
-        else:
-            score_new = list()
-            perm_inds_new = list()
-            for i in range(self.n_init):
-                s, p = _fit_single_init()
-                score_new.append(s)
-                perm_inds_new.append(p)
+        par = Parallel(n_jobs=self.n_jobs)
+        out = par([delayed(_fit_single_init)() for i in range(self.n_init)])
+        score_new, perm_inds_new = map(list, zip(*out))
 
         score_new = np.array(score_new)
         minimizer = np.min(obj_func_scalar * score_new)

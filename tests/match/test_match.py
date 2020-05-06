@@ -10,6 +10,7 @@ class TestGMP:
     @classmethod
     def setup_class(cls):
         cls.barycenter = GMP(gmp=False)
+        cls.barycenter_par = GMP(gmp=False, n_jobs=5)
         cls.rand = GMP(n_init=100, init_method="rand", gmp=False)
 
     def test_SGM_inputs(self):
@@ -25,6 +26,8 @@ class TestGMP:
             GMP(eps=-1)
         with pytest.raises(TypeError):
             GMP(gmp="hey")
+        with pytest.raises(TypeError):
+            GMP(n_jobs=-3)
         with pytest.raises(ValueError):
             GMP().fit(
                 np.random.random((3, 4)),
@@ -119,6 +122,12 @@ class TestGMP:
         chr15a = self.barycenter.fit(A, B, W1, W2)
         score = chr15a.score_
         assert 9896 == score
+
+    def test_barycenter_par_SGM(self):
+        A, B = self._get_AB("lipa20a")
+        lipa20a_par = self.barycenter_par.fit(A, B)
+        score = lipa20a_par.score_
+        assert 3683 <= score < 3900
 
     def test_rand_SGM(self):
         A, B = self._get_AB("chr12c")
