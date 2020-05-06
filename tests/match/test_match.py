@@ -26,8 +26,6 @@ class TestGMP:
             GMP(eps=-1)
         with pytest.raises(TypeError):
             GMP(gmp="hey")
-        with pytest.raises(TypeError):
-            GMP(n_jobs="-3")
         with pytest.raises(ValueError):
             GMP().fit(
                 np.random.random((3, 4)),
