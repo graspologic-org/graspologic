@@ -220,7 +220,7 @@ class GraphMatch:
         B21T = np.transpose(B21)
         B22T = np.transpose(B22)
 
-        def _fit_single_init(init_num):
+        def _fit_single_init():
             # setting initialization matrix
             if self.init_method == "rand":
                 sk = SinkhornKnopp()
@@ -288,17 +288,8 @@ class GraphMatch:
             # end of the _fit_single_init function
 
         par = Parallel(n_jobs=-1)
-        score_new, perm_inds_new = map(
-            list,
-            zip(
-                *par(
-                    [
-                        delayed(_fit_single_init)(init_num)
-                        for init_num in range(self.n_init)
-                    ]
-                )
-            ),
-        )
+        out = par([delayed(_fit_single_init)() for i in range(self.n_init)])
+        score_new, perm_inds_new = map(list, zip(*out))
 
         score_new = np.array(score_new)
         minimizer = np.min(obj_func_scalar * score_new)
