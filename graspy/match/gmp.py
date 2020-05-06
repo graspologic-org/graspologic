@@ -100,7 +100,7 @@ class GraphMatch:
         shuffle_input=True,
         eps=0.1,
         gmp=True,
-        n_jobs=-1,
+        n_jobs=1,
     ):
 
         if type(n_init) is int and n_init > 0:
