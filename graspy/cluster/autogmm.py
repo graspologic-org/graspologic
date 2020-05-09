@@ -515,6 +515,9 @@ class AutoGMMCluster(BaseCluster):
             if isinstance(self.affinity, list):
                 self.affinity.remove("cosine")
             warnings.warn("X contains a zero vector, will not run cosine affinity.")
+            if len(self.affinity) == 0:
+                msg = "No other affinity to use besides cosine."
+                raise ValueError(msg)
 
         label_init = self.label_init
         if label_init is not None:
