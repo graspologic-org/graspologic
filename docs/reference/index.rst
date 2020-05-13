@@ -9,6 +9,7 @@ Reference
    simulations
    models
    embed
+   subgraph
    cluster
    inference
    plotting
