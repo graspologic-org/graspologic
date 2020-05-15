@@ -66,7 +66,7 @@ class MultipleASE(BaseEmbedMulti):
         'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
 
-    scaled : bool, optional (default=False)
+    scaled : bool, optional (default=True)
         Whether to scale individual eigenvectors with eigenvalues in first embedding 
         stage.
 
@@ -100,7 +100,7 @@ class MultipleASE(BaseEmbedMulti):
         n_elbows=2,
         algorithm="randomized",
         n_iter=5,
-        scaled=False,
+        scaled=True,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
