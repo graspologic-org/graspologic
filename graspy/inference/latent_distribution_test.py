@@ -133,7 +133,7 @@ class LatentDistributionTest(BaseInference):
             self.test = KSample(test, compute_distance=metric)
         else:
             if metric == "gaussian":
-                self.test = KSample(test, compute_distance=self._medial_gaussian_kernel)
+                self.test = KSample(test, compute_distance=_medial_gaussian_kernel)
             else:
 
                 # TODO workers is a parameter required by hyppo.
@@ -167,26 +167,6 @@ class LatentDistributionTest(BaseInference):
 
         return X1_hat, X2_hat
 
-    def _medial_gaussian_kernel(self, x, workers=None):
-        """Baseline medial gaussian kernel similarity calculation"""
-        # TODO workers is a parameter required by hyppo. will be fixed in later releases.
-        l1 = pairwise_distances(x, x, "cityblock")
-        mask = np.ones(l1.shape, dtype=bool)
-        np.fill_diagonal(mask, 0)
-        gamma = 1.0 / (2 * (np.median(l1[mask]) ** 2))
-        K = np.exp(-gamma * pairwise_distances(x, x, "sqeuclidean"))
-        return 1 - K / np.max(K)
-
-    def _median_sign_flips(self, X1, X2):
-        X1_medians = np.median(X1, axis=0)
-        X2_medians = np.median(X2, axis=0)
-        val = np.multiply(X1_medians, X2_medians)
-
-        t = (val > 0) * 2 - 1
-        X1 = np.multiply(t.reshape(-1, 1).T, X1)
-
-        return X1, X2
-
     def fit(self, A1, A2):
         """
         Fits the test to the two input graphs
@@ -205,7 +185,7 @@ class LatentDistributionTest(BaseInference):
         A2 = import_graph(A2)
 
         X1_hat, X2_hat = self._embed(A1, A2)
-        X1_hat, X2_hat = self._median_sign_flips(X1_hat, X2_hat)
+        X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
         x = np.array(X1_hat)
         y = np.array(X2_hat)
@@ -218,3 +198,26 @@ class LatentDistributionTest(BaseInference):
         self.null_distribution_ = self.test.indep_test.null_dist
 
         return self.p_value_
+
+
+def _medial_gaussian_kernel(x, workers=None):
+    """Baseline medial gaussian kernel similarity calculation"""
+    # TODO workers is a parameter required by hyppo. will be fixed in later releases.
+    l1 = pairwise_distances(x, x, "cityblock")
+    mask = np.ones(l1.shape, dtype=bool)
+    np.fill_diagonal(mask, 0)
+    gamma = 1.0 / (2 * (np.median(l1[mask]) ** 2))
+    K = np.exp(-gamma * pairwise_distances(x, x, "sqeuclidean"))
+    return 1 - K / np.max(K)
+
+
+def _median_sign_flips(X1, X2):
+    X1_medians = np.median(X1, axis=0)
+    X2_medians = np.median(X2, axis=0)
+    val = np.multiply(X1_medians, X2_medians)
+
+    t = (val > 0) * 2 - 1
+    X1 = np.multiply(t.reshape(-1, 1).T, X1)
+
+    return X1, X2
+
