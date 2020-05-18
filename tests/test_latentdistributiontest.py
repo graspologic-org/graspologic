@@ -44,8 +44,6 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(test="dcorr", n_components=0.5)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test="dcorr", workers=0.5)
-        with self.assertRaises(NotImplementedError):
-            LatentDistributionTest(test="dcorr", workers=4)
 
     def test_n_bootstraps(self):
         for test in self.tests:
