@@ -137,7 +137,7 @@ class LatentDistributionTest(BaseInference):
                 metric_func = _medial_gaussian_kernel
             else:
 
-                def metric_func(X, Y=None, metric=metric, workers=None):
+                def metric_func(X, Y=None, metric=metric):
                     return pairwise_distances(X, Y, metric=metric)
 
         self.test = KSample(test, compute_distance=metric_func)
