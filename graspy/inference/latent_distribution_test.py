@@ -40,7 +40,8 @@ class LatentDistributionTest(BaseInference):
     ----------
     test : str
         Independence test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
-
+        See :class:`hyppo.ksample.KSample` for more information. 
+        
     metric : str or function, (default="euclidean")
         Distance metric to use, either a callable or a valid string.
         The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
