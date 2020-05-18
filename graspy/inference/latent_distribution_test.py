@@ -164,7 +164,7 @@ class LatentDistributionTest(BaseInference):
                 self.test = KSample(test, compute_distance=self._medial_gaussian_kernel)
             else:
 
-		# TODO workers is a parameter required by hyppo. 
+                # TODO workers is a parameter required by hyppo.
                 # will be fixed in later releases.
                 def dist_func(X, Y=None, metric=metric, workers=None):
                     return pairwise_distances(X, Y, metric=metric)
@@ -238,7 +238,9 @@ class LatentDistributionTest(BaseInference):
         x = np.array(X1_hat)
         y = np.array(X2_hat)
 
-        data = self.test.test(x, y, reps=self.n_bootstraps, workers=self.num_workers, auto=False)
+        data = self.test.test(
+            x, y, reps=self.n_bootstraps, workers=self.num_workers, auto=False
+        )
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
         self.null_distribution_ = self.test.indep_test.null_dist
