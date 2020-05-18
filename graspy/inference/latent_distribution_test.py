@@ -212,9 +212,6 @@ def _median_sign_flips(X1, X2):
     X1_medians = np.median(X1, axis=0)
     X2_medians = np.median(X2, axis=0)
     val = np.multiply(X1_medians, X2_medians)
-
     t = (val > 0) * 2 - 1
     X1 = np.multiply(t.reshape(-1, 1).T, X1)
-
     return X1, X2
-
