@@ -1,19 +1,20 @@
-os: linux
 dist: xenial
+sudo: true
 language: python
 python:
+- '3.5'
 - '3.6'
-jobs:
+matrix:
   include:
-    - python: 3.6
     - python: 3.7
 cache: pip
 install:
 - pip install -r requirements.txt
-- pip install -U pytest pytest-cov pytest-doctestplus codecov black
+- pip install -U pytest pytest-cov pytest-doctestplus codecov
+- if [[ $TRAVIS_PYTHON_VERSION != '3.5' ]]; then travis_retry pip install black; fi
 script:
 - pytest graspy/ tests/
-- black --check --diff ./graspy ./tests
+- if [[ $TRAVIS_PYTHON_VERSION != '3.5' ]]; then black --check --diff ./graspy ./tests; fi
 after_success:
 - codecov
 
