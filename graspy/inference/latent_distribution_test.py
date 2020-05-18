@@ -37,7 +37,7 @@ class LatentDistributionTest(BaseInference):
     Parameters
     ----------
     test : str
-        Independence test to use, one of ["CCA", "Dcorr", "HHG", "RV", "Hsic", "MGC"].
+        Independence test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
 
     metric : str or function, (default="euclidean")
         Distance metric to use, either a callable or a valid string.
@@ -156,10 +156,6 @@ class LatentDistributionTest(BaseInference):
             raise NotImplementedError()  # TODO env error parallelizing
 
         super().__init__(embedding="ase", n_components=n_components)
-
-        hyppo_input = ["CCA", "Dcorr", "HHG", "RV", "Hsic", "MGC"]
-        conv_dict = dict(zip(_VALID_TESTS, hyppo_input))
-        test = conv_dict[test]
 
         if callable(metric):
             self.test = KSample(test, compute_distance=metric)
