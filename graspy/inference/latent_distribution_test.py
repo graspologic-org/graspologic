@@ -29,7 +29,7 @@ class LatentDistributionTest(BaseInference):
     dot product graphs have the same distributions of latent positions.
 
     This test can operate on two graphs where there is no known matching between
-    the vertices of the two graphs, or even when the number of vertices is different.
+    the vertices of the two graphs.
     Currently, testing is only supported for undirected graphs.
 
     Read more in the :ref:`tutorials <inference_tutorials>`
