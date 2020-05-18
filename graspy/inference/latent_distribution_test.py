@@ -21,7 +21,8 @@ from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import PAIRED_DISTANCES
 from hyppo.ksample import KSample
 
-_VALID_METRICS = PAIRED_DISTANCES.keys()
+_VALID_METRICS = list(PAIRED_DISTANCES.keys())
+_VALID_METRICS.append("gaussian")  # we have a gaussian kernel implemented too
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
 
@@ -130,19 +131,16 @@ class LatentDistributionTest(BaseInference):
         super().__init__(embedding="ase", n_components=n_components)
 
         if callable(metric):
-            self.test = KSample(test, compute_distance=metric)
+            metric_func = metric
         else:
             if metric == "gaussian":
-                self.test = KSample(test, compute_distance=_medial_gaussian_kernel)
+                metric_func = _medial_gaussian_kernel
             else:
 
-                # TODO workers is a parameter required by hyppo.
-                # will be fixed in later releases.
-                def dist_func(X, Y=None, metric=metric, workers=None):
+                def metric_func(X, Y=None, metric=metric, workers=None):
                     return pairwise_distances(X, Y, metric=metric)
 
-                self.test = KSample(test, compute_distance=dist_func)
-
+        self.test = KSample(test, compute_distance=metric_func)
         self.n_bootstraps = n_bootstraps
         self.num_workers = num_workers
 
