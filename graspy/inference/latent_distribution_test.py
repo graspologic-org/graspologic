@@ -47,6 +47,7 @@ class LatentDistributionTest(BaseInference):
         Distance metric to use, either a callable or a valid string.
         The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
         if a string should be one of the keys in `sklearn.metrics.pairwise.PAIRED_DISTANCES`
+        or "gaussian" which will use a Gaussian kernel on Euclidean distances.
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
