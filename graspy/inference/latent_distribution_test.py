@@ -20,8 +20,6 @@ from .base import BaseInference
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import PAIRED_DISTANCES
 from hyppo.ksample import KSample
-from scipy.stats import multiscale_graphcorr
-from joblib import Parallel, delayed
 
 _VALID_METRICS = PAIRED_DISTANCES.keys()
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
