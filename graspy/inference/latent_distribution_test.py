@@ -18,9 +18,13 @@ from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 from sklearn.metrics import pairwise_distances
+from sklearn.metrics import SCORERS
 from hyppo.ksample import KSample
 from scipy.stats import multiscale_graphcorr
 from joblib import Parallel, delayed
+
+_VALID_METRICS = SCORERS.keys()
+_VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
 
 class LatentDistributionTest(BaseInference):
@@ -86,38 +90,6 @@ class LatentDistributionTest(BaseInference):
         n_bootstraps=200,
         num_workers=1,
     ):
-
-        _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
-        _VALID_METRICS = [
-            "euclidean",
-            "l2",
-            "l1",
-            "manhattan",
-            "cityblock",
-            "braycurtis",
-            "canberra",
-            "chebyshev",
-            "correlation",
-            "cosine",
-            "dice",
-            "hamming",
-            "jaccard",
-            "kulsinski",
-            "mahalanobis",
-            "matching",
-            "minkowski",
-            "rogerstanimoto",
-            "russellrao",
-            "seuclidean",
-            "sokalmichener",
-            "sokalsneath",
-            "sqeuclidean",
-            "yule",
-            "wminkowski",
-            "nan_euclidean",
-            "haversine",
-            "gaussian",
-        ]
 
         if not isinstance(test, str):
             msg = "test must be a str, not {}".format(type(test))
