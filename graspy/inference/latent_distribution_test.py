@@ -79,7 +79,7 @@ class LatentDistributionTest(BaseInference):
 
     def __init__(
         self,
-        test,
+        test="dcorr",
         metric="euclidean",
         n_components=None,
         n_bootstraps=200,
