@@ -133,7 +133,7 @@ class LatentDistributionTest(BaseInference):
         if callable(metric):
             self.test = KSample(test, compute_distance=metric)
         else:
-            if metric is "gaussian":
+            if metric == "gaussian":
                 self.test = KSample(test, compute_distance=self._medial_gaussian_kernel)
             else:
 
