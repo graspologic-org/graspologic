@@ -41,7 +41,7 @@ class LatentDistributionTest(BaseInference):
     test : str
         Independence test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
         See :class:`hyppo.ksample.KSample` for more information. 
-        
+
     metric : str or function, (default="euclidean")
         Distance metric to use, either a callable or a valid string.
         The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
@@ -50,6 +50,7 @@ class LatentDistributionTest(BaseInference):
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm. 
+        See :class:`~graspy.embed.AdjacencySpectralEmbed` for more information.
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations.
