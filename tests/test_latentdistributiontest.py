@@ -33,7 +33,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             LatentDistributionTest(test="dcorr", n_bootstraps=-100)
         with self.assertRaises(ValueError):
-            LatentDistributionTest(test="dcorr", num_workers=-1)
+            LatentDistributionTest(test="dcorr", workers=-1)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test=0)
         with self.assertRaises(TypeError):
@@ -43,9 +43,9 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             LatentDistributionTest(test="dcorr", n_components=0.5)
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="dcorr", num_workers=0.5)
+            LatentDistributionTest(test="dcorr", workers=0.5)
         with self.assertRaises(NotImplementedError):
-            LatentDistributionTest(test="dcorr", num_workers=4)
+            LatentDistributionTest(test="dcorr", workers=4)
 
     def test_n_bootstraps(self):
         for test in self.tests:

@@ -60,7 +60,7 @@ class LatentDistributionTest(BaseInference):
         Number of bootstrap iterations for the backend hypothesis test. See
         :class:`hyppo.ksample.KSample` for more information.
 
-    num_workers : int, optional (default=1)
+    workers : int, optional (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
 
     Attributes
@@ -92,7 +92,7 @@ class LatentDistributionTest(BaseInference):
         metric="euclidean",
         n_components=None,
         n_bootstraps=200,
-        num_workers=1,
+        workers=1,
     ):
 
         if not isinstance(test, str):
@@ -123,12 +123,12 @@ class LatentDistributionTest(BaseInference):
             msg = "{} is invalid number of bootstraps, must be greater than 1"
             raise ValueError(msg.format(n_bootstraps))
 
-        if not isinstance(num_workers, int):
-            msg = "num_workers must be an int, not {}".format(type(num_workers))
+        if not isinstance(workers, int):
+            msg = "workers must be an int, not {}".format(type(workers))
             raise TypeError(msg)
-        elif num_workers <= 0:
+        elif workers <= 0:
             msg = "{} is invalid number of workers, must be greater than 0"
-            raise ValueError(msg.format(num_workers))
+            raise ValueError(msg.format(workers))
 
         super().__init__(embedding="ase", n_components=n_components)
 
@@ -144,7 +144,7 @@ class LatentDistributionTest(BaseInference):
 
         self.test = KSample(test, compute_distance=metric_func)
         self.n_bootstraps = n_bootstraps
-        self.num_workers = num_workers
+        self.workers = workers
 
     def _embed(self, A1, A2):
         if not is_symmetric(A1) or not is_symmetric(A2):
@@ -188,7 +188,7 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
         data = self.test.test(
-            X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.num_workers, auto=False
+            X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False
         )
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
