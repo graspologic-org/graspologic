@@ -184,11 +184,8 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = self._embed(A1, A2)
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
-        x = np.array(X1_hat)
-        y = np.array(X2_hat)
-
         data = self.test.test(
-            x, y, reps=self.n_bootstraps, workers=self.num_workers, auto=False
+            X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.num_workers, auto=False
         )
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
