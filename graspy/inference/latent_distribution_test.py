@@ -52,7 +52,7 @@ class LatentDistributionTest(BaseInference):
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm. 
-        See :class:`~graspy.embed.AdjacencySpectralEmbed` for more information.
+        See :func:`~graspy.embed.selectSVD` for more information.
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations.
