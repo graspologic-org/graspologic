@@ -1,4 +1,4 @@
-# Copyright 2019 NeuroData (http://neurodata.io)
+# Copyright 2020 NeuroData (http://neurodata.io)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -164,8 +164,10 @@ class LatentDistributionTest(BaseInference):
                 self.test = KSample(test, compute_distance=self._medial_gaussian_kernel)
             else:
 
-                def dist_func(X, Y=None, metric=metric):
-                    return pairwise_distances(X, Y=None, metric=metric)
+		# TODO workers is a parameter required by hyppo. 
+                # will be fixed in later releases.
+                def dist_func(X, Y=None, metric=metric, workers=None):
+                    return pairwise_distances(X, Y, metric=metric)
 
                 self.test = KSample(test, compute_distance=dist_func)
 
@@ -193,8 +195,9 @@ class LatentDistributionTest(BaseInference):
 
         return X1_hat, X2_hat
 
-    def _medial_gaussian_kernel(self, x):
+    def _medial_gaussian_kernel(self, x, workers=None):
         """Baseline medial gaussian kernel similarity calculation"""
+        # TODO workers is a parameter required by hyppo. will be fixed in later releases.
         l1 = pairwise_distances(x, x, "cityblock")
         mask = np.ones(l1.shape, dtype=bool)
         np.fill_diagonal(mask, 0)
@@ -235,7 +238,7 @@ class LatentDistributionTest(BaseInference):
         x = np.array(X1_hat)
         y = np.array(X2_hat)
 
-        data = self.test.test(x, y, reps=self.n_bootstraps, workers=self.num_workers)
+        data = self.test.test(x, y, reps=self.n_bootstraps, workers=self.num_workers, auto=False)
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
         self.null_distribution_ = self.test.indep_test.null_dist
