@@ -41,12 +41,13 @@ class LatentDistributionTest(BaseInference):
 
     metric : str or function, (default="euclidean")
         Distance metric to use, either a callable or a valid string.
-        The callable should behave similarly to sklearn.metrics.pairwise_distances.
-        Valid strings: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise_distances.html.
+        The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
+        if a string should be one of the `metric` options described for 
+        :func:`sklearn.metrics.pairwise_distances`.
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
-        dimensions are found by the Zhu and Godsi algorithm.
+        dimensions are found by the Zhu and Godsi algorithm. 
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations.
