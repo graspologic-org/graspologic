@@ -18,12 +18,12 @@ from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 from sklearn.metrics import pairwise_distances
-from sklearn.metrics import SCORERS
+from sklearn.metrics.pairwise import PAIRED_DISTANCES
 from hyppo.ksample import KSample
 from scipy.stats import multiscale_graphcorr
 from joblib import Parallel, delayed
 
-_VALID_METRICS = SCORERS.keys()
+_VALID_METRICS = PAIRED_DISTANCES.keys()
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
 
@@ -46,8 +46,7 @@ class LatentDistributionTest(BaseInference):
     metric : str or function, (default="euclidean")
         Distance metric to use, either a callable or a valid string.
         The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
-        if a string should be one of the `metric` options described for 
-        :func:`sklearn.metrics.pairwise_distances`.
+        if a string should be one of the keys in `sklearn.metrics.pairwise.PAIRED_DISTANCES`
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
