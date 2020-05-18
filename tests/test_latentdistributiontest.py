@@ -5,6 +5,7 @@
 import unittest
 
 import numpy as np
+from sklearn.metrics import pairwise_distances
 
 from graspy.inference import LatentDistributionTest
 from graspy.simulations import er_np, sbm
@@ -24,6 +25,17 @@ class TestLatentDistributionTest(unittest.TestCase):
             for test in self.tests:
                 ldt = LatentDistributionTest(test, dist, n_bootstraps=10)
                 p = ldt.fit(self.A1, self.A2)
+
+    def test_workers(self):
+        ldt = LatentDistributionTest("dcorr", "euclidean", n_bootstraps=4, workers=4)
+        ldt.fit(self.A1, self.A2)
+
+    def test_callable_metric(self):
+        def metric_func(X, Y=None, workers=None):
+            return pairwise_distances(X, metric="euclidean") * 0.5
+
+        ldt = LatentDistributionTest("dcorr", metric_func, n_bootstraps=10)
+        ldt.fit(self.A1, self.A2)
 
     def test_bad_kwargs(self):
         with self.assertRaises(ValueError):
