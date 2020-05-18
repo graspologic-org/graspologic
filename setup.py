@@ -18,7 +18,7 @@ REQUIRED_PACKAGES = [
     "scipy>=1.1.0",
     "seaborn>=0.9.0",
     "matplotlib>=3.0.0",
-    "hyppo @ git+https://github.com/neurodata/hyppo@master#egg=hyppo",
+    "hyppo>=0.1.2",
 ]
 
 
