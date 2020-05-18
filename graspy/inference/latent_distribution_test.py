@@ -40,8 +40,10 @@ class LatentDistributionTest(BaseInference):
     Parameters
     ----------
     test : str
-        Independence test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
-        See :class:`hyppo.ksample.KSample` for more information. 
+        Backend hypothesis test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
+        These tests are typically used for independence testing, but here they are used 
+        for a two-sample hypothesis test on the latent positions of two graphs. See 
+        :class:`hyppo.ksample.KSample` for more information. 
 
     metric : str or function, (default="euclidean")
         Distance metric to use, either a callable or a valid string.
@@ -55,7 +57,8 @@ class LatentDistributionTest(BaseInference):
         See :func:`~graspy.embed.selectSVD` for more information.
 
     n_bootstraps : int (default=200)
-        Number of bootstrap iterations.
+        Number of bootstrap iterations for the backend hypothesis test. See
+        :class:`hyppo.ksample.KSample` for more information.
 
     num_workers : int, optional (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
