@@ -126,8 +126,6 @@ class LatentDistributionTest(BaseInference):
         elif num_workers <= 0:
             msg = "{} is invalid number of workers, must be greater than 0"
             raise ValueError(msg.format(num_workers))
-        elif num_workers > 1:
-            raise NotImplementedError()  # TODO env error parallelizing
 
         super().__init__(embedding="ase", n_components=n_components)
 
@@ -199,14 +197,14 @@ class LatentDistributionTest(BaseInference):
         return self.p_value_
 
 
-def _medial_gaussian_kernel(x, workers=None):
-    """Baseline medial gaussian kernel similarity calculation"""
-    # TODO workers is a parameter required by hyppo. will be fixed in later releases.
-    l1 = pairwise_distances(x, x, "cityblock")
+def _medial_gaussian_kernel(X, Y=None):
+    """Baseline medial gaussian kernel similarity calculation
+    Y is dummy to mimic sklearn pairwise_distances"""
+    l1 = pairwise_distances(X, Y=Y, metric="cityblock")
     mask = np.ones(l1.shape, dtype=bool)
     np.fill_diagonal(mask, 0)
     gamma = 1.0 / (2 * (np.median(l1[mask]) ** 2))
-    K = np.exp(-gamma * pairwise_distances(x, x, "sqeuclidean"))
+    K = np.exp(-gamma * pairwise_distances(X, Y=Y, metric="sqeuclidean"))
     return 1 - K / np.max(K)
 
 
