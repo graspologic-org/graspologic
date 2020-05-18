@@ -197,7 +197,7 @@ class LatentDistributionTest(BaseInference):
         return self.p_value_
 
 
-def _medial_gaussian_kernel(X, Y=None):
+def _medial_gaussian_kernel(X, Y=None, workers=None):
     """Baseline medial gaussian kernel similarity calculation
     Y is dummy to mimic sklearn pairwise_distances"""
     l1 = pairwise_distances(X, Y=Y, metric="cityblock")
