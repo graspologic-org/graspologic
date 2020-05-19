@@ -49,7 +49,8 @@ class LatentDistributionTest(BaseInference):
         Distance metric to use, either a callable or a valid string.
         The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
         if a string should be one of the keys in `sklearn.metrics.pairwise.PAIRED_DISTANCES`
-        or "gaussian" which will use a Gaussian kernel on Euclidean distances.
+        or "gaussian" which will use a Gaussian kernel on Euclidean distances with an 
+        adaptively selected bandwidth.
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
@@ -72,7 +73,7 @@ class LatentDistributionTest(BaseInference):
     p_value_ : float
         The overall p value from the test.
 
-    null_distribution_ : None or ndarray, shape (n_bootstraps, )
+    null_distribution_ : ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
 
     References
@@ -148,7 +149,8 @@ class LatentDistributionTest(BaseInference):
 
     def _embed(self, A1, A2):
         if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()  # TODO asymmetric case
+            msg = "currently, testing is only supported for undirected graphs"
+            raise NotImplementedError(msg)  # TODO asymmetric case
 
         if self.n_components is None:
             num_dims1 = select_dimension(A1)[0][-1]
