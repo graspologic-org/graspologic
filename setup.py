@@ -18,7 +18,9 @@ REQUIRED_PACKAGES = [
     "scipy>=1.1.0",
     "seaborn>=0.9.0",
     "matplotlib>=3.0.0",
+    "hyppo>=0.1.2",
 ]
+
 
 # Find GraSPy version.
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
