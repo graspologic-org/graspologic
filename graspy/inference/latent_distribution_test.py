@@ -85,6 +85,11 @@ class LatentDistributionTest(BaseInference):
     .. [2] Panda, S., Palaniappan, S., Xiong, J., Bridgeford, E., Mehta, R., Shen, C., & Vogelstein, J. (2019).
         "hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package."
         arXiv:1907.02088.
+
+    .. [3] Varjavand, B., Arroyo, J., Tang, M., Priebe, C., and Vogelstein, J. (2019).
+       "Improving Power of 2-Sample Random Graph Tests with Applications in Connectomics"
+       arXiv:1911.02741
+
     """
 
     def __init__(
