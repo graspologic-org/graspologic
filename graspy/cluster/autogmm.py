@@ -17,12 +17,15 @@ import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
-from sklearn.mixture.gaussian_mixture import (
+from sklearn.mixture._gaussian_mixture import (
     _compute_precision_cholesky,
     _estimate_gaussian_parameters,
 )
 from sklearn.model_selection import ParameterGrid
+from sklearn.utils._testing import ignore_warnings
+from sklearn.exceptions import ConvergenceWarning
 from joblib import Parallel, delayed
+import warnings
 
 from .base import BaseCluster
 
@@ -69,6 +72,10 @@ class AutoGMMCluster(BaseCluster):
 
         If a list/array, it must be a list/array of strings containing only
         'euclidean', 'manhattan', 'cosine', and/or 'none'.
+
+        Note that cosine similarity can only work when all of the rows are not the zero vector.
+        If the input matrix has a zero row, cosine similarity will be skipped and a warning will
+        be thrown.
 
     linkage : {'ward','complete','average','single', 'all' (default)}, optional
         String or list/array describing the type of linkages to use in agglomeration.
@@ -379,6 +386,9 @@ class AutoGMMCluster(BaseCluster):
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
 
+    # ignoring warning here because if convergence is not reached, the regularization
+    # is automatically increased
+    @ignore_warnings(category=ConvergenceWarning)
     def _fit_cluster(self, X, y, params):
         label_init = self.label_init
         if label_init is not None:
@@ -442,8 +452,8 @@ class AutoGMMCluster(BaseCluster):
             break
 
         if y is not None:
-            predictions = model.predict(X)
-            ari = adjusted_rand_score(y, predictions)
+            self.predictions = model.predict(X)
+            ari = adjusted_rand_score(y, self.predictions)
         else:
             ari = float("nan")
         results = {
@@ -504,9 +514,13 @@ class AutoGMMCluster(BaseCluster):
             raise ValueError(msg)
         # check if X contains the 0 vector
         if np.any(~X.any(axis=1)) and ("cosine" in self.affinity):
-            msg = "When using cosine affinity, X cannot contain the 0 vector, but "
-            msg += "X[{},] is 0".format(np.where(~X.any(axis=1)))
-            raise ValueError(msg)
+            if isinstance(self.affinity, np.ndarray):
+                self.affinity = np.delete(
+                    self.affinity, np.argwhere(self.affinity == "cosine")
+                )
+            if isinstance(self.affinity, list):
+                self.affinity.remove("cosine")
+            warnings.warn("X contains a zero vector, will not run cosine affinity.")
 
         label_init = self.label_init
         if label_init is not None:
