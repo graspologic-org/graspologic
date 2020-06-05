@@ -80,7 +80,6 @@ class BaseInference(BaseEstimator):
         """
         pass
 
-
     def _fit_predict(self, A1, A2):
         """
         Fits the model and returns the p-value
