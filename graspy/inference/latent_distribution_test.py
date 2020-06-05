@@ -136,7 +136,7 @@ class LatentDistributionTest(BaseInference):
             msg = "{} is invalid number of workers, must be greater than 0"
             raise ValueError(msg.format(workers))
 
-        super().__init__(embedding="ase", n_components=n_components)
+        super().__init__(n_components=n_components)
 
         if callable(metric):
             metric_func = metric
