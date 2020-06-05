@@ -20,6 +20,12 @@ class TestLatentDistributionTest(unittest.TestCase):
         cls.A1 = er_np(20, 0.3)
         cls.A2 = er_np(20, 0.3)
 
+    def test_fit_ase_works(self):
+        for dist in self.dists:
+            for test in self.tests:
+                ldt = LatentDistributionTest(test, dist, n_bootstraps=10)
+                assert ldt.fit(self.A1, self.A2) is ldt
+
     def test_fit_predict_ase_works(self):
         for dist in self.dists:
             for test in self.tests:
@@ -78,8 +84,7 @@ class TestLatentDistributionTest(unittest.TestCase):
 
         ldt = LatentDistributionTest("dcorr")
         with self.assertRaises(NotImplementedError):
-            p = ldt.fit_predict(A, B)
-        # self.assertTrue(p > 0.05)
+            ldt.fit(A, B)
 
     def test_SBM_euclidean(self):
         np.random.seed(12345678)

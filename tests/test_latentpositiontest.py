@@ -18,11 +18,11 @@ class TestLatentPositionTest(unittest.TestCase):
 
     def test_fit_ase_works(self):
         spt = LatentPositionTest()
-        spt.fit(self.A1, self.A2)
+        assert spt.fit(self.A1, self.A2) is spt
 
     def test_fit_omni_works(self):
         spt = LatentPositionTest(embedding="omnibus")
-        spt.fit(self.A1, self.A2)
+        assert spt.fit(self.A1, self.A2) is spt
 
     def test_fit_predict_ase_works(self):
         spt = LatentPositionTest()
