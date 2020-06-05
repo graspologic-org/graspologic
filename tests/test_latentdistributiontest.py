@@ -20,11 +20,12 @@ class TestLatentDistributionTest(unittest.TestCase):
         cls.A1 = er_np(20, 0.3)
         cls.A2 = er_np(20, 0.3)
 
-    def test_fit_p_ase_works(self):
+    def test_fit_predict_ase_works(self):
         for dist in self.dists:
             for test in self.tests:
                 ldt = LatentDistributionTest(test, dist, n_bootstraps=10)
-                p = ldt.fit(self.A1, self.A2)
+                p = ldt.fit_predict(self.A1, self.A2)
+                float(p)
 
     def test_workers(self):
         ldt = LatentDistributionTest("dcorr", "euclidean", n_bootstraps=4, workers=4)
@@ -77,7 +78,7 @@ class TestLatentDistributionTest(unittest.TestCase):
 
         ldt = LatentDistributionTest("dcorr")
         with self.assertRaises(NotImplementedError):
-            p = ldt.fit(A, B)
+            p = ldt.fit_predict(A, B)
         # self.assertTrue(p > 0.05)
 
     def test_SBM_euclidean(self):
@@ -97,8 +98,8 @@ class TestLatentDistributionTest(unittest.TestCase):
             ldt_alt = LatentDistributionTest(
                 test, "euclidean", n_components=2, n_bootstraps=50
             )
-            p_null = ldt_null.fit(A1, A2)
-            p_alt = ldt_alt.fit(A1, A3)
+            p_null = ldt_null.fit_predict(A1, A2)
+            p_alt = ldt_alt.fit_predict(A1, A3)
             self.assertTrue(p_null > 0.05)
             self.assertTrue(p_alt <= 0.05)
 
@@ -119,8 +120,8 @@ class TestLatentDistributionTest(unittest.TestCase):
             ldt_alt = LatentDistributionTest(
                 test, "gaussian", n_components=2, n_bootstraps=50
             )
-            p_null = ldt_null.fit(A1, A2)
-            p_alt = ldt_alt.fit(A1, A3)
+            p_null = ldt_null.fit_predict(A1, A2)
+            p_alt = ldt_alt.fit_predict(A1, A3)
             self.assertTrue(p_null > 0.05)
             self.assertTrue(p_alt <= 0.05)
 

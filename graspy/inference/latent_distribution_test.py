@@ -41,20 +41,20 @@ class LatentDistributionTest(BaseInference):
     ----------
     test : str
         Backend hypothesis test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
-        These tests are typically used for independence testing, but here they are used 
-        for a two-sample hypothesis test on the latent positions of two graphs. See 
-        :class:`hyppo.ksample.KSample` for more information. 
+        These tests are typically used for independence testing, but here they
+        are used for a two-sample hypothesis test on the latent positions of
+        two graphs. See :class:`hyppo.ksample.KSample` for more information.
 
     metric : str or function, (default="euclidean")
         Distance metric to use, either a callable or a valid string.
         The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
         if a string should be one of the keys in `sklearn.metrics.pairwise.PAIRED_DISTANCES`
-        or "gaussian" which will use a Gaussian kernel on Euclidean distances with an 
-        adaptively selected bandwidth.
+        or "gaussian" which will use a Gaussian kernel on Euclidean distances
+        with an adaptively selected bandwidth.
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
-        dimensions are found by the Zhu and Godsi algorithm. 
+        dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspy.embed.selectSVD` for more information.
 
     n_bootstraps : int (default=200)
@@ -66,15 +66,15 @@ class LatentDistributionTest(BaseInference):
 
     Attributes
     ----------
+    null_distribution_ : ndarray, shape (n_bootstraps, )
+        The distribution of T statistics generated under the null.
+
     sample_T_statistic_ : float
         The observed difference between the embedded latent positions of the two
         input graphs.
 
     p_value_ : float
         The overall p value from the test.
-
-    null_distribution_ : ndarray, shape (n_bootstraps, )
-        The distribution of T statistics generated under the null.
 
     References
     ----------
@@ -185,8 +185,7 @@ class LatentDistributionTest(BaseInference):
 
         Returns
         -------
-        p_value : float
-            The p value corresponding to the specified hypothesis test
+        self
         """
         A1 = import_graph(A1)
         A2 = import_graph(A2)
@@ -197,11 +196,12 @@ class LatentDistributionTest(BaseInference):
         data = self.test.test(
             X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False
         )
+
+        self.null_distribution_ = self.test.indep_test.null_dist
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
-        self.null_distribution_ = self.test.indep_test.null_dist
 
-        return self.p_value_
+        return self
 
 
 def _medial_gaussian_kernel(X, Y=None, workers=None):

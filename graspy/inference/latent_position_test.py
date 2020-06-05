@@ -23,12 +23,12 @@ from .base import BaseInference
 
 class LatentPositionTest(BaseInference):
     r"""
-    Two-sample hypothesis test for the problem of determining whether two random 
+    Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same latent positions.
 
     This test assumes that the two input graphs are vertex aligned, that is,
     there is a known mapping between vertices in the two graphs and the input graphs
-    have their vertices sorted in the same order. Currently, the function only 
+    have their vertices sorted in the same order. Currently, the function only
     supports undirected graphs.
 
     Read more in the :ref:`tutorials <inference_tutorials>`
@@ -49,9 +49,9 @@ class LatentPositionTest(BaseInference):
         dimensions are found by the Zhu and Godsi algorithm.
 
     test_case : string, {'rotation' (default), 'scalar-rotation', 'diagonal-rotation'}
-        describes the exact form of the hypothesis to test when using 'ase' or 'lse' 
+        describes the exact form of the hypothesis to test when using 'ase' or 'lse'
         as an embedding method. Ignored if using 'omnibus'. Given two latent positions,
-        :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that 
+        :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that
         minimizes :math:`||X_1 - X_2 R||_F`:
 
         - 'rotation'
@@ -69,19 +69,19 @@ class LatentPositionTest(BaseInference):
     Attributes
     ----------
     null_distribution_1_, null_distribution_2_ : np.ndarray (n_bootstraps,)
-        The distribution of T statistics generated under the null, using the first and  
-        and second input graph, respectively. The latent positions of each sample graph 
-        are used independently to sample random dot product graphs, so two null 
+        The distribution of T statistics generated under the null, using the first and
+        and second input graph, respectively. The latent positions of each sample graph
+        are used independently to sample random dot product graphs, so two null
         distributions are generated
-    
+
     sample_T_statistic_ : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
 
-    p_value_1_, p_value_2_ : float 
-        The p value estimated from the null distributions from sample 1 and sample 2. 
+    p_value_1_, p_value_2_ : float
+        The p value estimated from the null distributions from sample 1 and sample 2.
 
-    p_ : float 
+    p_value_ : float
         The overall p value from the test; this is the max of p_value_1_ and p_value_2_
 
     See also
@@ -90,9 +90,9 @@ class LatentPositionTest(BaseInference):
     graspy.embed.OmnibusEmbed
     graspy.embed.selectSVD
 
-    References  
+    References
     ----------
-    .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E. 
+    .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E.
        "A Semiparametric Two-Sample Hypothesis Testing Problem for Random Graphs"
        Journal of Computational and Graphical Statistics, Vol. 26(2), 2017
     """
@@ -100,6 +100,8 @@ class LatentPositionTest(BaseInference):
     def __init__(
         self, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation"
     ):
+        if type(embedding) is not str:
+            raise TypeError("embedding must be str")
         if type(n_bootstraps) is not int:
             raise TypeError()
         if type(test_case) is not str:
@@ -110,14 +112,17 @@ class LatentPositionTest(BaseInference):
                     n_bootstraps
                 )
             )
+        if embedding not in ["ase", "omnibus"]:
+            raise ValueError("{} is not a valid embedding method.".format(embedding))
         if test_case not in ["rotation", "scalar-rotation", "diagonal-rotation"]:
             raise ValueError(
                 "test_case must be one of 'rotation', 'scalar-rotation',"
                 + "'diagonal-rotation'"
             )
 
-        super().__init__(embedding=embedding, n_components=n_components)
+        super().__init__(n_components=n_components)
 
+        self.embedding = embedding
         self.n_bootstraps = n_bootstraps
         self.test_case = test_case
         # paper uses these always, but could be kwargs eventually. need to test
@@ -180,13 +185,12 @@ class LatentPositionTest(BaseInference):
         ----------
         A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
             The two graphs to run a hypothesis test on.
-            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs, 
+            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
             where ``n_vertices`` is the same for both
-        
+
         Returns
         -------
-        p : float
-            The p value corresponding to the specified hypothesis test
+        self
         """
         A1 = import_graph(A1)
         A2 = import_graph(A2)
@@ -226,4 +230,4 @@ class LatentPositionTest(BaseInference):
         self.p_value_2_ = p_value_2
         self.p_value_ = p_value
 
-        return p_value
+        return self

@@ -16,15 +16,18 @@ class TestLatentPositionTest(unittest.TestCase):
         cls.A1 = er_np(20, 0.3)
         cls.A2 = er_np(20, 0.3)
 
-    def test_fit_p_ase_works(self):
+    def test_fit_ase_works(self):
         spt = LatentPositionTest()
-        p = spt.fit(self.A1, self.A2)
-        pass
+        spt.fit(self.A1, self.A2)
 
-    def test_fit_p_omni_works(self):
+    def test_fit_omni_works(self):
         spt = LatentPositionTest(embedding="omnibus")
-        p = spt.fit(self.A1, self.A2)
-        pass
+        spt.fit(self.A1, self.A2)
+
+    def test_fit_predict_ase_works(self):
+        spt = LatentPositionTest()
+        p = spt.fit_predict(self.A1, self.A2)
+        float(p)
 
     def test_bad_kwargs(self):
         with self.assertRaises(ValueError):
@@ -114,8 +117,8 @@ class TestLatentPositionTest(unittest.TestCase):
 
         spt_null = LatentPositionTest(n_components=2, n_bootstraps=100)
         spt_alt = LatentPositionTest(n_components=2, n_bootstraps=100)
-        p_null = spt_null.fit(A1, A2)
-        p_alt = spt_alt.fit(A1, A3)
+        p_null = spt_null.fit_predict(A1, A2)
+        p_alt = spt_alt.fit_predict(A1, A3)
         self.assertTrue(p_null > 0.05)
         self.assertTrue(p_alt <= 0.05)
 
