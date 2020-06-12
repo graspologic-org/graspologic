@@ -208,18 +208,13 @@ class LatentPositionTest(BaseInference):
         null_distribution_1 = self._bootstrap(X_hats[0])
         null_distribution_2 = self._bootstrap(X_hats[1])
 
-        # Continuity correction - note that the +0.5 causes p > 1 sometimes # TODO
+        # uisng exact mc p-values (see, for example, Phipson and Smythi, 2010)
         p_value_1 = (
-            len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 0.5
-        ) / self.n_bootstraps
+            len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 1
+        ) / (self.n_bootstraps + 1)
         p_value_2 = (
-            len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 0.5
-        ) / self.n_bootstraps
-
-        if p_value_1 < 1 / self.n_bootstraps:
-            p_value_1 = 1 / self.n_bootstraps
-        if p_value_2 < 1 / self.n_bootstraps:
-            p_value_2 = 1 / self.n_bootstraps
+            len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 1
+        ) / (self.n_bootstraps + 1)
 
         p_value = max(p_value_1, p_value_2)
 

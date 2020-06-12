@@ -31,7 +31,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             for test in self.tests:
                 ldt = LatentDistributionTest(test, dist, n_bootstraps=10)
                 p = ldt.fit_predict(self.A1, self.A2)
-                float(p)
+                assert float(p) <= 1 and float(p) >= 0
 
     def test_workers(self):
         ldt = LatentDistributionTest("dcorr", "euclidean", n_bootstraps=4, workers=4)

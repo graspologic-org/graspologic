@@ -27,7 +27,7 @@ class TestLatentPositionTest(unittest.TestCase):
     def test_fit_predict_ase_works(self):
         spt = LatentPositionTest()
         p = spt.fit_predict(self.A1, self.A2)
-        float(p)
+        assert float(p) <= 1 and float(p) >= 0
 
     def test_bad_kwargs(self):
         with self.assertRaises(ValueError):
