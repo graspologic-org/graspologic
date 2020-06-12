@@ -208,7 +208,7 @@ class LatentPositionTest(BaseInference):
         null_distribution_1 = self._bootstrap(X_hats[0])
         null_distribution_2 = self._bootstrap(X_hats[1])
 
-        # uisng exact mc p-values (see, for example, Phipson and Smythi, 2010)
+        # uisng exact mc p-values (see, for example, Phipson and Smyth, 2010)
         p_value_1 = (
             len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 1
         ) / (self.n_bootstraps + 1)
