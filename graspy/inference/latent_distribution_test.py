@@ -195,7 +195,6 @@ class LatentDistributionTest(BaseInference):
 
         return X1_hat, X2_hat
 
-
     def _estimate_correction_variances(self, X_hat, Y_hat, pooled=True):
         # TODO it is unclear whether using pooled estimator provides more or
         # less power. this should be investigated. should not matter under null.
@@ -222,7 +221,6 @@ class LatentDistributionTest(BaseInference):
             Y_sigmas = get_sigma(Y_hat) * (M - N) / (N * M)
         return X_sigmas, Y_sigmas
 
-
     def _sample_modified_ase(self, X, Y, workers=1):
         n = len(X)
         m = len(Y)
@@ -245,7 +243,6 @@ class LatentDistributionTest(BaseInference):
                 )
             return X, Y_sampled
 
-
     def fit(self, A1, A2):
         """
         Fits the test to the two input graphs
@@ -266,7 +263,9 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
         if self.size_correction:
-            X1_hat, X2_hat = self._sample_modified_ase(X1_hat, X2_hat, workers=self.workers)
+            X1_hat, X2_hat = self._sample_modified_ase(
+                X1_hat, X2_hat, workers=self.workers
+            )
 
         data = self.test.test(
             X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False
@@ -285,7 +284,7 @@ def _medial_gaussian_kernel(X, Y=None, workers=None):
     l1 = pairwise_distances(X, Y=Y, metric="cityblock")
     mask = np.ones(l1.shape, dtype=bool)
     np.fill_diagonal(mask, 0)
-    bandwidth = np.median(l1[mask]) if np.median(l1[mask]) else 1 # k-sample case
+    bandwidth = np.median(l1[mask]) if np.median(l1[mask]) else 1  # k-sample case
     gamma = 1.0 / (2 * bandwidth ** 2)
     K = np.exp(-gamma * pairwise_distances(X, Y=Y, metric="sqeuclidean"))
     return 1 - K / np.max(K)
