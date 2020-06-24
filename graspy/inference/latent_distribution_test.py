@@ -176,7 +176,7 @@ class LatentDistributionTest(BaseInference):
                         f"{test} is a kernel-baed test, but {metric} "
                         "is a distance. results may not be optimal. it is "
                         "recomended to use either a different test or one of "
-                        f'the kernels:" {_VALID_KERNELS} as a metric.'
+                        f"the kernels: {_VALID_KERNELS} as a metric."
                     )
                     warnings.warn(msg, UserWarning)
 
@@ -189,7 +189,7 @@ class LatentDistributionTest(BaseInference):
                         f"{test} is a distance-baed test, but {metric} "
                         "is a kernel. results may not be optimal. it is "
                         "recomended to use either a hisc as a test or one of "
-                        f'the distances:" {_VALID_DISTANCES} as a metric.'
+                        f"the distances: {_VALID_DISTANCES} as a metric."
                     )
                     warnings.warn(msg, UserWarning)
                 metric_func = _medial_gaussian_kernel
@@ -199,7 +199,7 @@ class LatentDistributionTest(BaseInference):
                         f"{test} is a distance-baed test, but {metric} "
                         "is a kernel. results may not be optimal. it is "
                         "recomended to use either a hisc as a test or one of "
-                        f'the distances:" {_VALID_DISTANCES} as a metric.'
+                        f"the distances: {_VALID_DISTANCES} as a metric."
                     )
                     warnings.warn(msg, UserWarning)
 

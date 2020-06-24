@@ -86,7 +86,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             ldt.fit(A, B)
 
-    def test_SBM_euclidean(self):
+    def test_SBM_dcorr(self):
         np.random.seed(12345678)
         B1 = np.array([[0.5, 0.2], [0.2, 0.5]])
 
@@ -96,19 +96,18 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
-        for test in self.tests:
-            ldt_null = LatentDistributionTest(
-                test, "euclidean", n_components=2, n_bootstraps=50
-            )
-            ldt_alt = LatentDistributionTest(
-                test, "euclidean", n_components=2, n_bootstraps=50
-            )
-            p_null = ldt_null.fit_predict(A1, A2)
-            p_alt = ldt_alt.fit_predict(A1, A3)
-            self.assertTrue(p_null > 0.05)
-            self.assertTrue(p_alt <= 0.05)
+        ldt_null = LatentDistributionTest(
+            "dcorr", "euclidean", n_components=2, n_bootstraps=100
+        )
+        ldt_alt = LatentDistributionTest(
+            "dcorr", "euclidean", n_components=2, n_bootstraps=100
+        )
+        p_null = ldt_null.fit_predict(A1, A2)
+        p_alt = ldt_alt.fit_predict(A1, A3)
+        self.assertTrue(p_null > 0.05)
+        self.assertTrue(p_alt <= 0.05)
 
-    def test_SBM_gaussian(self):
+    def test_SBM_hsic(self):
         np.random.seed(12345678)
         B1 = np.array([[0.5, 0.2], [0.2, 0.5]])
 
@@ -118,17 +117,41 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
-        for test in self.tests:
-            ldt_null = LatentDistributionTest(
-                test, "gaussian", n_components=2, n_bootstraps=50
-            )
-            ldt_alt = LatentDistributionTest(
-                test, "gaussian", n_components=2, n_bootstraps=50
-            )
-            p_null = ldt_null.fit_predict(A1, A2)
-            p_alt = ldt_alt.fit_predict(A1, A3)
-            self.assertTrue(p_null > 0.05)
-            self.assertTrue(p_alt <= 0.05)
+        ldt_null = LatentDistributionTest(
+            "hsic", "gaussian", n_components=2, n_bootstraps=100
+        )
+        ldt_alt = LatentDistributionTest(
+            "hsic", "gaussian", n_components=2, n_bootstraps=100
+        )
+        p_null = ldt_null.fit_predict(A1, A2)
+        p_alt = ldt_alt.fit_predict(A1, A3)
+        self.assertTrue(p_null > 0.05)
+        self.assertTrue(p_alt <= 0.05)
+
+    def test_different_sizes(self):
+        np.random.seed(314)
+
+        A1 = er_np(100, 0.8)
+        A2 = er_np(1000, 0.8)
+
+        ldt_not_corrected = LatentDistributionTest(
+        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=False
+        )
+        ldt_corrected_1 = LatentDistributionTest(
+        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
+        )
+        ldt_corrected_2 = LatentDistributionTest(
+        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
+        )
+
+        p_not_corrected = ldt_not_corrected.fit_predict(A1, A2)
+        p_corrected_1 = ldt_corrected_1.fit_predict(A1, A2)
+        p_corrected_2 = ldt_corrected_2.fit_predict(A2, A1)
+
+        print(p_not_corrected, p_corrected_1, p_corrected_2)
+        self.assertTrue(p_not_corrected <= 0.05)
+        self.assertTrue(p_corrected_1 > 0.05)
+        self.assertTrue(p_corrected_2 > 0.05)
 
 
 if __name__ == "__main__":
