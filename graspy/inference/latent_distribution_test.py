@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import warnings
+
 import numpy as np
 from scipy import stats
 
@@ -19,12 +21,17 @@ from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph, is_symmetric
 from .base import BaseInference
 from sklearn.metrics import pairwise_distances
+from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.metrics.pairwise import PAIRED_DISTANCES
+from sklearn.metrics.pairwise import PAIRWISE_KERNEL_FUNCTIONS
 from hyppo.ksample import KSample
 from joblib import Parallel, delayed
 
-_VALID_METRICS = list(PAIRED_DISTANCES.keys())
-_VALID_METRICS.append("gaussian")  # we have a gaussian kernel implemented too
+_VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
+_VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
+_VALID_KERNELS.append("gaussian")  # we have a gaussian kernel implemented too
+_VALID_METRICS = _VALID_DISTANCES + _VALID_KERNELS
+
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
 
@@ -47,12 +54,15 @@ class LatentDistributionTest(BaseInference):
         are used for a two-sample hypothesis test on the latent positions of
         two graphs. See :class:`hyppo.ksample.KSample` for more information.
 
-    metric : str or function, (default="euclidean")
-        Distance metric to use, either a callable or a valid string.
-        The callable should behave similarly to :func:`sklearn.metrics.pairwise_distances`,
-        if a string should be one of the keys in `sklearn.metrics.pairwise.PAIRED_DISTANCES`
-        or "gaussian" which will use a dissimilarity induced by a gaussian
-        kernel with an adaptively selected bandwidth.
+    metric : str or function, (default="gaussian")
+        Distance or a kernel metric to use, either a callable or a valid string.
+        If a callable, then it should behave similarly to either
+        :func:`sklearn.metrics.pairwise_distances` or to
+        :func:`sklearn.metrics.pairwise.pairwise_kernels`.
+        If a string, then it should be either one of the keys in either
+        `sklearn.metrics.pairwise.PAIRED_DISTANCES` or in
+        `sklearn.metrics.pairwise.PAIRWISE_KERNEL_FUNCTIONS`, or "gaussian",
+        which will use a gaussian kernel with an adaptively selected bandwidth.
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
@@ -60,8 +70,8 @@ class LatentDistributionTest(BaseInference):
         See :func:`~graspy.embed.selectSVD` for more information.
 
     n_bootstraps : int (default=200)
-        Number of bootstrap iterations for the backend hypothesis test. See
-        :class:`hyppo.ksample.KSample` for more information.
+        Number of bootstrap iterations for the backend hypothesis test.
+        See :class:`hyppo.ksample.KSample` for more information.
 
     workers : int, optional (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
@@ -70,9 +80,8 @@ class LatentDistributionTest(BaseInference):
         The size degrades in validity as the sizes of two graphs diverge from
         each other, unless the kernel matrix is modified.
         If True - in the case when two graphs are not of equal sizes, estimates
-        the plug-in estimator for the variance and uses it to inject
-        appropriately scaled gaussian noise into the embedding of the larger
-        graph.
+        the plug-in estimator for the variance and uses it to correct the
+        embedding of the larger graph.
         If False - does not perform any modifications (generally not
         recommended).
 
@@ -161,12 +170,41 @@ class LatentDistributionTest(BaseInference):
         if callable(metric):
             metric_func = metric
         else:
-            if metric == "gaussian":
-                metric_func = _medial_gaussian_kernel
-            else:
+            if metric in _VALID_DISTANCES:
+                if test == "hsic":
+                    msg = (
+                        f"{test} is a kernel-baed test, but {metric} "
+                        "is a distance. results may not be optimal. it is "
+                        "recomended to use either a different test or one of "
+                        f'the kernels:" {_VALID_KERNELS} as a metric.'
+                    )
+                    warnings.warn(msg, UserWarning)
 
                 def metric_func(X, Y=None, metric=metric, workers=None):
                     return pairwise_distances(X, Y, metric=metric)
+
+            elif metric == "gaussian":
+                if test != "hsic":
+                    msg = (
+                        f"{test} is a distance-baed test, but {metric} "
+                        "is a kernel. results may not be optimal. it is "
+                        "recomended to use either a hisc as a test or one of "
+                        f'the distances:" {_VALID_DISTANCES} as a metric.'
+                    )
+                    warnings.warn(msg, UserWarning)
+                metric_func = _medial_gaussian_kernel
+            else:
+                if test != "hsic":
+                    msg = (
+                        f"{test} is a distance-baed test, but {metric} "
+                        "is a kernel. results may not be optimal. it is "
+                        "recomended to use either a hisc as a test or one of "
+                        f'the distances:" {_VALID_DISTANCES} as a metric.'
+                    )
+                    warnings.warn(msg, UserWarning)
+
+                def metric_func(X, Y=None, metric=metric, workers=None):
+                    return pairwise_kernels(X, Y, metric=metric)
 
         self.test = KSample(test, compute_distance=metric_func)
         self.n_bootstraps = n_bootstraps
@@ -279,7 +317,7 @@ class LatentDistributionTest(BaseInference):
 
 
 def _medial_gaussian_kernel(X, Y=None, workers=None):
-    """dissimilarity measure induced by a medial gaussian kernel
+    """gaussian kernel with an adaptively chosen bandwidth
     Y is dummy to mimic sklearn pairwise_distances"""
     l1 = pairwise_distances(X, Y=Y, metric="cityblock")
     mask = np.ones(l1.shape, dtype=bool)
@@ -287,7 +325,7 @@ def _medial_gaussian_kernel(X, Y=None, workers=None):
     bandwidth = np.median(l1[mask]) if np.median(l1[mask]) else 1  # k-sample case
     gamma = 1.0 / (2 * bandwidth ** 2)
     K = np.exp(-gamma * pairwise_distances(X, Y=Y, metric="sqeuclidean"))
-    return 1 - K / np.max(K)
+    return K
 
 
 def _median_sign_flips(X1, X2):
@@ -305,10 +343,12 @@ def _fit_plug_in_variance_estimator(X):
     the variance-covariance matrix at a given point using the
     plug-in estimator from the RDPG Central Limit Theorem.
     (Athreya et al., RDPG survey, Equation 10)
+
     Parameters
     ----------
     X : np.ndarray, shape (n, d)
         adjacency spectral embedding of a graph
+
     Returns
     -------
     plug_in_variance_estimtor: functions
@@ -326,11 +366,13 @@ def _fit_plug_in_variance_estimator(X):
         """
         Takes in a point of a matrix of points in R^d and returns an
         estimated covariance matrix for each of the points
+
         Parameters:
         -----------
         x: np.ndarray, shape (n, d)
             points to estimate variance at
             if 1-dimensional - reshaped to (1, d)
+
         Returns:
         -------
         covariances: np.ndarray, shape (n, d, d)
