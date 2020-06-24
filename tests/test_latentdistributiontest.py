@@ -45,7 +45,9 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             LatentDistributionTest(test="dcorr", n_bootstraps=-100)
         with self.assertRaises(ValueError):
-            LatentDistributionTest(test="dcorr", workers=-1)
+            LatentDistributionTest(test="dcorr", workers=0)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(test="dcorr", workers=-2)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test=0)
         with self.assertRaises(TypeError):
@@ -68,6 +70,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         with pytest.warns(None) as record:
             for test in self.tests.keys():
                 ldt = LatentDistributionTest(test, self.tests[test])
+            ldt = LatentDistributionTest("hsic", "rbf")
         assert len(record) == 0
         # some invalid combinations of test and metric
         with pytest.warns(UserWarning):

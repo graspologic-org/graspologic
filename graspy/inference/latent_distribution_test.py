@@ -25,11 +25,11 @@ from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.metrics.pairwise import PAIRED_DISTANCES
 from sklearn.metrics.pairwise import PAIRWISE_KERNEL_FUNCTIONS
 from hyppo.ksample import KSample
-from joblib import Parallel, delayed
+from hyppo._utils import gaussian
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
 _VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
-_VALID_KERNELS.append("gaussian")  # we have a gaussian kernel implemented too
+_VALID_KERNELS.append("gaussian")  # can use hyppo's medial gaussian kernel too
 _VALID_METRICS = _VALID_DISTANCES + _VALID_KERNELS
 
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
@@ -63,6 +63,8 @@ class LatentDistributionTest(BaseInference):
         `sklearn.metrics.pairwise.PAIRED_DISTANCES` or in
         `sklearn.metrics.pairwise.PAIRWISE_KERNEL_FUNCTIONS`, or "gaussian",
         which will use a gaussian kernel with an adaptively selected bandwidth.
+        It is recommended to use kernels (e.g. "gaussian") with kernel-based
+        hsic test and distances (e.g. "euclidean") with all other tests.
 
     n_components : int or None, optional (default=None)
         Number of embedding dimensions. If None, the optimal embedding
@@ -75,6 +77,7 @@ class LatentDistributionTest(BaseInference):
 
     workers : int, optional (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
+        Supply -1 to use all cores available to the Process.
 
     size_correction: bool (default=True)
         The size degrades in validity as the sizes of two graphs diverge from
@@ -157,8 +160,8 @@ class LatentDistributionTest(BaseInference):
         if not isinstance(workers, int):
             msg = "workers must be an int, not {}".format(type(workers))
             raise TypeError(msg)
-        elif workers <= 0:
-            msg = "{} is invalid number of workers, must be greater than 0"
+        elif workers == 0 or workers < 1:
+            msg = "{} is invalid number of workers, must be positive, or -1 (to use all)"
             raise ValueError(msg.format(workers))
 
         if not isinstance(size_correction, bool):
@@ -181,7 +184,7 @@ class LatentDistributionTest(BaseInference):
                     warnings.warn(msg, UserWarning)
 
                 def metric_func(X, Y=None, metric=metric, workers=None):
-                    return pairwise_distances(X, Y, metric=metric)
+                    return pairwise_distances(X, Y, metric=metric, n_jobs=workers)
 
             elif metric == "gaussian":
                 if test != "hsic":
@@ -192,7 +195,7 @@ class LatentDistributionTest(BaseInference):
                         f"the distances: {_VALID_DISTANCES} as a metric."
                     )
                     warnings.warn(msg, UserWarning)
-                metric_func = _medial_gaussian_kernel
+                metric_func = gaussian
             else:
                 if test != "hsic":
                     msg = (
@@ -204,7 +207,7 @@ class LatentDistributionTest(BaseInference):
                     warnings.warn(msg, UserWarning)
 
                 def metric_func(X, Y=None, metric=metric, workers=None):
-                    return pairwise_kernels(X, Y, metric=metric)
+                    return pairwise_kernels(X, Y, metric=metric, n_jobs=workers)
 
         self.test = KSample(test, compute_distance=metric_func)
         self.n_bootstraps = n_bootstraps
@@ -316,18 +319,6 @@ class LatentDistributionTest(BaseInference):
         return self
 
 
-def _medial_gaussian_kernel(X, Y=None, workers=None):
-    """gaussian kernel with an adaptively chosen bandwidth
-    Y is dummy to mimic sklearn pairwise_distances"""
-    l1 = pairwise_distances(X, Y=Y, metric="cityblock")
-    mask = np.ones(l1.shape, dtype=bool)
-    np.fill_diagonal(mask, 0)
-    bandwidth = np.median(l1[mask]) if np.median(l1[mask]) else 1  # k-sample case
-    gamma = 1.0 / (2 * bandwidth ** 2)
-    K = np.exp(-gamma * pairwise_distances(X, Y=Y, metric="sqeuclidean"))
-    return K
-
-
 def _median_sign_flips(X1, X2):
     X1_medians = np.median(X1, axis=0)
     X2_medians = np.median(X2, axis=0)
@@ -342,7 +333,6 @@ def _fit_plug_in_variance_estimator(X):
     Takes in ASE of a graph and returns a function that estimates
     the variance-covariance matrix at a given point using the
     plug-in estimator from the RDPG Central Limit Theorem.
-    (Athreya et al., RDPG survey, Equation 10)
 
     Parameters
     ----------
