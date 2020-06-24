@@ -161,7 +161,9 @@ class LatentDistributionTest(BaseInference):
             msg = "workers must be an int, not {}".format(type(workers))
             raise TypeError(msg)
         elif workers == 0 or workers < 1:
-            msg = "{} is invalid number of workers, must be positive, or -1 (to use all)"
+            msg = (
+                "{} is invalid number of workers, must be positive, or -1 (to use all)"
+            )
             raise ValueError(msg.format(workers))
 
         if not isinstance(size_correction, bool):
