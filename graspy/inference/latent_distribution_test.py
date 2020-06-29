@@ -238,7 +238,7 @@ class LatentDistributionTest(BaseInference):
 
         return X1_hat, X2_hat
 
-    def _estimate_correction_variances(self, X_hat, Y_hat, pooled=True):
+    def _estimate_correction_variances(self, X_hat, Y_hat, pooled=False):
         # TODO it is unclear whether using pooled estimator provides more or
         # less power. this should be investigated. should not matter under null.
         N, d_X = X_hat.shape

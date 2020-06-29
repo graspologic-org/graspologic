@@ -138,7 +138,6 @@ class TestLatentDistributionTest(unittest.TestCase):
         p_corrected_1 = ldt_corrected_1.fit_predict(A1, A2)
         p_corrected_2 = ldt_corrected_2.fit_predict(A2, A1)
 
-        print(p_not_corrected, p_corrected_1, p_corrected_2)
         self.assertTrue(p_not_corrected <= 0.05)
         self.assertTrue(p_corrected_1 > 0.05)
         self.assertTrue(p_corrected_2 > 0.05)
