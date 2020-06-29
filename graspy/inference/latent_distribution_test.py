@@ -167,7 +167,7 @@ class LatentDistributionTest(BaseInference):
             raise ValueError(msg.format(workers))
 
         if not isinstance(size_correction, bool):
-            msg = "size_correction must be an int, not {}".format(type(size_correction))
+            msg = "size_correction must be a bool, not {}".format(type(size_correction))
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)
