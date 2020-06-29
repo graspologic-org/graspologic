@@ -16,6 +16,7 @@ import numpy as np
 
 from ..utils import symmetrize, cartprod
 import warnings
+from scipy.stats import bernoulli
 
 
 def _n_to_labels(n):
@@ -310,6 +311,171 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
 
     return A
 
+
+def siem(
+    n,
+    p,
+    edge_comm,
+    directed=False,
+    loops=False,
+    wt=None,
+    wtargs=None,
+    return_labels=False,
+    force=True):
+    """
+    Samples a graph from the structured independent edge model (SIEM) 
+    SIEM produces a graph with specified communities, in which each community can
+    have different sizes and edge probabilities. 
+    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Parameters
+    ----------
+    n: int
+        Number of vertices
+    p: float or list of floats of length K (k_communities)
+        Probability of an edge existing within the corresponding communities.
+        If a float, a probability, or a float greater than or equal to zero and less than or equal to 1.
+        It is assumed that the probability is constant over all communities within the graph.
+        If a list of floats of length K, each entry p[i] should be a float greater than or equal to zero
+        and less than or equal to 1, where p[i] indicates the probability of an edge existing in the ith edge
+        community.
+    edge_comm: array-like shape (n, n)
+        a square 2d numpy array or square numpy matrix of the edge community each edge is assigned to.
+        All edges should be assigned a single community, taking values in the integers 1:K
+        where K is the total number of unique communities. Note that edge_comm is expected to respect succeeding
+        options passed in; particularly, directedness and loopiness. If loops is False, the entire diagonal of
+        edge_comm should be 0.
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+    loops: boolean, optional (default=False)
+        If False, no edges will be sampled in the diagonal. Otherwise, edges
+        are sampled in the diagonal.
+    wt: object or list of K objects
+        if Wt is an object, a weight function to use globally over
+        the siem for assigning weights. If Wt is a list, a weight function for each of
+        the edge communities to use for connection strengths Wt[i] corresponds to the weight function
+        for edge community i. Default of None results in a binary graph
+    wtargs: dictionary or array-like, shape
+        if Wt is an object, Wtargs corresponds to the trailing arguments
+        to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
+        corresponds to trailing arguments to pass to Wt[i, j].
+    return_labels: boolean, optional (default=True)
+        whether to return the community labels of each edge.
+    Returns
+    -------
+    A: ndarray, shape (n, n)
+        Sampled adjacency matrix
+    labels: ndarray, shape (n, n)
+        Square numpy array of labels for each of the edges. Returned if return_labels is True.
+    """
+    # check booleans
+    if not isinstance(loops, bool):
+        raise TypeError("`loops` should be a boolean. You passed %s.".format(type(loops)))
+    if not isinstance(directed, bool):
+        raise TypeError("`directed` should be a boolean. You passed %s.".format(type(boolean)))
+    # Check n
+    if not isinstance(n, (int)):
+        msg = "n must be a int, not {}.".format(type(n))
+        raise TypeError(msg)
+    # Check edge_comm
+    edge_comm = np.array(edge_comm)
+    if not isinstance(edge_comm, np.ndarray):
+        msg = "edge_comm must be a square numpy array or matrix."
+        raise TypeError(msg)
+    if not np.all(edge_comm == edge_comm.astype(int)):
+        msg = "`edge_comm` contains non-natural number entries. A value is not an integer."
+        raise TypeError(msg)
+    edge_comm = edge_comm.astype(int)
+    K = edge_comm.max()  # number of communities
+    if loops:
+        if edge_comm.min() != 1:
+            msg = "`edge_comm` should all be numbered sequentially from 1:K. The minimum is not 1."
+            raise TypeError(msg)
+    elif not loops:
+        if (edge_comm[~np.eye(edge_comm.shape[0], dtype=bool)].min() != 1):
+            msg = """Since your graph has no loops, all off-diagonal elements of`edge_comm`
+            should have a minimum of 1. The minimum is not 1."""
+            raise TypeError(msg)
+        if np.any(np.diagonal(edge_comm) != 0):
+            msg = """You requested a loopless graph, but assigned a diagonal element to a 
+            non-zero community. All diagonal elements of `edge_comm` should be zero if
+            `loops` is False."""
+            raise TypeError(msg)
+    n = edge_comm.shape[0]
+    if (edge_comm.shape[0] != edge_comm.shape[1]):
+        msg = "`edge_comm` should be square. `edge_comm` has dimensions [{%d}, {%d}]"
+        raise TypeError(msg.format(edge_comm.shape[0], edge_comm.shape[1]))
+    if (len(edge_comm.shape) != 2):
+        msg = "`edge_comm` should be a 2d array or a matrix, but `edge_comm` has {%d} dimensions."
+        raise TypeError(msg.format(len(edge_comm.shape)))
+    edge_comm = np.matrix(edge_comm)
+    if (not directed) and np.any(edge_comm != edge_comm.T):
+        msg = "You requested an undirected SIEM, but `edge_comm` is directed."
+    
+    # Check p
+    if isinstance(p, float) or isinstance(p, int):
+        p = p*np.ones(K)
+    if not isinstance(p, (list, np.ndarray)):
+        msg = "p must be a list or np.array, not {}.".format(type(p))
+        raise TypeError(msg)
+    else:
+        p = np.array(p)
+        if not np.issubdtype(p.dtype, np.number):
+            msg = "There are non-numeric elements in p"
+            raise ValueError(msg)
+        elif np.any(p < 0) or np.any(p > 1):
+            msg = "Values in p must be in between 0 and 1."
+            raise ValueError(msg)
+        elif len(p) != K:
+            msg = "# of Probabilities in `p` and # of Communities in `edge_comm` Don't match up."
+            raise ValueError(msg)
+    # Check wt and wtargs
+    if (wt is not None):
+        if callable(wt):
+            #extend the function to size of k 
+            wt = np.full(K, wt, dtype=object)
+            wtargs = np.full(len(edge_comm), wtargs, dtype=object)
+    if (wt is not None) and (wtargs is not None): 
+        if callable(wt):
+            #extend the function to size of k 
+            wt = np.full(K, wt, dtype=object)
+            wtargs = np.full(len(edge_comm), wtargs, dtype=object)
+        elif type(wt) == list:
+            if all(callable(x) for x in wt): 
+                # if not object, check dimensions
+                if len(wt) != K:
+                    msg = "wt must have size k, not {}".format(len(wt))
+                    raise ValueError(msg)
+                if len(wtargs) != K:
+                    msg = "wtargs must have size k , not {}".format(len(wtargs))
+                    raise ValueError(msg)
+                # check if each element is a function
+                for element in wt.ravel():
+                    if not callable(element):
+                        msg = "{} is not a callable function.".format(element)
+                        raise TypeError(msg)
+            else: 
+                msg = "list must contain all callable objects"
+                raise ValueError(msg)
+        else:
+            msg = "wt must be a callable object or list of callable objects"
+            raise ValueError(msg)
+
+    # End Checks, begin simulation
+    A = np.zeros((n,n))
+    for i in range(1, K+1):
+        edge_comm_i = (edge_comm == i)
+        A[np.where(edge_comm_i)] = bernoulli.rvs(p[i-1], size=edge_comm_i.sum())
+        if (wt is not None) and (wtargs is None):
+            A[np.where(edge_comm_i)] = A[np.where(edge_comm_i)]*wt[i]()
+        if (wt is not None) and (wtargs is not None):
+            A[np.where(edge_comm_i)] = A[np.where(edge_comm_i)]*wt[i](**wtargs[i])
+    # if not directed, just look at upper triangle and duplicate
+    if not directed:
+        A = symmetrize(A, method="triu")
+    if (return_labels):
+        return (A, edge_comm)
+    return A
 
 def sbm(
     n,
