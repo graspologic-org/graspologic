@@ -320,7 +320,8 @@ def siem(
     loops=False,
     wt=None,
     wtargs=None,
-    return_labels=False):
+    return_labels=False,
+):
     """
     Samples a graph from the structured independent edge model (SIEM) 
     SIEM produces a graph with specified communities, in which each community can
@@ -369,9 +370,13 @@ def siem(
     """
     # check booleans
     if not isinstance(loops, bool):
-        raise TypeError("`loops` should be a boolean. You passed %s.".format(type(loops)))
+        raise TypeError(
+            "`loops` should be a boolean. You passed %s.".format(type(loops))
+        )
     if not isinstance(directed, bool):
-        raise TypeError("`directed` should be a boolean. You passed %s.".format(type(directed)))
+        raise TypeError(
+            "`directed` should be a boolean. You passed %s.".format(type(directed))
+        )
     # Check n
     if not isinstance(n, (int)):
         msg = "n must be a int, not {}.".format(type(n))
@@ -385,7 +390,9 @@ def siem(
             msg = "edge_comm must contain only natural numbers. Contains non-integers."
             raise ValueError(msg)
     except ValueError as err:
-        err.message = "edge_comm must contain only natural numbers. Contains non-numerics."
+        err.message = (
+            "edge_comm must contain only natural numbers. Contains non-numerics."
+        )
         raise
     edge_comm = edge_comm.astype(int)
     K = edge_comm.max()  # number of communities
@@ -397,7 +404,7 @@ def siem(
             msg = "`edge_comm` should be numbered sequentially from 1:K. The sequence is not consecutive."
             raise ValueError(msg)
     elif not loops:
-        if (edge_comm[~np.eye(edge_comm.shape[0], dtype=bool)].min() != 1):
+        if edge_comm[~np.eye(edge_comm.shape[0], dtype=bool)].min() != 1:
             msg = """Since your graph has no loops, all off-diagonal elements of`edge_comm`
             should have a minimum of 1. The minimum is not 1."""
             raise ValueError(msg)
@@ -410,20 +417,20 @@ def siem(
             msg = """`edge_comm` should be numbered sequentially from 1:K for off-diagonals,
             and 0s on the diagonal. The sequence is not consecutive."""
             raise ValueError(msg)
-        
+
     n = edge_comm.shape[0]
-    if (edge_comm.shape[0] != edge_comm.shape[1]):
+    if edge_comm.shape[0] != edge_comm.shape[1]:
         msg = "`edge_comm` should be square. `edge_comm` has dimensions [%d, %d]"
         raise ValueError(msg.format(edge_comm.shape[0], edge_comm.shape[1]))
-    if (len(edge_comm.shape) != 2):
+    if len(edge_comm.shape) != 2:
         msg = "`edge_comm` should be a 2d array or a matrix, but `edge_comm` has %d dimensions."
         raise ValueError(msg.format(len(edge_comm.shape)))
     if (not directed) and np.any(edge_comm != edge_comm.T):
         msg = "You requested an undirected SIEM, but `edge_comm` is directed."
-    
+
     # Check p
     if isinstance(p, float) or isinstance(p, int):
-        p = p*np.ones(K)
+        p = p * np.ones(K)
     if not isinstance(p, (list, np.ndarray)):
         msg = "p must be a list or np.array, not {}.".format(type(p))
         raise TypeError(msg)
@@ -442,51 +449,57 @@ def siem(
             raise ValueError(msg)
     # Check wt and wtargs
     if (wt is not None) and (wtargs is None):
-        raise TypeError("wtargs should be a dictionary or a list of dictionaries. It is of type None.")
-    if (wt is not None) and (wtargs is not None): 
+        raise TypeError(
+            "wtargs should be a dictionary or a list of dictionaries. It is of type None."
+        )
+    if (wt is not None) and (wtargs is not None):
         if callable(wt):
-            #extend the function to size of K
+            # extend the function to size of K
             wt = np.full(K, wt, dtype=object)
             if isinstance(wtargs, dict):
                 wtargs = np.full(K, wtargs, dtype=object)
-            else:        
+            else:
                 for wtarg in wtargs:
                     if not isinstance(wtarg, dict):
-                        raise TypeError("wtarg should be a dictionary or a list of dictionaries.")
+                        raise TypeError(
+                            "wtarg should be a dictionary or a list of dictionaries."
+                        )
         elif isinstance(wt, list):
-            if all(callable(x) for x in wt): 
+            if all(callable(x) for x in wt):
                 # if not object, check dimensions
                 if not isinstance(wtargs, list):
-                    raise TypeError("Since wt is a list, wtargs should be a list of dictionaries.")
+                    raise TypeError(
+                        "Since wt is a list, wtargs should be a list of dictionaries."
+                    )
                 if len(wt) != K:
                     msg = "wt must have size K, not {}".format(len(wt))
                     raise ValueError(msg)
                 if len(wtargs) != K:
                     msg = "wtargs must have size K, not {}".format(len(wtargs))
                     raise ValueError(msg)
-            else: 
+            else:
                 msg = "wt must contain all callable objects."
                 raise TypeError(msg)
         else:
             msg = "wt must be a callable object or list of callable objects"
             raise TypeError(msg)
 
-
     # End Checks, begin simulation
-    A = np.zeros((n,n))
-    for i in range(1, K+1):
-        edge_comm_i = (edge_comm == i)
-        A[np.where(edge_comm_i)] = bernoulli.rvs(p[i-1], size=edge_comm_i.sum())
+    A = np.zeros((n, n))
+    for i in range(1, K + 1):
+        edge_comm_i = edge_comm == i
+        A[np.where(edge_comm_i)] = bernoulli.rvs(p[i - 1], size=edge_comm_i.sum())
 
-        if (wt is not None):
+        if wt is not None:
             for k, l in zip(*np.where(edge_comm_i)):
-                A[k,l] = A[k,l]*wt[i-1](**wtargs[i-1])
+                A[k, l] = A[k, l] * wt[i - 1](**wtargs[i - 1])
     # if not directed, just look at upper triangle and duplicate
     if not directed:
         A = symmetrize(A, method="triu")
-    if (return_labels):
+    if return_labels:
         return (A, edge_comm)
     return A
+
 
 def sbm(
     n,

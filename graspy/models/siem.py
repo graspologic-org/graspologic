@@ -8,6 +8,7 @@ from ..utils import (
 )
 from .base import BaseGraphEstimator, _calculate_p
 
+
 class SIEMEstimator(BaseGraphEstimator):
     """
     Stochastic Independent Edge Model
@@ -22,48 +23,25 @@ class SIEMEstimator(BaseGraphEstimator):
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
         the graph where a node connects to itself. 
-    n_components : int, optional (default=None)
-        Desired dimensionality of embedding for clustering to find communities.
-        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions 
-        will be chosen by :func:`~graspy.embed.select_dimension``.
-    min_comm : int, optional (default=1)
-        The minimum number of communities (blocks) to consider. 
-    max_comm : int, optional (default=10)
-        The maximum number of communities (blocks) to consider (inclusive).
-    cluster_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
-    embed_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspy.embed.AdjacencySpectralEmbed`
     Attributes
     ----------
-    block_p_ : np.ndarray, shape (n_blocks, n_blocks)
-        The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
-        represents the probability of an edge between block :math:`i` and block 
-        :math:`j`.
-    p_mat_ : np.ndarray, shape (n_verts, n_verts)
-        Probability matrix :math:`P` for the fit model, from which graphs could be
-        sampled.
-    vertex_assignments_ : np.ndarray, shape (n_verts)
-        A vector of integer labels corresponding to the predicted block that each node 
-        belongs to if ``y`` was not passed during the call to ``fit``. 
-    block_weights_ : np.ndarray, shape (n_blocks)
-        Contains the proportion of nodes that belong to each block in the fit model.
+    model: a dictionary of community names to a dictionary of edge indices and weights.
+    K: the number of unique edge communities.
     See also
     --------
     graspy.simulations.siem
     """
-    def __init__(
-        self,
-        directed=True,
-        loops=False
-    ):
+
+    def __init__(self, directed=True, loops=False):
         super().__init__(directed=directed, loops=loops)
         self.model = {}
+        self.K = None
 
-    def fit(self, graph, edge_comm, weighted=True, method='nonpar'):
+    def fit(self, graph, edge_comm, weighted=True):
         """
         Fits an SIEM to a graph.
         Parameters
+        ----------
         graph : array_like [nxn] or networkx.Graph with n vertices
             Input graph to fit
         edge_comm : array_like [n x n]
@@ -93,12 +71,14 @@ class SIEMEstimator(BaseGraphEstimator):
         if edge_comm.shape[0] != edge_comm.shape[1]:
             raise ValueError("`edge_comm` is not a square matrix.")
         if not np.ndarray.all(graph.shape == edge_comm.shape):
-            er_msg = """
+            msg = """
             Your edge communities do not have the same number of vertices as the graph.
             Graph has {%d} vertices; edge community has {%d} vertices.
-            """.format(graph.shape[0], edge_comm.shape[0])
-            raise ValueError(er_msg)
-            
+            """.format(
+                graph.shape[0], edge_comm.shape[0]
+            )
+            raise ValueError(msg)
+
         if not weighted:
             if any(elem not in [0, 1] for elem in np.unique(graph)):
                 msg = """You requested weighted as False, but have passed a weighted graph. 
@@ -111,6 +91,10 @@ class SIEMEstimator(BaseGraphEstimator):
             except TypeError as err:
                 err.message = "You have asked for thresholding, but did not pass a number to `weighted`."
                 raise
-        siem = {x: {'edges': np.where(edge_comm == x), 'weights': graph[edge_comm == x]} for x in np.unique(edge_comm)}
+        siem = {
+            x: {"edges": np.where(edge_comm == x), "weights": graph[edge_comm == x]}
+            for x in np.unique(edge_comm)
+        }
         self.model = siem
-            
+        self.K = len(self.model.keys())
+        return
