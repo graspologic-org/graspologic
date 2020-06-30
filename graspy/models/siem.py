@@ -66,7 +66,7 @@ class SIEMEstimator(BaseGraphEstimator):
         Parameters
         graph : array_like [nxn] or networkx.Graph with n vertices
             Input graph to fit
-        edge_comm : array_like [nxn]
+        edge_comm : array_like [n x n]
             A matrix giving the community assignments for each edge within the adjacency matrix
             of `graph`.
 
@@ -98,3 +98,19 @@ class SIEMEstimator(BaseGraphEstimator):
             Graph has {%d} vertices; edge community has {%d} vertices.
             """.format(graph.shape[0], edge_comm.shape[0])
             raise ValueError(er_msg)
+            
+        if not weighted:
+            if any(elem not in [0, 1] for elem in np.unique(graph)):
+                msg = """You requested weighted as False, but have passed a weighted graph. 
+                An unweighted graph contains only 0s or 1s. Did you mean to pass a threshold?"""
+                raise ValueError(msg)
+        if not isinstance(weighted, bool):
+            try:
+                graph[graph < weighted] = 0
+                graph[graph >= weighted] = 1
+            except TypeError as err:
+                err.message = "You have asked for thresholding, but did not pass a number to `weighted`."
+                raise
+        siem = {x: {'edges': np.where(edge_comm == x), 'weights': graph[edge_comm == x]} for x in np.unique(edge_comm)}
+        self.model = siem
+            
