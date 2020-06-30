@@ -395,9 +395,159 @@ class Test_SIEM(unittest.TestCase):
         np.random.seed(1)
         A = siem(self.n, 1, self.Esy_loop, loops=True)
         self.assertTrue(A.sum() == 100**2)  # test that matrix is all 1s
+        np.random.seed(1)
         A = siem(self.n, [1, .5], self.Esy_loop, loops=True)
         self.assertTrue(A[self.Esy_loop == 1].sum() == (100**2)/2)
-        self.assertTrue(np.allclose(A[self.Esy_loop == 2].mean(), 0.5, atol=.01))
+        self.assertTrue(np.allclose(A[self.Esy_loop == 2].mean(), 0.5, atol=.02))
+
+        np.random.seed(1)
+        A = siem(self.n, [.75, .25], self.Esy_loop, loops=True)
+        self.assertTrue(np.allclose(A[self.Esy_loop == 1].mean(), .75, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_loop == 2].mean(), 0.25, atol=.02))
+        pass
+
+    def test_uw_siem_loopless(self):
+        np.random.seed(1)
+        A = siem(self.n, 1, self.Esy_ll, loops=False)
+        self.assertTrue(A.sum() == 100*99)  # test that matrix is all 1s except diagonal
+        np.random.seed(1)
+        A = siem(self.n, [.75, .5], self.Esy_ll, loops=False)
+        self.assertTrue(np.allclose(A[self.Esy_ll == 1].mean(), .75, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_ll == 2].mean(), 0.5, atol=.02))
+        self.assertTrue(np.all(np.diag(A) == 0))
+        self.assertTrue(np.all(A[self.Esy_ll == 0] == 0))
+        pass
+
+    def test_wt_siem_loops(self):
+        np.random.seed(1)
+        # probability of edge is 1 case
+        p = 1
+        # single wt/wtarg
+        A = siem(self.n, p, self.Esy_loop, loops=True, wt=np.random.normal, wtargs={"loc":0, "scale":1})
+        self.assertTrue(np.allclose(A.mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A.std(), 1, atol=.05))
+
+        # single wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_loop, loops=True, wt=np.random.normal,
+            wtargs=[{"loc":0, "scale":1}, {"loc":2, "scale":.5}])
+        self.assertTrue(np.allclose(A[self.Esy_loop == 1].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_loop == 1].std(), 1, atol=.05))
+        self.assertTrue(np.allclose(A[self.Esy_loop == 2].mean(), 2, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_loop == 2].std(), .5, atol=.05))
+
+        # K wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_loop, loops=True, wt=[np.random.normal, np.random.poisson],
+            wtargs=[{"loc":0, "scale":1}, {"lam":2}])
+        self.assertTrue(np.allclose(A[self.Esy_loop == 1].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_loop == 1].std(), 1, atol=.05))
+        self.assertTrue(np.allclose(A[self.Esy_loop == 2].mean(), 2, atol=.02))
+
+        # zero-inflated cases
+        p = [.5, .8]
+        np.random.seed(1)
+        # single wt/wtarg
+        A = siem(self.n, p, self.Esy_loop, loops=True, wt=np.random.normal, wtargs={"loc":1, "scale":1})
+        self.assertTrue(np.allclose((A != 0).mean(), .65, atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_loop == 1] != 0).mean(), p[0], atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_loop == 2] != 0).mean(), p[1], atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 1, A != 0)].mean(), 1, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 1, A != 0)].std(), 1, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 2, A != 0)].mean(), 1, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 2, A != 0)].std(), 1, atol=.02))
+
+        # single wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_loop, loops=True, wt=np.random.normal,
+            wtargs=[{"loc":0, "scale":1}, {"loc":2, "scale":.5}])
+        self.assertTrue(np.allclose((A != 0).mean(), .65, atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_loop == 1] != 0).mean(), p[0], atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_loop == 2] != 0).mean(), p[1], atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 1, A != 0)].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 1, A != 0)].std(), 1, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 2, A != 0)].mean(), 2, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 2, A != 0)].std(), .5, atol=.02))
+
+        # K wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_loop, loops=True, wt=[np.random.normal, np.random.exponential],
+            wtargs=[{"loc":0, "scale":1}, {"scale":.5}])
+        self.assertTrue(np.allclose((A != 0).mean(), .65, atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_loop == 1] != 0).mean(), p[0], atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_loop == 2] != 0).mean(), p[1], atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 1, A != 0)].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 1, A != 0)].std(), 1, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_loop == 2, A != 0)].mean(), .5, atol=.02))
+        pass
+
+    def test_wt_siem_loopless(self):
+        np.random.seed(1)
+        # probability of edge is 1 case
+        p = 1
+        # single wt/wtarg
+        A = siem(self.n, p, self.Esy_ll, loops=False, wt=np.random.normal, wtargs={"loc":0, "scale":1})
+        self.assertTrue(np.allclose(A.mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A.std(), 1, atol=.05))
+        self.assertTrue(np.all(np.diag(A) == 0))
+
+        # single wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_ll, loops=False, wt=np.random.normal,
+            wtargs=[{"loc":0, "scale":1}, {"loc":2, "scale":.5}])
+        self.assertTrue(np.allclose(A[self.Esy_ll == 1].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_ll == 1].std(), 1, atol=.05))
+        self.assertTrue(np.allclose(A[self.Esy_ll == 2].mean(), 2, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_ll == 2].std(), .5, atol=.05))
+        self.assertTrue(np.all(np.diag(A) == 0))
+
+        # K wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_ll, loops=False, wt=[np.random.normal, np.random.poisson],
+            wtargs=[{"loc":0, "scale":1}, {"lam":2}])
+        self.assertTrue(np.allclose(A[self.Esy_ll == 1].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[self.Esy_ll == 1].std(), 1, atol=.05))
+        self.assertTrue(np.allclose(A[self.Esy_ll == 2].mean(), 2, atol=.02))
+        self.assertTrue(np.all(np.diag(A) == 0))
+
+        # zero-inflated cases
+        p = [.5, .8]
+        np.random.seed(1)
+        # single wt/wtarg
+        A = siem(self.n, p, self.Esy_ll, loops=False, wt=np.random.normal, wtargs={"loc":1, "scale":1})
+        self.assertTrue(np.allclose((A != 0).mean(), .65, atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_ll == 1] != 0).mean(), p[0], atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_ll == 2] != 0).mean(), p[1], atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 1, A != 0)].mean(), 1, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 1, A != 0)].std(), 1, atol=.05))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 2, A != 0)].mean(), 1, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 2, A != 0)].std(), 1, atol=.05))
+        self.assertTrue(np.all(np.diag(A) == 0))
+
+        # single wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_ll, loops=False, wt=np.random.normal,
+            wtargs=[{"loc":0, "scale":1}, {"loc":2, "scale":.5}])
+        self.assertTrue(np.allclose((A != 0).mean(), .65, atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_ll == 1] != 0).mean(), p[0], atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_ll == 2] != 0).mean(), p[1], atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 1, A != 0)].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 1, A != 0)].std(), 1, atol=.05))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 2, A != 0)].mean(), 2, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 2, A != 0)].std(), .5, atol=.05))
+        self.assertTrue(np.all(np.diag(A) == 0))
+
+        # K wt/K wtargs
+        np.random.seed(1)
+        A = siem(self.n, p, self.Esy_ll, loops=False, wt=[np.random.normal, np.random.exponential],
+            wtargs=[{"loc":0, "scale":1}, {"scale":.5}])
+        self.assertTrue(np.allclose((A != 0).mean(), .65, atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_ll == 1] != 0).mean(), p[0], atol=.02))
+        self.assertTrue(np.allclose((A[self.Esy_ll == 2] != 0).mean(), p[1], atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 1, A != 0)].mean(), 0, atol=.02))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 1, A != 0)].std(), 1, atol=.05))
+        self.assertTrue(np.allclose(A[np.logical_and(self.Esy_ll == 2, A != 0)].mean(), .5, atol=.05))
+        self.assertTrue(np.all(np.diag(A) == 0))
         pass
 
     def test_bad_inputs(self):
@@ -438,10 +588,35 @@ class Test_SIEM(unittest.TestCase):
             siem(self.n, 1, E, loops=True)
 
         # edge_comm does not contain entries 1:K
+        # edge_comm is not a 2d array or numpy matrix
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Esy_ll)
+            E[E == 2] = 3
+            siem(self.n, 1, E, loops=True)
 
         # edge_comm has a minimum above 1 when loopy
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Ens_loop)
+            E[E == 1] = 3
+            siem(self.n, 1, E, loops=True)
 
-        # edge_comm has a minimum above 1 when loopless in off-diagonals
+        # edge_comm has a minimum above 0 when loopless in off-diagonals
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Esy_ll)
+            E[E == 0] = 1
+            siem(self.n, 1, E, loops=False)
+
+        # edge_comm does not contain 0:K when loopless
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Esy_ll)
+            E[E == 1] = 3
+            siem(self.n, 1, E, loops=False)
+
+        # edge_comm contains 0 in off-diagonal when loopless
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Esy_ll)
+            E[E == 1] = 0
+            siem(self.n, 1, E, loops=False)
 
         # have list p but too many entries
         with self.assertRaises(ValueError):
@@ -501,8 +676,17 @@ class Test_SIEM(unittest.TestCase):
                 wt=[np.random.normal, np.random.normal], wtargs=[0.0, 1.0])
         
         # too few wts
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Esy_ll)
+            E[2,1] = 3
+            siem(self.n, [1,1], E, loops=False, directed=False,
+                wt=[np.random.normal, np.random.normal], wtargs=[0.0, 1.0])
 
         # too many wts
+        with self.assertRaises(ValueError):
+            siem(self.n, [1,1], self.Esy_ll, loops=False, directed=False,
+                wt=[np.random.normal, np.random.normal, np.random.normal], 
+                wtargs=[{"loc": 0.0, "scale":"1.0"}, {"loc": 0.0, "scale":"1.0"}, {"loc": 0.0, "scale":"1.0"}])
         pass
 
 

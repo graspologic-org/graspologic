@@ -393,6 +393,9 @@ def siem(
         if edge_comm.min() != 1:
             msg = "`edge_comm` should all be numbered sequentially from 1:K. The minimum is not 1."
             raise ValueError(msg)
+        if len(np.unique(edge_comm)) != K:
+            msg = "`edge_comm` should be numbered sequentially from 1:K. The sequence is not consecutive."
+            raise ValueError(msg)
     elif not loops:
         if (edge_comm[~np.eye(edge_comm.shape[0], dtype=bool)].min() != 1):
             msg = """Since your graph has no loops, all off-diagonal elements of`edge_comm`
@@ -403,6 +406,11 @@ def siem(
             non-zero community. All diagonal elements of `edge_comm` should be zero if
             `loops` is False."""
             raise ValueError(msg)
+        if len(np.unique(edge_comm)) != K + 1:
+            msg = """`edge_comm` should be numbered sequentially from 1:K for off-diagonals,
+            and 0s on the diagonal. The sequence is not consecutive."""
+            raise ValueError(msg)
+        
     n = edge_comm.shape[0]
     if (edge_comm.shape[0] != edge_comm.shape[1]):
         msg = "`edge_comm` should be square. `edge_comm` has dimensions [%d, %d]"
@@ -437,31 +445,32 @@ def siem(
         raise TypeError("wtargs should be a dictionary or a list of dictionaries. It is of type None.")
     if (wt is not None) and (wtargs is not None): 
         if callable(wt):
-            #extend the function to size of k 
+            #extend the function to size of K
             wt = np.full(K, wt, dtype=object)
-            wtargs = np.full(len(edge_comm), wtargs, dtype=object)
+            if isinstance(wtargs, dict):
+                wtargs = np.full(K, wtargs, dtype=object)
+            else:        
+                for wtarg in wtargs:
+                    if not isinstance(wtarg, dict):
+                        raise TypeError("wtarg should be a dictionary or a list of dictionaries.")
         elif isinstance(wt, list):
             if all(callable(x) for x in wt): 
                 # if not object, check dimensions
                 if not isinstance(wtargs, list):
                     raise TypeError("Since wt is a list, wtargs should be a list of dictionaries.")
                 if len(wt) != K:
-                    msg = "wt must have size k, not {}".format(len(wt))
+                    msg = "wt must have size K, not {}".format(len(wt))
                     raise ValueError(msg)
                 if len(wtargs) != K:
-                    msg = "wtargs must have size k , not {}".format(len(wtargs))
+                    msg = "wtargs must have size K, not {}".format(len(wtargs))
                     raise ValueError(msg)
-                # check if each element is a function
-                for element in wt:
-                    if not callable(element):
-                        msg = "{} is not a callable function.".format(element)
-                        raise TypeError(msg)
             else: 
-                msg = "list must contain all callable objects"
+                msg = "wt must contain all callable objects."
                 raise TypeError(msg)
         else:
             msg = "wt must be a callable object or list of callable objects"
             raise TypeError(msg)
+
 
     # End Checks, begin simulation
     A = np.zeros((n,n))
@@ -471,7 +480,7 @@ def siem(
 
         if (wt is not None):
             for k, l in zip(*np.where(edge_comm_i)):
-                A[k,l] = A[k,l]*wt[i](**wtargs[i])
+                A[k,l] = A[k,l]*wt[i-1](**wtargs[i-1])
     # if not directed, just look at upper triangle and duplicate
     if not directed:
         A = symmetrize(A, method="triu")
