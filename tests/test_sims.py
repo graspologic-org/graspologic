@@ -341,6 +341,171 @@ class Test_ZINP(unittest.TestCase):
             dc = np.array(np.random.power)
             er_np(self.n, self.p, dc=dc)
 
+def modular_edges(n):
+    """
+    A function for generating modular sbm edge communities.
+    """
+    m = int(n/2)
+    edge_comm = np.zeros((n,n))
+    for i in range(n):
+        for j in range(n):
+            if ( (i<m) & (j<m)) or ( (i>=m ) & (j>=m) ):
+                edge_comm[i,j] = 1
+            else:
+                edge_comm[i,j] = 2
+    return edge_comm
+
+def diag_edges(n):
+    """
+    A function for generating diagonal SIEM edge communities.
+    """
+    m = int(n/2)
+    edge_comm = np.zeros((n,n))
+    for i in range(n):
+        for j in range(n):
+            if (i == j + m) or (j == i + m):
+                edge_comm[i,j] = 1
+            else:
+                edge_comm[i,j] = 2
+    return edge_comm
+
+class Test_SIEM(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.n = 100  # number of vertices
+        # loopy symmetric edge communities
+        cls.Esy_loop = modular_edges(cls.n)
+        # loopy asymmetric edge communities
+        cls.Ens_loop = np.copy(cls.Esy_loop)
+        cls.Ens_loop[2, 1] = 2
+        # loopless symmetric
+        cls.Esy_ll = cls.Esy_loop - np.diag(np.diag(cls.Esy_loop))
+        # loopless asymmetric
+        cls.Esy_ll = cls.Esy_loop - np.diag(np.diag(cls.Ens_loop))
+        cls.Ediag = diag_edges(cls.n)
+
+    def test_siem_label(self):
+        np.random.seed(1)
+        A, E = siem(self.n, 1, self.Ens_loop, return_labels=True, loops=True)
+        self.assertTrue(np.allclose(E, self.Ens_loop))
+        pass
+
+    def test_uw_siem_loops(self):
+        np.random.seed(1)
+        A = siem(self.n, 1, self.Esy_loop, loops=True)
+        self.assertTrue(A.sum() == 100**2)  # test that matrix is all 1s
+        A = siem(self.n, [1, .5], self.Esy_loop, loops=True)
+        self.assertTrue(A[self.Esy_loop == 1].sum() == (100**2)/2)
+        self.assertTrue(np.allclose(A[self.Esy_loop == 2].mean(), 0.5, atol=.01))
+        pass
+
+    def test_bad_inputs(self):
+        # n is not passed as an integer
+        with self.assertRaises(TypeError):
+            n = "1"
+            siem(n, 1, self.Ens_loop)
+        # loops is not a boolean
+        with self.assertRaises(TypeError):
+            n = "1"
+            siem(n, 1, self.Ens_loop, loops="maybe")
+
+        # directed is not a boolean
+        with self.assertRaises(TypeError):
+            siem(self.n, 1, self.Ens_loop, directed="yes")
+
+        # edge_comm contains non-numeric entries
+        with self.assertRaises(ValueError):
+            E = np.array([["yes", "no"], ["q", "a"]])
+            siem(2, 1, E)
+
+        # edge_comm contains numeric, but non-integer entries
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Ens_loop)
+            E[1,1] = 1.111
+            siem(self.n, 1, E, loops=True)
+
+
+        # edge_comm contains negative entries
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Ens_loop)
+            E[1,1] = -1
+            siem(self.n, 1, E, loops=True)
+
+        # edge_comm is not a 2d array or numpy matrix
+        with self.assertRaises(ValueError):
+            E = np.dstack((self.Ens_loop, self.Ens_loop))
+            siem(self.n, 1, E, loops=True)
+
+        # edge_comm does not contain entries 1:K
+
+        # edge_comm has a minimum above 1 when loopy
+
+        # edge_comm has a minimum above 1 when loopless in off-diagonals
+
+        # have list p but too many entries
+        with self.assertRaises(ValueError):
+            siem(self.n, [1,1,1], self.Ens_loop, loops=True)
+
+        # have list p but too few entries
+        with self.assertRaises(ValueError):
+            E = np.copy(self.Ens_loop)
+            E[1,1] = 3
+            siem(self.n, [1,1], E, loops=True)
+
+        # pass in p with non-numerics
+        with self.assertRaises(ValueError):
+            siem(self.n, ["yes", 1, 1], self.Ens_loop, loops=True)
+
+        # pass in p with non-probability floats
+        with self.assertRaises(ValueError):
+            siem(self.n, [1.5, 1, 1], self.Ens_loop, loops=True)
+
+        # pass in p that is not a list or vector
+        with self.assertRaises(ValueError):
+            siem(self.n, np.ones((2, 2)), self.Ens_loop, loops=True)
+
+        # request loopless, but pass loopy edge communities
+        with self.assertRaises(ValueError):
+            siem(self.n, [1,1], self.Ens_loop, loops=False)
+
+        # request loopy, but pass in loopless edge communities
+        with self.assertRaises(ValueError):
+            siem(self.n, [1,1], self.Esy_ll, loops=True, directed=False)
+
+        # request undirected, but pass in asymmetric edge communities
+        with self.assertRaises(ValueError):
+            siem(self.n, [1,1], self.Esy_ll, directed=False, loops=True)
+
+        # wt is not callable
+        with self.assertRaises(TypeError):
+            siem(self.n, [1,1], self.Esy_ll, loops=False, directed=False, wt="test", wtargs={})
+
+        # wt is a list, but wtargs is None
+        with self.assertRaises(TypeError):
+            siem(self.n, [1,1], self.Esy_ll, loops=False, directed=False, wt=np.random.normal, wtargs=None)
+
+        # wt is a list, but wtargs is not
+        with self.assertRaises(TypeError):
+            siem(self.n, [1,1], self.Esy_ll, loops=False, directed=False,
+                wt=[np.random.normal, np.random.normal], wtargs={"loc": 0.0, "scale":"1.0"})
+
+        # wtargs is not a dictionary
+        with self.assertRaises(TypeError):
+            siem(self.n, [1,1], self.Esy_ll, loops=False, directed=False,
+                wt=[np.random.normal, np.random.normal], wtargs="test2")
+
+        # wtargs is a list of non-dictionaries
+        with self.assertRaises(TypeError):
+            siem(self.n, [1,1], self.Esy_ll, loops=False, directed=False,
+                wt=[np.random.normal, np.random.normal], wtargs=[0.0, 1.0])
+        
+        # too few wts
+
+        # too many wts
+        pass
+
+
 
 class Test_WSBM(unittest.TestCase):
     @classmethod
