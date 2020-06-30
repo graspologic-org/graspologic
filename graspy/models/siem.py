@@ -1,3 +1,13 @@
+import numpy as np
+
+from ..utils import (
+    import_graph,
+    is_unweighted,
+    remove_loops,
+    symmetrize,
+)
+from .base import BaseGraphEstimator, _calculate_p
+
 class SIEMEstimator(BaseGraphEstimator):
     """
     Stochastic Independent Edge Model
@@ -87,4 +97,4 @@ class SIEMEstimator(BaseGraphEstimator):
             Your edge communities do not have the same number of vertices as the graph.
             Graph has {%d} vertices; edge community has {%d} vertices.
             """.format(graph.shape[0], edge_comm.shape[0])
-            raise ValueError()
+            raise ValueError(er_msg)
