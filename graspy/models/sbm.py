@@ -152,6 +152,75 @@ class SBMEstimator(BaseGraphEstimator):
         )
         vertex_assignments = gc.fit_predict(latent)
         self.vertex_assignments_ = vertex_assignments
+    
+    def _fisher_exact_block_est(self, graph, y):
+        """
+        A function for fisher exact block estimation for a 2-block SBM.
+
+        """
+        return
+
+    def _chi2_exact_block_est(self, graph, y):
+        """
+        A function for fisher exact block estimation for a 2-block SBM.
+
+        """
+        return
+
+    def _lrt_block_est(self, graph, y):
+        """
+        A function for fisher exact block estimation for a 2-block SBM.
+
+        """
+        return
+
+    def estimate_block_structure(self, graph, y, candidates, method='fisher_exact'):
+        """
+        Estimate the block structure for 2-block SBMs.
+        
+        Parameters
+        ----------
+        graph: array_like or networkx.Graph
+            Input graph to estimate a block structure for.
+        y: array_like, length graph.shape[0]
+            Categorical labels for the block assignments of the graph. Should have 
+            2 unique entries.
+        candidates: list of strings
+            List of candidate models to sequentially test, in order, and will accept the candidate with
+            the lowest Holm-Bonferroni corrected p-value.
+            Should be a list of strings, where each entry is a 4-character string with acceptable
+            entries "a", "b", "c", "d". The string :math:`x_{11}x_{12}x_{21}x_{22}` where :math:`x_{ij} \in \{"a", "b", "c", "d"\}`
+            will test the candidate model :math:`[x_{11}, x_{21}; x_{12}, x_{22}]`, where entries that differ
+            in the candidate string will correspond to a test of whether those entries differ in distribution.
+            For example, the candidate models `["aaab", "abba"]` corresponds to testing 
+            :math:`H_0: F_{11} = F_{12} = F_{21} = F_{22}` against :math:`H_1: F_{11} = F_{12} = F_{21} \neq F_{22}` and
+            :math:`H_2: F_{11} = F_{22} \neq F_{21} = F_{12}`.
+        method: string (default="fisher_exact")
+            The method to use for estimating block structure. Supported options are
+            `"fisher_exact"` (fisher exact test), `"chi2"` (chi-squared test), and `"lrt"` (likelihood ratio test)
+            for unweighted graphs.
+        Returns
+        -------
+        block_structure: A string indicating the optimal block structure.
+        p-value: the p-value associated with the test of the relevant candidate models.
+        """
+        graph = import_graph(graph)
+
+        if len(set(y)) != 2:
+            raise ValueError("`y` vertex labels should have exactly 2 unique entries.")
+        if method not in ["fisher_exact", "chi2", "lrt"]:
+            raise ValueError("You have passed an unsupported method.")
+        if (not is_unweighted(graph)) and (method in ["fisher_exact", "chi2", "lrt"]):
+                raise ValueError("You have passed an unsupported method given a weighted graph.")
+        # run appropriate test
+        if method == "fisher_exact":
+            return _fisher_exact_block_est(graph, y)
+        elif method == "chi2":
+            return _chi2_block_est(graph, y)
+        elif method == "lrt":
+            return _lrt_block_est(graph, y)
+        else:
+            raise NotImplementedError("Estimating block structure only implemented for unweighted graphs.")
 
     def fit(self, graph, y=None):
         """

@@ -281,6 +281,38 @@ class TestSBM:
         e.fit(self.graph)
         assert e._n_parameters() == (1 + 3)
 
+    def test_SBM_blockest_fisher(self):
+        p = np.array([[1,.25],[.25,.25]])
+        pass
+
+    def test_SBM_blockest_chi2(self):
+        pass
+
+    def test_SBM_blockest_lrt(self):
+        pass
+
+    def test_SBM_blockest_badinputs(self):
+        np.random.seed(8888)
+        B = np.array(
+            [.75, .5], [.5, .75]
+        )
+        n = np.array([100, 100])
+        labels = _n_to_labels(n)
+        g_uw = sbm(n, B, directed=True, loops=False)
+        g_wt = sbm(n, B, directed=True, loops=False, wt=np.random.normal, wtargs={"loc":1, "scale":1})
+        e = SBMEstimator()
+        # can't determine optimal block structure for more than 2x2 case
+        with self.assertRaises(ValueError):
+            e.estimate_block_structure(g, _n_to_labels(np.array([50, 50, 50, 50])), ["aaab"])
+        # unsupported methods
+        with self.assertRaises(ValueError):
+            e.estimate_block_structure(g, labels, ["aaab"])
+
+        # improper method requested for weighted graph
+        with self.assertRaises(ValueError):
+            pass
+        pass
+
 
 class TestDCSBM:
     @classmethod
