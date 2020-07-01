@@ -220,6 +220,7 @@ class Test_ZINP(unittest.TestCase):
         self.assertFalse(is_symmetric(Awt))
         self.assertFalse(is_loopless(Abin))
         self.assertFalse(is_loopless(Awt))
+        pass
 
         # check dimensions
         self.assertTrue(Abin.shape == (self.n, self.n))

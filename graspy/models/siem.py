@@ -7,6 +7,7 @@ from ..utils import (
     symmetrize,
 )
 from .base import BaseGraphEstimator, _calculate_p
+import warnings
 
 
 class SIEMEstimator(BaseGraphEstimator):
@@ -27,6 +28,7 @@ class SIEMEstimator(BaseGraphEstimator):
     ----------
     model: a dictionary of community names to a dictionary of edge indices and weights.
     K: the number of unique edge communities.
+    n_vertices: the number of vertices in the graph.
     See also
     --------
     graspy.simulations.siem
@@ -36,8 +38,9 @@ class SIEMEstimator(BaseGraphEstimator):
         super().__init__(directed=directed, loops=loops)
         self.model = {}
         self.K = None
+        self._has_been_fit = False
 
-    def fit(self, graph, edge_comm, weighted=True):
+    def fit(self, graph, edge_comm):
         """
         Fits an SIEM to a graph.
         Parameters
@@ -47,19 +50,6 @@ class SIEMEstimator(BaseGraphEstimator):
         edge_comm : array_like [n x n]
             A matrix giving the community assignments for each edge within the adjacency matrix
             of `graph`.
-
-            To ignore an edge, set the value to "None"
-        weighted: boolean or float (default = True)
-            Boolean: True - do nothing or False - ensure everything is 0 or 1
-            Float: binarize and use float as cutoff
-        method: string (default = 'nonpar')
-            method == 'nonpar': store all of the edge weights within a community, as a dictionary of lists
-                (keys are unique community names; values are a list of the edges associated with that
-                community).
-            method == 'mean': store the mean of all edges associated with each community as a dictionary
-                (keys are unique community names; values are the means).
-            method == 'normal': store the mean, and variance, of all edges associated with each community as
-            a dictionary (keys are unique community names) of dictionaries (keys are mean and variance, values are the values).
         """
         graph = import_graph(graph)
 
@@ -70,31 +60,77 @@ class SIEMEstimator(BaseGraphEstimator):
             raise ValueError("`graph` is not a square adjacency matrix.")
         if edge_comm.shape[0] != edge_comm.shape[1]:
             raise ValueError("`edge_comm` is not a square matrix.")
-        if not np.ndarray.all(graph.shape == edge_comm.shape):
+        if not graph.shape == edge_comm.shape:
             msg = """
             Your edge communities do not have the same number of vertices as the graph.
-            Graph has {%d} vertices; edge community has {%d} vertices.
+            Graph has %d vertices; edge community has %d vertices.
             """.format(
                 graph.shape[0], edge_comm.shape[0]
             )
             raise ValueError(msg)
 
-        if not weighted:
-            if any(elem not in [0, 1] for elem in np.unique(graph)):
-                msg = """You requested weighted as False, but have passed a weighted graph. 
-                An unweighted graph contains only 0s or 1s. Did you mean to pass a threshold?"""
-                raise ValueError(msg)
-        if not isinstance(weighted, bool):
-            try:
-                graph[graph < weighted] = 0
-                graph[graph >= weighted] = 1
-            except TypeError as err:
-                err.message = "You have asked for thresholding, but did not pass a number to `weighted`."
-                raise
         siem = {
             x: {"edges": np.where(edge_comm == x), "weights": graph[edge_comm == x]}
             for x in np.unique(edge_comm)
         }
         self.model = siem
         self.K = len(self.model.keys())
+        self.graph = graph
+        if (self._has_been_fit):
+            warnings.warn("A model has already been fit. Overwriting previous model...")
+        self._has_been_fit = True
         return
+    
+    def summarize(self, wts, wtargs):
+        """
+        Allows users to compute summary statistics for each edge community in the model.
+        
+        Parameters
+        ----------
+        wts: dictionary of callables
+            A dictionary of summary statistics to compute for each edge community within the model.
+            The keys should be the name of the summary statistic, and each entry should be a callable
+            function accepting a vector or 1-d array as the first argument. Keys are names of the summary 
+            statistic, and values are the callable objects themselves.
+        wtargs: dictionary of dictionaries
+            A dictionary of dictionaries, where keys correspond to the names of summary statistics,
+            and values are dictionaries of the named parameters desired for the summary function. The
+            keys of `wts` and `wtargs` should be identical. The first key of each of the sub-dictionaries
+            should have a value of `None` and should correspond to the named parameter which will be taken to be
+            the edges associated with each community.
+        Returns
+        -------
+        summary: dictionary of summary statistics
+            A dictionary where keys are edge community names, and values are a dictionary of summary statistics
+            associated with each community.
+        """
+        # check that model has been fit
+        if not self._has_been_fit:
+            raise UnboundLocalError("You must fit a model with fit() before summarizing the model.")
+        # check keys for wt and wtargs are same
+        if set(wts.keys()) != set(wtargs.keys()):
+            raise ValueError("`wts` and `wtargs` should have the same key names.")
+        # check wt for callables
+        for key, wt in wts.items():
+            if not callable(wt):
+                raise TypeError("Each value of `wts` should be a callable object.")
+        # check whether wtargs is a dictionary of dictionaries with first entry being None in sub-dicts
+        for key, wtarg in wtargs.items():
+            if not isinstance(wtarg, dict):
+                raise TypeError("Each value of `wtargs` should be a sub-dictionary of class `dict`.")
+            if wtarg[list(wtarg.keys())[0]] is not None:
+                raise ValueError("The first entry of each sub-dictionary of wtargs should take the value None.")
+                
+        # equivalent of zipping the two dictionaries together
+        wt_mod = {key: (wt, wtargs[key]) for key, wt in wts.items()}
+        
+        summary = {}
+        for edge_comm in self.model.keys():
+            summary[edge_comm] = {}
+            for wt_name, (wt, wtarg) in wt_mod.items():
+                # place the edge weights for this community in the first named
+                # argument, which should be empty
+                wtarg[list(wtarg.keys())[0]] = self.model[edge_comm]["weights"]
+                # and store the summary statistic for this community
+                summary[edge_comm][wt_name] = wt(**wtarg)
+        return summary
