@@ -58,14 +58,12 @@ def diag_edges(n):
     return edge_comm
 
 
-class Test_Model(unittest.TestCase):
+class Test_Model_Fit(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = 100
         # set up edge-communities for relevant graphs
         cls.modular_edges = modular_edges(cls.n)
-        cls.nuis_edges = nuis_edges(cls.n)
-        cls.diag_edges = diag_edges(cls.n)
         cls.model = SIEMEstimator()
 
     def test_uw_case(self):
@@ -89,27 +87,6 @@ class Test_Model(unittest.TestCase):
         self.assertTrue(model.model[2.0]["edges"]) == np.where(
             graph[self.modular_edges == 2]
         )
-        pass
-
-    def test_summary_func(self):
-        np.random.seed(1)
-        graph = siem(
-            self.n,
-            1,
-            self.modular_edges,
-            loops=True,
-            wt=[np.random.normal, np.random.normal],
-            wtargs=[{"loc": 0, "scale": 1}, {"loc": 2, "scale": 1}],
-        )
-        model = deepcopy(self.model)
-        model.fit(graph, self.modular_edges)
-        msum = model.summarize(
-            {"loc": np.mean, "scale": np.std}, {"loc": {}, "scale": {}},
-        )
-        self.assertTrue(np.allclose(msum[1.0]["loc"], 0, atol=0.02))
-        self.assertTrue(np.allclose(msum[1.0]["scale"], 1, atol=0.05))
-        self.assertTrue(np.allclose(msum[2.0]["loc"], 2, atol=0.02))
-        self.assertTrue(np.allclose(msum[2.0]["scale"], 1, atol=0.05))
         pass
 
     def test_bad_inputs(self):
@@ -147,6 +124,46 @@ class Test_Model(unittest.TestCase):
             model = deepcopy(self.model)
             model.fit(graph, self.modular_edges)
 
+        graph = siem(self.n, 0.5, self.modular_edges, loops=True)
+        model = deepcopy(self.model)
+        model.fit(graph, self.modular_edges)
+        # fitting twice causes warning
+        with self.assertWarns(Warning):
+            model_double = deepcopy(model)
+            model_double.fit(graph, self.modular_edges)
+        pass
+
+
+class Test_Model_Summary(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.n = 100
+        # set up edge-communities for relevant graphs
+        cls.modular_edges = modular_edges(cls.n)
+        cls.model = SIEMEstimator()
+
+    def test_summary_func(self):
+        np.random.seed(1)
+        graph = siem(
+            self.n,
+            1,
+            self.modular_edges,
+            loops=True,
+            wt=[np.random.normal, np.random.normal],
+            wtargs=[{"loc": 0, "scale": 1}, {"loc": 2, "scale": 1}],
+        )
+        model = deepcopy(self.model)
+        model.fit(graph, self.modular_edges)
+        msum = model.summarize(
+            {"loc": np.mean, "scale": np.std}, {"loc": {}, "scale": {}},
+        )
+        self.assertTrue(np.allclose(msum[1.0]["loc"], 0, atol=0.02))
+        self.assertTrue(np.allclose(msum[1.0]["scale"], 1, atol=0.05))
+        self.assertTrue(np.allclose(msum[2.0]["loc"], 2, atol=0.02))
+        self.assertTrue(np.allclose(msum[2.0]["scale"], 1, atol=0.05))
+        pass
+
+    def test_bad_inputs(self):
         np.random.seed(1)
         graph = siem(self.n, 0.5, self.modular_edges, loops=True)
         model = deepcopy(self.model)
@@ -155,11 +172,6 @@ class Test_Model(unittest.TestCase):
             model.summarize({}, {})
 
         model.fit(graph, self.modular_edges)
-
-        # fitting twice causes warning
-        with self.assertWarns(Warning):
-            model_double = deepcopy(model)
-            model_double.fit(graph, self.modular_edges)
 
         # summarize with wt and wtargs not having same key names
         with self.assertRaises(ValueError):
@@ -172,4 +184,58 @@ class Test_Model(unittest.TestCase):
         # summarize with wtargs not being a dictionary of sub-dictionaries
         with self.assertRaises(TypeError):
             model.summarize({"mean": np.mean}, {"mean": "a"})
+        pass
+
+
+class Test_Model_Comparison(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.n = 100
+        # set up edge-communities for relevant graphs
+        cls.modular_edges = modular_edges(cls.n)
+        cls.model = SIEMEstimator()
+
+    def test_cmp(self):
+        np.random.seed(1)
+        graph = siem(
+            self.n,
+            1,
+            self.modular_edges,
+            loops=True,
+            wt=[np.random.normal, np.random.normal],
+            wtargs=[{"loc": 0, "scale": 1}, {"loc": 2, "scale": 1}],
+        )
+        model = deepcopy(self.model)
+        model.fit(graph, self.modular_edges)
+        test = model.compare(1.0, 2.0, methodargs={"alternative": "two-sided"})
+        self.assertTrue(np.allclose(test[1], 0, atol=0.02))
+        test = model.compare(1.0, 2.0, methodargs={"alternative": "less"})
+        self.assertTrue(np.allclose(test[1], 0, atol=0.01))
+        test = model.compare(1.0, 2.0, methodargs={"alternative": "greater"})
+        self.assertTrue(np.allclose(test[1], 1, atol=0.01))
+        # communities are passed in in appropriate ordering
+        test1 = model.compare(1.0, 2.0, methodargs={"alternative": "greater"})
+        test2 = model.compare(2.0, 1.0, methodargs={"alternative": "less"})
+        self.assertTrue(test1[1] == test2[1])
+        pass
+
+    def test_bad_inputs(self):
+        np.random.seed(1)
+        graph = siem(self.n, 0.5, self.modular_edges, loops=True)
+        model = deepcopy(self.model)
+        # compare before fitting model raises error
+        with self.assertRaises(UnboundLocalError):
+            model.compare("test1", "test2")
+        model.fit(graph, self.modular_edges)
+        # pass communities that are not community names
+        with self.assertRaises(ValueError):
+            model.compare("1", 2.0)
+        with self.assertRaises(ValueError):
+            model.compare(1.0, "2")
+        # wt is not callable
+        with self.assertRaises(TypeError):
+            model.compare(1.0, 2.0, "mww")
+        # wtargs is not a dictionary
+        with self.assertRaises(TypeError):
+            model.compare(1.0, 2.0, methodargs="two-sided")
         pass

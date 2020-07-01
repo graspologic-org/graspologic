@@ -106,7 +106,7 @@ class SIEMEstimator(BaseGraphEstimator):
         # check that model has been fit
         if not self._has_been_fit:
             raise UnboundLocalError(
-                "You must fit a model with fit() before summarizing the model."
+                "You must fit a model with `fit()` before summarizing the model."
             )
         # check keys for wt and wtargs are same
         if set(wts.keys()) != set(wtargs.keys()):
@@ -148,6 +148,28 @@ class SIEMEstimator(BaseGraphEstimator):
             A key in the model, from `self.model.keys()`, to be treated as the second
             entry to the comparison method.
         method: callable
-            A callable object to use for comparing the two objects. Should accept two 
+            A callable object to use for comparing the two objects. Should accept two unnamed
+            leading vectors or 1-d arrays of edge weights.
+        methodargs: dictionary
+            A dictionary of named trailing arguments to be passed ot the comparison function of
+            interest.
         """
-        pass
+        if not self._has_been_fit:
+            raise UnboundLocalError(
+                "You must fit a model with `fit()` before comparing communities in the model."
+            )
+        if not c1 in self.model.keys():
+            raise ValueError("`c1` is not a key for the model.")
+        if not c2 in self.model.keys():
+            raise ValueError("`c2` is not a key for the model.")
+        if not callable(method):
+            raise TypeError("`method` should be a callable object.")
+        if not isinstance(methodargs, dict):
+            raise TypeError(
+                "`methodargs` should be a dictionary of trailing arguments. Got type %s.".format(
+                    type(methodargs)
+                )
+            )
+        return method(
+            self.model[c1]["weights"], self.model[c2]["weights"], **methodargs
+        )
