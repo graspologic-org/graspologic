@@ -70,6 +70,7 @@ class Test_Model(unittest.TestCase):
 
     def test_uw_case(self):
         p = [0.75, 0.5]
+        np.random.seed(1)
         graph = siem(self.n, p, self.modular_edges, loops=True)
         model = deepcopy(self.model)
         model.fit(graph, self.modular_edges)
@@ -91,6 +92,7 @@ class Test_Model(unittest.TestCase):
         pass
 
     def test_summary_func(self):
+        np.random.seed(1)
         graph = siem(
             self.n,
             1,
@@ -102,8 +104,7 @@ class Test_Model(unittest.TestCase):
         model = deepcopy(self.model)
         model.fit(graph, self.modular_edges)
         msum = model.summarize(
-            {"loc": np.mean, "scale": np.std},
-            {"loc": {"a": None}, "scale": {"a": None}},
+            {"loc": np.mean, "scale": np.std}, {"loc": {}, "scale": {}},
         )
         self.assertTrue(np.allclose(msum[1.0]["loc"], 0, atol=0.02))
         self.assertTrue(np.allclose(msum[1.0]["scale"], 1, atol=0.05))
@@ -124,6 +125,7 @@ class Test_Model(unittest.TestCase):
             model = deepcopy(self.model)
             model.fit(graph, self.modular_edges)
 
+        np.random.seed(1)
         graph = siem(self.n, 0.5, self.modular_edges, loops=True)
         graph[2, 2] = np.inf
         # graph contains non-finite entries
@@ -131,18 +133,21 @@ class Test_Model(unittest.TestCase):
             model = deepcopy(self.model)
             model.fit(graph, self.modular_edges)
 
+        np.random.seed(1)
         graph = siem(self.n, 0.5, self.modular_edges, loops=True)
         # edge_comm is not square
         with self.assertRaises(ValueError):
             model = deepcopy(self.model)
             model.fit(graph, np.ones((self.n, self.n + 1)))
 
+        np.random.seed(1)
         graph = siem(self.n + 2, 0.5, modular_edges(self.n + 2), loops=True)
         # graph and edge_comm are both square, but not same size
         with self.assertRaises(ValueError):
             model = deepcopy(self.model)
             model.fit(graph, self.modular_edges)
 
+        np.random.seed(1)
         graph = siem(self.n, 0.5, self.modular_edges, loops=True)
         model = deepcopy(self.model)
         # summarize before fitting model raises error
@@ -162,13 +167,9 @@ class Test_Model(unittest.TestCase):
 
         # summarize with wt not being a dictionary of callables
         with self.assertRaises(TypeError):
-            model.summarize({"mean": 4}, {"mean": {"a": None}})
+            model.summarize({"mean": 4}, {"mean": {}})
 
         # summarize with wtargs not being a dictionary of sub-dictionaries
         with self.assertRaises(TypeError):
             model.summarize({"mean": np.mean}, {"mean": "a"})
-
-        # summarize with wtargs having sub-dicts with leading entries not None
-        with self.assertRaises(ValueError):
-            model.summarize({"mean": np.mean}, {"mean": {"a": 4}})
         pass

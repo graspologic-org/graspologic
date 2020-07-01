@@ -8,6 +8,7 @@ from ..utils import (
 )
 from .base import BaseGraphEstimator, _calculate_p
 import warnings
+from scipy.stats import mannwhitneyu
 
 
 class SIEMEstimator(BaseGraphEstimator):
@@ -76,11 +77,11 @@ class SIEMEstimator(BaseGraphEstimator):
         self.model = siem
         self.K = len(self.model.keys())
         self.graph = graph
-        if (self._has_been_fit):
+        if self._has_been_fit:
             warnings.warn("A model has already been fit. Overwriting previous model...")
         self._has_been_fit = True
         return
-    
+
     def summarize(self, wts, wtargs):
         """
         Allows users to compute summary statistics for each edge community in the model.
@@ -90,14 +91,12 @@ class SIEMEstimator(BaseGraphEstimator):
         wts: dictionary of callables
             A dictionary of summary statistics to compute for each edge community within the model.
             The keys should be the name of the summary statistic, and each entry should be a callable
-            function accepting a vector or 1-d array as the first argument. Keys are names of the summary 
-            statistic, and values are the callable objects themselves.
+            function accepting an unnamed argument for a vector or 1-d array as the first argument.
+            Keys are names of the summary statistic, and values are the callable objects themselves.
         wtargs: dictionary of dictionaries
             A dictionary of dictionaries, where keys correspond to the names of summary statistics,
-            and values are dictionaries of the named parameters desired for the summary function. The
-            keys of `wts` and `wtargs` should be identical. The first key of each of the sub-dictionaries
-            should have a value of `None` and should correspond to the named parameter which will be taken to be
-            the edges associated with each community.
+            and values are dictionaries of the trailing, named, parameters desired for the summary function. The
+            keys of `wts` and `wtargs` should be identical.
         Returns
         -------
         summary: dictionary of summary statistics
@@ -106,7 +105,9 @@ class SIEMEstimator(BaseGraphEstimator):
         """
         # check that model has been fit
         if not self._has_been_fit:
-            raise UnboundLocalError("You must fit a model with fit() before summarizing the model.")
+            raise UnboundLocalError(
+                "You must fit a model with fit() before summarizing the model."
+            )
         # check keys for wt and wtargs are same
         if set(wts.keys()) != set(wtargs.keys()):
             raise ValueError("`wts` and `wtargs` should have the same key names.")
@@ -117,20 +118,36 @@ class SIEMEstimator(BaseGraphEstimator):
         # check whether wtargs is a dictionary of dictionaries with first entry being None in sub-dicts
         for key, wtarg in wtargs.items():
             if not isinstance(wtarg, dict):
-                raise TypeError("Each value of `wtargs` should be a sub-dictionary of class `dict`.")
-            if wtarg[list(wtarg.keys())[0]] is not None:
-                raise ValueError("The first entry of each sub-dictionary of wtargs should take the value None.")
-                
+                raise TypeError(
+                    "Each value of `wtargs` should be a sub-dictionary of class `dict`."
+                )
+
         # equivalent of zipping the two dictionaries together
         wt_mod = {key: (wt, wtargs[key]) for key, wt in wts.items()}
-        
+
         summary = {}
         for edge_comm in self.model.keys():
             summary[edge_comm] = {}
             for wt_name, (wt, wtarg) in wt_mod.items():
-                # place the edge weights for this community in the first named
-                # argument, which should be empty
-                wtarg[list(wtarg.keys())[0]] = self.model[edge_comm]["weights"]
                 # and store the summary statistic for this community
-                summary[edge_comm][wt_name] = wt(**wtarg)
+                summary[edge_comm][wt_name] = wt(
+                    self.model[edge_comm]["weights"], **wtarg
+                )
         return summary
+
+    def compare(self, c1, c2, method=mannwhitneyu, methodargs=None):
+        """
+        A function for comparing two edge communities for a difference after a model has been fit.
+        
+        Parameters
+        ----------
+        c1: immutable
+            A key in the model, from `self.model.keys()`, to be treated as the first entry
+            to the comparison method.
+        c2: immutable
+            A key in the model, from `self.model.keys()`, to be treated as the second
+            entry to the comparison method.
+        method: callable
+            A callable object to use for comparing the two objects. Should accept two 
+        """
+        pass
