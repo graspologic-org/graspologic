@@ -12,6 +12,20 @@ from ..utils import (
     symmetrize,
 )
 from .base import BaseGraphEstimator, _calculate_p
+from hyppo.ksample import KSample
+from FisherExact import fisher_exact
+from scipy.stats import (
+    bernoulli,
+    mannwhitneyu,
+    fisher_exact,
+    chi2_contingency,
+    kruskal,
+    f_oneway,
+    chi2,
+)
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+from statsmodels.stats.multitest import multipletests
 
 
 def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kws):
@@ -152,29 +166,85 @@ class SBMEstimator(BaseGraphEstimator):
         )
         vertex_assignments = gc.fit_predict(latent)
         self.vertex_assignments_ = vertex_assignments
-    
-    def _fisher_exact_block_est(self, graph, y):
+
+    def _expand_labels(y, mode="abba"):
+        if mode == "abba":
+            return np.outer(1 - y, y) + np.outer(y, 1 - y) + 1
+        elif mode == "abbd":
+            return np.outer(1 - y, y) + np.outer(y, 1 - y) + 2 * np.outer(y, y) + 1
+        elif mode == "abcd":
+            return np.outer(y + 1, y + 2) - 1 - np.outer(y, y)
+        elif mode == "abca":
+            return np.outer(y + 1, y + 2) - 4 * np.outer(y, y) - 1
+        return None
+
+    def _fisher_exact_block_est(self, graph, labels):
         """
         A function for fisher exact block estimation for a 2-block SBM.
-
         """
-        return
+        un_labs = np.unique(labels)
+        T = np.zeros((2, len(un_labs)))
+        for idx, lab in enumerate(un_labs):
+            T[0, idx] = (graph[labels == lab]).sum()
+            T[1, idx] = len(graph[labels == lab]) - T[0, idx]
+        return fisher_exact(T, attempt=3)
 
-    def _chi2_exact_block_est(self, graph, y):
-        """
-        A function for fisher exact block estimation for a 2-block SBM.
-
-        """
-        return
-
-    def _lrt_block_est(self, graph, y):
+    def _chi2_exact_block_est(self, graph, labels):
         """
         A function for fisher exact block estimation for a 2-block SBM.
-
         """
-        return
+        un_labs = np.unique(labels)
+        T = np.zeros((2, len(un_labs)))
+        for idx, lab in enumerate(un_labs):
+            T[0, idx] = (graph[labels == lab]).sum()
+            T[1, idx] = len(graph[labels == lab]) - T[0, idx]
+        return chi2_contingency(T)[1]
 
-    def estimate_block_structure(self, graph, y, candidates, method='fisher_exact'):
+    def _lrt_block_est(self, graph, labels):
+        """
+        A function for fisher exact block estimation for a 2-block SBM.
+        """
+        lrt_dat = pd.DataFrame({"Edge": graph.flatten(), "Community": labels.flatten()})
+        model_null = smf.glm(
+            formula="Edge~1", data=lrt_dat, family=sm.families.Binomial()
+        ).fit()
+        model_alt = smf.glm(
+            formula="Edge~Community", data=lrt_dat, family=sm.families.Binomial()
+        ).fit()
+        dof = model_null.df_resid - model_alt.df_resid
+        lrs = 2 * (model_alt.llf - model_null.llf)
+        return chi2.sf(lrs, df=dof)
+
+    def _mgc_block_est(self, graph, labels):
+        """
+        A function for MGC block estimation for a 2-block SBM.
+        """
+        samples = [graph[graph == label] for label in labels]
+        return KSample("MGC").test(*samples)
+
+    def _kw_block_est(self, graph, labels):
+        """
+        AS function for Kruskal-Wallace block estimation for a 2-block SBM.
+        """
+        samples = [graph[graph == label] for label in labels]
+        return kruskal(*samples)[1]
+
+    def _anova_block_est(self, graph, labels):
+        """
+        A function for anova block estimation for a 2-block SBM.
+        """
+        samples = [graph[graph == label] for label in labels]
+        return f_oneway(*samples)[1]
+
+    def estimate_block_structure(
+        self,
+        graph,
+        y,
+        candidates,
+        test_method="mgc",
+        multitest_method="holm",
+        alpha=0.05,
+    ):
         """
         Estimate the block structure for 2-block SBMs.
         
@@ -192,35 +262,72 @@ class SBMEstimator(BaseGraphEstimator):
             entries "a", "b", "c", "d". The string :math:`x_{11}x_{12}x_{21}x_{22}` where :math:`x_{ij} \in \{"a", "b", "c", "d"\}`
             will test the candidate model :math:`[x_{11}, x_{21}; x_{12}, x_{22}]`, where entries that differ
             in the candidate string will correspond to a test of whether those entries differ in distribution.
-            For example, the candidate models `["aaab", "abba"]` corresponds to testing 
-            :math:`H_0: F_{11} = F_{12} = F_{21} = F_{22}` against :math:`H_1: F_{11} = F_{12} = F_{21} \neq F_{22}` and
+            For example, the candidate models `["abcd", "abba"]` corresponds to testing 
+            :math:`H_0: F_{11} \neq F_{12} \neq F_{21} \neq F_{22}` against :math:`H_1: F_{11} = F_{12} = F_{21} \neq F_{22}` and
             :math:`H_2: F_{11} = F_{22} \neq F_{21} = F_{12}`.
-        method: string (default="fisher_exact")
-            The method to use for estimating block structure. Supported options are
-            `"fisher_exact"` (fisher exact test), `"chi2"` (chi-squared test), and `"lrt"` (likelihood ratio test)
-            for unweighted graphs.
+        test_method: string (default="fisher_exact")
+            The method to use for estimating p-values associated with different block structures. Supported options are
+            `"fisher_exact"` (Fisher Exact Test), `"chi2"` (Chi-squared test), and `"lrt"` (Likelihood Ratio Test)
+            for unweighted graphs. Further, for both weighted and unweighted graphs, supported options are
+            "mgc" (Multiscale Generalized Correlation), "kw" (Kruskal-Wallace Test), and "anova" (ANOVA).
+        multitest_method: string (default="holm")
+            The method used for correction for multiple hypotheses when determining an appropriate candidate
+            model. Supported options are those from `statsmodels.stats.multitest.multitests()` in the
+            `statsmodels` package. Default to `"holm"`, the Holm-Bonferroni step-down correction.
+        alpha: float (default=.05)
+            A probability, indicating the significance of the test. Defaults to :math:`\alpha=.05`.
         Returns
         -------
-        block_structure: A string indicating the optimal block structure.
-        p-value: the p-value associated with the test of the relevant candidate models.
+        p_val: the p-value associated with the test of the relevant candidate models.
+        block_structure: A string indicating the optimal block structure with the lowest corrected p-value.
         """
         graph = import_graph(graph)
 
         if len(set(y)) != 2:
             raise ValueError("`y` vertex labels should have exactly 2 unique entries.")
-        if method not in ["fisher_exact", "chi2", "lrt"]:
+        if test_method not in ["fisher_exact", "chi2", "lrt", "mgc", "kw", "anova"]:
             raise ValueError("You have passed an unsupported method.")
-        if (not is_unweighted(graph)) and (method in ["fisher_exact", "chi2", "lrt"]):
-                raise ValueError("You have passed an unsupported method given a weighted graph.")
+        if (not is_unweighted(graph)) and (
+            test_method in ["fisher_exact", "chi2", "lrt"]
+        ):
+            raise ValueError(
+                "You have passed an unsupported method given a weighted graph."
+            )
+        for candidate in candidates:
+            if len(candidate) != 4:
+                raise ValueError(
+                    "You have passed a candidate with too many characters."
+                )
+            if candidate not in ["abba", "abbd", "abcd", "abca"]:
+                raise ValueError("You have passed an unsupported candidate model.")
         # run appropriate test
-        if method == "fisher_exact":
-            return _fisher_exact_block_est(graph, y)
-        elif method == "chi2":
-            return _chi2_block_est(graph, y)
-        elif method == "lrt":
-            return _lrt_block_est(graph, y)
+        if test_method == "fisher_exact":
+            fn = self._fisher_exact_block_est
+        elif test_method == "chi2":
+            fn = self._chi2_block_est
+        elif test_method == "lrt":
+            fn = self._lrt_block_est
+        elif test_method == "mgc":
+            fn = self._mgc_block_est
+        elif test_method == "kw":
+            fn = self._kw_block_est
+        elif test_method == "anova":
+            fn = self._anova_block_est
+        # execute the statistical tests
+        pvals = {}
+        for candidate in candidates:
+            can_label = _expand_labels(y, candidate)
+            # run test to obtain p-value
+            pvals[candidate] = fn(*[graph, can_label])
+        # run multitest method
+        reject, cor_pvals, _, _ = multipletests(
+            list(pvals.values()), alpha=alpha, method=multitest_method
+        )
+        idx_best = cor_pvals.argmin()
+        if reject[idx_best]:
+            return cor_pvals[idx_best], list(pvals.keys())[idx_best]
         else:
-            raise NotImplementedError("Estimating block structure only implemented for unweighted graphs.")
+            return cor_pvals[idx_best], "aaaa"
 
     def fit(self, graph, y=None):
         """

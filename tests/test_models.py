@@ -282,7 +282,7 @@ class TestSBM:
         assert e._n_parameters() == (1 + 3)
 
     def test_SBM_blockest_fisher(self):
-        p = np.array([[1,.25],[.25,.25]])
+        p = np.array([[1, 0.25], [0.25, 0.25]])
         pass
 
     def test_SBM_blockest_chi2(self):
@@ -291,26 +291,59 @@ class TestSBM:
     def test_SBM_blockest_lrt(self):
         pass
 
+    def test_SBM_blockest_mgc(self):
+        pass
+
+    def test_SBM_blockest_kw(self):
+        pass
+
+    def test_SBM_blockest_anova(self):
+        pass
+
     def test_SBM_blockest_badinputs(self):
         np.random.seed(8888)
-        B = np.array(
-            [.75, .5], [.5, .75]
-        )
+        B = np.array([[0.75, 0.5], [0.5, 0.75]])
         n = np.array([100, 100])
         labels = _n_to_labels(n)
         g_uw = sbm(n, B, directed=True, loops=False)
-        g_wt = sbm(n, B, directed=True, loops=False, wt=np.random.normal, wtargs={"loc":1, "scale":1})
+        g_wt = sbm(
+            n,
+            B,
+            directed=True,
+            loops=False,
+            wt=np.random.normal,
+            wtargs={"loc": 1, "scale": 1},
+        )
         e = SBMEstimator()
         # can't determine optimal block structure for more than 2x2 case
-        with self.assertRaises(ValueError):
-            e.estimate_block_structure(g, _n_to_labels(np.array([50, 50, 50, 50])), ["aaab"])
+        with pytest.raises(ValueError):
+            e.estimate_block_structure(
+                g_uw, _n_to_labels(np.array([50, 50, 50, 50])), ["aaab"]
+            )
         # unsupported methods
-        with self.assertRaises(ValueError):
-            e.estimate_block_structure(g, labels, ["aaab"])
+        with pytest.raises(ValueError):
+            e.estimate_block_structure(g_uw, labels, ["aaab"], test_method="chi")
+
+        # passes candidate model with more than 4 characters
+        with pytest.raises(ValueError):
+            e.estimate_block_structure(
+                g_uw, _n_to_labels([100, 100]), ["aaaba", "abba"]
+            )
+        # passes candidate model that is not a string
+        with pytest.raises(ValueError):
+            e.estimate_block_structure(
+                g_uw, _n_to_labels([100, 100]), ["aaab", "abba", 4]
+            )
 
         # improper method requested for weighted graph
-        with self.assertRaises(ValueError):
-            pass
+        with pytest.raises(ValueError):
+            e.estimate_block_structure(
+                g_wt, labels, ["aaab"], test_method="fisher_exact"
+            )
+        with pytest.raises(ValueError):
+            e.estimate_block_structure(g_wt, labels, ["aaab"], test_method="chi2")
+        with pytest.raises(ValueError):
+            e.estimate_block_structure(g_wt, labels, ["aaab"], test_method="lrt")
         pass
 
 
