@@ -12,6 +12,7 @@ from graspy.simulations import er_np, sbm, sample_edges
 from graspy.utils import cartprod, is_symmetric
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
+import warnings
 
 
 class TestER:
@@ -282,23 +283,102 @@ class TestSBM:
         assert e._n_parameters() == (1 + 3)
 
     def test_SBM_blockest_fisher(self):
-        p = np.array([[1, 0.25], [0.25, 0.25]])
-        pass
+        B = np.array([[0.55, 0.45], [0.45, 0.55]])
+        n = [50, 50]
+        np.random.seed(1)
+        g_uw = sbm(n, B, directed=True, loops=False)
+        e = SBMEstimator()
+        _, best = e.estimate_block_structure(
+            g_uw,
+            _n_to_labels(n),
+            ["abba", "abbd", "abcd", "abca"],
+            test_method="fisher_exact",
+            test_args={"seed": 1},
+        )
+        assert best == "abba"
 
     def test_SBM_blockest_chi2(self):
-        pass
+        B = np.array([[0.55, 0.45], [0.45, 0.55]])
+        n = [50, 50]
+        np.random.seed(1)
+        g_uw = sbm(n, B, directed=True, loops=False)
+        e = SBMEstimator()
+        _, best = e.estimate_block_structure(
+            g_uw, _n_to_labels(n), ["abba", "abbd", "abcd", "abca"], test_method="chi2"
+        )
+        assert best == "abba"
 
     def test_SBM_blockest_lrt(self):
-        pass
+        B = np.array([[0.55, 0.45], [0.45, 0.55]])
+        n = [50, 50]
+        np.random.seed(1)
+        g_uw = sbm(n, B, directed=True, loops=False)
+        e = SBMEstimator()
+        _, best = e.estimate_block_structure(
+            g_uw, _n_to_labels(n), ["abba", "abbd", "abcd", "abca"], test_method="lrt"
+        )
+        assert best == "abba"
 
     def test_SBM_blockest_mgc(self):
-        pass
+        B = np.array([[1, 1], [1, 1]])
+        wtarg = [
+            [{"loc": 3, "scale": 4}, {"loc": 1, "scale": 1}],
+            [{"loc": 1, "scale": 1}, {"loc": 3, "scale": 4}],
+        ]
+        n = [10, 10]
+        np.random.seed(1)
+        g_wt = sbm(n, B, directed=True, loops=False, wt=np.random.normal, wtargs=wtarg)
+        e = SBMEstimator()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            _, best = e.estimate_block_structure(
+                g_wt,
+                _n_to_labels(n),
+                ["abba", "abbd", "abcd", "abca"],
+                test_method="mgc",
+                test_args={"reps": 100},
+            )
+        assert best == "abba"
 
     def test_SBM_blockest_kw(self):
-        pass
+        B = np.array([[1, 1], [1, 1]])
+        wtarg = [
+            [{"loc": 2, "scale": 4}, {"loc": 1, "scale": 2}],
+            [{"loc": 1, "scale": 2}, {"loc": 2, "scale": 4}],
+        ]
+        n = [50, 50]
+        np.random.seed(1)
+        g_wt = sbm(n, B, directed=True, loops=False, wt=np.random.normal, wtargs=wtarg)
+        e = SBMEstimator()
+        _, best = e.estimate_block_structure(
+            g_wt, _n_to_labels(n), ["abba", "abbd", "abcd", "abca"], test_method="kw"
+        )
+        assert best == "abba"
 
     def test_SBM_blockest_anova(self):
-        pass
+        B = np.array([[1, 1], [1, 1]])
+        wtarg = [
+            [{"loc": 3, "scale": 4}, {"loc": 1, "scale": 2}],
+            [{"loc": 1, "scale": 2}, {"loc": 3, "scale": 4}],
+        ]
+        n = [50, 50]
+        g_wt = sbm(n, B, directed=True, loops=False, wt=np.random.normal, wtargs=wtarg)
+        e = SBMEstimator()
+        _, best = e.estimate_block_structure(
+            g_wt, _n_to_labels(n), ["abba", "abbd", "abcd", "abca"], test_method="anova"
+        )
+        assert best == "abba"
+
+    def test_SBM_blockest_anova_reject(self):
+        B = np.array([[1, 1], [1, 1]])
+        wtarg = {"loc": 0, "scale": 1}
+        n = [50, 50]
+        g_wt = sbm(n, B, directed=True, loops=False, wt=np.random.normal, wtargs=wtarg)
+        e = SBMEstimator()
+        _, best = e.estimate_block_structure(
+            g_wt, _n_to_labels(n), ["abba", "abbd", "abcd", "abca"], test_method="anova"
+        )
+        assert best == "aaaa"
 
     def test_SBM_blockest_badinputs(self):
         np.random.seed(8888)

@@ -17,7 +17,6 @@ from FisherExact import fisher_exact
 from scipy.stats import (
     bernoulli,
     mannwhitneyu,
-    fisher_exact,
     chi2_contingency,
     kruskal,
     f_oneway,
@@ -26,6 +25,7 @@ from scipy.stats import (
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from statsmodels.stats.multitest import multipletests
+from pandas import DataFrame
 
 
 def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kws):
@@ -167,7 +167,7 @@ class SBMEstimator(BaseGraphEstimator):
         vertex_assignments = gc.fit_predict(latent)
         self.vertex_assignments_ = vertex_assignments
 
-    def _expand_labels(y, mode="abba"):
+    def _expand_labels(self, y, mode="abba"):
         if mode == "abba":
             return np.outer(1 - y, y) + np.outer(y, 1 - y) + 1
         elif mode == "abbd":
@@ -178,7 +178,7 @@ class SBMEstimator(BaseGraphEstimator):
             return np.outer(y + 1, y + 2) - 4 * np.outer(y, y) - 1
         return None
 
-    def _fisher_exact_block_est(self, graph, labels):
+    def _fisher_exact_block_est(self, graph, labels, test_args):
         """
         A function for fisher exact block estimation for a 2-block SBM.
         """
@@ -187,9 +187,11 @@ class SBMEstimator(BaseGraphEstimator):
         for idx, lab in enumerate(un_labs):
             T[0, idx] = (graph[labels == lab]).sum()
             T[1, idx] = len(graph[labels == lab]) - T[0, idx]
-        return fisher_exact(T, attempt=3)
+        return fisher_exact(
+            T, workspace=T.sum() * 1.5, replicate=1000, simulate_pval=True, **test_args
+        )
 
-    def _chi2_exact_block_est(self, graph, labels):
+    def _chi2_block_est(self, graph, labels, test_args):
         """
         A function for fisher exact block estimation for a 2-block SBM.
         """
@@ -200,11 +202,11 @@ class SBMEstimator(BaseGraphEstimator):
             T[1, idx] = len(graph[labels == lab]) - T[0, idx]
         return chi2_contingency(T)[1]
 
-    def _lrt_block_est(self, graph, labels):
+    def _lrt_block_est(self, graph, labels, test_args):
         """
         A function for fisher exact block estimation for a 2-block SBM.
         """
-        lrt_dat = pd.DataFrame({"Edge": graph.flatten(), "Community": labels.flatten()})
+        lrt_dat = DataFrame({"Edge": graph.flatten(), "Community": labels.flatten()})
         model_null = smf.glm(
             formula="Edge~1", data=lrt_dat, family=sm.families.Binomial()
         ).fit()
@@ -215,25 +217,28 @@ class SBMEstimator(BaseGraphEstimator):
         lrs = 2 * (model_alt.llf - model_null.llf)
         return chi2.sf(lrs, df=dof)
 
-    def _mgc_block_est(self, graph, labels):
+    def _mgc_block_est(self, graph, labels, test_args):
         """
         A function for MGC block estimation for a 2-block SBM.
         """
-        samples = [graph[graph == label] for label in labels]
-        return KSample("MGC").test(*samples)
+        un_labs = np.unique(labels)
+        samples = [graph[labels == label] for label in un_labs]
+        return KSample("MGC").test(*samples, **test_args)[1]
 
-    def _kw_block_est(self, graph, labels):
+    def _kw_block_est(self, graph, labels, test_args):
         """
         AS function for Kruskal-Wallace block estimation for a 2-block SBM.
         """
-        samples = [graph[graph == label] for label in labels]
+        un_labs = np.unique(labels)
+        samples = [graph[labels == label] for label in un_labs]
         return kruskal(*samples)[1]
 
-    def _anova_block_est(self, graph, labels):
+    def _anova_block_est(self, graph, labels, test_args):
         """
         A function for anova block estimation for a 2-block SBM.
         """
-        samples = [graph[graph == label] for label in labels]
+        un_labs = np.unique(labels)
+        samples = [graph[labels == label] for label in un_labs]
         return f_oneway(*samples)[1]
 
     def estimate_block_structure(
@@ -242,6 +247,7 @@ class SBMEstimator(BaseGraphEstimator):
         y,
         candidates,
         test_method="mgc",
+        test_args=None,
         multitest_method="holm",
         alpha=0.05,
     ):
@@ -316,9 +322,10 @@ class SBMEstimator(BaseGraphEstimator):
         # execute the statistical tests
         pvals = {}
         for candidate in candidates:
-            can_label = _expand_labels(y, candidate)
+            can_label = self._expand_labels(y, candidate)
             # run test to obtain p-value
-            pvals[candidate] = fn(*[graph, can_label])
+            pvals[candidate] = fn(*[graph, can_label], test_args)
+
         # run multitest method
         reject, cor_pvals, _, _ = multipletests(
             list(pvals.values()), alpha=alpha, method=multitest_method
