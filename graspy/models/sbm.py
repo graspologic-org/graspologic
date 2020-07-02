@@ -225,6 +225,14 @@ class SBMEstimator(BaseGraphEstimator):
         samples = [graph[labels == label] for label in un_labs]
         return KSample("MGC").test(*samples, **test_args)[1]
 
+    def _dcorr_block_est(self, graph, labels, test_args):
+        """
+        A function for MGC block estimation for a 2-block SBM.
+        """
+        un_labs = np.unique(labels)
+        samples = [graph[labels == label] for label in un_labs]
+        return KSample("Dcorr").test(*samples, **test_args)[1]
+
     def _kw_block_est(self, graph, labels, test_args):
         """
         AS function for Kruskal-Wallace block estimation for a 2-block SBM.
@@ -291,7 +299,7 @@ class SBMEstimator(BaseGraphEstimator):
 
         if len(set(y)) != 2:
             raise ValueError("`y` vertex labels should have exactly 2 unique entries.")
-        if test_method not in ["fisher_exact", "chi2", "lrt", "mgc", "kw", "anova"]:
+        if test_method not in ["fisher_exact", "chi2", "lrt", "mgc", "kw", "anova", "dcorr"]:
             raise ValueError("You have passed an unsupported method.")
         if (not is_unweighted(graph)) and (
             test_method in ["fisher_exact", "chi2", "lrt"]
@@ -315,6 +323,8 @@ class SBMEstimator(BaseGraphEstimator):
             fn = self._lrt_block_est
         elif test_method == "mgc":
             fn = self._mgc_block_est
+        elif test_method == "dcorr":
+            fn = self._dcorr_block_est
         elif test_method == "kw":
             fn = self._kw_block_est
         elif test_method == "anova":

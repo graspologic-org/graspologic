@@ -340,6 +340,27 @@ class TestSBM:
             )
         assert best == "abba"
 
+    def test_SBM_blockest_dcorr(self):
+        B = np.array([[1, 1], [1, 1]])
+        wtarg = [
+            [{"loc": 3, "scale": 4}, {"loc": 1, "scale": 1}],
+            [{"loc": 1, "scale": 1}, {"loc": 3, "scale": 4}],
+        ]
+        n = [20, 20]
+        np.random.seed(1)
+        g_wt = sbm(n, B, directed=True, loops=False, wt=np.random.normal, wtargs=wtarg)
+        e = SBMEstimator()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            _, best = e.estimate_block_structure(
+                g_wt,
+                _n_to_labels(n),
+                ["abba", "abbd", "abcd", "abca"],
+                test_method="dcorr",
+                test_args={"reps": 100},
+            )
+        assert best == "abba"
+
     def test_SBM_blockest_kw(self):
         B = np.array([[1, 1], [1, 1]])
         wtarg = [
