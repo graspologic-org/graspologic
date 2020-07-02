@@ -11,11 +11,12 @@ jobs:
     - python: 3.7
 cache: pip
 install:
-- pip install -r requirements.txt
-- pip install -U pytest pytest-cov pytest-doctestplus codecov black
 - sudo apt-add-repository --yes ppa:ubuntu-toolchain-r/test
 - sudo apt-get update
-- sudo apt-get install gcc-4.8 gfortran-4.8
+- sudo apt-get install gcc gfortran
+- pip install numpy
+- pip install -r requirements.txt
+- pip install -U pytest pytest-cov pytest-doctestplus codecov black
 script:
 - pytest graspy/ tests/
 - black --check --diff ./graspy ./tests
