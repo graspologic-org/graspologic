@@ -255,7 +255,7 @@ class SBMEstimator(BaseGraphEstimator):
         y,
         candidates,
         test_method="mgc",
-        test_args=None,
+        test_args={},
         multitest_method="holm",
         alpha=0.05,
     ):
@@ -299,7 +299,15 @@ class SBMEstimator(BaseGraphEstimator):
 
         if len(set(y)) != 2:
             raise ValueError("`y` vertex labels should have exactly 2 unique entries.")
-        if test_method not in ["fisher_exact", "chi2", "lrt", "mgc", "kw", "anova", "dcorr"]:
+        if test_method not in [
+            "fisher_exact",
+            "chi2",
+            "lrt",
+            "mgc",
+            "kw",
+            "anova",
+            "dcorr",
+        ]:
             raise ValueError("You have passed an unsupported method.")
         if (not is_unweighted(graph)) and (
             test_method in ["fisher_exact", "chi2", "lrt"]
