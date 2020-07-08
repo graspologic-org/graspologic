@@ -261,9 +261,9 @@ class GraphMatch:
                 )  # computing the gradient of f(P) = -tr(APB^tP^t)
                 # run hungarian algorithm on gradient(f(P))
                 if self.alap:
-                    rows, cols = aLAP(delta_f, maximize)
+                    rows, cols = aLAP(delta_f, self.gmp)
                 else:
-                    rows, cols = linear_sum_assignment(delta_f, maximize)
+                    rows, cols = linear_sum_assignment(delta_f, self.gmp)
 
                 Q = np.zeros((n_unseed, n_unseed))
                 Q[rows, cols] = 1  # initialize search direction matrix Q
