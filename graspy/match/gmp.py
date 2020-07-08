@@ -19,6 +19,7 @@ from scipy.optimize import minimize_scalar
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
 from .skp import SinkhornKnopp
+from .alap import aLAP
 
 
 class GraphMatch:
@@ -101,6 +102,7 @@ class GraphMatch:
         shuffle_input=True,
         eps=0.1,
         gmp=True,
+        alap=False,
     ):
 
         if type(n_init) is int and n_init > 0:
@@ -136,6 +138,11 @@ class GraphMatch:
         else:
             msg = '"gmp" must be a boolean'
             raise TypeError(msg)
+        if isinstance(alap, bool):
+            self.alap = alap
+        else:
+            msg = '"alap" must be boolean'
+            raise TyperError(msg)
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
         """
@@ -252,9 +259,12 @@ class GraphMatch:
                 delta_f = (
                     const_sum + A22 @ P @ B22T + A22T @ P @ B22
                 )  # computing the gradient of f(P) = -tr(APB^tP^t)
-                rows, cols = linear_sum_assignment(
-                    obj_func_scalar * delta_f
-                )  # run hungarian algorithm on gradient(f(P))
+                # run hungarian algorithm on gradient(f(P))
+                if self.alap:
+                    rows, cols = aLAP(delta_f, maximize)
+                else:
+                    rows, cols = linear_sum_assignment(delta_f, maximize)
+
                 Q = np.zeros((n_unseed, n_unseed))
                 Q[rows, cols] = 1  # initialize search direction matrix Q
 
