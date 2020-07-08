@@ -4,6 +4,7 @@ import graspy.cluster
 import graspy.datasets
 import graspy.embed
 import graspy.inference
+import graspy.match
 import graspy.models
 import graspy.pipeline
 import graspy.plot
