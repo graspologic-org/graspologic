@@ -51,8 +51,7 @@ def aLAP(cost_matrix, maximize=True):
         # unmatched cols
 
         col_argmax = np.argmax(cost_matrix[np.ix_(m_row, qt_n)], axis=0)
-        row_argmax = np.argmax(cost_matrix[np.ix_(qt_p - num_vert, m_col)],
-                                axis=1)
+        row_argmax = np.argmax(cost_matrix[np.ix_(qt_p - num_vert, m_col)], axis=1)
 
         col_argmax = m_row[col_argmax]
         row_argmax = m_col[row_argmax]
