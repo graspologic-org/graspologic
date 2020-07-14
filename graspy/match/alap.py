@@ -2,6 +2,27 @@ import numpy as np
 
 
 def aLAP(cost_matrix, maximize=True):
+    """
+    An approximation algorithm for solving the Linear Assignment problem
+
+    Parameters
+    ----------
+    cost_matrix : array
+        The cost matrix of the bipartite graph.
+
+    maximize : bool (default: True)
+        Calculates a minimum weight matching if false.
+
+    Returns
+    -------
+    row_ind, col_ind : array
+        An array of row indices and one of corresponding column indices giving
+        the optimal assignment. The cost of the assignment can be computed
+        as ``cost_matrix[row_ind, col_ind].sum()``. The row indices will be
+        sorted; in the case of a square cost matrix they will be equal to
+        ``numpy.arange(cost_matrix.shape[0])``.
+    """
+
     if not maximize:
         cost_matrix = -cost_matrix
     num_vert = cost_matrix.shape[0]
