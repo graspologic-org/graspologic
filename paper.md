@@ -22,7 +22,7 @@ bibliography: refs_joss.bib
 
 # Summary
 
-*AutoGMM* is a Python algorithm for automatic Gaussian mixture modeling. It builds upon scikit-learn's *AgglomerativeClustering* and *GaussianMixture* classes [@sklearn], with certain modifications to make the results more stable. 
+*AutoGMM* is a Python algorithm for automatic Gaussian mixture modeling. It builds upon *scikit-learn*'s AgglomerativeClustering and GaussianMixture classes [@sklearn], with certain modifications to make the results more stable. 
 
 \autoref{fig:example} shows an example application of *AutoGMM*, on the Wisconsin Breast Cancer dataset from the UCI Machine Learning Repository [@bc]. It is compared to *mclust* [@mclust] and the GaussianCluster class in *GraSPy* [@graspy]. *AutoGMM* is available as a class in *GraSPy*.
 
