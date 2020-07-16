@@ -10,7 +10,7 @@ authors:
   - name: Thomas L. Athey
     orcid: 0000-0002-8987-3486
     affiliation: 1
-  - name: Joshua T. Vogelstein^[Corresponding Author jovo@jhu.edu]
+  - name: Joshua T. Vogelstein^[Corresponding Author]
     affiliation: 1
 affiliations:
  - name: Department of Biomedical Engineering Johns Hopkins University
@@ -42,6 +42,6 @@ The data likelihood in Expectation-Maximization of Gaussian mixture models can d
 
 # Figures
 
-![Three different clustering algorithms were applied to the Breast Cancer Wisconsin Data Set from the UCI Machine Learning Repository [@bc]. The true clustering is shown in panel a, the AutoGMM result in panel b, mclust in panel c [@mclust], and the GaussianCluster class in GraSPy (called GraSPyclust here) in panel d [@graspy]. All algorithms were run with default parameters There were two underlying clusters. AutoGMM and mclust produced similar clusterings, and predicted three underlying clusters. GraSPyclust predicted four underlying clusters. \label{fig:example}](./combined_bc_sq.png)
+![Three different clustering algorithms were applied to the Breast Cancer Wisconsin Data Set from the UCI Machine Learning Repository [@bc]. The true clustering is shown in panel a, the AutoGMM result in panel b, mclust in panel c [@mclust], and the GaussianCluster class in GraSPy (called GraSPyclust here) in panel d [@graspy]. All algorithms were run with default parameters There were two underlying clusters. AutoGMM and mclust produced similar clusterings, and predicted three underlying clusters. GraSPyclust predicted four underlying clusters. \label{fig:example}](combined_bc_sq.png)
 	
 # References
