@@ -33,9 +33,9 @@ In R, a popular package called *mclust* addresses both of these problems [@mclus
 
 However,  Python has lacked such a package. We therefore introduce *AutoGMM*, which is freely available and therefore further shrinks the gap between functionality of R and Python for data science.
 
-# Mathematics
+# Algorithm
 
-*AutoGMM* performs an initial clustering (using k-means, agglomerative clustering, or random initialization), then fits a Gaussian mixture model using Expectation-Maximization. The algorithm sweeps through combinations of clustering options such as Gaussian covariance constraints and number of clusters. Each combination is evaluated with the Bayesian Information Criterion, defined as $2ln(\hat{L}) - p \cdot \ln(n)$ where $\hat{L}$ is the maximized data likelihood, $p$ is the number of parameters, and $n$ is the number of data points [@bic].
+*AutoGMM* performs an initial clustering (using k-means, agglomerative clustering, or random initialization), then fits a Gaussian mixture model using Expectation-Maximization. The algorithm sweeps through combinations of clustering options such as Gaussian covariance constraints and number of clusters. Each combination is evaluated with the Bayesian Information Criterion (BIC), defined as $2ln(\hat{L}) - p \cdot \ln(n)$ where $\hat{L}$ is the maximized data likelihood, $p$ is the number of parameters, and $n$ is the number of data points [@bic]. The model with the highest BIC is selected.
 
 The data likelihood in Expectation-Maximization of Gaussian mixture models can diverge if one of the Gaussians becomes concentrated around a single data point. When this occurs, *AutoGMM* reruns the clustering by adding a regularization factor to the diagonal of the covariance matrices. This ensures that the estimated covariances have positive eigenvalues, without affecting the eigenvectors. 
 
