@@ -117,7 +117,6 @@ docs/bpedigo/ase_clustering.py
 *.pickle
 /graspy-env
 *.code-workspace
-*.png
 notebooks/bpedigo
 
 *.DS_Store
