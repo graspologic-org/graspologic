@@ -16,6 +16,7 @@ import numpy as np
 import scipy
 import sklearn
 from scipy.stats import norm
+from scipy.sparse import isspmatrix
 
 
 def _compute_likelihood(arr):
@@ -103,8 +104,8 @@ def select_dimension(
         pp.918-930.
     """
     # Handle input data
-    if not isinstance(X, np.ndarray):
-        msg = "X must be a numpy array, not {}.".format(type(X))
+    if not isinstance(X, np.ndarray) and not isspmatrix(X):
+        msg = "X must be a numpy array or sparse matrix, not {}.".format(type(X))
         raise ValueError(msg)
     if X.ndim > 2:
         msg = "X must be a 1d or 2d-array, not {}d array.".format(X.ndim)
