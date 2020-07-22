@@ -80,9 +80,9 @@ class LatentDistributionTest(BaseInference):
         Supply -1 to use all cores available to the Process.
 
     size_correction: bool (default=True)
-        The size degrades in validity as the sizes of two graphs diverge from
+        The size degrades in validity as the orders of two graphs diverge from
         each other, unless the kernel matrix is modified.
-        If True - in the case when two graphs are not of equal sizes, estimates
+        If True - in the case when two graphs are not of equal orders, estimates
         the plug-in estimator for the variance and uses it to correct the
         embedding of the larger graph.
         If False - does not perform any modifications (generally not
@@ -217,9 +217,9 @@ class LatentDistributionTest(BaseInference):
         self.size_correction = size_correction
 
     def _embed(self, A1, A2):
-        if not is_symmetric(A1) or not is_symmetric(A2):
-            msg = "currently, testing is only supported for undirected graphs"
-            raise NotImplementedError(msg)  # TODO asymmetric case
+        # if not is_symmetric(A1) or not is_symmetric(A2):
+        #     msg = "currently, testing is only supported for undirected graphs"
+        #     raise NotImplementedError(msg)  # TODO asymmetric case
 
         if self.n_components is None:
             num_dims1 = select_dimension(A1)[0][-1]
@@ -242,7 +242,6 @@ class LatentDistributionTest(BaseInference):
         N, M = len(X), len(Y)
 
         # return if graphs are same order, else else ensure X the larger graph.
-        print(X.shape, Y.shape)
         if N == M:
             return X, Y
         elif M > N:
@@ -252,8 +251,6 @@ class LatentDistributionTest(BaseInference):
         else:
             reverse_order = False
 
-        print(X.shape, Y.shape)
-        print(N, M, reverse_order)
         # estimate the central limit theorem variance
         if pooled:
             # TODO unclear whether using pooled estimator provides more power.
@@ -271,7 +268,6 @@ class LatentDistributionTest(BaseInference):
             X_sampled[i, :] = X[i, :] + stats.multivariate_normal.rvs(cov=X_sigmas[i])
 
         # return the embeddings in the appropriate order
-        print(X_sampled.shape)
         return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
     def fit(self, A1, A2):

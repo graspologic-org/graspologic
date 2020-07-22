@@ -91,8 +91,9 @@ class TestLatentDistributionTest(unittest.TestCase):
         B = er_np(100, 0.3, directed=True)
 
         ldt = LatentDistributionTest("dcorr")
-        with self.assertRaises(NotImplementedError):
-            ldt.fit(A, B)
+        # with self.assertRaises(NotImplementedError):
+        # ldt.fit(A, B)
+        ldt.fit(A, B)
 
     def test_SBM_dcorr(self):
         for test in self.tests.keys():
@@ -136,12 +137,11 @@ class TestLatentDistributionTest(unittest.TestCase):
         p_corrected_1 = ldt_corrected_1.fit_predict(A1, A2)
         p_corrected_2 = ldt_corrected_2.fit_predict(A2, A1)
 
-        print(p_not_corrected, p_corrected_1, p_corrected_2)
         self.assertTrue(p_not_corrected <= 0.05)
         self.assertTrue(p_corrected_1 > 0.05)
         self.assertTrue(p_corrected_2 > 0.05)
 
-    def test_different_sizes_alternative(self):
+    def test_different_sizes_nul(self):
         np.random.seed(314)
 
         A1 = er_np(100, 0.8)
