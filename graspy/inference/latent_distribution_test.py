@@ -79,8 +79,8 @@ class LatentDistributionTest(BaseInference):
         Number of workers to use. If more than 1, parallelizes the code.
         Supply -1 to use all cores available to the Process.
 
-    size_correction: bool (default=True)
-        The size degrades in validity as the orders of two graphs diverge from
+    order_correction: bool (default=True)
+        The test degrades in validity as the orders of two graphs diverge from
         each other, unless the kernel matrix is modified.
         If True - in the case when two graphs are not of equal orders, estimates
         the plug-in estimator for the variance and uses it to correct the
@@ -126,7 +126,7 @@ class LatentDistributionTest(BaseInference):
         n_components=None,
         n_bootstraps=200,
         workers=1,
-        size_correction=True,
+        order_correction=True,
     ):
 
         if not isinstance(test, str):
@@ -166,8 +166,8 @@ class LatentDistributionTest(BaseInference):
             )
             raise ValueError(msg.format(workers))
 
-        if not isinstance(size_correction, bool):
-            msg = "size_correction must be a bool, not {}".format(type(size_correction))
+        if not isinstance(order_correction, bool):
+            msg = "order_correction must be a bool, not {}".format(type(order_correction))
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)
@@ -214,7 +214,7 @@ class LatentDistributionTest(BaseInference):
         self.test = KSample(test, compute_distance=metric_func)
         self.n_bootstraps = n_bootstraps
         self.workers = workers
-        self.size_correction = size_correction
+        self.order_correction = order_correction
 
     def _embed(self, A1, A2):
         # if not is_symmetric(A1) or not is_symmetric(A2):
@@ -289,7 +289,7 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = self._embed(A1, A2)
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
-        if self.size_correction:
+        if self.order_correction:
             X1_hat, X2_hat = self._sample_modified_ase(X1_hat, X2_hat)
 
         data = self.test.test(
