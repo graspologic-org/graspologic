@@ -32,7 +32,7 @@ def import_graph(graph, copy=True):
     ----------
     graph: object
         Either array-like, shape (n_vertices, n_vertices) numpy array,
-        or an object of type networkx.Graph.
+        a scipy sparse matrix, or an object of type networkx.Graph.
 
     copy: bool, (default=True)
         Whether to return a copied version of array. If False and input is np.array,
@@ -76,7 +76,10 @@ def import_graph(graph, copy=True):
             copy=copy,
         )
     else:
-        msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
+        msg = "Input must be networkx.Graph, np.array, or scipy sparse matrix,\
+        not {}.".format(
+            type(graph)
+        )
         raise TypeError(msg)
     return out
 
@@ -178,7 +181,11 @@ def is_unweighted(X):
 
 
 def is_almost_symmetric(X, atol=1e-15):
-    return np.allclose(X, X.T, atol=atol)
+    # if isspmatrix(X):
+    #     return abs(X - X.T).max() <= atol
+    # else:
+    #     return np.allclose(X, X.T, atol=atol)
+    return abs(X - X.T).max() <= atol
 
 
 def symmetrize(graph, method="avg"):
@@ -674,7 +681,7 @@ def augment_diagonal(graph, weight=1):
         return graph
 
     def _sparse(graph):
-        graph = dia_matrix(graph)
+        # graph = dia_matrix(graph)
         divisor = graph.shape[0] - 1
 
         in_degrees = abs(graph).sum(axis=0)
