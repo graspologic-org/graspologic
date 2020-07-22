@@ -19,6 +19,7 @@ from pathlib import Path
 
 import networkx as nx
 import numpy as np
+import scipy
 from sklearn.utils import check_array
 from scipy.sparse import isspmatrix, diags, dia_matrix
 
