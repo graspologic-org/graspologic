@@ -153,8 +153,8 @@ class LatentDistributionTest(BaseInference):
         if not isinstance(n_bootstraps, int):
             msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
             raise TypeError(msg)
-        elif n_bootstraps < 1:
-            msg = "{} is invalid number of bootstraps, must be greater than 1"
+        elif n_bootstraps < 0:
+            msg = "{} is invalid number of bootstraps, must be positive"
             raise ValueError(msg.format(n_bootstraps))
 
         if not isinstance(workers, int):
@@ -238,53 +238,41 @@ class LatentDistributionTest(BaseInference):
 
         return X1_hat, X2_hat
 
-    def _estimate_correction_variances(self, X_hat, Y_hat, pooled=False):
-        # TODO it is unclear whether using pooled estimator provides more or
-        # less power. this should be investigated. should not matter under null.
-        N, d_X = X_hat.shape
-        M, d_Y = Y_hat.shape
-        if N == M:
-            X_sigmas = np.zeros((N, d_X, d_X))
-            Y_sigmas = np.zeros((M, d_Y, d_Y))
-        elif N > M:
-            if pooled:
-                two_samples = np.concatenate([X_hat, Y_hat], axis=0)
-                get_sigma = _fit_plug_in_variance_estimator(two_samples)
-            else:
-                get_sigma = _fit_plug_in_variance_estimator(X_hat)
-            X_sigmas = get_sigma(X_hat) * (N - M) / (N * M)
-            Y_sigmas = np.zeros((M, d_Y, d_Y))
-        else:
-            if pooled:
-                two_samples = np.concatenate([X_hat, Y_hat], axis=0)
-                get_sigma = _fit_plug_in_variance_estimator(two_samples)
-            else:
-                get_sigma = _fit_plug_in_variance_estimator(Y_hat)
-            X_sigmas = np.zeros((N, d_X, d_X))
-            Y_sigmas = get_sigma(Y_hat) * (M - N) / (N * M)
-        return X_sigmas, Y_sigmas
+    def _sample_modified_ase(self, X, Y, pooled=False):
+        N, M = len(X), len(Y)
 
-    def _sample_modified_ase(self, X, Y, workers=1):
-        n = len(X)
-        m = len(Y)
-        if n == m:
+        # return if graphs are same order, else else ensure X the larger graph.
+        print(X.shape, Y.shape)
+        if N == M:
             return X, Y
-        elif n > m:
-            X_sigmas, _ = self._estimate_correction_variances(X, Y)
-            X_sampled = np.zeros(X.shape)
-            for i in range(n):
-                X_sampled[i, :] = X[i, :] + stats.multivariate_normal.rvs(
-                    cov=X_sigmas[i]
-                )
-            return X_sampled, Y
+        elif M > N:
+            reverse_order = True
+            X, Y = Y, X
+            N, M = M, N
         else:
-            _, Y_sigmas = self._estimate_correction_variances(X, Y)
-            Y_sampled = np.zeros(Y.shape)
-            for i in range(m):
-                Y_sampled[i, :] = Y[i, :] + stats.multivariate_normal.rvs(
-                    cov=Y_sigmas[i]
-                )
-            return X, Y_sampled
+            reverse_order = False
+
+        print(X.shape, Y.shape)
+        print(N, M, reverse_order)
+        # estimate the central limit theorem variance
+        if pooled:
+            # TODO unclear whether using pooled estimator provides more power.
+            # TODO this should be investigated. should not matter under null.
+            two_samples = np.concatenate([X, Y], axis=0)
+            get_sigma = _fit_plug_in_variance_estimator(two_samples)
+        else:
+            get_sigma = _fit_plug_in_variance_estimator(X)
+        X_sigmas = get_sigma(X) * (N - M) / (N * M)
+
+        # increase the variance of X by sampling from the asy dist
+        X_sampled = np.zeros(X.shape)
+        # TODO may be parallelized, but requires keeping track of random state
+        for i in range(N):
+            X_sampled[i, :] = X[i, :] + stats.multivariate_normal.rvs(cov=X_sigmas[i])
+
+        # return the embeddings in the appropriate order
+        print(X_sampled.shape)
+        return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
     def fit(self, A1, A2):
         """
@@ -306,9 +294,7 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
         if self.size_correction:
-            X1_hat, X2_hat = self._sample_modified_ase(
-                X1_hat, X2_hat, workers=self.workers
-            )
+            X1_hat, X2_hat = self._sample_modified_ase(X1_hat, X2_hat)
 
         data = self.test.test(
             X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False

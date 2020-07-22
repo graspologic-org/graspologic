@@ -55,8 +55,6 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             LatentDistributionTest(test="dcorr", n_bootstraps=0.5)
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="dcorr", n_components=0.5)
-        with self.assertRaises(TypeError):
             LatentDistributionTest(test="dcorr", workers=0.5)
 
     def test_n_bootstraps(self):
@@ -118,7 +116,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             self.assertTrue(p_null > 0.05)
             self.assertTrue(p_alt <= 0.05)
 
-    def test_different_sizes(self):
+    def test_different_sizes_null(self):
         np.random.seed(314)
 
         A1 = er_np(100, 0.8)
@@ -138,9 +136,29 @@ class TestLatentDistributionTest(unittest.TestCase):
         p_corrected_1 = ldt_corrected_1.fit_predict(A1, A2)
         p_corrected_2 = ldt_corrected_2.fit_predict(A2, A1)
 
+        print(p_not_corrected, p_corrected_1, p_corrected_2)
         self.assertTrue(p_not_corrected <= 0.05)
         self.assertTrue(p_corrected_1 > 0.05)
         self.assertTrue(p_corrected_2 > 0.05)
+
+    def test_different_sizes_alternative(self):
+        np.random.seed(314)
+
+        A1 = er_np(100, 0.8)
+        A2 = er_np(1000, 0.7)
+
+        ldt_corrected_1 = LatentDistributionTest(
+            "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
+        )
+        ldt_corrected_2 = LatentDistributionTest(
+            "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
+        )
+
+        p_corrected_1 = ldt_corrected_1.fit_predict(A1, A2)
+        p_corrected_2 = ldt_corrected_2.fit_predict(A2, A1)
+
+        self.assertTrue(p_corrected_1 <= 0.05)
+        self.assertTrue(p_corrected_2 <= 0.05)
 
 
 if __name__ == "__main__":
