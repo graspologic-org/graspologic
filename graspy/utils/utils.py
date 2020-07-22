@@ -328,7 +328,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     """
 
-    def _sparse(A):
+    def _sparse(A, form, regularizer):
         in_degree = np.array(graph.sum(axis=0), dtype=np.float64)[0]
         out_degree = np.array(graph.sum(axis=1).T, dtype=np.float64)[0]
 
@@ -370,7 +370,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
             )  # sometimes machine prec. makes this necessary
         return L
 
-    def _dense(A):
+    def _dense(A, form, regularizer):
         in_degree = np.sum(A, axis=0)
         out_degree = np.sum(A, axis=1)
 
@@ -415,7 +415,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     A = import_graph(graph)
     create_lapgraph = _sparse if isspmatrix(A) else _dense
-    return create_lapgraph(A)
+    return create_lapgraph(A, form, regularizer)
 
 
 def is_fully_connected(graph):
