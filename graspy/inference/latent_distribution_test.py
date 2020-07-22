@@ -167,7 +167,9 @@ class LatentDistributionTest(BaseInference):
             raise ValueError(msg.format(workers))
 
         if not isinstance(order_correction, bool):
-            msg = "order_correction must be a bool, not {}".format(type(order_correction))
+            msg = "order_correction must be a bool, not {}".format(
+                type(order_correction)
+            )
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)
@@ -234,8 +236,10 @@ class LatentDistributionTest(BaseInference):
             X1_hat = np.concatenate(X1_hat, axis=-1)
             X2_hat = np.concatenate(X2_hat, axis=-1)
         elif isinstance(X1_hat, tuple) ^ isinstance(X2_hat, tuple):
-            msg = ("input graphs do not have same directedness. "
-                   "consider symmetrizing the directed graph.")
+            msg = (
+                "input graphs do not have same directedness. "
+                "consider symmetrizing the directed graph."
+            )
             raise ValueError(msg)
 
         return X1_hat, X2_hat
