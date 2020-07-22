@@ -89,11 +89,17 @@ class TestLatentDistributionTest(unittest.TestCase):
         np.random.seed(2)
         A = er_np(100, 0.3, directed=True)
         B = er_np(100, 0.3, directed=True)
+        C = er_np(100, 0.3, directed=False)
 
+        # two directed graphs is okay
         ldt = LatentDistributionTest("dcorr")
-        # with self.assertRaises(NotImplementedError):
-        # ldt.fit(A, B)
         ldt.fit(A, B)
+
+        # an undirected and a direced graph is not okay
+        with self.assertRaises(ValueError):
+            ldt.fit(A, C)
+        with self.assertRaises(ValueError):
+            ldt.fit(C, B)
 
     def test_SBM_dcorr(self):
         for test in self.tests.keys():

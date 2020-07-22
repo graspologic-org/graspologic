@@ -234,7 +234,9 @@ class LatentDistributionTest(BaseInference):
             X1_hat = np.concatenate(X1_hat, axis=-1)
             X2_hat = np.concatenate(X2_hat, axis=-1)
         elif isinstance(X1_hat, tuple) ^ isinstance(X2_hat, tuple):
-            raise ValueError("Input graphs do not have same directedness")
+            msg = ("input graphs do not have same directedness. "
+                   "consider symmetrizing the directed graph.")
+            raise ValueError(msg)
 
         return X1_hat, X2_hat
 
