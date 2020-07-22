@@ -21,7 +21,7 @@ import networkx as nx
 import numpy as np
 from sklearn.utils import check_array
 from scipy.sparse import isspmatrix, diags, dia_matrix
-from scipy.sparse import triu, tril
+
 
 def import_graph(graph, copy=True):
     """
@@ -165,7 +165,7 @@ def import_edgelist(
 
 
 def is_symmetric(X):
-    return abs(X-X.T).sum() == 0
+    return abs(X - X.T).sum() == 0
 
 
 def is_loopless(X):
@@ -319,9 +319,10 @@ def to_laplace(graph, form="DAD", regularizer=None):
            [0.70710678, 0.        , 0.        ]])
 
     """
+
     def _sparse(A):
-        in_degree = np.array(graph.sum(axis=0), dtype= np.float64)[0]
-        out_degree = np.array(graph.sum(axis=1).T, dtype = np.float64)[0]
+        in_degree = np.array(graph.sum(axis=0), dtype=np.float64)[0]
+        out_degree = np.array(graph.sum(axis=1).T, dtype=np.float64)[0]
 
         # regularize laplacian with parameter
         # set to average degree
@@ -330,7 +331,9 @@ def to_laplace(graph, form="DAD", regularizer=None):
                 regularizer = np.mean(out_degree)
             elif not isinstance(regularizer, (int, float)):
                 raise TypeError(
-                    "Regularizer must be a int or float, not {}".format(type(regularizer))
+                    "Regularizer must be a int or float, not {}".format(
+                        type(regularizer)
+                    )
                 )
             elif regularizer < 0:
                 raise ValueError("Regularizer must be greater than or equal to 0")
@@ -370,7 +373,9 @@ def to_laplace(graph, form="DAD", regularizer=None):
                 regularizer = np.mean(out_degree)
             elif not isinstance(regularizer, (int, float)):
                 raise TypeError(
-                    "Regularizer must be a int or float, not {}".format(type(regularizer))
+                    "Regularizer must be a int or float, not {}".format(
+                        type(regularizer)
+                    )
                 )
             elif regularizer < 0:
                 raise ValueError("Regularizer must be greater than or equal to 0")
@@ -403,6 +408,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     A = import_graph(graph)
     create_lapgraph = _sparse if isspmatrix(A) else _dense
     return create_lapgraph(A)
+
 
 def is_fully_connected(graph):
     r"""
@@ -653,6 +659,7 @@ def augment_diagonal(graph, weight=1):
            [1. , 0.5, 0. ],
            [1. , 0. , 0.5]])
     """
+
     def _dense(graph):
         divisor = graph.shape[0] - 1
 
@@ -664,15 +671,16 @@ def augment_diagonal(graph, weight=1):
         graph += np.diag(diag)
 
         return graph
+
     def _sparse(graph):
         graph = dia_matrix(graph)
         divisor = graph.shape[0] - 1
-        
+
         in_degrees = abs(graph).sum(axis=0)
         out_degrees = abs(graph).sum(axis=1).transpose()
         degrees = (in_degrees + out_degrees) / 2
-        
-        diag = weight * degrees/ divisor
+
+        diag = weight * degrees / divisor
 
         graph += diags(np.array(diag)[0])
 
@@ -683,7 +691,7 @@ def augment_diagonal(graph, weight=1):
 
     create_adgraph = _sparse if isspmatrix(graph) else _dense
     return create_adgraph(graph)
-    
+
 
 def binarize(graph):
     """
