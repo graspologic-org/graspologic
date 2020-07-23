@@ -154,7 +154,7 @@ class LatentDistributionTest(BaseInference):
             msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
             raise TypeError(msg)
         elif n_bootstraps < 0:
-            msg = "{} is invalid number of bootstraps, must be positive"
+            msg = "{} is invalid number of bootstraps, must be non-negative"
             raise ValueError(msg.format(n_bootstraps))
 
         if not isinstance(workers, int):
