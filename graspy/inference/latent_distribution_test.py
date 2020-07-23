@@ -80,13 +80,13 @@ class LatentDistributionTest(BaseInference):
         Supply -1 to use all cores available to the Process.
 
     order_correction: bool (default=True)
-        The test degrades in validity as the orders of two graphs diverge from
-        each other, unless the kernel matrix is modified.
-        If True - in the case when two graphs are not of equal orders, estimates
+        Ignored when the two graphs have the same number of vertices. The test degrades 
+        in validity as the number of vertices of the two graphs diverge from each other,
+        unless a correction is performed.
+        If True, when the two graphs have different numbers of vertices, estimates
         the plug-in estimator for the variance and uses it to correct the
         embedding of the larger graph.
-        If False - does not perform any modifications (generally not
-        recommended).
+        If False, does not perform any modifications (not recommended).
 
     Attributes
     ----------
