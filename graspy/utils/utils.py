@@ -283,7 +283,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     ----------
     graph: object
         Either array-like, (n_vertices, n_vertices) numpy array,
-        or an object of type networkx.Graph.
+        sparse matrix, or an object of type networkx.Graph.
 
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
 
@@ -645,7 +645,7 @@ def augment_diagonal(graph, weight=1):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, sparse matrix
         Input graph in any of the above specified formats. If np.ndarray, 
         interpreted as an :math:`n \times n` adjacency matrix
     weight: float/int
