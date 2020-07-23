@@ -180,7 +180,7 @@ class LatentDistributionTest(BaseInference):
             if metric in _VALID_DISTANCES:
                 if test == "hsic":
                     msg = (
-                        f"{test} is a kernel-baed test, but {metric} "
+                        f"{test} is a kernel-based test, but {metric} "
                         "is a distance. results may not be optimal. it is "
                         "recomended to use either a different test or one of "
                         f"the kernels: {_VALID_KERNELS} as a metric."
@@ -193,7 +193,7 @@ class LatentDistributionTest(BaseInference):
             elif metric == "gaussian":
                 if test != "hsic":
                     msg = (
-                        f"{test} is a distance-baed test, but {metric} "
+                        f"{test} is a distance-based test, but {metric} "
                         "is a kernel. results may not be optimal. it is "
                         "recomended to use either a hisc as a test or one of "
                         f"the distances: {_VALID_DISTANCES} as a metric."
@@ -203,7 +203,7 @@ class LatentDistributionTest(BaseInference):
             else:
                 if test != "hsic":
                     msg = (
-                        f"{test} is a distance-baed test, but {metric} "
+                        f"{test} is a distance-based test, but {metric} "
                         "is a kernel. results may not be optimal. it is "
                         "recomended to use either a hisc as a test or one of "
                         f"the distances: {_VALID_DISTANCES} as a metric."
