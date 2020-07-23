@@ -137,7 +137,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         Parameters
         ----------
-        graph : array_like or networkx.Graph
+        graph : array_like, sparse matrix, or networkx.Graph
             Input graph to embed.
 
         Returns
