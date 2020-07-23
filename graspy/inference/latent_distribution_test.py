@@ -18,7 +18,7 @@ import numpy as np
 from scipy import stats
 
 from ..embed import select_dimension, AdjacencySpectralEmbed
-from ..utils import import_graph, is_symmetric
+from ..utils import import_graph
 from .base import BaseInference
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import pairwise_kernels
@@ -219,10 +219,6 @@ class LatentDistributionTest(BaseInference):
         self.order_correction = order_correction
 
     def _embed(self, A1, A2):
-        # if not is_symmetric(A1) or not is_symmetric(A2):
-        #     msg = "currently, testing is only supported for undirected graphs"
-        #     raise NotImplementedError(msg)  # TODO asymmetric case
-
         if self.n_components is None:
             num_dims1 = select_dimension(A1)[0][-1]
             num_dims2 = select_dimension(A2)[0][-1]
