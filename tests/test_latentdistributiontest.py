@@ -44,10 +44,6 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(test="dcorr", n_components=-100)
         with self.assertRaises(ValueError):
             LatentDistributionTest(test="dcorr", n_bootstraps=-100)
-        with self.assertRaises(ValueError):
-            LatentDistributionTest(test="dcorr", workers=0)
-        with self.assertRaises(ValueError):
-            LatentDistributionTest(test="dcorr", workers=-2)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test=0)
         with self.assertRaises(TypeError):
