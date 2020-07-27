@@ -79,8 +79,8 @@ class LatentDistributionTest(BaseInference):
         Number of workers to use. If more than 1, parallelizes the code.
         Supply -1 to use all cores available to the Process.
 
-    order_correction: bool (default=True)
-        Ignored when the two graphs have the same number of vertices. The test degrades 
+    size_correction: bool (default=True)
+        Ignored when the two graphs have the same number of vertices. The test degrades
         in validity as the number of vertices of the two graphs diverge from each other,
         unless a correction is performed.
         If True, when the two graphs have different numbers of vertices, estimates
@@ -126,7 +126,7 @@ class LatentDistributionTest(BaseInference):
         n_components=None,
         n_bootstraps=200,
         workers=1,
-        order_correction=True,
+        size_correction=True,
     ):
 
         if not isinstance(test, str):
@@ -166,10 +166,8 @@ class LatentDistributionTest(BaseInference):
             )
             raise ValueError(msg.format(workers))
 
-        if not isinstance(order_correction, bool):
-            msg = "order_correction must be a bool, not {}".format(
-                type(order_correction)
-            )
+        if not isinstance(size_correction, bool):
+            msg = "size_correction must be a bool, not {}".format(type(size_correction))
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)
@@ -216,7 +214,7 @@ class LatentDistributionTest(BaseInference):
         self.test = KSample(test, compute_distance=metric_func)
         self.n_bootstraps = n_bootstraps
         self.workers = workers
-        self.order_correction = order_correction
+        self.size_correction = size_correction
 
     def _embed(self, A1, A2):
         if self.n_components is None:
@@ -291,7 +289,7 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = self._embed(A1, A2)
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
-        if self.order_correction:
+        if self.size_correction:
             X1_hat, X2_hat = self._sample_modified_ase(X1_hat, X2_hat)
 
         data = self.test.test(

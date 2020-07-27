@@ -130,13 +130,13 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = er_np(1000, 0.8)
 
         ldt_not_corrected = LatentDistributionTest(
-            "hsic", "gaussian", n_components=2, n_bootstraps=100, order_correction=False
+            "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=False
         )
         ldt_corrected_1 = LatentDistributionTest(
-            "hsic", "gaussian", n_components=2, n_bootstraps=100, order_correction=True
+            "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
         )
         ldt_corrected_2 = LatentDistributionTest(
-            "hsic", "gaussian", n_components=2, n_bootstraps=100, order_correction=True
+            "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
         )
 
         p_not_corrected = ldt_not_corrected.fit_predict(A1, A2)
@@ -154,10 +154,10 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = er_np(1000, 0.7)
 
         ldt_corrected_1 = LatentDistributionTest(
-            "hsic", "gaussian", n_components=2, n_bootstraps=100, order_correction=True
+            "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
         )
         ldt_corrected_2 = LatentDistributionTest(
-            "hsic", "gaussian", n_components=2, n_bootstraps=100, order_correction=True
+            "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
         )
 
         p_corrected_1 = ldt_corrected_1.fit_predict(A1, A2)
