@@ -178,7 +178,7 @@ class LatentDistributionTest(BaseInference):
             raise TypeError(msg)
 
         if not isinstance(pooled, bool):
-            msg = "size_correction must be a bool, not {}".format(type(size_correction))
+            msg = "pooled must be a bool, not {}".format(type(pooled))
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)
