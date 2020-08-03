@@ -143,7 +143,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         self.assertTrue(p_corrected_1 > 0.05)
         self.assertTrue(p_corrected_2 > 0.05)
 
-    def test_different_sizes_nul(self):
+    def test_different_sizes_null(self):
         np.random.seed(314)
 
         A1 = er_np(100, 0.8)
