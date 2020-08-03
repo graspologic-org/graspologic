@@ -69,7 +69,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = er_np(100, 0.3)
 
         ldt = LatentDistributionTest(pooled=True)
-        ldt.fit(self.A1, self.A2)
+        ldt.fit(A1, A2)
 
     def test_distances_and_kernels(self):
         # some valid combinations of test and metric
