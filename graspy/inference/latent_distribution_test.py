@@ -139,6 +139,7 @@ class LatentDistributionTest(BaseInference):
         n_bootstraps=200,
         workers=1,
         size_correction=True,
+        pooled=False,
     ):
 
         if not isinstance(test, str):
