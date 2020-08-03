@@ -52,12 +52,24 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(test="dcorr", n_bootstraps=0.5)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test="dcorr", workers=0.5)
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(size_correction=0)
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(pooled=0)
 
     def test_n_bootstraps(self):
         for test in self.tests.keys():
             ldt = LatentDistributionTest(test, self.tests[test], n_bootstraps=123)
             ldt.fit(self.A1, self.A2)
             self.assertEqual(ldt.null_distribution_.shape[0], 123)
+
+    def test_pooled(self):
+        np.random.seed(123)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(100, 0.3)
+
+        ldt = LatentDistributionTest(pooled=True)
+        ldt.fit(self.A1, self.A2)
 
     def test_distances_and_kernels(self):
         # some valid combinations of test and metric

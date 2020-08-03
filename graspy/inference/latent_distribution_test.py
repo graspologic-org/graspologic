@@ -36,8 +36,7 @@ _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
 
 class LatentDistributionTest(BaseInference):
-    """
-    Two-sample hypothesis test for the problem of determining whether two random
+    """Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same distributions of latent positions.
 
     This test can operate on two graphs where there is no known matching
@@ -48,13 +47,13 @@ class LatentDistributionTest(BaseInference):
 
     Parameters
     ----------
-    test : str
+    test : str (default="hsic")
         Backend hypothesis test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
         These tests are typically used for independence testing, but here they
         are used for a two-sample hypothesis test on the latent positions of
         two graphs. See :class:`hyppo.ksample.KSample` for more information.
 
-    metric : str or function, (default="gaussian")
+    metric : str or function (default="gaussian")
         Distance or a kernel metric to use, either a callable or a valid string.
         If a callable, then it should behave similarly to either
         :func:`sklearn.metrics.pairwise_distances` or to
@@ -66,7 +65,7 @@ class LatentDistributionTest(BaseInference):
         It is recommended to use kernels (e.g. "gaussian") with kernel-based
         hsic test and distances (e.g. "euclidean") with all other tests.
 
-    n_components : int or None, optional (default=None)
+    n_components : int or None (default=None)
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspy.embed.selectSVD` for more information.
@@ -75,18 +74,30 @@ class LatentDistributionTest(BaseInference):
         Number of bootstrap iterations for the backend hypothesis test.
         See :class:`hyppo.ksample.KSample` for more information.
 
-    workers : int, optional (default=1)
+    workers : int (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
         Supply -1 to use all cores available to the Process.
 
     size_correction: bool (default=True)
-        Ignored when the two graphs have the same number of vertices. The test degrades
-        in validity as the number of vertices of the two graphs diverge from each other,
-        unless a correction is performed.
-        If True, when the two graphs have different numbers of vertices, estimates
-        the plug-in estimator for the variance and uses it to correct the
-        embedding of the larger graph.
+        Ignored when the two graphs have the same number of vertices. The test
+        degrades in validity as the number of vertices of the two graphs
+        diverge from each other, unless a correction is performed.
+        If True, when the two graphs have different numbers of vertices,
+        estimates the plug-in estimator for the variance and uses it to correct
+        the embedding of the larger graph.
         If False, does not perform any modifications (not recommended).
+
+    pooled: bool (default=False)
+        Ignored whenever the two graphs have the same number of vertices or
+        size_correction is set to False. In order to correct the adjacency
+        spectral embedding used in the test, it is needed to estimate the
+        variance for each of the latent position estimates in the larger graph,
+        which requires to compute different sample moments. These moments can
+        be computed either over the larger graph (False), or over both graphs
+        (True). Setting it to True should not affect the behavior of the test
+        under the null hypothesis, but it is not clear whether it has more
+        power or less power under which alternatives. Generally not recomended,
+        as it is untested and included for experimental purposes.
 
     Attributes
     ----------
@@ -115,8 +126,9 @@ class LatentDistributionTest(BaseInference):
        arXiv:1911.02741
 
     .. [4] Alyakin, A., Agterberg, J., Helm, H., Priebe, C. (2020)
-       "Correcting a Nonparametric Two-sample Graph Hypothesis test for Differing Orders"
+       "Correcting a Nonparametric Two-sample Graph Hypothesis Test for Graphs with Different Numbers of Vertices"
        TODO cite the arXiv whenever possible
+
     """
 
     def __init__(
@@ -165,6 +177,10 @@ class LatentDistributionTest(BaseInference):
             msg = "size_correction must be a bool, not {}".format(type(size_correction))
             raise TypeError(msg)
 
+        if not isinstance(pooled, bool):
+            msg = "size_correction must be a bool, not {}".format(type(size_correction))
+            raise TypeError(msg)
+
         super().__init__(n_components=n_components)
 
         if callable(metric):
@@ -210,6 +226,7 @@ class LatentDistributionTest(BaseInference):
         self.n_bootstraps = n_bootstraps
         self.workers = workers
         self.size_correction = size_correction
+        self.pooled = pooled
 
     def _embed(self, A1, A2):
         if self.n_components is None:
@@ -248,8 +265,6 @@ class LatentDistributionTest(BaseInference):
 
         # estimate the central limit theorem variance
         if pooled:
-            # TODO unclear whether using pooled estimator provides more power.
-            # TODO this should be investigated. should not matter under null.
             two_samples = np.concatenate([X, Y], axis=0)
             get_sigma = _fit_plug_in_variance_estimator(two_samples)
         else:
@@ -285,7 +300,9 @@ class LatentDistributionTest(BaseInference):
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
         if self.size_correction:
-            X1_hat, X2_hat = self._sample_modified_ase(X1_hat, X2_hat)
+            X1_hat, X2_hat = self._sample_modified_ase(
+                X1_hat, X2_hat, pooled=self.pooled
+            )
 
         data = self.test.test(
             X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False
