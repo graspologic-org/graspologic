@@ -228,6 +228,7 @@ class LatentDistributionTest(BaseInference):
         self.workers = workers
         self.size_correction = size_correction
         self.pooled = pooled
+        self.metric = metric
 
     def _embed(self, A1, A2):
         if self.n_components is None:
