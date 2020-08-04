@@ -3,6 +3,16 @@
 Release Log
 ===========
 
+GraSPy 0.3
+----------
+Release date: 04 Aug 2020
+Supports Python 3.6, and 3.7
+
+
+Release notes
+~~~~~~~~~~~~~
+See :doc:`release/release_0.3`.
+
 GraSPy 0.2
 ----------
 Release date: 02 Mar 2020
