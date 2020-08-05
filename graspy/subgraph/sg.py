@@ -183,3 +183,11 @@ class SignalSubgraph:
         mask[self.sigsub_] = True
         self.mask_ = mask
         return self.sigsub_
+
+    def _estimate_pi(self):
+        """Calculate the posterior distribution of class labels."""
+        n = len(self.labels)
+        self.pi_ = dict()
+        for class_label in self.labels.unique():
+            pi_i = sum(self.labels == class_label) / n
+            self.pi_[label] = pi_i
