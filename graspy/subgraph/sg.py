@@ -216,7 +216,7 @@ class SignalSubgraph:
         """Calculate the probability of a graph belonging to a specific class."""
         pi_i = self.pi_[class_label]
         proba = 1
-        for u, v in self.sigsub_:
+        for u, v in zip(*self.sigsub_):
             a_uv = binarized_graph[u, v]
             p_uv_y = self._estimate_p_uv_y(u, v, class_label)
             proba *= (p_uv_y ** a_uv) * (1 - p_uv_y ** (not a_uv))
