@@ -212,27 +212,24 @@ class SignalSubgraph:
             pi_i = sum(self.labels == class_label) / n
             self.pi_[class_label] = pi_i
 
-    def _predict_class_proba(self, binarized_graph, class_label):
+    def _predict_class_proba(self, graph, class_label):
         """Calculate the probability of a graph belonging to a specific class."""
         pi_i = self.pi_[class_label]
         proba = 1
         for u, v in zip(*self.sigsub_):
-            a_uv = binarized_graph[u, v]
+            a_uv = graph[u, v]
             p_uv_y = self._estimate_p_uv_y(u, v, class_label)
-            proba *= (p_uv_y ** a_uv) * (1 - p_uv_y ** (not a_uv))
+            proba *= (p_uv_y ** a_uv) * (1 - p_uv_y ** (1 - a_uv))
         return proba * pi_i
 
     def predict_proba(self, graph):
         """Predict the probability of a graph belonging to all classes."""
 
-        # Binarize input graph
-        binarized_graph = graph > 0
-
         # Estimate pi
         self._estimate_pi()
 
         return {
-            class_label: self._predict_class_proba(binarized_graph, class_label)
+            class_label: self._predict_class_proba(graph, class_label)
             for class_label in np.unique(self.labels)
         }
 
