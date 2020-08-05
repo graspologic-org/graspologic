@@ -184,6 +184,26 @@ class SignalSubgraph:
         self.mask_ = mask
         return self.sigsub_
 
+    def _estimate_p_uv_y(self, u, v, class_label):
+        """
+        Calculate the smoothed class-conditional probability of an edge
+        occuring between vertecies u and v.
+        """
+
+        # Calculate class-conditional probability
+        n = len(self.labels)
+        eta = 1 / (10 * n)
+        n_edge, n_no_edge = self.contmat_[u, v, :, class_label]
+        p_uv_y = n_edge / (n_edge + n_no_edge)
+
+        # If necessary, smooth estimate
+        if p_uv_y == 0:
+            return eta
+        elif p_uv_y == 1:
+            return 1 - eta
+        else:
+            return p_uv_y
+
     def _estimate_pi(self):
         """Calculate the posterior distribution of class labels."""
         n = len(self.labels)
