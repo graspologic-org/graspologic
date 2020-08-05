@@ -223,9 +223,7 @@ class SignalSubgraph:
         return proba * pi_i
 
     def predict_proba(self, graph):
-        """
-        Predict the probability of a graph belonging to all classes.
-        """
+        """Predict the probability of a graph belonging to all classes."""
 
         # Binarize input graph
         binarized_graph = graph > 0
@@ -239,5 +237,6 @@ class SignalSubgraph:
         }
 
     def predict(self, graph):
+        """Predict most likely class for a given graph."""
         proba = self.predict_proba(graph)
         return max(proba, key=proba.get)
