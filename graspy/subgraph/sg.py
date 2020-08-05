@@ -208,7 +208,7 @@ class SignalSubgraph:
         """Calculate the posterior distribution of class labels."""
         n = len(self.labels)
         self.pi_ = dict()
-        for class_label in self.labels.unique():
+        for class_label in np.unique(self.labels):
             pi_i = sum(self.labels == class_label) / n
             self.pi_[class_label] = pi_i
 
@@ -233,7 +233,7 @@ class SignalSubgraph:
 
         return {
             class_label: self._predict_class_proba(binarized_graph, class_label)
-            for class_label in self.labels.unique()
+            for class_label in np.unique(self.labels)
         }
 
     def predict(self, graph):
