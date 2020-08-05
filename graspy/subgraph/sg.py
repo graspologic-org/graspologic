@@ -237,3 +237,7 @@ class SignalSubgraph:
             class_label: self._predict_class_proba(binarized_graph, class_label)
             for class_label in self.labels.unique()
         }
+
+    def predict(self, graph):
+        proba = self.predict_proba(graph)
+        return max(proba, key=proba.get)
