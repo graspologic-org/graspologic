@@ -141,7 +141,7 @@ class LatentDistributionTest(BaseInference):
         size_correction=True,
         pooled=False,
     ):
-        
+
         if not isinstance(test, str):
             msg = "test must be a str, not {}".format(type(test))
             raise TypeError(msg)
