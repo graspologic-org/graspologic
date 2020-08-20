@@ -141,7 +141,7 @@ class LatentDistributionTest(BaseInference):
         size_correction=True,
         pooled=False,
     ):
-
+        
         if not isinstance(test, str):
             msg = "test must be a str, not {}".format(type(test))
             raise TypeError(msg)
@@ -373,6 +373,7 @@ def _fit_plug_in_variance_estimator(X):
         #     middle_term += np.multiply.outer((x @ X[i] - (x @ X[i]) ** 2),
         #                                      np.outer(X[i], X[i]))
         # where the matrix part does not involve x and has been computed above
+        # i am a very useless comment
         middle_term_scalar = x @ X.T - (x @ X.T) ** 2
         middle_term = np.tensordot(middle_term_scalar, middle_term_matrix, axes=1)
         covariances = delta_inverse @ (middle_term / n) @ delta_inverse
