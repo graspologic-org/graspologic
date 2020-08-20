@@ -69,6 +69,8 @@ class LatentDistributionTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspy.embed.selectSVD` for more information.
+        This argument is ignored if already embedded graphs are passed (see
+        pass_graph argument of .fit())
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
@@ -281,23 +283,60 @@ class LatentDistributionTest(BaseInference):
         # return the embeddings in the appropriate order
         return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
-    def fit(self, A1, A2):
+    def fit(self, A1, A2, pass_graph=True):
         """
         Fits the test to the two input graphs
 
         Parameters
         ----------
         A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            The two graphs to run a hypothesis test on.
+            The two graphs, or their embeddings (see pass_graph) to run a
+            hypothesis test on.
+        pass_graph : bool (default=True)
+            whether to expect two full graphs, or the embeddings of thereof.
+            If True - expects graphs, either as networkX objects or as ajacency
+            matrices, provided as ndarrays of size (n, n) and (m, m). They will
+            be embedded using adjacency spectral embeddings.
+            If False - expects adjacency spectral embeddings of the graphs,
+            they must be ndarrays of size (n, d) and (m, d). n_components
+            attribute will be ignored in this case.
 
         Returns
         -------
         self
         """
-        A1 = import_graph(A1)
-        A2 = import_graph(A2)
+        if not isinstance(pass_graph, bool):
+            msg = "pass_graph must be a bool, not {}".format(type(pass_graph))
+            raise TypeError(msg)
 
-        X1_hat, X2_hat = self._embed(A1, A2)
+        if pass_graph:
+            A1 = import_graph(A1)
+            A2 = import_graph(A2)
+
+            X1_hat, X2_hat = self._embed(A1, A2)
+        else:
+            X1_hat, X2_hat = np.array(A1), np.array(A2)
+            if X1_hat.ndim != 2:
+                msg = (
+                    "embedding of the first graph does not have two dimensions! "
+                    "if pass_graph is False, the inputs need to be adjacency "
+                    "spectral embeddings, with shapes (n, d) and (m, d)"
+                )
+                raise ValueError(msg)
+            if X2_hat.ndim != 2:
+                msg = (
+                    "embedding of the second graph does not have two dimensions! "
+                    "if pass_graph is False, the inputs need to be adjacency "
+                    "spectral embeddings, with shapes (n, d) and (m, d)"
+                )
+                raise ValueError(msg)
+            if X1_hat.shape[1] != X2_hat.shape[1]:
+                msg = (
+                    "two embeddings have different number of components!"
+                    "if pass_graph is False, the inputs need to be adjacency "
+                    "spectral embeddings, with shapes (n, d) and (m, d)"
+                )
+                raise ValueError(msg)
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
         if self.size_correction:
@@ -314,6 +353,31 @@ class LatentDistributionTest(BaseInference):
         self.p_value_ = data[1]
 
         return self
+
+    def fit_predict(self, A1, A2, pass_graph=True):
+        """
+        Fits the test to the two input graphs and returns the p-value
+
+        Parameters
+        ----------
+        A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            The two graphs, or their embeddings (see pass_graph) to run a
+            hypothesis test on.
+        pass_graph : bool (default=True)
+            whether to expect two full graphs, or the embeddings of thereof.
+            If True - expects graphs, either as networkX objects or as ajacency
+            matrices, provided as ndarrays of size (n, n) and (m, m). They will
+            be embedded using adjacency spectral embeddings.
+            If False - expects adjacency spectral embeddings of the graphs,
+            they must be ndarrays of size (n, d) and (m, d). n_components
+            attribute will be ignored in this case.
+        Returns
+        ------
+        p_value_ : float
+            The overall p value from the test
+        """
+        self.fit(A1, A2, pass_graph=pass_graph)
+        return self.p_value_
 
 
 def _median_sign_flips(X1, X2):

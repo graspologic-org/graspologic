@@ -3,6 +3,7 @@ import unittest
 import numpy as np
 from sklearn.metrics import pairwise_distances
 
+from graspy.embed import AdjacencySpectralEmbed
 from graspy.inference import LatentDistributionTest
 from graspy.simulations import er_np, sbm
 
@@ -56,12 +57,45 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(size_correction=0)
         with self.assertRaises(TypeError):
             LatentDistributionTest(pooled=0)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest()
+            A1 = er_np(20, 0.8)
+            A2 = er_np(20, 0.8)
+            ldt.fit_predict(A1, A2, pass_graph="hello")
 
     def test_n_bootstraps(self):
         for test in self.tests.keys():
             ldt = LatentDistributionTest(test, self.tests[test], n_bootstraps=123)
             ldt.fit(self.A1, self.A2)
             self.assertEqual(ldt.null_distribution_.shape[0], 123)
+
+    def test_passing_embeddings(self):
+        np.random.seed(123)
+        A1 = er_np(20, 0.8)
+        A2 = er_np(20, 0.8)
+        ase_1 = AdjacencySpectralEmbed(n_components=2)
+        X1 = ase_1.fit_transform(A1)
+        ase_2 = AdjacencySpectralEmbed(n_components=2)
+        X2 = ase_2.fit_transform(A2)
+        ase_3 = AdjacencySpectralEmbed(n_components=1)
+        X3 = ase_3.fit_transform(A2)
+        # check embeddings having weird ndim
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest()
+            ldt.fit_predict(X1, X2.reshape(-1, 1, 1), pass_graph=False)
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest()
+            ldt.fit_predict(X1.reshape(-1, 1, 1), X2, pass_graph=False)
+        # check embeddings having mismatching number of components
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest()
+            ldt.fit_predict(X1, X3, pass_graph=False)
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest()
+            ldt.fit_predict(X3, X1, pass_graph=False)
+        # check that the appropriate input works
+        ldt = LatentDistributionTest()
+        ldt.fit_predict(X1, X2, pass_graph=False)
 
     def test_pooled(self):
         np.random.seed(123)
