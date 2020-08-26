@@ -15,7 +15,7 @@
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
-from ..utils import import_graph, is_almost_symmetric
+from ..utils import augment_diagonal, import_graph, is_almost_symmetric
 from .base import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
 
@@ -26,16 +26,16 @@ class MultipleASE(BaseEmbedMulti):
     graphs with matched vertex sets.
 
     For a population of undirected graphs, MASE assumes that the population of graphs 
-    is sampled from :math:`VR^{(i)}V^T` where :math:`V \in \mathbb{R}^{n\times d}` and 
-    :math:`R^{(i)} \in \mathbb{R}^{d\times d}`. Score matrices, :math:`R^{(i)}`, are 
-    allowed to vary for each graph, but are symmetric. All graphs share a common a 
-    latent position matrix :math:`V`. 
-    
+    is sampled from :math:`VR^{(i)}V^T` where :math:`V \in \mathbb{R}^{n\times d}` and
+    :math:`R^{(i)} \in \mathbb{R}^{d\times d}`. Score matrices, :math:`R^{(i)}`, are
+    allowed to vary for each graph, but are symmetric. All graphs share a common a
+    latent position matrix :math:`V`.
+
     For a population of directed graphs, MASE assumes that the population is sampled
-    from :math:`UR^{(i)}V^T` where :math:`U \in \mathbb{R}^{n\times d_1}`, 
-    :math:`V \in \mathbb{R}^{n\times d_2}`, and 
-    :math:`R^{(i)} \in \mathbb{R}^{d_1\times d_2}`. In this case, score matrices 
-    :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a 
+    from :math:`UR^{(i)}V^T` where :math:`U \in \mathbb{R}^{n\times d_1}`,
+    :math:`V \in \mathbb{R}^{n\times d_2}`, and
+    :math:`R^{(i)} \in \mathbb{R}^{d_1\times d_2}`. In this case, score matrices
+    :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a
     common latent position matrices :math:`U` and :math:`V`.
 
     Parameters
@@ -54,7 +54,7 @@ class MultipleASE(BaseEmbedMulti):
         SVD solver to use:
 
         - 'randomized'
-            Computes randomized svd using 
+            Computes randomized svd using
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
@@ -62,13 +62,18 @@ class MultipleASE(BaseEmbedMulti):
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
 
     n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or 
-        'truncated'. The default is larger than the default in randomized_svd 
+        Number of iterations for randomized SVD solver. Not used by 'full' or
+        'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
 
     scaled : bool, optional (default=True)
         Whether to scale individual eigenvectors with eigenvalues in first embedding 
         stage.
+
+    diag_aug : bool, optional (default = True)
+        Whether to replace the main diagonal of each adjacency matrices with
+        a vector corresponding to the degree (or sum of edge weights for a
+        weighted network) before embedding.
 
     Attributes
     ----------
@@ -82,7 +87,7 @@ class MultipleASE(BaseEmbedMulti):
         Estimated left latent positions of the graph. 
 
     latent_right_ : array, shape (n_samples, n_components), or None
-        Estimated right latent positions of the graph. Only computed when the an input 
+        Estimated right latent positions of the graph. Only computed when the an input
         graph is directed, or adjacency matrix is assymetric. Otherwise, None.
 
     scores_ : array, shape (n_samples, n_components, n_components)
@@ -101,6 +106,7 @@ class MultipleASE(BaseEmbedMulti):
         algorithm="randomized",
         n_iter=5,
         scaled=True,
+        diag_aug=True,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -111,6 +117,7 @@ class MultipleASE(BaseEmbedMulti):
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            diag_aug=diag_aug,
         )
         self.scaled = scaled
 
@@ -200,6 +207,14 @@ class MultipleASE(BaseEmbedMulti):
         # Check if undirected
         undirected = all(is_almost_symmetric(g) for g in graphs)
 
+        # Diag augment
+        if self.diag_aug:
+            if isinstance(graphs, list):
+                graphs = [augment_diagonal(g) for g in graphs]
+            elif isinstance(graphs, np.ndarray):
+                for i in range(self.n_graphs_):
+                    graphs[i] = augment_diagonal(graphs[i])
+
         # embed
         Uhat, Vhat = self._reduce_dim(graphs)
         self.latent_left_ = Uhat
@@ -226,8 +241,8 @@ class MultipleASE(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_vertices, n_components) if input 
-            graphs were symmetric. If graphs were directed, returns tuple of 
+        out : array-like, shape (n_vertices, n_components) if input
+            graphs were symmetric. If graphs were directed, returns tuple of
             two arrays (same shape as above) where the first corresponds to the
             left latent positions, and the right to the right latent positions
         """

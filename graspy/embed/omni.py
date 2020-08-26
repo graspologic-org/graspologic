@@ -16,7 +16,7 @@ import warnings
 
 import numpy as np
 
-from ..utils import import_graph, is_fully_connected
+from ..utils import augment_diagonal, import_graph, is_fully_connected
 from .base import BaseEmbedMulti
 
 
@@ -88,14 +88,19 @@ class OmnibusEmbed(BaseEmbedMulti):
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
 
     n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or 
-        'truncated'. The default is larger than the default in randomized_svd 
+        Number of iterations for randomized SVD solver. Not used by 'full' or
+        'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
 
     check_lcc : bool , optional (defult = True)
         Whether to check if the average of all input graphs are connected. May result
         in non-optimal results if the average graph is unconnected. If True and average
-        graph is unconnected, a UserWarning is thrown. 
+        graph is unconnected, a UserWarning is thrown.
+
+    diag_aug : bool, optional (default = True)
+        Whether to replace the main diagonal of each adjacency matrices with
+        a vector corresponding to the degree (or sum of edge weights for a
+        weighted network) before embedding.
 
     Attributes
     ----------
@@ -136,6 +141,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
+        diag_aug=True,
     ):
         super().__init__(
             n_components=n_components,
@@ -143,6 +149,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
+            diag_aug=diag_aug,
         )
 
     def fit(self, graphs, y=None):
@@ -172,6 +179,14 @@ class OmnibusEmbed(BaseEmbedMulti):
                     + "using ``graspy.utils.get_multigraph_union_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
+
+        # Diag augment
+        if self.diag_aug:
+            if isinstance(graphs, list):
+                graphs = [augment_diagonal(g) for g in graphs]
+            elif isinstance(graphs, np.ndarray):
+                for i in range(self.n_graphs_):
+                    graphs[i] = augment_diagonal(graphs[i])
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

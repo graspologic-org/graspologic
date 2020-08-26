@@ -175,6 +175,7 @@ class BaseEmbedMulti(BaseEmbed):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
+        diag_aug=True,
     ):
         super().__init__(
             n_components=n_components,
@@ -183,6 +184,10 @@ class BaseEmbedMulti(BaseEmbed):
             n_iter=n_iter,
             check_lcc=check_lcc,
         )
+
+        if not isinstance(diag_aug, bool):
+            raise TypeError("`diag_aug` must be of type bool")
+        self.diag_aug = diag_aug
 
     def _check_input_graphs(self, graphs):
         """
