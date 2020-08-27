@@ -53,12 +53,12 @@ def _get_omni_matrix(graphs):
 
 class OmnibusEmbed(BaseEmbedMulti):
     r"""
-    Omnibus embedding of arbitrary number of input graphs with matched vertex 
+    Omnibus embedding of arbitrary number of input graphs with matched vertex
     sets.
 
-    Given :math:`A_1, A_2, ..., A_m` a collection of (possibly weighted) adjacency 
-    matrices of a collection :math:`m` undirected graphs with matched vertices. 
-    Then the :math:`(mn \times mn)` omnibus matrix, :math:`M`, has the subgraph where 
+    Given :math:`A_1, A_2, ..., A_m` a collection of (possibly weighted) adjacency
+    matrices of a collection :math:`m` undirected graphs with matched vertices.
+    Then the :math:`(mn \times mn)` omnibus matrix, :math:`M`, has the subgraph where
     :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
     using adjacency spectral embedding.
 
@@ -67,7 +67,7 @@ class OmnibusEmbed(BaseEmbedMulti):
     Parameters
     ----------
     n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
+        Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
@@ -80,7 +80,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         SVD solver to use:
 
         - 'randomized'
-            Computes randomized svd using 
+            Computes randomized svd using
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
@@ -111,11 +111,11 @@ class OmnibusEmbed(BaseEmbedMulti):
         Number of vertices in each graph
 
     latent_left_ : array, shape (n_graphs, n_vertices, n_components)
-        Estimated left latent positions of the graph. 
+        Estimated left latent positions of the graph.
 
     latent_right_ : array, shape (n_graphs, n_vertices, n_components), or None
-        Only computed when the graph is directed, or adjacency matrix is 
-        asymmetric. Estimated right latent positions of the graph. Otherwise, 
+        Only computed when the graph is directed, or adjacency matrix is
+        asymmetric. Estimated right latent positions of the graph. Otherwise,
         None.
 
     singular_values_ : array, shape (n_components)
@@ -128,9 +128,9 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     References
     ----------
-    .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017, 
-       November). A central limit theorem for an omnibus embedding of multiple random 
-       dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International 
+    .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017,
+       November). A central limit theorem for an omnibus embedding of multiple random
+       dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International
        Conference on (pp. 964-967). IEEE.
     """
 
@@ -207,7 +207,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     def fit_transform(self, graphs, y=None):
         """
-        Fit the model with graphs and apply the embedding on graphs. 
+        Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
         Parameters
@@ -219,8 +219,8 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_graphs, n_vertices, n_components) if input 
-            graphs were symmetric. If graphs were directed, returns tuple of 
+        out : array-like, shape (n_graphs, n_vertices, n_components) if input
+            graphs were symmetric. If graphs were directed, returns tuple of
             two arrays (same shape as above) where the first corresponds to the
             left latent positions, and the right to the right latent positions
         """

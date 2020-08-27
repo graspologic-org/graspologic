@@ -28,7 +28,7 @@ class BaseEmbed(BaseEstimator):
     Parameters
     ----------
     n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
+        Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
@@ -147,7 +147,7 @@ class BaseEmbed(BaseEstimator):
 
     def fit_transform(self, graph, y=None):
         """
-        Fit the model with graphs and apply the transformation. 
+        Fit the model with graphs and apply the transformation.
 
         n_dimension is either automatically determined or based on user input.
 
@@ -161,7 +161,7 @@ class BaseEmbed(BaseEstimator):
         out : np.ndarray, shape (n_vertices, n_dimension) OR tuple (len 2)
             Where both elements have shape (n_vertices, n_dimension)
             A single np.ndarray represents the latent position of an undirected
-            graph, wheras a tuple represents the left and right latent positions 
+            graph, wheras a tuple represents the left and right latent positions
             for a directed graph
         """
         return self._fit_transform(graph)
@@ -205,12 +205,12 @@ class BaseEmbedMulti(BaseEmbed):
 
         Returns
         -------
-        out : ndarray, shape (n_graphs, n_vertices, n_vertices) 
+        out : ndarray, shape (n_graphs, n_vertices, n_vertices)
 
         Raises
         ------
         ValueError
-            If all graphs do not have same shape, or input list is empty or has 
+            If all graphs do not have same shape, or input list is empty or has
             one element.
         """
         # Convert input to np.arrays

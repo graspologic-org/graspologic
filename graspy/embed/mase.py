@@ -22,10 +22,10 @@ from .svd import select_dimension, selectSVD
 
 class MultipleASE(BaseEmbedMulti):
     r"""
-    Multiple Adjacency Spectral Embedding (MASE) embeds arbitrary number of input 
+    Multiple Adjacency Spectral Embedding (MASE) embeds arbitrary number of input
     graphs with matched vertex sets.
 
-    For a population of undirected graphs, MASE assumes that the population of graphs 
+    For a population of undirected graphs, MASE assumes that the population of graphs
     is sampled from :math:`VR^{(i)}V^T` where :math:`V \in \mathbb{R}^{n\times d}` and
     :math:`R^{(i)} \in \mathbb{R}^{d\times d}`. Score matrices, :math:`R^{(i)}`, are
     allowed to vary for each graph, but are symmetric. All graphs share a common a
@@ -41,7 +41,7 @@ class MultipleASE(BaseEmbedMulti):
     Parameters
     ----------
     n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
+        Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
@@ -67,7 +67,7 @@ class MultipleASE(BaseEmbedMulti):
         to handle sparse matrices that may have large slowly decaying spectrum.
 
     scaled : bool, optional (default=True)
-        Whether to scale individual eigenvectors with eigenvalues in first embedding 
+        Whether to scale individual eigenvectors with eigenvalues in first embedding
         stage.
 
     diag_aug : bool, optional (default = True)
@@ -84,7 +84,7 @@ class MultipleASE(BaseEmbedMulti):
         Number of vertices in each graph
 
     latent_left_ : array, shape (n_samples, n_components)
-        Estimated left latent positions of the graph. 
+        Estimated left latent positions of the graph.
 
     latent_right_ : array, shape (n_samples, n_components), or None
         Estimated right latent positions of the graph. Only computed when the an input
@@ -229,7 +229,7 @@ class MultipleASE(BaseEmbedMulti):
 
     def fit_transform(self, graphs, y=None):
         """
-        Fit the model with graphs and apply the embedding on graphs. 
+        Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
         Parameters

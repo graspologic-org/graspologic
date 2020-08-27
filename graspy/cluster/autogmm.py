@@ -35,7 +35,7 @@ class AutoGMMCluster(BaseCluster):
     Automatic Gaussian Mixture Model (GMM) selection.
 
     Clustering algorithm using a hierarchical agglomerative clustering then Gaussian
-    mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and 
+    mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and
     cluster numbers are used and the clustering with the best selection
     criterion (bic/aic) is chosen.
 
@@ -114,8 +114,8 @@ class AutoGMMCluster(BaseCluster):
         'spherical', 'tied', 'diag', and/or 'spherical'.
 
     random_state : int, RandomState instance or None, optional (default=None)
-        There is randomness in k-means initialization of 
-        :class:`sklearn.mixture.GaussianMixture`. This parameter is passed to 
+        There is randomness in k-means initialization of
+        :class:`sklearn.mixture.GaussianMixture`. This parameter is passed to
         :class:`~sklearn.mixture.GaussianMixture` to control the random state.
         If int, random_state is used as the random number generator seed;
         If RandomState instance, random_state is the random number generator;
@@ -124,31 +124,31 @@ class AutoGMMCluster(BaseCluster):
 
     label_init : array-like, shape (n_samples,), optional (default=None)
         List of labels for samples if available. Used to initialize the model.
-        If provided, min_components and max_components must match the number of 
+        If provided, min_components and max_components must match the number of
         unique labels given here.
 
     max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
 
     selection_criteria : str {"bic" or "aic"}, optional, (default="bic")
-        select the best model based on Bayesian Information Criterion (bic) or 
+        select the best model based on Bayesian Information Criterion (bic) or
         Aikake Information Criterion (aic)
 
     verbose : int, optional (default = 0)
-        Enable verbose output. If 1 then it prints the current initialization and each 
-        iteration step. If greater than 1 then it prints also the log probability and 
+        Enable verbose output. If 1 then it prints the current initialization and each
+        iteration step. If greater than 1 then it prints also the log probability and
         the time needed for each step.
 
     max_agglom_size : int or None, optional (default = 2000)
-        The maximum number of datapoints on which to do agglomerative clustering as the 
-        initialization to GMM. If the number of datapoints is larger than this value, 
+        The maximum number of datapoints on which to do agglomerative clustering as the
+        initialization to GMM. If the number of datapoints is larger than this value,
         a random subset of the data is used for agglomerative initialization. If None,
         all data is used for agglomerative clustering for initialization.
 
     n_jobs : int or None, optional (default = None)
         The number of jobs to use for the computation. This works by computing each of
-        the initialization runs in parallel. None means 1 unless in a 
-        ``joblib.parallel_backend context``. -1 means using all processors. 
+        the initialization runs in parallel. None means 1 unless in a
+        ``joblib.parallel_backend context``. -1 means using all processors.
         See https://scikit-learn.org/stable/glossary.html#term-n-jobs for more details.
 
     Attributes
@@ -643,20 +643,20 @@ def _labels_to_onehot(labels):
 
 def _process_paramgrid(paramgrid):
     """
-        Removes combinations of affinity and linkage that are not possible.
+    Removes combinations of affinity and linkage that are not possible.
 
-        Parameters
-        ----------
-        paramgrid : list of dicts
-            Each dict has the keys 'affinity', 'covariance_type', 'linkage',
-            'n_components', and 'random_state'
+    Parameters
+    ----------
+    paramgrid : list of dicts
+        Each dict has the keys 'affinity', 'covariance_type', 'linkage',
+        'n_components', and 'random_state'
 
-        Returns
-        -------
-        paramgrid_processed : list pairs of dicts
-            For each pair, the first dict are the options for AgglomerativeClustering.
-            The second dict include the options for GaussianMixture.
-        """
+    Returns
+    -------
+    paramgrid_processed : list pairs of dicts
+        For each pair, the first dict are the options for AgglomerativeClustering.
+        The second dict include the options for GaussianMixture.
+    """
     paramgrid_processed = []
 
     for params in paramgrid:

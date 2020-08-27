@@ -73,7 +73,7 @@ def select_dimension(
         sorted in decreasing order. If 2d-array, shape should be
         (n_samples, n_features).
     n_components : int, optional, default: None.
-        Number of components to embed. If None, ``n_components = 
+        Number of components to embed. If None, ``n_components =
         floor(log2(min(n_samples, n_features)))``. Ignored if X is 1d-array.
     n_elbows : int, optional, default: 2.
         Number of likelihood elbows to return. Must be > 1.
@@ -99,7 +99,7 @@ def select_dimension(
     ----------
     .. [#1] Zhu, M. and Ghodsi, A. (2006).
         Automatic dimensionality selection from the scree plot via the use of
-        profile likelihood. Computational Statistics & Data Analysis, 51(2), 
+        profile likelihood. Computational Statistics & Data Analysis, 51(2),
         pp.918-930.
     """
     # Handle input data
@@ -195,7 +195,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     X : array-like, shape (n_samples, n_features)
         The data to perform svd on.
     n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
+        Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
@@ -230,7 +230,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     ----------
     .. [1] Zhu, M. and Ghodsi, A. (2006).
         Automatic dimensionality selection from the scree plot via the use of
-        profile likelihood. Computational Statistics & Data Analysis, 51(2), 
+        profile likelihood. Computational Statistics & Data Analysis, 51(2),
         pp.918-930.
     """
     # Added in order to pass check estimator, must include words "one sample"

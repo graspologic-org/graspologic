@@ -28,7 +28,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     r"""
     Class for computing the adjacency spectral embedding of a graph.
 
-    The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation 
+    The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation
     of the graph based on its adjacency matrix. It relies on an SVD to reduce
     the dimensionality to the specified k, or if k is unspecified, can find a number of
     dimensions automatically (see :class:`~graspy.embed.selectSVD`).
@@ -38,7 +38,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     Parameters
     ----------
     n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
+        Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
@@ -70,8 +70,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         faster computation.
 
     diag_aug : bool, optional (default = True)
-        Whether to replace the main diagonal of the adjacency matrix with a vector 
-        corresponding to the degree (or sum of edge weights for a weighted network) 
+        Whether to replace the main diagonal of the adjacency matrix with a vector
+        corresponding to the degree (or sum of edge weights for a weighted network)
         before embedding. Empirically, this produces latent position estimates closer
         to the ground truth.
 
@@ -79,7 +79,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     Attributes
     ----------
     latent_left_ : array, shape (n_samples, n_components)
-        Estimated left latent positions of the graph. 
+        Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None
         Only computed when the graph is directed, or adjacency matrix is assymetric.
         Estimated right latent positions of the graph. Otherwise, None.
