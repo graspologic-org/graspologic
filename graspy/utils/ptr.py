@@ -19,7 +19,7 @@ from scipy.stats import rankdata
 
 def pass_to_ranks(graph, method="simple-nonzero"):
     r"""
-    Rescales edge weights of an adjacency matrix based on their relative rank in 
+    Rescales edge weights of an adjacency matrix based on their relative rank in
     the graph.
 
     Parameters
@@ -40,7 +40,7 @@ def pass_to_ranks(graph, method="simple-nonzero"):
             where n is the number of nodes
         - 'zero-boost'
             preserves the edge weight for all 0s, but ranks the other
-            edges as if the ranks of all 0 edges has been assigned. If there are 
+            edges as if the ranks of all 0 edges has been assigned. If there are
             10 0-valued edges, the lowest non-zero edge gets weight 11 / (number
             of possible edges). Ties settled by the average of the weight that those
             edges would have received. Number of possible edges is determined

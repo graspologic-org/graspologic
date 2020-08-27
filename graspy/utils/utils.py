@@ -24,7 +24,7 @@ from sklearn.utils import check_array
 
 def import_graph(graph, copy=True):
     """
-    A function for reading a graph and returning a shared data type. 
+    A function for reading a graph and returning a shared data type.
 
     Parameters
     ----------
@@ -82,7 +82,7 @@ def import_edgelist(
     path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
 ):
     """
-    Function for reading a single or multiple edgelists. When importing multiple 
+    Function for reading a single or multiple edgelists. When importing multiple
     edgelists, the union of vertices from all graphs is computed so that each output
     graph have matched vertex set. The order of nodes are sorted by node values.
 
@@ -94,7 +94,7 @@ def import_edgelist(
 
     extension : str, optional
         If ``path`` is a directory, then the function will convert all files
-        with matching extension. 
+        with matching extension.
 
     delimiter : str or None, default=None, optional
         Delimiter of edgelist. If None, the delimiter is whitespace.
@@ -112,8 +112,8 @@ def import_edgelist(
         an array is returned.
 
     vertices : array-like, shape (n_vertices, )
-        If ``return_vertices`` == True, then returns an array of all vertices that were 
-        included in the output graphs. 
+        If ``return_vertices`` == True, then returns an array of all vertices that were
+        included in the output graphs.
     """
     # p = Path(path)
     if not isinstance(path, (str, Path, Iterable)):
@@ -208,8 +208,8 @@ def symmetrize(graph, method="avg"):
     Examples
     --------
     >>> a = np.array([
-    ...    [0, 1, 1], 
-    ...    [0, 0, 1], 
+    ...    [0, 1, 1],
+    ...    [0, 0, 1],
     ...    [0, 0, 1]])
     >>> symmetrize(a, method="triu")
     array([[0, 1, 1],
@@ -369,7 +369,7 @@ def is_fully_connected(graph):
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
 
     Returns
@@ -527,7 +527,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
     Returns
     -------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        New graph of the largest connected component of the input parameter. 
+        New graph of the largest connected component of the input parameter.
 
     inds: (optional)
         Indices from the original adjacency matrix that were kept after taking
@@ -584,7 +584,7 @@ def augment_diagonal(graph, weight=1):
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
     weight: float/int
         scalar value to multiply the new diagonal vector by
@@ -627,7 +627,7 @@ def binarize(graph):
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
 
     Returns

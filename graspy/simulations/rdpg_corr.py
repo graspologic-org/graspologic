@@ -4,16 +4,16 @@ from graspy.simulations import p_from_latent, sample_edges_corr
 
 def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     r"""
-    Samples a random graph pair based on the latent positions in X (and 
+    Samples a random graph pair based on the latent positions in X (and
     optionally in Y)
     If only X :math:`\in\mathbb{R}^{n\times d}` is given, the P matrix is calculated as
-    :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then 
-    :math:`P = XY^T`. These operations correspond to the dot products between a set of 
-    latent positions, so each row in X or Y represents the latent positions in  
-    :math:`\mathbb{R}^{d}` for a single vertex in the random graph 
-    Note that this function may also rescale or clip the resulting P 
+    :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then
+    :math:`P = XY^T`. These operations correspond to the dot products between a set of
+    latent positions, so each row in X or Y represents the latent positions in
+    :math:`\mathbb{R}^{d}` for a single vertex in the random graph
+    Note that this function may also rescale or clip the resulting P
     matrix to get probabilities between 0 and 1, or remove loops.
-    A binary random graph is then sampled from the P matrix described 
+    A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
     Read more in the :ref:`tutorials <simulations_tutorials>`
 
@@ -30,7 +30,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
         The value of the correlation between the same vertices in two graphs.
 
     rescale: boolean, optional (default=True)
-        when rescale is True, will subtract the minimum value in 
+        when rescale is True, will subtract the minimum value in
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped.
@@ -38,20 +38,20 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
-        
+
     loops: boolean, optional (default=True)
-        If False, no edges will be sampled in the diagonal. Diagonal elements in P 
+        If False, no edges will be sampled in the diagonal. Diagonal elements in P
         matrix are removed prior to rescaling (see above) which may affect behavior.
         Otherwise, edges are sampled in the diagonal.
 
     Returns
     -------
     G1: ndarray (n_vertices, n_vertices)
-        A matrix representing the probabilities of connections between 
+        A matrix representing the probabilities of connections between
         vertices in a random graph based on their latent positions
-        
+
     G2: ndarray (n_vertices, n_vertices)
-        A matrix representing the probabilities of connections between 
+        A matrix representing the probabilities of connections between
         vertices in a random graph based on their latent positions
 
     References
@@ -59,7 +59,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     .. [1] Vince Lyzinski, Donniell E Fishkind profile imageDonniell E. Fishkind, Carey E Priebe.
        "Seeded graph matching for correlated Erdös-Rényi graphs".
        The Journal of Machine Learning Research, January 2014
-    
+
     Examples
     --------
     >>> np.random.seed(1234)
