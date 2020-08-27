@@ -5,17 +5,17 @@ from scipy.stats import fisher_exact
 class SignalSubgraph:
     """
     Estimate the signal-subgraph of a set of labeled graph samples.
-    
+
     The incoherent estimator finds the signal-subgraph, constrained by the number of edges.
     The coherent estimator finds the signal-subgraph, constrained by the number of edges and by the number of vertices that the edges in the signal-subgraph may be incident to.
 
     Parameters
     ----------
     graphs: array-like, shape (n_vertices, n_vertices, s_samples)
-        A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.      
+        A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.
     labels: vector, length (s_samples)
         A vector of class labels. There must be a maximum of two classes.
-         
+
     Attributes
     ----------
     contmat_: array-like, shape (n_vertices, n_vertices, 2, 2)
@@ -23,12 +23,12 @@ class SignalSubgraph:
     sigsub_: tuple, shape (2, n_edges)
         A tuple of a row index array and column index array, where n_edges is the size of the signal-subgraph determined by *constraints*.
     mask_: array-like, shape (n_vertices, n_vertices)
-        An array of boolean values. Entries are true for edges that are in the signal subgraph. 
+        An array of boolean values. Entries are true for edges that are in the signal subgraph.
 
     References
     ----------
     .. [1] J. T. Vogelstein, W. R. Gray, R. J. Vogelstein, and C. E. Priebe, "Graph Classification using Signal-Subgraphs: Applications in Statistical Connectomics," arXiv:1108.1427v2 [stat.AP], 2012.
-    
+
     """
 
     def __construct_contingency(self):
@@ -50,15 +50,15 @@ class SignalSubgraph:
         Parameters
         ----------
         graphs: array-like, shape (n_vertices, n_vertices, s_samples)
-            A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.   
+            A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.
         labels: vector, length (s_samples)
             A vector of class labels. There must be a maximum of two classes.
         constraints: int or vector
             The constraints that will be imposed onto the estimated signal-subgraph.
-            
+
             If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
             If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
-        
+
         Returns
         -------
         self: returns an instance of self
@@ -163,15 +163,15 @@ class SignalSubgraph:
         Parameters
         ----------
         graphs: array-like, shape (n_vertices, n_vertices, s_samples)
-            A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.     
+            A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.
         labels: vector, length (s_samples)
             A vector of class labels. There must be a maximum of two classes.
         constraints: int or vector
             The constraints that will be imposed onto the estimated signal-subgraph.
-            
+
             If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
             If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
-        
+
         Returns
         -------
         sigsub: tuple
