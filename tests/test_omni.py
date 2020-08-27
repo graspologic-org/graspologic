@@ -114,6 +114,20 @@ def test_omni_unconnected():
         omni.fit(graphs)
 
 
+def test_diag_aug():
+    np.random.seed(5)
+    n = 100
+    p = 0.25
+
+    graphs_list = [er_np(n, p) for _ in range(2)]
+    graphs_arr = np.array(graphs_list)
+
+    omni_list = OmnibusEmbed(diag_aug=True).fit_transform(graphs_list)
+    omni_arr = OmnibusEmbed(diag_aug=True).fit_transform(graphs_arr)
+
+    assert array_equal(omni_list, omni_arr)
+
+
 def test_omni_embed():
     """
     We compare the difference of norms of OmniBar and ABar.

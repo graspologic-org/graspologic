@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
-
 from graspy.cluster.gclust import GaussianCluster
 from graspy.embed.mase import MultipleASE
 from graspy.simulations.simulations import er_np, sbm
+from numpy import array_equal
 
 
 def make_train_undirected(n=[128, 128], m=10, alpha=1):
@@ -66,6 +66,20 @@ def test_bad_inputs():
     with pytest.raises(ValueError):
         "Test graphs with different sizes"
         MultipleASE().fit(different_size_graphs)
+
+
+def test_diag_aug():
+    np.random.seed(5)
+    n = 100
+    p = 0.25
+
+    graphs_list = [er_np(n, p) for _ in range(2)]
+    graphs_arr = np.array(graphs_list)
+
+    omni_list = MultipleASE(diag_aug=True).fit_transform(graphs_list)
+    omni_arr = MultipleASE(diag_aug=True).fit_transform(graphs_arr)
+
+    assert array_equal(omni_list, omni_arr)
 
 
 def test_graph_clustering():
