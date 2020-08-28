@@ -1,6 +1,7 @@
 import pytest
 import unittest
 import numpy as np
+import networkx as nx
 from sklearn.metrics import pairwise_distances
 
 from graspy.embed import AdjacencySpectralEmbed
@@ -66,6 +67,26 @@ class TestLatentDistributionTest(unittest.TestCase):
             ldt.fit(self.A1, self.A2)
             self.assertEqual(ldt.null_distribution_.shape[0], 123)
 
+    def test_passing_networkx(self):
+        np.random.seed(123)
+        A1 = er_np(20, 0.8)
+        A2 = er_np(20, 0.8)
+        A1_nx = nx.from_numpy_matrix(A1)
+        A2_nx = nx.from_numpy_matrix(A2)
+        # check passing nx, when exepect embeddings
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(A1_nx, A2)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(A1, A2_nx)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(A1_nx, A2_nx)
+        # check that the appropriate input works
+        ldt = LatentDistributionTest(input_graph=True)
+        ldt.fit_predict(A1_nx, A2_nx)
+
     def test_passing_embeddings(self):
         np.random.seed(123)
         A1 = er_np(20, 0.8)
@@ -90,6 +111,19 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             ldt = LatentDistributionTest(input_graph=False)
             ldt.fit_predict(X3, X1)
+        # check passing weird stuff as input (caught by check_array)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict("hello there", X1)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, "hello there")
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict({"hello": "there"}, X1)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, {"hello": "there"})
         # check that the appropriate input works
         ldt = LatentDistributionTest(input_graph=False)
         ldt.fit_predict(X1, X2)
