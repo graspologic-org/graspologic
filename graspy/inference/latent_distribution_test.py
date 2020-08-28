@@ -300,7 +300,7 @@ class LatentDistributionTest(BaseInference):
         # return the embeddings in the appropriate order
         return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
-    def fit(self, A1, A2):
+    def fit(self, A1, A2, pass_graph=True):
         """
         Fits the test to the two input graphs
 
