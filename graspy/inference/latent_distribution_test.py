@@ -69,7 +69,7 @@ class LatentDistributionTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspy.embed.selectSVD` for more information.
-        This argument is ignored if input_graph=False. 
+        This argument is ignored if input_graph=False.
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
@@ -198,7 +198,6 @@ class LatentDistributionTest(BaseInference):
         if not isinstance(input_graph, bool):
             msg = "input_graph must be a bool, not {}".format(type(input_graph))
             raise TypeError(msg)
-
 
         super().__init__(n_components=n_components)
 
