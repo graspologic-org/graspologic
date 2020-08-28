@@ -58,10 +58,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             LatentDistributionTest(pooled=0)
         with self.assertRaises(TypeError):
-            ldt = LatentDistributionTest()
-            A1 = er_np(20, 0.8)
-            A2 = er_np(20, 0.8)
-            ldt.fit_predict(A1, A2, pass_graph="hello")
+            ldt = LatentDistributionTest(input_graph="hello")
 
     def test_n_bootstraps(self):
         for test in self.tests.keys():
@@ -81,21 +78,21 @@ class TestLatentDistributionTest(unittest.TestCase):
         X3 = ase_3.fit_transform(A2)
         # check embeddings having weird ndim
         with self.assertRaises(ValueError):
-            ldt = LatentDistributionTest()
-            ldt.fit_predict(X1, X2.reshape(-1, 1, 1), pass_graph=False)
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, X2.reshape(-1, 1, 1))
         with self.assertRaises(ValueError):
-            ldt = LatentDistributionTest()
-            ldt.fit_predict(X1.reshape(-1, 1, 1), X2, pass_graph=False)
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1.reshape(-1, 1, 1), X2)
         # check embeddings having mismatching number of components
         with self.assertRaises(ValueError):
-            ldt = LatentDistributionTest()
-            ldt.fit_predict(X1, X3, pass_graph=False)
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, X3)
         with self.assertRaises(ValueError):
-            ldt = LatentDistributionTest()
-            ldt.fit_predict(X3, X1, pass_graph=False)
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X3, X1)
         # check that the appropriate input works
-        ldt = LatentDistributionTest()
-        ldt.fit_predict(X1, X2, pass_graph=False)
+        ldt = LatentDistributionTest(input_graph=False)
+        ldt.fit_predict(X1, X2)
 
     def test_pooled(self):
         np.random.seed(123)
