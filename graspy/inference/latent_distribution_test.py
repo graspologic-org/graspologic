@@ -69,8 +69,7 @@ class LatentDistributionTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspy.embed.selectSVD` for more information.
-        This argument is ignored if already embedded graphs are passed (see
-        pass_graph argument of .fit())
+        This argument is ignored if input_graph=False. 
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
@@ -84,10 +83,13 @@ class LatentDistributionTest(BaseInference):
         Ignored when the two graphs have the same number of vertices. The test
         degrades in validity as the number of vertices of the two graphs
         diverge from each other, unless a correction is performed.
-        If True, when the two graphs have different numbers of vertices,
-        estimates the plug-in estimator for the variance and uses it to correct
-        the embedding of the larger graph.
-        If False, does not perform any modifications (not recommended).
+
+        - True
+            Whenever the two graphs have different numbers of vertices,
+            estimates the plug-in estimator for the variance and uses it to
+            correct the embedding of the larger graph.
+        - False
+            Does not perform any modifications (not recommended).
 
     pooled: bool (default=False)
         Ignored whenever the two graphs have the same number of vertices or
@@ -101,14 +103,26 @@ class LatentDistributionTest(BaseInference):
         power or less power under which alternatives. Generally not recomended,
         as it is untested and included for experimental purposes.
 
+    input_graph : bool (default=True)
+        Flag whether to expect two full graphs, or the embeddings.
+
+        - True
+            .fit and .fit_predict() expect graphs, either as networkX objects
+            or as adjacency matrices, provided as ndarrays of size (n, n) and
+            (m, m). They will be embedded using adjacency spectral embeddings.
+        - False
+            .fit() and .fit_predict() expect adjacency spectral embeddings of
+            the graphs, they must be ndarrays of size (n, d) and (m, d), where
+            d must be same. n_components attribute is ignored in this case.
+
     Attributes
     ----------
     null_distribution_ : ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
 
     sample_T_statistic_ : float
-        The observed difference between the embedded latent positions of the two
-        input graphs.
+        The observed difference between the embedded latent positions of the
+        two input graphs.
 
     p_value_ : float
         The overall p value from the test.
@@ -123,13 +137,9 @@ class LatentDistributionTest(BaseInference):
         "hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package."
         arXiv:1907.02088.
 
-    .. [3] Varjavand, B., Arroyo, J., Tang, M., Priebe, C., and Vogelstein, J. (2019).
-       "Improving Power of 2-Sample Random Graph Tests with Applications in Connectomics"
-       arXiv:1911.02741
-
-    .. [4] Alyakin, A., Agterberg, J., Helm, H., Priebe, C. (2020)
+    .. [3] Alyakin, A., Agterberg, J., Helm, H., Priebe, C. (2020).
        "Correcting a Nonparametric Two-sample Graph Hypothesis Test for Graphs with Different Numbers of Vertices"
-       TODO cite the arXiv whenever possible
+       arXiv:2008.09434
 
     """
 
@@ -142,6 +152,7 @@ class LatentDistributionTest(BaseInference):
         workers=1,
         size_correction=True,
         pooled=False,
+        input_graph=True,
     ):
 
         if not isinstance(test, str):
@@ -183,6 +194,11 @@ class LatentDistributionTest(BaseInference):
         if not isinstance(pooled, bool):
             msg = "pooled must be a bool, not {}".format(type(pooled))
             raise TypeError(msg)
+
+        if not isinstance(input_graph, bool):
+            msg = "input_graph must be a bool, not {}".format(type(input_graph))
+            raise TypeError(msg)
+
 
         super().__init__(n_components=n_components)
 
@@ -230,6 +246,7 @@ class LatentDistributionTest(BaseInference):
         self.workers = workers
         self.size_correction = size_correction
         self.pooled = pooled
+        self.input_graph = input_graph
 
     def _embed(self, A1, A2):
         if self.n_components is None:
@@ -283,33 +300,33 @@ class LatentDistributionTest(BaseInference):
         # return the embeddings in the appropriate order
         return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
-    def fit(self, A1, A2, pass_graph=True):
+    def fit(self, A1, A2):
         """
         Fits the test to the two input graphs
 
         Parameters
         ----------
-        A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            The two graphs, or their embeddings (see pass_graph) to run a
-            hypothesis test on.
-        pass_graph : bool (default=True)
-            whether to expect two full graphs, or the embeddings of thereof.
-            If True - expects graphs, either as networkX objects or as ajacency
-            matrices, provided as ndarrays of size (n, n) and (m, m). They will
-            be embedded using adjacency spectral embeddings.
-            If False - expects adjacency spectral embeddings of the graphs,
-            they must be ndarrays of size (n, d) and (m, d). n_components
-            attribute will be ignored in this case.
+        A1, A2 : variable (see description)
+            The two graphs, or their embeddings to run a hypothesis test on.
+            Expected variable type and shape depends on input_graph attribute:
+
+            - input_graph=True
+                expects two unembedded graphs either as networkX objects, or as
+                two np.ndarrays, representing the adjacency matrices. In this
+                case will be embedded using adjacency spectral embedding.
+            - input_graph-False
+                expects two already embedded graphs. In this case they must be
+                arrays of shape (n, d) and (m, d), where d, the number of
+                components, must be shared.
+
+            Note that regardless of how the graphs are passed, they need not to
+            have the same number of vertices.
 
         Returns
         -------
         self
         """
-        if not isinstance(pass_graph, bool):
-            msg = "pass_graph must be a bool, not {}".format(type(pass_graph))
-            raise TypeError(msg)
-
-        if pass_graph:
+        if self.input_graph:
             A1 = import_graph(A1)
             A2 = import_graph(A2)
 
@@ -319,21 +336,21 @@ class LatentDistributionTest(BaseInference):
             if X1_hat.ndim != 2:
                 msg = (
                     "embedding of the first graph does not have two dimensions! "
-                    "if pass_graph is False, the inputs need to be adjacency "
+                    "if input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
             if X2_hat.ndim != 2:
                 msg = (
                     "embedding of the second graph does not have two dimensions! "
-                    "if pass_graph is False, the inputs need to be adjacency "
+                    "if input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
             if X1_hat.shape[1] != X2_hat.shape[1]:
                 msg = (
                     "two embeddings have different number of components!"
-                    "if pass_graph is False, the inputs need to be adjacency "
+                    "if input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
@@ -354,29 +371,36 @@ class LatentDistributionTest(BaseInference):
 
         return self
 
-    def fit_predict(self, A1, A2, pass_graph=True):
+    def fit_predict(self, A1, A2):
         """
         Fits the test to the two input graphs and returns the p-value
 
         Parameters
         ----------
-        A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            The two graphs, or their embeddings (see pass_graph) to run a
-            hypothesis test on.
-        pass_graph : bool (default=True)
-            whether to expect two full graphs, or the embeddings of thereof.
-            If True - expects graphs, either as networkX objects or as ajacency
-            matrices, provided as ndarrays of size (n, n) and (m, m). They will
-            be embedded using adjacency spectral embeddings.
-            If False - expects adjacency spectral embeddings of the graphs,
-            they must be ndarrays of size (n, d) and (m, d). n_components
-            attribute will be ignored in this case.
+        A1, A2 : variable (see description)
+            The two graphs, or their embeddings to run a hypothesis test on.
+            Expected variable type and shape depends on input_graph attribute:
+
+            - input_graph=True
+                expects two unembedded graphs either as networkX objects, or as
+                two np.ndarrays, representing the adjacency matrices. In this
+                case will be embedded using adjacency spectral embedding.
+            - input_graph-False
+                expects two already embedded graphs. In this case they must be
+                arrays of shape (n, d) and (m, d), where d, the number of
+                components, must be shared.
+
+            Note that regardless of how the graphs are passed, they need not to
+            have the same number of vertices.
+
+
         Returns
         ------
         p_value_ : float
             The overall p value from the test
         """
-        self.fit(A1, A2, pass_graph=pass_graph)
+        # abstract method overwritten in order to have a custom doc string
+        self.fit(A1, A2)
         return self.p_value_
 
 
