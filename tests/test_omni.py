@@ -10,7 +10,7 @@ from graspy.utils.utils import is_symmetric, symmetrize
 
 
 def generate_data(n, seed=1):
-    """Generate data form dirichelet distribution with
+    """Generate data form dirichelet distribution with 
     n numbers of points
     """
     np.random.seed(seed)
@@ -114,7 +114,7 @@ def test_omni_embed():
     """
     We compare the difference of norms of OmniBar and ABar.
     ABar is the lowest variance estimate of the latent positions X.
-    OmniBar should be reasonablly close to ABar when n_vertices is high.
+    OmniBar should be reasonablly close to ABar when n_vertices is high. 
     """
 
     def compute_bar(arr):

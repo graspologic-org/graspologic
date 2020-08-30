@@ -41,46 +41,46 @@ def _check_common_inputs(n_components, min_comm, max_comm, cluster_kws, embed_kw
 
 class SBMEstimator(BaseGraphEstimator):
     r"""
-    Stochastic Block Model
+    Stochastic Block Model 
 
-    The stochastic block model (SBM) represents each node as belonging to a block
-    (or community). For a given potential edge between node :math:`i` and :math:`j`,
+    The stochastic block model (SBM) represents each node as belonging to a block 
+    (or community). For a given potential edge between node :math:`i` and :math:`j`, 
     the probability of an edge existing is specified by the block that nodes :math:`i`
     and :math:`j` belong to:
 
     :math:`P_{ij} = B_{\tau_i \tau_j}`
 
-    where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\tau` is an `n\_nodes`
-    length vector specifying which block each node belongs to.
+    where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\tau` is an `n\_nodes` 
+    length vector specifying which block each node belongs to. 
 
     Read more in the :ref:`tutorials <models_tutorials>`
 
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
         this determines whether to force symmetry upon the block probability matrix fit
-        for the SBM. It will also determine whether graphs sampled from the model are
-        directed.
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
 
     loops : boolean, optional (default=False)
-        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
-        the graph where a node connects to itself.
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
 
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
-        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
+        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions 
         will be chosen by :func:`~graspy.embed.select_dimension``.
 
     min_comm : int, optional (default=1)
-        The minimum number of communities (blocks) to consider.
+        The minimum number of communities (blocks) to consider. 
 
     max_comm : int, optional (default=10)
         The maximum number of communities (blocks) to consider (inclusive).
 
     cluster_kws : dict, optional (default={})
         Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
-
+    
     embed_kws : dict, optional (default={})
         Additional kwargs passed down to :class:`~graspy.embed.AdjacencySpectralEmbed`
 
@@ -88,7 +88,7 @@ class SBMEstimator(BaseGraphEstimator):
     ----------
     block_p_ : np.ndarray, shape (n_blocks, n_blocks)
         The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
-        represents the probability of an edge between block :math:`i` and block
+        represents the probability of an edge between block :math:`i` and block 
         :math:`j`.
 
     p_mat_ : np.ndarray, shape (n_verts, n_verts)
@@ -96,8 +96,8 @@ class SBMEstimator(BaseGraphEstimator):
         sampled.
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
-        A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to ``fit``.
+        A vector of integer labels corresponding to the predicted block that each node 
+        belongs to if ``y`` was not passed during the call to ``fit``. 
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
@@ -218,61 +218,61 @@ class DCSBMEstimator(BaseGraphEstimator):
     r"""
     Degree-corrected Stochastic Block Model
 
-    The degree-corrected stochastic block model (DCSBM) represents each node as
+    The degree-corrected stochastic block model (DCSBM) represents each node as 
     belonging to a block (or community). For a given potential edge between node
-    :math:`i` and :math:`j`, the probability of an edge existing is specified by
+    :math:`i` and :math:`j`, the probability of an edge existing is specified by 
     the block that nodes :math:`i` and :math:`j` belong to as in the SBM. However,
-    an additional "promiscuity" parameter :math:`\theta` is added for each node,
-    allowing the vertices within a block to have heterogeneous expected degree
-    distributions:
+    an additional "promiscuity" parameter :math:`\theta` is added for each node, 
+    allowing the vertices within a block to have heterogeneous expected degree 
+    distributions: 
 
     :math:`P_{ij} = \theta_i \theta_j B_{\tau_i \tau_j}`
 
-    where :math:`B \in \mathbb{[0, 1]}^{K x K}` :math:`\tau` is an `n\_nodes`
+    where :math:`B \in \mathbb{[0, 1]}^{K x K}` :math:`\tau` is an `n\_nodes` 
     length vector specifying which block each node belongs to, and :math:`\theta`
     is an `n\_nodes` length vector specifiying the degree correction for each
-    node.
+    node. 
 
-    The ``degree_directed`` parameter of this model allows the degree correction
-    parameter to be different for the in and out degree of each node:
+    The ``degree_directed`` parameter of this model allows the degree correction 
+    parameter to be different for the in and out degree of each node:  
 
     :math:`P_{ij} = \theta_i \eta_j B_{\tau_i \tau_j}`
 
     where :math:`\theta` and :math:`\eta` need not be the same.
-
+    
     Read more in the :ref:`tutorials <models_tutorials>`
 
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
         this determines whether to force symmetry upon the block probability matrix fit
-        for the SBM. It will also determine whether graphs sampled from the model are
-        directed.
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
 
     degree_directed : boolean, optional (default=False)
         Whether to fit an "in" and "out" degree correction for each node. In the
-        degree_directed case, the fit model can have a different expected in and out
-        degree for each node.
+        degree_directed case, the fit model can have a different expected in and out 
+        degree for each node. 
 
     loops : boolean, optional (default=False)
-        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
-        the graph where a node connects to itself.
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
 
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
-        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
+        ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions 
         will be chosen by :func:`~graspy.embed.select_dimension``.
 
     min_comm : int, optional (default=1)
-        The minimum number of communities (blocks) to consider.
+        The minimum number of communities (blocks) to consider. 
 
     max_comm : int, optional (default=10)
         The maximum number of communities (blocks) to consider (inclusive).
 
     cluster_kws : dict, optional (default={})
         Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
-
+    
     embed_kws : dict, optional (default={})
         Additional kwargs passed down to :class:`~graspy.embed.LaplacianSpectralEmbed`
 
@@ -280,7 +280,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     ----------
     block_p_ : np.ndarray, shape (n_blocks, n_blocks)
         The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
-        represents the expected number of edges between block :math:`i` and block
+        represents the expected number of edges between block :math:`i` and block 
         :math:`j`.
 
     p_mat_ : np.ndarray, shape (n_verts, n_verts)
@@ -289,13 +289,13 @@ class DCSBMEstimator(BaseGraphEstimator):
 
     degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
         Degree correction vector(s) :math:`\theta`. If `degree_directed` parameter was
-        False, then will be of shape (n_verts, 1) and element :math:`i` represents the
-        degree correction for node :math:`i`. Otherwise, the first column contains out
-        degree corrections and the second column contains in degree corrections.
+        False, then will be of shape (n_verts, 1) and element :math:`i` represents the 
+        degree correction for node :math:`i`. Otherwise, the first column contains out 
+        degree corrections and the second column contains in degree corrections. 
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
-        A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to ``fit``.
+        A vector of integer labels corresponding to the predicted block that each node 
+        belongs to if ``y`` was not passed during the call to ``fit``. 
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
@@ -307,10 +307,10 @@ class DCSBMEstimator(BaseGraphEstimator):
 
     Notes
     -----
-    Note that many examples in the literature describe the DCSBM as being sampled with a
-    Poisson distribution. Here, we implement this model with a Bernoulli. When
-    individual edge probabilities are relatively low these two distributions will yield
-    similar results.
+    Note that many examples in the literature describe the DCSBM as being sampled with a 
+    Poisson distribution. Here, we implement this model with a Bernoulli. When 
+    individual edge probabilities are relatively low these two distributions will yield 
+    similar results. 
 
     References
     ----------
@@ -372,8 +372,8 @@ class DCSBMEstimator(BaseGraphEstimator):
 
         Returns
         -------
-        self : ``DCSBMEstimator`` object
-            Fitted instance of self
+        self : ``DCSBMEstimator`` object 
+            Fitted instance of self 
         """
         graph = import_graph(graph)
         if y is None:
@@ -455,7 +455,7 @@ def _get_block_indices(y):
 
 def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
     """
-    graph : input n x n graph
+    graph : input n x n graph 
     block_inds : list of length n_communities
     block_vert_inds : list of list, for each block index, gives every node in that block
     return_counts : whether to calculate counts rather than proportions
@@ -481,11 +481,11 @@ def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
 
 def _block_to_full(block_mat, inverse, shape):
     """
-    "blows up" a k x k matrix, where k is the number of communities,
+    "blows up" a k x k matrix, where k is the number of communities, 
     into a full n x n probability matrix
 
-    block mat : k x k
-    inverse : array like length n,
+    block mat : k x k 
+    inverse : array like length n, 
     """
     block_map = cartprod(inverse, inverse).T
     mat_by_edge = block_mat[block_map[0], block_map[1]]

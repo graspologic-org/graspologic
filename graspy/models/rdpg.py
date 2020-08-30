@@ -11,16 +11,16 @@ class RDPGEstimator(BaseGraphEstimator):
     Random Dot Product Graph
 
     Under the random dot product graph model, each node is assumed to have a
-    "latent position" in some :math:`d`-dimensional Euclidian space. This vector
+    "latent position" in some :math:`d`-dimensional Euclidian space. This vector 
     dictates that node's probability of connection to other nodes. For a given pair
-    of nodes :math:`i` and :math:`j`, the probability of connection is the dot
-    product between their latent positions:
+    of nodes :math:`i` and :math:`j`, the probability of connection is the dot 
+    product between their latent positions: 
 
     :math:`P_{ij} = \langle x_i, y_j \rangle`
 
-    where :math:`x_i` is the left latent position of node :math:`i`, and :math:`y_j` is
+    where :math:`x_i` is the left latent position of node :math:`i`, and :math:`y_j` is 
     the right latent position of node :math:`j`. If the graph being modeled is
-    is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via
+    is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via 
     :class:`~graspy.embed.AdjacencySpectralEmbed`.
 
     Read more in the :ref:`tutorials <models_tutorials>`
@@ -28,38 +28,38 @@ class RDPGEstimator(BaseGraphEstimator):
     Parameters
     ----------
     loops : boolean, optional (default=False)
-        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
-        the graph where a node connects to itself.
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
 
     n_components : int, optional (default=None)
         The dimensionality of the latent space used to model the graph. If None, the
-        method of Zhu and Godsie will be used to select an embedding dimension.
-
+        method of Zhu and Godsie will be used to select an embedding dimension. 
+    
     ase_kws : dict, optional (default={})
-        Dictionary of keyword arguments passed down to
+        Dictionary of keyword arguments passed down to 
         :class:`~graspy.embed.AdjacencySpectralEmbed`, which is used to fit the model.
 
     diag_aug_weight : int or float, optional (default=1)
-        Weighting used for diagonal augmentation, which is a form of regularization for
-        fitting the RDPG model.
+        Weighting used for diagonal augmentation, which is a form of regularization for 
+        fitting the RDPG model. 
 
     plus_c_weight : int or float, optional (default=1)
-        Weighting used for a constant scalar added to the adjacency matrix before
+        Weighting used for a constant scalar added to the adjacency matrix before 
         embedding as a form of regularization.
 
     Attributes
     ----------
     latent_ : tuple, length 2, or np.ndarray, shape (n_verts, n_components)
         The fit latent positions for the RDPG model. If a tuple, then the graph that was
-        input to fit was directed, and the first and second elements of the tuple are
+        input to fit was directed, and the first and second elements of the tuple are 
         the left and right latent positions, respectively. The left and right latent
-        positions will both be of shape (n_verts, n_components). If `latent_` is an
-        array, then the graph that was input to fit was undirected and the left and
-        right latent positions are the same.
+        positions will both be of shape (n_verts, n_components). If `latent_` is an 
+        array, then the graph that was input to fit was undirected and the left and 
+        right latent positions are the same. 
 
     p_mat_ : np.ndarray, shape (n_verts, n_verts)
         Probability matrix :math:`P` for the fit model, from which graphs could be
-        sampled.
+        sampled. 
 
     See also
     --------
@@ -71,12 +71,12 @@ class RDPGEstimator(BaseGraphEstimator):
     ----------
     .. [1] Athreya, A., Fishkind, D. E., Tang, M., Priebe, C. E., Park, Y.,
            Vogelstein, J. T., ... & Sussman, D. L. (2018). Statistical inference
-           on random dot product graphs: a survey. Journal of Machine Learning
+           on random dot product graphs: a survey. Journal of Machine Learning 
            Research, 18(226), 1-92.
 
     .. [2] Zhu, M. and Ghodsi, A. (2006).
            Automatic dimensionality selection from the scree plot via the use of
-           profile likelihood. Computational Statistics & Data Analysis, 51(2),
+           profile likelihood. Computational Statistics & Data Analysis, 51(2), 
            pp.918-930.
     """
 

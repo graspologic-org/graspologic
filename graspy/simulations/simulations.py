@@ -30,8 +30,8 @@ def sample_edges(P, directed=False, loops=False):
     """
     Gemerates a binary random graph based on the P matrix provided
 
-    Each element in P represents the probability of a connection between
-    a vertex indexed by the row i and the column j.
+    Each element in P represents the probability of a connection between 
+    a vertex indexed by the row i and the column j. 
 
     Parameters
     ----------
@@ -104,14 +104,14 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
         are sampled in the diagonal.
 
     wt: object, optional (default=1)
-        Weight function for each of the edges, taking only a size argument.
-        This weight function will be randomly assigned for selected edges.
+        Weight function for each of the edges, taking only a size argument. 
+        This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
 
     wtargs: dictionary, optional (default=None)
         Optional arguments for parameters that can be passed
         to weight function ``wt``.
-
+        
     dc: function or array-like, shape (n_vertices)
         `dc` is used to generate a degree-corrected Erdos Renyi Model in
         which each node in the graph has a parameter to specify its expected degree
@@ -203,8 +203,8 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
         are sampled in the diagonal.
 
     wt: object, optional (default=1)
-        Weight function for each of the edges, taking only a size argument.
-        This weight function will be randomly assigned for selected edges.
+        Weight function for each of the edges, taking only a size argument. 
+        This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
 
     wtargs: dictionary, optional (default=None)
@@ -323,10 +323,10 @@ def sbm(
     return_labels=False,
 ):
     """
-    Samples a graph from the stochastic block model (SBM).
+    Samples a graph from the stochastic block model (SBM). 
 
     SBM produces a graph with specified communities, in which each community can
-    have different sizes and edge probabilities.
+    have different sizes and edge probabilities. 
 
     Read more in the :ref:`tutorials <simulations_tutorials>`
 
@@ -336,8 +336,8 @@ def sbm(
         Number of vertices in each community. Communities are assigned n[0], n[1], ...
 
     p: array-like, shape (n_communities, n_communities)
-        Probability of an edge between each of the communities, where p[i, j] indicates
-        the probability of a connection between edges in communities [i, j].
+        Probability of an edge between each of the communities, where p[i, j] indicates 
+        the probability of a connection between edges in communities [i, j]. 
         0 < p[i, j] < 1 for all i, j.
 
     directed: boolean, optional (default=False)
@@ -359,7 +359,7 @@ def sbm(
 
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
         if Wt is an object, Wtargs corresponds to the trailing arguments
-        to pass to the weight function. If Wt is an array-like, Wtargs[i, j]
+        to pass to the weight function. If Wt is an array-like, Wtargs[i, j] 
         corresponds to trailing arguments to pass to Wt[i, j].
 
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
@@ -395,8 +395,8 @@ def sbm(
 
     References
     ----------
-    .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the
-        Degree-Corrected Stochastic Blockmodel," Advances in Neural Information
+    .. [1] Tai Qin and Karl Rohe. "Regularized spectral clustering under the 
+        Degree-Corrected Stochastic Blockmodel," Advances in Neural Information 
         Processing Systems 26, 2013
 
     Returns
@@ -630,17 +630,17 @@ def sbm(
 
 def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=None):
     r"""
-    Samples a random graph based on the latent positions in X (and
+    Samples a random graph based on the latent positions in X (and 
     optionally in Y)
 
     If only X :math:`\in\mathbb{R}^{n\times d}` is given, the P matrix is calculated as
-    :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then
-    :math:`P = XY^T`. These operations correspond to the dot products between a set of
-    latent positions, so each row in X or Y represents the latent positions in
-    :math:`\mathbb{R}^{d}` for a single vertex in the random graph
-    Note that this function may also rescale or clip the resulting P
+    :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then 
+    :math:`P = XY^T`. These operations correspond to the dot products between a set of 
+    latent positions, so each row in X or Y represents the latent positions in  
+    :math:`\mathbb{R}^{d}` for a single vertex in the random graph 
+    Note that this function may also rescale or clip the resulting P 
     matrix to get probabilities between 0 and 1, or remove loops.
-    A binary random graph is then sampled from the P matrix described
+    A binary random graph is then sampled from the P matrix described 
     by X (and possibly Y).
 
     Read more in the :ref:`tutorials <simulations_tutorials>`
@@ -655,7 +655,7 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
         right latent position from which to generate a P matrix
 
     rescale: boolean, optional (default=False)
-        when rescale is True, will subtract the minimum value in
+        when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
@@ -665,13 +665,13 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
         matrix will be asymmetric.
 
     loops: boolean, optional (default=False)
-        If False, no edges will be sampled in the diagonal. Diagonal elements in P
+        If False, no edges will be sampled in the diagonal. Diagonal elements in P 
         matrix are removed prior to rescaling (see above) which may affect behavior.
         Otherwise, edges are sampled in the diagonal.
 
     wt: object, optional (default=1)
-        Weight function for each of the edges, taking only a size argument.
-        This weight function will be randomly assigned for selected edges.
+        Weight function for each of the edges, taking only a size argument. 
+        This weight function will be randomly assigned for selected edges. 
         If 1, graph produced is binary.
 
     wtargs: dictionary, optional (default=None)
@@ -681,7 +681,7 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
     Returns
     -------
     A: ndarray (n_vertices, n_vertices)
-        A matrix representing the probabilities of connections between
+        A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
 
     References
@@ -689,7 +689,7 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-
+    
     Examples
     --------
     >>> np.random.seed(1)
@@ -744,9 +744,9 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
     If only X is given, the P matrix is calculated as :math:`P = XX^T`
     If X and Y is given, then :math:`P = XY^T`
     These operations correspond to the dot products between a set of latent
-    positions, so each row in X or Y represents the latent positions in
-    :math:`\mathbb{R}^{num-columns}` for a single vertex in the random graph
-    Note that this function may also rescale or clip the resulting P
+    positions, so each row in X or Y represents the latent positions in  
+    :math:`\mathbb{R}^{num-columns}` for a single vertex in the random graph 
+    Note that this function may also rescale or clip the resulting P 
     matrix to get probabilities between 0 and 1, or remove loops
 
     Parameters
@@ -759,21 +759,21 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
         right latent position from which to generate a P matrix
 
     rescale: boolean, optional (default=False)
-        when rescale is True, will subtract the minimum value in
+        when rescale is True, will subtract the minimum value in 
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
 
     loops: boolean, optional (default=True)
         whether to allow elements on the diagonal (corresponding
-        to self connections in a graph) in the returned P matrix.
-        If loops is False, these elements are removed prior to
+        to self connections in a graph) in the returned P matrix. 
+        If loops is False, these elements are removed prior to 
         rescaling (see above) which may affect behavior
 
     Returns
     -------
     P: ndarray (n_vertices, n_vertices)
-        A matrix representing the probabilities of connections between
+        A matrix representing the probabilities of connections between 
         vertices in a random graph based on their latent positions
 
     References
@@ -781,7 +781,7 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
-
+    
     """
     if Y is None:
         Y = X

@@ -5,11 +5,11 @@ import numpy as np
 
 class EREstimator(SBMEstimator):
     """
-    Erdos-Reyni Model
+    Erdos-Reyni Model 
 
     The Erdos-Reyni (ER) model is a simple random graph model in which the probability
     of any potential edge in the graph existing is the same for any two nodes :math:`i`
-    and :math:`j`.
+    and :math:`j`. 
 
     :math:`P_{ij} = p` for all i, j
 
@@ -18,24 +18,24 @@ class EREstimator(SBMEstimator):
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
         this determines whether to force symmetry upon the block probability matrix fit
-        for the SBM. It will also determine whether graphs sampled from the model are
-        directed.
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
 
     loops : boolean, optional (default=False)
-        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
-        the graph where a node connects to itself.
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
 
     Attributes
     ----------
     p_ : float
-        Value between 0 and 1 (inclusive) representing the probability of any edge in
-        the ER graph model
+        Value between 0 and 1 (inclusive) representing the probability of any edge in 
+        the ER graph model 
 
     p_mat_ : np.ndarray, shape (n_verts, n_verts)
         Probability matrix :math:`P` for the fit model, from which graphs could be
-        sampled.
+        sampled.         
 
     See also
     --------
@@ -65,11 +65,11 @@ class EREstimator(SBMEstimator):
 
 class DCEREstimator(DCSBMEstimator):
     r"""
-    Degree-corrected Erdos-Reyni Model
+    Degree-corrected Erdos-Reyni Model 
 
-    The Degree-corrected Erdos-Reyni (DCER) model is an extension of the ER model in
-    which each node has an additional "promiscuity" parameter :math:`\theta_i` that
-    determines its expected degree in the graph.
+    The Degree-corrected Erdos-Reyni (DCER) model is an extension of the ER model in 
+    which each node has an additional "promiscuity" parameter :math:`\theta_i` that 
+    determines its expected degree in the graph. 
 
     :math:`P_{ij} = \theta_i \theta_j p`
 
@@ -78,19 +78,19 @@ class DCEREstimator(DCSBMEstimator):
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
         this determines whether to force symmetry upon the block probability matrix fit
-        for the SBM. It will also determine whether graphs sampled from the model are
-        directed.
+        for the SBM. It will also determine whether graphs sampled from the model are 
+        directed. 
 
     loops : boolean, optional (default=False)
-        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
-        the graph where a node connects to itself.
+        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
+        the graph where a node connects to itself. 
 
-    degree_directed : boolean
+    degree_directed : boolean 
         Whether to allow seperate degree correction parameters for the in and out degree
         of each node. Ignored if ``directed`` is False.
-
+    
     Attributes
     ----------
     p_ : float
@@ -105,7 +105,7 @@ class DCEREstimator(DCSBMEstimator):
         Degree correction vector(s) :math:`\theta`. If ``degree_directed`` parameter was
         False, then will be of shape (n_verts, 1) and element `i` represents the degree
         correction for node :math:`i`. Otherwise, the first column contains out degree
-        corrections and the second column contains in degree corrections.
+        corrections and the second column contains in degree corrections. 
 
     Notes
     -----
