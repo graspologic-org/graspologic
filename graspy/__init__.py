@@ -1,5 +1,6 @@
 import warnings
 
+import graspy.align
 import graspy.cluster
 import graspy.datasets
 import graspy.embed
@@ -8,8 +9,8 @@ import graspy.models
 import graspy.pipeline
 import graspy.plot
 import graspy.simulations
-import graspy.utils
 import graspy.subgraph
+import graspy.utils
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
