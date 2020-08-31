@@ -100,7 +100,9 @@ class SignFlips(BaseAlign):
 
         if Y is None:
             if self.freeze_Y:
-                msg = "in fit, Y can only be None, if freeze_Y is False!"
+                msg = ("if freeze_Y=True, dataset X is matched to dataset Y. "
+                       "hence, Y cannot be None. provide Y! (or set freeze_Y "
+                       "to False, if you want to bring X to first orthant.")
                 raise ValueError(msg)
             # make Y an identity as a filler so that we can use two matrix code
             Y = np.eye(d)
@@ -123,3 +125,35 @@ class SignFlips(BaseAlign):
 
         self.Q_X, self.Q_Y = np.diag(t_X), np.diag(t_Y)
         return self
+
+    def fit_transform(self, X, Y=None):
+        """
+        Learns the matrices Q_X and Q_Y, uses them to match the two datasets
+        provided, and returns the two matched datasets.
+
+        Parameters
+        ----------
+        X: np.ndarray, shape (n, d)
+            First dataset of vectors. These vectors need to have same number of
+            dimensions as ones in Y, but the number of vectors can differ.
+
+        Y: np.ndarray, shape (m, d), or None
+            Second dataset of vectors. These vectors need to have same number
+            of dimensions as ones in X, but the number of vectors can differ.
+            If freeze_Y is set to False, then it is appropriate to omit this,
+            because X will just have all dimensions sign flipped to the first
+            orthant anyway.
+
+        Returns
+        -------
+        X_prime: np.ndarray, shape (n, d)
+            First dataset of vectors, matched to second. Equal to X @ self.Q_X.
+
+        Y_prime: np.ndarray, shape (m, d)
+            Second dataset of vectors, matched to first. Equal to X @ self.Q_Y.
+            Unless Y was not provided - in that case only returns X_prime.
+        """
+        # SignFlips has an overloaded fit_transform, because unlike all other
+        # aligners, it is sometimes appropriate to omit Y.
+        self.fit(X, Y)
+        return self.transform(X, Y)

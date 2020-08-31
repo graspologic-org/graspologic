@@ -92,12 +92,12 @@ class BaseAlign(BaseEstimator):
 
         Y_prime: np.ndarray, shape (m, d)
             Second dataset of vectors, matched to first. Equal to X @ self.Q_Y,
-            unless Y was set to None. In that case - it is None. # dont return?
+            unless Y was set to None. In that case - it is not returned. #None?
         """
         X = check_array(X, copy=True)
         if Y is None:
-            X_prime = X @ self.Q
-            return X_prime, None  # consider only returning X_prime ?
+            X_prime = X @ self.Q_X
+            return X_prime, # None # tried returning None, but felt clunky
         else:
             Y = check_array(Y, copy=True)
             X_prime, Y_prime = X @ self.Q_X, Y @ self.Q_Y
