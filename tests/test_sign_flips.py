@@ -5,14 +5,46 @@
 import unittest
 
 import numpy as np
-from scipy import stats
 
 from graspy.align import SignFlips
 
-class TestSeedlessProcrustes(unittest.TestCase):
+
+class TestSignFlips(unittest.TestCase):
     def test_bad_kwargs(self):
-        # ensure that i am checking all possible kwargs
-        pass
+        with self.assertRaises(TypeError):
+            SignFlips(freeze_Y="oops")
+        with self.assertRaises(TypeError):
+            SignFlips(criteria={"this is a": "dict"})
+        with self.assertRaises(ValueError):
+            SignFlips(criteria="cep")
+
+    def test_bad_datasets(self):
+        X = np.arange(6).reshape(3, 2) * (-1)
+        Y = np.arange(6).reshape(3, 2) @ np.diag([1, -1]) + 0.5
+        # check passing weird stuff as input (caught by check_array)
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit_transform("hello there", Y)
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit_transform(X, "hello there")
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit_transform({"hello": "there"}, Y)
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit_transform(X, {"hello": "there"})
+        # check passing arrays of weird ndims (caught by check_array)
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit_transform(X, Y.reshape(3, 2, 1))
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit_transform(X.reshape(3, 2, 1), Y)
+        # check passing arrays with different (catching ourselves)
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit_transform(X, Y[:, 0])
 
     def test_freeze_Y_true_two_datasets(self):
         X = np.arange(6).reshape(3, 2) * (-1)
