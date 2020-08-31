@@ -88,7 +88,7 @@ class SignFlips(BaseAlign):
         if self.criteria == "max":
 
             def max_criteria(X):
-                return X[np.arange(X.shape[0]) - 1, np.argmax(np.abs(X), axis=1)]
+                return X[np.argmax(np.abs(X), axis=0), np.arange(X.shape[1])]
 
             self.criteria_function_ = max_criteria
 
