@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import numpy as np
+from sklearn.utils import check_array
 
 from .base import BaseAlign
 
@@ -29,25 +30,33 @@ class SeedlessProcrustes(BaseAlign):
 
     Parameters
     ----------
-        lambda_init : float, optional (default 0.5)
-            the initial value of lambda for penalization
+        freeze_Y : boolean, optional (default True)
+            Irrelevant in SeedlessProcrustes, as it always modifies only one
+            dataset. Exists for compatibility with other align modules.
 
-        lambda_final : float, optional (deafault: 0.001)
-            for termination
+        lambda_init : float, optional (default 0.5)
+            Initial value of the lambda penalization parameter in the overall
+            aligning problem.
+
+        lambda_final : float, optional (default: 0.001)
+            Termination value of the lambda penalization parameters in the
+            overall aligning problem.
 
         alpha : float, optional (default 0.95)
-            the parameter for which lambda is multiplied by
-
-        optimal_transport_eps : float, optional
-            the tolerance for the optimal transport problem
-
-        iteration_eps : float, optional
-            the tolerance for the iterative problem
+            Parameter by which lambda is multiplied by in every step in the
+            overall aligning problem.
 
         num_reps : int, optional
-            the number of reps for each subiteration
+            Number of reps in each iteration of the optimal transport problem.
 
-        initiazlization: string, {"2d", "sign_flips", "custom"}
+        iteration_eps : float, optional
+            Tolerance for the each iteration of the optimal transport problem.
+
+        optimal_transport_eps : float, optional
+            Tolerance parameter for the each subiteration of the optimal
+            transport problem.
+
+        initialization: string, {"2d", "sign_flips", "custom"}
 
             - "2d"
                 uses 2^d different initiazlizations, where d is the dimension.
@@ -66,13 +75,27 @@ class SeedlessProcrustes(BaseAlign):
                 unless it is not provided. if not provided - uses initial P. if
                 neither is given initializes to Q = I.
 
+        initial_Q: np.ndarray, shape (d, d) or None, optional (default=None)
+            An initial guess for the alignment matrix, if such exists. Ignored
+            if initialization alignment is set to anything other than 'custom'.
+            If None - initializes using an initial guess for P.
+            If None, and P is also None - initializes Q to identity matrix.
+
+        initial_P: np.ndarray, shape (n, m) or None, optional (default=None)
+            Initial guess for the initial transport matrix.
+            Only matters if Q=None.
+
     Attributes
     ----------
+        Q_X : array, size (d, d)
+              final orthogonal matrix, used to modify X
+
+        Q_Y : array, size (d, d)
+              final orthogonal matrix, used to modify Y.
+              in SeedlessProcrustes Q_Y is always equal to identity I
+
         P : array, size (n, m) where n and md are the sizes of two datasets
             final matrix of optimal transports
-
-        Q : array, size (d, d) where d is the dimensionality of the datasets
-            final orthogonal matrix
 
     References
     ----------
@@ -81,6 +104,7 @@ class SeedlessProcrustes(BaseAlign):
 
     def __init__(
         self,
+        freeze_Y=True,
         lambda_init=0.5,
         lambda_final=0.001,
         alpha=0.95,
@@ -88,6 +112,8 @@ class SeedlessProcrustes(BaseAlign):
         iterative_eps=0.01,
         num_reps=100,
         initialization="2d",
+        initial_Q=None,
+        initial_P=None,
     ):
         if type(lambda_init) is not float:
             raise TypeError()
@@ -135,6 +161,11 @@ class SeedlessProcrustes(BaseAlign):
                 msg = "supported initializations are {}".format(initialization)
                 raise NotImplementedError(msg)
 
+        initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
+        initial_P = check_array(initial_P, accept_sparse=True, copy=True)
+
+        super.__init__(freeze_Y=freeze_Y)
+
         self.lambda_init = lambda_init
         self.lambda_final = lambda_final
         self.alpha = alpha
@@ -142,6 +173,8 @@ class SeedlessProcrustes(BaseAlign):
         self.iterative_eps = iterative_eps
         self.num_reps = num_reps
         self.initialization = initialization
+        self.initial_Q = initial_Q
+        self.initial_P = initial_P
 
     def _procrustes(self, X, Y, P_i):
         u, w, vt = np.linalg.svd(X.T @ P_i @ Y)
@@ -198,9 +231,9 @@ class SeedlessProcrustes(BaseAlign):
             lambda_current = self.alpha * lambda_current
         return P_i, Q
 
-    def fit(self, X, Y, Q=None, P=None):
+    def fit(self, X, Y):
         """
-        Matches two datasets using the seedless procrustes.
+        Matches two datasets using the seedless procrustes algorithm
 
         Parameters
         ----------
@@ -212,22 +245,17 @@ class SeedlessProcrustes(BaseAlign):
             Second dataset of vectors. These vectors need to have same number
             of dimensions as ones in X, but the number of vectors can differ.
 
-        Q: np.ndarray, shape (d, d) or None, optional (default=None)
-            An initial guess for the alignment matrix, if such exists. Ignored
-            if initialization alignment is set to anything other than 'custom'.
-            If None - initializes using an initial guess for P. If None, and
-            P is also None - initializes Q to identity matrix.
-
-        P: np.ndarray, shape (n, m) or None, optional (default=None)
-            an initial guess for the initial transpot matrix.
-            Only matters if Q=None.
-
         Returns
         -------
         self: returns an instance of self
         """
-        # TODO check bad matrix inputs
-        # make sure dimensions are the same
+        # perform checks
+        X = check_array(X, accept_sparse=True, copy=True)
+        Y = check_array(Y, accept_sparse=True, copy=True)
+        if X.shape[1] != Y.shape[1]:
+            msg = "two datasets have different number of components!"
+            raise ValueError(msg)
+
         if self.initialization == "2d":
             n, d = X.shape
             m, _ = Y.shape
@@ -244,21 +272,21 @@ class SeedlessProcrustes(BaseAlign):
             # pick the best one, using the objective function value
             best = np.argmin(objectives)
             self.initial_Q = self._orthogonal_matrix_from_int(best, d)
-            self.P, self.Q = P_matrices[best], Q_matrices[best]
+            self.P, self.Q_X = P_matrices[best], Q_matrices[best]
         elif self.initialization == "sign_flips":
             self.initial_Q = self._sign_flips(X, Y)
-            self.P, self.Q = self._match_datasets(X, Y, self.initial_Q)
+            self.P, self.Q_X = self._match_datasets(X, Y, self.initial_Q)
         else:
-            if Q is None:
-                if P is None:
-                    self.initial_Q = np.eye(X.shape[1])
+            # determine initial Q, if custom and not provided
+            if self.initial_Q is None:
+                if self.initial_P is not None:
+                    # use initial P, if provided
+                    self.initial_Q = self._procrustes(X, Y, self.initial_P)
                 else:
-                    self.initial_Q = self._procrustes(X, Y, P)
-            else:
-                self.initial_Q = Q
-            self.P, self.Q = self._match_datasets(X, Y, self.initial_Q)
+                    # set to initial Q to identity if neither Q nor P provided
+                    self.initial_Q = np.eye(X.shape[1])
+            self.P, self.Q_X = self._match_datasets(X, Y, self.initial_Q)
+
+        self.Q_Y = np.eye(d)
 
         return self
-
-
-

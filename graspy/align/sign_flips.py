@@ -43,12 +43,12 @@ class SignFlips(BaseAlign):
         criteria : string, {'median' (default), 'max'}
             String describing the criteria used to choose whether to flip
             signs. Two options are currently supported:
-    
+
             - 'median'
                 uses the median along each dimension
             - 'max'
                 uses the max (in magintude) alongs each dimension
-                    
+
 
 
 
@@ -61,10 +61,11 @@ class SignFlips(BaseAlign):
               final diagonal orthogonal matrix, used to modify Y
 
     """
+
     def __init__(
         self,
         freeze_Y=True,
-        criteria='median',
+        criteria="median",
     ):
 
         if type(criteria) is not str:
@@ -84,19 +85,21 @@ class SignFlips(BaseAlign):
         if self.critera == "median":
             self.criteria_function_ = partial(np.median, 0)
         if self.criteria == "max":
+
             def max_criteria(X):
-                return X[np.arange(X.shape[0])-1, np.argmax(np.abs(X), axis=1)]
+                return X[np.arange(X.shape[0]) - 1, np.argmax(np.abs(X), axis=1)]
+
             self.criteria_function_ = max_criteria
 
     def fit(self, X, Y=None):
         # perform checks
         self.set_criteria_function()
-        X = check_array(X, accept_sparse=True, copy=True),
+        X = check_array(X, accept_sparse=True, copy=True)
         _, d = X.shape
 
         if Y is None:
             if self.freeze_Y:
-                msg = "Y can only be None, if freeze_Y is False!"
+                msg = "in fit, Y can only be None, if freeze_Y is False!"
                 raise ValueError(msg)
             # make Y an identity as a filler so that we can use two matrix code
             Y = np.eye(d)
