@@ -77,10 +77,14 @@ class SignFlips(BaseAlign):
     def set_criteria_function(self):
         # perform a check, in case it was modified directly
         if self.criteria not in ["median", "max"]:
-            raise ValueError("{} is not a valid criteria".format(self.critera))
+            raise ValueError("{} is not a valid criteria".format(self.criteria))
 
-        if self.critera == "median":
-            self.criteria_function_ = partial(np.median, 0)
+        if self.criteria == "median":
+
+            def median_criteria(X):
+                return np.median(X, axis=0)
+
+            self.criteria_function_ = median_criteria
         if self.criteria == "max":
 
             def max_criteria(X):
@@ -106,8 +110,8 @@ class SignFlips(BaseAlign):
             msg = "two datasets have different number of components!"
             raise ValueError(msg)
 
-        X_criterias = self.criteria_function_(X, axis=0)
-        Y_criterias = self.criteria_function_(Y, axis=0)
+        X_criterias = self.criteria_function_(X)
+        Y_criterias = self.criteria_function_(Y)
 
         if self.freeze_Y:
             val = np.multiply(X_criterias, Y_criterias)
