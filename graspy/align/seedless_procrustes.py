@@ -14,8 +14,10 @@
 
 import numpy as np
 
+from .base import BaseAlign
 
-class SeedlessProcrustes:
+
+class SeedlessProcrustes(BaseAlign):
     """
     Matches datasets by iterating over a decreasing sequence of lambdas,
     the penalization parameters.
@@ -23,7 +25,7 @@ class SeedlessProcrustes:
     from Lambda = .5, and decreasing each time by alpha.
     This method takes longer, but is more likely to converge to the true
     solution, since we start from a more concave problem and iteratively solve
-    it by setting lambda = alpha * lambda, for alpha \in (0,1).
+    it by setting lambda = alpha * lambda, for alpha in (0,1).
 
     Parameters
     ----------
@@ -258,41 +260,5 @@ class SeedlessProcrustes:
 
         return self
 
-    def fit_predict(self, X, Y, Q=None, P=None):
-        """
-        Matches two datasets using the seedless procrustes, and returns the
-        matched datasets.
 
-        Parameters
-        ----------
-        X: np.ndarray, shape (n, d)
-            First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
-
-        Y: np.ndarray, shape (m, d)
-            Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
-
-        Q: np.ndarray, shape (d, d) or None, optional (default=None)
-            An initial guess for the alignment matrix, if such exists. Ignored
-            if initialization alignment is set to anything other than 'custom'.
-            If None - initializes using an initial guess for P. If None, and
-            P is also None - initializes Q to identity matrix.
-
-        P: np.ndarray, shape (n, m) or None, optional (default=None)
-            an initial guess for the initial transpot matrix.
-            Only matters if Q=None.
-
-        Returns
-        -------
-        X_prime: np.ndarray, shape (n, d)
-            First dataset of vectors, matched to second. Equal to X @ self.Q.
-
-        Y_prime: np.ndarray, shape (m, d)
-            Second dataset of vectors, matched to first. Guaranteed to be same
-            as Y.
-        """
-        self.fit(X, Y, Q, P)
-        X_prime, Y_prime = X.copy() @ Q, Y.copy()
-        return X_prime, Y_prime
 
