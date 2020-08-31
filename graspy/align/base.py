@@ -67,11 +67,12 @@ class BaseAlign(BaseEstimator):
         """
         pass
 
-    def predict(self, X, Y=None):
+    def transform(self, X, Y=None):
         """
         Uses the learned matrices Q_X, Q_Y to match the two datssets and
         returns them. These may or may not be the same datasets that it was fit
-        to. Also supports only modifying one dataset, by setting Y=None.
+        to. Also supports only modifying the one dataset (the first one, X)
+        dataset, by setting Y=None.
 
         Parameters
         ----------
@@ -96,13 +97,13 @@ class BaseAlign(BaseEstimator):
         X = check_array(X, copy=True)
         if Y is None:
             X_prime = X @ self.Q
-            return X_prime, None  # consider only removing X_prime ?
+            return X_prime, None  # consider only returning X_prime ?
         else:
             Y = check_array(Y, copy=True)
             X_prime, Y_prime = X @ self.Q_X, Y @ self.Q_Y
             return X_prime, Y_prime
 
-    def fit_predict(self, X, Y):
+    def fit_transform(self, X, Y):
         """
         Learns the matrices Q_X and Q_Y, uses them to match the two datasets
         provided, and returns the two matched datasets.
@@ -126,4 +127,4 @@ class BaseAlign(BaseEstimator):
             Second dataset of vectors, matched to first. Equal to X @ self.Q_Y.
         """
         self.fit(X, Y)
-        return self.predict(X, Y)
+        return self.transform(X, Y)
