@@ -100,9 +100,11 @@ class SignFlips(BaseAlign):
 
         if Y is None:
             if self.freeze_Y:
-                msg = ("if freeze_Y=True, dataset X is matched to dataset Y. "
-                       "hence, Y cannot be None. provide Y! (or set freeze_Y "
-                       "to False, if you want to bring X to first orthant.")
+                msg = (
+                    "if freeze_Y=True, dataset X is matched to dataset Y. "
+                    "hence, Y cannot be None. provide Y! (or set freeze_Y "
+                    "to False, if you want to bring X to first orthant."
+                )
                 raise ValueError(msg)
             # make Y an identity as a filler so that we can use two matrix code
             Y = np.eye(d)

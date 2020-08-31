@@ -97,7 +97,7 @@ class BaseAlign(BaseEstimator):
         X = check_array(X, copy=True)
         if Y is None:
             X_prime = X @ self.Q_X
-            return X_prime, # None # tried returning None, but felt clunky
+            return (X_prime,)  # None # tried returning None, but felt clunky
         else:
             Y = check_array(Y, copy=True)
             X_prime, Y_prime = X @ self.Q_X, Y @ self.Q_Y
