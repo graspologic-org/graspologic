@@ -27,7 +27,7 @@ class GraphMatch:
     (QAP) through an implementation of the Fast Approximate QAP Algorithm (FAQ) (these
     two problems are the same up to a sign change) [1].
 
-    This algorithm can be thought of as finding an alignment of the vertices of two 
+    This algorithm can be thought of as finding an alignment of the vertices of two
     graphs which minimizes the number of induced edge disagreements, or, in the case
     of weighted graphs, the sum of squared differences of edge weight disagreements.
     The option to add seeds (known vertex correspondence between some nodes) is also

@@ -23,7 +23,7 @@ class KMeansCluster(BaseCluster):
     """
     KMeans Cluster.
 
-    It computes all possible models from one component to 
+    It computes all possible models from one component to
     ``max_clusters``. The best model is given by the lowest silhouette score.
 
     Parameters
@@ -40,18 +40,18 @@ class KMeansCluster(BaseCluster):
     Attributes
     ----------
     n_clusters_ : int
-        Optimal number of components. If y is given, it is based on largest 
+        Optimal number of components. If y is given, it is based on largest
         ARI. Otherwise, it is based on smallest loss.
 
     model_ : KMeans object
         Fitted KMeans object fitted with optimal n_components.
 
     silhouette_ : list
-        List of silhouette scores computed for all possible number 
+        List of silhouette scores computed for all possible number
         of clusters given by ``range(2, max_clusters)``.
 
     ari_ : list
-        Only computed when y is given. List of ARI values computed for 
+        Only computed when y is given. List of ARI values computed for
         all possible number of clusters given by ``range(2, max_clusters)``.
     """
 
@@ -69,7 +69,7 @@ class KMeansCluster(BaseCluster):
 
     def fit(self, X, y=None):
         """
-        Fits kmeans model to the data. 
+        Fits kmeans model to the data.
 
         Parameters
         ----------
