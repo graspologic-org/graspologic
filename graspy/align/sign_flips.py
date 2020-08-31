@@ -16,11 +16,11 @@ import numpy as np
 from functools import partial
 from sklearn.utils import check_array
 
+from .base import BaseAlign
+
 
 class SignFlips(BaseAlign):
     """
-    # TODO There will be description here
-
     Parameters
     ----------
         freeze_Y : boolean, optional (default False)
@@ -48,9 +48,6 @@ class SignFlips(BaseAlign):
                 uses the median along each dimension
             - 'max'
                 uses the max (in magintude) alongs each dimension
-
-
-
 
     Attributes
     ----------
