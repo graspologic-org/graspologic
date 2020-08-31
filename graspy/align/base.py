@@ -16,6 +16,7 @@ from abc import abstractmethod
 from sklearn.utils import check_array
 from sklearn.base import BaseEstimator
 
+
 class BaseAlign(BaseEstimator):
     """
     Base class for align tasks such as sign flipping, procrustes and seedless
