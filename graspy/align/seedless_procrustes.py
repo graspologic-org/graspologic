@@ -161,10 +161,12 @@ class SeedlessProcrustes(BaseAlign):
                 msg = "supported initializations are {}".format(initialization)
                 raise NotImplementedError(msg)
 
-        initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
-        initial_P = check_array(initial_P, accept_sparse=True, copy=True)
+        if initial_Q is not None:
+            initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
+        if initial_P is not None:
+            initial_P = check_array(initial_P, accept_sparse=True, copy=True)
 
-        super.__init__(freeze_Y=freeze_Y)
+        super().__init__(freeze_Y=freeze_Y)
 
         self.lambda_init = lambda_init
         self.lambda_final = lambda_final
@@ -287,6 +289,6 @@ class SeedlessProcrustes(BaseAlign):
                     self.initial_Q = np.eye(X.shape[1])
             self.P, self.Q_X = self._match_datasets(X, Y, self.initial_Q)
 
-        self.Q_Y = np.eye(d)
+        self.Q_Y = np.eye(X.shape[1])
 
         return self
