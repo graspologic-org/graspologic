@@ -17,10 +17,17 @@ class TestSignFlips(unittest.TestCase):
             SignFlips(criteria={"this is a": "dict"})
         with self.assertRaises(ValueError):
             SignFlips(criteria="cep")
+        # check delayed ValueError
+        with self.assertRaises(ValueError):
+            aligner = SignFlips(criteria="median")
+            X = np.arange(6).reshape(6, 1)
+            Y = np.arange(6).reshape(6, 1)
+            aligner.criteria = "something"
+            aligner.fit(X, Y)
 
     def test_bad_datasets(self):
-        X = np.arange(6).reshape(3, 2) * (-1)
-        Y = np.arange(6).reshape(3, 2) @ np.diag([1, -1]) + 0.5
+        X = np.arange(6).reshape(6, 1)
+        Y = np.arange(6).reshape(6, 1)
         # check passing weird stuff as input (caught by check_array)
         with self.assertRaises(ValueError):
             aligner = SignFlips()
@@ -44,7 +51,7 @@ class TestSignFlips(unittest.TestCase):
         # check passing arrays with different (catching ourselves)
         with self.assertRaises(ValueError):
             aligner = SignFlips()
-            aligner.fit_transform(X, Y[:, 0])
+            aligner.fit_transform(X, Y.T)
 
     def test_freeze_Y_true_two_datasets(self):
         X = np.arange(6).reshape(3, 2) * (-1)
