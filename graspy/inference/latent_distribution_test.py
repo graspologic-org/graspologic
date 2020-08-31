@@ -109,7 +109,7 @@ class LatentDistributionTest(BaseInference):
         Flag whether to expect two full graphs, or the embeddings.
 
         - True
-            .fit and .fit_predict() expect graphs, either as networkX objects
+            .fit and .fit_predict() expect graphs, either as NetworkX graph objects
             or as adjacency matrices, provided as ndarrays of size (n, n) and
             (m, m). They will be embedded using adjacency spectral embeddings.
         - False
@@ -312,7 +312,7 @@ class LatentDistributionTest(BaseInference):
             Expected variable type and shape depends on input_graph attribute:
 
             - input_graph=True
-                expects two unembedded graphs either as networkX objects, or as
+                expects two unembedded graphs either as NetworkX graph objects, or as
                 two np.ndarrays, representing the adjacency matrices. In this
                 case will be embedded using adjacency spectral embedding.
             - input_graph-False
@@ -320,7 +320,7 @@ class LatentDistributionTest(BaseInference):
                 arrays of shape (n, d) and (m, d), where d, the number of
                 components, must be shared.
 
-            Note that regardless of how the graphs are passed, they need not to
+            Note that regardless of how the graphs are passed, they need not
             have the same number of vertices.
 
         Returns
@@ -403,7 +403,7 @@ class LatentDistributionTest(BaseInference):
             Expected variable type and shape depends on input_graph attribute:
 
             - input_graph=True
-                expects two unembedded graphs either as networkX objects, or as
+                expects two unembedded graphs either as NetworkX graph objects, or as
                 two np.ndarrays, representing the adjacency matrices. In this
                 case will be embedded using adjacency spectral embedding.
             - input_graph-False
