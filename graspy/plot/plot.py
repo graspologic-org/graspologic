@@ -121,7 +121,8 @@ def _transform(arr, method):
 def _process_graphs(
     graphs, inner_hier_labels, outer_hier_labels, transform, sort_nodes
 ):
-    """Handles transformation and sorting of graphs for plotting"""
+    """ Handles transformation and sorting of graphs for plotting
+    """
     for g in graphs:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
 
@@ -189,10 +190,10 @@ def heatmap(
         - 'log10'
             Plots the base 10 log of all nonzero numbers
         - 'zero-boost'
-            Pass to ranks method. preserves the edge weight for all 0s, but ranks
-            the other edges as if the ranks of all 0 edges has been assigned.
+            Pass to ranks method. preserves the edge weight for all 0s, but ranks 
+            the other edges as if the ranks of all 0 edges has been assigned. 
         - 'simple-all'
-            Pass to ranks method. Assigns ranks to all non-zero edges, settling
+            Pass to ranks method. Assigns ranks to all non-zero edges, settling 
             ties using the average. Ranks are then scaled by
             :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`
             where n is the number of nodes
@@ -200,7 +201,7 @@ def heatmap(
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
         - 'binarize'
-            Binarize input graph such that any edge weight greater than 0 becomes 1.
+            Binarize input graph such that any edge weight greater than 0 becomes 1. 
 
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
@@ -222,7 +223,7 @@ def heatmap(
         Valid matplotlib color map.
 
     vmin, vmax : floats, optional (default=None)
-        Values to anchor the colormap, otherwise they are inferred from the data and
+        Values to anchor the colormap, otherwise they are inferred from the data and 
         other keyword arguments.
 
     center : float, default: 0
@@ -232,16 +233,16 @@ def heatmap(
         Whether to draw a colorbar.
 
     inner_hier_labels : array-like, length of X's first dimension, default: None
-        Categorical labeling of the nodes. If not None, will group the nodes
+        Categorical labeling of the nodes. If not None, will group the nodes 
         according to these labels and plot the labels on the marginal
 
     outer_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
-        marginals
+        marginals 
 
     hier_label_fontsize : int
-        Size (in points) of the text labels for the ``inner_hier_labels`` and
+        Size (in points) of the text labels for the ``inner_hier_labels`` and 
         ``outer_hier_labels``.
 
     ax : matplotlib Axes, optional
@@ -253,7 +254,7 @@ def heatmap(
 
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
-        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
+        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
         ``sort_nodes`` is ``True``, will sort nodes this way within block.
 
     **kwargs : dict, optional
@@ -374,7 +375,7 @@ def gridplot(
     Plots multiple graphs on top of each other with dots as edges.
 
     This function is useful for visualizing multiple graphs simultaneously.
-    The size of the dots correspond to the edge weights of the graphs, and
+    The size of the dots correspond to the edge weights of the graphs, and 
     colors represent input graphs.
 
     Read more in the :ref:`tutorials <plot_tutorials>`
@@ -384,7 +385,7 @@ def gridplot(
     X : list of nx.Graph or np.ndarray object
         List of nx.Graph or numpy arrays to plot
     labels : list of str
-        List of strings, which are labels for each element in X.
+        List of strings, which are labels for each element in X. 
         ``len(X) == len(labels)``.
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
@@ -393,18 +394,18 @@ def gridplot(
         - 'log10'
             Plots the base 10 log of all nonzero numbers
         - 'zero-boost'
-            Pass to ranks method. preserves the edge weight for all 0s, but ranks
-            the other edges as if the ranks of all 0 edges has been assigned.
+            Pass to ranks method. preserves the edge weight for all 0s, but ranks 
+            the other edges as if the ranks of all 0 edges has been assigned. 
         - 'simple-all'
-            Pass to ranks method. Assigns ranks to all non-zero edges, settling
-            ties using the average. Ranks are then scaled by
-            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`
+            Pass to ranks method. Assigns ranks to all non-zero edges, settling 
+            ties using the average. Ranks are then scaled by 
+            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
         - 'simple-nonzero'
             Pass to ranks method. Same as simple-all, but ranks are scaled by
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
         - 'binarize'
-            Binarize input graph such that any edge weight greater than 0 becomes 1.
+            Binarize input graph such that any edge weight greater than 0 becomes 1. 
     height : int, optional, default: 10
         Height of figure in inches.
     title : str, optional, default: None
@@ -424,22 +425,22 @@ def gridplot(
     legend_name : string, default: 'Type'
         Name to plot above the legend
     inner_hier_labels : array-like, length of X's first dimension, default: None
-        Categorical labeling of the nodes. If not None, will group the nodes
+        Categorical labeling of the nodes. If not None, will group the nodes 
         according to these labels and plot the labels on the marginal
     outer_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals
     hier_label_fontsize : int
-        Size (in points) of the text labels for the ``inner_hier_labels`` and
+        Size (in points) of the text labels for the ``inner_hier_labels`` and 
         ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if ``None``
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
-        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is ``True``, will sort nodes this way within block.
+        (degree for an unweighted graph). If ``inner_hier_labels`` is passed and 
+        ``sort_nodes`` is ``True``, will sort nodes this way within block. 
     """
     _check_common_inputs(
         height=height,
@@ -544,12 +545,12 @@ def pairplot(
     r"""
     Plot pairwise relationships in a dataset.
 
-    By default, this function will create a grid of Axes such that each dimension
-    in data will by shared in the y-axis across a single row and in the x-axis
+    By default, this function will create a grid of Axes such that each dimension 
+    in data will by shared in the y-axis across a single row and in the x-axis 
     across a single column.
-
-    The off-diagonal Axes show the pairwise relationships displayed as scatterplot.
-    The diagonal Axes show the univariate distribution of the data for that
+    
+    The off-diagonal Axes show the pairwise relationships displayed as scatterplot. 
+    The diagonal Axes show the univariate distribution of the data for that 
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
     Read more in the :ref:`tutorials <plot_tutorials>`
@@ -561,7 +562,7 @@ def pairplot(
     labels : array-like or list, shape (n_samples), optional
         Labels that correspond to each sample in X.
     col_names : array-like or list, shape (n_features), optional
-        Names or labels for each feature in X. If not provided, the default
+        Names or labels for each feature in X. If not provided, the default 
         will be `Dimension 1, Dimension 2, etc`.
     title : str, optional, default: None
         Title of plot.
@@ -575,17 +576,17 @@ def pairplot(
     context :  None, or one of {paper, notebook, talk (default), poster}
         The name of a preconfigured set.
     font_scale : float, optional, default: 1
-        Separate scaling factor to independently scale the size of the font
+        Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
     alpha : float, optional, default: 0.7
-        Opacity value of plotter markers between 0 and 1
+        Opacity value of plotter markers between 0 and 1 
     size : float or int, optional, default: 50
         Size of plotted markers.
     marker : string, optional, default: '.'
-        Matplotlib style marker specification
+        Matplotlib style marker specification 
         https://matplotlib.org/api/markers_api.html
     """
     _check_common_inputs(
@@ -751,7 +752,7 @@ def degreeplot(
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
-        Separate scaling factor to independently scale the size of the font
+        Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
@@ -818,7 +819,7 @@ def edgeplot(
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
-        Separate scaling factor to independently scale the size of the font
+        Separate scaling factor to independently scale the size of the font 
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
@@ -865,7 +866,7 @@ def screeplot(
     show_first=None,
 ):
     r"""
-    Plots the distribution of singular values for a matrix, either showing the
+    Plots the distribution of singular values for a matrix, either showing the 
     raw distribution or an empirical CDF (depending on ``cumulative``)
 
     Parameters

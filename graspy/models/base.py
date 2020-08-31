@@ -43,15 +43,15 @@ class BaseGraphEstimator(BaseEstimator):
     def bic(self, graph):
         """
         Bayesian information criterion for the current model on the input graph.
-
-        Note that this implicitly assumes the input graph is indexed like the
+        
+        Note that this implicitly assumes the input graph is indexed like the 
         fit model.
 
         Parameters
         ----------
         graph : np.ndarray
             Input graph
-
+        
         Returns
         -------
         bic : float
@@ -63,15 +63,15 @@ class BaseGraphEstimator(BaseEstimator):
     def mse(self, graph):
         """
         Compute mean square error for the current model on the input graph
-
-        Note that this implicitly assumes the input graph is indexed like the
+        
+        Note that this implicitly assumes the input graph is indexed like the 
         fit model.
 
         Parameters
         ----------
         graph : np.ndarray
             Input graph
-
+        
         Returns
         -------
         mse : float
@@ -84,20 +84,20 @@ class BaseGraphEstimator(BaseEstimator):
         """
         Compute the weighted log probabilities for each potential edge.
 
-        Note that this implicitly assumes the input graph is indexed like the
+        Note that this implicitly assumes the input graph is indexed like the 
         fit model.
 
         Parameters
         ----------
         graph : np.ndarray
             Input graph. Must be same shape as model's ``p_mat_`` attribute
-
+        
         clip : scalar or None, optional (default=None)
             Values for which to clip probability matrix, entries less than c or more
             than 1 - c are set to c or 1 - c, respectively.
             If None, values will not be clipped in the likelihood calculation, which may
-            result in poorly behaved likelihoods depending on the model.
-
+            result in poorly behaved likelihoods depending on the model. 
+        
         Returns
         -------
         sample_scores : np.ndarray (size of ``graph``)
@@ -141,10 +141,10 @@ class BaseGraphEstimator(BaseEstimator):
 
     def score(self, graph):
         """
-        Compute the average log-likelihood over each potential edge of the
+        Compute the average log-likelihood over each potential edge of the 
         given graph.
 
-        Note that this implicitly assumes the input graph is indexed like the
+        Note that this implicitly assumes the input graph is indexed like the 
         fit model.
 
         Parameters
@@ -168,7 +168,7 @@ class BaseGraphEstimator(BaseEstimator):
     @abstractmethod
     def fit(self, graph, y=None):
         """
-        Calculate the parameters for the given graph model
+        Calculate the parameters for the given graph model 
         """
         return self
 
@@ -176,22 +176,22 @@ class BaseGraphEstimator(BaseEstimator):
         """
         Sample graphs (realizations) from the fitted model
 
-        Can only be called after the the model has been fit
+        Can only be called after the the model has been fit 
 
         Parameters
         ----------
         n_samples : int (default 1), optional
-            The number of graphs to sample
+            The number of graphs to sample 
 
-        Returns
+        Returns 
         -------
         graphs : np.array (n_samples, n_verts, n_verts)
-            Array of sampled graphs, where the first dimension
+            Array of sampled graphs, where the first dimension 
             indexes each sample, and the other dimensions represent
-            (n_verts x n_verts) adjacency matrices for the sampled graphs.
+            (n_verts x n_verts) adjacency matrices for the sampled graphs. 
 
-            Note that if only one sample is drawn, a (1, n_verts, n_verts)
-            array will still be returned.
+            Note that if only one sample is drawn, a (1, n_verts, n_verts) 
+            array will still be returned. 
         """
         check_is_fitted(self, "p_mat_")
         _check_n_samples(n_samples)

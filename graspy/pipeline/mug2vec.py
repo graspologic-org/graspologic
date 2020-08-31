@@ -23,46 +23,46 @@ class mug2vec(BaseEstimator):
     r"""
     Multigraphs-2-vectors (mug2vec).
 
-    mug2vec is a sequence of three algorithms that learns a feature vector for each
-    input graph.
+    mug2vec is a sequence of three algorithms that learns a feature vector for each 
+    input graph. 
 
     Steps:
-
+    
     1. Pass to ranks - ranks all edge weights from smallest to largest valued edges
     then normalize by a constant.
-
-    2. Omnibus embedding - jointly learns a low dimensional matrix representation for
+    
+    2. Omnibus embedding - jointly learns a low dimensional matrix representation for 
     all graphs under the random dot product model (RDPG).
-
-    3. Classical MDS (cMDS) - learns a feature vector for each graph by computing
-    Euclidean distance between each pair of graph embeddings from omnibus embedding,
+    
+    3. Classical MDS (cMDS) - learns a feature vector for each graph by computing 
+    Euclidean distance between each pair of graph embeddings from omnibus embedding, 
     followed by an eigen decomposition.
 
     Parameters
     ----------
     pass_to_ranks: {'simple-nonzero' (default), 'simple-all', 'zero-boost'} string, or None
-
+        
         - 'simple-nonzero'
-            assigns ranks to all non-zero edges, settling ties using
-            the average. Ranks are then scaled by
+            assigns ranks to all non-zero edges, settling ties using 
+            the average. Ranks are then scaled by 
             :math:`\frac{rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
         - 'simple-all'
-            assigns ranks to all non-zero edges, settling ties using
-            the average. Ranks are then scaled by
-            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`
+            assigns ranks to all non-zero edges, settling ties using 
+            the average. Ranks are then scaled by 
+            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}` 
             where n is the number of nodes
         - 'zero-boost'
             preserves the edge weight for all 0s, but ranks the other
-            edges as if the ranks of all 0 edges has been assigned. If there are
+            edges as if the ranks of all 0 edges has been assigned. If there are 
             10 0-valued edges, the lowest non-zero edge gets weight 11 / (number
             of possible edges). Ties settled by the average of the weight that those
-            edges would have received. Number of possible edges is determined
+            edges would have received. Number of possible edges is determined 
             by the type of graph (loopless or looped, directed or undirected).
         - None
-            No pass to ranks applied.
+            No pass to ranks applied. 
 
     omnibus_components, cmds_components : int or None, default = None
-        Desired dimensionality of output data. If "full",
+        Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
@@ -70,7 +70,7 @@ class mug2vec(BaseEstimator):
     omnibus_n_elbows, cmds_n_elbows: int, optional, default: 2
         If ``n_components=None``, then compute the optimal embedding dimension using
         ``select_dimension``. Otherwise, ignored.
-
+    
     Attributes
     ----------
     omnibus_n_components_ : int
@@ -82,7 +82,7 @@ class mug2vec(BaseEstimator):
         then equals the optimal embedding dimension.
 
     embeddings_ : array, shape (n_components, n_features)
-        Embeddings from the pipeline. Each graph is a point in ``n_features``
+        Embeddings from the pipeline. Each graph is a point in ``n_features`` 
         dimensions.
 
     See also
@@ -168,7 +168,7 @@ class mug2vec(BaseEstimator):
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
-
+        
         y : Ignored
 
         Returns

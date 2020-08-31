@@ -13,18 +13,18 @@ def _kmeans_comparison(data, labels, n_clusters):
 
     Parameters
     ----------
-        data: list-like
-            each element in the list is a dataset to perform k-means on
+        data: list-like 
+            each element in the list is a dataset to perform k-means on 
         labels: list-like
-            each element in the list is a set of lables with the same number of points as
+            each element in the list is a set of lables with the same number of points as 
             the corresponding data
         n_clusters: int
-            the number of clusters to use for k-means
-
+            the number of clusters to use for k-means 
+    
     Returns
     -------
         aris: list, length the same as data/labels
-            the i-th element in the list is an ARI (Adjusted Rand Index) corresponding to the result
+            the i-th element in the list is an ARI (Adjusted Rand Index) corresponding to the result 
             of k-means clustering on the i-th data/labels
 
     """

@@ -22,26 +22,26 @@ from .svd import select_dimension, selectSVD
 
 class MultipleASE(BaseEmbedMulti):
     r"""
-    Multiple Adjacency Spectral Embedding (MASE) embeds arbitrary number of input
+    Multiple Adjacency Spectral Embedding (MASE) embeds arbitrary number of input 
     graphs with matched vertex sets.
 
-    For a population of undirected graphs, MASE assumes that the population of graphs
-    is sampled from :math:`VR^{(i)}V^T` where :math:`V \in \mathbb{R}^{n\times d}` and
-    :math:`R^{(i)} \in \mathbb{R}^{d\times d}`. Score matrices, :math:`R^{(i)}`, are
-    allowed to vary for each graph, but are symmetric. All graphs share a common a
-    latent position matrix :math:`V`.
-
+    For a population of undirected graphs, MASE assumes that the population of graphs 
+    is sampled from :math:`VR^{(i)}V^T` where :math:`V \in \mathbb{R}^{n\times d}` and 
+    :math:`R^{(i)} \in \mathbb{R}^{d\times d}`. Score matrices, :math:`R^{(i)}`, are 
+    allowed to vary for each graph, but are symmetric. All graphs share a common a 
+    latent position matrix :math:`V`. 
+    
     For a population of directed graphs, MASE assumes that the population is sampled
-    from :math:`UR^{(i)}V^T` where :math:`U \in \mathbb{R}^{n\times d_1}`,
-    :math:`V \in \mathbb{R}^{n\times d_2}`, and
-    :math:`R^{(i)} \in \mathbb{R}^{d_1\times d_2}`. In this case, score matrices
-    :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a
+    from :math:`UR^{(i)}V^T` where :math:`U \in \mathbb{R}^{n\times d_1}`, 
+    :math:`V \in \mathbb{R}^{n\times d_2}`, and 
+    :math:`R^{(i)} \in \mathbb{R}^{d_1\times d_2}`. In this case, score matrices 
+    :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a 
     common latent position matrices :math:`U` and :math:`V`.
 
     Parameters
     ----------
     n_components : int or None, default = None
-        Desired dimensionality of output data. If "full",
+        Desired dimensionality of output data. If "full", 
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
@@ -54,7 +54,7 @@ class MultipleASE(BaseEmbedMulti):
         SVD solver to use:
 
         - 'randomized'
-            Computes randomized svd using
+            Computes randomized svd using 
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
@@ -62,12 +62,12 @@ class MultipleASE(BaseEmbedMulti):
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
 
     n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or
-        'truncated'. The default is larger than the default in randomized_svd
+        Number of iterations for randomized SVD solver. Not used by 'full' or 
+        'truncated'. The default is larger than the default in randomized_svd 
         to handle sparse matrices that may have large slowly decaying spectrum.
 
     scaled : bool, optional (default=True)
-        Whether to scale individual eigenvectors with eigenvalues in first embedding
+        Whether to scale individual eigenvectors with eigenvalues in first embedding 
         stage.
 
     Attributes
@@ -79,10 +79,10 @@ class MultipleASE(BaseEmbedMulti):
         Number of vertices in each graph
 
     latent_left_ : array, shape (n_samples, n_components)
-        Estimated left latent positions of the graph.
+        Estimated left latent positions of the graph. 
 
     latent_right_ : array, shape (n_samples, n_components), or None
-        Estimated right latent positions of the graph. Only computed when the an input
+        Estimated right latent positions of the graph. Only computed when the an input 
         graph is directed, or adjacency matrix is assymetric. Otherwise, None.
 
     scores_ : array, shape (n_samples, n_components, n_components)
@@ -214,7 +214,7 @@ class MultipleASE(BaseEmbedMulti):
 
     def fit_transform(self, graphs, y=None):
         """
-        Fit the model with graphs and apply the embedding on graphs.
+        Fit the model with graphs and apply the embedding on graphs. 
         n_components is either automatically determined or based on user input.
 
         Parameters
@@ -226,8 +226,8 @@ class MultipleASE(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_vertices, n_components) if input
-            graphs were symmetric. If graphs were directed, returns tuple of
+        out : array-like, shape (n_vertices, n_components) if input 
+            graphs were symmetric. If graphs were directed, returns tuple of 
             two arrays (same shape as above) where the first corresponds to the
             left latent positions, and the right to the right latent positions
         """

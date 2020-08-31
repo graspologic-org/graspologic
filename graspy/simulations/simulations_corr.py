@@ -56,13 +56,13 @@ def check_rel_sbm(p, r):
 def sample_edges_corr(P, R, directed=False, loops=False):
     """
     Generate a pair of correlated graphs with Bernoulli distribution.
-    Both G1 and G2 are binary matrices.
+    Both G1 and G2 are binary matrices. 
 
     Parameters
     ----------
     P: np.ndarray, shape (n_vertices, n_vertices)
         Matrix of probabilities (between 0 and 1) for a random graph.
-
+        
     R: np.ndarray, shape (n_vertices, n_vertices)
         Matrix of correlation (between 0 and 1) between graph pairs.
 
@@ -76,9 +76,9 @@ def sample_edges_corr(P, R, directed=False, loops=False):
 
     References
     ----------
-    .. [1] Vince Lyzinski, et al. "Seeded Graph Matching for Correlated Erdos-Renyi Graphs",
+    .. [1] Vince Lyzinski, et al. "Seeded Graph Matching for Correlated Erdos-Renyi Graphs", 
        Journal of Machine Learning Research 15, 2014
-
+        
     Returns
     -------
     G1: ndarray (n_vertices, n_vertices)
@@ -138,7 +138,7 @@ def sample_edges_corr(P, R, directed=False, loops=False):
 def er_corr(n, p, r, directed=False, loops=False):
     """
     Generate a pair of correlated graphs with specified edge probability
-    Both G1 and G2 are binary matrices.
+    Both G1 and G2 are binary matrices. 
 
     Parameters
     ----------
@@ -147,18 +147,18 @@ def er_corr(n, p, r, directed=False, loops=False):
 
     p: float
         Probability of an edge existing between two vertices, between 0 and 1.
-
+    
     r: float
         The value of the correlation between the same vertices in two graphs.
-
+    
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
-
+    
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
-
+    
     Returns
     -------
     G1: ndarray (n_vertices, n_vertices)
@@ -166,7 +166,7 @@ def er_corr(n, p, r, directed=False, loops=False):
 
     G2: ndarray (n_vertices, n_vertices)
         Adjacency matrix the same size as P representing a random graph.
-
+    
     Examples
     --------
     >>> np.random.seed(2)
@@ -220,7 +220,7 @@ def er_corr(n, p, r, directed=False, loops=False):
 def sbm_corr(n, p, r, directed=False, loops=False):
     """
     Generate a pair of correlated graphs with specified edge probability
-    Both G1 and G2 are binary matrices.
+    Both G1 and G2 are binary matrices. 
 
     Parameters
     ----------
@@ -228,21 +228,21 @@ def sbm_corr(n, p, r, directed=False, loops=False):
         Number of vertices in each community. Communities are assigned n[0], n[1], ...
 
     p: array-like, shape (n_communities, n_communities)
-        Probability of an edge between each of the communities, where p[i, j] indicates
-        the probability of a connection between edges in communities [i, j].
-        0 < p[i, j] < 1 for all i, j.
+        Probability of an edge between each of the communities, where p[i, j] indicates 
+        the probability of a connection between edges in communities [i, j]. 
+        0 < p[i, j] < 1 for all i, j. 
 
     r: float
         Probability of the correlation between the same vertices in two graphs.
-
+    
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
-
+    
     loops: boolean, optional (default=False)
         If False, no edges will be sampled in the diagonal. Otherwise, edges
         are sampled in the diagonal.
-
+    
     Returns
     -------
     G1: ndarray (n_vertices, n_vertices)
