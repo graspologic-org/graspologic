@@ -50,7 +50,7 @@ class TestSignFlips(unittest.TestCase):
         X = np.arange(6).reshape(3, 2) * (-1)
         Y = np.arange(6).reshape(3, 2) @ np.diag([1, -1]) + 0.5
         # in this case, Y should be unchanged, and X matched to Y
-        # so X flips all sings
+        # so X flips sign in the first dimension
         Q_X_answer = np.array([[-1, 0], [0, 1]])
         Q_Y_answer = np.eye(2)
         X_answer = X.copy() @ Q_X_answer
@@ -139,6 +139,25 @@ class TestSignFlips(unittest.TestCase):
         #  they both should be flipped to positive
         aligner_2 = SignFlips(freeze_Y=False)
         X_test, Y_test = aligner_2.fit_transform(X, Y)
+        self.assertTrue(np.all(X_test == X_answer))
+        self.assertTrue(np.all(Y_test == Y_answer))
+
+    def test_max_criteria(self):
+        X = np.arange(6).reshape(3, 2) * (-1)
+        Y = np.arange(6).reshape(3, 2) @ np.diag([1, -1]) + 0.5
+        # in this case, Y should be unchanged, and X matched to Y
+        # so X flips sign in the first dimension
+        Q_X_answer = np.array([[-1, 0], [0, 1]])
+        Q_Y_answer = np.eye(2)
+        X_answer = X.copy() @ Q_X_answer
+        Y_answer = Y.copy()
+        # set criteria to "max", see if that works
+        aligner = SignFlips(freeze_Y=True, criteria="max")
+        aligner.fit(X, Y)
+        Q_X_test, Q_Y_test = aligner.Q_X, aligner.Q_Y
+        X_test, Y_test = aligner.transform(X, Y)
+        self.assertTrue(np.all(Q_X_test == Q_X_answer))
+        self.assertTrue(np.all(Q_Y_test == Q_Y_answer))
         self.assertTrue(np.all(X_test == X_answer))
         self.assertTrue(np.all(Y_test == Y_answer))
 
