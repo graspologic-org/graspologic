@@ -28,7 +28,8 @@ class TestSignFlips(unittest.TestCase):
     def test_bad_datasets(self):
         X = np.arange(6).reshape(6, 1)
         Y = np.arange(6).reshape(6, 1)
-        # check passing weird stuff as input (caught by check_array)
+        Y_wrong_d = np.arange(12).reshape(6, 2)
+        # check passing weird stuff as input (caught by us)
         with self.assertRaises(ValueError):
             aligner = SignFlips()
             aligner.fit_transform("hello there", Y)
@@ -48,10 +49,10 @@ class TestSignFlips(unittest.TestCase):
         with self.assertRaises(ValueError):
             aligner = SignFlips()
             aligner.fit_transform(X.reshape(3, 2, 1), Y)
-        # check passing arrays with different (catching ourselves)
+        # check passing arrays with different dimensions (caught by us)
         with self.assertRaises(ValueError):
             aligner = SignFlips()
-            aligner.fit_transform(X, Y.T)
+            aligner.fit_transform(X, Y_wrong_d)
 
     def test_freeze_Y_true_two_datasets(self):
         X = np.arange(6).reshape(3, 2) * (-1)
