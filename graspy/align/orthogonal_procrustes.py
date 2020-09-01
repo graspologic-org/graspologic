@@ -14,7 +14,7 @@
 
 import numpy as np
 from sklearn.utils import check_array
-from sklearn.linalg import orthogonal_procrustes
+from scipy.linalg import orthogonal_procrustes
 
 from .base import BaseAlign
 

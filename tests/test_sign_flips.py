@@ -30,16 +30,16 @@ class TestSignFlips(unittest.TestCase):
         Y = np.arange(6).reshape(6, 1)
         Y_wrong_d = np.arange(12).reshape(6, 2)
         # check passing weird stuff as input (caught by us)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             aligner = SignFlips()
             aligner.fit_transform("hello there", Y)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             aligner = SignFlips()
             aligner.fit_transform(X, "hello there")
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             aligner = SignFlips()
             aligner.fit_transform({"hello": "there"}, Y)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             aligner = SignFlips()
             aligner.fit_transform(X, {"hello": "there"})
         # check passing arrays of weird ndims (caught by check_array)
