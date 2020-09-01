@@ -1,4 +1,4 @@
-from .orthogonals_procrustes import OrthogonalProcrustes
+from .orthogonal_procrustes import OrthogonalProcrustes
 from .seedless_procrustes import SeedlessProcrustes
 from .sign_flips import SignFlips
 
