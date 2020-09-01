@@ -15,13 +15,11 @@
 import warnings
 
 import numpy as np
-import networkx as nx
 from scipy import stats
 
 from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph
 from .base import BaseInference
-from sklearn.utils import check_array
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.metrics.pairwise import PAIRED_DISTANCES
@@ -335,24 +333,22 @@ class LatentDistributionTest(BaseInference):
         else:
             # check for nx objects, since they are castable to arrays,
             # but we don't want that
-            if isinstance(A1, nx.Graph) or isinstance(A1, nx.DiGraph):
+            if not isinstance(A1, np.ndarray):
                 msg = (
-                    f"embedding of the first graph is an {type(A1)}, not an array! "
-                    "if input_graph is False, the inputs need to be adjacency "
-                    "spectral embeddings, with shapes (n, d) and (m, d)"
+                    f"embedding of the first graph is an {type(A1)}, not an "
+                    "array! if input_graph is False, the inputs need to be "
+                    "adjacency spectral embeddings, with shapes (n, d) and "
+                    "(m, d), passed as np.ndarrays!"
                 )
                 raise TypeError(msg)
-            if isinstance(A2, nx.Graph) or isinstance(A2, nx.DiGraph):
+            if not isinstance(A2, np.ndarray):
                 msg = (
-                    f"embedding of the second graph is an {type(A2)}, not an array! "
-                    "if input_graph is False, the inputs need to be adjacency "
-                    "spectral embeddings, with shapes (n, d) and (m, d)"
+                    f"embedding of the second graph is an {type(A2)}, not an "
+                    "array! if input_graph is False, the inputs need to be "
+                    "adjacency spectral embeddings, with shapes (n, d) and "
+                    "(m, d), passed as np.ndarrays!"
                 )
                 raise TypeError(msg)
-
-            # allowing d!=2, and ndim>2 in order to throw custom errors below
-            X1_hat = check_array(A1, ensure_2d=False, allow_nd=True)
-            X2_hat = check_array(A2, ensure_2d=False, allow_nd=True)
 
             if X1_hat.ndim != 2:
                 msg = (
