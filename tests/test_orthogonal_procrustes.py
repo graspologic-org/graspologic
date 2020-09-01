@@ -49,10 +49,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
             aligner.fit_transform(X, Y_wrong_n)
 
     def test_identity(self):
-        Y = np.array([[1234, 19],
-                      [6798, 18],
-                      [9876, 17],
-                      [4321, 16]])
+        Y = np.array([[1234, 19], [6798, 18], [9876, 17], [4321, 16]])
 
         aligner = OrthogonalProcrustes()
         aligner.fit(Y, Y)
@@ -87,8 +84,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         # because it is just rotation times reflection
         X = np.array([[3, 4], [-4, 3], [-3, -4], [4, -3]])
         Y = np.array([[-5, 0], [0, 5], [5, 0], [0, -5]])
-        Q_X_answer = np.array([[-0.6, -0.8],
-                               [-0.8,  0.6]])
+        Q_X_answer = np.array([[-0.6, -0.8], [-0.8, 0.6]])
         Q_Y_answer = np.eye(2)
         X_answer = X.copy() @ Q_X_answer
         Y_answer = Y.copy()
