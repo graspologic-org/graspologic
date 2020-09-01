@@ -336,39 +336,39 @@ class LatentDistributionTest(BaseInference):
             # but we don't want that
             if not isinstance(A1, np.ndarray):
                 msg = (
-                    f"embedding of the first graph is an {type(A1)}, not an "
-                    "array! if input_graph is False, the inputs need to be "
+                    f"Embedding of the first graph is of type {type(A1)}, not "
+                    "np.ndarray. If input_graph is False, the inputs need to be "
                     "adjacency spectral embeddings, with shapes (n, d) and "
-                    "(m, d), passed as np.ndarrays!"
+                    "(m, d), passed as np.ndarrays."
                 )
                 raise TypeError(msg)
             if not isinstance(A2, np.ndarray):
                 msg = (
-                    f"embedding of the second graph is an {type(A2)}, not an "
-                    "array! if input_graph is False, the inputs need to be "
+                    f"Embedding of the second graph is of type {type(A2)}, not an "
+                    "array. If input_graph is False, the inputs need to be "
                     "adjacency spectral embeddings, with shapes (n, d) and "
-                    "(m, d), passed as np.ndarrays!"
+                    "(m, d), passed as np.ndarrays."
                 )
                 raise TypeError(msg)
 
             if A1.ndim != 2:
                 msg = (
-                    "embedding of the first graph does not have two dimensions! "
-                    "if input_graph is False, the inputs need to be adjacency "
+                    "Embedding array of the first graph does not have two dimensions. "
+                    "If input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
             if A2.ndim != 2:
                 msg = (
-                    "embedding of the second graph does not have two dimensions! "
-                    "if input_graph is False, the inputs need to be adjacency "
+                    "Embedding array of the second graph does not have two dimensions. "
+                    "If input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
             if A1.shape[1] != A2.shape[1]:
                 msg = (
-                    "two embeddings have different number of components!"
-                    "if input_graph is False, the inputs need to be adjacency "
+                    "Two input embeddings have different number of components. "
+                    "If input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
