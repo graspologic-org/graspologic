@@ -12,14 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import ot
 import numpy as np
 from sklearn.utils import check_array
 
 from .base import BaseAlign
+from .sign_flips import SignFlips
+from .orthogonal_procrustes import OrthogonalProcrustes
 
 
 class SeedlessProcrustes(BaseAlign):
     """
+    # TODO write this differently
     Matches datasets by iterating over a decreasing sequence of lambdas,
     the penalization parameters.
     If lambda is big, the function is more concave, so we iterate, starting
@@ -34,23 +38,13 @@ class SeedlessProcrustes(BaseAlign):
             Irrelevant in SeedlessProcrustes, as it always modifies only one
             dataset. Exists for compatibility with other align modules.
 
-        lambda_init : float, optional (default 0.5)
-            Initial value of the lambda penalization parameter in the overall
-            aligning problem.
-
-        lambda_final : float, optional (default: 0.001)
-            Termination value of the lambda penalization parameters in the
-            overall aligning problem.
-
-        alpha : float, optional (default 0.95)
-            Parameter by which lambda is multiplied by in every step in the
-            overall aligning problem.
-
         num_reps : int, optional
-            Number of reps in each iteration of the optimal transport problem.
+            Number of reps in each iteration of the iterative optimal transport
+            problem.
 
         iteration_eps : float, optional
-            Tolerance for the each iteration of the optimal transport problem.
+            Tolerance for the each iteration of the iterative optimal transport
+            problem.
 
         optimal_transport_eps : float, optional
             Tolerance parameter for the each subiteration of the optimal
@@ -105,9 +99,6 @@ class SeedlessProcrustes(BaseAlign):
     def __init__(
         self,
         freeze_Y=True,
-        lambda_init=0.5,
-        lambda_final=0.001,
-        alpha=0.95,
         optimal_transport_eps=0.01,
         iterative_eps=0.01,
         num_reps=100,
@@ -115,23 +106,12 @@ class SeedlessProcrustes(BaseAlign):
         initial_Q=None,
         initial_P=None,
     ):
-        if type(lambda_init) is not float:
-            raise TypeError()
-        if type(lambda_final) is not float:
-            raise TypeError()
-        if type(alpha) is not float:
-            raise TypeError()
         if type(optimal_transport_eps) is not float:
             raise TypeError()
         if type(iterative_eps) is not float:
             raise TypeError()
         if type(num_reps) is not int:
             raise TypeError()
-        if alpha < 0 or alpha > 1:
-            msg = "{} is an invalid value of alpha must be strictly between 0 and 1".format(
-                alpha
-            )
-            raise ValueError(msg)
         if optimal_transport_eps <= 0:
             msg = "{} is an invalud value of the optimal transport eps, must be postitive".format(
                 optimal_transport_eps
@@ -168,9 +148,6 @@ class SeedlessProcrustes(BaseAlign):
 
         super().__init__(freeze_Y=freeze_Y)
 
-        self.lambda_init = lambda_init
-        self.lambda_final = lambda_final
-        self.alpha = alpha
         self.optimal_transport_eps = optimal_transport_eps
         self.iterative_eps = iterative_eps
         self.num_reps = num_reps
@@ -178,59 +155,30 @@ class SeedlessProcrustes(BaseAlign):
         self.initial_Q = initial_Q
         self.initial_P = initial_P
 
-    def _procrustes(self, X, Y, P_i):
-        u, w, vt = np.linalg.svd(X.T @ P_i @ Y)
-        Q = u.dot(vt)
-        return Q
-
-    def _optimal_transport(self, X, Y, Q, lambd=0.1):
-        n, d = X.shape
-        m, _ = Y.shape
-
-        X = X @ Q
-        C = np.linalg.norm(X.reshape(n, 1, d) - Y.reshape(1, m, d), axis=2) ** 2
-
-        r = 1 / n
-        c = 1 / m
-        P = np.exp(-lambd * C)
-        u = np.zeros(n)
-        while np.max(np.abs(u - np.sum(P, axis=1))) > self.optimal_transport_eps:
-            u = np.sum(P, axis=1)
-            P = r * P / u.reshape(-1, 1)
-            v = np.sum(P, axis=0)
-            P = c * (P.T / v.reshape(-1, 1)).T
-        return P
-
-    def _iterative_optimal_transport(self, X, Y, Q=None, lambd=0.01):
-        _, d = X.shape
-        if Q is None:
-            Q = np.eye(d)
-
-        for i in range(self.num_reps):
-            P_i = self._optimal_transport(X, Y, Q)
-            Q = self._procrustes(X, Y, P_i)
-            c = np.linalg.norm(X @ Q - P_i @ Y, ord="fro")
-            if c < self.iterative_eps:
-                break
-        return P_i, Q
-
-    def _sign_flips(self, X, Y):
-        X_medians = np.median(X, axis=0)
-        Y_medians = np.median(Y, axis=0)
-        val = np.multiply(X_medians, Y_medians)
-        t = (val > 0) * 2 - 1
-        return np.diag(t)
-
     def _orthogonal_matrix_from_int(self, val_int, d):
         val_bin = bin(val_int)[2:]
         val_bin = "0" * (d - len(val_bin)) + val_bin
         return np.diag(np.array([(float(i) - 0.5) * -2 for i in val_bin]))
 
-    def _match_datasets(self, X, Y, Q):
-        lambda_current = self.lambda_init
-        while lambda_current > self.lambda_final:
-            P_i, Q = self._iterative_optimal_transport(X, Y, Q, lambd=lambda_current)
-            lambda_current = self.alpha * lambda_current
+    def _optimal_transport(self, X, Y, Q, lambd=0.1):
+        n, d = X.shape
+        m, _ = Y.shape
+        # initialize the cost matrix
+        X = X @ Q
+        C = np.linalg.norm(X.reshape(n, 1, d) - Y.reshape(1, m, d), axis=2) ** 2
+        # initialize the amount of probability mass arrays + run sinkhorn
+        a, b = np.ones(n) / n, np.ones(m) / m
+        P = ot.sinkhorn(a, b, C, lambd, stopThr=self.optimal_transport_eps)
+        return P
+
+    def _iterative_ot(self, X, Y, Q=None, lambd=0.01):
+        for i in range(self.num_reps):
+            P_i = self._optimal_transport(X, Y, Q, lambd)
+            aligner = OrthogonalProcrustes()
+            Q = aligner.fit(X, P_i @ Y).Q_X
+            c = np.linalg.norm(X @ Q - P_i @ Y, ord="fro")
+            if c < self.iterative_eps:
+                break
         return P_i, Q
 
     def fit(self, X, Y):
@@ -267,7 +215,7 @@ class SeedlessProcrustes(BaseAlign):
             # try 2^d different initializations
             for i in range(2 ** d):
                 initial_Q = self._orthogonal_matrix_from_int(i, d)
-                P_matrices[i], Q_matrices[i] = P, Q = self._match_datasets(
+                P_matrices[i], Q_matrices[i] = P, Q = self._iterative_ot(
                     X, Y, initial_Q
                 )
                 objectives[i] = np.linalg.norm(X @ Q - P @ Y, ord="fro")
@@ -276,8 +224,9 @@ class SeedlessProcrustes(BaseAlign):
             self.initial_Q = self._orthogonal_matrix_from_int(best, d)
             self.P, self.Q_X = P_matrices[best], Q_matrices[best]
         elif self.initialization == "sign_flips":
-            self.initial_Q = self._sign_flips(X, Y)
-            self.P, self.Q_X = self._match_datasets(X, Y, self.initial_Q)
+            aligner = SignFlips(freeze_Y=True)
+            self.initial_Q = aligner.fit(X, Y).Q_X
+            self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
         else:
             # determine initial Q, if custom and not provided
             if self.initial_Q is None:
@@ -287,7 +236,7 @@ class SeedlessProcrustes(BaseAlign):
                 else:
                     # set to initial Q to identity if neither Q nor P provided
                     self.initial_Q = np.eye(X.shape[1])
-            self.P, self.Q_X = self._match_datasets(X, Y, self.initial_Q)
+            self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
 
         self.Q_Y = np.eye(X.shape[1])
 
