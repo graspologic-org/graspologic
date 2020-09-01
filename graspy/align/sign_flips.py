@@ -137,9 +137,7 @@ class SignFlips(BaseAlign):
 
         # check X for numpy-ness, dimensions and finiteness
         if not isinstance(X, np.ndarray):
-            msg = (
-                f"first dataset is a {type(X)}, not an np.ndarray! "
-            )
+            msg = f"first dataset is a {type(X)}, not an np.ndarray! "
             raise TypeError(msg)
         X = check_array(X, accept_sparse=True, copy=True)
         _, d = X.shape
@@ -157,9 +155,7 @@ class SignFlips(BaseAlign):
 
         # check for numpy-ness, 2d-ness and finite-ness
         if not isinstance(Y, np.ndarray):
-            msg = (
-                f"first dataset is a {type(Y)}, not an np.ndarray! "
-            )
+            msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
             raise TypeError(msg)
         Y = check_array(Y, accept_sparse=True, copy=True)
 
