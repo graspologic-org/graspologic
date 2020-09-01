@@ -111,7 +111,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             ldt = LatentDistributionTest(input_graph=False)
             ldt.fit_predict(X3, X1)
-        # check passing weird stuff as input (caught by check_array)
+        # check passing weird stuff as input (caught by us)
         with self.assertRaises(TypeError):
             ldt = LatentDistributionTest(input_graph=False)
             ldt.fit_predict("hello there", X1)
