@@ -19,6 +19,7 @@ REQUIRED_PACKAGES = [
     "seaborn>=0.9.0",
     "matplotlib>=3.0.0",
     "hyppo>=0.1.3",
+    "ot>=0.7.0",
 ]
 
 
