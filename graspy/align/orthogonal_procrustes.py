@@ -87,14 +87,10 @@ class OrthogonalProcrustes(BaseAlign):
 
         # check for numpy-ness, 2d-ness and finite-ness
         if not isinstance(X, np.ndarray):
-            msg = (
-                f"first dataset is a {type(X)}, not an np.ndarray! "
-            )
+            msg = f"first dataset is a {type(X)}, not an np.ndarray! "
             raise TypeError(msg)
         if not isinstance(Y, np.ndarray):
-            msg = (
-                f"first dataset is a {type(Y)}, not an np.ndarray! "
-            )
+            msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
             raise TypeError(msg)
         X = check_array(X, accept_sparse=True, copy=True)
         Y = check_array(Y, accept_sparse=True, copy=True)
@@ -105,10 +101,12 @@ class OrthogonalProcrustes(BaseAlign):
             raise ValueError(msg)
         _, d = X.shape
         if X.shape[0] != Y.shape[0]:
-            msg = ("two datasets have different number of entries! "
-                   "OrthogonalProcrustes assumes that entries of the two "
-                   "datasets are matched. consider using SeedlessProcrustes "
-                   "instead.")
+            msg = (
+                "two datasets have different number of entries! "
+                "OrthogonalProcrustes assumes that entries of the two "
+                "datasets are matched. consider using SeedlessProcrustes "
+                "instead."
+            )
             raise ValueError(msg)
         _, d = X.shape
 
