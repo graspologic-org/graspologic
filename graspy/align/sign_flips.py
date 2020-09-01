@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import numpy as np
-from functools import partial
 from sklearn.utils import check_array
 
 from .base import BaseAlign
@@ -21,6 +20,19 @@ from .base import BaseAlign
 
 class SignFlips(BaseAlign):
     """
+    This module is used to transform two datasets by flipping the signs of all
+    entries along some dimensions. In particular, it does so in a way that
+    brings these two datasets to the same orthant according to some criteria,
+    computed along each dimension. The two critera currently available are the
+    median and the maximum value in magnitude along each dimension.
+
+    There are two choices for which orthant the datasets end up in: either the
+    first orthant (i.e. with all criteras being positive), which is a default,
+    or and orthant in which one the second dataset is already in.
+
+    This module can also run on a single dataset. In that case it makes the
+    medians / maxes of each dimension of the provided dataset positive.
+
     Parameters
     ----------
         freeze_Y : boolean, optional (default False)
@@ -93,8 +105,42 @@ class SignFlips(BaseAlign):
             self.criteria_function_ = max_criteria
 
     def fit(self, X, Y=None):
-        # perform checks
+        """
+        Uses the two datasets to learn matrices Q_X and Q_Y.
+        In sign flips, Q_X and Q_Y are diagonal orthogonal matrices (i.e.
+        matrices with 1 or -1 in each entry on diagonal and 0 everywhere else)
+        picked such that all dimensions of X @ Q_X and Y @ Q_Y are in the same
+        orthant using some critera (median or max magnitude).
+        The second dataset can be omitted if freeze_Y was set to False; in that
+        case Q_X is just the matrix that makes the medians / maxes of each
+        dimension of X positive; only X_prime is returned in that case.
+
+        Parameters
+        ----------
+        X: np.ndarray, shape (n, d)
+            First dataset of vectors. These vectors need to have same number of
+            dimensions as ones in Y, but the number of vectors can differ.
+
+        Y: np.ndarray, shape (m, d), or None
+            Second dataset of vectors. These vectors need to have same number
+            of dimensions as ones in X, but the number of vectors can differ.
+            If freeze_Y is set to False, then it is appropriate to omit this,
+            because X will just have all dimensions sign flipped to the first
+            orthant anyway.
+
+        Returns
+        -------
+        self: returns an instance of self
+        """
+
         self.set_criteria_function()
+
+        # check X for numpy-ness, dimensions and finiteness
+        if not isinstance(X, np.ndarray):
+            msg = (
+                f"first dataset is a {type(X)}, not an np.ndarray! "
+            )
+            raise TypeError(msg)
         X = check_array(X, accept_sparse=True, copy=True)
         _, d = X.shape
 
@@ -109,7 +155,14 @@ class SignFlips(BaseAlign):
             # make Y an identity as a filler so that we can use two matrix code
             Y = np.eye(d)
 
+        # check for numpy-ness, 2d-ness and finite-ness
+        if not isinstance(Y, np.ndarray):
+            msg = (
+                f"first dataset is a {type(Y)}, not an np.ndarray! "
+            )
+            raise TypeError(msg)
         Y = check_array(Y, accept_sparse=True, copy=True)
+
         if X.shape[1] != Y.shape[1]:
             msg = "two datasets have different number of components!"
             raise ValueError(msg)
@@ -132,6 +185,13 @@ class SignFlips(BaseAlign):
         """
         Learns the matrices Q_X and Q_Y, uses them to match the two datasets
         provided, and returns the two matched datasets.
+        In sign flips, Q_X and Q_Y are diagonal orthogonal matrices (i.e.
+        matrices with 1 or -1 in each entry on diagonal and 0 everywhere else)
+        picked such that all dimensions of X @ Q_X and Y @ Q_Y are in the same
+        orthant using some critera (median or max magnitude).
+        The second dataset can be omitted if freeze_Y was set to False; in that
+        case Q_X is just the matrix that makes the medians / maxes of each
+        dimension of X positive; only X_prime is returned in that case.
 
         Parameters
         ----------
@@ -156,6 +216,6 @@ class SignFlips(BaseAlign):
             Unless Y was not provided - in that case only returns X_prime.
         """
         # SignFlips has an overloaded fit_transform, because unlike all other
-        # aligners, it is sometimes appropriate to omit Y.
+        # aligners, it is appropriate to completely omit Y in fit.
         self.fit(X, Y)
         return self.transform(X, Y)
