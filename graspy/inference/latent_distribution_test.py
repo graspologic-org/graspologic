@@ -20,6 +20,7 @@ from scipy import stats
 from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph
 from .base import BaseInference
+from sklearn.utils import check_array
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.metrics.pairwise import PAIRED_DISTANCES
@@ -350,27 +351,32 @@ class LatentDistributionTest(BaseInference):
                 )
                 raise TypeError(msg)
 
-            if X1_hat.ndim != 2:
+            if A1.ndim != 2:
                 msg = (
                     "embedding of the first graph does not have two dimensions! "
                     "if input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
-            if X2_hat.ndim != 2:
+            if A2.ndim != 2:
                 msg = (
                     "embedding of the second graph does not have two dimensions! "
                     "if input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
-            if X1_hat.shape[1] != X2_hat.shape[1]:
+            if A1.shape[1] != A2.shape[1]:
                 msg = (
                     "two embeddings have different number of components!"
                     "if input_graph is False, the inputs need to be adjacency "
                     "spectral embeddings, with shapes (n, d) and (m, d)"
                 )
                 raise ValueError(msg)
+
+            # checking for inf values
+            X1_hat = check_array(A1)
+            X2_hat = check_array(A2)
+
         X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
 
         if self.size_correction:

@@ -124,6 +124,12 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             ldt = LatentDistributionTest(input_graph=False)
             ldt.fit_predict(X1, {"hello": "there"})
+        # check passing infinite in input (caught by check_array)
+        with self.assertRaises(ValueError):
+            X1_w_inf = X1.copy()
+            X1_w_inf[1, 1] = np.inf
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1_w_inf, X2)
         # check that the appropriate input works
         ldt = LatentDistributionTest(input_graph=False)
         ldt.fit_predict(X1, X2)
