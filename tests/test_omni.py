@@ -122,8 +122,9 @@ def test_diag_aug():
     graphs_list = [er_np(n, p) for _ in range(2)]
     graphs_arr = np.array(graphs_list)
 
-    omni_list = OmnibusEmbed(diag_aug=True).fit_transform(graphs_list)
+    # Test that array and list inputs results in same embeddings
     omni_arr = OmnibusEmbed(diag_aug=True).fit_transform(graphs_arr)
+    omni_list = OmnibusEmbed(diag_aug=True).fit_transform(graphs_list)
 
     assert array_equal(omni_list, omni_arr)
 

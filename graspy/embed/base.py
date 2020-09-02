@@ -17,7 +17,7 @@ from abc import abstractmethod
 import numpy as np
 from sklearn.base import BaseEstimator
 
-from ..utils import import_graph, is_almost_symmetric
+from ..utils import augment_diagonal, import_graph, is_almost_symmetric
 from .svd import selectSVD
 
 
@@ -243,3 +243,30 @@ class BaseEmbedMulti(BaseEmbed):
         self.n_vertices_ = out[0].shape[0]
 
         return out
+
+    def _diag_aug(self, graphs):
+        """
+        Augments the diagonal off each input graph. Returns the original
+        input object type.
+
+        Parameters
+        ----------
+        graphs : list of nx.Graph or ndarray, or ndarray
+            If list of nx.Graph, each Graph must contain same number of nodes.
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
+
+
+        Returns
+        -------
+        out : list of ndarray, or ndarray
+            If input is list of ndarray, then list is returned.
+            If input is ndarray, then ndarray is returned.
+        """
+        if isinstance(graphs, list):
+            out = [augment_diagonal(g) for g in graphs]
+        elif isinstance(graphs, np.ndarray):
+            # Copying is necessary to not overwrite input array
+            out = np.array([augment_diagonal(graphs[i]) for i in range(self.n_graphs_)])
+
+        return graphs

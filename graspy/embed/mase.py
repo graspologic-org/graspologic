@@ -15,7 +15,7 @@
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
-from ..utils import augment_diagonal, import_graph, is_almost_symmetric
+from ..utils import import_graph, is_almost_symmetric
 from .base import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
 
@@ -209,11 +209,7 @@ class MultipleASE(BaseEmbedMulti):
 
         # Diag augment
         if self.diag_aug:
-            if isinstance(graphs, list):
-                graphs = [augment_diagonal(g) for g in graphs]
-            elif isinstance(graphs, np.ndarray):
-                for i in range(self.n_graphs_):
-                    graphs[i] = augment_diagonal(graphs[i])
+            graphs = self._diag_aug(graphs)
 
         # embed
         Uhat, Vhat = self._reduce_dim(graphs)

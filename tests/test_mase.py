@@ -76,10 +76,11 @@ def test_diag_aug():
     graphs_list = [er_np(n, p) for _ in range(2)]
     graphs_arr = np.array(graphs_list)
 
-    omni_list = MultipleASE(diag_aug=True).fit_transform(graphs_list)
-    omni_arr = MultipleASE(diag_aug=True).fit_transform(graphs_arr)
+    # Test that array and list inputs results in same embeddings
+    mase_arr = MultipleASE(diag_aug=True).fit_transform(graphs_arr)
+    mase_list = MultipleASE(diag_aug=True).fit_transform(graphs_list)
 
-    assert array_equal(omni_list, omni_arr)
+    assert array_equal(mase_list, mase_arr)
 
 
 def test_graph_clustering():
