@@ -4,6 +4,12 @@ from setuptools import setup, find_packages
 from sys import platform
 from graspy import __version__
 
+# Exit if python version is too low.
+MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
+if sys.version_info < MINIMUM_PYTHON_VERSION:
+    major, minor = MINIMUM_PYTHON_VERSION
+    sys.exit(f"Python {major}.{minor}+ is required.")
+
 PACKAGE_NAME = "graspy"
 DESCRIPTION = "A set of python modules for graph statistics"
 with open("README.md", "r") as f:
@@ -11,7 +17,6 @@ with open("README.md", "r") as f:
 AUTHOR = ("Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand",)
 AUTHOR_EMAIL = "j1c@jhu.edu"
 URL = "https://github.com/neurodata/graspy"
-MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
 REQUIRED_PACKAGES = [
     "networkx>=2.1",
     "numpy>=1.8.1",
@@ -22,10 +27,6 @@ REQUIRED_PACKAGES = [
     "hyppo>=0.1.3",
 ]
 
-# Exit if python version is too low.
-if sys.version_info < MINIMUM_PYTHON_VERSION:
-    major, minor = MINIMUM_PYTHON_VERSION
-    sys.exit(f"Python {major}.{minor}+ is required.")
 
 setup(
     name=PACKAGE_NAME,
