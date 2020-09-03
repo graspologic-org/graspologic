@@ -269,4 +269,4 @@ class BaseEmbedMulti(BaseEmbed):
             # Copying is necessary to not overwrite input array
             out = np.array([augment_diagonal(graphs[i]) for i in range(self.n_graphs_)])
 
-        return graphs
+        return out
