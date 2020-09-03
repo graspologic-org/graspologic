@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 import sys
 from setuptools import setup, find_packages
 from sys import platform
