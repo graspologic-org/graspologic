@@ -24,24 +24,9 @@ REQUIRED_PACKAGES = [
 ]
 
 
-# Find GraSPy version.
-# PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-# PROJECT_PATH = Path(__file__).parent()
-# init = PROJECT_PATH / "graspy/__init__.py"
-# with open(init) as init_:
-
-# for line in open(os.path.join(PROJECT_PATH, "graspy", "__init__.py")):
-#     if line.startswith("__version__ = "):
-#         VERSION = line.strip().split()[2][1:-1]
-
-
-def check_python_version():
-    """Exit when the Python version is too low."""
-    if sys.version_info < MINIMUM_PYTHON_VERSION:
-        sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
-
-
-check_python_version()
+if sys.version_info < MINIMUM_PYTHON_VERSION:
+    major, minor = MINIMUM_PYTHON_VERSION
+    sys.exit(f"Python {major}.{minor}+ is required.")
 
 setup(
     name=PACKAGE_NAME,
