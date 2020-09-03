@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
 import sys
 from setuptools import setup, find_packages
 from sys import platform
+from graspy import __version__
 
 PACKAGE_NAME = "graspy"
 DESCRIPTION = "A set of python modules for graph statistics"
@@ -10,7 +12,7 @@ with open("README.md", "r") as f:
 AUTHOR = ("Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand",)
 AUTHOR_EMAIL = "j1c@jhu.edu"
 URL = "https://github.com/neurodata/graspy"
-MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.5
+MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
 REQUIRED_PACKAGES = [
     "networkx>=2.1",
     "numpy>=1.8.1",
@@ -23,10 +25,14 @@ REQUIRED_PACKAGES = [
 
 
 # Find GraSPy version.
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-for line in open(os.path.join(PROJECT_PATH, "graspy", "__init__.py")):
-    if line.startswith("__version__ = "):
-        VERSION = line.strip().split()[2][1:-1]
+# PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+# PROJECT_PATH = Path(__file__).parent()
+# init = PROJECT_PATH / "graspy/__init__.py"
+# with open(init) as init_:
+
+# for line in open(os.path.join(PROJECT_PATH, "graspy", "__init__.py")):
+#     if line.startswith("__version__ = "):
+#         VERSION = line.strip().split()[2][1:-1]
 
 
 def check_python_version():
@@ -39,7 +45,7 @@ check_python_version()
 
 setup(
     name=PACKAGE_NAME,
-    version=VERSION,
+    version=__version__,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
