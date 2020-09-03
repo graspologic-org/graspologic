@@ -22,7 +22,7 @@ REQUIRED_PACKAGES = [
     "hyppo>=0.1.3",
 ]
 
-
+# Exit if python version is too low.
 if sys.version_info < MINIMUM_PYTHON_VERSION:
     major, minor = MINIMUM_PYTHON_VERSION
     sys.exit(f"Python {major}.{minor}+ is required.")
