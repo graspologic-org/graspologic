@@ -1,8 +1,8 @@
 import os
 import sys
+import re
 from setuptools import setup, find_packages
 from sys import platform
-from graspy import __version__
 
 # Exit if python version is too low.
 MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
@@ -27,10 +27,12 @@ REQUIRED_PACKAGES = [
     "hyppo>=0.1.3",
 ]
 
+with open("graspy/__init__.py") as f:
+    VERSION = re.search(r'__version__ = "(.*?)"', f.read()).group(1)
 
 setup(
     name=PACKAGE_NAME,
-    version=__version__,
+    version=VERSION,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
