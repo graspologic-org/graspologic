@@ -1,7 +1,6 @@
 import os
 import sys
 from setuptools import setup, find_packages
-from sys import platform
 
 PACKAGE_NAME = "graspy"
 DESCRIPTION = "A set of python modules for graph statistics"
@@ -10,7 +9,7 @@ with open("README.md", "r") as f:
 AUTHOR = ("Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand",)
 AUTHOR_EMAIL = "j1c@jhu.edu"
 URL = "https://github.com/neurodata/graspy"
-MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.5
+MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
 REQUIRED_PACKAGES = [
     "networkx>=2.1",
     "numpy>=1.8.1",
