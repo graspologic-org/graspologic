@@ -11,6 +11,7 @@ from graspy.align import SeedlessProcrustes
 
 class TestSeedlessProcrustes(unittest.TestCase):
     def test_bad_kwargs(self):
+        # type errors for all but initial Q and initial P
         with self.assertRaises(TypeError):
             SeedlessProcrustes(optimal_transport_lambda="oops")
         with self.assertRaises(TypeError):
@@ -23,7 +24,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
             SeedlessProcrustes(iterative_num_reps=3.14)
         with self.assertRaises(TypeError):
             SeedlessProcrustes(initialization=["hi", "there"])
-
+        # value errors for all but initial Q and initial P
         with self.assertRaises(ValueError):
             SeedlessProcrustes(optimal_transport_lambda=-0.01)
         with self.assertRaises(ValueError):
@@ -36,6 +37,54 @@ class TestSeedlessProcrustes(unittest.TestCase):
             SeedlessProcrustes(iterative_num_reps=0)
         with self.assertRaises(ValueError):
             SeedlessProcrustes(initialization="hi")
+        # initial Q and inital P things
+        # initial Q and inital P things
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes(inital_Q="hello there")
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes(inital_P="hello there")
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes(inital_Q={"hello": "there"})
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes(inital_P={"hello": "there"})
+        with self.assertRaises(ValueError):
+            aligner = SeedlessProcrustes(inital_Q=np.ones(25).reshape(5, 5, 1))
+        with self.assertRaises(ValueError):
+            aligner = SeedlessProcrustes(inital_P=np.ones(25).reshape(5, 5, 1))
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes(inital_P=np.ones((3,2)))
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes(inital_P=np.ones((3,3)))
+
+    def test_bad_datasets(self):
+        X = np.arange(6).reshape(6, 1)
+        Y = np.arange(6).reshape(6, 1)
+        Y_wrong_d = np.arange(12).reshape(6, 2)
+        Y_wrong_n = np.arange(12).reshape(12, 1)
+        # check passing weird stuff as input (caught by us)
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes()
+            aligner.fit_transform("hello there", Y)
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes()
+            aligner.fit_transform(X, "hello there")
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes()
+            aligner.fit_transform({"hello": "there"}, Y)
+        with self.assertRaises(TypeError):
+            aligner = SeedlessProcrustes()
+            aligner.fit_transform(X, {"hello": "there"})
+        # check passing arrays of weird ndims (caught by check_array)
+        with self.assertRaises(ValueError):
+            aligner = SeedlessProcrustes()
+            aligner.fit_transform(X, Y.reshape(3, 2, 1))
+        with self.assertRaises(ValueError):
+            aligner = SeedlessProcrustes()
+            aligner.fit_transform(X.reshape(3, 2, 1), Y)
+        # check passing arrays with different dimensions (caught by us)
+        with self.assertRaises(ValueError):
+            aligner = SeedlessProcrustes()
+            aligner.fit_transform(X, Y_wrong_d)
 
     # def test_matching_datasets(self):
     #     np.random.seed(314)

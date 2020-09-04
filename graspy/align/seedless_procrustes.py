@@ -153,6 +153,12 @@ class SeedlessProcrustes(BaseAlign):
                 msg = f"initial_Q must be np.ndarray or None, not {type(initial_Q)}"
                 raise TypeError(msg)
             initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
+            if initial_Q[0] != initial_Q[1]:
+                msg = "initial_Q must be a squared orhthogonal matrix"
+                raise ValueError(msg)
+            if not (initial_Q.T @ initial_Q == np.eye(initial_Q.shape[0])).all():
+                msg = "initial_Q must be a squared orhthogonal matrix"
+                raise ValueError(msg)
         if initial_P is not None:
             if not isinstance(initial_P, np.ndarray):
                 msg = f"initial_P must be np.ndarray or None, not {type(initial_P)}"
