@@ -189,7 +189,7 @@ class LatentDistributionTest(BaseInference):
         workers=1,
         size_correction=True,
         pooled=False,
-        align_type='sign_flips',
+        align_type="sign_flips",
         align_kws={},
         input_graph=True,
     ):
@@ -247,7 +247,9 @@ class LatentDistributionTest(BaseInference):
             raise ValueError(msg)
 
         if not isinstance(align_kws, dict):
-            msg = "align_kws must be a dictionary of keyword arguments, not {}".format(type(align_kws))
+            msg = "align_kws must be a dictionary of keyword arguments, not {}".format(
+                type(align_kws)
+            )
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)

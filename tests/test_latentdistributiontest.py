@@ -259,7 +259,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         X1 = ase_1.fit_transform(A1)
         ase_2 = AdjacencySpectralEmbed(n_components=2)
         X2 = ase_2.fit_transform(A2)
-        X2 = - X2
+        X2 = -X2
 
         ldt_1 = LatentDistributionTest(input_graph=False, align_type=None)
         p_val_1 = ldt_1.fit_predict(X1, X2)
@@ -270,12 +270,14 @@ class TestLatentDistributionTest(unittest.TestCase):
         self.assertTrue(p_val_2 >= 0.05)
 
         # also checking that kws are passed through
-        ldt_3 = LatentDistributionTest(input_graph=False,
-                                       align_type="seedless_procrustes",
-                                       align_kws={"initialization": "sign_flips"}
-                                       )
+        ldt_3 = LatentDistributionTest(
+            input_graph=False,
+            align_type="seedless_procrustes",
+            align_kws={"initialization": "sign_flips"},
+        )
         p_val_3 = ldt_3.fit_predict(X1, X2)
         self.assertTrue(p_val_3 >= 0.05)
+
 
 if __name__ == "__main__":
     unittest.main()
