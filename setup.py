@@ -22,7 +22,7 @@ REQUIRED_PACKAGES = [
     "scikit-learn>=0.19.1",
     "scipy>=1.1.0",
     "seaborn>=0.9.0",
-    "matplotlib>=3.0.0",
+    "matplotlib>=3.0.0,<=3.3.0",
     "hyppo>=0.1.3",
 ]
 
