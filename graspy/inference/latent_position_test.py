@@ -15,6 +15,7 @@
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
 
+from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric

@@ -193,14 +193,14 @@ class LatentDistributionTest(BaseInference):
         align_kws={},
         input_graph=True,
     ):
-
+        # check test argument
         if not isinstance(test, str):
             msg = "test must be a str, not {}".format(type(test))
             raise TypeError(msg)
         elif test not in _VALID_TESTS:
             msg = "Unknown test {}. Valid tests are {}".format(test, _VALID_TESTS)
             raise ValueError(msg)
-
+        # check metric argument
         if not isinstance(metric, str) and not callable(metric):
             msg = "Metric must be str or callable, not {}".format(type(metric))
             raise TypeError(msg)
@@ -209,35 +209,31 @@ class LatentDistributionTest(BaseInference):
                 metric, _VALID_METRICS
             )
             raise ValueError(msg)
-
+        # check n_components argument
         if n_components is not None:
             if not isinstance(n_components, int):
                 msg = "n_components must be an int, not {}.".format(type(n_components))
                 raise TypeError(msg)
-
+        # check n_bootstraps argument
         if not isinstance(n_bootstraps, int):
             msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
             raise TypeError(msg)
         elif n_bootstraps < 0:
             msg = "{} is invalid number of bootstraps, must be non-negative"
             raise ValueError(msg.format(n_bootstraps))
-
+        # check workers argument
         if not isinstance(workers, int):
             msg = "workers must be an int, not {}".format(type(workers))
             raise TypeError(msg)
-
+        # check size_correction argument
         if not isinstance(size_correction, bool):
             msg = "size_correction must be a bool, not {}".format(type(size_correction))
             raise TypeError(msg)
-
+        # check pooled argument
         if not isinstance(pooled, bool):
             msg = "pooled must be a bool, not {}".format(type(pooled))
             raise TypeError(msg)
-
-        if not isinstance(input_graph, bool):
-            msg = "input_graph must be a bool, not {}".format(type(input_graph))
-            raise TypeError(msg)
-
+        # check align_type argument
         if (not isinstance(align_type, str)) and (align_type is not None):
             msg = "align_type must be a string or None, not {}".format(type(align_type))
             raise TypeError(msg)
@@ -245,11 +241,15 @@ class LatentDistributionTest(BaseInference):
         if align_type not in align_types_supported:
             msg = "supported align types are {}".format(align_types_supported)
             raise ValueError(msg)
-
+        # check align_kws argument
         if not isinstance(align_kws, dict):
             msg = "align_kws must be a dictionary of keyword arguments, not {}".format(
                 type(align_kws)
             )
+            raise TypeError(msg)
+        # check input_graph argument
+        if not isinstance(input_graph, bool):
+            msg = "input_graph must be a bool, not {}".format(type(input_graph))
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)
