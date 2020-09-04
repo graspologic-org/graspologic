@@ -9,6 +9,7 @@ jobs:
     - python: 3.7
 cache: pip
 install:
+- pip install -r requirements.txt
 - pip install -e .
 - pip install -U pytest pytest-cov pytest-doctestplus codecov black
 script:
