@@ -19,6 +19,7 @@ from scipy import stats
 
 from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph
+from ..align import SignFlips
 from .base import BaseInference
 from sklearn.utils import check_array
 from sklearn.metrics import pairwise_distances
@@ -377,7 +378,8 @@ class LatentDistributionTest(BaseInference):
             X1_hat = check_array(A1)
             X2_hat = check_array(A2)
 
-        X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
+        aligner = SignFlips()
+        X1_hat, X2_hat = aligner.fit_transform(X1_hat, X2_hat)
 
         if self.size_correction:
             X1_hat, X2_hat = self._sample_modified_ase(
@@ -425,15 +427,6 @@ class LatentDistributionTest(BaseInference):
         # abstract method overwritten in order to have a custom doc string
         self.fit(A1, A2)
         return self.p_value_
-
-
-def _median_sign_flips(X1, X2):
-    X1_medians = np.median(X1, axis=0)
-    X2_medians = np.median(X2, axis=0)
-    val = np.multiply(X1_medians, X2_medians)
-    t = (val > 0) * 2 - 1
-    X1 = np.multiply(t.reshape(-1, 1).T, X1)
-    return X1, X2
 
 
 def _fit_plug_in_variance_estimator(X):
