@@ -2,7 +2,6 @@ import os
 import sys
 import re
 from setuptools import setup, find_packages
-from sys import platform
 
 # Exit if python version is too low.
 MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
