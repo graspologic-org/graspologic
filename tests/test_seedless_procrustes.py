@@ -124,16 +124,19 @@ class TestSeedlessProcrustes(unittest.TestCase):
         )
         aligner_5.fit_transform(X, Y)
 
-    # def test_matching_datasets(self):
-    #     np.random.seed(314)
-    #     X = np.random.normal(1, 0.2, 1000).reshape(-1, 4)
-    #     Y = np.concatenate([X, X])
-    #     W = stats.ortho_group.rvs(4)
-    #     Y = Y @ W
+    def test_aligning_datasets(self):
+        np.random.seed(314)
+        n, d = 250, 2
+        mean = np.ones(d) * 5
+        cov = np.ones((d, d)) * 0.02 + np.eye(d) * 0.8
+        X = stats.multivariate_normal.rvs(mean, cov, n)
+        Y = np.concatenate([X, X])
+        W = stats.ortho_group.rvs(d)
+        Y = Y @ W
 
-    #     aligner = SeedlessProcrustes(initialization="custom", initial_Q=np.eye(4))
-    #     Q = aligner.fit(X, Y).Q_X
-    #     self.assertTrue(np.all(np.isclose(Q, W)))
+        aligner = SeedlessProcrustes(initialization="2d", initial_Q=np.eye(3))
+        Q = aligner.fit(X, Y).Q_X
+        self.assertTrue(np.linalg.norm(Y.mean(axis=0) - (X @ Q).mean(axis=0)) < 0.1)
 
 
 if __name__ == "__main__":
