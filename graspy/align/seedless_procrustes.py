@@ -148,6 +148,16 @@ class SeedlessProcrustes(BaseAlign):
         if type(initialization) is not str:
             msg = "initalization must be a str, not {}".format(type(initialization))
             raise TypeError(msg)
+        if initial_Q is not None:
+            if not isinstance(initial_Q, np.ndarray):
+                msg = f"initial_Q must be np.ndarray or None, not {type(initial_Q)}"
+                raise TypeError(msg)
+            initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
+        if initial_P is not None:
+            if not isinstance(initial_P, np.ndarray):
+                msg = f"initial_P must be np.ndarray or None, not {type(initial_P)}"
+                raise TypeError(msg)
+            initial_P = check_array(initial_P, accept_sparse=True, copy=True)
 
         # Value checking
         if optimal_transport_eps <= 0:
@@ -177,16 +187,11 @@ class SeedlessProcrustes(BaseAlign):
                 iterative_num_reps
             )
             raise ValueError(msg)
-
         initializations_supported = ["2d", "sign_flips", "custom"]
         if initialization not in initializations_supported:
             msg = "supported initializations are {}".format(initialization)
             raise NotImplementedError(msg)
 
-        if initial_Q is not None:
-            initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
-        if initial_P is not None:
-            initial_P = check_array(initial_P, accept_sparse=True, copy=True)
 
         super().__init__(freeze_Y=freeze_Y)
 
