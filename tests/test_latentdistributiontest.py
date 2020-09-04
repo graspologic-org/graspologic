@@ -43,13 +43,15 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             LatentDistributionTest(test="foo")
         with self.assertRaises(ValueError):
+            LatentDistributionTest(align_type="foo")
+        with self.assertRaises(ValueError):
             LatentDistributionTest(test="dcorr", n_components=-100)
         with self.assertRaises(ValueError):
             LatentDistributionTest(test="dcorr", n_bootstraps=-100)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test=0)
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="dcorr", distance=0)
+            LatentDistributionTest(test="dcorr", metric=0)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test="dcorr", n_bootstraps=0.5)
         with self.assertRaises(TypeError):
@@ -59,7 +61,11 @@ class TestLatentDistributionTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             LatentDistributionTest(pooled=0)
         with self.assertRaises(TypeError):
-            ldt = LatentDistributionTest(input_graph="hello")
+            LatentDistributionTest(input_graph="hello")
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(align_type={"not a": "string"})
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(align_kws="foo")
 
     def test_n_bootstraps(self):
         for test in self.tests.keys():
@@ -245,6 +251,27 @@ class TestLatentDistributionTest(unittest.TestCase):
         self.assertTrue(p_corrected_1 <= 0.05)
         self.assertTrue(p_corrected_2 <= 0.05)
 
+    def test_different_aligners(self):
+        np.random.seed(314)
+        A1 = er_np(100, 0.8)
+        A2 = er_np(100, 0.8)
+        ase_1 = AdjacencySpectralEmbed(n_components=2)
+        X1 = ase_1.fit_transform(A1)
+        ase_2 = AdjacencySpectralEmbed(n_components=2)
+        X2 = ase_2.fit_transform(A2)
+        X2 = - X2
+
+        ldt_1 = LatentDistributionTest(input_graph=False, align_type=None)
+        p_val_1 = ldt_1.fit_predict(X1, X2)
+        self.assertTrue(p_val_1 < 0.05)
+
+        ldt_2 = LatentDistributionTest(input_graph=False, align_type="sign_flips")
+        p_val_2 = ldt_2.fit_predict(X1, X2)
+        self.assertTrue(p_val_2 >= 0.05)
+
+        ldt_3 = LatentDistributionTest(input_graph=False, align_type="seedless_procrustes")
+        p_val_3 = ldt_3.fit_predict(X1, X2)
+        self.assertTrue(p_val_3 >= 0.05)
 
 if __name__ == "__main__":
     unittest.main()

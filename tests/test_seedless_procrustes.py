@@ -37,7 +37,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
             SeedlessProcrustes(iterative_eps=-0.01)
         with self.assertRaises(ValueError):
             SeedlessProcrustes(iterative_num_reps=0)
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(ValueError):
             SeedlessProcrustes(initialization="hi")
 
         # initial Q and initial P things

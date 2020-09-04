@@ -20,6 +20,7 @@ from scipy import stats
 from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph
 from ..align import SignFlips
+from ..align import SeedlessProcrustes
 from .base import BaseInference
 from sklearn.utils import check_array
 from sklearn.metrics import pairwise_distances
@@ -105,6 +106,40 @@ class LatentDistributionTest(BaseInference):
         power or less power under which alternatives. Generally not recomended,
         as it is untested and included for experimental purposes.
 
+    align_type : str, {'sign_flips' (default), 'seedless-procrustes'} or None
+        Random dot product graphs have an inherent non-identifiability,
+        associated with their latent positions. Thus, two embeddings of
+        different graphs may not be orthogonally aligned. Without this accounted
+        for, two embeddings of different graphs may appear different, even
+        if the distributions of the true latent positions are the same.
+        There are several options in terms of how this can be addresssed:
+
+        - 'sign_flips'
+            A simple heuristic that flips the signs of one of the embeddings,
+            if the medians of the two embeddings in that dimension differ from
+            each other. See :class:`~graspy.align.SignFlips` for more
+            information on this procedure. In the limit, this is guaranteed to
+            lead to a valid test, as long as matrix X^T X, where X is the
+            latent positions does not have repeated non-zero eigenvalues. This
+            may, however, result in an invalid test in the finite sample case
+            if the some eigenvalues are same or close.
+        - 'seedless_procrustes'
+            An algorithm that learns an orthogonal alignment matrix. This
+            procedure is slower than sign flips, but is guaranteed to yield a
+            valid test in the limit, and also makes the test more valid in some
+            finite sample cases, in which the eigenvalues are very close to
+            each other. See `~graspy.align.SignFlips` for more information on
+            the procedure.
+        - 'none'
+            Do not use any alignment technique. This is strongly not
+            recommended, as it may often result in a test that is not valid.
+
+    align_kws : dict
+        Keyword arguments for the aligner of choice, either
+        `~graspy.align.SignFlips` or `~graspy.align.SeedlessProcrustes`,
+        depending on the align_type. See respective classes for more
+        information.
+
     input_graph : bool (default=True)
         Flag whether to expect two full graphs, or the embeddings.
 
@@ -154,6 +189,8 @@ class LatentDistributionTest(BaseInference):
         workers=1,
         size_correction=True,
         pooled=False,
+        align_type='sign_flips',
+        align_kws={},
         input_graph=True,
     ):
 
@@ -199,6 +236,18 @@ class LatentDistributionTest(BaseInference):
 
         if not isinstance(input_graph, bool):
             msg = "input_graph must be a bool, not {}".format(type(input_graph))
+            raise TypeError(msg)
+
+        if (not isinstance(align_type, str)) and (align_type is not None):
+            msg = "align_type must be a string or None, not {}".format(type(align_type))
+            raise TypeError(msg)
+        align_types_supported = ["sign_flips", "seedless_procrustes", None]
+        if align_type not in align_types_supported:
+            msg = "supported align types are {}".format(align_types_supported)
+            raise ValueError(msg)
+
+        if not isinstance(align_kws, dict):
+            msg = "align_kws must be a dictionary of keyword arguments, not {}".format(type(align_kws))
             raise TypeError(msg)
 
         super().__init__(n_components=n_components)
@@ -248,6 +297,8 @@ class LatentDistributionTest(BaseInference):
         self.size_correction = size_correction
         self.pooled = pooled
         self.input_graph = input_graph
+        self.align_type = align_type
+        self.align_kws = align_kws
 
     def _embed(self, A1, A2):
         if self.n_components is None:
@@ -378,8 +429,12 @@ class LatentDistributionTest(BaseInference):
             X1_hat = check_array(A1)
             X2_hat = check_array(A2)
 
-        aligner = SignFlips()
-        X1_hat, X2_hat = aligner.fit_transform(X1_hat, X2_hat)
+        if self.align_type == "sign_flips":
+            aligner = SignFlips(**self.align_kws)
+            X1_hat, X2_hat = aligner.fit_transform(X1_hat, X2_hat)
+        if self.align_type == "seedless_procrustes":
+            aligner = SeedlessProcrustes(**self.align_kws)
+            X1_hat, X2_hat = aligner.fit_transform(X1_hat, X2_hat)
 
         if self.size_correction:
             X1_hat, X2_hat = self._sample_modified_ase(

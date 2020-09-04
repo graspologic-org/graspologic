@@ -207,7 +207,7 @@ class SeedlessProcrustes(BaseAlign):
         initializations_supported = ["2d", "sign_flips", "custom"]
         if initialization not in initializations_supported:
             msg = "supported initializations are {}".format(initializations_supported)
-            raise NotImplementedError(msg)
+            raise ValueError(msg)
 
         super().__init__(freeze_Y=freeze_Y)
 
