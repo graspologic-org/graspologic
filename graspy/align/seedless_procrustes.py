@@ -153,7 +153,7 @@ class SeedlessProcrustes(BaseAlign):
                 msg = f"initial_Q must be np.ndarray or None, not {type(initial_Q)}"
                 raise TypeError(msg)
             initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
-            if initial_Q[0] != initial_Q[1]:
+            if initial_Q.shape[0] != initial_Q.shape[1]:
                 msg = "initial_Q must be a squared orhthogonal matrix"
                 raise ValueError(msg)
             if not (initial_Q.T @ initial_Q == np.eye(initial_Q.shape[0])).all():
@@ -164,6 +164,21 @@ class SeedlessProcrustes(BaseAlign):
                 msg = f"initial_P must be np.ndarray or None, not {type(initial_P)}"
                 raise TypeError(msg)
             initial_P = check_array(initial_P, accept_sparse=True, copy=True)
+            n, m = initial_P.shape
+            if not np.allclose(initial_P.sum(axis=0), np.ones(m) / m):
+                msg = (
+                    "initial_P must be a doubly stochastic matrix "
+                    "(rows add up to (1/number of cols) "
+                    "and columns add up to (1/number of rows))"
+                )
+                raise ValueError(msg)
+            if not np.allclose(initial_P.sum(axis=1), np.ones(n) / n):
+                msg = (
+                    "initial_P must be a doubly stochastic matrix "
+                    "(rows add up to (1/number of cols) "
+                    "and columns add up to (1/number of rows))"
+                )
+                raise ValueError(msg)
 
         # Value checking
         if optimal_transport_eps <= 0:
@@ -195,9 +210,8 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         initializations_supported = ["2d", "sign_flips", "custom"]
         if initialization not in initializations_supported:
-            msg = "supported initializations are {}".format(initialization)
+            msg = "supported initializations are {}".format(initializations_supported)
             raise NotImplementedError(msg)
-
 
         super().__init__(freeze_Y=freeze_Y)
 
