@@ -4,10 +4,10 @@ import re
 from setuptools import setup, find_packages
 
 # Exit if python version is unsupported.
-MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
-MAXIMUM_PYTHON_VERSION = 3, 7, 9  # Maximum of Python 3.7
+MINIMUM_PYTHON_VERSION = 3, 6, 0  # Minimum of Python 3.6.0
+MAXIMUM_PYTHON_VERSION = 3, 7, 9  # Maximum of Python 3.7.9
 if not MINIMUM_PYTHON_VERSION < sys.version_info < MAXIMUM_PYTHON_VERSION:
-    major_min, minor_min = MINIMUM_PYTHON_VERSION
+    major_min, minor_min, _ = MINIMUM_PYTHON_VERSION
     major_max, minor_max, _ = MAXIMUM_PYTHON_VERSION
     sys.exit(f"Python {major_min}.{minor_min}-{major_max}.{minor_max} is required.")
 
