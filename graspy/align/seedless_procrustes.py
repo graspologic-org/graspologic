@@ -165,14 +165,10 @@ class SeedlessProcrustes(BaseAlign):
                 raise TypeError(msg)
             initial_P = check_array(initial_P, accept_sparse=True, copy=True)
             n, m = initial_P.shape
-            if not np.allclose(initial_P.sum(axis=0), np.ones(m) / m):
-                msg = (
-                    "initial_P must be a doubly stochastic matrix "
-                    "(rows add up to (1/number of cols) "
-                    "and columns add up to (1/number of rows))"
-                )
-                raise ValueError(msg)
-            if not np.allclose(initial_P.sum(axis=1), np.ones(n) / n):
+            if not (
+                np.allclose(initial_P.sum(axis=0), np.ones(m) / m)
+                and np.allclose(initial_P.sum(axis=1), np.ones(n) / n)
+            ):
                 msg = (
                     "initial_P must be a doubly stochastic matrix "
                     "(rows add up to (1/number of cols) "
@@ -249,7 +245,7 @@ class SeedlessProcrustes(BaseAlign):
         )
         return P
 
-    def _procrustes(self, X, P_i, Y):
+    def _procrustes(self, X, Y, P_i):
         # "M step" of the SeedlessProcurstes.
         aligner = OrthogonalProcrustes()
         Q = aligner.fit(X, P_i @ Y).Q_X
@@ -258,7 +254,7 @@ class SeedlessProcrustes(BaseAlign):
     def _iterative_ot(self, X, Y, Q):
         for i in range(self.iterative_num_reps):
             P_i = self._optimal_transport(X, Y, Q)
-            Q = self._procrustes(X, P_i, Y)
+            Q = self._procrustes(X, Y, P_i)
             c = np.linalg.norm(X @ Q - P_i @ Y, ord="fro")
             if c < self.iterative_eps:
                 break
@@ -324,7 +320,7 @@ class SeedlessProcrustes(BaseAlign):
         elif self.initialization == "sign_flips":
             aligner = SignFlips(freeze_Y=True)
             self.initial_Q = aligner.fit(X, Y).Q_X
-            self.P, self.Q_X = self._iterative_ot(X, Y, initial_Q)
+            self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
         else:
             # determine initial Q if "custom" and not provided
             if self.initial_Q is None:
@@ -334,7 +330,7 @@ class SeedlessProcrustes(BaseAlign):
                 else:
                     # set to initial Q to identity if neither Q nor P provided
                     self.initial_Q = np.eye(X.shape[1])
-            self.P, self.Q_X = self._iterative_ot(X, Y, initial_Q)
+            self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
 
         self.Q_Y = np.eye(X.shape[1])
 
