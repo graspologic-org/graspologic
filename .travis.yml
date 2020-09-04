@@ -10,8 +10,8 @@ jobs:
 cache: pip
 install:
 - pip install -r requirements.txt
-- pip install -e .
 - pip install -U pytest pytest-cov pytest-doctestplus codecov black
+- pip install -e .
 script:
 - pytest graspy/ tests/
 - black --check --diff ./graspy ./tests
