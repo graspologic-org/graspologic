@@ -158,9 +158,9 @@ class TestLatentDistributionTest(unittest.TestCase):
         with pytest.warns(None) as record:
             for test in self.tests.keys():
                 ldt = LatentDistributionTest(test, self.tests[test])
-                lft.fit(A1, A2)
+                ldt.fit(A1, A2)
             ldt = LatentDistributionTest("hsic", "rbf")
-            lft.fit(A1, A2)
+            ldt.fit(A1, A2)
         assert len(record) == 0
         # some invalid combinations of test and metric
         with pytest.warns(UserWarning):
