@@ -48,6 +48,8 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(test="dcorr", n_components=-100)
         with self.assertRaises(ValueError):
             LatentDistributionTest(test="dcorr", n_bootstraps=-100)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(n_components=0.5)
         with self.assertRaises(TypeError):
             LatentDistributionTest(test=0)
         with self.assertRaises(TypeError):
@@ -149,11 +151,16 @@ class TestLatentDistributionTest(unittest.TestCase):
         ldt.fit(A1, A2)
 
     def test_distances_and_kernels(self):
+        np.random.seed(123)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(100, 0.3)
         # some valid combinations of test and metric
         with pytest.warns(None) as record:
             for test in self.tests.keys():
                 ldt = LatentDistributionTest(test, self.tests[test])
+                lft.fit(A1, A2)
             ldt = LatentDistributionTest("hsic", "rbf")
+            lft.fit(A1, A2)
         assert len(record) == 0
         # some invalid combinations of test and metric
         with pytest.warns(UserWarning):
@@ -162,6 +169,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             ldt = LatentDistributionTest("dcorr", "gaussian")
         with pytest.warns(UserWarning):
             ldt = LatentDistributionTest("dcorr", "rbf")
+            ldt.fit
 
     def test_bad_matrix_inputs(self):
         ldt = LatentDistributionTest("dcorr")
