@@ -5,10 +5,10 @@ from setuptools import setup, find_packages
 
 # Exit if python version is unsupported.
 MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
-MAXIMUM_PYTHON_VERSION = 3, 7  # Maximum of Python 3.7
+MAXIMUM_PYTHON_VERSION = 3, 7, 9  # Maximum of Python 3.7
 if not MINIMUM_PYTHON_VERSION < sys.version_info < MAXIMUM_PYTHON_VERSION:
     major_min, minor_min = MINIMUM_PYTHON_VERSION
-    major_max, minor_max = MAXIMUM_PYTHON_VERSION
+    major_max, minor_max, _ = MAXIMUM_PYTHON_VERSION
     sys.exit(f"Python {major_min}.{minor_min}-{major_max}.{minor_max} is required.")
 
 PACKAGE_NAME = "graspy"
