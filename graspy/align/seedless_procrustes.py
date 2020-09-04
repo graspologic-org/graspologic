@@ -59,7 +59,7 @@ class SeedlessProcrustes(BaseAlign):
             problem. I.e. maxumum number of total iterations the whole "EM"
             algorithm.
 
-        initialization: string, {"2d", "sign_flips", "custom"}
+        initialization: string, {"2d" (default), "sign_flips", "custom"}
 
             - "2d"
                 uses 2^d different initiazlizations, where d is the dimension.

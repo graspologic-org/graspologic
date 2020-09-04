@@ -43,34 +43,31 @@ class TestSeedlessProcrustes(unittest.TestCase):
         # initial Q and initial P things
         # pass bad types
         with self.assertRaises(TypeError):
-            aligner = SeedlessProcrustes(initial_Q="hello there")
+            SeedlessProcrustes(initial_Q="hello there")
         with self.assertRaises(TypeError):
-            aligner = SeedlessProcrustes(initial_P="hello there")
+            SeedlessProcrustes(initial_P="hello there")
         with self.assertRaises(TypeError):
-            aligner = SeedlessProcrustes(initial_Q={"hello": "there"})
+            SeedlessProcrustes(initial_Q={"hello": "there"})
         with self.assertRaises(TypeError):
-            aligner = SeedlessProcrustes(initial_P={"hello": "there"})
+            SeedlessProcrustes(initial_P={"hello": "there"})
         # pass non ndim=2 matrices (cuaght by check_array)
         with self.assertRaises(ValueError):
-            aligner = SeedlessProcrustes(initial_Q=np.ones(25).reshape(5, 5, 1))
+            SeedlessProcrustes(initial_Q=np.ones(25).reshape(5, 5, 1))
         with self.assertRaises(ValueError):
-            aligner = SeedlessProcrustes(initial_P=np.ones(25).reshape(5, 5, 1))
+            SeedlessProcrustes(initial_P=np.ones(25).reshape(5, 5, 1))
         # pass not an orthogonal matrix as a Q
         with self.assertRaises(ValueError):
-            aligner = SeedlessProcrustes(initial_Q=np.ones((3, 2)))
+            SeedlessProcrustes(initial_Q=np.ones((3, 2)))
         with self.assertRaises(ValueError):
-            aligner = SeedlessProcrustes(initial_Q=np.ones((3, 3)))
+            SeedlessProcrustes(initial_Q=np.ones((3, 3)))
         # pass not a "doubly stochasitc" matrix as P
         with self.assertRaises(ValueError):
-            aligner = SeedlessProcrustes(initial_P=np.ones((3, 2)))
-        # pass a correct doubly stochastic matrix as P
-        SeedlessProcrustes(initial_P=np.ones((3, 2)) / 6)
+            SeedlessProcrustes(initial_P=np.ones((3, 2)))
 
     def test_bad_datasets(self):
         X = np.arange(6).reshape(6, 1)
         Y = np.arange(6).reshape(6, 1)
         Y_wrong_d = np.arange(12).reshape(6, 2)
-        Y_wrong_n = np.arange(12).reshape(12, 1)
         # check passing weird stuff as input (caught by us)
         with self.assertRaises(TypeError):
             aligner = SeedlessProcrustes()
@@ -120,10 +117,11 @@ class TestSeedlessProcrustes(unittest.TestCase):
 
         aligner_4 = SeedlessProcrustes(initialization="custom", initial_Q=-np.eye(3))
         aligner_4.fit_transform(X, Y)
-        self.assertTrue(np.all(- np.eye(3) == aligner_4.initial_Q))
+        self.assertTrue(np.all(-np.eye(3) == aligner_4.initial_Q))
 
-        aligner_5 = SeedlessProcrustes(initialization="custom",
-                                       initial_P=np.ones((100,100))/10000)
+        aligner_5 = SeedlessProcrustes(
+            initialization="custom", initial_P=np.ones((100, 100)) / 10000
+        )
         aligner_5.fit_transform(X, Y)
 
     # def test_matching_datasets(self):
