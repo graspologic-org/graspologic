@@ -40,8 +40,7 @@ class OrthogonalProcrustes(BaseAlign):
     ----------
         freeze_Y : boolean, optional (default True)
             Irrelevant in OrthogonalProcrustes, as it always modifies only one
-            dataset. Exists for compatibility with other align modules.
-
+            first dataset. Exists for compatibility with other align modules.
     Attributes
     ----------
         Q_X : array, size (d, d)
