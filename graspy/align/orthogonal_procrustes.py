@@ -182,12 +182,13 @@ class OrthogonalProcrustes(BaseAlign):
             D_X = np.eye(d) / norm_X
             D_Y = np.eye(d) / norm_Y
         elif self.align_type == "diagonal-orthogonal":
-            normX = np.sum(X ** 2, axis=1)
-            normY = np.sum(Y ** 2, axis=1)
-            normX[normX <= 1e-15] = 1
-            normY[normY <= 1e-15] = 1
-            D_X = np.diag(1 / np.sqrt(normX[:, None]))
-            D_Y = np.diag(1 / np.sqrt(normY[:, None]))
+            raise NotImplementedError("currently does not fit into this module")
+            # normX = np.sum(X ** 2, axis=1)
+            # normY = np.sum(Y ** 2, axis=1)
+            # normX[normX <= 1e-15] = 1
+            # normY[normY <= 1e-15] = 1
+            # D_X = np.diag(1 / np.sqrt(normX[:, None]))
+            # D_Y = np.diag(1 / np.sqrt(normY[:, None]))
 
         if self.freeze_Y is True:
             D_X = D_X @ np.linalg.inv(D_Y)

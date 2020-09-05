@@ -132,7 +132,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         #            |                  |
         #            |                  |
         #
-        # solution is
+        # solution is (if freeze_Y=True)
         #  _                 _             _      _
         # |                   |           |        |
         # | 3 / 5     - 4 / 5 |           | -1   0 |
@@ -168,6 +168,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         self.assertTrue(np.all(np.isclose(Q_Y_test_2, Q_Y_answer_2)))
         self.assertTrue(np.all(np.isclose(X_test_2, X_answer_2)))
         self.assertTrue(np.all(np.isclose(Y_test_2, Y_answer_2)))
+
 
 if __name__ == "__main__":
     unittest.main()
