@@ -57,7 +57,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         assert np.all(np.isclose(aligner.Q_X, np.eye(2)))
         assert np.all(aligner.Q_Y == np.eye(2))
 
-    def test__two_datasets(self):
+    def test_two_datasets(self):
         # A very simple example with a true existing solution
         #       X:                 Y:
         #            |                  |
@@ -115,6 +115,59 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         self.assertTrue(np.all(np.isclose(X_test_3, X_answer)))
         self.assertTrue(np.all(np.isclose(Y_test_3, Y_answer)))
 
+    def test_two_datasets_scaling_orthogonal(self):
+        # A very simple example with a true existing solution
+        #       X:                 Y:
+        #            |                  |
+        #            |                  |
+        #            |   1              |
+        #        2   |                  |
+        #            |                  2
+        #            |                  |
+        #      ------+------      ----1-+-3----
+        #            |                  |
+        #            |                  4
+        #            |    4             |
+        #         3  |                  |
+        #            |                  |
+        #            |                  |
+        #
+        # solution is
+        #  _                 _             _      _
+        # |                   |           |        |
+        # | 3 / 5     - 4 / 5 |           | -1   0 |
+        # |                   |   times   |        | times 0.4
+        # | 3 / 5       3 / 5 |           |  0   1 |
+        # |_                 _|           |_      _|
+        # because it is just rotation times reflection
+        X = np.array([[3, 4], [-4, 3], [-3, -4], [4, -3]])
+        Y = np.array([[-5, 0], [0, 5], [5, 0], [0, -5]])
+        Y = Y * 2 / 5
+
+        # now, do fit_transform
+        Q_X_answer_1 = np.array([[-0.6, -0.8], [-0.8, 0.6]]) * 2 / 5
+        Q_Y_answer_1 = np.eye(2)
+        X_answer_1 = X.copy() @ Q_X_answer_1
+        Y_answer_1 = Y.copy()
+        aligner_1 = OrthogonalProcrustes(freeze_Y=True, align_type='scaling-orthogonal')
+        X_test_1, Y_test_1 = aligner_1.fit_transform(X, Y)
+        Q_X_test_1, Q_Y_test_1 = aligner_1.Q_X, aligner_1.Q_Y
+        self.assertTrue(np.all(np.isclose(Q_X_test_1, Q_X_answer_1)))
+        self.assertTrue(np.all(np.isclose(Q_Y_test_1, Q_Y_answer_1)))
+        self.assertTrue(np.all(np.isclose(X_test_1, X_answer_1)))
+        self.assertTrue(np.all(np.isclose(Y_test_1, Y_answer_1)))
+        # lastly, check that freeze_Y runs, but is useless
+        Q_X_answer_2 = np.array([[-0.6, -0.8], [-0.8, 0.6]]) / 10
+        Q_Y_answer_2 = np.eye(2) / 4
+        X_answer_2 = X.copy() @ Q_X_answer_2
+        Y_answer_2 = Y.copy() @ Q_Y_answer_2
+        aligner_2 = OrthogonalProcrustes(freeze_Y=False, align_type='scaling-orthogonal')
+        X_test_2, Y_test_2 = aligner_2.fit_transform(X, Y)
+        Q_X_test_2, Q_Y_test_2 = aligner_2.Q_X, aligner_2.Q_Y
+        self.assertTrue(np.all(np.isclose(Q_X_test_2, Q_X_answer_2)))
+        self.assertTrue(np.all(np.isclose(Q_Y_test_2, Q_Y_answer_2)))
+        self.assertTrue(np.all(np.isclose(X_test_2, X_answer_2)))
+        self.assertTrue(np.all(np.isclose(Y_test_2, Y_answer_2)))
 
 if __name__ == "__main__":
     unittest.main()
