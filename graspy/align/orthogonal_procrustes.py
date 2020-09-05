@@ -39,19 +39,21 @@ class OrthogonalProcrustes(BaseAlign):
     Parameters
     ----------
         align_type : str, {'orthogonal' (default), 'scaling-orthogonal', 'diagonal-orthogonal'}
-            Whether to perform only the regular orthogonal alignment, or such
-            alignment followed by scaling. This is commonly used in different
-            test cases of the semiparametric latent position test. See
-            :class:`~graspy.inference.LatentPositionTest` for more information.
+            Whether to perform only the regular orthogonal alignment, or a
+            scaling followed by such alignment. This is commonly used in
+            different test cases of the semiparametric latent position test.
+            See :class:`~graspy.inference.LatentPositionTest` for more
+            information.
 
             - 'orthogonal'
                 Regular orthogonal Procrustes alignment.
             - 'scaling-orthogonal'
-                Regular orthogonal Procrustes alignment, followed by scaling
-                the two datasets two have the same Frobenius norm.
+                First scales the two datasets to have the same Frobenius norm,
+                then performs the regular orthogonal Procrustes alignment.
             - 'scaling-orthogonal'
-                Regular orthogonal Procrustes alignment, followed by scaling
-                each dimension of the two datasets to have the same norm
+                First scales each dimension of the two datasets to have the
+                same norm, then performs the regular orthogonal Procrustes
+                alignment.
 
         freeze_Y : boolean, optional (default=True)
             Irrelevant if the align_type is 'orthogonal', as the orthogonal
