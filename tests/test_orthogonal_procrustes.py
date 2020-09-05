@@ -156,7 +156,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         self.assertTrue(np.all(np.isclose(Q_Y_test_1, Q_Y_answer_1)))
         self.assertTrue(np.all(np.isclose(X_test_1, X_answer_1)))
         self.assertTrue(np.all(np.isclose(Y_test_1, Y_answer_1)))
-        # lastly, check that freeze_Y runs, but is useless
+        # lastly, check that freeze_Y runs (result is different!)
         Q_X_answer_2 = np.array([[-0.6, -0.8], [-0.8, 0.6]]) / 10
         Q_Y_answer_2 = np.eye(2) / 4
         X_answer_2 = X.copy() @ Q_X_answer_2
