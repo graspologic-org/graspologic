@@ -33,14 +33,50 @@ class OrthogonalProcrustes(BaseAlign):
     vertex i in graph Y.
 
     Implementation-wise, this class is a wrapper of the
-    `sklearn.linalg.orthogonal_procrustes`, which itself uses an algorithm
+    `scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
     described in to find the optimal solution algorithm [1]_.
 
     Parameters
     ----------
-        freeze_Y : boolean, optional (default True)
-            Irrelevant in OrthogonalProcrustes, as it always modifies only one
-            first dataset. Exists for compatibility with other align modules.
+        align_type : str, {'orthogonal' (default), 'scaling-orthogonal', 'diagonal-orthogonal'}
+            Whether to perform only the regular orthogonal alignment, or such
+            alignment followed by scaling. This is commonly used in different
+            test cases of the semiparametric latent position test. See
+            :class:`~graspy.inference.LatentPositionTest` for more information.
+
+            - 'orthogonal'
+                Regular orthogonal Procrustes alignment.
+            - 'scaling-orthogonal'
+                Regular orthogonal Procrustes alignment, followed by scaling
+                the two datasets two have the same Frobenius norm.
+            - 'scaling-orthogonal'
+                Regular orthogonal Procrustes alignment, followed by scaling
+                each dimension of the two datasets to have the same norm
+
+        freeze_Y : boolean, optional (default=True)
+            Irrelevant if the align_type is 'orthogonal', as the orthogonal
+            transformation always modifies only the first dataset. In other
+            cases:
+
+            - True
+                The second dataset will not be modified. The scaling, whether
+                in Frobenius norm (if align_type='scaling-orthogonal'), or per
+                each dimension (if align_type='diagonal-orthogonal'), will be
+                applied to the first dataset in a way to match scale of the
+                second.
+            - True
+                Both of the datasets will be scaled to have the Frobenius norm
+                (if align_type='scaling-orthogonal') or the row-wise norms (if
+                align_type='diagonal-orthogonal') be equal to value given by
+                scale (unity by default).
+
+        scale : int (default=1)
+            Irrelevant if align_type='orthogonal', or if freeze_y=True, since
+            in those cases only the first dataset is transformed. In other
+            cases, this is the value to which the Frobenius norm (if
+            align_type='scaling-orthogonal'), or the dimension-wise norms (if
+            align_type='diagonal-orthogonal') will be equal to.
+
     Attributes
     ----------
         Q_X : array, size (d, d)
@@ -60,8 +96,34 @@ class OrthogonalProcrustes(BaseAlign):
     def __init__(
         self,
         freeze_Y=True,
+        align_type="orthogonal",
+        scale=1.0,
     ):
+        # check type
+        if not isinstance(align_type, str):
+            msg = "align_type must be a string, not {}".format(type(align_type))
+            raise TypeError(msg)
+        align_types_supported = [
+            "orthogonal",
+            "scaling-orthogonal",
+            "diagonal-orthogonal",
+        ]
+        if align_type not in align_types_supported:
+            msg = "supported types are {}".format(align_types_supported)
+            raise ValueError(msg)
+        if type(scale) is not float:
+            msg = "scale must be a float, not {}".format(type(scale))
+            raise TypeError(msg)
+        # Value checking
+        if scale <= 0:
+            msg = "{} is an invalud value of the optimal transport eps, must be postitive".format(
+                scale
+            )
+            raise ValueError(msg)
+
         super().__init__(freeze_Y=freeze_Y)
+        self.align_type = align_type
+        self.scale = scale
 
     def fit(self, X, Y):
         """
@@ -107,10 +169,30 @@ class OrthogonalProcrustes(BaseAlign):
                 "instead."
             )
             raise ValueError(msg)
+
         _, d = X.shape
+        if self.align_type == "orthogonal":
+            D_X = np.eye(d)
+            D_Y = np.eye(d)
+        if self.align_type == "scaling-orthogonal":
+            norm_X = np.linalg.norm(X, order="fro")
+            norm_Y = np.linalg.norm(Y, order="fro")
+            D_X = np.eye(d) / norm_X
+            D_Y = np.eye(d) / norm_Y
+        elif self.align_type == "diagonal-orthogonal":
+            normX = np.sum(X ** 2, axis=1)
+            normY = np.sum(Y ** 2, axis=1)
+            normX[normX <= 1e-15] = 1
+            normY[normY <= 1e-15] = 1
+            D_X = np.diag(1 / np.sqrt(normX[:, None]))
+            D_Y = np.diag(1 / np.sqrt(normY[:, None]))
 
-        # call scipy's orthogonal procrustes, set the second matrix to identity
-        self.Q_X, _ = orthogonal_procrustes(X, Y)
-        self.Q_Y = np.eye(d)
+        if self.freeze_Y is True:
+            D_X = D_X @ np.linalg.inv(D_Y)
+            D_Y = np.eye(D_Y.shape[0])
 
+        X, Y = X @ D_X, Y @ D_Y
+        R, _ = orthogonal_procrustes(X, Y)
+        self.Q_X = R @ D_X
+        self.Q_Y = D_Y
         return self
