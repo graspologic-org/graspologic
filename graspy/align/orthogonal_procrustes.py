@@ -177,8 +177,8 @@ class OrthogonalProcrustes(BaseAlign):
             D_X = np.eye(d)
             D_Y = np.eye(d)
         if self.align_type == "scaling-orthogonal":
-            norm_X = np.linalg.norm(X, order="fro")
-            norm_Y = np.linalg.norm(Y, order="fro")
+            norm_X = np.linalg.norm(X, ord="fro")
+            norm_Y = np.linalg.norm(Y, ord="fro")
             D_X = np.eye(d) / norm_X
             D_Y = np.eye(d) / norm_Y
         elif self.align_type == "diagonal-orthogonal":
