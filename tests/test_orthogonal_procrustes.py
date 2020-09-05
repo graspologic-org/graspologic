@@ -149,7 +149,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         Q_Y_answer_1 = np.eye(2)
         X_answer_1 = X.copy() @ Q_X_answer_1
         Y_answer_1 = Y.copy()
-        aligner_1 = OrthogonalProcrustes(freeze_Y=True, align_type='scaling-orthogonal')
+        aligner_1 = OrthogonalProcrustes(freeze_Y=True, align_type="scaling-orthogonal")
         X_test_1, Y_test_1 = aligner_1.fit_transform(X, Y)
         Q_X_test_1, Q_Y_test_1 = aligner_1.Q_X, aligner_1.Q_Y
         self.assertTrue(np.all(np.isclose(Q_X_test_1, Q_X_answer_1)))
@@ -161,7 +161,9 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         Q_Y_answer_2 = np.eye(2) / 4
         X_answer_2 = X.copy() @ Q_X_answer_2
         Y_answer_2 = Y.copy() @ Q_Y_answer_2
-        aligner_2 = OrthogonalProcrustes(freeze_Y=False, align_type='scaling-orthogonal')
+        aligner_2 = OrthogonalProcrustes(
+            freeze_Y=False, align_type="scaling-orthogonal"
+        )
         X_test_2, Y_test_2 = aligner_2.fit_transform(X, Y)
         Q_X_test_2, Q_Y_test_2 = aligner_2.Q_X, aligner_2.Q_Y
         self.assertTrue(np.all(np.isclose(Q_X_test_2, Q_X_answer_2)))

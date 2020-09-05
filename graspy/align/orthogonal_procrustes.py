@@ -50,10 +50,9 @@ class OrthogonalProcrustes(BaseAlign):
             - 'scaling-orthogonal'
                 First scales the two datasets to have the same Frobenius norm,
                 then performs the regular orthogonal Procrustes alignment.
-            - 'scaling-orthogonal'
-                First scales each dimension of the two datasets to have the
-                same norm, then performs the regular orthogonal Procrustes
-                alignment.
+            - 'diagonal-orthogonal' # TODO
+                First scales each entry of the two datasets to have the same
+                norm as a respective entry of the other dataset.
 
         freeze_Y : boolean, optional (default=False)
             Irrelevant if the align_type is 'orthogonal', as the orthogonal
