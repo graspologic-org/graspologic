@@ -55,7 +55,7 @@ class OrthogonalProcrustes(BaseAlign):
                 same norm, then performs the regular orthogonal Procrustes
                 alignment.
 
-        freeze_Y : boolean, optional (default=True)
+        freeze_Y : boolean, optional (default=False)
             Irrelevant if the align_type is 'orthogonal', as the orthogonal
             transformation always modifies only the first dataset. In other
             cases:
@@ -97,7 +97,7 @@ class OrthogonalProcrustes(BaseAlign):
 
     def __init__(
         self,
-        freeze_Y=True,
+        freeze_Y=False,
         align_type="orthogonal",
         scale=1.0,
     ):
