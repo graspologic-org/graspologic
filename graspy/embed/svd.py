@@ -97,7 +97,7 @@ def select_dimension(
 
     References
     ----------
-    .. [#1] Zhu, M. and Ghodsi, A. (2006).
+    .. [1] Zhu, M. and Ghodsi, A. (2006).
         Automatic dimensionality selection from the scree plot via the use of
         profile likelihood. Computational Statistics & Data Analysis, 51(2),
         pp.918-930.

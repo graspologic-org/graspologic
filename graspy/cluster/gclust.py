@@ -56,8 +56,9 @@ class GaussianCluster(BaseCluster):
             each component has its own diagonal covariance matrix
         - 'spherical'
             each component has its own single variance
+            
         If a list/array, it must be a list/array of strings containing only
-            'spherical', 'tied', 'diag', and/or 'spherical'.
+            'spherical', 'tied', 'diag', and/or 'full'.
 
     tol : float, defaults to 1e-3.
         The convergence threshold. EM iterations will stop when the
@@ -77,6 +78,7 @@ class GaussianCluster(BaseCluster):
         The method used to initialize the weights, the means and the
         precisions.
         Must be one of::
+        
             'kmeans' : responsibilities are initialized using kmeans.
             'random' : responsibilities are initialized randomly.
 
