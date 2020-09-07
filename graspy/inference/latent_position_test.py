@@ -146,8 +146,8 @@ class LatentPositionTest(BaseInference):
             if self.test_case == "rotation":
                 pass
             elif self.test_case == "scalar-rotation":
-                X1 = X1 / np.linalg.norm(X1, ord='fro')
-                X2 = X2 / np.linalg.norm(X2, ord='fro')
+                X1 = X1 / np.linalg.norm(X1, ord="fro")
+                X2 = X2 / np.linalg.norm(X2, ord="fro")
             elif self.test_case == "diagonal-rotation":
                 normX1 = np.sum(X1 ** 2, axis=1)
                 normX2 = np.sum(X2 ** 2, axis=1)
