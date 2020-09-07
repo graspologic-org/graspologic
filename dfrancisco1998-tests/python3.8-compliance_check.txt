@@ -1,0 +1,1357 @@
+$ py.test test_base_embed.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 4 items
+
+test_base_embed.py ....                                                  [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     26    53%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     40    62%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    168    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    182    14%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2228    19%
+
+======================== 4 passed, 1 warning in 13.82s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_datasets.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 2 items
+
+test_datasets.py ..                                                      [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    189    11%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2363    14%
+
+======================== 2 passed, 1 warning in 14.68s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_latentdistributiontest.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 14 items
+
+test_latentdistributiontest.py ..............                            [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+tests/test_latentdistributiontest.py: 23 warnings
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\hyppo-0.1.3-py3.8.egg\hyppo\_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+
+tests/test_latentdistributiontest.py::TestLatentDistributionTest::test_pooled
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\scipy\stats\_multivariate.py:664: RuntimeWarning: covariance is not positive-semidefinite.
+    out = random_state.multivariate_normal(mean, cov, size)
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19      3    84%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     21    62%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     48    55%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      4    78%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165      8    95%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    190    26%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    148    30%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2074    25%
+
+================= 14 passed, 25 warnings in 347.50s (0:05:47) =================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_latentpositiontest.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 10 items
+
+test_latentpositiontest.py ..........                                    [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19      3    84%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     16    71%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29      3    90%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     48    55%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      1    94%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    162    37%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    152    28%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2082    24%
+
+================== 10 passed, 1 warning in 91.94s (0:01:31) ===================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_mase.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 3 items
+
+test_mase.py ...                                                         [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     34    64%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     13    76%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44      2    95%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     50    53%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    190    26%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    173    18%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2155    22%
+
+======================== 3 passed, 1 warning in 29.63s ========================
+(ndd)
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_mds.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 3 items
+
+test_mds.py ...                                                          [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68      1    99%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     44    58%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    188    11%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2273    17%
+
+======================== 3 passed, 1 warning in 28.19s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_models.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 27 items
+
+test_models.py ...........................                               [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     33    65%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19      3    84%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     21    62%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17      2    88%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     46    57%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     17    80%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47      1    98%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162      2    99%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    178    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    122    42%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   1867    32%
+
+================== 27 passed, 1 warning in 364.07s (0:06:04) ==================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_omni.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 6 items
+
+test_omni.py ......                                                      [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+tests/test_omni.py::test_omni_matrix_invalid_inputs
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\numpy\core\_asarray.py:136: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray
+    return array(a, dtype, copy=False, order=order, subok=True)
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     15    73%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29      1    97%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     46    57%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    168    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    161    24%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2183    21%
+
+======================= 6 passed, 2 warnings in 31.17s ========================
+
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_plot^Cy
+(ndd)
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ ls
+__init__.py   match/              test_datasets.py                test_latentpositiontest.py  test_models.py  test_ptr.py               test_sg.py         test_sklearn.py         test_utils.py
+__pycache__/  pipeline/           test_io.py                      test_mase.py                test_omni.py    test_rdpg_corr.py         test_sims.py       test_spectral_embed.py
+cluster/      test_base_embed.py  test_latentdistributiontest.py  test_mds.py                 test_plot.py    test_select_dimension.py  test_sims_corr.py  test_svd.py
+(ndd)
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_ptr.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 13 items
+
+test_ptr.py .............                                                [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44      2    95%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    171    19%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2329    15%
+
+======================= 13 passed, 1 warning in 13.21s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_rdpg_corr.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 4 items
+
+test_rdpg_corr.py ....                                                   [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     11    58%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    216    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     75    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    185    13%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2324    15%
+
+======================== 4 passed, 1 warning in 44.84s ========================
+
+
+~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_select_dimension.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 5 items
+
+test_select_dimension.py .....                                           [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     30    72%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    200    22%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    183    14%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2263    18%
+
+======================== 5 passed, 1 warning in 19.64s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_sg.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 7 items
+
+test_sg.py .......                                                       [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85      6    93%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    189    11%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2312    16%
+
+======================== 7 passed, 1 warning in 13.45s ========================
+
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_sims.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 29 items
+
+test_sims.py .............................                               [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257     13    95%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    178    16%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2140    22%
+
+======================= 29 passed, 1 warning in 30.56s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_sims_corr.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 6 items
+
+test_sims_corr.py ......                                                 [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    236     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     13    87%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    185    13%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2294    17%
+
+======================== 6 passed, 1 warning in 17.42s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_sklearn.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 0 items
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:488
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:488
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:488
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:488: FutureWarning: Passing a class is deprecated since version 0.23 and won't be supported in 0.24.Please pass an instance instead.
+    warnings.warn(msg, FutureWarning)
+
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:2979
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:2979
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:2979
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\sklearn\utils\estimator_checks.py:2979: FutureWarning: As of scikit-learn 0.23, estimators should expose a n_features_in_ attribute, unless the 'no_validation' tag is True. This attribute should be equal to the number of features passed to the fit method. An error will be raised from version 0.25 when calling check_estimator(). See SLEP010: https://scikit-learn-enhancement-proposals.readthedocs.io/en/latest/slep010/proposal.html
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19      3    84%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     22    60%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17      2    88%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     16    76%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     38    64%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    130    39%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2189    20%
+
+============================ 7 warnings in 19.78s =============================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_spectral_embed.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 8 items
+
+test_spectral_embed.py ........                                          [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     27    51%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     46    57%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    168    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    133    37%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2162    21%
+
+================== 8 passed, 1 warning in 114.08s (0:01:54) ===================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_svd.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 2 items
+
+test_svd.py ..                                                           [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     74    30%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    189    11%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2360    14%
+
+======================== 2 passed, 1 warning in 17.53s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_utils.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 26 items
+
+test_utils.py ..........................                                 [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212     48    77%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2244    18%
+
+======================== 26 passed, 1 warning in 9.95s ========================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test cluster
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 24 items
+
+cluster\test_autogmm.py .............                                    [ 54%]
+cluster\test_gclust.py .......                                           [ 83%]
+cluster\test_kclust.py ....                                              [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                       Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\autogmm.py                        256     21    92%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\gclust.py                          94      6    94%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\kclust.py                          40      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\ase.py                               19      3    84%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\base.py                              55     23    58%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\svd.py                              106     89    16%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\latent_distribution_test.py     139    115    17%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\simulations.py                257    200    22%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\utils.py                            212    154    27%
+----------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                       2722   1918    30%
+
+================== 24 passed, 1 warning in 868.55s (0:14:28) ==================
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test pipeline
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 2 items
+
+pipeline\test_mug2vec.py ..                                              [100%]
+
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                       Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\gclust.py                          94     32    66%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\base.py                              55     17    69%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\mds.py                               68     21    69%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\omni.py                              29      3    90%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\svd.py                              106     46    57%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\latent_distribution_test.py     139    115    17%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\pipeline\mug2vec.py                        36      2    94%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\simulations.py                257    200    22%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\ptr.py                               44     37    16%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\utils.py                            212    165    22%
+----------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                       2722   2082    24%
+
+======================== 2 passed, 1 warning in 25.31s ========================
+(ndd)
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$

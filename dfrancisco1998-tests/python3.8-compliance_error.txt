@@ -1,0 +1,227 @@
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test test_plot.py
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 8 items
+
+test_plot.py ....F...                                                    [100%]
+
+================================== FAILURES ===================================
+____________________________ test_gridplot_outputs ____________________________
+
+    def test_gridplot_outputs():
+        """
+        simple function to see if plot is made without errors
+        """
+        X = [er_np(10, 0.5) for _ in range(2)]
+        labels = ["Random A", "Random B"]
+>       fig = gridplot(X, labels)
+
+test_plot.py:152:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\graspy\plot\plot.py:486: in gridplot
+    plot = sns.relplot(
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\seaborn\relational.py:1703: in relplot
+    g.add_legend(legend_data=p.legend_data,
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\seaborn\axisgrid.py:107: in add_legend
+    self.fig.draw(self.fig.canvas.get_renderer())
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\artist.py:41: in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\figure.py:1863: in draw
+    mimage._draw_list_compositing_images(
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\image.py:131: in _draw_list_compositing_images
+    a.draw(renderer)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\artist.py:41: in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\cbook\deprecation.py:411: in wrapper
+    return func(*inner_args, **inner_kwargs)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\axes\_base.py:2748: in draw
+    mimage._draw_list_compositing_images(renderer, self, artists)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\image.py:131: in _draw_list_compositing_images
+    a.draw(renderer)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\artist.py:41: in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\collections.py:931: in draw
+    Collection.draw(self, renderer)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\artist.py:41: in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\collections.py:385: in draw
+    extents = paths[0].get_extents(combined_transform)
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\matplotlib\path.py:603: in get_extents
+    return Bbox([xys.min(axis=0), xys.max(axis=0)])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = array([], shape=(0, 2), dtype=float64), axis = 0, out = None
+keepdims = False, initial = <no value>, where = True
+
+    def _amin(a, axis=None, out=None, keepdims=False,
+              initial=_NoValue, where=True):
+>       return umr_minimum(a, axis, None, out, keepdims, initial, where)
+E       ValueError: zero-size array to reduction operation minimum which has no identity
+
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\numpy\core\_methods.py:43: ValueError
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                                   Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_distribution_test.py     165    139    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\__init__.py                           3      3     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\gmp.py                              136    136     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\match\skp.py                               58     58     0%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\plot\plot.py                              392    196    50%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations.py                257    190    26%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\ptr.py                               44     37    16%
+C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy\graspy\utils\utils.py                            212    171    19%
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                                   2748   2138    22%
+
+=========================== short test summary info ===========================
+FAILED test_plot.py::test_gridplot_outputs - ValueError: zero-size array to r...
+=================== 1 failed, 7 passed, 1 warning in 33.28s ===================
+(ndd)
+
+dfran@DESKTOP-3FUUKF1 MINGW64 ~/OneDrive/Documents/Hopkins/Hopkins_senior/Neurodata/branch_graspy/graspy/tests (dfrancisco1998)
+$ py.test match/
+============================= test session starts =============================
+platform win32 -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+rootdir: C:\Users\dfran\OneDrive\Documents\Hopkins\Hopkins_senior\Neurodata\branch_graspy\graspy, configfile: pytest.ini
+plugins: cov-2.10.1
+collected 4 items
+
+match\test_match.py .FF.                                                 [100%]
+
+================================== FAILURES ===================================
+_________________________ TestGMP.test_barycenter_SGM _________________________
+
+self = <test_match.TestGMP object at 0x0000014439B24FD0>
+
+    def test_barycenter_SGM(self):
+>       A, B = self._get_AB("lipa20a")
+
+match\test_match.py:73:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_match.TestGMP object at 0x0000014439B24FD0>, qap_prob = 'lipa20a'
+
+    def _get_AB(self, qap_prob):
+>       with open("tests/match/qapdata/" + qap_prob + ".dat") as f:
+E       FileNotFoundError: [Errno 2] No such file or directory: 'tests/match/qapdata/lipa20a.dat'
+
+match\test_match.py:61: FileNotFoundError
+____________________________ TestGMP.test_rand_SGM ____________________________
+
+self = <test_match.TestGMP object at 0x0000014439B24430>
+
+    def test_rand_SGM(self):
+>       A, B = self._get_AB("chr12c")
+
+match\test_match.py:124:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_match.TestGMP object at 0x0000014439B24430>, qap_prob = 'chr12c'
+
+    def _get_AB(self, qap_prob):
+>       with open("tests/match/qapdata/" + qap_prob + ".dat") as f:
+E       FileNotFoundError: [Errno 2] No such file or directory: 'tests/match/qapdata/chr12c.dat'
+
+match\test_match.py:61: FileNotFoundError
+============================== warnings summary ===============================
+c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2
+  c:\users\dfran\miniconda3\envs\ndd\lib\site-packages\win32\lib\pywintypes.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+    import imp, sys, os
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+
+----------- coverage: platform win32, python 3.8.5-final-0 -----------
+Name                                                                                                                       Stmts   Miss  Cover
+----------------------------------------------------------------------------------------------------------------------------------------------
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\__init__.py                                15      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\__init__.py                         4      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\autogmm.py                        256    235     8%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\base.py                             7      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\gclust.py                          94     85    10%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\cluster\kclust.py                          40     33    18%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\datasets\__init__.py                        2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\datasets\base.py                           26     22    15%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\__init__.py                           7      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\ase.py                               19     13    32%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\base.py                              55     38    31%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\lse.py                               17     11    35%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\mase.py                              44     34    23%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\mds.py                               68     57    16%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\omni.py                              29     20    31%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\embed\svd.py                              106     99     7%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\__init__.py                       3      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\base.py                          18      8    56%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\latent_distribution_test.py     139    115    17%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\inference\latent_position_test.py          86     74    14%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\__init__.py                           3      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\gmp.py                              136     78    43%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\match\skp.py                               58     10    83%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\__init__.py                          5      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\base.py                             87     65    25%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\er.py                               27     16    41%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\rdpg.py                             47     38    19%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\models\sbm.py                             162    142    12%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\pipeline\__init__.py                        2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\pipeline\mug2vec.py                        36     27    25%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\plot\__init__.py                            4      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\plot\plot.py                              392    365     7%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\__init__.py                     3      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\rdpg_corr.py                   26     23    12%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\simulations.py                257    247     4%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\simulations\simulations_corr.py            98     89     9%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\subgraph\__init__.py                        1      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\subgraph\sg.py                             85     79     7%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\__init__.py                           2      0   100%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\ptr.py                               44     40     9%
+C:\Users\dfran\Miniconda3\envs\ndd\Lib\site-packages\graspy-0.3.0-py3.8.egg\graspy\utils\utils.py                            212    189    11%
+----------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                                       2722   2252    17%
+
+=========================== short test summary info ===========================
+FAILED match\test_match.py::TestGMP::test_barycenter_SGM - FileNotFoundError:...
+FAILED match\test_match.py::TestGMP::test_rand_SGM - FileNotFoundError: [Errn...
+=================== 2 failed, 2 passed, 1 warning in 25.66s ===================
+(ndd)
