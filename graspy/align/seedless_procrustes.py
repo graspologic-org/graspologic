@@ -38,28 +38,28 @@ class SeedlessProcrustes(BaseAlign):
 
     Parameters
     ----------
-        optimal_transport_lambda : float, optional
+        optimal_transport_lambda : float (default=0.1), optional
             Regularization term of the Sinkhorn optimal transport algorithm.
 
-        optimal_transport_eps : float, optional
+        optimal_transport_eps : float (default=0.01), optional
             Tolerance parameter for the each Sinkhorn optimal transport
             algorithm. I.e. tolerance for each "E-step".
 
-        optimal_transport_num_reps : int, optional
+        optimal_transport_num_reps : int (default=1000), optional
             Number of repetitions in each iteration of the iterative optimal
             transport problem. I.e. maximum number of repetitions in each
             "E-step".
 
-        optimal_transport_eps : float, optional
+        optimal_transport_eps : float (default=0.1), optional
             Tolerance for the each iteration of the iterative optimal transport
             problem. I.e. tolerance of the whole "EM" algorithm.
 
-        iterative_num_reps : int, optional
+        iterative_num_reps : int (default=100), optional
             Number of reps in each iteration of the iterative optimal transport
             problem. I.e. maxumum number of total iterations the whole "EM"
             algorithm.
 
-        initialization: string, {"2d" (default), "sign_flips", "custom"}
+        initialization: string, {"2d" (default), "sign_flips", "custom"}, optional
 
             - "2d"
                 uses 2^d different initiazlizations, where d is the dimension.
@@ -88,7 +88,7 @@ class SeedlessProcrustes(BaseAlign):
             Initial guess for the initial transport matrix.
             Only matters if Q=None.
 
-        freeze_Y : boolean, optional (default True)
+        freeze_Y : boolean, optional (default=True)
             Irrelevant in SeedlessProcrustes, as it always modifies only the
             first dataset. Exists for compatibility with other align modules.
 
@@ -121,33 +121,70 @@ class SeedlessProcrustes(BaseAlign):
         initial_P=None,
         freeze_Y=True,
     ):
-        # Type checking
+        # check optimal_transport_lambda argument
         if type(optimal_transport_lambda) is not float:
             msg = "optimal_transport_lambda must be a float, not {}".format(
                 type(optimal_transport_lambda)
             )
             raise TypeError(msg)
+        if optimal_transport_lambda <= 0:
+            msg = "{} is an invalud value of the optimal transport lambda, must be non-negative".format(
+                optimal_transport_lambda
+            )
+            raise ValueError(msg)
+        # check optimal_transport_lambda argument
         if type(optimal_transport_eps) is not float:
             msg = "optimal_transport_eps must be a float, not {}".format(
                 type(optimal_transport_eps)
             )
             raise TypeError(msg)
+        if optimal_transport_eps <= 0:
+            msg = "{} is an invalud value of the optimal transport eps, must be postitive".format(
+                optimal_transport_eps
+            )
+            raise ValueError(msg)
+        # check optimal_transport_num_reps argument
         if type(optimal_transport_num_reps) is not int:
             msg = "optimal_transport_num_reps must be a int, not {}".format(
                 type(optimal_transport_num_reps)
             )
             raise TypeError(msg)
+        if optimal_transport_num_reps < 1:
+            msg = "{} is invalid number of repetitions, must be greater than 1".format(
+                iterative_num_reps
+            )
+            raise ValueError(msg)
+        # check iterative_eps argument
         if type(iterative_eps) is not float:
             msg = "iterative_eps must be a float, not {}".format(type(iterative_eps))
             raise TypeError(msg)
+        if iterative_eps <= 0:
+            msg = (
+                "{} is an invalud value of the iterative eps, must be postitive".format(
+                    iterative_eps
+                )
+            )
+            raise ValueError(msg)
+        # check iterative_num_reps argument
         if type(iterative_num_reps) is not int:
             msg = "iterative_num_reps must be a int, not {}".format(
                 type(iterative_num_reps)
             )
             raise TypeError(msg)
+        if iterative_num_reps < 1:
+            msg = "{} is invalid number of repetitions, must be greater than 1".format(
+                iterative_num_reps
+            )
+            raise ValueError(msg)
+        # check initialization argument
         if type(initialization) is not str:
             msg = "initalization must be a str, not {}".format(type(initialization))
             raise TypeError(msg)
+        initializations_supported = ["2d", "sign_flips", "custom"]
+        if initialization not in initializations_supported:
+            msg = "supported initializations are {}".format(initializations_supported)
+            raise ValueError(msg)
+        # check initial_Q argument
         if initial_Q is not None:
             if not isinstance(initial_Q, np.ndarray):
                 msg = f"initial_Q must be np.ndarray or None, not {type(initial_Q)}"
@@ -159,6 +196,7 @@ class SeedlessProcrustes(BaseAlign):
             if not np.allclose(initial_Q.T @ initial_Q, np.eye(initial_Q.shape[0])):
                 msg = "initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
+        # check initial_P argument
         if initial_P is not None:
             if not isinstance(initial_P, np.ndarray):
                 msg = f"initial_P must be np.ndarray or None, not {type(initial_P)}"

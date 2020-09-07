@@ -35,7 +35,7 @@ class SignFlips(BaseAlign):
 
     Parameters
     ----------
-        freeze_Y : boolean, optional (default False)
+        freeze_Y : boolean, optional (default=False)
             For any two datasets X and Y, both of dimensions of d, there are
             2^d ways to bring their median / max signs to same orthant (one
             for each orthant). This flag chooses between one of the two options
@@ -52,7 +52,7 @@ class SignFlips(BaseAlign):
                 Q_X is independent of Y, it is not necessary to provide Y to
                 fit at all.
 
-        criteria : string, {'median' (default), 'max'}
+        criteria : string, {'median' (default), 'max'}, optional
             String describing the criteria used to choose whether to flip
             signs. Two options are currently supported:
 
@@ -76,7 +76,7 @@ class SignFlips(BaseAlign):
         freeze_Y=True,
         criteria="median",
     ):
-
+        # checking criteria argument
         if type(criteria) is not str:
             raise TypeError("criteria must be str")
         if criteria not in ["median", "max"]:
