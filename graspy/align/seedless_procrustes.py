@@ -159,10 +159,8 @@ class SeedlessProcrustes(BaseAlign):
             msg = "iterative_eps must be a float, not {}".format(type(iterative_eps))
             raise TypeError(msg)
         if iterative_eps <= 0:
-            msg = (
-                "{} is an invalud value of the iterative eps, must be postitive".format(
-                    iterative_eps
-                )
+            msg = "{} is an invalud value of the iterative eps, must be postitive".format(
+                iterative_eps
             )
             raise ValueError(msg)
         # check iterative_num_reps argument
