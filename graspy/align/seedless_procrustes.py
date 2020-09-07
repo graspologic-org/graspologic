@@ -154,10 +154,10 @@ class SeedlessProcrustes(BaseAlign):
                 raise TypeError(msg)
             initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
             if initial_Q.shape[0] != initial_Q.shape[1]:
-                msg = "initial_Q must be a squared orhthogonal matrix"
+                msg = "initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
-            if not (initial_Q.T @ initial_Q == np.eye(initial_Q.shape[0])).all():
-                msg = "initial_Q must be a squared orhthogonal matrix"
+            if not np.allclose(initial_Q.T @ initial_Q, np.eye(initial_Q.shape[0])):
+                msg = "initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
         if initial_P is not None:
             if not isinstance(initial_P, np.ndarray):
@@ -193,10 +193,8 @@ class SeedlessProcrustes(BaseAlign):
             )
             raise ValueError(msg)
         if iterative_eps <= 0:
-            msg = (
-                "{} is an invalud value of the iterative eps, must be postitive".format(
-                    iterative_eps
-                )
+            msg = "{} is an invalud value of the iterative eps, must be postitive".format(
+                iterative_eps
             )
             raise ValueError(msg)
         if iterative_num_reps < 1:
@@ -308,9 +306,7 @@ class SeedlessProcrustes(BaseAlign):
             for i in range(2 ** d):
                 initial_Q = self._orthogonal_matrix_from_int(i, d)
                 P_matrices[i], Q_matrices[i] = P, Q = self._iterative_ot(
-                    X,
-                    Y,
-                    initial_Q,
+                    X, Y, initial_Q
                 )
                 objectives[i] = np.linalg.norm(X @ Q - P @ Y, ord="fro")
             # pick the best one, using the objective function value
