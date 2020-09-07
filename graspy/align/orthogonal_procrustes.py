@@ -39,8 +39,8 @@ class OrthogonalProcrustes(BaseAlign):
     Parameters
     ----------
         freeze_Y : boolean, optional (default=False)
-            Currently irrelevant since the orthogonal
-            transformation always modifies only the first dataset.
+            Currently irrelevant since the orthogonal transformation always
+            modifies only the first dataset.
 
     Attributes
     ----------
