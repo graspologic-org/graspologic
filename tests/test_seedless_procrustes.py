@@ -71,27 +71,27 @@ class TestSeedlessProcrustes(unittest.TestCase):
         # check passing weird stuff as input (caught by us)
         with self.assertRaises(TypeError):
             aligner = SeedlessProcrustes()
-            aligner.fit_transform("hello there", Y)
+            aligner.fit("hello there", Y)
         with self.assertRaises(TypeError):
             aligner = SeedlessProcrustes()
-            aligner.fit_transform(X, "hello there")
+            aligner.fit(X, "hello there")
         with self.assertRaises(TypeError):
             aligner = SeedlessProcrustes()
-            aligner.fit_transform({"hello": "there"}, Y)
+            aligner.fit({"hello": "there"}, Y)
         with self.assertRaises(TypeError):
             aligner = SeedlessProcrustes()
-            aligner.fit_transform(X, {"hello": "there"})
+            aligner.fit(X, {"hello": "there"})
         # check passing arrays of weird ndims (caught by check_array)
         with self.assertRaises(ValueError):
             aligner = SeedlessProcrustes()
-            aligner.fit_transform(X, Y.reshape(3, 2, 1))
+            aligner.fit(X, Y.reshape(3, 2, 1))
         with self.assertRaises(ValueError):
             aligner = SeedlessProcrustes()
-            aligner.fit_transform(X.reshape(3, 2, 1), Y)
+            aligner.fit(X.reshape(3, 2, 1), Y)
         # check passing arrays with different dimensions (caught by us)
         with self.assertRaises(ValueError):
             aligner = SeedlessProcrustes()
-            aligner.fit_transform(X, Y_wrong_d)
+            aligner.fit(X, Y_wrong_d)
 
     def test_different_inits(self):
         np.random.seed(314)
@@ -104,25 +104,25 @@ class TestSeedlessProcrustes(unittest.TestCase):
         Y = Y @ W
 
         aligner_1 = SeedlessProcrustes(init="2d")
-        aligner_1.fit_transform(X, Y)
+        aligner_1.fit(X, Y)
 
         aligner_2 = SeedlessProcrustes(init="sign_flips")
-        aligner_2.fit_transform(X, Y)
+        aligner_2.fit(X, Y)
         test_sign_flips = SignFlips()
-        self.assertTrue(np.all(test_sign_flips.fit(X, Y).Q_X == aligner_2.initial_Q))
+        self.assertTrue(np.all(test_sign_flips.fit(X, Y).Q_ == aligner_2.initial_Q))
 
         aligner_3 = SeedlessProcrustes(init="custom")
-        aligner_3.fit_transform(X, Y)
+        aligner_3.fit(X, Y)
         self.assertTrue(np.all(np.eye(3) == aligner_3.initial_Q))
 
         aligner_4 = SeedlessProcrustes(init="custom", initial_Q=-np.eye(3))
-        aligner_4.fit_transform(X, Y)
+        aligner_4.fit(X, Y)
         self.assertTrue(np.all(-np.eye(3) == aligner_4.initial_Q))
 
         aligner_5 = SeedlessProcrustes(
             init="custom", initial_P=np.ones((100, 100)) / 10000
         )
-        aligner_5.fit_transform(X, Y)
+        aligner_5.fit(X, Y)
 
     def test_aligning_datasets(self):
         np.random.seed(314)
@@ -135,7 +135,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
         Y = Y @ W
 
         aligner = SeedlessProcrustes(init="2d", initial_Q=np.eye(3))
-        Q = aligner.fit(X, Y).Q_X
+        Q = aligner.fit(X, Y).Q_
         self.assertTrue(np.linalg.norm(Y.mean(axis=0) - (X @ Q).mean(axis=0)) < 0.1)
 
 
