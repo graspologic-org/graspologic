@@ -299,7 +299,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         ldt_3 = LatentDistributionTest(
             input_graph=False,
             align_type="seedless_procrustes",
-            align_kws={"initialization": "sign_flips"},
+            align_kws={"init": "sign_flips"},
         )
         p_val_3 = ldt_3.fit_predict(X1, X2)
         self.assertTrue(p_val_3 >= 0.05)
