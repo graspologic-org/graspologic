@@ -136,16 +136,19 @@ class BaseEmbed(BaseEstimator):
 
         return self
 
-    def _fit_transform(self, graph):
-        "Fits the model and returns the estimated latent positions"
+    def _fit_transform(self, graph, concat=False):
+        "Fits the model and returns the estimated latent positions."
         self.fit(graph)
 
         if self.latent_right_ is None:
             return self.latent_left_
         else:
-            return self.latent_left_, self.latent_right_
+            if concat:
+                return np.concatenate((self.latent_left_, self.latent_right_), axis=1)
+            else:
+                return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph, y=None):
+    def fit_transform(self, graph, y=None, concat=False):
         """
         Fit the model with graphs and apply the transformation.
 
@@ -158,13 +161,14 @@ class BaseEmbed(BaseEstimator):
 
         Returns
         -------
-        out : np.ndarray, shape (n_vertices, n_dimension) OR tuple (len 2)
-            Where both elements have shape (n_vertices, n_dimension)
+        out : np.ndarray, shape (n_vertices, n_dimension) OR np.ndarray, shape (n_vertices, 2*n_dimension)
+            OR tuple (len 2) Where both elements have shape (n_vertices, n_dimension)
             A single np.ndarray represents the latent position of an undirected
-            graph, wheras a tuple represents the left and right latent positions
-            for a directed graph
+            graph, wheras when concat is False a tuple represents the left and right latent positions
+            for a directed graph, but when concat is True left and right latent positions are
+            concatenated along axis 1.
         """
-        return self._fit_transform(graph)
+        return self._fit_transform(graph, concat=concat)
 
 
 class BaseEmbedMulti(BaseEmbed):

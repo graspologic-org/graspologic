@@ -201,7 +201,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         return self
 
-    def fit_transform(self, graphs, y=None):
+    def fit_transform(self, graphs, y=None, concat=False):
         """
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
@@ -212,12 +212,16 @@ class OmnibusEmbed(BaseEmbedMulti):
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
+        concat : For directed graphs. If true selected components for both 'in' and 'out' embeddings
+            are concatenated, otherwise returned as tuple.
 
         Returns
         -------
         out : array-like, shape (n_graphs, n_vertices, n_components) if input
-            graphs were symmetric. If graphs were directed, returns tuple of
+            graphs were symmetric. If graphs were directed and concat is False, returns tuple of
             two arrays (same shape as above) where the first corresponds to the
-            left latent positions, and the right to the right latent positions
+            left latent positions, and the right to the right latent positions. If graphs
+            were directed and concat is True, left and right latent positions are concatenated, and
+            one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned
         """
-        return self._fit_transform(graphs)
+        return self._fit_transform(graphs, concat=concat)
