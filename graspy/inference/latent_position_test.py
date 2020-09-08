@@ -156,7 +156,7 @@ class LatentPositionTest(BaseInference):
                 X1 = X1 / np.sqrt(normX1[:, None])
                 X2 = X2 / np.sqrt(normX2[:, None])
             aligner = OrthogonalProcrustes()
-            X1, X2 = aligner.fit_transform(X1, X2)
+            X1 = aligner.fit_transform(X1, X2)
         return np.linalg.norm(X1 - X2)
 
     def _embed(self, A1, A2, check_lcc=True):
