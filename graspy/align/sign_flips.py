@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import numpy as np
-from sklearn.utils import check_array
 
 from .base import BaseAlign
 
@@ -94,17 +93,17 @@ class SignFlips(BaseAlign):
 
         Parameters
         ----------
-        X: np.ndarray, shape (n, d)
+        X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
             dimensions as ones in Y, but the number of vectors can differ.
 
-        Y: np.ndarray, shape (m, d)
+        Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
             of dimensions as ones in X, but the number of vectors can differ.
 
         Returns
         -------
-        self: returns an instance of self
+        self : returns an instance of self
         """
         X, Y = self._check_datasets(X, Y)
         _, d = X.shape

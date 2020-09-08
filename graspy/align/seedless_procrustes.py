@@ -63,7 +63,7 @@ class SeedlessProcrustes(BaseAlign):
             problem. I.e. maxumum number of total iterations the whole "EM"
             algorithm.
 
-        init: string, {"2d" (default), "sign_flips", "custom"}, optional
+        init : string, {"2d" (default), "sign_flips", "custom"}, optional
 
             - "2d"
                 uses 2^d different initiazlizations, where d is the dimension.
@@ -82,13 +82,13 @@ class SeedlessProcrustes(BaseAlign):
                 unless it is not provided. if not provided - uses initial P. if
                 neither is given initializes to Q = I.
 
-        initial_Q: np.ndarray, shape (d, d) or None, optional (default=None)
+        initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
             An initial guess for the alignment matrix, if such exists. Ignored
             if init alignment is set to anything other than 'custom'.
             If None - initializes using an initial guess for P.
             If None, and P is also None - initializes Q to identity matrix.
 
-        initial_P: np.ndarray, shape (n, m) or None, optional (default=None)
+        initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
             Initial guess for the initial transport matrix.
             Only matters if Q=None.
 
@@ -267,17 +267,17 @@ class SeedlessProcrustes(BaseAlign):
 
         Parameters
         ----------
-        X: np.ndarray, shape (n, d)
+        X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
             dimensions as ones in Y, but the number of vectors can differ.
 
-        Y: np.ndarray, shape (m, d)
+        Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
             of dimensions as ones in X, but the number of vectors can differ.
 
         Returns
         -------
-        self: returns an instance of self
+        self : returns an instance of self
         """
         X, Y = self._check_datasets(X, Y)
         _, d = X.shape

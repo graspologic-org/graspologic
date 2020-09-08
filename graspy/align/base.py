@@ -63,17 +63,17 @@ class BaseAlign(BaseEstimator):
 
         Parameters
         ----------
-        X: np.ndarray, shape (n, d)
+        X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
             dimensions as ones in Y, but the number of vectors can differ.
 
-        Y: np.ndarray, shape (m, d)
+        Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
             of dimensions as ones in X, but the number of vectors can differ.
 
         Returns
         -------
-        self: returns an instance of self
+        self : returns an instance of self
         """
         pass
 
@@ -85,14 +85,14 @@ class BaseAlign(BaseEstimator):
 
         Parameters
         ----------
-        X: np.ndarray, shape (n, d)
+        X : np.ndarray, shape (n, d)
             Dataset of vectors. Needs to have the same number of dimensions as
             X and Y passed to fit, but can have a different number of entries.
 
         Returns
         -------
-        X_prime: np.ndarray, shape (n, d)
-            First dataset of vectors, aligned to second. Equal to X @ self.Q_X.
+        X_prime : np.ndarray, shape (n, d)
+            First dataset of vectors, aligned to second. Equal to X @ self.Q_.
         """
         if not isinstance(X, np.ndarray):
             msg = f"dataset is a {type(X)}, not an np.ndarray! "
@@ -108,17 +108,17 @@ class BaseAlign(BaseEstimator):
 
         Parameters
         ----------
-        X: np.ndarray, shape (n, d)
+        X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
             dimensions as ones in Y, but the number of vectors can differ.
 
-        Y: np.ndarray, shape (m, d)
+        Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
             of dimensions as ones in X, but the number of vectors can differ.
 
         Returns
         -------
-        X_prime: np.ndarray, shape (n, d)
+        X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to X @ self.Q_X.
         """
         self.fit(X, Y)

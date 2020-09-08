@@ -72,7 +72,7 @@ class LatentDistributionTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspy.embed.selectSVD` for more information.
-        This argument is ignored if input_graph=False.
+        This argument is ignored if `input_graph`=False.
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
@@ -82,7 +82,7 @@ class LatentDistributionTest(BaseInference):
         Number of workers to use. If more than 1, parallelizes the code.
         Supply -1 to use all cores available to the Process.
 
-    size_correction: bool (default=True)
+    size_correction : bool (default=True)
         Ignored when the two graphs have the same number of vertices. The test
         degrades in validity as the number of vertices of the two graphs
         diverge from each other, unless a correction is performed.
@@ -94,9 +94,9 @@ class LatentDistributionTest(BaseInference):
         - False
             Does not perform any modifications (not recommended).
 
-    pooled: bool (default=False)
+    pooled : bool (default=False)
         Ignored whenever the two graphs have the same number of vertices or
-        size_correction is set to False. In order to correct the adjacency
+        `size_correction` is set to False. In order to correct the adjacency
         spectral embedding used in the test, it is needed to estimate the
         variance for each of the latent position estimates in the larger graph,
         which requires to compute different sample moments. These moments can
@@ -119,10 +119,10 @@ class LatentDistributionTest(BaseInference):
             if the medians of the two embeddings in that dimension differ from
             each other. See :class:`~graspy.align.SignFlips` for more
             information on this procedure. In the limit, this is guaranteed to
-            lead to a valid test, as long as matrix X^T X, where X is the
-            latent positions does not have repeated non-zero eigenvalues. This
-            may, however, result in an invalid test in the finite sample case
-            if the some eigenvalues are same or close.
+            lead to a valid test, as long as matrix :math:`X^T X`, where
+            :math:`X` is the latent positions does not have repeated non-zero
+            eigenvalues. This may, however, result in an invalid test in the
+            finite sample case if the some eigenvalues are same or close.
         - 'seedless_procrustes'
             An algorithm that learns an orthogonal alignment matrix. This
             procedure is slower than sign flips, but is guaranteed to yield a
@@ -477,7 +477,7 @@ class LatentDistributionTest(BaseInference):
 
 
         Returns
-        ------
+        -------
         p_value_ : float
             The overall p value from the test
         """
