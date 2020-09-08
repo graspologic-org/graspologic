@@ -223,7 +223,7 @@ class MultipleASE(BaseEmbedMulti):
 
         return self
 
-    def fit_transform(self, graphs, y=None):
+    def fit_transform(self, graphs, y=None, concat=False):
         """
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
@@ -238,8 +238,10 @@ class MultipleASE(BaseEmbedMulti):
         Returns
         -------
         out : array-like, shape (n_vertices, n_components) if input
-            graphs were symmetric. If graphs were directed, returns tuple of
+            graphs were symmetric. If graphs were directed and concat is False, returns tuple of
             two arrays (same shape as above) where the first corresponds to the
-            left latent positions, and the right to the right latent positions
+            left latent positions, and the right to the right latent positions,
+            but when concat is True left and right latent positions are
+            concatenated along axis 1.
         """
-        return self._fit_transform(graphs)
+        return self._fit_transform(graphs, concat=concat)
