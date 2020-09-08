@@ -10,10 +10,6 @@ from graspy.align import OrthogonalProcrustes
 
 
 class TestOrthogonalProcrustes(unittest.TestCase):
-    def test_bad_kwargs(self):
-        with self.assertRaises(TypeError):
-            OrthogonalProcrustes(freeze_Y="oops")
-
     def test_bad_datasets(self):
         X = np.arange(6).reshape(6, 1)
         Y = np.arange(6).reshape(6, 1)
@@ -106,14 +102,6 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         self.assertTrue(np.all(np.isclose(Q_Y_test_2, Q_Y_answer)))
         self.assertTrue(np.all(np.isclose(X_test_2, X_answer)))
         self.assertTrue(np.all(np.isclose(Y_test_2, Y_answer)))
-        # lastly, check that freeze_Y runs, but is useless
-        aligner_3 = OrthogonalProcrustes(freeze_Y=True)
-        X_test_3, Y_test_3 = aligner_3.fit_transform(X, Y)
-        Q_X_test_3, Q_Y_test_3 = aligner_3.Q_X, aligner_2.Q_Y
-        self.assertTrue(np.all(np.isclose(Q_X_test_3, Q_X_answer)))
-        self.assertTrue(np.all(np.isclose(Q_Y_test_3, Q_Y_answer)))
-        self.assertTrue(np.all(np.isclose(X_test_3, X_answer)))
-        self.assertTrue(np.all(np.isclose(Y_test_3, Y_answer)))
 
 
 if __name__ == "__main__":

@@ -36,12 +36,6 @@ class OrthogonalProcrustes(BaseAlign):
     `scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
     described in to find the optimal solution algorithm [1]_.
 
-    Parameters
-    ----------
-        freeze_Y : boolean, optional (default=False)
-            Currently irrelevant since the orthogonal transformation always
-            modifies only the first dataset.
-
     Attributes
     ----------
         Q_X : array, size (d, d)
@@ -60,10 +54,9 @@ class OrthogonalProcrustes(BaseAlign):
 
     def __init__(
         self,
-        freeze_Y=False,
     ):
 
-        super().__init__(freeze_Y=freeze_Y)
+        super().__init__()
 
     def fit(self, X, Y):
         """
