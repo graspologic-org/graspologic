@@ -61,11 +61,11 @@ class OrthogonalProcrustes(BaseAlign):
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
+            dimensions and entries as ones in Y.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
+            dimensions and entries as ones in Y.
 
         Returns
         -------

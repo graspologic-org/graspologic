@@ -54,7 +54,7 @@ class SeedlessProcrustes(BaseAlign):
             transport problem. I.e. maximum number of repetitions in each
             "E-step".
 
-        optimal_transport_eps : float (default=0.1), optional
+        iterative_eps : float (default=0.1), optional
             Tolerance for the each iteration of the iterative optimal transport
             problem. I.e. tolerance of the whole "EM" algorithm.
 
