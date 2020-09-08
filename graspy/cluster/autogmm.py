@@ -17,11 +17,15 @@ import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
-from sklearn.mixture.gaussian_mixture import (
+from sklearn.mixture._gaussian_mixture import (
     _compute_precision_cholesky,
     _estimate_gaussian_parameters,
 )
 from sklearn.model_selection import ParameterGrid
+from sklearn.utils._testing import ignore_warnings
+from sklearn.exceptions import ConvergenceWarning
+from joblib import Parallel, delayed
+import warnings
 
 from .base import BaseCluster
 
@@ -31,14 +35,13 @@ class AutoGMMCluster(BaseCluster):
     Automatic Gaussian Mixture Model (GMM) selection.
 
     Clustering algorithm using a hierarchical agglomerative clustering then Gaussian
-    mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and 
+    mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and
     cluster numbers are used and the clustering with the best selection
     criterion (bic/aic) is chosen.
 
-
     Parameters
     ----------
-    min_components : int, default=2. 
+    min_components : int, default=2.
         The minimum number of mixture components to consider (unless
         max_components=None, in which case this is the maximum number of
         components to consider). If max_components is not None, min_components
@@ -47,7 +50,7 @@ class AutoGMMCluster(BaseCluster):
         in label_init.
 
     max_components : int or None, default=10.
-        The maximum number of mixture components to consider. Must be greater 
+        The maximum number of mixture components to consider. Must be greater
         than or equal to min_components.
         If label_init is given, min_components must match number of unique labels
         in label_init.
@@ -70,6 +73,10 @@ class AutoGMMCluster(BaseCluster):
         If a list/array, it must be a list/array of strings containing only
         'euclidean', 'manhattan', 'cosine', and/or 'none'.
 
+        Note that cosine similarity can only work when all of the rows are not the zero vector.
+        If the input matrix has a zero row, cosine similarity will be skipped and a warning will
+        be thrown.
+
     linkage : {'ward','complete','average','single', 'all' (default)}, optional
         String or list/array describing the type of linkages to use in agglomeration.
         If a string, it must be one of:
@@ -87,11 +94,11 @@ class AutoGMMCluster(BaseCluster):
 
         If a list/array, it must be a list/array of strings containing only
         'ward', 'complete', 'average', and/or 'single'.
-        
+
     covariance_type : {'full', 'tied', 'diag', 'spherical', 'all' (default)} , optional
         String or list/array describing the type of covariance parameters to use.
         If a string, it must be one of:
-        
+
         - 'full'
             each component has its own general covariance matrix
         - 'tied'
@@ -105,10 +112,10 @@ class AutoGMMCluster(BaseCluster):
 
         If a list/array, it must be a list/array of strings containing only
         'spherical', 'tied', 'diag', and/or 'spherical'.
-    
+
     random_state : int, RandomState instance or None, optional (default=None)
-        There is randomness in k-means initialization of 
-        :class:`sklearn.mixture.GaussianMixture`. This parameter is passed to 
+        There is randomness in k-means initialization of
+        :class:`sklearn.mixture.GaussianMixture`. This parameter is passed to
         :class:`~sklearn.mixture.GaussianMixture` to control the random state.
         If int, random_state is used as the random number generator seed;
         If RandomState instance, random_state is the random number generator;
@@ -117,50 +124,56 @@ class AutoGMMCluster(BaseCluster):
 
     label_init : array-like, shape (n_samples,), optional (default=None)
         List of labels for samples if available. Used to initialize the model.
-        If provided, min_components and max_components must match the number of 
+        If provided, min_components and max_components must match the number of
         unique labels given here.
 
     max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
-    
+
     selection_criteria : str {"bic" or "aic"}, optional, (default="bic")
-        select the best model based on Bayesian Information Criterion (bic) or 
+        select the best model based on Bayesian Information Criterion (bic) or
         Aikake Information Criterion (aic)
 
     verbose : int, optional (default = 0)
-        Enable verbose output. If 1 then it prints the current initialization and each 
-        iteration step. If greater than 1 then it prints also the log probability and 
+        Enable verbose output. If 1 then it prints the current initialization and each
+        iteration step. If greater than 1 then it prints also the log probability and
         the time needed for each step.
 
     max_agglom_size : int or None, optional (default = 2000)
-        The maximum number of datapoints on which to do agglomerative clustering as the 
-        initialization to GMM. If the number of datapoints is larger than this value, 
+        The maximum number of datapoints on which to do agglomerative clustering as the
+        initialization to GMM. If the number of datapoints is larger than this value,
         a random subset of the data is used for agglomerative initialization. If None,
         all data is used for agglomerative clustering for initialization.
 
+    n_jobs : int or None, optional (default = None)
+        The number of jobs to use for the computation. This works by computing each of
+        the initialization runs in parallel. None means 1 unless in a
+        ``joblib.parallel_backend context``. -1 means using all processors.
+        See https://scikit-learn.org/stable/glossary.html#term-n-jobs for more details.
 
     Attributes
     ----------
     results_ : pandas.DataFrame
         Contains exhaustive information about all the clustering runs.
         Columns are:
-            'model' : GaussianMixture object
-                GMM clustering fit to the data
-            'bic/aic' : float
-                Bayesian Information Criterion
-            'ari' : float or nan
-                Adjusted Rand Index between GMM classification, and true classification,
-                nan if y is not given
-            'n_components' : int
-                number of clusters
-            'affinity' : {'euclidean','manhattan','cosine','none'}
-                affinity used in Agglomerative Clustering
-            'linkage' : {'ward','complete','average','single'}
-                linkage used in Agglomerative Clustering
-            'covariance_type' : {'full', 'tied', 'diag', 'spherical'}
-                covariance type used in GMM
-            'reg_covar' : float
-                regularization used in GMM
+
+        'model' : GaussianMixture object
+            GMM clustering fit to the data
+        'bic/aic' : float
+            Bayesian Information Criterion
+        'ari' : float or nan
+            Adjusted Rand Index between GMM classification, and true classification,
+            nan if y is not given
+        'n_components' : int
+            number of clusters
+        'affinity' : {'euclidean','manhattan','cosine','none'}
+            affinity used in Agglomerative Clustering
+        'linkage' : {'ward','complete','average','single'}
+            linkage used in Agglomerative Clustering
+        'covariance_type' : {'full', 'tied', 'diag', 'spherical'}
+            covariance type used in GMM
+        'reg_covar' : float
+            regularization used in GMM
 
     criter_ : the best (lowest) Bayesian Information Criterion
 
@@ -173,10 +186,10 @@ class AutoGMMCluster(BaseCluster):
     affinity_ : str
         affinity used in the model with the best bic/aic
 
-    linkage_ : str 
+    linkage_ : str
         linkage used in the model with the best bic/aic
-    
-    reg_covar_ : float 
+
+    reg_covar_ : float
         regularization used in the model with the best bic/aic
 
     ari_ : float
@@ -217,6 +230,7 @@ class AutoGMMCluster(BaseCluster):
         verbose=0,
         selection_criteria="bic",
         max_agglom_size=2000,
+        n_jobs=None,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -370,6 +384,89 @@ class AutoGMMCluster(BaseCluster):
         self.verbose = verbose
         self.selection_criteria = selection_criteria
         self.max_agglom_size = max_agglom_size
+        self.n_jobs = n_jobs
+
+    # ignoring warning here because if convergence is not reached, the regularization
+    # is automatically increased
+    @ignore_warnings(category=ConvergenceWarning)
+    def _fit_cluster(self, X, y, params):
+        label_init = self.label_init
+        if label_init is not None:
+            onehot = _labels_to_onehot(label_init)
+            weights_init, means_init, precisions_init = _onehot_to_initial_params(
+                X, onehot, params[1]["covariance_type"]
+            )
+            gm_params = params[1]
+            gm_params["weights_init"] = weights_init
+            gm_params["means_init"] = means_init
+            gm_params["precisions_init"] = precisions_init
+        elif params[0]["affinity"] != "none":
+            agg = AgglomerativeClustering(**params[0])
+            n = X.shape[0]
+
+            if self.max_agglom_size is None or n <= self.max_agglom_size:
+                X_subset = X
+            else:  # if dataset is huge, agglomerate a subset
+                subset_idxs = np.random.choice(np.arange(0, n), self.max_agglom_size)
+                X_subset = X[subset_idxs, :]
+            agg_clustering = agg.fit_predict(X_subset)
+            onehot = _labels_to_onehot(agg_clustering)
+            weights_init, means_init, precisions_init = _onehot_to_initial_params(
+                X_subset, onehot, params[1]["covariance_type"]
+            )
+            gm_params = params[1]
+            gm_params["weights_init"] = weights_init
+            gm_params["means_init"] = means_init
+            gm_params["precisions_init"] = precisions_init
+        else:
+            gm_params = params[1]
+            gm_params["init_params"] = "kmeans"
+        gm_params["reg_covar"] = 0
+        gm_params["max_iter"] = self.max_iter
+
+        criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
+        # below is the regularization scheme
+        while gm_params["reg_covar"] <= 1 and criter == np.inf:
+            model = GaussianMixture(**gm_params)
+            try:
+                model.fit(X)
+                predictions = model.predict(X)
+                counts = [
+                    sum(predictions == i) for i in range(gm_params["n_components"])
+                ]
+                # singleton clusters not allowed
+                assert not any([count <= 1 for count in counts])
+
+            except ValueError:
+                gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
+                continue
+            except AssertionError:
+                gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
+                continue
+            # if the code gets here, then the model has been fit with no errors or
+            # singleton clusters
+            if self.selection_criteria == "bic":
+                criter = model.bic(X)
+            else:
+                criter = model.aic(X)
+            break
+
+        if y is not None:
+            self.predictions = model.predict(X)
+            ari = adjusted_rand_score(y, self.predictions)
+        else:
+            ari = float("nan")
+        results = {
+            "model": model,
+            "bic/aic": criter,
+            "ari": ari,
+            "n_components": gm_params["n_components"],
+            "affinity": params[0]["affinity"],
+            "linkage": params[0]["linkage"],
+            "covariance_type": gm_params["covariance_type"],
+            "reg_covar": gm_params["reg_covar"],
+        }
+        return results
 
     def fit(self, X, y=None):
         """
@@ -382,14 +479,15 @@ class AutoGMMCluster(BaseCluster):
         X : array-like, shape (n_samples, n_features)
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        
+
         y : array-like, shape (n_samples,), optional (default=None)
             List of labels for X if available. Used to compute
             ARI scores.
 
         Returns
         -------
-        self
+        self : object
+            Returns an instance of self.
         """
 
         # Deal with number of clusters
@@ -416,9 +514,13 @@ class AutoGMMCluster(BaseCluster):
             raise ValueError(msg)
         # check if X contains the 0 vector
         if np.any(~X.any(axis=1)) and ("cosine" in self.affinity):
-            msg = "When using cosine affinity, X cannot contain the 0 vector, but "
-            msg += "X[{},] is 0".format(np.where(~X.any(axis=1)))
-            raise ValueError(msg)
+            if isinstance(self.affinity, np.ndarray):
+                self.affinity = np.delete(
+                    self.affinity, np.argwhere(self.affinity == "cosine")
+                )
+            if isinstance(self.affinity, list):
+                self.affinity.remove("cosine")
+            warnings.warn("X contains a zero vector, will not run cosine affinity.")
 
         label_init = self.label_init
         if label_init is not None:
@@ -426,117 +528,25 @@ class AutoGMMCluster(BaseCluster):
                 msg = "n_samples must be the same as the length of label_init"
                 raise ValueError(msg)
 
-        # Get parameters
-        random_state = self.random_state
-        max_iter = self.max_iter
-        verbose = self.verbose
-
         param_grid = dict(
             affinity=self.affinity,
             linkage=self.linkage,
             covariance_type=self.covariance_type,
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
-            random_state=[random_state],
+            random_state=[self.random_state],
         )
 
         param_grid = list(ParameterGrid(param_grid))
         param_grid = _process_paramgrid(param_grid)
 
-        results = pd.DataFrame(
-            columns=[
-                "model",
-                "bic/aic",
-                "ari",
-                "n_components",
-                "affinity",
-                "linkage",
-                "covariance_type",
-                "reg_covar",
-            ]
+        def _fit_for_data(p):
+            return self._fit_cluster(X, y, p)
+
+        results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
+            delayed(_fit_for_data)(p) for p in param_grid
         )
 
-        for params in param_grid:
-            if label_init is not None:
-                onehot = _labels_to_onehot(label_init)
-                weights_init, means_init, precisions_init = _onehot_to_initial_params(
-                    X, onehot, params[1]["covariance_type"]
-                )
-                gm_params = params[1]
-                gm_params["weights_init"] = weights_init
-                gm_params["means_init"] = means_init
-                gm_params["precisions_init"] = precisions_init
-            elif params[0]["affinity"] != "none":
-                agg = AgglomerativeClustering(**params[0])
-                n = X.shape[0]
-
-                if self.max_agglom_size is None or n <= self.max_agglom_size:
-                    X_subset = X
-                else:  # if dataset is huge, agglomerate a subset
-                    subset_idxs = np.random.choice(
-                        np.arange(0, n), self.max_agglom_size
-                    )
-                    X_subset = X[subset_idxs, :]
-                agg_clustering = agg.fit_predict(X_subset)
-                onehot = _labels_to_onehot(agg_clustering)
-                weights_init, means_init, precisions_init = _onehot_to_initial_params(
-                    X_subset, onehot, params[1]["covariance_type"]
-                )
-                gm_params = params[1]
-                gm_params["weights_init"] = weights_init
-                gm_params["means_init"] = means_init
-                gm_params["precisions_init"] = precisions_init
-            else:
-                gm_params = params[1]
-                gm_params["init_params"] = "kmeans"
-            gm_params["reg_covar"] = 0
-            gm_params["max_iter"] = max_iter
-            gm_params["verbose"] = verbose
-
-            criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
-            # below is the regularization scheme
-            while gm_params["reg_covar"] <= 1 and criter == np.inf:
-                model = GaussianMixture(**gm_params)
-                try:
-                    model.fit(X)
-                    predictions = model.predict(X)
-                    counts = [
-                        sum(predictions == i) for i in range(gm_params["n_components"])
-                    ]
-                    # singleton clusters not allowed
-                    assert not any([count <= 1 for count in counts])
-
-                except ValueError:
-                    gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
-                    continue
-                except AssertionError:
-                    gm_params["reg_covar"] = _increase_reg(gm_params["reg_covar"])
-                    continue
-                # if the code gets here, then the model has been fit with no errors or
-                # singleton clusters
-                if self.selection_criteria == "bic":
-                    criter = model.bic(X)
-                else:
-                    criter = model.aic(X)
-                break
-
-            if y is not None:
-                predictions = model.predict(X)
-                ari = adjusted_rand_score(y, predictions)
-            else:
-                ari = float("nan")
-            entry = pd.DataFrame(
-                {
-                    "model": [model],
-                    "bic/aic": [criter],
-                    "ari": [ari],
-                    "n_components": [gm_params["n_components"]],
-                    "affinity": [params[0]["affinity"]],
-                    "linkage": [params[0]["linkage"]],
-                    "covariance_type": [gm_params["covariance_type"]],
-                    "reg_covar": [gm_params["reg_covar"]],
-                }
-            )
-            results = results.append(entry, ignore_index=True)
+        results = pd.DataFrame(results)
 
         self.results_ = results
         # Get the best cov type and its index within the dataframe
@@ -633,20 +643,20 @@ def _labels_to_onehot(labels):
 
 def _process_paramgrid(paramgrid):
     """
-        Removes combinations of affinity and linkage that are not possible.
+    Removes combinations of affinity and linkage that are not possible.
 
-        Parameters
-        ----------
-        paramgrid : list of dicts
-            Each dict has the keys 'affinity', 'covariance_type', 'linkage',
-            'n_components', and 'random_state'
+    Parameters
+    ----------
+    paramgrid : list of dicts
+        Each dict has the keys 'affinity', 'covariance_type', 'linkage',
+        'n_components', and 'random_state'
 
-        Returns
-        -------
-        paramgrid_processed : list pairs of dicts
-            For each pair, the first dict are the options for AgglomerativeClustering.
-            The second dict include the options for GaussianMixture.
-        """
+    Returns
+    -------
+    paramgrid_processed : list pairs of dicts
+        For each pair, the first dict are the options for AgglomerativeClustering.
+        The second dict include the options for GaussianMixture.
+    """
     paramgrid_processed = []
 
     for params in paramgrid:

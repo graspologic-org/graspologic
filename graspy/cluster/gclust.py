@@ -45,7 +45,7 @@ class GaussianCluster(BaseCluster):
     covariance_type : {'all' (default), 'full', 'tied', 'diag', 'spherical'}, optional
         String or list/array describing the type of covariance parameters to use.
         If a string, it must be one of:
-        
+
         - 'all'
             considers all covariance structures in ['spherical', 'diag', 'tied', 'full']
         - 'full'
@@ -59,26 +59,26 @@ class GaussianCluster(BaseCluster):
         If a list/array, it must be a list/array of strings containing only
             'spherical', 'tied', 'diag', and/or 'spherical'.
 
-        tol : float, defaults to 1e-3.
-            The convergence threshold. EM iterations will stop when the
-            lower bound average gain is below this threshold.
+    tol : float, defaults to 1e-3.
+        The convergence threshold. EM iterations will stop when the
+        lower bound average gain is below this threshold.
 
-        reg_covar : float, defaults to 1e-6.
-            Non-negative regularization added to the diagonal of covariance.
-            Allows to assure that the covariance matrices are all positive.
+    reg_covar : float, defaults to 1e-6.
+        Non-negative regularization added to the diagonal of covariance.
+        Allows to assure that the covariance matrices are all positive.
 
-        max_iter : int, defaults to 100.
-            The number of EM iterations to perform.
+    max_iter : int, defaults to 100.
+        The number of EM iterations to perform.
 
-        n_init : int, defaults to 1.
-            The number of initializations to perform. The best results are kept.
+    n_init : int, defaults to 1.
+        The number of initializations to perform. The best results are kept.
 
-        init_params : {'kmeans', 'random'}, defaults to 'kmeans'.
-            The method used to initialize the weights, the means and the
-            precisions.
-            Must be one of::
-                'kmeans' : responsibilities are initialized using kmeans.
-                'random' : responsibilities are initialized randomly.
+    init_params : {'kmeans', 'random'}, defaults to 'kmeans'.
+        The method used to initialize the weights, the means and the
+        precisions.
+        Must be one of::
+            'kmeans' : responsibilities are initialized using kmeans.
+            'random' : responsibilities are initialized randomly.
 
     random_state : int, RandomState instance or None, optional (default=None)
         If int, ``random_state`` is the seed used by the random number generator;

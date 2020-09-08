@@ -161,6 +161,28 @@ def test_cosine_on_0():
         AutoGMM.fit(X)
 
 
+def test_cosine_with_0():
+    X = np.array(
+        [
+            [0, 1, 0],
+            [1, 0, 1],
+            [0, 0, 0],
+            [1, 1, 0],
+            [0, 0, 1],
+            [0, 1, 1],
+            [1, 1, 1],
+            [1, 0, 0],
+            [0, 1, 1],
+            [1, 1, 0],
+            [0, 1, 0],
+        ]
+    )
+
+    with pytest.warns(UserWarning):
+        AutoGMM = AutoGMMCluster(min_components=2, affinity="all")
+        AutoGMM.fit(X)
+
+
 def test_no_y():
     np.random.seed(1)
 
@@ -186,24 +208,47 @@ def test_two_class():
     n = 100
     d = 3
 
-    num_sims = 10
+    X1 = np.random.normal(2, 0.5, size=(n, d))
+    X2 = np.random.normal(-2, 0.5, size=(n, d))
+    X = np.vstack((X1, X2))
+    y = np.repeat([0, 1], n)
 
-    for _ in range(num_sims):
-        X1 = np.random.normal(2, 0.5, size=(n, d))
-        X2 = np.random.normal(-2, 0.5, size=(n, d))
-        X = np.vstack((X1, X2))
-        y = np.repeat([0, 1], n)
+    AutoGMM = AutoGMMCluster(max_components=5)
+    AutoGMM.fit(X, y)
 
-        AutoGMM = AutoGMMCluster(max_components=5)
-        AutoGMM.fit(X, y)
+    n_components = AutoGMM.n_components_
 
-        n_components = AutoGMM.n_components_
+    # Assert that the two cluster model is the best
+    assert_equal(n_components, 2)
 
-        # Assert that the two cluster model is the best
-        assert_equal(n_components, 2)
+    # Asser that we get perfect clustering
+    assert_allclose(AutoGMM.ari_, 1)
 
-        # Asser that we get perfect clustering
-        assert_allclose(AutoGMM.ari_, 1)
+
+def test_two_class_parallel():
+    """
+    Easily separable two gaussian problem.
+    """
+    np.random.seed(1)
+
+    n = 100
+    d = 3
+
+    X1 = np.random.normal(2, 0.5, size=(n, d))
+    X2 = np.random.normal(-2, 0.5, size=(n, d))
+    X = np.vstack((X1, X2))
+    y = np.repeat([0, 1], n)
+
+    AutoGMM = AutoGMMCluster(max_components=5, n_jobs=2)
+    AutoGMM.fit(X, y)
+
+    n_components = AutoGMM.n_components_
+
+    # Assert that the two cluster model is the best
+    assert_equal(n_components, 2)
+
+    # Asser that we get perfect clustering
+    assert_allclose(AutoGMM.ari_, 1)
 
 
 def test_two_class_aic():
@@ -215,26 +260,23 @@ def test_two_class_aic():
     n = 100
     d = 3
 
-    num_sims = 10
+    X1 = np.random.normal(2, 0.5, size=(n, d))
+    X2 = np.random.normal(-2, 0.5, size=(n, d))
+    X = np.vstack((X1, X2))
+    y = np.repeat([0, 1], n)
 
-    for _ in range(num_sims):
-        X1 = np.random.normal(2, 0.5, size=(n, d))
-        X2 = np.random.normal(-2, 0.5, size=(n, d))
-        X = np.vstack((X1, X2))
-        y = np.repeat([0, 1], n)
+    AutoGMM = AutoGMMCluster(max_components=5, selection_criteria="aic")
+    AutoGMM.fit(X, y)
 
-        AutoGMM = AutoGMMCluster(max_components=5, selection_criteria="aic")
-        AutoGMM.fit(X, y)
+    n_components = AutoGMM.n_components_
 
-        n_components = AutoGMM.n_components_
+    # AIC gets the number of components wrong
+    assert_equal(n_components >= 1, True)
+    assert_equal(n_components <= 5, True)
 
-        # AIC gets the number of components wrong
-        assert_equal(n_components >= 1, True)
-        assert_equal(n_components <= 5, True)
-
-        # Assert that the ari value is valid
-        assert_equal(AutoGMM.ari_ >= -1, True)
-        assert_equal(AutoGMM.ari_ <= 1, True)
+    # Assert that the ari value is valid
+    assert_equal(AutoGMM.ari_ >= -1, True)
+    assert_equal(AutoGMM.ari_ <= 1, True)
 
 
 def test_five_class():
@@ -247,17 +289,12 @@ def test_five_class():
     mus = [[i * 5, 0] for i in range(5)]
     cov = np.eye(2)  # balls
 
-    num_sims = 10
+    X = np.vstack([np.random.multivariate_normal(mu, cov, n) for mu in mus])
 
-    for _ in range(num_sims):
-        X = np.vstack([np.random.multivariate_normal(mu, cov, n) for mu in mus])
+    AutoGMM = AutoGMMCluster(min_components=3, max_components=10, covariance_type="all")
+    AutoGMM.fit(X)
 
-        AutoGMM = AutoGMMCluster(
-            min_components=3, max_components=10, covariance_type="all"
-        )
-        AutoGMM.fit(X)
-
-        assert_equal(AutoGMM.n_components_, 5)
+    assert_equal(AutoGMM.n_components_, 5)
 
 
 def test_five_class_aic():
@@ -270,22 +307,19 @@ def test_five_class_aic():
     mus = [[i * 5, 0] for i in range(5)]
     cov = np.eye(2)  # balls
 
-    num_sims = 10
+    X = np.vstack([np.random.multivariate_normal(mu, cov, n) for mu in mus])
 
-    for _ in range(num_sims):
-        X = np.vstack([np.random.multivariate_normal(mu, cov, n) for mu in mus])
+    AutoGMM = AutoGMMCluster(
+        min_components=3,
+        max_components=10,
+        covariance_type="all",
+        selection_criteria="aic",
+    )
+    AutoGMM.fit(X)
 
-        AutoGMM = AutoGMMCluster(
-            min_components=3,
-            max_components=10,
-            covariance_type="all",
-            selection_criteria="aic",
-        )
-        AutoGMM.fit(X)
-
-        # AIC fails often so there is no assertion here
-        assert_equal(AutoGMM.n_components_ >= 3, True)
-        assert_equal(AutoGMM.n_components_ <= 10, True)
+    # AIC fails often so there is no assertion here
+    assert_equal(AutoGMM.n_components_ >= 3, True)
+    assert_equal(AutoGMM.n_components_ <= 10, True)
 
 
 def test_ase_three_blocks():
@@ -293,7 +327,6 @@ def test_ase_three_blocks():
     Expect 3 clusters from a 3 block model
     """
     np.random.seed(1)
-    num_sims = 10
 
     # Generate adjacency and labels
     n = 50
@@ -301,24 +334,23 @@ def test_ase_three_blocks():
     p = np.array([[0.8, 0.3, 0.2], [0.3, 0.8, 0.3], [0.2, 0.3, 0.8]])
     y = np.repeat([1, 2, 3], repeats=n)
 
-    for _ in range(num_sims):
-        A = sbm(n=n_communites, p=p)
+    A = sbm(n=n_communites, p=p)
 
-        # Embed to get latent positions
-        ase = AdjacencySpectralEmbed(n_components=5)
-        X_hat = ase.fit_transform(A)
+    # Embed to get latent positions
+    ase = AdjacencySpectralEmbed(n_components=5)
+    X_hat = ase.fit_transform(A)
 
-        # Compute clusters
-        AutoGMM = AutoGMMCluster(max_components=10)
-        AutoGMM.fit(X_hat, y)
+    # Compute clusters
+    AutoGMM = AutoGMMCluster(max_components=10)
+    AutoGMM.fit(X_hat, y)
 
-        n_components = AutoGMM.n_components_
+    n_components = AutoGMM.n_components_
 
-        # Assert that the three cluster model is the best
-        assert_equal(n_components, 3)
+    # Assert that the three cluster model is the best
+    assert_equal(n_components, 3)
 
-        # Asser that we get perfect clustering
-        assert_allclose(AutoGMM.ari_, 1)
+    # Asser that we get perfect clustering
+    assert_allclose(AutoGMM.ari_, 1)
 
 
 def test_covariances():

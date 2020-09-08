@@ -43,7 +43,7 @@ class ClassicalMDS(BaseEstimator):
     """
     Classical multidimensional scaling (cMDS).
 
-    cMDS seeks a low-dimensional representation of the data in which the distances 
+    cMDS seeks a low-dimensional representation of the data in which the distances
     respect well the distances in the original high-dimensional space.
 
     Parameters
@@ -59,10 +59,9 @@ class ClassicalMDS(BaseEstimator):
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
         Dissimilarity measure to use:
 
-        - 'euclidean':
+        - 'euclidean'
             Pairwise Euclidean distances between points in the dataset.
-
-        - 'precomputed':
+        - 'precomputed'
             Pre-computed dissimilarities are passed directly to ``fit`` and
             ``fit_transform``.
 
@@ -77,9 +76,9 @@ class ClassicalMDS(BaseEstimator):
 
     singular_values_ : array, shape (n_components,)
         The singular values corresponding to each of the selected components.
-        
+
     dissimilarity_matrix_ : array, shape (n_features, n_features)
-        Dissimilarity matrix 
+        Dissimilarity matrix
 
     See Also
     --------
@@ -87,7 +86,7 @@ class ClassicalMDS(BaseEstimator):
 
     References
     ----------
-    Wickelmaier, Florian. "An introduction to MDS." Sound Quality Research Unit, 
+    Wickelmaier, Florian. "An introduction to MDS." Sound Quality Research Unit,
     Aalborg University, Denmark 46.5 (2003).
     """
 
@@ -118,12 +117,12 @@ class ClassicalMDS(BaseEstimator):
         Parameters
         ----------
         X : array_like
-            If ``dissimilarity=='precomputed'``, the input should be the 
-            dissimilarity matrix with shape (n_samples, n_samples). If 
-            ``dissimilarity=='euclidean'``, then the input should be 2d-array 
-            with shape (n_samples, n_features) or a 3d-array with shape 
+            If ``dissimilarity=='precomputed'``, the input should be the
+            dissimilarity matrix with shape (n_samples, n_samples). If
+            ``dissimilarity=='euclidean'``, then the input should be 2d-array
+            with shape (n_samples, n_features) or a 3d-array with shape
             (n_samples, n_features_1, n_features_2).
-        
+
         Returns
         -------
         out : 2d-array, shape (n_samples, n_samples)
@@ -153,13 +152,16 @@ class ClassicalMDS(BaseEstimator):
         Parameters
         ----------
         X : array_like
-            If ``dissimilarity=='precomputed'``, the input should be the 
-            dissimilarity matrix with shape (n_samples, n_samples). If 
-            ``dissimilarity=='euclidean'``, then the input should be 2d-array 
-            with shape (n_samples, n_features) or a 3d-array with shape 
+            If ``dissimilarity=='precomputed'``, the input should be the
+            dissimilarity matrix with shape (n_samples, n_samples). If
+            ``dissimilarity=='euclidean'``, then the input should be 2d-array
+            with shape (n_samples, n_features) or a 3d-array with shape
             (n_samples, n_features_1, n_features_2).
-        
-        y : Ignored
+
+        Returns
+        -------
+        self : object
+            Returns an instance of self.
         """
         # Check X type
         if not isinstance(X, np.ndarray):
@@ -211,14 +213,12 @@ class ClassicalMDS(BaseEstimator):
         Parameters
         ----------
         X : nd-array
-            If ``dissimilarity=='precomputed'``, the input should be the 
-            dissimilarity matrix with shape (n_samples, n_samples). If 
-            ``dissimilarity=='euclidean'``, then the input should be array 
-            with shape (n_samples, n_features) or a nd-array with shape 
+            If ``dissimilarity=='precomputed'``, the input should be the
+            dissimilarity matrix with shape (n_samples, n_samples). If
+            ``dissimilarity=='euclidean'``, then the input should be array
+            with shape (n_samples, n_features) or a nd-array with shape
             (n_samples, n_features_1, n_features_2, ..., n_features_d). First
             axis of nd-array must be ``n_samples``.
-
-        y : Ignored
 
         Returns
         -------

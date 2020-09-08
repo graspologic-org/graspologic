@@ -23,14 +23,14 @@ class KMeansCluster(BaseCluster):
     """
     KMeans Cluster.
 
-    It computes all possible models from one component to 
+    It computes all possible models from one component to
     ``max_clusters``. The best model is given by the lowest silhouette score.
 
     Parameters
     ----------
     max_clusters : int, defaults to 1.
         The maximum number of mixture components to consider.
-    
+
     random_state : int, RandomState instance or None, optional (default=None)
         If int, ``random_state`` is the seed used by the random number generator;
         If RandomState instance, random_state is the random number generator;
@@ -40,18 +40,18 @@ class KMeansCluster(BaseCluster):
     Attributes
     ----------
     n_clusters_ : int
-        Optimal number of components. If y is given, it is based on largest 
+        Optimal number of components. If y is given, it is based on largest
         ARI. Otherwise, it is based on smallest loss.
-    
+
     model_ : KMeans object
         Fitted KMeans object fitted with optimal n_components.
 
     silhouette_ : list
-        List of silhouette scores computed for all possible number 
+        List of silhouette scores computed for all possible number
         of clusters given by ``range(2, max_clusters)``.
 
     ari_ : list
-        Only computed when y is given. List of ARI values computed for 
+        Only computed when y is given. List of ARI values computed for
         all possible number of clusters given by ``range(2, max_clusters)``.
     """
 
@@ -69,14 +69,14 @@ class KMeansCluster(BaseCluster):
 
     def fit(self, X, y=None):
         """
-        Fits kmeans model to the data. 
+        Fits kmeans model to the data.
 
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
             List of n_features-dimensional data points. Each row
             corresponds to a single data point.
-        
+
         y : array-like, shape (n_samples,), optional (default=None)
             List of labels for `X` if available. Used to compute ARI scores.
 

@@ -24,7 +24,7 @@ from sklearn.utils import check_array
 
 def import_graph(graph, copy=True):
     """
-    A function for reading a graph and returning a shared data type. 
+    A function for reading a graph and returning a shared data type.
 
     Parameters
     ----------
@@ -40,7 +40,7 @@ def import_graph(graph, copy=True):
     -------
     out: array-like, shape (n_vertices, n_vertices)
         A graph.
-        
+
     See Also
     --------
     networkx.Graph, numpy.array
@@ -82,19 +82,19 @@ def import_edgelist(
     path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
 ):
     """
-    Function for reading a single or multiple edgelists. When importing multiple 
+    Function for reading a single or multiple edgelists. When importing multiple
     edgelists, the union of vertices from all graphs is computed so that each output
     graph have matched vertex set. The order of nodes are sorted by node values.
 
     Parameters
     ----------
     path : str, Path object, or iterable
-        If ``path`` is a directory, then the importing order will be sorted in 
+        If ``path`` is a directory, then the importing order will be sorted in
         alphabetical order.
 
     extension : str, optional
         If ``path`` is a directory, then the function will convert all files
-        with matching extension. 
+        with matching extension.
 
     delimiter : str or None, default=None, optional
         Delimiter of edgelist. If None, the delimiter is whitespace.
@@ -112,8 +112,8 @@ def import_edgelist(
         an array is returned.
 
     vertices : array-like, shape (n_vertices, )
-        If ``return_vertices`` == True, then returns an array of all vertices that were 
-        included in the output graphs. 
+        If ``return_vertices`` == True, then returns an array of all vertices that were
+        included in the output graphs.
     """
     # p = Path(path)
     if not isinstance(path, (str, Path, Iterable)):
@@ -190,27 +190,26 @@ def symmetrize(graph, method="avg"):
 
     method: {'avg' (default), 'triu', 'tril',}, optional
         An option indicating which half of the edges to
-        retain when symmetrizing. 
+        retain when symmetrizing.
 
             - 'avg'
-                Retain the average weight between the upper and lower 
+                Retain the average weight between the upper and lower
                 right triangle, of the adjacency matrix.
             - 'triu'
                 Retain the upper right triangle.
             - 'tril'
                 Retain the lower left triangle.
-            
 
     Returns
     -------
     graph: array-like, shape (n_vertices, n_vertices)
-        the graph with asymmetries removed.
+        Graph with asymmetries removed.
 
     Examples
     --------
     >>> a = np.array([
-    ...    [0, 1, 1], 
-    ...    [0, 0, 1], 
+    ...    [0, 1, 1],
+    ...    [0, 0, 1],
     ...    [0, 0, 1]])
     >>> symmetrize(a, method="triu")
     array([[0, 1, 1],
@@ -255,12 +254,12 @@ def remove_loops(graph):
 
 def to_laplace(graph, form="DAD", regularizer=None):
     r"""
-    A function to convert graph adjacency matrix to graph Laplacian. 
+    A function to convert graph adjacency matrix to graph Laplacian.
 
     Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal
-    matrix of degrees of each node raised to the -1/2 power, I is the 
+    matrix of degrees of each node raised to the -1/2 power, I is the
     identity matrix, and A is the adjacency matrix.
-    
+
     R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer*I`.
 
     Parameters
@@ -270,23 +269,23 @@ def to_laplace(graph, form="DAD", regularizer=None):
         or an object of type networkx.Graph.
 
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
-        
+
         - 'I-DAD'
             Computes :math:`L = I - D_i*A*D_i`
         - 'DAD'
             Computes :math:`L = D_o*A*D_i`
         - 'R-DAD'
-            Computes :math:`L = D_o^r*A*D_i^r` 
+            Computes :math:`L = D_o^r*A*D_i^r`
             where :math:`D_o^r = D_o + regularizer * I` and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
-        Constant to add to the degree vector(s). If None, average node degree is added. 
+        Constant to add to the degree vector(s). If None, average node degree is added.
         If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
 
     Returns
     -------
-    L: numpy.ndarray
-        2D (n_vertices, n_vertices) array representing graph 
+    L : numpy.ndarray
+        2D (n_vertices, n_vertices) array representing graph
         Laplacian of specified form
 
     References
@@ -302,8 +301,8 @@ def to_laplace(graph, form="DAD", regularizer=None):
     Examples
     --------
     >>> a = np.array([
-    ...    [0, 1, 1], 
-    ...    [1, 0, 0],  
+    ...    [0, 1, 1],
+    ...    [1, 0, 0],
     ...    [1, 0, 0]])
     >>> to_laplace(a, "DAD")
     array([[0.        , 0.70710678, 0.70710678],
@@ -360,17 +359,17 @@ def to_laplace(graph, form="DAD", regularizer=None):
 def is_fully_connected(graph):
     r"""
     Checks whether the input graph is fully connected in the undirected case
-    or weakly connected in the directed case. 
+    or weakly connected in the directed case.
 
     Connected means one can get from any vertex u to vertex v by traversing
-    the graph. For a directed graph, weakly connected means that the graph 
-    is connected after it is converted to an unweighted graph (ignore the 
+    the graph. For a directed graph, weakly connected means that the graph
+    is connected after it is converted to an unweighted graph (ignore the
     direction of each edge)
 
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
 
     Returns
@@ -385,8 +384,8 @@ def is_fully_connected(graph):
     Examples
     --------
     >>> a = np.array([
-    ...    [0, 1, 0], 
-    ...    [1, 0, 0], 
+    ...    [0, 1, 0],
+    ...    [1, 0, 0],
     ...    [0, 0, 0]])
     >>> is_fully_connected(a)
     False
@@ -405,17 +404,17 @@ def is_fully_connected(graph):
 
 def get_lcc(graph, return_inds=False):
     r"""
-    Finds the largest connected component for the input graph. 
+    Finds the largest connected component for the input graph.
 
     The largest connected component is the fully connected subgraph
-    which has the most nodes. 
+    which has the most nodes.
 
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
-    
+
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices in the original
         adjacency matrix that were kept and are now in the returned graph.
@@ -424,11 +423,11 @@ def get_lcc(graph, return_inds=False):
     Returns
     -------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        New graph of the largest connected component of the input parameter. 
+        New graph of the largest connected component of the input parameter.
 
     inds: (optional)
         Indices from the original adjacency matrix that were kept after taking
-        the largest connected component 
+        the largest connected component.
     """
     input_ndarray = False
     if type(graph) is np.ndarray:
@@ -463,12 +462,12 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
     graphs: list or np.ndarray
         List of array-like, (n_vertices, n_vertices), or list of np.ndarray
         nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph.
-        
+
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices in the original
         adjacency matrix that were kept and are now in the returned graph.
         Ignored when input is networkx object
-    
+
     Returns
     -------
     out : list or np.ndarray
@@ -508,10 +507,10 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
 
 def get_multigraph_intersect_lcc(graphs, return_inds=False):
     r"""
-    Finds the intersection of multiple graphs's largest connected components. 
+    Finds the intersection of multiple graphs's largest connected components.
 
-    Computes the largest connected component for each graph that was input, and 
-    takes the intersection over all of these resulting graphs. Note that this 
+    Computes the largest connected component for each graph that was input, and
+    takes the intersection over all of these resulting graphs. Note that this
     does not guarantee finding the largest graph where every node is shared among
     all of the input graphs.
 
@@ -519,20 +518,20 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
     ----------
     graphs: list or np.ndarray
         if list, each element must be an :math:`n \times n` np.ndarray adjacency matrix
-        
+
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices in the original
         adjacency matrix that were kept and are now in the returned graph.
         Ignored when input is networkx object
-    
+
     Returns
     -------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        New graph of the largest connected component of the input parameter. 
+        New graph of the largest connected component of the input parameter.
 
     inds: (optional)
         Indices from the original adjacency matrix that were kept after taking
-        the largest connected component 
+        the largest connected component
     """
     lcc_by_graph = []
     inds_by_graph = []
@@ -578,28 +577,28 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
 def augment_diagonal(graph, weight=1):
     r"""
     Replaces the diagonal of an adjacency matrix with :math:`\frac{d}{nverts - 1}` where
-    :math:`d` is the degree vector for an unweighted graph and the sum of magnitude of 
-    edge weights for each node for a weighted graph. For a directed graph the in/out 
+    :math:`d` is the degree vector for an unweighted graph and the sum of magnitude of
+    edge weights for each node for a weighted graph. For a directed graph the in/out
     :math:`d` is averaged.
-    
+
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
     weight: float/int
         scalar value to multiply the new diagonal vector by
-    
+
     Returns
     -------
-    graph: np.array
+    graph : np.array
         Adjacency matrix with average degrees added to the diagonal.
 
     Examples
     --------
     >>> a = np.array([
-    ...    [0, 1, 1], 
-    ...    [1, 0, 0], 
+    ...    [0, 1, 1],
+    ...    [1, 0, 0],
     ...    [1, 0, 0]])
     >>> augment_diagonal(a)
     array([[1. , 1. , 1. ],
@@ -628,12 +627,12 @@ def binarize(graph):
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
-    
+
     Returns
     -------
-    graph: np.array
+    graph : np.array
         Adjacency matrix with all nonzero values transformed to one.
 
     Examples

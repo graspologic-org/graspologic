@@ -28,6 +28,7 @@ stochastic block model, and random dot product graph (RDPG).
    tutorials/simulations/sbm
    tutorials/simulations/rdpg
    tutorials/simulations/corr
+   tutorials/simulations/rdpg_corr
 
 .. _embed_tutorials:
 
@@ -72,13 +73,14 @@ The following tutorials present ways to visualize the graphs, such as its adjace
 
 Matching
 ========
-The following is a brief tutorials how to use the graph matching algorithm,
-the Fast Approximate Quadratic assignment algorithm..
+The following tutorials demonstrate how to use the graph matching functionality,
+including an introduction to the module, and how to utilize the seeding feature.
 
 .. toctree::
    :maxdepth: 1
 
    tutorials/matching/faq
+   tutorials/matching/sgm
 
 .. _subgraph_tutorials:
 

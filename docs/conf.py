@@ -54,6 +54,8 @@ rawfiles = ["CNAME"]
 # -- numpydoc
 # Below is needed to prevent errors
 numpydoc_show_class_members = False
+numpydoc_attributes_as_param_list = True
+numpydoc_use_blockquotes = True
 
 # -- sphinx.ext.autosummary
 autosummary_generate = True
@@ -69,6 +71,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "sklearn": ("http://scikit-learn.org/dev", None),
+    "hyppo": ("https://hyppo.neurodata.io", None),
 }
 
 # -- sphinx options ----------------------------------------------------------

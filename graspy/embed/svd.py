@@ -20,7 +20,7 @@ from scipy.stats import norm
 
 def _compute_likelihood(arr):
     """
-    Computes the log likelihoods based on normal distribution given 
+    Computes the log likelihoods based on normal distribution given
     a 1d-array of sorted values. If the input has no variance,
     the likelihood will be nan.
     """
@@ -70,24 +70,24 @@ def select_dimension(
     ----------
     X : 1d or 2d array-like
         Input array generate profile likelihoods for. If 1d-array, it should be
-        sorted in decreasing order. If 2d-array, shape should be 
-        (n_samples, n_features). 
+        sorted in decreasing order. If 2d-array, shape should be
+        (n_samples, n_features).
     n_components : int, optional, default: None.
-        Number of components to embed. If None, ``n_components = 
+        Number of components to embed. If None, ``n_components =
         floor(log2(min(n_samples, n_features)))``. Ignored if X is 1d-array.
     n_elbows : int, optional, default: 2.
-        Number of likelihood elbows to return. Must be > 1. 
+        Number of likelihood elbows to return. Must be > 1.
     threshold : float, int, optional, default: None
         If given, only consider the singular values that are > threshold. Must
         be >= 0.
     return_likelihoods : bool, optional, default: False
-        If True, returns the all likelihoods associated with each elbow. 
+        If True, returns the all likelihoods associated with each elbow.
 
     Returns
     -------
     elbows : list
         Elbows indicate subsequent optimal embedding dimensions. Number of
-        elbows may be less than n_elbows if there are not enough singular 
+        elbows may be less than n_elbows if there are not enough singular
         values.
     sing_vals : list
         The singular values associated with each elbow.
@@ -99,7 +99,7 @@ def select_dimension(
     ----------
     .. [#1] Zhu, M. and Ghodsi, A. (2006).
         Automatic dimensionality selection from the scree plot via the use of
-        profile likelihood. Computational Statistics & Data Analysis, 51(2), 
+        profile likelihood. Computational Statistics & Data Analysis, 51(2),
         pp.918-930.
     """
     # Handle input data
@@ -184,7 +184,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
 
     Performs linear dimensionality reduction by using either full singular
     value decomposition (SVD) or truncated SVD. Full SVD is performed using
-    SciPy's wrapper for ARPACK, while truncated SVD is performed using either 
+    SciPy's wrapper for ARPACK, while truncated SVD is performed using either
     SciPy's wrapper for LAPACK or Sklearn's implementation of randomized SVD.
 
     It also performs optimal dimensionality selectiong using Zhu & Godsie algorithm
@@ -195,7 +195,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     X : array-like, shape (n_samples, n_features)
         The data to perform svd on.
     n_components : int or None, default = None
-        Desired dimensionality of output data. If "full", 
+        Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
@@ -206,31 +206,31 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         SVD solver to use:
 
         - 'randomized'
-            Computes randomized svd using 
+            Computes randomized svd using
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
         - 'truncated'
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
     n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or 
-        'truncated'. The default is larger than the default in randomized_svd 
+        Number of iterations for randomized SVD solver. Not used by 'full' or
+        'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
 
     Returns
     -------
-    U: array-like, shape (n_samples, n_components)
+    U : array-like, shape (n_samples, n_components)
         Left singular vectors corresponding to singular values.
-    D: array-like, shape (n_components)
+    D : array-like, shape (n_components)
         Singular values in decreasing order, as a 1d array.
-    V: array-like, shape (n_components, n_samples)
+    V : array-like, shape (n_components, n_samples)
         Right singular vectors corresponding to singular values.
 
     References
     ----------
     .. [1] Zhu, M. and Ghodsi, A. (2006).
         Automatic dimensionality selection from the scree plot via the use of
-        profile likelihood. Computational Statistics & Data Analysis, 51(2), 
+        profile likelihood. Computational Statistics & Data Analysis, 51(2),
         pp.918-930.
     """
     # Added in order to pass check estimator, must include words "one sample"
