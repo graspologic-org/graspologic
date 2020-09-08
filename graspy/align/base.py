@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import numpy as np
 from abc import abstractmethod
 from sklearn.utils import check_array
 from sklearn.base import BaseEstimator
@@ -22,16 +23,10 @@ class BaseAlign(BaseEstimator):
     Base class for align tasks such as sign flipping, procrustes and seedless
     procrustes.
 
-    Parameters
-    ----------
-
     Attributes
     ----------
-        Q_X : array, size (d, d)
-              final orthogonal matrix, used to modify X
-
-        Q_Y : array, size (d, d)
-              final orthogonal matrix, used to modify Y
+        Q_ : array, size (d, d)
+              final orthogonal matrix, used to modify X.
 
     """
 
@@ -41,7 +36,8 @@ class BaseAlign(BaseEstimator):
     @abstractmethod
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn matrices Q_X and Q_Y.
+        Uses the two datasets to learn the matrix Q_ that aligns the first
+        dataset with the second.
 
         Parameters
         ----------
@@ -59,46 +55,34 @@ class BaseAlign(BaseEstimator):
         """
         pass
 
-    def transform(self, X, Y=None):
+    def transform(self, X):
         """
-        Uses the learned matrices Q_X, Q_Y to match the two datssets and
-        returns them. These may or may not be the same datasets that it was fit
-        to. Also supports only modifying the one dataset (the first one, X)
-        dataset, by setting Y=None.
+        Transforms the dataset X using the learned matrix Q_. This may be the
+        same as the first dataset as in .fit(), or a new dataset. For example,
+        additional samples from the same dataset.
 
         Parameters
         ----------
         X: np.ndarray, shape (n, d)
-            First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
-
-        Y: np.ndarray, shape (m, d) or None (default)
-            Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
-            If None - only performs modifications to X.
+            Dataset of vectors. Needs to have the same number of dimensions as
+            X and Y passed to fit, but can have a different number of entries.
 
         Returns
         -------
         X_prime: np.ndarray, shape (n, d)
-            First dataset of vectors, matched to second. Equal to X @ self.Q_X.
-
-        Y_prime: np.ndarray, shape (m, d)
-            Second dataset of vectors, matched to first. Equal to X @ self.Q_Y,
-            unless Y was set to None. In that case - it is not returned. #None?
+            First dataset of vectors, aligned to second. Equal to X @ self.Q_X.
         """
-        X = check_array(X, copy=True)
-        if Y is None:
-            X_prime = X @ self.Q_X
-            return (X_prime,)  # None # tried returning None, but felt clunky
-        else:
-            Y = check_array(Y, copy=True)
-            X_prime, Y_prime = X @ self.Q_X, Y @ self.Q_Y
-            return X_prime, Y_prime
+        if not isinstance(X, np.ndarray):
+            msg = f"dataset is a {type(X)}, not an np.ndarray! "
+            raise TypeError(msg)
+        X = check_array(X)
+        return X @ self.Q_
 
     def fit_transform(self, X, Y):
         """
-        Learns the matrices Q_X and Q_Y, uses them to match the two datasets
-        provided, and returns the two matched datasets.
+        Uses the two datasets to learn the matrix Q_ that aligns the first
+        dataset with the second. Then, transforms the first dataset accordingly
+        and returns it.
 
         Parameters
         ----------
@@ -113,10 +97,7 @@ class BaseAlign(BaseEstimator):
         Returns
         -------
         X_prime: np.ndarray, shape (n, d)
-            First dataset of vectors, matched to second. Equal to X @ self.Q_X.
-
-        Y_prime: np.ndarray, shape (m, d)
-            Second dataset of vectors, matched to first. Equal to X @ self.Q_Y.
+            First dataset of vectors, aligned to second. Equal to X @ self.Q_X.
         """
         self.fit(X, Y)
-        return self.transform(X, Y)
+        return self.transform(X)

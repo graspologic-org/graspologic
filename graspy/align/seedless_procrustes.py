@@ -94,15 +94,11 @@ class SeedlessProcrustes(BaseAlign):
 
     Attributes
     ----------
-        Q_X : array, size (d, d)
-              final orthogonal matrix, used to modify X
+        Q_ : array, size (d, d)
+              final orthogonal matrix, used to modify X.
 
-        Q_Y : array, size (d, d)
-              final orthogonal matrix, used to modify Y.
-              in SeedlessProcrustes Q_Y is always equal to identity I
-
-        P : array, size (n, m) where n and md are the sizes of two datasets
-            final matrix of optimal transports
+        P_ : array, size (n, m) where n and md are the sizes of two datasets
+             final matrix of optimal transports
 
     References
     ----------
@@ -252,7 +248,7 @@ class SeedlessProcrustes(BaseAlign):
     def _procrustes(self, X, Y, P_i):
         # "M step" of the SeedlessProcurstes.
         aligner = OrthogonalProcrustes()
-        Q = aligner.fit(X, P_i @ Y).Q_X
+        Q = aligner.fit(X, P_i @ Y).Q_
         return Q
 
     def _iterative_ot(self, X, Y, Q):
@@ -266,10 +262,8 @@ class SeedlessProcrustes(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn matrices Q_X and Q_Y.
-        In seedless procrustes Q_X is a final solution of the to the iterative
-        optimal transport / procrustes algorithm and Q_Y is the identity
-        matrix.
+        Uses the two datasets to learn the matrix Q_ that aligns the first
+        dataset with the second.
 
         Parameters
         ----------
@@ -318,11 +312,11 @@ class SeedlessProcrustes(BaseAlign):
             # pick the best one, using the objective function value
             best = np.argmin(objectives)
             self.initial_Q = self._orthogonal_matrix_from_int(best, d)
-            self.P, self.Q_X = P_matrices[best], Q_matrices[best]
+            self.P_, self.Q_ = P_matrices[best], Q_matrices[best]
         elif self.init == "sign_flips":
             aligner = SignFlips()
-            self.initial_Q = aligner.fit(X, Y).Q_X
-            self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
+            self.initial_Q = aligner.fit(X, Y).Q_
+            self.P_, self.Q_ = self._iterative_ot(X, Y, self.initial_Q)
         else:
             # determine initial Q if "custom" and not provided
             if self.initial_Q is None:
@@ -332,8 +326,6 @@ class SeedlessProcrustes(BaseAlign):
                 else:
                     # set to initial Q to identity if neither Q nor P provided
                     self.initial_Q = np.eye(X.shape[1])
-            self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
-
-        self.Q_Y = np.eye(X.shape[1])
+            self.P_, self.Q_ = self._iterative_ot(X, Y, self.initial_Q)
 
         return self

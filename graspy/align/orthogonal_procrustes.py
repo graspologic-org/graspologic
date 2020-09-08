@@ -38,12 +38,8 @@ class OrthogonalProcrustes(BaseAlign):
 
     Attributes
     ----------
-        Q_X : array, size (d, d)
-              final orthogonal matrix, used to modify X
-
-        Q_Y : array, size (d, d)
-              final orthogonal matrix, used to modify Y
-              in OrthogonalProcrustes Q_Y is always equal to identity I
+        Q_ : array, size (d, d)
+              final orthogonal matrix, used to modify X.
 
     References
     ----------
@@ -60,9 +56,8 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn matrices Q_X and Q_Y.
-        In regular orthogonal procrustes Q_X is a solution to the orthogonal
-        procrustes problem, and Q_Y is the identity matrix.
+        Uses the two datasets to learn the matrix Q_ that aligns the first
+        dataset with the second.
 
         Parameters
         ----------
@@ -104,7 +99,5 @@ class OrthogonalProcrustes(BaseAlign):
             raise ValueError(msg)
 
         _, d = X.shape
-        R, _ = orthogonal_procrustes(X, Y)
-        self.Q_X = R
-        self.Q_Y = np.eye(d)
+        self.Q_, _ = orthogonal_procrustes(X, Y)
         return self

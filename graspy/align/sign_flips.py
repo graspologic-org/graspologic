@@ -46,11 +46,8 @@ class SignFlips(BaseAlign):
 
     Attributes
     ----------
-        Q_X : array, size (d, d)
-              final diagonal orthogonal matrix, used to modify X
-
-        Q_Y : array, size (d, d)
-              final diagonal orthogonal matrix, used to modify Y
+        Q_ : array, size (d, d)
+              final orthogonal matrix, used to modify X.
 
     """
 
@@ -88,11 +85,12 @@ class SignFlips(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn matrices Q_X and Q_Y.
-        In sign flips, Q_X and Q_Y are diagonal orthogonal matrices (i.e.
-        matrices with 1 or -1 in each entry on diagonal and 0 everywhere else)
-        picked such that all dimensions of X @ Q_X and Y @ Q_Y are in the same
-        orthant using some critera (median or max magnitude).
+        Uses the two datasets to learn the matrix Q_ that aligns the first
+        dataset with the second.
+        In sign flips, Q_ is an diagonal orthogonal matrices (i.e. a matrix
+        with 1 or -1 in each entry on diagonal and 0 everywhere else) picked
+        such that all dimensions of X @ Q_ and Y are in the same orthant using
+        some critera (median or max magnitude).
 
         Parameters
         ----------
@@ -100,7 +98,7 @@ class SignFlips(BaseAlign):
             First dataset of vectors. These vectors need to have same number of
             dimensions as ones in Y, but the number of vectors can differ.
 
-        Y: np.ndarray, shape (m, d), or None
+        Y: np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
             of dimensions as ones in X, but the number of vectors can differ.
 
@@ -130,7 +128,6 @@ class SignFlips(BaseAlign):
 
         val = np.multiply(X_criterias, Y_criterias)
         t_X = (val > 0) * 2 - 1
-        t_Y = np.ones(d)
 
-        self.Q_X, self.Q_Y = np.diag(t_X), np.diag(t_Y)
+        self.Q_ = np.diag(t_X)
         return self
