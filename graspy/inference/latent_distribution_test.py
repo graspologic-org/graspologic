@@ -433,10 +433,10 @@ class LatentDistributionTest(BaseInference):
 
         if self.align_type == "sign_flips":
             aligner = SignFlips(**self.align_kws)
-            X1_hat, X2_hat = aligner.fit_transform(X1_hat, X2_hat)
+            X1_hat = aligner.fit_transform(X1_hat, X2_hat)
         if self.align_type == "seedless_procrustes":
             aligner = SeedlessProcrustes(**self.align_kws)
-            X1_hat, X2_hat = aligner.fit_transform(X1_hat, X2_hat)
+            X1_hat = aligner.fit_transform(X1_hat, X2_hat)
 
         if self.size_correction:
             X1_hat, X2_hat = self._sample_modified_ase(
