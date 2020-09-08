@@ -18,31 +18,31 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         # check passing weird stuff as input (caught by us)
         with self.assertRaises(TypeError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform("hello there", Y)
+            aligner.fit("hello there", Y)
         with self.assertRaises(TypeError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform(X, "hello there")
+            aligner.fit(X, "hello there")
         with self.assertRaises(TypeError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform({"hello": "there"}, Y)
+            aligner.fit({"hello": "there"}, Y)
         with self.assertRaises(TypeError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform(X, {"hello": "there"})
+            aligner.fit(X, {"hello": "there"})
         # check passing arrays of weird ndims (caught by check_array)
         with self.assertRaises(ValueError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform(X, Y.reshape(3, 2, 1))
+            aligner.fit(X, Y.reshape(3, 2, 1))
         with self.assertRaises(ValueError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform(X.reshape(3, 2, 1), Y)
+            aligner.fit(X.reshape(3, 2, 1), Y)
         # check passing arrays with different dimensions (caught by us)
         with self.assertRaises(ValueError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform(X, Y_wrong_d)
+            aligner.fit(X, Y_wrong_d)
         # check passing arrays with different number of vertices (caught by us)
         with self.assertRaises(ValueError):
             aligner = OrthogonalProcrustes()
-            aligner.fit_transform(X, Y_wrong_n)
+            aligner.fit(X, Y_wrong_n)
 
     def test_identity(self):
         Y = np.array([[1234, 19], [6798, 18], [9876, 17], [4321, 16]])
@@ -50,8 +50,7 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         aligner = OrthogonalProcrustes()
         aligner.fit(Y, Y)
 
-        assert np.all(np.isclose(aligner.Q_X, np.eye(2)))
-        assert np.all(aligner.Q_Y == np.eye(2))
+        assert np.all(np.isclose(aligner.Q_, np.eye(2)))
 
     def test_two_datasets(self):
         # A very simple example with a true existing solution
@@ -80,28 +79,22 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         # because it is just rotation times reflection
         X = np.array([[3, 4], [-4, 3], [-3, -4], [4, -3]])
         Y = np.array([[-5, 0], [0, 5], [5, 0], [0, -5]])
-        Q_X_answer = np.array([[-0.6, -0.8], [-0.8, 0.6]])
-        Q_Y_answer = np.eye(2)
-        X_answer = X.copy() @ Q_X_answer
-        Y_answer = Y.copy()
+        Q_answer = np.array([[-0.6, -0.8], [-0.8, 0.6]])
+        X_answer = X.copy() @ Q_answer
 
         # first, do fit and transform separately
         aligner_1 = OrthogonalProcrustes()
         aligner_1.fit(X, Y)
-        Q_X_test_1, Q_Y_test_1 = aligner_1.Q_X, aligner_1.Q_Y
-        X_test_1, Y_test_1 = aligner_1.transform(X, Y)
-        self.assertTrue(np.all(np.isclose(Q_X_test_1, Q_X_answer)))
-        self.assertTrue(np.all(np.isclose(Q_Y_test_1, Q_Y_answer)))
+        Q_test_1 = aligner_1.Q_
+        X_test_1 = aligner_1.transform(X)
+        self.assertTrue(np.all(np.isclose(Q_test_1, Q_answer)))
         self.assertTrue(np.all(np.isclose(X_test_1, X_answer)))
-        self.assertTrue(np.all(np.isclose(Y_test_1, Y_answer)))
         # now, do fit_transform
         aligner_2 = OrthogonalProcrustes()
-        X_test_2, Y_test_2 = aligner_2.fit_transform(X, Y)
-        Q_X_test_2, Q_Y_test_2 = aligner_2.Q_X, aligner_2.Q_Y
-        self.assertTrue(np.all(np.isclose(Q_X_test_2, Q_X_answer)))
-        self.assertTrue(np.all(np.isclose(Q_Y_test_2, Q_Y_answer)))
+        X_test_2 = aligner_2.fit_transform(X, Y)
+        Q_test_2 = aligner_2.Q_
+        self.assertTrue(np.all(np.isclose(Q_test_2, Q_answer)))
         self.assertTrue(np.all(np.isclose(X_test_2, X_answer)))
-        self.assertTrue(np.all(np.isclose(Y_test_2, Y_answer)))
 
 
 if __name__ == "__main__":
