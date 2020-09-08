@@ -106,23 +106,10 @@ class SignFlips(BaseAlign):
         -------
         self: returns an instance of self
         """
-        # check X for numpy-ness, dimensions and finiteness
-        if not isinstance(X, np.ndarray):
-            msg = f"first dataset is a {type(X)}, not an np.ndarray! "
-            raise TypeError(msg)
-        X = check_array(X, copy=True)
-        # check for numpy-ness, 2d-ness and finite-ness
-        if not isinstance(Y, np.ndarray):
-            msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
-            raise TypeError(msg)
-        Y = check_array(Y, copy=True)
-        if X.shape[1] != Y.shape[1]:
-            msg = "two datasets have different number of components!"
-            raise ValueError(msg)
+        X, Y = self._check_datasets(X, Y)
         _, d = X.shape
 
         self.set_criteria_function()
-
         X_criterias = self.criteria_function_(X)
         Y_criterias = self.criteria_function_(Y)
 

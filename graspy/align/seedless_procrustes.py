@@ -279,21 +279,7 @@ class SeedlessProcrustes(BaseAlign):
         -------
         self: returns an instance of self
         """
-
-        # check for numpy-ness, 2d-ness and finite-ness
-        if not isinstance(X, np.ndarray):
-            msg = f"first dataset is a {type(X)}, not an np.ndarray! "
-            raise TypeError(msg)
-        if not isinstance(Y, np.ndarray):
-            msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
-            raise TypeError(msg)
-        X = check_array(X, copy=True)
-        Y = check_array(Y, copy=True)
-
-        # check for equal components and number of entries
-        if X.shape[1] != Y.shape[1]:
-            msg = "two datasets have different number of components!"
-            raise ValueError(msg)
+        X, Y = self._check_datasets(X, Y)
         _, d = X.shape
 
         if self.init == "2d":

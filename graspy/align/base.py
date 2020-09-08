@@ -33,6 +33,28 @@ class BaseAlign(BaseEstimator):
     def __init__(self):
         pass
 
+    def _check_datasets(self, X, Y):
+        """
+        Ensures that the datasets are numpy, 2d, finite, and have the same
+        number of components. Does not check for same number of vertices.
+        Returns copies of these datasets.
+        """
+        # check for numpy-ness
+        if not isinstance(X, np.ndarray):
+            msg = f"first dataset is a {type(X)}, not an np.ndarray! "
+            raise TypeError(msg)
+        if not isinstance(Y, np.ndarray):
+            msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
+            raise TypeError(msg)
+        # check for 2-dness and finiteness
+        X = check_array(X, copy=True)
+        Y = check_array(Y, copy=True)
+        # check for equal components
+        if X.shape[1] != Y.shape[1]:
+            msg = "two datasets have different number of components!"
+            raise ValueError(msg)
+        return X, Y
+
     @abstractmethod
     def fit(self, X, Y):
         """
