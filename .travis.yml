@@ -9,9 +9,8 @@ jobs:
     - python: 3.7
 cache: pip
 install:
-- pip install -r requirements.txt
-- pip install -U pytest pytest-cov pytest-doctestplus codecov black
 - pip install -e .
+- pip install -U pytest pytest-cov pytest-doctestplus codecov black
 script:
 - pytest graspy/ tests/
 - black --check --diff ./graspy ./tests
