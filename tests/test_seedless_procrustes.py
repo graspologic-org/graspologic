@@ -24,7 +24,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
         with self.assertRaises(TypeError):
             SeedlessProcrustes(iterative_num_reps=3.14)
         with self.assertRaises(TypeError):
-            SeedlessProcrustes(initialization=["hi", "there"])
+            SeedlessProcrustes(init=["hi", "there"])
 
         # value errors for all but initial Q and initial P
         with self.assertRaises(ValueError):
@@ -38,7 +38,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
         with self.assertRaises(ValueError):
             SeedlessProcrustes(iterative_num_reps=0)
         with self.assertRaises(ValueError):
-            SeedlessProcrustes(initialization="hi")
+            SeedlessProcrustes(init="hi")
 
         # initial Q and initial P things
         # pass bad types
@@ -93,7 +93,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
             aligner = SeedlessProcrustes()
             aligner.fit_transform(X, Y_wrong_d)
 
-    def test_different_initializations(self):
+    def test_different_inits(self):
         np.random.seed(314)
         mean = np.ones(3) * 5
         cov = np.eye(3) * 0.1
@@ -103,24 +103,24 @@ class TestSeedlessProcrustes(unittest.TestCase):
         W = stats.ortho_group.rvs(3)
         Y = Y @ W
 
-        aligner_1 = SeedlessProcrustes(initialization="2d")
+        aligner_1 = SeedlessProcrustes(init="2d")
         aligner_1.fit_transform(X, Y)
 
-        aligner_2 = SeedlessProcrustes(initialization="sign_flips")
+        aligner_2 = SeedlessProcrustes(init="sign_flips")
         aligner_2.fit_transform(X, Y)
         test_sign_flips = SignFlips(freeze_Y=True)
         self.assertTrue(np.all(test_sign_flips.fit(X, Y).Q_X == aligner_2.initial_Q))
 
-        aligner_3 = SeedlessProcrustes(initialization="custom")
+        aligner_3 = SeedlessProcrustes(init="custom")
         aligner_3.fit_transform(X, Y)
         self.assertTrue(np.all(np.eye(3) == aligner_3.initial_Q))
 
-        aligner_4 = SeedlessProcrustes(initialization="custom", initial_Q=-np.eye(3))
+        aligner_4 = SeedlessProcrustes(init="custom", initial_Q=-np.eye(3))
         aligner_4.fit_transform(X, Y)
         self.assertTrue(np.all(-np.eye(3) == aligner_4.initial_Q))
 
         aligner_5 = SeedlessProcrustes(
-            initialization="custom", initial_P=np.ones((100, 100)) / 10000
+            init="custom", initial_P=np.ones((100, 100)) / 10000
         )
         aligner_5.fit_transform(X, Y)
 
@@ -134,7 +134,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
         W = stats.ortho_group.rvs(d)
         Y = Y @ W
 
-        aligner = SeedlessProcrustes(initialization="2d", initial_Q=np.eye(3))
+        aligner = SeedlessProcrustes(init="2d", initial_Q=np.eye(3))
         Q = aligner.fit(X, Y).Q_X
         self.assertTrue(np.linalg.norm(Y.mean(axis=0) - (X @ Q).mean(axis=0)) < 0.1)
 

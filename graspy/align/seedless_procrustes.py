@@ -59,7 +59,7 @@ class SeedlessProcrustes(BaseAlign):
             problem. I.e. maxumum number of total iterations the whole "EM"
             algorithm.
 
-        initialization: string, {"2d" (default), "sign_flips", "custom"}, optional
+        init: string, {"2d" (default), "sign_flips", "custom"}, optional
 
             - "2d"
                 uses 2^d different initiazlizations, where d is the dimension.
@@ -80,7 +80,7 @@ class SeedlessProcrustes(BaseAlign):
 
         initial_Q: np.ndarray, shape (d, d) or None, optional (default=None)
             An initial guess for the alignment matrix, if such exists. Ignored
-            if initialization alignment is set to anything other than 'custom'.
+            if init alignment is set to anything other than 'custom'.
             If None - initializes using an initial guess for P.
             If None, and P is also None - initializes Q to identity matrix.
 
@@ -116,7 +116,7 @@ class SeedlessProcrustes(BaseAlign):
         optimal_transport_num_reps=1000,
         iterative_eps=0.01,
         iterative_num_reps=100,
-        initialization="2d",
+        init="2d",
         initial_Q=None,
         initial_P=None,
         freeze_Y=True,
@@ -176,13 +176,13 @@ class SeedlessProcrustes(BaseAlign):
                 iterative_num_reps
             )
             raise ValueError(msg)
-        # check initialization argument
-        if type(initialization) is not str:
-            msg = "initalization must be a str, not {}".format(type(initialization))
+        # check init argument
+        if type(init) is not str:
+            msg = "initalization must be a str, not {}".format(type(init))
             raise TypeError(msg)
-        initializations_supported = ["2d", "sign_flips", "custom"]
-        if initialization not in initializations_supported:
-            msg = "supported initializations are {}".format(initializations_supported)
+        inits_supported = ["2d", "sign_flips", "custom"]
+        if init not in inits_supported:
+            msg = "supported inits are {}".format(inits_supported)
             raise ValueError(msg)
         # check initial_Q argument
         if initial_Q is not None:
@@ -214,38 +214,6 @@ class SeedlessProcrustes(BaseAlign):
                 )
                 raise ValueError(msg)
 
-        # Value checking
-        if optimal_transport_eps <= 0:
-            msg = "{} is an invalud value of the optimal transport eps, must be postitive".format(
-                optimal_transport_eps
-            )
-            raise ValueError(msg)
-        if optimal_transport_lambda <= 0:
-            msg = "{} is an invalud value of the optimal transport lambda, must be non-negative".format(
-                optimal_transport_lambda
-            )
-            raise ValueError(msg)
-        if optimal_transport_num_reps < 1:
-            msg = "{} is invalid number of repetitions, must be greater than 1".format(
-                iterative_num_reps
-            )
-            raise ValueError(msg)
-        if iterative_eps <= 0:
-            msg = (
-                "{} is an invalud value of the iterative eps, must be postitive".format(
-                    iterative_eps
-                )
-            )
-            raise ValueError(msg)
-        if iterative_num_reps < 1:
-            msg = "{} is invalid number of repetitions, must be greater than 1".format(
-                iterative_num_reps
-            )
-            raise ValueError(msg)
-        initializations_supported = ["2d", "sign_flips", "custom"]
-        if initialization not in initializations_supported:
-            msg = "supported initializations are {}".format(initializations_supported)
-            raise ValueError(msg)
 
         super().__init__(freeze_Y=freeze_Y)
 
@@ -254,7 +222,7 @@ class SeedlessProcrustes(BaseAlign):
         self.optimal_transport_lambda = optimal_transport_lambda
         self.iterative_eps = iterative_eps
         self.iterative_num_reps = iterative_num_reps
-        self.initialization = initialization
+        self.init = init
         self.initial_Q = initial_Q
         self.initial_P = initial_P
 
@@ -336,7 +304,7 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         _, d = X.shape
 
-        if self.initialization == "2d":
+        if self.init == "2d":
             n, d = X.shape
             m, _ = Y.shape
             P_matrices = np.zeros((2 ** d, n, m))
@@ -353,7 +321,7 @@ class SeedlessProcrustes(BaseAlign):
             best = np.argmin(objectives)
             self.initial_Q = self._orthogonal_matrix_from_int(best, d)
             self.P, self.Q_X = P_matrices[best], Q_matrices[best]
-        elif self.initialization == "sign_flips":
+        elif self.init == "sign_flips":
             aligner = SignFlips(freeze_Y=True)
             self.initial_Q = aligner.fit(X, Y).Q_X
             self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
