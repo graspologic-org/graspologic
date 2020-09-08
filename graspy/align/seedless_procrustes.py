@@ -28,6 +28,10 @@ class SeedlessProcrustes(BaseAlign):
     entries. It can even be used in the settings when the two datasets do not
     have the same number of entries.
 
+    In graph setting, it is used to align the embeddings of two different
+    graphs, when it requires some simultaneous inference task, for example,
+    inside of the test for the equivalence of the latent distributions.
+
     In essence, it aims to simultaneously obtain a, not necessarily 1-to-1,
     correspondance between the vertices of the two data sets, and the
     orthogonal matrix alignment matrix. It does via a sequence of alternating

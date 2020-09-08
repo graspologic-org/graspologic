@@ -24,11 +24,6 @@ class BaseAlign(BaseEstimator):
 
     Parameters
     ----------
-        freeze_Y : boolean, optional (default True)
-            When set to true - attempts to act only on matrix X (i.e. enforce
-            Q_Y = I), if the specific aligner permits this. May be redundant
-            for some aligners, such as regular or seedless Procrustes, both of
-            which will only modify X regardless.
 
     Attributes
     ----------
@@ -40,11 +35,8 @@ class BaseAlign(BaseEstimator):
 
     """
 
-    def __init__(self, freeze_Y=True):
-        if type(freeze_Y) is not bool:
-            raise TypeError()
-
-        self.freeze_Y = freeze_Y
+    def __init__(self):
+        pass
 
     @abstractmethod
     def fit(self, X, Y):
