@@ -26,7 +26,7 @@ class SeedlessProcrustes(BaseAlign):
     Implements an algorithm that matches two datasets using an orthogonal
     matrix. Unlike OrthogonalProcrustes, this does not use a matching between
     entries. It can even be used in the settings when the two datasets do not
-    have the same number of vertices.
+    have the same number of entries.
 
     In essence, it aims to simultaneously obtain a, not necessarily 1-to-1,
     correspondance between the vertices of the two data sets, and the
@@ -88,10 +88,6 @@ class SeedlessProcrustes(BaseAlign):
             Initial guess for the initial transport matrix.
             Only matters if Q=None.
 
-        freeze_Y : boolean, optional (default=True)
-            Irrelevant in SeedlessProcrustes, as it always modifies only the
-            first dataset. Exists for compatibility with other align modules.
-
     Attributes
     ----------
         Q_X : array, size (d, d)
@@ -119,7 +115,6 @@ class SeedlessProcrustes(BaseAlign):
         init="2d",
         initial_Q=None,
         initial_P=None,
-        freeze_Y=True,
     ):
         # check optimal_transport_lambda argument
         if type(optimal_transport_lambda) is not float:
@@ -215,7 +210,7 @@ class SeedlessProcrustes(BaseAlign):
                 raise ValueError(msg)
 
 
-        super().__init__(freeze_Y=freeze_Y)
+        super().__init__()
 
         self.optimal_transport_eps = optimal_transport_eps
         self.optimal_transport_num_reps = optimal_transport_num_reps
@@ -322,7 +317,7 @@ class SeedlessProcrustes(BaseAlign):
             self.initial_Q = self._orthogonal_matrix_from_int(best, d)
             self.P, self.Q_X = P_matrices[best], Q_matrices[best]
         elif self.init == "sign_flips":
-            aligner = SignFlips(freeze_Y=True)
+            aligner = SignFlips()
             self.initial_Q = aligner.fit(X, Y).Q_X
             self.P, self.Q_X = self._iterative_ot(X, Y, self.initial_Q)
         else:
