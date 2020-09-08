@@ -86,8 +86,8 @@ class OrthogonalProcrustes(BaseAlign):
         if not isinstance(Y, np.ndarray):
             msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
             raise TypeError(msg)
-        X = check_array(X, accept_sparse=True, copy=True)
-        Y = check_array(Y, accept_sparse=True, copy=True)
+        X = check_array(X, copy=True)
+        Y = check_array(Y, copy=True)
 
         # check for equal components and number of entries
         if X.shape[1] != Y.shape[1]:

@@ -139,7 +139,7 @@ class SignFlips(BaseAlign):
         if not isinstance(X, np.ndarray):
             msg = f"first dataset is a {type(X)}, not an np.ndarray! "
             raise TypeError(msg)
-        X = check_array(X, accept_sparse=True, copy=True)
+        X = check_array(X, copy=True)
         _, d = X.shape
 
         if Y is None:
@@ -157,7 +157,7 @@ class SignFlips(BaseAlign):
         if not isinstance(Y, np.ndarray):
             msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
             raise TypeError(msg)
-        Y = check_array(Y, accept_sparse=True, copy=True)
+        Y = check_array(Y, copy=True)
 
         if X.shape[1] != Y.shape[1]:
             msg = "two datasets have different number of components!"

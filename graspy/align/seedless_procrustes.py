@@ -184,7 +184,7 @@ class SeedlessProcrustes(BaseAlign):
             if not isinstance(initial_Q, np.ndarray):
                 msg = f"initial_Q must be np.ndarray or None, not {type(initial_Q)}"
                 raise TypeError(msg)
-            initial_Q = check_array(initial_Q, accept_sparse=True, copy=True)
+            initial_Q = check_array(initial_Q, copy=True)
             if initial_Q.shape[0] != initial_Q.shape[1]:
                 msg = "initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
@@ -196,7 +196,7 @@ class SeedlessProcrustes(BaseAlign):
             if not isinstance(initial_P, np.ndarray):
                 msg = f"initial_P must be np.ndarray or None, not {type(initial_P)}"
                 raise TypeError(msg)
-            initial_P = check_array(initial_P, accept_sparse=True, copy=True)
+            initial_P = check_array(initial_P, copy=True)
             n, m = initial_P.shape
             if not (
                 np.allclose(initial_P.sum(axis=0), np.ones(m) / m)
@@ -208,7 +208,6 @@ class SeedlessProcrustes(BaseAlign):
                     "and columns add up to (1/number of rows))"
                 )
                 raise ValueError(msg)
-
 
         super().__init__()
 
@@ -290,8 +289,8 @@ class SeedlessProcrustes(BaseAlign):
         if not isinstance(Y, np.ndarray):
             msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
             raise TypeError(msg)
-        X = check_array(X, accept_sparse=True, copy=True)
-        Y = check_array(Y, accept_sparse=True, copy=True)
+        X = check_array(X, copy=True)
+        Y = check_array(Y, copy=True)
 
         # check for equal components and number of entries
         if X.shape[1] != Y.shape[1]:
