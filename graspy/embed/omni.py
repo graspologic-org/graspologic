@@ -221,10 +221,11 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_graphs, n_vertices, n_components) if input graphs were symmetric.
+        out : np.ndarray or length 2 tuple of np.ndarray.
+            if input graphs were symmetric, nndarray of shape (n_graphs, n_vertices, n_components).
             If graphs were directed and super().concat is False, returns tuple of two arrays (same shape as above).
             The first corresponds to the left latent positions, and the right to the right latent positions.
             If graphs were directed and super().concat is True, left and right latent positions are concatenated.
-            In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned
+            In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.
         """
         return self._fit_transform(graphs)

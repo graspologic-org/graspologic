@@ -165,7 +165,8 @@ class BaseEmbed(BaseEstimator):
 
         Returns
         -------
-        out : if undirected then returns single np.ndarray of latent position, shape(n_vertices, n_dimension).
+        out : np.ndarray OR length 2 tuple of np.ndarray.
+            if undirected then returns single np.ndarray of latent position, shape(n_vertices, n_dimension).
             if directed, self.concat = True then concatenate latent matrices on axis 1, shape(n_vertices, 2*n_dimension).
             if directed, self.concat = False then tuple of the latent matrices. Each of shape (n_vertices, n_dimension).
         """

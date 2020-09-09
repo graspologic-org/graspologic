@@ -243,7 +243,8 @@ class MultipleASE(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_vertices, n_components) if input graphs were symmetric.
+        out : np.ndarray or length 2 tuple of np.ndarray.
+            If input graphs were symmetric shape (n_vertices, n_components).
             If graphs were directed and super().concat is False, returns tuple of two arrays (same shape as above).
             The first corresponds to the left latent positions, and the second to the right latent positions.
             When super().concat is True left and right latent positions are concatenated along axis 1.
