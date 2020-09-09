@@ -71,6 +71,9 @@ class LaplacianSpectralEmbed(BaseEmbed):
         node degree is added. If int or float, must be >= 0. Only used when
         ``form`` == 'R-DAD'.
 
+    concat : bool, optional (default False)
+        if graph is directed whether to concatenate each graph's embedding along axis 1.
+
     Attributes
     ----------
     latent_left_ : array, shape (n_samples, n_components)
@@ -122,6 +125,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         regularizer=None,
+        concat=False
     ):
         super().__init__(
             n_components=n_components,
@@ -129,6 +133,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
+            concat=concat
         )
         self.form = form
         self.regularizer = regularizer

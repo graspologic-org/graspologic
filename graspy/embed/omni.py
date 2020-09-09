@@ -102,6 +102,9 @@ class OmnibusEmbed(BaseEmbedMulti):
         a vector corresponding to the degree (or sum of edge weights for a
         weighted network) before embedding.
 
+    concat : bool, optional (default False)
+        if graph(s) are directed whether to concatenate each graph's embedding along axis 1.
+
     Attributes
     ----------
     n_graphs_ : int
@@ -120,6 +123,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
+
 
     See Also
     --------
@@ -142,6 +146,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
+        concat=False
     ):
         super().__init__(
             n_components=n_components,
@@ -150,6 +155,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             n_iter=n_iter,
             check_lcc=check_lcc,
             diag_aug=diag_aug,
+            concat=concat
         )
 
     def fit(self, graphs, y=None):
@@ -201,7 +207,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         return self
 
-    def fit_transform(self, graphs, y=None, concat=False):
+    def fit_transform(self, graphs, y=None):
         """
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
@@ -212,16 +218,13 @@ class OmnibusEmbed(BaseEmbedMulti):
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
-        concat : For directed graphs. If true selected components for both 'in' and 'out' embeddings
-            are concatenated, otherwise returned as tuple.
 
         Returns
         -------
-        out : array-like, shape (n_graphs, n_vertices, n_components) if input
-            graphs were symmetric. If graphs were directed and concat is False, returns tuple of
-            two arrays (same shape as above) where the first corresponds to the
-            left latent positions, and the right to the right latent positions. If graphs
-            were directed and concat is True, left and right latent positions are concatenated, and
-            one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned
+        out : array-like, shape (n_graphs, n_vertices, n_components) if input graphs were symmetric.
+            If graphs were directed and super().concat is False, returns tuple of two arrays (same shape as above).
+            The first corresponds to the left latent positions, and the right to the right latent positions.
+            If graphs were directed and super().concat is True, left and right latent positions are concatenated.
+            In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned
         """
-        return self._fit_transform(graphs, concat=concat)
+        return self._fit_transform(graphs)

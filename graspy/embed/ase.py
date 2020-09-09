@@ -75,6 +75,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
         before embedding. Empirically, this produces latent position estimates closer
         to the ground truth.
 
+    concat : bool, optional (default False)
+        if graph is directed whether to concatenate each graph's embedding along axis 1.
+
 
     Attributes
     ----------
@@ -118,6 +121,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
+        concat=False
     ):
         super().__init__(
             n_components=n_components,
@@ -125,6 +129,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
+            concat=concat
         )
 
         if not isinstance(diag_aug, bool):
