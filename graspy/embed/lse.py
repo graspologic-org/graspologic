@@ -73,6 +73,8 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     Attributes
     ----------
+    n_features_in_: int
+        number of features passed to the fit method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
 
@@ -162,6 +164,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
+        self.n_features_in_ = len(A)
         L_norm = to_laplace(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
         return self
