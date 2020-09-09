@@ -209,7 +209,7 @@ class ClassicalMDS(BaseEstimator):
         if X.ndim == 2:
             self.n_features_in_ = X.shape[1]
         else:
-            self.n_features_in_ = X.shape[1,2]
+            self.n_features_in_ = X.shape[1]*X.shape[2]
 
         return self
 
