@@ -1,4 +1,3 @@
-import graspy
 import numpy as np
 from graspy.embed import MultipleASE, OmnibusEmbed
 from scipy.special import gamma
@@ -6,6 +5,10 @@ from sklearn.base import BaseEstimator
 
 
 class AnomalyDetection(BaseEstimator):
+    """
+
+    """
+
     def __init__(self, method="omni", time_window=3, diag_aug=True, **svd_kwargs):
         self.method = method
         self.time_window = time_window
