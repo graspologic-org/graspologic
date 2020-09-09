@@ -111,7 +111,7 @@ class MultipleASE(BaseEmbedMulti):
         n_iter=5,
         scaled=True,
         diag_aug=True,
-        concat=False
+        concat=False,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -122,8 +122,7 @@ class MultipleASE(BaseEmbedMulti):
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
-            diag_aug=diag_aug,
-            concat=concat
+            concat=concat,
         )
         self.scaled = scaled
 

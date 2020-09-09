@@ -125,7 +125,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         regularizer=None,
-        concat=False
+        concat=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -133,7 +133,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
-            concat=concat
+            concat=concat,
         )
         self.form = form
         self.regularizer = regularizer

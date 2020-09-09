@@ -146,7 +146,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
-        concat=False
+        concat=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -155,7 +155,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             n_iter=n_iter,
             check_lcc=check_lcc,
             diag_aug=diag_aug,
-            concat=concat
+            concat=concat,
         )
 
     def fit(self, graphs, y=None):

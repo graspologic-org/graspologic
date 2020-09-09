@@ -73,7 +73,7 @@ class BaseEmbed(BaseEstimator):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
-        concat=False
+        concat=False,
     ):
         self.n_components = n_components
         self.n_elbows = n_elbows
