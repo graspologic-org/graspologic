@@ -97,6 +97,11 @@ class OmnibusEmbed(BaseEmbedMulti):
         in non-optimal results if the average graph is unconnected. If True and average
         graph is unconnected, a UserWarning is thrown.
 
+    diag_aug : bool, optional (default = True)
+        Whether to replace the main diagonal of each adjacency matrices with
+        a vector corresponding to the degree (or sum of edge weights for a
+        weighted network) before embedding.
+
     Attributes
     ----------
     n_graphs_ : int
@@ -136,6 +141,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
+        diag_aug=True,
     ):
         super().__init__(
             n_components=n_components,
@@ -143,6 +149,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
+            diag_aug=diag_aug,
         )
 
     def fit(self, graphs, y=None):
@@ -172,6 +179,10 @@ class OmnibusEmbed(BaseEmbedMulti):
                     + "using ``graspy.utils.get_multigraph_union_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
+
+        # Diag augment
+        if self.diag_aug:
+            graphs = self._diag_aug(graphs)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

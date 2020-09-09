@@ -1,8 +1,10 @@
 import pytest
 import unittest
 import numpy as np
+import networkx as nx
 from sklearn.metrics import pairwise_distances
 
+from graspy.embed import AdjacencySpectralEmbed
 from graspy.inference import LatentDistributionTest
 from graspy.simulations import er_np, sbm
 
@@ -56,12 +58,81 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(size_correction=0)
         with self.assertRaises(TypeError):
             LatentDistributionTest(pooled=0)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph="hello")
 
     def test_n_bootstraps(self):
         for test in self.tests.keys():
             ldt = LatentDistributionTest(test, self.tests[test], n_bootstraps=123)
             ldt.fit(self.A1, self.A2)
             self.assertEqual(ldt.null_distribution_.shape[0], 123)
+
+    def test_passing_networkx(self):
+        np.random.seed(123)
+        A1 = er_np(20, 0.8)
+        A2 = er_np(20, 0.8)
+        A1_nx = nx.from_numpy_matrix(A1)
+        A2_nx = nx.from_numpy_matrix(A2)
+        # check passing nx, when exepect embeddings
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(A1_nx, A2)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(A1, A2_nx)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(A1_nx, A2_nx)
+        # check that the appropriate input works
+        ldt = LatentDistributionTest(input_graph=True)
+        ldt.fit_predict(A1_nx, A2_nx)
+
+    def test_passing_embeddings(self):
+        np.random.seed(123)
+        A1 = er_np(20, 0.8)
+        A2 = er_np(20, 0.8)
+        ase_1 = AdjacencySpectralEmbed(n_components=2)
+        X1 = ase_1.fit_transform(A1)
+        ase_2 = AdjacencySpectralEmbed(n_components=2)
+        X2 = ase_2.fit_transform(A2)
+        ase_3 = AdjacencySpectralEmbed(n_components=1)
+        X3 = ase_3.fit_transform(A2)
+        # check embeddings having weird ndim
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, X2.reshape(-1, 1, 1))
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1.reshape(-1, 1, 1), X2)
+        # check embeddings having mismatching number of components
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, X3)
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X3, X1)
+        # check passing weird stuff as input (caught by us)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict("hello there", X1)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, "hello there")
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict({"hello": "there"}, X1)
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1, {"hello": "there"})
+        # check passing infinite in input (caught by check_array)
+        with self.assertRaises(ValueError):
+            X1_w_inf = X1.copy()
+            X1_w_inf[1, 1] = np.inf
+            ldt = LatentDistributionTest(input_graph=False)
+            ldt.fit_predict(X1_w_inf, X2)
+        # check that the appropriate input works
+        ldt = LatentDistributionTest(input_graph=False)
+        ldt.fit_predict(X1, X2)
 
     def test_pooled(self):
         np.random.seed(123)

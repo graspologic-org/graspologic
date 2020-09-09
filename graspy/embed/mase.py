@@ -70,6 +70,11 @@ class MultipleASE(BaseEmbedMulti):
         Whether to scale individual eigenvectors with eigenvalues in first embedding
         stage.
 
+    diag_aug : bool, optional (default = True)
+        Whether to replace the main diagonal of each adjacency matrices with
+        a vector corresponding to the degree (or sum of edge weights for a
+        weighted network) before embedding.
+
     Attributes
     ----------
     n_graphs_ : int
@@ -101,6 +106,7 @@ class MultipleASE(BaseEmbedMulti):
         algorithm="randomized",
         n_iter=5,
         scaled=True,
+        diag_aug=True,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -111,6 +117,7 @@ class MultipleASE(BaseEmbedMulti):
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            diag_aug=diag_aug,
         )
         self.scaled = scaled
 
@@ -199,6 +206,10 @@ class MultipleASE(BaseEmbedMulti):
 
         # Check if undirected
         undirected = all(is_almost_symmetric(g) for g in graphs)
+
+        # Diag augment
+        if self.diag_aug:
+            graphs = self._diag_aug(graphs)
 
         # embed
         Uhat, Vhat = self._reduce_dim(graphs)
