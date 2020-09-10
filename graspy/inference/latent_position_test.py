@@ -78,7 +78,7 @@ class LatentPositionTest(BaseInference):
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
 
-    p_value_1\_, p_value_2\_ : float
+    p_value_1_, p_value_2_ : float
         The p value estimated from the null distributions from sample 1 and sample 2.
 
     p_value_ : float
