@@ -88,8 +88,8 @@ def _test_sbm_er_binary(self, method, P, directed=False, *args, **kwargs):
         X_er = embed_er.fit_transform(er)
 
         if directed:
-            self.assertEqual(X_sbm.shape, (verts, 2*communities))
-            self.assertEqual(X_er.shape, (verts, 2*communities))
+            self.assertEqual(X_sbm.shape, (verts, 2 * communities))
+            self.assertEqual(X_er.shape, (verts, 2 * communities))
         else:
             self.assertEqual(X_sbm.shape, (verts, communities))
             self.assertEqual(X_er.shape, (verts, communities))
