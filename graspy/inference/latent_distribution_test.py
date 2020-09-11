@@ -203,15 +203,7 @@ class LatentDistributionTest(BaseInference):
         elif test not in _VALID_TESTS:
             msg = "Unknown test {}. Valid tests are {}".format(test, _VALID_TESTS)
             raise ValueError(msg)
-        # check metric argument
-        if not isinstance(metric, str) and not callable(metric):
-            msg = "Metric must be str or callable, not {}".format(type(metric))
-            raise TypeError(msg)
-        elif metric not in _VALID_METRICS and not callable(metric):
-            msg = "Unknown metric {}. Valid metrics are {}, or a callable".format(
-                metric, _VALID_METRICS
-            )
-            raise ValueError(msg)
+        # metric argument is checked when metric_func_ is instantiated
         # check n_components argument
         if n_components is not None:
             if not isinstance(n_components, int):
@@ -257,6 +249,27 @@ class LatentDistributionTest(BaseInference):
 
         super().__init__(n_components=n_components)
 
+        self.test = test
+        self.metric = metric
+        self.metric_func_ = self._instantiate_metric_func(metric, test)
+        self.n_bootstraps = n_bootstraps
+        self.workers = workers
+        self.size_correction = size_correction
+        self.pooled = pooled
+        self.input_graph = input_graph
+        self.align_type = align_type
+        self.align_kws = align_kws
+
+    def _instantiate_metric_func(self, metric, test):
+        # check metric argument
+        if not isinstance(metric, str) and not callable(metric):
+            msg = "Metric must be str or callable, not {}".format(type(metric))
+            raise TypeError(msg)
+        elif metric not in _VALID_METRICS and not callable(metric):
+            msg = "Unknown metric {}. Valid metrics are {}, or a callable".format(
+                metric, _VALID_METRICS
+            )
+            raise ValueError(msg)
         if callable(metric):
             metric_func = metric
         else:
@@ -296,16 +309,7 @@ class LatentDistributionTest(BaseInference):
                 def metric_func(X, Y=None, metric=metric, workers=None):
                     return pairwise_kernels(X, Y, metric=metric, n_jobs=workers)
 
-        self.metric = metric
-        self.metric_func = metric_func
-        self.test = test
-        self.n_bootstraps = n_bootstraps
-        self.workers = workers
-        self.size_correction = size_correction
-        self.pooled = pooled
-        self.input_graph = input_graph
-        self.align_type = align_type
-        self.align_kws = align_kws
+        return metric_func
 
     def _embed(self, A1, A2):
         if self.n_components is None:
@@ -448,7 +452,8 @@ class LatentDistributionTest(BaseInference):
                 X1_hat, X2_hat, pooled=self.pooled
             )
 
-        test_obj = KSample(self.test, compute_distance=self.metric_func)
+        self.metric_func_ = self._instantiate_metric_func(self.metric, self.test)
+        test_obj = KSample(self.test, compute_distance=self.metric_func_)
 
         data = test_obj.test(
             X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False

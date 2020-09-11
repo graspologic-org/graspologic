@@ -50,6 +50,15 @@ class TestLatentDistributionTest(unittest.TestCase):
             LatentDistributionTest(metric=0)
         with self.assertRaises(ValueError):
             LatentDistributionTest(metric="some_kind_of_kernel")
+        # check metric argument modified
+        with self.assertRaises(TypeError):
+            ldt = LatentDistributionTest()
+            ldt.metric = 0
+            ldt.fit(self.A1, self.A2)
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest()
+            ldt.metric = "some_kind_of_kernel"
+            ldt.fit(self.A1, self.A2)
         # check n_components argument
         with self.assertRaises(TypeError):
             LatentDistributionTest(n_components=0.5)
@@ -203,7 +212,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         C = er_np(100, 0.3, directed=False)
 
         # two directed graphs is okay
-        ldt = LatentDistributionTest("dcorr")
+        ldt = LatentDistributionTest()
         ldt.fit(A, B)
 
         # an undirected and a direced graph is not okay
