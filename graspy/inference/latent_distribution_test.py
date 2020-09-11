@@ -154,6 +154,9 @@ class LatentDistributionTest(BaseInference):
 
     Attributes
     ----------
+    metric_func_ : callable
+        A callable associated with the specified metric. See `metric`.
+
     null_distribution_ : ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
 
@@ -293,7 +296,9 @@ class LatentDistributionTest(BaseInference):
                 def metric_func(X, Y=None, metric=metric, workers=None):
                     return pairwise_kernels(X, Y, metric=metric, n_jobs=workers)
 
-        self.test = KSample(test, compute_distance=metric_func)
+        self.metric = metric
+        self.metric_func = metric_func
+        self.test = test
         self.n_bootstraps = n_bootstraps
         self.workers = workers
         self.size_correction = size_correction
@@ -443,11 +448,13 @@ class LatentDistributionTest(BaseInference):
                 X1_hat, X2_hat, pooled=self.pooled
             )
 
-        data = self.test.test(
+        test_obj = KSample(self.test, compute_distance=self.metric_func)
+
+        data = test_obj.test(
             X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False
         )
 
-        self.null_distribution_ = self.test.indep_test.null_dist
+        self.null_distribution_ = test_obj.indep_test.null_dist
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
 
