@@ -29,9 +29,6 @@ class SignFlips(BaseAlign):
     first orthant (i.e. with all criteras being positive), which is a default,
     or and orthant in which one the second dataset is already in.
 
-    This module can also run on a single dataset. In that case it makes the
-    medians / maxes of each dimension of the provided dataset positive.
-
     Parameters
     ----------
         criteria : string, {'median' (default), 'max'}, optional
@@ -113,7 +110,7 @@ class SignFlips(BaseAlign):
         Y_criterias = self.criteria_function_(Y)
 
         val = np.multiply(X_criterias, Y_criterias)
-        t_X = (val > 0) * 2 - 1
+        t_X = (val >= 0) * 2 - 1
 
         self.Q_ = np.diag(t_X)
         return self
