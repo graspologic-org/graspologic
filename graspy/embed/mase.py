@@ -124,6 +124,7 @@ class MultipleASE(BaseEmbedMulti):
             n_elbows=n_elbows,
             algorithm=algorithm,
             n_iter=n_iter,
+            diag_aug=diag_aug,
             concat=concat,
         )
         self.scaled = scaled
