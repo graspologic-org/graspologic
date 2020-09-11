@@ -81,6 +81,9 @@ class BaseEmbed(BaseEstimator):
         self.algorithm = algorithm
         self.n_iter = n_iter
         self.check_lcc = check_lcc
+        if not isinstance(concat, bool):
+            msg = "Parameter `concat` is expected to be type bool"
+            raise TypeError(msg)
         self.concat = concat
 
     def _reduce_dim(self, A):
