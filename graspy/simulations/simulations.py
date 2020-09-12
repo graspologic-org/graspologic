@@ -706,6 +706,7 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
            [0., 0., 0., 1., 1.],
            [0., 1., 1., 0., 0.],
            [1., 1., 1., 0., 0.]])
+           
 
     Sample a weighted RDPG with Poisson(2) weight distribution
 

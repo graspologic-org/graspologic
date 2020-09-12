@@ -79,6 +79,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
            [0., 0., 0., 0., 0.],
            [1., 0., 0., 0., 0.],
            [0., 1., 0., 0., 0.]]))
+           
     """
     # check r
     if not np.issubdtype(type(r), np.floating):
