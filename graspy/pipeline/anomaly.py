@@ -227,10 +227,10 @@ def anomaly_detection(
     graph_anomaly_indices : ndarray
         Indices of the input graph that are anomalous.
 
-    vertex_anomaly_indices : list of tuples
-        Tuples have form (graph_idx, vertex_idx) where graph_idx is the index
-        of input graph and vertex_idx contain indices of anomalous vertices for
-        graph_idx.
+    vertex_anomaly_indices : dict
+        Indices of vertices that are anomalous. Key is the index of the input
+        graph, and value are the indices of anomalous vertices for that particular
+        graph.
 
     graph_anomaly_dict, vertex_anomaly_dict : dict
         Contains additional useful additional returns containing the following
@@ -341,7 +341,7 @@ def anomaly_detection(
                 < vertex_lower_central_line.reshape(-1, 1)
             )
         )
-        vertex_idx = [(i + time_window, v_idx[g_idx == i]) for i in np.unique(g_idx)]
+        vertex_idx = {i + time_window: v_idx[g_idx == i] for i in np.unique(g_idx)}
     else:
         graph_idx = (
             np.where(graph_stats[time_window - 1 :] > graph_upper_central_line)[0]
@@ -351,7 +351,7 @@ def anomaly_detection(
         g_idx, v_idx = np.where(
             vertex_stats[time_window - 1 :] > vertex_upper_central_line.reshape(-1, 1)
         )
-        vertex_idx = [(i + time_window, v_idx[g_idx == i]) for i in np.unique(g_idx)]
+        vertex_idx = {i + time_window: v_idx[g_idx == i] for i in np.unique(g_idx)}
 
     graph_dict = dict(
         statistics=graph_stats[time_window - 1 :],

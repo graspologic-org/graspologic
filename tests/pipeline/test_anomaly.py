@@ -45,5 +45,5 @@ def test_pipeline():
     assert_equal(graph_indices, [5, 10])
 
     # All 100 vertices in graphs 5 and 6 should be different
-    assert len(vertex_indices[1][1]) == 100
-    assert len(vertex_indices[2][1]) == 100
+    assert len(vertex_indices[5]) == 100
+    assert len(vertex_indices[6]) == 100
