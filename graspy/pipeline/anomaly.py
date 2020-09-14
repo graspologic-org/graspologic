@@ -158,6 +158,7 @@ def anomaly_detection(
     changes significantly from the previous time point.
 
     Specifically, anomaly detection is a five step process:
+
         1. Estimate latent positions of graphs for each sequential pair of
             graphs using either :class:`~graspy.embed.OmnibusEmbed` or
             :class:`~graspy.embed.MultipleASE`.
