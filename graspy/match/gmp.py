@@ -79,6 +79,9 @@ class GraphMatch(BaseEstimator):
     score_ : float
         The objective function value of for the optimal permutation found.
 
+    n_iter_ : int
+        Number of iterations run.
+
 
     References
     ----------
