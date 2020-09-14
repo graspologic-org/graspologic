@@ -61,9 +61,11 @@ def _compute_control_chart(graph_stats, vertex_stats, time_window):
 
     Parameters
     ----------
-    graph_stats
+    graph_stats : ndarray, shape (n_graphs - 1, )
+        Test statistics based on spectral norms.
 
-    vertex_stats
+    vertex_stats : ndarray, shape (n_graphs - 1, n_vertices)
+        Test statistics based on L2 norms.
 
     time_window : int
         The number of graphs in time window in estimating the moving mean and
@@ -151,6 +153,23 @@ def anomaly_detection(
     n_iter=5,
 ):
     """
+    Function for computing anomalous graphs and vertices given time series of
+    graphs. Anomaly is defined as graphs or vertices at a specific time that
+    changes significantly from the previous time point.
+
+    Specifically, anomaly detection is a five step process:
+        1. Estimate latent positions of graphs for each sequential pair of
+            graphs using either :class:`~graspy.embed.OmnibusEmbed` or
+            :class:`~graspy.embed.MultipleASE`.
+        2. Compute test statistics, or the magnitude of change, for each pair
+            of latent positions via spectral norm for graph anomaly detection
+            or L2 norm for vertex anomaly detection.
+        3. Compute moving means and standard deviations of the test statistics
+            given a time window.
+        4. Compute the upper and lower threshold for test statistics.
+        5. Compute graphs or vertices that are above the upper threshold or
+            below the lower threshold.
+
     Parameters
     ----------
     graphs : list of nx.Graph or ndarray, or ndarray
@@ -205,16 +224,38 @@ def anomaly_detection(
 
     Returns
     -------
+    graph_anomaly_indices : ndarray
+        Indices of the input graph that are anomalous.
 
+    vertex_anomaly_indices : list of tuples
+        Tuples have form (graph_idx, vertex_idx) where graph_idx is the index
+        of input graph and vertex_idx contain indices of anomalous vertices for
+        graph_idx.
+
+    graph_anomaly_dict, vertex_anomaly_dict : dict
+        Contains additional useful additional returns containing the following
+        keys:
+
+            - statistics : ndarray
+                Graph-wise test statistics with shape (n_graphs - time_window, )
+                or vertex-wise test statistics with shape (n_graphs - time_window,
+                n_vertices).
+            - means : ndarray, shape (n_graphs - time_window, )
+                Moving average of test statistics.
+            - stds : ndarray, shape (n_graphs - time_window, )
+                Moving standard deviation of test statistics.
+            - upper_central_line : ndarray, shape
+                Upper threshold of test statistics.
+            - lower_central_line : ndarray, shape
+                Lower threshold of test statistics.
+
+    References
+    ----------
+    .. [1] Chen, G., Arroyo, J., Athreya, A., Cape, J., Vogelstein, J.T., Park, Y.,
+        White, C., Larson, J., Yang, W. and Priebe, C.E., (2020). "Multiple Network
+        Embedding for Anomaly Detection in Time Series of Graphs."
+        arXiv:2008.10055.
     """
-    if isinstance(time_window, int):
-        if time_window < 3 or time_window >= len(graphs):
-            msg = f"time_window must be within [3, {len(graphs)})."
-            raise ValueError(msg)
-    else:
-        msg = f"time_window must be an integer, not {type(time_window)}"
-        raise TypeError(msg)
-
     if not isinstance(method, str):
         raise TypeError(f"method must be a string.")
     elif method.lower() not in ["omni", "mase"]:
@@ -238,6 +279,17 @@ def anomaly_detection(
                 scaled=scaled,
             )
 
+    if isinstance(time_window, int):
+        if time_window < 3 or time_window >= len(graphs):
+            msg = f"time_window must be within [3, {len(graphs)})."
+            raise ValueError(msg)
+    else:
+        msg = f"time_window must be an integer, not {type(time_window)}."
+        raise TypeError(msg)
+
+    if not isinstance(use_lower_line, bool):
+        raise TypeError(f"use_lower_line must be a bool, not {type(use_lower_line)}.")
+
     graphs = import_multigraphs(graphs)
     n_graphs = len(graphs)
 
@@ -252,7 +304,7 @@ def anomaly_detection(
             embedder.fit_transform(graphs[i : i + 2]) for i in range(n_graphs - 1)
         ]
     else:
-        # Do mase. Bit more complicated since Vhat needs to be rescaled by |Rhat|^1/2
+        # Do mase. Vhat needs to be rescaled by |Rhat|^1/2
         embeddings = []
         for i in range(n_graphs - 1):
             Vhat = embedder.fit_transform(graphs[i : i + 2])
@@ -274,7 +326,22 @@ def anomaly_detection(
     ) = _compute_control_chart(graph_stats, vertex_stats, time_window)
 
     if use_lower_line:
-        pass
+        graph_idx = (
+            np.where(
+                (graph_stats[time_window - 1 :] > graph_upper_central_line)
+                | (graph_stats[time_window - 1 :] < graph_lower_central_line)
+            )[0]
+            + time_window
+        )
+
+        g_idx, v_idx = np.where(
+            (vertex_stats[time_window - 1 :] > vertex_upper_central_line.reshape(-1, 1))
+            | (
+                vertex_stats[time_window - 1 :]
+                < vertex_lower_central_line.reshape(-1, 1)
+            )
+        )
+        vertex_idx = [(i + time_window, v_idx[g_idx == i]) for i in np.unique(g_idx)]
     else:
         graph_idx = (
             np.where(graph_stats[time_window - 1 :] > graph_upper_central_line)[0]
