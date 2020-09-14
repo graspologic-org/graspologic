@@ -167,8 +167,8 @@ def anomaly_detection(
         3. Compute moving means and standard deviations of the test statistics
             given a time window.
         4. Compute the upper and lower threshold for test statistics.
-        5. Compute graphs or vertices that are above the upper threshold or
-            below the lower threshold.
+        5. Compute graphs or vertices with test statistics that are above the
+            upper threshold or below the lower threshold.
 
     Parameters
     ----------
