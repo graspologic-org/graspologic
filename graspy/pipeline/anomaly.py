@@ -25,14 +25,16 @@ def _compute_statistics(embeddings):
 
     Parameters
     ----------
-    embeddings : list of ndarray,
+    embeddings : list of ndarray
+        Sequential pair-wise embeddings.
 
     Returns
     -------
-    graph_stats : ndarray, shape (n_graphs -1, )
+    graph_stats : ndarray, shape (n_graphs - 1, )
+        Test statistics based on spectral norms.
 
-    vertex_stats : ndarray, shape (n_graphs -1, n_vertices)
-
+    vertex_stats : ndarray, shape (n_graphs - 1, n_vertices)
+        Test statistics based on L2 norms.
     """
     # This is \tilde{y}^t
     graph_stats = np.array(
@@ -55,12 +57,44 @@ def _compute_statistics(embeddings):
 
 def _compute_control_chart(graph_stats, vertex_stats, time_window):
     """
+    Computes the control limits using 3 standard deviations.
 
     Parameters
     ----------
     graph_stats
 
     vertex_stats
+
+    time_window : int
+        The number of graphs in time window in estimating the moving mean and
+        moving standard deviation.
+
+    Returns
+    -------
+    graph_means : ndarray, shape (n_graphs - time_window, )
+        Moving average of graph-wise test statistics.
+
+    graph_stds : ndarray, shape (n_graphs - time_window, )
+        Moving standard deviation of graph-wise test statistics.
+
+    graph_upper_central_line : ndarray, shape (n_graphs - time_window, )
+        Upper threshold of graph-wise test statistics.
+
+    graph_lower_central_line : ndarray, shape (n_graphs - time_window, )
+        Lower threshold of graph-wise test statistics.
+
+    vertex_means : ndarray, shape (n_graphs - time_window, )
+        Moving average of vertex-wise test statistics.
+
+    vertex_stds : ndarray, shape (n_graphs - time_window, )
+        UnWeighted AVErage of subgroup estimates based on subgroup Standard
+        Deviations (UWAVE-SD) of vertex-wise test statistics.
+
+    vertex_upper_central_line : ndarray, shape (n_graphs - time_window, )
+        Upper threshold of vertex-wise test statistics.
+
+    vertex_lower_central_line : ndarray, shape (n_graphs - time_window, )
+        Lower threshold of vertex-wise test statistics.
     """
     el = time_window
     m = graph_stats.size + 1  # num graphs
@@ -72,7 +106,7 @@ def _compute_control_chart(graph_stats, vertex_stats, time_window):
         graph_means[i] = graph_stats[i : i + el - 1].sum() / (el - 1)
         vertex_means[i] = vertex_stats[i : i + el - 1].sum() / (n * (el - 1))
 
-    # Sequential differences in \tilde{y}^t
+    # Sequential differences
     graph_diffs = np.abs(np.diff(graph_stats))
 
     # Compute vertex standard deviation
@@ -125,12 +159,16 @@ def anomaly_detection(
         If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
     method : {"omni" (default), "mase"}
-        Embedding method
+        Embedding method for estimating latent positions for each sequential
+        pair of graphs.
 
     time_window : int, default=3
         The number of graphs in time window in estimating the moving mean and
-        moving standard deviation. Must be greater than 3 and less than number
-        of input graphs.
+        moving standard deviation. Must be greater than or equal to 3 and less
+        than number of input graphs.
+
+    use_lower_line : bool, default=False
+        Use the lower control line to compute anomalous graphs or vertices.
 
     diag_aug : bool, default=True
         Augment the diagonals of each input graph prior to embeddings.
@@ -164,6 +202,10 @@ def anomaly_detection(
         Number of iterations for randomized SVD solver. Not used by 'full' or
         'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
+
+    Returns
+    -------
+
     """
     if isinstance(time_window, int):
         if time_window < 3 or time_window >= len(graphs):
@@ -204,7 +246,7 @@ def anomaly_detection(
         raise ValueError("All input graphs must be undirected.")
 
     # Sequential pair-wise embeddings
-    # Need list of ndarrays with shape (2, n_verts, n_components)
+    # Create list of ndarrays with shape (2, n_verts, n_components)
     if method.lower() == "omni":  # Do omni
         embeddings = [
             embedder.fit_transform(graphs[i : i + 2]) for i in range(n_graphs - 1)
