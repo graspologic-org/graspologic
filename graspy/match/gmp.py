@@ -16,12 +16,13 @@ import numpy as np
 import math
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
+from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
 from .skp import SinkhornKnopp
 
 
-class GraphMatch:
+class GraphMatch(BaseEstimator):
     """
     This class solves the Graph Matching Problem and the Quadratic Assignment Problem
     (QAP) through an implementation of the Fast Approximate QAP Algorithm (FAQ) (these
