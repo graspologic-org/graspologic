@@ -701,11 +701,11 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
     Sample a binary RDPG using sampled latent positions.
 
     >>> rdpg(X, loops=False)
-    array([[0., 1., 0., 0., 1.],
-           [1., 0., 0., 1., 1.],
-           [0., 0., 0., 1., 1.],
-           [0., 1., 1., 0., 0.],
-           [1., 1., 1., 0., 0.]])
+    array([[0., 1., 1., 1., 0.],
+            [1., 0., 0., 1., 1.],
+            [1., 0., 0., 1., 0.],
+            [1., 1., 1., 0., 1.],
+            [0., 1., 0., 1., 0.]])
 
     Sample a weighted RDPG with Poisson(2) weight distribution
 

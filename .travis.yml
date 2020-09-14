@@ -5,8 +5,6 @@ python:
 - '3.6'
 jobs:
   include:
-    - python: 3.6
-    - python: 3.7
     - python: 3.8
 cache: pip
 install:
