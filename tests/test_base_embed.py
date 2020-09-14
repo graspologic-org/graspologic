@@ -44,7 +44,7 @@ class TestBaseEmbed(unittest.TestCase):
         A = er_nm(n, M, directed=True)
         embed._reduce_dim(A)
         out = embed.fit_transform(A)
-        self.assertEqual(out.shape, (n, 2*n_components))
+        self.assertEqual(out.shape, (n, 2 * n_components))
         self.assertTrue(embed.latent_right_ is not None)
 
     def test_baseembed(self):
