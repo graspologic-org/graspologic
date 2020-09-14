@@ -161,6 +161,14 @@ class GraphMatch(BaseEstimator):
         Returns
         -------
         self : returns an instance of self
+
+        Attributes
+        -------
+        n_iter_ : Number of iterations run.
+
+        score_ : Objective function value.
+
+        perm_inds_ : Permutation Indicies
         """
         A = check_array(A, copy=True, ensure_2d=True)
         B = check_array(B, copy=True, ensure_2d=True)
