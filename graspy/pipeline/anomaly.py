@@ -353,14 +353,14 @@ def anomaly_detection(
         )
         vertex_idx = [(i + time_window, v_idx[g_idx == i]) for i in np.unique(g_idx)]
 
-    graph_anomaly_dict = dict(
+    graph_dict = dict(
         statistics=graph_stats[time_window - 1 :],
         means=graph_means,
         stds=graph_stds,
         upper_central_line=graph_upper_central_line,
         lower_central_line=graph_lower_central_line,
     )
-    vertex_anomaly_dict = dict(
+    vertex_dict = dict(
         statistics=vertex_stats[time_window - 1 :],
         means=vertex_means,
         stds=vertex_stds,
@@ -368,4 +368,4 @@ def anomaly_detection(
         lower_central_line=vertex_lower_central_line,
     )
 
-    return AnomalyResult(graph_idx, graph_anomaly_dict, vertex_idx, vertex_anomaly_dict)
+    return AnomalyResult(graph_idx, graph_dict, vertex_idx, vertex_dict)
