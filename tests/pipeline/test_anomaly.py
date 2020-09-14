@@ -35,15 +35,52 @@ def test_inputs():
 
 def test_pipeline():
     """Based on the example in Guodong's repo"""
-    graphs = load_data()
 
-    (graph_indices, graph_dict, vertex_indices, vertex_dict) = anomaly_detection(
-        graphs, method="omni", time_window=4, n_components=1
-    )
+    def run_anomaly(method, use_lower_line):
+        graphs = load_data()
 
-    # Expected graphs
-    assert_equal(graph_indices, [5, 10])
+        (graph_indices, graph_dict, vertex_indices, vertex_dict) = anomaly_detection(
+            graphs,
+            method=method,
+            time_window=4,
+            n_components=1,
+            use_lower_line=use_lower_line,
+        )
 
+        return graph_indices, vertex_indices
+
+    # Use Omni, no lower line
+    g_idx, v_idx = run_anomaly("omni", use_lower_line=False)
+
+    # Expected graphs to be different
+    assert_equal(g_idx, [5, 10])
     # All 100 vertices in graphs 5 and 6 should be different
-    assert len(vertex_indices[5]) == 100
-    assert len(vertex_indices[6]) == 100
+    assert_equal(len(v_idx[5]), 100)
+    assert_equal(len(v_idx[6]), 100)
+
+    # Use Omni, use lower line
+    g_idx, v_idx = run_anomaly("omni", use_lower_line=True)
+    # Expected graphs to be different
+    assert_equal(g_idx, [4, 5, 10])
+    # All 100 vertices in graphs 5 and 6 should be different
+    assert_equal(len(v_idx[5]), 100)
+    assert_equal(len(v_idx[6]), 100)
+
+    # Use MASE, no lower_line
+    g_idx, v_idx = run_anomaly("mase", use_lower_line=False)
+
+    # Expected graphs to be different
+    assert_equal(g_idx, [5])
+    # All 100 vertices in graphs 5 and 6 should be different
+    assert_equal(len(v_idx[5]), 100)
+    assert_equal(len(v_idx[6]), 100)
+
+    # Use MASE, no lower_line
+    g_idx, v_idx = run_anomaly("mase", use_lower_line=True)
+
+    # Results are the same
+    # Expected graphs to be different
+    assert_equal(g_idx, [5])
+    # All 100 vertices in graphs 5 and 6 should be different
+    assert_equal(len(v_idx[5]), 100)
+    assert_equal(len(v_idx[6]), 100)
