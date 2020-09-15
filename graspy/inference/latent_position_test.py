@@ -58,11 +58,11 @@ class LatentPositionTest(BaseInference):
             .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
             .. math:: H_o: X_1 = c X_2 R
-            
+
             where :math:`c` is a scalar, :math:`c > 0`
         - 'diagonal-rotation'
             .. math:: H_o: X_1 = D X_2 R
-            
+
             where :math:`D` is an arbitrary diagonal matrix
 
     n_bootstraps : int, optional (default 500)
