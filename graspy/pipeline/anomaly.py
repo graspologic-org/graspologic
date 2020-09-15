@@ -162,12 +162,16 @@ def anomaly_detection(
         1. Estimate latent positions of graphs for each sequential pair of
         graphs using either :class:`~graspy.embed.OmnibusEmbed` or
         :class:`~graspy.embed.MultipleASE`.
+
         2. Compute test statistics, or the magnitude of change, for each pair
         of latent positions via spectral norm for graph anomaly detection
         or L2 norm for vertex anomaly detection.
+
         3. Compute moving means and standard deviations of the test statistics
         given a time window.
+
         4. Compute the upper and lower threshold for test statistics.
+
         5. Compute graphs or vertices with test statistics that are above the
         upper threshold or below the lower threshold.
 
