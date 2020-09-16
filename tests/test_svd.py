@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import pytest
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
