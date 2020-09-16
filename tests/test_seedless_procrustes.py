@@ -40,29 +40,48 @@ class TestSeedlessProcrustes(unittest.TestCase):
         with self.assertRaises(ValueError):
             SeedlessProcrustes(init="hi")
 
-        # initial Q and initial P things
+        # initial Q and initial P passed when shouldn't be
+        with self.assertRaises(ValueError):
+            SeedlessProcrustes(
+                init="2d",
+                initial_Q = np.eye(2),
+            )
+        with self.assertRaises(ValueError):
+            SeedlessProcrustes(
+                init="2d",
+                initial_P=np.ones((100, 100)) / 10000
+            )
+        with self.assertRaises(ValueError):
+            SeedlessProcrustes(
+                init="custom",
+                initial_Q = np.eye(2),
+                initial_P=np.ones((100, 100)) / 10000
+            )
+
+
+        # initial Q and initial P specific values
         # pass bad types
         with self.assertRaises(TypeError):
-            SeedlessProcrustes(initial_Q="hello there")
+            SeedlessProcrustes(init="custom", initial_Q="hello there")
         with self.assertRaises(TypeError):
-            SeedlessProcrustes(initial_P="hello there")
+            SeedlessProcrustes(init="custom", initial_P="hello there")
         with self.assertRaises(TypeError):
-            SeedlessProcrustes(initial_Q={"hello": "there"})
+            SeedlessProcrustes(init="custom", initial_Q={"hello": "there"})
         with self.assertRaises(TypeError):
-            SeedlessProcrustes(initial_P={"hello": "there"})
+            SeedlessProcrustes(init="custom", initial_P={"hello": "there"})
         # pass non ndim=2 matrices (cuaght by check_array)
         with self.assertRaises(ValueError):
-            SeedlessProcrustes(initial_Q=np.ones(25).reshape(5, 5, 1))
+            SeedlessProcrustes(init="custom", initial_Q=np.eye(5).reshape(5, 5, 1))
         with self.assertRaises(ValueError):
-            SeedlessProcrustes(initial_P=np.ones(25).reshape(5, 5, 1))
+            SeedlessProcrustes(init="custom", initial_P=np.eye(5).reshape(5, 5, 1))
         # pass not an orthogonal matrix as a Q
         with self.assertRaises(ValueError):
-            SeedlessProcrustes(initial_Q=np.ones((3, 2)))
+            SeedlessProcrustes(init="custom", initial_Q=np.eye(3)[:-1])
         with self.assertRaises(ValueError):
-            SeedlessProcrustes(initial_Q=np.ones((3, 3)))
+            SeedlessProcrustes(init="custom", initial_Q=np.ones((3, 3)))
         # pass not a "doubly stochasitc" matrix as P
         with self.assertRaises(ValueError):
-            SeedlessProcrustes(initial_P=np.ones((3, 2)))
+            SeedlessProcrustes(init="custom", initial_P=np.ones((3, 2)))
 
     def test_bad_datasets(self):
         X = np.arange(6).reshape(6, 1)
@@ -139,7 +158,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
         W = stats.ortho_group.rvs(d)
         Y = Y @ W
 
-        aligner = SeedlessProcrustes(init="2d", initial_Q=np.eye(3))
+        aligner = SeedlessProcrustes(init="2d")
         Q = aligner.fit(X, Y).Q_
         self.assertTrue(np.linalg.norm(Y.mean(axis=0) - (X @ Q).mean(axis=0)) < 0.1)
 
