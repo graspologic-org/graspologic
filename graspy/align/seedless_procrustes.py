@@ -106,18 +106,23 @@ class SeedlessProcrustes(BaseAlign):
     References
     ----------
     .. [1] Agterberg, J.
+        # TODO Cite the Seedless Procrustes preprint whenever available.
+
+    // [2] Agterberg, J., Tang, M., Priebe., C. E. (2020).
+        "On Two Distinct Sources of Nonidentifiability in Latent Position Random Graph Models"
+        arXiv:2003.14250
 
     Notes
     -----
     In essence, the goal of this procedure is to simultaneously obtain a, not
     necessarily 1-to-1, correspondence between the vertices of the two data
     sets, and an orthogonal alignment between two datasets. If the two datasets
-    are represented with matrices :math:`X \in M_{n, d}` and :math:`Y \in M_{m,
-    d}`, then the correspondence is a matrix :math:`P \in M_{n, m}` that is
-    doubly-stochastic (that is, it's rows sum to :math:`1/n`, and columns sum
-    to :math:`1/m`) and the orthogonal alignment is an orthogonal matrix
-    :math:`Q \in M_{d, d}`. The global objective function is
-    :math:`||X Q - P Y ||_F`.
+    are represented with matrices :math:`X \in M_{n, d}` and
+    :math:`Y \in M_{m, d}`, then the correspondence is a matrix
+    :math:`P \in M_{n, m}` that is doubly-stochastic (that is, it's rows sum to
+    :math:`1/n`, and columns sum to :math:`1/m`) and the orthogonal alignment
+    is an orthogonal matrix :math:`Q \in M_{d, d}`. The global objective
+    function is :math:`|| X Q - P Y ||_F`.
 
     Note that both :math:`X` and :math:`PY` are matrices in :math:`M_{n, d}`.
     Thus, if one knew :math:`P`, it would be simple to obtain an estimate for

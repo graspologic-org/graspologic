@@ -177,7 +177,7 @@ class LatentDistributionTest(BaseInference):
         "hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package."
         arXiv:1907.02088.
 
-    .. [3] Alyakin, A., Agterberg, J., Helm, H., Priebe, C. (2020).
+    .. [3] Alyakin, A. A., Agterberg, J., Helm, H. S., Priebe, C. E. (2020).
        "Correcting a Nonparametric Two-sample Graph Hypothesis Test for Graphs with Different Numbers of Vertices"
        arXiv:2008.09434
 
