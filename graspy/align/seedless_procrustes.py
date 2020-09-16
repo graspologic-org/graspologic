@@ -52,22 +52,30 @@ class SeedlessProcrustes(BaseAlign):
             problem. I.e. maxumum number of total iterations the whole "EM"
             algorithm.
 
-        init : string, {"2d" (default), "sign_flips", "custom"}, optional
+        init : string, {'2d' (default), 'sign_flips', 'custom'}, optional
 
-            - "2d"
-                Uses 2^d different initiazlizations, where d is the dimension.
-                specifically, uses all possible matrices with all entries real
-                and diagonal entries having magnitude 1 and 0s everywehre else.
-                for example, for d=2, tries [[1, 0], [0, 1]], [[1, 0], [0,
-                -1]], [[-1, 0], [0, 1]], and [[-1, 0], [0, -1]]. picks the best
-                one based on the value of the objective function.
+            - '2d'
+                Uses :math:`2^d` different restarts, where :math:`d` is the
+                dimension of the datasets. In particular, tries all matrices
+                that are simultaneously diagonal and orthogonal. In other
+                words, these are diagonal matrices with all entries on the
+                diagonal being either +1 or -1. The final result is picked
+                based on the final values of the objective function. This is
+                motivated by the fact that in the graph setting, the embeddings
+                have two types of orthogonal non-identifiability, one of which
+                is captured by the orthogonal diagonal matrices. For more on
+                this, see [2]_.
             - 'sign_flips'
                 Initial alignment done by making the median value in each
-                 dimension have the same sign"
-            - "custom"
-                Expects either an initial matrix Q or initial matrix P during
-                the use of fit or fit_transform (but not both). if neither is
-                given initializes to Q = I.
+                dimension have the same sign". The motivation is similar to
+                that in '2d', except this is a heuristic that can save time,
+                but can sometimes yield suboptimal results.
+            - 'custom'
+                Expects either an initial guess for :math:`Q` or an initial
+                guess for :math:`P`, but not both. See `initial_Q` and
+                initial_P`, respectively. If neither is provided, initializes
+                `initial_Q` to an identity with an appropriate number of
+                dimensions.
 
         initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
             An initial guess for the alignment matrix, Q, if such exists. Only
@@ -109,25 +117,25 @@ class SeedlessProcrustes(BaseAlign):
     doubly-stochastic (that is, it's rows sum to :math:`1/n`, and columns sum
     to :math:`1/m`) and the orthogonal alignment is an orthogonal matrix
     :math:`Q \in M_{d, d}`. The global objective function is
-    :math:`||X W - P Y ||_F`.
+    :math:`||X Q - P Y ||_F`.
 
     Note that both :math:`X` and :math:`PY` are matrices in :math:`M_{n, d}`.
     Thus, if one knew :math:`P`, it would be simple to obtain an estimate for
-    :math:`W`, using the regular orthogonal procrustes. On the other hand, if
-    :math:`W` was known, then :math:`XW` and :math:`Y` could be thought of
+    :math:`Q`, using the regular orthogonal procrustes. On the other hand, if
+    :math:`Q` was known, then :math:`XQ` and :math:`Y` could be thought of
     distributions over a finite number of masses, each with weight :math:`1/n`
     or :math:`1/m`, respectively. These distributions could be "matched" via
     solving an optimal transport problem.
 
-    However, both :math:`W` and :math:`P` are simultaneously unknown here. So
+    However, both :math:`Q` and :math:`P` are simultaneously unknown here. So
     the algorithm performs a sequence of alternating steps, obtaining
-    iteratively improving estimates of :math:`W` and :math:`P`, similarly to an
+    iteratively improving estimates of :math:`Q` and :math:`P`, similarly to an
     expectation-maximization (EM) procedure. It is not known whether this
     procedure is formally an EM, but the analogy can be drawn as follows: after
-    obtaining an initial guess of of :math:`\hat{W}_{0}`, obtaining an
-    assignment matrix :math:`\hat{P}_{i+1} | \hat{W}_{i}` ("E-step") is done by
+    obtaining an initial guess of of :math:`\hat{Q}_{0}`, obtaining an
+    assignment matrix :math:`\hat{P}_{i+1} | \hat{Q}_{i}` ("E-step") is done by
     solving an optimal transport problem via Sinkhorn algorithm, whereas
-    obtaining an orthogonal alignment matrix :math:`W_{i+1} | P_{i}` ("M-step")
+    obtaining an orthogonal alignment matrix :math:`Q_{i+1} | P_{i}` ("M-step")
     is done via regular orthogonal procurstes. These alternating steps are
     performed until `iterative_num_reps` is reached.
 
