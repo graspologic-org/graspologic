@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import os
 import sys
 from setuptools import setup, find_packages
@@ -15,7 +18,7 @@ REQUIRED_PACKAGES = [
     "networkx>=2.1",
     "numpy>=1.8.1",
     "scikit-learn>=0.19.1",
-    "scipy>=1.1.0",
+    "scipy>=1.4.0",
     "seaborn>=0.9.0",
     "matplotlib>=3.0.0",
     "hyppo>=0.1.3",
@@ -47,7 +50,7 @@ setup(
     author_email=AUTHOR_EMAIL,
     install_requires=REQUIRED_PACKAGES,
     url=URL,
-    license="Apache License 2.0",
+    license="MIT",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
