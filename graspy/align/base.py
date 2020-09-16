@@ -103,7 +103,7 @@ class BaseAlign(BaseEstimator):
                    "as datasets X and Y used in fit. currently, vectors in "
                    f" the dataset to transform have {X.shape[1]} dimensions, "
                    f"while vectors in fit had {self.Q_.shape[0]} dimensions.")
-            raise TypeError(msg)
+            raise ValueError(msg)
         return X @ self.Q_
 
     def fit_transform(self, X, Y):

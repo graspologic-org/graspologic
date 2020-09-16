@@ -68,31 +68,34 @@ class SeedlessProcrustes(BaseAlign):
         init : string, {"2d" (default), "sign_flips", "custom"}, optional
 
             - "2d"
-                uses 2^d different initiazlizations, where d is the dimension.
+                Uses 2^d different initiazlizations, where d is the dimension.
                 specifically, uses all possible matrices with all entries real
                 and diagonal entries having magnitude 1 and 0s everywehre else.
                 for example, for d=2, tries [[1, 0], [0, 1]], [[1, 0], [0,
                 -1]], [[-1, 0], [0, 1]], and [[-1, 0], [0, -1]]. picks the best
                 one based on the value of the objective function.
             - 'sign_flips'
-                for the first dimension, if two datasets have medians with
-                varying signs, flips all signs along this dimension for the
-                first dataset. then initializes to an identity.
+                Initial alignment done by making the median value in each
+                 dimension have the same sign"
             - "custom"
-                expects either an initial matrix Q or initial matrix P during
-                the use of fit or fit_transform. uses initial Q provided,
-                unless it is not provided. if not provided - uses initial P. if
-                neither is given initializes to Q = I.
+                Expects either an initial matrix Q or initial matrix P during
+                the use of fit or fit_transform (but not both). if neither is
+                given initializes to Q = I.
 
         initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
-            An initial guess for the alignment matrix, if such exists. Ignored
-            if init alignment is set to anything other than 'custom'.
-            If None - initializes using an initial guess for P.
-            If None, and P is also None - initializes Q to identity matrix.
+            An initial guess for the alignment matrix, Q, if such exists. Only
+            one of initial_Q, initial_P can be provided at the same time, and
+            only if `init` argument is set to 'custom'. If None, and initial_P
+            is also None - initializes `initial_Q` to identity matrix. Must be
+            an orthogonal matrix, if provided.
 
         initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
-            Initial guess for the initial transport matrix.
-            Only matters if Q=None.
+            Initial guess for the optimal transport matrix, P, if such exists.
+            Only one of initial_Q, initial_P can be provided at the same time,
+            and only if `init` argument is set to 'custom'. If None, and
+            initial_P is also None - initializes `initial_Q` to identity
+            matrix. Must be a doubly stochastic matrix if provided (rows sum up
+            to 1/n, cols sum up to 1/m.)
 
     Attributes
     ----------
