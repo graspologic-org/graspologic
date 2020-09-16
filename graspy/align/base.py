@@ -44,7 +44,7 @@ class BaseAlign(BaseEstimator):
             msg = f"first dataset is a {type(X)}, not an np.ndarray! "
             raise TypeError(msg)
         if not isinstance(Y, np.ndarray):
-            msg = f"first dataset is a {type(Y)}, not an np.ndarray! "
+            msg = f"second dataset is a {type(Y)}, not an np.ndarray! "
             raise TypeError(msg)
         # check for 2-dness and finiteness
         X = check_array(X, copy=True)
@@ -98,6 +98,12 @@ class BaseAlign(BaseEstimator):
             msg = f"dataset is a {type(X)}, not an np.ndarray! "
             raise TypeError(msg)
         X = check_array(X)
+        if not X.shape[1] == self.Q_.shape[0]:
+            msg = ("dataset needs to have the same number of dimensions, d, "
+                   "as datasets X and Y used in fit. currently, vectors in "
+                   f" the dataset to transform have {X.shape[1]} dimensions, "
+                   f"while vectors in fit had {self.Q_.shape[0]} dimensions.")
+            raise TypeError(msg)
         return X @ self.Q_
 
     def fit_transform(self, X, Y):

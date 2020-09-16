@@ -43,6 +43,15 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         with self.assertRaises(ValueError):
             aligner = OrthogonalProcrustes()
             aligner.fit(X, Y_wrong_n)
+        # check passing array with wrong dimensions to transform (caught by us)
+        with self.assertRaises(ValueError):
+            aligner = OrthogonalProcrustes()
+            aligner.fit(X, Y)
+            aligner.transform(Y_wrong_d)
+        # passing array with different number of vertices to fit is okay
+        aligner = OrthogonalProcrustes()
+        aligner.fit(X, Y)
+        aligner.transform(Y_wrong_n)
 
     def test_identity(self):
         Y = np.array([[1234, 19], [6798, 18], [9876, 17], [4321, 16]])

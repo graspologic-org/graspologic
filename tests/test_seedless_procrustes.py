@@ -92,6 +92,11 @@ class TestSeedlessProcrustes(unittest.TestCase):
         with self.assertRaises(ValueError):
             aligner = SeedlessProcrustes()
             aligner.fit(X, Y_wrong_d)
+        # check passing array with wrong dimensions to transform (caught by us)
+        with self.assertRaises(ValueError):
+            aligner = SeedlessProcrustes()
+            aligner.fit(X, Y)
+            aligner.transform(Y_wrong_d)
 
     def test_different_inits(self):
         np.random.seed(314)

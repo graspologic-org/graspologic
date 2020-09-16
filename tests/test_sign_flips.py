@@ -51,6 +51,11 @@ class TestSignFlips(unittest.TestCase):
         with self.assertRaises(ValueError):
             aligner = SignFlips()
             aligner.fit(X, Y_wrong_d)
+        # check passing array with wrong dimensions to transform (caught by us)
+        with self.assertRaises(ValueError):
+            aligner = SignFlips()
+            aligner.fit(X, Y)
+            aligner.transform(Y_wrong_d)
 
     def test_two_datasets(self):
         X = np.arange(6).reshape(3, 2) * (-1)
