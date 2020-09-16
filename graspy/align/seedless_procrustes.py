@@ -30,15 +30,8 @@ class SeedlessProcrustes(BaseAlign):
 
     In graph setting, it is used to align the embeddings of two different
     graphs, when it requires some simultaneous inference task, for example,
-    inside of the test for the equivalence of the latent distributions.
-
-    In essence, it aims to simultaneously obtain a, not necessarily 1-to-1,
-    correspondance between the vertices of the two data sets, and the
-    orthogonal matrix alignment matrix. It does via a sequence of alternating
-    steps, similarly to a regular expectation-maximization procedures. The step
-    of obtaining an assignment ("E-step") is done by solving an optimal
-    transport problem via Sinkhorn algorithm, whereas obtaining an orthogonal
-    alignment matrix ("M-step") is done via regular orthogonal procurstes.
+    inside of the test for the equivalence of the latent distributions, and no
+    1-1 matching between the vertices of the two graphs can be established.
 
     Parameters
     ----------
@@ -106,11 +99,46 @@ class SeedlessProcrustes(BaseAlign):
             Final matrix of optimal transports
 
         score_ : float
-            Final value of the objective function: math`|| X Q - P Y ||_F`
+            Final value of the objective function: :math:`|| X Q - P Y ||_F`
 
     References
     ----------
     .. [1] Agterberg, J.
+
+    Notes
+    -----
+    In essence, the goal of this procedure is to simultaneously obtain a, not
+    necessarily 1-to-1, correspondence between the vertices of the two data
+    sets, and an orthogonal alignment between two datasets. If the two datasets
+    are represented with matrices :math:`X \in M_{n, d}` and :math:`Y \in M_{m,
+    d}`, then the correspondence is a matrix :math:`P \in M_{n, m}` that is
+    doubly-stochastic (that is, it's rows sum to :math:`1/n`, and columns sum
+    to :math:`1/m`) and the orthogonal alignment is an orthogonal matrix
+    :math:`Q \in M_{d, d}`. The global objective function is
+    :math:`||X W - P Y ||_F`.
+
+    Note that both :math:`X` and :math:`PY` are matrices in :math:`M_{n, d}`.
+    Thus, if one knew :math:`P`, it would be simple to obtain an estimate for
+    :math:`W`, using the regular orthogonal procrustes. On the other hand, if
+    :math:`W` was known, then :math:`XW` and :math:`Y` could be thought of
+    distributions over a finite number of masses, each with weight :math:`1/n`
+    or :math:`1/m`, respectively. These distributions could be "matched" via
+    solving an optimal transport problem.
+
+    However, both :math:`W` and :math:`P` are simultaneously unknown here. So
+    the algorithm performs a sequence of alternating steps, obtaining
+    iteratively improving estimates of :math:`W` and :math:`P`, similarly to an
+    expectation-maximization (EM) procedure. It is not known whether this
+    procedure is formally an EM, but the analogy can be drawn as follows: after
+    obtaining an initial guess of of :math:`\hat{W}_{0}`, obtaining an
+    assignment matrix :math:`\hat{P}_{i+1} | \hat{W}_{i}` ("E-step") is done by
+    solving an optimal transport problem via Sinkhorn algorithm, whereas
+    obtaining an orthogonal alignment matrix :math:`W_{i+1} | P_{i}` ("M-step")
+    is done via regular orthogonal procurstes. These alternating steps are
+    performed until `iterative_num_reps` is reached.
+
+    For more on how the initial guess can be performed, see `init`.
+
     """
 
     def __init__(
