@@ -223,7 +223,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         Returns
         -------
         out : np.ndarray or length 2 tuple of np.ndarray.
-            if input graphs were symmetric, nndarray of shape (n_graphs, n_vertices, n_components).
+            If input graphs were symmetric, ndarray of shape (n_graphs, n_vertices, n_components).
             If graphs were directed and ``concat`` is False, returns tuple of two arrays (same shape as above).
             The first corresponds to the left latent positions, and the second to the right latent positions.
             If graphs were directed and ``concat`` is True, left and right (out and in) latent positions are concatenated.
