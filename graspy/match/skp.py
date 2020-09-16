@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 # Title: sinkhorn_knopp Source Code
 # Author: Tabanpour, B
 # Date: 2018

@@ -71,7 +71,7 @@ If you have an idea for an improvement not listed there, please
 developers. 
 
 # License
-This project is covered under the [Apache 2.0 License](https://github.com/neurodata/graspy/blob/master/LICENSE).
+This project is covered under the MIT License.
 
 # Issues
 We appreciate detailed bug reports and feature requests (though we appreciate pull requests even more!). Please visit our [issues](https://github.com/neurodata/graspy/issues) page if you have questions or ideas.
