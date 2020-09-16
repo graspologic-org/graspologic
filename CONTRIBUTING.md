@@ -129,7 +129,6 @@ We recommended that your contribution complies with the following rules before y
   ```
 
 # Guidelines
-----------
 
 ## Coding Guidelines
 
