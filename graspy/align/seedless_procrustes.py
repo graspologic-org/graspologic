@@ -185,6 +185,16 @@ class SeedlessProcrustes(BaseAlign):
         if init not in inits_supported:
             msg = "supported inits are {}".format(inits_supported)
             raise ValueError(msg)
+        # check that initial_Q and intial_P aren't provided when shouldn't be
+        if initial_Q is not None and init != "custom":
+            msg = "initial_Q can only be provided if init is set to custom"
+            raise ValueError(msg)
+        if initial_P is not None and init != "custom":
+            msg = "initial_P can only be provided if init is set to custom"
+            raise ValueError(msg)
+        if initial_Q is not None and initial_P is not None:
+            msg = "initial_Q and initial_P cannot be provided simultaneously"
+            raise ValueError(msg)
         # check initial_Q argument
         if initial_Q is not None:
             if not isinstance(initial_Q, np.ndarray):
@@ -311,14 +321,15 @@ class SeedlessProcrustes(BaseAlign):
             self.initial_Q = aligner.fit(X, Y).Q_
             self.P_, self.Q_ = self._iterative_ot(X, Y, self.initial_Q)
         else:
-            # determine initial Q if "custom" and not provided
-            if self.initial_Q is None:
-                if self.initial_P is not None:
-                    # use initial P, if provided
-                    self.initial_Q = self._procrustes(X, Y, self.initial_P)
-                else:
-                    # set to initial Q to identity if neither Q nor P provided
-                    self.initial_Q = np.eye(d)
+            # determine initial Q if "custom"
+            if self.initial_Q is not None:
+                pass
+            elif self.initial_P is not None:
+                # use initial P, if provided
+                self.initial_Q = self._procrustes(X, Y, self.initial_P)
+            else:
+                # set to initial Q to identity if neither Q nor P provided
+                self.initial_Q = np.eye(d)
             self.P_, self.Q_ = self._iterative_ot(X, Y, self.initial_Q)
         self.score_ = self._compute_objective(X, Y)
 
