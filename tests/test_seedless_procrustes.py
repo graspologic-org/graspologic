@@ -44,20 +44,16 @@ class TestSeedlessProcrustes(unittest.TestCase):
         with self.assertRaises(ValueError):
             SeedlessProcrustes(
                 init="2d",
-                initial_Q = np.eye(2),
+                initial_Q=np.eye(2),
             )
         with self.assertRaises(ValueError):
-            SeedlessProcrustes(
-                init="2d",
-                initial_P=np.ones((100, 100)) / 10000
-            )
+            SeedlessProcrustes(init="2d", initial_P=np.ones((100, 100)) / 10000)
         with self.assertRaises(ValueError):
             SeedlessProcrustes(
                 init="custom",
-                initial_Q = np.eye(2),
-                initial_P=np.ones((100, 100)) / 10000
+                initial_Q=np.eye(2),
+                initial_P=np.ones((100, 100)) / 10000,
             )
-
 
         # initial Q and initial P specific values
         # pass bad types

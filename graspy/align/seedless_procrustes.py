@@ -340,4 +340,3 @@ def _sign_flip_matrix_from_int(val_int, d):
     val_bin = bin(val_int)[2:]
     val_bin = "0" * (d - len(val_bin)) + val_bin
     return np.diag(np.array([(float(i) - 0.5) * -2 for i in val_bin]))
-

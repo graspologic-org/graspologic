@@ -99,10 +99,12 @@ class BaseAlign(BaseEstimator):
             raise TypeError(msg)
         X = check_array(X)
         if not X.shape[1] == self.Q_.shape[0]:
-            msg = ("dataset needs to have the same number of dimensions, d, "
-                   "as datasets X and Y used in fit. currently, vectors in "
-                   f" the dataset to transform have {X.shape[1]} dimensions, "
-                   f"while vectors in fit had {self.Q_.shape[0]} dimensions.")
+            msg = (
+                "dataset needs to have the same number of dimensions, d, "
+                "as datasets X and Y used in fit. currently, vectors in "
+                f" the dataset to transform have {X.shape[1]} dimensions, "
+                f"while vectors in fit had {self.Q_.shape[0]} dimensions."
+            )
             raise ValueError(msg)
         return X @ self.Q_
 
