@@ -139,7 +139,7 @@ formatted and indented. Please read it and follow it.
 
 ## Docstring Guidelines
 
-Properly formatted docstrings is required for documentation generation by Sphinx. The pygraphstats package closely 
+Properly formatted docstrings is required for documentation generation by Sphinx. The graspologic package closely 
 follows the numpydoc guidelines. Please read and follow the 
 [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html#overview) guidelines. Refer to the 
 [example.py](https://numpydoc.readthedocs.io/en/latest/example.html#example) provided by numpydoc.
