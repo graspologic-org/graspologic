@@ -20,8 +20,6 @@ class TestSeedlessProcrustes(unittest.TestCase):
         with self.assertRaises(TypeError):
             SeedlessProcrustes(optimal_transport_num_reps=3.14)
         with self.assertRaises(TypeError):
-            SeedlessProcrustes(iterative_eps="oops")
-        with self.assertRaises(TypeError):
             SeedlessProcrustes(iterative_num_reps=3.14)
         with self.assertRaises(TypeError):
             SeedlessProcrustes(init=["hi", "there"])
@@ -33,8 +31,6 @@ class TestSeedlessProcrustes(unittest.TestCase):
             SeedlessProcrustes(optimal_transport_eps=-0.01)
         with self.assertRaises(ValueError):
             SeedlessProcrustes(optimal_transport_num_reps=0)
-        with self.assertRaises(ValueError):
-            SeedlessProcrustes(iterative_eps=-0.01)
         with self.assertRaises(ValueError):
             SeedlessProcrustes(iterative_num_reps=0)
         with self.assertRaises(ValueError):

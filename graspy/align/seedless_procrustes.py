@@ -47,12 +47,6 @@ class SeedlessProcrustes(BaseAlign):
             transport problem. I.e. maximum number of repetitions in each
             "E-step".
 
-        iterative_eps : float (default=0), optional
-            Tolerance of the iterative optimal transport problem. I.e.
-            tolerance of the whole "EM" algorithm. Zero by default, which means
-            that the algorithm performs all `iterative_num_reps` number of
-            steps.
-
         iterative_num_reps : int (default=100), optional
             Number of reps in each iteration of the iterative optimal transport
             problem. I.e. maxumum number of total iterations the whole "EM"
@@ -146,7 +140,6 @@ class SeedlessProcrustes(BaseAlign):
         optimal_transport_lambda=0.1,
         optimal_transport_eps=0.01,
         optimal_transport_num_reps=1000,
-        iterative_eps=0.0,
         iterative_num_reps=100,
         init="2d",
         initial_Q=None,
@@ -183,15 +176,6 @@ class SeedlessProcrustes(BaseAlign):
         if optimal_transport_num_reps < 1:
             msg = "{} is an invalid number of repetitions, must be non-negative".format(
                 iterative_num_reps
-            )
-            raise ValueError(msg)
-        # check iterative_eps argument
-        if type(iterative_eps) is not float:
-            msg = "iterative_eps must be a float, not {}".format(type(iterative_eps))
-            raise TypeError(msg)
-        if iterative_eps < 0:
-            msg = "{} is an invalid value of the iterative eps, must be non-negative".format(
-                iterative_eps
             )
             raise ValueError(msg)
         # check iterative_num_reps argument
@@ -258,7 +242,6 @@ class SeedlessProcrustes(BaseAlign):
         self.optimal_transport_eps = optimal_transport_eps
         self.optimal_transport_num_reps = optimal_transport_num_reps
         self.optimal_transport_lambda = optimal_transport_lambda
-        self.iterative_eps = iterative_eps
         self.iterative_num_reps = iterative_num_reps
         self.init = init
         self.initial_Q = initial_Q
@@ -295,8 +278,6 @@ class SeedlessProcrustes(BaseAlign):
             P = self._optimal_transport(X, Y, Q)
             Q = self._procrustes(X, Y, P)
             c = self._compute_objective(X, Y, Q, P)
-            if c < self.iterative_eps:
-                break
         return P, Q
 
     def _compute_objective(self, X, Y, Q=None, P=None):
