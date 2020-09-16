@@ -1,6 +1,5 @@
-# Anton Alyakin
-# aalyaki1 [at] jhu.edu
-# 09.04.2020
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import unittest
 
