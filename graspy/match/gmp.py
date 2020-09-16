@@ -1,27 +1,17 @@
-# Copyright 2019 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import numpy as np
 import math
 from scipy.optimize import linear_sum_assignment
 from scipy.optimize import minimize_scalar
+from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
 from .skp import SinkhornKnopp
 
 
-class GraphMatch:
+class GraphMatch(BaseEstimator):
     """
     This class solves the Graph Matching Problem and the Quadratic Assignment Problem
     (QAP) through an implementation of the Fast Approximate QAP Algorithm (FAQ) (these

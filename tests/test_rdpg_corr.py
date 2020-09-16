@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import unittest
 from graspy.simulations.simulations import sample_edges, p_from_latent
 from graspy.simulations.rdpg_corr import rdpg_corr
