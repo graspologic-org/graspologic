@@ -71,6 +71,9 @@ class ClassicalMDS(BaseEstimator):
         Equals the parameter n_components. If input n_components was None,
         then equals the optimal embedding dimension.
 
+    n_features_in_: int
+        number of features passed to the fit method.
+
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.
 
@@ -203,6 +206,7 @@ class ClassicalMDS(BaseEstimator):
         self.components_ = U
         self.singular_values_ = D ** 0.5
         self.dissimilarity_matrix_ = dissimilarity_matrix
+        self.n_features_in_ = X.shape[1]
 
         return self
 
