@@ -49,7 +49,7 @@ def test_pipeline():
 
         return graph_indices, vertex_indices
 
-    # Use Omni, no lower line
+    # Use Omni, no lower line.
     g_idx, v_idx = run_anomaly("omni", use_lower_line=False)
 
     # Expected graphs to be different
