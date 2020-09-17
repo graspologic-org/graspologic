@@ -81,7 +81,7 @@ class GraphMatch(BaseEstimator):
 
     n_iter_ : int
         Number of Frank-Wolfe iterations run. If n_init > 1, n_iter_ refelects the number of
-        iterations performed at the initialization returned.
+        iterations performed at the initialization returned.  
 
 
     References
