@@ -60,6 +60,7 @@ class BaseEmbed(BaseEstimator):
         Dimensionality of the embedded space.
     n_features_in_: int
         number of features passed to the fit method.
+    to trigger netlify
 
     See Also
     --------
