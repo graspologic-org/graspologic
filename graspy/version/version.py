@@ -7,7 +7,9 @@ import pkg_resources
 
 __all__: List[str] = ["version", "name"]
 
-name = "graspy"  # TODO: #454 Update in https://github.com/microsoft/graspologic/issues/454
+name = (
+    "graspy"  # TODO: #454 Update in https://github.com/microsoft/graspologic/issues/454
+)
 
 # manually updated
 __semver = "0.1.0"
@@ -22,7 +24,7 @@ def _from_resource() -> str:
 
 
 def local_build_number() -> str:
-    return datetime.datetime.today().strftime('%Y%m%d%H%M%S')
+    return datetime.datetime.today().strftime("%Y%m%d%H%M%S")
 
 
 def get_version() -> str:
