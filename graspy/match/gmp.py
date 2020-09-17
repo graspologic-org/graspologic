@@ -80,8 +80,8 @@ class GraphMatch(BaseEstimator):
         The objective function value of for the optimal permutation found.
 
     n_iter_ : int
-        Number of Frank-Wolfe iterations run. If n_init > 1, n_iter_ refelects the number of
-        iterations performed at the initialization returned.  
+        Number of Frank-Wolfe iterations run. If n_init > 1, n_iter_ reflects the number of
+        iterations performed at the initialization returned.
 
 
     References
