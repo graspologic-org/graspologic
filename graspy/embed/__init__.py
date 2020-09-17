@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 from .ase import AdjacencySpectralEmbed
 from .lse import LaplacianSpectralEmbed
 from .mase import MultipleASE
