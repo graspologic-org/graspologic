@@ -1,5 +1,5 @@
-Announcement: GraSPy 0.0.2
-==========================
+Release Notes: GraSPy 0.0.2
+===========================
 
 We're happy to announce the release of GraSPy 0.0.2! GraSPy is a Python package for 
 understanding the properties of random graphs that arise from modern datasets, such as social networks 

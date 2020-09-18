@@ -82,7 +82,7 @@ source_encoding = "utf-8"
 # -- Options for HTML output -------------------------------------------------
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
-html_static_path = ["_static"]
+html_static_path = []
 modindex_common_prefix = ["graspy."]
 
 pygments_style = "sphinx"
