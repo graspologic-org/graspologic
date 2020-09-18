@@ -68,7 +68,7 @@ setup(
             "numpydoc",
             "pytest",
             "pytest-cov",
-            "sphinx"
+            "sphinx",
             "sphinxcontrib-rawfiles",
             "sphinx-rtd-theme",
         ]
