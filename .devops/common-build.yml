@@ -1,0 +1,93 @@
+jobs:
+  - job: cred_scan
+    dependsOn: build_identity
+    displayName: Cred Scan
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - task: CredScan@3
+        displayName: 'Run CredScan'
+        inputs:
+          outputFormat: sarif
+          debugMode: false
+  - job: code_fmt_check
+    displayName: Code Format Validation
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.8'
+      - script: |
+          pip install -U pip setuptools
+          pip install black
+          black --check --diff ./graspy ./tests
+        displayName: "Code Format Validation"
+  - job: mypy_type_check
+    displayName: Type Check
+    continueOnError: true  # soft addition of mypy for reporting purposes, shouldn't fail build -yet-
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.8'
+      - script: |
+          pip install -U pip setuptools
+          pip install mypy
+          mypy -m graspy
+        displayName: "Type Check"
+  - job: test_coverage
+    displayName: Test Coverage
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.8'
+      - script: |
+          pip install -U pip setuptools
+          pip install pytest pytest-cov
+          pytest --co --cov=graspy/  # --co collects the tests but does not run them
+        displayName: "Test Coverage"
+  - job: python_build
+    displayName: Python Build
+    strategy:
+      matrix:
+        linux_p36:
+          os: "ubuntu-latest"
+          python_version: "3.6"
+        linux_p37:
+          os: "ubuntu-latest"
+          python_version: "3.7"
+        linux_p38:
+          os: "ubuntu-latest"
+          python_version: "3.8"
+        mac_p36:
+          os: "macos-latest"
+          python_version: "3.6"
+        mac_p37:
+          os: "macos-latest"
+          python_version: "3.7"
+        mac_p38:
+          os: "macos-latest"
+          python_version: "3.8"
+        windows_p36:
+          os: "windows-latest"
+          python_version: "3.6"
+        windows_p37:
+          os: "windows-latest"
+          python_version: "3.7"
+        windows_p38:
+          os: "windows-latest"
+          python_version: "3.8"
+    pool:
+      vmImage: $(os)
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: $(python_version)
+      - script: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          pytest tests
