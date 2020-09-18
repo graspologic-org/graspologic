@@ -88,5 +88,6 @@ jobs:
           versionSpec: $(python_version)
       - script: |
           pip install -U pip setuptools
+          pip install pytest
           pip install -r requirements.txt
           pytest tests
