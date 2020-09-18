@@ -22,7 +22,6 @@ jobs:
       - script: |
           pip install -U pip setuptools
           pip install -r requirements.txt
-          pip install pytest pytest-cov sphinx-rtd-theme black
           pip freeze > requirements.txt
       - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
         displayName: 'Component Detection'
@@ -63,7 +62,6 @@ jobs:
           versionSpec: '3.8'
       - script: |
           pip install -U pip setuptools
-          pip install pytest pytest-cov sphinx-rtd-theme
           pip install -r requirements.txt
           python -m pytest --co --cov=graspy
         displayName: "Test Coverage"
@@ -106,6 +104,5 @@ jobs:
           versionSpec: $(python_version)
       - script: |
           pip install -U pip setuptools
-          pip install pytest
           pip install -r requirements.txt
           pytest tests
