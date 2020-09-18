@@ -46,7 +46,7 @@ jobs:
           versionSpec: '3.8'
       - script: |
           pip install -U pip setuptools
-          pip install pytest pytest-cov
+          pip install pytest pytest-cov sphinx-rtd-theme
           pip install -r requirements.txt
           python -m pytest --co --cov=graspy
         displayName: "Test Coverage"
