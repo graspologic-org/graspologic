@@ -23,15 +23,14 @@ project = "GraSPy"
 copyright = "2018"
 authors = u"NeuroData"
 
-# The short X.Y version
-# Find GraSPy version.
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-for line in open(os.path.join(PROJECT_PATH, "..", "graspy", "__init__.py")):
-    if line.startswith("__version__ = "):
-        version = line.strip().split()[2][1:-1]
+realpath = os.path.realpath(__file__)
+dir_realpath = os.path.dirname(os.path.dirname(realpath))
+sys.path.append(dir_realpath)
 
-# The full version, including alpha/beta/rc tags
-release = "alpha"
+import graspy
+
+version = graspy.version.version.__semver
+release = graspy.version.version.version
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
