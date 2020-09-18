@@ -18,7 +18,7 @@ sys.path.pop(0)
 
 version_path = os.path.join("graspy", "version", "version.txt")
 with open(version_path, "w") as version_file:
-    _b = version_file.write(f"{version}")
+    version_file.write(f"{version}")
 
 with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
@@ -55,7 +55,7 @@ setup(
         "scikit-learn>=0.19.1",
         "scipy>=1.4.0",
         "seaborn>=0.9.0",
-        "matplotlib>=3.0.0",
+        "matplotlib>=3.0.0,<=3.3.0",
         "hyppo>=0.1.3",
     ],
     extras_require={
