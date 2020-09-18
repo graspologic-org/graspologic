@@ -1,6 +1,8 @@
+variables:
+  skipComponentGovernanceDetection: true  # in case ADO Pipeline tries to inject it into every job, we only need to do this once which we do explicitly below
 jobs:
   - job: cred_scan
-    displayName: Cred Scan
+    displayName: Credential Scan
     pool:
       vmImage: "windows-latest"
     steps:
@@ -9,6 +11,21 @@ jobs:
         inputs:
           outputFormat: sarif
           debugMode: false
+  - job: component_governance
+    displayName: Component Governance
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.8'
+      - script: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          pip install pytest pytest-cov sphinx-rtd-theme black
+          pip freeze > requirements.txt
+      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+        displayName: 'Component Detection'
   - job: code_fmt_check
     displayName: Code Format Validation
     pool:
