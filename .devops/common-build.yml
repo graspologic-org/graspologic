@@ -47,7 +47,8 @@ jobs:
       - script: |
           pip install -U pip setuptools
           pip install pytest pytest-cov
-          pytest --co --cov=graspy/  # --co collects the tests but does not run them
+          pip install -r requirements.txt
+          python -m pytest --co --cov=graspy
         displayName: "Test Coverage"
   - job: python_build
     displayName: Python Build
