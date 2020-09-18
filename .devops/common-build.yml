@@ -25,6 +25,18 @@ jobs:
           pip freeze > requirements.txt
       - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
         displayName: 'Component Detection'
+  - job: build_documentation
+    displayName: Build Documentation
+    pool:
+      - vmImage: "ubuntu-latest"
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.8'
+      - script: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          sphinx-build -W -a docs/ docs/_build/html
   - job: code_fmt_check
     displayName: Code Format Validation
     pool:
