@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import numpy as np
 import pytest
 from numpy import allclose, array_equal

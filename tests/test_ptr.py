@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import unittest
 import numpy as np
 from graspy.utils import pass_to_ranks, is_unweighted
