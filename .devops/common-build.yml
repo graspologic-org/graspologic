@@ -1,6 +1,5 @@
 jobs:
   - job: cred_scan
-    dependsOn: build_identity
     displayName: Cred Scan
     pool:
       vmImage: "windows-latest"
