@@ -33,10 +33,10 @@ jobs:
       - task: UsePythonVersion@0
         inputs:
           versionSpec: '3.8'
-        - script: |
-            pip install -U pip setuptools
-            pip install -r requirements.txt
-            sphinx-build -W -a docs/ docs/_build/html
+      - script: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          sphinx-build -W -a docs/ docs/_build/html
         displayName: "Build Documentation with Sphinx"
   - job: code_fmt_check
     displayName: Code Format Validation
