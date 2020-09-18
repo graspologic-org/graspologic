@@ -28,7 +28,7 @@ jobs:
   - job: build_documentation
     displayName: Build Documentation
     pool:
-      - vmImage: "ubuntu-latest"
+      vmImage: "ubuntu-latest"
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -37,7 +37,6 @@ jobs:
           pip install -U pip setuptools
           pip install -r requirements.txt
           sphinx-build -W -a docs/ docs/_build/html
-        displayName: "Build Documentation with Sphinx"
   - job: code_fmt_check
     displayName: Code Format Validation
     pool:
