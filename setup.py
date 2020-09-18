@@ -61,10 +61,16 @@ setup(
     extras_require={
         "dev": [
             "black",
+            "ipykernel>=5.1.0",
+            "ipython>=7.4.0",
             "mypy",
+            "nbsphinx",
+            "numpydoc",
             "pytest",
             "pytest-cov",
-            "sphinx-rtd-theme"
+            "sphinx"
+            "sphinxcontrib-rawfiles",
+            "sphinx-rtd-theme",
         ]
     }
 )
