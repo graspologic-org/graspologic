@@ -27,6 +27,7 @@ jobs:
         displayName: 'Component Detection'
   - job: build_documentation
     displayName: Build Documentation
+    continueOnError: true  # soft addition of sphinx for reporting purposes, shouldn't fail build -yet-
     pool:
       vmImage: "ubuntu-latest"
     steps:
