@@ -81,3 +81,14 @@ including an introduction to the module, and how to utilize the seeding feature.
 
    tutorials/matching/faq
    tutorials/matching/sgm
+
+.. _subgraph_tutorials:
+
+Subgraph
+========
+The following tutorial demonstrates how to estimate the signal-subgraph of samples of a graph/class model according to either the coherent or incoherent estimator models.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/subgraph/subgraph
