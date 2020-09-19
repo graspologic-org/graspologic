@@ -65,7 +65,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         to the ground truth.
 
     concat : bool, optional (default False)
-        if graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.
+        If graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.
 
 
 

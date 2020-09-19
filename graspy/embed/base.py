@@ -43,7 +43,7 @@ class BaseEmbed(BaseEstimator):
         results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
     concat : bool, optional (default = False)
-        if graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
     Attributes

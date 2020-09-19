@@ -92,7 +92,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         weighted network) before embedding.
 
     concat : bool, optional (default False)
-        if graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
     Attributes
