@@ -68,7 +68,7 @@ jobs:
         with:
           python-version: ${{matrix.python_version}}
       - name: Install dependencies
-      run: |
-        pip install -U pip setuptools
-        pip install -r requirements.txt
-        pytest tests
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          pytest tests
