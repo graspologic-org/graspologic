@@ -1,0 +1,74 @@
+name: Graspologic Continuous Integration
+on: [push]
+jobs:
+  build-documentation:
+    runs-on: ubuntu-latest
+    continue-on-error: true  # soft addition of sphinx for reporting purposes, shouldn't fail build -yet-
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          sphinx-build -W -a docs/ docs/_build/html
+  code-format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          black --check --diff ./graspy ./tests
+  mypy-type-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true  # soft addition of mypy for reporting purposes, shouldn't fail build -yet-
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          mypy ./graspy
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          python -m pytest --co --cov=graspy
+  validate:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python_version: [3.6, 3.7, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{matrix.python_version}}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{matrix.python_version}}
+      - name: Install dependencies
+      run: |
+        pip install -U pip setuptools
+        pip install -r requirements.txt
+        pytest tests
