@@ -406,7 +406,14 @@ def gridplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
         For acceptable string arguments, See the palette options in
-        :func:`/tutorials/colors/colormaps`
+        :func:`colormaps`
+        :ref:`matplotlib:/tutorials/colors/colormaps`
+        :ref:`matplotlib:~tutorials/colors/colormaps`
+        :ref:`matplotlib <matplotlib:tutorials/colors/colormaps>`
+        :ref:`matplotlib <matplotlib:/tutorials/colors/colormaps>`
+        :ref:`matplotlib <matplotlib/tutorials/colors/colormaps>`
+        :ref:`matplotlib <matplotlib:colormaps>`
+        :ref:`matplotlib <matplotlib:/colormaps>`
     alpha : float [0, 1], default : 0.7
         Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
@@ -571,7 +578,7 @@ def pairplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
         For acceptable string arguments, See the palette options in
-        :ref:`/tutorials/colors/colormaps`
+        :ref:`matplotlib:tutorials/colors/colormaps`
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     size : float or int, optional, default: 50
