@@ -72,7 +72,7 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "sklearn": ("http://scikit-learn.org/dev", None),
     "hyppo": ("https://hyppo.neurodata.io", None),
-    "matplotlib": ("http://matplotlib.org/3.1.3/tutorials/colors/%s", "matplotlib")
+    "matplotlib": ("http://matplotlib.org", None)
 }
 
 # -- sphinx options ----------------------------------------------------------
