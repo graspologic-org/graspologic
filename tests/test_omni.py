@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import numpy as np
 import pytest
 from numpy import allclose, array_equal
@@ -69,7 +72,11 @@ def test_omni_matrix_random():
     assert_allclose(A, expected_output)
 
 
-def test_omni_matrix_invalid_inputs():
+def test_invalid_inputs():
+    with pytest.raises(TypeError):
+        wrong_diag_aug = "True"
+        omni = OmnibusEmbed(diag_aug=wrong_diag_aug)
+
     with pytest.raises(ValueError):
         empty_list = []
         omni = OmnibusEmbed(n_components=2)
@@ -110,6 +117,21 @@ def test_omni_unconnected():
         omni.fit(graphs)
 
 
+def test_diag_aug():
+    np.random.seed(5)
+    n = 100
+    p = 0.25
+
+    graphs_list = [er_np(n, p) for _ in range(2)]
+    graphs_arr = np.array(graphs_list)
+
+    # Test that array and list inputs results in same embeddings
+    omni_arr = OmnibusEmbed(diag_aug=True).fit_transform(graphs_arr)
+    omni_list = OmnibusEmbed(diag_aug=True).fit_transform(graphs_list)
+
+    assert array_equal(omni_list, omni_arr)
+
+
 def test_omni_embed():
     """
     We compare the difference of norms of OmniBar and ABar.
@@ -121,15 +143,18 @@ def test_omni_embed():
         n = arr.shape[0] // 2
         return (arr[:n] + arr[n:]) / 2
 
-    X, A1, A2 = generate_data(1000)
-    Abar = (A1 + A2) / 2
+    def run(diag_aug):
+        X, A1, A2 = generate_data(1000, seed=2)
+        Abar = (A1 + A2) / 2
 
-    np.random.seed(11)
-    omni = OmnibusEmbed(n_components=3)
-    OmniBar = compute_bar(omni.fit_transform([A1, A2]))
+        omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug)
+        OmniBar = compute_bar(omni.fit_transform([A1, A2]))
 
-    omni = OmnibusEmbed(n_components=3)
-    ABar = compute_bar(omni.fit_transform([Abar, Abar]))
+        omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug)
+        ABar = compute_bar(omni.fit_transform([Abar, Abar]))
 
-    tol = 1.0e-2
-    assert allclose(norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol)
+        tol = 1.0e-2
+        assert allclose(norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol)
+
+    run(diag_aug=True)
+    run(diag_aug=False)
