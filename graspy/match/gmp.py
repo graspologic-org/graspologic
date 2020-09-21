@@ -57,6 +57,19 @@ class GraphMatch(BaseEstimator):
         Gives users the option to solve QAP rather than the Graph Matching Problem
         (GMP). This is accomplished through trivial negation of the objective function.
 
+    padding : string (default = 'adopted')
+        Allows user to specify padding scheme if `A` and `B` are not of equal size.
+
+        "adopted" : say that `A` and `B` have :math:`n_1` and :math`n_2` nodes, respectively.
+            Define :math:`\tilde{A} = 2A - 1_{n1}1_{n1}^T` and
+            :math:`\tilde{B} = 2B - 1_{n2}1_{n2}^T`. If :math:`n_1 < n_2`, then we substitute
+            :math:`\tilde{A} \oplus 0_{(n2-n1)x(n2-n1)}` and :math:`\tilde{B}` in place of A
+            and B.
+
+        "naive" : say that `A` and `B` have :math:`n_1` and :math`n_2` nodes, respectively.
+            If :math:`n_1 < n_2`, then we substitute :math:`A \oplus 0_{(n2-n1)x(n2-n1)}`
+            and :math:`B` in place of A and B.
+
     Attributes
     ----------
 
@@ -91,6 +104,7 @@ class GraphMatch(BaseEstimator):
         shuffle_input=True,
         eps=0.1,
         gmp=True,
+        padding="adopted",
     ):
 
         if type(n_init) is int and n_init > 0:
@@ -126,6 +140,11 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"gmp" must be a boolean'
             raise TypeError(msg)
+        if padding in {"adopted", "naive"}:
+            self.padding = padding
+        else:
+            msg = 'Invalid "padding" parameter string'
+            raise ValueError(msg)
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
         """
@@ -156,10 +175,7 @@ class GraphMatch(BaseEstimator):
         seeds_A = column_or_1d(seeds_A)
         seeds_B = column_or_1d(seeds_B)
 
-        if A.shape[0] != B.shape[0]:
-            msg = "Adjacency matrices must be of equal size"
-            raise ValueError(msg)
-        elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
+        if A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
             msg = "Adjacency matrix entries must be square"
             raise ValueError(msg)
         elif seeds_A.shape[0] != seeds_B.shape[0]:
@@ -177,6 +193,10 @@ class GraphMatch(BaseEstimator):
         ):
             msg = "Seed array entries must be less than or equal to n-1"
             raise ValueError(msg)
+
+        # pads A and B according to section 2.5 of [2]
+        if A.shape[0] != B.shape[0]:
+            A, B = _adj_pad(A, B, self.padding)
 
         n = A.shape[0]  # number of vertices in graphs
         n_seeds = seeds_A.shape[0]  # number of seeds
@@ -324,6 +344,27 @@ class GraphMatch(BaseEstimator):
         """
         self.fit(A, B, seeds_A, seeds_B)
         return self.perm_inds_
+
+
+def _adj_pad(A, B, method):
+    def pad(X, n):
+        X_pad = np.zeros((n[1], n[1]))
+        X_pad[: n[0], : n[0]] = X
+        return X_pad
+
+    A_n = A.shape[0]
+    B_n = B.shape[0]
+    n = np.sort([A_n, B_n])
+    if method == "adopted":
+        A = 2 * A - np.ones((A_n, A_n))
+        B = 2 * B - np.ones((B_n, B_n))
+
+    if A.shape[0] == n[0]:
+        A = pad(A, n)
+    else:
+        B = pad(B, n)
+
+    return A, B
 
 
 def _unshuffle(array, n):

@@ -8,6 +8,8 @@ import random
 from graspy.match import GraphMatch as GMP
 from graspy.match import SinkhornKnopp as SK
 
+np.random.seed(0)
+
 
 class TestGMP:
     @classmethod
@@ -35,13 +37,14 @@ class TestGMP:
                 np.arange(2),
                 np.arange(2),
             )
-        with pytest.raises(ValueError):
-            GMP().fit(
-                np.random.random((3, 3)),
-                np.random.random((4, 4)),
-                np.arange(2),
-                np.arange(2),
-            )
+        # with pytest.raises(ValueError):
+        #     GMP().fit(
+        #         np.random.random((3, 3)),
+        #         np.random.random((4, 4)),
+        #         np.arange(2),
+        #         np.arange(2),
+        #     )
+        # TODO: add tests for padding
         with pytest.raises(ValueError):
             GMP().fit(
                 np.random.random((3, 4)),
