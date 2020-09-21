@@ -406,14 +406,26 @@ def gridplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
         For acceptable string arguments, See the palette options in
-        :func:`colormaps`
-        :ref:`matplotlib:/tutorials/colors/colormaps`
-        :ref:`matplotlib:~tutorials/colors/colormaps`
-        :ref:`matplotlib <matplotlib:tutorials/colors/colormaps>`
-        :ref:`matplotlib <matplotlib:/tutorials/colors/colormaps>`
-        :ref:`matplotlib <matplotlib/tutorials/colors/colormaps>`
-        :ref:`matplotlib <matplotlib:colormaps>`
-        :ref:`matplotlib <matplotlib:/colormaps>`
+        :func:`qualitative`.
+        :doc:`qualitative`.
+        :ref:`qualitative`.
+        :obj:`qualitative`.
+        :func:`matplotlib:qualitative`.
+        :ref:`matplotlib:qualitative`.
+        :doc:`matplotlib:qualitative`.
+        :obj:`matplotlib:qualitative`.
+        :func:`matplotlib <matplotlib:qualitative>`.
+        :ref:`matplotlib <matplotlib:qualitative>`.
+        :doc:`matplotlib <matplotlib:qualitative>`.
+        :obj:`matplotlib <matplotlib:qualitative>`.
+        :func:`matplotlib <matplotlib:/qualitative>`.
+        :ref:`matplotlib <matplotlib:/qualitative>`.
+        :doc:`matplotlib <matplotlib:/qualitative>`.
+        :obj:`matplotlib <matplotlib:/qualitative>`.
+        :func:`matplotlib <matplotlib/qualitative>`.
+        :ref:`matplotlib <matplotlib/qualitative>`.
+        :doc:`matplotlib <matplotlib/qualitative>`.
+        :obj:`matplotlib <matplotlib/qualitative>`.
     alpha : float [0, 1], default : 0.7
         Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
