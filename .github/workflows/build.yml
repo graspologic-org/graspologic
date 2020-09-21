@@ -10,7 +10,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: \[Optional\] Run Documentation Generation
+      - name: "[Optional] Run Documentation Generation"
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
@@ -38,7 +38,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: \[Optional\] Run Type Validation Checks
+      - name: "[Optional] Run Type Validation Checks"
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
