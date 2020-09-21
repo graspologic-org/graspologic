@@ -60,15 +60,15 @@ class GraphMatch(BaseEstimator):
     padding : string (default = 'adopted')
         Allows user to specify padding scheme if `A` and `B` are not of equal size.
 
-        "adopted" : say that `A` and `B` have :math:`n_1` and :math`n_2` nodes, respectively.
-            Define :math:`\tilde{A} = 2A - 1_{n1}1_{n1}^T` and
-            :math:`\tilde{B} = 2B - 1_{n2}1_{n2}^T`. If :math:`n_1 < n_2`, then we substitute
-            :math:`\tilde{A} \oplus 0_{(n2-n1)x(n2-n1)}` and :math:`\tilde{B}` in place of A
-            and B.
+        "adopted" : say that `A` and `B` have :math:`n_1` and :math:`n_2` nodes, respectively.
+        Define :math:`\tilde{A} = 2A - 1_{n1}1_{n1}^T` and
+        :math:`\tilde{B} = 2B - 1_{n2}1_{n2}^T`. If :math:`n_1 < n_2`, then we substitute
+        :math:`\tilde{A} \oplus 0_{(n2-n1)x(n2-n1)}` and :math:`\tilde{B}` in place of A
+        and B.
 
-        "naive" : say that `A` and `B` have :math:`n_1` and :math`n_2` nodes, respectively.
-            If :math:`n_1 < n_2`, then we substitute :math:`A \oplus 0_{(n2-n1)x(n2-n1)}`
-            and :math:`B` in place of A and B.
+        "naive" : say that `A` and `B` have :math:`n_1` and :math:`n_2` nodes, respectively.
+        If :math:`n_1 < n_2`, then we substitute :math:`A \oplus 0_{(n2-n1)x(n2-n1)}` and
+        :math:`B` in place of A and B.
 
     Attributes
     ----------
