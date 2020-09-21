@@ -3,60 +3,63 @@ on: [push]
 jobs:
   build-documentation:
     runs-on: ubuntu-latest
-    continue-on-error: true  # soft addition of sphinx for reporting purposes, shouldn't fail build -yet-
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Documentation generation
+      - name: [Optional] Run Documentation Generation
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
           sphinx-build -W -a docs/ docs/_build/html
   code-format-check:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Format Check
+      - name: Run Format Check
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
           black --check --diff ./graspy ./tests
   mypy-type-check:
     runs-on: ubuntu-latest
-    continue-on-error: true  # soft addition of mypy for reporting purposes, shouldn't fail build -yet-
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Type validation checks
+      - name: [Optional] Run Type Validation Checks
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
           mypy ./graspy
   test-coverage:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Test Coverage
+      - name: Run Test Coverage
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
           python -m pytest --co --cov=graspy
-  validate:
+  unit-and-doc-test:
     runs-on: ${{matrix.os}}
+    continue-on-error: true
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -67,7 +70,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{matrix.python_version}}
-      - name: Tests and Doctests
+      - name: Run Unit Tests and Doctests
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
