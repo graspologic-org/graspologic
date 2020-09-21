@@ -10,7 +10,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Install dependencies
+      - name: Documentation generation
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Install dependencies
+      - name: Format Check
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Install dependencies
+      - name: Type validation checks
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
@@ -50,7 +50,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Install dependencies
+      - name: Test Coverage
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
