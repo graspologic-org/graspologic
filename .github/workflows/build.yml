@@ -67,7 +67,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{matrix.python_version}}
-      - name: Install dependencies
+      - name: Tests and Doctests
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
