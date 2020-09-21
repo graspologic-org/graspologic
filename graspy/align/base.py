@@ -91,7 +91,7 @@ class BaseAlign(BaseEstimator):
             msg = (
                 "Dataset needs to have the same number of dimensions, d, "
                 "as datasets X and Y used in fit. Currently, vectors in "
-                f" the dataset to transform have {X.shape[1]} dimensions, "
+                f"the dataset to transform have {X.shape[1]} dimensions, "
                 f"while vectors in fit had {self.Q_.shape[0]} dimensions."
             )
             raise ValueError(msg)
