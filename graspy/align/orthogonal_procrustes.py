@@ -26,7 +26,7 @@ class OrthogonalProcrustes(BaseAlign):
     Attributes
     ----------
         Q_ : array, size (d, d)
-              final orthogonal matrix, used to modify X.
+              Final orthogonal matrix, used to modify X.
 
     References
     ----------
@@ -65,7 +65,7 @@ class OrthogonalProcrustes(BaseAlign):
         _, d = X.shape
         if X.shape[0] != Y.shape[0]:
             msg = (
-                "two datasets have different number of entries! "
+                "Two datasets have different number of entries! "
                 "OrthogonalProcrustes assumes that entries of the two "
                 "datasets are matched. consider using SeedlessProcrustes "
                 "instead."

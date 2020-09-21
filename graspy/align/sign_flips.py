@@ -25,14 +25,14 @@ class SignFlips(BaseAlign):
             signs. Two options are currently supported:
 
             - 'median'
-                uses the median along each dimension
+                Uses the median along each dimension
             - 'max'
-                uses the max (in magintude) alongs each dimension
+                Uses the max (in magintude) alongs each dimension
 
     Attributes
     ----------
         Q_ : array, size (d, d)
-              final orthogonal matrix, used to modify X.
+            Final orthogonal matrix, used to modify X.
 
     """
 
@@ -42,7 +42,7 @@ class SignFlips(BaseAlign):
     ):
         # checking criteria argument
         if type(criteria) is not str:
-            raise TypeError("criteria must be str")
+            raise TypeError("Criteria must be str")
         if criteria not in ["median", "max"]:
             raise ValueError("{} is not a valid criteria.".format(criteria))
 

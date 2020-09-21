@@ -108,7 +108,7 @@ class SeedlessProcrustes(BaseAlign):
     sets, and an orthogonal alignment between two datasets. If the two datasets
     are represented with matrices :math:`X \in M_{n, d}` and
     :math:`Y \in M_{m, d}`, then the correspondence is a matrix
-    :math:`P \in M_{n, m}` that is doubly-stochastic (that is, it's rows sum to
+    :math:`P \in M_{n, m}` that is doubly-stochastic (that is, its rows sum to
     :math:`1/n`, and columns sum to :math:`1/m`) and the orthogonal alignment
     is an orthogonal matrix :math:`Q \in M_{d, d}`. The global objective
     function is :math:`|| X Q - P Y ||_F`.
@@ -149,7 +149,7 @@ class SeedlessProcrustes(BaseAlign):
     ):
         # check optimal_transport_lambda argument
         if type(optimal_transport_lambda) is not float:
-            msg = "optimal_transport_lambda must be a float, not {}".format(
+            msg = "Optimal_transport_lambda must be a float, not {}".format(
                 type(optimal_transport_lambda)
             )
             raise TypeError(msg)
@@ -160,7 +160,7 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         # check optimal_transport_lambda argument
         if type(optimal_transport_eps) is not float:
-            msg = "optimal_transport_eps must be a float, not {}".format(
+            msg = "Optimal_transport_eps must be a float, not {}".format(
                 type(optimal_transport_eps)
             )
             raise TypeError(msg)
@@ -171,7 +171,7 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         # check optimal_transport_num_reps argument
         if type(optimal_transport_num_reps) is not int:
-            msg = "optimal_transport_num_reps must be a int, not {}".format(
+            msg = "Optimal_transport_num_reps must be a int, not {}".format(
                 type(optimal_transport_num_reps)
             )
             raise TypeError(msg)
@@ -182,7 +182,7 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         # check iterative_num_reps argument
         if type(iterative_num_reps) is not int:
-            msg = "iterative_num_reps must be a int, not {}".format(
+            msg = "Iterative_num_reps must be a int, not {}".format(
                 type(iterative_num_reps)
             )
             raise TypeError(msg)
@@ -193,38 +193,38 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         # check init argument
         if type(init) is not str:
-            msg = "initalization must be a str, not {}".format(type(init))
+            msg = "Initalization must be a str, not {}".format(type(init))
             raise TypeError(msg)
         inits_supported = ["2d", "sign_flips", "custom"]
         if init not in inits_supported:
-            msg = "supported inits are {}".format(inits_supported)
+            msg = "Supported inits are {}".format(inits_supported)
             raise ValueError(msg)
         # check that initial_Q and intial_P aren't provided when shouldn't be
         if initial_Q is not None and init != "custom":
-            msg = "initial_Q can only be provided if init is set to custom"
+            msg = "Initial_Q can only be provided if init is set to custom"
             raise ValueError(msg)
         if initial_P is not None and init != "custom":
-            msg = "initial_P can only be provided if init is set to custom"
+            msg = "Initial_P can only be provided if init is set to custom"
             raise ValueError(msg)
         if initial_Q is not None and initial_P is not None:
-            msg = "initial_Q and initial_P cannot be provided simultaneously"
+            msg = "Initial_Q and initial_P cannot be provided simultaneously"
             raise ValueError(msg)
         # check initial_Q argument
         if initial_Q is not None:
             if not isinstance(initial_Q, np.ndarray):
-                msg = f"initial_Q must be np.ndarray or None, not {type(initial_Q)}"
+                msg = f"Initial_Q must be np.ndarray or None, not {type(initial_Q)}"
                 raise TypeError(msg)
             initial_Q = check_array(initial_Q, copy=True)
             if initial_Q.shape[0] != initial_Q.shape[1]:
-                msg = "initial_Q must be a square orthogonal matrix"
+                msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
             if not np.allclose(initial_Q.T @ initial_Q, np.eye(initial_Q.shape[0])):
-                msg = "initial_Q must be a square orthogonal matrix"
+                msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
         # check initial_P argument
         if initial_P is not None:
             if not isinstance(initial_P, np.ndarray):
-                msg = f"initial_P must be np.ndarray or None, not {type(initial_P)}"
+                msg = f"Initial_P must be np.ndarray or None, not {type(initial_P)}"
                 raise TypeError(msg)
             initial_P = check_array(initial_P, copy=True)
             n, m = initial_P.shape
@@ -233,7 +233,7 @@ class SeedlessProcrustes(BaseAlign):
                 and np.allclose(initial_P.sum(axis=1), np.ones(n) / n)
             ):
                 msg = (
-                    "initial_P must be a doubly stochastic matrix "
+                    "Initial_P must be a doubly stochastic matrix "
                     "(rows add up to (1/number of cols) "
                     "and columns add up to (1/number of rows))"
                 )
