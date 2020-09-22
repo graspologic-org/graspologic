@@ -78,8 +78,8 @@ jobs:
           pytest tests  # note: should be pytest graspy tests, but we're skipping doctests for now and re-enabling them in another PR
   publish:
     runs-on: ubuntu-latest
-    needs: [code-format-check, unit-and-doc-test]
-    if: github.event.pull_request.merged && (github.ref=='main' || github.ref=='dev')
+    needs: [build-documentation, code-format-check, unit-and-doc-test]
+    if: github.event.pull_request.merged && (github.ref=='refs/heads/main' || github.ref=='refs/heads/dev')
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
