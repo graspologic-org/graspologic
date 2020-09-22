@@ -66,6 +66,7 @@ setup(
             "mypy",
             "nbsphinx",
             "numpydoc",
+            "pandoc",
             "pytest",
             "pytest-cov",
             "sphinx",
