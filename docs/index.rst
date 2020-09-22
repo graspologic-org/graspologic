@@ -57,7 +57,7 @@ GraSPy is a graph statistics package in python.
    tutorial
    reference/index
    contributing
-   news
+   release
    license
 
 .. toctree::
