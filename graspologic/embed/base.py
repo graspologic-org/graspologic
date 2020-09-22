@@ -50,7 +50,7 @@ class BaseEmbed(BaseEstimator):
 
     See Also
     --------
-    graspy.embed.selectSVD, graspy.embed.select_dimension
+    graspologic.embed.selectSVD, graspologic.embed.select_dimension
     """
 
     def __init__(

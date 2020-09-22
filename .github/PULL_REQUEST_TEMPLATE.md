@@ -1,6 +1,6 @@
 <!--
 Thanks for contributing a pull request! Please ensure you have taken a look at
-the contribution guidelines: https://github.com/neurodata/graspy/blob/master/CONTRIBUTING.md#pull-request-checklist
+the contribution guidelines: https://github.com/microsoft/grasp0ologic/CONTRIBUTING.md#how-to-create-an-actionable-bug-report
 -->
 
 #### Reference Issues/PRs

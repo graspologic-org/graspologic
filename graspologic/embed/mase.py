@@ -33,11 +33,11 @@ class MultipleASE(BaseEmbedMulti):
         Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
         If ``n_components=None``, then compute the optimal embedding dimension using
-        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:

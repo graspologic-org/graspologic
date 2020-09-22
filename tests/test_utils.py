@@ -4,7 +4,7 @@
 import unittest
 import numpy as np
 import networkx as nx
-from graspy.utils import utils as gus
+from graspologic.utils import utils as gus
 from math import sqrt
 from numpy.testing import assert_equal
 

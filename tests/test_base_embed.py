@@ -5,9 +5,9 @@ import unittest
 
 import numpy as np
 
-import graspy as gs
-from graspy.embed.base import BaseEmbed
-from graspy.simulations.simulations import er_nm, er_np
+import graspologic as gs
+from graspologic.embed.base import BaseEmbed
+from graspologic.simulations.simulations import er_nm, er_np
 
 
 class TestBaseEmbed(unittest.TestCase):

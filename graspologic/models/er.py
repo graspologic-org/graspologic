@@ -42,9 +42,9 @@ class EREstimator(SBMEstimator):
 
     See also
     --------
-    graspy.models.DCEREstimator
-    graspy.models.SBMEstimator
-    graspy.simulations.er_np
+    graspologic.models.DCEREstimator
+    graspologic.models.SBMEstimator
+    graspologic.simulations.er_np
 
     References
     ----------
@@ -117,9 +117,9 @@ class DCEREstimator(DCSBMEstimator):
 
     See also
     --------
-    graspy.models.DCSBMEstimator
-    graspy.models.EREstimator
-    graspy.simulations.er_np
+    graspologic.models.DCSBMEstimator
+    graspologic.models.EREstimator
+    graspologic.simulations.er_np
 
     References
     ----------

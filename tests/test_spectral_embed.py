@@ -3,9 +3,9 @@
 
 import unittest
 import numpy as np
-from graspy.embed.ase import AdjacencySpectralEmbed
-from graspy.embed.lse import LaplacianSpectralEmbed
-from graspy.simulations.simulations import er_np, er_nm, sbm
+from graspologic.embed.ase import AdjacencySpectralEmbed
+from graspologic.embed.lse import LaplacianSpectralEmbed
+from graspologic.simulations.simulations import er_np, er_nm, sbm
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
 
