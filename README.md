@@ -50,7 +50,7 @@ please feel free to [raise an issue](https://github.com/microsoft/graspologic/is
 if we have concrete examples of things not working!
 
 ### Python Dependencies
-Users of `graspologic` will have the following direct dependencies:
+`graspologic` has the following direct dependencies:
 ```
 hyppo
 matplotlib
