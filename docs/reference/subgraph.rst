@@ -1,9 +1,15 @@
+********
 Subgraph
-========
+********
 
 .. currentmodule:: graspy.subgraph
 
-Signal-Subgraph Estimators
---------------------------
+Vertex screening
+----------------
+.. autoclass:: Screen
 
-.. autoclass:: SignalSubgraph
+.. autoclass:: ItScreen
+
+Coherence subgraph estimation
+-----------------------------
+.. autoclass:: Coherence

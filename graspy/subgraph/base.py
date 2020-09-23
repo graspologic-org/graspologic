@@ -1,16 +1,5 @@
-# Copyright 2020 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 from abc import abstractmethod
 
@@ -38,10 +27,7 @@ class BaseSubgraph(BaseEstimator):
     graspy.subgraph.coherence, graspy.subgraph.parse
     """
 
-    def __init__(
-        self,
-        stat=None,
-    ):
+    def __init__(self, stat=None) -> None:
         stats = [None, "mgc", "dcorr", "rv", "cca"]
 
         if stat not in stats:
@@ -50,7 +36,7 @@ class BaseSubgraph(BaseEstimator):
         else:
             self.stat = stat
 
-    def _screen(self, X, y):
+    def _screen(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         Performs non-iterative screening on graphs.
 
@@ -129,7 +115,7 @@ class BaseSubgraph(BaseEstimator):
         return corrs
 
     @abstractmethod
-    def fit(self, X, y):
+    def fit(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         Estimate the signal subgraph.
 

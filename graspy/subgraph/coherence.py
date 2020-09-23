@@ -1,21 +1,15 @@
-# Copyright 2020 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
+from typing import List
+from typing import Tuple
 
 import numpy as np
 from scipy.stats import fisher_exact
 
 from .base import BaseSubgraph
+
+Vector = List[float]
 
 
 class Coherence(BaseSubgraph):
@@ -25,17 +19,6 @@ class Coherence(BaseSubgraph):
     coherent estimator, which is constrained by the number of edges and by the
     number of vertices that the edges in the ss may be incident to.
     Read more in the :ref:`tutorials <subgraph_tutorials>`
-
-    Parameters
-    ----------
-    constraints : int or vector
-        The constraints that will be imposed onto the estimated ss.
-
-        If constraints is an int, constraints is the number of edges in the ss.
-
-        If constraints is a vector, then its first element is the number of
-        edges in the ss, and its second element is the number of vertices that
-        the ss must be incident to.
 
     Attributes
     ----------
@@ -52,14 +35,19 @@ class Coherence(BaseSubgraph):
     References
     ----------
     .. [1] J. T. Vogelstein, W. R. Gray, R. J. Vogelstein, and C. E. Priebe,
-    "Graph Classification using Signal-Subgraphs: Applications in Statistical
-    Connectomics," arXiv:1108.1427v2 [stat.AP], 2012.
+       "Graph Classification using Signal-Subgraphs: Applications in
+       Statistical Connectomics," arXiv:1108.1427v2 [stat.AP], 2012.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def fit(self, X, y, constraints):
+    def fit(
+        self,
+        X: np.ndarray,
+        y: Tuple[np.ndarray, Vector],
+        constraints: Tuple[int, np.ndarray, Vector],
+    ) -> None:
         """
         Fit the signal-subgraph estimator according to the constraints given.
 
@@ -71,6 +59,15 @@ class Coherence(BaseSubgraph):
             should be used.
         y : vector, length ``(n_graphs)``
             A vector of class labels. There must be a maximum of two classes.
+        constraints : int or vector
+            The constraints that will be imposed onto the estimated ss.
+
+            If constraints is an int, constraints is the number of edges in
+            the ss.
+
+            If constraints is a vector, then its first element is the number of
+            edges in the ss, and its second element is the number of vertices
+            that the ss must be incident to.
 
         Returns
         -------
@@ -180,7 +177,12 @@ class Coherence(BaseSubgraph):
         self.sigsub_ = sigsub
         return self
 
-    def fit_transform(self, X, y, constraints):
+    def fit_transform(
+        self,
+        X: np.ndarray,
+        y: Tuple[np.ndarray, Vector],
+        constraints: Tuple[int, np.ndarray, Vector],
+    ) -> None:
         """
         A function to return the indices of the signal subgraph.
 
@@ -192,6 +194,15 @@ class Coherence(BaseSubgraph):
             be used.
         y : vector, length ``(n_graphs)``
             A vector of class labels. There must be a maximum of two classes.
+        constraints : int or vector
+            The constraints that will be imposed onto the estimated ss.
+
+            If constraints is an int, constraints is the number of edges in
+            the ss.
+
+            If constraints is a vector, then its first element is the number of
+            edges in the ss, and its second element is the number of vertices
+            that the ss must be incident to.
 
         Returns
         -------

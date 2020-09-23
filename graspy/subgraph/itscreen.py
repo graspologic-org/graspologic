@@ -1,16 +1,5 @@
-# Copyright 2020 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import numpy as np
 import numbers
@@ -51,10 +40,11 @@ class ItScreen(BaseSubgraph):
     References
     ----------
     .. [1] S. Wang, C. Chen, A. Badea, Priebe, C.E., Vogelstein, J.T. "Signal
-    Subgraph Estimation Via Vertex Screening" arXiv: 1801.07683 [stat.ME], 2018
+       Subgraph Estimation Via Vertex Screening" arXiv: 1801.07683 [stat.ME],
+       2018
     """
 
-    def __init__(self, stat, delta, sg_n_verts):
+    def __init__(self, stat: str, delta: float, sg_n_verts: int) -> None:
         super().__init__(stat=stat)
 
         if not isinstance(delta, numbers.Real):
@@ -72,7 +62,7 @@ class ItScreen(BaseSubgraph):
 
         self.sg_n_verts = sg_n_verts
 
-    def fit(self, X, y):
+    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         """
         Performs iterative screening on graphs to estimate signal subgraph.
 
@@ -147,7 +137,7 @@ class ItScreen(BaseSubgraph):
 
         return S_hat
 
-    def fit_transform(self, X, y):
+    def fit_transform(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         Apply screening to graph set X to find nodes with
         high enough correlation values.

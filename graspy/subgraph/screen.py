@@ -1,16 +1,5 @@
-# Copyright 2020 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import numpy as np
 import numbers
@@ -45,10 +34,11 @@ class Screen(BaseSubgraph):
     References
     ----------
     .. [1] S. Wang, C. Chen, A. Badea, Priebe, C.E., Vogelstein, J.T. "Signal
-    Subgraph Estimation Via Vertex Screening" arXiv: 1801.07683 [stat.ME], 2018
+       Subgraph Estimation Via Vertex Screening" arXiv: 1801.07683 [stat.ME],
+       2018
     """
 
-    def __init__(self, stat, corr_thresh):
+    def __init__(self, stat: str, corr_thresh: float) -> None:
         super().__init__(stat=stat)
 
         if not isinstance(corr_thresh, numbers.Real):
@@ -66,7 +56,7 @@ class Screen(BaseSubgraph):
 
         self.corr_thresh = corr_thresh
 
-    def fit(self, X, y):
+    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         """
         Performs non-iterative screening on graphs.
 
@@ -86,7 +76,7 @@ class Screen(BaseSubgraph):
 
         return self
 
-    def _fit_transform(self, X, y):
+    def _fit_transform(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         "Finds the signal subgraph from the correlation values"
         self.fit(X, y)
 
@@ -108,7 +98,7 @@ class Screen(BaseSubgraph):
 
         return S_hat
 
-    def fit_transform(self, X, y):
+    def fit_transform(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         Apply screening to graph set X to estimate signal subgraph.
 
