@@ -1,4 +1,4 @@
-name: Graspologic Continuous Integration
+name: graspologic CI
 on: [push]
 jobs:
   build-documentation:
