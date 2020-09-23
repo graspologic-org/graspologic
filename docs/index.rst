@@ -36,7 +36,7 @@ Free software
 -------------
 
 graspologic is free software; you can redistribute it and/or modify it under the
-terms of the :doc:`MIT </license>`.  We welcome contributions.
+terms of the :doc:`MIT </license>` license.  We welcome contributions.
 Join us on `GitHub <https://github.com/microsoft/graspologic>`_.
 
 History
