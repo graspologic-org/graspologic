@@ -7,6 +7,7 @@ import math
 import random
 from graspy.match import GraphMatch as GMP
 from graspy.match import SinkhornKnopp as SK
+from graspy.simulations import sbm_corr
 
 np.random.seed(0)
 
@@ -37,14 +38,6 @@ class TestGMP:
                 np.arange(2),
                 np.arange(2),
             )
-        # with pytest.raises(ValueError):
-        #     GMP().fit(
-        #         np.random.random((3, 3)),
-        #         np.random.random((4, 4)),
-        #         np.arange(2),
-        #         np.arange(2),
-        #     )
-        # TODO: add tests for padding
         with pytest.raises(ValueError):
             GMP().fit(
                 np.random.random((3, 4)),
@@ -152,6 +145,37 @@ class TestGMP:
         chr15a = self.rand.fit(A, B, W1, W2)
         score = chr15a.score_
         assert 9896 <= score < 10000
+
+    def test_padding(self):
+        directed = False
+        loops = False
+        block_probs = [
+            [0.9, 0.4, 0.3, 0.2],
+            [0.4, 0.9, 0.4, 0.3],
+            [0.3, 0.4, 0.9, 0.4],
+            [0.2, 0.3, 0.4, 0.7],
+        ]
+        n = 100
+        n_blocks = 4
+        rho = 0.5
+        block_members = np.array(n_blocks * [n])
+        n_verts = block_members.sum()
+        G1p, G2 = sbm_corr(block_members, block_probs, rho, directed, loops)
+        G1 = np.zeros((300, 300))
+        for i in range(5):
+            stepx = 100 * i
+            for j in range(5):
+                stepy = 100 * j
+                G1[(75 * i) : (75 * (i + 1)), (75 * j) : (75 * (j + 1))] = G1p[
+                    stepx : (stepx + 75), stepy : (stepy + 75)
+                ]
+        seed1 = np.random.randint(0, 300, 10)
+        seed2 = [int(x / 75) * 25 + x for x in seed1]
+        res = self.barycenter.fit(G2, G1, seed2, seed1)
+        matching = np.concatenate(
+            [res.perm_inds_[x * 100 : (x * 100) + 75] for x in range(n_blocks)]
+        )
+        assert 1.0 == (sum(matching == np.arange(300)) / 300)
 
 
 class TestSinkhornKnopp:
