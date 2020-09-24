@@ -821,8 +821,8 @@ def edgeplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
         For acceptable string arguments, See the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <matplotlib: tutorials/colors/colormaps.html>`.
-        :doc:`Choosing Colormaps in Matplotlib <matplotlib:Choosing Colormaps in Matplotlib>`.
+        :ref:`Choosing Colormaps in Matplotlib <matplotlib: tutorials/colors/colormaps.html>`.
+        :ref:`Choosing Colormaps in Matplotlib <matplotlib:Choosing Colormaps in Matplotlib>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
