@@ -570,7 +570,7 @@ def pairplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
-        For acceptable string arguments, See the palette options at
+        For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
@@ -748,7 +748,7 @@ def degreeplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
-        For acceptable string arguments, See the palette options at
+        For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
@@ -817,7 +817,7 @@ def edgeplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
-        For acceptable string arguments, See the palette options at
+        For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
