@@ -1,16 +1,5 @@
-# Copyright 2019 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
@@ -58,9 +47,11 @@ class LatentPositionTest(BaseInference):
             .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
             .. math:: H_o: X_1 = c X_2 R
+
             where :math:`c` is a scalar, :math:`c > 0`
         - 'diagonal-rotation'
             .. math:: H_o: X_1 = D X_2 R
+
             where :math:`D` is an arbitrary diagonal matrix
 
     n_bootstraps : int, optional (default 500)
@@ -82,7 +73,7 @@ class LatentPositionTest(BaseInference):
         The p value estimated from the null distributions from sample 1 and sample 2.
 
     p_value_ : float
-        The overall p value from the test; this is the max of p_value_1_ and p_value_2_
+        The overall p value from the test; this is the max of ``p_value_1_`` and ``p_value_2_``
 
     See also
     --------

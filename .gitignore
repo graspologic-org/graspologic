@@ -121,3 +121,5 @@ docs/bpedigo/ase_clustering.py
 notebooks/bpedigo
 
 *.DS_Store
+.idea
+*.iml
