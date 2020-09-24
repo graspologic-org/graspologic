@@ -42,6 +42,9 @@ class BaseEmbed(BaseEstimator):
         Whether to check if input graph is connected. May result in non-optimal
         results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
+    concat : bool, optional (default = False)
+        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+        along axis 1.
 
     Attributes
     ----------
@@ -62,12 +65,17 @@ class BaseEmbed(BaseEstimator):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
+        concat=False,
     ):
         self.n_components = n_components
         self.n_elbows = n_elbows
         self.algorithm = algorithm
         self.n_iter = n_iter
         self.check_lcc = check_lcc
+        if not isinstance(concat, bool):
+            msg = "Parameter `concat` is expected to be type bool"
+            raise TypeError(msg)
+        self.concat = concat
 
     def _reduce_dim(self, A):
         """
@@ -128,13 +136,16 @@ class BaseEmbed(BaseEstimator):
         return self
 
     def _fit_transform(self, graph):
-        "Fits the model and returns the estimated latent positions"
+        "Fits the model and returns the estimated latent positions."
         self.fit(graph)
 
         if self.latent_right_ is None:
             return self.latent_left_
         else:
-            return self.latent_left_, self.latent_right_
+            if self.concat:
+                return np.concatenate((self.latent_left_, self.latent_right_), axis=1)
+            else:
+                return self.latent_left_, self.latent_right_
 
     def fit_transform(self, graph, y=None):
         """
@@ -149,11 +160,10 @@ class BaseEmbed(BaseEstimator):
 
         Returns
         -------
-        out : np.ndarray, shape (n_vertices, n_dimension) OR tuple (len 2)
-            Where both elements have shape (n_vertices, n_dimension)
-            A single np.ndarray represents the latent position of an undirected
-            graph, wheras a tuple represents the left and right latent positions
-            for a directed graph
+        out : np.ndarray OR length 2 tuple of np.ndarray.
+            If undirected then returns single np.ndarray of latent position, shape(n_vertices, n_components).
+            If directed, ``concat`` is True then concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
+            If directed, ``concat`` is False then tuple of the latent matrices. Each of shape (n_vertices, n_components).
         """
         return self._fit_transform(graph)
 
@@ -167,6 +177,7 @@ class BaseEmbedMulti(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
+        concat=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -174,6 +185,7 @@ class BaseEmbedMulti(BaseEmbed):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
+            concat=concat,
         )
 
         if not isinstance(diag_aug, bool):
