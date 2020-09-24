@@ -23,15 +23,14 @@ project = "GraSPy"
 copyright = "2018"
 authors = u"NeuroData"
 
-# The short X.Y version
-# Find GraSPy version.
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-for line in open(os.path.join(PROJECT_PATH, "..", "graspy", "__init__.py")):
-    if line.startswith("__version__ = "):
-        version = line.strip().split()[2][1:-1]
+realpath = os.path.realpath(__file__)
+dir_realpath = os.path.dirname(os.path.dirname(realpath))
+sys.path.append(dir_realpath)
 
-# The full version, including alpha/beta/rc tags
-release = "alpha"
+import graspy
+
+version = graspy.version.version.__semver
+release = graspy.version.version.version
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
@@ -72,6 +71,7 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "sklearn": ("http://scikit-learn.org/dev", None),
     "hyppo": ("https://hyppo.neurodata.io", None),
+    "matplotlib": ('https://matplotlib.org', None)
 }
 
 # -- sphinx options ----------------------------------------------------------
@@ -83,7 +83,7 @@ source_encoding = "utf-8"
 # -- Options for HTML output -------------------------------------------------
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
-html_static_path = ["_static"]
+html_static_path = []
 modindex_common_prefix = ["graspy."]
 
 pygments_style = "sphinx"
