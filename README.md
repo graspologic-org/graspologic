@@ -87,3 +87,5 @@ If you find GraSPy useful in your work, please cite the package via the [GraSPy 
 > Chung, J., Pedigo, B. D., Bridgeford, E. W., Varjavand, B. K., Helm, H. S., & Vogelstein, J. T. (2019). GraSPy: Graph Statistics in Python. Journal of Machine Learning Research, 20(158), 1-7.
 
 Build isn't firing off for forks and I don't know why
+
+Enabled workflow builds on my fork
