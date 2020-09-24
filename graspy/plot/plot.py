@@ -577,8 +577,6 @@ def pairplot(
     size : float or int, optional, default: 50
         Size of plotted markers.
     marker : string, optional, default: '.'
-        Matplotlib style marker specification
-        https://matplotlib.org/api/markers_api.html
         :doc:`Matplotlib style marker specification <api/markers_api>`
     """
     _check_common_inputs(
