@@ -47,9 +47,11 @@ class LatentPositionTest(BaseInference):
             .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
             .. math:: H_o: X_1 = c X_2 R
+
             where :math:`c` is a scalar, :math:`c > 0`
         - 'diagonal-rotation'
             .. math:: H_o: X_1 = D X_2 R
+
             where :math:`D` is an arbitrary diagonal matrix
 
     n_bootstraps : int, optional (default 500)
@@ -71,7 +73,7 @@ class LatentPositionTest(BaseInference):
         The p value estimated from the null distributions from sample 1 and sample 2.
 
     p_value_ : float
-        The overall p value from the test; this is the max of p_value_1_ and p_value_2_
+        The overall p value from the test; this is the max of ``p_value_1_`` and ``p_value_2_``
 
     See also
     --------
