@@ -91,6 +91,10 @@ class OmnibusEmbed(BaseEmbedMulti):
         a vector corresponding to the degree (or sum of edge weights for a
         weighted network) before embedding.
 
+    concat : bool, optional (default False)
+        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+        along axis 1.
+
     Attributes
     ----------
     n_graphs_ : int
@@ -109,6 +113,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
+
 
     See Also
     --------
@@ -131,6 +136,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
+        concat=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -139,6 +145,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             n_iter=n_iter,
             check_lcc=check_lcc,
             diag_aug=diag_aug,
+            concat=concat,
         )
 
     def fit(self, graphs, y=None):
@@ -204,9 +211,11 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_graphs, n_vertices, n_components) if input
-            graphs were symmetric. If graphs were directed, returns tuple of
-            two arrays (same shape as above) where the first corresponds to the
-            left latent positions, and the right to the right latent positions
+        out : np.ndarray or length 2 tuple of np.ndarray.
+            If input graphs were symmetric, ndarray of shape (n_graphs, n_vertices, n_components).
+            If graphs were directed and ``concat`` is False, returns tuple of two arrays (same shape as above).
+            The first corresponds to the left latent positions, and the second to the right latent positions.
+            If graphs were directed and ``concat`` is True, left and right (out and in) latent positions are concatenated.
+            In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.
         """
         return self._fit_transform(graphs)
