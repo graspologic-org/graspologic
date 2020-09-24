@@ -405,27 +405,9 @@ def gridplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
-        For acceptable string arguments, See the palette options in
-        :func:`qualitative`.
-        :doc:`qualitative`.
-        :ref:`qualitative`.
-        :obj:`qualitative`.
-        :func:`matplotlib:qualitative`.
-        :ref:`matplotlib:qualitative`.
-        :doc:`matplotlib:qualitative`.
-        :obj:`matplotlib:qualitative`.
-        :func:`matplotlib <matplotlib:qualitative>`.
-        :ref:`matplotlib <matplotlib:qualitative>`.
-        :doc:`matplotlib <matplotlib:qualitative>`.
-        :obj:`matplotlib <matplotlib:qualitative>`.
-        :func:`matplotlib <matplotlib:/qualitative>`.
-        :ref:`matplotlib <matplotlib:/qualitative>`.
-        :doc:`matplotlib <matplotlib:/qualitative>`.
-        :obj:`matplotlib <matplotlib:/qualitative>`.
-        :func:`matplotlib <matplotlib/qualitative>`.
-        :ref:`matplotlib <matplotlib/qualitative>`.
-        :doc:`matplotlib <matplotlib/qualitative>`.
-        :obj:`matplotlib <matplotlib/qualitative>`.
+        For acceptable string arguments, See the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib: tutorials/colors/colormaps.html>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:Choosing Colormaps in Matplotlib>`.
     alpha : float [0, 1], default : 0.7
         Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
@@ -589,8 +571,9 @@ def pairplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
-        For acceptable string arguments, See the palette options in
-        :ref:`matplotlib:tutorials/colors/colormaps`
+        For acceptable string arguments, See the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib: tutorials/colors/colormaps.html>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:Choosing Colormaps in Matplotlib>`.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     size : float or int, optional, default: 50
@@ -767,8 +750,9 @@ def degreeplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
-        For acceptable string arguments, See the palette options in
-        :dox:`/tutorials/colors/colormaps`
+        For acceptable string arguments, See the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib: tutorials/colors/colormaps.html>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:Choosing Colormaps in Matplotlib>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
@@ -836,8 +820,9 @@ def edgeplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
-        For acceptable string arguments, See the palette options in
-        :obj:`matplotlib.axes.Axes.plot`
+        For acceptable string arguments, See the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib: tutorials/colors/colormaps.html>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:Choosing Colormaps in Matplotlib>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
