@@ -1,5 +1,5 @@
 name: Graspologic Continuous Integration
-on: [push]
+on: [push, pull_request_target]
 jobs:
   build-documentation:
     runs-on: ubuntu-latest
