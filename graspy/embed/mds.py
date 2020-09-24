@@ -61,7 +61,7 @@ class ClassicalMDS(BaseEstimator):
         then equals the optimal embedding dimension.
 
     n_features_in_: int
-        number of features passed to the fit method.
+        Number of features passed to the fit method.
 
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.

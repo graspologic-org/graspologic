@@ -72,7 +72,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     Attributes
     ----------
     n_features_in_: int
-        number of features passed to the fit method.
+        Number of features passed to the fit method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None

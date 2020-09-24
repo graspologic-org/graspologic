@@ -51,7 +51,7 @@ class BaseEmbed(BaseEstimator):
     n_components_ : int
         Dimensionality of the embedded space.
     n_features_in_: int
-        number of features passed to the fit method.
+        Number of features passed to the fit method.
 
     See Also
     --------
