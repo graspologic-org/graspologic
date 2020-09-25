@@ -68,6 +68,10 @@ class GraphMatch(BaseEstimator):
     score_ : float
         The objective function value of for the optimal permutation found.
 
+    n_iter_ : int
+        Number of Frank-Wolfe iterations run. If `n_init` > 1, `n_iter_` reflects the number of
+        iterations performed at the initialization returned.
+
 
     References
     ----------
@@ -285,6 +289,7 @@ class GraphMatch(BaseEstimator):
                 score = score_new
                 perm_inds = np.zeros(n, dtype=int)
                 perm_inds[permutation_A] = permutation_B[perm_inds_new]
+                best_n_iter = n_iter
 
         permutation_A_unshuffle = _unshuffle(permutation_A, n)
         A = A[np.ix_(permutation_A_unshuffle, permutation_A_unshuffle)]
@@ -294,6 +299,7 @@ class GraphMatch(BaseEstimator):
 
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
+        self.n_iter_ = best_n_iter
         return self
 
     def fit_predict(self, A, B, seeds_A=[], seeds_B=[]):

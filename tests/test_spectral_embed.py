@@ -43,6 +43,17 @@ def _kmeans_comparison(data, labels, n_clusters):
     return aris
 
 
+def _test_output_dim_directed(self, method):
+    n_components = 4
+    embed = method(n_components=n_components, concat=True)
+    n = 10
+    M = 20
+    A = er_nm(n, M, directed=True) + 5
+    self.assertEqual(embed.fit_transform(A).shape, (n, 8))
+    self.assertEqual(embed.latent_left_.shape, (n, 4))
+    self.assertEqual(embed.latent_right_.shape, (n, 4))
+
+
 def _test_output_dim(self, method, *args, **kwargs):
     n_components = 4
     embed = method(n_components=n_components)
@@ -54,7 +65,7 @@ def _test_output_dim(self, method, *args, **kwargs):
     self.assertTrue(embed.latent_right_ is None)
 
 
-def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
+def _test_sbm_er_binary(self, method, P, directed=False, *args, **kwargs):
     np.random.seed(8888)
 
     num_sims = 50
@@ -66,24 +77,25 @@ def _test_sbm_er_binary_undirected(self, method, P, *args, **kwargs):
     sbm_wins = 0
     er_wins = 0
     for sim in range(0, num_sims):
-        sbm_sample = sbm(verts_per_community, P)
-        er = er_np(verts, 0.5)
-        embed_sbm = method(n_components=2)
-        embed_er = method(n_components=2)
+        sbm_sample = sbm(verts_per_community, P, directed=directed)
+        er = er_np(verts, 0.5, directed=directed)
+        embed_sbm = method(n_components=2, concat=directed)
+        embed_er = method(n_components=2, concat=directed)
 
         labels_sbm = np.zeros((verts), dtype=np.int8)
         labels_er = np.zeros((verts), dtype=np.int8)
         labels_sbm[100:] = 1
         labels_er[100:] = 1
 
-        embed_sbm.fit(sbm_sample)
-        embed_er.fit(er)
+        X_sbm = embed_sbm.fit_transform(sbm_sample)
+        X_er = embed_er.fit_transform(er)
 
-        X_sbm = embed_sbm.latent_left_
-        X_er = embed_er.latent_left_
-
-        self.assertEqual(X_sbm.shape, (verts, communities))
-        self.assertEqual(X_er.shape, (verts, communities))
+        if directed:
+            self.assertEqual(X_sbm.shape, (verts, 2 * communities))
+            self.assertEqual(X_er.shape, (verts, 2 * communities))
+        else:
+            self.assertEqual(X_sbm.shape, (verts, communities))
+            self.assertEqual(X_er.shape, (verts, communities))
 
         aris = _kmeans_comparison((X_sbm, X_er), (labels_sbm, labels_er), communities)
         sbm_wins = sbm_wins + (aris[0] > aris[1])
@@ -96,9 +108,16 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
         _test_output_dim(self, AdjacencySpectralEmbed)
 
+    def test_output_dim_directed(self):
+        _test_output_dim_directed(self, AdjacencySpectralEmbed)
+
     def test_sbm_er_binary_undirected(self):
         P = np.array([[0.8, 0.2], [0.2, 0.8]])
-        _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed, P)
+        _test_sbm_er_binary(self, AdjacencySpectralEmbed, P, directed=False)
+
+    def test_sbm_er_binary_directed(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        _test_sbm_er_binary(self, AdjacencySpectralEmbed, P, directed=True)
 
     def test_unconnected_warning(self):
         A = er_nm(100, 10)
@@ -116,9 +135,16 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
         _test_output_dim(self, LaplacianSpectralEmbed)
 
+    def test_output_dim_directed(self):
+        _test_output_dim_directed(self, LaplacianSpectralEmbed)
+
     def test_sbm_er_binary_undirected(self):
         P = np.array([[0.8, 0.2], [0.2, 0.3]])
-        _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P)
+        _test_sbm_er_binary(self, LaplacianSpectralEmbed, P, directed=False)
+
+    def test_sbm_er_binary_directed(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.3]])
+        _test_sbm_er_binary(self, LaplacianSpectralEmbed, P, directed=True)
 
     def test_different_forms(self):
         f = np.array([[1, 2], [2, 1]])
