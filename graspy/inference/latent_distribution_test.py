@@ -95,7 +95,7 @@ class LatentDistributionTest(BaseInference):
         power or less power under which alternatives. Generally not recomended,
         as it is untested and included for experimental purposes.
 
-    align_type : str, {'sign_flips' (default), 'seedless-procrustes'} or None
+    align_type : str, {'sign_flips' (default), 'seedless_procrustes'} or None
         Random dot product graphs have an inherent non-identifiability,
         associated with their latent positions. Thus, two embeddings of
         different graphs may not be orthogonally aligned. Without this accounted

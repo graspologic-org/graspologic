@@ -13,9 +13,9 @@ from .orthogonal_procrustes import OrthogonalProcrustes
 class SeedlessProcrustes(BaseAlign):
     """
     Matches two datasets using an orthogonal matrix. Unlike
-    OrthogonalProcrustes, this does not use a matching between entries. It can
-    even be used in the settings when the two datasets do not have the same
-    number of entries.
+    :class:`~graspy.align.OrthogonalProcrustes`, this does not use a matching
+    between entries. It can even be used in the settings when the two datasets
+    do not have the same number of entries.
 
     In graph setting, it is used to align the embeddings of two different
     graphs, when it requires some simultaneous inference task, for example,
@@ -48,46 +48,48 @@ class SeedlessProcrustes(BaseAlign):
                 dimension of the datasets. In particular, tries all matrices
                 that are simultaneously diagonal and orthogonal. In other
                 words, these are diagonal matrices with all entries on the
-                diagonal being either +1 or -1. The final result is picked
-                based on the final values of the objective function. This is
-                motivated by the fact that in the graph setting, the embeddings
-                have two types of orthogonal non-identifiability, one of which
-                is captured by the orthogonal diagonal matrices. For more on
+                diagonal being either +1 or -1. This is motivated by the fact
+                that spectral graph embeddings have two types of orthogonal
+                non-identifiability, one of which is captured by the orthogonal
+                diagonal matrices. The final result is picked based on the
+                final values of the objective function. For more on
                 this, see [2]_.
             - 'sign_flips'
                 Initial alignment done by making the median value in each
-                dimension have the same sign". The motivation is similar to
+                dimension have the same sign. The motivation is similar to
                 that in '2d', except this is a heuristic that can save time,
                 but can sometimes yield suboptimal results.
             - 'custom'
                 Expects either an initial guess for :math:`Q` or an initial
-                guess for :math:`P`, but not both. See `initial_Q` and
-                initial_P`, respectively. If neither is provided, initializes
-                `initial_Q` to an identity with an appropriate number of
-                dimensions.
+                guess for :math:`P`, but not both. See ``initial_Q`` and
+                ``initial_P``, respectively. If neither is provided,
+                initializes ``initial_Q`` to an identity with an appropriate
+                number of dimensions.
 
         initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
-            An initial guess for the alignment matrix, Q, if such exists. Only
-            one of initial_Q, initial_P can be provided at the same time, and
-            only if `init` argument is set to 'custom'. If None, and initial_P
-            is also None - initializes `initial_Q` to identity matrix. Must be
-            an orthogonal matrix, if provided.
+            An initial guess for the alignment matrix, ``self.Q_``, if such
+            exists. Only one of ``initial_Q``, ``initial_P`` can be provided at
+            the same time, and only if `init` argument is set to 'custom'. If
+            None, and ``initial_P`` is also None - initializes `initial_Q` to
+            identity matrix. Must be an orthogonal matrix, if provided.
 
         initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
-            Initial guess for the optimal transport matrix, P, if such exists.
-            Only one of initial_Q, initial_P can be provided at the same time,
-            and only if `init` argument is set to 'custom'. If None, and
-            initial_P is also None - initializes `initial_Q` to identity
-            matrix. Must be a doubly stochastic matrix if provided (rows sum up
-            to 1/n, cols sum up to 1/m.)
+            Initial guess for the optimal transport matrix, ``self.P``, if such
+            exists. Only one of ``initial_Q``, ``initial_P`` can be provided at
+            the same time, and only if `init` argument is set to 'custom'. If
+            None, and ``initial_Q`` is also None - initializes `initial_Q` to
+            identity matrix. Must be a doubly stochastic matrix if provided
+            (rows sum up to 1/n, cols sum up to 1/m.)
 
     Attributes
     ----------
         Q_ : array, size (d, d)
-            Final orthogonal matrix, used to modify X.
+            Final orthogonal matrix, used to modify ``X``.
 
         P_ : array, size (n, m) where n and m are the sizes of two datasets
-            Final matrix of optimal transports
+            Final matrix of optimal transports, represent soft matching weights
+            from points in one dataset to the other, normalized such that all
+            rows sum to 1/n and all columns sum to 1/m.
 
         score_ : float
             Final value of the objective function: :math:`|| X Q - P Y ||_F`
