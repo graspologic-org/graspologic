@@ -11,15 +11,15 @@ from graspy.align import SignFlips
 class TestSignFlips(unittest.TestCase):
     def test_bad_kwargs(self):
         with self.assertRaises(TypeError):
-            SignFlips(criteria={"this is a": "dict"})
+            SignFlips(criterion={"this is a": "dict"})
         with self.assertRaises(ValueError):
-            SignFlips(criteria="cep")
+            SignFlips(criterion="cep")
         # check delayed ValueError
         with self.assertRaises(ValueError):
-            aligner = SignFlips(criteria="median")
+            aligner = SignFlips(criterion="median")
             X = np.arange(6).reshape(6, 1)
             Y = np.arange(6).reshape(6, 1)
-            aligner.criteria = "something"
+            aligner.criterion = "something"
             aligner.fit(X, Y)
 
     def test_bad_datasets(self):
@@ -80,15 +80,15 @@ class TestSignFlips(unittest.TestCase):
         I_answer = np.diag([-1, 1])
         self.assertTrue(np.all(I_test == I_answer))
 
-    def test_max_criteria(self):
+    def test_max_criterion(self):
         X = np.arange(6).reshape(3, 2) * (-1)
         Y = np.arange(6).reshape(3, 2) @ np.diag([1, -1]) + 0.5
         # in this case, Y should be unchanged, and X matched to Y
         # so X flips sign in the first dimension
         Q_answer = np.array([[-1, 0], [0, 1]])
         X_answer = X.copy() @ Q_answer
-        # set criteria to "max", see if that works
-        aligner = SignFlips(criteria="max")
+        # set criterion to "max", see if that works
+        aligner = SignFlips(criterion="max")
         aligner.fit(X, Y)
         Q_test = aligner.Q_
         X_test = aligner.transform(X)
