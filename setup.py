@@ -13,6 +13,7 @@ if sys.version_info < MINIMUM_PYTHON_VERSION:
 
 sys.path.insert(0, os.path.join("graspologic", "version"))
 from version import version
+
 sys.path.pop(0)
 
 version_path = os.path.join("graspologic", "version", "version.txt")
@@ -72,5 +73,5 @@ setup(
             "sphinxcontrib-rawfiles",
             "sphinx-rtd-theme",
         ]
-    }
+    },
 )
