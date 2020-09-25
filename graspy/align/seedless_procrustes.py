@@ -60,31 +60,31 @@ class SeedlessProcrustes(BaseAlign):
                 that in '2d', except this is a heuristic that can save time,
                 but can sometimes yield suboptimal results.
             - 'custom'
-                Expects either an initial guess for :math:`Q` or an initial
-                guess for :math:`P`, but not both. See ``initial_Q`` and
-                ``initial_P``, respectively. If neither is provided,
-                initializes ``initial_Q`` to an identity with an appropriate
+                Expects either an initial guess for `self.Q_` or an initial
+                guess for `self.P_`, but not both. See `initial_Q` and
+                `initial_P`, respectively. If neither is provided,
+                initializes `initial_Q` to an identity with an appropriate
                 number of dimensions.
 
         initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
-            An initial guess for the alignment matrix, ``self.Q_``, if such
-            exists. Only one of ``initial_Q``, ``initial_P`` can be provided at
+            An initial guess for the alignment matrix, `self.Q_`, if such
+            exists. Only one of `initial_Q`, `initial_P` can be provided at
             the same time, and only if `init` argument is set to 'custom'. If
-            None, and ``initial_P`` is also None - initializes `initial_Q` to
+            None, and `initial_P` is also None - initializes `initial_Q` to
             identity matrix. Must be an orthogonal matrix, if provided.
 
         initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
-            Initial guess for the optimal transport matrix, ``self.P``, if such
-            exists. Only one of ``initial_Q``, ``initial_P`` can be provided at
-            the same time, and only if `init` argument is set to 'custom'. If
-            None, and ``initial_Q`` is also None - initializes `initial_Q` to
-            identity matrix. Must be a doubly stochastic matrix if provided
-            (rows sum up to 1/n, cols sum up to 1/m.)
+            Initial guess for the optimal transport matrix, `self.P`, if such
+            exists. Only one of `initial_Q`, `initial_P` can be provided at the
+            same time, and only if `init` argument is set to 'custom'. If None,
+            and `initial_Q` is also None - initializes `initial_Q` to identity
+            matrix. Must be a doubly stochastic matrix if provided (rows sum up
+            to 1/n, cols sum up to 1/m.)
 
     Attributes
     ----------
         Q_ : array, size (d, d)
-            Final orthogonal matrix, used to modify ``X``.
+            Final orthogonal matrix, used to modify `X`.
 
         P_ : array, size (n, m) where n and m are the sizes of two datasets
             Final matrix of optimal transports, represent soft matching weights
@@ -113,8 +113,9 @@ class SeedlessProcrustes(BaseAlign):
     :math:`Y \in M_{m, d}`, then the correspondence is a matrix
     :math:`P \in M_{n, m}` that is doubly-stochastic (that is, its rows sum to
     :math:`1/n`, and columns sum to :math:`1/m`) and the orthogonal alignment
-    is an orthogonal matrix :math:`Q \in M_{d, d}`. The global objective
-    function is :math:`|| X Q - P Y ||_F`.
+    is an orthogonal matrix :math:`Q \in M_{d, d}` (recall that an orthogonal
+    matrix, is any matrix that satisfies :math:`Q^T Q = Q Q^T = I`). The global
+    objective function is :math:`|| X Q - P Y ||_F`.
 
     Note that both :math:`X` and :math:`PY` are matrices in :math:`M_{n, d}`.
     Thus, if one knew :math:`P`, it would be simple to obtain an estimate for

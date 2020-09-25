@@ -9,26 +9,17 @@ from .base import BaseAlign
 class OrthogonalProcrustes(BaseAlign):
     """
     Computes the matrix solution of the classical orthogonal Procrustes [1]_
-    problem, which is that given two matrices :math:`X` and :math:`Y` of equal
-    shape (n, d), find an orthogonal matrix :math:`Q` that most closely maps
-    `X` to `Y`. Subsequently, uses that matrix to transform either the original
-    `X`, or a different dataset that has the same.
+    problem, which is that given two matrices `X` and `Y` of equal shape
+    (n, d), find an orthogonal matrix `self.Q_` that most closely maps `X` to
+    `Y`. Subsequently, uses that matrix to transform either the original `X`,
+    or a different dataset that has the same.
 
     Note that when used to match two datasets, this method unlike
-    SeedlessProcrustes, not only requires that the datasets have the same
-    number of entries, but also that there is some correspondence between the
-    entries. In graph embeddings, this usually corresponds to the assumption
-    that the vertex i in graph X has the same latent position as the vertex i
-    in graph Y.
-
-    Formally, minimizes :math:`|| X Q - Y ||_F`, which has a closed form
-    solution, whenever :math:`Q` is constrained to be an orthogonal matrix,
-    that is a matrix that satisfies :math:`Q^T Q = Q Q^T = I`. For the more
-    details, including the proof of the closed-form solution see [1]_.
-
-    Implementation-wise, this class is a wrapper of the
-    `scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
-    described in find the optimal solution algorithm [2]_.
+    :class:`~graspy.align.SeedlessProcrustes`, not only requires that the
+    datasets have the same number of entries, but also that there is some
+    correspondence between the entries. In graph embeddings, this usually
+    corresponds to the assumption that the vertex i in graph X has the same
+    latent position as the vertex i in graph Y.
 
     Attributes
     ----------
@@ -42,6 +33,17 @@ class OrthogonalProcrustes(BaseAlign):
 
     .. [2] Peter H. Schonemann, "A generalized solution of the orthogonal
            Procrustes problem", Psychometrica -- Vol. 31, No. 1, March, 1996.
+
+    Notes
+    -----
+    Formally, minimizes :math:`|| X Q - Y ||_F`, which has a closed form
+    solution, whenever :math:`Q` is constrained to be an orthogonal matrix,
+    that is a matrix that satisfies :math:`Q^T Q = Q Q^T = I`. For the more
+    details, including the proof of the closed-form solution see [1]_.
+
+    Implementation-wise, this class is a wrapper of the
+    `scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
+    described in find the optimal solution algorithm [2]_.
 
     """
 
