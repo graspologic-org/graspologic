@@ -8,11 +8,11 @@ from numpy.linalg import norm
 from numpy.testing import assert_allclose
 
 from graspy.embed.omni import OmnibusEmbed, _get_omni_matrix
-from graspy.simulations.simulations import er_nm, er_np
+from graspy.simulations.simulations import er_nm, er_np, sbm
 from graspy.utils.utils import is_symmetric, symmetrize
 
 
-def generate_data(n, seed=1):
+def generate_data(n, seed=1, symetric=True):
     """Generate data form dirichelet distribution with
     n numbers of points
     """
@@ -27,8 +27,11 @@ def generate_data(n, seed=1):
     P = np.dot(X, X.T)
 
     # Generate two adjacencies
-    A1 = symmetrize(np.random.binomial(1, P))
-    A2 = symmetrize(np.random.binomial(1, P))
+    A1 = np.random.binomial(1, P)
+    A2 = np.random.binomial(1, P)
+    if symetric:
+        A1 = symmetrize(A1)
+        A2 = symmetrize(A2)
 
     return (X, A1, A2)
 
@@ -151,6 +154,35 @@ def test_omni_embed():
         OmniBar = compute_bar(omni.fit_transform([A1, A2]))
 
         omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug)
+        ABar = compute_bar(omni.fit_transform([Abar, Abar]))
+
+        tol = 1.0e-2
+        assert allclose(norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol)
+
+    run(diag_aug=True)
+    run(diag_aug=False)
+
+
+def test_omni_embed_directed():
+    """
+    We compare the difference of norms of OmniBar and ABar.
+    ABar is the lowest variance estimate of the latent positions X.
+    OmniBar should be reasonablly close to ABar when n_vertices is high.
+    """
+
+    def compute_bar(arr):
+        n = arr.shape[0] // 2
+        return (arr[:n] + arr[n:]) / 2
+
+    def run(diag_aug):
+        X, A1, A2 = generate_data(n=1000, symetric=False)
+        Abar = (A1 + A2) / 2
+
+        np.random.seed(11)
+        omni = OmnibusEmbed(n_components=3, concat=True, diag_aug=diag_aug)
+        OmniBar = compute_bar(omni.fit_transform([A2, A2]))
+
+        omni = OmnibusEmbed(n_components=3, concat=True, diag_aug=diag_aug)
         ABar = compute_bar(omni.fit_transform([Abar, Abar]))
 
         tol = 1.0e-2

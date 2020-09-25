@@ -14,6 +14,7 @@ if sys.version_info < MINIMUM_PYTHON_VERSION:
 sys.path.insert(0, os.path.join("graspy", "version"))
 # TODO: #454 Change path in https://github.com/microsoft/graspologic/issues/454
 from version import version
+
 sys.path.pop(0)
 
 version_path = os.path.join("graspy", "version", "version.txt")
@@ -73,5 +74,5 @@ setup(
             "sphinxcontrib-rawfiles",
             "sphinx-rtd-theme",
         ]
-    }
+    },
 )

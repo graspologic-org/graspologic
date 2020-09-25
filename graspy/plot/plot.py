@@ -404,7 +404,9 @@ def gridplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the hue variable
+        be values in the hue variable.
+        For acceptable string arguments, see the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float [0, 1], default : 0.7
         Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
@@ -568,13 +570,15 @@ def pairplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
+        For acceptable string arguments, see the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     size : float or int, optional, default: 50
         Size of plotted markers.
     marker : string, optional, default: '.'
-        Matplotlib style marker specification
-        https://matplotlib.org/api/markers_api.html
+        Matplotlib marker specifier, see the marker options at
+        :doc:`Matplotlib style marker specification <api/markers_api>`
     """
     _check_common_inputs(
         height=height,
@@ -744,6 +748,8 @@ def degreeplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
+        For acceptable string arguments, see the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
@@ -811,6 +817,8 @@ def edgeplot(
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the hue variable.
+        For acceptable string arguments, see the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
