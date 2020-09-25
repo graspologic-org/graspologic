@@ -186,7 +186,7 @@ class SeedlessProcrustes(BaseAlign):
                 type(iterative_num_reps)
             )
             raise TypeError(msg)
-        if iterative_num_reps < 1:
+        if iterative_num_reps < 0:
             msg = "{} is an invalid number of repetitions, must be non-negative".format(
                 iterative_num_reps
             )
@@ -276,6 +276,8 @@ class SeedlessProcrustes(BaseAlign):
         return Q
 
     def _iterative_ot(self, X, Y, Q):
+        # this P is not used. it is set to default in case numreps=0
+        P = np.ones((X.shape[0], Y.shape[0])) / (X.shape[0] * Y.shape[0])
         for i in range(self.iterative_num_reps):
             P = self._optimal_transport(X, Y, Q)
             Q = self._procrustes(X, Y, P)
