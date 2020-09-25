@@ -91,6 +91,7 @@ class SeedlessProcrustes(BaseAlign):
 
         score_ : float
             Final value of the objective function: :math:`|| X Q - P Y ||_F`
+            Lower means the datasets have been matched together better.
 
     References
     ----------

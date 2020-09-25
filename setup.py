@@ -8,8 +8,11 @@ from typing import Tuple
 
 
 def package_metadata() -> Tuple[str, str]:
-    sys.path.insert(0, os.path.join("graspy", "version"))  # TODO: #454 Change path in https://github.com/microsoft/graspologic/issues/454
+    sys.path.insert(
+        0, os.path.join("graspy", "version")
+    )  # TODO: #454 Change path in https://github.com/microsoft/graspologic/issues/454
     from version import name, version
+
     sys.path.pop(0)
 
     version_path = os.path.join("graspy", "version", "version.txt")
@@ -71,5 +74,7 @@ setup(
     ],
     packages=find_packages(exclude=["tests", "tests.*", "tests/*"]),
     include_package_data=True,
-    package_data={'version': [os.path.join('graspy', 'version', 'version.txt')]},  # TODO: #454 Also needs changed by https://github.com/microsoft/graspologic/issues/454,
+    package_data={
+        "version": [os.path.join("graspy", "version", "version.txt")]
+    },  # TODO: #454 Also needs changed by https://github.com/microsoft/graspologic/issues/454,
 )

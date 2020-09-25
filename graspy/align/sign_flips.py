@@ -25,9 +25,9 @@ class SignFlips(BaseAlign):
             signs. Two options are currently supported:
 
             - 'median'
-                Uses the median along each dimension
+                Uses the median along each dimension.
             - 'max'
-                Uses the max (in magintude) alongs each dimension
+                Uses the max (in magintude) along each dimension.
 
     Attributes
     ----------
@@ -70,22 +70,24 @@ class SignFlips(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix Q_ that aligns the first
-        dataset with the second.
-        In sign flips, Q_ is an diagonal orthogonal matrices (i.e. a matrix
-        with 1 or -1 in each entry on diagonal and 0 everywhere else) picked
-        such that all dimensions of X @ Q_ and Y are in the same orthant using
-        some critera (median or max magnitude).
+        Uses the two datasets to learn the matrix ``self.Q_`` that aligns the
+        first dataset with the second.
+
+        In sign flips, ``self.Q_`` is an diagonal orthogonal matrices (i.e. a
+        matrix with 1 or -1 in each entry on diagonal and 0 everywhere else)
+        picked such that all dimensions of ``X`` @ ``self.Q_`` and ``Y`` are in
+        the same orthant using some critera (median or max magnitude).
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
+            dimensions as ones in ``Y``, but the number of vectors can differ.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
+            of dimensions as ones in ``X``, but the number of vectors can
+            differ.
 
         Returns
         -------
