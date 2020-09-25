@@ -15,18 +15,18 @@ class OrthogonalProcrustes(BaseAlign):
     Note that when used to match two datasets, this method unlike
     SeedlessProcrustes, not only requires that the datasets have the same
     number of entries, but also that there is some correspondence between the
-    vertices. In statistical spectral graphs, this usually corresponds to the
-    assumption that the vertex i in graph X has the same latent position as the
-    vertex i in graph Y.
+    entries. In graph embeddings, this usually corresponds to the assumption
+    that the vertex i in graph X has the same latent position as the vertex i
+    in graph Y.
 
     Implementation-wise, this class is a wrapper of the
     `scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
-    described in to find the optimal solution algorithm [1]_.
+    described in find the optimal solution algorithm [1]_.
 
     Attributes
     ----------
         Q_ : array, size (d, d)
-              Final orthogonal matrix, used to modify X.
+              Final orthogonal matrix, used to modify ``X``.
 
     References
     ----------
@@ -43,18 +43,18 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix Q_ that aligns the first
-        dataset with the second.
+        Uses the two datasets to learn the matrix ``self.Q_`` that aligns the
+        first dataset with the second.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions and entries as ones in Y.
+            dimensions and entries as ones in ``Y``.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            dimensions and entries as ones in Y.
+            dimensions and entries as ones in ``X``.
 
         Returns
         -------

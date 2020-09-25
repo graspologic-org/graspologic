@@ -15,7 +15,7 @@ class BaseAlign(BaseEstimator):
     Attributes
     ----------
         Q_ : array, size (d, d)
-              final orthogonal matrix, used to modify X.
+              Final orthogonal matrix, used to modify ``X`` passed to transform
 
     """
 
@@ -47,18 +47,19 @@ class BaseAlign(BaseEstimator):
     @abstractmethod
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix Q_ that aligns the first
-        dataset with the second.
+        Uses the two datasets to learn the matrix ``self.Q_`` that aligns the
+        first dataset with the second.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
+            dimensions as ones in ``Y``, but the number of vectors can differ.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
+            of dimensions as ones in ``X``, but the number of vectors can
+            differ.
 
         Returns
         -------
@@ -68,20 +69,22 @@ class BaseAlign(BaseEstimator):
 
     def transform(self, X):
         """
-        Transforms the dataset X using the learned matrix Q_. This may be the
-        same as the first dataset as in .fit(), or a new dataset. For example,
-        additional samples from the same dataset.
+        Transforms the dataset ``X`` using the learned matrix ``self.Q_``. This
+        may be the same as the first dataset as in .fit(), or a new dataset.
+        For example, additional samples from the same dataset.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             Dataset of vectors. Needs to have the same number of dimensions as
-            X and Y passed to fit, but can have a different number of entries.
+            ``X`` and ``Y`` passed to fit, but can have a different number of
+            entries.
 
         Returns
         -------
         X_prime : np.ndarray, shape (n, d)
-            First dataset of vectors, aligned to second. Equal to X @ self.Q_.
+            First dataset of vectors, aligned to second. Equal to
+            ``X`` @ ``self.Q_``.
         """
         if not isinstance(X, np.ndarray):
             msg = f"Dataset is a {type(X)}, not an np.ndarray! "
@@ -99,24 +102,26 @@ class BaseAlign(BaseEstimator):
 
     def fit_transform(self, X, Y):
         """
-        Uses the two datasets to learn the matrix Q_ that aligns the first
-        dataset with the second. Then, transforms the first dataset accordingly
-        and returns it.
+        Transforms the dataset ``X`` using the learned matrix ``self.Q_``. This
+        may be the same as the first dataset as in .fit(), or a new dataset.
+        For example, additional samples from the same dataset.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
+            dimensions as ones in ``Y``, but the number of vectors can differ.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
+            of dimensions as ones in ``X``, but the number of vectors can
+            differ.
 
         Returns
         -------
         X_prime : np.ndarray, shape (n, d)
-            First dataset of vectors, aligned to second. Equal to X @ self.Q_X.
+            First dataset of vectors, aligned to second. Equal to
+            ``X`` @ ``self.Q_X``.
         """
         self.fit(X, Y)
         return self.transform(X)

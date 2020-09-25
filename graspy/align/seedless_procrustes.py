@@ -12,10 +12,10 @@ from .orthogonal_procrustes import OrthogonalProcrustes
 
 class SeedlessProcrustes(BaseAlign):
     """
-    Implements an algorithm that matches two datasets using an orthogonal
-    matrix. Unlike OrthogonalProcrustes, this does not use a matching between
-    entries. It can even be used in the settings when the two datasets do not
-    have the same number of entries.
+    Matches two datasets using an orthogonal matrix. Unlike
+    OrthogonalProcrustes, this does not use a matching between entries. It can
+    even be used in the settings when the two datasets do not have the same
+    number of entries.
 
     In graph setting, it is used to align the embeddings of two different
     graphs, when it requires some simultaneous inference task, for example,
@@ -86,7 +86,7 @@ class SeedlessProcrustes(BaseAlign):
         Q_ : array, size (d, d)
             Final orthogonal matrix, used to modify X.
 
-        P_ : array, size (n, m) where n and md are the sizes of two datasets
+        P_ : array, size (n, m) where n and m are the sizes of two datasets
             Final matrix of optimal transports
 
         score_ : float
