@@ -24,7 +24,7 @@ class OrthogonalProcrustes(BaseAlign):
     Attributes
     ----------
         Q_ : array, size (d, d)
-              Final orthogonal matrix, used to modify ``X``.
+              Final orthogonal matrix, used to modify `X`.
 
     References
     ----------
@@ -55,18 +55,18 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix ``self.Q_`` that aligns the
+        Uses the two datasets to learn the matrix `self.Q_` that aligns the
         first dataset with the second.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions and entries as ones in ``Y``.
+            dimensions and entries as ones in `Y`.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            dimensions and entries as ones in ``X``.
+            dimensions and entries as ones in `X`.
 
         Returns
         -------
@@ -87,3 +87,27 @@ class OrthogonalProcrustes(BaseAlign):
         _, d = X.shape
         self.Q_, _ = orthogonal_procrustes(X, Y)
         return self
+
+    def fit_transform(self, X, Y):
+        """
+        Uses the two datasets to learn the matrix `self.Q_` that aligns the
+        first dataset with the second. Then, transforms the first dataset `X`
+        using the learned matrix `self.Q_`.
+
+        Parameters
+        ----------
+        X : np.ndarray, shape (n, d)
+            First dataset of vectors. These vectors need to have same number of
+            dimensions and entries as ones in `Y`.
+
+        Y : np.ndarray, shape (m, d)
+            Second dataset of vectors. These vectors need to have same number
+            dimensions and entries as ones in `X`.
+
+        Returns
+        -------
+        X_prime : np.ndarray, shape (n, d)
+            First dataset of vectors, aligned to second. Equal to
+            `X` @ `self.Q_`.
+        """
+        return super().fit_transform(X, Y)
