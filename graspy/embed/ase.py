@@ -71,6 +71,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     Attributes
     ----------
+    n_features_in_: int
+        Number of features passed to the fit method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None
@@ -154,5 +156,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
         if self.diag_aug:
             A = augment_diagonal(A)
 
+        self.n_features_in_ = len(A)
         self._reduce_dim(A)
         return self
