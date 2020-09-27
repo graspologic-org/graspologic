@@ -32,7 +32,7 @@ class SignFlips(BaseAlign):
     Attributes
     ----------
         Q_ : array, size (d, d)
-            Final orthogonal matrix, used to modify X.
+            Final orthogonal matrix, used to modify `X`.
 
     """
 
@@ -44,7 +44,7 @@ class SignFlips(BaseAlign):
         if type(criterion) is not str:
             raise TypeError("Criterion must be str")
         if criterion not in ["median", "max"]:
-            raise ValueError("{} is not a valid criterion.".format(criterion))
+            raise ValueError(f"{self.criterion} is not a valid criterion.")
 
         super().__init__()
 
@@ -53,7 +53,7 @@ class SignFlips(BaseAlign):
     def set_criterion_function(self):
         # perform a check, in case it was modified directly
         if self.criterion not in ["median", "max"]:
-            raise ValueError("{} is not a valid criterion".format(self.criterion))
+            raise ValueError(f"{self.criterion} is not a valid criterion")
 
         if self.criterion == "median":
 
@@ -70,22 +70,23 @@ class SignFlips(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix Q_ that aligns the first
-        dataset with the second.
-        In sign flips, Q_ is an diagonal orthogonal matrices (i.e. a matrix
-        with 1 or -1 in each entry on diagonal and 0 everywhere else) picked
-        such that all dimensions of X @ Q_ and Y are in the same orthant using
-        some critera (median or max magnitude).
+        Uses the two datasets to learn the matrix `self.Q_` that aligns the
+        first dataset with the second.
+
+        In sign flips, `self.Q_` is an diagonal orthogonal matrices (i.e. a
+        matrix with 1 or -1 in each entry on diagonal and 0 everywhere else)
+        picked such that all dimensions of `X` @ `self.Q_` and `Y` are in the
+        same orthant using some critera (median or max magnitude).
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
+            dimensions as ones in `Y`, but the number of vectors can differ.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
+            of dimensions as ones in `X`, but the number of vectors can differ.
 
         Returns
         -------
