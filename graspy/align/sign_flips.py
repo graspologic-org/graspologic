@@ -44,7 +44,7 @@ class SignFlips(BaseAlign):
         if type(criterion) is not str:
             raise TypeError("Criterion must be str")
         if criterion not in ["median", "max"]:
-            raise ValueError(f"{self.criterion} is not a valid criterion.")
+            raise ValueError(f"{criterion} is not a valid criterion.")
 
         super().__init__()
 
