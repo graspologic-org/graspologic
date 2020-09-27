@@ -121,7 +121,7 @@ class BaseAlign(BaseEstimator):
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            ``X`` @ ``self.Q_X``.
+            ``X`` @ ``self.Q_``.
         """
         self.fit(X, Y)
         return self.transform(X)
