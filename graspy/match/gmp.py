@@ -59,16 +59,14 @@ class GraphMatch(BaseEstimator):
 
     padding : string (default = 'adopted')
         Allows user to specify padding scheme if `A` and `B` are not of equal size.
+        Say that `A` and `B` have :math:`n_1` and :math:`n_2` nodes, respectively, and
+        :math:`n_1 < n_2`. 
 
-        "adopted" : say that `A` and `B` have :math:`n_1` and :math:`n_2` nodes, respectively.
-        Define :math:`\widetilde{A} = 2A - 1_{n1}1_{n1}^T` and
-        :math:`\widetilde{B} = 2B - 1_{n2}1_{n2}^T`. If :math:`n_1 < n_2`, then we substitute
-        :math:`\widetilde{A} \oplus 0_{(n2-n1)x(n2-n1)}` and :math:`\widetilde{B}` in place of A
-        and B.
+        "adopted" : matches `A` to the best fitting induced subgraph of `B`. Reduces the
+        affinity between isolated vertices added to `A` through padding and low-density
+        subgraphs of `B`.
 
-        "naive" : say that `A` and `B` have :math:`n_1` and :math:`n_2` nodes, respectively.
-        If :math:`n_1 < n_2`, then we substitute :math:`A \oplus 0_{(n2-n1)x(n2-n1)}` and
-        :math:`B` in place of A and B.
+        "naive" : matches `A` to the best fitting subgraph of `B`. 
 
     Attributes
     ----------
