@@ -1,62 +1,78 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import os
 import sys
 from setuptools import setup, find_packages
-from sys import platform
 
-PACKAGE_NAME = "graspy"
-DESCRIPTION = "A set of python modules for graph statistics"
+
+MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
+
+if sys.version_info < MINIMUM_PYTHON_VERSION:
+    sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
+
+sys.path.insert(0, os.path.join("graspy", "version"))
+# TODO: #454 Change path in https://github.com/microsoft/graspologic/issues/454
+from version import version
+
+sys.path.pop(0)
+
+version_path = os.path.join("graspy", "version", "version.txt")
+with open(version_path, "w") as version_file:
+    version_file.write(f"{version}")
+
 with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
-AUTHOR = ("Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand",)
-AUTHOR_EMAIL = "j1c@jhu.edu"
-URL = "https://github.com/neurodata/graspy"
-MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.5
-REQUIRED_PACKAGES = [
-    "networkx>=2.1",
-    "numpy>=1.8.1",
-    "scikit-learn>=0.19.1",
-    "scipy>=1.4.0",
-    "seaborn>=0.9.0",
-    "matplotlib>=3.0.0",
-    "hyppo>=0.1.3",
-]
-
-
-# Find GraSPy version.
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-for line in open(os.path.join(PROJECT_PATH, "graspy", "__init__.py")):
-    if line.startswith("__version__ = "):
-        VERSION = line.strip().split()[2][1:-1]
-
-
-def check_python_version():
-    """Exit when the Python version is too low."""
-    if sys.version_info < MINIMUM_PYTHON_VERSION:
-        sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
-
-
-check_python_version()
 
 setup(
-    name=PACKAGE_NAME,
-    version=VERSION,
-    description=DESCRIPTION,
+    name="graspy",
+    version=version,
+    description="A set of python modules for graph statistics",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
-    author=AUTHOR,
-    author_email=AUTHOR_EMAIL,
-    install_requires=REQUIRED_PACKAGES,
-    url=URL,
-    license="Apache License 2.0",
+    author="Eric Bridgeford, Jaewon Chung, Benjamin Pedigo, Bijan Varjavand",
+    author_email="j1c@jhu.edu",
+    maintainer="Dwayne Pryce",
+    maintainer_email="dwpryce@microsoft.com",
+    url="https://github.com/microsoft/graspologic",
+    license="MIT",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Mathematics",
-        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=find_packages(),
+    packages=find_packages(exclude=["tests", "tests.*", "tests/*"]),
     include_package_data=True,
+    package_data={
+        "version": [os.path.join("graspy", "version", "version.txt")]
+    },  # TODO: #454 Also needs changed by https://github.com/microsoft/graspologic/issues/454
+    install_requires=[
+        "networkx>=2.1",
+        "numpy>=1.8.1",
+        "scikit-learn>=0.19.1",
+        "scipy>=1.4.0",
+        "seaborn>=0.9.0",
+        "matplotlib>=3.0.0,<=3.3.0",
+        "hyppo>=0.1.3",
+    ],
+    extras_require={
+        "dev": [
+            "black",
+            "ipykernel>=5.1.0",
+            "ipython>=7.4.0",
+            "mypy",
+            "nbsphinx",
+            "numpydoc",
+            "pandoc",
+            "pytest",
+            "pytest-cov",
+            "sphinx",
+            "sphinxcontrib-rawfiles",
+            "sphinx-rtd-theme",
+        ]
+    },
 )

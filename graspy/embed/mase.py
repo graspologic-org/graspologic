@@ -1,16 +1,5 @@
-# Copyright 2019 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
@@ -75,6 +64,11 @@ class MultipleASE(BaseEmbedMulti):
         a vector corresponding to the degree (or sum of edge weights for a
         weighted network) before embedding.
 
+    concat : bool, optional (default False)
+        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+        along axis 1.
+
+
     Attributes
     ----------
     n_graphs_ : int
@@ -93,6 +87,7 @@ class MultipleASE(BaseEmbedMulti):
     scores_ : array, shape (n_samples, n_components, n_components)
         Estimated :math:`\hat{R}` matrices for each input graph.
 
+
     Notes
     -----
     When an input graph is directed, `n_components` of `latent_left_` may not be equal
@@ -107,6 +102,7 @@ class MultipleASE(BaseEmbedMulti):
         n_iter=5,
         scaled=True,
         diag_aug=True,
+        concat=False,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -118,6 +114,7 @@ class MultipleASE(BaseEmbedMulti):
             algorithm=algorithm,
             n_iter=n_iter,
             diag_aug=diag_aug,
+            concat=concat,
         )
         self.scaled = scaled
 
@@ -237,9 +234,10 @@ class MultipleASE(BaseEmbedMulti):
 
         Returns
         -------
-        out : array-like, shape (n_vertices, n_components) if input
-            graphs were symmetric. If graphs were directed, returns tuple of
-            two arrays (same shape as above) where the first corresponds to the
-            left latent positions, and the right to the right latent positions
+        out : np.ndarray or length 2 tuple of np.ndarray.
+            If input graphs were symmetric shape (n_vertices, n_components).
+            If graphs were directed and ``concat`` is False, returns tuple of two arrays (same shape as above).
+            The first corresponds to the left latent positions, and the second to the right latent positions.
+            When ``concat`` is True left and right (out and in) latent positions are concatenated along axis 1.
         """
         return self._fit_transform(graphs)

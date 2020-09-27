@@ -1,16 +1,5 @@
-# Copyright 2019 NeuroData (http://neurodata.io)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import warnings
 
@@ -71,6 +60,10 @@ class LaplacianSpectralEmbed(BaseEmbed):
         node degree is added. If int or float, must be >= 0. Only used when
         ``form`` == 'R-DAD'.
 
+    concat : bool, optional (default False)
+        If graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.
+
+
     Attributes
     ----------
     latent_left_ : array, shape (n_samples, n_components)
@@ -122,6 +115,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         regularizer=None,
+        concat=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -129,6 +123,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
+            concat=concat,
         )
         self.form = form
         self.regularizer = regularizer
