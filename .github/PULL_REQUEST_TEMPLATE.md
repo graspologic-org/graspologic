@@ -17,7 +17,7 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 
 #### Checklist
 
-- [ ] Followed the `(coding-guidelines)[#guidelines]`.
+- [ ] Followed the `[coding-guidelines](#guidelines)`.
 - [ ] Given your pull request a helpful title that summarises what your contribution does. In some cases ``Fix <ISSUE TITLE>`` is enough. ``Fix #<ISSUE NUMBER>`` is not enough.
 - [ ] All public methods should have informative docstrings with sample usage presented as doctests when appropriate.
 - [ ] At least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
