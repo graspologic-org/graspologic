@@ -4,15 +4,15 @@
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose
-from graspy.models import (
+from graspologic.models import (
     EREstimator,
     DCSBMEstimator,
     SBMEstimator,
     RDPGEstimator,
     DCEREstimator,
 )
-from graspy.simulations import er_np, sbm, sample_edges
-from graspy.utils import cartprod, is_symmetric
+from graspologic.simulations import er_np, sbm, sample_edges
+from graspologic.utils import cartprod, is_symmetric
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
 

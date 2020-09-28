@@ -2,8 +2,8 @@
 # Licensed under the MIT License.
 
 import unittest
-from graspy.simulations.simulations import sample_edges, p_from_latent
-from graspy.simulations.rdpg_corr import rdpg_corr
+from graspologic.simulations.simulations import sample_edges, p_from_latent
+from graspologic.simulations.rdpg_corr import rdpg_corr
 import numpy as np
 import pytest
 import warnings

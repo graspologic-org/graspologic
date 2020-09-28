@@ -7,6 +7,7 @@ from graspy.inference import LatentPositionTest
 from graspy.simulations import er_np, sbm
 
 
+
 class TestLatentPositionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

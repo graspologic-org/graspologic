@@ -3,7 +3,7 @@
 
 import unittest
 import numpy as np
-from graspy.utils import pass_to_ranks, is_unweighted
+from graspologic.utils import pass_to_ranks, is_unweighted
 
 
 class TestPTR(unittest.TestCase):

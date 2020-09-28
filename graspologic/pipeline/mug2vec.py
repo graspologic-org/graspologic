@@ -76,10 +76,10 @@ class mug2vec(BaseEstimator):
 
     See also
     --------
-    graspy.utils.pass_to_ranks
-    graspy.embed.OmnibusEmbed
-    graspy.embed.ClassicalMDS
-    graspy.embed.select_dimension
+    graspologic.utils.pass_to_ranks
+    graspologic.embed.OmnibusEmbed
+    graspologic.embed.ClassicalMDS
+    graspologic.embed.select_dimension
     """
 
     def __init__(

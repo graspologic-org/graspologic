@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import numpy as np
-from graspy.simulations import p_from_latent, sample_edges_corr
+from graspologic.simulations import p_from_latent, sample_edges_corr
 
 
 def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):

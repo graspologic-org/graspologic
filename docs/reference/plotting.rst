@@ -2,7 +2,7 @@
 Plotting
 ********
 
-.. currentmodule:: graspy.plot
+.. currentmodule:: graspologic.plot
 
 Heatmap
 -------
