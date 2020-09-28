@@ -1,5 +1,5 @@
 name: graspologic CI
-on: [push, pull_request_target]
+on: [push]
 jobs:
   build-documentation:
     runs-on: ubuntu-latest
