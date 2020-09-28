@@ -22,8 +22,23 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 - [ ] All public methods should have informative docstrings with sample usage presented as doctests when appropriate.
 - [ ] At least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
 - [ ] All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
-- [ ] 
-
+- [ ] Ensure all tests are passing locally using pytest. Install the necessary packages by:
+```
+$ pip install pytest pytest-cov
+```
+And then
+```
+$ pytest
+```
+or you can run pytest on a single test file by
+```
+$ pytest path/to/test.py
+```
+- [ ] Run an autoformatter. We use black and would like for you to format all files using ``black``. You can run the following lines to format your files.
+```
+$ pip install black
+$ black path/to/module.py
+```
 
 #### Any other comments?
 
