@@ -24,7 +24,7 @@ class RDPGEstimator(BaseGraphEstimator):
     where :math:`x_i` is the left latent position of node :math:`i`, and :math:`y_j` is
     the right latent position of node :math:`j`. If the graph being modeled is
     is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via
-    :class:`~graspy.embed.AdjacencySpectralEmbed`.
+    :class:`~graspologic.embed.AdjacencySpectralEmbed`.
 
     Read more in the :ref:`tutorials <models_tutorials>`
 
@@ -40,7 +40,7 @@ class RDPGEstimator(BaseGraphEstimator):
 
     ase_kws : dict, optional (default={})
         Dictionary of keyword arguments passed down to
-        :class:`~graspy.embed.AdjacencySpectralEmbed`, which is used to fit the model.
+        :class:`~graspologic.embed.AdjacencySpectralEmbed`, which is used to fit the model.
 
     diag_aug_weight : int or float, optional (default=1)
         Weighting used for diagonal augmentation, which is a form of regularization for
@@ -66,9 +66,9 @@ class RDPGEstimator(BaseGraphEstimator):
 
     See also
     --------
-    graspy.simulations.rdpg
-    graspy.embed.AdjacencySpectralEmbed
-    graspy.utils.augment_diagonal
+    graspologic.simulations.rdpg
+    graspologic.embed.AdjacencySpectralEmbed
+    graspologic.utils.augment_diagonal
 
     References
     ----------

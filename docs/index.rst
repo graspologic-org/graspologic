@@ -2,12 +2,12 @@
 
 .. _contents:
 
-Overview of GraSPy_
-===================
+Overview of graspologic_
+========================
 
-.. _GraSPy: https://graspy.neurodata.io
+.. _graspologic: https://graspy.neurodata.io
 
-GraSPy is a Python package for analysis of graphs, or networks. 
+graspologic is a Python package for analysis of graphs, or networks. 
 
 Motivation
 ----------
@@ -27,28 +27,35 @@ Python
 
 Python is a powerful programming language that allows concise expressions of network
 algorithms.  Python has a vibrant and growing ecosystem of packages that
-GraSPy uses to provide more features such as numerical linear algebra and
-plotting.  In order to make the most out of GraSPy you will want to know how
+graspologic uses to provide more features such as numerical linear algebra and
+plotting.  In order to make the most out of graspologic you will want to know how
 to write basic programs in Python.  Among the many guides to Python, we
 recommend the `Python documentation <https://docs.python.org/3/>`_.
 
 Free software
 -------------
 
-GraSPy is free software; you can redistribute it and/or modify it under the
-terms of the :doc:`Apache-2.0 </license>`.  We welcome contributions.
-Join us on `GitHub <https://github.com/neurodata/graspy>`_.
+graspologic is free software; you can redistribute it and/or modify it under the
+terms of the :doc:`MIT </license>` license.  We welcome contributions.
+Join us on `GitHub <https://github.com/microsoft/graspologic>`_.
 
 History
 -------
 
-GraSPy was born in September 2018. The original version was designed and written by Jaewon Chung, 
-Benjamin Pedigo, and Eric Bridgeford.
+``graspologic`` first released in September 2020, but it got its start as a pair of Python libraries
+written by Johns Hopkins University's NeuroData lab and Microsoft Research's Project Essex. 
+Both teams worked on many of the same algorithms, shared research, findings, and generally duplicated a lot of effort.
+
+``GraSPy`` - the NeuroData library - and ``topologic`` - the Microsoft Research library began merging in September of 2020, but both got their starts far earlier, with GraSPy starting in September 2018 and topologic starting just a short time later, on October 2nd, 2018.
+
+GraSPy was originally designed and written by Jaewon Chung, Benjamin Pedigo, and Eric Bridgeford.
+
+Topologic was originally designed and written by Patrick Bourke, Jonathan McLean, Nick Caurvina, and Dwayne Pryce.
 
 Documentation
 =============
 
-GraSPy is a graph statistics package in python.
+graspologic is a graph statistics package in python.
 
 .. toctree::
    :maxdepth: 1
@@ -64,9 +71,9 @@ GraSPy is a graph statistics package in python.
    :maxdepth: 1
    :caption: Useful Links
 
-   GraSPy @ GitHub <http://www.github.com/neurodata/graspy/>
-   GraSPy @ PyPI <https://pypi.org/project/graspy/>
-   Issue Tracker <https://github.com/neurodata/graspy/issues>
+   graspologic @ GitHub <http://www.github.com/microsoft/graspologic/>
+   graspologic @ PyPI <https://pypi.org/project/graspologic/>
+   Issue Tracker <https://github.com/microsoft/graspologic/issues>
 
 
 Indices and tables

@@ -77,9 +77,9 @@ class LatentPositionTest(BaseInference):
 
     See also
     --------
-    graspy.embed.AdjacencySpectralEmbed
-    graspy.embed.OmnibusEmbed
-    graspy.embed.selectSVD
+    graspologic.embed.AdjacencySpectralEmbed
+    graspologic.embed.OmnibusEmbed
+    graspologic.embed.selectSVD
 
     References
     ----------

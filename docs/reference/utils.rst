@@ -1,7 +1,7 @@
 Utility
 =======
 
-.. currentmodule:: graspy.utils
+.. currentmodule:: graspologic.utils
 
 Transformations
 ---------------
