@@ -1,28 +1,17 @@
 import numpy as np
-import warnings
+from anytree import NodeMixin, LevelOrderIter
+from anytree.search import findall
 
-from anytree import NodeMixin, LevelOrderGroupIter, LevelOrderIter
-# from scipy.cluster.hierarchy import dendrogram, linkage
-# from sklearn.cluster import AgglomerativeClustering
-
-from graspy.embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, select_dimension
 from graspy.cluster import KMeansCluster, AutoGMMCluster
-# from graspy.cluster.base import BaseCluster
-# from graspy.models import SBMEstimator
-from graspy.models.sbm import _calculate_block_p, _block_to_full, _get_block_indices
-from graspy.models.base import BaseGraphEstimator
-from graspy.utils import augment_diagonal, pass_to_ranks, import_graph, remove_loops, symmetrize
-
 from sklearn.utils.validation import check_is_fitted
-from sklearn.utils import check_array, check_X_y
+from sklearn.utils import check_array
 from sklearn.base import BaseEstimator
 from scipy.stats import chi2
+
 # from spherecluster import SphericalKMeans
 
 
-def _check_common_inputs(
-    min_components, max_components, cluster_kws, embed_kws
-):
+def _check_common_inputs(min_components, max_components, cluster_kws, embed_kws):
     if not isinstance(min_components, int):
         raise TypeError("min_components must be an int")
     elif min_components < 1:
@@ -44,11 +33,63 @@ def _check_common_inputs(
 
 
 class RecursiveCluster(NodeMixin, BaseEstimator):
+    """
+    Recursively cluster using a chosen clustering algorithm
+
+    Parameters
+    ----------
+    cluster_method : str {"GMM", "KMeans", "Spherical-KMeans"}, default="GMM"
+        The clustering method chosen to apply
+    min_components : int, optional (default=1)
+        The minimum number of mixture components or clusters to consider
+        for the first split
+    max_components : int, optional (default=10)
+        The maximum number of mixture components or clusters to consider
+        at each split
+    selection_criteria : str, optional, default(=None) is the default
+        selection_criteria of chosen clustering algorithm
+        select the best model based on a certain criterion for each split
+    min_split : int, optional (default=1)
+        The minimum number of samples allowed in a leaf cluster
+    max_level : int, optional (default=20)
+        The maximum level to cluster
+    delta_criter : float or None, positive, default=None
+        The smallest difference between selection criterion values of a new
+        model and the current model that is required to accept the new model
+    likelihood_ratio : float or None, in range (0,1), default=None
+        The significance threshold of p-value for likelihood ratio test
+
+    Attributes
+    ----------
+    results_ : dict
+        Contains information about clustering results on a cluster
+        Items are:
+
+        'model' : GaussianMixture (or KMeans) object if "GMM" (or "KMeans")
+            is selected to perform clustering
+        'criter' : float
+            Bayesian (or Akaike) Information Criterion if "bic" (or "aic")
+            is chosen to select the best model
+        'n_components' : int
+            number of components or clusters
+    predictions : array_like, shape (n_samples, n_levels)
+
+    See Also
+    --------
+    graspy.cluster.AutoGMMCluster
+
+    References
+    ----------
+    .. [1]  Lyzinski, V., Tang, M., Athreya, A., Park, Y., & Priebe, C. E
+            (2016). Community detection and classification in hierarchical
+            stochastic blockmodels. IEEE Transactions on Network Science and
+            Engineering, 4(1), 13-26.
+    """
+
     def __init__(
         self,
         selection_criteria=None,
         cluster_method="GMM",
-        n_init=1,
         parent=None,
         min_components=1,
         max_components=10,
@@ -64,11 +105,12 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         )
 
         if cluster_method not in ["GMM", "KMeans", "Spherical-KMeans"]:
-            msg = "clustering method must be one of {GMM, Kmeans, Spherical-KMeans}"
+            msg = "clustering method must be one of"
+            msg += "{GMM, Kmeans, Spherical-KMeans}"
             raise ValueError(msg)
 
         if delta_criter:
-            if delta_criter < 0:
+            if delta_criter <= 0:
                 raise ValueError("delta_criter must be positive")
 
         if likelihood_ratio:
@@ -76,7 +118,6 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
                 raise ValueError("likelihood_ratio must be in (0,1)")
 
         self.parent = parent
-        self.n_init = n_init
         self.min_components = min_components
         self.max_components = max_components
         self.cluster_method = cluster_method
@@ -87,32 +128,122 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         self.max_level = max_level
         self.delta_criter = delta_criter
         self.likelihood_ratio = likelihood_ratio
-        
-    def fit(self, X, adj=None):
+
+    def fit(self, X):
+        """
+        Fits clustering models to the data as well as resulting clusters
+
+        Parameters
+        ----------
+        X : array_like, shape (n_samples, n_features)
+
+        Returns
+        -------
+        self : object
+            Returns an instance of self.
+        """
         self.fit_predict(X)
         return self
 
-    def predict(self, X, adj=None):
+    def predict(self, X, level=None):
+        """
+        Predicts a hierarchy of labels based on fitted models
+
+        Parameters
+        ----------
+        X : array_like, shape (n_samples, n_features)
+        level: int, optional (default=None)
+            the level of flat clustering to generate
+
+        Returns
+        -------
+        labels : array_like, shape (n_samples, n_levels)
+            if no level specified; otherwise, shape (n_samples,)
+        """
+
         check_is_fitted(self, ["model_"], all_or_any=all)
-        labels = self.fit_predict(X)
+
+        X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
+        if level:
+            if not isinstance(level, int):
+                raise TypeError("level must be an int")
+
+        # if already predited on some new data,
+        # clean up attributes attched to corresponding nodes in the fitted tree
+        for n in [node for node in LevelOrderIter(self)]:
+            if hasattr(n, "new_x"):
+                del n.new_x, n.new_inds, n.new_pred, n.predicted
+
+        # the fitted node corresponding to the nxt node to predict
+        nxt_fitted_node = [self]
+        self.new_x = X
+        self.new_inds = np.arange(len(X))
+
+        while nxt_fitted_node:
+            nxt_fitted_node = nxt_fitted_node[0]
+            if hasattr(nxt_fitted_node, "model_") and not nxt_fitted_node.is_leaf:
+                model = nxt_fitted_node.model_
+                pred = model.predict(nxt_fitted_node.new_x)
+
+                uni_labels = np.unique(pred)
+                for ul in uni_labels:
+                    inds = pred == ul
+                    new_x = nxt_fitted_node.new_x[inds]
+                    nxt_node = nxt_fitted_node.children[ul]
+                    nxt_node.new_x = new_x
+                    nxt_node.new_inds = inds
+
+            # consider leaf nodes and nodes w/o "model_"
+            else:
+                # nodes w/o "model_" were not fitted b/c had too few samples
+                # or were too deep so assume a model of single cluster here
+                pred = np.zeros(len(nxt_fitted_node.new_x))
+
+            # find available node to predict
+            nxt_fitted_node.new_pred = pred
+            nxt_fitted_node.predicted = True
+            nodes_with_new_x = findall(self, lambda node: hasattr(node, "new_x"))
+            nxt_fitted_node = [
+                j for i, j in enumerate(nodes_with_new_x) if not hasattr(j, "predicted")
+            ]
+
+        labels = self._to_labels(X, True)
+        if level:
+            if level < labels.shape[1]:
+                labels = labels[:, level]
+            else:
+                msg = "input exceeds max level = {}".format(labels.shape[1] - 1)
+                raise ValueError(msg)
+
         return labels
-    
-    def fit_predict(self, X, level=None, adj=None):
-        X = check_array(
-            X, dtype=[np.float64, np.float32],  ensure_min_samples=1
-        )
+
+    def fit_predict(self, X, level=None):
+        """
+        Fits clustering models to the data as well as resulting clusters
+        and using fitted models to predict a hierarchy of labels
+
+        Parameters
+        ----------
+        X : array_like, shape (n_samples, n_features)
+        level: int, optional (default=None)
+
+        Returns
+        -------
+        labels : array_label, shape (n_samples, n_levels)
+            if no level specified; otherwise, shape (n_samples,)
+        """
+        X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
         if level:
             if not isinstance(level, int):
                 raise TypeError("level must be an int")
 
         self.X = X
-        self.adj = adj
 
         if self.max_components > X.shape[0]:
             msg = "max_components must be >= n_samples, but max_components = "
             msg += "{}, n_samples = {}".format(self.max_components, X.shape[0])
             raise ValueError(msg)
-        
+
         while True:
             current_node = self._get_next_node()
             if current_node:
@@ -120,9 +251,13 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             else:
                 break
 
-        labels = self._to_labels()
+        labels = self._to_labels(self.X, False)
         if level:
-            labels = labels[:, level]
+            if level < labels.shape[1]:
+                labels = labels[:, level]
+            else:
+                msg = "input exceeds max level = {}".format(labels.shape[1] - 1)
+                raise ValueError(msg)
 
         self.predictions = labels
         return labels
@@ -132,9 +267,11 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         current_node = []
 
         for leaf in leaves:
-            if (len(leaf.X) >= self.max_components and
-                    len(leaf.X) >= self.min_split and
-                    leaf.depth < self.max_level):
+            if (
+                len(leaf.X) >= self.max_components
+                and len(leaf.X) >= self.min_split
+                and leaf.depth < self.max_level
+            ):
                 if not hasattr(leaf, "k_"):
                     current_node = leaf
                     break
@@ -142,15 +279,23 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
 
     def _cluster_and_decide(self):
         X = self.X
+        if self.is_root:
+            min_components = self.min_components
+        else:
+            min_components = 1
+
         if self.cluster_method == "GMM":
             cluster = AutoGMMCluster(
-                min_components=1, max_components=self.max_components, **self.cluster_kws
+                min_components=min_components,
+                max_components=self.max_components,
+                **self.cluster_kws
             )
-            pred = cluster.fit_predict(X)
+            cluster.fit(X)
             model = cluster.model_
             criter = cluster.criter_
             lik = model.score(X)
             k = cluster.n_components_
+            pred = cluster.predict(X)
 
             if self.delta_criter or self.likelihood_ratio:
                 single_cluster = AutoGMMCluster(
@@ -169,56 +314,51 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
                 # perform likelihood ratio test
                 if self.likelihood_ratio:
                     LR = 2 * (lik - lik_single_cluster)
-                    p = chi2.sf(LR, k-1)
-                    # TODO: maybe set a default p-value threshold if do LR test?
+                    p = chi2.sf(LR, k - 1)
+                    # TODO: maybe set a default p-value threshold if do LR test
                     if p < self.likelihood_ratio:
                         k = 1
-                # TODO: maybe add similar tests for Kmeans?
+                # TODO: maybe add similar tests for Kmeans
 
         elif self.cluster_method == "Kmeans":
             cluster = KMeansCluster(
                 max_clusters=self.max_components, **self.cluster_kws
             )
-            pred = cluster.fit_predict(X)
+            cluster.fit(X)
             model = cluster.model_
             k = cluster.n_clusters_
             criter = cluster.silhouette_
-            
+            pred = cluster.predict(X)
+
         elif self.cluster_method == "Spherical-Kmeans":
-            # cluster = SphericalKMeans(
-            #     n_clusters=self.max_components, **self.cluster_kw
-            # )
+            # TODO: could use SphericalKMeans
             pass
 
         results = {
             "model": model,
-            "pred": pred,
+            # "pred": pred,
             "criter": criter,
-            "k": k,
+            "n_components": k,
         }
         self.results_ = results
         self.k_ = k
         self.model_ = model
         self.pred_ = pred
         self.children = []
-        
+
         if k > 1:
             uni_labels = np.unique(pred)
             for ul in uni_labels:
                 inds = pred == ul
                 new_x = self.X[inds]
 
-                if self.adj:
-                    new_adj = self.adj[np.ix_(inds, inds)]
-                    new_x = self._embed(new_adj)
-
                 RecursiveCluster(
                     selection_criteria=self.selection_criteria,
                     cluster_method=self.cluster_method,
-                    n_init=self.n_init,
                     parent=self,
                     max_components=self.max_components,
                     min_split=self.min_split,
+                    max_level=self.max_level,
                     cluster_kws=self.cluster_kws,
                     delta_criter=self.delta_criter,
                     likelihood_ratio=self.likelihood_ratio,
@@ -226,217 +366,44 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
                 self.children[-1].X = new_x
                 self.children[-1].inds = inds
 
-                if self.adj:
-                    self.children[-1].adj = new_adj
-                else:
-                    self.children[-1].adj = self.adj
-
-    def _embed(self, graph):
-        raise NotImplementedError()
-
-    def _to_labels(self):
+    def _to_labels(self, X, pred_on_new):
         n_levels = self.height
-        n_sample = len(self.X)
+        n_sample = len(X)
         labels = np.zeros((n_sample, n_levels))
-        labels[:, 0] = self.pred_
-        children = [node for node in LevelOrderIter(self)][1:]
 
+        children = [node for node in LevelOrderIter(self)][1:]
+        pred_attr = "pred_"
+        inds_attr = "inds"
+        # if labels are calculated after predicting on new data
+        if pred_on_new:
+            children = [node for node in children if hasattr(node, pred_attr)]
+            pred_attr = "new_pred"
+            inds_attr = "new_inds"
+
+        labels[:, 0] = getattr(self, pred_attr)
+        # place predictions on nodes at appropriate locations in labels
         for c in range(len(children)):
             level = children[c].depth
-            if level < n_levels and hasattr(children[c], "pred_"):
+            if level < n_levels and hasattr(children[c], pred_attr):
                 path = children[c].path[1:]
                 X_inds = np.arange(n_sample)
                 for node in range(len(path)):
-                    X_inds = X_inds[path[node].inds]
-                labels[X_inds, level] = children[c].pred_
+                    X_inds = X_inds[getattr(path[node], inds_attr)]
+                labels[X_inds, level] = getattr(children[c], pred_attr)
 
+        # renumber labeling so labels[:,i] assigns a uniq value to each cluster
         for level in range(1, n_levels):
             # to avoid updated labels accidentally matching old ones
-            new_labels = -labels[:, :level+1]-1
+            new_labels = -labels[:, : level + 1] - 1
             uni_labels = np.unique(new_labels, axis=0)
             for ul in range(len(uni_labels)):
                 uni_labels_inds = np.where(
                     (uni_labels[:, None, :] == new_labels).all(2)[ul]
-                    )[0]
+                )[0]
                 labels[uni_labels_inds, level] = ul
 
-        return labels
-
-
-class _RecursiveGraphCluster(RecursiveCluster):
-    def __init__(
-        self,
-        selection_criteria=None,
-        cluster_method="GMM",
-        embed_method="ASE",
-        n_init=1,
-        parent=None,
-        min_components=1,
-        max_components=10,
-        n_components=None,
-        cluster_kws={},
-        embed_kws={},
-        min_split=1,
-        max_level=20,
-        delta_criter=None,
-        likelihood_ratio=None,
-        loops=False,
-    ):
-        _check_common_inputs(
-            min_components, max_components, cluster_kws, embed_kws
-        )
-
-        if embed_method not in ["ASE", "LSE"]:
-            msg = "clustering method must be one of {ASE, LSE}"
-            raise ValueError(msg)
-
-        if n_components:
-            # TODO: assume every subgraph embedded to "n_components" if given?
-            if not isinstance(n_components, int):
-                raise TypeError("n_components must be an int")
-
-        RecursiveCluster.__init__(
-            self,
-            selection_criteria=selection_criteria,
-            cluster_method=cluster_method,
-            n_init=n_init,
-            parent=parent,
-            min_components=min_components,
-            max_components=max_components,
-            cluster_kws=cluster_kws,
-            min_split=min_split,
-            max_level=max_level,
-            delta_criter=delta_criter,
-            likelihood_ratio=likelihood_ratio,
-        )
-
-        self.n_components = n_components
-        self.embed_method = embed_method
-        self.embed_kws = embed_kws
-        self.loops = loops
-
-    def fit(self, graph):
-        self.fit_predict(graph)
-        return self
-
-    def fit_predit(self, graph):
-        graph = import_graph(graph)
-        if not self.loops:
-            graph = remove_loops(graph)
-     
-        graph = augment_diagonal(graph)
-        embed_graph = pass_to_ranks(graph)
-        latent = self._embed(embed_graph)
-        if isinstance(latent, tuple):
-            latent = np.concatenate(latent, axis=1)
-
-        labels = super().fit_predict(X=latent, adj=embed_graph)
-        self.predictions = labels
+        if pred_on_new:
+            for lvl in range(labels.shape[1]):
+                _, labels[:, lvl] = np.unique(labels[:, lvl], return_inverse=True)
 
         return labels
-
-    def predict(self, graph):
-        check_is_fitted(self, ["model_"], all_or_any=all)
-        return self.predictions
-
-    def _embed(self, graph):
-        if self.n_components:
-            n_components = self.n_components
-        else:
-            # TODO: not embedding subgraphs onto the same dim
-            # in case some subgraph contains very few nodes
-            n_components = None
-
-        if self.embed_method == "ASE":
-            embedder = AdjacencySpectralEmbed(
-                n_components=n_components, **self.embed_kws
-            )
-            embed = embedder.fit_transform(graph)
-        elif self.embed_method == "LSE":
-            embedder = LaplacianSpectralEmbed(
-                n_components=n_components, **self.embed_kws
-            )
-            embed = embedder.fit_transform(graph)
-
-        return embed
-
-
-class HSBMEstimator(_RecursiveGraphCluster, BaseGraphEstimator):
-    def __init__(
-        self,
-        selection_criteria=None,
-        cluster_method="GMM",
-        embed_method="ASE",
-        n_init=1,
-        parent=None,
-        min_components=1,
-        max_components=10,
-        n_components=None,
-        cluster_kws={},
-        embed_kws={},
-        min_split=1,
-        max_level=20,
-        delta_criter=None,
-        likelihood_ratio=None,
-        directed=False,
-        loops=False,
-        reembed=False,
-    ):
-        _RecursiveGraphCluster.__init__(
-            self,
-            selection_criteria=selection_criteria,
-            cluster_method=cluster_method,
-            n_init=n_init,
-            parent=parent,
-            min_components=min_components,
-            max_components=max_components,
-            cluster_kws=cluster_kws,
-            min_split=min_split,
-            max_level=max_level,
-            delta_criter=delta_criter,
-            likelihood_ratio=likelihood_ratio,
-            n_components=n_components,
-            embed_kws=embed_kws,
-        )
-
-        BaseGraphEstimator.__init__(self, directed=directed, loops=loops)
-
-        self.reembed = reembed
-
-    def fit(self, X, y=None):
-        if y is None:
-            if self.reembed is True:
-                y = _RecursiveGraphCluster.fit_predict(self, X)
-            else:
-                y = RecursiveCluster.fit_predict(self, X)
-     
-        _, y = check_X_y(X, y, multi_output=True)
-
-        if max(y[0]) == 0:
-            warnings.warn("only 1 cluster predicted at the first level")
-        
-        n_levels = y.shape[1]
-      
-        self.block_weights_ = np.empty(n_levels, dtype=object)
-        self.block_p_ = np.empty(n_levels, dtype=object)
-        self.p_mat_ = np.empty(n_levels, dtype=object)
-
-        for i in range(n_levels):
-            single_label = y[:, i]
-            _, counts = np.unique(single_label, return_counts=True)
-            self.block_weights_[i] = counts / X.shape[0]
-            block_vert_inds, block_inds, block_inv = _get_block_indices(single_label)
-            block_p = _calculate_block_p(X, block_inds, block_vert_inds)
-
-            if self.reembed is True:
-                if not self.directed:
-                    block_p = symmetrize(block_p)
-            self.block_p_[i] = block_p
-
-            p_mat = _block_to_full(block_p, block_inv, X.shape)
-            if self.reembed is True:
-                if not self.loops:
-                    p_mat = remove_loops(p_mat)
-            self.p_mat_[i] = p_mat
-
-        return self
