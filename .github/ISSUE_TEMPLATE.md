@@ -9,7 +9,7 @@ Tell us what should happen
 Tell us what happens instead
 
 ## Template Code
-```GraSPy
+```graspologic
 Paste the template code (ideally a minimal example) that causes the issue
 
 ```
