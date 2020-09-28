@@ -73,7 +73,7 @@ class SBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspy.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension``.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -82,10 +82,10 @@ class SBMEstimator(BaseGraphEstimator):
         The maximum number of communities (blocks) to consider (inclusive).
 
     cluster_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
+        Additional kwargs passed down to :class:`~graspologic.cluster.GaussianCluster`
 
     embed_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspy.embed.AdjacencySpectralEmbed`
+        Additional kwargs passed down to :class:`~graspologic.embed.AdjacencySpectralEmbed`
 
     Attributes
     ----------
@@ -107,8 +107,8 @@ class SBMEstimator(BaseGraphEstimator):
 
     See also
     --------
-    graspy.models.DCSBMEstimator
-    graspy.simulations.sbm
+    graspologic.models.DCSBMEstimator
+    graspologic.simulations.sbm
 
     References
     ----------
@@ -265,7 +265,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspy.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension``.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -274,10 +274,10 @@ class DCSBMEstimator(BaseGraphEstimator):
         The maximum number of communities (blocks) to consider (inclusive).
 
     cluster_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspy.cluster.GaussianCluster`
+        Additional kwargs passed down to :class:`~graspologic.cluster.GaussianCluster`
 
     embed_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspy.embed.LaplacianSpectralEmbed`
+        Additional kwargs passed down to :class:`~graspologic.embed.LaplacianSpectralEmbed`
 
     Attributes
     ----------
@@ -305,8 +305,8 @@ class DCSBMEstimator(BaseGraphEstimator):
 
     See also
     --------
-    graspy.models.SBMEstimator
-    graspy.simulations.sbm
+    graspologic.models.SBMEstimator
+    graspologic.simulations.sbm
 
     Notes
     -----

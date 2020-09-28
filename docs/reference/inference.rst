@@ -1,7 +1,7 @@
 Inference
 =========
 
-.. currentmodule:: graspy.inference
+.. currentmodule:: graspologic.inference
 
 Two-graph hypothesis testing
 ----------------------------

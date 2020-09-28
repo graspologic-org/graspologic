@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import numpy as np
-from graspy.simulations import sample_edges
+from graspologic.simulations import sample_edges
 
 
 def check_dirloop(directed, loops):

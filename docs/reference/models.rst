@@ -1,7 +1,7 @@
 Models
 ======
 
-.. currentmodule:: graspy.models
+.. currentmodule:: graspologic.models
 
 Erdos-Reyni models
 ------------------
