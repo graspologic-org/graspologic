@@ -286,7 +286,6 @@ class SeedlessProcrustes(BaseAlign):
         for i in range(self.iterative_num_reps):
             P = self._optimal_transport(X, Y, Q)
             Q = self._procrustes(X, Y, P)
-            c = self._compute_objective(X, Y, Q, P)
         return P, Q
 
     def _compute_objective(self, X, Y, Q=None, P=None):
