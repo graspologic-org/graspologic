@@ -16,7 +16,8 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 
 
 #### Checklist
-[] Followed the coding-guidelines.
+
+- [] Followed the coding-guidelines.
 
 
 #### Any other comments?
