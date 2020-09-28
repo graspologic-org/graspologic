@@ -12,7 +12,7 @@ class OrthogonalProcrustes(BaseAlign):
     problem, which is that given two matrices `X` and `Y` of equal shape
     (n, d), find an orthogonal matrix `self.Q_` that most closely maps `X` to
     `Y`. Subsequently, uses that matrix to transform either the original `X`,
-    or a different dataset that has the same.
+    or a different dataset that has the same generating distribution.
 
     Note that when used to match two datasets, this method unlike
     :class:`~graspy.align.SeedlessProcrustes`, not only requires that the

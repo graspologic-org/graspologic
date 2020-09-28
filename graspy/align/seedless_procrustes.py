@@ -13,14 +13,15 @@ from .orthogonal_procrustes import OrthogonalProcrustes
 class SeedlessProcrustes(BaseAlign):
     """
     Matches two datasets using an orthogonal matrix. Unlike
-    :class:`~graspy.align.OrthogonalProcrustes`, this does not use a matching
-    between entries. It can even be used in the settings when the two datasets
-    do not have the same number of entries.
+    :class:`~graspy.align.OrthogonalProcrustes`, this does not requires a
+    matching between entries. It can even be used in the settings when the two
+    datasets do not have the same number of entries.
 
     In graph setting, it is used to align the embeddings of two different
-    graphs, when it requires some simultaneous inference task, for example,
-    inside of the test for the equivalence of the latent distributions, and no
-    1-1 matching between the vertices of the two graphs can be established.
+    graphs, when it requires some simultaneous inference task and no 1-1
+    matching between the vertices of the two graphs can be established, for
+    example, inside of the test for the equivalence of the latent distributions
+    (see: :class:`~graspy.inference.LatentDistributionTest`).
 
     Parameters
     ----------
@@ -100,7 +101,7 @@ class SeedlessProcrustes(BaseAlign):
     .. [1] Agterberg, J.
         # TODO Cite the Seedless Procrustes preprint whenever available.
 
-    // [2] Agterberg, J., Tang, M., Priebe., C. E. (2020).
+    .. [2] Agterberg, J., Tang, M., Priebe., C. E. (2020).
         "On Two Distinct Sources of Nonidentifiability in Latent Position Random Graph Models"
         arXiv:2003.14250
 
@@ -297,18 +298,18 @@ class SeedlessProcrustes(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix Q_ that aligns the first
-        dataset with the second.
+        Uses the two datasets to learn the matrix `self.Q_` that aligns the
+        first dataset with the second.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
             First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in Y, but the number of vectors can differ.
+            dimensions as ones in `Y`, but the number of vectors can differ.
 
         Y : np.ndarray, shape (m, d)
             Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in X, but the number of vectors can differ.
+            of dimensions as ones in `X`, but the number of vectors can differ.
 
         Returns
         -------
