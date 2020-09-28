@@ -15,5 +15,9 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 #### What does this implement/fix? Explain your changes.
 
 
+#### Checklist
+- [] Followed the coding-guidelines.
+
+
 #### Any other comments?
 
