@@ -18,27 +18,26 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 #### Checklist
 
 - [ ] Followed the [coding-guidelines](#guidelines).
-- [ ] Given your pull request a helpful title that summarises what your contribution does. In some cases ``Fix <ISSUE TITLE>`` is enough. ``Fix #<ISSUE NUMBER>`` is not enough.
+- [ ] Give your pull request a helpful title that summarizes what your contribution does.
+- [ ] Link your pull request to the issue (see: [closing keywords](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) for an easy way of linking your issue)
 - [ ] All public methods should have informative docstrings with sample usage presented as doctests when appropriate.
 - [ ] At least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
+- [ ] If your feature is complex enough that a doctest is insufficient to fully showcase the utility, consider creating a Jupyter notebook to illustrate use instead.
 - [ ] All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
-- [ ] Ensure all tests are passing locally using pytest. Install the necessary packages by:
-```
-$ pip install pytest pytest-cov
-```
-And then
-```
-$ pytest
-```
-or you can run pytest on a single test file by
-```
-$ pytest path/to/test.py
-```
-- [ ] Run an autoformatter. We use black and would like for you to format all files using ``black``. You can run the following lines to format your files.
-```
-$ pip install black
-$ black path/to/module.py
-```
+- [ ] All functions and classes should be rigorously typed with Python 3.5+ 
+  [`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running `mypy ./graspy`
+- [ ] All code should be automatically formatted by `black`. You can run this formatter by calling:
+  ```bash
+  pip install black
+  black path/to/your_module.py
+  ```
+- [ ] Ensure all tests are passing locally using `pytest`. Install the necessary
+  packages by: 
+
+  ```bash
+  pip install pytest pytest-cov
+  pytest
+  ```
 
 #### Any other comments?
 
