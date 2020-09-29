@@ -50,10 +50,12 @@ class BaseEmbed(BaseEstimator):
     ----------
     n_components_ : int
         Dimensionality of the embedded space.
+    n_features_in_: int
+        Number of features passed to the fit method.
 
     See Also
     --------
-    graspy.embed.selectSVD, graspy.embed.select_dimension
+    graspologic.embed.selectSVD, graspologic.embed.select_dimension
     """
 
     def __init__(

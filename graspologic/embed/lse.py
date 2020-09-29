@@ -27,11 +27,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
         Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
         If ``n_components=None``, then compute the optimal embedding dimension using
-        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
@@ -66,6 +66,9 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     Attributes
     ----------
+    n_features_in_: int
+        Number of features passed to the fit method.
+
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
 
@@ -78,9 +81,9 @@ class LaplacianSpectralEmbed(BaseEmbed):
 
     See Also
     --------
-    graspy.embed.selectSVD
-    graspy.embed.select_dimension
-    graspy.utils.to_laplace
+    graspologic.embed.selectSVD
+    graspologic.embed.select_dimension
+    graspologic.utils.to_laplace
 
     Notes
     -----
@@ -139,7 +142,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         Parameters
         ----------
         graph : array_like or networkx.Graph
-            Input graph to embed. see graspy.utils.import_graph
+            Input graph to embed. see graspologic.utils.import_graph
 
         Returns
         -------
@@ -153,10 +156,11 @@ class LaplacianSpectralEmbed(BaseEmbed):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspy.utils.get_lcc``."
+                    + "using ``graspologic.utils.get_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
 
+        self.n_features_in_ = len(A)
         L_norm = to_laplace(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
         return self

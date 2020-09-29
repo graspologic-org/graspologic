@@ -2,7 +2,7 @@
 Clustering
 **********
 
-.. currentmodule:: graspy.cluster
+.. currentmodule:: graspologic.cluster
 
 K-Means Clustering
 ------------------

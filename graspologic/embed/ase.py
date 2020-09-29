@@ -20,7 +20,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation
     of the graph based on its adjacency matrix. It relies on an SVD to reduce
     the dimensionality to the specified k, or if k is unspecified, can find a number of
-    dimensions automatically (see :class:`~graspy.embed.selectSVD`).
+    dimensions automatically (see :class:`~graspologic.embed.selectSVD`).
 
     Read more in the :ref:`tutorials <embed_tutorials>`
 
@@ -30,11 +30,11 @@ class AdjacencySpectralEmbed(BaseEmbed):
         Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
-        :func:`~graspy.embed.select_dimension` using ``n_elbows`` argument.
+        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
         If ``n_components=None``, then compute the optimal embedding dimension using
-        :func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
@@ -71,6 +71,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     Attributes
     ----------
+    n_features_in_: int
+        Number of features passed to the fit method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None
@@ -81,8 +83,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     See Also
     --------
-    graspy.embed.selectSVD
-    graspy.embed.select_dimension
+    graspologic.embed.selectSVD
+    graspologic.embed.select_dimension
 
     Notes
     -----
@@ -147,12 +149,13 @@ class AdjacencySpectralEmbed(BaseEmbed):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspy.utils.get_lcc``."
+                    + "using ``graspologic.utils.get_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
 
         if self.diag_aug:
             A = augment_diagonal(A)
 
+        self.n_features_in_ = len(A)
         self._reduce_dim(A)
         return self

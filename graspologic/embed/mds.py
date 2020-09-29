@@ -43,7 +43,7 @@ class ClassicalMDS(BaseEstimator):
 
     n_elbows : int, or None (default=2)
         If ``n_components=None``, then compute the optimal embedding dimension using
-        `:func:`~graspy.embed.select_dimension`. Otherwise, ignored.
+        `:func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
         Dissimilarity measure to use:
@@ -60,6 +60,9 @@ class ClassicalMDS(BaseEstimator):
         Equals the parameter n_components. If input n_components was None,
         then equals the optimal embedding dimension.
 
+    n_features_in_: int
+        Number of features passed to the fit method.
+
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.
 
@@ -71,7 +74,7 @@ class ClassicalMDS(BaseEstimator):
 
     See Also
     --------
-    graspy.embed.select_dimension
+    graspologic.embed.select_dimension
 
     References
     ----------
@@ -192,6 +195,7 @@ class ClassicalMDS(BaseEstimator):
         self.components_ = U
         self.singular_values_ = D ** 0.5
         self.dissimilarity_matrix_ = dissimilarity_matrix
+        self.n_features_in_ = X.shape[1]
 
         return self
 

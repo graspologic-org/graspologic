@@ -1,7 +1,7 @@
 Datasets
 ========
 
-.. currentmodule:: graspy.datasets
+.. currentmodule:: graspologic.datasets
 
 Drosophila larval mushroom body
 -------------------------------

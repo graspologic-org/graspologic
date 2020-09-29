@@ -6,7 +6,7 @@ If the branch is master or dev, it will generate the appropriate content for ver
 """
 
 import os
-from graspy.version.version import __semver
+from graspologic.version.version import __semver
 
 ref_key = "GITHUB_REF"
 run_id_key = "GITHUB_RUN_ID"

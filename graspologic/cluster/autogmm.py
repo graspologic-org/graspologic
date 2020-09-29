@@ -189,8 +189,8 @@ class AutoGMMCluster(BaseCluster):
 
     See Also
     --------
-    graspy.cluster.GaussianCluster
-    graspy.cluster.KMeansCluster
+    graspologic.cluster.GaussianCluster
+    graspologic.cluster.KMeansCluster
 
     Notes
     -----

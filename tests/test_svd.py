@@ -6,8 +6,8 @@ import numpy as np
 from numpy.testing import assert_equal, assert_allclose
 from scipy.spatial import procrustes
 
-from graspy.embed.svd import selectSVD
-from graspy.simulations.simulations import er_np
+from graspologic.embed.svd import selectSVD
+from graspologic.simulations.simulations import er_np
 
 
 def test_bad_inputs():
