@@ -3,9 +3,9 @@
 
 import numpy as np
 import pytest
-from graspy.cluster.gclust import GaussianCluster
-from graspy.embed.mase import MultipleASE
-from graspy.simulations.simulations import er_np, sbm
+from graspologic.cluster.gclust import GaussianCluster
+from graspologic.embed.mase import MultipleASE
+from graspologic.simulations.simulations import er_np, sbm
 from numpy import array_equal
 
 
@@ -132,17 +132,15 @@ def test_vertex():
         # undirected case
         np.random.seed(4 + diag_aug + scaled)
         X = make_train_undirected(n, m)
-
-        res = MultipleASE(n_components=2).fit(X).latent_left_
+        # undirected case
+        res = MultipleASE(n_components=2).fit_transform(X)
         gmm = GaussianCluster(10, covariance_type="all").fit(res)
         assert gmm.n_components_ == 2
 
         # directed case
         np.random.seed(5 + diag_aug + scaled)
         X = make_train_directed(n, m)
-
-        mase = MultipleASE(n_components=2).fit(X)
-        res = np.hstack([mase.latent_left_, mase.latent_right_])
+        res = MultipleASE(n_components=2, concat=True).fit_transform(X)
         gmm = GaussianCluster(10, covariance_type="all").fit(res)
         assert gmm.n_components_ == 2
 

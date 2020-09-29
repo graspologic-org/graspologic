@@ -3,6 +3,10 @@
 Release Log
 ===========
 
+graspologic 0.1.0
+-----------------
+Release date: ?
+
 GraSPy 0.3
 ----------
 Release date: 04 Aug 2020
