@@ -13,7 +13,7 @@ from .orthogonal_procrustes import OrthogonalProcrustes
 class SeedlessProcrustes(BaseAlign):
     """
     Matches two datasets using an orthogonal matrix. Unlike
-    :class:`~graspologic.align.OrthogonalProcrustes`, this does not requires a
+    :class:`~graspologic.align.OrthogonalProcrustes`, this does not require a
     matching between entries. It can even be used in the settings where the two
     datasets do not have the same number of entries.
 

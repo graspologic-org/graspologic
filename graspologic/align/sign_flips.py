@@ -8,15 +8,15 @@ from .base import BaseAlign
 
 class SignFlips(BaseAlign):
     """
-    This module is used to transform two datasets by flipping the signs of all
-    entries along some dimensions. In particular, it does so in a way that
-    brings these two datasets to the same orthant according to some criterion,
+    Flips the signs of all entries in one dataset, `X` along some of the
+    dimensions. In particular, it does so in a way that brings this dataset to
+    the same orthant as the second dataset, `Y`, according to some criterion,
     computed along each dimension. The two critera currently available are the
     median and the maximum (in magnitude) value along each dimension.
 
-    There are two choices for which orthant the datasets end up in: either the
-    first orthant (i.e. with all criteras being positive), which is a default,
-    or and orthant in which one the second dataset is already in.
+    This module can also be used to bring the dataset to the first orthant
+    (i.e. with all criteras being positive) by providing the identity matrix as
+    the second dataset.
 
     Parameters
     ----------
