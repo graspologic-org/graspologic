@@ -95,12 +95,14 @@ class TestOrthogonalProcrustes(unittest.TestCase):
         aligner_1.fit(X, Y)
         Q_test_1 = aligner_1.Q_
         X_test_1 = aligner_1.transform(X)
+        self.assertTrue(np.isclose(0, aligner_1.score_))
         self.assertTrue(np.all(np.isclose(Q_test_1, Q_answer)))
         self.assertTrue(np.all(np.isclose(X_test_1, X_answer)))
         # now, do fit_transform
         aligner_2 = OrthogonalProcrustes()
         X_test_2 = aligner_2.fit_transform(X, Y)
         Q_test_2 = aligner_2.Q_
+        self.assertTrue(np.isclose(0, aligner_2.score_))
         self.assertTrue(np.all(np.isclose(Q_test_2, Q_answer)))
         self.assertTrue(np.all(np.isclose(X_test_2, X_answer)))
 

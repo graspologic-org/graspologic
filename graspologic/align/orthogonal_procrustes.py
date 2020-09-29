@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import numpy as np
 from scipy.linalg import orthogonal_procrustes
 
 from .base import BaseAlign
@@ -25,6 +26,10 @@ class OrthogonalProcrustes(BaseAlign):
     ----------
         Q_ : array, size (d, d)
               Final orthogonal matrix, used to modify `X`.
+
+        score_ : float
+            Final value of the objective function: :math:`|| X Q - Y ||_F`
+            Lower means the datasets have been matched together better.
 
     References
     ----------
@@ -87,6 +92,7 @@ class OrthogonalProcrustes(BaseAlign):
 
         _, d = X.shape
         self.Q_, _ = orthogonal_procrustes(X, Y)
+        self.score_ = np.linalg.norm(X @ self.Q_ - Y, ord="fro")
         return self
 
     def fit_transform(self, X, Y):
