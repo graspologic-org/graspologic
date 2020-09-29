@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_equal
 
-from graspy.pipeline import anomaly_detection
+from graspologic.pipeline import anomaly_detection
 
 
 def load_data():
