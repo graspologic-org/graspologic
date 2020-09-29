@@ -2,7 +2,7 @@
 Aligning
 ********
 
-.. currentmodule:: graspy.align
+.. currentmodule:: graspologic.align
 
 Sign flips
 ----------

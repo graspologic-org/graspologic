@@ -15,7 +15,7 @@ class OrthogonalProcrustes(BaseAlign):
     or a different dataset that has the same generating distribution.
 
     Note that when used to match two datasets, this method unlike
-    :class:`~graspy.align.SeedlessProcrustes`, not only requires that the
+    :class:`~graspologic.align.SeedlessProcrustes`, not only requires that the
     datasets have the same number of entries, but also that there is some
     correspondence between the entries. In graph embeddings, this usually
     corresponds to the assumption that the vertex i in graph X has the same

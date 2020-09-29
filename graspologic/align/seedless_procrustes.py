@@ -13,7 +13,7 @@ from .orthogonal_procrustes import OrthogonalProcrustes
 class SeedlessProcrustes(BaseAlign):
     """
     Matches two datasets using an orthogonal matrix. Unlike
-    :class:`~graspy.align.OrthogonalProcrustes`, this does not requires a
+    :class:`~graspologic.align.OrthogonalProcrustes`, this does not requires a
     matching between entries. It can even be used in the settings where the two
     datasets do not have the same number of entries.
 
@@ -21,7 +21,7 @@ class SeedlessProcrustes(BaseAlign):
     graphs, when it requires some simultaneous inference task and no 1-1
     matching between the vertices of the two graphs can be established, for
     example, inside of the test for the equivalence of the latent distributions
-    (see: :class:`~graspy.inference.LatentDistributionTest`).
+    (see: :class:`~graspologic.inference.LatentDistributionTest`).
 
     Parameters
     ----------

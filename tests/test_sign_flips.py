@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from graspy.align import SignFlips
+from graspologic.align import SignFlips
 
 
 class TestSignFlips(unittest.TestCase):

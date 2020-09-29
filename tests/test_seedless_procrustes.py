@@ -5,8 +5,8 @@ import unittest
 
 import numpy as np
 from scipy import stats
-from graspy.align import SignFlips
-from graspy.align import SeedlessProcrustes
+from graspologic.align import SignFlips
+from graspologic.align import SeedlessProcrustes
 
 
 class TestSeedlessProcrustes(unittest.TestCase):

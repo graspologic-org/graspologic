@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from graspy.align import OrthogonalProcrustes
+from graspologic.align import OrthogonalProcrustes
 
 
 class TestOrthogonalProcrustes(unittest.TestCase):

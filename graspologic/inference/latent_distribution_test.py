@@ -106,7 +106,7 @@ class LatentDistributionTest(BaseInference):
         - 'sign_flips'
             A simple heuristic that flips the signs of one of the embeddings,
             if the medians of the two embeddings in that dimension differ from
-            each other. See :class:`~graspy.align.SignFlips` for more
+            each other. See :class:`~graspologic.align.SignFlips` for more
             information on this procedure. In the limit, this is guaranteed to
             lead to a valid test, as long as matrix :math:`X^T X`, where
             :math:`X` is the latent positions does not have repeated non-zero
@@ -117,17 +117,17 @@ class LatentDistributionTest(BaseInference):
             procedure is slower than sign flips, but is guaranteed to yield a
             valid test in the limit, and also makes the test more valid in some
             finite sample cases, in which the eigenvalues are very close to
-            each other. See `~graspy.align.SignFlips` for more information on
-            the procedure.
+            each other. See `~graspologic.align.SignFlips` for more information
+            on the procedure.
         - 'none'
             Do not use any alignment technique. This is strongly not
             recommended, as it may often result in a test that is not valid.
 
     align_kws : dict
         Keyword arguments for the aligner of choice, either
-        `~graspy.align.SignFlips` or `~graspy.align.SeedlessProcrustes`,
-        depending on the align_type. See respective classes for more
-        information.
+        `~graspologic.align.SignFlips` or
+        `~graspologic.align.SeedlessProcrustes`, depending on the align_type.
+        See respective classes for more information.
 
     input_graph : bool (default=True)
         Flag whether to expect two full graphs, or the embeddings.
