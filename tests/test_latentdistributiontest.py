@@ -199,7 +199,6 @@ class TestLatentDistributionTest(unittest.TestCase):
             ldt = LatentDistributionTest("dcorr", "gaussian")
         with pytest.warns(UserWarning):
             ldt = LatentDistributionTest("dcorr", "rbf")
-            ldt.fit
 
     def test_bad_matrix_inputs(self):
         ldt = LatentDistributionTest("dcorr")

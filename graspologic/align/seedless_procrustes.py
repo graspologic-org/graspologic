@@ -198,7 +198,7 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         # check init argument
         if type(init) is not str:
-            msg = "Initalization must be a str, not {}".format(type(init))
+            msg = "Init must be a str, not {}".format(type(init))
             raise TypeError(msg)
         inits_supported = ["2d", "sign_flips", "custom"]
         if init not in inits_supported:
