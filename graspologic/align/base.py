@@ -53,12 +53,11 @@ class BaseAlign(BaseEstimator):
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in `Y`, but the number of vectors can differ.
+            Dataset to be mapped to `Y`, must have same number of dimensions
+            (axis 1) as `Y`.
 
         Y : np.ndarray, shape (m, d)
-            Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in `X`, but the number of vectors can differ.
+            Target dataset, must have same number of dimensions (axis 1) as `X`.
 
         Returns
         -------
@@ -74,10 +73,9 @@ class BaseAlign(BaseEstimator):
 
         Parameters
         ----------
-        X : np.ndarray, shape (n, d)
-            Dataset of vectors. Needs to have the same number of dimensions as
-            `X` and `Y` passed to fit, but can have a different number of
-            entries.
+        X : np.ndarray, shape(m, d)
+            Dataset to be transformed, must have same number of dimensions
+            (axis 1) as `X` and `Y` that were passed to fit.
 
         Returns
         -------
@@ -108,13 +106,11 @@ class BaseAlign(BaseEstimator):
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in `Y`, but the number of vectors can differ.
+            Dataset to be mapped to `Y`, must have same number of dimensions
+            (axis 1) as `Y`.
 
         Y : np.ndarray, shape (m, d)
-            Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in `X`, but the number of vectors can
-            differ.
+            Target dataset, must have same number of dimensions (axis 1) as `X`.
 
         Returns
         -------

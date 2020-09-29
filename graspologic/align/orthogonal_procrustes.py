@@ -66,12 +66,11 @@ class OrthogonalProcrustes(BaseAlign):
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            First dataset of vectors. These vectors need to have same number of
-            dimensions and entries as ones in `Y`.
+            Dataset to be mapped to `Y`, must have the same shape as `Y`.
 
         Y : np.ndarray, shape (m, d)
-            Second dataset of vectors. These vectors need to have same number
-            dimensions and entries as ones in `X`.
+            Target dataset, must have the same shape as `X`.
+
 
         Returns
         -------
@@ -104,12 +103,10 @@ class OrthogonalProcrustes(BaseAlign):
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            First dataset of vectors. These vectors need to have same number of
-            dimensions and entries as ones in `Y`.
+            Dataset to be mapped to `Y`, must have the same shape as `Y`.
 
         Y : np.ndarray, shape (m, d)
-            Second dataset of vectors. These vectors need to have same number
-            dimensions and entries as ones in `X`.
+            Target dataset, must have the same shape as `X`.
 
         Returns
         -------

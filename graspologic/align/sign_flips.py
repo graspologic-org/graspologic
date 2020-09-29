@@ -81,12 +81,11 @@ class SignFlips(BaseAlign):
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            First dataset of vectors. These vectors need to have same number of
-            dimensions as ones in `Y`, but the number of vectors can differ.
+            Dataset to be mapped to `Y`, must have same number of dimensions
+            (axis 1) as `Y`.
 
         Y : np.ndarray, shape (m, d)
-            Second dataset of vectors. These vectors need to have same number
-            of dimensions as ones in `X`, but the number of vectors can differ.
+            Target dataset, must have same number of dimensions (axis 1) as `X`.
 
         Returns
         -------
