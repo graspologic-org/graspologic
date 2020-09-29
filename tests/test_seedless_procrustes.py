@@ -124,7 +124,9 @@ class TestSeedlessProcrustes(unittest.TestCase):
         aligner_2 = SeedlessProcrustes(init="sign_flips")
         aligner_2.fit(X, Y)
         test_sign_flips = SignFlips()
-        self.assertTrue(np.all(test_sign_flips.fit(X, Y).Q_ == aligner_2.selected_initial_Q_))
+        self.assertTrue(
+            np.all(test_sign_flips.fit(X, Y).Q_ == aligner_2.selected_initial_Q_)
+        )
 
         aligner_3 = SeedlessProcrustes(init="custom")
         aligner_3.fit(X, Y)
