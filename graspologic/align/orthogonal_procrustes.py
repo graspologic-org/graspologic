@@ -27,7 +27,7 @@ class OrthogonalProcrustes(BaseAlign):
         Q_ : array, size (d, d)
               Final orthogonal matrix, used to modify `X`.
 
-        score_ : float
+        score\_ : float
             Final value of the objective function: :math:`|| X Q - Y ||_F`
             Lower means the datasets have been matched together better.
 
