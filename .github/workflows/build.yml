@@ -1,0 +1,105 @@
+name: graspologic CI
+on: [push]
+jobs:
+  build-documentation:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: "Run Documentation Generation"
+        run: |
+          sudo apt install pandoc
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          sphinx-build -W -a docs/ docs/_build/html
+  code-format-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Run Format Check
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          black --check --diff ./graspologic ./tests
+  mypy-type-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: "[Optional] Run Type Validation Checks"
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          mypy ./graspologic
+  test-coverage:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Run Test Coverage
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          python -m pytest --co --cov=graspologic
+  unit-and-doc-test:
+    runs-on: ${{matrix.os}}
+    continue-on-error: true
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python_version: [3.6, 3.7, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{matrix.python_version}}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{matrix.python_version}}
+      - name: Run Unit Tests and Doctests
+        run: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+          pytest tests  # note: should be pytest graspologic tests, but we're skipping doctests for now and re-enabling them in another PR
+  publish:
+    runs-on: ubuntu-latest
+    needs: [build-documentation, code-format-check, unit-and-doc-test]
+    if: github.ref=='refs/heads/main' || github.ref=='refs/heads/dev'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel twine
+          pip install -r requirements.txt
+      - name: Materialize Fixed Version
+        run: |
+          python .github/build/set_version.py > graspologic/version/version.txt
+          cat graspologic/version/version.txt
+      - name: Build with setuptools
+        run: |
+          python setup.py build sdist
+      - name: Publish with twine
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          twine upload dist/*

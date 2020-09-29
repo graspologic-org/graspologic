@@ -7,9 +7,9 @@ import numpy as np
 import networkx as nx
 from sklearn.metrics import pairwise_distances
 
-from graspy.embed import AdjacencySpectralEmbed
-from graspy.inference import LatentDistributionTest
-from graspy.simulations import er_np, sbm
+from graspologic.embed import AdjacencySpectralEmbed
+from graspologic.inference import LatentDistributionTest
+from graspologic.simulations import er_np, sbm
 
 
 class TestLatentDistributionTest(unittest.TestCase):

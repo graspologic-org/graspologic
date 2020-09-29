@@ -5,9 +5,9 @@ import unittest
 
 import numpy as np
 
-import graspy as gs
-from graspy.embed.base import BaseEmbed
-from graspy.simulations.simulations import er_nm, er_np
+import graspologic as gs
+from graspologic.embed.base import BaseEmbed
+from graspologic.simulations.simulations import er_nm, er_np
 
 
 class TestBaseEmbed(unittest.TestCase):
@@ -39,6 +39,17 @@ class TestBaseEmbed(unittest.TestCase):
         self.assertEqual(embed.latent_right_.shape, (n, n_components))
         self.assertTrue(embed.latent_right_ is not None)
 
+    def test_baseembed_er_directed_concat(self):
+        n_components = 4
+        embed = BaseEmbed(n_components=n_components, concat=True)
+        n = 10
+        M = 20
+        A = er_nm(n, M, directed=True)
+        embed._reduce_dim(A)
+        out = embed.fit_transform(A)
+        self.assertEqual(out.shape, (n, 2 * n_components))
+        self.assertTrue(embed.latent_right_ is not None)
+
     def test_baseembed(self):
         embed = BaseEmbed(n_components=None)
         n = 10
@@ -60,3 +71,7 @@ class TestBaseEmbed(unittest.TestCase):
         embed = BaseEmbed(n_components=self.n, algorithm="randomized")
         with self.assertRaises(ValueError):
             embed._reduce_dim(self.A)
+
+    def test_input_checks(self):
+        with self.assertRaises(TypeError):
+            BaseEmbed(n_components=self.n, concat=42)

@@ -1,6 +1,6 @@
 <!--
 Thanks for contributing a pull request! Please ensure you have taken a look at
-the contribution guidelines: https://github.com/neurodata/graspy/blob/master/CONTRIBUTING.md#pull-request-checklist
+the contribution guidelines: https://github.com/microsoft/graspologic/CONTRIBUTING.md#how-to-create-an-actionable-bug-report
 -->
 
 #### Reference Issues/PRs
@@ -16,4 +16,3 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 
 
 #### Any other comments?
-

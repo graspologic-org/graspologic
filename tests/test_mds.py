@@ -5,7 +5,7 @@ import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal, assert_equal
 
-from graspy.embed.mds import ClassicalMDS
+from graspologic.embed.mds import ClassicalMDS
 
 
 def test_input():
