@@ -71,6 +71,7 @@ class OrthogonalProcrustes(BaseAlign):
         Returns
         -------
         self : returns an instance of self
+
         """
         X, Y = self._check_datasets(X, Y)
 

@@ -14,7 +14,7 @@ class SeedlessProcrustes(BaseAlign):
     """
     Matches two datasets using an orthogonal matrix. Unlike
     :class:`~graspy.align.OrthogonalProcrustes`, this does not requires a
-    matching between entries. It can even be used in the settings when the two
+    matching between entries. It can even be used in the settings where the two
     datasets do not have the same number of entries.
 
     In graph setting, it is used to align the embeddings of two different

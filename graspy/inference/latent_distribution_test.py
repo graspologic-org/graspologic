@@ -377,6 +377,7 @@ class LatentDistributionTest(BaseInference):
         Returns
         -------
         self
+
         """
         if self.input_graph:
             A1 = import_graph(A1)

@@ -12,7 +12,7 @@ class SignFlips(BaseAlign):
     entries along some dimensions. In particular, it does so in a way that
     brings these two datasets to the same orthant according to some criterion,
     computed along each dimension. The two critera currently available are the
-    median and the maximum value in magnitude along each dimension.
+    median and the maximum (in magnitude) value along each dimension.
 
     There are two choices for which orthant the datasets end up in: either the
     first orthant (i.e. with all criteras being positive), which is a default,
@@ -27,7 +27,7 @@ class SignFlips(BaseAlign):
             - 'median'
                 Uses the median along each dimension
             - 'max'
-                Uses the max (in magintude) alongs each dimension
+                Uses the maximum (in magintude) along each dimension
 
     Attributes
     ----------
@@ -91,6 +91,7 @@ class SignFlips(BaseAlign):
         Returns
         -------
         self : returns an instance of self
+
         """
         X, Y = self._check_datasets(X, Y)
         _, d = X.shape
