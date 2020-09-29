@@ -124,15 +124,15 @@ class TestSeedlessProcrustes(unittest.TestCase):
         aligner_2 = SeedlessProcrustes(init="sign_flips")
         aligner_2.fit(X, Y)
         test_sign_flips = SignFlips()
-        self.assertTrue(np.all(test_sign_flips.fit(X, Y).Q_ == aligner_2.initial_Q))
+        self.assertTrue(np.all(test_sign_flips.fit(X, Y).Q_ == aligner_2.selected_initial_Q_))
 
         aligner_3 = SeedlessProcrustes(init="custom")
         aligner_3.fit(X, Y)
-        self.assertTrue(np.all(np.eye(3) == aligner_3.initial_Q))
+        self.assertTrue(np.all(np.eye(3) == aligner_3.selected_initial_Q_))
 
         aligner_4 = SeedlessProcrustes(init="custom", initial_Q=-np.eye(3))
         aligner_4.fit(X, Y)
-        self.assertTrue(np.all(-np.eye(3) == aligner_4.initial_Q))
+        self.assertTrue(np.all(-np.eye(3) == aligner_4.selected_initial_Q_))
 
         aligner_5 = SeedlessProcrustes(
             init="custom", initial_P=np.ones((100, 100)) / 10000

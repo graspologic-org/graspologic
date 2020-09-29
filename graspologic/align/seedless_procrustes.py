@@ -96,6 +96,15 @@ class SeedlessProcrustes(BaseAlign):
             Final value of the objective function: :math:`|| X Q - P Y ||_F`
             Lower means the datasets have been matched together better.
 
+        selected_initial_Q : array, size (d, d)
+            Initial orthogonal matrix which was used as the initialization.
+            If `init` was set to `2d` or `sign_flips`, then it is the
+            adaptively selected matrix.
+            If `init` was set to custom, and `initial_Q` was provided, then
+            equal to that. If it was not provided, but `initial_P` was, then
+            it is the matrix after the first procrustes performed. If neither
+            was provided, then it is the identity matrix.
+
     References
     ----------
     .. [1] Agterberg, J.
@@ -331,23 +340,23 @@ class SeedlessProcrustes(BaseAlign):
                 objectives[i] = self._compute_objective(X, Y, Q, P)
             # pick the best one, using the objective function value
             best = np.argmin(objectives)
-            self.initial_Q = _sign_flip_matrix_from_int(best, d)
+            self.selected_initial_Q_ = _sign_flip_matrix_from_int(best, d)
             self.P_, self.Q_ = P_matrices[best], Q_matrices[best]
         elif self.init == "sign_flips":
             aligner = SignFlips()
-            self.initial_Q = aligner.fit(X, Y).Q_
-            self.P_, self.Q_ = self._iterative_ot(X, Y, self.initial_Q)
+            self.selected_initial_Q_ = aligner.fit(X, Y).Q_
+            self.P_, self.Q_ = self._iterative_ot(X, Y, self.selected_initial_Q_)
         else:
             # determine initial Q if "custom"
             if self.initial_Q is not None:
-                pass
+                self.selected_initial_Q_ = self.initial_Q
             elif self.initial_P is not None:
                 # use initial P, if provided
-                self.initial_Q = self._procrustes(X, Y, self.initial_P)
+                self.selected_initial_Q_ = self._procrustes(X, Y, self.initial_P)
             else:
                 # set to initial Q to identity if neither Q nor P provided
-                self.initial_Q = np.eye(d)
-            self.P_, self.Q_ = self._iterative_ot(X, Y, self.initial_Q)
+                self.selected_initial_Q_ = np.eye(d)
+            self.P_, self.Q_ = self._iterative_ot(X, Y, self.selected_initial_Q_)
         self.score_ = self._compute_objective(X, Y)
 
         return self
