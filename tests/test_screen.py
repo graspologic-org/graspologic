@@ -1,7 +1,7 @@
 import numpy as np
 import random
-from graspy.simulations import sbm
-from graspy.subgraph import Screen
+from graspologic.simulations import sbm
+from graspologic.subgraph import Screen
 
 np.random.seed(10)
 

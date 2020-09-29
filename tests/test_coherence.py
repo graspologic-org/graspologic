@@ -1,4 +1,4 @@
-from graspy.subgraph import Coherence
+from graspologic.subgraph import Coherence
 import unittest
 import numpy as np
 
