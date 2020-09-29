@@ -2,7 +2,7 @@
 Subgraph
 ********
 
-.. currentmodule:: graspy.subgraph
+.. currentmodule:: graspologic.subgraph
 
 Vertex screening
 ----------------
