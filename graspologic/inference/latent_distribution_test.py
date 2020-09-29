@@ -119,7 +119,7 @@ class LatentDistributionTest(BaseInference):
             finite sample cases, in which the eigenvalues are very close to
             each other. See `~graspologic.align.SignFlips` for more information
             on the procedure.
-        - 'none'
+        - None
             Do not use any alignment technique. This is strongly not
             recommended, as it may often result in a test that is not valid.
 

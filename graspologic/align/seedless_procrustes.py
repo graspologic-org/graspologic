@@ -75,7 +75,7 @@ class SeedlessProcrustes(BaseAlign):
             identity matrix. Must be an orthogonal matrix, if provided.
 
         initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
-            Initial guess for the optimal transport matrix, `self.P`, if such
+            Initial guess for the optimal transport matrix, `self.P_`, if such
             exists. Only one of `initial_Q`, `initial_P` can be provided at the
             same time, and only if `init` argument is set to 'custom'. If None,
             and `initial_Q` is also None - initializes `initial_Q` to identity
