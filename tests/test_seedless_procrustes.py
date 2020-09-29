@@ -70,7 +70,7 @@ class TestSeedlessProcrustes(unittest.TestCase):
             SeedlessProcrustes(init="custom", initial_Q=np.eye(3)[:-1])
         with self.assertRaises(ValueError):
             SeedlessProcrustes(init="custom", initial_Q=np.ones((3, 3)))
-        # pass not a "doubly stochasitc" matrix as P
+        # pass not a soft assignment matrix as P
         with self.assertRaises(ValueError):
             SeedlessProcrustes(init="custom", initial_P=np.ones((3, 2)))
 

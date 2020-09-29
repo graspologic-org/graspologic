@@ -79,7 +79,7 @@ class SeedlessProcrustes(BaseAlign):
             exists. Only one of `initial_Q`, `initial_P` can be provided at the
             same time, and only if `init` argument is set to 'custom'. If None,
             and `initial_Q` is also None - initializes `initial_Q` to identity
-            matrix. Must be a doubly stochastic matrix if provided (rows sum up
+            matrix. Must be a soft assignment matrix if provided (rows sum up
             to 1/n, cols sum up to 1/m.)
 
     Attributes
@@ -121,11 +121,11 @@ class SeedlessProcrustes(BaseAlign):
     sets, and an orthogonal alignment between two datasets. If the two datasets
     are represented with matrices :math:`X \in M_{n, d}` and
     :math:`Y \in M_{m, d}`, then the correspondence is a matrix
-    :math:`P \in M_{n, m}` that is doubly-stochastic (that is, its rows sum to
-    :math:`1/n`, and columns sum to :math:`1/m`) and the orthogonal alignment
-    is an orthogonal matrix :math:`Q \in M_{d, d}` (recall that an orthogonal
-    matrix, is any matrix that satisfies :math:`Q^T Q = Q Q^T = I`). The global
-    objective function is :math:`|| X Q - P Y ||_F`.
+    :math:`P \in M_{n, m}` that is soft assignment matrix (that is, its rows
+    sum to :math:`1/n`, and columns sum to :math:`1/m`) and the orthogonal
+    alignment is an orthogonal matrix :math:`Q \in M_{d, d}` (recall that an
+    orthogonal matrix, is any matrix that satisfies :math:`Q^T Q = Q Q^T = I`).
+    The global objective function is :math:`|| X Q - P Y ||_F`.
 
     Note that both :math:`X` and :math:`PY` are matrices in :math:`M_{n, d}`.
     Thus, if one knew :math:`P`, it would be simple to obtain an estimate for
@@ -247,7 +247,7 @@ class SeedlessProcrustes(BaseAlign):
                 and np.allclose(initial_P.sum(axis=1), np.ones(n) / n)
             ):
                 msg = (
-                    "Initial_P must be a doubly stochastic matrix "
+                    "Initial_P must be a soft assignment matrix "
                     "(rows add up to (1/number of cols) "
                     "and columns add up to (1/number of rows))"
                 )
