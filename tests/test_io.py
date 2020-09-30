@@ -8,7 +8,7 @@ import networkx as nx
 import numpy as np
 import pytest
 
-import graspy as gs
+import graspologic as gs
 
 
 class TestImportGraph:

@@ -2,11 +2,16 @@
 # Licensed under the MIT License.
 
 import unittest
-import graspy as gs
+import graspologic as gs
 import numpy as np
 import networkx as nx
+<<<<<<< HEAD
 from graspy.simulations import *
 from graspy.utils.utils import is_symmetric, is_loopless, symmetrize, cartprod
+=======
+from graspologic.simulations import *
+from graspologic.utils.utils import is_symmetric, is_loopless, symmetrize, cartprod
+>>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
 
 
 def remove_diagonal(A):
