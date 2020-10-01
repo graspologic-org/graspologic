@@ -82,6 +82,28 @@ class SeedlessProcrustes(BaseAlign):
             matrix. Must be a soft assignment matrix if provided (rows sum up
             to 1/n, cols sum up to 1/m.)
 
+    Attributes
+    ----------
+        Q_ : array, size (d, d)
+            Final orthogonal matrix, used to modify `X`.
+
+        P_ : array, size (n, m) where n and m are the sizes of two datasets
+            Final matrix of optimal transports, represent soft matching weights
+            from points in one dataset to the other, normalized such that all
+            rows sum to 1/n and all columns sum to 1/m.
+
+        score_ : float
+            Final value of the objective function: :math:`|| X Q - Y ||_F`
+            Lower means the datasets have been matched together better.
+
+        selected_initial_Q : array, size (d, d)
+            Initial orthogonal matrix which was used as the initialization.
+            If `init` was set to `2d` or `sign_flips`, then it is the
+            adaptively selected matrix.
+            If `init` was set to custom, and `initial_Q` was provided, then
+            equal to that. If it was not provided, but `initial_P` was, then
+            it is the matrix after the first procrustes performed. If neither
+            was provided, then it is the identity matrix.
 
     References
     ----------
