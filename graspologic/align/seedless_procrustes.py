@@ -96,7 +96,7 @@ class SeedlessProcrustes(BaseAlign):
             Final value of the objective function: :math:`|| X Q - P Y ||_F`
             Lower means the datasets have been matched together better.
 
-        selected_initial_Q : array, size (d, d)
+        selected_initial_Q_ : array, size (d, d)
             Initial orthogonal matrix which was used as the initialization.
             If `init` was set to `2d` or `sign_flips`, then it is the
             adaptively selected matrix.
