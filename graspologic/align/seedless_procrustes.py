@@ -92,7 +92,7 @@ class SeedlessProcrustes(BaseAlign):
             from points in one dataset to the other, normalized such that all
             rows sum to 1/n and all columns sum to 1/m.
 
-        score_ : float
+        score\_ : float
             Final value of the objective function: :math:`|| X Q - P Y ||_F`
             Lower means the datasets have been matched together better.
 
