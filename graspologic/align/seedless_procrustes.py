@@ -87,7 +87,7 @@ class SeedlessProcrustes(BaseAlign):
         Q_ : array, size (d, d)
             Final orthogonal matrix, used to modify `X`.
 
-        P_ : array, size (n, m) where n and m are the sizes of two datasets
+        P\_ : array, size (n, m) where n and m are the sizes of two datasets
             Final matrix of optimal transports, represent soft matching weights
             from points in one dataset to the other, normalized such that all
             rows sum to 1/n and all columns sum to 1/m.
