@@ -84,7 +84,7 @@ class SeedlessProcrustes(BaseAlign):
 
     Attributes
     ----------
-        Q\_ : array, size (d, d)
+        Q_ : array, size (d, d)
             Final orthogonal matrix, used to modify `X`.
 
         P\_ : array, size (n, m) where n and m are the sizes of two datasets
@@ -92,11 +92,11 @@ class SeedlessProcrustes(BaseAlign):
             from points in one dataset to the other, normalized such that all
             rows sum to 1/n and all columns sum to 1/m.
 
-        score\_ : float
+        score_ : float
             Final value of the objective function: :math:`|| X Q - P Y ||_F`
             Lower means the datasets have been matched together better.
 
-        selected_initial_Q\_ : array, size (d, d)
+        selected_initial_Q_ : array, size (d, d)
             Initial orthogonal matrix which was used as the initialization.
             If `init` was set to `2d` or `sign_flips`, then it is the
             adaptively selected matrix.
