@@ -61,7 +61,7 @@ class LatentDistributionTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspologic.embed.selectSVD` for more information.
-        This argument is ignored if `input_graph`=False.
+        This argument is ignored if `input_graph` is False.
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
