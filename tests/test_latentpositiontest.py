@@ -5,7 +5,6 @@ import unittest
 import numpy as np
 from graspologic.inference import LatentPositionTest
 from graspologic.simulations import er_np, sbm
-from graspologic.utils import *
 
 
 class TestLatentPositionTest(unittest.TestCase):
