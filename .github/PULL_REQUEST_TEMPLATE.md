@@ -1,5 +1,5 @@
 <!--
-Thanks for contributing to a pull request! Please ensure you have taken a look at
+Thanks for contributing a pull request! Please ensure you have taken a look at
 the contribution guidelines: https://github.com/neurodata/graspy/blob/master/CONTRIBUTING.md#pull-request-checklist
 -->
 
@@ -18,13 +18,13 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 #### Checklist
 
 - [ ] Followed the [coding-guidelines](#guidelines).
-- [ ] Give your pull request a helpful title that summarizes what your contribution does.
+- [ ] pull request has a helpful title that summarizes what your contribution does.
 - [ ] Link your pull request to the issue (see: [closing keywords](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) for an easy way of linking your issue)
 - [ ] All public methods should have informative docstrings with sample usage presented as doctests when appropriate.
 - [ ] At least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
 - [ ] If your feature is complex enough that a doctest is insufficient to fully showcase the utility, consider creating a Jupyter notebook to illustrate use instead.
 - [ ] All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
-- [ ] All functions and classes should be rigorously typed with Python 3.5+ 
+- [ ] All functions and classes should be rigorously typed with Python 3.6+ 
   [`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running `mypy ./graspy`
 - [ ] All code should be automatically formatted by `black`. You can run this formatter by calling:
   ```bash
