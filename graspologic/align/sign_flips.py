@@ -20,19 +20,19 @@ class SignFlips(BaseAlign):
 
     Parameters
     ----------
-        criterion : string, {'median' (default), 'max'}, optional
-            String describing the criterion used to choose whether to flip
-            signs. Two options are currently supported:
+    criterion : string, {'median' (default), 'max'}, optional
+        String describing the criterion used to choose whether to flip signs.
+        Two options are currently supported:
 
-            - 'median'
-                Uses the median along each dimension
-            - 'max'
-                Uses the maximum (in magintude) along each dimension
+        - 'median'
+            Uses the median along each dimension
+        - 'max'
+            Uses the maximum (in magintude) along each dimension
 
     Attributes
     ----------
-        Q_ : array, size (d, d)
-            Final orthogonal matrix, used to modify `X`.
+    Q_ : array, size (d, d)
+        Final orthogonal matrix, used to modify `X`.
 
     """
 

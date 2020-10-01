@@ -24,12 +24,12 @@ class OrthogonalProcrustes(BaseAlign):
 
     Attributes
     ----------
-        Q_ : array, size (d, d)
-              Final orthogonal matrix, used to modify `X`.
+    Q_ : array, size (d, d)
+            Final orthogonal matrix, used to modify `X`.
 
-        score\_ : float
-            Final value of the objective function: :math:`|| X Q - Y ||_F`
-            Lower means the datasets have been matched together better.
+    score_ : float
+        Final value of the objective function: :math:`|| X Q - Y ||_F`
+        Lower means the datasets have been matched together better.
 
     References
     ----------

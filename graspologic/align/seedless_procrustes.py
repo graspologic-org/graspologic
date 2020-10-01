@@ -25,62 +25,59 @@ class SeedlessProcrustes(BaseAlign):
 
     Parameters
     ----------
-        optimal_transport_lambda : float (default=0.1), optional
-            Regularization term of the Sinkhorn optimal transport algorithm.
+    optimal_transport_lambda : float (default=0.1), optional
+        Regularization term of the Sinkhorn optimal transport algorithm.
 
-        optimal_transport_eps : float (default=0.01), optional
-            Tolerance parameter for the each Sinkhorn optimal transport
-            algorithm. I.e. tolerance for each "E-step".
+    optimal_transport_eps : float (default=0.01), optional
+        Tolerance parameter for the each Sinkhorn optimal transport algorithm.
+        I.e. tolerance for each "E-step".
 
-        optimal_transport_num_reps : int (default=1000), optional
-            Number of repetitions in each iteration of the iterative optimal
-            transport problem. I.e. maximum number of repetitions in each
-            "E-step".
+    optimal_transport_num_reps : int (default=1000), optional
+        Number of repetitions in each iteration of the iterative optimal
+        transport problem. I.e. maximum number of repetitions in each "E-step".
 
-        iterative_num_reps : int (default=100), optional
-            Number of reps in each iteration of the iterative optimal transport
-            problem. I.e. maxumum number of total iterations the whole "EM"
-            algorithm.
+    iterative_num_reps : int (default=100), optional
+        Number of reps in each iteration of the iterative optimal transport
+        problem. I.e. maxumum number of total iterations the whole "EM"
+        algorithm.
 
-        init : string, {'2d' (default), 'sign_flips', 'custom'}, optional
+    init : string, {'2d' (default), 'sign_flips', 'custom'}, optional
 
-            - '2d'
-                Uses :math:`2^d` different restarts, where :math:`d` is the
-                dimension of the datasets. In particular, tries all matrices
-                that are simultaneously diagonal and orthogonal. In other
-                words, these are diagonal matrices with all entries on the
-                diagonal being either +1 or -1. This is motivated by the fact
-                that spectral graph embeddings have two types of orthogonal
-                non-identifiability, one of which is captured by the orthogonal
-                diagonal matrices. The final result is picked based on the
-                final values of the objective function. For more on
-                this, see [2]_.
-            - 'sign_flips'
-                Initial alignment done by making the median value in each
-                dimension have the same sign. The motivation is similar to
-                that in '2d', except this is a heuristic that can save time,
-                but can sometimes yield suboptimal results.
-            - 'custom'
-                Expects either an initial guess for `self.Q_` or an initial
-                guess for `self.P_`, but not both. See `initial_Q` and
-                `initial_P`, respectively. If neither is provided,
-                initializes `initial_Q` to an identity with an appropriate
-                number of dimensions.
+        - '2d'
+            Uses :math:`2^d` different restarts, where :math:`d` is the
+            dimension of the datasets. In particular, tries all matrices that
+            are simultaneously diagonal and orthogonal. In other words, these
+            are diagonal matrices with all entries on the diagonal being either
+            +1 or -1. This is motivated by the fact that spectral graph
+            embeddings have two types of orthogonal non-identifiability, one of
+            which is captured by the orthogonal diagonal matrices. The final
+            result is picked based on the final values of the objective
+            function. For more on this, see [2]_.
+        - 'sign_flips'
+            Initial alignment done by making the median value in each dimension
+            have the same sign. The motivation is similar to that in '2d',
+            except this is a heuristic that can save time, but can sometimes
+            yield suboptimal results.
+        - 'custom'
+            Expects either an initial guess for `self.Q_` or an initial guess
+            for `self.P_`, but not both. See `initial_Q` and `initial_P`,
+            respectively. If neither is provided, initializes `initial_Q` to an
+            identity with an appropriate number of dimensions.
 
-        initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
-            An initial guess for the alignment matrix, `self.Q_`, if such
-            exists. Only one of `initial_Q`, `initial_P` can be provided at
-            the same time, and only if `init` argument is set to 'custom'. If
-            None, and `initial_P` is also None - initializes `initial_Q` to
-            identity matrix. Must be an orthogonal matrix, if provided.
+    initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
+        An initial guess for the alignment matrix, `self.Q_`, if such exists.
+        Only one of `initial_Q`, `initial_P` can be provided at the same time,
+        and only if `init` argument is set to 'custom'. If None, and
+        `initial_P` is also None - initializes `initial_Q` to identity matrix.
+        Must be an orthogonal matrix, if provided.
 
-        initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
-            Initial guess for the optimal transport matrix, `self.P_`, if such
-            exists. Only one of `initial_Q`, `initial_P` can be provided at the
-            same time, and only if `init` argument is set to 'custom'. If None,
-            and `initial_Q` is also None - initializes `initial_Q` to identity
-            matrix. Must be a soft assignment matrix if provided (rows sum up
-            to 1/n, cols sum up to 1/m.)
+    initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
+        Initial guess for the optimal transport matrix, `self.P_`, if such
+        exists. Only one of `initial_Q`, `initial_P` can be provided at the
+        same time, and only if `init` argument is set to 'custom'. If None, and
+        `initial_Q` is also None - initializes `initial_Q` to identity matrix.
+        Must be a soft assignment matrix if provided (rows sum up to 1/n, cols
+        sum up to 1/m.)
 
     Attributes
     ----------
@@ -89,8 +86,8 @@ class SeedlessProcrustes(BaseAlign):
 
     P_ : array, size (n, m) where n and m are the sizes of two datasets
         Final matrix of optimal transports, represent soft matching weights
-        from points in one dataset to the other, normalized such that all
-        rows sum to 1/n and all columns sum to 1/m.
+        from points in one dataset to the other, normalized such that all rows
+        sum to 1/n and all columns sum to 1/m.
 
     score_ : float
         Final value of the objective function: :math:`|| X Q - P Y ||_F`
@@ -98,12 +95,12 @@ class SeedlessProcrustes(BaseAlign):
 
     selected_initial_Q_ : array, size (d, d)
         Initial orthogonal matrix which was used as the initialization.
-        If `init` was set to `2d` or `sign_flips`, then it is the
-        adaptively selected matrix.
-        If `init` was set to custom, and `initial_Q` was provided, then
-        equal to that. If it was not provided, but `initial_P` was, then
-        it is the matrix after the first procrustes performed. If neither
-        was provided, then it is the identity matrix.
+        If `init` was set to `2d` or `sign_flips`, then it is the adaptively
+        selected matrix.
+        If `init` was set to custom, and `initial_Q` was provided, then equal
+        to that. If it was not provided, but `initial_P` was, then it is the
+        matrix after the first procrustes performed. If neither was provided,
+        then it is the identity matrix.
 
     References
     ----------
@@ -123,9 +120,9 @@ class SeedlessProcrustes(BaseAlign):
     :math:`Y \in M_{m, d}`, then the correspondence is a matrix
     :math:`P \in M_{n, m}` that is soft assignment matrix (that is, its rows
     sum to :math:`1/n`, and columns sum to :math:`1/m`) and the orthogonal
-    alignment is an orthogonal matrix :math:`Q \in M_{d, d}` (recall that an
-    orthogonal matrix, is any matrix that satisfies :math:`Q^T Q = Q Q^T = I`).
-    The global objective function is :math:`|| X Q - P Y ||_F`.
+    alignment is an orthogonal matrix :math:`Q \in M_{d, d}` (an orthogonal
+    matrix is any matrix that satisfies :math:`Q^T Q = Q Q^T = I`). The global
+    objective function is :math:`|| X Q - P Y ||_F`.
 
     Note that both :math:`X` and :math:`PY` are matrices in :math:`M_{n, d}`.
     Thus, if one knew :math:`P`, it would be simple to obtain an estimate for

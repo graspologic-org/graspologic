@@ -14,8 +14,8 @@ class BaseAlign(BaseEstimator):
 
     Attributes
     ----------
-        Q_ : array, size (d, d)
-              Final orthogonal matrix, used to modify `X` passed to transform
+    Q_ : array, size (d, d)
+            Final orthogonal matrix, used to modify `X` passed to transform
 
     """
 
