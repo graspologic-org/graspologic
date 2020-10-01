@@ -19,9 +19,9 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 
 - [ ] Followed the [coding-guidelines](#guidelines).
 - [ ] pull request has a helpful title that summarizes what your contribution does.
-- [ ] Link your pull request to the issue (see: [closing keywords](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) for an easy way of linking your issue)
-- [ ] All public methods should have informative docstrings with sample usage presented as doctests when appropriate.
-- [ ] At least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
+- [ ] Linked your pull request to the issue (see: [closing keywords](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) for an easy way of linking your issue)
+- [ ] All public methods have informative docstrings with sample usage presented as doctests when appropriate.
+- [ ] It has at least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
 - [ ] If your feature is complex enough that a doctest is insufficient to fully showcase the utility, consider creating a Jupyter notebook to illustrate use instead.
 - [ ] All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
 - [ ] All functions and classes should be rigorously typed with Python 3.6+ 
