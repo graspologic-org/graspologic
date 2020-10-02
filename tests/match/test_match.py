@@ -108,8 +108,8 @@ class TestGMP:
 
         np.random.seed(1)
         G1 = er_np(n=n, p=p)
-        G2 = G1[:48,:48] # remove two nodes
-        gmp_adopted = GMP(padding='adopted')
+        G2 = G1[:48, :48]  # remove two nodes
+        gmp_adopted = GMP(padding="adopted")
         res = gmp_adopted.fit(G1, G2)
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
