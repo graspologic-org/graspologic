@@ -7,6 +7,9 @@ import math
 import random
 from graspologic.match import GraphMatch as GMP
 from graspologic.match import SinkhornKnopp as SK
+from graspy.simulations import sbm_corr
+
+np.random.seed(0)
 
 
 class TestGMP:
@@ -14,6 +17,7 @@ class TestGMP:
     def setup_class(cls):
         cls.barycenter = GMP(gmp=False)
         cls.rand = GMP(n_init=100, init_method="rand", gmp=False)
+        cls.barygm = GMP(gmp=True)
 
     def test_SGM_inputs(self):
         with pytest.raises(TypeError):
@@ -29,16 +33,11 @@ class TestGMP:
         with pytest.raises(TypeError):
             GMP(gmp="hey")
         with pytest.raises(ValueError):
-            GMP().fit(
-                np.random.random((3, 4)),
-                np.random.random((3, 4)),
-                np.arange(2),
-                np.arange(2),
-            )
+            GMP(padding="hey")
         with pytest.raises(ValueError):
             GMP().fit(
-                np.random.random((3, 3)),
-                np.random.random((4, 4)),
+                np.random.random((3, 4)),
+                np.random.random((3, 4)),
                 np.arange(2),
                 np.arange(2),
             )
@@ -73,25 +72,6 @@ class TestGMP:
             return A, B
 
     def test_barycenter_SGM(self):
-        A, B = self._get_AB("lipa20a")
-        lipa20a = self.barycenter.fit(A, B)
-        score = lipa20a.score_
-        assert 3683 <= score < 3900
-
-        A, B = self._get_AB("lipa20b")
-        lipa20b = self.barycenter.fit(A, B)
-        score = lipa20b.score_
-        assert score == 27076
-
-        A, B = self._get_AB("lipa30a")
-        lipa30a = self.barycenter.fit(A, B)
-        score = lipa30a.score_
-        assert 13178 <= score < 13650
-
-        A, B = self._get_AB("lipa30b")
-        lipa30b = self.barycenter.fit(A, B)
-        score = lipa30b.score_
-        assert score == 151426
 
         A, B = self._get_AB("chr12c")
         n = A.shape[0]
@@ -108,21 +88,6 @@ class TestGMP:
         score = chr12c.score_
         assert 11156 == score
 
-        A, B = self._get_AB("chr15a")
-        n = A.shape[0]
-        pi = np.array([5, 10, 8, 13, 12, 11, 14, 2, 4, 6, 7, 15, 3, 1, 9]) - [1] * n
-        W1 = [0, 5, 11, 14]
-        W2 = [pi[z] for z in W1]
-        chr15a = self.barycenter.fit(A, B, W1, W2)
-        score = chr15a.score_
-        assert 9896 <= score < 20000
-
-        W1 = np.sort(random.sample(list(range(n)), n - 1))
-        W2 = [pi[z] for z in W1]
-        chr15a = self.barycenter.fit(A, B, W1, W2)
-        score = chr15a.score_
-        assert 9896 == score
-
     def test_rand_SGM(self):
         A, B = self._get_AB("chr12c")
         chr12c = self.rand.fit(A, B)
@@ -137,18 +102,38 @@ class TestGMP:
         score = chr12c.score_
         assert 11156 <= score < 12500
 
-        A, B = self._get_AB("chr15a")
-        chr15a = self.rand.fit(A, B)
-        score = chr15a.score_
-        assert 9896 <= score < 12000
+    def test_padding(self):
+        directed = False
+        loops = False
+        block_probs = [
+            [0.9, 0.4, 0.3, 0.2],
+            [0.4, 0.9, 0.4, 0.3],
+            [0.3, 0.4, 0.9, 0.4],
+            [0.2, 0.3, 0.4, 0.7],
+        ]
+        n = 100
+        n_blocks = 4
+        rho = 0.5
+        block_members = np.array(n_blocks * [n])
+        n_verts = block_members.sum()
+        G1p, G2 = sbm_corr(block_members, block_probs, rho, directed, loops)
+        G1 = np.zeros((300, 300))
 
-        n = A.shape[0]
-        pi = np.array([5, 10, 8, 13, 12, 11, 14, 2, 4, 6, 7, 15, 3, 1, 9]) - [1] * n
-        W1 = [0, 5, 11, 14]
-        W2 = [pi[z] for z in W1]
-        chr15a = self.rand.fit(A, B, W1, W2)
-        score = chr15a.score_
-        assert 9896 <= score < 10000
+        for i in range(5):
+            stepx = 100 * i
+            for j in range(5):
+                stepy = 100 * j
+                G1[(75 * i) : (75 * (i + 1)), (75 * j) : (75 * (j + 1))] = G1p[
+                    stepx : (stepx + 75), stepy : (stepy + 75)
+                ]
+        seed1 = np.random.randint(0, 300, 10)
+        seed2 = [int(x / 75) * 25 + x for x in seed1]
+        res = self.barygm.fit(G2, G1, seed2, seed1)
+        matching = np.concatenate(
+            [res.perm_inds_[x * 100 : (x * 100) + 75] for x in range(n_blocks)]
+        )
+
+        assert 1.0 == (sum(matching == np.arange(300)) / 300)
 
 
 class TestSinkhornKnopp:
