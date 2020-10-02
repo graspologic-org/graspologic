@@ -6,8 +6,8 @@ import pytest
 from numpy.testing import assert_equal
 from scipy.linalg import orth
 
-from graspy.embed.svd import select_dimension
-from graspy.simulations.simulations import sbm
+from graspologic.embed.svd import select_dimension
+from graspologic.simulations.simulations import sbm
 
 
 def generate_data(n=10, elbows=3, seed=1):

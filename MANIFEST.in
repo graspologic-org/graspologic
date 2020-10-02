@@ -1,3 +1,3 @@
-recursive-include graspy/datasets *.csv
-recursive-include graspy/version version.txt
+recursive-include graspologic/datasets *.csv
+recursive-include graspologic/version version.txt
 exclude tests/*
