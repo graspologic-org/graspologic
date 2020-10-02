@@ -7,7 +7,7 @@ import math
 import random
 from graspologic.match import GraphMatch as GMP
 from graspologic.match import SinkhornKnopp as SK
-from graspologic.simulations import sbm_corr
+from graspologic.simulations import er_np
 
 np.random.seed(0)
 
@@ -103,37 +103,16 @@ class TestGMP:
         assert 11156 <= score < 12500
 
     def test_padding(self):
-        directed = False
-        loops = False
-        block_probs = [
-            [0.9, 0.4, 0.3, 0.2],
-            [0.4, 0.9, 0.4, 0.3],
-            [0.3, 0.4, 0.9, 0.4],
-            [0.2, 0.3, 0.4, 0.7],
-        ]
-        n = 100
-        n_blocks = 4
-        rho = 0.5
-        block_members = np.array(n_blocks * [n])
-        n_verts = block_members.sum()
-        G1p, G2 = sbm_corr(block_members, block_probs, rho, directed, loops)
-        G1 = np.zeros((300, 300))
+        n = 50
+        p = 0.4
 
-        for i in range(5):
-            stepx = 100 * i
-            for j in range(5):
-                stepy = 100 * j
-                G1[(75 * i) : (75 * (i + 1)), (75 * j) : (75 * (j + 1))] = G1p[
-                    stepx : (stepx + 75), stepy : (stepy + 75)
-                ]
-        seed1 = np.random.randint(0, 300, 10)
-        seed2 = [int(x / 75) * 25 + x for x in seed1]
-        res = self.barygm.fit(G2, G1, seed2, seed1)
-        matching = np.concatenate(
-            [res.perm_inds_[x * 100 : (x * 100) + 75] for x in range(n_blocks)]
-        )
+        np.random.seed(1)
+        G1 = er_np(n=n, p=p)
+        G2 = G1[:48,:48] # remove two nodes
+        gmp_adopted = GMP(padding='adopted')
+        res = gmp_adopted.fit(G1, G2)
 
-        assert 1.0 == (sum(matching == np.arange(300)) / 300)
+        assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
 
 
 class TestSinkhornKnopp:
