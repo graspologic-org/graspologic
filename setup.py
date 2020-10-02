@@ -4,26 +4,9 @@
 import os
 import sys
 from setuptools import setup, find_packages
-<<<<<<< HEAD
-=======
-
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
 
 MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
 
-<<<<<<< HEAD
-MINIMUM_PYTHON_VERSION = 3, 6  # Minimum of Python 3.6
-
-if sys.version_info < MINIMUM_PYTHON_VERSION:
-    sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
-
-sys.path.insert(0, os.path.join("graspy", "version"))
-# TODO: #454 Change path in https://github.com/microsoft/graspologic/issues/454
-from version import version
-sys.path.pop(0)
-
-version_path = os.path.join("graspy", "version", "version.txt")
-=======
 if sys.version_info < MINIMUM_PYTHON_VERSION:
     sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
 
@@ -33,7 +16,6 @@ from version import version
 sys.path.pop(0)
 
 version_path = os.path.join("graspologic", "version", "version.txt")
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
 with open(version_path, "w") as version_file:
     version_file.write(f"{version}")
 
@@ -41,11 +23,7 @@ with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
-<<<<<<< HEAD
-    name="graspy",
-=======
     name="graspologic",
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
     version=version,
     description="A set of python modules for graph statistics",
     long_description=LONG_DESCRIPTION,
@@ -67,14 +45,7 @@ setup(
     ],
     packages=find_packages(exclude=["tests", "tests.*", "tests/*"]),
     include_package_data=True,
-    package_data={
-<<<<<<< HEAD
-        "version": [os.path.join("graspy", "version", "version.txt")]
-    },  # TODO: #454 Also needs changed by https://github.com/microsoft/graspologic/issues/454
-=======
-        "version": [os.path.join("graspologic", "version", "version.txt")]
-    },
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
+    package_data={"version": [os.path.join("graspologic", "version", "version.txt")]},
     install_requires=[
         "networkx>=2.1",
         "numpy>=1.8.1",
@@ -92,19 +63,12 @@ setup(
             "mypy",
             "nbsphinx",
             "numpydoc",
-<<<<<<< HEAD
-=======
             "pandoc",
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
             "pytest",
             "pytest-cov",
             "sphinx",
             "sphinxcontrib-rawfiles",
             "sphinx-rtd-theme",
         ]
-<<<<<<< HEAD
-    }
-=======
     },
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
 )
