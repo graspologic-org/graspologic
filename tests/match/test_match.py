@@ -7,7 +7,7 @@ import math
 import random
 from graspologic.match import GraphMatch as GMP
 from graspologic.match import SinkhornKnopp as SK
-from graspy.simulations import sbm_corr
+from graspologic.simulations import sbm_corr
 
 np.random.seed(0)
 
