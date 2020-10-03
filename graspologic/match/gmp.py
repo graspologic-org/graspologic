@@ -177,6 +177,10 @@ class GraphMatch(BaseEstimator):
         seeds_A = column_or_1d(seeds_A)
         seeds_B = column_or_1d(seeds_B)
 
+        # pads A and B according to section 2.5 of [2]
+        if A.shape[0] != B.shape[0]:
+            A, B = _adj_pad(A, B, self.padding)
+
         if A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
             msg = "Adjacency matrix entries must be square"
             raise ValueError(msg)
@@ -195,10 +199,6 @@ class GraphMatch(BaseEstimator):
         ):
             msg = "Seed array entries must be less than or equal to n-1"
             raise ValueError(msg)
-
-        # pads A and B according to section 2.5 of [2]
-        if A.shape[0] != B.shape[0]:
-            A, B = _adj_pad(A, B, self.padding)
 
         n = A.shape[0]  # number of vertices in graphs
         n_seeds = seeds_A.shape[0]  # number of seeds
