@@ -7,6 +7,7 @@ from .mase import MultipleASE
 from .mds import ClassicalMDS
 from .omni import OmnibusEmbed
 from .svd import select_dimension, selectSVD
+from .base import BaseEmbed
 
 __all__ = [
     "ClassicalMDS",
@@ -16,4 +17,5 @@ __all__ = [
     "MultipleASE",
     "select_dimension",
     "selectSVD",
+    "BaseEmbed"
 ]
