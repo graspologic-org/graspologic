@@ -6,7 +6,6 @@ from sklearn.base import BaseEstimator
 
 
 class BaseVN(BaseEstimator):
-
     def __init__(self, multigraph=False):
         self.multigraph = multigraph
 
