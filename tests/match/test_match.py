@@ -108,7 +108,7 @@ class TestGMP:
 
         np.random.seed(1)
         G1 = er_np(n=n, p=p)
-        G2 = G1[:48, :48]  # remove two nodes
+        G2 = G1[: (n - 1), : (n - 1)]  # remove two nodes
         gmp_adopted = GMP(padding="adopted")
         res = gmp_adopted.fit(G1, G2)
 
