@@ -1,7 +1,7 @@
 Pipeline
 ========
 
-.. currentmodule:: graspy.pipeline
+.. currentmodule:: graspologic.pipeline
 
 Multigraph Embeddings
 ---------------------

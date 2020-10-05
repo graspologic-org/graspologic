@@ -3,9 +3,9 @@
 
 import numpy as np
 import pytest
-from graspy.cluster.gclust import GaussianCluster
-from graspy.embed.mase import MultipleASE
-from graspy.simulations.simulations import er_np, sbm
+from graspologic.cluster.gclust import GaussianCluster
+from graspologic.embed.mase import MultipleASE
+from graspologic.simulations.simulations import er_np, sbm
 from numpy import array_equal
 
 
