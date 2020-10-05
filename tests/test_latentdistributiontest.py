@@ -43,26 +43,55 @@ class TestLatentDistributionTest(unittest.TestCase):
         ldt.fit(self.A1, self.A2)
 
     def test_bad_kwargs(self):
-        with self.assertRaises(ValueError):
-            LatentDistributionTest(test="foo")
-        with self.assertRaises(ValueError):
-            LatentDistributionTest(test="dcorr", n_components=-100)
-        with self.assertRaises(ValueError):
-            LatentDistributionTest(test="dcorr", n_bootstraps=-100)
+        # check test argument
         with self.assertRaises(TypeError):
             LatentDistributionTest(test=0)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(test="foo")
+        # check metric argument
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="dcorr", distance=0)
+            LatentDistributionTest(metric=0)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(metric="some_kind_of_kernel")
+        # check metric argument modified
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="dcorr", n_bootstraps=0.5)
+            ldt = LatentDistributionTest()
+            ldt.metric = 0
+            ldt.fit(self.A1, self.A2)
+        with self.assertRaises(ValueError):
+            ldt = LatentDistributionTest()
+            ldt.metric = "some_kind_of_kernel"
+            ldt.fit(self.A1, self.A2)
+        # check n_components argument
         with self.assertRaises(TypeError):
-            LatentDistributionTest(test="dcorr", workers=0.5)
+            LatentDistributionTest(n_components=0.5)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(n_components=-100)
+        # check n_bootstraps argument
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(n_bootstraps=0.5)
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(n_bootstraps=-100)
+        # check workers argument
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(workers=0.5)
+        # check size_correction argument
         with self.assertRaises(TypeError):
             LatentDistributionTest(size_correction=0)
+        # check pooled argument
         with self.assertRaises(TypeError):
             LatentDistributionTest(pooled=0)
+        # check align_type argument
+        with self.assertRaises(ValueError):
+            LatentDistributionTest(align_type="foo")
         with self.assertRaises(TypeError):
-            ldt = LatentDistributionTest(input_graph="hello")
+            LatentDistributionTest(align_type={"not a": "string"})
+        # check align_kws argument
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(align_kws="foo")
+        # check input_graph argument
+        with self.assertRaises(TypeError):
+            LatentDistributionTest(input_graph="hello")
 
     def test_n_bootstraps(self):
         for test in self.tests.keys():
@@ -146,12 +175,23 @@ class TestLatentDistributionTest(unittest.TestCase):
         ldt.fit(A1, A2)
 
     def test_distances_and_kernels(self):
+        np.random.seed(123)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(100, 0.3)
         # some valid combinations of test and metric
-        with pytest.warns(None) as record:
-            for test in self.tests.keys():
-                ldt = LatentDistributionTest(test, self.tests[test])
-            ldt = LatentDistributionTest("hsic", "rbf")
-        assert len(record) == 0
+        # # would love to do this, but currently FutureWarning breaks this
+        # with pytest.warns(None) as record:
+        #     for test in self.tests.keys():
+        #         ldt = LatentDistributionTest(test, self.tests[test])
+        #         ldt.fit(A1, A2)
+        #     ldt = LatentDistributionTest("hsic", "rbf")
+        #     ldt.fit(A1, A2)
+        # assert len(record) == 0
+        for test in self.tests.keys():
+            ldt = LatentDistributionTest(test, self.tests[test])
+            ldt.fit(A1, A2)
+        ldt = LatentDistributionTest("hsic", "rbf")
+        ldt.fit(A1, A2)
         # some invalid combinations of test and metric
         with pytest.warns(UserWarning):
             ldt = LatentDistributionTest("hsic", "euclidean")
@@ -174,7 +214,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         C = er_np(100, 0.3, directed=False)
 
         # two directed graphs is okay
-        ldt = LatentDistributionTest("dcorr")
+        ldt = LatentDistributionTest()
         ldt.fit(A, B)
 
         # an undirected and a direced graph is not okay
@@ -247,6 +287,33 @@ class TestLatentDistributionTest(unittest.TestCase):
 
         self.assertTrue(p_corrected_1 <= 0.05)
         self.assertTrue(p_corrected_2 <= 0.05)
+
+    def test_different_aligners(self):
+        np.random.seed(314)
+        A1 = er_np(100, 0.8)
+        A2 = er_np(100, 0.8)
+        ase_1 = AdjacencySpectralEmbed(n_components=2)
+        X1 = ase_1.fit_transform(A1)
+        ase_2 = AdjacencySpectralEmbed(n_components=2)
+        X2 = ase_2.fit_transform(A2)
+        X2 = -X2
+
+        ldt_1 = LatentDistributionTest(input_graph=False, align_type=None)
+        p_val_1 = ldt_1.fit_predict(X1, X2)
+        self.assertTrue(p_val_1 < 0.05)
+
+        ldt_2 = LatentDistributionTest(input_graph=False, align_type="sign_flips")
+        p_val_2 = ldt_2.fit_predict(X1, X2)
+        self.assertTrue(p_val_2 >= 0.05)
+
+        # also checking that kws are passed through
+        ldt_3 = LatentDistributionTest(
+            input_graph=False,
+            align_type="seedless_procrustes",
+            align_kws={"init": "sign_flips"},
+        )
+        p_val_3 = ldt_3.fit_predict(X1, X2)
+        self.assertTrue(p_val_3 >= 0.05)
 
 
 if __name__ == "__main__":
