@@ -142,11 +142,14 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"gmp" must be a boolean'
             raise TypeError(msg)
-        if padding in {"adopted", "naive"}:
+        if isinstance(padding, str) and padding in {"adopted", "naive"}:
             self.padding = padding
-        else:
+        elif isinstance(padding, str):
             msg = 'Invalid "padding" parameter string'
             raise ValueError(msg)
+        else:
+            msg = '"padding" parameter must be of type string'
+            raise TypeError(msg)
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
         """

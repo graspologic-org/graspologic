@@ -32,6 +32,8 @@ class TestGMP:
             GMP(eps=-1)
         with pytest.raises(TypeError):
             GMP(gmp="hey")
+        with pytest.raises(TypeError):
+            GMP(padding=2)
         with pytest.raises(ValueError):
             GMP(padding="hey")
         with pytest.raises(ValueError):
