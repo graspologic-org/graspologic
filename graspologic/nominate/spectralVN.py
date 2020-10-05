@@ -29,7 +29,7 @@ class BaseSpectralVN(BaseVN):
     def _pairwise_dist(self, y: np.ndarray, metric='euclidean') -> np.ndarray:
         # wrapper for scipy's cdist function
         # y should give indexes
-        y_vec = self.embedding[y[:, 0]]
+        y_vec = self.embedding[y[:, 0].astype(np.int)]
         dist_mat = distance.cdist(self.embedding, y_vec, metric=metric)
         return dist_mat
 
@@ -63,16 +63,19 @@ class BaseSpectralVN(BaseVN):
         if self.embedding is None:
             self._embed(X)
 
-        # detect if y is attributed, reshape if not.
-        y = np.array(y)
-        if np.ndim(y) < 2:
-            y = np.concatenate((y, np.zeros(y.shape[0])))
-            y = y.reshape(-1, 2)
-        else:
-            y = y.reshape(-1, 2)
         self._attr_labels = y[:, 1]
         self.seed = y[:, 0]
         self.unique_att = np.unique(self._attr_labels)
+
+    @classmethod
+    def _make_2d(cls, arr):
+        arr = np.array(arr, dtype=np.int)
+        if np.ndim(arr) < 2:
+            arr = np.concatenate((arr, np.zeros(arr.shape[0])))
+            arr = arr.reshape(-1, 2)
+        else:
+            arr = arr.reshape(-1, 2)
+        return arr
 
     @abstractmethod
     def fit(self, X, y):
@@ -101,6 +104,8 @@ class SpectralVertexNominator(BaseSpectralVN):
         self.distance_matrix = None
 
     def fit(self, X, y):
+        # detect if y is attributed, reshape if not.
+        y = BaseSpectralVN._make_2d(y)
         self._fit(X, y)
         self.distance_matrix = self._pairwise_dist(y)
 
@@ -113,8 +118,10 @@ class SpectralVertexNominator(BaseSpectralVN):
         -------
 
         '''
-        ordered = self.distance_matrix.argsort(axis=1)
-        sorted_dists = self.distance_matrix[np.arange(ordered.shape[0], ordered.T)].T
+        ordered = self.distance_matrix.argsort(axis=0)
+        sorted_dists = np.zeros(ordered.shape)
+        for i in range(ordered.shape[1]):
+            sorted_dists[:, i] = self.distance_matrix[ordered[:, i], i].reshape(-1)
         return ordered, sorted_dists, np.zeros(1)
 
     def _knn_weighted_predict(self, out, k=5):
@@ -195,6 +202,8 @@ class SpectralClusterVertexNominator(BaseSpectralVN):
 
         """
         from sklearn.cluster import KMeans
+        # detect if y is attributed, reshape if not.
+        y = BaseSpectralVN._make_2d(y)
         self._fit(X, y)
         self.clf = KMeans(n_clusters=self.unique_att.shape[0])
         self.clf.fit(self.embedding)
