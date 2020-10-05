@@ -133,7 +133,7 @@ class SpectralVertexNominator(BaseSpectralVN):
         '''
         ordered = self.distance_matrix.argsort(axis=1)
         sorted_dists = self.distance_matrix[np.arange(ordered.shape[0]), ordered.T].T
-        atts = self._attr_labels[ordered[:, :k]]
+        atts = self._attr_labels[ordered[:, :k]]  # label for the nearest 5 seeds for each vertex
         pred_weights = np.empty(
             (atts.shape[0], self.unique_att.shape[0]))  # use this array for bin counts as well to save space
         for i in range(self.unique_att.shape[0]):
@@ -151,9 +151,9 @@ class SpectralVertexNominator(BaseSpectralVN):
             prediction = np.concatenate((vert_order.reshape(-1, 1), att_preds.reshape(-1, 1)), axis=1)
             return prediction, pred_weights[vert_order]
         elif out == 'per_attribute':
-            pred_weights[np.argwhere(np.isnan(pred_weights))] = np.nanmax(pred_weights)
             vert_order = np.empty(pred_weights.shape, dtype=np.int)
             for i in range(pred_weights.shape[1]):
+                pred_weights[np.argwhere(np.isnan(pred_weights[:, i])), i] = np.nanmax(pred_weights[:, i])
                 vert_order[:, i] = np.argsort(pred_weights[:, i])
             return vert_order, pred_weights[vert_order]
 
