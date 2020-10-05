@@ -7,7 +7,9 @@ import numpy as np
 from scipy import stats
 
 from ..embed import select_dimension, AdjacencySpectralEmbed
-from ..utils import import_graph
+from ..utils import import_graph, fit_plug_in_variance_estimator
+from ..align import SignFlips
+from ..align import SeedlessProcrustes
 from .base import BaseInference
 from sklearn.utils import check_array
 from sklearn.metrics import pairwise_distances
@@ -59,7 +61,7 @@ class LatentDistributionTest(BaseInference):
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspologic.embed.selectSVD` for more information.
-        This argument is ignored if input_graph=False.
+        This argument is ignored if `input_graph` is False.
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
@@ -69,7 +71,7 @@ class LatentDistributionTest(BaseInference):
         Number of workers to use. If more than 1, parallelizes the code.
         Supply -1 to use all cores available to the Process.
 
-    size_correction: bool (default=True)
+    size_correction : bool (default=True)
         Ignored when the two graphs have the same number of vertices. The test
         degrades in validity as the number of vertices of the two graphs
         diverge from each other, unless a correction is performed.
@@ -81,9 +83,9 @@ class LatentDistributionTest(BaseInference):
         - False
             Does not perform any modifications (not recommended).
 
-    pooled: bool (default=False)
+    pooled : bool (default=False)
         Ignored whenever the two graphs have the same number of vertices or
-        size_correction is set to False. In order to correct the adjacency
+        `size_correction` is set to False. In order to correct the adjacency
         spectral embedding used in the test, it is needed to estimate the
         variance for each of the latent position estimates in the larger graph,
         which requires to compute different sample moments. These moments can
@@ -92,6 +94,40 @@ class LatentDistributionTest(BaseInference):
         under the null hypothesis, but it is not clear whether it has more
         power or less power under which alternatives. Generally not recomended,
         as it is untested and included for experimental purposes.
+
+    align_type : str, {'sign_flips' (default), 'seedless_procrustes'} or None
+        Random dot product graphs have an inherent non-identifiability,
+        associated with their latent positions. Thus, two embeddings of
+        different graphs may not be orthogonally aligned. Without this accounted
+        for, two embeddings of different graphs may appear different, even
+        if the distributions of the true latent positions are the same.
+        There are several options in terms of how this can be addresssed:
+
+        - 'sign_flips'
+            A simple heuristic that flips the signs of one of the embeddings,
+            if the medians of the two embeddings in that dimension differ from
+            each other. See :class:`~graspologic.align.SignFlips` for more
+            information on this procedure. In the limit, this is guaranteed to
+            lead to a valid test, as long as matrix :math:`X^T X`, where
+            :math:`X` is the latent positions does not have repeated non-zero
+            eigenvalues. This may, however, result in an invalid test in the
+            finite sample case if the some eigenvalues are same or close.
+        - 'seedless_procrustes'
+            An algorithm that learns an orthogonal alignment matrix. This
+            procedure is slower than sign flips, but is guaranteed to yield a
+            valid test in the limit, and also makes the test more valid in some
+            finite sample cases, in which the eigenvalues are very close to
+            each other. See `~graspologic.align.SignFlips` for more information
+            on the procedure.
+        - None
+            Do not use any alignment technique. This is strongly not
+            recommended, as it may often result in a test that is not valid.
+
+    align_kws : dict
+        Keyword arguments for the aligner of choice, either
+        `~graspologic.align.SignFlips` or
+        `~graspologic.align.SeedlessProcrustes`, depending on the align_type.
+        See respective classes for more information.
 
     input_graph : bool (default=True)
         Flag whether to expect two full graphs, or the embeddings.
@@ -107,6 +143,9 @@ class LatentDistributionTest(BaseInference):
 
     Attributes
     ----------
+    metric_func_ : callable
+        A callable associated with the specified metric. See `metric`.
+
     null_distribution_ : ndarray, shape (n_bootstraps, )
         The distribution of T statistics generated under the null.
 
@@ -127,7 +166,7 @@ class LatentDistributionTest(BaseInference):
         "hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package."
         arXiv:1907.02088.
 
-    .. [3] Alyakin, A., Agterberg, J., Helm, H., Priebe, C. (2020).
+    .. [3] Alyakin, A. A., Agterberg, J., Helm, H. S., Priebe, C. E. (2020).
        "Correcting a Nonparametric Two-sample Graph Hypothesis Test for Graphs with Different Numbers of Vertices"
        arXiv:2008.09434
 
@@ -142,16 +181,76 @@ class LatentDistributionTest(BaseInference):
         workers=1,
         size_correction=True,
         pooled=False,
+        align_type="sign_flips",
+        align_kws={},
         input_graph=True,
     ):
-
+        # check test argument
         if not isinstance(test, str):
             msg = "test must be a str, not {}".format(type(test))
             raise TypeError(msg)
         elif test not in _VALID_TESTS:
             msg = "Unknown test {}. Valid tests are {}".format(test, _VALID_TESTS)
             raise ValueError(msg)
+        # metric argument is checked when metric_func_ is instantiated
+        # check n_components argument
+        if n_components is not None:
+            if not isinstance(n_components, int):
+                msg = "n_components must be an int, not {}.".format(type(n_components))
+                raise TypeError(msg)
+        # check n_bootstraps argument
+        if not isinstance(n_bootstraps, int):
+            msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
+            raise TypeError(msg)
+        elif n_bootstraps < 0:
+            msg = "{} is invalid number of bootstraps, must be non-negative"
+            raise ValueError(msg.format(n_bootstraps))
+        # check workers argument
+        if not isinstance(workers, int):
+            msg = "workers must be an int, not {}".format(type(workers))
+            raise TypeError(msg)
+        # check size_correction argument
+        if not isinstance(size_correction, bool):
+            msg = "size_correction must be a bool, not {}".format(type(size_correction))
+            raise TypeError(msg)
+        # check pooled argument
+        if not isinstance(pooled, bool):
+            msg = "pooled must be a bool, not {}".format(type(pooled))
+            raise TypeError(msg)
+        # check align_type argument
+        if (not isinstance(align_type, str)) and (align_type is not None):
+            msg = "align_type must be a string or None, not {}".format(type(align_type))
+            raise TypeError(msg)
+        align_types_supported = ["sign_flips", "seedless_procrustes", None]
+        if align_type not in align_types_supported:
+            msg = "supported align types are {}".format(align_types_supported)
+            raise ValueError(msg)
+        # check align_kws argument
+        if not isinstance(align_kws, dict):
+            msg = "align_kws must be a dictionary of keyword arguments, not {}".format(
+                type(align_kws)
+            )
+            raise TypeError(msg)
+        # check input_graph argument
+        if not isinstance(input_graph, bool):
+            msg = "input_graph must be a bool, not {}".format(type(input_graph))
+            raise TypeError(msg)
 
+        super().__init__(n_components=n_components)
+
+        self.test = test
+        self.metric = metric
+        self.metric_func_ = self._instantiate_metric_func(metric, test)
+        self.n_bootstraps = n_bootstraps
+        self.workers = workers
+        self.size_correction = size_correction
+        self.pooled = pooled
+        self.input_graph = input_graph
+        self.align_type = align_type
+        self.align_kws = align_kws
+
+    def _instantiate_metric_func(self, metric, test):
+        # check metric argument
         if not isinstance(metric, str) and not callable(metric):
             msg = "Metric must be str or callable, not {}".format(type(metric))
             raise TypeError(msg)
@@ -160,37 +259,6 @@ class LatentDistributionTest(BaseInference):
                 metric, _VALID_METRICS
             )
             raise ValueError(msg)
-
-        if n_components is not None:
-            if not isinstance(n_components, int):
-                msg = "n_components must be an int, not {}.".format(type(n_components))
-                raise TypeError(msg)
-
-        if not isinstance(n_bootstraps, int):
-            msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
-            raise TypeError(msg)
-        elif n_bootstraps < 0:
-            msg = "{} is invalid number of bootstraps, must be non-negative"
-            raise ValueError(msg.format(n_bootstraps))
-
-        if not isinstance(workers, int):
-            msg = "workers must be an int, not {}".format(type(workers))
-            raise TypeError(msg)
-
-        if not isinstance(size_correction, bool):
-            msg = "size_correction must be a bool, not {}".format(type(size_correction))
-            raise TypeError(msg)
-
-        if not isinstance(pooled, bool):
-            msg = "pooled must be a bool, not {}".format(type(pooled))
-            raise TypeError(msg)
-
-        if not isinstance(input_graph, bool):
-            msg = "input_graph must be a bool, not {}".format(type(input_graph))
-            raise TypeError(msg)
-
-        super().__init__(n_components=n_components)
-
         if callable(metric):
             metric_func = metric
         else:
@@ -230,12 +298,7 @@ class LatentDistributionTest(BaseInference):
                 def metric_func(X, Y=None, metric=metric, workers=None):
                     return pairwise_kernels(X, Y, metric=metric, n_jobs=workers)
 
-        self.test = KSample(test, compute_distance=metric_func)
-        self.n_bootstraps = n_bootstraps
-        self.workers = workers
-        self.size_correction = size_correction
-        self.pooled = pooled
-        self.input_graph = input_graph
+        return metric_func
 
     def _embed(self, A1, A2):
         if self.n_components is None:
@@ -275,9 +338,9 @@ class LatentDistributionTest(BaseInference):
         # estimate the central limit theorem variance
         if pooled:
             two_samples = np.concatenate([X, Y], axis=0)
-            get_sigma = _fit_plug_in_variance_estimator(two_samples)
+            get_sigma = fit_plug_in_variance_estimator(two_samples)
         else:
-            get_sigma = _fit_plug_in_variance_estimator(X)
+            get_sigma = fit_plug_in_variance_estimator(X)
         X_sigmas = get_sigma(X) * (N - M) / (N * M)
 
         # increase the variance of X by sampling from the asy dist
@@ -314,6 +377,7 @@ class LatentDistributionTest(BaseInference):
         Returns
         -------
         self
+
         """
         if self.input_graph:
             A1 = import_graph(A1)
@@ -366,18 +430,26 @@ class LatentDistributionTest(BaseInference):
             X1_hat = check_array(A1)
             X2_hat = check_array(A2)
 
-        X1_hat, X2_hat = _median_sign_flips(X1_hat, X2_hat)
+        if self.align_type == "sign_flips":
+            aligner = SignFlips(**self.align_kws)
+            X1_hat = aligner.fit_transform(X1_hat, X2_hat)
+        elif self.align_type == "seedless_procrustes":
+            aligner = SeedlessProcrustes(**self.align_kws)
+            X1_hat = aligner.fit_transform(X1_hat, X2_hat)
 
         if self.size_correction:
             X1_hat, X2_hat = self._sample_modified_ase(
                 X1_hat, X2_hat, pooled=self.pooled
             )
 
-        data = self.test.test(
+        self.metric_func_ = self._instantiate_metric_func(self.metric, self.test)
+        test_obj = KSample(self.test, compute_distance=self.metric_func_)
+
+        data = test_obj.test(
             X1_hat, X2_hat, reps=self.n_bootstraps, workers=self.workers, auto=False
         )
 
-        self.null_distribution_ = self.test.indep_test.null_dist
+        self.null_distribution_ = test_obj.indep_test.null_dist
         self.sample_T_statistic_ = data[0]
         self.p_value_ = data[1]
 
@@ -407,75 +479,10 @@ class LatentDistributionTest(BaseInference):
 
 
         Returns
-        ------
+        -------
         p_value_ : float
             The overall p value from the test
         """
         # abstract method overwritten in order to have a custom doc string
         self.fit(A1, A2)
         return self.p_value_
-
-
-def _median_sign_flips(X1, X2):
-    X1_medians = np.median(X1, axis=0)
-    X2_medians = np.median(X2, axis=0)
-    val = np.multiply(X1_medians, X2_medians)
-    t = (val > 0) * 2 - 1
-    X1 = np.multiply(t.reshape(-1, 1).T, X1)
-    return X1, X2
-
-
-def _fit_plug_in_variance_estimator(X):
-    """
-    Takes in ASE of a graph and returns a function that estimates
-    the variance-covariance matrix at a given point using the
-    plug-in estimator from the RDPG Central Limit Theorem.
-
-    Parameters
-    ----------
-    X : np.ndarray, shape (n, d)
-        adjacency spectral embedding of a graph
-
-    Returns
-    -------
-    plug_in_variance_estimtor: functions
-        a function that estimates variance (see below)
-    """
-
-    n = len(X)
-
-    # precompute the Delta and the middle term matrix part
-    delta = 1 / (n) * (X.T @ X)
-    delta_inverse = np.linalg.inv(delta)
-    middle_term_matrix = np.einsum("bi,bo->bio", X, X)
-
-    def plug_in_variance_estimator(x):
-        """
-        Takes in a point of a matrix of points in R^d and returns an
-        estimated covariance matrix for each of the points
-
-        Parameters:
-        -----------
-        x: np.ndarray, shape (n, d)
-            points to estimate variance at
-            if 1-dimensional - reshaped to (1, d)
-
-        Returns:
-        -------
-        covariances: np.ndarray, shape (n, d, d)
-            n estimated variance-covariance matrices of the points provided
-        """
-        if x.ndim < 2:
-            x = x.reshape(1, -1)
-        # the following two lines are a properly vectorized version of
-        # middle_term = 0
-        # for i in range(n):
-        #     middle_term += np.multiply.outer((x @ X[i] - (x @ X[i]) ** 2),
-        #                                      np.outer(X[i], X[i]))
-        # where the matrix part does not involve x and has been computed above
-        middle_term_scalar = x @ X.T - (x @ X.T) ** 2
-        middle_term = np.tensordot(middle_term_scalar, middle_term_matrix, axes=1)
-        covariances = delta_inverse @ (middle_term / n) @ delta_inverse
-        return covariances
-
-    return plug_in_variance_estimator
