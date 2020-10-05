@@ -10,14 +10,21 @@ import numpy as np
 from scipy.spatial import distance
 from scipy.stats import mode
 
+
 class BaseSpectralVN(BaseVN):
-    def __init__(self, multigraph: bool, embedding: np.ndarray, embeder: Union[str, BaseEmbed], mode: str):
+    def __init__(
+        self,
+        multigraph: bool,
+        embedding: np.ndarray,
+        embeder: Union[str, BaseEmbed],
+        mode: str,
+    ):
         super().__init__(multigraph=multigraph)
         self.embedding = embedding
         if self.embedding is None:
             if issubclass(type(embeder), BaseEmbed):
                 self.embeder = embeder
-            elif embeder == 'ASE':
+            elif embeder == "ASE":
                 self.embeder = ase()
             else:
                 raise TypeError
@@ -26,7 +33,7 @@ class BaseSpectralVN(BaseVN):
         self.unique_att = None
         self.mode = mode
 
-    def _pairwise_dist(self, y: np.ndarray, metric='euclidean') -> np.ndarray:
+    def _pairwise_dist(self, y: np.ndarray, metric="euclidean") -> np.ndarray:
         # wrapper for scipy's cdist function
         # y should give indexes
         y_vec = self.embedding[y[:, 0].astype(np.int)]
@@ -91,16 +98,16 @@ class BaseSpectralVN(BaseVN):
 
 
 class SpectralVertexNominator(BaseSpectralVN):
-
-    def __init__(self, multigraph: bool = False,
-                 embedding: np.ndarray = None,
-                 embeder: Union[str, BaseEmbed] = 'ASE',
-                 mode: str = 'single_vertex'):
-        super(SpectralVertexNominator,
-              self).__init__(multigraph=multigraph,
-                             embedding=embedding,
-                             embeder=embeder,
-                             mode=mode)
+    def __init__(
+        self,
+        multigraph: bool = False,
+        embedding: np.ndarray = None,
+        embeder: Union[str, BaseEmbed] = "ASE",
+        mode: str = "single_vertex",
+    ):
+        super(SpectralVertexNominator, self).__init__(
+            multigraph=multigraph, embedding=embedding, embeder=embeder, mode=mode
+        )
         self.distance_matrix = None
 
     def fit(self, X, y):
@@ -110,14 +117,14 @@ class SpectralVertexNominator(BaseSpectralVN):
         self.distance_matrix = self._pairwise_dist(y)
 
     def _knn_simple_predict(self):
-        '''
+        """
         Simplest possible methdod, doesn't consider attributes.
         If multiple seed vertices are provied, provides the top
         nominations for each individual seed.
         Returns
         -------
 
-        '''
+        """
         ordered = self.distance_matrix.argsort(axis=0)
         sorted_dists = np.zeros(ordered.shape)
         for i in range(ordered.shape[1]):
@@ -125,7 +132,7 @@ class SpectralVertexNominator(BaseSpectralVN):
         return ordered, sorted_dists, np.zeros(1)
 
     def _knn_weighted_predict(self, out, k=5):
-        '''
+        """
         Nominate vertex based on distance from the k nearest neighbors of each class.
         The default decision function is sum(dist to each neighbor of class c) / (number_such_neighbors)^2.
         This is a good metric because it accounts for both number of neighbors from a class and their respective
@@ -138,37 +145,48 @@ class SpectralVertexNominator(BaseSpectralVN):
         Returns
         -------
 
-        '''
+        """
         ordered = self.distance_matrix.argsort(axis=1)
         sorted_dists = self.distance_matrix[np.arange(ordered.shape[0]), ordered.T].T
-        atts = self._attr_labels[ordered[:, :k]]  # label for the nearest 5 seeds for each vertex
+        atts = self._attr_labels[
+            ordered[:, :k]
+        ]  # label for the nearest 5 seeds for each vertex
         pred_weights = np.empty(
-            (atts.shape[0], self.unique_att.shape[0]))  # use this array for bin counts as well to save space
+            (atts.shape[0], self.unique_att.shape[0])
+        )  # use this array for bin counts as well to save space
         for i in range(self.unique_att.shape[0]):
             pred_weights[:, i] = np.count_nonzero(atts == self.unique_att[i], axis=1)
             inds = np.argwhere(atts == self.unique_att[i])
             place_hold = np.empty(atts.shape)
             place_hold[:] = np.NaN
             place_hold[inds[:, 0], inds[:, 1]] = sorted_dists[inds[:, 0], inds[:, 1]]
-            pred_weights[:, i] = np.nansum(place_hold, axis=1) / np.power(pred_weights[:, i], 2)
-        if out == 'best_preds':
+            pred_weights[:, i] = np.nansum(place_hold, axis=1) / np.power(
+                pred_weights[:, i], 2
+            )
+        if out == "best_preds":
             best_pred_inds = np.nanargmin(pred_weights, axis=1)
-            best_pred_weights = pred_weights[np.arange(pred_weights.shape[0]), best_pred_inds]
+            best_pred_weights = pred_weights[
+                np.arange(pred_weights.shape[0]), best_pred_inds
+            ]
             vert_order = np.argsort(best_pred_weights, axis=0)
             att_preds = self.unique_att[best_pred_inds[vert_order]]
-            prediction = np.concatenate((vert_order.reshape(-1, 1), att_preds.reshape(-1, 1)), axis=1)
+            prediction = np.concatenate(
+                (vert_order.reshape(-1, 1), att_preds.reshape(-1, 1)), axis=1
+            )
             return prediction, pred_weights[vert_order], self.unique_att
-        elif out == 'per_attribute':
+        elif out == "per_attribute":
             vert_order = np.empty(pred_weights.shape, dtype=np.int)
             for i in range(pred_weights.shape[1]):
-                pred_weights[np.argwhere(np.isnan(pred_weights[:, i])), i] = np.nanmax(pred_weights[:, i])
+                pred_weights[np.argwhere(np.isnan(pred_weights[:, i])), i] = np.nanmax(
+                    pred_weights[:, i]
+                )
                 vert_order[:, i] = np.argsort(pred_weights[:, i])
             return vert_order, pred_weights[vert_order], self.unique_att
 
     def predict(self, out="best_preds"):
-        if self.mode == 'single_vertex':
+        if self.mode == "single_vertex":
             return self._knn_simple_predict()
-        elif self.mode == 'knn_weighted':
+        elif self.mode == "knn_weighted":
             return self._knn_weighted_predict(out)
         else:
             raise KeyError("no such mode " + str(self.mode))
@@ -179,15 +197,16 @@ class SpectralVertexNominator(BaseSpectralVN):
 
 
 class SpectralClusterVertexNominator(BaseSpectralVN):
-    def __init__(self, multigraph: bool = False,
-                 embedding: np.ndarray = None,
-                 embeder: Union[str, BaseEmbed] = 'ASE',
-                 mode: str = 'single_vertex'):
-        super(SpectralClusterVertexNominator,
-              self).__init__(multigraph=multigraph,
-                             embedding=embedding,
-                             embeder=embeder,
-                             mode=mode)
+    def __init__(
+        self,
+        multigraph: bool = False,
+        embedding: np.ndarray = None,
+        embeder: Union[str, BaseEmbed] = "ASE",
+        mode: str = "single_vertex",
+    ):
+        super(SpectralClusterVertexNominator, self).__init__(
+            multigraph=multigraph, embedding=embedding, embeder=embeder, mode=mode
+        )
         self.clf = None
 
     def fit(self, X, y):
@@ -202,6 +221,7 @@ class SpectralClusterVertexNominator(BaseSpectralVN):
 
         """
         from sklearn.cluster import KMeans
+
         # detect if y is attributed, reshape if not.
         y = BaseSpectralVN._make_2d(y)
         self._fit(X, y)
@@ -214,7 +234,9 @@ class SpectralClusterVertexNominator(BaseSpectralVN):
         for i in range(clusters.shape[0]):
             att_ind = np.argwhere(y_hat == clusters[i]).reshape(-1)
             _, seed_arg, _ = np.intersect1d(self.seed, att_ind, return_indices=True)
-            temp_att = np.concatenate((self._attr_labels[seed_arg], self.unique_att), axis=0)  #ensure all rep'ed in count
+            temp_att = np.concatenate(
+                (self._attr_labels[seed_arg], self.unique_att), axis=0
+            )  # ensure all rep'ed in count
             id, counts = np.unique(temp_att, return_counts=True)
             ind = np.argsort(id)
             counts = counts[ind]  # leave some smoothing bias here to prevent nan slice
@@ -229,10 +251,12 @@ class SpectralClusterVertexNominator(BaseSpectralVN):
             metric_arr[:, best[1]] = np.nan
         return map
 
-    def predict(self, out='per_attribute'):
+    def predict(self, out="per_attribute"):
         y_hat = self.clf.predict(self.embedding)
         clust_to_att = self._cluster_map(y_hat)
-        centered_map = clust_to_att - np.min(clust_to_att)  # allows to order prediction as they were provided
+        centered_map = clust_to_att - np.min(
+            clust_to_att
+        )  # allows to order prediction as they were provided
         clust_dists = self.clf.transform(self.embedding)
         att_preds = np.empty(clust_dists.shape, dtype=np.int)
         for i in range(clust_dists.shape[1]):
@@ -241,6 +265,4 @@ class SpectralClusterVertexNominator(BaseSpectralVN):
             clust_dists[:, i] = clust_dists[sort_inds, i]
         att_preds = att_preds.T[centered_map].T
         clust_dists = clust_dists.T[centered_map].T
-        return att_preds, np.sort(clust_to_att), clust_dists
-
-
+        return att_preds, clust_dists, np.sort(clust_to_att)
