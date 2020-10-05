@@ -26,7 +26,7 @@ class BaseSpectralVN(BaseVN):
         self.unique_att = None
         self.mode = mode
 
-    def _pairwise_dist(self, y: np.ndarray, metric='euclidian') -> np.ndarray:
+    def _pairwise_dist(self, y: np.ndarray, metric='euclidean') -> np.ndarray:
         # wrapper for scipy's cdist function
         # y should give indexes
         y_vec = self.embedding[y[:, 0]]
@@ -47,7 +47,7 @@ class BaseSpectralVN(BaseVN):
         if self.embedding is None:
             self.embedding = self.embeder.fit_transform(X)
 
-    def _fit(self, X: np.typing.ArrayLike, y: np.typing.ArrayLike):
+    def _fit(self, X: np.ndarray, y: np.ndarray):
         """
         Constructs the embedding if needed.
         Parameters
@@ -152,32 +152,16 @@ class SpectralVertexNominator(BaseSpectralVN):
             return prediction, pred_weights[vert_order]
         elif out == 'per_attribute':
             pred_weights[np.argwhere(np.isnan(pred_weights))] = np.nanmax(pred_weights)
-            vert_orders = np.argsort(pred_weights, axis=0)
-            return vert_orders, pred_weights[vert_orders]
-
-    def _kmeans_unsupervised_predict(self):
-        '''
-        Unsupervised kmeans spectral nomination, as described
-        by Fishkind et. al. in Vertex Nomination for Membership Prediction.
-        Has the advantage of being able to identify attributes not represented
-        in seed population, however by default will select number of clusters
-        based on number of unique attributes in given seed.
-        Returns
-        -------
-
-        '''
-        from sklearn.cluster import KMeans
-        unique_att = np.unique(self._attr_labels)
-        clf = KMeans(n_clusters=unique_att.shape[0])
-        y_hat = clf.fit_transform(self.embedding)
-        # now order for each cluster based of distance from centroid
-        centroids = clf.cluster_centers_
+            vert_order = np.empty(pred_weights.shape, dtype=np.int)
+            for i in range(pred_weights.shape[1]):
+                vert_order[:, i] = np.argsort(pred_weights[:, i])
+            return vert_order, pred_weights[vert_order]
 
     def predict(self, out="best_preds"):
         if self.mode == 'single_vertex':
-            self._knn_simple_predict()
+            return self._knn_simple_predict()
         elif self.mode == 'knn-weighted':
-            self._knn_weighted_predict(out)
+            return self._knn_weighted_predict(out)
         else:
             raise KeyError("no such mode " + str(self.mode))
 
@@ -198,7 +182,7 @@ class SpectralClusterVertexNominator(BaseSpectralVN):
                              mode=mode)
         self.clf = None
 
-    def fit(self, X, y=None):
+    def fit(self, X, y):
         """
         Unsupervised kmeans spectral nomination, as described
         by Fishkind et. al. in Vertex Nomination for Membership Prediction.
@@ -215,29 +199,38 @@ class SpectralClusterVertexNominator(BaseSpectralVN):
         self.clf.fit(self.embedding)
 
     def _cluster_map(self, y_hat):
-        map = {}
-        clusters = np.unique(y_hat)
-        for cluster in clusters:
-            att_ind = np.argwhere(y_hat == cluster).reshape(-1)
-            match = np.argwhere(self.seed == att_ind).reshape(-1)
-            if match.shape[0] != 0:
-                temp_labels = self._attr_labels.copy()
-                best_id = -1
-                while best_id in list(map.values()):
-                    best_id = mode(temp_labels[match], nan_policy='omit')
-                    temp_labels[np.argwhere(temp_labels == best_id)] = np.nan
-                map[cluster] = best_id
+        clusters = np.sort(np.unique(y_hat))
+        metric_arr = np.zeros((clusters.shape[0], clusters.shape[0]), dtype=np.float32)
+        for i in range(clusters.shape[0]):
+            att_ind = np.argwhere(y_hat == clusters[i]).reshape(-1)
+            _, seed_arg, _ = np.intersect1d(self.seed, att_ind, return_indices=True)
+            temp_att = np.concatenate((self._attr_labels[seed_arg], self.unique_att), axis=0)  #ensure all rep'ed in count
+            id, counts = np.unique(temp_att, return_counts=True)
+            ind = np.argsort(id)
+            counts = counts[ind]  # leave some smoothing bias here to prevent nan slice
+            metric_arr[i] = counts / temp_att.shape[0]  # percent each label att
+        map = np.zeros(clusters.shape[0], dtype=np.int)
+        # assign cluster mapping greedily in percent match
+        for i in range(clusters.shape[0]):
+            best = np.unravel_index(np.nanargmax(metric_arr), metric_arr.shape)
+            og_att = np.sort(self.unique_att)[best[1]]
+            map[best[0].astype(int)] = og_att.astype(int)
+            metric_arr[best[0]] = np.nan
+            metric_arr[:, best[1]] = np.nan
         return map
 
     def predict(self, out='per_attribute'):
         y_hat = self.clf.predict(self.embedding)
         clust_to_att = self._cluster_map(y_hat)
+        centered_map = clust_to_att - np.min(clust_to_att)  # allows to order prediction as they were provided
         clust_dists = self.clf.transform(self.embedding)
-        att_preds = np.empty(clust_dists.shape)
-        for i in range(clust_dists.shape[0]):
+        att_preds = np.empty(clust_dists.shape, dtype=np.int)
+        for i in range(clust_dists.shape[1]):
             sort_inds = np.argsort(clust_dists[:, i])
             att_preds[:, i] = sort_inds
-            clust_dists[:, i] = clust_dists
-        return att_preds, clust_dists
+            clust_dists[:, i] = clust_dists[sort_inds, i]
+        att_preds = att_preds.T[centered_map].T
+        clust_dists = clust_dists.T[centered_map].T
+        return att_preds, np.sort(clust_to_att), clust_dists
 
 
