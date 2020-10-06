@@ -63,6 +63,7 @@ hyppo
 matplotlib
 networkx
 numpy
+POT
 seaborn
 scikit-learn
 scipy
