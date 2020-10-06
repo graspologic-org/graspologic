@@ -4,6 +4,7 @@
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
 
+from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
@@ -134,11 +135,10 @@ class LatentPositionTest(BaseInference):
     def _difference_norm(self, X1, X2):
         if self.embedding in ["ase"]:
             if self.test_case == "rotation":
-                R = orthogonal_procrustes(X1, X2)[0]
-                return np.linalg.norm(X1 @ R - X2)
+                pass
             elif self.test_case == "scalar-rotation":
-                R, s = orthogonal_procrustes(X1, X2)
-                return np.linalg.norm(s / np.sum(X1 ** 2) * X1 @ R - X2)
+                X1 = X1 / np.linalg.norm(X1, ord="fro")
+                X2 = X2 / np.linalg.norm(X2, ord="fro")
             elif self.test_case == "diagonal-rotation":
                 normX1 = np.sum(X1 ** 2, axis=1)
                 normX2 = np.sum(X2 ** 2, axis=1)
@@ -146,11 +146,9 @@ class LatentPositionTest(BaseInference):
                 normX2[normX2 <= 1e-15] = 1
                 X1 = X1 / np.sqrt(normX1[:, None])
                 X2 = X2 / np.sqrt(normX2[:, None])
-                R = orthogonal_procrustes(X1, X2)[0]
-                return np.linalg.norm(X1 @ R - X2)
-        else:
-            # in the omni case we don't need to align
-            return np.linalg.norm(X1 - X2)
+            aligner = OrthogonalProcrustes()
+            X1 = aligner.fit_transform(X1, X2)
+        return np.linalg.norm(X1 - X2)
 
     def _embed(self, A1, A2, check_lcc=True):
         if self.embedding == "ase":
