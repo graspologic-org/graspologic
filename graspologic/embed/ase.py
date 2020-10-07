@@ -170,9 +170,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
         self.is_fitted_ = True
         return self
 
-    def predict(self, y):
+    def transform(self, y):
         """
-        Predict an out-of-sample embedding from a vertex not in the original embedding.
+        Obtain an out-of-sample embedding from a vertex not in the original embedding.
         For more details, see [1].
 
         Parameters
