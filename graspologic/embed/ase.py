@@ -104,7 +104,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012"""
+       Journal of the American Statistical Association, Vol. 107(499), 2012
+    """
 
     def __init__(
         self,
@@ -114,6 +115,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
+        concat=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -121,6 +123,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
+            concat=concat,
         )
 
         if not isinstance(diag_aug, bool):
@@ -155,6 +158,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         if self.diag_aug:
             A = augment_diagonal(A)
 
+        self.n_features_in_ = len(A)
         self._reduce_dim(A)
 
         # for out-of-sample
