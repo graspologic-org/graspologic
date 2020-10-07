@@ -172,7 +172,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     def predict(self, y):
         """
-        Predict an out-of-sample embedding from a vertex not in the original fitted matrix.
+        Predict an out-of-sample embedding from a vertex not in the original embedding.
         For more details, see [1].
 
         Parameters
