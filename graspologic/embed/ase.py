@@ -2,6 +2,8 @@
 # Licensed under the MIT License.
 
 import warnings
+import numpy as np
+from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseEmbed
 from ..utils import (
@@ -102,8 +104,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
-    """
+       Journal of the American Statistical Association, Vol. 107(499), 2012"""
 
     def __init__(
         self,
@@ -113,7 +114,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
         n_iter=5,
         check_lcc=True,
         diag_aug=True,
-        concat=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -121,14 +121,13 @@ class AdjacencySpectralEmbed(BaseEmbed):
             algorithm=algorithm,
             n_iter=n_iter,
             check_lcc=check_lcc,
-            concat=concat,
         )
 
         if not isinstance(diag_aug, bool):
             raise TypeError("`diag_aug` must be of type bool")
         self.diag_aug = diag_aug
 
-    def fit(self, graph, y=None):
+    def fit(self, graph):
         """
         Fit ASE model to input graph
 
@@ -149,13 +148,60 @@ class AdjacencySpectralEmbed(BaseEmbed):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.get_lcc``."
+                    + "using ``graspy.utils.get_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
 
         if self.diag_aug:
             A = augment_diagonal(A)
 
-        self.n_features_in_ = len(A)
         self._reduce_dim(A)
+
+        # for out-of-sample
+        inv_eigs = np.diag(1 / self.singular_values_)
+        self.pinv_left_ = self.latent_left_ @ inv_eigs
+        if self.latent_right_ is not None:
+            self.pinv_right_ = self.latent_right_ @ inv_eigs
+
+        self.is_fitted_ = True
         return self
+
+    def predict(self, y):
+        """
+        Predict an out-of-sample embedding from a vertex not in the original fitted matrix.
+        For more details, see [1].
+
+        Parameters
+        ----------
+        y : array_like or tuple, shape (n_oos_samples, n_vertices)
+            out-of-sample matrix.
+            If tuple, graph is directed and y[0] contains edges from y to other nodes.
+
+        Returns
+        -------
+        array_like or tuple
+            Out-of-sample prediction for the latent position(s) of y.
+
+        References
+        ----------
+        .. [1] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
+        Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
+        of Machine Learning Research, 80, 2975-2984.
+        """
+
+        # checks
+        check_is_fitted(self, "is_fitted_")
+        if not np.array_equal(a, a.astype(bool)):
+            raise ValueError("Out-of-sample array must be unweighted.")
+
+        # workhorse code
+        if self.latent_right_ is None:  # undirected
+            if not isinstance(y, np.ndarray):
+                raise TypeError("Undirected graphs require array input")
+            return y @ self.pinv_left_
+        else:  # directed
+            if not isinstance(y, tuple):
+                raise TypeError(
+                    "Directed graphs require a tuple (y_right, y_left) as input."
+                )
+            return y[0] @ self.pinv_left_, y[1] @ self.pinv_right_
