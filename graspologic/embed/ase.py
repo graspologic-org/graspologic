@@ -185,6 +185,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         -------
         array_like or tuple
             Out-of-sample prediction for the latent position(s) of y.
+            If the original embedding was undirected, input should be an array.
+            If the original embedding was directed, input should be a tuple (y_right, y_left).
 
         References
         ----------
@@ -205,7 +207,5 @@ class AdjacencySpectralEmbed(BaseEmbed):
             return y @ self.pinv_left_
         else:  # directed
             if not isinstance(y, tuple):
-                raise TypeError(
-                    "Directed graphs require a tuple (y_right, y_left) as input."
-                )
+                raise TypeError("Directed graphs require a tuple (y_right, y_left)")
             return y[0] @ self.pinv_left_, y[1] @ self.pinv_right_
