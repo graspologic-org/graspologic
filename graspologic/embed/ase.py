@@ -127,7 +127,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
             raise TypeError("`diag_aug` must be of type bool")
         self.diag_aug = diag_aug
 
-    def fit(self, graph):
+    def fit(self, graph, y=None):
         """
         Fit ASE model to input graph
 
