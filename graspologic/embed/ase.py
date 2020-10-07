@@ -148,7 +148,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspy.utils.get_lcc``."
+                    + "using ``graspologic.utils.get_lcc``."
                 )
                 warnings.warn(msg, UserWarning)
 
