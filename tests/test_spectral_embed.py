@@ -2,11 +2,6 @@
 # Licensed under the MIT License.
 
 import unittest
-<<<<<<< HEAD
-=======
-import pytest
-import graspy as gs
->>>>>>> upstream/oos
 import numpy as np
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
