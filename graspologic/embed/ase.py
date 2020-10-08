@@ -197,9 +197,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # checks
         check_is_fitted(self, "is_fitted_")
-        # TODO: remove after testing on weighted
-        # if not np.array_equal(y, y.astype(bool)):
-        #     raise ValueError("Out-of-sample array must be unweighted.")
 
         # workhorse code
         if self.latent_right_ is None:  # undirected

@@ -703,7 +703,7 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
-def remove_vertex(graph, index, return_vertex=False, directed=False):
+def remove_vertex(graph, index, return_vertex=False):
     """
     Remove a vertex from an adjacency matrix,
     then return the new adjacency matrix.
@@ -724,11 +724,36 @@ def remove_vertex(graph, index, return_vertex=False, directed=False):
         If np.ndarray, returns a copy of `graph` without the vertex in position i.
         If tuple, returns (A, v), where A is the truncated graph and v is the vertex.
         If graph is directed, v is a tuple with input and output edges.
+
+    Examples
+    --------
+    >>> A = np.array([[0, 1, 2],
+                      [3, 0, 5],
+                      [6, 7, 0]])
+    >>> remove_vertex(A, 0)
+    array([[4, 5],
+           [7, 8]])
+    >>> remove_vertex(A, 0, return_vertex=True)
+    (array([[4, 5],
+            [7, 8]]),
+    (array([3, 6]), array([1, 2])))
+
+    >>> B = np.array([[0, 1, 2],
+                      [1, 0, 5],
+                      [2, 5, 0]])
+    >>> return_vertex(B, 0, return_vertex=True)
+    (array([[0, 5],
+            [5, 0]]),
+     array([1, 2]))
     """
-    A = np.delete(np.delete(graph, index, 0), index, 1)
+    directed = not is_almost_symmetric(graph)
+    i = index
+
+    # delete the ith row and column of A
+    A = np.delete(np.delete(graph, i, 0), i, 1)
     if return_vertex:
-        v = np.delete(graph[index, :], index)
+        v = np.delete(graph[:, i], i)
         if directed:
-            v = v, np.delete(graph[:, index], index)
+            v = v, np.delete(graph[i, :], i)
         return A, v
     return A
