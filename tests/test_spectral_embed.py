@@ -143,7 +143,13 @@ class TestAdjacencySpectralEmbedSparse(unittest.TestCase):
 
     def test_sbm_er_binary_undirected(self):
         P = np.array([[0.8, 0.2], [0.2, 0.8]])
-        _test_sbm_er_binary_undirected(self, AdjacencySpectralEmbed, P, sparse=True)
+        _test_sbm_er_binary(
+            self, AdjacencySpectralEmbed, P, directed=False, sparse=True
+        )
+
+    def test_sbm_er_binary_directed(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        _test_sbm_er_binary(self, AdjacencySpectralEmbed, P, directed=True, sparse=True)
 
     def test_unconnected_warning(self):
         A = csr_matrix(er_nm(100, 10))
@@ -186,7 +192,13 @@ class TestLaplacianSpectralEmbedSparse(unittest.TestCase):
 
     def test_sbm_er_binary_undirected(self):
         P = np.array([[0.8, 0.2], [0.2, 0.3]])
-        _test_sbm_er_binary_undirected(self, LaplacianSpectralEmbed, P, sparse=True)
+        _test_sbm_er_binary(
+            self, LaplacianSpectralEmbed, P, directed=False, sparse=True
+        )
+
+    def test_sbm_er_binary_directed(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.3]])
+        _test_sbm_er_binary(self, LaplacianSpectralEmbed, P, directed=True, sparse=True)
 
     def test_different_forms(self):
         f = csr_matrix(np.array([[1, 2], [2, 1]]))

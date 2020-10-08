@@ -160,7 +160,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
-        self.n_features_in_ = len(A)
+        self.n_features_in_ = A.shape[0]
         L_norm = to_laplace(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
         return self

@@ -156,6 +156,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
         if self.diag_aug:
             A = augment_diagonal(A)
 
-        self.n_features_in_ = len(A)
+        self.n_features_in_ = A.shape[0]
         self._reduce_dim(A)
         return self
