@@ -1,6 +1,7 @@
 # graspologic
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 [![Downloads shield](https://img.shields.io/pypi/dm/graspologic.svg)](https://pypi.org/project/graspologic/)
+![Docs shield](https://img.shields.io/netlify/dc6aa606-17dd-4d3e-98b8-0b8ecfe45190?label=docs)
 ![graspologic CI](https://github.com/microsoft/graspologic/workflows/graspologic%20CI/badge.svg)
 [![codecov](https://codecov.io/gh/neurodata/graspy/branch/master/graph/badge.svg)](https://codecov.io/gh/neurodata/graspy)
 [![DOI](https://zenodo.org/badge/147768493.svg)](https://zenodo.org/badge/latestdoi/147768493)
