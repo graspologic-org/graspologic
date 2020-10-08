@@ -38,7 +38,7 @@ class SignFlips(BaseAlign):
 
     def __init__(
         self,
-        criterion="median",
+        criterion: str = "median",
     ):
         # checking criterion argument
         if type(criterion) is not str:
@@ -68,7 +68,7 @@ class SignFlips(BaseAlign):
 
             self.criterion_function_ = max_criterion
 
-    def fit(self, X, Y):
+    def fit(self, X: np.ndarray, Y: np.ndarray) -> "SignFlips":
         """
         Uses the two datasets to learn the matrix `self.Q_` that aligns the
         first dataset with the second.

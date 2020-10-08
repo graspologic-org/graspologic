@@ -1,10 +1,14 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Tuple, TypeVar
+
 import numpy as np
 from abc import abstractmethod
 from sklearn.utils import check_array
 from sklearn.base import BaseEstimator
+
+Self = TypeVar("Self", bound="BaseAlign")
 
 
 class BaseAlign(BaseEstimator):
@@ -22,7 +26,7 @@ class BaseAlign(BaseEstimator):
     def __init__(self):
         pass
 
-    def _check_datasets(self, X, Y):
+    def _check_datasets(self, X: np.ndarray, Y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Ensures that the datasets are numpy, 2d, finite, and have the same
         number of components. Does not check for same number of vertices.
@@ -45,7 +49,7 @@ class BaseAlign(BaseEstimator):
         return X, Y
 
     @abstractmethod
-    def fit(self, X, Y):
+    def fit(self: Self, X: np.ndarray, Y: np.ndarray) -> Self:
         """
         Uses the two datasets to learn the matrix `self.Q_` that aligns the
         first dataset with the second.
@@ -65,7 +69,7 @@ class BaseAlign(BaseEstimator):
         """
         pass
 
-    def transform(self, X):
+    def transform(self, X: np.ndarray) -> np.ndarray:
         """
         Transforms the dataset `X` using the learned matrix `self.Q_`. This may
         be the same as the first dataset as in .fit(), or a new dataset.
@@ -97,7 +101,7 @@ class BaseAlign(BaseEstimator):
             raise ValueError(msg)
         return X @ self.Q_
 
-    def fit_transform(self, X, Y):
+    def fit_transform(self, X: np.ndarray, Y: np.ndarray) -> np.ndarray:
         """
         Uses the two datasets to learn the matrix `self.Q_` that aligns the
         first dataset with the second. Then, transforms the first dataset `X`
