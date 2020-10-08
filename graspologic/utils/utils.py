@@ -635,7 +635,7 @@ def augment_diagonal(graph, weight=1):
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, sparse matrix
-        Input graph in any of the above specified formats. If np.ndarray, 
+        Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
     weight: float/int
         scalar value to multiply the new diagonal vector by
