@@ -1,9 +1,12 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import pytest
 import numpy as np
 import math
 import random
-from graspy.match import GraphMatch as GMP
-from graspy.match import SinkhornKnopp as SK
+from graspologic.match import GraphMatch as GMP
+from graspologic.match import SinkhornKnopp as SK
 
 
 class TestGMP:

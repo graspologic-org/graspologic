@@ -1,5 +1,8 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import pytest
-from graspy.datasets import *
+from graspologic.datasets import *
 
 
 def test_drosphila_left():
