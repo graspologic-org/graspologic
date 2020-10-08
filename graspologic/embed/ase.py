@@ -172,12 +172,12 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     def predict(self, y):
         """
-        Obtain an out-of-sample embedding from a vertex not in the original embedding.
+        Obtain an out-of-sample embedding from vertices not in the original embedding.
         For more details, see [1].
 
         Parameters
         ----------
-        y : array_like or tuple, shape (n_oos_samples, n_vertices)
+        y : array_like or tuple, shape (n_oos_vertices, n_vertices)
             out-of-sample matrix.
             If tuple, graph is directed and y[0] contains edges from y to other nodes.
 
@@ -186,7 +186,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         array_like or tuple
             Out-of-sample prediction for the latent position(s) of y.
             If the original embedding was undirected, input should be an array.
-            If the original embedding was directed, input should be a tuple (y_right, y_left).
+            If the original embedding was directed, input should be a tuple (y_left, y_right).
 
         References
         ----------
@@ -208,5 +208,5 @@ class AdjacencySpectralEmbed(BaseEmbed):
             return y @ self.pinv_left_
         else:  # directed
             if not isinstance(y, tuple):
-                raise TypeError("Directed graphs require a tuple (y_right, y_left)")
+                raise TypeError("Directed graphs require a tuple (y_left, y_right)")
             return y[0] @ self.pinv_left_, y[1] @ self.pinv_right_

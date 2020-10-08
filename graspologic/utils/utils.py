@@ -701,3 +701,34 @@ def fit_plug_in_variance_estimator(X):
         return covariances
 
     return plug_in_variance_estimator
+
+
+def remove_vertex(graph, index, return_vertex=False, directed=False):
+    """
+    Remove a vertex from an adjacency matrix,
+    then return the new adjacency matrix.
+
+    Parameters
+    ----------
+    graph : np.ndarray
+        Adjacency matrix, undirected
+    index : int
+        Index of the vertex to be removed.
+    return_vertex : bool, optional
+        Whether to return the tuple (A, v),
+        where A is the smaller adjacency matrix, by default False
+
+    Returns
+    -------
+    np.ndarray, tuple
+        If np.ndarray, returns a copy of `graph` without the vertex in position i.
+        If tuple, returns (A, v), where A is the truncated graph and v is the vertex.
+        If graph is directed, v is a tuple with input and output edges.
+    """
+    A = np.delete(np.delete(graph, index, 0), index, 1)
+    if return_vertex:
+        v = np.delete(graph[index, :], index)
+        if directed:
+            v = v, np.delete(graph[:, index], index)
+        return A, v
+    return A
