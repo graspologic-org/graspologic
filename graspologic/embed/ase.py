@@ -170,7 +170,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         self.is_fitted_ = True
         return self
 
-    def transform(self, y):
+    def predict(self, y):
         """
         Obtain an out-of-sample embedding from a vertex not in the original embedding.
         For more details, see [1].
@@ -197,6 +197,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # checks
         check_is_fitted(self, "is_fitted_")
+        # TODO: remove after testing on weighted
         if not np.array_equal(y, y.astype(bool)):
             raise ValueError("Out-of-sample array must be unweighted.")
 
