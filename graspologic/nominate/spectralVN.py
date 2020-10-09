@@ -71,43 +71,7 @@ class SpectralVertexNominator(BaseVN):
         if self.embedding is None:
             self.embedding = self.embeder.fit_transform(X)
 
-    def fit(self, X, y):
-        """
-        Constructs the embedding if needed.
-        Parameters
-        ----------
-        X
-        y: List of seed vertex indices, OR List of tuples of seed vertex indices and associated attributes.
-
-        Returns
-        -------
-
-        """
-        X = np.array(X)
-        if self.embedding is None:
-            self._embed(X)
-
-        self._attr_labels = y[:, 1]
-        self.seed = y[:, 0]
-        self.unique_att = np.unique(self._attr_labels)
-        self.distance_matrix = self._pairwise_dist(y)
-
-    def _knn_simple_predict(self):
-        """
-        Simplest possible methdod, doesn't consider attributes.
-        If multiple seed vertices are provied, provides the top
-        nominations for each individual seed.
-        Returns
-        -------
-
-        """
-        ordered = self.distance_matrix.argsort(axis=0)
-        sorted_dists = np.zeros(ordered.shape)
-        for i in range(ordered.shape[1]):
-            sorted_dists[:, i] = self.distance_matrix[ordered[:, i], i].reshape(-1)
-        return ordered, sorted_dists, np.zeros(1)
-
-    def _knn_weighted_predict(self, k=5):
+    def _knn_predict(self, k=5, neighbor_function='basic'):
         """
         Nominate vertex based on distance from the k nearest neighbors of each class.
         The default decision function is sum(dist to each neighbor of class c) / (number_such_neighbors)^2.
@@ -132,33 +96,51 @@ class SpectralVertexNominator(BaseVN):
         pred_weights = np.empty(
             (num_att, atts.shape[0])
         )
+        # large buffer to preform matrix operations.
+        nd_buffer = np.tile(self.unique_att, (k, atts.shape[0], 1)).T.astype(np.float32)
+        inds = np.argwhere(atts[np.newaxis, :, :] == nd_buffer)
 
-        att_tile = np.tile(atts, reps=(num_att, 1, 1))
-        unique_tile = np.tile(self.unique_att, (k, atts.shape[0], 1)).T
-        inds = np.argwhere(att_tile == unique_tile)
+        nd_buffer[:] = np.NaN  # nans are a neat way to operate on attributes individually
+        nd_buffer[inds[:, 0], inds[:, 1], inds[:, 2]] = sorted_dists[inds[:, 1], inds[:, 2]]
 
-        place_hold = np.empty((self.unique_att.shape[0], atts.shape[0], atts.shape[1]))
-        place_hold[:] = np.NaN
-        dist_tile = np.tile(sorted_dists, (k, 1, 1))
-        place_hold[inds[:, 0], inds[:, 1], inds[:, 2]] = dist_tile[inds[:, 0], inds[:, 1], inds[:, 2]]
+        # weighting function, outer inverse for consistency (e.g. higher rank has smaller distance metric)
+        if neighbor_function == 'sum_inverse_distance':
+            pred_weights = np.power(np.nansum(np.power(nd_buffer, -1), axis=2), -1).T
+        else:
+            raise KeyError
 
-        # weighting function, outer inverse for consistency (e.g. higher rank has distance metric)
-        pred_weights = np.power(np.nansum(np.power(place_hold, -1), axis=2), -1).T
-
-        vert_order = np.empty(pred_weights.shape, dtype=np.int)
         nan_inds = np.argwhere(np.isnan(pred_weights))
         pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.nanmax(pred_weights)
         vert_order = np.argsort(pred_weights, axis=0)
 
         return vert_order, pred_weights[vert_order], self.unique_att
 
+    def fit(self, X, y):
+        """
+        Constructs the embedding if needed.
+        Parameters
+        ----------
+        X
+        y: List of seed vertex indices, OR List of tuples of seed vertex indices and associated attributes.
+
+        Returns
+        -------
+
+        """
+        X = np.array(X)
+        if self.embedding is None:
+            self._embed(X)
+
+        self._attr_labels = y[:, 1]
+        self.seed = y[:, 0]
+        self.unique_att = np.unique(self._attr_labels)
+        self.distance_matrix = self._pairwise_dist(y)
+
     def predict(self, out="best_preds"):
-        if self.mode == "single_vertex":
-            return self._knn_simple_predict()
-        elif self.mode == "knn_weighted":
-            return self._knn_weighted_predict()
+        if self.mode == "knn":
+            return self._knn_predict()
         else:
-            raise KeyError("no such mode " + str(self.mode))
+            raise KeyError("No such mode " + str(self.mode))
 
     def fit_transform(self, X, y):
         self.fit(X, y)
