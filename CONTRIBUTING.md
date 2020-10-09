@@ -51,7 +51,7 @@ follow these guidelines! This will make it a lot faster for us to respond to you
 
     import platform; print(platform.platform())
     import sys; print(f"Python {sys.version}")
-    import graspy; print(f"GraSPy {graspy.__version__}")
+    import graspologic; print(f"graspologic {graspologic.__version__}")
 
 - Please ensure all **code snippets and error messages are formatted in
   appropriate code blocks**.  See 
@@ -114,7 +114,7 @@ We recommended that your contribution complies with the following rules before y
 - All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring 
   correct computation/outputs.
 - All functions and classes should be rigorously typed with Python 3.5+ 
-  [`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running `mypy ./graspy`
+  [`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running `mypy ./graspologic`
 - All code should be automatically formatted by `black`. You can run this formatter by calling:
   ```bash
   pip install black

@@ -1,7 +1,7 @@
 Embedding
 =========
 
-.. currentmodule:: graspy.embed
+.. currentmodule:: graspologic.embed
 
 Decomposition
 -------------
