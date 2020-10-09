@@ -73,7 +73,7 @@ class SBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -265,7 +265,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -291,7 +291,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         sampled.
 
     degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
-        Degree correction vector(s) :math:`\theta`. If `degree_directed` parameter was
+        Degree correction vector(s) :math:`\theta`. If ``degree_directed`` parameter was
         False, then will be of shape (n_verts, 1) and element :math:`i` represents the
         degree correction for node :math:`i`. Otherwise, the first column contains out
         degree corrections and the second column contains in degree corrections.
