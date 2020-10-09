@@ -247,7 +247,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal
     matrix of degrees of each node raised to the -1/2 power, I is the
-    identity matrix, and A is the adjacency matrix.
+    identity matrix, and A xis the adjacency matrix.
 
     R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer*I`.
 
@@ -703,17 +703,17 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
-def remove_vertex(graph, index, return_vertex=False):
+def remove_vertices(graph, indices, return_vertices=False):
     """
-    Remove a vertex from an adjacency matrix,
+    Remove vertices from an adjacency matrix,
     then return the new adjacency matrix.
 
     Parameters
     ----------
     graph : np.ndarray
         Adjacency matrix, undirected
-    index : int
-        Index of the vertex to be removed.
+    indices : int, list
+        Index/indices of the vertex/vertices to be removed.
     return_vertex : bool, optional
         Whether to return the tuple (A, v),
         where A is the smaller adjacency matrix, by default False
@@ -730,30 +730,57 @@ def remove_vertex(graph, index, return_vertex=False):
     >>> A = np.array([[0, 1, 2],
                       [3, 0, 5],
                       [6, 7, 0]])
-    >>> remove_vertex(A, 0)
-    array([[4, 5],
-           [7, 8]])
-    >>> remove_vertex(A, 0, return_vertex=True)
-    (array([[4, 5],
-            [7, 8]]),
+    >>> remove_vertices(A, 0)
+    array([[0, 5],
+           [7, 0]])
+    >>> remove_vertices(A, 0, return_vertices=True)
+    (array([[0, 5],
+            [7, 0]]),
     (array([3, 6]), array([1, 2])))
 
-    >>> B = np.array([[0, 1, 2],
-                      [1, 0, 5],
-                      [2, 5, 0]])
-    >>> return_vertex(B, 0, return_vertex=True)
-    (array([[0, 5],
-            [5, 0]]),
-     array([1, 2]))
+    >>> B = np.array([[0, 1, 2, 3],
+                      [1, 0, 4, 5],
+                      [2, 4, 0, 7],
+                      [3, 5, 7, 0]])
+    >>> remove_vertices(B, 0, return_vertices=True)
+    (array([[0., 4., 5.],
+            [4., 0., 7.],
+            [5., 7., 0.]]),
+    array([[1., 2., 3.]]))
+     >>> remove_vertices(B, [0, -1], return_vertices=True)
+    (array([[0., 4.],
+            [4., 0.]]),
+    array([[1., 2.],
+            [5., 7.]]))
     """
+    # TODO: fix examples
+    # TODO: add support for directed graphs
     directed = not is_almost_symmetric(graph)
-    i = index
+    graph = import_graph(graph)
+    if isinstance(indices, int):
+        indices = [indices]
 
-    # delete the ith row and column of A
-    A = np.delete(np.delete(graph, i, 0), i, 1)
-    if return_vertex:
-        v = np.delete(graph[:, i], i)
+    # truncate graph
+    A = graph.copy()
+    A = np.delete(np.delete(A, indices, 0), indices, 1)
+
+    # grab relevant vertices
+    if return_vertices:
+        vertices = []
+        vertices_right = []
+        # TODO: probably can implement this without a for-loop
+        for i in indices:
+            v = np.delete(graph[:, i], indices)
+            vertices.append(v)
+            if directed:
+                v2 = np.delete(graph[i, :], indices)
+                vertices_right.append(v2)
+
+        # make sure output looks right
+        vertices = np.squeeze(np.array(vertices))
         if directed:
-            v = v, np.delete(graph[i, :], i)
-        return A, v
+            vertices_right = np.squeeze(np.array(vertices_right))
+            return A, (np.array(vertices), np.array(vertices_right))
+        return A, np.array(vertices)
+
     return A
