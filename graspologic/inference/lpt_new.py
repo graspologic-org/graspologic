@@ -3,14 +3,100 @@
 
 import numpy as np
 from scipy.linalg import orthogonal_procrustes
+
+from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
 
-# test
+
 def lpt_function(
     A1, A2, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation"
 ):
+    r"""
+    Two sample hypothesis test for the problem of determining whether two random dot
+    product graphs have the same latent positions.
+
+    This test assumes that the two input graphs are vertex aligned, that is,
+    there is a known mapping between vertices in the two graphs and the input graphs
+    have their vertices sorted in the same order. Currently, the function only
+    supports undirected graphs.
+
+    Read more in the :ref:`tutorials <inference_tutorials>`
+
+    Parameters
+    ----------
+    A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+            The two graphs to run a hypothesis test on.
+            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
+            where ``n_vertices`` is the same for both
+
+    embedding : string, { 'ase' (default), 'omnibus'}
+        String describing the embedding method to use:
+
+        - 'ase'
+            Embed each graph separately using adjacency spectral embedding
+            and use Procrustes to align the embeddings.
+        - 'omnibus'
+            Embed all graphs simultaneously using omnibus embedding.
+
+    n_components : None (default), or int
+        Number of embedding dimensions. If None, the optimal embedding
+        dimensions are found by the Zhu and Godsi algorithm.
+
+    n_bootstraps : int, optional (default 500)
+        Number of bootstrap simulations to run to generate the null distribution
+
+    test_case : string, {'rotation' (default), 'scalar-rotation', 'diagonal-rotation'}
+        describes the exact form of the hypothesis to test when using 'ase' or 'lse'
+        as an embedding method. Ignored if using 'omnibus'. Given two latent positions,
+        :math:`X_1` and :math:`X_2`, and an orthogonal rotation matrix :math:`R` that
+        minimizes :math:`||X_1 - X_2 R||_F`:
+
+        - 'rotation'
+            .. math:: H_o: X_1 = X_2 R
+        - 'scalar-rotation'
+            .. math:: H_o: X_1 = c X_2 R
+
+            where :math:`c` is a scalar, :math:`c > 0`
+        - 'diagonal-rotation'
+            .. math:: H_o: X_1 = D X_2 R
+
+            where :math:`D` is an arbitrary diagonal matrix
+
+    Returns
+    -------
+    p_value: float
+        The overall p value from the test; this is the max of ``p_value_1`` and ``p_value_2_
+    
+    sample_T_statistic : float
+        The observed difference between the embedded positions of the two input graphs
+        after an alignment (the type of alignment depends on ``test_case``)
+
+    misc_stats : dictionary
+
+        - 'p_value_1', 'p_value_2': float
+            The p value estimate from the null distributions from sample 1 and sample 2
+
+        - 'null_distribution_1', 'null_distribution_2' : np.ndarray (n_bootstraps,)
+            The distribution of T statistics generated under the null, using the first and
+            and second input graph, respectively. The latent positions of each sample graph
+            are used independently to sample random dot product graphs, so two null
+            distributions are generated
+    
+    See also
+    --------
+    graspologic.embed.AdjacencySpectralEmbed
+    graspologic.embed.OmnibusEmbed
+    graspologic.embed.selectSVD
+
+    References
+    ----------
+    .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E.
+       "A Semiparametric Two-Sample Hypothesis Testing Problem for Random Graphs"
+       Journal of Computational and Graphical Statistics, Vol. 26(2), 2017
+    """
+
     if type(embedding) is not str:
         raise TypeError("embedding must be str")
     if type(n_bootstraps) is not int:
