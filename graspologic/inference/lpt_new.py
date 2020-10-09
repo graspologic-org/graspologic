@@ -7,7 +7,7 @@ from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
 
-
+# test
 def lpt_function(
     A1, A2, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation"
 ):
