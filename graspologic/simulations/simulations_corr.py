@@ -151,10 +151,10 @@ def er_corr(n, p, r, directed=False, loops=False):
     Returns
     -------
     G1: ndarray (n_vertices, n_vertices)
-        Adjacency matrix the same size as ``p`` representing a random graph.
+        Adjacency matrix the same size as P representing a random graph.
 
     G2: ndarray (n_vertices, n_vertices)
-        Adjacency matrix the same size as ``p`` representing a random graph.
+        Adjacency matrix the same size as P representing a random graph.
 
     Examples
     --------
@@ -235,10 +235,10 @@ def sbm_corr(n, p, r, directed=False, loops=False):
     Returns
     -------
     G1: ndarray (n_vertices, n_vertices)
-        Adjacency matrix the same size as ``p`` representing a random graph.
+        Adjacency matrix the same size as P representing a random graph.
 
     G2: ndarray (n_vertices, n_vertices)
-        Adjacency matrix the same size as ``p`` representing a random graph.
+        Adjacency matrix the same size as P representing a random graph.
 
     Examples
     --------

@@ -341,9 +341,9 @@ def sbm(
         if ``wt`` is an object, a weight function to use globally over
         the sbm for assigning weights. 1 indicates to produce a binary
         graph. If ``wt`` is an array-like, a weight function for each of
-        the edge communities. Wt[i, j] corresponds to the weight function
+        the edge communities. ``wt[i, j]`` corresponds to the weight function
         between communities i and j. If the entry is a function, should
-        accept an argument for size. An entry of Wt[i, j] = 1 will produce a
+        accept an argument for size. An entry of ``wt[i, j] = 1`` will produce a
         binary subgraph over the i, j community.
 
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
