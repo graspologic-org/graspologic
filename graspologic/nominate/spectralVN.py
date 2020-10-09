@@ -122,29 +122,34 @@ class SpectralVertexNominator(BaseVN):
         -------
 
         """
+        num_att = self.unique_att.shape[0]
+
         ordered = self.distance_matrix.argsort(axis=1)
         sorted_dists = self.distance_matrix[np.arange(ordered.shape[0]), ordered.T].T
         atts = self._attr_labels[
             ordered[:, :k]
         ]  # label for the nearest k seeds for each vertex
         pred_weights = np.empty(
-            (atts.shape[0], self.unique_att.shape[0])
+            (num_att, atts.shape[0])
         )
-        for i in range(self.unique_att.shape[0]):
-            inds = np.argwhere(atts == self.unique_att[i])
-            place_hold = np.empty(atts.shape)
-            place_hold[:] = np.NaN
-            place_hold[inds[:, 0], inds[:, 1]] = sorted_dists[inds[:, 0], inds[:, 1]]
 
-            # weighting function, outer inverse for consistency (e.g. higher rank has distance metric)
-            pred_weights[:, i] = np.power(np.nansum(np.power(place_hold, -1), axis=1), -1)
+        att_tile = np.tile(atts, reps=(num_att, 1, 1))
+        unique_tile = np.tile(self.unique_att, (k, atts.shape[0], 1)).T
+        inds = np.argwhere(att_tile == unique_tile)
+
+        place_hold = np.empty((self.unique_att.shape[0], atts.shape[0], atts.shape[1]))
+        place_hold[:] = np.NaN
+        dist_tile = np.tile(sorted_dists, (k, 1, 1))
+        place_hold[inds[:, 0], inds[:, 1], inds[:, 2]] = dist_tile[inds[:, 0], inds[:, 1], inds[:, 2]]
+
+        # weighting function, outer inverse for consistency (e.g. higher rank has distance metric)
+        pred_weights = np.power(np.nansum(np.power(place_hold, -1), axis=2), -1).T
 
         vert_order = np.empty(pred_weights.shape, dtype=np.int)
-        for i in range(pred_weights.shape[1]):
-            pred_weights[np.argwhere(np.isnan(pred_weights[:, i])), i] = np.nanmax(
-                pred_weights[:, i]
-            )
-            vert_order[:, i] = np.argsort(pred_weights[:, i])
+        nan_inds = np.argwhere(np.isnan(pred_weights))
+        pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.nanmax(pred_weights)
+        vert_order = np.argsort(pred_weights, axis=0)
+
         return vert_order, pred_weights[vert_order], self.unique_att
 
     def predict(self, out="best_preds"):
