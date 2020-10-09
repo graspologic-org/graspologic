@@ -102,7 +102,7 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
         to weight function ``wt``.
 
     dc: function or array-like, shape (n_vertices)
-        `dc` is used to generate a degree-corrected Erdos Renyi Model in
+        ``dc`` is used to generate a degree-corrected Erdos Renyi Model in
         which each node in the graph has a parameter to specify its expected degree
         relative to other nodes.
 
@@ -116,8 +116,8 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
             vertex is the node's relative expected degree.
 
     dc_kws: dictionary
-        Ignored if `dc` is none or array of scalar.
-        If `dc` is a function, `dc_kws` corresponds to its named arguments.
+        Ignored if ``dc`` is none or array of scalar.
+        If ``dc`` is a function, ``dc_kws`` corresponds to its named arguments.
         If not specified, in either case all functions will assume their default
         parameters.
 
@@ -338,21 +338,21 @@ def sbm(
         are sampled in the diagonal.
 
     wt: object or array-like, shape (n_communities, n_communities)
-        if Wt is an object, a weight function to use globally over
+        if ``wt`` is an object, a weight function to use globally over
         the sbm for assigning weights. 1 indicates to produce a binary
-        graph. If Wt is an array-like, a weight function for each of
+        graph. If ``wt`` is an array-like, a weight function for each of
         the edge communities. Wt[i, j] corresponds to the weight function
         between communities i and j. If the entry is a function, should
         accept an argument for size. An entry of Wt[i, j] = 1 will produce a
         binary subgraph over the i, j community.
 
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
-        if Wt is an object, Wtargs corresponds to the trailing arguments
-        to pass to the weight function. If Wt is an array-like, Wtargs[i, j]
-        corresponds to trailing arguments to pass to Wt[i, j].
+        if ``wt`` is an object, ``wtargs`` corresponds to the trailing arguments
+        to pass to the weight function. If Wt is an array-like, ``wtargs[i, j]``
+        corresponds to trailing arguments to pass to ``wt[i, j]``.
 
     dc: function or array-like, shape (n_vertices) or (n_communities), optional
-        `dc` is used to generate a degree-corrected stochastic block model [1] in
+        ``dc`` is used to generate a degree-corrected stochastic block model [1] in
         which each node in the graph has a parameter to specify its expected degree
         relative to other nodes within its community.
 
@@ -369,9 +369,9 @@ def sbm(
             vertex is the node's relative expected degree within its community.
 
     dc_kws: dictionary or array-like, shape (n_communities), optional
-        Ignored if `dc` is none or array of scalar.
-        If `dc` is a function, `dc_kws` corresponds to its named arguments.
-        If `dc` is an array-like of functions, `dc_kws` should be an array-like, shape
+        Ignored if ``dc`` is none or array of scalar.
+        If ``dc`` is a function, ``dc_kws`` corresponds to its named arguments.
+        If ``dc`` is an array-like of functions, ``dc_kws`` should be an array-like, shape
         (n_communities), of dictionary. Each dictionary is the named arguments
         for the corresponding function for that community.
         If not specified, in either case all functions will assume their default
@@ -644,7 +644,7 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
         right latent position from which to generate a P matrix
 
     rescale: boolean, optional (default=False)
-        when rescale is True, will subtract the minimum value in
+        when ``rescale`` is True, will subtract the minimum value in
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped
