@@ -90,6 +90,7 @@ class SpectralVertexNominator(BaseVN):
         self._attr_labels = y[:, 1]
         self.seed = y[:, 0]
         self.unique_att = np.unique(self._attr_labels)
+        self.distance_matrix = self._pairwise_dist(y)
 
     def _knn_simple_predict(self):
         """
@@ -106,7 +107,7 @@ class SpectralVertexNominator(BaseVN):
             sorted_dists[:, i] = self.distance_matrix[ordered[:, i], i].reshape(-1)
         return ordered, sorted_dists, np.zeros(1)
 
-    def _knn_weighted_predict(self, out, k=5):
+    def _knn_weighted_predict(self, k=5):
         """
         Nominate vertex based on distance from the k nearest neighbors of each class.
         The default decision function is sum(dist to each neighbor of class c) / (number_such_neighbors)^2.
@@ -115,7 +116,7 @@ class SpectralVertexNominator(BaseVN):
 
         Parameters
         ----------
-        out
+        k : Number of neighbors to consider in nearest neighbors classification
 
         Returns
         -------
@@ -125,47 +126,35 @@ class SpectralVertexNominator(BaseVN):
         sorted_dists = self.distance_matrix[np.arange(ordered.shape[0]), ordered.T].T
         atts = self._attr_labels[
             ordered[:, :k]
-        ]  # label for the nearest 5 seeds for each vertex
+        ]  # label for the nearest k seeds for each vertex
         pred_weights = np.empty(
             (atts.shape[0], self.unique_att.shape[0])
-        )  # use this array for bin counts as well to save space
+        )
         for i in range(self.unique_att.shape[0]):
-            pred_weights[:, i] = np.count_nonzero(atts == self.unique_att[i], axis=1)
             inds = np.argwhere(atts == self.unique_att[i])
             place_hold = np.empty(atts.shape)
             place_hold[:] = np.NaN
             place_hold[inds[:, 0], inds[:, 1]] = sorted_dists[inds[:, 0], inds[:, 1]]
-            pred_weights[:, i] = np.nansum(place_hold, axis=1) / np.power(
-                pred_weights[:, i], 2
+
+            # weighting function, outer inverse for consistency (e.g. higher rank has distance metric)
+            pred_weights[:, i] = np.power(np.nansum(np.power(place_hold, -1), axis=1), -1)
+
+        vert_order = np.empty(pred_weights.shape, dtype=np.int)
+        for i in range(pred_weights.shape[1]):
+            pred_weights[np.argwhere(np.isnan(pred_weights[:, i])), i] = np.nanmax(
+                pred_weights[:, i]
             )
-        if out == "best_preds":
-            best_pred_inds = np.nanargmin(pred_weights, axis=1)
-            best_pred_weights = pred_weights[
-                np.arange(pred_weights.shape[0]), best_pred_inds
-            ]
-            vert_order = np.argsort(best_pred_weights, axis=0)
-            att_preds = self.unique_att[best_pred_inds[vert_order]]
-            prediction = np.concatenate(
-                (vert_order.reshape(-1, 1), att_preds.reshape(-1, 1)), axis=1
-            )
-            return prediction, pred_weights[vert_order], self.unique_att
-        elif out == "per_attribute":
-            vert_order = np.empty(pred_weights.shape, dtype=np.int)
-            for i in range(pred_weights.shape[1]):
-                pred_weights[np.argwhere(np.isnan(pred_weights[:, i])), i] = np.nanmax(
-                    pred_weights[:, i]
-                )
-                vert_order[:, i] = np.argsort(pred_weights[:, i])
-            return vert_order, pred_weights[vert_order], self.unique_att
+            vert_order[:, i] = np.argsort(pred_weights[:, i])
+        return vert_order, pred_weights[vert_order], self.unique_att
 
     def predict(self, out="best_preds"):
         if self.mode == "single_vertex":
             return self._knn_simple_predict()
         elif self.mode == "knn_weighted":
-            return self._knn_weighted_predict(out)
+            return self._knn_weighted_predict()
         else:
             raise KeyError("no such mode " + str(self.mode))
 
-    def fit_transform(self, X, y=None):
+    def fit_transform(self, X, y):
         self.fit(X, y)
         return self.predict()

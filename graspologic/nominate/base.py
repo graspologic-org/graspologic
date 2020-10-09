@@ -18,5 +18,5 @@ class BaseVN(BaseEstimator):
         return None
 
     @abstractmethod
-    def fit_transform(self, X, y=None):
+    def fit_transform(self, X, y):
         return None
