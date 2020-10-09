@@ -28,8 +28,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
     ----------
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2

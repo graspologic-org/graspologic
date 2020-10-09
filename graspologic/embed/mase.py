@@ -31,8 +31,8 @@ class MultipleASE(BaseEmbedMulti):
     ----------
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
@@ -90,8 +90,8 @@ class MultipleASE(BaseEmbedMulti):
 
     Notes
     -----
-    When an input graph is directed, `n_components` of `latent_left_` may not be equal
-    to `n_components` of `latent_right_`.
+    When an input graph is directed, ``n_components`` of ``latent_left_`` may not be equal
+    to ``n_components`` of ``latent_right_``.
     """
 
     def __init__(
