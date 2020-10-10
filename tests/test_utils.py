@@ -1,7 +1,10 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import unittest
 import numpy as np
 import networkx as nx
-from graspy.utils import utils as gus
+from graspologic.utils import utils as gus
 from math import sqrt
 from numpy.testing import assert_equal
 

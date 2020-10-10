@@ -1,10 +1,13 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import numpy as np
 import pytest
 from numpy.testing import assert_equal
 
-from graspy.cluster import GaussianCluster
-from graspy.pipeline import mug2vec
-from graspy.simulations import sbm
+from graspologic.cluster import GaussianCluster
+from graspologic.pipeline import mug2vec
+from graspologic.simulations import sbm
 
 
 def generate_data():

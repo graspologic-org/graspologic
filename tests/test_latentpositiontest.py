@@ -1,12 +1,10 @@
-# Ben Pedigo
-# bpedigo [at] jhu.edu
-# 10.18.2018
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
 
 import unittest
 import numpy as np
-from graspy.inference import LatentPositionTest
-from graspy.simulations import er_np, sbm
-from graspy.utils import *
+from graspologic.inference import LatentPositionTest
+from graspologic.simulations import er_np, sbm
 
 
 class TestLatentPositionTest(unittest.TestCase):

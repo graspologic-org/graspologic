@@ -2,7 +2,7 @@
 Simulations
 ***********
 
-.. currentmodule:: graspy.simulations
+.. currentmodule:: graspologic.simulations
 
 
 
