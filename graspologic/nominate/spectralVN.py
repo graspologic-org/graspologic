@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Union
+from typing import Union, Tuple
 from abc import abstractmethod
 from .base import BaseVN
 from ..embed import BaseEmbed
@@ -12,6 +12,7 @@ from scipy.stats import mode
 
 
 # STATIC METHODS #
+
 
 def _make_2d(cls, arr):
     arr = np.array(arr, dtype=np.int)
@@ -50,7 +51,7 @@ class SpectralVertexNominator(BaseVN):
         self.mode = mode
         self.distance_matrix = None
 
-    def _pairwise_dist(self, y: np.ndarray, metric="euclidean") -> np.ndarray:
+    def _pairwise_dist(self, y: np.ndarray, metric: str = "euclidean") -> np.ndarray:
         # wrapper for scipy's cdist function
         # y should give indexes
         y_vec = self.embedding[y[:, 0].astype(np.int)]
@@ -71,7 +72,7 @@ class SpectralVertexNominator(BaseVN):
         if self.embedding is None:
             self.embedding = self.embeder.fit_transform(X)
 
-    def _knn_predict(self, k=5, neighbor_function='basic'):
+    def _knn_predict(self, k: np.uint16 = 5, neighbor_function: str = "sum_inverse_distance") -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominate vertex based on distance from the k nearest neighbors of each class.
         The default decision function is sum(dist to each neighbor of class c) / (number_such_neighbors)^2.
@@ -81,9 +82,18 @@ class SpectralVertexNominator(BaseVN):
         Parameters
         ----------
         k : Number of neighbors to consider in nearest neighbors classification
-
+        neighbor_function : method for determining class membership based on neighbors
+            options
+            ------
+            sum_inverse_distance :  Simplest weighted knn method, works well in the VN context because
+                                    it generates a natural ordering for each vertex on each attribute represented
+                                    in the seed set. For each attribute, nomination is ordered by
+                                    sum of the inverse of distances to the k nearest neighbors belonging
+                                    to that attribute.
         Returns
         -------
+        An tuple of two np.ndarrays, each of shape(number_vertices, number_attributes_in_seed).
+        The array at index 0 is the nomination list, for each attribute column, the rows are indexes
 
         """
         num_att = self.unique_att.shape[0]
@@ -93,18 +103,19 @@ class SpectralVertexNominator(BaseVN):
         atts = self._attr_labels[
             ordered[:, :k]
         ]  # label for the nearest k seeds for each vertex
-        pred_weights = np.empty(
-            (num_att, atts.shape[0])
-        )
-        # large buffer to preform matrix operations.
-        nd_buffer = np.tile(self.unique_att, (k, atts.shape[0], 1)).T.astype(np.float32)
-        inds = np.argwhere(atts[np.newaxis, :, :] == nd_buffer)
 
-        nd_buffer[:] = np.NaN  # nans are a neat way to operate on attributes individually
-        nd_buffer[inds[:, 0], inds[:, 1], inds[:, 2]] = sorted_dists[inds[:, 1], inds[:, 2]]
+        # could avoid mem penalty by also broadcasting here, but is slightly slower and reduces code clarity
+        nd_buffer = np.tile(atts, (k, 1, 1)).astype(np.float32)
+        inds = np.argwhere(nd_buffer == self.unique_att[:, np.newaxis, np.newaxis])
+
+        # nans are a neat way to operate on attributes individually
+        nd_buffer[:] = np.NaN
+        nd_buffer[inds[:, 0], inds[:, 1], inds[:, 2]] = sorted_dists[
+            inds[:, 1], inds[:, 2]
+        ]
 
         # weighting function, outer inverse for consistency (e.g. higher rank has smaller distance metric)
-        if neighbor_function == 'sum_inverse_distance':
+        if neighbor_function == "sum_inverse_distance":
             pred_weights = np.power(np.nansum(np.power(nd_buffer, -1), axis=2), -1).T
         else:
             raise KeyError
@@ -113,9 +124,9 @@ class SpectralVertexNominator(BaseVN):
         pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.nanmax(pred_weights)
         vert_order = np.argsort(pred_weights, axis=0)
 
-        return vert_order, pred_weights[vert_order], self.unique_att
+        return vert_order, pred_weights[vert_order]
 
-    def fit(self, X, y):
+    def fit(self, X: np.ndarray, y: np.ndarray):
         """
         Constructs the embedding if needed.
         Parameters
@@ -136,12 +147,12 @@ class SpectralVertexNominator(BaseVN):
         self.unique_att = np.unique(self._attr_labels)
         self.distance_matrix = self._pairwise_dist(y)
 
-    def predict(self, out="best_preds"):
-        if self.mode == "knn":
+    def predict(self, out: str = "best_preds") -> Tuple[np.ndarray, np.ndarray]:
+        if self.mode == "knn_weighted":
             return self._knn_predict()
         else:
             raise KeyError("No such mode " + str(self.mode))
 
-    def fit_transform(self, X, y):
+    def fit_transform(self, X: np.ndarray, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         self.fit(X, y)
         return self.predict()
