@@ -52,8 +52,8 @@ class mug2vec(BaseEstimator):
 
     omnibus_components, cmds_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If ``None``, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
 
     omnibus_n_elbows, cmds_n_elbows: int, optional, default: 2
@@ -63,11 +63,11 @@ class mug2vec(BaseEstimator):
     Attributes
     ----------
     omnibus_n_components_ : int
-        Equals the parameter n_components. If input n_components was None,
+        Equals the parameter ``n_components``. If input ``n_components`` was ``None``,
         then equals the optimal embedding dimension.
 
     cmds_n_components_ : int
-        Equals the parameter n_components. If input n_components was None,
+        Equals the parameter ``n_components``. If input ``n_components`` was ``None``,
         then equals the optimal embedding dimension.
 
     embeddings_ : array, shape (n_components, n_features)
