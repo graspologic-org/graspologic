@@ -25,7 +25,7 @@ def _check_common_inputs(min_components, max_components, cluster_kws, embed_kws)
     elif max_components < min_components:
         raise ValueError("max_components must be >= min_components")
 
-    if embed_kws:
+    if embed_kws is not None:
         if not isinstance(embed_kws, dict):
             raise TypeError("embed_kws must be a dict")
 
@@ -110,11 +110,11 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             msg += "{GMM, Kmeans, Spherical-KMeans}"
             raise ValueError(msg)
 
-        if delta_criter:
+        if delta_criter is not None:
             if delta_criter <= 0:
                 raise ValueError("delta_criter must be positive")
 
-        if likelihood_ratio:
+        if likelihood_ratio is not None:
             if likelihood_ratio <= 0 or likelihood_ratio >= 1:
                 raise ValueError("likelihood_ratio must be in (0,1)")
 
@@ -162,9 +162,11 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             if no level specified; otherwise, shape (n_samples,)
         """
         X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
-        if level:
-            if not isinstance(level, int) or level < 1:
-                raise TypeError("level must be a positive int")
+        if level is not None:
+            if not isinstance(level, int):
+                raise TypeError("level must be an int")
+            elif level < 1:
+                raise ValueError("level must be positive")
 
         self.X = X
         self.labels = np.zeros((len(X), 1), dtype=int)
@@ -183,7 +185,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
                 break
 
         labels = self._unique_labels(self.labels)
-        if level:
+        if level is not None:
             if level <= labels.shape[1]:
                 labels = labels[:, level - 1]
             else:
@@ -327,7 +329,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         labels = self._predict_labels(X)
         labels = self._unique_labels(labels)
 
-        if level:
+        if level is not None:
             if level <= labels.shape[1]:
                 labels = labels[:, level - 1]
             else:
