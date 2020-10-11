@@ -11,7 +11,7 @@ class OrthogonalProcrustes(BaseAlign):
     """
     Computes the matrix solution of the classical orthogonal Procrustes [1]_
     problem, which is that given two matrices `X` and `Y` of equal shape
-    (n, d), find an orthogonal matrix `self.Q_` that most closely maps `X` to
+    (n, d), find an orthogonal matrix ``Q_`` that most closely maps `X` to
     `Y`. Subsequently, uses that matrix to transform either the original `X`,
     or a different dataset in the same space.
 
@@ -19,8 +19,8 @@ class OrthogonalProcrustes(BaseAlign):
     :class:`~graspologic.align.SeedlessProcrustes`, not only requires that the
     datasets have the same number of entries, but also that there is some
     correspondence between the entries. In graph embeddings, this usually
-    corresponds to the assumption that the vertex i in graph X has the same
-    latent position as the vertex i in graph Y.
+    corresponds to the assumption that the vertex :math:`i` in graph :math:`X` has the same
+    latent position as the vertex :math:`i` in graph :math:`Y`.
 
     Attributes
     ----------
@@ -47,7 +47,7 @@ class OrthogonalProcrustes(BaseAlign):
     details, including the proof of the closed-form solution see [1]_.
 
     Implementation-wise, this class is a wrapper of the
-    `scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
+    :func:`scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
     described in find the optimal solution algorithm [2]_.
 
     """
