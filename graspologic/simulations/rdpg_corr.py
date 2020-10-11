@@ -13,7 +13,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then
     :math:`P = XY^T`. These operations correspond to the dot products between a set of
     latent positions, so each row in X or Y represents the latent positions in
-    :math:`\mathbb{R}^{d}` for a single vertex in the random graph.  
+    :math:`\mathbb{R}^{d}` for a single vertex in the random graph.
     Note that this function may also rescale or clip the resulting P
     matrix to get probabilities between 0 and 1, or remove loops.
     A binary random graph is then sampled from the P matrix described

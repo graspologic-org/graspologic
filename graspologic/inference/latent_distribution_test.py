@@ -51,7 +51,7 @@ class LatentDistributionTest(BaseInference):
         :func:`sklearn.metrics.pairwise_distances` or to
         :func:`sklearn.metrics.pairwise.pairwise_kernels`.
         If a string, then it should be either one of the keys in
-        :py:attr:`sklearn.metrics.pairwise.PAIRED_DISTANCES` one of the keys in 
+        :py:attr:`sklearn.metrics.pairwise.PAIRED_DISTANCES` one of the keys in
         :py:attr:`sklearn.metrics.pairwise.PAIRWISE_KERNEL_FUNCTIONS`, or "gaussian",
         which will use a gaussian kernel with an adaptively selected bandwidth.
         It is recommended to use kernels (e.g. "gaussian") with kernel-based
