@@ -29,14 +29,14 @@ class GraphMatch(BaseEstimator):
 
     n_init : int, positive (default = 1)
         Number of random initializations of the starting permutation matrix that
-        the FAQ algorithm will undergo. n_init automatically set to 1 if
-        init_method = 'barycenter'
+        the FAQ algorithm will undergo. ``n_init`` automatically set to 1 if
+        ``init_method`` = 'barycenter'
 
     init_method : string (default = 'barycenter')
         The initial position chosen
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
-        :math:`J=1*1^T /n` , i.e the barycenter of the feasible region
+        :math:`J=1 \times 1^T /n` , i.e the barycenter of the feasible region
 
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random doubly
         stochastic matrix
@@ -69,7 +69,7 @@ class GraphMatch(BaseEstimator):
         The objective function value of for the optimal permutation found.
 
     n_iter_ : int
-        Number of Frank-Wolfe iterations run. If `n_init` > 1, `n_iter_` reflects the number of
+        Number of Frank-Wolfe iterations run. If ``n_init > 1``, ``n_iter_`` reflects the number of
         iterations performed at the initialization returned.
 
 
