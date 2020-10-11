@@ -58,6 +58,7 @@ setup(
         "matplotlib>=3.0.0,<=3.3.0",
         "hyppo>=0.1.3",
         "POT>=0.7.0",
+        "anytree>=2.8.0",
     ],
     extras_require={
         "dev": [
