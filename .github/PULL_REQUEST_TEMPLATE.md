@@ -23,9 +23,9 @@ is merged. See https://github.com/blog/1506-closing-issues-via-pull-requests
 - [ ] All public methods have informative docstrings with sample usage presented as doctests when appropriate.
 - [ ] It has at least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
 - [ ] If your feature is complex enough that a doctest is insufficient to fully showcase the utility, consider creating a Jupyter notebook to illustrate use instead.
-- [ ] All functions and classes have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
+- [ ] All functions and classes have unit tests. Required tests include type checking, bounds validation, correct computation/outputs, and all conceivable edge cases.
 - [ ] All functions and classes has been rigorously typed with Python 3.6+ 
-  [`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running `mypy ./graspy`
+  [`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running `mypy ./graspologic`
 - [ ] All code should be automatically formatted by `black`. You can run this formatter by calling:
   ```bash
   pip install black
