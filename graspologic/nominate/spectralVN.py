@@ -69,6 +69,16 @@ class SpectralVertexNominator(BaseVN):
         If False, future calls to fit will overwrite an existing embedding. Must be True
         if an embedding is provided.
 
+    References
+    ----------
+    Fishkind, D. E.; Lyzinski, V.; Pao, H.; Chen, L.; Priebe, C. E. Vertex nomination schemes for membership prediction.
+    Ann. Appl. Stat. 9 2015. https://projecteuclid.org/euclid.aoas/1446488749
+
+    Jordan Yoder, Li Chen, Henry Pao, Eric Bridgeford, Keith Levin, Donniell E. Fishkind, Carey Priebe, Vince Lyzinski,
+    Vertex nomination: The canonical sampling and the extended spectral nomination schemes,
+    Computational Statistics & Data Analysis, Volume 145, 2020.
+    http://www.sciencedirect.com/science/article/pii/S0167947320300074
+
     """
 
     def __init__(
@@ -130,28 +140,20 @@ class SpectralVertexNominator(BaseVN):
 
         # Embed graph if embedding not provided
         if self.embedding is None:
-            self.embedding = self.embeder.fit_transform(X)
+            if issubclass(type(self.embeder), BaseEmbed):
+                self.embedding = self.embeder.fit_transform(X)
+            else:
+                raise TypeError("No embeder available")
 
-    def _predict(
-        self, k: int = 5, neighbor_function: str = "sum_inverse_distance"
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    def _predict(self, k: int = 5) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Nominate vertex based on distance from the k nearest neighbors of each class.
+        Nominate vertex based on attribute specific distance from the k nearest neighbors.
 
         Parameters
         ----------
         k : int, optional (default = 5)
-            Number of neighbors to consider in nearest neighbors classification
-        neighbor_function : str, optional (default = "sum_inverse_distance")
-            method for determining class membership based on neighbors
-            options
-            ------
-            sum_inverse_dist :      Simplest weighted knn method, works well in the VN context because
-                                    it generates a natural ordering for each vertex on each attribute represented
-                                    in the seed set. For each attribute, nomination is ordered by
-                                    sum of the inverse of distances to the k nearest neighbors belonging
-                                    to that attribute. Degenerates to simple distance based ranking when seed is
-                                    unattributed and k is equivalent to the number of seeds.
+            Number of neighbors to consider in nearest neighbors distance weighting.
+
         Returns
         -------
         An tuple of two np.ndarrays, each of shape(number_vertices, number_attributes_in_seed).
@@ -180,10 +182,7 @@ class SpectralVertexNominator(BaseVN):
         # weighting function. Outer inverse for consistency, makes equivalent to simple
         # ranking by distance in unattributed case, and makes higher ranked vertices
         # naturally have lower distance metric value.
-        if neighbor_function == "sum_inverse_distance":
-            pred_weights = np.power(np.nansum(np.power(nd_buffer, -1), axis=2), -1).T
-        else:
-            raise NotImplementedError("Specified neighbor function not implemented")
+        pred_weights = np.power(np.nansum(np.power(nd_buffer, -1), axis=2), -1).T
 
         nan_inds = np.argwhere(np.isnan(pred_weights))
         pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.inf
@@ -198,7 +197,8 @@ class SpectralVertexNominator(BaseVN):
         """
         Nominate vertex based on distance from the k nearest neighbors of each class,
         or if seed is unattributed, nominates vertices for each seed vertex.
-        Wrapper for private method _predict.
+        Wrapper for private method _predict. Methodology is distance based
+        ranking.
 
         Parameters
         ----------
