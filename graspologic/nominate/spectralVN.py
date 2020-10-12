@@ -9,20 +9,6 @@ import numpy as np
 from scipy.spatial import distance
 
 
-# STATIC METHODS #
-def _make_2d(arr: np.ndarray):
-    # ensures arr is two or less dimensions.
-    # if 1d, adds unique at each index on
-    # the second dimension.
-    arr = np.array(arr, dtype=np.int)
-    if np.ndim(arr) > 2 or arr.shape[1] > 2:
-        raise IndexError("Argument must have shape (n) or (n, 1) or (n, 2).")
-    elif np.ndim(arr) == 1 or arr.shape[1] == 1:
-        arr = arr.reshape(-1, 2)
-        arr = np.concatenate((arr, np.arange(arr.shape[0])), axis=1)
-    return arr
-
-
 class SpectralVertexNominator(BaseVN):
     """
     Class for spectral vertex nomination on a single graph.
@@ -59,10 +45,17 @@ class SpectralVertexNominator(BaseVN):
         which embedding method to use, which may be either
         "ASE" for Adjacency Spectral Embedding or
         "LSE" for Laplacian Spectral Embedding.
+    persistent : bool, optional (default = True)
+        If False, future calls to fit will overwrite an existing embedding. Must be True
+        if an embedding is provided.
 
 
     Attributes
     ----------
+    embedding : np.ndarray
+        The spectral embedding of the graph spectral nomination will be preformed on.
+    embeder : BaseEmbed
+        The embed object to be used to compute the embedding.
     attr_labels : np.ndarray
         The attributes of the vertices in the seed (parameter 'y' for fit).
         Shape is (number_seed_vertices)
@@ -72,15 +65,21 @@ class SpectralVertexNominator(BaseVN):
         The euclidean distance from each seed vertex to each vertex.
         Shape (number_vertices, number_unique_attributes) if attributed
         or Shape (number_vertices, number_seed_vertices) if unattributed.
+    persistent : bool
+        If False, future calls to fit will overwrite an existing embedding. Must be True
+        if an embedding is provided.
 
     """
 
     def __init__(
-        self, embedding: np.ndarray = None, embeder: Union[str, BaseEmbed] = "ASE",
+        self,
+        embedding: np.ndarray = None,
+        embeder: Union[str, BaseEmbed] = "ASE",
+        persistent: bool = True,
     ):
         super().__init__(multigraph=False)
         self.embedding = embedding
-        if self.embedding is None:
+        if self.embedding is None or not persistent:
             if issubclass(type(embeder), BaseEmbed):
                 self.embeder = embeder
             elif embeder == "ASE":
@@ -89,9 +88,27 @@ class SpectralVertexNominator(BaseVN):
                 self.embeder = lse()
             else:
                 raise TypeError
+        elif np.ndim(embedding) != 2:
+            raise IndexError("embedding must have dimension 2")
+        self.persistent = persistent
         self.attr_labels = None
         self.unique_att = None
         self.distance_matrix = None
+
+    @staticmethod
+    def _make_2d(arr: np.ndarray):
+        # ensures arr is two or less dimensions.
+        # if 1d, adds unique at each index on
+        # the second dimension.
+        if not np.issubdtype(arr.dtype, np.integer):
+            raise TypeError("Argument must be of type int")
+        arr = np.array(arr, dtype=np.int)
+        if np.ndim(arr) > 2 or (arr.ndim == 2 and arr.shape[1] > 2):
+            raise IndexError("Argument must have shape (n) or (n, 1) or (n, 2).")
+        elif np.ndim(arr) == 1 or arr.shape[1] == 1:
+            arr = arr.reshape(-1, 1)
+            arr = np.concatenate((arr, np.arange(arr.shape[0]).reshape(-1, 1)), axis=1)
+        return arr
 
     def _pairwise_dist(self, y: np.ndarray, metric: str = "euclidean") -> np.ndarray:
         # wrapper for scipy's cdist function
@@ -101,11 +118,13 @@ class SpectralVertexNominator(BaseVN):
         return dist_mat
 
     def _embed(self, X: np.ndarray):
-        if not self.multigraph and len(X.shape) != 2:
-            if len(X.shape) == 3 and X.shape[0] <= 1:
-                X = X.reshape(X.shape[1], X.shape[2])
-            else:
+        if not self.multigraph:
+            if not np.issubdtype(X.dtype, np.number):
+                raise TypeError("Adjacency matrix should have numeric type")
+            if np.ndim(X) != 2:
                 raise IndexError("Argument must have dim 2")
+            if X.shape[0] != X.shape[1]:
+                raise IndexError("Adjacency Matrix should be square.")
         else:
             raise NotImplementedError("Multigraph SVN not implemented")
 
@@ -142,11 +161,12 @@ class SpectralVertexNominator(BaseVN):
         distance metric value between vertex i and attribute j.
 
         """
+        num_unique = self.unique_att.shape[0]
         ordered = self.distance_matrix.argsort(axis=1)
         sorted_dists = self.distance_matrix[np.arange(ordered.shape[0]), ordered.T].T
-        nd_buffer = np.tile(self.attr_labels[ordered[:, :k]], (k, 1, 1)).astype(
-            np.float64
-        )
+        nd_buffer = np.tile(
+            self.attr_labels[ordered[:, :k]], (num_unique, 1, 1)
+        ).astype(np.float64)
 
         # comparison taking place in 3-dim view, coordinates produced are therefore 3D
         inds = np.argwhere(nd_buffer == self.unique_att[:, np.newaxis, np.newaxis])
@@ -169,9 +189,12 @@ class SpectralVertexNominator(BaseVN):
         pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.inf
         vert_order = np.argsort(pred_weights, axis=0)
 
-        return vert_order, pred_weights[vert_order]
+        inds = np.tile(self.unique_att, (1, vert_order.shape[0])).T
+        inds = np.concatenate((vert_order.reshape(-1, 1), inds), axis=1)
+        pred_weights = pred_weights[inds[:, 0], inds[:, 1]]
+        return vert_order, pred_weights.reshape(vert_order.shape)
 
-    def predict(self, k=5):
+    def predict(self, k: int = 5):
         """
         Nominate vertex based on distance from the k nearest neighbors of each class,
         or if seed is unattributed, nominates vertices for each seed vertex.
@@ -189,6 +212,10 @@ class SpectralVertexNominator(BaseVN):
         rows of each column is a list of vertex indexes from the original adjacency matrix in order degree of
         match.
         """
+        if type(k) is not int:
+            raise TypeError("k must be an integer")
+        elif k <= 0:
+            raise ValueError("k must be greater than 0")
         if self.unique_att.shape[0] == self.attr_labels.shape[0]:
             # seed is not attributed
             return self._predict(k=1)
@@ -211,8 +238,8 @@ class SpectralVertexNominator(BaseVN):
         """
         # ensure y has correct shape. If unattributed (1d)
         # add unique attribute to each seed vertex.
-        y = _make_2d(y)
-        if self.embedding is None:
+        y = self._make_2d(y)
+        if not self.persistent or self.embedding is None:
             if X is None:
                 raise ValueError(
                     "Adjacency matrix must be provided if embedding is None."
@@ -225,7 +252,7 @@ class SpectralVertexNominator(BaseVN):
         self.distance_matrix = self._pairwise_dist(y)
 
     def fit_transform(
-        self, X: np.ndarray, y: np.ndarray, k=5
+        self, X: np.ndarray, y: np.ndarray, k: int = 5
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Calls this class' fit and then predict methods.
