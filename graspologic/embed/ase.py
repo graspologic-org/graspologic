@@ -197,22 +197,25 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # checks
         check_is_fitted(self, "is_fitted_")
+        directed = self.latent_right_ is not None
         latent_rows, _ = self.latent_left_.shape
-        if isinstance(y, tuple):
-            _, y_cols = y[0].shape
-        elif isinstance(y, np.ndarray):
-            _, y_cols = y.shape
-        else:
-            raise TypeError("the out-of-sample vertex must be a numpy array or tuple.")
-        if latent_rows != y_cols:
-            raise ValueError("out-of-sample input must be shape (n_oos_vertices, n_vertices)")
 
         # workhorse code
-        if self.latent_right_ is None:  # undirected
+        if not directed:
             if not isinstance(y, np.ndarray):
                 raise TypeError("Undirected graphs require array input")
+            _, y_cols = y.shape
+            if latent_rows != y_cols:
+                raise ValueError(
+                    "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
+                )
             return y @ self.pinv_left_
-        else:  # directed
+        elif directed:
             if not isinstance(y, tuple):
                 raise TypeError("Directed graphs require a tuple (y_left, y_right)")
+            _, y_cols = y[0].shape
+            if latent_rows != y_cols:
+                raise ValueError(
+                    "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
+                )
             return y[0] @ self.pinv_left_, y[1] @ self.pinv_right_
