@@ -6,6 +6,7 @@ import numpy as np
 
 from sklearn.utils.estimator_checks import check_estimator
 
-# check_estimator(graspologic.embed.AdjacencySpectralEmbed)  # TODO: figure out a better solution here
+# TODO: figure out a better solution here
+# check_estimator(graspologic.embed.AdjacencySpectralEmbed)  # with current implementation of predict, this class is no longer sklearn compliant
 check_estimator(graspologic.embed.LaplacianSpectralEmbed)
 check_estimator(graspologic.embed.ClassicalMDS)
