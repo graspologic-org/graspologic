@@ -743,44 +743,31 @@ def remove_vertices(graph, indices, return_vertices=False):
                       [2, 4, 0, 7],
                       [3, 5, 7, 0]])
     >>> remove_vertices(B, 0, return_vertices=True)
-    (array([[0., 4., 5.],
-            [4., 0., 7.],
-            [5., 7., 0.]]),
-    array([[1., 2., 3.]]))
+    (array([[0, 4, 5],
+            [4, 0, 7],
+            [5, 7, 0]]),
+    array([1, 2, 3])
      >>> remove_vertices(B, [0, -1], return_vertices=True)
-    (array([[0., 4.],
-            [4., 0.]]),
-    array([[1., 2.],
-            [5., 7.]]))
+    (array([[0, 4],
+            [4, 0]]),
+    array([[1, 2],
+            [5, 7]]))
     """
     # TODO: fix examples
     # TODO: add support for directed graphs
     directed = not is_almost_symmetric(graph)
     graph = import_graph(graph)
-    if isinstance(indices, int):
-        indices = [indices]
 
     # truncate graph
-    A = graph.copy()
-    A = np.delete(np.delete(A, indices, 0), indices, 1)
+    A = np.delete(np.delete(graph, indices, 0), indices, 1)
 
     # grab relevant vertices
     if return_vertices:
-        vertices = []
-        vertices_right = []
-        # TODO: probably can implement this without a for-loop
-        for i in indices:
-            v = np.delete(graph[:, i], indices)
-            vertices.append(v)
-            if directed:
-                v2 = np.delete(graph[i, :], indices)
-                vertices_right.append(v2)
-
-        # make sure output looks right
-        vertices = np.squeeze(np.array(vertices))
+        rows = np.delete(graph, indices, axis=0)
+        vertices = rows[:, indices].T
         if directed:
-            vertices_right = np.squeeze(np.array(vertices_right))
-            return A, (np.array(vertices), np.array(vertices_right))
-        return A, np.array(vertices)
-
+            cols = np.delete(graph, indices, axis=1)
+            vertices_right = cols[indices, :]
+            return A, (vertices, vertices_right)
+        return A, vertices
     return A
