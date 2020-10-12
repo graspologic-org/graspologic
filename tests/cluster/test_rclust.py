@@ -81,27 +81,35 @@ def test_predict_without_fit():
         rc.predict(X)
 
 
-def test_two_class():
+def test_hierarchical_four_class():
     """
-    Easily separable two gaussian problem.
+    Easily separable hierarchical four-gaussian problem.
     """
     np.random.seed(1)
 
     n = 100
     d = 3
 
-    X1 = np.random.normal(2, 0.5, size=(n, d))
-    X2 = np.random.normal(-2, 0.5, size=(n, d))
-    X = np.vstack((X1, X2))
-    y = np.repeat([0, 1], n)
+    X11 = np.random.normal(-5, 0.1, size=(n, d))
+    X21 = np.random.normal(-2, 0.1, size=(n, d))
+    X12 = np.random.normal(2, 0.1, size=(n, d))
+    X22 = np.random.normal(5, 0.1, size=(n, d))
+    X = np.vstack((X11, X21, X12, X22))
+    y_lvl1 = np.repeat([0, 1], 2 * n)
+    y_lvl2 = np.repeat([0, 1, 2, 3], n)
 
-    rc = RecursiveCluster(max_components=5)
-    rc.fit(X)
+    rc = RecursiveCluster(max_components=2)
+    pred = rc.fit_predict(X)
 
-    # Assert that the two cluster model is the best at level 1
-    assert_equal(rc.k_, 2)
+    # Assert that the 2-cluster model is the best at level 1
+    assert_equal(np.max(pred[:, 0]) + 1, 2)
+    # Assert that the 4-cluster model is the best at level 1
+    assert_equal(np.max(pred[:, 1]) + 1, 4)
 
-    pred = rc.predictions[:, 0]
-    ari = adjusted_rand_score(y, pred)
     # Assert that we get perfect clustering at level 1
-    assert_allclose(ari, 1)
+    ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
+    assert_allclose(ari_lvl1, 1)
+
+    # Assert that we get perfect clustering at level 2
+    ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
+    assert_allclose(ari_lvl2, 1)
