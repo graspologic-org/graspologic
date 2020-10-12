@@ -711,18 +711,19 @@ def remove_vertices(graph, indices, return_vertices=False):
     Parameters
     ----------
     graph : np.ndarray
-        Adjacency matrix, undirected
+        Adjacency matrix
     indices : int, list
         Index/indices of the vertex/vertices to be removed.
     return_vertex : bool, optional
-        Whether to return the tuple (A, v),
-        where A is the smaller adjacency matrix, by default False
+        Whether to return the tuple (A, V),
+        where A is the truncated adjacency matrix,
+        V is an array of the removed vertices, by default False
 
     Returns
     -------
     np.ndarray, tuple
         If np.ndarray, returns a copy of `graph` without the vertex in position i.
-        If tuple, returns (A, v), where A is the truncated graph and v is the vertex.
+        If tuple, returns (A, V), where A is the truncated graph and V is the array of removed vertices without edges to each other.
         If graph is directed, v is a tuple with input and output edges.
 
     Examples
@@ -731,30 +732,28 @@ def remove_vertices(graph, indices, return_vertices=False):
                       [3, 0, 5],
                       [6, 7, 0]])
     >>> remove_vertices(A, 0)
-    array([[0, 5],
-           [7, 0]])
+    array([[0., 5.],
+           [7., 0.]]))
     >>> remove_vertices(A, 0, return_vertices=True)
-    (array([[0, 5],
-            [7, 0]]),
-    (array([3, 6]), array([1, 2])))
+    (array([[0., 5.],
+            [7., 0.]]),
+    (array([3., 6.]), array([1., 2.])))
 
     >>> B = np.array([[0, 1, 2, 3],
                       [1, 0, 4, 5],
                       [2, 4, 0, 7],
                       [3, 5, 7, 0]])
     >>> remove_vertices(B, 0, return_vertices=True)
-    (array([[0, 4, 5],
-            [4, 0, 7],
-            [5, 7, 0]]),
-    array([1, 2, 3])
+    (array([[0., 4., 5.],
+            [4., 0., 7.],
+            [5., 7., 0.]]),
+    array([1., 2., 3.]))
      >>> remove_vertices(B, [0, -1], return_vertices=True)
-    (array([[0, 4],
-            [4, 0]]),
-    array([[1, 2],
-            [5, 7]]))
+    (array([[0., 4.],
+            [4., 0.]]),
+    array([[1., 2.],
+            [5., 7.]]))
     """
-    # TODO: fix examples
-    # TODO: add support for directed graphs
     directed = not is_almost_symmetric(graph)
     graph = import_graph(graph)
 
