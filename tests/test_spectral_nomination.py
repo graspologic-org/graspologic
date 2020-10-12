@@ -1,7 +1,6 @@
 import pytest
 import numpy as np
 from graspologic.embed.ase import AdjacencySpectralEmbed
-from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import sbm
 from graspologic.nominate import SpectralVertexNominator
 
