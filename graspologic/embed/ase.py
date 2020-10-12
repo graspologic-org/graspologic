@@ -205,7 +205,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         else:
             raise TypeError("the out-of-sample vertex must be a numpy array or tuple.")
         if latent_rows != y_cols:
-            raise ValueError("out-of-sample input must be shape (n_oos_vertices, n)")
+            raise ValueError("out-of-sample input must be shape (n_oos_vertices, n_vertices)")
 
         # workhorse code
         if self.latent_right_ is None:  # undirected
