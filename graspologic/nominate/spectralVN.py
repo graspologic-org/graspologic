@@ -14,7 +14,7 @@ class SpectralVertexNominator(BaseVN):
     Class for spectral vertex nomination on a single graph.
 
     Given a graph G=(V,E) and a subset of V called S (the "seed"),
-    Single Graph Vertex Nomination is the problem a ranking all V
+    Single Graph Vertex Nomination is the problem of ranking all V
     in order of relation to members of S.
     Spectral Vertex Nomination solves this problem by embedding G
     into a low dimensional euclidean space using any of the embedding
@@ -151,7 +151,7 @@ class SpectralVertexNominator(BaseVN):
                                     in the seed set. For each attribute, nomination is ordered by
                                     sum of the inverse of distances to the k nearest neighbors belonging
                                     to that attribute. Degenerates to simple distance based ranking when seed is
-                                    unattributed and k is 1.
+                                    unattributed and k is equivalent to the number of seeds.
         Returns
         -------
         An tuple of two np.ndarrays, each of shape(number_vertices, number_attributes_in_seed).
@@ -218,7 +218,7 @@ class SpectralVertexNominator(BaseVN):
             raise ValueError("k must be greater than 0")
         if self.unique_att.shape[0] == self.attr_labels.shape[0]:
             # seed is not attributed
-            return self._predict(k=1)
+            return self._predict(k=self.unique_att.shape[0])
         else:
             # seed is attributed
             return self._predict(k=k)
