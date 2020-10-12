@@ -247,7 +247,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal
     matrix of degrees of each node raised to the -1/2 power, I is the
-    identity matrix, and A xis the adjacency matrix.
+    identity matrix, and A is the adjacency matrix.
 
     R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer*I`.
 
