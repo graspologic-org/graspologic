@@ -197,7 +197,15 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # checks
         check_is_fitted(self, "is_fitted_")
-        # TODO: check for nan values in y
+        latent_rows, _ = self.latent_left_.shape
+        if isinstance(y, tuple):
+            _, y_cols = y[0].shape
+        elif isinstance(y, np.ndarray):
+            _, y_cols = y.shape
+        else:
+            raise TypeError("the out-of-sample vertex must be a numpy array or tuple.")
+        if latent_rows != y_cols:
+            raise ValueError("out-of-sample input must be shape (n_oos_vertices, n)")
 
         # workhorse code
         if self.latent_right_ is None:  # undirected
