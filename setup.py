@@ -46,12 +46,10 @@ setup(
     ],
     packages=find_packages(exclude=["tests", "tests.*", "tests/*"]),
     include_package_data=True,
-    package_data={
-        "version": [os.path.join("graspologic", "version", "version.txt")]
-    },
+    package_data={"version": [os.path.join("graspologic", "version", "version.txt")]},
     install_requires=[
         "networkx>=2.1",
-        "numpy>=1.8.1",
+        "numpy>=1.19.2",
         "scikit-learn>=0.19.1",
         "scipy>=1.4.0",
         "seaborn>=0.9.0",
