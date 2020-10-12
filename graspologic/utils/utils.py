@@ -723,7 +723,8 @@ def remove_vertices(graph, indices, return_vertices=False):
     -------
     np.ndarray, tuple
         If np.ndarray, returns a copy of `graph` without the vertex in position i.
-        If tuple, returns (A, V), where A is the truncated graph and V is the array of removed vertices without edges to each other.
+        If tuple, returns (A, V), where A is the truncated graph
+        and V is the array of removed vertices without edges to each other, where vertices are rows.
         If graph is directed, v is a tuple with input and output edges.
 
     Examples

@@ -197,6 +197,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # checks
         check_is_fitted(self, "is_fitted_")
+        # TODO: check for nan values in y
 
         # workhorse code
         if self.latent_right_ is None:  # undirected
