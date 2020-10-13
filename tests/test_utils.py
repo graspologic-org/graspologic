@@ -466,3 +466,14 @@ class TestRemoveVertices(unittest.TestCase):
         np.testing.assert_array_equal(A, np.array([[0, 14], [18, 0]]))
         np.testing.assert_array_equal(a[0], np.array([[11, 16], [15, 20], [12, 17]]))
         np.testing.assert_array_equal(a[1], np.array([[3, 4], [23, 24], [8, 9]]))
+
+        # with integer index
+        idx = 0
+        A, a = gus.remove_vertices(self.directed, idx, return_vertices=True)
+        np.testing.assert_array_equal(A, gus.remove_vertices(self.directed, idx))
+        self.assertIsInstance(a, tuple)
+        self.assertIsInstance(a[0], np.ndarray)
+        self.assertIsInstance(a[1], np.ndarray)
+        np.testing.assert_array_equal(A, self.directed[1:, 1:])
+        np.testing.assert_array_equal(a[0], np.array([6, 11, 16, 21]))
+        np.testing.assert_array_equal(a[1], np.array())
