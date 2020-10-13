@@ -705,27 +705,27 @@ def fit_plug_in_variance_estimator(X):
 
 def remove_vertices(graph, indices, return_vertices=False):
     """
-    Remove vertices from an adjacency matrix,
-    then return the new adjacency matrix.
+    Remove vertices from an adjacency matrix.
 
     Parameters
     ----------
-    graph : np.ndarray
+    graph: np.ndarray, shape (n, n)
         Adjacency matrix
-    indices : int, list
+    indices: int or list
         Index/indices of the vertex/vertices to be removed.
-    return_vertex : bool, optional
+    return_vertex: bool, optional
         Whether to return the tuple (A, V),
         where A is the truncated adjacency matrix,
         V is an array of the removed vertices, by default False
 
     Returns
     -------
-    np.ndarray, tuple
-        If np.ndarray, returns a copy of `graph` without the vertex in position i.
-        If tuple, returns (A, V), where A is the truncated graph
-        and V is the array of removed vertices without edges to each other, where vertices are rows.
-        If graph is directed, v is a tuple with input and output edges.
+    truncated_graph: np.ndarray, shape (k, k), n>k
+        Copy of `graph` without the nodes given by `indices`.
+
+    vertices: np.ndarray or tuple, shape (n_indices, n) (optional)
+        Array of removed vertices without edges to each other.
+        If directed, return a tuple with input and output edges.
 
     Examples
     --------

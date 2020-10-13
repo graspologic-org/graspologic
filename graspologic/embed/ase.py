@@ -183,10 +183,10 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         Returns
         -------
-        array_like or tuple
+        array_like or tuple, shape (n_oos_vertices, n_components)
             Out-of-sample prediction for the latent position(s) of y.
-            If the original embedding was undirected, input should be an array.
-            If the original embedding was directed, input should be a tuple (y_left, y_right).
+            If undirected, returns array.
+            If directed, returns (y_left, y_right).
 
         References
         ----------
