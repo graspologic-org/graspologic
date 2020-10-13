@@ -5,6 +5,7 @@ import warnings
 from collections import Iterable
 from functools import reduce
 from pathlib import Path
+from typing import List, Union
 
 import networkx as nx
 import numpy as np
@@ -151,7 +152,9 @@ def import_edgelist(
         return out
 
 
-def import_multigraphs(graphs):
+def import_multigraphs(
+    graphs: Union[List[nx.Graph], List[np.ndarray], np.ndarray]
+) -> np.ndarray:
     """
     A function for reading multiple graph and returning the original input data
     type. Ensures all graphs have the same shape.
