@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import unittest
+import pytest
 import numpy as np
 from numpy.random import poisson, normal
 from graspologic.embed.ase import AdjacencySpectralEmbed
@@ -10,6 +11,7 @@ from graspologic.simulations.simulations import er_np, er_nm, sbm
 from graspologic.utils import remove_vertices
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
+from sklearn.base import clone
 
 
 def _kmeans_comparison(data, labels, n_clusters):
@@ -122,6 +124,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             Guwd=sbm(n=n, p=p, directed=True),
             Gwd=sbm(n=n, p=p, wt=wt, wtargs=wtargs, directed=True),
         )
+        self.ase = AdjacencySpectralEmbed(n_components=2)
 
     def test_output_dim(self):
         _test_output_dim(self, AdjacencySpectralEmbed)
@@ -149,8 +152,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase.fit()
 
     def test_predict_runs(self):
-        n_components = 2
-        ase = AdjacencySpectralEmbed(n_components=n_components)
+        ase = clone(self.ase)
         for graph in self.testgraphs.values():
             A, a = remove_vertices(graph, 1, return_vertices=True)
             ase.fit(A)
@@ -163,7 +165,25 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
                 self.assertIsInstance(w[1], np.ndarray)
             elif not directed:
                 self.assertIsInstance(w, np.ndarray)
-                self.assertEquals(np.atleast_2d(w).shape[1], n_components)
+                self.assertEqual(np.atleast_2d(w).shape[1], 2)
+
+    def test_exceptions(self):
+        ase = clone(self.ase)
+
+        with pytest.raises(TypeError):
+            ase.fit(self.testgraphs["Gwd"])
+            ase.predict("9001")
+
+        with pytest.raises(TypeError):
+            Guwd = self.testgraphs["Guwd"]
+            ase.fit(Guwd)
+            ase.predict(np.ones(len(Guwd)))
+
+        with pytest.raises(ValueError):
+            A, a = remove_vertices(self.testgraphs["Gw"], [0, 1], return_vertices=True)
+            a = a.T
+            ase.fit(A)
+            ase.predict(a)
 
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
