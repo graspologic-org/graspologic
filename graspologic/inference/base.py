@@ -72,6 +72,7 @@ class BaseInference(BaseEstimator):
     def fit_predict(self, A1, A2):
         """
         Fits the model and returns the p-value
+
         Parameters
         ----------
         A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
