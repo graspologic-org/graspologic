@@ -1,23 +1,22 @@
 from collections import namedtuple
+from typing import Dict, List, NamedTuple, Optional, Tuple, Union
 
+import networkx as nx
 import numpy as np
 from scipy.special import gamma
 
 from ..embed import MultipleASE, OmnibusEmbed
 from ..utils import import_multigraphs, is_almost_symmetric
 
-AnomalyResult = namedtuple(
-    "AnomalyResult",
-    (
-        "graph_anomaly_indices",
-        "graph_anomaly_dict",
-        "vertex_anomaly_indices",
-        "vertex_anomaly_dict",
-    ),
-)
+
+class AnomalyResult(NamedTuple):
+    graph_anomaly_indices: np.ndarray
+    graph_anomaly_dict: Dict[str, np.ndarray]
+    vertex_anomaly_indices: Dict[int, np.ndarray]
+    vertex_anomaly_dict: Dict[str, np.ndarray]
 
 
-def _compute_statistics(embeddings):
+def _compute_statistics(embeddings: List[np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
     """
     For graph anomaly detection, computes spectral norm between each pair-wise
     embeddings. For vertex anomaly detection, computes L2 norm between each
@@ -55,7 +54,18 @@ def _compute_statistics(embeddings):
     return graph_stats, vertex_stats
 
 
-def _compute_control_chart(graph_stats, vertex_stats, time_window):
+def _compute_control_chart(
+    graph_stats: np.ndarray, vertex_stats: np.ndarray, time_window: int
+) -> Tuple[
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+    np.ndarray,
+]:
     """
     Computes the control limits using 3 standard deviations.
 
@@ -141,16 +151,16 @@ def _compute_control_chart(graph_stats, vertex_stats, time_window):
 
 
 def anomaly_detection(
-    graphs,
-    method="omni",
-    time_window=3,
-    use_lower_line=False,
-    diag_aug=True,
-    scaled=True,
-    n_components=None,
-    n_elbows=2,
-    algorithm="randomized",
-    n_iter=5,
+    graphs: Union[List[nx.Graph], List[np.ndarray], np.ndarray],
+    method: str = "omni",
+    time_window: int = 3,
+    use_lower_line: bool = False,
+    diag_aug: bool = True,
+    scaled: bool = True,
+    n_components: Optional[int] = None,
+    n_elbows: int = 2,
+    algorithm: str = "randomized",
+    n_iter: int = 5,
 ):
     """
     Function for computing anomalous graphs and vertices given time series of

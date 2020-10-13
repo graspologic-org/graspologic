@@ -2,11 +2,11 @@ import numpy as np
 import pytest
 from numpy.testing import assert_equal
 
-from graspologic.pipeline import anomaly_detection
+from graspologic.timeseries import anomaly_detection
 
 
 def load_data():
-    f = np.load("tests/pipeline/data/anomaly.npz")
+    f = np.load("tests/timeseries/data/anomaly.npz")
     graphs = f["graphs"]
     return graphs
 
