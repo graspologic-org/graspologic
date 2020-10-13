@@ -476,4 +476,4 @@ class TestRemoveVertices(unittest.TestCase):
         self.assertIsInstance(a[1], np.ndarray)
         np.testing.assert_array_equal(A, self.directed[1:, 1:])
         np.testing.assert_array_equal(a[0], np.array([6, 11, 16, 21]))
-        np.testing.assert_array_equal(a[1], np.array())
+        np.testing.assert_array_equal(a[1], np.array([2, 3, 4, 5]))

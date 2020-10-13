@@ -110,7 +110,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
     def setUp(self):
         np.random.seed(9001)
         n = [10, 10]
-        p = np.eye(2)
+        p = np.array([[0.9, 0.1], [0.1, 0.9]])
         wt = [[normal, poisson], [poisson, normal]]
         wtargs = [
             [dict(loc=3, scale=1), dict(lam=5)],
