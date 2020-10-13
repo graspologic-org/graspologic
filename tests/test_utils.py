@@ -408,7 +408,61 @@ class TestDiagonalAugment(unittest.TestCase):
 
 
 def test_binarize():
+    # TODO: does unittest work like this? I got a TypeError when i called `python -m unittest test_utils.test_binarize`
     g = np.array([[1, 2], [1, 1]])
     g2 = gus.binarize(g)
     g2_expected = np.ones_like(g)
     assert_equal(g2, g2_expected)
+
+
+class TestRemoveVertices(unittest.TestCase):
+    def setUp(self):
+        self.directed = np.array(
+            [
+                [0, 2, 3, 4, 5],
+                [6, 0, 8, 9, 10],
+                [11, 12, 0, 14, 15],
+                [16, 17, 18, 0, 20],
+                [21, 22, 23, 24, 0],
+            ]
+        )
+        self.undirected = np.array(
+            [
+                [0, 6, 11, 16, 21],
+                [6, 0, 12, 17, 22],
+                [11, 12, 0, 18, 23],
+                [16, 17, 18, 0, 24],
+                [21, 22, 23, 24, 0],
+            ]
+        )
+
+    def test_undirected(self):
+        # with list index
+        indices = [0, -1, 1]
+        A, a = gus.remove_vertices(self.undirected, indices, return_vertices=True)
+        self.assertIsInstance(a, np.ndarray)
+        np.testing.assert_array_equal(A, np.array([[0, 18], [18, 0]]))
+        np.testing.assert_array_equal(a, np.array([[11, 16], [23, 24], [12, 17]]))
+        self.assertTrue(gus.is_almost_symmetric(A))
+
+        # with integer index
+        indices = 0
+        A, a = gus.remove_vertices(self.undirected, indices, return_vertices=True)
+        np.testing.assert_array_equal(A, self.undirected[1:, 1:])
+        np.testing.assert_array_equal(a, np.array([6, 11, 16, 21]))
+        self.assertTrue(gus.is_almost_symmetric(A))
+        np.testing.assert_array_equal(
+            gus.remove_vertices(self.undirected, 0),
+            gus.remove_vertices(self.undirected, [0]),
+        )
+
+    def test_directed(self):
+        # with list index
+        indices = [0, -1, 1]
+        A, a = gus.remove_vertices(self.directed, indices, return_vertices=True)
+        self.assertIsInstance(a, tuple)
+        self.assertIsInstance(a[0], np.ndarray)
+        self.assertIsInstance(a[1], np.ndarray)
+        np.testing.assert_array_equal(A, np.array([[0, 14], [18, 0]]))
+        np.testing.assert_array_equal(a[0], np.array([[11, 16], [15, 20], [12, 17]]))
+        np.testing.assert_array_equal(a[1], np.array([[3, 4], [23, 24], [8, 9]]))
