@@ -749,11 +749,6 @@ def remove_vertices(graph, indices, return_vertices=False):
             [4., 0., 7.],
             [5., 7., 0.]]),
     array([1., 2., 3.]))
-     >>> remove_vertices(B, [0, -1], return_vertices=True)
-    (array([[0., 4.],
-            [4., 0.]]),
-    array([[1., 2.],
-           [5., 7.]]))
     """
     directed = not is_almost_symmetric(graph)
     graph = import_graph(graph)
