@@ -734,6 +734,10 @@ def remap_labels(y_true, y_pred, return_map=False):
     array([0, 0, 1, 1, 2, 2])
 
     """
+
+    if not isinstance(return_map, bool):
+        raise TypeError("return_map must be of type bool.")
+
     confusion_mat = confusion_matrix(y_true, y_pred)
     row_inds, col_inds = linear_sum_assignment(confusion_mat, maximize=True)
     label_map = dict(zip(col_inds, row_inds))
