@@ -705,6 +705,10 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
+from sklearn.utils.multiclass import unique_labels
+from sklearn.metrics._classification import _check_targets
+
+
 def remap_labels(y_true, y_pred, return_map=False):
     """
     Attempts to remap a categorical labeling (such as one predicted by a clustering 
@@ -738,14 +742,17 @@ def remap_labels(y_true, y_pred, return_map=False):
 
     """
 
+    _check_targets(y_true, y_pred)
     if not isinstance(return_map, bool):
         raise TypeError("return_map must be of type bool.")
 
-    confusion_mat = confusion_matrix(y_true, y_pred)
+    labels = unique_labels(y_true, y_pred)
+    confusion_mat = confusion_matrix(y_true, y_pred, labels=labels)
     row_inds, col_inds = linear_sum_assignment(confusion_mat, maximize=True)
-    label_map = dict(zip(col_inds, row_inds))
+    label_map = dict(zip(labels[col_inds], labels[row_inds]))
     remapped_y_pred = np.vectorize(label_map.get)(y_pred)
     if return_map:
         return remapped_y_pred, label_map
     else:
         return remapped_y_pred
+
