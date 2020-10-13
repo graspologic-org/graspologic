@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import unittest
+import pytest
 import numpy as np
 import networkx as nx
 from graspologic.utils import utils as gus
@@ -441,17 +442,17 @@ class TestRemoveVertices(unittest.TestCase):
         indices = [0, -1, 1]
         A, a = gus.remove_vertices(self.undirected, indices, return_vertices=True)
         self.assertIsInstance(a, np.ndarray)
-        np.testing.assert_array_equal(A, np.array([[0, 18], [18, 0]]))
-        np.testing.assert_array_equal(a, np.array([[11, 16], [23, 24], [12, 17]]))
+        assert_equal(A, np.array([[0, 18], [18, 0]]))
+        assert_equal(a, np.array([[11, 16], [23, 24], [12, 17]]))
         self.assertTrue(gus.is_almost_symmetric(A))
 
         # with integer index
         indices = 0
         A, a = gus.remove_vertices(self.undirected, indices, return_vertices=True)
-        np.testing.assert_array_equal(A, self.undirected[1:, 1:])
-        np.testing.assert_array_equal(a, np.array([6, 11, 16, 21]))
+        assert_equal(A, self.undirected[1:, 1:])
+        assert_equal(a, np.array([6, 11, 16, 21]))
         self.assertTrue(gus.is_almost_symmetric(A))
-        np.testing.assert_array_equal(
+        assert_equal(
             gus.remove_vertices(self.undirected, 0),
             gus.remove_vertices(self.undirected, [0]),
         )
@@ -463,17 +464,34 @@ class TestRemoveVertices(unittest.TestCase):
         self.assertIsInstance(a, tuple)
         self.assertIsInstance(a[0], np.ndarray)
         self.assertIsInstance(a[1], np.ndarray)
-        np.testing.assert_array_equal(A, np.array([[0, 14], [18, 0]]))
-        np.testing.assert_array_equal(a[0], np.array([[11, 16], [15, 20], [12, 17]]))
-        np.testing.assert_array_equal(a[1], np.array([[3, 4], [23, 24], [8, 9]]))
+        assert_equal(A, np.array([[0, 14], [18, 0]]))
+        assert_equal(a[0], np.array([[11, 16], [15, 20], [12, 17]]))
+        assert_equal(a[1], np.array([[3, 4], [23, 24], [8, 9]]))
 
         # with integer index
         idx = 0
         A, a = gus.remove_vertices(self.directed, idx, return_vertices=True)
-        np.testing.assert_array_equal(A, gus.remove_vertices(self.directed, idx))
+        assert_equal(A, gus.remove_vertices(self.directed, idx))
         self.assertIsInstance(a, tuple)
         self.assertIsInstance(a[0], np.ndarray)
         self.assertIsInstance(a[1], np.ndarray)
-        np.testing.assert_array_equal(A, self.directed[1:, 1:])
-        np.testing.assert_array_equal(a[0], np.array([6, 11, 16, 21]))
-        np.testing.assert_array_equal(a[1], np.array([2, 3, 4, 5]))
+        assert_equal(A, self.directed[1:, 1:])
+        assert_equal(a[0], np.array([6, 11, 16, 21]))
+        assert_equal(a[1], np.array([2, 3, 4, 5]))
+
+    def test_exceptions(self):
+        # ensure proper errors are thrown when invalid inputs are passed.
+        with pytest.raises(TypeError):
+            gus.remove_vertices(9001, 0)
+
+        with pytest.raises(ValueError):
+            nonsquare = np.vstack((self.directed, self.directed))
+            gus.remove_vertices(nonsquare, 0)
+
+        with pytest.raises(IndexError):
+            indices = np.arange(len(self.directed) + 1)
+            gus.remove_vertices(self.directed, indices)
+
+        with pytest.raises(IndexError):
+            idx = len(self.directed) + 1
+            gus.remove_vertices(self.directed, indices)
