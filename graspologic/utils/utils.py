@@ -724,7 +724,7 @@ def remap_labels(y_true, y_pred, return_map=False):
         permuted to best match those of `y_true`.
     label_map : dict
         Mapping from the original labels of `y_pred` to the new labels which best
-        resemble those of `y_true`.
+        resemble those of `y_true`. Only returned if `return_map` was True.
 
     Examples
     --------
