@@ -161,7 +161,7 @@ def anomaly_detection(
     n_elbows: int = 2,
     algorithm: str = "randomized",
     n_iter: int = 5,
-):
+) -> AnomalyResult:
     """
     Function for computing anomalous graphs and vertices given time series of
     graphs. Anomaly is defined as graphs or vertices at a specific time that
