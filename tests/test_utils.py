@@ -463,4 +463,3 @@ class TestRemapLabels(unittest.TestCase):
 
         with pytest.raises(ValueError):
             remap_labels(self.y_pred, ["ant", "ant", "cat", "cat", "bird", "bird"])
-

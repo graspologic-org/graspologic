@@ -711,7 +711,7 @@ from sklearn.metrics._classification import _check_targets
 
 def remap_labels(y_true, y_pred, return_map=False):
     """
-    Attempts to remap a categorical labeling (such as one predicted by a clustering 
+    Attempts to remap a categorical labeling (such as one predicted by a clustering
     algorithm) to match the labels used by another similar labeling.
 
     Parameters
@@ -719,9 +719,9 @@ def remap_labels(y_true, y_pred, return_map=False):
     y_true : array-like of shape (n_samples,)
         Ground truth labels, or, labels to map to.
     y_pred : array-like of shape (n_samples,)
-        Labels to remap to match the categorical labeling of `y_true`. The categorical 
-        labeling of `y_pred` will be preserved exactly, but the labels used to 
-        denote the categories will be changed to best match the categories used in 
+        Labels to remap to match the categorical labeling of `y_true`. The categorical
+        labeling of `y_pred` will be preserved exactly, but the labels used to
+        denote the categories will be changed to best match the categories used in
         `y_true`.
 
     Returns
@@ -755,4 +755,3 @@ def remap_labels(y_true, y_pred, return_map=False):
         return remapped_y_pred, label_map
     else:
         return remapped_y_pred
-
