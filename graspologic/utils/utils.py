@@ -755,11 +755,11 @@ def remove_vertices(graph, indices, return_vertices=False):
     array([[1., 2.],
            [5., 7.]]))
     """
-    directed = not is_almost_symmetric(graph)
     graph = import_graph(graph)
+    directed = not is_almost_symmetric(graph)
 
     # truncate graph
-    A = np.delete(np.delete(graph, indices, 0), indices, 1)
+    A = np.delete(np.delete(graph, indices, axis=0), indices, axis=1)
 
     # grab relevant vertices
     if return_vertices:
