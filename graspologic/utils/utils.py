@@ -707,15 +707,18 @@ def fit_plug_in_variance_estimator(X):
 
 def remap_labels(y_true, y_pred, return_map=False):
     """
-    Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
-    match the labels used by another similar labeling.
+    Attempts to remap a categorical labeling (such as one predicted by a clustering 
+    algorithm) to match the labels used by another similar labeling.
 
     Parameters
     ----------
     y_true : array-like of shape (n_samples,)
         Ground truth labels, or, labels to map to.
     y_pred : array-like of shape (n_samples,)
-        Labels to remap to match the categorical labeling of `y_true`.
+        Labels to remap to match the categorical labeling of `y_true`. The categorical 
+        labeling of `y_pred` will be preserved exactly, but the labels used to 
+        denote the categories will be changed to best match the categories used in 
+        `y_true`.
 
     Returns
     -------
