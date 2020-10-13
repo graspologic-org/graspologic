@@ -3,9 +3,11 @@
 
 import unittest
 import numpy as np
+from numpy.random import poisson, normal
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import er_np, er_nm, sbm
+from graspologic.utils import remove_vertices
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
 
@@ -105,6 +107,22 @@ def _test_sbm_er_binary(self, method, P, directed=False, *args, **kwargs):
 
 
 class TestAdjacencySpectralEmbed(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(9001)
+        n = [10, 10]
+        p = np.eye(2)
+        wt = [[normal, poisson], [poisson, normal]]
+        wtargs = [
+            [dict(loc=3, scale=1), dict(lam=5)],
+            [dict(lam=5), dict(loc=3, scale=1)],
+        ]
+        self.testgraphs = dict(
+            Guw=sbm(n=n, p=p),
+            Gw=sbm(n=n, p=p, wt=wt, wtargs=wtargs),
+            Guwd=sbm(n=n, p=p, directed=True),
+            Gwd=sbm(n=n, p=p, wt=wt, wtargs=wtargs, directed=True),
+        )
+
     def test_output_dim(self):
         _test_output_dim(self, AdjacencySpectralEmbed)
 
@@ -129,6 +147,23 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         with self.assertRaises(TypeError):
             ase = AdjacencySpectralEmbed(diag_aug="over 9000")
             ase.fit()
+
+    def test_predict_runs(self):
+        n_components = 2
+        ase = AdjacencySpectralEmbed(n_components=n_components)
+        for graph in self.testgraphs.values():
+            A, a = remove_vertices(graph, 1, return_vertices=True)
+            ase.fit(A)
+            directed = ase.latent_right_ is not None
+            weighted = not np.array_equal(A, A.astype(bool))
+            w = ase.predict(a)
+            if directed:
+                self.assertIsInstance(w, tuple)
+                self.assertIsInstance(w[0], np.ndarray)
+                self.assertIsInstance(w[1], np.ndarray)
+            elif not directed:
+                self.assertIsInstance(w, np.ndarray)
+                self.assertEquals(np.atleast_2d(w).shape[1], n_components)
 
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
