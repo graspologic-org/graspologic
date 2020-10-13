@@ -8,6 +8,8 @@ from pathlib import Path
 
 import networkx as nx
 import numpy as np
+from scipy.optimize import linear_sum_assignment
+from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array
 
 
@@ -701,3 +703,42 @@ def fit_plug_in_variance_estimator(X):
         return covariances
 
     return plug_in_variance_estimator
+
+
+def remap_labels(y_true, y_pred, return_map=False):
+    """
+    Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
+    match the labels used by another similar labeling.
+
+    Parameters
+    ----------
+    y_true : array-like of shape (n_samples,)
+        Ground truth labels, or, labels to map to.
+    y_pred : array-like of shape (n_samples,)
+        Labels to remap to match the categorical labeling of `y_true`.
+
+    Returns
+    -------
+    remapped_y_pred : np.ndarray of shape (n_samples,)
+        Same categorical labeling as that of `y_pred`, but with the category labels
+        permuted to best match those of `y_true`.
+    label_map : dict
+        Mapping from the original labels of `y_pred` to the new labels which best
+        resemble those of `y_true`.
+
+    Examples
+    --------
+    >>> y_true = np.array([0,0,1,1,2,2])
+    >>> y_pred = np.array([2,2,1,1,0,0])
+    >>> remap_labels(y_true, y_pred)
+    array([0, 0, 1, 1, 2, 2])
+
+    """
+    confusion_mat = confusion_matrix(y_true, y_pred)
+    row_inds, col_inds = linear_sum_assignment(confusion_mat, maximize=True)
+    label_map = dict(zip(col_inds, row_inds))
+    remapped_y_pred = np.vectorize(label_map.get)(y_pred)
+    if return_map:
+        return remapped_y_pred, label_map
+    else:
+        return remapped_y_pred
