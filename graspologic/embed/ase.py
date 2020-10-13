@@ -207,7 +207,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # correct shape in y?
         latent_rows, _ = self.latent_left_.shape
-        _, y_cols = y[0].shape if directed else y.shape
+        _, y_cols = np.atleast_2d(y[0]).shape if directed else np.atleast_2d(y).shape
         if latent_rows != y_cols:
             raise ValueError(
                 "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
