@@ -212,6 +212,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
             raise ValueError(
                 "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
             )
+        ndim = y[0].ndim if directed else y.ndim
+        if ndim > 2:
+            raise ValueError("out-of-sample vertex must be 1d or 2d")
 
         # workhorse code
         if not directed:
