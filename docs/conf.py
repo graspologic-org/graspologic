@@ -70,7 +70,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "sklearn": ("https://scikit-learn.org/dev", None),
-    "hyppo": ("https://hyppo.neurodata.io", "https://hyppo.neurodata.io/objects.inv"),
+    "hyppo": ("https://hyppo.neurodata.io", None),
     "matplotlib": ("https://matplotlib.org", None),
 }
 
