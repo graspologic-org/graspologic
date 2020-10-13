@@ -10,7 +10,9 @@ import networkx as nx
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics._classification import _check_targets
 from sklearn.utils import check_array
+from sklearn.utils.multiclass import unique_labels
 
 
 def import_graph(graph, copy=True):
@@ -703,10 +705,6 @@ def fit_plug_in_variance_estimator(X):
         return covariances
 
     return plug_in_variance_estimator
-
-
-from sklearn.utils.multiclass import unique_labels
-from sklearn.metrics._classification import _check_targets
 
 
 def remap_labels(y_true, y_pred, return_map=False):
