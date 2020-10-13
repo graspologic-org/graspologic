@@ -206,15 +206,13 @@ class AdjacencySpectralEmbed(BaseEmbed):
             raise TypeError("Undirected graphs require array input")
 
         # correct shape in y?
-        latent_rows, _ = self.latent_left_.shape
         _y = y[0] if directed else y
+        latent_rows, _ = self.latent_left_.shape
         y_cols = _y.shape[-1]
-        ndim = _y.ndim
         if latent_rows != y_cols:
-            raise ValueError(
-                "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
-            )
-        if ndim > 2:
+            msg = "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
+            raise ValueError(msg)
+        if _y.ndim > 2:
             raise ValueError("out-of-sample vertex must be 1d or 2d")
 
         # workhorse code
