@@ -713,7 +713,7 @@ def remap_labels(
     y_true: Union[List, np.ndarray, pd.Series],
     y_pred: Union[List, np.ndarray, pd.Series],
     return_map: bool = False,
-):
+) -> np.ndarray:
     """
     Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
     match the labels used by another similar labeling.
