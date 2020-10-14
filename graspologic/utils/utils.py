@@ -726,6 +726,10 @@ def remap_labels(y_true, y_pred, return_map=False):
         labeling of `y_pred` will be preserved exactly, but the labels used to
         denote the categories will be changed to best match the categories used in
         `y_true`.
+    return_map : bool, optional
+        Whether to return a dictionary where the keys are the original category labels
+        from `y_pred` and the values are the new category labels that they were mapped
+        to.
 
     Returns
     -------
@@ -764,6 +768,7 @@ def remap_labels(y_true, y_pred, return_map=False):
     confusion_mat = confusion_matrix(y_true, y_pred, labels=labels)
     row_inds, col_inds = linear_sum_assignment(confusion_mat, maximize=True)
     label_map = dict(zip(labels[col_inds], labels[row_inds]))
+
     remapped_y_pred = np.vectorize(label_map.get)(y_pred)
     if return_map:
         return remapped_y_pred, label_map
