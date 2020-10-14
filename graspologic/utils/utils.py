@@ -729,33 +729,39 @@ def remove_vertices(graph, indices, return_vertices=False):
 
     Examples
     --------
+    # Undirected
     >>> A = np.array([[0, 1, 2],
-                      [3, 0, 5],
-                      [6, 7, 0]])
+                      [1, 0, 3],
+                      [2, 3, 0]])
     >>> remove_vertices(A, 0)
-    array([[0., 5.],
-           [7., 0.]]))
+    array([[0., 3.],
+           [3., 0.]]))
     >>> remove_vertices(A, 0, return_vertices=True)
-    (array([[0., 5.],
-            [7., 0.]]),
-    (array([3., 6.]), array([1., 2.])))
+    (array([[0., 3.],
+            [3., 0.]]),
+     array([1., 2.]))
 
+    # Directed
     >>> B = np.array([[0, 1, 2, 3],
-                      [1, 0, 4, 5],
-                      [2, 4, 0, 7],
-                      [3, 5, 7, 0]])
+                      [4, 0, 5, 6],
+                      [7, 8, 0, 9],
+                      [10, 11, 12, 0]])
     >>> remove_vertices(B, 0, return_vertices=True)
-    (array([[0., 4., 5.],
-            [4., 0., 7.],
-            [5., 7., 0.]]),
-    array([1., 2., 3.]))
+    (array([[ 0.,  5.,  6.],
+            [ 8.,  0.,  9.],
+            [11., 12.,  0.]]),
+    (array([ 4.,  7., 10.]), array([1., 2., 3.])))
     >>> remove_vertices(B, [0, -1], return_vertices=True)
-    (array([[0., 4.],
-            [4., 0.]]),
-    array([[1., 2.],
-           [5., 7.]]))
+    (array([[0., 5.],
+            [8., 0.]]),
+    (array([[4., 7.],
+            [6., 9.]]),
+    array([[ 1.,  2.],
+            [11., 12.]])))
     """
     graph = import_graph(graph)
+    if isinstance(indices, list) and len(indices) >= len(graph):
+        raise IndexError("You must pass in fewer vertex indices than vertices.")
     directed = not is_almost_symmetric(graph)
 
     # truncate graph
