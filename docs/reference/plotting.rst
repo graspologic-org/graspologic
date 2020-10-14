@@ -16,6 +16,10 @@ Pairplot
 --------
 .. autofunction:: pairplot
 
+Pairplot with GMM
+--------
+.. autofunction:: pairplot_with_gmm
+
 Degreeplot
 ----------
 .. autofunction:: degreeplot
