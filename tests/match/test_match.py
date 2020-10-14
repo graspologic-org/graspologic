@@ -6,7 +6,6 @@ import numpy as np
 import math
 import random
 from graspologic.match import GraphMatch as GMP
-from graspologic.match import SinkhornKnopp as SK
 from graspologic.simulations import er_np
 
 np.random.seed(0)
@@ -115,38 +114,3 @@ class TestGMP:
         res = gmp_adopted.fit(G1, G2)
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
-
-
-class TestSinkhornKnopp:
-    @classmethod
-    def test_SK_inputs(self):
-        with pytest.raises(TypeError):
-            SK(max_iter=True)
-        with pytest.raises(ValueError):
-            SK(max_iter=-1)
-        with pytest.raises(TypeError):
-            SK(epsilon=True)
-        with pytest.raises(ValueError):
-            SK(epsilon=2)
-
-    def test_SK(self):
-
-        # Epsilon = 1e-3
-        sk = SK()
-        P = np.asarray([[1, 2], [3, 4]])
-        n = P.shape[0]
-        Pt = sk.fit(P)
-
-        f = np.concatenate((np.sum(Pt, axis=0), np.sum(Pt, axis=1)), axis=None)
-        f1 = [round(x, 5) for x in f]
-        assert (f1 == np.ones(2 * n)).all()
-
-        # Epsilon = 1e-8
-        sk = SK(epsilon=1e-8)
-        P = np.asarray([[1.4, 0.2, 4], [3, 4, 0.7], [0.4, 6, 1]])
-        n = P.shape[0]
-        Pt = sk.fit(P)
-
-        f = np.concatenate((np.sum(Pt, axis=0), np.sum(Pt, axis=1)), axis=None)
-        f1 = [round(x, 5) for x in f]
-        assert (f1 == np.ones(2 * n)).all()
