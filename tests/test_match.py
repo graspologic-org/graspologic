@@ -62,6 +62,9 @@ class TestGMP:
             )
 
     def _get_AB(self):
+        # adjacency matrices from QAPLIB instance chr12c
+        # QAP problem is minimized with objective function value 11156
+
         A = [
             [0, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [90, 0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -94,6 +97,9 @@ class TestGMP:
         return A, B
 
     def test_barycenter_SGM(self):
+        # minimize such that we achieve some number close to the optimum,
+        # though strictly greater than or equal
+        # results vary due to random shuffle within GraphMatch
 
         A, B = self._get_AB()
         n = A.shape[0]
