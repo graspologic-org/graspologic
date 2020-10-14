@@ -709,8 +709,13 @@ def fit_plug_in_variance_estimator(X):
 
 def remap_labels(y_true, y_pred, return_map=False):
     """
-    Attempts to remap a categorical labeling (such as one predicted by a clustering
-    algorithm) to match the labels used by another similar labeling.
+    Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
+    match the labels used by another similar labeling.
+
+    Given two $n$-length vectors describing a categorical labeling of $n$ samples, this
+    method reorders the labels of the second vector (`y_pred`) so that as many samples
+    as possible from the two label vectors are in the same category.
+
 
     Parameters
     ----------
@@ -738,6 +743,17 @@ def remap_labels(y_true, y_pred, return_map=False):
     >>> remap_labels(y_true, y_pred)
     array([0, 0, 1, 1, 2, 2])
 
+    Notes
+    -----
+    This method will work well when the label vectors describe a somewhat similar
+    categorization of the data (as measured by metrics such as
+    :func:`sklearn.metrics.adjusted_rand_score`, for example). When the categorizations
+    are not similar, the remapping may not make sense (as such a remapping does not
+    exist).
+
+    For example, consider when one category in `y_true` is exactly split in half into
+    two categories in `y_pred`. If this is the case, it is impossible to say which of
+    the categories in `y_pred` match that original category from `y_true`.
     """
 
     _check_targets(y_true, y_pred)
