@@ -6,7 +6,7 @@ import numpy as np
 from numpy.testing import assert_allclose, assert_equal
 from sklearn.exceptions import NotFittedError
 
-from graspy.cluster.kclust import KMeansCluster
+from graspologic.cluster.kclust import KMeansCluster
 
 
 def test_inputs():
