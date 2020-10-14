@@ -157,10 +157,10 @@ class GraphMatch(BaseEstimator):
 
         Parameters
         ----------
-        A : 2d-array, square, positive
+        A : 2d-array, square
             A square adjacency matrix
 
-        B : 2d-array, square, positive
+        B : 2d-array, square
             A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
@@ -330,11 +330,11 @@ class GraphMatch(BaseEstimator):
 
         Parameters
         ----------
-        A : 2d-array, square, positive
-            A square, positive adjacency matrix
+        A : 2d-array, square
+            A square adjacency matrix
 
-        B : 2d-array, square, positive
-            A square, positive adjacency matrix
+        B : 2d-array, square
+            A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in `A`.
