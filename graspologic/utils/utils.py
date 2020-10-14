@@ -5,9 +5,11 @@ import warnings
 from collections import Iterable
 from functools import reduce
 from pathlib import Path
+from typing import List, Union
 
 import networkx as nx
 import numpy as np
+import pandas as pd
 from scipy.optimize import linear_sum_assignment
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics._classification import _check_targets
@@ -707,7 +709,11 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
-def remap_labels(y_true, y_pred, return_map=False):
+def remap_labels(
+    y_true: Union[List, np.ndarray, pd.Series],
+    y_pred: Union[List, np.ndarray, pd.Series],
+    return_map: bool = False,
+):
     """
     Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
     match the labels used by another similar labeling.
