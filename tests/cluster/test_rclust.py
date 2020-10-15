@@ -3,7 +3,7 @@
 
 import pytest
 import numpy as np
-from numpy.testing import assert_allclose, assert_equal
+from numpy.testing import assert_allclose, assert_equal, assert_array_less
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
@@ -30,17 +30,13 @@ def test_inputs():
     with pytest.raises(TypeError):
         rc = RecursiveCluster(max_components="1")
 
-    # cluster_method not in ['AutoGMM', 'KMeans', 'Spherical-KMeans']
+    # cluster_method not in ['gmm', 'kmeans']
     with pytest.raises(ValueError):
         rc = RecursiveCluster(cluster_method="graspologic")
 
     # delta_criter not positive
     with pytest.raises(ValueError):
         rc = RecursiveCluster(delta_criter=0)
-
-    # likelihood_ratio not in (0,1)
-    with pytest.raises(ValueError):
-        rc = RecursiveCluster(likelihood_ratio=0)
 
     # cluster_kws not a dict
     with pytest.raises(TypeError):
@@ -61,7 +57,7 @@ def test_inputs():
         rc = RecursiveCluster(max_components=2)
         rc.fit_predict(X, level=0)
 
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         rc = RecursiveCluster(max_components=2)
         rc.fit(X)
         rc.predict(X, level=0)
@@ -81,23 +77,111 @@ def test_predict_without_fit():
         rc.predict(X)
 
 
-def test_hierarchical_four_class():
-    """
-    Easily separable hierarchical four-gaussian problem.
-    """
+def test_predict_on_nonfitted_data_gmm():
+    # Generate random data to fit on
     np.random.seed(1)
-
     n = 100
     d = 3
+    X1 = np.random.normal(1, 0.1, size=(n, d))
+    X2 = np.random.normal(2, 0.1, size=(n, d))
+    X = np.vstack((X1, X2))
+    y = np.repeat([0, 1], n)
 
-    X11 = np.random.normal(-5, 0.1, size=(n, d))
-    X21 = np.random.normal(-2, 0.1, size=(n, d))
-    X12 = np.random.normal(2, 0.1, size=(n, d))
-    X22 = np.random.normal(5, 0.1, size=(n, d))
-    X = np.vstack((X11, X21, X12, X22))
-    y_lvl1 = np.repeat([0, 1], 2 * n)
-    y_lvl2 = np.repeat([0, 1, 2, 3], n)
+    rc = RecursiveCluster(max_components=2)
+    pred1 = rc.fit_predict(X)
 
+    # Generate random data to predict on
+    np.random.seed(2)
+    n = 50
+    d = 3
+    X1_new = np.random.normal(1, 0.1, size=(n, d))
+    X2_new = np.random.normal(2, 0.1, size=(n, d))
+    X_new = np.vstack((X1_new, X2_new))
+    y_new = np.repeat([0, 1], n)
+
+    pred2 = rc.predict(X_new)
+
+    # Assert that both predictions have the same depth
+    assert_equal(pred1.shape[1], pred2.shape[1])
+
+    # Assert that both predictions represent a perfect clustering
+    # of 2 clusters
+    assert_equal(np.max(pred1) + 1, 2)
+    ari_1 = adjusted_rand_score(y, pred1[:, 0])
+    assert_allclose(ari_1, 1)
+
+    assert_equal(np.max(pred2) + 1, 2)
+    ari_2 = adjusted_rand_score(y_new, pred2[:, 0])
+    assert_allclose(ari_2, 1)
+
+
+def test_predict_on_nonfitted_data_kmeans():
+    # Generate random data to fit on
+    np.random.seed(1)
+    n = 100
+    d = 3
+    X1 = np.random.normal(1, 0.1, size=(n, d))
+    X2 = np.random.normal(2, 0.1, size=(n, d))
+    X = np.vstack((X1, X2))
+    y = np.repeat([0, 1], n)
+
+    rc = RecursiveCluster(max_components=2, cluster_method="kmeans")
+    pred1 = rc.fit_predict(X)
+
+    # Generate random data to predict on
+    np.random.seed(2)
+    n = 50
+    d = 3
+    X1_new = np.random.normal(1, 0.1, size=(n, d))
+    X2_new = np.random.normal(2, 0.1, size=(n, d))
+    X_new = np.vstack((X1_new, X2_new))
+    y_new = np.repeat([0, 1], n)
+
+    pred2 = rc.predict(X_new)
+
+    # Assert that both predictions have the same depth
+    assert_equal(pred1.shape[1], pred2.shape[1])
+
+    # Assert that both predictions represent a perfect clustering
+    # of 2 clusters at 1st level
+    assert_equal(np.max(pred1[:, 0]) + 1, 2)
+    ari_1 = adjusted_rand_score(y, pred1[:, 0])
+    assert_allclose(ari_1, 1)
+
+    assert_equal(np.max(pred2[:, 0]) + 1, 2)
+    ari_2 = adjusted_rand_score(y_new, pred2[:, 0])
+    assert_allclose(ari_2, 1)
+
+    # Assert that predictions on new data have the same or fewer
+    # clusters than those on the fitted data at each level
+    for lvl in range(pred1.shape[1]):
+        n_cluster1 = np.max(pred1[:, lvl]) + 1
+        n_cluster2 = np.max(pred2[:, lvl]) + 1
+        assert_array_less(n_cluster2, n_cluster1 + 1)
+
+
+#  Easily separable hierarchical data with 2 levels
+#  of four gaussians
+np.random.seed(1)
+n = 100
+d = 3
+
+X11 = np.random.normal(-5, 0.1, size=(n, d))
+X21 = np.random.normal(-2, 0.1, size=(n, d))
+X12 = np.random.normal(2, 0.1, size=(n, d))
+X22 = np.random.normal(5, 0.1, size=(n, d))
+X = np.vstack((X11, X21, X12, X22))
+
+# true labels of 2 levels
+y_lvl1 = np.repeat([0, 1], 2 * n)
+y_lvl2 = np.repeat([0, 1, 2, 3], n)
+
+
+def test_hierarchical_four_class_gmm():
+    """
+    Clustering above hierarchical data with gmm
+    """
+    np.random.seed(1)
     rc = RecursiveCluster(max_components=2)
     pred = rc.fit_predict(X)
 
@@ -113,3 +197,104 @@ def test_hierarchical_four_class():
     # Assert that we get perfect clustering at level 2
     ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
     assert_allclose(ari_lvl2, 1)
+
+
+def test_hierarchical_four_class_aic():
+    """
+    Clustering above hierarchical data with gmm and
+    selecting the best model using aic
+    """
+    np.random.seed(1)
+
+    params = dict(selection_criteria="aic")
+    rc = RecursiveCluster(max_components=2, cluster_kws=params)
+    pred = rc.fit_predict(X)
+
+    # Assert that the 2-cluster model is the best at level 1
+    assert_equal(np.max(pred[:, 0]) + 1, 2)
+    # Assert that the 4-cluster model is the best at level 1
+    assert_equal(np.max(pred[:, 1]) + 1, 4)
+
+    # Assert that we get perfect clustering at level 1
+    ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
+    assert_allclose(ari_lvl1, 1)
+
+    # Assert that we get perfect clustering at level 2
+    ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
+    assert_allclose(ari_lvl2, 1)
+
+
+def test_hierarchical_four_class_kmeans():
+    """
+    Clustering above hierarchical data with kmeans
+    """
+    np.random.seed(1)
+
+    rc = RecursiveCluster(max_components=2, cluster_method="kmeans")
+    pred = rc.fit_predict(X)
+
+    # Assert that the 2-cluster model is the best at level 1
+    assert_equal(np.max(pred[:, 0]) + 1, 2)
+    # Assert that the 4-cluster model is the best at level 1
+    assert_equal(np.max(pred[:, 1]) + 1, 4)
+
+    # Assert that we get perfect clustering at level 1
+    ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
+    assert_allclose(ari_lvl1, 1)
+
+    # Assert that we get perfect clustering at level 2
+    ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
+    assert_allclose(ari_lvl2, 1)
+
+
+def test_hierarchical_six_class_delta_criter():
+    """
+    Clustering on less easily separable hierarchical data with 2 levels
+    of six gaussians
+    """
+
+    np.random.seed(1)
+
+    n = 100
+    d = 3
+
+    X11 = np.random.normal(-4, 0.8, size=(n, d))
+    X21 = np.random.normal(-3, 0.8, size=(n, d))
+    X31 = np.random.normal(-2, 0.8, size=(n, d))
+    X12 = np.random.normal(2, 0.8, size=(n, d))
+    X22 = np.random.normal(3, 0.8, size=(n, d))
+    X32 = np.random.normal(4, 0.8, size=(n, d))
+    X = np.vstack((X11, X21, X31, X12, X22, X32))
+
+    y_lvl1 = np.repeat([0, 1], 3 * n)
+    y_lvl2 = np.repeat([0, 1, 2, 3, 4, 5], n)
+
+    # Perform clustering without setting delta_criter
+    rc = RecursiveCluster(max_components=2)
+    pred = rc.fit_predict(X)
+
+    # Perform clustering while setting delta_criter
+    rc = RecursiveCluster(max_components=2, delta_criter=10)
+    pred_delta_criter = rc.fit_predict(X)
+
+    # Assert that pred has more levels than pred_delta_criter
+    assert_equal(pred.shape[1] - 1, pred_delta_criter.shape[1])
+
+    # Assert that both pred_delta_criter and pred represent
+    # perfect clustering at the frist level
+    ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
+    assert_allclose(ari_lvl1, 1)
+    ari_delta_criter_lvl1 = adjusted_rand_score(y_lvl1, pred_delta_criter[:, 0])
+    assert_allclose(ari_delta_criter_lvl1, 1)
+
+    # Assert that pred_delta_criter leads to a clustering as good as
+    # pred at the second level
+    ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
+    ari_delta_criter_lvl2 = adjusted_rand_score(y_lvl2, pred_delta_criter[:, 1])
+    assert_allclose(ari_delta_criter_lvl2, ari_lvl2)
+
+    # Assert that pred suggests oversplitting at the last level
+    # which leads to a worse clustering
+    ari_lvl3 = adjusted_rand_score(y_lvl2, pred[:, -1])
+    ari_delta_criter_lvl3 = adjusted_rand_score(y_lvl2, pred_delta_criter[:, -1])
+    assert_array_less(ari_lvl3, ari_delta_criter_lvl3)
