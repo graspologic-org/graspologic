@@ -207,13 +207,12 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             pred = cluster.predict(X)
 
         self.model_ = model
-        self.pred_ = pred
+        return pred
 
     def _fit(self, X):
-        self._cluster_and_decide(X)
+        pred = self._cluster_and_decide(X)
         self.children = []
 
-        pred = self.pred_
         uni_labels = np.unique(pred)
         labels = pred.reshape((-1, 1))
         if len(uni_labels) > 1:
