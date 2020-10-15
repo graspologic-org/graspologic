@@ -66,10 +66,10 @@ autodoc_member_order = "bysource"  # default is alphabetical
 
 # -- sphinx.ext.intersphinx
 intersphinx_mapping = {
-    "numpy": ("https://docs.scipy.org/doc/numpy", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
     "python": ("https://docs.python.org/3", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
-    "sklearn": ("http://scikit-learn.org/dev", None),
+    "sklearn": ("https://scikit-learn.org/dev", None),
     "hyppo": ("https://hyppo.neurodata.io", None),
     "matplotlib": ("https://matplotlib.org", None),
 }
