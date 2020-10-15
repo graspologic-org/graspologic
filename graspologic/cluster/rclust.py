@@ -67,7 +67,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
     Attributes
     ----------
     model_ : GaussianMixture (or KMeans) object if "gmm" (or "kmeans")
-            is selected.
+        is selected.
         Fitted GaussianMixture (or KMeans) object at 1st level of clustering.
 
     See Also
@@ -133,7 +133,6 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         self : object
             Returns an instance of self.
         """
-        
         self.fit_predict(X)
         return self
 
@@ -152,7 +151,6 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         labels : array_label, shape (n_samples, n_levels)
             if no level specified; otherwise, shape (n_samples,)
         """
-        
         X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
         if level is not None:
             if not isinstance(level, int):
