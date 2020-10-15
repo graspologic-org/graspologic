@@ -2,14 +2,14 @@
 # Licensed under the MIT License.
 
 import numpy as np
+from sklearn.base import BaseEstimator
+from sklearn.utils import check_array
+from sklearn.utils.validation import check_is_fitted
+
 from anytree import NodeMixin
 
-from .kclust import KMeansCluster
 from .autogmm import AutoGMMCluster
-
-from sklearn.utils.validation import check_is_fitted
-from sklearn.utils import check_array
-from sklearn.base import BaseEstimator
+from .kclust import KMeansCluster
 
 
 def _check_common_inputs(min_components, max_components, cluster_kws, embed_kws):
