@@ -214,11 +214,11 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         self.children = []
 
         uni_labels = np.unique(pred)
-        labels = pred.reshape((-1, 1))
+        labels = pred.reshape((-1, 1)).copy()
         if len(uni_labels) > 1:
             for ul in uni_labels:
                 inds = pred == ul
-                new_x = X[inds]
+                new_X = X[inds]
                 rc = RecursiveCluster(
                     cluster_method=self.cluster_method,
                     max_components=self.max_components,
@@ -229,11 +229,11 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
                 )
                 rc.parent = self
                 if (
-                    len(new_x) > self.max_components
-                    and len(new_x) >= self.min_split
+                    len(new_X) > self.max_components
+                    and len(new_X) >= self.min_split
                     and self.depth + 1 < self.max_level
                 ):
-                    child_labels = rc._fit(new_x)
+                    child_labels = rc._fit(new_X)
                     while labels.shape[1] <= child_labels.shape[1]:
                         labels = np.column_stack(
                             (labels, np.zeros((len(X), 1), dtype=int))
