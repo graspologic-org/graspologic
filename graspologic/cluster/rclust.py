@@ -69,8 +69,8 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
 
     See Also
     --------
-    graspy.cluster.AutoGMMCluster
-    graspy.cluster.KMeansCluster
+    graspologic.cluster.AutoGMMCluster
+    graspologic.cluster.KMeansCluster
 
     Notes
     -----
