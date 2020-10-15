@@ -177,12 +177,12 @@ y_lvl1 = np.repeat([0, 1], 2 * n)
 y_lvl2 = np.repeat([0, 1, 2, 3], n)
 
 
-def test_hierarchical_four_class_gmm():
+def _test_hierarchical_four_class(**kws):
     """
     Clustering above hierarchical data with gmm
     """
     np.random.seed(1)
-    rc = RecursiveCluster(max_components=2)
+    rc = RecursiveCluster(max_components=2, **kws)
     pred = rc.fit_predict(X)
 
     # Assert that the 2-cluster model is the best at level 1
@@ -197,54 +197,18 @@ def test_hierarchical_four_class_gmm():
     # Assert that we get perfect clustering at level 2
     ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
     assert_allclose(ari_lvl2, 1)
+
+
+def test_hierarchical_four_class_gmm():
+    _test_hierarchical_four_class(cluster_method="gmm")
 
 
 def test_hierarchical_four_class_aic():
-    """
-    Clustering above hierarchical data with gmm and
-    selecting the best model using aic
-    """
-    np.random.seed(1)
-
-    params = dict(selection_criteria="aic")
-    rc = RecursiveCluster(max_components=2, cluster_kws=params)
-    pred = rc.fit_predict(X)
-
-    # Assert that the 2-cluster model is the best at level 1
-    assert_equal(np.max(pred[:, 0]) + 1, 2)
-    # Assert that the 4-cluster model is the best at level 1
-    assert_equal(np.max(pred[:, 1]) + 1, 4)
-
-    # Assert that we get perfect clustering at level 1
-    ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
-    assert_allclose(ari_lvl1, 1)
-
-    # Assert that we get perfect clustering at level 2
-    ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
-    assert_allclose(ari_lvl2, 1)
+    _test_hierarchical_four_class(params=dict(selection_criteria="aic"))
 
 
 def test_hierarchical_four_class_kmeans():
-    """
-    Clustering above hierarchical data with kmeans
-    """
-    np.random.seed(1)
-
-    rc = RecursiveCluster(max_components=2, cluster_method="kmeans")
-    pred = rc.fit_predict(X)
-
-    # Assert that the 2-cluster model is the best at level 1
-    assert_equal(np.max(pred[:, 0]) + 1, 2)
-    # Assert that the 4-cluster model is the best at level 1
-    assert_equal(np.max(pred[:, 1]) + 1, 4)
-
-    # Assert that we get perfect clustering at level 1
-    ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
-    assert_allclose(ari_lvl1, 1)
-
-    # Assert that we get perfect clustering at level 2
-    ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
-    assert_allclose(ari_lvl2, 1)
+    _test_hierarchical_four_class(cluster_method="kmeans")
 
 
 def test_hierarchical_six_class_delta_criter():
