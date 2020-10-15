@@ -81,6 +81,7 @@ including an introduction to the module, and how to utilize the seeding feature.
 
    tutorials/matching/faq
    tutorials/matching/sgm
+   tutorials/matching/padded_gm
 
 .. _subgraph_tutorials:
 
