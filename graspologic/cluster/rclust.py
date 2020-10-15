@@ -12,7 +12,7 @@ from .autogmm import AutoGMMCluster
 from .kclust import KMeansCluster
 
 
-def _check_common_inputs(min_components, max_components, cluster_kws, embed_kws):
+def _check_common_inputs(min_components, max_components, cluster_kws):
     if not isinstance(min_components, int):
         raise TypeError("min_components must be an int")
     elif min_components < 1:
@@ -24,10 +24,6 @@ def _check_common_inputs(min_components, max_components, cluster_kws, embed_kws)
         raise ValueError("max_components must be > 0")
     elif max_components < min_components:
         raise ValueError("max_components must be >= min_components")
-
-    if embed_kws is not None:
-        if not isinstance(embed_kws, dict):
-            raise TypeError("embed_kws must be a dict")
 
     if not isinstance(cluster_kws, dict):
         raise TypeError("cluster_kws must be a dict")
@@ -95,9 +91,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         delta_criter=None,
     ):
 
-        _check_common_inputs(
-            min_components, max_components, cluster_kws, embed_kws=None
-        )
+        _check_common_inputs(min_components, max_components, cluster_kws)
 
         if cluster_method not in ["gmm", "kmeans"]:
             msg = "clustering method must be one of"
@@ -123,7 +117,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
 
         Parameters
         ----------
-        X : array_like, shape (n_samples, n_features)
+        X : array-like, shape (n_samples, n_features)
 
         Returns
         -------
@@ -140,7 +134,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
 
         Parameters
         ----------
-        X : array_like, shape (n_samples, n_features)
+        X : array-like, shape (n_samples, n_features)
         level: int, optional (default=None)
 
         Returns
@@ -255,13 +249,13 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
 
         Parameters
         ----------
-        X : array_like, shape (n_samples, n_features)
+        X : array-like, shape (n_samples, n_features)
         level: int, optional (default=None)
             the level of flat clustering to generate
 
         Returns
         -------
-        labels : array_like, shape (n_samples, n_levels)
+        labels : array-like, shape (n_samples, n_levels)
             if no level specified; otherwise, shape (n_samples,)
         """
 
