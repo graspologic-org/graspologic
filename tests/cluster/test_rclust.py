@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import pytest
 import numpy as np
-from numpy.testing import assert_allclose, assert_equal, assert_array_less
+import pytest
+from numpy.testing import assert_allclose, assert_array_less, assert_equal
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
-from graspologic.cluster.rclust import RecursiveCluster
+from graspologic.cluster import RecursiveCluster
 
 
 def test_inputs():
