@@ -43,15 +43,15 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
     cluster_method : str {"gmm", "kmeans"}, defaults to "gmm".
         The clustering method chosen to apply.
     min_components : int, defaults to 1.
-        The minimum number of mixture components to consider for the first
+        The minimum number of mixture components/clusters to consider for the first
         split if "gmm" is selected as cluster_method; and is set to 1
         for later splits.
         If "kmeans" is selected, it is set to 2 for all splits.
     max_components : int, defaults to 2.
-        The maximum number of mixture components or clusters to consider
+        The maximum number of mixture components/clusters to consider
         at each split.
     min_split : int, defaults to 1.
-        The minimum size of a cluster to be split on.
+        The minimum size of a cluster for it to be considered to split again.
     max_level : int, defaults to 4.
         The maximum number of times to recursively cluster the data.
     delta_criter : float or None, positive, defaults to None
@@ -59,21 +59,18 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         model and the current model that is required to accept the new model.
         Not implemented if None is provided or cluster_method is not "gmm".
     cluster_kws : dict, defaults to None
-        Clustering parameters (except min_components and max_components)
-        specified for chosen clustering method. For example, may specify
-        the type of affinity (defaults to "all") as dict(affinity="ward")
-        if gmm is chosen.
+        Keyword arguments (except min_components and max_components) for chosen
+        clustering method.
 
     Attributes
     ----------
-    model_ : GaussianMixture (or KMeans) object if "gmm" (or "kmeans")
-        is selected.
-        Fitted GaussianMixture (or KMeans) object at 1st level of clustering.
+    model_ : GaussianMixture or KMeans object
+        Fitted clustering object based on which `cluster_method` was used.
 
     See Also
     --------
     graspy.cluster.AutoGMMCluster
-    graspy.cluster.kclust
+    graspy.cluster.KMeansCluster
 
     Notes
     -----
