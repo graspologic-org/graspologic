@@ -703,7 +703,7 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
-def remove_vertices(graph, /, indices, *, return_vertices=False):
+def remove_vertices(graph, indices, return_vertices=False):
     """
     Remove vertices from an adjacency matrix.
 
