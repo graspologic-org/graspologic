@@ -32,8 +32,12 @@ class GraphMatch(BaseEstimator):
         the FAQ algorithm will undergo. n_init automatically set to 1 if
         init_method = 'barycenter'
 
-    init_method : string (default = 'barycenter')
+    init : string (default = 'barycenter') or 2d-array
         The initial position chosen
+
+        If 2d-array, `init` must be :math:`m' x m'`, where :math:`m' = n - m`,
+        and it must be doubly stochastic: each of its rows and columns must
+        sum to 1.
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
         :math:`J=1*1^T /n` , i.e the barycenter of the feasible region
@@ -101,7 +105,7 @@ class GraphMatch(BaseEstimator):
     def __init__(
         self,
         n_init=1,
-        init_method="barycenter",
+        init="barycenter",
         max_iter=30,
         shuffle_input=True,
         eps=0.1,
@@ -118,11 +122,12 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"n_init" must be a positive integer'
             raise TypeError(msg)
-        if init_method == "rand":
-            self.init_method = "randomized"
-        elif init_method == "barycenter":
-            self.init_method = "barycenter"
-            self.n_init = 1
+        if init == "rand":
+            self.init = "randomized"
+        elif init == "barycenter":
+            self.init = "barycenter"
+        elif not isinstance(init, str):
+            self.init = init
         else:
             msg = 'Invalid "init_method" parameter string'
             raise ValueError(msg)
@@ -192,7 +197,7 @@ class GraphMatch(BaseEstimator):
         options = {
             "maximize": self.gmp,
             "partial_match": partial_match,
-            "P0": self.init_method,
+            "P0": self.init,
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
             "tol": self.eps,

@@ -15,14 +15,14 @@ class TestGMP:
     @classmethod
     def setup_class(cls):
         cls.barycenter = GMP(gmp=False)
-        cls.rand = GMP(n_init=100, init_method="rand", gmp=False)
+        cls.rand = GMP(n_init=100, init="rand", gmp=False)
         cls.barygm = GMP(gmp=True)
 
     def test_SGM_inputs(self):
         with pytest.raises(TypeError):
             GMP(n_init=-1.5)
         with pytest.raises(ValueError):
-            GMP(init_method="random")
+            GMP(init="random")
         with pytest.raises(TypeError):
             GMP(max_iter=-1.5)
         with pytest.raises(TypeError):
