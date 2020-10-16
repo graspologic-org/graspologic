@@ -193,6 +193,28 @@ def test_pairplot_outputs():
         X, Y, col_names, title="Test", height=1.5, variables=["Feature1", "Feature2"]
     )
 
+def test_pairplot_with_gmm_inputs_():
+    X = np.random.rand(15, 3)
+    gmm = GaussianMixture(n_components=3, covariance_type='full').fit(X)
+    labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
+    # test data
+    with pytest.raises(TypeError):
+        pairplot_with_gmm(X="test", gmm=gmm)
+
+    with pytest.raises(ValueError):
+        pairplot_with_gmm(X=X, gmm=gmm, labels=["A"])
+
+    with pytest.raises(TypeError):
+        pairplot_with_gmm(X, gmm=None)
+
+def test_pairplot_with_gmm_outputs():
+    X = np.random.rand(15, 3)
+    gmm = GaussianMixture(n_components=3, covariance_type='full').fit(X)
+    labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
+    fig = pairplot_with_gmm(X, gmm)
+    fig = pairplot_with_gmm(X, gmm, labels)
+    fig = pairplot_with_gmm(
+        X, gmm, labels, title="Test")
 
 def test_sort_inds():
     B = np.array(
