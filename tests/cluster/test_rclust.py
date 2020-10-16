@@ -204,7 +204,7 @@ def test_hierarchical_four_class_gmm():
 
 
 def test_hierarchical_four_class_aic():
-    _test_hierarchical_four_class(params=dict(selection_criteria="aic"))
+    _test_hierarchical_four_class(cluster_kws=dict(selection_criteria="aic"))
 
 
 def test_hierarchical_four_class_kmeans():
