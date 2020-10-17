@@ -50,10 +50,10 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         The minimum size of a cluster for it to be considered to split again.
     max_level : int, defaults to 4.
         The maximum number of times to recursively cluster the data.
-    delta_criter : float or None, positive, defaults to None
+    delta_criter : float, non-negative, defaults to 0.
         The smallest difference between selection criterion values of a new
         model and the current model that is required to accept the new model.
-        Not implemented if None is provided or cluster_method is not "gmm".
+        Applicable only if cluster_method is "gmm".
     cluster_kws : dict, defaults to None
         Keyword arguments (except min_components and max_components) for chosen
         clustering method.
@@ -88,7 +88,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         cluster_kws={},
         min_split=1,
         max_level=4,
-        delta_criter=None,
+        delta_criter=0,
     ):
 
         _check_common_inputs(min_components, max_components, cluster_kws)
@@ -98,9 +98,8 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             msg += "{gmm, kmeans}"
             raise ValueError(msg)
 
-        if delta_criter is not None:
-            if delta_criter <= 0:
-                raise ValueError("delta_criter must be positive")
+        if delta_criter < 0:
+            raise ValueError("delta_criter must be non-negative")
 
         self.parent = None
         self.min_components = min_components
@@ -183,7 +182,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             k = cluster.n_components_
             pred = cluster.predict(X)
 
-            if self.delta_criter:
+            if self.delta_criter > 0:
                 single_cluster = AutoGMMCluster(
                     min_components=1, max_components=1, **self.cluster_kws
                 )
@@ -195,7 +194,6 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
                     # of "split" and "not split" is greater than
                     # the threshold, delta_criter
                     if criter_single_cluster - criter < self.delta_criter:
-                        k = 1
                         pred = np.zeros((len(X), 1), dtype=int)
 
         elif self.cluster_method == "kmeans":
