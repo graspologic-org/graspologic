@@ -34,9 +34,9 @@ def test_inputs():
     with pytest.raises(ValueError):
         rc = RecursiveCluster(cluster_method="graspologic")
 
-    # delta_criter not positive
+    # delta_criter negative
     with pytest.raises(ValueError):
-        rc = RecursiveCluster(delta_criter=0)
+        rc = RecursiveCluster(delta_criter=-1)
 
     # cluster_kws not a dict
     with pytest.raises(TypeError):
