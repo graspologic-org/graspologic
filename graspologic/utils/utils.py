@@ -721,11 +721,11 @@ def remove_vertices(graph, indices, return_vertices=False):
     Returns
     -------
     truncated_graph: np.ndarray, shape (k, k), n>k
-        Copy of `graph` without the nodes given by `indices`.
+        Copy of `graph` without the vertices given by `indices`.
 
     vertices: np.ndarray or tuple, shape (n_indices, n) (optional)
         Array of removed vertices without edges to each other.
-        If directed, return a tuple with input and output edges.
+        If directed, return a tuple with input and output vertices.
 
     Examples
     --------

@@ -172,7 +172,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
     def predict(self, y):
         """
-        Obtain an out-of-sample embedding from vertices not in the original embedding.
+        Obtain out-of-sample latent positions for vertices not in the original embedding.
         For more details, see [1].
 
         Parameters
