@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-np.random.seed(8888)
-
 from graspologic.inference import lpt_function, LatentPositionTest
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.simulations import sbm, rdpg
@@ -11,7 +9,7 @@ from graspologic.plot import heatmap, pairplot
 
 n_components = 2  # the number of embedding dimensions for ASE
 P = np.array([[0.9, 0.6], [0.6, 0.9]])
-csize = [50] * 2
+csize = [80] * 2
 A1 = sbm(csize, P)
 X1 = AdjacencySpectralEmbed(n_components=n_components).fit_transform(A1)
 

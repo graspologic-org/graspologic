@@ -3,7 +3,8 @@
 
 import numpy as np
 
-np.random.seed(8888)
+np.random.seed(88888889)
+
 from scipy.linalg import orthogonal_procrustes
 
 from ..align import OrthogonalProcrustes
