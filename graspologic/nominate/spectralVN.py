@@ -37,7 +37,7 @@ class SpectralVertexNominator(BaseVN):
     Parameters
     ----------
     embedding: np.ndarray, optional (default = None)
-        An pre-calculated embedding may be provided, in which case
+        A pre-calculated embedding may be provided, in which case
         it will be used for vertex nomination instead of embedding
         the adjacency matrix using embeder.
     embeder: str OR BaseEmbed, optional (default = 'ASE')
@@ -53,7 +53,7 @@ class SpectralVertexNominator(BaseVN):
     Attributes
     ----------
     embedding : np.ndarray
-        The spectral embedding of the graph spectral nomination will be preformed on.
+        The spectral embedding of the graph that spectral nomination will be preformed on.
     embeder : BaseEmbed
         The embed object to be used to compute the embedding.
     attr_labels : np.ndarray
@@ -158,7 +158,7 @@ class SpectralVertexNominator(BaseVN):
         -------
         An tuple of two np.ndarrays, each of shape(number_vertices, number_attributes_in_seed).
         The array at index 0 is the nomination list - for each attribute column, the rows are indexes
-        of vertices in original adjacency matrix ordered by liklihood of matching that attribute.
+        of vertices in original adjacency matrix ordered by likelihood of matching that attribute.
         The array at index 1 is the distances computed, where each element at (i, j) represents the
         distance metric value between vertex i and attribute j.
 

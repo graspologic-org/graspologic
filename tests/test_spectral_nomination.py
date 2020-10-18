@@ -52,7 +52,8 @@ class TestSpectralVertexNominator:
     def test_basic(self, nominator, seed):
         """
         Runs two attributed seeds and two unattributed seeds with each nominator.
-        Ensures all options work. Should be fast.
+        Ensures all options work. Should be fast. Nested parametrization tests all
+        all combinations of listed parameters.
         """
         TestSpectralVertexNominator._nominate(seed, nominator)
 
@@ -68,7 +69,7 @@ class TestSpectralVertexNominator:
     )
     def test_attributed_acc(self, nominator, seed):
         """
-        want to ensure preformace is at least better than random
+        want to ensure performance is at least better than random
         """
         n_verts = TestSpectralVertexNominator.n_verts
         group1_correct = np.zeros(3 * n_verts)
