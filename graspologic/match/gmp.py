@@ -42,7 +42,7 @@ class GraphMatch(BaseEstimator):
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
         :math:`J=1*1^T /n` , i.e the barycenter of the feasible region
 
-        "randomized" : some random point near :math:`J, (J+K)/2`, where K is some random
+        "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
         doubly stochastic matrix
 
     max_iter : int, positive (default = 30)
