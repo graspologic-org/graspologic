@@ -92,3 +92,12 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
    :maxdepth: 1
 
    tutorials/subgraph/subgraph
+
+Subgraph
+========
+The following tutorial demonstrates how to use attributed and unattributed single graph spectral vertex nomination to find vertices that are related to a given vertex / set of vertices of interest.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/vertex_nomination/SpectralVertexNomination
