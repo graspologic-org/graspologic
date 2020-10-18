@@ -17,5 +17,5 @@ __all__ = [
     "MultipleASE",
     "select_dimension",
     "selectSVD",
-    "BaseEmbed"
+    "BaseEmbed",
 ]
