@@ -5,6 +5,7 @@ import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib as mpl
 from matplotlib.colors import ListedColormap
+from graspy.simulations import sbm
 
 
 """
@@ -41,8 +42,6 @@ def _check_item_in_meta(meta, item, name):
                 pass
             else:
                 raise ValueError(f"{col_name} is not a column in the meta dataframe.")
-    if (name == "class_order"):
-        item = item[0]
 
     return item
 
@@ -61,7 +60,7 @@ def _check_sorting_kws(length, meta, group_class, class_order, item_order, color
         group_class = _check_item_in_meta(meta, group_class, "group_class")
         class_order = _check_item_in_meta(meta, class_order, "class_order")
         item_order = _check_item_in_meta(meta, item_order, "item_order")
-        colors = _check_item_in_meta(meta, color_class, "color_class")
+        color_class = _check_item_in_meta(meta, color_class, "color_class")
     else:
         # otherwise, arguments can be a hodgepodge of stuff
         group_class_meta, group_class = _item_to_df(group_class, "group_class", length)
@@ -77,7 +76,7 @@ def _check_sorting_kws(length, meta, group_class, class_order, item_order, color
         else:
             meta = pd.DataFrame()
 
-    return meta, group_class, class_order, item_order, colors
+    return meta, group_class, class_order, item_order, color_class
 
 
 def _get_separator_info(meta, group_class):
@@ -388,7 +387,7 @@ def gridmap(data, ax=None, legend=False, sizes=(5, 10), **kws):
     return ax
 
 
-def sort_meta(length, meta, group_class, class_order="size", item_order=None):
+def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
     """
     Sort the data and metadata according to the sorting method
 
@@ -427,18 +426,18 @@ def sort_meta(length, meta, group_class, class_order="size", item_order=None):
     # TODO sort each group based on the class size in each group rather than
     # the size of the entire class
     for gc in group_class:
-        if class_order == "size":
-            class_size = meta.groupby(gc).size()
-            # map each node from the sorting class to their sorting class size
-            meta[f"{gc}_size_order"] = meta[gc].map(class_size)
-            total_sort_by.append(f"{gc}_size_order")
-        elif len(class_order) > 0:
-            for co in class_order:
+        for co in class_order:
+            if co == "size":
+                class_size = meta.groupby(gc).size()
+                # map each node from the sorting class to their sorting class size
+                meta[f"{gc}_size_order"] = meta[gc].map(class_size)
+                total_sort_by.append(f"{gc}_size_order")
+            else:
                 class_value = meta.groupby(gc)[co].mean()
                 # map each node from the sorting class to certain sorting class attribute
-                meta[f"{gc}_{co}_order"] = meta[sc].map(class_value)
+                meta[f"{gc}_{co}_order"] = meta[gc].map(class_value)
                 total_sort_by.append(f"{gc}_{co}_order")
-        total_sort_by.append(gc)
+            total_sort_by.append(gc)
     total_sort_by += item_order
 
     # arbitrarily sort the data from 1 to length
@@ -447,7 +446,7 @@ def sort_meta(length, meta, group_class, class_order="size", item_order=None):
     if len(total_sort_by) > 0:
         meta.sort_values(total_sort_by, inplace=True, kind="mergesort")
 
-    inds = meta["sort_idx"].values
+    inds = np.copy(meta["sort_idx"].values)
     meta["sort_idx"] = range(len(meta))
     return inds, meta
 
@@ -491,7 +490,7 @@ def matrixplot(
         Metadata of the matrix such as class, cell type, etc., by default None
     group_class : list or np.ndarray, optional
         Metadata to group the graph in the plot, by default None
-    class_order : str, optional
+    class_order : string or list of string, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
     item_order : string or list of string, optional
         Attribute in meta by which to sort elements within a class, by default None
@@ -548,37 +547,15 @@ def matrixplot(
         item_order,
         color_class,
     )
-
-    # assign the sorting method to the row and column
-    row_meta = meta
-    row_group_class = group_class
-    row_class_order = class_order
-    row_item_order = item_order
-    row_color_class = color_class
-    row_palette = palette
-    col_meta = meta
-    col_group_class = group_class
-    col_class_order = class_order
-    col_item_order = item_order
-    col_color_class = color_class
-    col_palette = palette
-
     # sort the data and the metadata according to the sorting method
-    row_inds, row_meta = sort_meta(
+    inds, meta = sort_meta(
         data.shape[0],
-        row_meta,
-        row_group_class,
-        class_order=row_class_order,
-        item_order=row_item_order,
+        meta,
+        group_class,
+        class_order=class_order,
+        item_order=item_order,
     )
-    col_inds, col_meta = sort_meta(
-        data.shape[1],
-        col_meta,
-        col_group_class,
-        class_order=col_class_order,
-        item_order=col_item_order,
-    )
-    data = data[np.ix_(row_inds, col_inds)]
+    data = data[np.ix_(inds, inds)]
 
     # draw the main heatmap/scattermap
     if ax is None:
@@ -608,16 +585,16 @@ def matrixplot(
     draw_separators(
         ax,
         ax_type="x",
-        meta=col_meta,
-        group_class=col_group_class,
+        meta=meta,
+        group_class=group_class,
         plot_type=plot_type,
         gridline_kws=gridline_kws,
     )
     draw_separators(
         ax,
         ax_type="y",
-        meta=row_meta,
-        group_class=row_group_class,
+        meta=meta,
+        group_class=group_class,
         plot_type=plot_type,
         gridline_kws=gridline_kws,
     )
@@ -630,7 +607,7 @@ def matrixplot(
         draw_separators(
             ax,
             ax_type="x",
-            meta=col_meta,
+            meta=meta,
             group_class=highlight,
             plot_type=plot_type,
             gridline_kws=highlight_kws,
@@ -638,7 +615,7 @@ def matrixplot(
         draw_separators(
             ax,
             ax_type="y",
-            meta=col_meta,
+            meta=meta,
             group_class=highlight,
             plot_type=plot_type,
             gridline_kws=highlight_kws,
@@ -659,22 +636,22 @@ def matrixplot(
             _remove_shared_ax(color_ax)
             draw_colors(
                 color_ax,
-                meta=col_meta,
+                meta=meta,
                 divider=divider,
                 ax_type="x",
                 color_class=rev_color_class[i],
-                palette=col_palette,
+                palette=palette,
             )
             # plt.show()
             color_ax = divider.append_axes("left", size="3%", pad=color_pad[i], sharey=ax)
             _remove_shared_ax(color_ax)
             draw_colors(
                 color_ax,
-                meta=row_meta,
+                meta=meta,
                 divider=divider,
                 ax_type="y",
                 color_class=rev_color_class[i],
-                palette=row_palette,
+                palette=palette,
             )
             # plt.show()
     # plt.show()
@@ -703,7 +680,7 @@ def matrixplot(
             draw_ticks(
                 tick_ax,
                 ax_type="x",
-                meta=col_meta,
+                meta=meta,
                 group_class=rev_group_class[i:],
                 plot_type=plot_type,
             )
@@ -721,7 +698,7 @@ def matrixplot(
             draw_ticks(
                 tick_ax,
                 ax_type="y",
-                meta=row_meta,
+                meta=meta,
                 group_class=rev_group_class[i:],
                 plot_type=plot_type,
             )
@@ -741,23 +718,32 @@ def matrixplot(
 
 def main():
     N = 10
-    data = np.random.randint(10, size=(N, N))
-    meta = pd.DataFrame({
-        'hemisphere': np.random.randint(3, size=N),
-        'dVNC': np.random.randint(3, size=N),
-        'ID': np.random.randint(10, size=N)
-    })
+    n_communities = [N, 3*N, 2*N, N]
+    p = [[0.8, 0.1, 0.05, 0.01],
+        [0.1, 0.4, 0.15, 0.02],
+        [0.05, 0.15, 0.3, 0.01],
+        [0.01, 0.02, 0.01, 0.4]]
+
+    np.random.seed(2)
+    A = sbm(n_communities, p)
+    meta = pd.DataFrame(
+        data={
+            'hemisphere': np.concatenate((np.full((1, 4*N), 0), np.full((1, 3*N), 1)), axis=1).flatten(),
+            'dVNC': np.concatenate((np.full((1, N), 0), np.full((1, 3*N), 1), np.full((1, 2*N), 0), np.full((1, N), 1)), axis=1).flatten(),
+            'ID': np.arange(7*N)},
+    )
+    rnd_idx = np.arange(7*N)
+    np.random.shuffle(rnd_idx)
+    A = A[np.ix_(rnd_idx, rnd_idx)]
+    meta = meta.reindex(rnd_idx)
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     matrixplot(
-        data=data,
+        data=A,
         ax=ax,
         meta=meta,
-        plot_type="heatmap",
+        plot_type="scattermap",
         group_class=["hemisphere", "dVNC"],
-        item_order=["ID"],
-        sizes=(1, 5),
-        color_class=["hemisphere", "dVNC"],
-        highlight=["hemisphere"]
+        class_order=["ID"],
     )
     plt.show()
 
