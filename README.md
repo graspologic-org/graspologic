@@ -1,13 +1,12 @@
-# GraSPy
+# graspologic
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
-[![Downloads shield](https://img.shields.io/pypi/dm/graspy.svg)](https://pypi.org/project/graspy/)
-[![Build Status](https://travis-ci.org/neurodata/graspy.svg?branch=master)](https://travis-ci.org/neurodata/graspy)
+[![Downloads shield](https://img.shields.io/pypi/dm/graspologic.svg)](https://pypi.org/project/graspologic/)
+![graspologic CI](https://github.com/microsoft/graspologic/workflows/graspologic%20CI/badge.svg)
 [![codecov](https://codecov.io/gh/neurodata/graspy/branch/master/graph/badge.svg)](https://codecov.io/gh/neurodata/graspy)
 [![DOI](https://zenodo.org/badge/147768493.svg)](https://zenodo.org/badge/latestdoi/147768493)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
-**Gra**ph **S**tatistics in **Py**thon is a package for graph statistical algorithms.
+## `graspologic` is a package for graph statistical algorithms.
 
 - [Overview](#overview)
 - [Documentation](#documentation)
@@ -17,10 +16,10 @@
 - [License](#license)
 - [Issues](#issues)
 
-# Note: GraSPy + topologic = graspologic
-The package formerly known as `GraSPy` is merging with `topologic` to become `graspologic`, so some things in this
-repo my be a bit wonky for the time being (e.g. names may say `GraSPy` still instead of `graspologic`). 
-Please stay tuned and we'll be back up and running shortly.
+# Notice: `graspologic` is the merger project of `GraSPy` and `topologic`
+We're actively merging these projects into one, but you may see some references to `graspy` or `topologic` from time to time in documentation and 
+issues. If you notice anything in the documentation referencing either graspy or topologic, please raise an issue (if one does not already exist) 
+noting the missed titles so we can address all of them.
 
 # Overview
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.
@@ -32,56 +31,83 @@ Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) i
 
 # System Requirements
 ## Hardware requirements
-`GraSPy` package requires only a standard computer with enough RAM to support the in-memory operations. 
+`graspologic` package requires only a standard computer with enough RAM to support the in-memory operations. 
 
 ## Software requirements
 ### OS Requirements
-This package is supported for *Linux* and *macOS*. The package has been tested on the following systems:
-+ Linux: Ubuntu 16.04
-+ macOS: Mojave (10.14.1)
-+ Windows: 10 
+`graspologic` is tested on the following OSes:
+- Linux x64
+- macOS x64
+- Windows 10 x64
 
-### Python Requirements
-This package is written for Python3. Currently, it is supported for Python 3.6 and 3.7.
+And across the following versions of Python:
+- 3.6 (x64)
+- 3.7 (x64)
+- 3.8 (x64)
+
+If you try to use `graspologic` for a different platform than the ones listed and notice any unexpected behavior,
+please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users 
+if we have concrete examples of things not working!
 
 ### Python Dependencies
-`GraSPy` mainly depends on the Python scientific stack.
+`graspologic` has the following direct dependencies:
 ```
+hyppo
+matplotlib
 networkx
 numpy
-pandas
+POT
+seaborn
 scikit-learn
 scipy
-seaborn
 ```
+
+Developers of `graspologic` will also have the following dependencies:
+```
+black
+ipykernel
+ipython
+myp
+nbsphinx
+numpydoc
+pandoc
+pytest
+pytest-cov
+sphinx
+sphinxcontrib-rawfiles
+sphinx-rtd-theme
+```
+
+Please note that `pandoc` will also [need to be installed for your system](https://pandoc.org/installing.html).
 
 # Installation Guide
 ## Install from pip
 ```
-pip install graspy
+pip install graspologic
 ```
 
 ## Install from Github
 ```
-git clone https://github.com/neurodata/graspy
-cd graspy
+git clone https://github.com/microsoft/graspologic
+cd graspologic
+python3 -m venv venv
+source venv/bin/activate
 python3 setup.py install
 ```
 
 # Contributing
-We welcome contributions from anyone. Please see our [contribution guidelines](https://graspy.neurodata.io/contributing.html) before making a pull request. Our 
-[issues](https://github.com/neurodata/graspy/issues) page is full of places we could use help! 
+We welcome contributions from anyone. Please see our [contribution guidelines](https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md) before making a pull request. Our 
+[issues](https://github.com/microsoft/graspologic/issues) page is full of places we could use help! 
 If you have an idea for an improvement not listed there, please 
-[make an issue](https://github.com/neurodata/graspy/issues/new) first so you can discuss with the 
-developers. 
+[make an issue](https://github.com/microsoft/graspologic/issues/new) first so you can discuss with the developers. 
 
 # License
 This project is covered under the MIT License.
 
 # Issues
-We appreciate detailed bug reports and feature requests (though we appreciate pull requests even more!). Please visit our [issues](https://github.com/neurodata/graspy/issues) page if you have questions or ideas.
+We appreciate detailed bug reports and feature requests (though we appreciate pull requests even more!). Please visit our [issues](https://github.com/microsoft/graspologic/issues) page if you have questions or ideas.
 
-# Citing GraSPy
-If you find GraSPy useful in your work, please cite the package via the [GraSPy paper](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
+# Citing `graspologic`
+If you find `graspologic` useful in your work, please cite the package via the [GraSPy paper](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 
 > Chung, J., Pedigo, B. D., Bridgeford, E. W., Varjavand, B. K., Helm, H. S., & Vogelstein, J. T. (2019). GraSPy: Graph Statistics in Python. Journal of Machine Learning Research, 20(158), 1-7.

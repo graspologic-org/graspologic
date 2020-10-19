@@ -1,7 +1,7 @@
 Matching
 ========
 
-.. currentmodule:: graspy.match
+.. currentmodule:: graspologic.match
 
 Graph Matching
 --------------------

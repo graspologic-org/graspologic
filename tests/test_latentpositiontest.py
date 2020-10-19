@@ -3,9 +3,8 @@
 
 import unittest
 import numpy as np
-from graspy.inference import LatentPositionTest
-from graspy.simulations import er_np, sbm
-from graspy.utils import *
+from graspologic.inference import LatentPositionTest
+from graspologic.simulations import er_np, sbm
 
 
 class TestLatentPositionTest(unittest.TestCase):

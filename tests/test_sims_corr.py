@@ -2,7 +2,11 @@
 # Licensed under the MIT License.
 
 import unittest
-from graspy.simulations.simulations_corr import sample_edges_corr, er_corr, sbm_corr
+from graspologic.simulations.simulations_corr import (
+    sample_edges_corr,
+    er_corr,
+    sbm_corr,
+)
 import numpy as np
 import pytest
 import warnings
