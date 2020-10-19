@@ -162,7 +162,7 @@ def test_bad_matrix_inputs():
         latent_distribution_test(bad_matrix, A2, test="dcorr")
 
 
-def test_directed_inputs(self):
+def test_directed_inputs():
     np.random.seed(2)
     A = er_np(100, 0.3, directed=True)
     B = er_np(100, 0.3, directed=True)
@@ -199,16 +199,6 @@ def test_different_sizes_null():
     A1 = er_np(100, 0.8)
     A2 = er_np(1000, 0.8)
 
-    ldt_not_corrected = LatentDistributionTest(
-        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=False
-    )
-    ldt_corrected_1 = LatentDistributionTest(
-        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
-    )
-    ldt_corrected_2 = LatentDistributionTest(
-        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
-    )
-
     p_not_corrected = latent_distribution_test(
         A1,
         A2,
@@ -242,18 +232,11 @@ def test_different_sizes_null():
     assert p_corrected_2 > 0.05
 
 
-def test_different_sizes_null(self):
+def test_different_sizes_null():
     np.random.seed(314)
 
     A1 = er_np(100, 0.8)
     A2 = er_np(1000, 0.7)
-
-    ldt_corrected_1 = LatentDistributionTest(
-        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
-    )
-    ldt_corrected_2 = LatentDistributionTest(
-        "hsic", "gaussian", n_components=2, n_bootstraps=100, size_correction=True
-    )
 
     p_corrected_1 = latent_distribution_test(
         A1,
@@ -278,7 +261,7 @@ def test_different_sizes_null(self):
     assert p_corrected_2 <= 0.05
 
 
-def test_different_aligners(self):
+def test_different_aligners():
     np.random.seed(314)
     A1 = er_np(100, 0.8)
     A2 = er_np(100, 0.8)
