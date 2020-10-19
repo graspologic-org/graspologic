@@ -713,7 +713,7 @@ def remove_vertices(graph, indices, return_vertices=False):
         Adjacency matrix
     indices: int or list
         Index/indices of the vertex/vertices to be removed.
-    return_vertex: bool, optional
+    return_vertices: bool, optional
         Whether to return the tuple (A, V),
         where A is the truncated adjacency matrix,
         V is an array of the removed vertices, by default False
@@ -762,18 +762,19 @@ def remove_vertices(graph, indices, return_vertices=False):
     graph = import_graph(graph)
     if isinstance(indices, list) and len(indices) >= len(graph):
         raise IndexError("You must pass in fewer vertex indices than vertices.")
+    if isinstance(indices, int):
+        indices = [indices]
     directed = not is_almost_symmetric(graph)
 
     # truncate graph
-    A = np.delete(np.delete(graph, indices, axis=0), indices, axis=1)
+    mask = np.ones(graph.shape[0], bool)
+    mask[indices] = 0
+    A = graph[mask, :][:, mask]
 
-    # grab relevant vertices
     if return_vertices:
-        rows = np.delete(graph, indices, axis=0)
-        vertices = rows[:, indices].T
+        vertices = np.squeeze(graph[:, indices][mask, :].T)
         if directed:
-            cols = np.delete(graph, indices, axis=1)
-            vertices_right = cols[indices, :]
+            vertices_right = np.squeeze(graph[indices, :][:, mask])
             return A, (vertices, vertices_right)
         return A, vertices
     return A
