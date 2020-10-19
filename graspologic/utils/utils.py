@@ -767,7 +767,7 @@ def remove_vertices(graph, indices, return_vertices=False):
     directed = not is_almost_symmetric(graph)
 
     # truncate graph
-    mask = np.ones(graph.shape[0], bool)
+    mask = np.ones(graph.shape[0], dtype=bool)
     mask[indices] = 0
     A = graph[mask, :][:, mask]
 
