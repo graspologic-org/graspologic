@@ -1,7 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from graspologic.inference import lpt_function, LatentPositionTest
+from graspologic.inference import (
+    lpt_function,
+    LatentPositionTest,
+    ldt_function,
+    LatentDistributionTest,
+)
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.simulations import sbm, rdpg
 from graspologic.utils import symmetrize
@@ -22,4 +27,7 @@ print(lpt_class.p_value_)
 
 p_val, _, _ = lpt_function(A1, A2, n_bootstraps=150, n_components=n_components)
 print(p_val)
+
+p_val_ldt, _, _ = ldt_function(A1, A2, n_bootstraps=150)
+print(p_val_ldt)
 

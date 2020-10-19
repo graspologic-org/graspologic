@@ -3,6 +3,7 @@
 
 import warnings
 import numpy as np
+
 np.random.seed(8888)
 from scipy import stats
 
@@ -41,7 +42,7 @@ def ldt_function(
     align_kws={},
     input_graph=True,
 ):
-     """Two-sample hypothesis test for the problem of determining whether two random
+    """Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same distributions of latent positions.
 
     This test can operate on two graphs where there is no known matching
@@ -186,7 +187,6 @@ def ldt_function(
 
     """
 
-    
     # check test argument
     if not isinstance(test, str):
         msg = "test must be a str, not {}".format(type(test))
@@ -299,7 +299,7 @@ def ldt_function(
     if size_correction:
         X1_hat, X2_hat = _sample_modified_ase(X1_hat, X2_hat, pooled=pooled)
 
-    metric_func_ = _instantiate_metric_func(metric=metrix, test=test)
+    metric_func_ = _instantiate_metric_func(metric=metric, test=test)
     test_obj = KSample(test, compute_distance=metric_func_)
 
     data = test_obj.test(X1_hat, X2_hat, reps=n_bootstraps, workers=workers, auto=False)
@@ -308,7 +308,7 @@ def ldt_function(
     sample_T_statistic_ = data[0]
     p_value_ = data[1]
 
-    return p_value_, sample_T_statistic, null_distribution_
+    return p_value_, sample_T_statistic_, null_distribution_
 
 
 def _instantiate_metric_func(metric, test):

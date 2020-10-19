@@ -6,6 +6,7 @@ from graspologic.simulations import er_np, sbm
 
 
 def test_common_input():
+    np.random.seed(1234556)
     A1 = er_np(20, 0.3)
     A2 = er_np(20, 0.3)
 
@@ -103,6 +104,3 @@ def test_SBM_epsilon():
     pytest.assertTrue(p_null > 0.05)
     pytest.assertTrue(p_alt <= 0.05)
 
-
-if __name__ == "__main__":
-    unittest.main()
