@@ -711,7 +711,7 @@ def remove_vertices(graph, indices, return_vertices=False):
     ----------
     graph: np.ndarray, shape (n, n)
         Adjacency matrix
-    indices: int or list
+    indices: int or array-like
         Index/indices of the vertex/vertices to be removed.
     return_vertices: bool, optional
         Whether to return the tuple (A, V),
@@ -772,9 +772,11 @@ def remove_vertices(graph, indices, return_vertices=False):
     A = graph[mask, :][:, mask]
 
     if return_vertices:
-        vertices = np.squeeze(graph[:, indices][mask, :].T)
+        cols = graph[:, indices]
+        vertices = np.squeeze(cols[mask, :].T)
         if directed:
-            vertices_right = np.squeeze(graph[indices, :][:, mask])
+            rows = graph[indices, :]
+            vertices_right = np.squeeze(rows[:, mask])
             return A, (vertices, vertices_right)
         return A, vertices
     return A
