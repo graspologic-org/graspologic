@@ -84,11 +84,7 @@ source_encoding = "utf-8"
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 html_static_path = []
-<<<<<<< HEAD
-modindex_common_prefix = ["graspy."]
-=======
 modindex_common_prefix = ["graspologic."]
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
 
 pygments_style = "sphinx"
 smartquotes = False
