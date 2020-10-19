@@ -57,6 +57,17 @@ class GraphMatch(BaseEstimator):
         Gives users the option to solve QAP rather than the Graph Matching Problem
         (GMP). This is accomplished through trivial negation of the objective function.
 
+    padding : string (default = 'adopted')
+        Allows user to specify padding scheme if `A` and `B` are not of equal size.
+        Say that `A` and `B` have :math:`n_1` and :math:`n_2` nodes, respectively, and
+        :math:`n_1 < n_2`.
+
+        "adopted" : matches `A` to the best fitting induced subgraph of `B`. Reduces the
+        affinity between isolated vertices added to `A` through padding and low-density
+        subgraphs of `B`.
+
+        "naive" : matches `A` to the best fitting subgraph of `B`.
+
     Attributes
     ----------
 
@@ -95,6 +106,7 @@ class GraphMatch(BaseEstimator):
         shuffle_input=True,
         eps=0.1,
         gmp=True,
+        padding="adopted",
     ):
 
         if type(n_init) is int and n_init > 0:
@@ -130,6 +142,14 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"gmp" must be a boolean'
             raise TypeError(msg)
+        if isinstance(padding, str) and padding in {"adopted", "naive"}:
+            self.padding = padding
+        elif isinstance(padding, str):
+            msg = 'Invalid "padding" parameter string'
+            raise ValueError(msg)
+        else:
+            msg = '"padding" parameter must be of type string'
+            raise TypeError(msg)
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
         """
@@ -137,10 +157,10 @@ class GraphMatch(BaseEstimator):
 
         Parameters
         ----------
-        A : 2d-array, square, positive
+        A : 2d-array, square
             A square adjacency matrix
 
-        B : 2d-array, square, positive
+        B : 2d-array, square
             A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
@@ -160,10 +180,11 @@ class GraphMatch(BaseEstimator):
         seeds_A = column_or_1d(seeds_A)
         seeds_B = column_or_1d(seeds_B)
 
+        # pads A and B according to section 2.5 of [2]
         if A.shape[0] != B.shape[0]:
-            msg = "Adjacency matrices must be of equal size"
-            raise ValueError(msg)
-        elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
+            A, B = _adj_pad(A, B, self.padding)
+
+        if A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
             msg = "Adjacency matrix entries must be square"
             raise ValueError(msg)
         elif seeds_A.shape[0] != seeds_B.shape[0]:
@@ -309,11 +330,11 @@ class GraphMatch(BaseEstimator):
 
         Parameters
         ----------
-        A : 2d-array, square, positive
-            A square, positive adjacency matrix
+        A : 2d-array, square
+            A square adjacency matrix
 
-        B : 2d-array, square, positive
-            A square, positive adjacency matrix
+        B : 2d-array, square
+            A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in `A`.
@@ -330,6 +351,27 @@ class GraphMatch(BaseEstimator):
         """
         self.fit(A, B, seeds_A, seeds_B)
         return self.perm_inds_
+
+
+def _adj_pad(A, B, method):
+    def pad(X, n):
+        X_pad = np.zeros((n[1], n[1]))
+        X_pad[: n[0], : n[0]] = X
+        return X_pad
+
+    A_n = A.shape[0]
+    B_n = B.shape[0]
+    n = np.sort([A_n, B_n])
+    if method == "adopted":
+        A = 2 * A - np.ones((A_n, A_n))
+        B = 2 * B - np.ones((B_n, B_n))
+
+    if A.shape[0] == n[0]:
+        A = pad(A, n)
+    else:
+        B = pad(B, n)
+
+    return A, B
 
 
 def _unshuffle(array, n):
