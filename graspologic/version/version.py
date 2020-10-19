@@ -7,9 +7,7 @@ import pkg_resources
 
 __all__: List[str] = ["version", "name"]
 
-name = (
-    "graspy"  # TODO: #454 Update in https://github.com/microsoft/graspologic/issues/454
-)
+name = "graspologic"
 
 # manually updated
 __semver = "0.1.0"

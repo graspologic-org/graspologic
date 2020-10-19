@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-recursive-include graspy/datasets *.csv
-recursive-include graspy/version version.txt
-exclude tests/*
-=======
 recursive-include graspologic/datasets *.csv
 recursive-include graspologic/version version.txt
 exclude tests/*
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be

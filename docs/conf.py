@@ -27,17 +27,10 @@ realpath = os.path.realpath(__file__)
 dir_realpath = os.path.dirname(os.path.dirname(realpath))
 sys.path.append(dir_realpath)
 
-<<<<<<< HEAD
-import graspy
-
-version = graspy.version.version.__semver
-release = graspy.version.version.version
-=======
 import graspologic
 
 version = graspologic.version.version.__semver
 release = graspologic.version.version.version
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
 
 # -- Extension configuration -------------------------------------------------
 extensions = [

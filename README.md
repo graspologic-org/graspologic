@@ -16,17 +16,10 @@
 - [License](#license)
 - [Issues](#issues)
 
-<<<<<<< HEAD
-# Note: GraSPy + topologic = graspologic
-The package formerly known as `GraSPy` is merging with `topologic` to become `graspologic`, so some things in this
-repo my be a bit wonky for the time being (e.g. names may say `GraSPy` still instead of `graspologic`). 
-Please stay tuned and we'll be back up and running shortly.
-=======
 # Notice: `graspologic` is the merger project of `GraSPy` and `topologic`
 We're actively merging these projects into one, but you may see some references to `graspy` or `topologic` from time to time in documentation and 
 issues. If you notice anything in the documentation referencing either graspy or topologic, please raise an issue (if one does not already exist) 
 noting the missed titles so we can address all of them.
->>>>>>> b9547d80c056de342db85b0d3238e43b110f07be
 
 # Overview
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.
