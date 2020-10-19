@@ -26,7 +26,7 @@ class MultipleASE(BaseEmbedMulti):
     :math:`R^{(i)} \in \mathbb{R}^{d_1\times d_2}`. In this case, score matrices
     :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a
     common latent position matrices :math:`U` and :math:`V`.
-    
+
     Read more in the :ref:`tutorials <embed_tutorials>`
 
     Parameters
