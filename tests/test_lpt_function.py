@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
-from graspologic.inference import LatentPositionTest
+
+from graspologic.inference import lpt_function
 from graspologic.simulations import er_np, sbm
 
 
@@ -101,3 +102,7 @@ def test_SBM_epsilon():
     p_alt, _, _ = lpt_function(A1, A3, n_components=2, n_bootstraps=100)
     pytest.assertTrue(p_null > 0.05)
     pytest.assertTrue(p_alt <= 0.05)
+
+
+if __name__ == "__main__":
+    unittest.main()

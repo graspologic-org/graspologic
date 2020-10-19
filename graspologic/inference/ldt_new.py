@@ -2,9 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-
 import numpy as np
-
 np.random.seed(8888)
 from scipy import stats
 
@@ -43,7 +41,152 @@ def ldt_function(
     align_kws={},
     input_graph=True,
 ):
+     """Two-sample hypothesis test for the problem of determining whether two random
+    dot product graphs have the same distributions of latent positions.
 
+    This test can operate on two graphs where there is no known matching
+    between the vertices of the two graphs, or even when the number of vertices
+    is different. Currently, testing is only supported for undirected graphs.
+
+    Read more in the :ref:`tutorials <inference_tutorials>`
+
+    Parameters
+    ----------
+    A1, A2 : variable (see description)
+            The two graphs, or their embeddings to run a hypothesis test on.
+            Expected variable type and shape depends on input_graph attribute:
+
+    test : str (default="hsic")
+        Backend hypothesis test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
+        These tests are typically used for independence testing, but here they
+        are used for a two-sample hypothesis test on the latent positions of
+        two graphs. See :class:`hyppo.ksample.KSample` for more information.
+
+    metric : str or function (default="gaussian")
+        Distance or a kernel metric to use, either a callable or a valid string.
+        If a callable, then it should behave similarly to either
+        :func:`sklearn.metrics.pairwise_distances` or to
+        :func:`sklearn.metrics.pairwise.pairwise_kernels`.
+        If a string, then it should be either one of the keys in either
+        `sklearn.metrics.pairwise.PAIRED_DISTANCES` or in
+        `sklearn.metrics.pairwise.PAIRWISE_KERNEL_FUNCTIONS`, or "gaussian",
+        which will use a gaussian kernel with an adaptively selected bandwidth.
+        It is recommended to use kernels (e.g. "gaussian") with kernel-based
+        hsic test and distances (e.g. "euclidean") with all other tests.
+
+    n_components : int or None (default=None)
+        Number of embedding dimensions. If None, the optimal embedding
+        dimensions are found by the Zhu and Godsi algorithm.
+        See :func:`~graspologic.embed.selectSVD` for more information.
+        This argument is ignored if `input_graph` is False.
+
+    n_bootstraps : int (default=200)
+        Number of bootstrap iterations for the backend hypothesis test.
+        See :class:`hyppo.ksample.KSample` for more information.
+
+    workers : int (default=1)
+        Number of workers to use. If more than 1, parallelizes the code.
+        Supply -1 to use all cores available to the Process.
+
+    size_correction : bool (default=True)
+        Ignored when the two graphs have the same number of vertices. The test
+        degrades in validity as the number of vertices of the two graphs
+        diverge from each other, unless a correction is performed.
+
+        - True
+            Whenever the two graphs have different numbers of vertices,
+            estimates the plug-in estimator for the variance and uses it to
+            correct the embedding of the larger graph.
+        - False
+            Does not perform any modifications (not recommended).
+
+    pooled : bool (default=False)
+        Ignored whenever the two graphs have the same number of vertices or
+        `size_correction` is set to False. In order to correct the adjacency
+        spectral embedding used in the test, it is needed to estimate the
+        variance for each of the latent position estimates in the larger graph,
+        which requires to compute different sample moments. These moments can
+        be computed either over the larger graph (False), or over both graphs
+        (True). Setting it to True should not affect the behavior of the test
+        under the null hypothesis, but it is not clear whether it has more
+        power or less power under which alternatives. Generally not recomended,
+        as it is untested and included for experimental purposes.
+
+    align_type : str, {'sign_flips' (default), 'seedless_procrustes'} or None
+        Random dot product graphs have an inherent non-identifiability,
+        associated with their latent positions. Thus, two embeddings of
+        different graphs may not be orthogonally aligned. Without this accounted
+        for, two embeddings of different graphs may appear different, even
+        if the distributions of the true latent positions are the same.
+        There are several options in terms of how this can be addresssed:
+
+        - 'sign_flips'
+            A simple heuristic that flips the signs of one of the embeddings,
+            if the medians of the two embeddings in that dimension differ from
+            each other. See :class:`~graspologic.align.SignFlips` for more
+            information on this procedure. In the limit, this is guaranteed to
+            lead to a valid test, as long as matrix :math:`X^T X`, where
+            :math:`X` is the latent positions does not have repeated non-zero
+            eigenvalues. This may, however, result in an invalid test in the
+            finite sample case if the some eigenvalues are same or close.
+        - 'seedless_procrustes'
+            An algorithm that learns an orthogonal alignment matrix. This
+            procedure is slower than sign flips, but is guaranteed to yield a
+            valid test in the limit, and also makes the test more valid in some
+            finite sample cases, in which the eigenvalues are very close to
+            each other. See `~graspologic.align.SignFlips` for more information
+            on the procedure.
+        - None
+            Do not use any alignment technique. This is strongly not
+            recommended, as it may often result in a test that is not valid.
+
+    align_kws : dict
+        Keyword arguments for the aligner of choice, either
+        `~graspologic.align.SignFlips` or
+        `~graspologic.align.SeedlessProcrustes`, depending on the align_type.
+        See respective classes for more information.
+
+    input_graph : bool (default=True)
+        Flag whether to expect two full graphs, or the embeddings.
+
+        - True
+            .fit and .fit_predict() expect graphs, either as NetworkX graph objects
+            or as adjacency matrices, provided as ndarrays of size (n, n) and
+            (m, m). They will be embedded using adjacency spectral embeddings.
+        - False
+            .fit() and .fit_predict() expect adjacency spectral embeddings of
+            the graphs, they must be ndarrays of size (n, d) and (m, d), where
+            d must be same. n_components attribute is ignored in this case.
+
+    Attributes
+    ----------
+    p_value_ : float
+        The overall p value from the test.
+        
+    sample_T_statistic_ : float
+        The observed difference between the embedded latent positions of the
+        two input graphs.
+
+    null_distribution_ : ndarray, shape (n_bootstraps, )
+        The distribution of T statistics generated under the null.
+
+    References
+    ----------
+    .. [1] Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., & Priebe, C. E. (2017).
+        "A nonparametric two-sample hypothesis testing problem for random graphs."
+        Bernoulli, 23(3), 1599-1630.
+
+    .. [2] Panda, S., Palaniappan, S., Xiong, J., Bridgeford, E., Mehta, R., Shen, C., & Vogelstein, J. (2019).
+        "hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package."
+        arXiv:1907.02088.
+
+    .. [3] Alyakin, A. A., Agterberg, J., Helm, H. S., Priebe, C. E. (2020).
+       "Correcting a Nonparametric Two-sample Graph Hypothesis Test for Graphs with Different Numbers of Vertices"
+       arXiv:2008.09434
+
+    """
+
+    
     # check test argument
     if not isinstance(test, str):
         msg = "test must be a str, not {}".format(type(test))
