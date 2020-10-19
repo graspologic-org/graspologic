@@ -762,8 +762,6 @@ def remove_vertices(graph, indices, return_vertices=False):
     graph = import_graph(graph)
     if isinstance(indices, list) and len(indices) >= len(graph):
         raise IndexError("You must pass in fewer vertex indices than vertices.")
-    if isinstance(indices, int):
-        indices = [indices]
     directed = not is_almost_symmetric(graph)
 
     # truncate graph
@@ -772,11 +770,11 @@ def remove_vertices(graph, indices, return_vertices=False):
     A = graph[mask, :][:, mask]
 
     if return_vertices:
-        cols = graph[:, indices]
-        vertices = np.squeeze(cols[mask, :].T)
+        rows = graph[mask]
+        vertices = rows[:, indices].T
         if directed:
-            rows = graph[indices, :]
-            vertices_right = np.squeeze(rows[:, mask])
+            cols = graph[:, mask]
+            vertices_right = cols[indices]
             return A, (vertices, vertices_right)
         return A, vertices
     return A

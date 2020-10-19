@@ -482,6 +482,9 @@ class TestRemoveVertices(unittest.TestCase):
         assert_equal(a[0], np.array([6, 11, 16, 21]))
         assert_equal(a[1], np.array([2, 3, 4, 5]))
 
+        # make sure vertices matches with latent_left_,
+        # and vertices_right matches with latent_right_
+
     def test_exceptions(self):
         # ensure proper errors are thrown when invalid inputs are passed.
         with pytest.raises(TypeError):
