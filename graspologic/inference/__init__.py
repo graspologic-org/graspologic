@@ -1,14 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from .lpt_new import lpt_function
-from .ldt_new import ldt_function
-from .latent_position_test import LatentPositionTest
-from .latent_distribution_test import LatentDistributionTest
+from .lpt import latent_position_test
+from .ldt import latent_distribution_test
 
-__all__ = [
-    "lpt_function",
-    "ldt_function",
-    "LatentPositionTest",
-    "LatentDistributionTest",
-]
+__all__ = ["latent_position_test", "latent_distribution_test"]

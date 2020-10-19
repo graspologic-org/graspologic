@@ -11,7 +11,6 @@ from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph, fit_plug_in_variance_estimator
 from ..align import SignFlips
 from ..align import SeedlessProcrustes
-from .base import BaseInference
 from sklearn.utils import check_array
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import pairwise_kernels
@@ -28,7 +27,7 @@ _VALID_METRICS = _VALID_DISTANCES + _VALID_KERNELS
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
 
-def ldt_function(
+def latent_distribution_test(
     A1,
     A2,
     test="dcorr",

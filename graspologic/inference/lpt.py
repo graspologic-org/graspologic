@@ -12,7 +12,7 @@ from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
 
 
-def lpt_function(
+def latent_position_test(
     A1, A2, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation"
 ):
     r"""
