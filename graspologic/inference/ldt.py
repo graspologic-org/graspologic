@@ -4,7 +4,6 @@
 import warnings
 import numpy as np
 
-np.random.seed(8888)
 from scipy import stats
 
 from ..embed import select_dimension, AdjacencySpectralEmbed
@@ -388,7 +387,7 @@ def _embed(A1, A2, n_components):
 def _sample_modified_ase(X, Y, pooled=False):
     N, M = len(X), len(Y)
 
-    # return if graphs are same order, else else ensure X the larger graph.
+    # return if graphs are same order, else ensure X the larger graph.
     if N == M:
         return X, Y
     elif M > N:
