@@ -4,7 +4,7 @@
 import numpy as np
 from sklearn.base import BaseEstimator
 
-from ..embed import ClassicalMDS, OmnibusEmbed
+from .embed import ClassicalMDS, OmnibusEmbed
 from ..utils import pass_to_ranks
 
 
