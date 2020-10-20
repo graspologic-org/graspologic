@@ -70,6 +70,7 @@ def latent_position_test(
     p_value: float
         The overall p value from the test; this is the max of ``p_value_1`` and ``p_value_2_
     
+
     sample_T_statistic : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
@@ -85,6 +86,7 @@ def latent_position_test(
             are used independently to sample random dot product graphs, so two null
             distributions are generated
     
+
     See also
     --------
     graspologic.embed.AdjacencySpectralEmbed
@@ -208,4 +210,3 @@ def embed(A1, A2, embedding, n_components, check_lcc=True):
         X1_hat = X_hat_compound[0]
         X2_hat = X_hat_compound[1]
     return (X1_hat, X2_hat)
-
