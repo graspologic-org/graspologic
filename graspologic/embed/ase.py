@@ -163,9 +163,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # for out-of-sample
         inv_eigs = np.diag(1 / self.singular_values_)
-        self.pinv_left_ = self.latent_left_ @ inv_eigs
+        self._pinv_left = self.latent_left_ @ inv_eigs
         if self.latent_right_ is not None:
-            self.pinv_right_ = self.latent_right_ @ inv_eigs
+            self._pinv_right = self.latent_right_ @ inv_eigs
 
         self.is_fitted_ = True
         return self
@@ -206,17 +206,17 @@ class AdjacencySpectralEmbed(BaseEmbed):
             raise TypeError("Undirected graphs require array input")
 
         # correct shape in y?
+        latent_rows = self.latent_left_.shape[0]
         _y = y[0] if directed else y
-        latent_rows, _ = self.latent_left_.shape
         y_cols = _y.shape[-1]
+        if _y.ndim > 2:
+            raise ValueError("out-of-sample vertex must be 1d or 2d")
         if latent_rows != y_cols:
             msg = "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
             raise ValueError(msg)
-        if _y.ndim > 2:
-            raise ValueError("out-of-sample vertex must be 1d or 2d")
 
         # workhorse code
         if not directed:
-            return y @ self.pinv_left_
+            return y @ self._pinv_left
         elif directed:
-            return y[0] @ self.pinv_left_, y[1] @ self.pinv_right_
+            return y[0] @ self._pinv_left, y[1] @ self._pinv_right
