@@ -107,8 +107,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
        Journal of the American Statistical Association, Vol. 107(499), 2012
 
     .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
-    Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
-    of Machine Learning Research, 80, 2975-2984.
+        Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
+        of Machine Learning Research, 80, 2975-2984.
     """
 
     def __init__(
