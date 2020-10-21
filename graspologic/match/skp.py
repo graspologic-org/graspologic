@@ -37,10 +37,10 @@ import numpy as np
 class SinkhornKnopp:
     """
     Sinkhorn Knopp Algorithm
-    Takes a non-negative square matrix P, where :math:`P /= 0`
+    Takes a non-negative square matrix :math:`P`, where :math:`P \\neq 0`
     and iterates through Sinkhorn Knopp's algorithm
-    to convert P to a doubly stochastic matrix.
-    Guaranteed convergence if P has total support [1]:
+    to convert :math:`P` to a doubly stochastic matrix.
+    Guaranteed convergence if :math:`P` has total support [1]:
 
     Parameters
     ----------

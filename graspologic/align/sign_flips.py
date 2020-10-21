@@ -8,9 +8,9 @@ from .base import BaseAlign
 
 class SignFlips(BaseAlign):
     """
-    Flips the signs of all entries in one dataset, `X` along some of the
+    Flips the signs of all entries in one dataset, ``X`` along some of the
     dimensions. In particular, it does so in a way that brings this dataset to
-    the same orthant as the second dataset, `Y`, according to some criterion,
+    the same orthant as the second dataset, ``Y``, according to some criterion,
     computed along each dimension. The two critera currently available are the
     median and the maximum (in magnitude) value along each dimension.
 
@@ -32,7 +32,7 @@ class SignFlips(BaseAlign):
     Attributes
     ----------
     Q_ : array, size (d, d)
-        Final orthogonal matrix, used to modify `X`.
+        Final orthogonal matrix, used to modify ``X``.
 
     """
 

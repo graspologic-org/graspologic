@@ -39,10 +39,10 @@ class ClassicalMDS(BaseEstimator):
     ----------
     n_components : int, or None (default=None)
         Number of components to keep. If None, then it will run
-        ``select_dimension`` to find the optimal embedding dimension.
+        :func:`~graspologic.embed.select_dimension` to find the optimal embedding dimension.
 
     n_elbows : int, or None (default=2)
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'

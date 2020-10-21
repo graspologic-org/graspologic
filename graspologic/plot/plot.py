@@ -237,12 +237,12 @@ def heatmap(
 
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if ``None``
+        if None
 
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is ``True``, will sort nodes this way within block.
+        ``sort_nodes`` is True, will sort nodes this way within block.
 
     **kwargs : dict, optional
         additional plotting arguments passed to Seaborn's ``heatmap``
@@ -418,18 +418,18 @@ def gridplot(
         according to these labels and plot the labels on the marginal
     outer_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes, ignored without ``inner_hier_labels``
-        If not ``None``, will plot these labels as the second level of a hierarchy on the
+        If not None, will plot these labels as the second level of a hierarchy on the
         marginals
     hier_label_fontsize : int
         Size (in points) of the text labels for the ``inner_hier_labels`` and
         ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if ``None``
+        if None
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is ``True``, will sort nodes this way within block.
+        ``sort_nodes`` is True, will sort nodes this way within block.
     """
     _check_common_inputs(
         height=height,

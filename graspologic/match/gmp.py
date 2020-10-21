@@ -36,7 +36,7 @@ class GraphMatch(BaseEstimator):
         The initial position chosen
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
-        :math:`J=1 \times 1^T /n` , i.e the barycenter of the feasible region
+        :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region
 
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random doubly
         stochastic matrix
@@ -51,7 +51,7 @@ class GraphMatch(BaseEstimator):
 
     eps : float (default = 0.1)
         A positive, threshold stopping criteria such that FW continues to iterate
-        while Frobenius norm of :math:`(P_{i}-P_{i+1}) > eps`
+        while Frobenius norm of :math:`(P_{i}-P_{i+1}) > \\text{eps}`
 
     gmp : bool (default = True)
         Gives users the option to solve QAP rather than the Graph Matching Problem
@@ -73,14 +73,14 @@ class GraphMatch(BaseEstimator):
 
     perm_inds_ : array, size (n,) where n is the number of vertices in the fitted graphs.
         The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
-        to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
+        to best minimize the objective function :math:`f(P) = \\text{trace}(A^T PBP^T )`.
 
 
     score_ : float
         The objective function value of for the optimal permutation found.
 
     n_iter_ : int
-        Number of Frank-Wolfe iterations run. If ``n_init > 1``, ``n_iter_`` reflects the number of
+        Number of Frank-Wolfe iterations run. If ``n_init > 1``, :attr:`n_iter_` reflects the number of
         iterations performed at the initialization returned.
 
 

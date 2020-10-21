@@ -86,7 +86,7 @@ def import_edgelist(
         with matching extension.
 
     delimiter : str or None, default=None, optional
-        Delimiter of edgelist. If ``None``, the delimiter is whitespace.
+        Delimiter of edgelist. If None, the delimiter is whitespace.
 
     nodetype : int (default), float, str, Python type, optional
        Convert node data from strings to specified type.
@@ -101,7 +101,7 @@ def import_edgelist(
         an array is returned.
 
     vertices : array-like, shape (n_vertices, )
-        If ``return_vertices == True``, then returns an array of all vertices that were
+        If ``return_vertices``` is True, then returns an array of all vertices that were
         included in the output graphs.
     """
     # p = Path(path)
@@ -269,7 +269,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     regularizer: int, float or None, optional (default=None)
         Constant to add to the degree vector(s). If None, average node degree is added.
-        If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
+        If int or float, must be >= 0. Only used when ``form`` is 'R-DAD'.
 
     Returns
     -------

@@ -30,7 +30,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
@@ -58,7 +58,7 @@ class LaplacianSpectralEmbed(BaseEmbed):
     regularizer: int, float or None, optional (default=None)
         Constant to be added to the diagonal of degree matrix. If None, average
         node degree is added. If int or float, must be >= 0. Only used when
-        ``form`` == 'R-DAD'.
+        ``form`` is 'R-DAD'.
 
     concat : bool, optional (default False)
         If graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.

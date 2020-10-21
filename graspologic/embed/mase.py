@@ -36,7 +36,7 @@ class MultipleASE(BaseEmbedMulti):
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
@@ -90,8 +90,8 @@ class MultipleASE(BaseEmbedMulti):
 
     Notes
     -----
-    When an input graph is directed, ``n_components`` of ``latent_left_`` may not be equal
-    to ``n_components`` of ``latent_right_``.
+    When an input graph is directed, ``n_components`` of :attr:`latent_left_` may not be equal
+    to ``n_components`` of :attr:`latent_right_`.
     """
 
     def __init__(

@@ -23,7 +23,7 @@ class GaussianCluster(BaseCluster):
     ----------
     min_components : int, default=2.
         The minimum number of mixture components to consider (unless
-        ``max_components=None``, in which case this is the maximum number of
+        ``max_components`` is None, in which case this is the maximum number of
         components to consider). If ``max_componens`` is not None, ``min_components``
         must be less than or equal to ``max_components``.
 
@@ -90,11 +90,11 @@ class GaussianCluster(BaseCluster):
     bic_ : pandas.DataFrame
         A pandas DataFrame of BIC values computed for all possible number of clusters
         given by ``range(min_components, max_components + 1)`` and all covariance
-        structures given by ``covariance_type``.
+        structures given by :attr:`covariance_type`.
     ari_ : pandas.DataFrame
         Only computed when y is given. Pandas Dataframe containing ARI values computed
         for all possible number of clusters given by ``range(min_components,
-        max_components)`` and all covariance structures given by ``covariance_type``.
+        max_components)`` and all covariance structures given by :attr:`covariance_type`.
     """
 
     def __init__(

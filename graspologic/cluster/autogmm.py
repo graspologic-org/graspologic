@@ -32,7 +32,7 @@ class AutoGMMCluster(BaseCluster):
     ----------
     min_components : int, default=2.
         The minimum number of mixture components to consider (unless
-        ``max_components=None``, in which case this is the maximum number of
+        ``max_components`` is None, in which case this is the maximum number of
         components to consider). If ``max_components`` is not None, ``min_components``
         must be less than or equal to ``max_components``.
         If ``label_init`` is given, min_components must match number of unique labels

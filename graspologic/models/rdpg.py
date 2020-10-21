@@ -56,7 +56,7 @@ class RDPGEstimator(BaseGraphEstimator):
         The fit latent positions for the RDPG model. If a tuple, then the graph that was
         input to fit was directed, and the first and second elements of the tuple are
         the left and right latent positions, respectively. The left and right latent
-        positions will both be of shape (n_verts, n_components). If ``latent_`` is an
+        positions will both be of shape (n_verts, n_components). If :attr:`latent_` is an
         array, then the graph that was input to fit was undirected and the left and
         right latent positions are the same.
 
