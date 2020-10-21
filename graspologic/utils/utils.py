@@ -704,29 +704,32 @@ def fit_plug_in_variance_estimator(X):
 
 
 def remove_vertices(graph, indices, return_removed=False):
-    # TODO: return_removed name change
     """
-    Remove vertices from an adjacency matrix.
+    Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the truncated matrix and optionally
+    the removed subgraph. Here, an adjacency vector is the set of edge weights for a particular vertex.
 
     Parameters
     ----------
-    graph: np.ndarray, shape (n, n)
-        Adjacency matrix
-    indices: int or array-like
-        Index/indices of the vertex/vertices to be removed.
-    return_removed: bool, optional
-        Whether to return the tuple (A, V),
-        where A is the truncated adjacency matrix,
-        V is an array of the removed vertices, by default False
+    graph: networkx.Graph or array-like, shape (n, n)
+        The adjacency matrix for some graph.
+    indices: int or array-like, length m
+        Index/indices of the adjacency vector(s) to be removed.
+    return_removed: bool, by default False (optional)
+        Whether to return the tuple ``(A, V)``,
+        where ``A`` is the truncated adjacency matrix,
+        ``V`` is an array representing the removed subgraph.
 
     Returns
     -------
-    truncated_graph: np.ndarray, shape (k, k), n>k
-        Copy of `graph` without the vertices given by `indices`.
+    truncated_graph: np.ndarray
+        The truncated matrix.
+        This is a copy of `graph` of shape (k, k), with ``k=n-m``, without the ``m`` adjacency vectors given by `indices`.
 
-    vertices: np.ndarray or tuple, shape (n_indices, n) (optional)
-        Array of removed vertices without edges to each other.
-        If directed, return a tuple with input and output vertices.
+    removed_subgraph: np.ndarray or tuple, shape (m, k) (optional)
+        Array of removed adjacency vectors without edges to each other.
+        If directed, this is a tuple ``(V_1, V_2)``,
+        with ``V_1`` being an array of adjacency vectors from the removed subgraph to the truncated graph,
+        and ``V_2`` being an array of adjacency vectors from the truncated graph to the removed subgraph.
 
     Examples
     --------

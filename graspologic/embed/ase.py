@@ -105,6 +105,10 @@ class AdjacencySpectralEmbed(BaseEmbed):
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
+
+    .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
+    Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
+    of Machine Learning Research, 80, 2975-2984.
     """
 
     def __init__(
@@ -173,7 +177,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     def predict(self, y):
         """
         Obtain out-of-sample latent positions for vertices not in the original embedding.
-        For more details, see [1].
+        For more details, see [2].
 
         Parameters
         ----------
@@ -187,12 +191,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
             Out-of-sample prediction for the latent position(s) of y.
             If undirected, returns array.
             If directed, returns (y_left, y_right).
-
-        References
-        ----------
-        .. [1] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
-        Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
-        of Machine Learning Research, 80, 2975-2984.
         """
 
         # checks
