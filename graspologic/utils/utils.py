@@ -703,7 +703,8 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
-def remove_vertices(graph, indices, return_vertices=False):
+def remove_vertices(graph, indices, return_removed=False):
+    # TODO: return_removed name change
     """
     Remove vertices from an adjacency matrix.
 
@@ -713,7 +714,7 @@ def remove_vertices(graph, indices, return_vertices=False):
         Adjacency matrix
     indices: int or array-like
         Index/indices of the vertex/vertices to be removed.
-    return_vertices: bool, optional
+    return_removed: bool, optional
         Whether to return the tuple (A, V),
         where A is the truncated adjacency matrix,
         V is an array of the removed vertices, by default False
@@ -736,7 +737,7 @@ def remove_vertices(graph, indices, return_vertices=False):
     >>> remove_vertices(A, 0)
     array([[0., 3.],
            [3., 0.]]))
-    >>> remove_vertices(A, 0, return_vertices=True)
+    >>> remove_vertices(A, 0, return_removed=True)
     (array([[0., 3.],
             [3., 0.]]),
      array([1., 2.]))
@@ -746,12 +747,12 @@ def remove_vertices(graph, indices, return_vertices=False):
                       [4, 0, 5, 6],
                       [7, 8, 0, 9],
                       [10, 11, 12, 0]])
-    >>> remove_vertices(B, 0, return_vertices=True)
+    >>> remove_vertices(B, 0, return_removed=True)
     (array([[ 0.,  5.,  6.],
             [ 8.,  0.,  9.],
             [11., 12.,  0.]]),
     (array([ 4.,  7., 10.]), array([1., 2., 3.])))
-    >>> remove_vertices(B, [0, -1], return_vertices=True)
+    >>> remove_vertices(B, [0, -1], return_removed=True)
     (array([[0., 5.],
             [8., 0.]]),
     (array([[4., 7.],
@@ -769,7 +770,7 @@ def remove_vertices(graph, indices, return_vertices=False):
     mask[indices] = 0
     A = graph[mask, :][:, mask]
 
-    if return_vertices:
+    if return_removed:
         rows = graph[mask]
         vertices = rows[:, indices].T
         if directed:

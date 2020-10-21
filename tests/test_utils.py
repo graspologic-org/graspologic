@@ -441,7 +441,7 @@ class TestRemoveVertices(unittest.TestCase):
         # with list index
         indices = [0, -1, 1]
         for idx in [indices, np.array(indices)]:
-            A, a = gus.remove_vertices(self.undirected, idx, return_vertices=True)
+            A, a = gus.remove_vertices(self.undirected, idx, return_removed=True)
             self.assertIsInstance(a, np.ndarray)
             assert_equal(A, np.array([[0, 18], [18, 0]]))
             assert_equal(a, np.array([[11, 16], [23, 24], [12, 17]]))
@@ -449,7 +449,7 @@ class TestRemoveVertices(unittest.TestCase):
 
         # with integer index
         indices = 0
-        A, a = gus.remove_vertices(self.undirected, indices, return_vertices=True)
+        A, a = gus.remove_vertices(self.undirected, indices, return_removed=True)
         assert_equal(A, self.undirected[1:, 1:])
         assert_equal(a, np.array([6, 11, 16, 21]))
         self.assertTrue(gus.is_almost_symmetric(A))
@@ -463,7 +463,7 @@ class TestRemoveVertices(unittest.TestCase):
         idx1 = [0, -1, 1]
         idx2 = np.array(idx1)
         for indices in [idx1, idx2]:
-            A, a = gus.remove_vertices(self.directed, indices, return_vertices=True)
+            A, a = gus.remove_vertices(self.directed, indices, return_removed=True)
             self.assertIsInstance(a, tuple)
             self.assertIsInstance(a[0], np.ndarray)
             self.assertIsInstance(a[1], np.ndarray)
@@ -473,7 +473,7 @@ class TestRemoveVertices(unittest.TestCase):
 
         # with integer index
         idx = 0
-        A, a = gus.remove_vertices(self.directed, idx, return_vertices=True)
+        A, a = gus.remove_vertices(self.directed, idx, return_removed=True)
         assert_equal(A, gus.remove_vertices(self.directed, idx))
         self.assertIsInstance(a, tuple)
         self.assertIsInstance(a[0], np.ndarray)

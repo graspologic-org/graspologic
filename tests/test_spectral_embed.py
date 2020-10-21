@@ -154,7 +154,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
     def test_predict_runs(self):
         ase = clone(self.ase)
         for graph in self.testgraphs.values():
-            A, a = remove_vertices(graph, 1, return_vertices=True)
+            A, a = remove_vertices(graph, 1, return_removed=True)
             ase.fit(A)
             directed = ase.latent_right_ is not None
             weighted = not np.array_equal(A, A.astype(bool))
@@ -180,7 +180,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase.predict(np.ones(len(Guwd)))
 
         with pytest.raises(ValueError):
-            A, a = remove_vertices(self.testgraphs["Gw"], [0, 1], return_vertices=True)
+            A, a = remove_vertices(self.testgraphs["Gw"], [0, 1], return_removed=True)
             a = a.T
             ase.fit(A)
             ase.predict(a)
