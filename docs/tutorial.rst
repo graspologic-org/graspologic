@@ -40,6 +40,7 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
    :maxdepth: 1
    
    tutorials/embedding/AdjacencySpectralEmbed
+   tutorials/embedding/OutOfSampleEmbed
    tutorials/embedding/Omnibus
    
 .. _inference_tutorials: 
