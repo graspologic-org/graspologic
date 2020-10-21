@@ -16,7 +16,7 @@ A clear and concise description of what you want to happen.
 **Describe alternatives you've considered**
 A clear and concise description of any alternative solutions or features you've considered.
 
-**Provide any references for your feature request**
+**Provide references (if applicable)**
 If your feature request is related to a published algorithm/idea, please provide links to 
 any relevant articles or webpages.
 
