@@ -9,6 +9,10 @@ import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.utils import check_array, check_consistent_length
 from sklearn.preprocessing import Binarizer
+import itertools
+from scipy import linalg
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 from ..embed import selectSVD
 from ..utils import import_graph, pass_to_ranks
@@ -671,6 +675,217 @@ def pairplot(
         pairs.fig.suptitle(title)
 
     return pairs
+
+def plot_ellipse(
+    X,
+    Y_,
+    means,
+    covariances,
+    ax,
+    j,
+    k,
+    colors,
+    lab_dict=None,
+    ind_to_lab=None,
+    alpha=0.7,
+):
+    r"""
+    plot_ellipse makes a scatter plot from the two dimensions j,k where j corresponds to x-axis
+    and k corresponds to the y-axis onto the axis that is ax. plot_ellipse then applies a gmm ellipse onto the scatterplot
+    using the data from Y_, means, covariances.
+
+    Parameters
+    ----------
+    X : array-like, shape (n_samples, n_features)
+        Input data.
+    Y_ : array-like, shape (n_samples, 1)
+        When no labels are passed into pairplot_with_gmm then these are the gmm lables.
+        When labels are passed into pairplot_with_gmm then these are numbers that have corrsponding
+        relationship to the labels
+    means : array-like, shape (n_components, n_features)
+        Estimated means from gmm
+    covariances : array-like, shape (with 'full') (n_components, n_features, n_features)
+        estimated covariances from gmm
+    ax : axis object
+        The location where plot_ellipse will plot
+    j : int
+        column index of feature of interest from X which will be the x-axis data.
+    k : int
+        column index of feature of interest from X which will be the y-axis data.
+    colors: array-like
+    lab_dict : dict
+        Dictionary of labels mapped to unique number
+    ind_to_lab : dict
+        The reverse of lab_dict
+    alpha : float, optional, default: 0.7
+        Opacity value of plotter markers between 0 and 1
+    """
+    for i, (mean, covar, color) in enumerate(zip(means, covariances, colors)):
+        v, w = linalg.eigh(covar)
+        v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
+        u = w[0] / linalg.norm(w[0])
+        if lab_dict and ind_to_lab:
+            # Plot the scatter
+            sns.scatterplot(
+                X[Y_ == i, j], X[Y_ == i, k], color=color, ax=ax, label=ind_to_lab[i]
+            )
+            # Plot an ellipse to show the Gaussian component
+            angle = np.arctan(u[1] / u[0])
+            angle = 180.0 * angle / np.pi
+            ell = mpl.patches.Ellipse(
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
+            )
+        else:
+            if not np.any(Y_ == i):
+                continue
+            sns.scatterplot(
+                X[Y_ == i, j],
+                X[Y_ == i, k],
+                color=color,
+                ax=ax,
+                label="Block {}".format(i),
+            )
+            # Plot an ellipse to show the Gaussian component
+            angle = np.arctan(u[1] / u[0])
+            angle = 180.0 * angle / np.pi
+            ell = mpl.patches.Ellipse(
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
+            )
+        ell.set_clip_box(ax.bbox)
+        ell.set_alpha(alpha)
+        ax.add_artist(ell)
+        ax.set_xticks([]), ax.set_yticks([])
+        ax.set_ylabel(k), ax.set_xlabel(k)
+
+
+def pairplot_with_gmm(
+    X, gmm, labels=None, title=None, context="talk", font_scale=1, alpha=0.7
+):
+    r"""
+    Plot pairwise relationships in a dataset.
+
+    By default, this function will create a grid of Axes such that each dimension
+    in data will by shared in the y-axis across a single row and in the x-axis
+    across a single column.
+
+    The off-diagonal Axes show the pairwise relationships displayed as scatterplot.
+    Using the inputted gmm an ellipse to show the Gaussian component will be plotted.
+    The diagonal Axes show the univariate distribution of the data for that
+    dimension displayed as kernel density estimates (KDEs).
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
+    Parameters
+    ----------
+    X : array-like, shape (n_samples, n_features)
+        Input data.
+    gmm: sklearn.mixture.GaussianMixture
+    labels : array-like or list, shape (n_samples), optional
+        Labels that correspond to each sample in X.
+    title : str, optional, default: None
+        Title of plot.
+    context :  None, or one of {paper, notebook, talk (default), poster}
+        The name of a preconfigured set.
+    font_scale : float, optional, default: 1
+        Separate scaling factor to independently scale the size of the font
+        elements.
+    alpha : float, optional, default: 0.7
+        Opacity value of plotter markers between 0 and 1
+    """
+    sns.despine(left=True)
+    # Handle X
+    if not isinstance(X, (list, np.ndarray)):
+        msg = "X must be array-like, not {}.".format(type(X))
+        raise TypeError(msg)
+
+    # Handle labels
+    if labels is not None:
+        if not isinstance(labels, (list, np.ndarray)):
+            msg = "Y must be array-like or list, not {}.".format(type(labels))
+            raise TypeError(msg)
+        elif X.shape[0] != len(labels):
+            msg = "Expected length {}, but got length {} instead for Y.".format(
+                X.shape[0], len(labels)
+            )
+            raise ValueError(msg)
+    # Handle gmm
+    if gmm is None:
+        msg = "You must input a sklearn.mixture.GaussianMixture"
+        raise TypeError(msg)
+    # get relevant features from the gmm model
+    Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
+    colors = ["red", "blue", "green", "purple", "pink", "brown", "orange"]
+    # plot only a scatter plot with only two feature columns
+    lab_dict, ind_to_lab = {}, {}
+    if labels:
+        set_labs = sorted(set(labels))
+        counter = 0
+        for lab in set_labs:
+            lab_dict[lab] = counter
+            ind_to_lab[counter] = lab
+            counter += 1
+        Y_ = np.asarray([lab_dict[labels[i]] for i in range(len(labels))])
+    with sns.plotting_context(context=context, font_scale=font_scale):
+        if X.shape[1] == 2:
+            pairplot, axes = plt.subplots(1, 1, figsize=(12, 12))
+            plot_ellipse(
+                X, Y_, means, covariances, axes, 0, 1, colors, lab_dict, ind_to_lab
+            )
+            axes.set_ylabel("Dim " + str(0))
+            axes.set_xlabel("Dim " + str(1))
+            if title:
+                pairplot.suptitle(title)
+            pairplot.suptitle(
+                "Fit a Gaussian mixture using " + str(means.shape[0]) + " components"
+            )
+            plt.subplots_adjust(right=0.8)
+            return pairplot
+        # for more than two features compared
+        pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=(12, 12))
+        for k in range(X.shape[1]):
+            for j in range(X.shape[1]):
+                if k == j:
+                    for t in range(X.shape[1]):
+                        sns.distplot(
+                            X[Y_ == t, k], kde=True, color=colors[t], ax=axes[k, k]
+                        )
+                    axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
+                    axes[k, j].set_ylabel(None)
+                    axes[k, j].set_ylabel(j), axes[k, j].set_xlabel(k)
+                else:
+                    plot_ellipse(
+                        X,
+                        Y_,
+                        means,
+                        covariances,
+                        axes[k, j],
+                        j,
+                        k,
+                        colors,
+                        lab_dict,
+                        ind_to_lab,
+                    )
+        for i in range(X.shape[1]):
+            for j in range(X.shape[1]):
+                axes[i, j].set_ylabel("Dim " + str(i))
+                axes[i, j].set_xlabel("Dim " + str(j))
+        for ax in axes.flat:
+            ax.label_outer()
+        if title:
+            pairplot.suptitle(title)
+        pairplot.suptitle(
+            "Fit a Gaussian mixture using " + str(means.shape[0]) + " components"
+        )
+        handles, labels = [], []
+        for ax in axes.flat:
+            ax.legend().remove()
+            handles_, labels_ = ax.get_legend_handles_labels()
+            handles += handles_
+            labels += labels_
+        pairplot.legend(
+            handles[: means.shape[0]], labels[: means.shape[0]], loc="upper right"
+        )
+    return pairplot
+
 
 
 def _distplot(

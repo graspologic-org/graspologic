@@ -11,6 +11,8 @@ from sklearn.utils import check_array, check_consistent_length
 from sklearn.preprocessing import Binarizer
 import itertools
 from scipy import linalg
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 from ..embed import selectSVD
 from ..utils import import_graph, pass_to_ranks
@@ -876,8 +878,7 @@ def pairplot_with_gmm(
         )
         handles, labels = [], []
         for ax in axes.flat:
-            legend = ax.legend()
-            legend.remove()
+            ax.legend().remove()
             handles_, labels_ = ax.get_legend_handles_labels()
             handles += handles_
             labels += labels_
