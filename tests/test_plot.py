@@ -4,7 +4,7 @@
 import numpy as np
 import pytest
 from sklearn.mixture import GaussianMixture
-from graspologic.plot.plot import heatmap, gridplot, pairplot, _sort_inds
+from graspologic.plot.plot import heatmap, gridplot, pairplot, _sort_inds, pairplot_with_gmm
 from graspologic.simulations.simulations import er_np, sbm
 
 
