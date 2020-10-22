@@ -193,7 +193,7 @@ def test_pairplot_outputs():
         X, Y, col_names, title="Test", height=1.5, variables=["Feature1", "Feature2"]
     )
 
-def test_pairplot_with_gmm_inputs_():
+def test_pairplot_with_gmm_inputs():
     X = np.random.rand(15, 3)
     gmm = GaussianMixture(n_components=3, covariance_type='full').fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
