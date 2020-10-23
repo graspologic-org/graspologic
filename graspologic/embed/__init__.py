@@ -8,6 +8,7 @@ from .mds import ClassicalMDS
 from .n2v import node2vec_embed
 from .omni import OmnibusEmbed
 from .svd import select_dimension, selectSVD
+from .mug2vec import mug2vec
 
 __all__ = [
     "ClassicalMDS",
