@@ -3,7 +3,7 @@
 
 import warnings
 
-from .base import BaseEmbed
+from .base import BaseSpectralEmbed
 from ..utils import (
     import_graph,
     is_fully_connected,
@@ -13,7 +13,7 @@ from ..utils import (
 )
 
 
-class AdjacencySpectralEmbed(BaseEmbed):
+class AdjacencySpectralEmbed(BaseSpectralEmbed):
     r"""
     Class for computing the adjacency spectral embedding of a graph.
 
