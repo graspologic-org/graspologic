@@ -5,18 +5,18 @@ import logging
 import math
 import random
 import time
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Optional, Tuple, Union
 
 import networkx as nx
 import numpy as np
 
 
 def node2vec_embed(
-    graph: nx.Graph,
+    graph: Union[nx.Graph, nx.DiGraph],
     num_walks: int = 10,
     walk_length: int = 80,
-    return_hyperparameter: int = 1,
-    inout_hyperparameter: int = 1,
+    return_hyperparameter: float = 1.0,
+    inout_hyperparameter: float = 1.0,
     dimensions: int = 128,
     window_size: int = 10,
     workers: int = 8,
@@ -29,16 +29,18 @@ def node2vec_embed(
     Parameters
     ----------
 
-    graph: nx.Graph
-        A networkx graph. If the graph is unweighted, the weight of each edge will default to 1
+    graph: Union[nx.Graph, nx.DiGraph]
+        A networkx graph or digraph.  A multigraph should be turned into a non-multigraph so that the calling user
+        properly handles the multi-edges (i.e. aggregate weights or take last edge weight).
+        If the graph is unweighted, the weight of each edge will default to 1.
     num_walks : int
         Number of walks per source. Default is 10.
     walk_length: int
         Length of walk per source. Default is 80.
-    return_hyperparameter : int
-        Return hyperparameter (p). Default is 1.
-    inout_hyperparameter : int
-        Inout hyperparameter (q). Default is 1.
+    return_hyperparameter : float
+        Return hyperparameter (p). Default is 1.0
+    inout_hyperparameter : float
+        Inout hyperparameter (q). Default is 1.0
     dimensions : int
         Dimensionality of the word vectors. Default is 128.
     window_size : int
@@ -57,11 +59,39 @@ def node2vec_embed(
         lower degree walks dominating your higher degree nodes.
 
     Returns
+    -------
     Tuple[np.ndarray, np.ndarray]
         A tuple containing a matrix, with each row index corresponding to the embedding for each node. The tuple
         also contains a vector containing the corresponding vertex labels for each row in the matrix.
         The matrix and vector are positionally correlated.
+
+    Notes
+    -----
+    The original reference implementation of node2vec comes from Aditya Grover from
+        https://github.com/aditya-grover/node2vec/.
+
+    Further details on the Alias Method used in this functionality can be found at
+        https://lips.cs.princeton.edu/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
+
+    References
+    ----------
+    .. [1] Aditya Grover and Jure Leskovec  "node2vec: Scalable Feature Learning for Networks."
+        Knowledge Discovery and Data Mining, 2016.
     """
+
+    _preconditions(
+        graph,
+        num_walks,
+        walk_length,
+        return_hyperparameter,
+        inout_hyperparameter,
+        dimensions,
+        window_size,
+        workers,
+        iterations,
+        interpolate_walk_lengths_by_node_degree,
+    )
+
     node2vec_graph = _Node2VecGraph(graph, return_hyperparameter, inout_hyperparameter)
 
     logging.info(
@@ -88,6 +118,53 @@ def node2vec_embed(
     )
 
     return model.wv.vectors, model.wv.index2word
+
+
+def _assert_is_positive_int(name: str, value: int):
+    if not isinstance(value, int):
+        raise TypeError(f"{name} must be an int")
+    if value <= 0:
+        raise ValueError(f"{name} must be > 0")
+
+
+def _assert_is_nonnegative_float(name: str, value: float):
+    if not isinstance(value, float):
+        raise TypeError(f"{name} must be a float")
+    if value < 0.0:
+        raise ValueError(f"{name} must be >= 0.0")
+
+
+def _preconditions(
+    graph: Union[nx.Graph, nx.DiGraph],
+    num_walks: int,
+    walk_length: int,
+    return_hyperparameter: float,
+    inout_hyperparameter: float,
+    dimensions: int,
+    window_size: int,
+    workers: int,
+    iterations: int,
+    interpolate_walk_lengths_by_node_degree: bool,
+):
+    if not isinstance(graph, nx.Graph):
+        raise TypeError("graph must be a networkx Graph or DiGraph")
+    if graph.is_multigraph():
+        raise ValueError(
+            "This function does not work on multigraphs - because there are two reasonable ways to treat a "
+            "multigraph with different behaviors, we insist that the caller create an appropriate Graph or "
+            "DiGraph that represents the manner in which they'd like the multigraph to be treated for the "
+            "purposes of this embedding"
+        )
+    _assert_is_positive_int("num_walks", num_walks)
+    _assert_is_positive_int("walk_length", walk_length)
+    _assert_is_nonnegative_float("return_hyperparameter", return_hyperparameter)
+    _assert_is_nonnegative_float("inout_hyperparameter", inout_hyperparameter)
+    _assert_is_positive_int("dimensions", dimensions)
+    _assert_is_positive_int("window_size", window_size)
+    _assert_is_positive_int("workers", workers)
+    _assert_is_positive_int("iterations", iterations)
+    if not isinstance(interpolate_walk_lengths_by_node_degree, bool):
+        raise TypeError("interpolate_walk_lengths_by_node_degree must be a bool")
 
 
 def _learn_embeddings(
@@ -138,7 +215,10 @@ class _Node2VecGraph:
         self.q = inout_hyperparameter
 
     def node2vec_walk(
-        self, walk_length: int, start_node: Any, degree_percentiles: Optional[np.ndarray]
+        self,
+        walk_length: int,
+        start_node: Any,
+        degree_percentiles: Optional[np.ndarray],
     ):
         """
         Simulate a random walk starting from start node.
