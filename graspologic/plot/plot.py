@@ -676,19 +676,7 @@ def pairplot(
 
     return pairs
 
-def plot_ellipse(
-    X,
-    Y_,
-    means,
-    covariances,
-    ax,
-    j,
-    k,
-    colors,
-    lab_dict=None,
-    ind_to_lab=None,
-    alpha=0.7,
-):
+def plot_ellipse(X, Y_, means, covariances, ax, j, k, lab_dict = None, ind_to_lab = None, alpha = .7):
     r"""
     plot_ellipse makes a scatter plot from the two dimensions j,k where j corresponds to x-axis
     and k corresponds to the y-axis onto the axis that is ax. plot_ellipse then applies a gmm ellipse onto the scatterplot
@@ -712,7 +700,6 @@ def plot_ellipse(
         column index of feature of interest from X which will be the x-axis data.
     k : int
         column index of feature of interest from X which will be the y-axis data.
-    colors: array-like
     lab_dict : dict
         Dictionary of labels mapped to unique number
     ind_to_lab : dict
@@ -720,47 +707,33 @@ def plot_ellipse(
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     """
-    for i, (mean, covar, color) in enumerate(zip(means, covariances, colors)):
+    sns.color_palette("viridis", as_cmap=True)
+    for i, (mean, covar) in enumerate(zip(means, covariances)):
         v, w = linalg.eigh(covar)
-        v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
+        v = 2. * np.sqrt(2.) * np.sqrt(v)
         u = w[0] / linalg.norm(w[0])
         if lab_dict and ind_to_lab:
             # Plot the scatter
-            sns.scatterplot(
-                X[Y_ == i, j], X[Y_ == i, k], color=color, ax=ax, label=ind_to_lab[i]
-            )
+            sns.scatterplot(X[Y_ == i, j], X[Y_ == i, k],ax = ax, label = ind_to_lab[i])
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
-            angle = 180.0 * angle / np.pi
-            ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
-            )
+            angle = 180. * angle / np.pi
+            ell = mpl.patches.Ellipse([mean[j], mean[k]], v[0], v[1], 180. + angle, color = 'red')
         else:
             if not np.any(Y_ == i):
                 continue
-            sns.scatterplot(
-                X[Y_ == i, j],
-                X[Y_ == i, k],
-                color=color,
-                ax=ax,
-                label="Block {}".format(i),
-            )
+            sns.scatterplot(X[Y_ == i, j], X[Y_ == i, k],ax = ax, label = 'Block {}'.format(i) )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
-            angle = 180.0 * angle / np.pi
-            ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
-            )
+            angle = 180. * angle / np.pi
+            ell = mpl.patches.Ellipse([mean[j], mean[k]], v[0], v[1], 180. + angle, color = 'red')
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
         ax.add_artist(ell)
         ax.set_xticks([]), ax.set_yticks([])
         ax.set_ylabel(k), ax.set_xlabel(k)
 
-
-def pairplot_with_gmm(
-    X, gmm, labels=None, title=None, context="talk", font_scale=1, alpha=0.7
-):
+def pairplot_with_gmm(X, gmm, labels = None, title = None, context="talk", font_scale=1,alpha=0.7):
     r"""
     Plot pairwise relationships in a dataset.
 
@@ -792,6 +765,7 @@ def pairplot_with_gmm(
         Opacity value of plotter markers between 0 and 1
     """
     sns.despine(left=True)
+    sns.color_palette("viridis", as_cmap=True)
     # Handle X
     if not isinstance(X, (list, np.ndarray)):
         msg = "X must be array-like, not {}.".format(type(X))
@@ -811,10 +785,9 @@ def pairplot_with_gmm(
     if gmm is None:
         msg = "You must input a sklearn.mixture.GaussianMixture"
         raise TypeError(msg)
-    # get relevant features from the gmm model
+    #get relevant features from the gmm model
     Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
-    colors = ["red", "blue", "green", "purple", "pink", "brown", "orange"]
-    # plot only a scatter plot with only two feature columns
+    #plot only a scatter plot with only two feature columns
     lab_dict, ind_to_lab = {}, {}
     if labels:
         set_labs = sorted(set(labels))
@@ -826,66 +799,51 @@ def pairplot_with_gmm(
         Y_ = np.asarray([lab_dict[labels[i]] for i in range(len(labels))])
     with sns.plotting_context(context=context, font_scale=font_scale):
         if X.shape[1] == 2:
-            pairplot, axes = plt.subplots(1, 1, figsize=(12, 12))
-            plot_ellipse(
-                X, Y_, means, covariances, axes, 0, 1, colors, lab_dict, ind_to_lab
-            )
+            pairplot, axes = plt.subplots(1,1, figsize=(12, 12))
+            plot_ellipse(X, Y_, means, covariances, axes, 0, 1, lab_dict,  ind_to_lab)
             axes.set_ylabel("Dim " + str(0))
             axes.set_xlabel("Dim " + str(1))
+            axes.label_outer()
+            axes.spines['right'].set_visible(False)
+            axes.spines['top'].set_visible(False)
             if title:
                 pairplot.suptitle(title)
-            pairplot.suptitle(
-                "Fit a Gaussian mixture using " + str(means.shape[0]) + " components"
-            )
-            plt.subplots_adjust(right=0.8)
+            else:
+                pairplot.suptitle("Fit a Gaussian mixture using " + str(means.shape[0]) + " components")
+            plt.subplots_adjust(right=.8)
             return pairplot
-        # for more than two features compared
-        pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=(12, 12))
+        #for more than two features compared
+        pairplot, axes = plt.subplots(X.shape[1],X.shape[1], figsize=(12, 12))
         for k in range(X.shape[1]):
             for j in range(X.shape[1]):
                 if k == j:
                     for t in range(X.shape[1]):
-                        sns.distplot(
-                            X[Y_ == t, k], kde=True, color=colors[t], ax=axes[k, k]
-                        )
-                    axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
-                    axes[k, j].set_ylabel(None)
-                    axes[k, j].set_ylabel(j), axes[k, j].set_xlabel(k)
+                        sns.distplot(X[Y_ == t, k], kde=True, ax=axes[k, k])
+                    axes[k,j].set_xticks([]), axes[k,j].set_yticks([])
+                    axes[k,j].set_ylabel(None)
+                    axes[k,j].set_ylabel(j), axes[k,j].set_xlabel(k)
                 else:
-                    plot_ellipse(
-                        X,
-                        Y_,
-                        means,
-                        covariances,
-                        axes[k, j],
-                        j,
-                        k,
-                        colors,
-                        lab_dict,
-                        ind_to_lab,
-                    )
+                    plot_ellipse(X, Y_, means, covariances, axes[k,j], j, k, lab_dict,  ind_to_lab)
         for i in range(X.shape[1]):
             for j in range(X.shape[1]):
-                axes[i, j].set_ylabel("Dim " + str(i))
-                axes[i, j].set_xlabel("Dim " + str(j))
-        for ax in axes.flat:
-            ax.label_outer()
+                axes[i,j].set_ylabel("Dim " + str(i))
+                axes[i,j].set_xlabel("Dim " + str(j))
         if title:
             pairplot.suptitle(title)
-        pairplot.suptitle(
-            "Fit a Gaussian mixture using " + str(means.shape[0]) + " components"
-        )
+        else:
+            pairplot.suptitle("Fit a Gaussian mixture using " + str(means.shape[0]) + " components")
         handles, labels = [], []
         for ax in axes.flat:
+            ax.label_outer()
+            ax.spines['right'].set_visible(False)
+            ax.spines['top'].set_visible(False)
             ax.legend().remove()
             handles_, labels_ = ax.get_legend_handles_labels()
             handles += handles_
             labels += labels_
-        pairplot.legend(
-            handles[: means.shape[0]], labels[: means.shape[0]], loc="upper right"
-        )
-    return pairplot
 
+        pairplot.legend(handles[:means.shape[0]], labels[:means.shape[0]], loc='upper right')
+        return pairplot
 
 
 def _distplot(
