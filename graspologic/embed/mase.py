@@ -87,6 +87,10 @@ class MultipleASE(BaseEmbedMulti):
     scores_ : array, shape (n_samples, n_components, n_components)
         Estimated :math:`\hat{R}` matrices for each input graph.
 
+    singular_values_ : array, shape (n_components) OR length 2 tuple of arrays
+        If input graph is undirected, equal to the singular values of the concatenated adjacency spectral embeddings.
+        If input graph is directed, :attr:`singular_values_` is a tuple of length 2, where :attr:`singular_values_[0]` corresponds to the concatenated left
+        adjacency spectral embeddings, and :attr:`singular_values_[1]` corresponds to the concatenated right adjacency spectral embeddings.
 
     Notes
     -----
@@ -166,7 +170,7 @@ class MultipleASE(BaseEmbedMulti):
 
         # Second SVD for vertices
         # The notation is slightly different than the paper
-        Uhat, _, _ = selectSVD(
+        Uhat, sing_vals_left, _ = selectSVD(
             Us,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
@@ -174,14 +178,14 @@ class MultipleASE(BaseEmbedMulti):
             n_iter=self.n_iter,
         )
 
-        Vhat, _, _ = selectSVD(
+        Vhat, sing_vals_right, _ = selectSVD(
             Vs,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
         )
-        return Uhat, Vhat
+        return Uhat, Vhat, sing_vals_left, sing_vals_right
 
     def fit(self, graphs, y=None):
         """
@@ -209,14 +213,16 @@ class MultipleASE(BaseEmbedMulti):
             graphs = self._diag_aug(graphs)
 
         # embed
-        Uhat, Vhat = self._reduce_dim(graphs)
+        Uhat, Vhat, sing_vals_left, sing_vals_right = self._reduce_dim(graphs)
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
             self.scores_ = Uhat.T @ graphs @ Vhat
+            self.singular_values_ = (sing_vals_left, sing_vals_right)
         else:
             self.latent_right_ = None
             self.scores_ = Uhat.T @ graphs @ Uhat
+            self.singular_values_ = sing_vals_left
 
         return self
 
