@@ -69,9 +69,13 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
     --------
     graspologic.cluster.AutoGMMCluster
     graspologic.cluster.KMeansCluster
+    anytree.node.nodemixin.NodeMixin
 
     Notes
     -----
+    This class inherits from :class:`anytree.node.nodemixin.NodeMixin`, a lightweight
+    class for doing various simple operations on trees.
+
     This algorithm was strongly inspired by maggotcluster, a divisive
     clustering algorithm in https://github.com/neurodata/maggot_models and the
     algorithm for estimating a hierarchical stochastic block model presented in [2]_.
