@@ -55,15 +55,15 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
     delta_criter : float, non-negative, defaults to 0.
         The smallest difference between selection criterion values of a new
         model and the current model that is required to accept the new model.
-        Applicable only if cluster_method is "gmm".
-    cluster_kws : dict, defaults to None
-        Keyword arguments (except min_components and max_components) for chosen
+        Applicable only if ``cluster_method`` is "gmm".
+    cluster_kws : dict, defaults to {}
+        Keyword arguments (except ``min_components`` and ``max_components``) for chosen
         clustering method.
 
     Attributes
     ----------
     model_ : GaussianMixture or KMeans object
-        Fitted clustering object based on which `cluster_method` was used.
+        Fitted clustering object based on which ``cluster_method`` was used.
 
     See Also
     --------
@@ -73,13 +73,18 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
     Notes
     -----
     This algorithm was strongly inspired by maggotcluster, a divisive
-    clustering algorithm in https://github.com/neurodata/maggot_models
+    clustering algorithm in https://github.com/neurodata/maggot_models and the
+    algorithm for estimating a hierarchical stochastic block model presented in [2]_.
 
     References
     ----------
     .. [1]  Athey, T. L., & Vogelstein, J. T. (2019).
             AutoGMM: Automatic Gaussian Mixture Modeling in Python.
             arXiv preprint arXiv:1909.02688.
+    .. [2]  Lyzinski, V., Tang, M., Athreya, A., Park, Y., & Priebe, C. E
+            (2016). Community detection and classification in hierarchical
+            stochastic blockmodels. IEEE Transactions on Network Science and
+            Engineering, 4(1), 13-26.
     """
 
     def __init__(
