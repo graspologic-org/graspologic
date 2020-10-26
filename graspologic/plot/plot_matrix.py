@@ -5,7 +5,6 @@ import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib as mpl
 from matplotlib.colors import ListedColormap
-from graspy.simulations import sbm
 
 
 """
@@ -37,7 +36,7 @@ def _check_item_in_meta(meta, item, name):
             )
             raise TypeError(msg)
     for col_name in item:
-        if (col_name not in meta.columns):
+        if col_name not in meta.columns:
             if (name == "class_order") and (col_name == "size"):
                 pass
             else:
@@ -68,7 +67,12 @@ def _check_sorting_kws(length, meta, group_class, class_order, item_order, color
         item_order_meta, item_order = _item_to_df(item_order, "item_order", length)
         color_class_meta, color_class = _item_to_df(color_class, "color_class", length)
         metas = []
-        for m in [group_class_meta, class_order_meta, item_order_meta, color_class_meta]:
+        for m in [
+            group_class_meta,
+            class_order_meta,
+            item_order_meta,
+            color_class_meta,
+        ]:
             if m is not None:
                 metas.append(m)
         if len(metas) > 0:
@@ -145,7 +149,9 @@ def _remove_shared_ax(ax):
         axis.set_minor_formatter(fmt)
 
 
-def draw_colors(ax, ax_type="x", meta=None, divider=None, color_class=None, palette="tab10"):
+def draw_colors(
+    ax, ax_type="x", meta=None, divider=None, color_class=None, palette="tab10"
+):
     """
     Draw colormap onto the axis to separate the data
 
@@ -175,7 +181,9 @@ def draw_colors(ax, ax_type="x", meta=None, divider=None, color_class=None, pale
     if isinstance(palette, dict):
         color_dict = palette
     elif isinstance(palette, str):
-        color_dict = dict(zip(uni_classes, sns.color_palette(palette, len(uni_classes))))
+        color_dict = dict(
+            zip(uni_classes, sns.color_palette(palette, len(uni_classes)))
+        )
 
     # Make the colormap
     class_map = dict(zip(uni_classes, range(len(uni_classes))))
@@ -201,13 +209,15 @@ def draw_colors(ax, ax_type="x", meta=None, divider=None, color_class=None, pale
     )
     if ax_type == "x":
         ax.set_xlabel(color_class)
-        ax.xaxis.set_label_position('top')
+        ax.xaxis.set_label_position("top")
     elif ax_type == "y":
         ax.set_ylabel(color_class)
     return ax
 
 
-def draw_separators(ax, ax_type="x", meta=None, group_class=None, plot_type="heatmap", gridline_kws=None):
+def draw_separators(
+    ax, ax_type="x", meta=None, group_class=None, plot_type="heatmap", gridline_kws=None
+):
     """
     Draw separators between groups on the plot
 
@@ -260,7 +270,9 @@ def draw_separators(ax, ax_type="x", meta=None, group_class=None, plot_type="hea
     return ax
 
 
-def draw_ticks(ax, ax_type="x", meta=None, group_class=None, group_border=True, plot_type="heatmap"):
+def draw_ticks(
+    ax, ax_type="x", meta=None, group_class=None, group_border=True, plot_type="heatmap"
+):
     """
     Draw ticks onto the axis of the plot to separate the data
 
@@ -301,7 +313,7 @@ def draw_ticks(ax, ax_type="x", meta=None, group_class=None, group_border=True, 
         ax.set_xticklabels(tick_labels, ha="center", va="bottom")
         ax.xaxis.tick_top()
         ax.set_xlabel(group_class[0])
-        ax.xaxis.set_label_position('top') 
+        ax.xaxis.set_label_position("top")
     elif ax_type == "y":
         ax.set_yticks(tick_inds)
         ax.set_yticklabels(tick_labels, ha="right", va="center")
@@ -473,7 +485,7 @@ def matrixplot(
     gridline_kws=None,
     spinestyle_kws=None,
     highlight_kws=None,
-    **kws
+    **kws,
 ):
     """
     Sorts a matrix and plots it with ticks and colors on the borders
@@ -562,7 +574,15 @@ def matrixplot(
         _, ax = plt.subplot(1, 1, figsize=(10, 10))
 
     if plot_type == "heatmap":
-        sns.heatmap(data, cmap=cmap, ax=ax, center=center, xticklabels=False, yticklabels=False, **kws)
+        sns.heatmap(
+            data,
+            cmap=cmap,
+            ax=ax,
+            center=center,
+            xticklabels=False,
+            yticklabels=False,
+            **kws,
+        )
     elif plot_type == "scattermap":
         gridmap(data, ax=ax, sizes=sizes, **kws)
 
@@ -632,7 +652,9 @@ def matrixplot(
 
         rev_color_class = list(color_class[::-1])
         for i, sc in enumerate(rev_color_class):
-            color_ax = divider.append_axes("top", size="3%", pad=color_pad[i], sharex=ax)
+            color_ax = divider.append_axes(
+                "top", size="3%", pad=color_pad[i], sharex=ax
+            )
             _remove_shared_ax(color_ax)
             draw_colors(
                 color_ax,
@@ -643,7 +665,9 @@ def matrixplot(
                 palette=palette,
             )
             # plt.show()
-            color_ax = divider.append_axes("left", size="3%", pad=color_pad[i], sharey=ax)
+            color_ax = divider.append_axes(
+                "left", size="3%", pad=color_pad[i], sharey=ax
+            )
             _remove_shared_ax(color_ax)
             draw_colors(
                 color_ax,
@@ -714,40 +738,3 @@ def matrixplot(
             spine.set_alpha(spinestyle_kws["alpha"])
 
     return ax, divider
-
-
-def main():
-    N = 10
-    n_communities = [N, 3*N, 2*N, N]
-    p = [[0.8, 0.1, 0.05, 0.01],
-        [0.1, 0.4, 0.15, 0.02],
-        [0.05, 0.15, 0.3, 0.01],
-        [0.01, 0.02, 0.01, 0.4]]
-
-    np.random.seed(2)
-    A = sbm(n_communities, p)
-    meta = pd.DataFrame(
-        data={
-            'hemisphere': np.concatenate((np.full((1, 4*N), 0), np.full((1, 3*N), 1)), axis=1).flatten(),
-            'dVNC': np.concatenate((np.full((1, N), 0), np.full((1, 3*N), 1), np.full((1, 2*N), 0), np.full((1, N), 1)), axis=1).flatten(),
-            'ID': np.arange(7*N)},
-    )
-    rnd_idx = np.arange(7*N)
-    np.random.shuffle(rnd_idx)
-    A = A[np.ix_(rnd_idx, rnd_idx)]
-    meta = meta.reindex(rnd_idx)
-    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
-    matrixplot(
-        data=A,
-        ax=ax,
-        meta=meta,
-        plot_type="scattermap",
-        group_class=["hemisphere", "dVNC"],
-        class_order=["ID"],
-    )
-    plt.show()
-
-
-if __name__ == "__main__":
-    main()
-

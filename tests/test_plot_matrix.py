@@ -2,19 +2,22 @@
 # Licensed under the MIT License.
 
 import numpy as np
+import pandas as pd
 import pytest
 
-from graspy.plot.plot_matrix import matrixplot
-from graspy.simulations.simulations import er_np, sbm
+from graspologic.plot.plot_matrix import matrixplot
+from graspologic.simulations.simulations import er_np
 
 
 def test_matrixplot_inputs():
     X = er_np(100, 0.5)
-    meta = pd.DataFrame({
-        'hemisphere': np.random.randint(2, size=100),
-        'dVNC': np.random.randint(2, size=100),
-        'ID': np.random.randint(10, size=100),
-    })
+    meta = pd.DataFrame(
+        {
+            "hemisphere": np.random.randint(2, size=100),
+            "dVNC": np.random.randint(2, size=100),
+            "ID": np.random.randint(10, size=100),
+        }
+    )
 
     # test matrix
     with pytest.raises(TypeError):
@@ -26,11 +29,13 @@ def test_matrixplot_inputs():
     with pytest.raises(ValueError):
         matrixplot(X)
     with pytest.raises(ValueError):
-        bad_meta = pd.DataFrame({
-            'hemisphere': np.random.randint(2, size=1),
-            'dVNC': np.random.randint(2, size=1),
-            'ID': np.random.randint(10, size=1),
-        })
+        bad_meta = pd.DataFrame(
+            {
+                "hemisphere": np.random.randint(2, size=1),
+                "dVNC": np.random.randint(2, size=1),
+                "ID": np.random.randint(10, size=1),
+            }
+        )
         matrixplot(X, meta=bad_meta)
 
     # test plot type
@@ -61,11 +66,13 @@ def test_matrixplot_output():
     simple function to see if plot is made without errors
     """
     X = er_np(10, 0.5)
-    meta = pd.DataFrame({
-        'hemisphere': np.random.randint(2, size=10),
-        'dVNC': np.random.randint(2, size=10),
-        'ID': np.random.randint(10, size=10),
-    })
+    meta = pd.DataFrame(
+        {
+            "hemisphere": np.random.randint(2, size=10),
+            "dVNC": np.random.randint(2, size=10),
+            "ID": np.random.randint(10, size=10),
+        }
+    )
     ax = matrixplot(X, meta=meta)
     ax = matrixplot(X, meta=meta, group_class="hemisphere")
     ax = matrixplot(X, meta=meta, group_class="hemisphere", class_order="size")
