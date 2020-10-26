@@ -12,7 +12,7 @@ from graspologic.cluster import DivisiveCluster
 
 def test_inputs():
     # Generate random data
-    X = np.random.normal(0, 1, size=(10, 3))
+    X = np.random.normal(0, 1, size=(100, 3))
 
     # min_components < 1
     with pytest.raises(ValueError):
@@ -41,26 +41,6 @@ def test_inputs():
     # cluster_kws not a dict
     with pytest.raises(TypeError):
         dc = DivisiveCluster(cluster_kws=0)
-
-    # level not an int
-    with pytest.raises(TypeError):
-        dc = DivisiveCluster(max_components=2)
-        dc.fit_predict(X, level="1")
-
-    # level not positive
-    with pytest.raises(ValueError):
-        dc = DivisiveCluster(max_components=2)
-        dc.fit_predict(X, level=0)
-
-    # level exceeds n_level
-    with pytest.raises(ValueError):
-        dc = DivisiveCluster(max_components=2)
-        dc.fit_predict(X, fcluster=True, level=100)
-
-    # level is given but fcluster disabled
-    with pytest.raises(ValueError):
-        dc = DivisiveCluster(max_components=2)
-        dc.fit_predict(X, level=1)
 
     # max_components > n_sample
     with pytest.raises(ValueError):
@@ -183,7 +163,13 @@ def _test_hierarchical_four_class(**kws):
     """
     np.random.seed(1)
     dc = DivisiveCluster(max_components=2, **kws)
-    pred = dc.fit_predict(X, fcluster=True)
+    pred = dc.fit_predict(X)
+
+    # re-number "pred" so that each column represents
+    # a flat clustering at current level
+    for lvl in range(1, pred.shape[1]):
+        _, inds = np.unique(pred[:, : lvl + 1], axis=0, return_inverse=True)
+        pred[:, lvl] = inds
 
     # Assert that the 2-cluster model is the best at level 1
     assert_equal(np.max(pred[:, 0]) + 1, 2)
@@ -235,11 +221,25 @@ def test_hierarchical_six_class_delta_criter():
 
     # Perform clustering without setting delta_criter
     dc = DivisiveCluster(max_components=2)
-    pred = dc.fit_predict(X, fcluster=True)
+    pred = dc.fit_predict(X)
+
+    # re-number "pred" so that each column represents
+    # a flat clustering at current level
+    for lvl in range(1, pred.shape[1]):
+        _, inds = np.unique(pred[:, : lvl + 1], axis=0, return_inverse=True)
+        pred[:, lvl] = inds
 
     # Perform clustering while setting delta_criter
     dc = DivisiveCluster(max_components=2, delta_criter=10)
-    pred_delta_criter = dc.fit_predict(X, fcluster=True)
+    pred_delta_criter = dc.fit_predict(X)
+
+    # re-number "pred_delta_criter" so that each column represents
+    # a flat clustering at current level
+    for lvl in range(1, pred_delta_criter.shape[1]):
+        _, inds = np.unique(
+            pred_delta_criter[:, : lvl + 1], axis=0, return_inverse=True
+        )
+        pred_delta_criter[:, lvl] = inds
 
     # Assert that pred has more levels than pred_delta_criter
     assert_equal(pred.shape[1] - 1, pred_delta_criter.shape[1])
@@ -257,8 +257,8 @@ def test_hierarchical_six_class_delta_criter():
     ari_delta_criter_lvl2 = adjusted_rand_score(y_lvl2, pred_delta_criter[:, 1])
     assert_allclose(ari_delta_criter_lvl2, ari_lvl2)
 
-    # Assert that pred suggests oversplitting at the last level
-    # which leads to a worse clustering
+    # Assert that pred suggests oversplitting at the last level (level 3)
+    # which leads to a worse clustering than the last level
+    # of pred_delta_criter (level 2)
     ari_lvl3 = adjusted_rand_score(y_lvl2, pred[:, -1])
-    ari_delta_criter_lvl3 = adjusted_rand_score(y_lvl2, pred_delta_criter[:, -1])
-    assert_array_less(ari_lvl3, ari_delta_criter_lvl3)
+    assert_array_less(ari_lvl3, ari_delta_criter_lvl2)
