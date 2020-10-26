@@ -76,4 +76,4 @@ def test_matrixplot_output():
     ax = matrixplot(X, meta=meta)
     ax = matrixplot(X, meta=meta, group_class="hemisphere")
     ax = matrixplot(X, meta=meta, group_class="hemisphere", class_order="size")
-    ax = matrixplot(X, meta=meta, gropu_class="hemisphere", item_order="ID")
+    ax = matrixplot(X, meta=meta, group_class="hemisphere", item_order="ID")
