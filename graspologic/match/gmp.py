@@ -160,7 +160,9 @@ class GraphMatch(BaseEstimator):
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
 
-    def fit(self, A, B, seeds_A=[], seeds_B=[]):
+    # TODO: add `S` documentation
+
+    def fit(self, A, B, seeds_A=[], seeds_B=[], S=None):
         """
         Fits the model with two assigned adjacency matrices
 
@@ -179,6 +181,8 @@ class GraphMatch(BaseEstimator):
             An array where each entry is an index of a node in `B` The elements of
             `seeds_A` and `seeds_B` are vertices which are known to be matched, that is,
             `seeds_A[i]` is matched to vertex `seeds_B[i]`.
+        S : 2d-array, square
+            A square similarity matrix
 
         Returns
         -------
@@ -197,6 +201,7 @@ class GraphMatch(BaseEstimator):
         options = {
             "maximize": self.gmp,
             "partial_match": partial_match,
+            "S": S,
             "P0": self.init,
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,

@@ -217,6 +217,7 @@ def _quadratic_assignment_faq(
     B,
     maximize=False,
     partial_match=None,
+    S=None,
     rng=None,
     P0="barycenter",
     shuffle_input=False,
@@ -379,6 +380,14 @@ def _quadratic_assignment_faq(
         msg = "'maxiter' must be a positive integer"
     elif tol <= 0:
         msg = "'tol' must be a positive float"
+    elif S is not None:
+        S = np.atleast_2d(S)
+        if S.shape[0] != S.shape[1]:
+            msg = "`S` must be square"
+        elif S.ndim != 2:
+            msg = "`S` must have exactly two dimensions"
+        elif S.shape != A.shape:
+            msg = "`S`, `A`, and `B` matrices must be of equal size"
     if msg is not None:
         raise ValueError(msg)
 
@@ -397,18 +406,23 @@ def _quadratic_assignment_faq(
     if maximize:
         obj_func_scalar = -1
 
-    nonseed_B = np.setdiff1d(range(n), partial_match[:, 1])
+    perm_S = np.setdiff1d(range(n), partial_match[:, 1])
     if shuffle_input:
-        nonseed_B = rng.permutation(nonseed_B)
+        nonseed_B = rng.permutation(perm_S)
         # shuffle_input to avoid results from inputs that were already matched
 
     nonseed_A = np.setdiff1d(range(n), partial_match[:, 0])
     perm_A = np.concatenate([partial_match[:, 0], nonseed_A])
     perm_B = np.concatenate([partial_match[:, 1], nonseed_B])
 
+    if S is None:
+        S = np.zeros((n, n))
+    S = S[:, perm_B]
+
     # definitions according to Seeded Graph Matching [2].
     A11, A12, A21, A22 = _split_matrix(A[perm_A][:, perm_A], n_seeds)
     B11, B12, B21, B22 = _split_matrix(B[perm_B][:, perm_B], n_seeds)
+    S22 = S[perm_S, n_seeds:]
 
     # [1] Algorithm 1 Line 1 - choose initialization
     if isinstance(P0, str):
@@ -429,7 +443,7 @@ def _quadratic_assignment_faq(
         _check_init_input(P0, n_unseed)
         P = P0
 
-    const_sum = A21 @ B21.T + A12.T @ B12
+    const_sum = A21 @ B21.T + A12.T @ B12 + S22
 
     # [1] Algorithm 1 Line 2 - loop while stopping criteria not met
     for n_iter in range(1, maxiter + 1):
@@ -451,8 +465,9 @@ def _quadratic_assignment_faq(
         BR22 = B22 @ R.T
         b22a = (AR22 * B22.T[cols]).sum()
         b22b = (A22 * BR22[cols]).sum()
+        s = (S22.T * R).sum()
         a = (AR22.T * BR22).sum()
-        b = b21 + b12 + b22a + b22b
+        b = b21 + b12 + b22a + b22b + s
         # critical point of ax^2 + bx + c is at x = -d/(2*e)
         # if a * obj_func_scalar > 0, it is a minimum
         # if minimum is not in [0, 1], only endpoints need to be considered

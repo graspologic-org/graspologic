@@ -59,6 +59,22 @@ class TestGMP:
             GMP().fit(
                 np.identity(3), np.identity(3), -1 * np.arange(2), -1 * np.arange(2)
             )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((4, 4)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((3, 4)),
+            )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((4, 4)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((3, 3)),
+            )
 
     def _get_AB(self, qap_prob):
         with open("tests/match/qapdata/" + qap_prob + ".dat") as f:
@@ -114,3 +130,5 @@ class TestGMP:
         res = gmp_adopted.fit(G1, G2)
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
+
+    # TODO: def test_sim(self):
