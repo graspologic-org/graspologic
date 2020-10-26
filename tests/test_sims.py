@@ -882,3 +882,111 @@ class Test_RDPG(unittest.TestCase):
         g = rdpg(X, rescale=True, loops=False, directed=False)
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
+
+class Test_MMsbm(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # 120 vertex graph
+        cls.n = 120
+        # define connectivity matrix B, two blocks
+        cls.p = np.vstack(([0.6, 0.2], [0.3, 0.4]))
+        #define alpha parameter
+        cls.alpha = 0.05 * np.ones(len(cls.p))
+        #define seed
+        cls.seed = 12345
+
+    def test_labels(self):
+        np.random.seed(self.seed)
+        alpha = np.array([0.0001, 100]) #assign all nodes to second group(index 1)
+        A = MMsbm(self.n, self.p, alpha, directed= False, loops= False, return_labels=True)
+        labels=A[1]
+        expected_labels = np.ones((self.n,self.n)) - np.identity(self.n) # since we expect all nodes to pertain to node 1 we expect all values for labels to be 1 besides those on the diagonal due to missingness of loops in this scenario
+        #check that expected labels is the same as the labels output by function
+        self.assertTrue(np.allclose(labels, expected_labels))
+        pass
+
+    def test_loop_directed(self):
+        np.random.seed(self.seed)
+        A = MMsbm(self.n, self.p, self.alpha, directed= False, loops= False)
+
+        # check loopless and undirected
+        self.assertFalse(is_symmetric(A))
+        self.assertFalse(is_loopless(A))
+
+        # check dimensions
+        self.assertTrue(A.shape == (self.n, self.n))
+        pass
+
+    def test_noloop_undirected(self):
+        #Test that when loops = False and directed = False the output is undirected and with no loops
+        np.random.seed(self.seed)
+        A = MMsbm(self.n, self.p, self.alpha, directed= False, loops= False)
+
+        # check loopless and undirected
+        self.assertTrue(is_symmetric(A))
+        self.assertTrue(is_loopless(A))
+
+        # check dimensions
+        self.assertTrue(A.shape == (self.n, self.n))
+        pass
+
+    def test_bad_inputs(self):
+        with self.assertRaises(ValueError):
+            n = -1 #n must be greater than 0
+            MMsbm(n, self.p, self.alpha)
+
+        with self.assertRaises(TypeError):
+            n = "1" #n must be an integer
+            MMsbm(n, self.p, self.alpha)
+
+        with self.assertRaises(TypeError):
+            n = 2.5 #n must be an integer
+            MMsbm(n, self.p, self.alpha)
+
+        with self.assertRaises(TypeError):
+            n = ["1", 10] #n must be an integer
+            MMsbm(n, self.p, self.alpha)
+
+        with self.assertRaises(TypeError):
+            p = 0.5 #p must be an array or list
+            MMsbm(self.n, p, self.alpha)
+
+        with self.assertRaises(ValueError):
+            p = [[0.2, 0.1],["str", 0.6]] #p must only contain mumeric elements
+            MMsbm(self.n, p, self.alpha)
+
+        with self.assertRaises(ValueError):
+            p = [[5, 5], [4, 4]] #p must be between 0 and 1
+            MMsbm(self.n, p, self.alpha)
+
+        with self.assertRaises(TypeError):
+            alpha = 1 #alpha must be an array
+            MMsbm(self.n, self.p, alpha)
+
+        with self.assertRaises(TypeError):
+            #test deafult alpha = None, should output typeerror
+            MMsbm(self.n, self.p)
+
+        with self.assertRaises(ValueError):
+            alpha = ["str", 0.3] #alpha must only contain numeric elements
+            MMsbm(self.n, self.p, alpha= alpha)
+
+        with self.assertRaises(ValueError):
+            alpha = [0.1, -2] #alpha entries must be positive
+            MMsbm(self.n, self.p, alpha)
+
+        with self.assertRaises(ValueError):
+            alpha = [0.1, 0.5, 0.7] #dimension of p is 2x2 so alpha should be of length 2.
+            MMsbm(self.n, self.p, alpha)
+
+        with self.assertRaises(TypeError):
+            loops = 2 #loops must be a bool
+            MMsbm(self.n, self.p, self.alpha, loops= loops)
+
+        with self.assertRaises(TypeError):
+            directed = 2 #directed must be a bool
+            MMsbm(self.n, self.p, self.alpha, directed= directed)
+
+        with self.assertRaises(TypeError):
+            return_labels = 2 #return labels must be a bool
+            MMsbm(self.n, self.p, self.alpha, return_labels= return_labels)
