@@ -37,19 +37,19 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
     Parameters
     ----------
     cluster_method : str {"gmm", "kmeans"}, defaults to "gmm".
-        The underlying clustering method to apply. If "gmm" will use 
+        The underlying clustering method to apply. If "gmm" will use
         :class:`~graspologic.cluster.AutoGMMCluster`. If "kmeans", will use
         :class:`~graspologic.cluster.KMeansCluster`.
     min_components : int, defaults to 1.
         The minimum number of mixture components/clusters to consider
-        for the first split if "gmm" is selected as cluster_method;
+        for the first split if "gmm" is selected as ``cluster_method``;
         and is set to 1 for later splits.
-        If "kmeans" is selected, it is set to 2 for all splits.
+        If ``cluster_method`` is "kmeans", it is set to 2 for all splits.
     max_components : int, defaults to 2.
         The maximum number of mixture components/clusters to consider
         at each split.
     min_split : int, defaults to 1.
-        The minimum size of a cluster for it to be considered to split again.
+        The minimum size of a cluster for it to be considered to be split again.
     max_level : int, defaults to 4.
         The maximum number of times to recursively cluster the data.
     delta_criter : float, non-negative, defaults to 0.
