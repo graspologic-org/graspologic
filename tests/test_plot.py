@@ -4,7 +4,13 @@
 import numpy as np
 import pytest
 from sklearn.mixture import GaussianMixture
-from graspologic.plot.plot import heatmap, gridplot, pairplot, _sort_inds, pairplot_with_gmm
+from graspologic.plot.plot import (
+    heatmap,
+    gridplot,
+    pairplot,
+    _sort_inds,
+    pairplot_with_gm
+)
 from graspologic.simulations.simulations import er_np, sbm
 
 
@@ -193,6 +199,7 @@ def test_pairplot_outputs():
         X, Y, col_names, title="Test", height=1.5, variables=["Feature1", "Feature2"]
     )
 
+
 def test_pairplot_with_gmm_inputs():
     X = np.random.rand(15, 3)
     gmm = GaussianMixture(n_components=3, covariance_type='full').fit(X)
@@ -207,6 +214,7 @@ def test_pairplot_with_gmm_inputs():
     with pytest.raises(TypeError):
         pairplot_with_gmm(X, gmm=None)
 
+
 def test_pairplot_with_gmm_outputs():
     X = np.random.rand(15, 3)
     gmm = GaussianMixture(n_components=3, covariance_type='full').fit(X)
@@ -215,6 +223,7 @@ def test_pairplot_with_gmm_outputs():
     fig = pairplot_with_gmm(X, gmm, labels)
     fig = pairplot_with_gmm(
         X, gmm, labels, title="Test")
+
 
 def test_sort_inds():
     B = np.array(

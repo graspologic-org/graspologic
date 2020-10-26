@@ -676,6 +676,7 @@ def pairplot(
 
     return pairs
 
+
 def plot_ellipse(
     X,
     Y_,

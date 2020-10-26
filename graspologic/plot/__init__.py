@@ -4,6 +4,24 @@
 import sys
 import matplotlib as mpl
 
-from .plot import heatmap, gridplot, pairplot, plot_ellipse, pairplot_with_gmm, degreeplot, edgeplot, screeplot
+from .plot import (
+    heatmap,
+    gridplot,
+    pairplot,
+    plot_ellipse,
+    pairplot_with_gmm,
+    degreeplot,
+    edgeplot,
+    screeplot,
+)
 
-__all__ = ["heatmap", "gridplot", "pairplot", "plot_ellipse", "pairplot_with_gmm",   "degreeplot", "edgeplot", "screeplot"]
+__all__ = [
+    "heatmap",
+    "gridplot",
+    "pairplot",
+    "plot_ellipse",
+    "pairplot_with_gmm",
+    "degreeplot",
+    "edgeplot",
+    "screeplot"
+]
