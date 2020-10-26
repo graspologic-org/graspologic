@@ -6,7 +6,7 @@ import pytest
 from numpy.testing import assert_equal
 
 from graspologic.cluster import GaussianCluster
-from graspologic.pipeline import mug2vec
+from graspologic.embed import mug2vec
 from graspologic.simulations import sbm
 
 
