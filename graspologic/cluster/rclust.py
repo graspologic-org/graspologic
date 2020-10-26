@@ -29,7 +29,7 @@ def _check_common_inputs(min_components, max_components, cluster_kws):
         raise TypeError("cluster_kws must be a dict")
 
 
-class RecursiveCluster(NodeMixin, BaseEstimator):
+class DivisiveCluster(NodeMixin, BaseEstimator):
     """
     Recursively clusters data based on a chosen clustering algorithm.
     This algorithm implements a "divisive" or "top-down" approach.
@@ -126,7 +126,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         self.fit_predict(X)
         return self
 
-    def fit_predict(self, X, level=None):
+    def fit_predict(self, X, fcluster=False, level=None):
         """
         Fits clustering models to the data as well as resulting clusters
         and using fitted models to predict a hierarchy of labels
@@ -134,7 +134,12 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
+        fcluster: bool, default=False
+            if True, returned labels will be a hierarchy of flat clusterings,
+            one for each level
         level: int, optional (default=None)
+            the level of a single flat clustering to generate
+            only available if `fcluster` is True
 
         Returns
         -------
@@ -154,13 +159,21 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             raise ValueError(msg)
 
         labels = self._fit(X)
-        labels = self._relabel(labels)
+        # delete the last column if predictions at the last level
+        # are all zero vectors
+        if (labels.shape[1] > 1) and (np.max(labels[:, -1]) == 0):
+            labels = labels[:, :-1]
+
         if level is not None:
-            if level <= labels.shape[1]:
-                labels = labels[:, level - 1]
-            else:
+            if not fcluster:
+                msg = "level-specific flat clustering is available\
+                    only if 'fcluster' is True"
+                raise ValueError(msg)
+            elif level > labels.shape[1]:
                 msg = "input exceeds max level = {}".format(labels.shape[1])
                 raise ValueError(msg)
+        if fcluster:
+            labels = self._relabel(labels, level)
 
         return labels
 
@@ -217,7 +230,7 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
             for ul in uni_labels:
                 inds = pred == ul
                 new_X = X[inds]
-                rc = RecursiveCluster(
+                dc = DivisiveCluster(
                     cluster_method=self.cluster_method,
                     max_components=self.max_components,
                     min_split=self.min_split,
@@ -225,13 +238,13 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
                     cluster_kws=self.cluster_kws,
                     delta_criter=self.delta_criter,
                 )
-                rc.parent = self
+                dc.parent = self
                 if (
                     len(new_X) > self.max_components
                     and len(new_X) >= self.min_split
                     and self.depth + 1 < self.max_level
                 ):
-                    child_labels = rc._fit(new_X)
+                    child_labels = dc._fit(new_X)
                     while labels.shape[1] <= child_labels.shape[1]:
                         labels = np.column_stack(
                             (labels, np.zeros((len(X), 1), dtype=int))
@@ -240,40 +253,24 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
 
         return labels
 
-    def predict(self, X, level=None):
+    def predict(self, X):
         """
         Predicts a hierarchy of labels based on fitted models
 
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
-        level: int, optional (default=None)
-            the level of flat clustering to generate
 
         Returns
         -------
         labels : array-like, shape (n_samples, n_levels)
-            if no level specified; otherwise, shape (n_samples,)
         """
 
         check_is_fitted(self, ["model_"], all_or_any=all)
 
         X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
-        if level is not None:
-            if not isinstance(level, int):
-                raise TypeError("level must be an int")
-            elif level < 1:
-                raise ValueError("level must be positive")
 
         labels = self._predict_labels(X)
-        labels = self._relabel(labels)
-
-        if level is not None:
-            if level <= labels.shape[1]:
-                labels = labels[:, level - 1]
-            else:
-                msg = "input exceeds max level = {}".format(labels.shape[1])
-                raise ValueError(msg)
 
         return labels
 
@@ -299,22 +296,16 @@ class RecursiveCluster(NodeMixin, BaseEstimator):
 
         return pred_labels
 
-    def _relabel(self, labels):
-        # re-number labeling so that labels[:,i] assigns a unique value to each cluster
-        n_levels = labels.shape[1]
-        for level in range(n_levels):
-            # to avoid updated labels accidentally matching old ones
-            new_labels = -labels[:, : level + 1] - 1
-            uni_labels = np.unique(new_labels, axis=0)
-            for ul in range(len(uni_labels)):
-                uni_labels_inds = np.where(
-                    (uni_labels[:, None, :] == new_labels).all(2)[ul]
-                )[0]
-                labels[uni_labels_inds, level] = ul
+    def _relabel(self, labels, level=None):
+        # re-number "labels" so that each column of "labels" represents
+        # a flat clustering at current level
+        new_labels = labels.copy()
 
-        # delete labels[:,-1] b/c it will be the same as labels[:,-2]
-        # if n_components=1 for pred of every cluster at level of depth=1
-        if labels.shape[1] > 1:
-            if np.max(labels[:, -1]) == np.max(labels[:, -2]):
-                labels = labels[:, :-1]
-        return labels
+        for lvl in range(1, self.height):
+            _, inds = np.unique(labels[:, : lvl + 1], axis=0, return_inverse=True)
+            new_labels[:, lvl] = inds
+
+        if level is not None:
+            new_labels = new_labels[:, level]
+
+        return new_labels
