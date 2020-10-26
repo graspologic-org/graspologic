@@ -16,4 +16,4 @@ Gaussian Mixture Models Clustering
 
 Hierarchical Clustering
 ----------------------------------
-.. autoclass:: RecursiveCluster
+.. autoclass:: DivisiveCluster
