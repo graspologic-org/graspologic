@@ -4,6 +4,6 @@
 from .gclust import GaussianCluster
 from .kclust import KMeansCluster
 from .autogmm import AutoGMMCluster
-from .rclust import DivisiveCluster
+from .divisive_cluster import DivisiveCluster
 
 __all__ = ["GaussianCluster", "KMeansCluster", "AutoGMMCluster", "DivisiveCluster"]
