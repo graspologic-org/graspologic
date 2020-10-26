@@ -571,7 +571,7 @@ def matrixplot(
 
     # draw the main heatmap/scattermap
     if ax is None:
-        _, ax = plt.subplot(1, 1, figsize=(10, 10))
+        _, ax = plt.subplots(1, 1, figsize=(10, 10))
 
     if plot_type == "heatmap":
         sns.heatmap(
