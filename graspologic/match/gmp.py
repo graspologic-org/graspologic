@@ -108,7 +108,7 @@ class GraphMatch(BaseEstimator):
         init="barycenter",
         max_iter=30,
         shuffle_input=True,
-        eps=0.1,
+        eps=0.03,
         gmp=True,
         padding="adopted",
     ):
@@ -162,7 +162,7 @@ class GraphMatch(BaseEstimator):
 
     # TODO: add `S` documentation
 
-    def fit(self, A, B, seeds_A=[], seeds_B=[], S=None):
+    def fit(self, A, B, seeds_A=[], seeds_B=[], S=None, rng=None):
         """
         Fits the model with two assigned adjacency matrices
 
@@ -202,6 +202,7 @@ class GraphMatch(BaseEstimator):
             "maximize": self.gmp,
             "partial_match": partial_match,
             "S": S,
+            "rng": rng,
             "P0": self.init,
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
