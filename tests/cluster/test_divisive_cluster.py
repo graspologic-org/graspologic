@@ -245,7 +245,7 @@ def test_hierarchical_six_class_delta_criter():
     assert_equal(pred.shape[1] - 1, pred_delta_criter.shape[1])
 
     # Assert that both pred_delta_criter and pred represent
-    # perfect clustering at the frist level
+    # perfect clustering at the first level
     ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
     assert_allclose(ari_lvl1, 1)
     ari_delta_criter_lvl1 = adjusted_rand_score(y_lvl1, pred_delta_criter[:, 0])
