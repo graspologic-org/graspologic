@@ -9,7 +9,7 @@ from graspologic.plot.plot import (
     gridplot,
     pairplot,
     _sort_inds,
-    pairplot_with_gm
+    pairplot_with_gmm,
 )
 from graspologic.simulations.simulations import er_np, sbm
 
@@ -202,7 +202,7 @@ def test_pairplot_outputs():
 
 def test_pairplot_with_gmm_inputs():
     X = np.random.rand(15, 3)
-    gmm = GaussianMixture(n_components=3, covariance_type='full').fit(X)
+    gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
     # test data
     with pytest.raises(TypeError):
@@ -217,7 +217,7 @@ def test_pairplot_with_gmm_inputs():
 
 def test_pairplot_with_gmm_outputs():
     X = np.random.rand(15, 3)
-    gmm = GaussianMixture(n_components=3, covariance_type='full').fit(X)
+    gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
     fig = pairplot_with_gmm(X, gmm)
     fig = pairplot_with_gmm(X, gmm, labels)

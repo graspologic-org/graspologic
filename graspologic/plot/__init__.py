@@ -23,5 +23,5 @@ __all__ = [
     "pairplot_with_gmm",
     "degreeplot",
     "edgeplot",
-    "screeplot"
+    "screeplot",
 ]
