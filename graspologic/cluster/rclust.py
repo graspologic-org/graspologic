@@ -39,9 +39,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
     cluster_method : str {"gmm", "kmeans"}, defaults to "gmm".
         The clustering method chosen to apply.
     min_components : int, defaults to 1.
-        The minimum number of mixture components/clusters to consider for the first
-        split if "gmm" is selected as cluster_method; and is set to 1
-        for later splits.
+        The minimum number of mixture components/clusters to consider
+        for the first split if "gmm" is selected as cluster_method;
+        and is set to 1 for later splits.
         If "kmeans" is selected, it is set to 2 for all splits.
     max_components : int, defaults to 2.
         The maximum number of mixture components/clusters to consider
@@ -126,7 +126,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         self.fit_predict(X)
         return self
 
-    def fit_predict(self, X, fcluster=False, level=None):
+    def fit_predict(self, X):
         """
         Fits clustering models to the data as well as resulting clusters
         and using fitted models to predict a hierarchy of labels
@@ -134,24 +134,12 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
-        fcluster: bool, default=False
-            if True, returned labels will be a hierarchy of flat clusterings,
-            one for each level
-        level: int, optional (default=None)
-            the level of a single flat clustering to generate
-            only available if `fcluster` is True
 
         Returns
         -------
         labels : array_label, shape (n_samples, n_levels)
-            if no level specified; otherwise, shape (n_samples,)
         """
         X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
-        if level is not None:
-            if not isinstance(level, int):
-                raise TypeError("level must be an int")
-            elif level < 1:
-                raise ValueError("level must be positive")
 
         if self.max_components > X.shape[0]:
             msg = "max_components must be >= n_samples, but max_components = "
@@ -163,17 +151,6 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         # are all zero vectors
         if (labels.shape[1] > 1) and (np.max(labels[:, -1]) == 0):
             labels = labels[:, :-1]
-
-        if level is not None:
-            if not fcluster:
-                msg = "level-specific flat clustering is available\
-                    only if 'fcluster' is True"
-                raise ValueError(msg)
-            elif level > labels.shape[1]:
-                msg = "input exceeds max level = {}".format(labels.shape[1])
-                raise ValueError(msg)
-        if fcluster:
-            labels = self._relabel(labels, level)
 
         return labels
 
@@ -267,11 +244,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         """
 
         check_is_fitted(self, ["model_"], all_or_any=all)
-
         X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
 
         labels = self._predict_labels(X)
-
         return labels
 
     def _predict_labels(self, X):
@@ -295,17 +270,3 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
                 pred_labels = np.zeros((len(X), 1), dtype=int)
 
         return pred_labels
-
-    def _relabel(self, labels, level=None):
-        # re-number "labels" so that each column of "labels" represents
-        # a flat clustering at current level
-        new_labels = labels.copy()
-
-        for lvl in range(1, self.height):
-            _, inds = np.unique(labels[:, : lvl + 1], axis=0, return_inverse=True)
-            new_labels[:, lvl] = inds
-
-        if level is not None:
-            new_labels = new_labels[:, level]
-
-        return new_labels
