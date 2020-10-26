@@ -221,8 +221,7 @@ def test_pairplot_with_gmm_outputs():
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
     fig = pairplot_with_gmm(X, gmm)
     fig = pairplot_with_gmm(X, gmm, labels)
-    fig = pairplot_with_gmm(
-        X, gmm, labels, title="Test")
+    fig = pairplot_with_gmm(X, gmm, labels, title="Test")
 
 
 def test_sort_inds():
