@@ -441,12 +441,12 @@ def is_fully_connected(graph):
     >>> is_fully_connected(a)
     False
     """
-    if type(graph) is np.ndarray:
+    if type(graph) is np.ndarray or isspmatrix:
         if is_symmetric(graph):
             g_object = nx.Graph()
         else:
             g_object = nx.DiGraph()
-        graph = nx.from_numpy_array(graph, create_using=g_object)
+        graph = nx.to_networkx_graph(graph, create_using=g_object)
     if type(graph) in [nx.Graph, nx.MultiGraph]:
         return nx.is_connected(graph)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
