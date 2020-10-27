@@ -48,6 +48,7 @@ setup(
     include_package_data=True,
     package_data={"version": [os.path.join("graspologic", "version", "version.txt")]},
     install_requires=[
+        "anytree>=2.8.0",
         "gensim",
         "hyppo>=0.1.3",
         "matplotlib>=3.0.0,<=3.3.0",
