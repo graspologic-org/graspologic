@@ -215,7 +215,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         uni_labels = np.unique(pred)
         labels = pred.reshape((-1, 1)).copy()
         if len(uni_labels) > 1:
-            for ul in uni_labels:
+            for i, ul in enumerate(uni_labels):
                 inds = pred == ul
                 new_X = X[inds]
                 dc = DivisiveCluster(
@@ -227,6 +227,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
                     delta_criter=self.delta_criter,
                 )
                 dc.parent = self
+                dc.parent_model_index = i
                 if (
                     len(new_X) > self.max_components
                     and len(new_X) >= self.min_split
