@@ -162,7 +162,6 @@ def latent_distribution_test(
     p_value_ : float
         The overall p value from the test.
         
-        
     sample_T_statistic_ : float
         The observed difference between the embedded latent positions of the
         two input graphs.

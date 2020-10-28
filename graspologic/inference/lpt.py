@@ -58,11 +58,9 @@ def latent_position_test(
             .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
             .. math:: H_o: X_1 = c X_2 R
-
             where :math:`c` is a scalar, :math:`c > 0`
         - 'diagonal-rotation'
             .. math:: H_o: X_1 = D X_2 R
-
             where :math:`D` is an arbitrary diagonal matrix
 
     Returns
@@ -70,7 +68,6 @@ def latent_position_test(
     p_value: float
         The overall p value from the test; this is the max of ``p_value_1`` and ``p_value_2_
     
-
     sample_T_statistic : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
@@ -86,7 +83,6 @@ def latent_position_test(
             are used independently to sample random dot product graphs, so two null
             distributions are generated
     
-
     See also
     --------
     graspologic.embed.AdjacencySpectralEmbed
