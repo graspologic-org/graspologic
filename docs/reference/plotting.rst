@@ -3,6 +3,7 @@ Plotting
 ********
 
 .. currentmodule:: graspologic.plot
+.. currentmodule:: graspologic.plot_matrix
 
 Heatmap
 -------
@@ -27,3 +28,7 @@ Edgeplot
 Screeplot
 ---------
 .. autofunction:: screeplot
+
+Matrixplot
+----------
+.. autofunction:: matrixplot

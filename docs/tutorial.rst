@@ -68,6 +68,7 @@ The following tutorials present ways to visualize the graphs, such as its adjace
    tutorials/plotting/heatmaps
    tutorials/plotting/gridplot
    tutorials/plotting/pairplot
+   tutorials/plotting/matrixplot
 
 .. _matching_tutorials:
 
