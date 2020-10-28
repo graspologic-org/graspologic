@@ -21,5 +21,5 @@ __all__ = [
     "node2vec_embed",
     "select_dimension",
     "selectSVD",
-    "BaseSpectralEmbed"
+    "BaseSpectralEmbed",
 ]
