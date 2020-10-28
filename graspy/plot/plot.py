@@ -14,8 +14,8 @@ from scipy import linalg
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-from ..embed import selectSVD
-from ..utils import import_graph, pass_to_ranks
+from graspologic.embed import selectSVD
+from graspologic.utils import import_graph, pass_to_ranks
 
 
 def _check_common_inputs(
