@@ -6,4 +6,4 @@ Nomination
 Single graph spectral vertex nomination
 ---------------------------------------
 
-.. autoclass:: SpectralVertexNomination
+.. autoclass:: SpectralVertexNominator
