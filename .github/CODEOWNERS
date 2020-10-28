@@ -1,4 +1,5 @@
 # graspologic package
+/graspologic/align @alyakin314 @bdpedigo
 /graspologic/cluster @bdpedigo @j1c
 /graspologic/datasets @bdpedigo
 /graspologic/embed @j1c @bdpedigo

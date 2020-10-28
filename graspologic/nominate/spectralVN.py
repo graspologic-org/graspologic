@@ -3,7 +3,7 @@
 
 from typing import Union, Tuple
 from .base import BaseVN
-from ..embed import BaseEmbed
+from ..embed import BaseSpectralEmbed
 from ..embed import AdjacencySpectralEmbed as ase, LaplacianSpectralEmbed as lse
 import numpy as np
 from scipy.spatial import distance
@@ -84,13 +84,13 @@ class SpectralVertexNominator(BaseVN):
     def __init__(
         self,
         embedding: np.ndarray = None,
-        embeder: Union[str, BaseEmbed] = "ASE",
+        embeder: Union[str, BaseSpectralEmbed] = "ASE",
         persistent: bool = True,
     ):
         super().__init__(multigraph=False)
         self.embedding = embedding
         if self.embedding is None or not persistent:
-            if issubclass(type(embeder), BaseEmbed):
+            if issubclass(type(embeder), BaseSpectralEmbed):
                 self.embeder = embeder
             elif embeder == "ASE":
                 self.embeder = ase()
@@ -140,7 +140,7 @@ class SpectralVertexNominator(BaseVN):
 
         # Embed graph if embedding not provided
         if self.embedding is None:
-            if issubclass(type(self.embeder), BaseEmbed):
+            if issubclass(type(self.embeder), BaseSpectralEmbed):
                 self.embedding = self.embeder.fit_transform(X)
             else:
                 raise TypeError("No embeder available")
