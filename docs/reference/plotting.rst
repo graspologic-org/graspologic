@@ -3,7 +3,6 @@ Plotting
 ********
 
 .. currentmodule:: graspologic.plot
-.. currentmodule:: graspologic.plot_matrix
 
 Heatmap
 -------
