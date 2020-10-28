@@ -166,7 +166,7 @@ def latent_distribution_test(
         The observed difference between the embedded latent positions of the
         two input graphs.
 
-    null_distribution_ : ndarray, shape (n_bootstraps, )
+    null_distribution_ : ndarray, shape (n_bootstraps,)
         The distribution of T statistics generated under the null.
 
     References
