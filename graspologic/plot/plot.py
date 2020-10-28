@@ -770,34 +770,31 @@ def pairplot_with_gmm(
 ):
     r"""
     Plot pairwise relationships in a dataset.
+    By default, this function will create a grid of Axes such that each
+    dimension in data will by shared in the y-axis across a single row and
+    in the x-axis across a single column.
 
-    By default, this function will create a grid of Axes such that each dimension
-    in data will by shared in the y-axis across a single row and in the x-axis
-    across a single column.
-
-    The off-diagonal Axes show the pairwise relationships displayed as scatterplot.
-    Using the inputted gmm an ellipse to show the Gaussian component will be plotted.
-    The diagonal Axes show the univariate distribution of the data for that
-    dimension displayed as kernel density estimates (KDEs).
-
-    Read more in the :ref:`tutorials <plot_tutorials>`
     Parameters
     ----------
-    X : array-like, shape (n_samples, n_features)
-        Input data.
-    gmm: sklearn.mixture.GaussianMixture
-    labels : array-like or list, shape (n_samples), optional
-        Labels that correspond to each sample in X.
-    title : str, optional, default: None
-        Title of plot.
-    context :  None, or one of {paper, notebook, talk (default), poster}
-        The name of a preconfigured set.
+    X : np.ndarray (2D)
+        input graph
+    gmm: Gaussian Mixture Model object
+    labels : 1d np.ndarray or list, same length as dimensions of X
+        Labels for different categories of graph nodes
+    title : string, default : 'Degree plot'
+        Plot title
+    context :  None, or one of {talk (default), paper, notebook, poster}
+        Seaborn plotting context
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font
         elements.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     palette : str, dict, optional, default: 'Set1'
+        Set of colors for mapping the ``hue`` variable. If a dict, keys should
+        be values in the hue variable.
+        For acceptable string arguments, see the palette options at
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     """
     sns.despine(left=True)
     sns.color_palette(palette, as_cmap=True)
