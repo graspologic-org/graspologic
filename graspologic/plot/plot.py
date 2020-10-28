@@ -725,7 +725,7 @@ def plot_ellipse(
         Opacity value of plotter markers between 0 and 1
     palette : str, dict, optional, default: 'Set1'
     """
-    sns.color_palette(palette, as_cmap=True)
+    colors = sns.color_palette(palette)
     for i, (mean, covar) in enumerate(zip(means, covariances)):
         v, w = linalg.eigh(covar)
         v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
@@ -737,7 +737,7 @@ def plot_ellipse(
             angle = np.arctan(u[1] / u[0])
             angle = 180.0 * angle / np.pi
             ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color="red"
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
             )
         else:
             if not np.any(Y_ == i):
@@ -749,7 +749,7 @@ def plot_ellipse(
             angle = np.arctan(u[1] / u[0])
             angle = 180.0 * angle / np.pi
             ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color="red"
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
             )
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
