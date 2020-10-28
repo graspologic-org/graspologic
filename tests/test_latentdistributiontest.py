@@ -263,22 +263,17 @@ class TestLatentDistributionTest(unittest.TestCase):
         X2 = -X2
 
         p_val_1, _, _ = latent_distribution_test(
-            A1, A2, input_graph=False, align_type=None
+            X1, X2, input_graph=False, align_type=None
         )
         self.assertTrue(p_val_1 < 0.05)
 
         p_val_2, _, _ = latent_distribution_test(
-            A1, A2, input_graph=False, align_type="sign_flips"
+            X1, X2, input_graph=False, align_type="sign_flips"
         )
         self.assertTrue(p_val_2 >= 0.05)
 
         # also checking that kws are passed through
-        ldt_3 = LatentDistributionTest(
-            input_graph=False,
-            align_type="seedless_procrustes",
-            align_kws={"init": "sign_flips"},
-        )
-        p_val_3 = latent_distribution_test(
+        p_val_3, _, _ = latent_distribution_test(
             X1,
             X2,
             input_graph=False,
