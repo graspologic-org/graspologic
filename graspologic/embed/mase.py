@@ -88,9 +88,12 @@ class MultipleASE(BaseEmbedMulti):
         Estimated :math:`\hat{R}` matrices for each input graph.
 
     singular_values_ : array, shape (n_components) OR length 2 tuple of arrays
-        If input graph is undirected, equal to the singular values of the concatenated adjacency spectral embeddings.
-        If input graph is directed, :attr:`singular_values_` is a tuple of length 2, where :attr:`singular_values_[0]` corresponds to the concatenated left
-        adjacency spectral embeddings, and :attr:`singular_values_[1]` corresponds to the concatenated right adjacency spectral embeddings.
+        If input graph is undirected, equal to the singular values of the concatenated
+        adjacency spectral embeddings. If input graph is directed, :attr:`singular_values_`
+        is a tuple of length 2, where :attr:`singular_values_[0]` corresponds to
+        the singular values of the concatenated left adjacency spectral embeddings,
+        and :attr:`singular_values_[1]` corresponds to
+        the singular values of the concatenated right adjacency spectral embeddings.
 
     Notes
     -----
