@@ -734,7 +734,11 @@ def plot_ellipse(
         if lab_dict and ind_to_lab:
             # Plot the scatter
             sns.scatterplot(
-                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label=ind_to_lab[i], color=colors[i]
+                X[Y_ == i, j],
+                X[Y_ == i, k],
+                ax=ax,
+                label=ind_to_lab[i],
+                color=colors[i]
             )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
