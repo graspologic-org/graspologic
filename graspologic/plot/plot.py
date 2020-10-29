@@ -836,6 +836,7 @@ def pairplot_with_gmm(
             ind_to_lab[counter] = lab
             counter += 1
         Y_ = np.asarray([lab_dict[labels[i]] for i in range(len(labels))])
+    colors = dict(zip(np.unique(Y_), colors))
     with sns.plotting_context(context=context, font_scale=font_scale):
         if X.shape[1] == 2:
             pairplot, axes = plt.subplots(1, 1, figsize=(12, 12))
