@@ -738,7 +738,7 @@ def plot_ellipse(
                 X[Y_ == i, k],
                 ax=ax,
                 label=ind_to_lab[i],
-                color=colors[i]
+                color=colors[i],
             )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
