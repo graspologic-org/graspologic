@@ -734,13 +734,13 @@ def plot_ellipse(
         if lab_dict and ind_to_lab:
             # Plot the scatter
             sns.scatterplot(
-                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label=ind_to_lab[i], color=color
+                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label=ind_to_lab[i], color=colors[i]
             )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
             angle = 180.0 * angle / np.pi
             ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
             )
         else:
             if not np.any(Y_ == i):
@@ -750,13 +750,13 @@ def plot_ellipse(
                 X[Y_ == i, k],
                 ax=ax,
                 label="Block {}".format(i),
-                color=color,
+                color=colors[i],
             )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
             angle = 180.0 * angle / np.pi
             ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
             )
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
