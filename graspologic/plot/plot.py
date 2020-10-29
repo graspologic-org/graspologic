@@ -734,8 +734,7 @@ def plot_ellipse(
         if lab_dict and ind_to_lab:
             # Plot the scatter
             sns.scatterplot(
-                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label=ind_to_lab[i],
-                color = color
+                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label=ind_to_lab[i], color = color
             )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
@@ -747,7 +746,10 @@ def plot_ellipse(
             if not np.any(Y_ == i):
                 continue
             sns.scatterplot(
-                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label="Block {}".format(i),
+                X[Y_ == i, j],
+                X[Y_ == i, k],
+                ax=ax,
+                label="Block {}".format(i),
                 color = color
             )
             # Plot an ellipse to show the Gaussian component
@@ -845,7 +847,7 @@ def pairplot_with_gmm(
                 axes,
                 0,
                 1,
-                colors, 
+                colors,
                 lab_dict,
                 ind_to_lab,
                 palette=palette,
@@ -872,8 +874,7 @@ def pairplot_with_gmm(
                 if k == j:
                     for t in range(X.shape[1]):
                         sns.distplot(
-                            X[Y_ == t, k], kde=True, ax=axes[k, k],
-                            color = color[t]
+                            X[Y_ == t, k], kde=True, ax=axes[k, k], color = colors[t]
                         )
                     axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
                     axes[k, j].set_ylabel(None)
