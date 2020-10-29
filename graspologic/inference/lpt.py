@@ -12,7 +12,7 @@ from ..utils import import_graph, is_symmetric
 
 
 def latent_position_test(
-    A1, A2, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation"
+    A1, A2, embedding="ase", n_components=None, test_case="rotation", n_bootstraps=500
 ):
     r"""
     Two sample hypothesis test for the problem of determining whether two random dot
@@ -27,14 +27,17 @@ def latent_position_test(
 
     Parameters
     ----------
+
+    Parameters
+    ----------
     A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            The two graphs to run a hypothesis test on.
-            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
-            where ``n_vertices`` is the same for both
+        The two graphs to run a hypothesis test on.
+        If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
+        where ``n_vertices`` is the same for both
 
     embedding : string, { 'ase' (default), 'omnibus'}
         String describing the embedding method to use:
-
+        
         - 'ase'
             Embed each graph separately using adjacency spectral embedding
             and use Procrustes to align the embeddings.
@@ -44,9 +47,6 @@ def latent_position_test(
     n_components : None (default), or int
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
-
-    n_bootstraps : int, optional (default 500)
-        Number of bootstrap simulations to run to generate the null distribution
 
     test_case : string, {'rotation' (default), 'scalar-rotation', 'diagonal-rotation'}
         describes the exact form of the hypothesis to test when using 'ase' or 'lse'
@@ -58,25 +58,39 @@ def latent_position_test(
             .. math:: H_o: X_1 = X_2 R
         - 'scalar-rotation'
             .. math:: H_o: X_1 = c X_2 R
+
             where :math:`c` is a scalar, :math:`c > 0`
         - 'diagonal-rotation'
             .. math:: H_o: X_1 = D X_2 R
+
             where :math:`D` is an arbitrary diagonal matrix
 
-    Returns
-    -------
-    p_value: float
+    n_bootstraps : int, optional (default 500)
+        Number of bootstrap simulations to run to generate the null distribution
+
+    Attributes
+    ----------
+    p_value : float
         The overall p value from the test; this is the max of ``p_value_1`` and ``p_value_2``
     
     sample_T_statistic : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
 
+    null_distribution_1, null_distribution_2 : np.ndarray (n_bootstraps,)
+        The distribution of T statistics generated under the null, using the first and
+        and second input graph, respectively. The latent positions of each sample graph
+        are used independently to sample random dot product graphs, so two null
+        distributions are generated
+    
+    p_value_1, p_value_2 : float
+        The p value estimated from the null distributions from sample 1 and sample 2.
+
     misc_stats : dictionary
+        A collection of other statistics obtained from the latent position test
 
-        - 'p_value_1', 'p_value_2': float
+        - 'p_value_1', 'p_value_2' : float
             The p value estimate from the null distributions from sample 1 and sample 2
-
         - 'null_distribution_1', 'null_distribution_2' : np.ndarray (n_bootstraps,)
             The distribution of T statistics generated under the null, using the first and
             and second input graph, respectively. The latent positions of each sample graph
@@ -88,7 +102,7 @@ def latent_position_test(
     graspologic.embed.AdjacencySpectralEmbed
     graspologic.embed.OmnibusEmbed
     graspologic.embed.selectSVD
-
+    
     References
     ----------
     .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E.
