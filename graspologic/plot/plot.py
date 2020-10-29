@@ -685,6 +685,7 @@ def plot_ellipse(
     ax,
     j,
     k,
+    colors,
     lab_dict=None,
     ind_to_lab=None,
     alpha=0.7,
@@ -717,6 +718,7 @@ def plot_ellipse(
         column index of feature of interest from X which will be the x-axis data.
     k : int
         column index of feature of interest from X which will be the y-axis data.
+    colors : array-like or list,seaborn color palette
     lab_dict : dict
         Dictionary of labels mapped to unique number
     ind_to_lab : dict
@@ -725,31 +727,34 @@ def plot_ellipse(
         Opacity value of plotter markers between 0 and 1
     palette : str, dict, optional, default: 'Set1'
     """
-    colors = sns.color_palette(palette)
-    for i, (mean, covar) in enumerate(zip(means, covariances)):
+    for i, (mean, covar) in enumerate(zip(means, covariances, colors)):
         v, w = linalg.eigh(covar)
         v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
         u = w[0] / linalg.norm(w[0])
         if lab_dict and ind_to_lab:
             # Plot the scatter
-            sns.scatterplot(X[Y_ == i, j], X[Y_ == i, k], ax=ax, label=ind_to_lab[i])
+            sns.scatterplot(
+                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label=ind_to_lab[i],
+                color = color
+            )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
             angle = 180.0 * angle / np.pi
             ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
             )
         else:
             if not np.any(Y_ == i):
                 continue
             sns.scatterplot(
-                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label="Block {}".format(i)
+                X[Y_ == i, j], X[Y_ == i, k], ax=ax, label="Block {}".format(i),
+                color = color
             )
             # Plot an ellipse to show the Gaussian component
             angle = np.arctan(u[1] / u[0])
             angle = 180.0 * angle / np.pi
             ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
+                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
             )
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
@@ -797,7 +802,7 @@ def pairplot_with_gmm(
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     """
     sns.despine(left=True)
-    sns.color_palette(palette, as_cmap=True)
+    colors = sns.color_palette(palette)
     # Handle X
     if not isinstance(X, (list, np.ndarray)):
         msg = "X must be array-like, not {}.".format(type(X))
@@ -840,6 +845,7 @@ def pairplot_with_gmm(
                 axes,
                 0,
                 1,
+                colors, 
                 lab_dict,
                 ind_to_lab,
                 palette=palette,
@@ -865,7 +871,10 @@ def pairplot_with_gmm(
             for j in range(X.shape[1]):
                 if k == j:
                     for t in range(X.shape[1]):
-                        sns.distplot(X[Y_ == t, k], kde=True, ax=axes[k, k])
+                        sns.distplot(
+                            X[Y_ == t, k], kde=True, ax=axes[k, k],
+                            color = color[t]
+                        )
                     axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
                     axes[k, j].set_ylabel(None)
                     axes[k, j].set_ylabel(j), axes[k, j].set_xlabel(k)
@@ -878,6 +887,7 @@ def pairplot_with_gmm(
                         axes[k, j],
                         j,
                         k,
+                        colors,
                         lab_dict,
                         ind_to_lab,
                         palette=palette,
