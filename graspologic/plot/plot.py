@@ -727,7 +727,7 @@ def plot_ellipse(
         Opacity value of plotter markers between 0 and 1
     palette : str, dict, optional, default: 'Set1'
     """
-    for i, (mean, covar,color) in enumerate(zip(means, covariances, colors)):
+    for i, (mean, covar, color) in enumerate(zip(means, covariances, colors)):
         v, w = linalg.eigh(covar)
         v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
         u = w[0] / linalg.norm(w[0])
