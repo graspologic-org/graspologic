@@ -1,26 +1,70 @@
 import numpy as np
-import random
 from ..match import GraphMatch as GMP
-from ..utils import pass_to_ranks
-from scipy.stats import rankdata
+from sklearn.base import BaseEstimator
+
 
 class VNviaSGM(BaseEstimator):
     """
-    
+    This class implements vertex nomination via seeded graph matching
+
+    Parameters
+    ----------
+    h: int
+        distance between voi used to create induced subgraph on `G_1`
+
+    ell: int
+        distance from seeds to other verticies to create induced subgraphs on `G_1`
+
+    R: int
+        Number of restarts for soft seeded graph matching algorithm
+
+    a_inds: 1d-array
+        Array of indices in the induced subgraph of A that will be matched to `b_inds`
+
+    b_inds: 1d-array
+        Array of indices in the induced subgraph of B that will be matched to `a_inds`
+
+    n_seeds_used: int
+        Number of seeds passed in `seedsA` that occured in the induced subgraph about `voi`
+
+    nomination_list: list
+        List of 2 tuples of the format nomination_list = [(j, p_val)] where p_val is the
+        probability that the voi matches to node j in graph B (sorted by descending
+        probability)
+
+    Attributes
+    ----------
+    P : 2d-array, square
+        The probability array that describes the probability `P[i, j]` that row `i` in `a_inds`
+        matches `j` in `b_inds`
+
+    corr : 1d-array
+        The matrix that maps values from `a_inds` to `b_inds`
+
+
+    References
+    ----------
+    .. [1] Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded graph matching. Stat Anal Data
+    Min: The ASA Data Sci Journal. 2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
     """
 
-    # def __init__(
-    #     self,
-    # ):
-    #
+    def __init__(
+        self,
+        h=1,
+        ell=1,
+        R=100
+    ):
+        self.h = h
+        self.ell = ell
+        self.R = R
 
-    def fit(self, voi, A, B, seedsA, seedsB, h, ell, R, g):
-        '''
+    def fit(self, voi, A, B, seedsA, seedsB):
+        """
         Parameters
         ----------
 
         voi: int
-            Verticie of interest (voi)
+            Vertices of interest (voi)
 
         A: 2d-array, square
             Adjacency matrix of `G_1`, the graph where voi is known
@@ -29,28 +73,11 @@ class VNviaSGM(BaseEstimator):
             Adjacency matrix of `G_2`, the graph where voi is not known
 
         seedsA: list
-            Seeds associated to adjacenty matrix A
+            Seeds associated to adjacency matrix A
 
         seedsB: list
             Seeds associated to adjacency matrix B `len(seedsA)==len(seedsB)`
-
-        h: int
-            distance between voi used to create induced subgraph on `G_1`
-
-        ell: int
-            distance from seeds to other verticies to create induced subgraphs on `G_1`
-
-        R: int
-            Number of restarts for soft seeded graph matching algorithm
-
-        g: float
-            gamma to be used, max tol for alpha, tollerable dist from barycenter
-
-        References
-        ----------
-        Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded graph matching. Stat Anal Data
-        Min: The ASA Data Sci Journal. 2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
-        '''
+        """
         assert len(seedsA) == len(seedsB)
 
         voi = np.reshape(np.array(voi), (1,))
@@ -70,7 +97,7 @@ class VNviaSGM(BaseEstimator):
         voi_reord = len(seedsA)
         #     print("seeds reord = ", seeds_reord, ", voi_reord = ", voi_reord)
 
-        subgraph_AA = np.array(ego_list(AA, h, voi_reord, mindist=1))
+        subgraph_AA = np.array(ego_list(AA, self.h, voi_reord, mindist=1))
 
         voi_reord = np.reshape(np.array(voi_reord), (1,))
 
@@ -82,8 +109,8 @@ class VNviaSGM(BaseEstimator):
             print("Impossible")
             return None
 
-        Nx1 = np.array(ego_list(AA, ell, list(Sx1), mindist=0))
-        Nx2 = np.array(ego_list(BB, ell, list(Sx2), mindist=0))
+        Nx1 = np.array(ego_list(AA, self.ell, list(Sx1), mindist=0))
+        Nx2 = np.array(ego_list(BB, self.ell, list(Sx2), mindist=0))
 
         foo = np.concatenate((Sx1, voi_reord))
         ind1 = np.concatenate((Sx1, voi_reord, np.setdiff1d(Nx1, foo)))
@@ -92,9 +119,8 @@ class VNviaSGM(BaseEstimator):
         AA_fin = AA[np.ix_(ind1, ind1)]
         BB_fin = BB[np.ix_(ind2, ind2)]
 
-
         seeds_fin = list(range(len(Sx1)))
-        sgm = GMP(n_init=R, shuffle_input=False, init_method="rand", padding="naive")
+        sgm = GMP(n_init=self.R, shuffle_input=False, init_method="rand", padding="naive")
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 
@@ -108,7 +134,7 @@ class VNviaSGM(BaseEstimator):
         nomination_list.sort(key=lambda x: x[1], reverse=True)
         self.nomination_list = nomination_list
 
-    def fit_predict(self, A, B, seeds_A=[], seeds_B=[]):
+    def fit_predict(self, A, B, seeds_A, seeds_B):
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
