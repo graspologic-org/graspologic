@@ -796,10 +796,12 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
         P[P > 1] = 1
     return P
 
+
 def MMsbm(
     n,
     p,
     alpha=None,
+    rng=np.random.default_rng(),
     directed=False,
     loops=False,
     return_labels=False,
@@ -812,7 +814,7 @@ def MMsbm(
      their community membership.
     Each node is assigned a membership vector drawn from dirichlet distribution
      with parameter alpha. Each entry of this vector indicates the probability
-     of that node pertaining to each community. Finally, each interaction between 
+     of that node pertaining to each community. Finally, each interaction between
      nodes is drawn by assigning the community membership of each node according to
      the probability specified in the mixed membership vector for that node.
 
@@ -832,6 +834,9 @@ def MMsbm(
     alpha: array-like, shape (n_communities,)
         Concentration parameter alpha of the Dirichlet distribution used to sample mixed-membership vectors for each node
 
+    rng: numpy.random.Generator or numpy.random.BitGenerator, optional (default= numpy.random.default_rng())
+        Numpy Random Generator object to generate sampling from distributions.
+
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
@@ -842,10 +847,10 @@ def MMsbm(
 
     return_labels: boolean, optional (default=False)
         If False, the only output is adjacency matrix. Otherwise, an additional output will
-        be a list of length equal to the number of vertices. Each entry of 
+        be a list of length equal to the number of vertices. Each entry of
         this list represents a node of the graph and contains an array of length equal
          to the number of vertices in the graph indicating the community that was utilized
-        to form the connection between the node of the entry when interacting with any other 
+        to form the connection between the node of the entry when interacting with any other
         node in the graph. Community 1 is labeled with a 0, community 2 with 1, etc.
 
     References
@@ -861,36 +866,37 @@ def MMsbm(
 
     Examples
     --------
-    >>> np.random.seed(1)
+    >>> rng = np.random.default_rng(1)
     >>> n = 6
-    >>> p = [[0.2, 0], [0, 1]]
+    >>> p = [[0.5, 0], [0, 1]]
 
     To sample a binary MMSBM in which all nodes pertain to community two:
 
     >>> alpha = [0.05, 100]
-    >>> MMsbm(n, p)
-    array([[0. 1. 1. 1. 1. 1.]
-           [1. 0. 1. 1. 1. 1.]
-           [1. 1. 0. 1. 1. 1.]
-           [1. 1. 1. 0. 1. 1.]
-           [1. 1. 1. 1. 0. 1.]
-           [1. 1. 1. 1. 1. 0.]])
+    >>> MMsbm(n, p, alpha, rng = rng)
+    array([[0., 1., 1., 1., 1., 1.],
+           [1., 0., 1., 1., 1., 1.],
+           [1., 1., 0., 1., 1., 1.],
+           [1., 1., 1., 0., 1., 1.],
+           [1., 1., 1., 1., 0., 1.],
+           [1., 1., 1., 1., 1., 0.]])
 
     To sample a binary MMSBM similar to 2-block SBM with connectivity matrix B:
 
-    >>> alpha = [0.05, 0.05]
-    >>> MMsbm(n, p)
-    array([[0. 0. 0. 0. 0. 0.]
-           [0. 0. 0. 0. 0. 0.]
-           [0. 0. 0. 1. 1. 1.]
-           [0. 0. 1. 0. 1. 1.]
-           [0. 0. 1. 1. 0. 1.]
-           [0. 0. 1. 1. 1. 0.]])
+    >>> rng = np.random.default_rng(1)
+    >>> alpha = [0.005, 0.005]
+    >>> MMsbm(n, p, alpha, rng = rng)
+    array([[0., 0., 0., 0., 0., 0.],
+           [0., 0., 1., 0., 0., 0.],
+           [0., 1., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 1., 1.],
+           [0., 0., 0., 1., 0., 1.],
+           [0., 0., 0., 1., 1., 0.]])
     """
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
     else:
-        if(n <= 0):
+        if n <= 0:
             raise ValueError("n must be greater than 0")
     if not isinstance(p, (list, np.ndarray)):
         msg = "p must be a list or np.array, not {}.".format(type(p))
@@ -908,55 +914,76 @@ def MMsbm(
         raise TypeError(msg)
     else:
         alpha = np.array(alpha)
-        if not np.issubdtype(p.dtype, np.number):
+        if not np.issubdtype(alpha.dtype, np.number):
             msg = "There are non-numeric elements in alpha"
             raise ValueError(msg)
         elif np.any(alpha < 0):
-            msg = "Alpha entries must be positive."
+            msg = "Alpha entries must be non-negative."
             raise ValueError(msg)
         elif alpha.shape != (len(p),):
-            msg = "alpha must be a list or np.array of dimension {desired_shape}, not {provided_shape}.".format(desired_shape= (len(p),),provided_shape= np.array(alpha).shape)
+            msg = "alpha must be a list or np.array of dimension {desired_shape}, not {provided_shape}.".format(
+                desired_shape=(len(p),), provided_shape=np.array(alpha).shape
+            )
             raise ValueError(msg)
         elif np.any(alpha == 0):
-            alpha[np.any(alpha == 0)] = float(1e-8) #np.random.dirichlet does not accept alpha = 0.0
+            alpha[np.any(alpha == 0)] = float(
+                1e-8
+            )  # np.random.dirichlet does not accept alpha = 0.0
+    if not isinstance(rng, (np.random._generator.Generator)):
+        msg = "rng expected to be <class 'numpy.random._generator.Generator'> not {}.".format(
+            type(rng)
+        )
+        raise TypeError(msg)
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
     if type(directed) is not bool:
         raise TypeError("directed is not of type bool.")
+    if type(return_labels) is not bool:
+        raise TypeError("return_labels is not of type bool.")
 
-    MMvectors = np.random.default_rng().dirichlet(alpha, n)
+    if not directed:
+        if np.any(p != p.T):
+            raise ValueError("Specified undirected, but P is directed.")
+
+    MMvectors = rng.dirichlet(alpha, n)
 
     MMvectors = np.array(sorted(MMvectors, key=lambda x: np.argmax(x)))
 
-    A = np.zeros((n,n))
+    A = np.zeros((n, n))
 
-    labels = np.zeros((n,n,len(p)))
+    labels = np.zeros((n, n, len(p)))
 
     for i in range(n):
         for j in range(i, n):
-            if(i == j):
-                if(loops == True):
-                    Z_pp = np.random.multinomial(1, MMvectors[i], size = 1)
+            if i == j:
+                if loops == True:
+                    Z_pp = rng.multinomial(1, MMvectors[i], size=1)
                     Z_pp = Z_pp[0]
-                    edge_loop = np.random.binomial(1, (1.0)*Z_pp @ (p @ Z_pp.T))
-                    labels[i,j] = Z_pp
-                    A[i,j] = edge_loop
+                    edge_loop = rng.binomial(1, (1.0) * Z_pp @ (p @ Z_pp.T))
+                    labels[i, j] = Z_pp
+                    A[i, j] = edge_loop
             else:
-                Z_pq = np.random.multinomial(1, MMvectors[i], size = 1)
+                Z_pq = rng.multinomial(1, MMvectors[i], size=1)
                 Z_pq = Z_pq[0]
-                Z_qp = np.random.multinomial(1, MMvectors[j], size = 1)
+                Z_qp = rng.multinomial(1, MMvectors[j], size=1)
                 Z_qp = Z_qp[0]
-                edge_pq = np.random.binomial(1, (1.0)*Z_pq @ (p @ Z_qp.T))
-                labels[i,j] = Z_pq
-                labels[j,i] = Z_qp
-                A[i,j] = edge_pq
-                if(directed==False):
-                    A[j,i] = A[i,j]
-                elif(directed==True):
-                    edge_qp = np.random.binomial(1, (1.0)*Z_qp @ (p @ Z_pq.T))
-                    A[j,i] = edge_qp
+                edge_pq = rng.binomial(1, (1.0) * Z_pq @ (p @ Z_qp.T))
+                labels[i, j] = Z_pq
+                labels[j, i] = Z_qp
+                A[i, j] = edge_pq
+                if directed == False:
+                    A[j, i] = A[i, j]
+                elif directed == True:
+                    edge_qp = rng.binomial(1, (1.0) * Z_qp @ (p @ Z_pq.T))
+                    A[j, i] = edge_qp
     if return_labels:
-        labels = [[np.argmax(membership_point_i_interacting_j) for membership_point_i_interacting_j in label]for label in labels]
+        labels = [
+            [
+                np.argmax(membership_point_i_interacting_j)
+                for membership_point_i_interacting_j in label
+            ]
+            for label in labels
+        ]
         labels = np.array(labels)
         return (A, labels)
-    return(A)
+    return A
