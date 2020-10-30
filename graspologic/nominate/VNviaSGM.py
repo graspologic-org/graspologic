@@ -14,190 +14,99 @@ class VNviaSGM(BaseEstimator):
     # ):
     #
 
-
-
-    def vnsgm_ordered(self,x,S,A,B,h,ell,R,g,pad=0,sim=True,verb=False,plotF=False):
+    def fit(self, voi, A, B, seedsA, seedsB, h, ell, R, g):
         '''
         Parameters
         ----------
 
-        x: list
-            Verticies of intrerest
+        voi: int
+            Verticie of interest (voi)
 
-        S: list
-            Vector of seeds
-
-        A: ndarray
-            `G_1` where voi are known
-
-        B: ndarray
-            `G_2` where voi unknown
-
-        rest same as before
-        '''
-        s = len(S)
-        Nh = ego_list(A, h, x, mindist=1) # TODO: make able to take a list in <- unlist(ego(g1,h,nodes=x,mindist=1))
-
-        Sx1 = None; Sx2 = None
-
-        Sx1 = list(set(Nh).intersection(set(S))); Sx1.sort(); sx = len(Sx1)
-
-        Sx2 = list(set(list(range(B.shape[0]))).intersection(set(Sx1))); Sx2.sort(); sx2 = len(Sx2)
-        #print("SX1, Sx2, ", Sx1, Sx2)
-
-        case = 'possible' if sx2>0 else 'impossible'
-
-        if case == 'possible':
-            Cx2 = ego_list(B, ell, Sx2, mindist=1)
-            Cx2 = set(Cx2).difference(set(Sx2))
-            print(Cx2)
-            if sim:
-                case = np.array(['possible' if _x in Cx2 else 'impossible' for _x in x])
-
-
-            if len(np.where(case == 'possible')[0])>0:
-                Nx1 = ego_list(A, ell, Sx1, mindist=0)
-                Nx2 = ego_list(B, ell, Sx2, mindist=0)
-
-                #print("NX1, Nx2, ",len(Nx1), len(Nx2), Nx1, Nx2)
-
-                if sim:
-                    #print("in opt 1")
-                    wxp = np.where(case == 'possible')[0]
-                    print(wxp)
-                    xp = x#x[wxp]
-
-                    print(Sx1, x, Nx1, np.setdiff1d(Nx1, np.concatenate((Sx1, x))))
-                    ind1 = np.concatenate((Sx1, x, np.setdiff1d(Nx1, np.concatenate((Sx1, x)))))
-                    print(Sx2, xp, Nx2)#, np.setdiff1d(Nx2, np.concatenate((Sx2, xp))))
-
-
-                    ind2 = np.concatenate((Sx2, xp, np.setdiff1d(Nx2, np.concatenate((Sx2, xp)))))
-                else:
-                    #print("in opt 2")
-                    ind1 = Sx1 + x + list(set(Nx1).difference(set(Sx1+x)))
-
-                    ind2 = Sx2 + list(set(Nx2).difference(set(Sx2)))
-
-                if verb:
-                    print("seed = ", Sx1, ", matching ", ind1, " and ", ind2)
-
-                #print("inside 2 w/ params Sx1 = ", Sx1, ", x = ", x, ", Nx1 = ", Nx1)
-                #print("inside 2 w/ indlens ", len(ind1), len(ind2), ind1, ind2)
-                n_iters = 20
-                As = shuffle_adj_matrix(A, ind1)
-                Bs = shuffle_adj_matrix(B, ind2)
-
-                sgm = GMP(n_init=n_iters)
-
-                # Note we must padd because the inputs are note guarenteed to be the same
-                totv1 = As.shape[1]
-                totv2 = Bs.shape[1]
-
-    #             if (totv1>totv2):
-    #                 #print("in pad 2")
-    #                 diff = totv1-totv2
-    #                 Bs = np.concatenate((Bs, np.full((Bs.shape[0], diff), pad)), axis=1)
-    #                 Bs = np.concatenate((Bs, np.full((diff, Bs.shape[1]), pad)), axis=0)
-    #             elif (totv1<totv2):
-    #                 #print("in pad 2")
-    #                 diff = totv2-totv1
-    #                 As = np.concatenate((As, np.full((As.shape[0], diff), pad)), axis=1)
-    #                 As = np.concatenate((As, np.full((diff, As.shape[1]), pad)), axis=0)
-
-                self.corr = sgm.fit_predict(As, Bs, seeds_A=np.arange(len(Sx1)), seeds_B=np.arange(len(Sx1))) #multistart_sgm(A, B, R, len(Sx1), g, pad=pad, n_iters=n_iters)
-                self.P = sgm.P_final
-                self.Cx2 = list(Cx2)
-                self.labelsGx = ind1
-                self.labelsGxp = ind2
-            else:
-                self.ind1 = self.ind2 = self.P = self.corr = None
-        else:
-            self.ind1 = self.ind2 = self.P = self.Cx2= self.corr = None
-
-        return self
-
-    def fit(self, x, seeds, A, B, h, ell, R, g, pad=0, sim=False, verb=False, plotF=False):
-        """
-        Fits the model with two assigned adjacency matrices
-
-        Parameters
-        ----------
-        x: int or ndarray
-        verticies of interest (voi)
-
-        seeds: ndarray
-            seeds vector
-
-        A: ndarray
+        A: 2d-array, square
             Adjacency matrix of `G_1`, the graph where voi is known
 
-        B: ndarray
+        B: 2d-array, square
             Adjacency matrix of `G_2`, the graph where voi is not known
+
+        seedsA: list
+            Seeds associated to adjacenty matrix A
+
+        seedsB: list
+            Seeds associated to adjacency matrix B `len(seedsA)==len(seedsB)`
 
         h: int
             distance between voi used to create induced subgraph on `G_1`
 
         ell: int
-            distance from seeds to other verts to create induced subgraphs on `G_1`
+            distance from seeds to other verticies to create induced subgraphs on `G_1`
 
         R: int
-            number of restarts
+            Number of restarts for soft seeded graph matching algorithm
 
         g: float
             gamma to be used, max tol for alpha, tollerable dist from barycenter
 
-        Returns
-        -------
-        self : returns an instance of self
-        """
+        References
+        ----------
+        Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded graph matching. Stat Anal Data
+        Min: The ASA Data Sci Journal. 2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
+        '''
+        assert len(seedsA) == len(seedsB)
 
-        nv1 = A.shape[0]
-        nv2 = A.shape[0]
+        voi = np.reshape(np.array(voi), (1,))
 
-        nv = max(nv1, nv2)
+        # get reordering for A
+        nsx1 = np.setdiff1d(list(range(A.shape[0])), np.concatenate((seedsA, voi)))
+        a_reord = np.concatenate((seedsA, voi, nsx1))
 
-        nsx1 = set(range(nv1)).difference(set([seeds[0], x]))
+        # get reordering for B
+        nsx2 = np.setdiff1d(list(range(B.shape[0])), seedsB)
+        b_reord = np.concatenate((seedsB, nsx2))
 
-        vec = [seeds[0], x]; vec.extend(nsx1)
+        AA = A[np.ix_(a_reord, a_reord)]
+        BB = B[np.ix_(b_reord, b_reord)]
 
-        AA = shuffle_adj_matrix(A, vec)
+        seeds_reord = np.arange(len(seedsA))
+        voi_reord = len(seedsA)
+        #     print("seeds reord = ", seeds_reord, ", voi_reord = ", voi_reord)
 
-        ns2 = set(range(nv2)).difference(set([seeds[1]])) # <- setdiff(1:nv2,seeds[,2])
-        vec2 = [seeds[1]]; vec2.extend(ns2) # <- c(seeds[,2],ns2)
+        subgraph_AA = np.array(ego_list(AA, h, voi_reord, mindist=1))
 
-        BB = shuffle_adj_matrix(B, vec2)
+        voi_reord = np.reshape(np.array(voi_reord), (1,))
 
-        nrow_seeds = seeds.shape[0]
+        Sx1 = np.intersect1d(a_reord[subgraph_AA], seeds_reord)
+        Sx2 = np.intersect1d(np.arange(BB.shape[0]), Sx1)
+        #     print("Sx1 = ", Sx1, " Sx2 = ", Sx2)
 
-        S = list(range(nrow_seeds))
+        if len(Sx2) <= 0:
+            print("Impossible")
+            return None
 
-        voi = list(range(nrow_seeds, nrow_seeds+2))
+        Nx1 = np.array(ego_list(AA, ell, list(Sx1), mindist=0))
+        Nx2 = np.array(ego_list(BB, ell, list(Sx2), mindist=0))
 
-        P = self.vnsgm_ordered(voi,S,AA,BB,h,ell,R,g,pad=pad,sim=sim,verb=verb,plotF=plotF)
+        foo = np.concatenate((Sx1, voi_reord))
+        ind1 = np.concatenate((Sx1, voi_reord, np.setdiff1d(Nx1, foo)))
+        ind2 = np.concatenate((Sx2, np.setdiff1d(Nx2, Sx2)))
 
-        self.x = x
-        self.S = seeds
+        AA_fin = AA[np.ix_(ind1, ind1)]
+        BB_fin = BB[np.ix_(ind2, ind2)]
 
-        if self.Cxp is not None:
-            foo = []
-            for kk in self.Cxp:
-                foo.append(vec2[kk])
-            self.Cxp = foo
 
-        if self.labelsGx is not None:
-            foo = []
-            for kk in self.labelsGx:
-                foo.append(vec[kk])
-            self.labelsGx = foo
+        seeds_fin = list(range(len(Sx1)))
+        sgm = GMP(n_init=R, shuffle_input=False, init_method="rand", padding="naive")
+        corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
+        P_outp = sgm.probability_matrix_
 
-        if self.labelsGxp is not None:
-            foo = []
-            for kk in self.labelsGxp:
-                foo.append(vec2[kk])
-            self.labelsGxp = foo
+        self.P = P_outp
+        self.corr = corr
+        self.a_inds = a_reord[ind1]
+        self.b_inds = b_reord[ind2]
+        self.n_seeds_used = len(Sx1)
 
-        return self
+        nomination_list = list(zip(self.b_inds[self.n_seeds_used:], self.P[0]))
+        nomination_list.sort(key=lambda x: x[1], reverse=True)
+        self.nomination_list = nomination_list
 
     def fit_predict(self, A, B, seeds_A=[], seeds_B=[]):
         """
@@ -226,18 +135,19 @@ class VNviaSGM(BaseEstimator):
             The optimal permutation indices to minimize the objective function
         """
         self.fit(A, B, seeds_A, seeds_B)
-        return self.perm_inds_
+        return self.nomination_list
+
 
 def ego(graph_adj_matrix, order, node, mindist=1):
-    #Note all nodes are zero based in this implementation, i.e the first node is 0
+    # Note all nodes are zero based in this implementation, i.e the first node is 0
     dists = [[node]]
-    for ii in range(1, order+1):
+    for ii in range(1, order + 1):
         clst = []
         for nn in dists[-1]:
-            clst.extend(list(np.where(graph_adj_matrix[nn]==1)[0]))
+            clst.extend(list(np.where(graph_adj_matrix[nn] == 1)[0]))
         clst = list(set(clst))
 
-        #Remove all the ones that are closer (i.e thtat have already been included)
+        # Remove all the ones that are closer (i.e thtat have already been included)
         dists_conglom = []
         for dd in dists:
             dists_conglom.extend(dd)
@@ -251,17 +161,18 @@ def ego(graph_adj_matrix, order, node, mindist=1):
         dists.append(cn_proc)
     ress = []
 
-    for ii in range(mindist, order+1):
+    for ii in range(mindist, order + 1):
         ress.extend(dists[ii])
 
-    return list(set(ress))
+    return np.array(list(set(ress)))
+
 
 def ego_list(graph_adj_matrix, order, node, mindist=1):
-    print(type(node))
+    #     print(type(node))
     if type(node) == list:
         total_res = []
         for nn in node:
-            ego_res = ego(graph_adj_matrix, order, nn, mindist=1)
+            ego_res = ego(graph_adj_matrix, order, nn, mindist=mindist)
             total_res.extend(ego_res)
         return list(set(total_res))
     else:
