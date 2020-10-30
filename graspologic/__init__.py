@@ -11,7 +11,6 @@ import graspologic.datasets
 import graspologic.embed
 import graspologic.inference
 import graspologic.models
-import graspologic.pipeline
 import graspologic.plot
 import graspologic.simulations
 import graspologic.subgraph
