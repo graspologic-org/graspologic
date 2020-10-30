@@ -35,6 +35,7 @@ class DefinedHistogram(NamedTuple):
     The bin_edges will have a length 1 greater than the histogram, as it defines the minimal and maximal edges as well
     as each edge in between.
     """
+
     histogram: np.ndarray
     bin_edges: np.ndarray
 
@@ -77,16 +78,17 @@ def histogram_edge_weight(
         weight for _, _, weight in graph.edges(data=weight_attribute)
     ]
     none_weights: List[None] = [weight for weight in edge_weights if weight is None]
-    actual_weights: List[Union[int, float]] = [weight for weight in edge_weights if weight is not None]
+    actual_weights: List[Union[int, float]] = [
+        weight for weight in edge_weights if weight is not None
+    ]
 
     if len(none_weights) != 0:
-        logger.warning(f"Graph contains {len(none_weights)} edges with no {weight_attribute}." +
-                       f" Histogram excludes these values.")
+        logger.warning(
+            f"Graph contains {len(none_weights)} edges with no {weight_attribute}."
+            + f" Histogram excludes these values."
+        )
 
-    histogram, bin_edges = np.histogram(
-        actual_weights,
-        bin_directive
-    )
+    histogram, bin_edges = np.histogram(actual_weights, bin_directive)
 
     return DefinedHistogram(histogram=histogram, bin_edges=bin_edges)
 
@@ -96,7 +98,7 @@ def cut_edges_by_weight(
     cut_threshold: Union[int, float],
     cut_process: str,
     weight_attribute: str = "weight",
-    prune_isolates: bool = False
+    prune_isolates: bool = False,
 ) -> nx.Graph:
     """
     Given a graph, a cut threshold, and a cut_process, create a new Graph that contains only the edges that are not
@@ -133,12 +135,15 @@ def cut_edges_by_weight(
     """
     filter_by = _filter_function_for_make_cuts(cut_threshold, cut_process)
     if not isinstance(cut_threshold, int) and not isinstance(cut_threshold, float):
-        raise TypeError(f"cut_threshold must be of type int or float; you provided: {type(cut_threshold)}")
+        raise TypeError(
+            f"cut_threshold must be of type int or float; you provided: {type(cut_threshold)}"
+        )
 
     logger = logging.getLogger(__name__)
     graph_copy = graph.copy()
     edge_weights: List[Tuple[Tuple[Any, Any], Union[int, float, None]]] = [
-        ((source, target), weight) for source, target, weight in graph.edges(data=weight_attribute)
+        ((source, target), weight)
+        for source, target, weight in graph.edges(data=weight_attribute)
     ]
     none_weights: List[Tuple[Tuple[Any, Any], None]] = [
         (edge, weight) for edge, weight in edge_weights if weight is None
@@ -148,13 +153,19 @@ def cut_edges_by_weight(
     ]
 
     if len(none_weights) != 0:
-        logger.warning(f"Graph contains {len(none_weights)} edges with no {weight_attribute}." +
-                       f"Ignoring these when cutting by weight")
+        logger.warning(
+            f"Graph contains {len(none_weights)} edges with no {weight_attribute}."
+            + f"Ignoring these when cutting by weight"
+        )
 
     edges_to_cut = [x for x in actual_weights if filter_by(x)]
     for edge, weight in edges_to_cut:
         source, target = edge
-        if source in graph_copy and target in graph_copy and target in graph_copy[source]:
+        if (
+            source in graph_copy
+            and target in graph_copy
+            and target in graph_copy[source]
+        ):
             graph_copy.remove_edge(source, target)
         if prune_isolates:
             if len(graph_copy[source]) == 0:
@@ -166,8 +177,8 @@ def cut_edges_by_weight(
 
 
 def histogram_degree_centrality(
-        graph: nx.Graph,
-        bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10
+    graph: nx.Graph,
+    bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
 ) -> DefinedHistogram:
     """
     Generates a histogram of the vertex degree centrality of the provided graph. Histogram function is fundamentally
@@ -193,16 +204,13 @@ def histogram_degree_centrality(
 
     degree_centrality_dict = nx.degree_centrality(graph)
     histogram, bin_edges = np.histogram(
-        list(degree_centrality_dict.values()),
-        bin_directive
+        list(degree_centrality_dict.values()), bin_directive
     )
     return DefinedHistogram(histogram=histogram, bin_edges=bin_edges)
 
 
 def cut_vertices_by_degree_centrality(
-    graph: nx.Graph,
-    cut_threshold: Union[int, float],
-    cut_process: str
+    graph: nx.Graph, cut_threshold: Union[int, float], cut_process: str
 ) -> nx.Graph:
     """
     Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
@@ -244,7 +252,7 @@ def histogram_betweenness_centrality(
     normalized: bool = True,
     weight_attribute: Optional[str] = "weight",
     include_endpoints: bool = False,
-    random_seed: Optional[Union[int, random.Random, np.random.RandomState]] = None
+    random_seed: Optional[Union[int, random.Random, np.random.RandomState]] = None,
 ) -> DefinedHistogram:
     """
     Generates a histogram of the vertex betweenness centrality of the provided graph. Histogram function is
@@ -296,11 +304,10 @@ def histogram_betweenness_centrality(
         normalized=normalized,
         weight=weight_attribute,
         endpoints=include_endpoints,
-        seed=random_seed
+        seed=random_seed,
     )
     histogram, bin_edges = np.histogram(
-        list(betweenness_centrality_dict.values()),
-        bin_directive
+        list(betweenness_centrality_dict.values()), bin_directive
     )
     return DefinedHistogram(histogram=histogram, bin_edges=bin_edges)
 
@@ -313,15 +320,15 @@ def cut_vertices_by_betweenness_centrality(
     normalized: bool = True,
     weight_attribute: Optional[str] = "weight",
     include_endpoints: bool = False,
-    random_seed: Optional[Union[int, random.Random, np.random.RandomState]] = None
+    random_seed: Optional[Union[int, random.Random, np.random.RandomState]] = None,
 ) -> nx.Graph:
     """
     Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
         cut_threshold.
-    
+
         The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling
         by providing num_random_samples (or k, in networkx betweenness_centrality nomenclature).
-    
+
 
     graph : nx.Graph
         The graph that will be copied and pruned.
@@ -366,7 +373,7 @@ def cut_vertices_by_betweenness_centrality(
         normalized=normalized,
         weight=weight_attribute,
         endpoints=include_endpoints,
-        seed=random_seed
+        seed=random_seed,
     )
     filter_by = _filter_function_for_make_cuts(cut_threshold, cut_process)
     vertices_to_cut = list(filter(filter_by, betweenness_centrality_dict.items()))
