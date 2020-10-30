@@ -27,9 +27,6 @@ def latent_position_test(
 
     Parameters
     ----------
-
-    Parameters
-    ----------
     A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
         The two graphs to run a hypothesis test on.
         If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
@@ -37,7 +34,7 @@ def latent_position_test(
 
     embedding : string, { 'ase' (default), 'omnibus'}
         String describing the embedding method to use:
-        
+
         - 'ase'
             Embed each graph separately using adjacency spectral embedding
             and use Procrustes to align the embeddings.
@@ -72,7 +69,7 @@ def latent_position_test(
     ----------
     p_value : float
         The overall p value from the test; this is the max of ``p_value_1`` and ``p_value_2``
-    
+
     sample_T_statistic : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
@@ -82,7 +79,7 @@ def latent_position_test(
         and second input graph, respectively. The latent positions of each sample graph
         are used independently to sample random dot product graphs, so two null
         distributions are generated
-    
+
     p_value_1, p_value_2 : float
         The p value estimated from the null distributions from sample 1 and sample 2.
 
@@ -96,13 +93,13 @@ def latent_position_test(
             and second input graph, respectively. The latent positions of each sample graph
             are used independently to sample random dot product graphs, so two null
             distributions are generated
-    
+
     See also
     --------
     graspologic.embed.AdjacencySpectralEmbed
     graspologic.embed.OmnibusEmbed
     graspologic.embed.selectSVD
-    
+
     References
     ----------
     .. [1] Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E.

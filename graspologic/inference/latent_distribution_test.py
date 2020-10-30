@@ -53,7 +53,7 @@ def latent_distribution_test(
     ----------
     A1, A2 : variable (see description)
         The two graphs, or their embeddings to run a hypothesis test on.
-        Expected variable type and shape depends on input_graph attribute:
+        Expected variable type and shape depends on input_graph attribute
 
     test : str (default="hsic")
         Backend hypothesis test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
@@ -161,7 +161,7 @@ def latent_distribution_test(
     ----------
     p_value_ : float
         The overall p value from the test.
-        
+
     sample_T_statistic_ : float
         The observed difference between the embedded latent positions of the
         two input graphs.
