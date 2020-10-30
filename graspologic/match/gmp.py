@@ -83,6 +83,8 @@ class GraphMatch(BaseEstimator):
         Number of Frank-Wolfe iterations run. If `n_init` > 1, `n_iter_` reflects the number of
         iterations performed at the initialization returned.
 
+    probability_matrix_ : 2d-array square
+        The output probability matrix P
 
     References
     ----------
@@ -210,6 +212,8 @@ class GraphMatch(BaseEstimator):
         score = math.inf
         perm_inds = np.zeros(n)
 
+        probability_matrix = np.zeros((n_unseed, n_unseed))
+
         obj_func_scalar = 1
         if self.gmp:
             obj_func_scalar = -1
@@ -298,6 +302,11 @@ class GraphMatch(BaseEstimator):
             row, col = linear_sum_assignment(
                 -P
             )  # Project onto the set of permutation matrices
+
+            perm_mat = np.zeros((n_unseed, n_unseed)).astype(float)
+            perm_mat[row, col] = 1
+            probability_matrix += perm_mat
+
             perm_inds_new = np.concatenate(
                 (np.arange(n_seeds), np.array([x + n_seeds for x in col]))
             )
@@ -318,6 +327,7 @@ class GraphMatch(BaseEstimator):
         B = B[np.ix_(permutation_B_unshuffle, permutation_B_unshuffle)]
         score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
 
+        self.probability_matrix_ = probability_matrix/self.n_init
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
         self.n_iter_ = best_n_iter
