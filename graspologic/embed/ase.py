@@ -143,6 +143,8 @@ class AdjacencySpectralEmbed(BaseEmbed):
         graph : array_like or networkx.Graph
             Input graph to embed.
 
+        y: Ignored
+
         Returns
         -------
         self : object
@@ -161,6 +163,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         if self.diag_aug:
             A = augment_diagonal(A)
+        self._A = A
 
         self.n_features_in_ = len(A)
         self._reduce_dim(A)
@@ -174,47 +177,54 @@ class AdjacencySpectralEmbed(BaseEmbed):
         self.is_fitted_ = True
         return self
 
-    def predict(self, y):
+    def transform(self, X):
         """
-        Obtain out-of-sample latent positions for vertices not in the original embedding.
-        For more details, see [2].
+        Obtain latent positions from an adjacency matrix or matrix of out-of-sample vertices.
+        For more details on transforming out-of-sample vertices, see [2].
 
         Parameters
         ----------
-        y : array_like or tuple, shape (n_oos_vertices, n_vertices)
-            out-of-sample matrix.
+        X : array_like or tuple, shape (n_vertices, n_vertices) or (n_oos_vertices, n_vertices).
+            The original fitted matrix or new out-of-sample data.
+            If X is the original fitted matrix, returns ``self.fit_transform(X)``.
+            If X is an out-of-sample matrix,  n_oos_vertices is the number of new vertices, and n_vertices is the number of vertices in the original graph.
             If tuple, graph is directed and y[0] contains edges from y to other nodes.
 
         Returns
         -------
         array_like or tuple, shape (n_oos_vertices, n_components)
-            Out-of-sample prediction for the latent position(s) of y.
+            Array of latent positions. If X was the original fitted matrix, returns its latent positions.
+            If X is an array or tuple of new nodes, returns the out-of-sample prediction for X.
             If undirected, returns array.
             If directed, returns (y_left, y_right).
         """
+
+        # just fit_transform if X is the matrix we fit to
+        if np.array_equal(X, self._A):
+            return self.fit_transform(X)
 
         # checks
         check_is_fitted(self, "is_fitted_")
         directed = self.latent_right_ is not None
 
         # correct types?
-        if directed and not isinstance(y, tuple):
+        if directed and not isinstance(X, tuple):
             raise TypeError("Directed graphs require a tuple (y_left, y_right")
-        if not directed and not isinstance(y, np.ndarray):
+        if not directed and not isinstance(X, np.ndarray):
             raise TypeError("Undirected graphs require array input")
 
         # correct shape in y?
         latent_rows = self.latent_left_.shape[0]
-        _y = y[0] if directed else y
-        y_cols = _y.shape[-1]
-        if _y.ndim > 2:
+        _X = X[0] if directed else X
+        X_cols = _X.shape[-1]
+        if _X.ndim > 2:
             raise ValueError("out-of-sample vertex must be 1d or 2d")
-        if latent_rows != y_cols:
+        if latent_rows != X_cols:
             msg = "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
             raise ValueError(msg)
 
         # workhorse code
         if not directed:
-            return y @ self._pinv_left
+            return X @ self._pinv_left
         elif directed:
-            return y[0] @ self._pinv_left, y[1] @ self._pinv_right
+            return X[0] @ self._pinv_left, X[1] @ self._pinv_right
