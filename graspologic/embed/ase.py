@@ -60,7 +60,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         a UserWarning is thrown. Not checking for connectedness may result in
         faster computation.
 
-    diag_aug : bool, optional (default = True)
+    diag_aug : bool, optional (default = False)
         Whether to replace the main diagonal of the adjacency matrix with a vector
         corresponding to the degree (or sum of edge weights for a weighted network)
         before embedding. Empirically, this produces latent position estimates closer
@@ -118,7 +118,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
-        diag_aug=True,
+        diag_aug=False,
         concat=False,
     ):
         super().__init__(
@@ -203,7 +203,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         # just fit_transform if X is the matrix we fit to
         # TODO: Test that this fixes diag_aug issue
         if np.array_equal(X, self._A):
-            return self.fit_transform(X, prefit=True)
+            return self._fit_transform(X, prefit=True)
 
         # checks
         check_is_fitted(self, "is_fitted_")
