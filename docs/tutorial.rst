@@ -94,6 +94,8 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
    tutorials/subgraph/subgraph
 
+.. _aligning_tutorials:
+
 Aligning
 ========
 The following tutorials shows how to align two seperate datasets with each other.
