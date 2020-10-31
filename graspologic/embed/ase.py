@@ -133,6 +133,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         if not isinstance(diag_aug, bool):
             raise TypeError("`diag_aug` must be of type bool")
         self.diag_aug = diag_aug
+        self.is_fitted_ = False
 
     def fit(self, graph, y=None):
         """
@@ -200,8 +201,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
         """
 
         # just fit_transform if X is the matrix we fit to
+        # TODO: Test that this fixes diag_aug issue
         if np.array_equal(X, self._A):
-            return self.fit_transform(X)
+            return self.fit_transform(X, prefit=True)
 
         # checks
         check_is_fitted(self, "is_fitted_")

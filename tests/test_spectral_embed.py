@@ -5,6 +5,7 @@ import unittest
 import pytest
 import numpy as np
 from numpy.random import poisson, normal
+from numpy.testing import assert_equal
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import er_np, er_nm, sbm
@@ -151,14 +152,22 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase = AdjacencySpectralEmbed(diag_aug="over 9000")
             ase.fit()
 
-    def test_predict_runs(self):
+    def test_transform_fit_transform(self):
+        ase = AdjacencySpectralEmbed(n_components=2)
+        A = self.testgraphs["Guw"]
+        ase.fit(A)
+        X = ase.transform(A)
+        Y = ase.fit_transform(A)
+        assert_equal(X, Y)
+
+    def test_transform_runs(self):
         ase = clone(self.ase)
         for graph in self.testgraphs.values():
             A, a = remove_vertices(graph, 1, return_removed=True)
             ase.fit(A)
             directed = ase.latent_right_ is not None
             weighted = not np.array_equal(A, A.astype(bool))
-            w = ase.predict(a)
+            w = ase.transform(a)
             if directed:
                 self.assertIsInstance(w, tuple)
                 self.assertIsInstance(w[0], np.ndarray)
@@ -172,18 +181,18 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
 
         with pytest.raises(TypeError):
             ase.fit(self.testgraphs["Gwd"])
-            ase.predict("9001")
+            ase.transform("9001")
 
         with pytest.raises(TypeError):
             Guwd = self.testgraphs["Guwd"]
             ase.fit(Guwd)
-            ase.predict(np.ones(len(Guwd)))
+            ase.transform(np.ones(len(Guwd)))
 
         with pytest.raises(ValueError):
             A, a = remove_vertices(self.testgraphs["Gw"], [0, 1], return_removed=True)
             a = a.T
             ase.fit(A)
-            ase.predict(a)
+            ase.transform(a)
 
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
