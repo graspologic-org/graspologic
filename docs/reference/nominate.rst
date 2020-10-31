@@ -1,8 +1,8 @@
-Matching
+Nomination
 ========
 
 .. currentmodule:: graspologic.nominate
 
-Graph Matching
+Vertex Nomination via Seeded Graph Matching
 --------------------
 .. autoclass:: VNviaSGM
