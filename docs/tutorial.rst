@@ -93,3 +93,12 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
    :maxdepth: 1
 
    tutorials/subgraph/subgraph
+
+Vertex Nomination
+=================
+The following tutorial demonstrates how to use vertex nomination via seeded graph matching.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/nominate/vertex_nomination_via_SGM
