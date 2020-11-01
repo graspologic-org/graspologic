@@ -645,3 +645,59 @@ def cartprod(*arrays):
     return np.transpose(
         np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
     ).reshape(-1, N)
+
+
+def fit_plug_in_variance_estimator(X):
+    """
+    Takes in ASE of a graph and returns a function that estimates
+    the variance-covariance matrix at a given point using the
+    plug-in estimator from the RDPG Central Limit Theorem.
+
+    Parameters
+    ----------
+    X : np.ndarray, shape (n, d)
+        adjacency spectral embedding of a graph
+
+    Returns
+    -------
+    plug_in_variance_estimtor: functions
+        a function that estimates variance (see below)
+    """
+
+    n = len(X)
+
+    # precompute the Delta and the middle term matrix part
+    delta = 1 / (n) * (X.T @ X)
+    delta_inverse = np.linalg.inv(delta)
+    middle_term_matrix = np.einsum("bi,bo->bio", X, X)
+
+    def plug_in_variance_estimator(x):
+        """
+        Takes in a point of a matrix of points in R^d and returns an
+        estimated covariance matrix for each of the points
+
+        Parameters:
+        -----------
+        x: np.ndarray, shape (n, d)
+            points to estimate variance at
+            if 1-dimensional - reshaped to (1, d)
+
+        Returns:
+        -------
+        covariances: np.ndarray, shape (n, d, d)
+            n estimated variance-covariance matrices of the points provided
+        """
+        if x.ndim < 2:
+            x = x.reshape(1, -1)
+        # the following two lines are a properly vectorized version of
+        # middle_term = 0
+        # for i in range(n):
+        #     middle_term += np.multiply.outer((x @ X[i] - (x @ X[i]) ** 2),
+        #                                      np.outer(X[i], X[i]))
+        # where the matrix part does not involve x and has been computed above
+        middle_term_scalar = x @ X.T - (x @ X.T) ** 2
+        middle_term = np.tensordot(middle_term_scalar, middle_term_matrix, axes=1)
+        covariances = delta_inverse @ (middle_term / n) @ delta_inverse
+        return covariances
+
+    return plug_in_variance_estimator
