@@ -236,7 +236,8 @@ def test_pairplot_with_gmm_outputs():
         cluster_palette=cluster_palette,
         label_palette=label_palette,
     )
-    
+
+
 
 def test_sort_inds():
     B = np.array(
