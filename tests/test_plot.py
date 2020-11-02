@@ -211,7 +211,7 @@ def test_pairplot_with_gmm_inputs():
     with pytest.raises(ValueError):
         pairplot_with_gmm(X=X, gmm=gmm, labels=["A"])
 
-    with pytest.raises(TypeError):
+    with pytest.raises(NameError):
         pairplot_with_gmm(X, gmm=None)
 
 
@@ -219,10 +219,24 @@ def test_pairplot_with_gmm_outputs():
     X = np.random.rand(15, 3)
     gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
+    cluster_palette = {"Block 1": "pink", "Block 2": "brown", "Block 3": "yellow"}
+    label_palette = {"Block 1": "red", "Block 2": "blue", "Block 3": "green"}
     fig = pairplot_with_gmm(X, gmm)
-    fig = pairplot_with_gmm(X, gmm, labels)
-    fig = pairplot_with_gmm(X, gmm, labels, title="Test")
-
+    fig = pairplot_with_gmm(
+        X,
+        gmm,
+        labels=labels,
+        cluster_palette=cluster_palette,
+        label_palette=label_palette,
+    )
+    fig = pairplot_with_gmm(
+        X,
+        gmm,
+        labels=labels,
+        cluster_palette=cluster_palette,
+        label_palette=label_palette,
+    )
+    
 
 def test_sort_inds():
     B = np.array(
