@@ -3,11 +3,11 @@
 
 import warnings
 
-from .base import BaseEmbed
+from .base import BaseSpectralEmbed
 from ..utils import import_graph, to_laplace, is_fully_connected
 
 
-class LaplacianSpectralEmbed(BaseEmbed):
+class LaplacianSpectralEmbed(BaseSpectralEmbed):
     r"""
     Class for computing the laplacian spectral embedding of a graph.
 
