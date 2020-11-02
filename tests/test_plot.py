@@ -219,8 +219,8 @@ def test_pairplot_with_gmm_outputs():
     X = np.random.rand(15, 3)
     gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
-    cluster_palette = {"Block 1": "pink", "Block 2": "brown", "Block 3": "yellow"}
-    label_palette = {"Block 1": "red", "Block 2": "blue", "Block 3": "green"}
+    cluster_palette = {"A": "pink", "B": "brown", "C": "yellow"}
+    label_palette = {"A": "red", "B": "blue", "C": "green"}
     fig = pairplot_with_gmm(X, gmm)
     fig = pairplot_with_gmm(
         X,
