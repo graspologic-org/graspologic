@@ -6,7 +6,9 @@ import numpy as np
 import math
 import random
 from graspologic.match import GraphMatch as GMP
-from graspologic.simulations import er_np
+from graspologic.simulations import er_np, sbm_corr
+from graspologic.embed import AdjacencySpectralEmbed
+from graspologic.align import SignFlips
 
 np.random.seed(0)
 
@@ -131,4 +133,25 @@ class TestGMP:
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
 
-    # TODO: def test_sim(self):
+    def test_sim(self):
+        n = 150
+        rho = 1.0
+        n_per_block = int(n / 3)
+        n_blocks = 3
+        block_members = np.array(n_blocks * [n_per_block])
+        block_probs = np.array(
+            [[0.2, 0.01, 0.01], [0.01, 0.1, 0.01], [0.01, 0.01, 0.2]]
+        )
+        directed = False
+        loops = False
+        A1, A2 = sbm_corr(
+            block_members, block_probs, rho, directed=directed, loops=loops
+        )
+        ase = AdjacencySpectralEmbed(n_components=3, algorithm="truncated")
+        x1 = ase.fit_transform(A1)
+        x2 = ase.fit_transform(A2)
+        xh1 = SignFlips().fit_transform(x1, x2)
+        S = xh1 @ x2.T
+        res = self.barygm.fit(A1, A2, S=S)
+
+        assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
