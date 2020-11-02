@@ -10,7 +10,7 @@ from ..utils import augment_diagonal, import_graph, is_almost_symmetric
 from .svd import selectSVD
 
 
-class BaseEmbed(BaseEstimator):
+class BaseSpectralEmbed(BaseEstimator):
     """
     A base class for embedding a graph.
 
@@ -168,7 +168,7 @@ class BaseEmbed(BaseEstimator):
         return self._fit_transform(graph)
 
 
-class BaseEmbedMulti(BaseEmbed):
+class BaseEmbedMulti(BaseSpectralEmbed):
     def __init__(
         self,
         n_components=None,
