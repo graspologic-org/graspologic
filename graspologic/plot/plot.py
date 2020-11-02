@@ -9,7 +9,6 @@ import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.utils import check_array, check_consistent_length
 from sklearn.preprocessing import Binarizer
-import itertools
 from scipy import linalg
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -677,19 +676,8 @@ def pairplot(
     return pairs
 
 
-def plot_ellipse(
-    X,
-    Y_,
-    means,
-    covariances,
-    ax,
-    j,
-    k,
-    colors,
-    lab_dict=None,
-    ind_to_lab=None,
-    alpha=0.7,
-    palette="Set1",
+def __plot_ellipse(
+    data, X, j, k, means, covariances, ax, label_palette, cluster_palette, alpha
 ):
     r"""
     plot_ellipse makes a scatter plot from the two dimensions j,k where j
@@ -702,66 +690,40 @@ def plot_ellipse(
     ----------
     X : array-like, shape (n_samples, n_features)
         Input data.
-    Y_ : array-like, shape (n_samples, 1)
-        When no labels are passed into pairplot_with_gmm then these are the gmm
-        lables.
-        When labels are passed into pairplot_with_gmm then these are numbers
-        that have corrsponding
-        relationship to the labels
+    j : int
+        column index of feature of interest from X which will be the x-axis data.
+    k : int
+        column index of feature of interest from X which will be the y-axis data.
     means : array-like, shape (n_components, n_features)
         Estimated means from gmm
     covariances : array-like, shape (with 'full') (n_components, n_features, n_features)
         estimated covariances from gmm
     ax : axis object
         The location where plot_ellipse will plot
-    j : int
-        column index of feature of interest from X which will be the x-axis data.
-    k : int
-        column index of feature of interest from X which will be the y-axis data.
-    colors : array-like or list,seaborn color palette
-    lab_dict : dict
-        Dictionary of labels mapped to unique number
-    ind_to_lab : dict
-        The reverse of lab_dict
+    label_palette : dict, optional, default: dictionary using 'Set1'
+    cluster_palette : dict, optional, default: dictionary using 'Set1'
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
-    palette : str, dict, optional, default: 'Set1'
     """
-    for i, (mean, covar, color) in enumerate(zip(means, covariances, colors)):
+    sns.scatterplot(
+        data=data, x=X[:, j], y=X[:, k], ax=ax, hue="labels", palette=label_palette
+    )
+    means_collector = data[[j, k, "labels"]]
+    means_collector = means_collector.groupby("labels").mean()
+    for i, (mean, covar) in enumerate(zip(means, covariances)):
         v, w = linalg.eigh(covar)
         v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
         u = w[0] / linalg.norm(w[0])
-        if lab_dict and ind_to_lab:
-            # Plot the scatter
-            sns.scatterplot(
-                X[Y_ == i, j],
-                X[Y_ == i, k],
-                ax=ax,
-                label=ind_to_lab[i],
-                color=colors[i],
-            )
-            # Plot an ellipse to show the Gaussian component
-            angle = np.arctan(u[1] / u[0])
-            angle = 180.0 * angle / np.pi
-            ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
-            )
-        else:
-            if not np.any(Y_ == i):
-                continue
-            sns.scatterplot(
-                X[Y_ == i, j],
-                X[Y_ == i, k],
-                ax=ax,
-                label="Block {}".format(i),
-                color=colors[i],
-            )
-            # Plot an ellipse to show the Gaussian component
-            angle = np.arctan(u[1] / u[0])
-            angle = 180.0 * angle / np.pi
-            ell = mpl.patches.Ellipse(
-                [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=colors[i]
-            )
+        # Plot an ellipse to show the Gaussian component
+        angle = np.arctan(u[1] / u[0])
+        angle = 180.0 * angle / np.pi
+        for i, m in means_collector.iterrows():
+            if abs(float(round(mean[j], 3)) - float(round(m[j], 3))) < 0.1:
+                if abs(float(round(mean[k], 3)) - float(round(m[k], 3))) < 0.1:
+                    color = cluster_palette[i]
+        ell = mpl.patches.Ellipse(
+            [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
+        )
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
         ax.add_artist(ell)
@@ -773,11 +735,12 @@ def pairplot_with_gmm(
     X,
     gmm,
     labels=None,
+    cluster_palette=None,
+    label_palette=None,
     title=None,
     context="talk",
     font_scale=1,
     alpha=0.7,
-    palette="Set1",
 ):
     r"""
     Plot pairwise relationships in a dataset.
@@ -792,6 +755,8 @@ def pairplot_with_gmm(
     gmm: Gaussian Mixture Model object
     labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
+    label_palette : str or dict, optional, default: dictionary using 'Set1'
+    cluster_palette : str or dict, optional, default: dictionary using 'Set1'
     title : string, default : 'Degree plot'
         Plot title
     context :  None, or one of {talk (default), paper, notebook, poster}
@@ -801,14 +766,7 @@ def pairplot_with_gmm(
         elements.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
-    palette : str, dict, optional, default: 'Set1'
-        Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the hue variable.
-        For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     """
-    sns.despine(left=True)
-    colors = sns.color_palette(palette)
     # Handle X
     if not isinstance(X, (list, np.ndarray)):
         msg = "X must be array-like, not {}.".format(type(X))
@@ -827,35 +785,46 @@ def pairplot_with_gmm(
     # Handle gmm
     if gmm is None:
         msg = "You must input a sklearn.mixture.GaussianMixture"
-        raise TypeError(msg)
-    # get relevant features from the gmm model
+        raise NameError(msg)
     Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
-    # plot only a scatter plot with only two feature columns
-    lab_dict, ind_to_lab = {}, {}
-    if labels:
-        set_labs = sorted(set(labels))
-        counter = 0
-        for lab in set_labs:
-            lab_dict[lab] = counter
-            ind_to_lab[counter] = lab
-            counter += 1
-        Y_ = np.asarray([lab_dict[labels[i]] for i in range(len(labels))])
-    colors = dict(zip(np.unique(Y_), colors))
+    data = pd.DataFrame(data=X)
+    num_comps = gmm.n_components
+    if labels is None:
+        lab_names = ["Block {}".format(i) for i in range(num_comps)]
+        data["labels"] = np.asarray([lab_names[Y_[i]] for i in range(Y_.shape[0])])
+    else:
+        data["labels"] = labels
+    data["clusters"] = Y_
+    if isinstance(cluster_palette, str) and labels is not None:
+        colors = sns.color_palette(cluster_palette, num_comps)
+        cluster_palette = dict(zip(np.unique(Y_), colors))
+    if isinstance(label_palette, str) and labels is not None:
+        colors = sns.color_palette(label_palette, num_comps)
+        label_palette = dict(zip(np.unique(np.asarray(labels)), colors))
+    if (labels is not None) and (cluster_palette is None or label_palette is None):
+        msg = "if give labels array must give palette dicts or string desciptors"
+        raise ValueError(msg)
+    elif labels is None and cluster_palette is None and label_palette is None:
+        colors = sns.color_palette("Set1", num_comps)
+        cluster_palette = dict(zip(np.unique(lab_names), colors))
+        label_palette = dict(zip(np.unique(lab_names), colors))
+    elif labels is None and (cluster_palette is not None or label_palette is not None):
+        msg = "must give labels if using palettes for labels and clusters"
+        raise ValueError(msg)
     with sns.plotting_context(context=context, font_scale=font_scale):
         if X.shape[1] == 2:
             pairplot, axes = plt.subplots(1, 1, figsize=(12, 12))
-            plot_ellipse(
+            __plot_ellipse(
+                data,
                 X,
-                Y_,
+                0,
+                1,
                 means,
                 covariances,
                 axes,
-                0,
-                1,
-                colors,
-                lab_dict,
-                ind_to_lab,
-                palette=palette,
+                label_palette,
+                cluster_palette,
+                alpha=alpha,
             )
             axes.set_ylabel("Dim " + str(0))
             axes.set_xlabel("Dim " + str(1))
@@ -870,33 +839,33 @@ def pairplot_with_gmm(
                     + str(means.shape[0])
                     + " components"
                 )
-            plt.subplots_adjust(right=0.8)
-            return pairplot
-        # for more than two features compared
+            return
         pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=(12, 12))
         for k in range(X.shape[1]):
             for j in range(X.shape[1]):
                 if k == j:
-                    for t in range(X.shape[1]):
+                    for t, lab in zip([i for i in range(X.shape[1])], label_palette):
                         sns.distplot(
-                            X[Y_ == t, k], kde=True, ax=axes[k, k], color=colors[t]
+                            X[Y_ == t, k],
+                            kde=True,
+                            ax=axes[k, k],
+                            color=label_palette[lab],
                         )
                     axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
                     axes[k, j].set_ylabel(None)
                     axes[k, j].set_ylabel(j), axes[k, j].set_xlabel(k)
                 else:
-                    plot_ellipse(
+                    __plot_ellipse(
+                        data,
                         X,
-                        Y_,
+                        j,
+                        k,
                         means,
                         covariances,
                         axes[k, j],
-                        j,
-                        k,
-                        colors,
-                        lab_dict,
-                        ind_to_lab,
-                        palette=palette,
+                        label_palette,
+                        cluster_palette,
+                        alpha=alpha,
                     )
         for i in range(X.shape[1]):
             for j in range(X.shape[1]):
@@ -921,7 +890,6 @@ def pairplot_with_gmm(
         pairplot.legend(
             handles[: means.shape[0]], labels[: means.shape[0]], loc="upper right"
         )
-    return pairplot
 
 
 def _distplot(
