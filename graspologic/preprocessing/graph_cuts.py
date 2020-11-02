@@ -8,10 +8,10 @@ import networkx as nx
 import numpy as np
 
 
-LARGER_THAN_INCLUSIVE = "LARGER_THAN_INCLUSIVE"
-LARGER_THAN_EXCLUSIVE = "LARGER_THAN_EXCLUSIVE"
-SMALLER_THAN_INCLUSIVE = "SMALLER_THAN_INCLUSIVE"
-SMALLER_THAN_EXCLUSIVE = "SMALLER_THAN_EXCLUSIVE"
+LARGER_THAN_INCLUSIVE = "larger_than_inclusive"
+LARGER_THAN_EXCLUSIVE = "larger_than_exclusive"
+SMALLER_THAN_INCLUSIVE = "smaller_than_inclusive"
+SMALLER_THAN_EXCLUSIVE = "smaller_than_exclusive"
 
 
 def _filter_function_for_make_cuts(
@@ -41,7 +41,7 @@ class DefinedHistogram(NamedTuple):
 
 
 def histogram_edge_weight(
-    graph: nx.Graph,
+    graph: Union[nx.Graph, nx.DiGraph],
     bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
     weight_attribute: str = "weight",
 ) -> DefinedHistogram:
@@ -56,7 +56,7 @@ def histogram_edge_weight(
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
-        See: https://docs.scipy.org/doc/numpy-1.15.1/reference/generated/numpy.histogram_bin_edges.html#numpy.histogram_bin_edges
+        See: `numpy:numpy.histogram_bin_edges`
         In short: if an int is provided, we use `bin_directive` number of equal range bins.
         If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
         Note that the np.ndarray should be ndim=1 and the values should be float or int.
@@ -94,29 +94,29 @@ def histogram_edge_weight(
 
 
 def cut_edges_by_weight(
-    graph: nx.Graph,
+    graph: Union[nx.Graph, nx.DiGraph],
     cut_threshold: Union[int, float],
     cut_process: str,
     weight_attribute: str = "weight",
     prune_isolates: bool = False,
-) -> nx.Graph:
+) -> Union[nx.Graph, nx.DiGraph]:
     """
     Given a graph, a cut threshold, and a cut_process, create a new Graph that contains only the edges that are not
         pruned.
 
     Parameters
     ----------
-    graph : nx.Graph
+    graph : Union[nx.Graph, nx.DiGraph]
         The graph that will be copied and pruned.
     cut_threshold : Union[int, float]
         The threshold for making cuts based on weight.
     cut_process : str
         Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
         exclusive or inclusive. Allowed values are
-        - ``LARGER_THAN_INCLUSIVE``
-        - ``LARGER_THAN_EXCLUSIVE``
-        - ``SMALLER_THAN_INCLUSIVE``
-        - ``SMALLER_THAN_EXCLUSIVE``
+        - ``larger_than_inclusive``
+        - ``larger_than_exclusive``
+        - ``smaller_than_inclusive``
+        - ``smaller_than_exclusive``
     weight_attribute : str
         The weight attribute name in the edge's data dictionary. Default is `weight`.
     prune_isolates : bool
@@ -125,8 +125,8 @@ def cut_edges_by_weight(
 
     Returns
     -------
-    nx.Graph
-        Pruned copy of the graph
+    Union[nx.Graph, nx.DiGraph]
+        Pruned copy of the same type of graph provided
 
     Notes
     -----
@@ -177,7 +177,7 @@ def cut_edges_by_weight(
 
 
 def histogram_degree_centrality(
-    graph: nx.Graph,
+    graph: Union[nx.Graph, nx.DiGraph],
     bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
 ) -> DefinedHistogram:
     """
@@ -187,12 +187,12 @@ def histogram_degree_centrality(
     Parameters
     ----------
 
-    graph : nx.Graph
+    graph : Union[nx.Graph, nx.DiGraph]
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
-        See: https://docs.scipy.org/doc/numpy-1.15.1/reference/generated/numpy.histogram_bin_edges.html#numpy.histogram_bin_edges
-        In short: if an int is provided, we use `bin_directive` number of equal range bins.
+        See: `numpy:numpy.histogram_bin_edges`
+        In short: if an int is provided, we use ```bin_directive`` number of equal range bins.
         If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
         Note that the np.ndarray should be ndim=1 and the values should be float or int.
 
@@ -210,30 +210,30 @@ def histogram_degree_centrality(
 
 
 def cut_vertices_by_degree_centrality(
-    graph: nx.Graph, cut_threshold: Union[int, float], cut_process: str
-) -> nx.Graph:
+    graph: Union[nx.Graph, nx.DiGraph], cut_threshold: Union[int, float], cut_process: str
+) -> Union[nx.Graph, nx.DiGraph]:
     """
     Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
         cut_threshold.
 
     Parameters
     ----------
-    graph : nx.Graph
+    graph : Union[nx.Graph, nx.DiGraph]
         The graph that will be copied and pruned.
     cut_threshold : Union[int, float]
         The threshold for making cuts based on weight.
     cut_process : str
         Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
         exclusive or inclusive. Allowed values are
-        - ``LARGER_THAN_INCLUSIVE``
-        - ``LARGER_THAN_EXCLUSIVE``
-        - ``SMALLER_THAN_INCLUSIVE``
-        - ``SMALLER_THAN_EXCLUSIVE``
+        - ``larger_than_inclusive``
+        - ``larger_than_exclusive``
+        - ``smaller_than_inclusive``
+        - ``smaller_than_exclusive``
 
     Returns
     -------
-    nx.Graph
-        Pruned copy of the graph
+    Union[nx.Graph, nx.DiGraph]
+        Pruned copy of the same type of graph provided
     """
     graph_copy = graph.copy()
     degree_centrality_dict = nx.degree_centrality(graph_copy)
@@ -246,7 +246,7 @@ def cut_vertices_by_degree_centrality(
 
 
 def histogram_betweenness_centrality(
-    graph: nx.Graph,
+    graph: Union[nx.Graph, nx.DiGraph],
     bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
     num_random_samples: Optional[int] = None,
     normalized: bool = True,
@@ -257,18 +257,18 @@ def histogram_betweenness_centrality(
     """
     Generates a histogram of the vertex betweenness centrality of the provided graph. Histogram function is
         fundamentally proxied through to numpy's `histogram` function, and bin selection follows
-        `numpy.histogram` processes.
+        `numpy:numpy.histogram` processes.
 
         The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling
         by providing num_random_samples (or ``k``, in networkx betweenness_centrality nomenclature).
 
     Parameters
     ----------
-    graph : nx.Graph
+    graph : Union[nx.Graph, nx.DiGraph]
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
-        See: https://docs.scipy.org/doc/numpy-1.15.1/reference/generated/numpy.histogram_bin_edges.html#numpy.histogram_bin_edges
+        See: `numpy:numpy.histogram_bin_edges`
         In short: if an int is provided, we use `bin_directive` number of equal range bins.
         If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
         Note that the np.ndarray should be ndim=1 and the values should be float or int.
@@ -276,8 +276,8 @@ def histogram_betweenness_centrality(
         Use num_random_samples for vertex samples to *estimate* betweeness.  num_random_samples should be <=
         len(graph.nodes). The larger num_random_samples is, the better the approximation. Default is ``None``.
     normalized : bool
-        If True the betweenness values are normalized by 2/((n-1)(n-2)) for graphs, and 1/((n-1)(n-2)) for directed
-        graphs where n is the number of vertices in the graph. Default is ``True``
+        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for undirected graphs, and
+        :math:`1/((n-1)(n-2))` for directed graphs where n is the number of vertices in the graph. Default is ``True``
     weight_attribute : Optional[str]
         If None, all edge weights are considered equal. Otherwise holds the name of the edge attribute used as weight.
         Default is ``weight``
@@ -295,7 +295,7 @@ def histogram_betweenness_centrality(
 
     See Also
     --------
-    - https://networkx.github.io/documentation/networkx-1.10/reference/generated/networkx.algorithms.centrality.betweenness_centrality.html
+    - `networkx:networkx.betweenness_centrality`
     """
 
     betweenness_centrality_dict = nx.betweenness_centrality(
@@ -313,7 +313,7 @@ def histogram_betweenness_centrality(
 
 
 def cut_vertices_by_betweenness_centrality(
-    graph: nx.Graph,
+    graph: Union[nx.Graph, nx.DiGraph],
     cut_threshold: Union[int, float],
     cut_process: str,
     num_random_samples: Optional[int] = None,
@@ -321,7 +321,7 @@ def cut_vertices_by_betweenness_centrality(
     weight_attribute: Optional[str] = "weight",
     include_endpoints: bool = False,
     random_seed: Optional[Union[int, random.Random, np.random.RandomState]] = None,
-) -> nx.Graph:
+) -> Union[nx.Graph, nx.DiGraph]:
     """
     Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
         cut_threshold.
@@ -329,24 +329,25 @@ def cut_vertices_by_betweenness_centrality(
         The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling
         by providing num_random_samples (or k, in networkx betweenness_centrality nomenclature).
 
-
-    graph : nx.Graph
+    Parameters
+    ----------
+    graph : Union[nx.Graph, nx.DiGraph]
         The graph that will be copied and pruned.
     cut_threshold : Union[int, float]
         The threshold for making cuts based on weight.
     cut_process : str
         Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
         exclusive or inclusive. Allowed values are
-        - ``LARGER_THAN_INCLUSIVE``
-        - ``LARGER_THAN_EXCLUSIVE``
-        - ``SMALLER_THAN_INCLUSIVE``
-        - ``SMALLER_THAN_EXCLUSIVE``
+        - ``larger_than_inclusive``
+        - ``larger_than_exclusive``
+        - ``smaller_than_inclusive``
+        - ``smaller_than_exclusive``
     num_random_samples : Optional[int]
-        Use num_random_samples for vertex samples to *estimate* betweeness.  num_random_samples should be <=
+        Use num_random_samples for vertex samples to *estimate* betweenness.  num_random_samples should be <=
         len(graph.nodes). The larger num_random_samples is, the better the approximation. Default is ``None``.
     normalized : bool
-        If True the betweenness values are normalized by 2/((n-1)(n-2)) for graphs, and 1/((n-1)(n-2)) for directed
-        graphs where n is the number of vertices in the graph. Default is ``True``
+        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for undirected graphs, and
+        :math:`1/((n-1)(n-2))` for directed graphs where n is the number of vertices in the graph. Default is ``True``
     weight_attribute : Optional[str]
         If None, all edge weights are considered equal. Otherwise holds the name of the edge attribute used as weight.
         Default is ``weight``
@@ -359,12 +360,12 @@ def cut_vertices_by_betweenness_centrality(
 
     Returns
     -------
-    nx.Graph
-        Pruned copy of the graph
+    Union[nx.Graph, nx.DiGraph]
+        Pruned copy of the same type of graph provided
 
     See Also
     --------
-    - https://networkx.github.io/documentation/networkx-1.10/reference/generated/networkx.algorithms.centrality.betweenness_centrality.html
+    - `networkx:networkx.betweenness_centrality`
     """
     graph_copy = graph.copy()
     betweenness_centrality_dict = nx.betweenness_centrality(
