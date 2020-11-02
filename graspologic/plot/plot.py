@@ -676,7 +676,7 @@ def pairplot(
     return pairs
 
 
-def __plot_ellipse(
+def plot_ellipse(
     data, X, j, k, means, covariances, ax, label_palette, cluster_palette, alpha
 ):
     r"""
@@ -814,7 +814,7 @@ def pairplot_with_gmm(
     with sns.plotting_context(context=context, font_scale=font_scale):
         if X.shape[1] == 2:
             pairplot, axes = plt.subplots(1, 1, figsize=(12, 12))
-            __plot_ellipse(
+            plot_ellipse(
                 data,
                 X,
                 0,
@@ -855,7 +855,7 @@ def pairplot_with_gmm(
                     axes[k, j].set_ylabel(None)
                     axes[k, j].set_ylabel(j), axes[k, j].set_xlabel(k)
                 else:
-                    __plot_ellipse(
+                    plot_ellipse(
                         data,
                         X,
                         j,
