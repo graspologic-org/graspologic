@@ -97,10 +97,8 @@ def _transform(arr, method):
             transformer = Binarizer().fit(arr)
             arr = transformer.transform(arr)
         else:
-            msg = "Transform must be one of {log, log10, binarize, zero-boost, simple-all, \
-            simple-nonzero, not {}.".format(
-                method
-            )
+            msg = f"Transform must be one of {{log, log10, binarize, zero-boost, \
+            simple-all, simple-nonzero}}, not {method}."
             raise ValueError(msg)
 
     return arr
@@ -152,7 +150,7 @@ def heatmap(
     ax=None,
     title_pad=None,
     sort_nodes=False,
-    **kwargs
+    **kwargs,
 ):
     r"""
     Plots a graph as a color-encoded matrix.
@@ -314,7 +312,7 @@ def heatmap(
             ax=ax,
             vmin=vmin,
             vmax=vmax,
-            **kwargs
+            **kwargs,
         )
 
         if title is not None:
@@ -1112,7 +1110,7 @@ def _plot_brackets(
             ax.patch.set_alpha(0)
     ax.set_yticks([])
     ax.set_xticks([])
-    ax.tick_params(axis=axis, which=u"both", length=0, pad=7)
+    ax.tick_params(axis=axis, which="both", length=0, pad=7)
     for direction in ["left", "right", "bottom", "top"]:
         ax.spines[direction].set_visible(False)
     if axis == "x":
