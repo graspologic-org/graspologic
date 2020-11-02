@@ -18,35 +18,34 @@ class SpectralVertexNominator(BaseVN):
     in order of relation to members of S.
     Spectral Vertex Nomination solves this problem by embedding G
     into a low dimensional euclidean space using any of the embedding
-    algorithms (see embed documentation), and then generating a nomination
-    list by some distance based algorithm. In the simplest case, for each
-    seed vertex u, the other vertices are ranked in order of euclidean
-    distance from u.
+    algorithms (:ref:`tutorials <embed_tutorials>`),
+    and then generating a nomination list by some distance based algorithm.
+    In the simplest case, for each seed vertex u, the other vertices are
+    ranked in order of euclidean distance from u.
     There can be both attributed and unattributed cases. In the unattributed
     case, we treat each seed vertex individually and rank all vertices by distance.
     In the attributed case, subsets of the seed vertices share some attribute we
     care about. We want to rank the other vertices by the likelihood that they
     also share that attribute. Note that the unattributed problem is simply the
     attributed problem when each seed vertex has a unique attribute.
-    SVN algorithms in general make the rather strong assumption that vertexes
+    SVN algorithms in general make the assumption that vertexes
     are likely to be related in a way that is of interest if they are close to
-    each other in an embedding. This somewhat conflates the notion of relatedness
-    and community membership, and is not appropriate for all Vertex Nomination
-    problems.
+    each other in an embedding. This is a somewhat simplified notion of relatedness,
+    and is not appropriate for all Vertex Nomination problems.
 
     Parameters
     ----------
-    embedding: np.ndarray, optional (default = None)
+    embedding: np.ndarray, default = None
         A pre-calculated embedding may be provided, in which case
         it will be used for vertex nomination instead of embedding
         the adjacency matrix using embeder.
-    embeder: str OR BaseEmbed, optional (default = 'ASE')
+    embeder: str or BaseEmbed, default = 'ASE'
         May provide either a embed object or a string indicating
         which embedding method to use, which may be either
-        "ASE" for Adjacency Spectral Embedding or
-        "LSE" for Laplacian Spectral Embedding.
-    persistent : bool, optional (default = True)
-        If False, future calls to fit will overwrite an existing embedding. Must be True
+        "ASE" for :py:class:`~graspologic.embed.AdjacencySpectralEmbed` or
+        "LSE" for :py:class:`~graspologic.embed.LaplacianSpectralEmbed`.
+    persistent : bool, default = True
+        If ``False``, future calls to fit will overwrite an existing embedding. Must be ``True``
         if an embedding is provided.
 
 
@@ -54,19 +53,19 @@ class SpectralVertexNominator(BaseVN):
     ----------
     embedding : np.ndarray
         The spectral embedding of the graph that spectral nomination will be preformed on.
-    embeder : BaseEmbed
+    embeder : :py:class:`~graspologic.embed.BaseEmbed`
         The embed object to be used to compute the embedding.
     attr_labels : np.ndarray
         The attributes of the vertices in the seed (parameter 'y' for fit).
-        Shape is (number_seed_vertices)
+        Shape is the number of seed vertices.
     unique_att : np.ndarray
-        Each unique attribute represented in the seed. 1 dimensional.
+        Each unique attribute represented in the seed. One dimensional.
     distance_matrix : np.ndarray
         The euclidean distance from each seed vertex to each vertex.
-        Shape (number_vertices, number_unique_attributes) if attributed
-        or Shape (number_vertices, number_seed_vertices) if unattributed.
+        Shape is ``(number_vertices, number_unique_attributes)`` if attributed
+        or Shape is ``(number_vertices, number_seed_vertices)`` if unattributed.
     persistent : bool
-        If False, future calls to fit will overwrite an existing embedding. Must be True
+        If ``False``, future calls to fit will overwrite an existing embedding. Must be ``True``
         if an embedding is provided.
 
     References
@@ -106,7 +105,7 @@ class SpectralVertexNominator(BaseVN):
         self.distance_matrix = None
 
     @staticmethod
-    def _make_2d(arr: np.ndarray):
+    def _make_2d(arr: np.ndarray) -> np.ndarray:
         # ensures arr is two or less dimensions.
         # if 1d, adds unique at each index on
         # the second dimension.
@@ -151,15 +150,15 @@ class SpectralVertexNominator(BaseVN):
 
         Parameters
         ----------
-        k : int, optional (default = 5)
+        k : int
             Number of neighbors to consider in nearest neighbors distance weighting.
 
         Returns
         -------
-        An tuple of two np.ndarrays, each of shape(number_vertices, number_attributes_in_seed).
-        The array at index 0 is the nomination list - for each attribute column, the rows are indexes
+        An tuple of two np.ndarrays, each with shape = ``(number_vertices, number_attributes_in_seed)``.
+        The array at index 0 is the nomination list. For each attribute column, the rows contain indices
         of vertices in original adjacency matrix ordered by likelihood of matching that attribute.
-        The array at index 1 is the distances computed, where each element at (i, j) represents the
+        The array at index 1 is the computed distances, where each element at (i, j) represents the
         distance metric value between vertex i and attribute j.
 
         """
@@ -193,7 +192,7 @@ class SpectralVertexNominator(BaseVN):
         pred_weights = pred_weights[inds[:, 0], inds[:, 1]]
         return vert_order, pred_weights.reshape(vert_order.shape)
 
-    def predict(self, k: int = 5):
+    def predict(self, k: int = None) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominate vertex based on distance from the k nearest neighbors of each class,
         or if seed is unattributed, nominates vertices for each seed vertex.
@@ -202,35 +201,43 @@ class SpectralVertexNominator(BaseVN):
 
         Parameters
         ----------
-        k : Number of neighbors to consider if seed is attributed. Otherwise is ignored.
+        k : int, default = None
+            Number of neighbors to consider if seed is attributed. Defaults to the size of the seed, i.e. all
+            seed vertices are considered. Is ignored in the unattributed case, since it only is reasonable to
+            consider all vertices.
 
         Returns
         -------
-        An tuple of two np.ndarrays, each of shape(number_vertices, number_attributes_in_seed) if attributed,
-        or shape(number_vertices, number_vertices_in_seed) if unattributed.
-        The array at index 0 is the nomination list. Each column is an attribute or seed vertex, and the
-        rows of each column is a list of vertex indexes from the original adjacency matrix in order degree of
-        match.
+        Nomination List : np.ndarray
+                        shape is ``(number_vertices, number_attributes_in_seed)`` if attributed, or
+                        shape is ``(number_vertices, number_vertices_in_seed)`` if unattributed. Each
+                        column is an attribute or seed vertex, and the rows of each column are a list of
+                        vertex indexes from the original adjacency matrix in order degree of match.
+        Distance Matrix : np.ndarray
+                        The matrix of distances associated with each element of the nomination list.
         """
-        if type(k) is not int:
+        if k is not None and type(k) is not int:
             raise TypeError("k must be an integer")
-        elif k <= 0:
+        elif k is not None and k <= 0:
             raise ValueError("k must be greater than 0")
-        if self.unique_att.shape[0] == self.attr_labels.shape[0]:
-            # seed is not attributed
+        if self.unique_att.shape[0] == self.attr_labels.shape[0] or k is None:
+            # seed is not attributed, or no k is specified.
             return self._predict(k=self.unique_att.shape[0])
         else:
-            # seed is attributed
+            # seed is attributed and k is specified/
             return self._predict(k=k)
 
     def fit(self, X: np.ndarray, y: np.ndarray):
         """
         Constructs the embedding if not provided, then calculates the pairwise distance from each
         seed to each vertex in graph.
+
         Parameters
         ----------
-        X : np.ndarray. Adjaceny matrix representation of graph. May be None if embedding was provided.
-        y: np.ndarray. List of seed vertex indices, OR List of tuples of seed vertex indices and associated attributes.
+        X : np.ndarray
+            Adjacency matrix representation of graph. May be None if embedding was provided.
+        y: np.ndarray
+            List of seed vertex indices, OR List of tuples of seed vertex indices and associated attributes.
 
         Returns
         -------
@@ -252,24 +259,32 @@ class SpectralVertexNominator(BaseVN):
         self.distance_matrix = self._pairwise_dist(y)
 
     def fit_transform(
-        self, X: np.ndarray, y: np.ndarray, k: int = 5
+        self, X: np.ndarray, y: np.ndarray, k: int = None
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Calls this class' fit and then predict methods.
+
         Parameters
         ----------
-        X : np.ndarray. Adjaceny matrix representation of graph. May be None if embedding was provided.
-        y : np.ndarray. List of seed vertex indices in adjacency matrix in column 1, and associated
-                        attributes in column 2, OR list of unattributed vertex indices.
-        k : Number of neighbors to consider if seed is attributed. Otherwise is ignored.
+        X : np.ndarray.
+            Adjacency matrix representation of graph. May be None if embedding was provided.
+        y : np.ndarray.
+            List of seed vertex indices in adjacency matrix in column 1, and associated attributes in column 2,
+            OR list of unattributed vertex indices.
+        k : int, default = None
+            Number of neighbors to consider if seed is attributed. Defaults to the size of the seed, i.e. all
+            seed vertices are considered. Is ignored in the unattributed case, since it only is reasonable to
+            consider all vertices.
 
         Returns
         -------
-        An tuple of two np.ndarrays, each of shape(number_vertices, number_attributes_in_seed) if attributed,
-        or shape(number_vertices, number_vertices_in_seed) if unattributed.
-        The array at index 0 is the nomination list. Each column is an attribute or seed vertex, and the
-        rows of each column is a list of vertex indexes from the original adjacency matrix in order degree of
-        match.
+        Nomination List : np.ndarray
+                        shape is ``(number_vertices, number_attributes_in_seed)`` if attributed, or
+                        shape is ``(number_vertices, number_vertices_in_seed)`` if unattributed. Each
+                        column is an attribute or seed vertex, and the rows of each column are a list of
+                        vertex indexes from the original adjacency matrix in order degree of match.
+        Distance Matrix : np.ndarray
+                        The matrix of distances associated with each element of the nomination list.
         """
         self.fit(X, y)
         return self.predict(k=k)
