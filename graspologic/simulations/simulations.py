@@ -810,13 +810,13 @@ def MMsbm(
     Samples a graph from Mixed Membership Stochastic Block Model (MMSBM).
 
     MMSBM produces a graph given the specified block connectivity matrix B,
-     which indicates the probability of connection between nodes based upon
-     their community membership.
+    which indicates the probability of connection between nodes based upon
+    their community membership.
     Each node is assigned a membership vector drawn from dirichlet distribution
-     with parameter alpha. Each entry of this vector indicates the probability
-     of that node pertaining to each community. Finally, each interaction between
-     nodes is drawn by assigning the community membership of each node according to
-     the probability specified in the mixed membership vector for that node.
+    with parameter alpha. Each entry of this vector indicates the probability
+    of that node pertaining to each community. Finally, each interaction between
+    nodes is drawn by assigning the community membership of each node according to
+    the probability specified in the mixed membership vector for that node.
 
 
     Read more in the :ref:`tutorials <simulations_tutorials>`
