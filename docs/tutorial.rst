@@ -98,9 +98,11 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
 Aligning
 ========
-The following tutorials shows how to align two seperate datasets with each other.
+The following tutorials shows how to align two seperate datasets with each other, for better comparison of the data. 
 
 .. toctree::
    :maxdepth: 1
 
-   tutorials/aligning/aligning
+   tutorials/aligning/SignFlips
+   tutorials/aligning/OrthogonalProcrustes
+   tutorials/aligning/SeedlessProcrustes
