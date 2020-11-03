@@ -713,22 +713,17 @@ def _plot_ellipse(
     means_collector = means_collector.groupby("labels").mean()
     lst_tups = list(zip(means_collector[j], means_collector[k]))
     means_list = [[i[0], i[1]] for i in lst_tups]
-    min_inds = np.argwhere(
-        euclidean_distances(np.asarray(means_list), means[:, [j, k]])
-        == np.min(euclidean_distances(np.asarray(means_list), means[:, [j, k]]))
-    )
-    min_block_name = list(means_collector.index)[min_inds[0][0]]
+    distance_arr = euclidean_distances(np.asarray(means_list), means[:, [j, k]])
     for i, (mean, covar) in enumerate(zip(means, covariances)):
+        min_inds = np.argwhere(distance_arr[i] == np.min(distance_arr[i]))
+        ind = min_inds[0, 0]
+        min_block_name = list(means_collector.index)[ind]
         v, w = linalg.eigh(covar)
         v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
         u = w[0] / linalg.norm(w[0])
         # Plot an ellipse to show the Gaussian component
         angle = np.arctan(u[1] / u[0])
         angle = 180.0 * angle / np.pi
-        for i, m in means_collector.iterrows():
-            if abs(float(round(mean[j], 3)) - float(round(m[j], 3))) < 0.1:
-                if abs(float(round(mean[k], 3)) - float(round(m[k], 3))) < 0.1:
-                    color = cluster_palette[i]
         ell = mpl.patches.Ellipse(
             [mean[j], mean[k]],
             v[0],
