@@ -12,6 +12,7 @@ from sklearn.preprocessing import Binarizer
 from scipy import linalg
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from sklearn.metrics.pairwise import euclidean_distances
 
 from ..embed import selectSVD
 from ..utils import import_graph, pass_to_ranks
