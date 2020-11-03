@@ -56,10 +56,14 @@ def histogram_edge_weight(
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
-        See: `numpy:numpy.histogram_bin_edges`
-        In short: if an int is provided, we use `bin_directive` number of equal range bins.
+
+        See: :func:`numpy.histogram_bin_edges`
+
+        In short: if an int is provided, we use ``bin_directive`` number of equal range bins.
+
         If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
-        Note that the np.ndarray should be ndim=1 and the values should be float or int.
+
+        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be float or int.
     weight_attribute : str
         The weight attribute name in the data dictionary. Default is `weight`.
 
@@ -192,10 +196,14 @@ def histogram_degree_centrality(
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
-        See: `numpy:numpy.histogram_bin_edges`
-        In short: if an int is provided, we use ```bin_directive`` number of equal range bins.
+
+        See: :func:`numpy.histogram_bin_edges`
+
+        In short: if an int is provided, we use ``bin_directive`` number of equal range bins.
+
         If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
-        Note that the np.ndarray should be ndim=1 and the values should be float or int.
+
+        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be float or int.
 
     Returns
     -------
@@ -270,10 +278,14 @@ def histogram_betweenness_centrality(
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
-        See: `numpy:numpy.histogram_bin_edges`
-        In short: if an int is provided, we use `bin_directive` number of equal range bins.
+
+        See: :func:`numpy.histogram_bin_edges`
+
+        In short: if an int is provided, we use ``bin_directive`` number of equal range bins.
+
         If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
-        Note that the np.ndarray should be ndim=1 and the values should be float or int.
+
+        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be float or int.
     num_random_samples : Optional[int]
         Use num_random_samples for vertex samples to *estimate* betweeness.  num_random_samples should be <=
         len(graph.nodes). The larger num_random_samples is, the better the approximation. Default is ``None``.
