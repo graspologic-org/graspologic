@@ -4,11 +4,10 @@
 import sys
 import matplotlib as mpl
 
-from graspologic.plot import (
+from .plot import (
     heatmap,
     gridplot,
     pairplot,
-    plot_ellipse,
     pairplot_with_gmm,
     degreeplot,
     edgeplot,
@@ -19,9 +18,8 @@ __all__ = [
     "heatmap",
     "gridplot",
     "pairplot",
-    "plot_ellipse",
     "pairplot_with_gmm",
     "degreeplot",
     "edgeplot",
-    "screeplot"
+    "screeplot",
 ]
