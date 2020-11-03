@@ -4,7 +4,7 @@
 import sys
 import matplotlib as mpl
 
-from .plot import (
+from graspologic.plot import (
     heatmap,
     gridplot,
     pairplot,
@@ -21,5 +21,5 @@ __all__ = [
     "pairplot_with_gmm",
     "degreeplot",
     "edgeplot",
-    "screeplot",
+    "screeplot"
 ]
