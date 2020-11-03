@@ -9,7 +9,6 @@ from graspologic.plot.plot import (
     gridplot,
     pairplot,
     _sort_inds,
-    _plot_ellipse,
     pairplot_with_gmm,
 )
 from graspologic.simulations.simulations import er_np, sbm
