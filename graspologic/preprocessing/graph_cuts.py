@@ -47,7 +47,7 @@ def histogram_edge_weight(
 ) -> DefinedHistogram:
     """
     Generates a histogram of the edge weights of the provided graph. Histogram function is fundamentally proxied
-        through to numpy's `histogram` function, and bin selection follows `numpy.histogram` processes.
+    through to numpy's `histogram` function, and bin selection follows :func:`numpy.histogram` processes.
 
     Parameters
     ----------
@@ -71,7 +71,7 @@ def histogram_edge_weight(
     Notes
     -----
     Edges without a `weight_attribute` field will be excluded from this histogram.  Enable logging to view any
-        messages about edges without weights.
+    messages about edges without weights.
     """
     logger = logging.getLogger(__name__)
     edge_weights: List[Union[int, float, None]] = [
@@ -102,7 +102,7 @@ def cut_edges_by_weight(
 ) -> Union[nx.Graph, nx.DiGraph]:
     """
     Given a graph, a cut threshold, and a cut_process, create a new Graph that contains only the edges that are not
-        pruned.
+    pruned.
 
     Parameters
     ----------
@@ -113,6 +113,7 @@ def cut_edges_by_weight(
     cut_process : str
         Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
         exclusive or inclusive. Allowed values are
+
         - ``larger_than_inclusive``
         - ``larger_than_exclusive``
         - ``smaller_than_inclusive``
@@ -130,8 +131,8 @@ def cut_edges_by_weight(
 
     Notes
     -----
-    Edges without a `weight_attribute` field will be excluded from these cuts.  Enable logging to view any
-        messages about edges without weights.
+    Edges without a `weight_attribute` field will be excluded from these cuts.  Enable logging to view any messages
+    about edges without weights.
     """
     filter_by = _filter_function_for_make_cuts(cut_threshold, cut_process)
     if not isinstance(cut_threshold, int) and not isinstance(cut_threshold, float):
@@ -182,7 +183,7 @@ def histogram_degree_centrality(
 ) -> DefinedHistogram:
     """
     Generates a histogram of the vertex degree centrality of the provided graph. Histogram function is fundamentally
-        proxied through to numpy's `histogram` function, and bin selection follows `numpy.histogram` processes.
+    proxied through to numpy's `histogram` function, and bin selection follows :func:`numpy.histogram` processes.
 
     Parameters
     ----------
@@ -214,7 +215,7 @@ def cut_vertices_by_degree_centrality(
 ) -> Union[nx.Graph, nx.DiGraph]:
     """
     Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
-        cut_threshold.
+    cut_threshold.
 
     Parameters
     ----------
@@ -225,6 +226,7 @@ def cut_vertices_by_degree_centrality(
     cut_process : str
         Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
         exclusive or inclusive. Allowed values are
+
         - ``larger_than_inclusive``
         - ``larger_than_exclusive``
         - ``smaller_than_inclusive``
@@ -256,11 +258,11 @@ def histogram_betweenness_centrality(
 ) -> DefinedHistogram:
     """
     Generates a histogram of the vertex betweenness centrality of the provided graph. Histogram function is
-        fundamentally proxied through to numpy's `histogram` function, and bin selection follows
-        `numpy:numpy.histogram` processes.
+    fundamentally proxied through to numpy's `histogram` function, and bin selection follows :func:`numpy.histogram`
+    processes.
 
-        The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling
-        by providing num_random_samples (or ``k``, in networkx betweenness_centrality nomenclature).
+    The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling by
+    providing num_random_samples (or ``k``, in networkx betweenness_centrality nomenclature).
 
     Parameters
     ----------
@@ -295,7 +297,7 @@ def histogram_betweenness_centrality(
 
     See Also
     --------
-    - `networkx:networkx.betweenness_centrality`
+    networkx.algorithms.centrality.betweenness_centrality
     """
 
     betweenness_centrality_dict = nx.betweenness_centrality(
@@ -324,10 +326,10 @@ def cut_vertices_by_betweenness_centrality(
 ) -> Union[nx.Graph, nx.DiGraph]:
     """
     Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
-        cut_threshold.
+    cut_threshold.
 
-        The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling
-        by providing num_random_samples (or k, in networkx betweenness_centrality nomenclature).
+    The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling
+    by providing num_random_samples (or k, in networkx betweenness_centrality nomenclature).
 
     Parameters
     ----------
@@ -338,6 +340,7 @@ def cut_vertices_by_betweenness_centrality(
     cut_process : str
         Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
         exclusive or inclusive. Allowed values are
+
         - ``larger_than_inclusive``
         - ``larger_than_exclusive``
         - ``smaller_than_inclusive``
@@ -365,7 +368,7 @@ def cut_vertices_by_betweenness_centrality(
 
     See Also
     --------
-    - `networkx:networkx.betweenness_centrality`
+    networkx.algorithms.centrality.betweenness_centrality
     """
     graph_copy = graph.copy()
     betweenness_centrality_dict = nx.betweenness_centrality(
