@@ -710,6 +710,13 @@ def plot_ellipse(
     )
     means_collector = data[[j, k, "labels"]]
     means_collector = means_collector.groupby("labels").mean()
+    lst_tups = list(zip(means_collector[j], means_collector[k]))
+    means_list = [[i[0], i[1]] for i in lst_tups]
+    min_inds = np.argwhere(
+        euclidean_distances(np.asarray(means_list), means[:, [j, k]])
+        == np.min(euclidean_distances(np.asarray(means_list), means[:, [j, k]]))
+    )
+    min_block_name = list(means_collector.index)[min_inds[0][0]]
     for i, (mean, covar) in enumerate(zip(means, covariances)):
         v, w = linalg.eigh(covar)
         v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
@@ -722,7 +729,11 @@ def plot_ellipse(
                 if abs(float(round(mean[k], 3)) - float(round(m[k], 3))) < 0.1:
                     color = cluster_palette[i]
         ell = mpl.patches.Ellipse(
-            [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=color
+            [mean[j], mean[k]],
+            v[0],
+            v[1],
+            180.0 + angle,
+            color=cluster_palette[min_block_name],
         )
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
