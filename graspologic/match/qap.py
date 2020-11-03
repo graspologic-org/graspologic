@@ -169,9 +169,9 @@ def quadratic_assignment(A, B, method="faq", options=None):
     return res
 
 
-def _calc_score(A, B, perm):
+def _calc_score(A, B, S, perm):
     # equivalent to objective function but avoids matmul
-    return np.sum(A * B[perm][:, perm])
+    return np.sum(A * B[perm][:, perm]) + S[:,perm].sum()
 
 
 def _common_input_validation(A, B, partial_match):
@@ -396,9 +396,12 @@ def _quadratic_assignment_faq(
     n_seeds = partial_match.shape[0]  # number of seeds
     n_unseed = n - n_seeds
 
+    if S is None:
+        S = np.zeros((n, n))
+
     # check outlier cases
     if n == 0 or partial_match.shape[0] == n:
-        score = _calc_score(A, B, partial_match[:, 1])
+        score = _calc_score(A, B, S, partial_match[:, 1])
         res = {"col_ind": partial_match[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
 
@@ -415,8 +418,6 @@ def _quadratic_assignment_faq(
     perm_A = np.concatenate([partial_match[:, 0], nonseed_A])
     perm_B = np.concatenate([partial_match[:, 1], nonseed_B])
 
-    if S is None:
-        S = np.zeros((n, n))
     S = S[:, perm_B]
 
     # definitions according to Seeded Graph Matching [2].
@@ -465,7 +466,7 @@ def _quadratic_assignment_faq(
         BR22 = B22 @ R.T
         b22a = (AR22 * B22.T[cols]).sum()
         b22b = (A22 * BR22[cols]).sum()
-        s = (S22.T * R).sum()
+        s = (S22.T * R.T).sum()
         a = (AR22.T * BR22).sum()
         b = b21 + b12 + b22a + b22b + s
         # critical point of ax^2 + bx + c is at x = -d/(2*e)
@@ -491,7 +492,7 @@ def _quadratic_assignment_faq(
     unshuffled_perm = np.zeros(n, dtype=int)
     unshuffled_perm[perm_A] = perm_B[perm]
 
-    score = _calc_score(A, B, unshuffled_perm)
+    score = _calc_score(A, B, S, unshuffled_perm)
 
     res = {"col_ind": unshuffled_perm, "fun": score, "nit": n_iter}
 

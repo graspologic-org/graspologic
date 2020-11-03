@@ -122,9 +122,9 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"n_init" must be a positive integer'
             raise TypeError(msg)
-        if init == "rand":
+        if isinstance(init, str) and init == "rand":
             self.init = "randomized"
-        elif init == "barycenter":
+        elif isinstance(init, str) and init == "barycenter":
             self.init = "barycenter"
         elif not isinstance(init, str):
             self.init = init
