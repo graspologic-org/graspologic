@@ -13,3 +13,7 @@ Gaussian Mixture Models Clustering
 .. autoclass:: GaussianCluster
 
 .. autoclass:: AutoGMMCluster
+
+Hierarchical Clustering
+----------------------------------
+.. autoclass:: DivisiveCluster
