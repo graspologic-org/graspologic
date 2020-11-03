@@ -295,7 +295,7 @@ def histogram_betweenness_centrality(
 
     See Also
     --------
-    - https://networkx.github.io/documentation/networkx-1.10/reference/generated/networkx.algorithms.centrality.betweenness_centrality.html
+    networkx.betweenness_centrality
     """
 
     betweenness_centrality_dict = nx.betweenness_centrality(
