@@ -219,7 +219,9 @@ def histogram_degree_centrality(
 
 
 def cut_vertices_by_degree_centrality(
-    graph: Union[nx.Graph, nx.DiGraph], cut_threshold: Union[int, float], cut_process: str
+    graph: Union[nx.Graph, nx.DiGraph],
+    cut_threshold: Union[int, float],
+    cut_process: str,
 ) -> Union[nx.Graph, nx.DiGraph]:
     """
     Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
