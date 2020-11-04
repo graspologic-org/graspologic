@@ -806,7 +806,7 @@ def MMsbm(
     loops=False,
     return_labels=False,
 ):
-    """
+    r"""
     Samples a graph from Mixed Membership Stochastic Block Model (MMSBM).
 
     MMSBM produces a graph given the specified block connectivity matrix B,
@@ -820,7 +820,7 @@ def MMsbm(
 
 
     Read more in the :ref:`tutorials <simulations_tutorials>`
-
+    
     Parameters
     ----------
     n: int
@@ -849,7 +849,7 @@ def MMsbm(
         If False, the only output is adjacency matrix. Otherwise, an additional output will
         be a list of length equal to the number of vertices. Each entry of
         this list represents a node of the graph and contains an array of length equal
-         to the number of vertices in the graph indicating the community that was utilized
+        to the number of vertices in the graph indicating the community that was utilized
         to form the connection between the node of the entry when interacting with any other
         node in the graph. Community 1 is labeled with a 0, community 2 with 1, etc.
 
@@ -892,6 +892,7 @@ def MMsbm(
            [0., 0., 0., 0., 1., 1.],
            [0., 0., 0., 1., 0., 1.],
            [0., 0., 0., 1., 1., 0.]])
+           
     """
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
