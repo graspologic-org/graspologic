@@ -50,6 +50,7 @@ setup(
     install_requires=[
         "anytree>=2.8.0",
         "gensim",
+        "graspologic-native",
         "hyppo>=0.1.3",
         "matplotlib>=3.0.0,<=3.3.0",
         "networkx>=2.1",
