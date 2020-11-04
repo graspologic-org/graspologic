@@ -708,15 +708,7 @@ def _plot_ellipse(
     sns.scatterplot(
         data=data, x=X[:, j], y=X[:, k], ax=ax, hue="labels", palette=label_palette
     )
-    means_collector = data[[j, k, "labels"]]
-    means_collector = means_collector.groupby("labels").mean()
-    lst_tups = list(zip(means_collector[j], means_collector[k]))
-    means_list = [[i[0], i[1]] for i in lst_tups]
-    distance_arr = euclidean_distances(np.asarray(means_list), means[:, [j, k]])
     for i, (mean, covar) in enumerate(zip(means, covariances)):
-        min_inds = np.argwhere(distance_arr[i] == np.min(distance_arr[i]))
-        ind = min_inds[0, 0]
-        min_block_name = list(means_collector.index)[ind]
         v, w = linalg.eigh(covar)
         v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
         u = w[0] / linalg.norm(w[0])
@@ -728,7 +720,7 @@ def _plot_ellipse(
             v[0],
             v[1],
             180.0 + angle,
-            color=cluster_palette[min_block_name],
+            color=cluster_palette[i],
         )
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
@@ -796,7 +788,7 @@ def pairplot_with_gmm(
     data = pd.DataFrame(data=X)
     num_comps = gmm.n_components
     if labels is None:
-        lab_names = ["Block {}".format(i) for i in range(num_comps)]
+        lab_names = [i for i in range(num_comps)]
         data["labels"] = np.asarray([lab_names[Y_[i]] for i in range(Y_.shape[0])])
     else:
         data["labels"] = labels
@@ -896,7 +888,6 @@ def pairplot_with_gmm(
         pairplot.legend(
             handles[: means.shape[0]], labels[: means.shape[0]], loc="upper right"
         )
-
 
 
 def _distplot(
