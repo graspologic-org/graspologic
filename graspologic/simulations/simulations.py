@@ -820,7 +820,7 @@ def MMsbm(
 
 
     Read more in the :ref:`tutorials <simulations_tutorials>`
-    
+
     Parameters
     ----------
     n: int
@@ -892,7 +892,7 @@ def MMsbm(
            [0., 0., 0., 0., 1., 1.],
            [0., 0., 0., 1., 0., 1.],
            [0., 0., 0., 1., 1., 0.]])
-           
+
     """
     if not np.issubdtype(type(n), np.integer):
         raise TypeError("n is not of type int.")
