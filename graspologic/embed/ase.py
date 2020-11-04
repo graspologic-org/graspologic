@@ -189,19 +189,18 @@ class AdjacencySpectralEmbed(BaseEmbed):
             The original fitted matrix or new out-of-sample data.
             If X is the original fitted matrix, returns ``self.fit_transform(X)``.
             If X is an out-of-sample matrix,  n_oos_vertices is the number of new vertices, and n_vertices is the number of vertices in the original graph.
-            If tuple, graph is directed and y[0] contains edges from y to other nodes.
+            If tuple, graph is directed and X[0] contains edges from out-of-sample to in-sample.
 
         Returns
         -------
         array_like or tuple, shape (n_oos_vertices, n_components)
-            Array of latent positions. If X was the original fitted matrix, returns its latent positions.
+            Array of latent positions. If X was the original fitted matrix, `transform(X)` == `fit_transform(X)`.
             If X is an array or tuple of new nodes, returns the out-of-sample prediction for X.
-            If undirected, returns array.
-            If directed, returns (y_left, y_right).
+                If undirected, returns array.
+                If directed, returns (X_out, X_in), where X_out contains latent positions corresponding to edges from out-of-sample to in-sample.
         """
 
         # just fit_transform if X is the matrix we fit to
-        # TODO: Test that this fixes diag_aug issue
         if np.array_equal(X, self._A):
             return self._fit_transform(X, prefit=True)
 
@@ -211,7 +210,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
 
         # correct types?
         if directed and not isinstance(X, tuple):
-            raise TypeError("Directed graphs require a tuple (y_left, y_right")
+            raise TypeError("Directed graphs require a tuple (X_out, X_in")
         if not directed and not isinstance(X, np.ndarray):
             raise TypeError("Undirected graphs require array input")
 
@@ -229,4 +228,4 @@ class AdjacencySpectralEmbed(BaseEmbed):
         if not directed:
             return X @ self._pinv_left
         elif directed:
-            return X[0] @ self._pinv_left, X[1] @ self._pinv_right
+            return X[1] @ self._pinv_right, X[0] @ self._pinv_left
