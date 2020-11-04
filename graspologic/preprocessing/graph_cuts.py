@@ -105,8 +105,7 @@ def cut_edges_by_weight(
     prune_isolates: bool = False,
 ) -> Union[nx.Graph, nx.DiGraph]:
     """
-    Given a graph, a cut threshold, and a cut_process, create a new Graph that contains only the edges that are not
-    pruned.
+    Thresholds edges (removing them from the graph and returning a copy) by weight.
 
     Parameters
     ----------
