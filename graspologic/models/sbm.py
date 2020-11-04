@@ -100,7 +100,7 @@ class SBMEstimator(BaseGraphEstimator):
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to :func:`~graspologic.model.SBMEstimator.fit`.
+        belongs to if ``y`` was not passed during the call to :func:`~graspologic.models.SBMEstimator.fit`.
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
