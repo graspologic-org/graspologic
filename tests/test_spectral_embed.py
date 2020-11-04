@@ -4,6 +4,7 @@
 import unittest
 import pytest
 import numpy as np
+import pandas as pd
 from numpy.random import poisson, normal
 from numpy.testing import assert_equal
 from graspologic.embed.ase import AdjacencySpectralEmbed
@@ -11,7 +12,7 @@ from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import er_np, er_nm, sbm
 from graspologic.utils import remove_vertices
 from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score
+from sklearn.metrics import adjusted_rand_score, pairwise_distances
 from sklearn.base import clone
 
 
@@ -161,7 +162,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         assert_equal(X, Y)
 
     def test_transform_runs(self):
-        ase = clone(self.ase)
+        ase = AdjacencySpectralEmbed(n_components=2)
         for graph in self.testgraphs.values():
             A, a = remove_vertices(graph, 1, return_removed=True)
             ase.fit(A)
@@ -175,6 +176,43 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             elif not directed:
                 self.assertIsInstance(w, np.ndarray)
                 self.assertEqual(np.atleast_2d(w).shape[1], 2)
+
+    def test_directed_correct_latent_positions(self):
+        # setup
+        ase = AdjacencySpectralEmbed(n_components=3)
+        P = np.array([[0.9, 0.1, 0.1], [0.3, 0.6, 0.1], [0.1, 0.5, 0.6]])
+        M, labels = sbm([200, 200, 200], P, directed=True, return_labels=True)
+
+        # one node from each community
+        oos_idx = np.nonzero(np.r_[1, np.diff(labels)[:-1]])[0]
+        labels = list(labels)
+        oos_labels = [labels.pop(i) for i in oos_idx]
+
+        # Grab out-of-sample, fit, transform
+        A, a = remove_vertices(M, indices=oos_idx, return_removed=True)
+        latent_left, latent_right = ase.fit_transform(A)
+        oos_left, oos_right = ase.transform(a)
+
+        # separate into communities (left)
+        for i, latent in enumerate([latent_left, latent_right]):
+            df = pd.DataFrame(
+                {
+                    "Type": labels,
+                    "Dimension 1": latent[:, 0],
+                    "Dimension 2": latent[:, 1],
+                    "Dimension 3": latent[:, 2],
+                }
+            )
+            # make sure that oos vertices are closer to their true community averages than others
+            means = df.groupby("Type").mean()
+            if i == 0:
+                avg_dist_true = np.diag(pairwise_distances(means, oos_left))
+                avg_dist_false = np.diag(pairwise_distances(means, oos_right))
+                self.assertTrue(all(avg_dist_true < avg_dist_false))
+            elif i == 1:
+                avg_dist_true = np.diag(pairwise_distances(means, oos_right))
+                avg_dist_false = np.diag(pairwise_distances(means, oos_left))
+                self.assertTrue(all(avg_dist_true < avg_dist_false))
 
     def test_exceptions(self):
         ase = clone(self.ase)
