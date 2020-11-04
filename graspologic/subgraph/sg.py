@@ -59,8 +59,10 @@ class SignalSubgraph:
         constraints: int or vector
             The constraints that will be imposed onto the estimated signal-subgraph.
 
-            If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
-            If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
+            If ``constraints`` is an int, ``constraints`` is the number of edges in the signal-subgraph.
+            If ``constraints`` is a vector, the first element of *constraints* is the number of edges
+            in the signal-subgraph, and the second element of ``constraints``
+            is the number of vertices that the signal-subgraph must be incident to.
 
         Returns
         -------
@@ -161,7 +163,7 @@ class SignalSubgraph:
 
     def fit_transform(self, graphs, labels, constraints):
         """
-        A function to return the indices of the signal-subgraph. If *return_mask* is True, also returns a mask for the signal-subgraph.
+        A function to return the indices of the signal-subgraph. If ``return_mask`` is True, also returns a mask for the signal-subgraph.
 
         Parameters
         ----------
@@ -172,8 +174,10 @@ class SignalSubgraph:
         constraints: int or vector
             The constraints that will be imposed onto the estimated signal-subgraph.
 
-            If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
-            If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
+            If ``constraints`` is an int, ``constraints`` is the number of edges in the signal-subgraph.
+            If ``constraints`` is a vector, the first element of ``constraints`` is the number of edges
+            in the signal-subgraph, and the second element of ``constraints``
+            is the number of vertices that the signal-subgraph must be incident to.
 
         Returns
         -------

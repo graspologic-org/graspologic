@@ -547,9 +547,9 @@ def pairplot(
     X : array-like, shape (n_samples, n_features)
         Input data.
     labels : array-like or list, shape (n_samples), optional
-        Labels that correspond to each sample in X.
+        Labels that correspond to each sample in ``X``.
     col_names : array-like or list, shape (n_features), optional
-        Names or labels for each feature in X. If not provided, the default
+        Names or labels for each feature in ``X``. If not provided, the default
         will be `Dimension 1, Dimension 2, etc`.
     title : str, optional, default: None
         Title of plot.
@@ -732,7 +732,7 @@ def degreeplot(
     ----------
     X : np.ndarray (2D)
         input graph
-    labels : 1d np.ndarray or list, same length as dimensions of X
+    labels : 1d np.ndarray or list, same length as dimensions of ``X``
         Labels for different categories of graph nodes
     direction : string, ('out', 'in')
         Whether to plot out degree or in degree for a directed graph
@@ -801,7 +801,7 @@ def edgeplot(
     ----------
     X : np.ndarray (2D)
         Input graph
-    labels : 1d np.ndarray or list, same length as dimensions of X
+    labels : 1d np.ndarray or list, same length as dimensions of ``X``
         Labels for different categories of graph nodes
     nonzero : boolean, default: False
         Whether to restrict the edgeplot to only the non-zero edges

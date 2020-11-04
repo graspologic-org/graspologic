@@ -60,7 +60,7 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix `self.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_` that aligns the
         first dataset with the second.
 
         Parameters
@@ -96,22 +96,22 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit_transform(self, X, Y):
         """
-        Uses the two datasets to learn the matrix :attr:`Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_` that aligns the
         first dataset with the second. Then, transforms the first dataset ``X``
-        using the learned matrix :attr:`Q_`.
+        using the learned matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_`.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            Dataset to be mapped to `Y`, must have the same shape as `Y`.
+            Dataset to be mapped to ``Y``, must have the same shape as ``Y``.
 
         Y : np.ndarray, shape (m, d)
-            Target dataset, must have the same shape as `X`.
+            Target dataset, must have the same shape as ``X``.
 
         Returns
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            `X` @ `self.Q_`.
+            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
         """
         return super().fit_transform(X, Y)

@@ -51,7 +51,7 @@ class SinkhornKnopp:
         Metric used to compute the stopping condition,
         which occurs if all the row and column sums are
         within epsilon of 1. This should be a very small value.
-        Epsilon must be between 0 and 1.
+        ``epsilon`` must be between 0 and 1.
 
     Attributes
     ----------

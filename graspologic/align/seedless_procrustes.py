@@ -82,7 +82,7 @@ class SeedlessProcrustes(BaseAlign):
     Attributes
     ----------
     Q_ : array, size (d, d)
-        Final orthogonal matrix, used to modify `X`.
+        Final orthogonal matrix, used to modify ``X``.
 
     P_ : array, size (n, m) where n and m are the sizes of two datasets
         Final matrix of optimal transports, represent soft matching weights
@@ -309,11 +309,11 @@ class SeedlessProcrustes(BaseAlign):
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            Dataset to be mapped to `Y`, must have same number of dimensions
-            (axis 1) as `Y`.
+            Dataset to be mapped to ``Y``, must have same number of dimensions
+            (axis 1) as ``Y``.
 
         Y : np.ndarray, shape (m, d)
-            Target dataset, must have same number of dimensions (axis 1) as `X`.
+            Target dataset, must have same number of dimensions (axis 1) as ``X``.
 
         Returns
         -------

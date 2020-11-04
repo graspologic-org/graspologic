@@ -51,8 +51,8 @@ class ClassicalMDS(BaseEstimator):
         - 'euclidean'
             Pairwise Euclidean distances between points in the dataset.
         - 'precomputed'
-            Pre-computed dissimilarities are passed directly to ``fit`` and
-            ``fit_transform``.
+            Pre-computed dissimilarities are passed directly to :func:`~graspologic.embed.ClassicalMDS.fit` and
+            :func:`~graspologic.embed.ClassicalMDS.fit_transform`.
 
     Attributes
     ----------
@@ -61,7 +61,7 @@ class ClassicalMDS(BaseEstimator):
         then equals the optimal embedding dimension.
 
     n_features_in_: int
-        Number of features passed to the fit method.
+        Number of features passed to the :func:`graspologic.embed.ClasisicalMDS.fit` method.
 
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.
