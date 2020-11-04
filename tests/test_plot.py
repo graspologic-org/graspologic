@@ -1,8 +1,11 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import numpy as np
 import pytest
 
-from graspy.plot.plot import heatmap, gridplot, pairplot, _sort_inds
-from graspy.simulations.simulations import er_np, sbm
+from graspologic.plot.plot import heatmap, gridplot, pairplot, _sort_inds
+from graspologic.simulations.simulations import er_np, sbm
 
 
 def test_common_inputs():
