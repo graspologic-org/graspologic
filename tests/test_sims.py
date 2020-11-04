@@ -922,7 +922,7 @@ class Test_MMsbm(unittest.TestCase):
         rng = np.random.default_rng(self.seed)
         A = MMsbm(self.n, self.p, self.alpha, rng=rng, directed=True, loops=True)
 
-        # check loopless and undirected
+        # check loops and directed
         self.assertFalse(is_symmetric(A))
         self.assertFalse(is_loopless(A))
 
