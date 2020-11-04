@@ -60,7 +60,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         a UserWarning is thrown. Not checking for connectedness may result in
         faster computation.
 
-    diag_aug : bool, optional (default = False)
+    diag_aug : bool, optional (default = True)
         Whether to replace the main diagonal of the adjacency matrix with a vector
         corresponding to the degree (or sum of edge weights for a weighted network)
         before embedding. Empirically, this produces latent position estimates closer
@@ -118,7 +118,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
         algorithm="randomized",
         n_iter=5,
         check_lcc=True,
-        diag_aug=False,
+        diag_aug=True,
         concat=False,
     ):
         super().__init__(
