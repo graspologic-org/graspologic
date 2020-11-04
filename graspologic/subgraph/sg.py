@@ -60,7 +60,7 @@ class SignalSubgraph:
             The constraints that will be imposed onto the estimated signal-subgraph.
 
             If ``constraints`` is an int, ``constraints`` is the number of edges in the signal-subgraph.
-            If ``constraints`` is a vector, the first element of *constraints* is the number of edges
+            If ``constraints`` is a vector, the first element of ``constraints`` is the number of edges
             in the signal-subgraph, and the second element of ``constraints``
             is the number of vertices that the signal-subgraph must be incident to.
 

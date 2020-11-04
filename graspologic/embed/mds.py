@@ -61,7 +61,7 @@ class ClassicalMDS(BaseEstimator):
         then equals the optimal embedding dimension.
 
     n_features_in_: int
-        Number of features passed to the :func:`graspologic.embed.ClasisicalMDS.fit` method.
+        Number of features passed to the :func:`~graspologic.embed.ClassicalMDS.fit` method.
 
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.
