@@ -154,20 +154,23 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase.fit()
 
     def test_transform_fit_transform(self):
-        ase = AdjacencySpectralEmbed(n_components=2)
-        A = self.testgraphs["Guw"]
-        ase.fit(A)
-        X = ase.transform(A)
-        Y = ase.fit_transform(A)
-        assert_equal(X, Y)
+        for diag_aug in [True, False]:
+            ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
+            A = self.testgraphs["Guw"]
+            ase.fit(A)
+            X = ase.transform(A)
+            Y = ase.fit_transform(A)
+            assert_equal(X, Y)
 
     def test_fit_transform_transform(self):
-        ase = AdjacencySpectralEmbed(n_components=2)
-        A = self.testgraphs["Guw"]
-        Y = ase.fit_transform(A)
-        ase.fit(A)
-        X = ase.transform(A)
-        assert_equal(X, Y)
+        # tests that we're still good when reversing order of transform and fit_transform
+        for diag_aug in [True, False]:
+            ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
+            A = self.testgraphs["Guw"]
+            Y = ase.fit_transform(A)
+            ase.fit(A)
+            X = ase.transform(A)
+            assert_equal(X, Y)
 
     def test_transform_runs(self):
         ase = AdjacencySpectralEmbed(n_components=2)
@@ -185,6 +188,14 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
                 self.assertIsInstance(w, np.ndarray)
                 self.assertEqual(np.atleast_2d(w).shape[1], 2)
 
+    def test_directed_vertex_direction(self):
+        ase = AdjacencySpectralEmbed(n_components=3)
+        P = np.array([[0.9, 0.1, 0.1], [0.3, 0.6, 0.1], [0.1, 0.5, 0.6]])
+        M = sbm([200, 200, 200], P, directed=True)
+        oos_idx = 0
+        A, a = remove_vertices(M, indices=oos_idx, return_removed=True)
+        assert_equal(np.delete(M[:, 0], oos_idx), a[0])
+
     def test_directed_correct_latent_positions(self):
         # setup
         ase = AdjacencySpectralEmbed(n_components=3)
@@ -201,8 +212,9 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         latent_left, latent_right = ase.fit_transform(A)
         oos_left, oos_right = ase.transform(a)
 
-        # separate into communities (left)
+        # separate into communities
         for i, latent in enumerate([latent_left, latent_right]):
+            left = i == 0
             df = pd.DataFrame(
                 {
                     "Type": labels,
@@ -211,16 +223,16 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
                     "Dimension 3": latent[:, 2],
                 }
             )
-            # make sure that oos vertices are closer to their true community averages than others
+            # make sure that oos vertices are closer to their true community averages than other community averages
             means = df.groupby("Type").mean()
-            if i == 0:
-                avg_dist_true = np.diag(pairwise_distances(means, oos_left))
-                avg_dist_false = np.diag(pairwise_distances(means, oos_right))
-                self.assertTrue(all(avg_dist_true < avg_dist_false))
-            elif i == 1:
-                avg_dist_true = np.diag(pairwise_distances(means, oos_right))
-                avg_dist_false = np.diag(pairwise_distances(means, oos_left))
-                self.assertTrue(all(avg_dist_true < avg_dist_false))
+            if left:
+                avg_dist_within = np.diag(pairwise_distances(means, oos_left))
+                avg_dist_between = np.diag(pairwise_distances(means, oos_right))
+                self.assertTrue(all(avg_dist_within < avg_dist_between))
+            elif not left:
+                avg_dist_within = np.diag(pairwise_distances(means, oos_right))
+                avg_dist_between = np.diag(pairwise_distances(means, oos_left))
+                self.assertTrue(all(avg_dist_within < avg_dist_between))
 
     def test_exceptions(self):
         ase = clone(self.ase)
