@@ -162,9 +162,9 @@ class AdjacencySpectralEmbed(BaseEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
+        self._A = A
         if self.diag_aug:
             A = augment_diagonal(A)
-        self._A = A
 
         self.n_features_in_ = len(A)
         self._reduce_dim(A)

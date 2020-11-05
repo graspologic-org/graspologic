@@ -161,6 +161,14 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         Y = ase.fit_transform(A)
         assert_equal(X, Y)
 
+    def test_fit_transform_transform(self):
+        ase = AdjacencySpectralEmbed(n_components=2)
+        A = self.testgraphs["Guw"]
+        Y = ase.fit_transform(A)
+        ase.fit(A)
+        X = ase.transform(A)
+        assert_equal(X, Y)
+
     def test_transform_runs(self):
         ase = AdjacencySpectralEmbed(n_components=2)
         for graph in self.testgraphs.values():
