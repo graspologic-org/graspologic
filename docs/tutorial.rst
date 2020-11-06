@@ -103,9 +103,5 @@ The following tutorials shows how to align two seperate datasets with each other
 .. toctree::
    :maxdepth: 1
 
-   tutorials/aligning/Aligning_version1
-   tutorials/aligning/Aligning_version2
-   tutorials/aligning/SignFlips
-   tutorials/aligning/OrthogonalProcrustes
-   tutorials/aligning/SeedlessProcrustes
+   tutorials/aligning/Aligning
 =======
