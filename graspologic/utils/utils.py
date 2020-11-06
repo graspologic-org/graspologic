@@ -10,7 +10,7 @@ import networkx as nx
 import numpy as np
 import scipy
 from sklearn.utils import check_array
-from scipy.sparse import isspmatrix, diags, dia_matrix
+from scipy.sparse import isspmatrix_csr, diags, dia_matrix
 
 
 def import_graph(graph, copy=True):
@@ -21,7 +21,7 @@ def import_graph(graph, copy=True):
     ----------
     graph: object
         Either array-like, shape (n_vertices, n_vertices) numpy array,
-        a scipy sparse matrix, or an object of type networkx.Graph.
+        a scipy.csr_matrix, or an object of type networkx.Graph.
 
     copy: bool, (default=True)
         Whether to return a copied version of array. If False and input is np.array,
@@ -38,7 +38,7 @@ def import_graph(graph, copy=True):
     """
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
-    elif isinstance(graph, (np.ndarray, np.memmap)) or isspmatrix(graph):
+    elif isinstance(graph, (np.ndarray, np.memmap, scipy.sparse.csr.csr_matrix)):
         shape = graph.shape
         if len(shape) > 3:
             msg = "Input tensor must have at most 3 dimensions, not {}.".format(
@@ -57,7 +57,7 @@ def import_graph(graph, copy=True):
         out = check_array(
             graph,
             dtype=[np.float64, np.float32],
-            accept_sparse=isspmatrix(graph),
+            accept_sparse=True,
             ensure_2d=True,
             allow_nd=True,  # For omni tensor input
             ensure_min_features=min_features,
@@ -65,7 +65,7 @@ def import_graph(graph, copy=True):
             copy=copy,
         )
     else:
-        msg = "Input must be networkx.Graph, np.array, or scipy sparse matrix,\
+        msg = "Input must be networkx.Graph, np.array, or scipy.csr_matrix,\
         not {}.".format(
             type(graph)
         )
@@ -216,7 +216,7 @@ def symmetrize(graph, method="avg"):
            [1, 1, 1]])
     """
     # graph = import_graph(graph)
-    sparse = isspmatrix(graph)
+    sparse = isspmatrix_csr(graph)
     pac = scipy.sparse if sparse else np
 
     if method == "triu":
@@ -251,7 +251,7 @@ def remove_loops(graph):
     """
     graph = import_graph(graph)
 
-    dia = diags(graph.diagonal()) if isspmatrix(graph) else np.diag(np.diag(graph))
+    dia = diags(graph.diagonal()) if isspmatrix_csr(graph) else np.diag(np.diag(graph))
 
     graph = graph - dia
 
@@ -272,7 +272,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     ----------
     graph: object
         Either array-like, (n_vertices, n_vertices) numpy array,
-        sparse matrix, or an object of type networkx.Graph.
+        scipy.csr_matrix, or an object of type networkx.Graph.
 
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
 
@@ -403,7 +403,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
         raise TypeError("Unsuported Laplacian normalization")
 
     A = import_graph(graph)
-    create_lapgraph = _sparse if isspmatrix(A) else _dense
+    create_lapgraph = _sparse if isspmatrix_csr(A) else _dense
     return create_lapgraph(A, form, regularizer)
 
 
@@ -441,7 +441,7 @@ def is_fully_connected(graph):
     >>> is_fully_connected(a)
     False
     """
-    if type(graph) is np.ndarray or isspmatrix:
+    if isinstance(graph, (np.ndarray, scipy.sparse.csr.csr_matrix)):
         if is_symmetric(graph):
             g_object = nx.Graph()
         else:
@@ -634,7 +634,8 @@ def augment_diagonal(graph, weight=1):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, sparse matrix
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray,
+        scipy.scr_matrix.
         Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
     weight: float/int
@@ -686,7 +687,7 @@ def augment_diagonal(graph, weight=1):
     graph = import_graph(graph)
     graph = remove_loops(graph)
 
-    create_adgraph = _sparse if isspmatrix(graph) else _dense
+    create_adgraph = _sparse if isspmatrix_csr(graph) else _dense
     return create_adgraph(graph)
 
 
