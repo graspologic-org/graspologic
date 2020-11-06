@@ -884,7 +884,7 @@ class Test_RDPG(unittest.TestCase):
         self.assertTrue(is_loopless(g))
 
 
-class Test_MMsbm(unittest.TestCase):
+class Test_MMSBM(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # 120 vertex graph
@@ -901,7 +901,7 @@ class Test_MMsbm(unittest.TestCase):
     def test_labels(self):
         rng = np.random.default_rng(self.seed)
         alpha = np.array([0.0001, 100])  # assign all nodes to second group(index 1)
-        A = MMsbm(
+        A = mmsbm(
             self.n,
             self.p,
             alpha,
@@ -920,7 +920,7 @@ class Test_MMsbm(unittest.TestCase):
 
     def test_loop_directed(self):
         rng = np.random.default_rng(self.seed)
-        A = MMsbm(self.n, self.p, self.alpha, rng=rng, directed=True, loops=True)
+        A = mmsbm(self.n, self.p, self.alpha, rng=rng, directed=True, loops=True)
 
         # check loops and directed
         self.assertFalse(is_symmetric(A))
@@ -933,7 +933,7 @@ class Test_MMsbm(unittest.TestCase):
     def test_noloop_undirected(self):
         rng = np.random.default_rng(self.seed)
         # Test that when loops = False and directed = False the output is undirected and with no loops
-        A = MMsbm(self.n, self.p, self.alpha, rng=rng, directed=False, loops=False)
+        A = mmsbm(self.n, self.p, self.alpha, rng=rng, directed=False, loops=False)
 
         # check loopless and undirected
         self.assertTrue(is_symmetric(A))
@@ -946,47 +946,47 @@ class Test_MMsbm(unittest.TestCase):
     def test_bad_inputs(self):
         with self.assertRaises(ValueError):
             n = -1  # n must be greater than 0
-            MMsbm(n, self.p, self.alpha, rng=self.rng)
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
 
         with self.assertRaises(TypeError):
             n = "1"  # n must be an integer
-            MMsbm(n, self.p, self.alpha, rng=self.rng)
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
 
         with self.assertRaises(TypeError):
             n = 2.5  # n must be an integer
-            MMsbm(n, self.p, self.alpha, rng=self.rng)
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
 
         with self.assertRaises(TypeError):
             n = ["1", 10]  # n must be an integer
-            MMsbm(n, self.p, self.alpha, rng=self.rng)
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
 
         with self.assertRaises(TypeError):
             p = 0.5  # p must be an array or list
-            MMsbm(self.n, p, self.alpha, rng=self.rng)
+            mmsbm(self.n, p, self.alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
             p = [[0.2, 0.1], ["str", 0.6]]  # p must only contain mumeric elements
-            MMsbm(self.n, p, self.alpha, rng=self.rng)
+            mmsbm(self.n, p, self.alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
             p = [[5, 5], [4, 4]]  # p must be between 0 and 1
-            MMsbm(self.n, p, self.alpha, rng=self.rng)
+            mmsbm(self.n, p, self.alpha, rng=self.rng)
 
         with self.assertRaises(TypeError):
             alpha = 1  # alpha must be an array
-            MMsbm(self.n, self.p, alpha, rng=self.rng)
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
 
         with self.assertRaises(TypeError):
             # test deafult alpha = None, should output typeerror
-            MMsbm(self.n, self.p, alpha, rng=self.rng)
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
             alpha = ["str", 0.3]  # alpha must only contain numeric elements
-            MMsbm(self.n, self.p, alpha, rng=self.rng)
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
             alpha = [0.1, -2]  # alpha entries must be positive
-            MMsbm(self.n, self.p, alpha, rng=self.rng)
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
             alpha = [
@@ -994,24 +994,24 @@ class Test_MMsbm(unittest.TestCase):
                 0.5,
                 0.7,
             ]  # dimension of p is 2x2 so alpha should be of length 2.
-            MMsbm(self.n, self.p, alpha, rng=self.rng)
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
 
         with self.assertRaises(TypeError):
             rng = 2  # must be generator
-            MMsbm(self.n, self.p, self.alpha, rng=rng)
+            mmsbm(self.n, self.p, self.alpha, rng=rng)
 
         with self.assertRaises(TypeError):
             loops = 2  # loops must be a bool
-            MMsbm(self.n, self.p, self.alpha, loops=loops, rng=self.rng)
+            mmsbm(self.n, self.p, self.alpha, loops=loops, rng=self.rng)
 
         with self.assertRaises(TypeError):
             directed = 2  # directed must be a bool
-            MMsbm(self.n, self.p, self.alpha, directed=directed, rng=self.rng)
+            mmsbm(self.n, self.p, self.alpha, directed=directed, rng=self.rng)
 
         with self.assertRaises(ValueError):
             p = np.vstack(([0.6, 0.2], [0.3, 0.4]))  # directed must be a bool
-            MMsbm(self.n, p, self.alpha, directed=False, rng=self.rng)
+            mmsbm(self.n, p, self.alpha, directed=False, rng=self.rng)
 
         with self.assertRaises(TypeError):
             return_labels = 2  # return labels must be a bool
-            MMsbm(self.n, self.p, self.alpha, return_labels=return_labels, rng=self.rng)
+            mmsbm(self.n, self.p, self.alpha, return_labels=return_labels, rng=self.rng)

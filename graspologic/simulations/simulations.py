@@ -797,7 +797,7 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
     return P
 
 
-def MMsbm(
+def mmsbm(
     n,
     p,
     alpha=None,
@@ -832,9 +832,10 @@ def MMsbm(
         0 < p[i, j] < 1 for all i, j.
 
     alpha: array-like, shape (n_communities,)
-        Concentration parameter alpha of the Dirichlet distribution used to sample mixed-membership vectors for each node
+        Concentration parameter alpha of the Dirichlet distribution used to sample the
+        mixed-membership vectors for each node.
 
-    rng: numpy.random.Generator or numpy.random.BitGenerator, optional (default= numpy.random.default_rng())
+    rng: numpy.random.Generator, optional (default= numpy.random.default_rng())
         Numpy Random Generator object to generate sampling from distributions.
 
     directed: boolean, optional (default=False)
@@ -846,23 +847,28 @@ def MMsbm(
         are sampled in the diagonal.
 
     return_labels: boolean, optional (default=False)
-        If False, the only output is adjacency matrix. Otherwise, an additional output will
-        be a list of length equal to the number of vertices. Each entry of
-        this list represents a node of the graph and contains an array of length equal
-        to the number of vertices in the graph indicating the community that was utilized
-        to form the connection between the node of the entry when interacting with any other
-        node in the graph. Community 1 is labeled with a 0, community 2 with 1, etc.
+        If False, the only output is the adjacency matrix.
+        If True, output is a tuple. The first element of the tuple is the adjacency
+        matrix. The second element of the tuple is a list of length equal to the number
+        of vertices. The $i^{\text{\tiny th}}$ entry of this list represents the
+        $i^{\text{\tiny th}}$ node of the graph and is also an array of length equal
+        to the number of vertices. The $j^{\text{\tiny th}}$ entry of this array
+        indicates the membership assigned to the $i^{\text{\tiny th}}$ node when
+        interacting with the $j^{\text{\tiny th}}$ node.
+        Community 1 is labeled with a 0, community 2 with 1, etc.
 
     References
     ----------
-    .. [1] Airoldi, Edoardo, et al. “Mixed Membership Stochastic Blockmodels.” Journal of Machine Learning Research, vol. 9, 2008, pp. 1981–2014.
+    .. [1] Airoldi, Edoardo, et al. “Mixed Membership Stochastic Blockmodels.”
+       Journal of Machine Learning Research, vol. 9, 2008, pp. 1981–2014.
 
     Returns
     -------
     A: ndarray, shape (n, n)
         Sampled adjacency matrix
     labels: ndarray, shape (n, n, 1)
-        Array containing for each node the membership assigned when interacting with another node.
+        Array containing the membership assigned to each node when interacting with
+        another node.
 
     Examples
     --------
@@ -873,7 +879,7 @@ def MMsbm(
     To sample a binary MMSBM in which all nodes pertain to community two:
 
     >>> alpha = [0.05, 100]
-    >>> MMsbm(n, p, alpha, rng = rng)
+    >>> mmsbm(n, p, alpha, rng = rng)
     array([[0., 1., 1., 1., 1., 1.],
            [1., 0., 1., 1., 1., 1.],
            [1., 1., 0., 1., 1., 1.],
@@ -885,7 +891,7 @@ def MMsbm(
 
     >>> rng = np.random.default_rng(1)
     >>> alpha = [0.005, 0.005]
-    >>> MMsbm(n, p, alpha, rng = rng)
+    >>> mmsbm(n, p, alpha, rng = rng)
     array([[0., 0., 0., 0., 0., 0.],
            [0., 0., 1., 0., 0., 0.],
            [0., 1., 0., 0., 0., 0.],
@@ -922,8 +928,8 @@ def MMsbm(
             msg = "Alpha entries must be non-negative."
             raise ValueError(msg)
         elif alpha.shape != (len(p),):
-            msg = "alpha must be a list or np.array of dimension {desired_shape}, not {provided_shape}.".format(
-                desired_shape=(len(p),), provided_shape=np.array(alpha).shape
+            msg = "alpha must be a list or np.array of dimension {c}, not {w}.".format(
+                c=(len(p),), w=np.array(alpha).shape
             )
             raise ValueError(msg)
         elif np.any(alpha == 0):
@@ -931,7 +937,7 @@ def MMsbm(
                 1e-8
             )  # np.random.dirichlet does not accept alpha = 0.0
     if not isinstance(rng, (np.random._generator.Generator)):
-        msg = "rng expected to be <class 'numpy.random._generator.Generator'> not {}.".format(
+        msg = "rng must be <class 'numpy.random._generator.Generator'> not {}.".format(
             type(rng)
         )
         raise TypeError(msg)
@@ -946,9 +952,9 @@ def MMsbm(
         if np.any(p != p.T):
             raise ValueError("Specified undirected, but P is directed.")
 
-    MMvectors = rng.dirichlet(alpha, n)
+    MM_vectors = rng.dirichlet(alpha, n)
 
-    MMvectors = np.array(sorted(MMvectors, key=lambda x: np.argmax(x)))
+    MM_vectors = np.array(sorted(MM_vectors, key=lambda x: np.argmax(x)))
 
     A = np.zeros((n, n))
 
@@ -958,15 +964,15 @@ def MMsbm(
         for j in range(i, n):
             if i == j:
                 if loops == True:
-                    Z_pp = rng.multinomial(1, MMvectors[i], size=1)
+                    Z_pp = rng.multinomial(1, MM_vectors[i], size=1)
                     Z_pp = Z_pp[0]
                     edge_loop = rng.binomial(1, (1.0) * Z_pp @ (p @ Z_pp.T))
                     labels[i, j] = Z_pp
                     A[i, j] = edge_loop
             else:
-                Z_pq = rng.multinomial(1, MMvectors[i], size=1)
+                Z_pq = rng.multinomial(1, MM_vectors[i], size=1)
                 Z_pq = Z_pq[0]
-                Z_qp = rng.multinomial(1, MMvectors[j], size=1)
+                Z_qp = rng.multinomial(1, MM_vectors[j], size=1)
                 Z_qp = Z_qp[0]
                 edge_pq = rng.binomial(1, (1.0) * Z_pq @ (p @ Z_qp.T))
                 labels[i, j] = Z_pq
