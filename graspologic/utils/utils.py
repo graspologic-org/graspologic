@@ -21,7 +21,7 @@ def import_graph(graph, copy=True):
     ----------
     graph: object
         Either array-like, shape (n_vertices, n_vertices) numpy array,
-        a scipy.csr_matrix, or an object of type networkx.Graph.
+        a scipy.sparse.csr_matrix, or an object of type networkx.Graph.
 
     copy: bool, (default=True)
         Whether to return a copied version of array. If False and input is np.array,
@@ -65,7 +65,7 @@ def import_graph(graph, copy=True):
             copy=copy,
         )
     else:
-        msg = "Input must be networkx.Graph, np.array, or scipy.csr_matrix,\
+        msg = "Input must be networkx.Graph, np.array, or scipy.sparse.csr_matrix,\
         not {}.".format(
             type(graph)
         )
@@ -268,7 +268,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     ----------
     graph: object
         Either array-like, (n_vertices, n_vertices) numpy array,
-        scipy.csr_matrix, or an object of type networkx.Graph.
+        scipy.sparse.csr_matrix, or an object of type networkx.Graph.
 
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
 
