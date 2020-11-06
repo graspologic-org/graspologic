@@ -170,10 +170,6 @@ def is_unweighted(X):
 
 
 def is_almost_symmetric(X, atol=1e-15):
-    # if isspmatrix(X):
-    #     return abs(X - X.T).max() <= atol
-    # else:
-    #     return np.allclose(X, X.T, atol=atol)
     return abs(X - X.T).max() <= atol
 
 
@@ -228,7 +224,7 @@ def symmetrize(graph, method="avg"):
     else:
         msg = "You have not passed a valid parameter for the method."
         raise ValueError(msg)
-    # A = A + A' - diag(A)
+
     dia = diags(graph.diagonal()) if sparse else np.diag(np.diag(graph))
     graph = graph + graph.T - dia
     return graph
@@ -317,94 +313,57 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     """
 
-    def _sparse(A, form, regularizer):
-        in_degree = np.array(graph.sum(axis=0), dtype=np.float64)[0]
-        out_degree = np.array(graph.sum(axis=1).T, dtype=np.float64)[0]
-
-        # regularize laplacian with parameter
-        # set to average degree
-        if form == "R-DAD":
-            if regularizer is None:
-                regularizer = np.mean(out_degree)
-            elif not isinstance(regularizer, (int, float)):
-                raise TypeError(
-                    "Regularizer must be a int or float, not {}".format(
-                        type(regularizer)
-                    )
-                )
-            elif regularizer < 0:
-                raise ValueError("Regularizer must be greater than or equal to 0")
-
-            in_degree += regularizer
-            out_degree += regularizer
-
-        with np.errstate(divide="ignore"):
-            in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
-            out_root = 1 / np.sqrt(out_degree)
-
-        in_root[np.isinf(in_root)] = 0
-        out_root[np.isinf(out_root)] = 0
-
-        in_root = diags(in_root)  # just change to sparse diag for sparse support
-        out_root = diags(out_root)
-
-        if form == "I-DAD":
-            L = diags(in_degree) - A
-            L = in_root @ L @ in_root
-        elif form == "DAD" or form == "R-DAD":
-            L = out_root @ A @ in_root
-        if is_symmetric(A):
-            return symmetrize(
-                L, method="avg"
-            )  # sometimes machine prec. makes this necessary
-        return L
-
-    def _dense(A, form, regularizer):
-        in_degree = np.sum(A, axis=0)
-        out_degree = np.sum(A, axis=1)
-
-        # regularize laplacian with parameter
-        # set to average degree
-        if form == "R-DAD":
-            if regularizer is None:
-                regularizer = np.mean(out_degree)
-            elif not isinstance(regularizer, (int, float)):
-                raise TypeError(
-                    "Regularizer must be a int or float, not {}".format(
-                        type(regularizer)
-                    )
-                )
-            elif regularizer < 0:
-                raise ValueError("Regularizer must be greater than or equal to 0")
-
-            in_degree += regularizer
-            out_degree += regularizer
-
-        with np.errstate(divide="ignore"):
-            in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
-            out_root = 1 / np.sqrt(out_degree)
-
-        in_root[np.isinf(in_root)] = 0
-        out_root[np.isinf(out_root)] = 0
-
-        in_root = np.diag(in_root)  # just change to sparse diag for sparse support
-        out_root = np.diag(out_root)
-
-        if form == "I-DAD":
-            L = np.diag(in_degree) - A
-            L = in_root @ L @ in_root
-        elif form == "DAD" or form == "R-DAD":
-            L = out_root @ A @ in_root
-
-        return L
-
     valid_inputs = ["I-DAD", "DAD", "R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
 
     A = import_graph(graph)
-    create_lapgraph = _sparse if isspmatrix_csr(A) else _dense
-    return create_lapgraph(A, form, regularizer)
+
+    # def _sparse(A, form, regularizer):
+    if isspmatrix_csr(A):
+        in_degree = np.array(graph.sum(axis=0), dtype=np.float64)[0]
+        out_degree = np.array(graph.sum(axis=1).T, dtype=np.float64)[0]
+    else:
+        in_degree = np.sum(A, axis=0)
+        out_degree = np.sum(A, axis=1)
+
+    # regularize laplacian with parameter
+    # set to average degree
+    if form == "R-DAD":
+        if regularizer is None:
+            regularizer = np.mean(out_degree)
+        elif not isinstance(regularizer, (int, float)):
+            raise TypeError(
+                "Regularizer must be a int or float, not {}".format(type(regularizer))
+            )
+        elif regularizer < 0:
+            raise ValueError("Regularizer must be greater than or equal to 0")
+
+        in_degree += regularizer
+        out_degree += regularizer
+
+    with np.errstate(divide="ignore"):
+        in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
+        out_root = 1 / np.sqrt(out_degree)
+
+    diag = diags if isspmatrix_csr(graph) else np.diag
+
+    in_root[np.isinf(in_root)] = 0
+    out_root[np.isinf(out_root)] = 0
+
+    in_root = diag(in_root)  # just change to sparse diag for sparse support
+    out_root = diag(out_root)
+
+    if form == "I-DAD":
+        L = diag(in_degree) - A
+        L = in_root @ L @ in_root
+    elif form == "DAD" or form == "R-DAD":
+        L = out_root @ A @ in_root
+    if is_symmetric(A):
+        return symmetrize(
+            L, method="avg"
+        )  # sometimes machine prec. makes this necessary
+    return L
 
 
 def is_fully_connected(graph):
@@ -658,37 +617,24 @@ def augment_diagonal(graph, weight=1):
            [1. , 0. , 0.5]])
     """
 
-    def _dense(graph):
-        divisor = graph.shape[0] - 1
-
-        in_degrees = np.sum(np.abs(graph), axis=0)
-        out_degrees = np.sum(np.abs(graph), axis=1)
-        degrees = (in_degrees + out_degrees) / 2
-
-        diag = weight * degrees / divisor
-        graph += np.diag(diag)
-
-        return graph
-
-    def _sparse(graph):
-        # graph = dia_matrix(graph)
-        divisor = graph.shape[0] - 1
-
-        in_degrees = abs(graph).sum(axis=0)
-        out_degrees = abs(graph).sum(axis=1).transpose()
-        degrees = (in_degrees + out_degrees) / 2
-
-        diag = weight * degrees / divisor
-
-        graph += diags(np.array(diag)[0])
-
-        return graph
-
     graph = import_graph(graph)
     graph = remove_loops(graph)
 
-    create_adgraph = _sparse if isspmatrix_csr(graph) else _dense
-    return create_adgraph(graph)
+    divisor = graph.shape[0] - 1
+
+    if isspmatrix_csr(graph):
+        in_degrees = abs(graph).sum(axis=0)
+        out_degrees = abs(graph).sum(axis=1).transpose()
+    else:
+        in_degrees = np.sum(np.abs(graph), axis=0)
+        out_degrees = np.sum(np.abs(graph), axis=1)
+
+    degrees = (in_degrees + out_degrees) / 2
+    diag = weight * degrees / divisor
+
+    graph += diags(np.array(diag)[0]) if isspmatrix_csr(graph) else np.diag(diag)
+
+    return graph
 
 
 def binarize(graph):
