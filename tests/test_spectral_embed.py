@@ -155,7 +155,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase = AdjacencySpectralEmbed(diag_aug="over 9000")
             ase.fit()
 
-    def test_transform_fit_transform(self):
+    def test_transform_closeto_fit_transform(self):
         for diag_aug in [True, False]:
             ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
             A = self.testgraphs["Guw"]
@@ -164,7 +164,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             Y = ase.fit_transform(A)
             self.assertTrue(np.allclose(X, Y, atol=1e-1))
 
-    def test_transform_runs(self):
+    def test_transform_correct_types(self):
         ase = AdjacencySpectralEmbed(n_components=2)
         for graph in self.testgraphs.values():
             A, a = remove_vertices(graph, 1, return_removed=True)
@@ -181,9 +181,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
                 self.assertEqual(np.atleast_2d(w).shape[1], 2)
 
     def test_directed_vertex_direction(self):
-        ase = AdjacencySpectralEmbed(n_components=3)
-        P = np.array([[0.9, 0.1, 0.1], [0.3, 0.6, 0.1], [0.1, 0.5, 0.6]])
-        M = sbm([200, 200, 200], P, directed=True)
+        M = self.testgraphs["Guwd"]
         oos_idx = 0
         A, a = remove_vertices(M, indices=oos_idx, return_removed=True)
         assert_equal(np.delete(M[:, 0], oos_idx), a[0])
