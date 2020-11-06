@@ -135,10 +135,9 @@ class BaseEmbed(BaseEstimator):
 
         return self
 
-    def _fit_transform(self, graph, prefit=False):
+    def _fit_transform(self, graph):
         "Fits the model and returns the estimated latent positions."
-        if not prefit:
-            self.fit(graph)
+        self.fit(graph)
 
         if self.latent_right_ is None:
             return self.latent_left_

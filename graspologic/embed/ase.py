@@ -162,7 +162,6 @@ class AdjacencySpectralEmbed(BaseEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
-        self._A = A
         if self.diag_aug:
             A = augment_diagonal(A)
 
@@ -187,22 +186,22 @@ class AdjacencySpectralEmbed(BaseEmbed):
         ----------
         X : array_like or tuple, shape (n_vertices, n_vertices) or (n_oos_vertices, n_vertices).
             The original fitted matrix or new out-of-sample data.
-            If X is the original fitted matrix, returns ``self.fit_transform(X)``.
+            If X is the original fitted matrix, returns a matrix close to ``self.fit_transform(X)``.
             If X is an out-of-sample matrix,  n_oos_vertices is the number of new vertices, and n_vertices is the number of vertices in the original graph.
             If tuple, graph is directed and X[0] contains edges from out-of-sample to in-sample.
 
         Returns
         -------
         array_like or tuple, shape (n_oos_vertices, n_components)
-            Array of latent positions. If X was the original fitted matrix, `transform(X)` == `fit_transform(X)`.
+            Array of latent positions.
             If X is an array or tuple of new nodes, returns the out-of-sample prediction for X.
                 If undirected, returns array.
                 If directed, returns (X_out, X_in), where X_out contains latent positions corresponding to edges from out-of-sample to in-sample.
-        """
 
-        # just fit_transform if X is the matrix we fit to
-        if np.array_equal(X, self._A):
-            return self._fit_transform(X, prefit=True)
+        Notes
+        -----
+        If the matrix was diagonally augmented (e.g., self.diag_aug was True), `fit` followed by `transform` will produce a slightly different matrix than `fit_transform`.
+        """
 
         # checks
         check_is_fitted(self, "is_fitted_")
