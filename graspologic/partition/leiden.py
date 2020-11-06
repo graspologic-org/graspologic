@@ -11,7 +11,12 @@ import graspologic_native as gn
 
 
 def _validate_and_build_edge_list(
-    graph: Union[List[Tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix],
+    graph: Union[
+        List[Tuple[Any, Any, Union[int, float]]],
+        nx.Graph,
+        np.ndarray,
+        scipy.sparse.csr.csr_matrix,
+    ],
     is_weighted: Optional[bool],
     weight_attribute: str,
     check_directed: bool,
@@ -19,21 +24,32 @@ def _validate_and_build_edge_list(
 ) -> List[Tuple[str, str, float]]:
     if isinstance(graph, (nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         raise TypeError("directed or multigraphs are not supported in these functions")
-    if isinstance(graph, (np.ndarray, scipy.sparse.csr.csr_matrix)) and check_directed is True and not utils.is_almost_symmetric(graph):
-        raise ValueError("leiden only supports undirected graphs and the adjacency matrix provided was found "
-                         "to be directed")
+    if (
+        isinstance(graph, (np.ndarray, scipy.sparse.csr.csr_matrix))
+        and check_directed is True
+        and not utils.is_almost_symmetric(graph)
+    ):
+        raise ValueError(
+            "leiden only supports undirected graphs and the adjacency matrix provided was found "
+            "to be directed"
+        )
 
     return utils.to_weighted_edge_list(
         graph=graph,
         weight_attribute=weight_attribute,
         weight_default=weight_default,
         is_weighted=is_weighted,
-        is_directed=False
+        is_directed=False,
     )
 
 
 def leiden(
-    graph: Union[List[Tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix],
+    graph: Union[
+        List[Tuple[Any, Any, Union[int, float]]],
+        nx.Graph,
+        np.ndarray,
+        scipy.sparse.csr.csr_matrix,
+    ],
     starting_communities: Optional[Dict[str, int]] = None,
     iterations: int = 1,
     resolution: float = 1.0,
@@ -124,7 +140,9 @@ def leiden(
     This function is implemented in the `graspologic-native` Python module, a module written in Rust for Python.
 
     """
-    graph = _validate_and_build_edge_list(graph, is_weighted, weight_attribute, check_directed, weight_default)
+    graph = _validate_and_build_edge_list(
+        graph, is_weighted, weight_attribute, check_directed, weight_default
+    )
 
     _improved, _modularity, partitions = gn.leiden(
         edges=graph,
@@ -160,9 +178,11 @@ class HierarchicalCluster(NamedTuple):
 
     @staticmethod
     def final_hierarchical_clustering(
-        hierarchical_clusters: List["HierarchicalCluster"]
+        hierarchical_clusters: List["HierarchicalCluster"],
     ) -> Dict[str, int]:
-        final_clusters = (cluster for cluster in hierarchical_clusters if cluster.is_final_cluster)
+        final_clusters = (
+            cluster for cluster in hierarchical_clusters if cluster.is_final_cluster
+        )
         return {cluster.node: cluster.cluster for cluster in final_clusters}
 
 
@@ -281,7 +301,9 @@ def hierarchical_leiden(
     This function is implemented in the `graspologic-native` Python module, a module written in Rust for Python.
 
     """
-    graph = _validate_and_build_edge_list(graph, is_weighted, weight_attribute, check_directed, weight_default)
+    graph = _validate_and_build_edge_list(
+        graph, is_weighted, weight_attribute, check_directed, weight_default
+    )
     hierarchical_clusters_native = gn.hierarchical_leiden(
         edges=graph,
         starting_communities=starting_communities,
