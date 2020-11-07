@@ -60,7 +60,7 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
 
 Plotting
 ========
-The following tutorials present ways to visualize the graphs, such as its adjacency matrix, and graph embeddings.
+The following tutorials present ways to visualize the graphs, such as its adjacency matrix, and graph embeddings. 
 
 .. toctree::
    :maxdepth: 1
@@ -103,5 +103,5 @@ The following tutorials shows how to align two seperate datasets with each other
 .. toctree::
    :maxdepth: 1
 
-   tutorials/aligning/Aligning
+   tutorials/aligning/aligning
 =======
