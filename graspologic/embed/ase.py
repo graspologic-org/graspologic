@@ -179,28 +179,35 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
     def transform(self, X):
         """
-        Obtain latent positions from an adjacency matrix or matrix of out-of-sample vertices.
-        For more details on transforming out-of-sample vertices, see [2].
+        Obtain latent positions from an adjacency matrix or matrix of out-of-sample
+        vertices. For more details on transforming out-of-sample vertices, see the
+        :ref:`tutorials <embed_tutorials>`. For mathematical background, see [2].
 
         Parameters
         ----------
-        X : array_like or tuple, shape (n_vertices, n_vertices) or (n_oos_vertices, n_vertices).
-            The original fitted matrix or new out-of-sample data.
-            If X is the original fitted matrix, returns a matrix close to ``self.fit_transform(X)``.
-            If X is an out-of-sample matrix,  n_oos_vertices is the number of new vertices, and n_vertices is the number of vertices in the original graph.
-            If tuple, graph is directed and X[0] contains edges from out-of-sample to in-sample.
+        X : array_like or tuple, original shape or (n_oos_vertices, n_vertices).
+            The original fitted matrix ("graph" in fit) or new out-of-sample data.
+            If ``X`` is the original fitted matrix, returns a matrix close to
+            ``self.fit_transform(X)``. If ``X`` is an out-of-sample matrix,
+            n_oos_vertices is the number of new vertices, and n_vertices is the number
+            of vertices in the original graph. If tuple, graph is directed and ``X[0]``
+            contains edges from out-of-sample to in-sample.
 
         Returns
         -------
         array_like or tuple, shape (n_oos_vertices, n_components)
             Array of latent positions.
-            If X is an array or tuple of new nodes, returns the out-of-sample prediction for X.
-                If undirected, returns array.
-                If directed, returns (X_out, X_in), where X_out contains latent positions corresponding to edges from out-of-sample to in-sample.
+            If ``X`` is an array or tuple of new nodes, returns the out-of-sample
+            prediction for ``X``.
+                - If undirected, returns array.
+                - If directed, returns ``(X_out, X_in)``, where ``X_out`` contains
+                latent positions corresponding to edges from out-of-sample to in-sample.
 
         Notes
         -----
-        If the matrix was diagonally augmented (e.g., self.diag_aug was True), `fit` followed by `transform` will produce a slightly different matrix than `fit_transform`.
+        If the matrix was diagonally augmented (e.g., self.diag_aug was True), ``fit``
+        followed by ``transform`` will produce a slightly different matrix than
+        ``fit_transform``.
         """
 
         # checks
