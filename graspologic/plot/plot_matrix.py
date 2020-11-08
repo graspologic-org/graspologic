@@ -387,15 +387,12 @@ def gridmap(data, ax=None, legend=False, sizes=(5, 10), **kws):
         linewidth=0,
         **kws,
     )
-    # ax.axis("image")
     ax.set_xlim((-1, n_verts + 1))
     ax.set_ylim((n_verts + 1, -1))
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_ylabel("")
     ax.set_xlabel("")
-    # ax.axis("off")
-    # plt.show()
     return ax
 
 
@@ -435,8 +432,6 @@ def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
     # one problem with this current sorting algorithm is that we cannot sort
     # classes by size and other class attributes at the same time.
 
-    # TODO sort each group based on the class size in each group rather than
-    # the size of the entire class
     for gc in group_class:
         for co in class_order:
             if co == "size":

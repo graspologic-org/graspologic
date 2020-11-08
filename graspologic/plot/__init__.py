@@ -5,7 +5,7 @@ import sys
 import matplotlib as mpl
 
 from .plot import heatmap, gridplot, pairplot, degreeplot, edgeplot, screeplot
-from .plot_matrix import matrixplot, gridmap
+from .plot_matrix import matrixplot
 
 __all__ = [
     "heatmap",
@@ -15,5 +15,4 @@ __all__ = [
     "edgeplot",
     "screeplot",
     "matrixplot",
-    "gridmap",
 ]
