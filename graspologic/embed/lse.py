@@ -25,12 +25,12 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
@@ -58,7 +58,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     regularizer: int, float or None, optional (default=None)
         Constant to be added to the diagonal of degree matrix. If None, average
         node degree is added. If int or float, must be >= 0. Only used when
-        ``form`` == 'R-DAD'.
+        ``form`` is 'R-DAD'.
 
     concat : bool, optional (default False)
         If graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.
@@ -67,7 +67,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     Attributes
     ----------
     n_features_in_: int
-        Number of features passed to the fit method.
+        Number of features passed to the :func:`~graspologic.embed.LaplacianSpectralEmbed.fit` method.
 
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.

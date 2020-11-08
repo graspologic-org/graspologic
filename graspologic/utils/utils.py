@@ -98,7 +98,7 @@ def import_edgelist(
        Convert node data from strings to specified type.
 
     return_vertices : bool, default=False, optional
-        Returns the union of all ind
+        Returns the union of all individual edgelists.
 
     Returns
     -------
@@ -107,7 +107,7 @@ def import_edgelist(
         an array is returned.
 
     vertices : array-like, shape (n_vertices, )
-        If ``return_vertices`` == True, then returns an array of all vertices that were
+        If ``return_vertices``` is True, then returns an array of all vertices that were
         included in the output graphs.
     """
     # p = Path(path)
@@ -262,7 +262,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     matrix of degrees of each node raised to the -1/2 power, I is the
     identity matrix, and A is the adjacency matrix.
 
-    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer*I`.
+    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer \times I`.
 
     Parameters
     ----------
@@ -273,16 +273,16 @@ def to_laplace(graph, form="DAD", regularizer=None):
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
 
         - 'I-DAD'
-            Computes :math:`L = I - D_i*A*D_i`
+            Computes :math:`L = I - D_i A D_i`
         - 'DAD'
-            Computes :math:`L = D_o*A*D_i`
+            Computes :math:`L = D_o A D_i`
         - 'R-DAD'
-            Computes :math:`L = D_o^r*A*D_i^r`
-            where :math:`D_o^r = D_o + regularizer * I` and likewise for :math:`D_i`
+            Computes :math:`L = D_o^r A D_i^r`
+            where :math:`D_o^r = D_o + regularizer \times I` and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
         Constant to add to the degree vector(s). If None, average node degree is added.
-        If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
+        If int or float, must be >= 0. Only used when ``form`` is 'R-DAD'.
 
     Returns
     -------
@@ -371,7 +371,7 @@ def is_fully_connected(graph):
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case.
 
-    Connected means one can get from any vertex u to vertex v by traversing
+    Connected means one can get from any vertex :math:`u` to vertex :math:`v` by traversing
     the graph. For a directed graph, weakly connected means that the graph
     is connected after it is converted to an unweighted graph (ignore the
     direction of each edge)

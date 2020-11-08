@@ -64,12 +64,12 @@ def select_dimension(
         (n_samples, n_features).
     n_components : int, optional, default: None.
         Number of components to embed. If None, ``n_components =
-        floor(log2(min(n_samples, n_features)))``. Ignored if X is 1d-array.
+        floor(log2(min(n_samples, n_features)))``. Ignored if ``X`` is 1d-array.
     n_elbows : int, optional, default: 2.
-        Number of likelihood elbows to return. Must be > 1.
+        Number of likelihood elbows to return. Must be ``> 1``.
     threshold : float, int, optional, default: None
-        If given, only consider the singular values that are > threshold. Must
-        be >= 0.
+        If given, only consider the singular values that are ``> threshold``. Must
+        be ``>= 0``.
     return_likelihoods : bool, optional, default: False
         If True, returns the all likelihoods associated with each elbow.
 
@@ -77,13 +77,13 @@ def select_dimension(
     -------
     elbows : list
         Elbows indicate subsequent optimal embedding dimensions. Number of
-        elbows may be less than n_elbows if there are not enough singular
+        elbows may be less than ``n_elbows`` if there are not enough singular
         values.
     sing_vals : list
         The singular values associated with each elbow.
     likelihoods : list of array-like
         Array of likelihoods of the corresponding to each elbow. Only returned
-        if `return_likelihoods` is True.
+        if ``return_likelihoods`` is True.
 
     References
     ----------
@@ -177,7 +177,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     SciPy's wrapper for ARPACK, while truncated SVD is performed using either
     SciPy's wrapper for LAPACK or Sklearn's implementation of randomized SVD.
 
-    It also performs optimal dimensionality selectiong using Zhu & Godsie algorithm
+    It also performs optimal dimensionality selection using Zhu & Godsie algorithm
     if number of target dimension is not specified.
 
     Parameters
@@ -186,11 +186,11 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         The data to perform svd on.
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
     n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
