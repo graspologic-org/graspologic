@@ -5,7 +5,7 @@ import warnings
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
-from .base import BaseEmbed
+from .base import BaseSpectralEmbed
 from ..utils import (
     import_graph,
     is_fully_connected,
@@ -15,7 +15,7 @@ from ..utils import (
 )
 
 
-class AdjacencySpectralEmbed(BaseEmbed):
+class AdjacencySpectralEmbed(BaseSpectralEmbed):
     r"""
     Class for computing the adjacency spectral embedding of a graph.
 
@@ -30,12 +30,12 @@ class AdjacencySpectralEmbed(BaseEmbed):
     ----------
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
@@ -74,7 +74,7 @@ class AdjacencySpectralEmbed(BaseEmbed):
     Attributes
     ----------
     n_features_in_: int
-        Number of features passed to the fit method.
+        Number of features passed to the :func:`~graspologic.embed.AdjacencySpectralEmbed.fit` method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None
