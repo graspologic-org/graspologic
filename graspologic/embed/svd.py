@@ -94,7 +94,7 @@ def select_dimension(
     """
     # Handle input data
     if not isinstance(X, np.ndarray) and not isspmatrix_csr(X):
-        msg = "X must be a numpy array or sparse matrix, not {}.".format(type(X))
+        msg = "X must be a numpy array or csr sparse matrix, not {}.".format(type(X))
         raise ValueError(msg)
     if X.ndim > 2:
         msg = "X must be a 1d or 2d-array, not {}d array.".format(X.ndim)
