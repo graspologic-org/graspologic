@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from numpy.random import poisson, normal
 from numpy.testing import assert_equal
+import networkx as nx
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import er_np, er_nm, sbm
@@ -157,12 +158,18 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
 
     def test_transform_closeto_fit_transform(self):
         for diag_aug in [True, False]:
-            ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
-            A = self.testgraphs["Guw"]
-            ase.fit(A)
-            X = ase.transform(A)
-            Y = ase.fit_transform(A)
-            self.assertTrue(np.allclose(X, Y, atol=1e-1))
+            for A in self.testgraphs.values():
+                ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
+                ase.fit(A)
+                X = ase.transform(A)
+                Y = ase.fit_transform(A)
+                self.assertTrue(np.allclose(X, Y, atol=1e-1))
+
+    def test_transform_networkx(self):
+        G = nx.grid_2d_graph(5, 5)
+        ase = AdjacencySpectralEmbed(n_components=2)
+        ase.fit(G)
+        ase.transform(G)
 
     def test_transform_correct_types(self):
         ase = AdjacencySpectralEmbed(n_components=2)
@@ -227,11 +234,11 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
     def test_exceptions(self):
         ase = clone(self.ase)
 
-        with pytest.raises(TypeError):
+        with pytest.raises(Exception):
             ase.fit(self.testgraphs["Gwd"])
             ase.transform("9001")
 
-        with pytest.raises(TypeError):
+        with pytest.raises(Exception):
             Guwd = self.testgraphs["Guwd"]
             ase.fit(Guwd)
             ase.transform(np.ones(len(Guwd)))

@@ -4,6 +4,7 @@
 import warnings
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
+import networkx as nx
 
 from .base import BaseSpectralEmbed
 from ..utils import (
@@ -221,11 +222,15 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         # checks
         check_is_fitted(self, "is_fitted_")
+        if isinstance(X, nx.classes.graph.Graph):
+            X = import_graph(X)
         directed = self.latent_right_ is not None
 
         # correct types?
         if directed and not isinstance(X, tuple):
-            raise TypeError("Directed graphs require a tuple (X_out, X_in")
+            if X.shape[0] != X.shape[1]:  # in case original matrix was passed
+                msg = "Directed graphs require a tuple (X_out, X_in) for out-of-sample transforms."
+                raise TypeError(msg)
         if not directed and not isinstance(X, np.ndarray):
             raise TypeError("Undirected graphs require array input")
 
