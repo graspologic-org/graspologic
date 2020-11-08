@@ -11,7 +11,7 @@ import networkx as nx
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import er_np, er_nm, sbm
-from graspologic.utils import remove_vertices
+from graspologic.utils import remove_vertices, is_symmetric
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, pairwise_distances
 from sklearn.base import clone
@@ -157,13 +157,21 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase.fit()
 
     def test_transform_closeto_fit_transform(self):
+        atol = 0.15
         for diag_aug in [True, False]:
-            for A in self.testgraphs.values():
+            for g, A in self.testgraphs.items():
                 ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
                 ase.fit(A)
-                X = ase.transform(A)
                 Y = ase.fit_transform(A)
-                self.assertTrue(np.allclose(X, Y, atol=1e-1))
+                if isinstance(Y, np.ndarray):
+                    X = ase.transform(A)
+                    self.assertTrue(np.allclose(X, Y, atol=atol))
+                elif isinstance(Y, tuple):
+                    X = ase.transform((A.T, A))
+                    self.assertTrue(np.allclose(X[0], Y[0], atol=atol))
+                    self.assertTrue(np.allclose(X[1], Y[1], atol=atol))
+                else:
+                    raise TypeError
 
     def test_transform_networkx(self):
         G = nx.grid_2d_graph(5, 5)

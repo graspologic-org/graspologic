@@ -225,10 +225,16 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         if isinstance(X, nx.classes.graph.Graph):
             X = import_graph(X)
         directed = self.latent_right_ is not None
+        original = directed and isinstance(X, np.ndarray)
 
         # correct types?
         if directed and not isinstance(X, tuple):
-            if X.shape[0] != X.shape[1]:  # in case original matrix was passed
+            if X.shape[0] == X.shape[1]:  # in case original matrix was passed
+                msg = """A square matrix A was passed to ``transform`` in the directed case. 
+                If this was the original in-sample matrix, either use ``fit_transform`` 
+                or pass a tuple (A.T, A)."""
+                warnings.warn(msg)
+            else:
                 msg = "Directed graphs require a tuple (X_out, X_in) for out-of-sample transforms."
                 raise TypeError(msg)
         if not directed and not isinstance(X, np.ndarray):
