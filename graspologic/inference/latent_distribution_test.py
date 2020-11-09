@@ -163,16 +163,8 @@ def latent_distribution_test(
 
     Attributes
     ----------
-<<<<<<< HEAD
     p_value_ : float
         The overall p value from the test.
-=======
-    metric_func_ : callable
-        A callable associated with the specified metric. See ``metric``.
-
-    null_distribution_ : ndarray, shape (n_bootstraps, )
-        The distribution of T statistics generated under the null.
->>>>>>> 8d7d29f0e569de4b1969d3b1aed8d47168aa6a96
 
     sample_T_statistic_ : float
         The observed difference between the embedded latent positions of the

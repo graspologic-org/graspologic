@@ -83,7 +83,6 @@ def latent_position_test(
     p_value_1, p_value_2 : float
         The p value estimated from the null distributions from sample 1 and sample 2.
 
-<<<<<<< HEAD
     misc_stats : dictionary
         A collection of other statistics obtained from the latent position test
 
@@ -94,10 +93,6 @@ def latent_position_test(
             and second input graph, respectively. The latent positions of each sample graph
             are used independently to sample random dot product graphs, so two null
             distributions are generated
-=======
-    p_value_ : float
-        The overall p value from the test; this is the max of :attr:`p_value_1_` and :attr:`p_value_2_`
->>>>>>> 8d7d29f0e569de4b1969d3b1aed8d47168aa6a96
 
     See also
     --------
