@@ -94,7 +94,9 @@ class TestSpectralVertexNominator:
         assert np.mean(g3_correct_prob[: n_verts - 10]) > 0.8
 
     def test_seed_params(self):
-        svn = SpectralVertexNomination(embedding=TestSpectralVertexNominator.pre_embeded)
+        svn = SpectralVertexNomination(
+            embedding=TestSpectralVertexNominator.pre_embeded
+        )
         with pytest.raises(IndexError):
             TestSpectralVertexNominator._nominate(
                 np.zeros((5, 5, 5), dtype=np.int), svn
