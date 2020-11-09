@@ -37,10 +37,10 @@ import numpy as np
 class SinkhornKnopp:
     """
     Sinkhorn Knopp Algorithm
-    Takes a non-negative square matrix P, where P =/= 0
+    Takes a non-negative square matrix :math:`P`, where :math:`P \\neq 0`
     and iterates through Sinkhorn Knopp's algorithm
-    to convert P to a doubly stochastic matrix.
-    Guaranteed convergence if P has total support [1]:
+    to convert :math:`P` to a doubly stochastic matrix.
+    Guaranteed convergence if :math:`P` has total support [1]:
 
     Parameters
     ----------
@@ -51,7 +51,7 @@ class SinkhornKnopp:
         Metric used to compute the stopping condition,
         which occurs if all the row and column sums are
         within epsilon of 1. This should be a very small value.
-        Epsilon must be between 0 and 1.
+        ``epsilon`` must be between 0 and 1.
 
     Attributes
     ----------
@@ -71,11 +71,11 @@ class SinkhornKnopp:
 
     _D1 : 2d-array
         Diagonal matrix obtained after a stopping condition was met
-        so that _D1.dot(P).dot(_D2) is close to doubly stochastic.
+        so that ``_D1.dot(P).dot(_D2)`` is close to doubly stochastic.
 
     _D2 : 2d-array
         Diagonal matrix obtained after a stopping condition was met
-        so that _D1.dot(P).dot(_D2) is close to doubly stochastic.
+        so that ``_D1.dot(P).dot(_D2)`` is close to doubly stochastic.
 
 
     References

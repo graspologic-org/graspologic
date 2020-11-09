@@ -66,9 +66,9 @@ def latent_distribution_test(
         If a callable, then it should behave similarly to either
         :func:`sklearn.metrics.pairwise_distances` or to
         :func:`sklearn.metrics.pairwise.pairwise_kernels`.
-        If a string, then it should be either one of the keys in either
-        `sklearn.metrics.pairwise.PAIRED_DISTANCES` or in
-        `sklearn.metrics.pairwise.PAIRWISE_KERNEL_FUNCTIONS`, or "gaussian",
+        If a string, then it should be either one of the keys in
+        :py:attr:`sklearn.metrics.pairwise.PAIRED_DISTANCES` one of the keys in
+        :py:attr:`sklearn.metrics.pairwise.PAIRWISE_KERNEL_FUNCTIONS`, or "gaussian",
         which will use a gaussian kernel with an adaptively selected bandwidth.
         It is recommended to use kernels (e.g. "gaussian") with kernel-based
         hsic test and distances (e.g. "euclidean") with all other tests.
@@ -77,7 +77,7 @@ def latent_distribution_test(
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
         See :func:`~graspologic.embed.selectSVD` for more information.
-        This argument is ignored if `input_graph` is False.
+        This argument is ignored if ``input_graph`` is False.
 
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
@@ -101,7 +101,7 @@ def latent_distribution_test(
 
     pooled : bool (default=False)
         Ignored whenever the two graphs have the same number of vertices or
-        `size_correction` is set to False. In order to correct the adjacency
+        ``size_correction`` is set to False. In order to correct the adjacency
         spectral embedding used in the test, it is needed to estimate the
         variance for each of the latent position estimates in the larger graph,
         which requires to compute different sample moments. These moments can
@@ -122,7 +122,7 @@ def latent_distribution_test(
         - 'sign_flips'
             A simple heuristic that flips the signs of one of the embeddings,
             if the medians of the two embeddings in that dimension differ from
-            each other. See :class:`~graspologic.align.SignFlips` for more
+            each other. See :class:`graspologic.align.SignFlips` for more
             information on this procedure. In the limit, this is guaranteed to
             lead to a valid test, as long as matrix :math:`X^T X`, where
             :math:`X` is the latent positions does not have repeated non-zero
@@ -133,7 +133,7 @@ def latent_distribution_test(
             procedure is slower than sign flips, but is guaranteed to yield a
             valid test in the limit, and also makes the test more valid in some
             finite sample cases, in which the eigenvalues are very close to
-            each other. See `~graspologic.align.SignFlips` for more information
+            each other. See :class:`graspologic.align.SignFlips` for more information
             on the procedure.
         - None
             Do not use any alignment technique. This is strongly not
@@ -141,26 +141,38 @@ def latent_distribution_test(
 
     align_kws : dict
         Keyword arguments for the aligner of choice, either
-        `~graspologic.align.SignFlips` or
-        `~graspologic.align.SeedlessProcrustes`, depending on the align_type.
+        :class:`graspologic.align.SignFlips` or
+        :class:`graspologic.align.SeedlessProcrustes`, depending on the ``align_type``.
         See respective classes for more information.
 
     input_graph : bool (default=True)
         Flag whether to expect two full graphs, or the embeddings.
 
         - True
-            .fit and .fit_predict() expect graphs, either as NetworkX graph objects
-            or as adjacency matrices, provided as ndarrays of size (n, n) and
-            (m, m). They will be embedded using adjacency spectral embeddings.
+            :func:`~graspologic.inference.LatentDistributionTest.fit` and
+            :func:`~graspologic.inference.LatentDistributionTest.fit_predict`
+            expect graphs, either as NetworkX graph objects or as adjacency matrices,
+            provided as ndarrays of size (n, n) and (m, m).
+            They will be embedded using adjacency spectral embeddings.
         - False
-            .fit() and .fit_predict() expect adjacency spectral embeddings of
-            the graphs, they must be ndarrays of size (n, d) and (m, d), where
+            :func:`~graspologic.inference.LatentDistributionTest.fit` and
+            :func:`~graspologic.inference.LatentDistributionTest.fit_predict`
+            expect adjacency spectral embeddings of the graphs,
+            they must be ndarrays of size (n, d) and (m, d), where
             d must be same. n_components attribute is ignored in this case.
 
     Attributes
     ----------
+<<<<<<< HEAD
     p_value_ : float
         The overall p value from the test.
+=======
+    metric_func_ : callable
+        A callable associated with the specified metric. See ``metric``.
+
+    null_distribution_ : ndarray, shape (n_bootstraps, )
+        The distribution of T statistics generated under the null.
+>>>>>>> 8d7d29f0e569de4b1969d3b1aed8d47168aa6a96
 
     sample_T_statistic_ : float
         The observed difference between the embedded latent positions of the

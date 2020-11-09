@@ -52,7 +52,7 @@ def node2vec_embed(
     interpolate_walk_lengths_by_node_degree : bool
         Use a dynamic walk length that corresponds to each nodes
         degree. If the node is in the bottom 20 percentile, default to a walk length of 1. If it is in the top 10
-        percentile, use walk_length. If it is in the 20-80 percentiles, linearly interpolate between 1 and walk_length.
+        percentile, use ``walk_length``. If it is in the 20-80 percentiles, linearly interpolate between 1 and ``walk_length``.
         This will reduce lower degree nodes from biasing your resulting embedding. If a low degree node has the same
         number of walks as a high degree node (which it will if this setting is not on), then the lower degree nodes
         will take a smaller breadth of random walks when compared to the high degree nodes. This will result in your
