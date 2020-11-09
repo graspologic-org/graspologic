@@ -58,7 +58,7 @@ class VNviaSGM(BaseEstimator):
         self.ell = ell
         self.R = R
 
-    def fit(self, voi, A, B, seedsA, seedsB):
+    def fit(self, voi, A, B, seedsA=[], seedsB=[]):
         """
         Parameters
         ----------
@@ -79,15 +79,18 @@ class VNviaSGM(BaseEstimator):
             Seeds associated to adjacency matrix B `len(seedsA)==len(seedsB)`
         """
         assert len(seedsA) == len(seedsB)
+        if len(seedsA) == 0:
+            print("Must include at least one seed to produce nomination list")
+            return None
 
         voi = np.reshape(np.array(voi), (1,))
 
         # get reordering for A
-        nsx1 = np.setdiff1d(list(range(A.shape[0])), np.concatenate((seedsA, voi)))
+        nsx1 = np.setdiff1d(np.arange(A.shape[0]), np.concatenate((seedsA, voi)))
         a_reord = np.concatenate((seedsA, voi, nsx1))
 
         # get reordering for B
-        nsx2 = np.setdiff1d(list(range(B.shape[0])), seedsB)
+        nsx2 = np.setdiff1d(np.arange(B.shape[0]), seedsB)
         b_reord = np.concatenate((seedsB, nsx2))
 
         AA = A[np.ix_(a_reord, a_reord)]
@@ -95,22 +98,20 @@ class VNviaSGM(BaseEstimator):
 
         seeds_reord = np.arange(len(seedsA))
         voi_reord = len(seedsA)
-        #     print("seeds reord = ", seeds_reord, ", voi_reord = ", voi_reord)
 
-        subgraph_AA = np.array(ego_list(AA, self.h, voi_reord, mindist=1))
+        subgraph_AA = np.array(_ego_list(AA, self.h, voi_reord, mindist=1))
 
         voi_reord = np.reshape(np.array(voi_reord), (1,))
 
         Sx1 = np.intersect1d(a_reord[subgraph_AA], seeds_reord)
         Sx2 = np.intersect1d(np.arange(BB.shape[0]), Sx1)
-        #     print("Sx1 = ", Sx1, " Sx2 = ", Sx2)
 
         if len(Sx2) <= 0:
-            print("Impossible")
+            print("Voi was not a member of the induced subgraph A[seedsA]")
             return None
 
-        Nx1 = np.array(ego_list(AA, self.ell, list(Sx1), mindist=0))
-        Nx2 = np.array(ego_list(BB, self.ell, list(Sx2), mindist=0))
+        Nx1 = np.array(_ego_list(AA, self.ell, list(Sx1), mindist=0))
+        Nx2 = np.array(_ego_list(BB, self.ell, list(Sx2), mindist=0))
 
         foo = np.concatenate((Sx1, voi_reord))
         ind1 = np.concatenate((Sx1, voi_reord, np.setdiff1d(Nx1, foo)))
@@ -133,8 +134,9 @@ class VNviaSGM(BaseEstimator):
         nomination_list = list(zip(self.b_inds[self.n_seeds_used:], self.P[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
         self.nomination_list = nomination_list
+        return self
 
-    def fit_predict(self, A, B, seeds_A, seeds_B):
+    def fit_predict(self, voi, A, B, seedsA=[], seedsB=[]):
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
@@ -160,46 +162,42 @@ class VNviaSGM(BaseEstimator):
         perm_inds_ : 1-d array, some shuffling of [0, n_vert)
             The optimal permutation indices to minimize the objective function
         """
-        self.fit(A, B, seeds_A, seeds_B)
+        retval = self.fit(voi, A, B, seedsA=seedsA, seedsB=seedsB)
+
+        if retval is None:
+            return None
+
         return self.nomination_list
 
 
-def ego(graph_adj_matrix, order, node, mindist=1):
+def _ego(graph_adj_matrix, order, node, mindist=1):
     # Note all nodes are zero based in this implementation, i.e the first node is 0
     dists = [[node]]
+    dists_conglom = [node]
     for ii in range(1, order + 1):
         clst = []
         for nn in dists[-1]:
-            clst.extend(list(np.where(graph_adj_matrix[nn] == 1)[0]))
-        clst = list(set(clst))
+            clst.extend(list(np.where(graph_adj_matrix[nn] >= 1)[0]))
+        clst = np.array(list(set(clst)))
 
-        # Remove all the ones that are closer (i.e thtat have already been included)
-        dists_conglom = []
-        for dd in dists:
-            dists_conglom.extend(dd)
-        dists_conglom = list(set(dists_conglom))
-
-        cn_proc = []
-        for cn in clst:
-            if cn not in dists_conglom:
-                cn_proc.append(cn)
+        cn_proc = np.setdiff1d(clst, dists_conglom)
 
         dists.append(cn_proc)
-    ress = []
 
-    for ii in range(mindist, order + 1):
-        ress.extend(dists[ii])
+        dists_conglom.extend(cn_proc)
+        dists_conglom = list(set(dists_conglom))
+
+    ress = itertools.chain(*dists[mindist:order + 1])
 
     return np.array(list(set(ress)))
 
 
-def ego_list(graph_adj_matrix, order, node, mindist=1):
-    #     print(type(node))
+def _ego_list(graph_adj_matrix, order, node, mindist=1):
     if type(node) == list:
         total_res = []
         for nn in node:
-            ego_res = ego(graph_adj_matrix, order, nn, mindist=mindist)
+            ego_res = _ego(graph_adj_matrix, order, nn, mindist=mindist)
             total_res.extend(ego_res)
         return list(set(total_res))
     else:
-        return ego(graph_adj_matrix, order, node)
+        return _ego(graph_adj_matrix, order, node)
