@@ -409,7 +409,6 @@ class TestDiagonalAugment(unittest.TestCase):
 
 
 def test_binarize():
-    # TODO: does unittest work like this? I got a TypeError when i called `python -m unittest test_utils.test_binarize`
     g = np.array([[1, 2], [1, 1]])
     g2 = gus.binarize(g)
     g2_expected = np.ones_like(g)
