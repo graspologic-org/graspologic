@@ -705,8 +705,9 @@ def fit_plug_in_variance_estimator(X):
 
 def remove_vertices(graph, indices, return_removed=False):
     """
-    Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the truncated matrix and optionally
-    the removed subgraph. Here, an adjacency vector is the set of edge weights for a particular vertex.
+    Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the
+    truncated matrix and optionally the removed subgraph. Here, an adjacency vector
+    is the set of edge weights for a particular vertex.
 
     Parameters
     ----------
@@ -723,7 +724,8 @@ def remove_vertices(graph, indices, return_removed=False):
     -------
     truncated_graph: np.ndarray
         The truncated matrix.
-        This is a copy of `graph` of shape (k, k), with ``k=n-m``, without the ``m`` adjacency vectors given by `indices`.
+        This is a copy of `graph` of shape (k, k), with ``k=n-m``, without the ``m``
+        adjacency vectors given by `indices`.
 
     removed_subgraph: np.ndarray or tuple, shape (m, k) (optional)
         Array of removed adjacency vectors without edges to each other.
