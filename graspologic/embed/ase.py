@@ -218,6 +218,11 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         If the matrix was diagonally augmented (e.g., self.diag_aug was True), ``fit``
         followed by ``transform`` will produce a slightly different matrix than
         ``fit_transform``.
+
+        To get the original embedding, using ``fit_transform`` is recommended. In the
+        directed case, if A is the original in-sample adjacency matrix, the tuple
+        (A.T, A) will need to be passed to ``transform`` if you do not wish to use
+        ``fit_transform``.
         """
 
         # checks
