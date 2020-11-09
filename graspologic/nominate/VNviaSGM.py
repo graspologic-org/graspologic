@@ -55,6 +55,8 @@ class VNviaSGM(BaseEstimator):
 
     def fit(self, voi, A, B, seedsA=[], seedsB=[]):
         """
+        Fits the model to two graphs
+
         Parameters
         ----------
 
@@ -72,6 +74,11 @@ class VNviaSGM(BaseEstimator):
 
         seedsB: list
             Seeds associated to adjacency matrix B `len(seedsA)==len(seedsB)`
+
+        Returns
+        -------
+        self:
+            A reference to self
         """
         assert len(seedsA) == len(seedsB)
         if len(seedsA) == 0:
@@ -135,8 +142,7 @@ class VNviaSGM(BaseEstimator):
 
     def fit_predict(self, voi, A, B, seedsA=[], seedsB=[]):
         """
-        Fits the model with two assigned adjacency matrices, returning optimal
-        permutation indices
+        Fits model to two adjacenty matricies and returns nomination list
 
         Parameters
         ----------
@@ -156,8 +162,8 @@ class VNviaSGM(BaseEstimator):
 
         Returns
         -------
-        perm_inds_ : 1-d array, some shuffling of [0, n_vert)
-            The optimal permutation indices to minimize the objective function
+        nomination_list : 1-d array of 2-tuples
+            The nomination list containing tuples in form (vertex, probability)
         """
         retval = self.fit(voi, A, B, seedsA=seedsA, seedsB=seedsB)
 
