@@ -24,7 +24,7 @@ class SpectralVertexNomination(BaseVN):
     ----------
     embedding: np.ndarray, default = None
         A pre-calculated embedding may be provided, in which case it will be used for vertex nomination instead of
-        embedding the adjacency matrix using embedder.
+        embedding the adjacency matrix using `embedder`.
     embedder: str or BaseEmbed, default = 'ASE'
         May provide either a embed object or a string indicating which embedding method to use, which may be either:
         "ASE" for :py:class:`~graspologic.embed.AdjacencySpectralEmbed` or
@@ -39,14 +39,14 @@ class SpectralVertexNomination(BaseVN):
         The spectral embedding of the graph that spectral nomination will be preformed on.
     embeder : :py:class:`~graspologic.embed.BaseEmbed`
         The embed object to be used to compute the embedding.
-    attr_labels : np.ndarray
+    attr_labels_ : np.ndarray
         The attributes of the vertices in the seed (parameter 'y' for fit).
         Shape is the number of seed vertices. Each value is unique in the unattributed case.
-    unique_att : np.ndarray
+    unique_att_ : np.ndarray
         Each unique attribute represented in the seed. One dimensional. In the unattributed case of SVN, the number of
-        unique attributes (and therefore the shape along axis 0 of `unique_att`) is equal to the number of seeds ( the
-        shape along axis 0 of `attr_labels`).
-    distance_matrix : np.ndarray
+        unique attributes (and therefore the shape along axis 0 of `unique_att_`) is equal to the number of seeds ( the
+        shape along axis 0 of `attr_labels_`).
+    distance_matrix_ : np.ndarray
         The euclidean distance from each seed vertex to each vertex.
         Shape is ``(number_vertices, number_unique_attributes)`` if attributed or Shape is
         ``(number_vertices, number_seed_vertices)`` if unattributed.
@@ -83,9 +83,9 @@ class SpectralVertexNomination(BaseVN):
         elif np.ndim(embedding) != 2:
             raise IndexError("embedding must have dimension 2")
         self.persistent = persistent
-        self.attr_labels = None
-        self.unique_att = None
-        self.distance_matrix = None
+        self.attr_labels_ = None
+        self.unique_att_ = None
+        self.distance_matrix_ = None
 
     @staticmethod
     def _make_2d(arr: np.ndarray) -> np.ndarray:
@@ -145,15 +145,15 @@ class SpectralVertexNomination(BaseVN):
         distance metric value between vertex i and attribute j.
 
         """
-        num_unique = self.unique_att.shape[0]
-        ordered = self.distance_matrix.argsort(axis=1)
-        sorted_dists = self.distance_matrix[np.arange(ordered.shape[0]), ordered.T].T
+        num_unique = self.unique_att_.shape[0]
+        ordered = self.distance_matrix_.argsort(axis=1)
+        sorted_dists = self.distance_matrix_[np.arange(ordered.shape[0]), ordered.T].T
         nd_buffer = np.tile(
-            self.attr_labels[ordered[:, :k]], (num_unique, 1, 1)
+            self.attr_labels_[ordered[:, :k]], (num_unique, 1, 1)
         ).astype(np.float64)
 
         # comparison taking place in 3-dim view, coordinates produced are therefore 3D
-        inds = np.argwhere(nd_buffer == self.unique_att[:, np.newaxis, np.newaxis])
+        inds = np.argwhere(nd_buffer == self.unique_att_[:, np.newaxis, np.newaxis])
 
         # nans are a neat way to operate on attributes individually
         nd_buffer[:] = np.NaN
@@ -170,7 +170,7 @@ class SpectralVertexNomination(BaseVN):
         pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.inf
         vert_order = np.argsort(pred_weights, axis=0)
 
-        inds = np.tile(self.unique_att, (1, vert_order.shape[0])).T
+        inds = np.tile(self.unique_att_, (1, vert_order.shape[0])).T
         inds = np.concatenate((vert_order.reshape(-1, 1), inds), axis=1)
         pred_weights = pred_weights[inds[:, 0], inds[:, 1]]
         return vert_order, pred_weights.reshape(vert_order.shape)
@@ -203,9 +203,9 @@ class SpectralVertexNomination(BaseVN):
             raise TypeError("k must be an integer")
         elif k is not None and k <= 0:
             raise ValueError("k must be greater than 0")
-        if self.unique_att.shape[0] == self.attr_labels.shape[0] or k is None:
+        if self.unique_att_.shape[0] == self.attr_labels_.shape[0] or k is None:
             # seed is not attributed, or no k is specified.
-            return self._predict(k=self.unique_att.shape[0])
+            return self._predict(k=self.unique_att_.shape[0])
         else:
             # seed is attributed and k is specified/
             return self._predict(k=k)
@@ -237,9 +237,9 @@ class SpectralVertexNomination(BaseVN):
             X = np.array(X)
             self._embed(X)
 
-        self.attr_labels = y[:, 1]
-        self.unique_att = np.unique(self.attr_labels)
-        self.distance_matrix = self._pairwise_dist(y)
+        self.attr_labels_ = y[:, 1]
+        self.unique_att_ = np.unique(self.attr_labels_)
+        self.distance_matrix_ = self._pairwise_dist(y)
 
     def fit_transform(
         self, X: np.ndarray, y: np.ndarray, k: int = None

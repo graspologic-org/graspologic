@@ -26,7 +26,7 @@ class TestSpectralVertexNominator:
     def _nominate(cls, seed, nominator):
         nominator.fit(cls.adj, seed)
         nom_list, dists = nominator.predict()
-        unique_att = nominator.unique_att
+        unique_att = nominator.unique_att_
         assert nom_list.shape == (3 * cls.n_verts, unique_att.shape[0])
         assert dists.shape == (3 * cls.n_verts, unique_att.shape[0])
         return nom_list
