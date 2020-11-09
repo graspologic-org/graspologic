@@ -48,12 +48,7 @@ class VNviaSGM(BaseEstimator):
     Min: The ASA Data Sci Journal. 2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
     """
 
-    def __init__(
-        self,
-        h=1,
-        ell=1,
-        R=100
-    ):
+    def __init__(self, h=1, ell=1, R=100):
         self.h = h
         self.ell = ell
         self.R = R
@@ -121,7 +116,9 @@ class VNviaSGM(BaseEstimator):
         BB_fin = BB[np.ix_(ind2, ind2)]
 
         seeds_fin = list(range(len(Sx1)))
-        sgm = GMP(n_init=self.R, shuffle_input=False, init_method="rand", padding="naive")
+        sgm = GMP(
+            n_init=self.R, shuffle_input=False, init_method="rand", padding="naive"
+            )
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 
@@ -131,7 +128,7 @@ class VNviaSGM(BaseEstimator):
         self.b_inds = b_reord[ind2]
         self.n_seeds_used = len(Sx1)
 
-        nomination_list = list(zip(self.b_inds[self.n_seeds_used:], self.P[0]))
+        nomination_list = list(zip(self.b_inds[self.n_seeds_used :], self.P[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
         self.nomination_list = nomination_list
         return self
@@ -187,7 +184,7 @@ def _ego(graph_adj_matrix, order, node, mindist=1):
         dists_conglom.extend(cn_proc)
         dists_conglom = list(set(dists_conglom))
 
-    ress = itertools.chain(*dists[mindist:order + 1])
+    ress = itertools.chain(*dists[mindist : order + 1])
 
     return np.array(list(set(ress)))
 
