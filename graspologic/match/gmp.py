@@ -327,7 +327,7 @@ class GraphMatch(BaseEstimator):
         B = B[np.ix_(permutation_B_unshuffle, permutation_B_unshuffle)]
         score = np.trace(np.transpose(A) @ B[np.ix_(perm_inds, perm_inds)])
 
-        self.probability_matrix_ = probability_matrix/self.n_init
+        self.probability_matrix_ = probability_matrix / self.n_init
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
         self.n_iter_ = best_n_iter
