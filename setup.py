@@ -73,6 +73,7 @@ setup(
             "sphinx",
             "sphinxcontrib-rawfiles",
             "sphinx-rtd-theme",
+            "testfixtures",
         ]
     },
 )
