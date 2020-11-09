@@ -3,4 +3,4 @@
 
 from .VNviaSGM import VNviaSGM
 
-__all__ = ["VNviaSGMgi"]
+__all__ = ["VNviaSGM"]
