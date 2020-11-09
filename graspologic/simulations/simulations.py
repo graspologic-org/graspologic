@@ -812,8 +812,8 @@ def mmsbm(
     MMSBM produces a graph given the specified block connectivity matrix B,
     which indicates the probability of connection between nodes based upon
     their community membership.
-    Each node is assigned a membership vector drawn from dirichlet distribution
-    with parameter alpha. Each entry of this vector indicates the probability
+    Each node is assigned a membership vector drawn from Dirichlet distribution
+    with parameter :math:`\alpha`. Each entry of this vector indicates the probability
     of that node pertaining to each community. Finally, each interaction between
     nodes is drawn by assigning the community membership of each node according to
     the probability specified in the mixed membership vector for that node.
@@ -832,8 +832,9 @@ def mmsbm(
         0 < p[i, j] < 1 for all i, j.
 
     alpha: array-like, shape (n_communities,)
-        Concentration parameter alpha of the Dirichlet distribution used to sample the
-        mixed-membership vectors for each node.
+        Concentration parameter :math:`\alpha` of the Dirichlet distribution used to
+        sample the mixed-membership vectors for each node.
+        alpha[i] > 0 for all i.
 
     rng: numpy.random.Generator, optional (default= numpy.random.default_rng())
         Numpy Random Generator object to generate sampling from distributions.
@@ -849,12 +850,8 @@ def mmsbm(
     return_labels: boolean, optional (default=False)
         If False, the only output is the adjacency matrix.
         If True, output is a tuple. The first element of the tuple is the adjacency
-        matrix. The second element of the tuple is a list of length equal to the number
-        of vertices. The $i^{\text{\tiny th}}$ entry of this list represents the
-        $i^{\text{\tiny th}}$ node of the graph and is also an array of length equal
-        to the number of vertices. The $j^{\text{\tiny th}}$ entry of this array
-        indicates the membership assigned to the $i^{\text{\tiny th}}$ node when
-        interacting with the $j^{\text{\tiny th}}$ node.
+        matrix. The second element is a matrix in which the :math:`(i^{th}, j^{th})`
+        entry indicates the membership assigned to node i when interacting with node j.
         Community 1 is labeled with a 0, community 2 with 1, etc.
 
     References
@@ -866,7 +863,7 @@ def mmsbm(
     -------
     A: ndarray, shape (n, n)
         Sampled adjacency matrix
-    labels: ndarray, shape (n, n, 1)
+    labels: ndarray, shape (n, n)
         Array containing the membership assigned to each node when interacting with
         another node.
 
@@ -924,18 +921,14 @@ def mmsbm(
         if not np.issubdtype(alpha.dtype, np.number):
             msg = "There are non-numeric elements in alpha"
             raise ValueError(msg)
-        elif np.any(alpha < 0):
-            msg = "Alpha entries must be non-negative."
+        elif np.any(alpha <= 0):
+            msg = "Alpha entries must be > 0."
             raise ValueError(msg)
         elif alpha.shape != (len(p),):
             msg = "alpha must be a list or np.array of dimension {c}, not {w}.".format(
                 c=(len(p),), w=np.array(alpha).shape
             )
             raise ValueError(msg)
-        elif np.any(alpha == 0):
-            alpha[np.any(alpha == 0)] = float(
-                1e-8
-            )  # np.random.dirichlet does not accept alpha = 0.0
     if not isinstance(rng, (np.random._generator.Generator)):
         msg = "rng must be <class 'numpy.random._generator.Generator'> not {}.".format(
             type(rng)

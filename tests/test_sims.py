@@ -913,7 +913,9 @@ class Test_MMSBM(unittest.TestCase):
         labels = A[1]
         expected_labels = np.ones((self.n, self.n)) - np.identity(
             self.n
-        )  # since we expect all nodes to pertain to node 1 we expect all values for labels to be 1 besides those on the diagonal due to missingness of loops in this scenario
+        )  # since we expect all nodes to pertain to node 1 we expect all values for
+        # labels to be 1 besides those on the diagonal due to missingness of loop
+
         # check that expected labels is the same as the labels output by function
         self.assertTrue(np.allclose(labels, expected_labels))
         pass
@@ -932,7 +934,8 @@ class Test_MMSBM(unittest.TestCase):
 
     def test_noloop_undirected(self):
         rng = np.random.default_rng(self.seed)
-        # Test that when loops = False and directed = False the output is undirected and with no loops
+        # Test that when loops = False and directed = False the output is undirected
+        # and with no loops
         A = mmsbm(self.n, self.p, self.alpha, rng=rng, directed=False, loops=False)
 
         # check loopless and undirected
@@ -985,7 +988,7 @@ class Test_MMSBM(unittest.TestCase):
             mmsbm(self.n, self.p, alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
-            alpha = [0.1, -2]  # alpha entries must be positive
+            alpha = [0.1, -2]  # alpha entries must be > 0
             mmsbm(self.n, self.p, alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
@@ -1009,7 +1012,8 @@ class Test_MMSBM(unittest.TestCase):
             mmsbm(self.n, self.p, self.alpha, directed=directed, rng=self.rng)
 
         with self.assertRaises(ValueError):
-            p = np.vstack(([0.6, 0.2], [0.3, 0.4]))  # directed must be a bool
+            # specified undirected but provided directed B matrix
+            p = np.vstack(([0.6, 0.2], [0.3, 0.4]))
             mmsbm(self.n, p, self.alpha, directed=False, rng=self.rng)
 
         with self.assertRaises(TypeError):
