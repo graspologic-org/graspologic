@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.simulations.simulations import sbm
-from graspologic.nominate import SpectralVertexNominator
+from graspologic.nominate import SpectralVertexNomination
 
 
 def _gen_att_seed(size, n_verts, labels):
@@ -34,10 +34,10 @@ class TestSpectralVertexNominator:
     @pytest.mark.parametrize(
         "nominator",
         [
-            SpectralVertexNominator(embeder="ASE", persistent=False),
-            SpectralVertexNominator(embeder="LSE", persistent=False),
-            SpectralVertexNominator(embeder=embeder, persistent=False),
-            SpectralVertexNominator(embedding=pre_embeded),
+            SpectralVertexNomination(embeder="ASE", persistent=False),
+            SpectralVertexNomination(embeder="LSE", persistent=False),
+            SpectralVertexNomination(embeder=embeder, persistent=False),
+            SpectralVertexNomination(embedding=pre_embeded),
         ],
     )
     @pytest.mark.parametrize(
@@ -60,8 +60,8 @@ class TestSpectralVertexNominator:
     @pytest.mark.parametrize(
         "nominator",
         [
-            SpectralVertexNominator(embeder="ASE", persistent=False),
-            SpectralVertexNominator(embeder="LSE", persistent=False),
+            SpectralVertexNomination(embeder="ASE", persistent=False),
+            SpectralVertexNomination(embeder="LSE", persistent=False),
         ],
     )
     @pytest.mark.parametrize(
@@ -94,7 +94,7 @@ class TestSpectralVertexNominator:
         assert np.mean(g3_correct_prob[: n_verts - 10]) > 0.8
 
     def test_seed_params(self):
-        svn = SpectralVertexNominator(embedding=TestSpectralVertexNominator.pre_embeded)
+        svn = SpectralVertexNomination(embedding=TestSpectralVertexNominator.pre_embeded)
         with pytest.raises(IndexError):
             TestSpectralVertexNominator._nominate(
                 np.zeros((5, 5, 5), dtype=np.int), svn
@@ -106,10 +106,10 @@ class TestSpectralVertexNominator:
 
     def test_graph_params(self):
         with pytest.raises(IndexError):
-            SpectralVertexNominator(embedding=np.zeros((5, 5, 5), dtype=np.int))
+            SpectralVertexNomination(embedding=np.zeros((5, 5, 5), dtype=np.int))
 
         with pytest.raises(IndexError):
-            svn = SpectralVertexNominator()
+            svn = SpectralVertexNomination()
             shape = TestSpectralVertexNominator.adj.shape
             svn.fit(
                 np.reshape(TestSpectralVertexNominator.adj, (1, shape[0], shape[1])),
@@ -117,18 +117,18 @@ class TestSpectralVertexNominator:
             )
 
         with pytest.raises(IndexError):
-            svn = SpectralVertexNominator()
+            svn = SpectralVertexNomination()
             svn.fit(TestSpectralVertexNominator.adj[1:], np.array([1], dtype=np.int))
 
         with pytest.raises(TypeError):
-            svn = SpectralVertexNominator()
+            svn = SpectralVertexNomination()
             svn.fit(
                 TestSpectralVertexNominator.adj.astype(np.object),
                 np.array([1], dtype=np.int),
             )
 
     def test_predict_params(self):
-        svn = SpectralVertexNominator()
+        svn = SpectralVertexNomination()
         with pytest.raises(TypeError):
             svn.predict(k=5.3)
         with pytest.raises(ValueError):

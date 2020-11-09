@@ -2,9 +2,9 @@
 # Licensed under the MIT License.
 
 from .base import BaseVN
-from .spectralVN import SpectralVertexNominator
+from .spectralVN import SpectralVertexNomination
 
 __all__ = [
     "BaseVN",
-    "SpectralVertexNominator",
+    "SpectralVertexNomination",
 ]

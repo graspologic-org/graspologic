@@ -9,45 +9,29 @@ import numpy as np
 from scipy.spatial import distance
 
 
-class SpectralVertexNominator(BaseVN):
+class SpectralVertexNomination(BaseVN):
     """
     Class for spectral vertex nomination on a single graph.
 
-    Given a graph G=(V,E) and a subset of V called S (the "seed"),
-    Single Graph Vertex Nomination is the problem of ranking all V
-    in order of relation to members of S.
-    Spectral Vertex Nomination solves this problem by embedding G
-    into a low dimensional euclidean space using any of the embedding
-    algorithms (:ref:`tutorials <embed_tutorials>`),
-    and then generating a nomination list by some distance based algorithm.
-    In the simplest case, for each seed vertex u, the other vertices are
-    ranked in order of euclidean distance from u.
-    There can be both attributed and unattributed cases. In the unattributed
-    case, we treat each seed vertex individually and rank all vertices by distance.
-    In the attributed case, subsets of the seed vertices share some attribute we
-    care about. We want to rank the other vertices by the likelihood that they
-    also share that attribute. Note that the unattributed problem is simply the
-    attributed problem when each seed vertex has a unique attribute.
-    SVN algorithms in general make the assumption that vertexes
-    are likely to be related in a way that is of interest if they are close to
-    each other in an embedding. This is a somewhat simplified notion of relatedness,
-    and is not appropriate for all Vertex Nomination problems.
+    Given a graph :math:`G=(V,E)` and a subset of V called S (the "seed"), Single Graph Vertex Nomination is the problem
+    of ranking all V in order of relation to members of S. Spectral Vertex Nomination solves this problem by embedding G
+    into a low dimensional euclidean space (:ref:`tutorials <embed_tutorials>`), and then generating a nomination list
+    by some distance based algorithm. In the simple unattributed case, for each seed vertex u, the other vertices are
+    ranked in order of euclidean distance from u. In the attributed case, vertices are ranked by relatedness to each
+    attribute present in the set of seed vertices.
 
     Parameters
     ----------
     embedding: np.ndarray, default = None
-        A pre-calculated embedding may be provided, in which case
-        it will be used for vertex nomination instead of embedding
-        the adjacency matrix using embeder.
-    embeder: str or BaseEmbed, default = 'ASE'
-        May provide either a embed object or a string indicating
-        which embedding method to use, which may be either
+        A pre-calculated embedding may be provided, in which case it will be used for vertex nomination instead of
+        embedding the adjacency matrix using embedder.
+    embedder: str or BaseEmbed, default = 'ASE'
+        May provide either a embed object or a string indicating which embedding method to use, which may be either:
         "ASE" for :py:class:`~graspologic.embed.AdjacencySpectralEmbed` or
         "LSE" for :py:class:`~graspologic.embed.LaplacianSpectralEmbed`.
     persistent : bool, default = True
-        If ``False``, future calls to fit will overwrite an existing embedding. Must be ``True``
-        if an embedding is provided.
-
+        If ``False``, future calls to fit will overwrite an existing embedding. Must be ``True`` if an embedding is
+        provided.
 
     Attributes
     ----------
@@ -57,26 +41,25 @@ class SpectralVertexNominator(BaseVN):
         The embed object to be used to compute the embedding.
     attr_labels : np.ndarray
         The attributes of the vertices in the seed (parameter 'y' for fit).
-        Shape is the number of seed vertices.
+        Shape is the number of seed vertices. Each value is unique in the unattributed case.
     unique_att : np.ndarray
-        Each unique attribute represented in the seed. One dimensional.
+        Each unique attribute represented in the seed. One dimensional. In the unattributed case of SVN, the number of
+        unique attributes (and therefore the shape along axis 0 of `unique_att`) is equal to the number of seeds ( the
+        shape along axis 0 of `attr_labels`).
     distance_matrix : np.ndarray
         The euclidean distance from each seed vertex to each vertex.
-        Shape is ``(number_vertices, number_unique_attributes)`` if attributed
-        or Shape is ``(number_vertices, number_seed_vertices)`` if unattributed.
-    persistent : bool
-        If ``False``, future calls to fit will overwrite an existing embedding. Must be ``True``
-        if an embedding is provided.
+        Shape is ``(number_vertices, number_unique_attributes)`` if attributed or Shape is
+        ``(number_vertices, number_seed_vertices)`` if unattributed.
 
     References
     ----------
-    Fishkind, D. E.; Lyzinski, V.; Pao, H.; Chen, L.; Priebe, C. E. Vertex nomination schemes for membership prediction.
-    Ann. Appl. Stat. 9 2015. https://projecteuclid.org/euclid.aoas/1446488749
+    .. [1] SFishkind, D. E.; Lyzinski, V.; Pao, H.; Chen, L.; Priebe, C. E. Vertex nomination schemes for membership
+        prediction. Ann. Appl. Stat. 9 2015. https://projecteuclid.org/euclid.aoas/1446488749
 
-    Jordan Yoder, Li Chen, Henry Pao, Eric Bridgeford, Keith Levin, Donniell E. Fishkind, Carey Priebe, Vince Lyzinski,
-    Vertex nomination: The canonical sampling and the extended spectral nomination schemes,
-    Computational Statistics & Data Analysis, Volume 145, 2020.
-    http://www.sciencedirect.com/science/article/pii/S0167947320300074
+    .. [2] SJordan Yoder, Li Chen, Henry Pao, Eric Bridgeford, Keith Levin, Donniell E. Fishkind, Carey Priebe,
+        Vince Lyzinski, Vertex nomination: The canonical sampling and the extended spectral nomination schemes,
+        Computational Statistics & Data Analysis, Volume 145, 2020.
+        http://www.sciencedirect.com/science/article/pii/S0167947320300074
 
     """
 
@@ -90,11 +73,11 @@ class SpectralVertexNominator(BaseVN):
         self.embedding = embedding
         if self.embedding is None or not persistent:
             if issubclass(type(embeder), BaseSpectralEmbed):
-                self.embeder = embeder
+                self.embedder = embeder
             elif embeder == "ASE":
-                self.embeder = ase()
+                self.embedder = ase()
             elif embeder == "LSE":
-                self.embeder = lse()
+                self.embedder = lse()
             else:
                 raise TypeError
         elif np.ndim(embedding) != 2:
@@ -139,10 +122,10 @@ class SpectralVertexNominator(BaseVN):
 
         # Embed graph if embedding not provided
         if self.embedding is None:
-            if issubclass(type(self.embeder), BaseSpectralEmbed):
-                self.embedding = self.embeder.fit_transform(X)
+            if issubclass(type(self.embedder), BaseSpectralEmbed):
+                self.embedding = self.embedder.fit_transform(X)
             else:
-                raise TypeError("No embeder available")
+                raise TypeError("No embedder available")
 
     def _predict(self, k: int = 5) -> Tuple[np.ndarray, np.ndarray]:
         """
