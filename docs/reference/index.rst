@@ -15,5 +15,6 @@ Reference
    datasets
    utils
    match
+   nominate
    subgraph
    align
