@@ -1,6 +1,7 @@
 import numpy as np
 from ..match import GraphMatch as GMP
 from sklearn.base import BaseEstimator
+import itertools
 
 
 class VNviaSGM(BaseEstimator):
@@ -18,6 +19,15 @@ class VNviaSGM(BaseEstimator):
     R: int
         Number of restarts for soft seeded graph matching algorithm
 
+    Attributes
+    ----------
+    P : 2d-array, square
+        The probability array that describes the probability `P[i, j]` that row `i` in `a_inds`
+        matches `j` in `b_inds`
+
+    corr : 1d-array
+        The matrix that maps values from `a_inds` to `b_inds`
+
     a_inds: 1d-array
         Array of indices in the induced subgraph of A that will be matched to `b_inds`
 
@@ -32,26 +42,32 @@ class VNviaSGM(BaseEstimator):
         probability that the voi matches to node j in graph B (sorted by descending
         probability)
 
-    Attributes
-    ----------
-    P : 2d-array, square
-        The probability array that describes the probability `P[i, j]` that row `i` in `a_inds`
-        matches `j` in `b_inds`
-
-    corr : 1d-array
-        The matrix that maps values from `a_inds` to `b_inds`
-
 
     References
     ----------
     .. [1] Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded graph matching. Stat Anal Data
-    Min: The ASA Data Sci Journal. 2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
+        Min: The ASA Data Sci Journal. 2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
+
+
+
     """
 
     def __init__(self, h=1, ell=1, R=100):
-        self.h = h
-        self.ell = ell
-        self.R = R
+        if type(h) is int and h > 0:
+            self.h = h
+        else:
+            msg = "h must be an integer > 0"
+            raise ValueError(msg)
+        if type(ell) is int and ell > 0:
+            self.ell = ell
+        else:
+            msg = "ell must be an integer > 0"
+            raise ValueError(msg)
+        if type(R) is int and R > 0:
+            self.R = R
+        else:
+            msg = "R must be an integer > 0"
+            raise ValueError(msg)
 
     def fit(self, voi, A, B, seedsA=[], seedsB=[]):
         """
@@ -59,9 +75,8 @@ class VNviaSGM(BaseEstimator):
 
         Parameters
         ----------
-
         voi: int
-            Vertices of interest (voi)
+            Vertex of interest (voi)
 
         A: 2d-array, square
             Adjacency matrix of `G_1`, the graph where voi is known
@@ -77,13 +92,18 @@ class VNviaSGM(BaseEstimator):
 
         Returns
         -------
-        self:
-            A reference to self
+        self: A reference to self
         """
-        assert len(seedsA) == len(seedsB)
+        if seedsA.shape[0] != seedsB.shape[0]:
+            msg = "Must have the same number of seeds for each adjacency matrix"
+            raise ValueError(msg)
         if len(seedsA) == 0:
             print("Must include at least one seed to produce nomination list")
             return None
+
+        if B.shape[0] != B.shape[1] or A.shape[0] != A.shape[1]:
+            msg = "Adjacency matrix entries must be square"
+            raise ValueError(msg)
 
         voi = np.reshape(np.array(voi), (1,))
 
@@ -135,7 +155,7 @@ class VNviaSGM(BaseEstimator):
         self.b_inds = b_reord[ind2]
         self.n_seeds_used = len(Sx1)
 
-        nomination_list = list(zip(self.b_inds[self.n_seeds_used :], self.P[0]))
+        nomination_list = list(zip(self.b_inds[self.n_seeds_used:], self.P[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
         self.nomination_list = nomination_list
         return self
@@ -146,6 +166,9 @@ class VNviaSGM(BaseEstimator):
 
         Parameters
         ----------
+        voi : int
+            The vertex of interest in A
+
         A : 2d-array, square
             A square adjacency matrix
 
@@ -190,7 +213,7 @@ def _ego(graph_adj_matrix, order, node, mindist=1):
         dists_conglom.extend(cn_proc)
         dists_conglom = list(set(dists_conglom))
 
-    ress = itertools.chain(*dists[mindist : order + 1])
+    ress = itertools.chain(*dists[mindist: order + 1])
 
     return np.array(list(set(ress)))
 

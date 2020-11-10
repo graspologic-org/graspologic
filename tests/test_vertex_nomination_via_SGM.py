@@ -53,7 +53,7 @@ class TestGMP:
     def test_vn_algorithm(self):
         n = 20
         nseeds = 4
-        g1 = er_np(n=n, p=.5)
+        g1 = er_np(n=n, p=0.5)
         node_shuffle = np.random.permutation(n)
         g2 = g1[np.ix_(node_shuffle, node_shuffle)]
 
