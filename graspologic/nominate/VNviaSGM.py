@@ -155,7 +155,7 @@ class VNviaSGM(BaseEstimator):
         self.b_inds = b_reord[ind2]
         self.n_seeds_used = len(Sx1)
 
-        nomination_list = list(zip(self.b_inds[self.n_seeds_used:], self.P[0]))
+        nomination_list = list(zip(self.b_inds[self.n_seeds_used :], self.P[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
         self.nomination_list = nomination_list
         return self
@@ -213,7 +213,7 @@ def _ego(graph_adj_matrix, order, node, mindist=1):
         dists_conglom.extend(cn_proc)
         dists_conglom = list(set(dists_conglom))
 
-    ress = itertools.chain(*dists[mindist: order + 1])
+    ress = itertools.chain(*dists[mindist : order + 1])
 
     return np.array(list(set(ress)))
 
