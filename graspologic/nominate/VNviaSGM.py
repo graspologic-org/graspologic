@@ -94,7 +94,7 @@ class VNviaSGM(BaseEstimator):
         -------
         self: A reference to self
         """
-        if seedsA.shape[0] != seedsB.shape[0]:
+        if len(seedsA) != len(seedsB):
             msg = "Must have the same number of seeds for each adjacency matrix"
             raise ValueError(msg)
         if len(seedsA) == 0:

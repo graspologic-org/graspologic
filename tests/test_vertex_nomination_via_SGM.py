@@ -28,24 +28,24 @@ class TestGMP:
         with pytest.raises(ValueError):
             VNviaSGM().fit(
                 0,
-                np.identity((3, 4)),
-                np.identity((4, 4)),
+                np.random.randn(3, 4),
+                np.random.randn(4, 4),
                 np.arange(2),
                 np.arange(2),
             )
         with pytest.raises(ValueError):
             VNviaSGM().fit(
                 0,
-                np.identity((4, 4)),
-                np.identity((3, 4)),
+                np.random.randn(4, 4),
+                np.random.randn(3, 4),
                 np.arange(2),
                 np.arange(2),
             )
         with pytest.raises(ValueError):
             VNviaSGM().fit(
                 0,
-                np.identity((4, 4)),
-                np.identity((4, 4)),
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
                 np.arange(2),
                 np.arange(3),
             )
@@ -88,7 +88,8 @@ class TestGMP:
         ]
 
         node_shuffle = [12, 5, 8, 4, 0, 14, 13, 1, 7, 2, 3, 10, 6, 11, 9]
-
+        A = np.array(A)
+        B = np.array(B)
         return A, B, node_shuffle
 
     def test_vn_algorithm(self):
@@ -98,12 +99,10 @@ class TestGMP:
         kklst.sort(key=lambda x: x[0])
         kklst = np.array(kklst)
 
-        vnsgm = VNviaSGM()
-
         voi = 5
         nseeds = 4
 
-        nomlst = vnsgm.fit_predict(
+        nomlst = self.vnsgm.fit_predict(
             voi, g1, g2, seedsA=kklst[0:nseeds, 0], seedsB=kklst[0:nseeds, 1]
         )
 
