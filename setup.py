@@ -58,6 +58,7 @@ setup(
         "seaborn>=0.9.0",
         "scikit-learn>=0.19.1",
         "scipy>=1.4.0",
+        "joblib>=0.17.0", # Older versions of joblib cause issue #806.  Transitive dependency of hyppo.
     ],
     extras_require={
         "dev": [
