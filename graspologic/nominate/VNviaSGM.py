@@ -10,6 +10,12 @@ class VNviaSGM(BaseEstimator):
 
     Parameters
     ----------
+    G_1: 2d-array, square
+        Adjacency matrix of `G_1`, the graph where voi is known
+
+    G_2: 2d-array, square
+        Adjacency matrix of `G_2`, the graph where voi is not known
+
     h: int
         distance between voi used to create induced subgraph on `G_1`
 
@@ -52,7 +58,7 @@ class VNviaSGM(BaseEstimator):
 
     """
 
-    def __init__(self, h=1, ell=1, R=100):
+    def __init__(self, G_1, G_2, h=1, ell=1, R=100):
         if type(h) is int and h > 0:
             self.h = h
         else:
@@ -69,31 +75,47 @@ class VNviaSGM(BaseEstimator):
             msg = "R must be an integer > 0"
             raise ValueError(msg)
 
-    def fit(self, voi, A, B, seedsA=[], seedsB=[]):
+        if G_1.shape[0] != G_1.shape[1] or G_2.shape[0] != G_2.shape[1]:
+            msg = "Adjacency matrix entries must be square"
+            raise ValueError(msg)
+        else:
+            self.G_1 = G_1
+            self.G_2 = G_2
+
+    def fit(self, X, y=[]):
         """
         Fits the model to two graphs
 
         Parameters
         ----------
-        voi: int
+        X: int
             Vertex of interest (voi)
 
-        A: 2d-array, square
-            Adjacency matrix of `G_1`, the graph where voi is known
-
-        B: 2d-array, square
-            Adjacency matrix of `G_2`, the graph where voi is not known
-
-        seedsA: list
-            Seeds associated to adjacency matrix A
-
-        seedsB: list
-            Seeds associated to adjacency matrix B `len(seedsA)==len(seedsB)`
+        y: list
+            List of length two `[seedsA, seedsB]` where first element is
+        the seeds associated with adjacency matrix G_1
+        and the second element the adjacency matrix associated with G_2, note
+        `len(seedsA)==len(seedsB)` The elements of `seeds_A` and `seeds_B` are
+        vertices which are known to be matched, that is, `seeds_A[i]` is matched
+        to vertex `seeds_B[i]`.
 
         Returns
         -------
         self: A reference to self
         """
+        voi = X
+
+        if len(y) == 0:
+            print("Must include at least one seed to produce nomination list")
+            return None
+        if len(y) != 2:
+            msg = "List must be length two, with first element containing seeds \
+                  of G_1 and the second containing seeds of G_2"
+            raise ValueError(msg)
+
+        seedsA = y[0]
+        seedsB = y[1]
+
         if len(seedsA) != len(seedsB):
             msg = "Must have the same number of seeds for each adjacency matrix"
             raise ValueError(msg)
@@ -101,22 +123,20 @@ class VNviaSGM(BaseEstimator):
             print("Must include at least one seed to produce nomination list")
             return None
 
-        if B.shape[0] != B.shape[1] or A.shape[0] != A.shape[1]:
-            msg = "Adjacency matrix entries must be square"
-            raise ValueError(msg)
+
 
         voi = np.reshape(np.array(voi), (1,))
 
         # get reordering for A
-        nsx1 = np.setdiff1d(np.arange(A.shape[0]), np.concatenate((seedsA, voi)))
+        nsx1 = np.setdiff1d(np.arange(self.G_1.shape[0]), np.concatenate((seedsA, voi)))
         a_reord = np.concatenate((seedsA, voi, nsx1))
 
         # get reordering for B
-        nsx2 = np.setdiff1d(np.arange(B.shape[0]), seedsB)
+        nsx2 = np.setdiff1d(np.arange(self.G_2.shape[0]), seedsB)
         b_reord = np.concatenate((seedsB, nsx2))
 
-        AA = A[np.ix_(a_reord, a_reord)]
-        BB = B[np.ix_(b_reord, b_reord)]
+        AA = self.G_1[np.ix_(a_reord, a_reord)]
+        BB = self.G_2[np.ix_(b_reord, b_reord)]
 
         seeds_reord = np.arange(len(seedsA))
         voi_reord = len(seedsA)
@@ -160,35 +180,29 @@ class VNviaSGM(BaseEstimator):
         self.nomination_list = nomination_list
         return self
 
-    def fit_predict(self, voi, A, B, seedsA=[], seedsB=[]):
+    def fit_predict(self, X, y=[]):
         """
         Fits model to two adjacenty matricies and returns nomination list
 
         Parameters
         ----------
-        voi : int
-            The vertex of interest in A
+        X: int
+            Vertex of interest (voi)
 
-        A : 2d-array, square
-            A square adjacency matrix
-
-        B : 2d-array, square
-            A square adjacency matrix
-
-        seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in `A`.
-
-        seeds_B : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in `B` The elements of
-            `seeds_A` and `seeds_B` are vertices which are known to be matched, that is,
-            `seeds_A[i]` is matched to vertex `seeds_B[i]`.
+        y: list
+            List of length two `[seedsA, seedsB]` where first element is
+        the seeds associated with adjacency matrix G_1
+        and the second element the adjacency matrix associated with G_2, note
+        `len(seedsA)==len(seedsB)` The elements of `seeds_A` and `seeds_B` are
+        vertices which are known to be matched, that is, `seeds_A[i]` is matched
+        to vertex `seeds_B[i]`.
 
         Returns
         -------
         nomination_list : 1-d array of 2-tuples
             The nomination list containing tuples in form (vertex, probability)
         """
-        retval = self.fit(voi, A, B, seedsA=seedsA, seedsB=seedsB)
+        retval = self.fit(X, y)
 
         if retval is None:
             return None
@@ -197,6 +211,30 @@ class VNviaSGM(BaseEstimator):
 
 
 def _ego(graph_adj_matrix, order, node, mindist=1):
+    """
+    Generates a vertex list for the induced subgraph about a node with
+    max and min distance parameters.
+
+    Parameters
+    ----------
+    graph_adj_matrix: 2-d array
+        Adjacency matrix of interest.
+
+    order: int
+        Distance to create the induce subgraph with. Max distance away from
+    the node to include in subgraph.
+
+    node: int
+        The vertex to center the induced subgraph about.
+
+    mindist: int
+        The minimum distance away from the node to include in the subgraph.
+
+    Returns
+    -------
+    induced_subgraph : list
+        The list containing all the vertices in the induced subgraph.
+    """
     # Note all nodes are zero based in this implementation, i.e the first node is 0
     dists = [[node]]
     dists_conglom = [node]
@@ -219,6 +257,30 @@ def _ego(graph_adj_matrix, order, node, mindist=1):
 
 
 def _ego_list(graph_adj_matrix, order, node, mindist=1):
+    """
+    Generates a vertex list for the induced subgraph about a node with
+    max and min distance parameters.
+
+    Parameters
+    ----------
+    graph_adj_matrix: 2-d array
+        Adjacency matrix of interest.
+
+    order: int
+        Distance to create the induce subgraph with. Max distance away from
+    the node to include in subgraph.
+
+    node: int or list
+        The list of vertices to center the induced subgraph about.
+
+    mindist: int
+        The minimum distance away from the node to include in the subgraph.
+
+    Returns
+    -------
+    induced_subgraph : list
+        The list containing all the vertices in the induced subgraph.
+    """
     if type(node) == list:
         total_res = []
         for nn in node:
