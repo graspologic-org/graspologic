@@ -154,9 +154,10 @@ class VNviaSGM(BaseEstimator):
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 
+        b_inds = b_reord[ind2]
         self.n_seeds_used = len(Sx1)
 
-        nomination_list = list(zip(self.b_inds[self.n_seeds_used :], self.P[0]))
+        nomination_list = list(zip(b_inds[self.n_seeds_used :], P_outp[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
         self.nomination_list = nomination_list
         return self
