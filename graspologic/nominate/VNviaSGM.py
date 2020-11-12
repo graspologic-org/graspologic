@@ -123,8 +123,6 @@ class VNviaSGM(BaseEstimator):
             print("Must include at least one seed to produce nomination list")
             return None
 
-
-
         voi = np.reshape(np.array(voi), (1,))
 
         # get reordering for A
