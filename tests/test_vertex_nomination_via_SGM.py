@@ -7,10 +7,6 @@ np.random.seed(0)
 
 
 class TestGMP:
-    @classmethod
-    def setup_class(cls):
-        cls.vnsgm = VNviaSGM()
-
     def test_VNviaSGM_inputs(self):
         with pytest.raises(ValueError):
             VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4), h=-1)
