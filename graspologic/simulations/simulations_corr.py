@@ -217,9 +217,9 @@ def sbm_corr(n, p, r, directed=False, loops=False):
         Number of vertices in each community. Communities are assigned n[0], n[1], ...
 
     p: array-like, shape (n_communities, n_communities)
-        Probability of an edge between each of the communities, where p[i, j] indicates
-        the probability of a connection between edges in communities [i, j].
-        0 < p[i, j] < 1 for all i, j.
+        Probability of an edge between each of the communities, where ``p[i, j]`` indicates
+        the probability of a connection between edges in communities ``[i, j]``.
+        ``0 < p[i, j] < 1`` for all ``i, j``.
 
     r: float
         Probability of the correlation between the same vertices in two graphs.

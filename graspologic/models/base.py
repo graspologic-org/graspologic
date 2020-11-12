@@ -93,7 +93,7 @@ class BaseGraphEstimator(BaseEstimator):
         Parameters
         ----------
         graph : np.ndarray
-            Input graph. Must be same shape as model's ``p_mat_`` attribute
+            Input graph. Must be same shape as model's :attr:`p_mat_` attribute
 
         clip : scalar or None, optional (default=None)
             Values for which to clip probability matrix, entries less than c or more
@@ -153,7 +153,7 @@ class BaseGraphEstimator(BaseEstimator):
         Parameters
         ----------
         graph : np.ndarray
-            Input graph. Must be same shape as model's ``p_mat_`` attribute
+            Input graph. Must be same shape as model's :attr:`p_mat_` attribute
 
         Returns
         -------
