@@ -83,7 +83,7 @@ class TestGMP:
         kklst.sort(key=lambda x: x[0])
         kklst = np.array(kklst)
 
-        voi = 5
+        voi = 6
         nseeds = 4
 
         vnsgm = VNviaSGM(g1, g2)
