@@ -16,6 +16,8 @@ Transformations
 
 .. autofunction:: remove_loops
 
+.. autofunction:: remove_vertices
+
 Connected Components
 --------------------
 
