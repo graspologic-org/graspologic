@@ -684,7 +684,8 @@ def _plot_ellipse(
     corresponds to x-axis
     and k corresponds to the y-axis onto the axis that is ax. plot_ellipse then
     applies a gmm ellipse onto the scatterplot
-    using the data from Y_, means, covariances.
+    using the data from Y_(which is stored in data["clusters"]),
+    means, covariances.
 
     Parameters
     ----------
@@ -753,10 +754,12 @@ def pairplot_with_gmm(
     gmm: Gaussian Mixture Model object
     labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
-    label_palette : str or dict, optional, default: dictionary using 'Set1'
+    label_palette : str or dict, optional,
+        with no input : dictionary using 'Set1'
     cluster_palette : str or dict, optional, default: dictionary using 'Set1'
-    title : string, default : 'Degree plot'
-        Plot title
+        with no input : dictionary using 'Set1'
+    title : string
+        default : "Fit a Gaussian mixture using " + n_comps + " components"
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
