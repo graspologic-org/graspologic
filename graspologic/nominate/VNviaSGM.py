@@ -27,19 +27,6 @@ class VNviaSGM(BaseEstimator):
 
     Attributes
     ----------
-    P : 2d-array, square
-        The probability array that describes the probability `P[i, j]` that row `i` in `a_inds`
-        matches `j` in `b_inds`
-
-    corr : 1d-array
-        The matrix that maps values from `a_inds` to `b_inds`
-
-    a_inds: 1d-array
-        Array of indices in the induced subgraph of A that will be matched to `b_inds`
-
-    b_inds: 1d-array
-        Array of indices in the induced subgraph of B that will be matched to `a_inds`
-
     n_seeds_used: int
         Number of seeds passed in `seedsA` that occured in the induced subgraph about `voi`
 
@@ -167,10 +154,6 @@ class VNviaSGM(BaseEstimator):
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 
-        self.P = P_outp
-        self.corr = corr
-        self.a_inds = a_reord[ind1]
-        self.b_inds = b_reord[ind2]
         self.n_seeds_used = len(Sx1)
 
         nomination_list = list(zip(self.b_inds[self.n_seeds_used :], self.P[0]))
