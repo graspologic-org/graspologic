@@ -791,37 +791,37 @@ def pairplot_with_gmm(
     Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
     data = pd.DataFrame(data=X)
     n_components = gmm.n_components
-    #setting up the data DataFrame
+    # setting up the data DataFrame
     if labels is None:
         lab_names = [i for i in range(n_components)]
         data["labels"] = np.asarray([lab_names[Y_[i]] for i in range(Y_.shape[0])])
     else:
         data["labels"] = labels
     data["clusters"] = Y_
-    #creating a cluster_palette from a stirng  only if labels is given
+    # creating a cluster_palette from a stirng  only if labels is given
     if isinstance(cluster_palette, str) and labels is not None:
         colors = sns.color_palette(cluster_palette, n_components)
         cluster_palette = dict(zip(np.unique(Y_), colors))
-    #creating a label_palette from a stirng  only if labels is given
-    #note that these can be same string and mapping would be same for both
+    # creating a label_palette from a stirng  only if labels is given
+    # note that these can be same string and mapping would be same for both
     if isinstance(label_palette, str) and labels is not None:
         colors = sns.color_palette(label_palette, n_components)
         label_palette = dict(zip(np.unique(np.asarray(labels)), colors))
-    #must give labels AND palettes
+    # must give labels AND palettes
     if (labels is not None) and (cluster_palette is None or label_palette is None):
         msg = "if give labels array must give palette dicts or string desciptors"
         raise ValueError(msg)
     elif labels is None and (cluster_palette is not None or label_palette is not None):
         msg = "must give labels if using palettes for labels and clusters"
         raise ValueError(msg)
-    #This takes care of default case, when no palettes or labels given
+    # This takes care of default case, when no palettes or labels given
     elif labels is None and cluster_palette is None and label_palette is None:
         colors = sns.color_palette("Set1", n_components)
         cluster_palette = dict(zip(np.unique(lab_names), colors))
         label_palette = dict(zip(np.unique(lab_names), colors))
 
     with sns.plotting_context(context=context, font_scale=font_scale):
-        #handle the case where only given two dims
+        # handle the case where only given two dims
         if X.shape[1] == 2:
             pairplot, axes = plt.subplots(1, 1, figsize=(12, 12))
             _plot_ellipse(
@@ -836,7 +836,7 @@ def pairplot_with_gmm(
                 cluster_palette,
                 alpha=alpha,
             )
-            #formatting
+            # formatting
             axes.set_ylabel("Dim " + str(0))
             axes.set_xlabel("Dim " + str(1))
             axes.label_outer()
@@ -860,12 +860,12 @@ def pairplot_with_gmm(
                     + " components"
                 )
             return pairplot
-        #for the case with more than 2 dims
+        # for the case with more than 2 dims
         pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=(12, 12))
         for k in range(X.shape[1]):
             for j in range(X.shape[1]):
                 if k == j:
-                    #take care of the distplot on diagonal
+                    # take care of the distplot on diagonal
                     for t, lab in zip([i for i in range(X.shape[1])], label_palette):
                         sns.distplot(
                             X[Y_ == t, k],
@@ -877,7 +877,7 @@ def pairplot_with_gmm(
                     axes[k, j].set_ylabel(None)
                     axes[k, j].set_ylabel(j), axes[k, j].set_xlabel(k)
                 else:
-                    #take care off off-diagonal scatterplots
+                    # take care off off-diagonal scatterplots
                     _plot_ellipse(
                         data,
                         X,
@@ -890,7 +890,7 @@ def pairplot_with_gmm(
                         cluster_palette,
                         alpha=alpha,
                     )
-        #formatting
+        # formatting
         for i in range(X.shape[1]):
             for j in range(X.shape[1]):
                 axes[i, j].set_ylabel("Dim " + str(i))
