@@ -728,6 +728,7 @@ def _plot_ellipse(
         ax.add_artist(ell)
         ax.set_xticks([]), ax.set_yticks([])
         ax.set_ylabel(k), ax.set_xlabel(k)
+        ax.legend().remove()
 
 
 def pairplot_with_gmm(
@@ -832,6 +833,14 @@ def pairplot_with_gmm(
             axes.label_outer()
             axes.spines["right"].set_visible(False)
             axes.spines["top"].set_visible(False)
+            handles, labels = [], []
+            handles_, labels_ = axes.get_legend_handles_labels()
+            handles += handles_
+            labels += labels_
+            pairplot.legend(
+                handles[: means.shape[0] + 1], labels[: means.shape[0] + 1],
+                loc="upper right"
+            )
             if title:
                 pairplot.suptitle(title)
             else:
@@ -882,14 +891,13 @@ def pairplot_with_gmm(
         for ax in axes.flat:
             ax.label_outer()
             ax.spines["right"].set_visible(False)
-            ax.spines["top"].set_visible(False)
-            ax.legend().remove()
+            ax.spines["top"].set_visible(False)            
             handles_, labels_ = ax.get_legend_handles_labels()
             handles += handles_
             labels += labels_
 
         pairplot.legend(
-            handles[: means.shape[0]], labels[: means.shape[0]], loc="upper right"
+            handles[: means.shape[0] + 1], labels[: means.shape[0] + 1], loc="upper right"
         )
 
 
