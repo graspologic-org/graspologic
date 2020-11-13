@@ -760,7 +760,7 @@ def pairplot_with_gmm(
     cluster_palette : str or dict, optional, default: dictionary using 'Set1'
         with no input : dictionary using 'Set1'
     title : string
-        default : "Fit a Gaussian mixture using " + n_comps + " components"
+        default : "Fit a Gaussian mixture using " + n_components + " components"
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
@@ -790,24 +790,24 @@ def pairplot_with_gmm(
         raise NameError(msg)
     Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
     data = pd.DataFrame(data=X)
-    num_comps = gmm.n_components
+    n_components = gmm.n_components
     if labels is None:
-        lab_names = [i for i in range(num_comps)]
+        lab_names = [i for i in range(n_components)]
         data["labels"] = np.asarray([lab_names[Y_[i]] for i in range(Y_.shape[0])])
     else:
         data["labels"] = labels
     data["clusters"] = Y_
     if isinstance(cluster_palette, str) and labels is not None:
-        colors = sns.color_palette(cluster_palette, num_comps)
+        colors = sns.color_palette(cluster_palette, n_components)
         cluster_palette = dict(zip(np.unique(Y_), colors))
     if isinstance(label_palette, str) and labels is not None:
-        colors = sns.color_palette(label_palette, num_comps)
+        colors = sns.color_palette(label_palette, n_components)
         label_palette = dict(zip(np.unique(np.asarray(labels)), colors))
     if (labels is not None) and (cluster_palette is None or label_palette is None):
         msg = "if give labels array must give palette dicts or string desciptors"
         raise ValueError(msg)
     elif labels is None and cluster_palette is None and label_palette is None:
-        colors = sns.color_palette("Set1", num_comps)
+        colors = sns.color_palette("Set1", n_components)
         cluster_palette = dict(zip(np.unique(lab_names), colors))
         label_palette = dict(zip(np.unique(lab_names), colors))
     elif labels is None and (cluster_palette is not None or label_palette is not None):
@@ -838,8 +838,9 @@ def pairplot_with_gmm(
             handles += handles_
             labels += labels_
             pairplot.legend(
-                handles[: means.shape[0] + 1], labels[: means.shape[0] + 1],
-                loc="upper right"
+                handles[: means.shape[0] + 1],
+                labels[: means.shape[0] + 1],
+                loc="upper right",
             )
             if title:
                 pairplot.suptitle(title)
@@ -891,13 +892,15 @@ def pairplot_with_gmm(
         for ax in axes.flat:
             ax.label_outer()
             ax.spines["right"].set_visible(False)
-            ax.spines["top"].set_visible(False)            
+            ax.spines["top"].set_visible(False)
             handles_, labels_ = ax.get_legend_handles_labels()
             handles += handles_
             labels += labels_
 
         pairplot.legend(
-            handles[: means.shape[0] + 1], labels[: means.shape[0] + 1], loc="upper right"
+            handles[: means.shape[0] + 1],
+            labels[: means.shape[0] + 1],
+            loc="upper right",
         )
 
 
