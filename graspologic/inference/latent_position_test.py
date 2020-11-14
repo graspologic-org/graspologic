@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
-# Test
+
 import numpy as np
 
 from scipy.linalg import orthogonal_procrustes
