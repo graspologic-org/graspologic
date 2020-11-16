@@ -779,7 +779,6 @@ def remap_labels(
     y_true = column_or_1d(y_true)
     y_pred = column_or_1d(y_pred)
 
-    # _check_targets(y_true, y_pred)
     if not isinstance(return_map, bool):
         raise TypeError("return_map must be of type bool.")
 
