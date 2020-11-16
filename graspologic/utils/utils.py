@@ -5,10 +5,15 @@ import warnings
 from collections import Iterable
 from functools import reduce
 from pathlib import Path
+from typing import List, Union
 
 import networkx as nx
 import numpy as np
-from sklearn.utils import check_array
+import pandas as pd
+from scipy.optimize import linear_sum_assignment
+from sklearn.metrics import confusion_matrix
+from sklearn.utils import check_array, check_consistent_length, column_or_1d
+from sklearn.utils.multiclass import type_of_target, unique_labels
 
 
 def import_graph(graph, copy=True):
@@ -701,3 +706,89 @@ def fit_plug_in_variance_estimator(X):
         return covariances
 
     return plug_in_variance_estimator
+
+
+def remap_labels(
+    y_true: Union[List, np.ndarray, pd.Series],
+    y_pred: Union[List, np.ndarray, pd.Series],
+    return_map: bool = False,
+) -> np.ndarray:
+    """
+    Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
+    match the labels used by another similar labeling.
+
+    Given two :math:`n`-length vectors describing a categorical labeling of :math:`n`
+    samples, this method reorders the labels of the second vector (`y_pred`) so that as
+    many samples as possible from the two label vectors are in the same category.
+
+
+    Parameters
+    ----------
+    y_true : array-like of shape (n_samples,)
+        Ground truth labels, or, labels to map to.
+    y_pred : array-like of shape (n_samples,)
+        Labels to remap to match the categorical labeling of `y_true`. The categorical
+        labeling of `y_pred` will be preserved exactly, but the labels used to
+        denote the categories will be changed to best match the categories used in
+        `y_true`.
+    return_map : bool, optional
+        Whether to return a dictionary where the keys are the original category labels
+        from `y_pred` and the values are the new category labels that they were mapped
+        to.
+
+    Returns
+    -------
+    remapped_y_pred : np.ndarray of shape (n_samples,)
+        Same categorical labeling as that of `y_pred`, but with the category labels
+        permuted to best match those of `y_true`.
+    label_map : dict
+        Mapping from the original labels of `y_pred` to the new labels which best
+        resemble those of `y_true`. Only returned if `return_map` was True.
+
+    Examples
+    --------
+    >>> y_true = np.array([0,0,1,1,2,2])
+    >>> y_pred = np.array([2,2,1,1,0,0])
+    >>> remap_labels(y_true, y_pred)
+    array([0, 0, 1, 1, 2, 2])
+
+    Notes
+    -----
+    This method will work well when the label vectors describe a somewhat similar
+    categorization of the data (as measured by metrics such as
+    :func:`sklearn.metrics.adjusted_rand_score`, for example). When the categorizations
+    are not similar, the remapping may not make sense (as such a remapping does not
+    exist).
+
+    For example, consider when one category in `y_true` is exactly split in half into
+    two categories in `y_pred`. If this is the case, it is impossible to say which of
+    the categories in `y_pred` match that original category from `y_true`.
+    """
+    check_consistent_length(y_true, y_pred)
+    true_type = type_of_target(y_true)
+    pred_type = type_of_target(y_pred)
+
+    valid_target_types = {"binary", "multiclass"}
+    if (true_type not in valid_target_types) or (pred_type not in valid_target_types):
+        msg = "Elements of `y_true` and `y_pred` must represent a valid binary or "
+        msg += "multiclass labeling, see "
+        msg += "https://scikit-learn.org/stable/modules/generated/sklearn.utils.multiclass.type_of_target.html"
+        msg += " for more information."
+        raise ValueError(msg)
+
+    y_true = column_or_1d(y_true)
+    y_pred = column_or_1d(y_pred)
+
+    if not isinstance(return_map, bool):
+        raise TypeError("return_map must be of type bool.")
+
+    labels = unique_labels(y_true, y_pred)
+    confusion_mat = confusion_matrix(y_true, y_pred, labels=labels)
+    row_inds, col_inds = linear_sum_assignment(confusion_mat, maximize=True)
+    label_map = dict(zip(labels[col_inds], labels[row_inds]))
+
+    remapped_y_pred = np.vectorize(label_map.get)(y_pred)
+    if return_map:
+        return remapped_y_pred, label_map
+    else:
+        return remapped_y_pred
