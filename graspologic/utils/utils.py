@@ -717,9 +717,9 @@ def remap_labels(
     Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
     match the labels used by another similar labeling.
 
-    Given two $n$-length vectors describing a categorical labeling of $n$ samples, this
-    method reorders the labels of the second vector (`y_pred`) so that as many samples
-    as possible from the two label vectors are in the same category.
+    Given two :math:`n`-length vectors describing a categorical labeling of :math:`n`
+    samples, this method reorders the labels of the second vector (`y_pred`) so that as
+    many samplesas possible from the two label vectors are in the same category.
 
 
     Parameters
