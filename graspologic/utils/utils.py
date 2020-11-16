@@ -12,9 +12,8 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import linear_sum_assignment
 from sklearn.metrics import confusion_matrix
-from sklearn.metrics._classification import _check_targets
-from sklearn.utils import check_array
-from sklearn.utils.multiclass import unique_labels
+from sklearn.utils import check_array, check_consistent_length, column_or_1d
+from sklearn.utils.multiclass import type_of_target, unique_labels
 
 
 def import_graph(graph, copy=True):
@@ -765,8 +764,22 @@ def remap_labels(
     two categories in `y_pred`. If this is the case, it is impossible to say which of
     the categories in `y_pred` match that original category from `y_true`.
     """
+    check_consistent_length(y_true, y_pred)
+    true_type = type_of_target(y_true)
+    pred_type = type_of_target(y_pred)
 
-    _check_targets(y_true, y_pred)
+    valid_target_types = {"binary", "multiclass"}
+    if (true_type not in valid_target_types) or (pred_type not in valid_target_types):
+        msg = "Elements of `y_true` and `y_pred` must represent a valid binary or "
+        msg += "multiclass labeling, see "
+        msg += "https://scikit-learn.org/stable/modules/generated/sklearn.utils.multiclass.type_of_target.html"
+        msg += " for more information."
+        raise ValueError(msg)
+
+    y_true = column_or_1d(y_true)
+    y_pred = column_or_1d(y_pred)
+
+    # _check_targets(y_true, y_pred)
     if not isinstance(return_map, bool):
         raise TypeError("return_map must be of type bool.")
 
