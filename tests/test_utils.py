@@ -590,4 +590,3 @@ class TestToWeightedEdgeList(unittest.TestCase):
             gus.to_weighted_edge_list(np.array(data))
         with self.assertRaises(ValueError):
             gus.to_weighted_edge_list(scipy.sparse.csr_matrix(data))
-

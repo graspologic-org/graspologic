@@ -43,6 +43,48 @@ def _validate_and_build_edge_list(
     )
 
 
+def _validate_common_arguments(
+    starting_communities: Optional[Dict[str, int]] = None,
+    iterations: int = 1,
+    resolution: float = 1.0,
+    randomness: float = 0.001,
+    use_modularity: bool = True,
+    random_seed: Optional[int] = None,
+    is_weighted: Optional[bool] = None,
+    weight_default: float = 1.0,
+    check_directed: bool = True,
+):
+    if starting_communities is not None and not isinstance(starting_communities, dict):
+        raise TypeError("starting_communities must be a dictionary")
+    if not isinstance(iterations, int):
+        raise TypeError("iterations must be an int")
+    if not isinstance(resolution, (int, float)):
+        raise TypeError("resolution must be a float")
+    if not isinstance(randomness, (int, float)):
+        raise TypeError("randomness must be a float")
+    if not isinstance(use_modularity, bool):
+        raise TypeError("use_modularity must be a bool")
+    if random_seed is not None and not isinstance(random_seed, int):
+        raise TypeError("random_seed must either be an int or None")
+    if is_weighted is not None and not isinstance(is_weighted, bool):
+        raise TypeError("is_weighted must either be a bool or None")
+    if not isinstance(weight_default, (int, float)):
+        raise TypeError("weight_default must be a float")
+    if not isinstance(check_directed, bool):
+        raise TypeError("check_directed must be a bool")
+
+    if iterations < 1:
+        raise ValueError("iterations must be a positive integer")
+    if resolution <= 0:
+        raise ValueError("resolution must be a positive float")
+    if randomness <= 0:
+        raise ValueError("randomness must be a positive float")
+    if random_seed is not None and random_seed <= 0:
+        raise ValueError(
+            "random_seed must be a positive integer (the native PRNG implementation is an unsigned 64 bit integer)"
+        )
+
+
 def leiden(
     graph: Union[
         List[Tuple[Any, Any, Union[int, float]]],
@@ -127,22 +169,36 @@ def leiden(
 
     See Also
     --------
-    graspologic.utils.to_weighted_edge_list()
-    `graspologic native <https://github.com/microsoft/graspologic-native_>`
+    graspologic.utils.to_weighted_edge_list
 
     References
     ----------
     .. [1] Traag, V.A.; Waltman, L.; Van, Eck N.J. "From Louvain to Leiden: guaranteeing well-connected communities",
          Scientific Reports, Vol. 9, 2019
+    .. [2] https://github.com/microsoft/graspologic-native
 
     Notes
     -----
     This function is implemented in the `graspologic-native` Python module, a module written in Rust for Python.
 
     """
+    _validate_common_arguments(
+        starting_communities,
+        iterations,
+        resolution,
+        randomness,
+        use_modularity,
+        random_seed,
+        is_weighted,
+        weight_default,
+        check_directed,
+    )
     graph = _validate_and_build_edge_list(
         graph, is_weighted, weight_attribute, check_directed, weight_default
     )
+
+    if iterations < 1:
+        raise ValueError("iterations must be > 1")
 
     _improved, _modularity, partitions = gn.leiden(
         edges=graph,
@@ -168,6 +224,10 @@ class HierarchicalCluster(NamedTuple):
     def from_native(
         cls, native_cluster: gn.HierarchicalCluster
     ) -> "HierarchicalCluster":
+        if not isinstance(native_cluster, gn.HierarchicalCluster):
+            raise TypeError(
+                "This class method is only valid for graspologic_native.HierarchicalCluster"
+            )
         return cls(
             node=native_cluster.node,
             cluster=native_cluster.cluster,
@@ -178,8 +238,14 @@ class HierarchicalCluster(NamedTuple):
 
     @staticmethod
     def final_hierarchical_clustering(
-        hierarchical_clusters: List["HierarchicalCluster"],
+        hierarchical_clusters: List[
+            Union["HierarchicalCluster", gn.HierarchicalCluster]
+        ],
     ) -> Dict[str, int]:
+        if not isinstance(hierarchical_clusters, list):
+            raise TypeError(
+                "This static method requires a list of hierarchical clusters"
+            )
         final_clusters = (
             cluster for cluster in hierarchical_clusters if cluster.is_final_cluster
         )
@@ -215,7 +281,7 @@ def hierarchical_leiden(
     ``max_cluster_size`` OR we are unable to break them down any further.
 
     Once a node's membership registration in a community cannot be changed any further, it is marked with the flag
-    `graspologic.partition.HierarchicalCluster.is_final_cluster = 1.
+    ``graspologic.partition.HierarchicalCluster.is_final_cluster = 1``.
 
     Parameters
     ----------
@@ -288,19 +354,35 @@ def hierarchical_leiden(
 
     See Also
     --------
-    graspologic.utils.to_weighted_edge_list()
-    `graspologic native <https://github.com/microsoft/graspologic-native_>`
+    graspologic.utils.to_weighted_edge_list
 
     References
     ----------
     .. [1] Traag, V.A.; Waltman, L.; Van, Eck N.J. "From Louvain to Leiden: guaranteeing well-connected communities",
          Scientific Reports, Vol. 9, 2019
+    .. [2] https://github.com/microsoft/graspologic-native
 
     Notes
     -----
     This function is implemented in the `graspologic-native` Python module, a module written in Rust for Python.
 
     """
+    _validate_common_arguments(
+        starting_communities,
+        iterations,
+        resolution,
+        randomness,
+        use_modularity,
+        random_seed,
+        is_weighted,
+        weight_default,
+        check_directed,
+    )
+    if not isinstance(max_cluster_size, int):
+        raise TypeError("max_cluster_size must be an int")
+    if max_cluster_size <= 0:
+        raise ValueError("max_cluster_size must be a positive int")
+
     graph = _validate_and_build_edge_list(
         graph, is_weighted, weight_attribute, check_directed, weight_default
     )

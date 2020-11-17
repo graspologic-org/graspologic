@@ -35,7 +35,7 @@ def _assertions(
         raise ValueError(
             "Multigraphs must be provided in the form of a non multigraph."
         )
-    if not nx.is_weighted(graph, weight_attribute):
+    if not nx.is_weighted(graph, weight=weight_attribute):
         raise ValueError(
             f"weight_attribute {weight_attribute} not found on every edge in the provided graph"
         )
@@ -82,9 +82,9 @@ def modularity(
         If ``graph`` is directed
         If ``graph`` is a multigraph
 
-    See Also
-    --------
-    https://en.wikipedia.org/wiki/Modularity_(networks)
+    References
+    ----------
+    .. [1] https://en.wikipedia.org/wiki/Modularity_(networks)
     """
     _assertions(graph, partitions, weight_attribute, resolution)
 

@@ -849,19 +849,19 @@ def remap_labels(
 
 
 def to_weighted_edge_list(
-        graph: Union[
-            List[Tuple[Any, Any, Union[float, int]]],
-            nx.Graph,
-            nx.DiGraph,
-            nx.MultiGraph,
-            nx.MultiDiGraph,
-            np.ndarray,
-            scipy.sparse.csr.csr_matrix,
-        ],
-        is_directed: Optional[bool] = None,
-        is_weighted: Optional[bool] = None,
-        weight_attribute: Any = "weight",
-        weight_default: Optional[float] = None,
+    graph: Union[
+        List[Tuple[Any, Any, Union[float, int]]],
+        nx.Graph,
+        nx.DiGraph,
+        nx.MultiGraph,
+        nx.MultiDiGraph,
+        np.ndarray,
+        scipy.sparse.csr.csr_matrix,
+    ],
+    is_directed: Optional[bool] = None,
+    is_weighted: Optional[bool] = None,
+    weight_attribute: Any = "weight",
+    weight_default: Optional[float] = None,
 ) -> List[Tuple[str, str, float]]:
     """
     Creates a weighted edge list with string representations of the nodes and float weights.
