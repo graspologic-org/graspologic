@@ -17,13 +17,13 @@ class GaussianCluster(BaseCluster):
     Representation of a Gaussian mixture model probability distribution.
     This class allows to estimate the parameters of a Gaussian mixture
     distribution. It computes all possible models from one component to
-    max_components. The best model is given by the lowest BIC score.
+    ``max_components``. The best model is given by the lowest BIC score.
 
     Parameters
     ----------
     min_components : int, default=2.
         The minimum number of mixture components to consider (unless
-        ``max_components=None``, in which case this is the maximum number of
+        ``max_components`` is None, in which case this is the maximum number of
         components to consider). If ``max_componens`` is not None, ``min_components``
         must be less than or equal to ``max_components``.
 
@@ -73,7 +73,7 @@ class GaussianCluster(BaseCluster):
 
     random_state : int, RandomState instance or None, optional (default=None)
         If int, ``random_state`` is the seed used by the random number generator;
-        If RandomState instance, random_state is the random number generator;
+        If RandomState instance, ``random_state`` is the random number generator;
         If None, the random number generator is the RandomState instance used
         by ``np.random``.
 
@@ -89,12 +89,12 @@ class GaussianCluster(BaseCluster):
         and optimal covariance structure.
     bic_ : pandas.DataFrame
         A pandas DataFrame of BIC values computed for all possible number of clusters
-        given by range(min_components, max_components + 1) and all covariance
-        structures given by covariance_type.
+        given by ``range(min_components, max_components + 1)`` and all covariance
+        structures given by :attr:`covariance_type`.
     ari_ : pandas.DataFrame
         Only computed when y is given. Pandas Dataframe containing ARI values computed
-        for all possible number of clusters given by ``r``ange(min_components,
-        max_components)`` and all covariance structures given by covariance_type.
+        for all possible number of clusters given by ``range(min_components,
+        max_components)`` and all covariance structures given by :attr:`covariance_type`.
     """
 
     def __init__(

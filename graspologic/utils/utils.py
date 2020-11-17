@@ -7,10 +7,15 @@ from functools import reduce
 from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
 
+
 import networkx as nx
 import numpy as np
 import scipy
-from sklearn.utils import check_array
+import pandas as pd
+from scipy.optimize import linear_sum_assignment
+from sklearn.metrics import confusion_matrix
+from sklearn.utils import check_array, check_consistent_length, column_or_1d
+from sklearn.utils.multiclass import type_of_target, unique_labels
 
 
 def import_graph(graph, copy=True):
@@ -94,7 +99,7 @@ def import_edgelist(
        Convert node data from strings to specified type.
 
     return_vertices : bool, default=False, optional
-        Returns the union of all ind
+        Returns the union of all individual edgelists.
 
     Returns
     -------
@@ -103,7 +108,7 @@ def import_edgelist(
         an array is returned.
 
     vertices : array-like, shape (n_vertices, )
-        If ``return_vertices`` == True, then returns an array of all vertices that were
+        If ``return_vertices``` is True, then returns an array of all vertices that were
         included in the output graphs.
     """
     # p = Path(path)
@@ -303,7 +308,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     matrix of degrees of each node raised to the -1/2 power, I is the
     identity matrix, and A is the adjacency matrix.
 
-    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer*I`.
+    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer \times I`.
 
     Parameters
     ----------
@@ -314,16 +319,16 @@ def to_laplace(graph, form="DAD", regularizer=None):
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
 
         - 'I-DAD'
-            Computes :math:`L = I - D_i*A*D_i`
+            Computes :math:`L = I - D_i A D_i`
         - 'DAD'
-            Computes :math:`L = D_o*A*D_i`
+            Computes :math:`L = D_o A D_i`
         - 'R-DAD'
-            Computes :math:`L = D_o^r*A*D_i^r`
-            where :math:`D_o^r = D_o + regularizer * I` and likewise for :math:`D_i`
+            Computes :math:`L = D_o^r A D_i^r`
+            where :math:`D_o^r = D_o + regularizer \times I` and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
         Constant to add to the degree vector(s). If None, average node degree is added.
-        If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
+        If int or float, must be >= 0. Only used when ``form`` is 'R-DAD'.
 
     Returns
     -------
@@ -404,7 +409,7 @@ def is_fully_connected(graph):
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case.
 
-    Connected means one can get from any vertex u to vertex v by traversing
+    Connected means one can get from any vertex :math:`u` to vertex :math:`v` by traversing
     the graph. For a directed graph, weakly connected means that the graph
     is connected after it is converted to an unweighted graph (ignore the
     direction of each edge)
@@ -757,20 +762,106 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
+def remap_labels(
+    y_true: Union[List, np.ndarray, pd.Series],
+    y_pred: Union[List, np.ndarray, pd.Series],
+    return_map: bool = False,
+) -> np.ndarray:
+    """
+    Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
+    match the labels used by another similar labeling.
+
+    Given two :math:`n`-length vectors describing a categorical labeling of :math:`n`
+    samples, this method reorders the labels of the second vector (`y_pred`) so that as
+    many samples as possible from the two label vectors are in the same category.
+
+
+    Parameters
+    ----------
+    y_true : array-like of shape (n_samples,)
+        Ground truth labels, or, labels to map to.
+    y_pred : array-like of shape (n_samples,)
+        Labels to remap to match the categorical labeling of `y_true`. The categorical
+        labeling of `y_pred` will be preserved exactly, but the labels used to
+        denote the categories will be changed to best match the categories used in
+        `y_true`.
+    return_map : bool, optional
+        Whether to return a dictionary where the keys are the original category labels
+        from `y_pred` and the values are the new category labels that they were mapped
+        to.
+
+    Returns
+    -------
+    remapped_y_pred : np.ndarray of shape (n_samples,)
+        Same categorical labeling as that of `y_pred`, but with the category labels
+        permuted to best match those of `y_true`.
+    label_map : dict
+        Mapping from the original labels of `y_pred` to the new labels which best
+        resemble those of `y_true`. Only returned if `return_map` was True.
+
+    Examples
+    --------
+    >>> y_true = np.array([0,0,1,1,2,2])
+    >>> y_pred = np.array([2,2,1,1,0,0])
+    >>> remap_labels(y_true, y_pred)
+    array([0, 0, 1, 1, 2, 2])
+
+    Notes
+    -----
+    This method will work well when the label vectors describe a somewhat similar
+    categorization of the data (as measured by metrics such as
+    :func:`sklearn.metrics.adjusted_rand_score`, for example). When the categorizations
+    are not similar, the remapping may not make sense (as such a remapping does not
+    exist).
+
+    For example, consider when one category in `y_true` is exactly split in half into
+    two categories in `y_pred`. If this is the case, it is impossible to say which of
+    the categories in `y_pred` match that original category from `y_true`.
+    """
+    check_consistent_length(y_true, y_pred)
+    true_type = type_of_target(y_true)
+    pred_type = type_of_target(y_pred)
+
+    valid_target_types = {"binary", "multiclass"}
+    if (true_type not in valid_target_types) or (pred_type not in valid_target_types):
+        msg = "Elements of `y_true` and `y_pred` must represent a valid binary or "
+        msg += "multiclass labeling, see "
+        msg += "https://scikit-learn.org/stable/modules/generated/sklearn.utils.multiclass.type_of_target.html"
+        msg += " for more information."
+        raise ValueError(msg)
+
+    y_true = column_or_1d(y_true)
+    y_pred = column_or_1d(y_pred)
+
+    if not isinstance(return_map, bool):
+        raise TypeError("return_map must be of type bool.")
+
+    labels = unique_labels(y_true, y_pred)
+    confusion_mat = confusion_matrix(y_true, y_pred, labels=labels)
+    row_inds, col_inds = linear_sum_assignment(confusion_mat, maximize=True)
+    label_map = dict(zip(labels[col_inds], labels[row_inds]))
+
+    remapped_y_pred = np.vectorize(label_map.get)(y_pred)
+    if return_map:
+        return remapped_y_pred, label_map
+    else:
+        return remapped_y_pred
+
+
 def to_weighted_edge_list(
-    graph: Union[
-        List[Tuple[Any, Any, Union[float, int]]],
-        nx.Graph,
-        nx.DiGraph,
-        nx.MultiGraph,
-        nx.MultiDiGraph,
-        np.ndarray,
-        scipy.sparse.csr.csr_matrix,
-    ],
-    is_directed: Optional[bool] = None,
-    is_weighted: Optional[bool] = None,
-    weight_attribute: Any = "weight",
-    weight_default: Optional[float] = None,
+        graph: Union[
+            List[Tuple[Any, Any, Union[float, int]]],
+            nx.Graph,
+            nx.DiGraph,
+            nx.MultiGraph,
+            nx.MultiDiGraph,
+            np.ndarray,
+            scipy.sparse.csr.csr_matrix,
+        ],
+        is_directed: Optional[bool] = None,
+        is_weighted: Optional[bool] = None,
+        weight_attribute: Any = "weight",
+        weight_default: Optional[float] = None,
 ) -> List[Tuple[str, str, float]]:
     """
     Creates a weighted edge list with string representations of the nodes and float weights.
