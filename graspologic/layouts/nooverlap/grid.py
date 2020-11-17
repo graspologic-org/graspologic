@@ -4,11 +4,12 @@
 import math
 from collections import defaultdict
 
+
 class grid_buckets:
-    '''
+    """
     One thing to note, that right now this grid must have cells the same size or bigger than the radius of the
     largest node in the graph.
-    '''
+    """
 
     def __init__(self, cell_size):
         self.cell_size = cell_size
@@ -21,20 +22,20 @@ class grid_buckets:
     def get_cell(self, x, y):
         xval = x // self.cell_size
         yval = y // self.cell_size
-        return xval*self.cell_size, yval*self.cell_size
+        return xval * self.cell_size, yval * self.cell_size
 
     def get_grid_cells(self, x, y, node_size):
         return self._get_grid_cells(x, y, node_size, False)
 
     def _get_grid_cells(self, x, y, node_size, update_max=True):
-        '''
+        """
         Each node will be at least one cell but up to four cells.
         It depends on the grid cell size and the size and location of the node
         :param x: x location
         :param y: y location
         :param node_size: nodesize
         :return:
-        '''
+        """
         min_x = x - node_size
         max_x = x + node_size
         min_y = y - node_size
@@ -51,32 +52,32 @@ class grid_buckets:
         return {nw, ne, se, sw}
 
     def add_node(self, node):
-        '''
+        """
         Node to add must have an x, y, and size property
         :param node: The node to add to the grid
         :return: The node added
-        '''
+        """
         cells = self._get_grid_cells(node.x, node.y, node.size)
         for cell in cells:
             self.grid[cell].append(node)
         return node
 
     def add_node_once(self, node):
-        '''
+        """
         Node to add must have an x, y, and size property
         :param node: The node to add to the grid
         :return: The node added
-        '''
+        """
         cell = self.get_cell(node.x, node.y)
         self.grid[cell].append(node)
         return node
 
     def remove_node(self, node):
-        '''
+        """
         Will throw an exception if the node is not in the grid.
         :param node:  node to remove
         :return: the node removed
-        '''
+        """
         cells = self._get_grid_cells(node.x, node.y, node.size)
         for cell in cells:
             self.grid[cell].remove(node)
@@ -96,12 +97,12 @@ class grid_buckets:
         return nodes
 
     def _get_x_cells(self):
-        xrange = self.max_x-self.min_x
-        return xrange//self.cell_size
+        xrange = self.max_x - self.min_x
+        return xrange // self.cell_size
 
     def _get_y_cells(self):
-        yrange = self.max_y-self.min_y
-        return yrange//self.cell_size
+        yrange = self.max_y - self.min_y
+        return yrange // self.cell_size
 
     def num_cells(self):
         x_cells = self._get_x_cells()
@@ -130,7 +131,12 @@ class grid_buckets:
             number_of_cells = self.num_cells()
             number_of_zeros = int(number_of_cells - len(self.grid))
             num_nodes_in_cell_to_count_of_cells[0] = number_of_zeros
-        return [(cell_count, node_count) for cell_count, node_count in sorted(num_nodes_in_cell_to_count_of_cells.items())]
+        return [
+            (cell_count, node_count)
+            for cell_count, node_count in sorted(
+                num_nodes_in_cell_to_count_of_cells.items()
+            )
+        ]
 
     def get_grid_bounds(self):
         x_min, y_min = math.inf, math.inf
@@ -146,44 +152,46 @@ class grid_buckets:
         rows = []
         x_min, y_min, x_max, y_max = self.get_grid_bounds()
         cell_size = self.cell_size
-        #print (type(y_min), type(y_max), type(cell_size))
+        # print (type(y_min), type(y_max), type(cell_size))
         y = y_min
-        while (y <= y_max):
+        while y <= y_max:
             row = []
             x = x_min
-            while (x <= x_max):
-                row.append(len(self.grid[(x,y)]))
+            while x <= x_max:
+                row.append(len(self.grid[(x, y)]))
                 x += cell_size
-            rows.insert(0,row)
+            rows.insert(0, row)
             y += cell_size
-        #for c in sorted(self.grid):
-        #	print (c)
+        # for c in sorted(self.grid):
+        # 	print (c)
         return rows
 
     def print_stats(self):
-        print(f'cell size: {self.cell_size}, area: {self.cell_size*self.cell_size}, rows: {self._get_y_cells()}, cols: {self._get_x_cells()}')
+        print(
+            f"cell size: {self.cell_size}, area: {self.cell_size*self.cell_size}, rows: {self._get_y_cells()}, cols: {self._get_x_cells()}"
+        )
         return None
 
     def _get_area(self, node_list):
         area = 0.0
         for n in node_list:
-            area += n.size*n.size*4
+            area += n.size * n.size * 4
         return area
 
     def get_all_grid_cells_by_area(self):
         rows = []
         x_min, y_min, x_max, y_max = self.get_grid_bounds()
         cell_size = self.cell_size
-        #print (type(y_min), type(y_max), type(cell_size))
+        # print (type(y_min), type(y_max), type(cell_size))
         y = y_min
-        while (y <= y_max):
+        while y <= y_max:
             row = []
             x = x_min
-            while (x <= x_max):
-                row.append(self._get_area(self.grid[(x,y)]))
+            while x <= x_max:
+                row.append(self._get_area(self.grid[(x, y)]))
                 x += cell_size
-            rows.insert(0,row)
+            rows.insert(0, row)
             y += cell_size
-        #for c in sorted(self.grid):
-        #	print (c)
+        # for c in sorted(self.grid):
+        # 	print (c)
         return rows

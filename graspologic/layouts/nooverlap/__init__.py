@@ -9,4 +9,3 @@ __all__ = [
     "quad_tree",
     "node",
 ]
-

@@ -7,13 +7,14 @@ from .classes import NodePosition
 import matplotlib.pyplot as plt
 
 
-def _calculate_x_y_domain(positions: List[NodePosition]) -> Tuple[
-        Tuple[float, float], Tuple[float, float]]:
-    """ calculate the overall x/y domain, converting to a square
-        so we can have a consistent scale
+def _calculate_x_y_domain(
+    positions: List[NodePosition],
+) -> Tuple[Tuple[float, float], Tuple[float, float]]:
+    """calculate the overall x/y domain, converting to a square
+    so we can have a consistent scale
     """
-    min_x = min_y = float('inf')
-    max_x = max_y = float('-inf')
+    min_x = min_y = float("inf")
+    max_x = max_y = float("-inf")
     for node_postion in positions:
         min_x = min(min_x, node_postion.x - node_postion.size)
         max_x = max(max_x, node_postion.x + node_postion.size)
@@ -36,25 +37,33 @@ def _calculate_x_y_domain(positions: List[NodePosition]) -> Tuple[
     return (min_x, max_x), (min_y, max_y)
 
 
-def _scale_value(domain: Tuple[float, float], data_range: Tuple[float, float], value: float) -> float:
-    return data_range[0] + (data_range[1] - data_range[0]) * ((value - domain[0]) / (domain[1] - domain[0]))
+def _scale_value(
+    domain: Tuple[float, float], data_range: Tuple[float, float], value: float
+) -> float:
+    return data_range[0] + (data_range[1] - data_range[0]) * (
+        (value - domain[0]) / (domain[1] - domain[0])
+    )
 
 
 def _scale_node_sizes_for_rendering(
     sizes: List[float],
     spatial_domain: Tuple[float, float],
     spatial_range: Tuple[float, float],
-    dpi: float
+    dpi: float,
 ):
-    """ scale the size again to match the rendered pixel range
-        we would expect this to be handled by the underlying viz framework, but it isn't, size is specified
-        as the bounding box in points of the rendered output, so we need to transform our size to match.
+    """scale the size again to match the rendered pixel range
+    we would expect this to be handled by the underlying viz framework, but it isn't, size is specified
+    as the bounding box in points of the rendered output, so we need to transform our size to match.
 
-        There are 72 points per inch. Multiplying by 72 / dpi converts from pixels to points.
+    There are 72 points per inch. Multiplying by 72 / dpi converts from pixels to points.
     """
     spatial_domain = (0, spatial_domain[1] - spatial_domain[0])
     return list(
-        map(lambda s: _scale_value(spatial_domain, spatial_range, s*2*72.0/dpi)**2, sizes)
+        map(
+            lambda s: _scale_value(spatial_domain, spatial_range, s * 2 * 72.0 / dpi)
+            ** 2,
+            sizes,
+        )
     )
 
 
@@ -83,7 +92,7 @@ def _draw_graph(
                 f"The node position provided for {position.node_id} references a node not found in our graph"
             )
 
-    plt.rcParams['figure.dpi'] = dpi  # TODO, test at different dpi
+    plt.rcParams["figure.dpi"] = dpi  # TODO, test at different dpi
 
     plt.clf()
     figure = plt.gcf()
@@ -95,7 +104,9 @@ def _draw_graph(
     x_domain, y_domain = _calculate_x_y_domain(positions)
 
     position_map = {position.node_id: position for position in positions}
-    node_positions = {position.node_id: (position.x, position.y) for position in positions}
+    node_positions = {
+        position.node_id: (position.x, position.y) for position in positions
+    }
 
     vertices = []
     vertex_sizes = []
@@ -108,10 +119,7 @@ def _draw_graph(
         node_color_list.append(node_colors[node])
 
     vertex_sizes = _scale_node_sizes_for_rendering(
-        vertex_sizes,
-        x_domain,
-        (0, window_extent_width),
-        dpi
+        vertex_sizes, x_domain, (0, window_extent_width), dpi
     )
 
     for source, target in graph.edges():
@@ -129,7 +137,7 @@ def _draw_graph(
         width=edge_line_width,
         edge_color=edge_color_list,
         arrows=arrows,
-        ax=ax
+        ax=ax,
     )
 
     nx.draw_networkx_nodes(
@@ -141,7 +149,7 @@ def _draw_graph(
         linewidths=vertex_line_width,
         node_size=vertex_sizes,
         node_shape=vertex_shape,
-        ax=ax
+        ax=ax,
     )
 
 
@@ -182,9 +190,9 @@ def show_graph(
     """
     ax = plt.gca()
     if light_background:
-        facecolor=ax.get_facecolor()
+        facecolor = ax.get_facecolor()
     else:
-        facecolor="#030303"
+        facecolor = "#030303"
 
     _draw_graph(
         graph=graph,
@@ -219,7 +227,7 @@ def save_graph(
     light_background: bool = True,
     vertex_shape: str = "o",
     arrows: bool = False,
-    dpi: int =100,
+    dpi: int = 100,
 ):
     """
     Renders a graph to file.
@@ -256,8 +264,8 @@ def save_graph(
     )
     ax = plt.gca()
     if light_background:
-        facecolor=ax.get_facecolor()
+        facecolor = ax.get_facecolor()
     else:
-        facecolor="#030303"
+        facecolor = "#030303"
     plt.savefig(output_path, facecolor=facecolor)
     plt.close("all")
