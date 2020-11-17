@@ -59,6 +59,7 @@ setup(
         "seaborn>=0.9.0",
         "scikit-learn>=0.19.1",
         "scipy>=1.4.0",
+        'umap-learn>=0.4.6',
     ],
     extras_require={
         "dev": [

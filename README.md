@@ -18,8 +18,8 @@
 - [Issues](#issues)
 
 # Notice: `graspologic` is the merger project of `GraSPy` and `topologic`
-We're actively merging these projects into one, but you may see some references to `graspy` or `topologic` from time to time in documentation and 
-issues. If you notice anything in the documentation referencing either graspy or topologic, please raise an issue (if one does not already exist) 
+We're actively merging these projects into one, but you may see some references to `graspy` or `topologic` from time to time in documentation and
+issues. If you notice anything in the documentation referencing either graspy or topologic, please raise an issue (if one does not already exist)
 noting the missed titles so we can address all of them.
 
 # Overview
@@ -32,7 +32,7 @@ Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) i
 
 # System Requirements
 ## Hardware requirements
-`graspologic` package requires only a standard computer with enough RAM to support the in-memory operations. 
+`graspologic` package requires only a standard computer with enough RAM to support the in-memory operations.
 
 ## Software requirements
 ### OS Requirements
@@ -47,7 +47,7 @@ And across the following versions of Python:
 - 3.8 (x64)
 
 If you try to use `graspologic` for a different platform than the ones listed and notice any unexpected behavior,
-please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users 
+please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users
 if we have concrete examples of things not working!
 
 ### Python Dependencies
@@ -61,6 +61,7 @@ POT
 seaborn
 scikit-learn
 scipy
+umap-learn
 ```
 
 Developers of `graspologic` will also have the following dependencies:
@@ -97,10 +98,10 @@ python3 setup.py install
 ```
 
 # Contributing
-We welcome contributions from anyone. Please see our [contribution guidelines](https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md) before making a pull request. Our 
-[issues](https://github.com/microsoft/graspologic/issues) page is full of places we could use help! 
-If you have an idea for an improvement not listed there, please 
-[make an issue](https://github.com/microsoft/graspologic/issues/new) first so you can discuss with the developers. 
+We welcome contributions from anyone. Please see our [contribution guidelines](https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md) before making a pull request. Our
+[issues](https://github.com/microsoft/graspologic/issues) page is full of places we could use help!
+If you have an idea for an improvement not listed there, please
+[make an issue](https://github.com/microsoft/graspologic/issues/new) first so you can discuss with the developers.
 
 # License
 This project is covered under the MIT License.
