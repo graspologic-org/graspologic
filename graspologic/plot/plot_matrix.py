@@ -659,7 +659,6 @@ def matrixplot(
                 color_class=rev_color_class[i],
                 palette=palette,
             )
-            # plt.show()
             color_ax = divider.append_axes(
                 "left", size="3%", pad=color_pad[i], sharey=ax
             )
@@ -672,8 +671,6 @@ def matrixplot(
                 color_class=rev_color_class[i],
                 palette=palette,
             )
-            # plt.show()
-    # plt.show()
 
     # draw ticks
     if len(group_class) > 0 and ticks:
