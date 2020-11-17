@@ -15,7 +15,7 @@ class BaseAlign(BaseEstimator):
     Attributes
     ----------
     Q_ : array, size (d, d)
-            Final orthogonal matrix, used to modify `X` passed to transform
+            Final orthogonal matrix, used to modify ``X`` passed to transform
 
     """
 
@@ -47,17 +47,17 @@ class BaseAlign(BaseEstimator):
     @abstractmethod
     def fit(self, X, Y):
         """
-        Uses the two datasets to learn the matrix `self.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~graspologic.align.BaseAlign.Q_` that aligns the
         first dataset with the second.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            Dataset to be mapped to `Y`, must have same number of dimensions
-            (axis 1) as `Y`.
+            Dataset to be mapped to ``Y``, must have same number of dimensions
+            (axis 1) as ``Y``.
 
         Y : np.ndarray, shape (m, d)
-            Target dataset, must have same number of dimensions (axis 1) as `X`.
+            Target dataset, must have same number of dimensions (axis 1) as ``X``.
 
         Returns
         -------
@@ -67,21 +67,21 @@ class BaseAlign(BaseEstimator):
 
     def transform(self, X):
         """
-        Transforms the dataset `X` using the learned matrix `self.Q_`. This may
-        be the same as the first dataset as in .fit(), or a new dataset.
+        Transforms the dataset ``X`` using the learned matrix :attr:`~graspologic.align.BaseAlign.Q_`. This may
+        be the same as the first dataset as in :func:`~graspologic.align.BaseAlign.fit`, or a new dataset.
         For example, additional samples from the same dataset.
 
         Parameters
         ----------
         X : np.ndarray, shape(m, d)
             Dataset to be transformed, must have same number of dimensions
-            (axis 1) as `X` and `Y` that were passed to fit.
+            (axis 1) as ``X`` and ``Y`` that were passed to fit.
 
         Returns
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            `X` @ `self.Q_`.
+            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
         """
         if not isinstance(X, np.ndarray):
             msg = f"Dataset is a {type(X)}, not an np.ndarray! "
@@ -99,24 +99,24 @@ class BaseAlign(BaseEstimator):
 
     def fit_transform(self, X, Y):
         """
-        Uses the two datasets to learn the matrix `self.Q_` that aligns the
-        first dataset with the second. Then, transforms the first dataset `X`
-        using the learned matrix `self.Q_`.
+        Uses the two datasets to learn the matrix :attr:`~graspologic.align.BaseAlign.Q_` that aligns the
+        first dataset with the second. Then, transforms the first dataset ``X``
+        using the learned matrix :attr:`~graspologic.align.BaseAlign.Q_`.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            Dataset to be mapped to `Y`, must have same number of dimensions
-            (axis 1) as `Y`.
+            Dataset to be mapped to ``Y``, must have same number of dimensions
+            (axis 1) as ``Y``.
 
         Y : np.ndarray, shape (m, d)
-            Target dataset, must have same number of dimensions (axis 1) as `X`.
+            Target dataset, must have same number of dimensions (axis 1) as ``X``.
 
         Returns
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            `X` @ `self.Q_`.
+            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
         """
         self.fit(X, Y)
         return self.transform(X)

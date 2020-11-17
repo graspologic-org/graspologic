@@ -29,8 +29,8 @@ class GraphMatch(BaseEstimator):
 
     n_init : int, positive (default = 1)
         Number of random initializations of the starting permutation matrix that
-        the FAQ algorithm will undergo. n_init automatically set to 1 if
-        init_method = 'barycenter'
+        the FAQ algorithm will undergo. ``n_init`` automatically set to 1 if
+        ``init_method`` = 'barycenter'
 
     init : string (default = 'barycenter') or 2d-array
         The initial position chosen
@@ -40,7 +40,7 @@ class GraphMatch(BaseEstimator):
         sum to 1.
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
-        :math:`J=1*1^T /n` , i.e the barycenter of the feasible region
+        :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region
 
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
         doubly stochastic matrix
@@ -55,7 +55,7 @@ class GraphMatch(BaseEstimator):
 
     eps : float (default = 0.1)
         A positive, threshold stopping criteria such that FW continues to iterate
-        while Frobenius norm of :math:`(P_{i}-P_{i+1}) > eps`
+        while Frobenius norm of :math:`(P_{i}-P_{i+1}) > \\text{eps}`
 
     gmp : bool (default = True)
         Gives users the option to solve QAP rather than the Graph Matching Problem
@@ -77,14 +77,14 @@ class GraphMatch(BaseEstimator):
 
     perm_inds_ : array, size (n,) where n is the number of vertices in the fitted graphs.
         The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
-        to best minimize the objective function :math:`f(P) = trace(A^T PBP^T )`.
+        to best minimize the objective function :math:`f(P) = \\text{trace}(A^T PBP^T )`.
 
 
     score_ : float
         The objective function value of for the optimal permutation found.
 
     n_iter_ : int
-        Number of Frank-Wolfe iterations run. If `n_init` > 1, `n_iter_` reflects the number of
+        Number of Frank-Wolfe iterations run. If ``n_init > 1``, :attr:`n_iter_` reflects the number of
         iterations performed at the initialization returned.
 
 
@@ -175,7 +175,7 @@ class GraphMatch(BaseEstimator):
             A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in `A`.
+            An array where each entry is an index of a node in ``A``.
 
         seeds_B : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in `B` The elements of
@@ -233,12 +233,12 @@ class GraphMatch(BaseEstimator):
             A square adjacency matrix
 
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in `A`.
+            An array where each entry is an index of a node in ``A``.
 
         seeds_B : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
-            An array where each entry is an index of a node in `B` The elements of
-            `seeds_A` and `seeds_B` are vertices which are known to be matched, that is,
-            `seeds_A[i]` is matched to vertex `seeds_B[i]`.
+            An array where each entry is an index of a node in ``B`` The elements of
+            ``seeds_A`` and ``seeds_B`` are vertices which are known to be matched, that is,
+            ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
 
         Returns
         -------

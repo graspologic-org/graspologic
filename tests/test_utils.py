@@ -2,11 +2,15 @@
 # Licensed under the MIT License.
 
 import unittest
-import numpy as np
-import networkx as nx
-from graspologic.utils import utils as gus
 from math import sqrt
+
+import networkx as nx
+import numpy as np
+import pytest
 from numpy.testing import assert_equal
+
+from graspologic.utils import remap_labels
+from graspologic.utils import utils as gus
 
 
 class TestInput(unittest.TestCase):
@@ -412,3 +416,50 @@ def test_binarize():
     g2 = gus.binarize(g)
     g2_expected = np.ones_like(g)
     assert_equal(g2, g2_expected)
+
+
+class TestRemapLabels(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.y_true = np.array([0, 0, 1, 1, 2, 2])
+        cls.y_pred = np.array([1, 1, 2, 2, 0, 0])
+
+    def test_proper_relabeling(self):
+        y_pred_remapped, label_map = remap_labels(
+            self.y_true, self.y_pred, return_map=True
+        )
+        assert_equal(y_pred_remapped, self.y_true)
+        for key, val in label_map.items():
+            if key == 0:
+                assert val == 2
+            elif key == 2:
+                assert val == 1
+            elif key == 1:
+                assert val == 0
+
+    def test_imperfect_relabeling(self):
+        y_true = [0, 0, 0, 1, 1, 1, 2, 2, 2]
+        # swap 0 and 1, make the 3rd label wrong.
+        y_pred = [1, 1, 0, 0, 0, 0, 2, 2, 2]
+        y_pred_remapped = remap_labels(y_true, y_pred)
+        assert_equal(y_pred_remapped, [0, 0, 1, 1, 1, 1, 2, 2, 2])
+
+    def test_string_relabeling(self):
+        y_true = ["ant", "ant", "cat", "cat", "bird", "bird"]
+        y_pred = ["bird", "bird", "cat", "cat", "ant", "ant"]
+        y_pred_remapped = remap_labels(y_true, y_pred)
+        assert_equal(y_true, y_pred_remapped)
+
+    def test_inputs(self):
+        with pytest.raises(ValueError):
+            # handled by sklearn confusion matrix
+            remap_labels(self.y_true[1:], self.y_pred)
+
+        with pytest.raises(TypeError):
+            remap_labels(8, self.y_pred)
+
+        with pytest.raises(TypeError):
+            remap_labels(self.y_pred, self.y_true, return_map="hi")
+
+        with pytest.raises(ValueError):
+            remap_labels(self.y_pred, ["ant", "ant", "cat", "cat", "bird", "bird"])
