@@ -171,7 +171,7 @@ def quadratic_assignment(A, B, method="faq", options=None):
 
 def _calc_score(A, B, S, perm):
     # equivalent to objective function but avoids matmul
-    return np.sum(A * B[perm][:, perm]) + S[:,perm].sum()
+    return np.sum(A * B[perm][:, perm]) + S[:, perm].sum()
 
 
 def _common_input_validation(A, B, partial_match):

@@ -159,7 +159,6 @@ class TestGMP:
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
 
-
     def test_sim(self):
         n = 150
         rho = 1.0
@@ -182,4 +181,3 @@ class TestGMP:
         res = self.barygm.fit(A1, A2, S=S)
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
-
