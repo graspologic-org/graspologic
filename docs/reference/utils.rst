@@ -34,5 +34,7 @@ IO
 
 .. autofunction:: import_edgelist
 
+Other
+-----
 
-
+.. autofunction:: remap_labels
