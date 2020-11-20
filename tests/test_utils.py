@@ -422,7 +422,6 @@ def test_binarize():
     assert_equal(g2, g2_expected)
 
 
-
 class TestRemoveVertices(unittest.TestCase):
     def setUp(self):
         self.directed = np.array(
@@ -506,6 +505,7 @@ class TestRemoveVertices(unittest.TestCase):
             idx = len(self.directed) + 1
             gus.remove_vertices(self.directed, indices)
 
+
 class TestRemapLabels(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -551,4 +551,3 @@ class TestRemapLabels(unittest.TestCase):
 
         with pytest.raises(ValueError):
             remap_labels(self.y_pred, ["ant", "ant", "cat", "cat", "bird", "bird"])
-
