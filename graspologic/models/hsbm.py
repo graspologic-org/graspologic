@@ -5,11 +5,13 @@ import numpy as np
 import warnings
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_X_y
+from sklearn.utils.validation import check_is_fitted
 
 from anytree import NodeMixin
 
-from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, select_dimension
+from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from ..cluster import DivisiveCluster
+from ..cluster.divisive_cluster import _check_common_inputs
 from .sbm import _calculate_block_p, _block_to_full, _get_block_indices
 from .base import BaseGraphEstimator
 from ..utils import (
@@ -19,27 +21,6 @@ from ..utils import (
     remove_loops,
     symmetrize,
 )
-
-
-def _check_common_inputs(min_components, max_components, cluster_kws, embed_kws):
-    if not isinstance(min_components, int):
-        raise TypeError("min_components must be an int")
-    elif min_components < 1:
-        raise ValueError("min_components must be > 0")
-
-    if not isinstance(max_components, int):
-        raise TypeError("max_components must be an int")
-    elif max_components < 1:
-        raise ValueError("max_components must be > 0")
-    elif max_components < min_components:
-        raise ValueError("max_components must be >= min_components")
-
-    if embed_kws:
-        if not isinstance(embed_kws, dict):
-            raise TypeError("embed_kws must be a dict")
-
-    if not isinstance(cluster_kws, dict):
-        raise TypeError("cluster_kws must be a dict")
 
 
 class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
@@ -156,7 +137,8 @@ class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
 
         Parameters
         ----------
-        X : array-like, shape (n_samples, n_features)
+        graph : array_like or networkx.Graph
+            Input graph to fit
 
         Returns
         -------
@@ -173,11 +155,12 @@ class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
 
         Parameters
         ----------
-        X : array-like, shape (n_samples, n_features)
+        graph : array_like or networkx.Graph
+            Input graph to fit
 
         Returns
         -------
-        labels : array_label, shape (n_samples, n_levels)
+        labels : array_label, shape (n_verts, n_levels)
         """
         if self.max_components > graph.shape[0]:
             msg = "max_components must be >= n_samples, but max_components = "
@@ -190,8 +173,7 @@ class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
 
         graph = augment_diagonal(graph)
         embed_graph = pass_to_ranks(graph)
-        # TODO: maybe allow users to specify embed_dim at 1st level
-        embed = self._embed(embed_graph, None)
+        embed = self._embed(embed_graph)
 
         labels = self._fit_graph(embed_graph, embed)
         # delete the last column if predictions at the last level
@@ -209,8 +191,6 @@ class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
         uni_labels = np.unique(pred)
         labels = pred.reshape((-1, 1)).copy()
         if len(uni_labels) > 1:
-            # find the max embedding dim for clusters at current lvl
-            max_dim = 0
             for ul in uni_labels:
                 inds = pred == ul
                 new_graph = graph[np.ix_(inds, inds)]
@@ -223,19 +203,15 @@ class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
                     cluster_kws=self.cluster_kws,
                     embed_kws=self.embed_kws,
                     delta_criter=self.delta_criter,
+                    loops=self.loops,
                 )
                 dc.parent = self
-                embed_dim = select_dimension(new_graph)[0][-1]
-                if embed_dim > max_dim:
-                    max_dim = embed_dim
-
-            for ul in uni_labels:
                 if (
                     len(new_graph) > self.max_components
                     and len(new_graph) >= self.min_split
                     and self.depth + 1 < self.max_level
                 ):
-                    embed = dc._embed(new_graph, max_dim)
+                    embed = dc._embed(new_graph)
                     child_labels = dc._fit_graph(new_graph, embed)
                     while labels.shape[1] <= child_labels.shape[1]:
                         labels = np.column_stack(
@@ -245,12 +221,12 @@ class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
 
         return labels
 
-    def _embed(self, graph, embed_dim):
+    def _embed(self, graph):
         if self.embed_method == "ase":
-            embedder = AdjacencySpectralEmbed(n_components=embed_dim, **self.embed_kws)
+            embedder = AdjacencySpectralEmbed(**self.embed_kws)
             embed = embedder.fit_transform(graph)
         elif self.embed_method == "lse":
-            embedder = LaplacianSpectralEmbed(n_components=embed_dim, **self.embed_kws)
+            embedder = LaplacianSpectralEmbed(**self.embed_kws)
             embed = embedder.fit_transform(graph)
 
         if isinstance(embed, tuple):
@@ -276,10 +252,22 @@ class HSBMEstimator(DivisiveCluster, _DivisiveGraphCluster, BaseGraphEstimator):
 
     Parameters
     ----------
-    min_components : int, optional (default=1)
-        The minimum number of communities (blocks) to consider.
-    max_components : int, optional (default=10)
-        The maximum number of communities (blocks) to consider (inclusive).
+    min_components : int, defaults to 1.
+        The minimum number of mixture components/clusters to consider
+        for the first split if "gmm" is selected as ``cluster_method``;
+        and is set to 1 for later splits.
+        If ``cluster_method`` is "kmeans", it is set to 2 for all splits.
+    max_components : int, defaults to 2.
+        The maximum number of mixture components/clusters to consider
+        at each split.
+    cluster_method : str {"gmm", "kmeans"}, defaults to "gmm".
+        The underlying clustering method to apply. If "gmm" will use
+        :class:`~graspologic.cluster.AutoGMMCluster`. If "kmeans", will use
+        :class:`~graspologic.cluster.KMeansCluster`.
+    embed_method : str {"ase", "lse"}, defaults to "ase".
+        The embedding method to apply. If "ase" will use
+        :class:`~graspologic.embed.AdjacencySpectralEmbed`. If "lse", will use
+        :class:`~graspologic.embed.LaplacianSpectralEmbed`.
     cluster_kws : dict, optional (default={})
         Additional kwargs passed down to
         :class:`~graspologic.cluster.GaussianCluster`
@@ -296,10 +284,33 @@ class HSBMEstimator(DivisiveCluster, _DivisiveGraphCluster, BaseGraphEstimator):
     loops : boolean, optional (default=False)
         Whether to allow entries on the diagonal of the adjacency matrix,
         i.e. loops in the graph where a node connects to itself.
+    min_split : int, defaults to 1.
+        During clustering, the minimum size of a cluster for it to be considered
+        to be split again.
+    max_level : int, defaults to 4.
+        During clustering, the maximum number of times to recursively cluster the data.
+    delta_criter : float, non-negative, defaults to 0.
+        During clustering, the smallest difference between selection criterion values
+        of a new model and the current model that is required to accept the new model.
+        Applicable only if ``cluster_method`` is "gmm".
 
     Attributes
     ----------
-
+    block_p_ : list of np.ndarray, length n_level, each item has shape
+        (n_blocks, n_blocks)
+        The block probability matrix :math:`B`, where the element :math:`B_{i, j}`
+        represents the probability of an edge between block :math:`i` and block
+        :math:`j` for each level.
+    p_mat_ : list of np.ndarray, length n_level, each item has shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model for each level,
+        from which graphs could be sampled.
+    vertex_assignments_ : np.ndarray, shape (n_verts, n_levels)
+        An array of integer labels corresponding to the predicted block that each node
+        belongs to at each level if ``y`` was not passed during the call
+        to :func:`~graspologic.models.SBMEstimator.fit`.
+    block_weights_ : list of np.ndarray, length n_level, each item has shape (n_blocks)
+        Contains the proportion of nodes that belong to each block in the fit model
+        for each level.
 
     See also
     --------
@@ -344,9 +355,11 @@ class HSBMEstimator(DivisiveCluster, _DivisiveGraphCluster, BaseGraphEstimator):
 
         BaseGraphEstimator.__init__(self, directed=directed, loops=loops)
 
+        if not isinstance(reembed, bool):
+            raise TypeError("`reembed` must be of type bool")
         self.reembed = reembed
 
-    def fit(self, X, y=None):
+    def fit(self, graph, y=None):
         """
         Fit the HSBM to a graph, optionally with known block labels
 
@@ -358,43 +371,68 @@ class HSBMEstimator(DivisiveCluster, _DivisiveGraphCluster, BaseGraphEstimator):
         graph : array_like or networkx.Graph
             Input graph to fit
 
-        y : array_like, length graph.shape[0], optional
+        y : array_like, shape (n_verts, n_levels), optional
             Categorical labels for the block assignments of the graph
 
         """
         if y is None:
             if self.reembed:
-                y = _DivisiveGraphCluster.fit_predict(self, X)
+                y = _DivisiveGraphCluster.fit_predict(self, graph)
             else:
-                y = DivisiveCluster.fit_predict(self, X, fcluster=True)
+                y = DivisiveCluster.fit_predict(self, graph, fcluster=True)
+            self.vertex_assignments_ = y
+        else:
+            _, y = check_X_y(graph, y, multi_output=True)
+        self.y = y
 
-        _, y = check_X_y(X, y, multi_output=True)
-
-        if max(y[0]) == 0:
+        if max(y[:, 0]) == 0:
             warnings.warn("only 1 cluster estimated at the first level")
 
-        n_levels = y.shape[1]
-
-        self.block_weights_ = np.empty(n_levels, dtype=object)
-        self.block_p_ = np.empty(n_levels, dtype=object)
-        self.p_mat_ = np.empty(n_levels, dtype=object)
-
-        for i in range(n_levels):
-            single_label = y[:, i]
-            _, counts = np.unique(single_label, return_counts=True)
-            self.block_weights_[i] = counts / X.shape[0]
-            block_vert_inds, block_inds, block_inv = _get_block_indices(single_label)
-            block_p = _calculate_block_p(X, block_inds, block_vert_inds)
-
-            if self.reembed:
-                if not self.directed:
-                    block_p = symmetrize(block_p)
-            self.block_p_[i] = block_p
-
-            p_mat = _block_to_full(block_p, block_inv, X.shape)
-            if self.reembed:
-                if not self.loops:
-                    p_mat = remove_loops(p_mat)
-            self.p_mat_[i] = p_mat
-
         return self
+
+    def compute_model_params(self, graph, level):
+        """
+        Compute graph model parameters corresponding to a specific level
+            of the input graph
+
+        Parameters
+        ----------
+        graph : array_like or networkx.Graph
+            Same graph as the one used to fit the model
+
+        """
+        check_is_fitted(self, ["y"], all_or_any=all)
+        y = self.y[:, level - 1]
+
+        _, counts = np.unique(y, return_counts=True)
+        self.block_weights_ = counts / graph.shape[0]
+        block_vert_inds, block_inds, block_inv = _get_block_indices(y)
+
+        block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
+
+        if not self.directed:
+            block_p = symmetrize(block_p)
+        self.block_p_ = block_p
+
+        p_mat = _block_to_full(block_p, block_inv, graph.shape)
+        if not self.loops:
+            p_mat = remove_loops(p_mat)
+        self.p_mat_ = p_mat
+
+    def _n_parameters(self):
+        if not hasattr(self, "block_p_"):
+            msg = "must run `compute_model_params` before checking model attributes"
+            raise AttributeError(msg)
+
+        n_blocks = self.block_p_.shape[0]
+        n_parameters = 0
+        if self.directed:
+            n_parameters += n_blocks ** 2
+        else:
+            n_parameters += n_blocks * (n_blocks + 1) / 2
+        if hasattr(self, "vertex_assignments_"):
+            n_parameters += n_blocks - 1
+        n_parameters += 1  # level index
+        if self.reembed:
+            n_parameters += 1
+        return n_parameters
