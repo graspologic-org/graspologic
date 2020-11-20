@@ -30,10 +30,10 @@ class VNviaSGM(BaseEstimator):
     n_seeds_used: int
         Number of seeds passed in `seedsA` that occured in the induced subgraph about `voi`
 
-    nomination_list: list
-        List of 2 tuples of the format nomination_list = [(j, p_val)] where p_val is the
-        probability that the voi matches to node j in graph B (sorted by descending
-        probability)
+    nomination_list: 2d-array
+        An array containing vertex nominations in the form nomination list = [[j, p_val],...]
+        where p_val is the probability that the voi matches to node j in graph B (sorted by
+        descending probability)
 
 
     References
@@ -159,7 +159,7 @@ class VNviaSGM(BaseEstimator):
 
         nomination_list = list(zip(b_inds[self.n_seeds_used :], P_outp[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
-        self.nomination_list = nomination_list
+        self.nomination_list = np.array(nomination_list)
         return self
 
     def fit_predict(self, X, y=[]):
@@ -181,8 +181,8 @@ class VNviaSGM(BaseEstimator):
 
         Returns
         -------
-        nomination_list : 1-d array of 2-tuples
-            The nomination list containing tuples in form (vertex, probability)
+        nomination_list : 2d-array
+            The nomination array
         """
         retval = self.fit(X, y)
 
