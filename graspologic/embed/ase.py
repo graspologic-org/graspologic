@@ -236,8 +236,9 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
             if X.shape[0] == X.shape[1]:  # in case original matrix was passed
                 msg = """A square matrix A was passed to ``transform`` in the directed case. 
                 If this was the original in-sample matrix, either use ``fit_transform`` 
-                or pass a tuple (A.T, A)."""
-                warnings.warn(msg)
+                or pass a tuple (A.T, A). If this was an out-of-sample matrix, directed
+                graphs require a tuple (X_out, X_in)."""
+                raise TypeError(msg)
             else:
                 msg = "Directed graphs require a tuple (X_out, X_in) for out-of-sample transforms."
                 raise TypeError(msg)
