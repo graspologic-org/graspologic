@@ -626,7 +626,7 @@ class TestHSBM:
         hsbme.fit(self.graph)
         hsbme.compute_model_params(self.graph, 1)
         assert hsbme._n_parameters() == (5)
-        
+
 
 class TestRDPG:
     @classmethod
@@ -782,7 +782,7 @@ def _test_score(estimator, p_mat, graph):
     lik = np.log(lik)
     assert_allclose(lik, estimator.score_samples(graph))
     assert np.sum(lik) == estimator.score(graph)
- 
+
 
 def _test_HSBM_score(estimator, p_mat, graph):
     np.random.seed(8888)
