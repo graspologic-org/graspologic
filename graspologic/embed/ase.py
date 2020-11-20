@@ -230,7 +230,6 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         if isinstance(X, nx.classes.graph.Graph):
             X = import_graph(X)
         directed = self.latent_right_ is not None
-        original = directed and isinstance(X, np.ndarray)
 
         # correct types?
         if directed and not isinstance(X, tuple):
