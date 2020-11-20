@@ -167,7 +167,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
                     X = ase.transform(A)
                     self.assertTrue(np.allclose(X, Y, atol=atol))
                 elif isinstance(Y, tuple):
-                    with self.assertWarns(Warning):
+                    with self.assertRaises(TypeError):
                         X = ase.transform(A)
                     X = ase.transform((A.T, A))
                     self.assertTrue(np.allclose(X[0], Y[0], atol=atol))
