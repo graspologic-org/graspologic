@@ -80,11 +80,11 @@ class VNviaSGM(BaseEstimator):
 
         y: list
             List of length two `[seedsA, seedsB]` where first element is
-        the seeds associated with adjacency matrix G_1
-        and the second element the adjacency matrix associated with G_2, note
-        `len(seedsA)==len(seedsB)` The elements of `seeds_A` and `seeds_B` are
-        vertices which are known to be matched, that is, `seeds_A[i]` is matched
-        to vertex `seeds_B[i]`.
+            the seeds associated with adjacency matrix G_1
+            and the second element the adjacency matrix associated with G_2, note
+            `len(seedsA)==len(seedsB)` The elements of `seeds_A` and `seeds_B` are
+            vertices which are known to be matched, that is, `seeds_A[i]` is matched
+            to vertex `seeds_B[i]`.
 
         Returns
         -------
@@ -173,11 +173,11 @@ class VNviaSGM(BaseEstimator):
 
         y: list
             List of length two `[seedsA, seedsB]` where first element is
-        the seeds associated with adjacency matrix G_1
-        and the second element the adjacency matrix associated with G_2, note
-        `len(seedsA)==len(seedsB)` The elements of `seeds_A` and `seeds_B` are
-        vertices which are known to be matched, that is, `seeds_A[i]` is matched
-        to vertex `seeds_B[i]`.
+            the seeds associated with adjacency matrix G_1
+            and the second element the adjacency matrix associated with G_2, note
+            `len(seedsA)==len(seedsB)` The elements of `seeds_A` and `seeds_B` are
+            vertices which are known to be matched, that is, `seeds_A[i]` is matched
+            to vertex `seeds_B[i]`.
 
         Returns
         -------
@@ -204,7 +204,7 @@ def _ego(graph_adj_matrix, order, node, mindist=1):
 
     order: int
         Distance to create the induce subgraph with. Max distance away from
-    the node to include in subgraph.
+        the node to include in subgraph.
 
     node: int
         The vertex to center the induced subgraph about.
@@ -250,7 +250,7 @@ def _ego_list(graph_adj_matrix, order, node, mindist=1):
 
     order: int
         Distance to create the induce subgraph with. Max distance away from
-    the node to include in subgraph.
+        the node to include in subgraph.
 
     node: int or list
         The list of vertices to center the induced subgraph about.
