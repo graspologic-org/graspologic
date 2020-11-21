@@ -708,7 +708,6 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
-
 def remove_vertices(graph, indices, return_removed=False):
     """
     Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the
@@ -790,6 +789,7 @@ def remove_vertices(graph, indices, return_removed=False):
             return A, (vertices, vertices_right)
         return A, vertices
     return A
+
 
 def remap_labels(
     y_true: Union[List, np.ndarray, pd.Series],
