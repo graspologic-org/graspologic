@@ -215,7 +215,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         Notes
         -----
-        If the matrix was diagonally augmented (e.g., self.diag_aug was True), ``fit``
+        If the matrix was diagonally augmented (e.g., ``self.diag_aug`` was True), ``fit``
         followed by ``transform`` will produce a slightly different matrix than
         ``fit_transform``.
 
