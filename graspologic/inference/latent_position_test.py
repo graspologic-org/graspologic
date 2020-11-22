@@ -65,30 +65,22 @@ def latent_position_test(
     n_bootstraps : int, optional (default 500)
         Number of bootstrap simulations to run to generate the null distribution
 
-    Attributes
+    Returns
     ----------
-    p_value : float
+    p_value_ : float
         The overall p value from the test; this is the max of ``p_value_1`` and ``p_value_2``
 
-    sample_T_statistic : float
+    sample_T_statistic_ : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
 
-    null_distribution_1, null_distribution_2 : np.ndarray (n_bootstraps,)
-        The distribution of T statistics generated under the null, using the first and
-        and second input graph, respectively. The latent positions of each sample graph
-        are used independently to sample random dot product graphs, so two null
-        distributions are generated
-
-    p_value_1, p_value_2 : float
-        The p value estimated from the null distributions from sample 1 and sample 2.
-
-    misc_stats : dictionary
+    misc_stats_ : dictionary
         A collection of other statistics obtained from the latent position test
 
-        - 'p_value_1', 'p_value_2' : float
+        - 'p_value_1_', 'p_value_2_' : float
             The p value estimate from the null distributions from sample 1 and sample 2
-        - 'null_distribution_1', 'null_distribution_2' : np.ndarray (n_bootstraps,)
+
+        - 'null_distribution_1_', 'null_distribution_2_' : np.ndarray (n_bootstraps,)
             The distribution of T statistics generated under the null, using the first and
             and second input graph, respectively. The latent positions of each sample graph
             are used independently to sample random dot product graphs, so two null
@@ -138,52 +130,52 @@ def latent_position_test(
         num_dims1 = select_dimension(A1)[0][-1]
         num_dims2 = select_dimension(A2)[0][-1]
         n_components = max(num_dims1, num_dims2)
-    X_hats = embed(A1, A2, embedding, n_components)
-    sample_T_statistic = difference_norm(X_hats[0], X_hats[1], embedding, test_case)
-    null_distribution_1 = bootstrap(
+    X_hats = _embed(A1, A2, embedding, n_components)
+    sample_T_statistic_ = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
+    null_distribution_1_ = _bootstrap(
         X_hats[0], embedding, n_components, n_bootstraps, test_case
     )
-    null_distribution_2 = bootstrap(
+    null_distribution_2_ = _bootstrap(
         X_hats[1], embedding, n_components, n_bootstraps, test_case
     )
 
     # using exact mc p-values (see, for example, Phipson and Smyth, 2010)
-    p_value_1 = (
-        len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 1
+    p_value_1_ = (
+        len(null_distribution_1_[null_distribution_1_ >= sample_T_statistic_]) + 1
     ) / (n_bootstraps + 1)
-    p_value_2 = (
-        len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 1
+    p_value_2_ = (
+        len(null_distribution_2_[null_distribution_2_ >= sample_T_statistic_]) + 1
     ) / (n_bootstraps + 1)
 
-    p_value = max(p_value_1, p_value_2)
+    p_value_ = max(p_value_1_, p_value_2_)
 
-    misc_stats = {
-        "null_distribution_1": null_distribution_1,
-        "null_distribution_2": null_distribution_2,
-        "p_value_1": p_value_1,
-        "p_value_2": p_value_2,
+    misc_stats_ = {
+        "null_distribution_1": null_distribution_1_,
+        "null_distribution_2": null_distribution_2_,
+        "p_value_1": p_value_1_,
+        "p_value_2": p_value_2_,
     }
 
-    return p_value, sample_T_statistic, misc_stats
+    return p_value_, sample_T_statistic_, misc_stats_
 
 
-def bootstrap(
+def _bootstrap(
     X_hat, embedding, n_components, n_bootstraps, test_case, rescale=False, loops=False
 ):
     t_bootstrap = np.zeros(n_bootstraps)
     for i in range(n_bootstraps):
         A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
         A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
-        X1_hat_simulated, X2_hat_simulated = embed(
+        X1_hat_simulated, X2_hat_simulated = _embed(
             A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
         )
-        t_bootstrap[i] = difference_norm(
+        t_bootstrap[i] = _difference_norm(
             X1_hat_simulated, X2_hat_simulated, embedding, test_case
         )
     return t_bootstrap
 
 
-def difference_norm(X1, X2, embedding, test_case):
+def _difference_norm(X1, X2, embedding, test_case):
     if embedding in ["ase"]:
         if test_case == "rotation":
             pass
@@ -202,7 +194,7 @@ def difference_norm(X1, X2, embedding, test_case):
     return np.linalg.norm(X1 - X2)
 
 
-def embed(A1, A2, embedding, n_components, check_lcc=True):
+def _embed(A1, A2, embedding, n_components, check_lcc=True):
     if embedding == "ase":
         X1_hat = AdjacencySpectralEmbed(
             n_components=n_components, check_lcc=check_lcc

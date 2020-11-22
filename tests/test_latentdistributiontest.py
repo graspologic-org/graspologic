@@ -14,8 +14,28 @@ from graspologic.simulations import er_np, sbm
 
 class TestLatentDistributionTest(unittest.TestCase):
     @classmethod
+    def test_workers(self):
+        np.random.seed(888)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(20, 0.3)
+        p_val, _, _ = latent_distribution_test(
+            A1, A2, "dcorr", "euclidean", n_bootstraps=4, workers=4
+        )
+
+    def test_callable_metric(self):
+        np.random.seed(888)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(20, 0.3)
+
+        def metric_func(X, Y=None, workers=None):
+            return pairwise_distances(X, metric="euclidean") * 0.5
+
+        p_val, _, _ = latent_distribution_test(
+            A1, A2, "dcorr", metric_func, n_bootstraps=10
+        )
+
     def test_bad_kwargs(self):
-        np.random.seed(123456)
+        np.random.seed(888)
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
 
@@ -253,7 +273,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         self.assertTrue(p_corrected_2 <= 0.05)
 
     def test_different_aligners(self):
-        np.random.seed(888)
+        np.random.seed(314)
         A1 = er_np(100, 0.8)
         A2 = er_np(100, 0.8)
         ase_1 = AdjacencySpectralEmbed(n_components=2)

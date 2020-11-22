@@ -32,7 +32,7 @@ def latent_distribution_test(
     test="dcorr",
     metric="euclidean",
     n_components=None,
-    n_bootstraps=200,
+    n_bootstraps=500,
     workers=1,
     size_correction=True,
     pooled=False,
@@ -51,7 +51,7 @@ def latent_distribution_test(
 
     Parameters
     ----------
-    A1, A2 : variable (see description)
+    A1, A2 : variable (see description of 'input_graph')
         The two graphs, or their embeddings to run a hypothesis test on.
         Expected variable type and shape depends on input_graph attribute
 
@@ -161,7 +161,7 @@ def latent_distribution_test(
             they must be ndarrays of size (n, d) and (m, d), where
             d must be same. n_components attribute is ignored in this case.
 
-    Attributes
+    Returns
     ----------
     p_value_ : float
         The overall p value from the test.

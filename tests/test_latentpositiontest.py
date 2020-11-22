@@ -2,7 +2,7 @@ import unittest
 import pytest
 import numpy as np
 
-from graspologic.inference import latent_position_test, difference_norm
+from graspologic.inference import latent_position_test, _difference_norm
 from graspologic.simulations import er_np, sbm
 
 
@@ -61,7 +61,7 @@ class TestLatentPositionTest(unittest.TestCase):
         rotation = np.array([[0, 1], [-1, 0]])
         points2 = np.dot(points1, rotation)
 
-        n = difference_norm(points1, points2, embedding="ase", test_case="rotation")
+        n = _difference_norm(points1, points2, embedding="ase", test_case="rotation")
         self.assertAlmostEqual(n, 0)
 
     def test_diagonal_rotation_norm(self):
@@ -74,7 +74,7 @@ class TestLatentPositionTest(unittest.TestCase):
         diagonal = np.array([[2, 0, 0], [0, 3, 0], [0, 0, 2]])
         points2 = np.dot(diagonal, points2)
 
-        n = difference_norm(
+        n = _difference_norm(
             points1, points2, embedding="ase", test_case="diagonal-rotation"
         )
         self.assertAlmostEqual(n, 0)
@@ -88,7 +88,7 @@ class TestLatentPositionTest(unittest.TestCase):
         # scaled
         points2 = 2 * points2
 
-        n = difference_norm(
+        n = _difference_norm(
             points1, points2, embedding="ase", test_case="scalar-rotation"
         )
         self.assertAlmostEqual(n, 0)
