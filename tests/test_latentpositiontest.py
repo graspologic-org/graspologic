@@ -38,7 +38,7 @@ class TestLatentPositionTest(unittest.TestCase):
         _, _, misc_stats = latent_position_test(
             A1, A2, n_bootstraps=234, n_components=None
         )
-        assert misc_stats["null_distribution_1_"].shape[0] == 234
+        assert misc_stats["null_distribution_1"].shape[0] == 234
 
     def test_bad_matrix_inputs(self):
         np.random.seed(1234556)

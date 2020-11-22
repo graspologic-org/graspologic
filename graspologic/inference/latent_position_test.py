@@ -68,7 +68,7 @@ def latent_position_test(
     Returns
     ----------
     p_value_ : float
-        The overall p value from the test; this is the max of p_value_1_ and p_value_2_
+        The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'
 
     sample_T_statistic_ : float
         The observed difference between the embedded positions of the two input graphs
@@ -77,10 +77,10 @@ def latent_position_test(
     misc_stats_ : dictionary
         A collection of other statistics obtained from the latent position test
 
-        - 'p_value_1_', 'p_value_2_' : float
+        - 'p_value_1', 'p_value_2' : float
             The p value estimate from the null distributions from sample 1 and sample 2
 
-        - 'null_distribution_1_', 'null_distribution_2_' : np.ndarray (n_bootstraps,)
+        - 'null_distribution_1', 'null_distribution_2' : np.ndarray (n_bootstraps,)
             The distribution of T statistics generated under the null, using the first and
             and second input graph, respectively. The latent positions of each sample graph
             are used independently to sample random dot product graphs, so two null
@@ -132,28 +132,28 @@ def latent_position_test(
         n_components = max(num_dims1, num_dims2)
     X_hats = _embed(A1, A2, embedding, n_components)
     sample_T_statistic_ = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
-    null_distribution_1_ = _bootstrap(
+    null_distribution_1 = _bootstrap(
         X_hats[0], embedding, n_components, n_bootstraps, test_case
     )
-    null_distribution_2_ = _bootstrap(
+    null_distribution_2 = _bootstrap(
         X_hats[1], embedding, n_components, n_bootstraps, test_case
     )
 
     # using exact mc p-values (see, for example, Phipson and Smyth, 2010)
-    p_value_1_ = (
-        len(null_distribution_1_[null_distribution_1_ >= sample_T_statistic_]) + 1
+    p_value_1 = (
+        len(null_distribution_1[null_distribution_1 >= sample_T_statistic_]) + 1
     ) / (n_bootstraps + 1)
-    p_value_2_ = (
-        len(null_distribution_2_[null_distribution_2_ >= sample_T_statistic_]) + 1
+    p_value_2 = (
+        len(null_distribution_2[null_distribution_2 >= sample_T_statistic_]) + 1
     ) / (n_bootstraps + 1)
 
-    p_value_ = max(p_value_1_, p_value_2_)
+    p_value_ = max(p_value_1, p_value_2)
 
     misc_stats_ = {
-        "null_distribution_1_": null_distribution_1_,
-        "null_distribution_2_": null_distribution_2_,
-        "p_value_1_": p_value_1_,
-        "p_value_2_": p_value_2_,
+        "null_distribution_1": null_distribution_1,
+        "null_distribution_2_": null_distribution_2,
+        "p_value_1": p_value_1,
+        "p_value_2": p_value_2,
     }
 
     return p_value_, sample_T_statistic_, misc_stats_
