@@ -68,7 +68,7 @@ def latent_position_test(
     Returns
     ----------
     p_value_ : float
-        The overall p value from the test; this is the max of ``p_value_1`` and ``p_value_2``
+        The overall p value from the test; this is the max of ``p_value_1_`` and ``p_value_2_``
 
     sample_T_statistic_ : float
         The observed difference between the embedded positions of the two input graphs
