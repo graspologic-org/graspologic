@@ -150,10 +150,10 @@ def latent_position_test(
     p_value_ = max(p_value_1_, p_value_2_)
 
     misc_stats_ = {
-        "null_distribution_1": null_distribution_1_,
-        "null_distribution_2": null_distribution_2_,
-        "p_value_1": p_value_1_,
-        "p_value_2": p_value_2_,
+        "null_distribution_1_": null_distribution_1_,
+        "null_distribution_2_": null_distribution_2_,
+        "p_value_1_": p_value_1_,
+        "p_value_2_": p_value_2_,
     }
 
     return p_value_, sample_T_statistic_, misc_stats_
