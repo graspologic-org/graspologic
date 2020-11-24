@@ -71,7 +71,7 @@ class VNviaSGM(BaseEstimator):
 
     def fit(self, X, y=[]):
         """
-        Fits the model to two graphs
+        Fits the model to two graphs.
 
         Parameters
         ----------
