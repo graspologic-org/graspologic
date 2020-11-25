@@ -163,14 +163,14 @@ def latent_distribution_test(
 
     Returns
     ----------
-    p_value_ : float
+    p_value : float
         The overall p value from the test.
 
-    sample_T_statistic_ : float
+    sample_T_statistic : float
         The observed difference between the embedded latent positions of the
         two input graphs.
 
-    null_distribution_ : ndarray, shape (n_bootstraps,)
+    null_distribution : ndarray, shape (n_bootstraps,)
         The distribution of T statistics generated under the null.
 
     References
@@ -306,11 +306,11 @@ def latent_distribution_test(
 
     data = test_obj.test(X1_hat, X2_hat, reps=n_bootstraps, workers=workers, auto=False)
 
-    null_distribution_ = test_obj.indep_test.null_dist
-    sample_T_statistic_ = data[0]
-    p_value_ = data[1]
+    null_distribution = test_obj.indep_test.null_dist
+    sample_T_statistic = data[0]
+    p_value = data[1]
 
-    return p_value_, sample_T_statistic_, null_distribution_
+    return p_value, sample_T_statistic, null_distribution
 
 
 def _instantiate_metric_func(metric, test):

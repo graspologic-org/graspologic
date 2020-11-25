@@ -8,7 +8,19 @@ from graspologic.simulations import er_np, sbm
 
 class TestLatentPositionTest(unittest.TestCase):
     @classmethod
-    def test_common_input(self):
+    def test_ase_works(self):
+        np.random.seed(1234556)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(20, 0.3)
+        p_val, _, _ = latent_position_test(A1, A2)
+
+    def test_ase_works(self):
+        np.random.seed(1234556)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(20, 0.3)
+        p_val, _, _ = latent_position_test(A1, A2, embedding="omnibus")
+
+    def test_bad_kwargs(self):
         np.random.seed(1234556)
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)

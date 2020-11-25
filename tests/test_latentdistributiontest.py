@@ -14,6 +14,16 @@ from graspologic.simulations import er_np, sbm
 
 class TestLatentDistributionTest(unittest.TestCase):
     @classmethod
+    def test_ase_works(self):
+        np.random.seed(888)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(20, 0.3)
+        tests = {"dcorr": "euclidean", "hsic": "gaussian", "mgc": "euclidean"}
+        for test in tests.keys():
+            p_val, _, _ = latent_distribution_test(
+                A1, A2, test, tests[test], n_bootstraps=10
+            )
+
     def test_workers(self):
         np.random.seed(888)
         A1 = er_np(20, 0.3)

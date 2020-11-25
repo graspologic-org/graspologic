@@ -67,14 +67,14 @@ def latent_position_test(
 
     Returns
     ----------
-    p_value_ : float
+    p_value : float
         The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'
 
-    sample_T_statistic_ : float
+    sample_T_statistic : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
 
-    misc_stats_ : dictionary
+    misc_stats : dictionary
         A collection of other statistics obtained from the latent position test
 
         - 'p_value_1', 'p_value_2' : float
@@ -131,7 +131,7 @@ def latent_position_test(
         num_dims2 = select_dimension(A2)[0][-1]
         n_components = max(num_dims1, num_dims2)
     X_hats = _embed(A1, A2, embedding, n_components)
-    sample_T_statistic_ = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
+    sample_T_statistic = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
     null_distribution_1 = _bootstrap(
         X_hats[0], embedding, n_components, n_bootstraps, test_case
     )
@@ -141,22 +141,22 @@ def latent_position_test(
 
     # using exact mc p-values (see, for example, Phipson and Smyth, 2010)
     p_value_1 = (
-        len(null_distribution_1[null_distribution_1 >= sample_T_statistic_]) + 1
+        len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 1
     ) / (n_bootstraps + 1)
     p_value_2 = (
-        len(null_distribution_2[null_distribution_2 >= sample_T_statistic_]) + 1
+        len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 1
     ) / (n_bootstraps + 1)
 
-    p_value_ = max(p_value_1, p_value_2)
+    p_value = max(p_value_1, p_value_2)
 
-    misc_stats_ = {
+    misc_stats = {
         "null_distribution_1": null_distribution_1,
         "null_distribution_2_": null_distribution_2,
         "p_value_1": p_value_1,
         "p_value_2": p_value_2,
     }
 
-    return p_value_, sample_T_statistic_, misc_stats_
+    return p_value, sample_T_statistic, misc_stats
 
 
 def _bootstrap(
