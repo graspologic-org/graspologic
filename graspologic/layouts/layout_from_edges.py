@@ -5,18 +5,33 @@ import argparse
 import time
 import math
 import logging
-
-logger = logging.getLogger(__name__)
-from .layouts import NodePosition
-import networkx
 from typing import List, Optional
 
+import networkx
+import umap
+from sklearn.manifold import TSNE
+
+import graspologic as gspl
+from graspologic.layouts.layouts import NodePosition, save_graph
+import graspologic_native as gln
+from graspologic.preprocessing import cut_edges_by_weight, histogram_edge_weight
+from ._helpers import (
+    create_colormap,
+    get_node_colors_from_partition,
+    get_partition,
+    largest_connected_component,
+    read_graph,
+    read_json_colorfile,
+)
+from graspologic.layouts.nooverlap import quad_tree, node
+
+
+logger = logging.getLogger(__name__)
 
 color_file_json = "colors-100.json"
 
 
 def _partition_graph(graph: networkx.Graph):
-    import graspologic_native as gln
 
     # find our own communities
     logger.info(
@@ -34,7 +49,6 @@ def _creat_node2vec_embedding(graph: networkx.Graph):
 
     Returns: an arary of numpy.Array and a list of labels
     """
-    import graspologic as gspl
 
     start = time.time()
     tensors, labels = gspl.embed.node2vec_embed(
@@ -53,13 +67,6 @@ def _get_node_colors(
     color_scheme="nominal",
     node_attributes=None,
 ):
-    from ._helpers import (
-        get_node_colors_from_partition,
-        create_colormap,
-        read_json_colorfile,
-        get_partition,
-    )
-
     light_colors, dark_colors = read_json_colorfile(color_file)
     if light_background:
         color_list = light_colors[color_scheme]
@@ -92,7 +99,6 @@ def layout_with_node2vec_umap(
     Runs UMAP to transform to 2D, then removes node overlaps.
     @return the LCC and the node positions
     """
-    import umap
 
     lcc = _cut_edges_if_needed(graph, max_edges_to_keep=max_edges)
     tensors, labels = _creat_node2vec_embedding(lcc)
@@ -126,7 +132,6 @@ def layout_with_node2vec_tsne(
     Runs t-SNE to transform to 2D, then removes node overlaps.
     @return the LCC as a networkx.Graph and the node positions as a list of NodePosition objects
     """
-    from sklearn.manifold import TSNE
 
     lcc = _cut_edges_if_needed(graph, max_edges_to_keep=10000000)
     tensors, labels = _creat_node2vec_embedding(lcc)
@@ -160,8 +165,6 @@ def layout_node2vec_umap_from_file(
     Computes a node2vec embedding.
     Then performs a UMAP dimensionality reduction.
     """
-    from .layouts import save_graph
-    from ._helpers import read_graph
 
     graph = read_graph(edge_file)
     lcc, positions = layout_with_node2vec_umap(graph, max_edges=max_edges)
@@ -204,8 +207,6 @@ def layout_node2vec_tsne_from_file(
     Computes a node2vec embedding.
     Then performs a t-SNE dimensionality reduction.
     """
-    from ._helpers import read_graph
-    from .layouts import save_graph
 
     graph = read_graph(edge_file)
     print(
@@ -241,7 +242,6 @@ def layout_node2vec_tsne_from_file(
 
 
 def remove_overlaps(list_of_node_positions: List[NodePosition]):
-    from .nooverlap import quad_tree, node
 
     logger.info("removing overlaps")
     local_nodes = []
@@ -309,8 +309,6 @@ def _find_right_edge_count(graph, max_edges, bins):
 
 
 def _cut_edges_if_needed(graph, max_edges_to_keep=1000000):
-    from ._helpers import largest_connected_component
-    from graspologic.preprocessing import cut_edges_by_weight, histogram_edge_weight
 
     num_edges = len(graph.edges())
     num_nodes = len(graph.nodes())

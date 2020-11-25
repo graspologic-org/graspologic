@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 
 
-from .nooverlap_quad import quad_tree, node
+from graspologic.layouts.nooverlap.nooverlap_quad import quad_tree, node
 
 
 __all__ = [

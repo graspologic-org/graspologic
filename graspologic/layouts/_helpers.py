@@ -151,10 +151,10 @@ def read_graph(edge_file, has_header=True):
     start = time.time()
     with open(edge_file, "r") as ifile:
         graph = nx.Graph()
+        reader = csv.reader(ifile)
         if has_header:
-            reader = csv.reader(ifile)
-        # Need to read the header
-        next(reader)
+            # Need to read the header
+            next(reader)
         for row in reader:
             source = row[0]
             target = row[1]

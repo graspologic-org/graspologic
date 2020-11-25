@@ -3,7 +3,18 @@
 
 import networkx
 import logging
-from .. import layouts
+from graspologic.layouts import layouts
+from graspologic.layouts._helpers import (
+    read_node_file,
+    get_node_colors_from_partition,
+    create_colormap,
+    read_locations,
+    get_partition,
+    read_json_colorfile,
+    read_graph,
+    get_sequential_node_colors,
+)
+
 
 logger = logging.getLogger(__name__)
 
@@ -30,17 +41,6 @@ def render_graph_from_files(
     arrows,
     dpi,
 ):
-    from .._helpers import (
-        read_node_file,
-        get_node_colors_from_partition,
-        create_colormap,
-        read_locations,
-        get_partition,
-        read_json_colorfile,
-        read_graph,
-        get_sequential_node_colors,
-    )
-
     node_positions, partitions = read_locations(location_file)
     node_attributes = read_node_file(node_file, node_id, color_attribute)
 

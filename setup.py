@@ -49,7 +49,8 @@ setup(
     package_data={"version": [os.path.join("graspologic", "version", "version.txt")]},
     install_requires=[
         "anytree>=2.8.0",
-        "gensim",
+        "gensim>=3.8.0,<=3.9.0", #methods signatures changed in the 4.0.0beta release
+        "graspologic-native>=0.1.0",
         "hyppo>=0.1.3",
         "joblib>=0.17.0", # Older versions of joblib cause issue #806.  Transitive dependency of hyppo.
         "matplotlib>=3.0.0,<=3.3.0",

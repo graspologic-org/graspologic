@@ -4,6 +4,8 @@
 import argparse
 import logging
 
+from graspologic.layouts._helpers import read_node_file, ensure_directory_for_file
+
 logging.basicConfig(
     format="%(asctime)s:%(levelname)s:%(name)s, %(message)s", level=logging.INFO
 )
@@ -56,7 +58,6 @@ def _main():
     dpi = args.dpi
 
     # moved import after command line parsing to speed up command line failures
-    from ._helpers import read_node_file, ensure_directory_for_file
     from .layout_from_edges import (
         layout_node2vec_umap_from_file,
         layout_node2vec_tsne_from_file,

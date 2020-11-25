@@ -6,7 +6,7 @@ import numpy as np
 import math
 import csv
 from scipy.spatial import distance
-from .grid import grid_buckets
+from graspologic.layouts.nooverlap.grid import grid_buckets
 import logging
 
 logger = logging.getLogger(__name__)
