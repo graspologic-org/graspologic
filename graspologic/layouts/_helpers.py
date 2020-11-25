@@ -7,7 +7,7 @@ import csv
 import os
 import pkg_resources
 import atexit
-from .layouts import NodePosition
+from graspologic.layouts import NodePosition
 from collections import defaultdict
 import logging
 import networkx as nx

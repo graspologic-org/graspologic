@@ -3,7 +3,7 @@
 
 import networkx as nx
 from typing import Any, Dict, List, Optional, Tuple
-from graspologic.layouts.layouts.classes import NodePosition
+from graspologic.layouts.classes import NodePosition
 import matplotlib.pyplot as plt
 
 

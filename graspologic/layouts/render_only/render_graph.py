@@ -3,7 +3,7 @@
 
 import networkx
 import logging
-from graspologic.layouts import layouts
+from graspologic.layouts import save_graph
 from graspologic.layouts._helpers import (
     read_node_file,
     get_node_colors_from_partition,
@@ -72,7 +72,7 @@ def render_graph_from_files(
         _add_edges_to_graph(nx_graph, all_edges.edges())
 
     logger.info(f"writing file: {image_file}")
-    layouts.save_graph(
+    save_graph(
         image_file,
         nx_graph,
         node_positions,

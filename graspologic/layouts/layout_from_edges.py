@@ -12,7 +12,7 @@ import umap
 from sklearn.manifold import TSNE
 
 import graspologic as gspl
-from graspologic.layouts.layouts import NodePosition, save_graph
+from graspologic.layouts import NodePosition, save_graph
 import graspologic_native as gln
 from graspologic.preprocessing import cut_edges_by_weight, histogram_edge_weight
 from ._helpers import (
