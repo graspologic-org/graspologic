@@ -18,6 +18,9 @@ from .utils import (
     augment_diagonal,
     binarize,
     cartprod,
+    fit_plug_in_variance_estimator,
+    remove_vertices,
+    remap_labels,
 )
 from .ptr import pass_to_ranks
 
@@ -39,4 +42,7 @@ __all__ = [
     "binarize",
     "cartprod",
     "pass_to_ranks",
+    "fit_plug_in_variance_estimator",
+    "remove_vertices",
+    "remap_labels",
 ]

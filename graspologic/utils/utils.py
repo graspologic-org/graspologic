@@ -5,10 +5,15 @@ import warnings
 from collections import Iterable
 from functools import reduce
 from pathlib import Path
+from typing import List, Union
 
 import networkx as nx
 import numpy as np
-from sklearn.utils import check_array
+import pandas as pd
+from scipy.optimize import linear_sum_assignment
+from sklearn.metrics import confusion_matrix
+from sklearn.utils import check_array, check_consistent_length, column_or_1d
+from sklearn.utils.multiclass import type_of_target, unique_labels
 
 
 def import_graph(graph, copy=True):
@@ -92,7 +97,7 @@ def import_edgelist(
        Convert node data from strings to specified type.
 
     return_vertices : bool, default=False, optional
-        Returns the union of all ind
+        Returns the union of all individual edgelists.
 
     Returns
     -------
@@ -101,7 +106,7 @@ def import_edgelist(
         an array is returned.
 
     vertices : array-like, shape (n_vertices, )
-        If ``return_vertices`` == True, then returns an array of all vertices that were
+        If ``return_vertices``` is True, then returns an array of all vertices that were
         included in the output graphs.
     """
     # p = Path(path)
@@ -249,7 +254,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     matrix of degrees of each node raised to the -1/2 power, I is the
     identity matrix, and A is the adjacency matrix.
 
-    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer*I`.
+    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer \times I`.
 
     Parameters
     ----------
@@ -260,16 +265,16 @@ def to_laplace(graph, form="DAD", regularizer=None):
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
 
         - 'I-DAD'
-            Computes :math:`L = I - D_i*A*D_i`
+            Computes :math:`L = I - D_i A D_i`
         - 'DAD'
-            Computes :math:`L = D_o*A*D_i`
+            Computes :math:`L = D_o A D_i`
         - 'R-DAD'
-            Computes :math:`L = D_o^r*A*D_i^r`
-            where :math:`D_o^r = D_o + regularizer * I` and likewise for :math:`D_i`
+            Computes :math:`L = D_o^r A D_i^r`
+            where :math:`D_o^r = D_o + regularizer \times I` and likewise for :math:`D_i`
 
     regularizer: int, float or None, optional (default=None)
         Constant to add to the degree vector(s). If None, average node degree is added.
-        If int or float, must be >= 0. Only used when ``form`` == 'R-DAD'.
+        If int or float, must be >= 0. Only used when ``form`` is 'R-DAD'.
 
     Returns
     -------
@@ -350,7 +355,7 @@ def is_fully_connected(graph):
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case.
 
-    Connected means one can get from any vertex u to vertex v by traversing
+    Connected means one can get from any vertex :math:`u` to vertex :math:`v` by traversing
     the graph. For a directed graph, weakly connected means that the graph
     is connected after it is converted to an unweighted graph (ignore the
     direction of each edge)
@@ -645,3 +650,228 @@ def cartprod(*arrays):
     return np.transpose(
         np.meshgrid(*arrays, indexing="ij"), np.roll(np.arange(N + 1), -1)
     ).reshape(-1, N)
+
+
+def fit_plug_in_variance_estimator(X):
+    """
+    Takes in ASE of a graph and returns a function that estimates
+    the variance-covariance matrix at a given point using the
+    plug-in estimator from the RDPG Central Limit Theorem.
+
+    Parameters
+    ----------
+    X : np.ndarray, shape (n, d)
+        adjacency spectral embedding of a graph
+
+    Returns
+    -------
+    plug_in_variance_estimtor: functions
+        a function that estimates variance (see below)
+    """
+
+    n = len(X)
+
+    # precompute the Delta and the middle term matrix part
+    delta = 1 / (n) * (X.T @ X)
+    delta_inverse = np.linalg.inv(delta)
+    middle_term_matrix = np.einsum("bi,bo->bio", X, X)
+
+    def plug_in_variance_estimator(x):
+        """
+        Takes in a point of a matrix of points in R^d and returns an
+        estimated covariance matrix for each of the points
+
+        Parameters:
+        -----------
+        x: np.ndarray, shape (n, d)
+            points to estimate variance at
+            if 1-dimensional - reshaped to (1, d)
+
+        Returns:
+        -------
+        covariances: np.ndarray, shape (n, d, d)
+            n estimated variance-covariance matrices of the points provided
+        """
+        if x.ndim < 2:
+            x = x.reshape(1, -1)
+        # the following two lines are a properly vectorized version of
+        # middle_term = 0
+        # for i in range(n):
+        #     middle_term += np.multiply.outer((x @ X[i] - (x @ X[i]) ** 2),
+        #                                      np.outer(X[i], X[i]))
+        # where the matrix part does not involve x and has been computed above
+        middle_term_scalar = x @ X.T - (x @ X.T) ** 2
+        middle_term = np.tensordot(middle_term_scalar, middle_term_matrix, axes=1)
+        covariances = delta_inverse @ (middle_term / n) @ delta_inverse
+        return covariances
+
+    return plug_in_variance_estimator
+
+
+def remove_vertices(graph, indices, return_removed=False):
+    """
+    Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the
+    truncated matrix and optionally the removed subgraph. Here, an adjacency vector
+    is the set of edge weights for a particular vertex.
+
+    Parameters
+    ----------
+    graph: networkx.Graph or array-like, shape (n, n)
+        The adjacency matrix for some graph.
+    indices: int or array-like, length m
+        Index/indices of the adjacency vector(s) to be removed.
+    return_removed: bool, by default False (optional)
+        Whether to return the tuple ``(A, V)``,
+        where ``A`` is the truncated adjacency matrix,
+        ``V`` is an array representing the removed subgraph.
+
+    Returns
+    -------
+    truncated_graph: np.ndarray
+        The truncated matrix.
+        This is a copy of `graph` of shape (k, k), with ``k=n-m``, without the ``m``
+        adjacency vectors given by `indices`.
+
+    removed_subgraph: np.ndarray or tuple, shape (m, k) (optional)
+        Array of removed adjacency vectors without edges to each other.
+        If directed, this is a tuple ``(V_1, V_2)``,
+        with ``V_1`` being an array of adjacency vectors from the removed subgraph to the truncated graph,
+        and ``V_2`` being an array of adjacency vectors from the truncated graph to the removed subgraph.
+
+    Examples
+    --------
+    # Undirected
+    >>> A = np.array([[0, 1, 2],
+                      [1, 0, 3],
+                      [2, 3, 0]])
+    >>> remove_vertices(A, 0)
+    array([[0., 3.],
+           [3., 0.]]))
+    >>> remove_vertices(A, 0, return_removed=True)
+    (array([[0., 3.],
+            [3., 0.]]),
+     array([1., 2.]))
+
+    # Directed
+    >>> B = np.array([[0, 1, 2, 3],
+                      [4, 0, 5, 6],
+                      [7, 8, 0, 9],
+                      [10, 11, 12, 0]])
+    >>> remove_vertices(B, 0, return_removed=True)
+    (array([[ 0.,  5.,  6.],
+            [ 8.,  0.,  9.],
+            [11., 12.,  0.]]),
+    (array([ 4.,  7., 10.]), array([1., 2., 3.])))
+    >>> remove_vertices(B, [0, -1], return_removed=True)
+    (array([[0., 5.],
+            [8., 0.]]),
+    (array([[4., 7.],
+            [6., 9.]]),
+    array([[ 1.,  2.],
+            [11., 12.]])))
+    """
+    graph = import_graph(graph)
+    if isinstance(indices, list) and len(indices) >= len(graph):
+        raise IndexError("You must pass in fewer vertex indices than vertices.")
+    directed = not is_almost_symmetric(graph)
+
+    # truncate graph
+    mask = np.ones(graph.shape[0], dtype=bool)
+    mask[indices] = 0
+    A = graph[mask, :][:, mask]
+
+    if return_removed:
+        rows = graph[mask]
+        vertices = rows[:, indices].T
+        if directed:
+            cols = graph[:, mask]
+            vertices_right = cols[indices]
+            return A, (vertices, vertices_right)
+        return A, vertices
+    return A
+
+
+def remap_labels(
+    y_true: Union[List, np.ndarray, pd.Series],
+    y_pred: Union[List, np.ndarray, pd.Series],
+    return_map: bool = False,
+) -> np.ndarray:
+    """
+    Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
+    match the labels used by another similar labeling.
+
+    Given two :math:`n`-length vectors describing a categorical labeling of :math:`n`
+    samples, this method reorders the labels of the second vector (`y_pred`) so that as
+    many samples as possible from the two label vectors are in the same category.
+
+
+    Parameters
+    ----------
+    y_true : array-like of shape (n_samples,)
+        Ground truth labels, or, labels to map to.
+    y_pred : array-like of shape (n_samples,)
+        Labels to remap to match the categorical labeling of `y_true`. The categorical
+        labeling of `y_pred` will be preserved exactly, but the labels used to
+        denote the categories will be changed to best match the categories used in
+        `y_true`.
+    return_map : bool, optional
+        Whether to return a dictionary where the keys are the original category labels
+        from `y_pred` and the values are the new category labels that they were mapped
+        to.
+
+    Returns
+    -------
+    remapped_y_pred : np.ndarray of shape (n_samples,)
+        Same categorical labeling as that of `y_pred`, but with the category labels
+        permuted to best match those of `y_true`.
+    label_map : dict
+        Mapping from the original labels of `y_pred` to the new labels which best
+        resemble those of `y_true`. Only returned if `return_map` was True.
+
+    Examples
+    --------
+    >>> y_true = np.array([0,0,1,1,2,2])
+    >>> y_pred = np.array([2,2,1,1,0,0])
+    >>> remap_labels(y_true, y_pred)
+    array([0, 0, 1, 1, 2, 2])
+
+    Notes
+    -----
+    This method will work well when the label vectors describe a somewhat similar
+    categorization of the data (as measured by metrics such as
+    :func:`sklearn.metrics.adjusted_rand_score`, for example). When the categorizations
+    are not similar, the remapping may not make sense (as such a remapping does not
+    exist).
+
+    For example, consider when one category in `y_true` is exactly split in half into
+    two categories in `y_pred`. If this is the case, it is impossible to say which of
+    the categories in `y_pred` match that original category from `y_true`.
+    """
+    check_consistent_length(y_true, y_pred)
+    true_type = type_of_target(y_true)
+    pred_type = type_of_target(y_pred)
+
+    valid_target_types = {"binary", "multiclass"}
+    if (true_type not in valid_target_types) or (pred_type not in valid_target_types):
+        msg = "Elements of `y_true` and `y_pred` must represent a valid binary or "
+        msg += "multiclass labeling, see "
+        msg += "https://scikit-learn.org/stable/modules/generated/sklearn.utils.multiclass.type_of_target.html"
+        msg += " for more information."
+        raise ValueError(msg)
+
+    y_true = column_or_1d(y_true)
+    y_pred = column_or_1d(y_pred)
+
+    if not isinstance(return_map, bool):
+        raise TypeError("return_map must be of type bool.")
+
+    labels = unique_labels(y_true, y_pred)
+    confusion_mat = confusion_matrix(y_true, y_pred, labels=labels)
+    row_inds, col_inds = linear_sum_assignment(confusion_mat, maximize=True)
+    label_map = dict(zip(labels[col_inds], labels[row_inds]))
+
+    remapped_y_pred = np.vectorize(label_map.get)(y_pred)
+    if return_map:
+        return remapped_y_pred, label_map
+    else:
+        return remapped_y_pred
