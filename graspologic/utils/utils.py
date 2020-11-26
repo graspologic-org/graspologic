@@ -10,6 +10,8 @@ from typing import List, Union
 import networkx as nx
 import numpy as np
 import pandas as pd
+from scipy.sparse import csr_matrix
+from scipy.sparse.csgraph import connected_components
 from scipy.optimize import linear_sum_assignment
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
@@ -348,6 +350,18 @@ def to_laplace(graph, form="DAD", regularizer=None):
             L, method="avg"
         )  # sometimes machine prec. makes this necessary
     return L
+
+
+def scipy_is_fully_connected(
+    graph, directed=False, connection="weak", return_labels=True
+):
+    A = import_graph(graph)
+    A = csr_matrix(A)
+    n_components, labels = connected_components(
+        csgraph=A, directed=directed, connection=connection, return_labels=True
+    )
+
+    return all(labels)
 
 
 def is_fully_connected(graph):
