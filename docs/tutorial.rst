@@ -26,6 +26,7 @@ stochastic block model, and random dot product graph (RDPG).
    
    tutorials/simulations/erdos_renyi
    tutorials/simulations/sbm
+   tutorials/simulations/mmsbm
    tutorials/simulations/rdpg
    tutorials/simulations/corr
    tutorials/simulations/rdpg_corr
