@@ -813,10 +813,10 @@ def mmsbm(
     which indicates the probability of connection between nodes based upon
     their community membership.
     Each node is assigned a membership vector drawn from Dirichlet distribution
-    with parameter :math:`\alpha`. Each entry of this vector indicates the probability
-    of that node pertaining to each community. Finally, each interaction between
-    nodes is drawn by assigning the community membership of each node according to
-    the probability specified in the mixed membership vector for that node.
+    with parameter :math:`\vec{\alpha}`. Each entry of this vector indicates the
+    probability of that node pertaining to each community. Finally, each interaction
+    between nodes is drawn by assigning the community membership of each node according
+    to the probability specified in the mixed membership vector for that node.
 
 
     Read more in the :ref:`tutorials <simulations_tutorials>`
@@ -827,14 +827,14 @@ def mmsbm(
         Number of vertices of the graph.
 
     p: array-like, shape (n_communities, n_communities)
-        Probability of an edge between each of the communities, where p[i, j] indicates
-        the probability of a connection between edges in communities [i, j].
-        0 < p[i, j] < 1 for all i, j.
+        Probability of an edge between each of the communities, where :math:`P_{ij}`
+        indicates the probability of a connection between edges in communities i, j.
+        0 < :math:`P_{ij}` < 1 for all i, j.
 
     alpha: array-like, shape (n_communities,)
-        Concentration parameter :math:`\alpha` of the Dirichlet distribution used to
-        sample the mixed-membership vectors for each node.
-        alpha[i] > 0 for all i.
+        Concentration parameter :math:`\vec{\alpha}` of the Dirichlet distribution used
+        to sample the mixed-membership vectors for each node.
+        :math:`\vec{\alpha}_i` > 0 for all i.
 
     rng: numpy.random.Generator, optional (default= numpy.random.default_rng())
         Numpy Random Generator object to generate sampling from distributions.
