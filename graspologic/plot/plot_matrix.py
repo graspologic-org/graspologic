@@ -47,14 +47,7 @@ def _check_length(item, name, length):
         )
 
 
-def _check_sorting_kws(
-    length,
-    meta,
-    group_class,
-    class_order,
-    item_order,
-    color_class
-):
+def _check_sorting_kws(length, meta, group_class, class_order, item_order, color_class):
     if isinstance(meta, pd.DataFrame):
         # if meta is here, than everything else must be column item in meta
         _check_length(meta, "meta", length)
@@ -161,12 +154,7 @@ def _remove_shared_ax(ax):
 
 
 def draw_colors(
-    ax,
-    ax_type="x",
-    meta=None,
-    divider=None,
-    color_class=None,
-    palette="tab10"
+    ax, ax_type="x", meta=None, divider=None, color_class=None, palette="tab10"
 ):
     """
     Draw colormap onto the axis to separate the data
@@ -422,13 +410,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
     return ax
 
 
-def sort_meta(
-    length,
-    meta,
-    group_class,
-    class_order=["size"],
-    item_order=None
-):
+def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
     """
     Sort the data and metadata according to the sorting method
 
@@ -604,6 +586,7 @@ def matrixplot(
         col_item_order,
         col_color_class,
     )
+
     (
         row_meta,
         row_group_class,
