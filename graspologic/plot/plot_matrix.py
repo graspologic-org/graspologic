@@ -47,7 +47,14 @@ def _check_length(item, name, length):
         )
 
 
-def _check_sorting_kws(length, meta, group_class, class_order, item_order, color_class):
+def _check_sorting_kws(
+    length,
+    meta,
+    group_class,
+    class_order,
+    item_order,
+    color_class
+):
     if isinstance(meta, pd.DataFrame):
         # if meta is here, than everything else must be column item in meta
         _check_length(meta, "meta", length)
@@ -154,7 +161,12 @@ def _remove_shared_ax(ax):
 
 
 def draw_colors(
-    ax, ax_type="x", meta=None, divider=None, color_class=None, palette="tab10"
+    ax,
+    ax_type="x",
+    meta=None,
+    divider=None,
+    color_class=None,
+    palette="tab10"
 ):
     """
     Draw colormap onto the axis to separate the data
@@ -220,7 +232,12 @@ def draw_colors(
 
 
 def draw_separators(
-    ax, ax_type="x", meta=None, group_class=None, plot_type="heatmap", gridline_kws=None
+    ax,
+    ax_type="x",
+    meta=None,
+    group_class=None,
+    plot_type="heatmap",
+    gridline_kws=None,
 ):
     """
     Draw separators between groups on the plot
@@ -275,7 +292,12 @@ def draw_separators(
 
 
 def draw_ticks(
-    ax, ax_type="x", meta=None, group_class=None, group_border=True, plot_type="heatmap"
+    ax,
+    ax_type="x",
+    meta=None,
+    group_class=None,
+    group_border=True,
+    plot_type="heatmap",
 ):
     """
     Draw ticks onto the axis of the plot to separate the data
@@ -400,7 +422,13 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
     return ax
 
 
-def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
+def sort_meta(
+    length,
+    meta,
+    group_class,
+    class_order=["size"],
+    item_order=None
+):
     """
     Sort the data and metadata according to the sorting method
 
@@ -562,7 +590,13 @@ def matrixplot(
         raise ValueError(f"`plot_type` must be one of {plot_type_opts}")
 
     # check for the types of the sorting arguments
-    col_meta, col_group_class, col_class_order, col_item_order, col_color_class = _check_sorting_kws(
+    (
+        col_meta,
+        col_group_class,
+        col_class_order,
+        col_item_order,
+        col_color_class,
+    ) = _check_sorting_kws(
         data.shape[0],
         col_meta,
         col_group_class,
@@ -570,7 +604,13 @@ def matrixplot(
         col_item_order,
         col_color_class,
     )
-    row_meta, row_group_class, row_class_order, row_item_order, row_color_class = _check_sorting_kws(
+    (
+        row_meta,
+        row_group_class,
+        row_class_order,
+        row_item_order,
+        row_color_class,
+    ) = _check_sorting_kws(
         data.shape[0],
         row_meta,
         row_group_class,
@@ -734,9 +774,13 @@ def matrixplot(
         for i, sc in enumerate(rev_group_class):
 
             # Add a new axis when needed
-            tick_ax = divider.append_axes("top", size="1%", pad=col_tick_pad[i], sharex=ax)
+            tick_ax = divider.append_axes(
+                "top", size="1%", pad=col_tick_pad[i], sharex=ax
+            )
             _remove_shared_ax(tick_ax)
-            tick_ax = _set_spines(tick_ax, left=False, right=False, top=True, bottom=False)
+            tick_ax = _set_spines(
+                tick_ax, left=False, right=False, top=True, bottom=False
+            )
 
             # Draw the ticks for the x axis
             draw_ticks(
@@ -759,9 +803,13 @@ def matrixplot(
         rev_group_class = list(row_group_class[::-1])
         for i, sc in enumerate(rev_group_class):
             # Add a new axis when needed
-            tick_ax = divider.append_axes("left", size="1%", pad=row_tick_pad[i], sharey=ax)
+            tick_ax = divider.append_axes(
+                "left", size="1%", pad=row_tick_pad[i], sharey=ax
+            )
             _remove_shared_ax(tick_ax)
-            tick_ax = _set_spines(tick_ax, left=True, right=False, top=False, bottom=False)
+            tick_ax = _set_spines(
+                tick_ax, left=True, right=False, top=False, bottom=False
+            )
 
             # Draw the ticks for the y axis
             draw_ticks(

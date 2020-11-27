@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from graspologic.plot.plot_matrix import matrixplot
+from graspologic.plot.plot_matrix import adjplot, matrixplot
 from graspologic.simulations.simulations import er_np
 
 
-def test_matrixplot_inputs():
+def test_adjplot_inputs():
     X = er_np(100, 0.5)
     meta = pd.DataFrame(
         {
@@ -21,13 +21,13 @@ def test_matrixplot_inputs():
 
     # test matrix
     with pytest.raises(TypeError):
-        matrixplot(data="input", meta=meta)
+        adjplot(data="input", meta=meta)
     with pytest.raises(ValueError):
-        matrixplot(data=np.zeros((2, 2, 2)), meta=meta)
+        adjplot(data=np.zeros((2, 2, 2)), meta=meta)
 
     # test meta
     with pytest.raises(ValueError):
-        matrixplot(X)
+        adjplot(X)
     with pytest.raises(ValueError):
         bad_meta = pd.DataFrame(
             {
@@ -36,32 +36,32 @@ def test_matrixplot_inputs():
                 "ID": np.random.randint(10, size=1),
             }
         )
-        matrixplot(X, meta=bad_meta)
+        adjplot(X, meta=bad_meta)
 
     # test plot type
     with pytest.raises(ValueError):
-        matrixplot(X, plot_type="bad plottype")
+        adjplot(X, plot_type="bad plottype")
 
     # test sorting_kws
     with pytest.raises(TypeError):
-        matrixplot(X, meta=meta, group_class=123)
+        adjplot(X, meta=meta, group_class=123)
     with pytest.raises(TypeError):
-        matrixplot(X, meta=meta, class_order=123)
+        adjplot(X, meta=meta, class_order=123)
     with pytest.raises(TypeError):
-        matrixplot(X, meta=meta, item_order=123)
+        adjplot(X, meta=meta, item_order=123)
     with pytest.raises(TypeError):
-        matrixplot(X, meta=meta, color_class=123)
+        adjplot(X, meta=meta, color_class=123)
     with pytest.raises(ValueError):
-        matrixplot(X, meta=meta, group_class="bad value")
+        adjplot(X, meta=meta, group_class="bad value")
     with pytest.raises(ValueError):
-        matrixplot(X, meta=meta, class_order="bad value")
+        adjplot(X, meta=meta, class_order="bad value")
     with pytest.raises(ValueError):
-        matrixplot(X, meta=meta, item_order="bad value")
+        adjplot(X, meta=meta, item_order="bad value")
     with pytest.raises(ValueError):
-        matrixplot(X, meta=meta, color_class="bad value")
+        adjplot(X, meta=meta, color_class="bad value")
 
 
-def test_matrixplot_output():
+def test_adjplot_output():
     """
     simple function to see if plot is made without errors
     """
@@ -73,7 +73,7 @@ def test_matrixplot_output():
             "ID": np.random.randint(10, size=10),
         }
     )
-    ax = matrixplot(X, meta=meta)
-    ax = matrixplot(X, meta=meta, group_class="hemisphere")
-    ax = matrixplot(X, meta=meta, group_class="hemisphere", class_order="size")
-    ax = matrixplot(X, meta=meta, group_class="hemisphere", item_order="ID")
+    ax = adjplot(X, meta=meta)
+    ax = adjplot(X, meta=meta, group_class="hemisphere")
+    ax = adjplot(X, meta=meta, group_class="hemisphere", class_order="size")
+    ax = adjplot(X, meta=meta, group_class="hemisphere", item_order="ID")
