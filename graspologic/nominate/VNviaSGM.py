@@ -14,7 +14,7 @@ class VNviaSGM(BaseEstimator):
         Adjacency matrix of `G_1`, the graph where voi is known
 
     G_2: 2d-array, square
-        Adjacency matrix of `G_2`, the graph where voi is not known.
+        Adjacency matrix of `G_2`, the graph where voi is not known
 
     h: int
         distance between voi used to create induced subgraph on `G_1`
