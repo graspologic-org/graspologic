@@ -257,7 +257,7 @@ class GraphMatch(BaseEstimator):
 
         for i in range(self.n_init):
             # setting initialization matrix
-            if self.init_method == "rand":
+            if self.init == "rand":
                 sk = SinkhornKnopp()
                 K = np.random.rand(
                     n_unseed, n_unseed
@@ -268,7 +268,7 @@ class GraphMatch(BaseEstimator):
                     n_unseed
                 )  # initialize J, a doubly stochastic barycenter
                 P = (K + J) / 2
-            elif self.init_method == "barycenter":
+            elif self.init == "barycenter":
                 P = np.ones((n_unseed, n_unseed)) / float(n_unseed)
 
             const_sum = A21 @ np.transpose(B21) + np.transpose(A12) @ B12
