@@ -222,6 +222,7 @@ def _quadratic_assignment_faq(
     shuffle_input=False,
     maxiter=30,
     tol=0.03,
+    probability_matrix=None
 ):
     r"""
     Solve the quadratic assignment problem (approximately).
@@ -470,7 +471,13 @@ def _quadratic_assignment_faq(
     # [1] Algorithm 1 Line 7 - end main loop
 
     # [1] Algorithm 1 Line 8 - project onto the set of permutation matrices
-    _, col = linear_sum_assignment(-P)
+    row, col = linear_sum_assignment(-P)
+
+    if probability_matrix is not None:
+        perm_mat = np.zeros((n_unseed, n_unseed)).astype(float)
+        perm_mat[row, col] = 1
+        probability_matrix += perm_mat
+
     perm = np.concatenate((np.arange(n_seeds), col + n_seeds))
 
     unshuffled_perm = np.zeros(n, dtype=int)
