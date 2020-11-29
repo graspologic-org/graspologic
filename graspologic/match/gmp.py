@@ -173,7 +173,7 @@ class GraphMatch(BaseEstimator):
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
             "tol": self.eps,
-            "probability_matrix": self.probability_matrix
+            "probability_matrix": self.probability_matrix,
         }
 
         res = min(
@@ -231,4 +231,3 @@ def _adj_pad(A, B, method):
         B = pad(B, n)
 
     return A, B
-

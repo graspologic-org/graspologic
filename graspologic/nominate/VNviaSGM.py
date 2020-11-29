@@ -148,9 +148,7 @@ class VNviaSGM(BaseEstimator):
         BB_fin = BB[np.ix_(ind2, ind2)]
 
         seeds_fin = list(range(len(Sx1)))
-        sgm = GMP(
-            n_init=self.R, shuffle_input=False, init="rand", padding="naive"
-        )
+        sgm = GMP(n_init=self.R, shuffle_input=False, init="rand", padding="naive")
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 

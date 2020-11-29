@@ -222,7 +222,7 @@ def _quadratic_assignment_faq(
     shuffle_input=False,
     maxiter=30,
     tol=0.03,
-    probability_matrix=None
+    probability_matrix=None,
 ):
     r"""
     Solve the quadratic assignment problem (approximately).
