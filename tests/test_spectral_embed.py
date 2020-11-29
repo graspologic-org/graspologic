@@ -2,12 +2,21 @@
 # Licensed under the MIT License.
 
 import unittest
+import pytest
 import numpy as np
+import pandas as pd
+from numpy.random import poisson, normal
+from numpy.testing import assert_equal
+import networkx as nx
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import er_np, er_nm, sbm
+from graspologic.utils import remove_vertices, is_symmetric
 from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score
+from sklearn.metrics import adjusted_rand_score, pairwise_distances
+from sklearn.base import clone
+
+np.random.seed(9002)
 
 
 def _kmeans_comparison(data, labels, n_clusters):
@@ -105,6 +114,23 @@ def _test_sbm_er_binary(self, method, P, directed=False, *args, **kwargs):
 
 
 class TestAdjacencySpectralEmbed(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(9001)
+        n = [10, 10]
+        p = np.array([[0.9, 0.1], [0.1, 0.9]])
+        wt = [[normal, poisson], [poisson, normal]]
+        wtargs = [
+            [dict(loc=3, scale=1), dict(lam=5)],
+            [dict(lam=5), dict(loc=3, scale=1)],
+        ]
+        self.testgraphs = dict(
+            Guw=sbm(n=n, p=p),
+            Gw=sbm(n=n, p=p, wt=wt, wtargs=wtargs),
+            Guwd=sbm(n=n, p=p, directed=True),
+            Gwd=sbm(n=n, p=p, wt=wt, wtargs=wtargs, directed=True),
+        )
+        self.ase = AdjacencySpectralEmbed(n_components=2)
+
     def test_output_dim(self):
         _test_output_dim(self, AdjacencySpectralEmbed)
 
@@ -129,6 +155,109 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         with self.assertRaises(TypeError):
             ase = AdjacencySpectralEmbed(diag_aug="over 9000")
             ase.fit()
+
+    def test_transform_closeto_fit_transform(self):
+        atol = 0.15
+        for diag_aug in [True, False]:
+            for g, A in self.testgraphs.items():
+                ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
+                ase.fit(A)
+                Y = ase.fit_transform(A)
+                if isinstance(Y, np.ndarray):
+                    X = ase.transform(A)
+                    self.assertTrue(np.allclose(X, Y, atol=atol))
+                elif isinstance(Y, tuple):
+                    with self.assertRaises(TypeError):
+                        X = ase.transform(A)
+                    X = ase.transform((A.T, A))
+                    self.assertTrue(np.allclose(X[0], Y[0], atol=atol))
+                    self.assertTrue(np.allclose(X[1], Y[1], atol=atol))
+                else:
+                    raise TypeError
+
+    def test_transform_networkx(self):
+        G = nx.grid_2d_graph(5, 5)
+        ase = AdjacencySpectralEmbed(n_components=2)
+        ase.fit(G)
+        ase.transform(G)
+
+    def test_transform_correct_types(self):
+        ase = AdjacencySpectralEmbed(n_components=2)
+        for graph in self.testgraphs.values():
+            A, a = remove_vertices(graph, 1, return_removed=True)
+            ase.fit(A)
+            directed = ase.latent_right_ is not None
+            weighted = not np.array_equal(A, A.astype(bool))
+            w = ase.transform(a)
+            if directed:
+                self.assertIsInstance(w, tuple)
+                self.assertIsInstance(w[0], np.ndarray)
+                self.assertIsInstance(w[1], np.ndarray)
+            elif not directed:
+                self.assertIsInstance(w, np.ndarray)
+                self.assertEqual(np.atleast_2d(w).shape[1], 2)
+
+    def test_directed_vertex_direction(self):
+        M = self.testgraphs["Guwd"]
+        oos_idx = 0
+        A, a = remove_vertices(M, indices=oos_idx, return_removed=True)
+        assert_equal(np.delete(M[:, 0], oos_idx), a[0])
+
+    def test_directed_correct_latent_positions(self):
+        # setup
+        ase = AdjacencySpectralEmbed(n_components=3)
+        P = np.array([[0.9, 0.1, 0.1], [0.3, 0.6, 0.1], [0.1, 0.5, 0.6]])
+        M, labels = sbm([200, 200, 200], P, directed=True, return_labels=True)
+
+        # one node from each community
+        oos_idx = np.nonzero(np.r_[1, np.diff(labels)[:-1]])[0]
+        labels = list(labels)
+        oos_labels = [labels.pop(i) for i in oos_idx]
+
+        # Grab out-of-sample, fit, transform
+        A, a = remove_vertices(M, indices=oos_idx, return_removed=True)
+        latent_left, latent_right = ase.fit_transform(A)
+        oos_left, oos_right = ase.transform(a)
+
+        # separate into communities
+        for i, latent in enumerate([latent_left, latent_right]):
+            left = i == 0
+            df = pd.DataFrame(
+                {
+                    "Type": labels,
+                    "Dimension 1": latent[:, 0],
+                    "Dimension 2": latent[:, 1],
+                    "Dimension 3": latent[:, 2],
+                }
+            )
+            # make sure that oos vertices are closer to their true community averages than other community averages
+            means = df.groupby("Type").mean()
+            if left:
+                avg_dist_within = np.diag(pairwise_distances(means, oos_left))
+                avg_dist_between = np.diag(pairwise_distances(means, oos_right))
+                self.assertTrue(all(avg_dist_within < avg_dist_between))
+            elif not left:
+                avg_dist_within = np.diag(pairwise_distances(means, oos_right))
+                avg_dist_between = np.diag(pairwise_distances(means, oos_left))
+                self.assertTrue(all(avg_dist_within < avg_dist_between))
+
+    def test_exceptions(self):
+        ase = clone(self.ase)
+
+        with pytest.raises(Exception):
+            ase.fit(self.testgraphs["Gwd"])
+            ase.transform("9001")
+
+        with pytest.raises(Exception):
+            Guwd = self.testgraphs["Guwd"]
+            ase.fit(Guwd)
+            ase.transform(np.ones(len(Guwd)))
+
+        with pytest.raises(ValueError):
+            A, a = remove_vertices(self.testgraphs["Gw"], [0, 1], return_removed=True)
+            a = a.T
+            ase.fit(A)
+            ase.transform(a)
 
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
