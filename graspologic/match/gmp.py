@@ -410,3 +410,9 @@ def _adj_pad(A, B, method):
         B = pad(B, n)
 
     return A, B
+
+
+def _unshuffle(array, n):
+    unshuffle = np.array(range(n))
+    unshuffle[array] = np.array(range(n))
+    return unshuffle
