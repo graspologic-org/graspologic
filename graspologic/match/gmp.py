@@ -8,7 +8,6 @@ from scipy.optimize import minimize_scalar
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
-from .skp import SinkhornKnopp
 
 
 class GraphMatch(BaseEstimator):
