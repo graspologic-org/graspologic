@@ -8,7 +8,7 @@ from scipy.optimize import minimize_scalar
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
-from .skp import SinkhornKnopp
+from .qap import quadratic_assignment
 
 
 class GraphMatch(BaseEstimator):
@@ -32,14 +32,18 @@ class GraphMatch(BaseEstimator):
         the FAQ algorithm will undergo. ``n_init`` automatically set to 1 if
         ``init_method`` = 'barycenter'
 
-    init_method : string (default = 'barycenter')
+    init : string (default = 'barycenter') or 2d-array
         The initial position chosen
+
+        If 2d-array, `init` must be :math:`m' x m'`, where :math:`m' = n - m`,
+        and it must be doubly stochastic: each of its rows and columns must
+        sum to 1.
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
         :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region
 
-        "rand" : some random point near :math:`J, (J+K)/2`, where K is some random doubly
-        stochastic matrix
+        "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
+        doubly stochastic matrix
 
     max_iter : int, positive (default = 30)
         Integer specifying the max number of Franke-Wolfe iterations.
@@ -103,24 +107,29 @@ class GraphMatch(BaseEstimator):
     def __init__(
         self,
         n_init=1,
-        init_method="barycenter",
+        init="barycenter",
         max_iter=30,
         shuffle_input=True,
         eps=0.1,
         gmp=True,
         padding="adopted",
     ):
-
         if type(n_init) is int and n_init > 0:
             self.n_init = n_init
         else:
             msg = '"n_init" must be a positive integer'
             raise TypeError(msg)
-        if init_method == "rand":
-            self.init_method = "rand"
-        elif init_method == "barycenter":
-            self.init_method = "barycenter"
-            self.n_init = 1
+        if type(n_init) is int and n_init > 0:
+            self.n_init = n_init
+        else:
+            msg = '"n_init" must be a positive integer'
+            raise TypeError(msg)
+        if init == "rand":
+            self.init = "randomized"
+        elif init == "barycenter":
+            self.init = "barycenter"
+        elif not isinstance(init, str):
+            self.init = init
         else:
             msg = 'Invalid "init_method" parameter string'
             raise ValueError(msg)
@@ -181,6 +190,7 @@ class GraphMatch(BaseEstimator):
         B = check_array(B, copy=True, ensure_2d=True)
         seeds_A = column_or_1d(seeds_A)
         seeds_B = column_or_1d(seeds_B)
+        partial_match = np.column_stack((seeds_A, seeds_B))
 
         # pads A and B according to section 2.5 of [2]
         if A.shape[0] != B.shape[0]:
@@ -331,6 +341,24 @@ class GraphMatch(BaseEstimator):
         self.perm_inds_ = perm_inds  # permutation indices
         self.score_ = score  # objective function value
         self.n_iter_ = best_n_iter
+
+        options = {
+            "maximize": self.gmp,
+            "partial_match": partial_match,
+            "P0": self.init,
+            "shuffle_input": self.shuffle_input,
+            "maxiter": self.max_iter,
+            "tol": self.eps,
+        }
+
+        res = min(
+            [quadratic_assignment(A, B, options=options) for i in range(self.n_init)],
+            key=lambda x: x.fun,
+        )
+
+        self.perm_inds_ = res.col_ind  # permutation indices
+        self.score_ = res.fun  # objective function value
+        self.n_iter_ = res.nit
         return self
 
     def fit_predict(self, A, B, seeds_A=[], seeds_B=[]):
@@ -382,9 +410,3 @@ def _adj_pad(A, B, method):
         B = pad(B, n)
 
     return A, B
-
-
-def _unshuffle(array, n):
-    unshuffle = np.array(range(n))
-    unshuffle[array] = np.array(range(n))
-    return unshuffle
