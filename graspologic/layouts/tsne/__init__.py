@@ -1,23 +1,8 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from graspologic.layouts import layouts, render_only, nooverlap
-from graspologic.layouts.tsne import tsne_layout
-from graspologic.layouts.layout_from_edges import (
-    layout_node2vec_tsne_from_file,
-    layout_node2vec_umap_from_file,
-    layout_with_node2vec_tsne,
-    layout_with_node2vec_umap,
-    remove_overlaps,
-)
+from graspologic.layouts.tsne.tsne_layout import reduce_dimensions
 
 __all__ = [
-    "layouts",
-    "_helpers",
-    "render_only",
-    "tsne",
-    "nooverlap",
-    "layout_node2vec_tsne_from_file",
-    "layout_with_node2vec_tsne",
-    "remove_overlaps",
+    "reduce_dimensions",
 ]

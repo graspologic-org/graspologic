@@ -6,8 +6,12 @@ import numpy as np
 import math
 import csv
 from scipy.spatial import distance
-from graspologic.layouts.nooverlap.grid import grid_buckets
 import logging
+import time
+from typing import List, Optional
+
+from graspologic.layouts.nooverlap.grid import grid_buckets
+from graspologic.layouts import NodePosition
 
 logger = logging.getLogger(__name__)
 
@@ -1168,3 +1172,26 @@ class quad_tree:
                     for n in qn.parent.nodes:
                         n.color = first_color  #'#FF0004'
             first = False
+
+
+def remove_overlaps(list_of_node_positions: List[NodePosition]):
+
+    logger.info("removing overlaps")
+    local_nodes = []
+    for n in list_of_node_positions:
+        local_nodes.append(node(n.node_id, n.x, n.y, n.size, n.community))
+    qt = quad_tree(local_nodes, 50)
+    start = time.time()
+    # qt.layout_dense_first(first_color='#FF0004')
+    qt.layout_dense_first(first_color=None)
+    stop = time.time()
+    logger.info(f"removed overlap in {stop-start} seconds")
+
+    new_positions = []
+    for n in local_nodes:
+        new_positions.append(
+            NodePosition(
+                node_id=n.nid, x=n.x, y=n.y, size=n.size, community=n.community
+            )
+        )
+    return new_positions

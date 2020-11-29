@@ -4,7 +4,13 @@
 import argparse
 import logging
 
-from graspologic.layouts._helpers import read_node_file, ensure_directory_for_file
+from graspologic.layouts._helpers import ensure_directory_for_file
+
+from graspologic.layouts import (
+    layout_node2vec_umap_from_file,
+    layout_node2vec_tsne_from_file,
+)
+
 
 logging.basicConfig(
     format="%(asctime)s:%(levelname)s:%(name)s, %(message)s", level=logging.INFO
@@ -57,12 +63,6 @@ def _main():
     max_edges = args.max_edges
     dpi = args.dpi
 
-    # moved import after command line parsing to speed up command line failures
-    from .layout_from_edges import (
-        layout_node2vec_umap_from_file,
-        layout_node2vec_tsne_from_file,
-    )
-
     if image_file is None and location_file is None:
         print(f"Must specify an image file, a location file or both")
         return
@@ -77,8 +77,6 @@ def _main():
         layout_node2vec_tsne_from_file(
             edge_list_file, image_file, location_file, dpi, max_edges
         )
-    # 	elif layout_type == 'autolayout':
-    # 		autolayout(edge_list_file, image_file, location_file, dpi)
     else:
         print(f"Invalid Layout type specified {layout_type}")
     return
