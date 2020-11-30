@@ -358,7 +358,7 @@ def scipy_is_fully_connected(
     A = import_graph(graph)
     A = csr_matrix(A)
     n_components, labels = connected_components(
-        csgraph=A, directed=directed, connection=connection, return_labels=True
+        csgraph=A, directed=directed, connection=connection, return_labels=return_labels
     )
 
     return all(labels)
