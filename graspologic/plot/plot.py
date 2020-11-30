@@ -708,7 +708,8 @@ def _plot_ellipse(
 
     References
     ----------
-    .. [1] https://matplotlib.org/3.1.1/gallery/shapes_and_collections/ellipse_demo.html#references
+    .. [1] Weiss, R., Varoquaux, G.(2011). Scikit-learn: Machine Learning in PythonJournal
+        of Machine Learning Research, 12, 2825–2830.
     """
     sns.scatterplot(
         data=data, x=X[:, j], y=X[:, k], ax=ax, hue="labels", palette=label_palette
@@ -730,7 +731,8 @@ def _plot_ellipse(
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
         ax.add_artist(ell)
-        # removes tick marks from off diagonal graphs 
+        # removes tick marks from off diagonal graphs
+
         ax.set_xticks([]), ax.set_yticks([])
         ax.set_ylabel(k), ax.set_xlabel(k)
         ax.legend().remove()
