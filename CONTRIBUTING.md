@@ -103,7 +103,7 @@ branch. Steps:
 
 We recommended that your contribution complies with the following rules before you submit a pull request: 
 
-- Follow the [coding-guidelines](guidelines). 
+- Follow the [coding-guidelines](#guidelines). 
 - Give your pull request a helpful title that summarizes what your contribution does. 
 - Link your pull request to the issue (see: 
   [closing keywords](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) 
