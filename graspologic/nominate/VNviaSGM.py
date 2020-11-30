@@ -134,7 +134,7 @@ class VNviaSGM(BaseEstimator):
         Sx2 = np.intersect1d(np.arange(BB.shape[0]), Sx1)
 
         if len(Sx2) <= 0:
-            print("Voi was not a member of the induced subgraph A[seedsA]")
+            print("Voi {} was not a member of the induced subgraph A[{}]".format(voi, seedsA))
             return None
 
         Nx1 = np.array(_ego_list(AA, self.ell, list(Sx1), mindist=0))
