@@ -219,10 +219,6 @@ def is_unweighted(
 
 
 def is_almost_symmetric(X, atol=1e-15):
-    # if isspmatrix(X):
-    #     return abs(X - X.T).max() <= atol
-    # else:
-    #     return np.allclose(X, X.T, atol=atol)
     return abs(X - X.T).max() <= atol
 
 
@@ -864,23 +860,28 @@ def to_weighted_edge_list(
     weight_default: Optional[float] = None,
 ) -> List[Tuple[str, str, float]]:
     """
-    Creates a weighted edge list with string representations of the nodes and float weights.
+    Creates a weighted edge list with string representations of the nodes and float
+    weights.
 
     Parameters
     ----------
     graph : Union[List[Tuple[Any, Any, Union[float, int]]], nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, scipy.sparse.csr.csr_matrix]
-        A representation of a graph either as a list of tuples, a networkx graph, or an adjacency matrix from numpy or scipy.sparse.csr.csr_matrix
+        A representation of a graph either as a list of tuples, a networkx graph, or an
+        adjacency matrix from numpy or scipy.sparse.csr.csr_matrix
     is_directed : Optional[bool]
-        Default is ``None``. Ignored if an edge tuple list or networkx graph is provided, but can be used to short
-        circuit an exhaustive matrix symmetry check for numpy and scipy matrices.
+        Default is ``None``. Ignored if an edge tuple list or networkx graph is
+        provided, but can be used to short circuit an exhaustive matrix symmetry check
+        for numpy and scipy matrices.
     is_weighted : Optional[bool]
-        Default is ``None``. Ignored if an edge tuple list or networkx graph is provided, but can be used to short
-        circuit an exhaustive matrix weight check for numpy and scipy matrices.
+        Default is ``None``. Ignored if an edge tuple list or networkx graph is
+        provided, but can be used to short circuit an exhaustive matrix weight check for
+        numpy and scipy matrices.
     weight_attribute : Any
-        Default is the string ``weight``.  Used to retrieve the weight from networkx edge attribute dictionary.
+        Default is the string ``weight``.  Used to retrieve the weight from networkx
+        edge attribute dictionary.
     weight_default : Optional[float]
-        Default is ``None``. If given an unweighted graph, will use as a default weight to output in the weighted edge
-        list.
+        Default is ``None``. If given an unweighted graph, will use as a default weight
+        to output in the weighted edge list.
 
     Raises
     ------
@@ -894,8 +895,8 @@ def to_weighted_edge_list(
     Returns
     -------
     List[Tuple[str, str, float]]
-        A list of edges for the type of graph.  Undirected graphs will only contain a single entry for an edge between
-        any two nodes.
+        A list of edges for the type of graph.  Undirected graphs will only contain a
+        single entry for an edge between any two nodes.
     """
     # if we're already an edge list of str, str, float, return it
     if weight_default is not None and not isinstance(weight_default, (float, int)):
@@ -906,8 +907,9 @@ def to_weighted_edge_list(
             return graph
         if not isinstance(graph[0], tuple) or len(graph[0]) != 3:
             raise TypeError(
-                "If the provided graph is a list, it must be a list of tuples with 3 values in the form "
-                f"of Tuple[Any, Any, Union[int, float]], you provided {type(graph[0])}, {repr(graph[0])}"
+                "If the provided graph is a list, it must be a list of tuples with 3 "
+                "values in the form of Tuple[Any, Any, Union[int, float]], you provided"
+                f"{type(graph[0])}, {repr(graph[0])}"
             )
         return [
             (str(source), str(target), float(weight))
@@ -926,19 +928,19 @@ def to_weighted_edge_list(
                 for source, target, data in graph.edges(data=True)
             ]
         except TypeError:
-            # None is returned for the weight if it doesn't exist and a weight_default is not set,
-            # which results in a TypeError when you call float(None)
+            # None is returned for the weight if it doesn't exist and a weight_default
+            # is not set, which results in a TypeError when you call float(None)
             raise ValueError(
-                f"The networkx graph provided did not contain a {weight_attribute} that could be cast "
-                f"to float in one of the edges"
+                f"The networkx graph provided did not contain a {weight_attribute} that"
+                " could be cast to float in one of the edges"
             )
 
     if isinstance(graph, (np.ndarray, scipy.sparse.csr.csr_matrix)):
         shape = graph.shape
         if len(shape) != 2 or shape[0] != shape[1]:
             raise ValueError(
-                "graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be adjacency matrices with "
-                "n x n shape"
+                "graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be "
+                "adjacency matrices with n x n shape"
             )
 
         if is_weighted is None:
@@ -946,7 +948,8 @@ def to_weighted_edge_list(
 
         if not is_weighted and weight_default is None:
             raise ValueError(
-                "the adjacency matrix provided is not weighted and a default weight has not been set"
+                "the adjacency matrix provided is not weighted and a default weight has"
+                " not been set"
             )
 
         if is_directed is None:
@@ -974,6 +977,6 @@ def to_weighted_edge_list(
         return edges
 
     raise TypeError(
-        f"The type of graph provided {type(graph)} is not a list of 3-tuples, networkx graph, "
-        f"numpy.ndarray, or scipy.sparse.csr.csr_matrix"
+        f"The type of graph provided {type(graph)} is not a list of 3-tuples, networkx "
+        f"graph, numpy.ndarray, or scipy.sparse.csr.csr_matrix"
     )

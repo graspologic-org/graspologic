@@ -52,15 +52,16 @@ def modularity(
     resolution: float = 1.0,
 ) -> float:
     """
-    Given an undirected graph and a dictionary of vertices to community ids, calculate the modularity.
+    Given an undirected graph and a dictionary of vertices to community ids, calculate
+    the modularity.
 
     Parameters
     ----------
     graph : nx.Graph
         An undirected graph
     partitions : Dict[Any, int]
-        A dictionary representing a community partitioning scheme with the keys being the
-        vertex and the value being a community id.
+        A dictionary representing a community partitioning scheme with the keys being
+        the vertex and the value being a community id.
     weight_attribute : str
         The edge data attribute on the graph that contains a float weight for the edge.
     resolution : float
@@ -100,16 +101,17 @@ def modularity_components(
     resolution: float = 1.0,
 ) -> Dict[int, float]:
     """
-    Given an undirected, weighted graph and a community partition dictionary, calculates a modularity quantum for each
-    community ID. The sum of these quanta is the modularity of the graph and partitions provided.
+    Given an undirected, weighted graph and a community partition dictionary,
+    calculates a modularity quantum for each community ID. The sum of these quanta
+    is the modularity of the graph and partitions provided.
 
     Parameters
     ----------
     graph : nx.Graph
         An undirected graph
     partitions : Dict[Any, int]
-        A dictionary representing a community partitioning scheme with the keys being the
-        vertex and the value being a community id.
+        A dictionary representing a community partitioning scheme with the keys being
+        the vertex and the value being a community id.
     weight_attribute : str
         The edge data attribute on the graph that contains a float weight for the edge.
     resolution : float

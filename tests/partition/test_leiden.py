@@ -61,7 +61,7 @@ class TestLeiden(unittest.TestCase):
         # both leiden and hierarchical_leiden require the same types and mostly the same value range restrictions
         good_args = {
             "starting_communities": {"1": 2},
-            "iterations": 1,
+            "extra_forced_iterations": 0,
             "resolution": 1.0,
             "randomness": 0.001,
             "use_modularity": True,
@@ -87,12 +87,12 @@ class TestLeiden(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             args = good_args.copy()
-            args["iterations"] = 1234.003
+            args["extra_forced_iterations"] = 1234.003
             leiden(graph=graph, **args)
 
         with self.assertRaises(ValueError):
             args = good_args.copy()
-            args["iterations"] = -4003
+            args["extra_forced_iterations"] = -4003
             leiden(graph=graph, **args)
 
         with self.assertRaises(TypeError):
@@ -163,9 +163,9 @@ class TestLeiden(unittest.TestCase):
             hierarchical_leiden(graph=graph, **args)
 
     def test_hierarchical(self):
-        # most of leiden is tested in unit / integration tests in graspologic-native. All we're trying to test
-        # through these unit tests are the python conversions prior to calling, so type and value validation and
-        # that we got a result
+        # most of leiden is tested in unit / integration tests in graspologic-native.
+        # All we're trying to test through these unit tests are the python conversions
+        # prior to calling, so type and value validation and that we got a result
         edges = _create_edge_list()
         results = hierarchical_leiden(edges, random_seed=1234)
 
