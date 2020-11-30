@@ -705,6 +705,10 @@ def _plot_ellipse(
     cluster_palette : dict, optional, default: dictionary using 'Set1'
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
+
+    References
+    ----------
+    .. [1] https://matplotlib.org/3.1.1/gallery/shapes_and_collections/ellipse_demo.html#references
     """
     sns.scatterplot(
         data=data, x=X[:, j], y=X[:, k], ax=ax, hue="labels", palette=label_palette
@@ -869,7 +873,7 @@ def pairplot_with_gmm(
                             ax=axes[k, k],
                             color=label_palette[lab],
                         )
-                    # this removes the tick marks from the histplot 
+                    # this removes the tick marks from the histplot
                     axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
                 else:
                     # take care off off-diagonal scatterplots
