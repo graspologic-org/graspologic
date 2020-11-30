@@ -844,10 +844,10 @@ def pairplot_with_gmm(
             axes.label_outer()
             axes.spines["right"].set_visible(False)
             axes.spines["top"].set_visible(False)
-            handles, labels = [], []
-            handles_, labels_ = axes.get_legend_handles_labels()
-            handles += handles_
-            labels += labels_
+            # we get the handels (like the colored dot in legend)
+            # we get the associated label
+            # in order to show only the unique pairs we do the following
+            handles, labels = axes.get_legend_handles_labels()
             pairplot.legend(
                 handles[: means.shape[0] + 1],
                 labels[: means.shape[0] + 1],
@@ -893,6 +893,10 @@ def pairplot_with_gmm(
                 axes[i, j].set_xlabel("Dimension " + str(j))
         if title:
             pairplot.suptitle(title)
+
+        # we get the handels (like the colored dot in legend)
+        # we get the associated label
+        # in order to show only the unique pairs we do the following
         handles, labels = [], []
         for ax in axes.flat:
             ax.label_outer()
