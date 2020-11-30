@@ -742,6 +742,7 @@ def pairplot_with_gmm(
     font_scale=1,
     alpha=0.7,
     figsize=(12, 12),
+    kde=True,
 ):
     r"""
     Plot pairwise relationships in a dataset.
@@ -864,7 +865,7 @@ def pairplot_with_gmm(
                     for t, lab in zip([i for i in range(X.shape[1])], label_palette):
                         sns.distplot(
                             X[Y_ == t, k],
-                            kde=True,
+                            kde=kde,
                             ax=axes[k, k],
                             color=label_palette[lab],
                         )
