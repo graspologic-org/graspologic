@@ -730,6 +730,7 @@ def _plot_ellipse(
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
         ax.add_artist(ell)
+        # removes tick marks from off diagonal graphs 
         ax.set_xticks([]), ax.set_yticks([])
         ax.set_ylabel(k), ax.set_xlabel(k)
         ax.legend().remove()
