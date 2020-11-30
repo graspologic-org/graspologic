@@ -853,13 +853,13 @@ def adjplot(
         One of "heatmap" or "scattermap", by default "heatmap"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group_class : list or np.ndarray, optional
-        Metadata to group the graph in the plot, by default None
+    group_class : string or list of string, optional
+        Attribute in meta to group the graph in the plot, by default None
     class_order : string or list of string, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
     item_order : string or list of string, optional
         Attribute in meta by which to sort elements within a class, by default None
-    color_class : dict, optional
+    color_class : string or list of string, optional
         Attribute in meta by which to draw colorbars, by default None
     border : bool, optional
         Whether the plot should have border, by default True
