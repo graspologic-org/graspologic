@@ -708,6 +708,89 @@ def fit_plug_in_variance_estimator(X):
     return plug_in_variance_estimator
 
 
+def remove_vertices(graph, indices, return_removed=False):
+    """
+    Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the
+    truncated matrix and optionally the removed subgraph. Here, an adjacency vector
+    is the set of edge weights for a particular vertex.
+
+    Parameters
+    ----------
+    graph: networkx.Graph or array-like, shape (n, n)
+        The adjacency matrix for some graph.
+    indices: int or array-like, length m
+        Index/indices of the adjacency vector(s) to be removed.
+    return_removed: bool, by default False (optional)
+        Whether to return the tuple ``(A, V)``,
+        where ``A`` is the truncated adjacency matrix,
+        ``V`` is an array representing the removed subgraph.
+
+    Returns
+    -------
+    truncated_graph: np.ndarray
+        The truncated matrix.
+        This is a copy of `graph` of shape (k, k), with ``k=n-m``, without the ``m``
+        adjacency vectors given by `indices`.
+
+    removed_subgraph: np.ndarray or tuple, shape (m, k) (optional)
+        Array of removed adjacency vectors without edges to each other.
+        If directed, this is a tuple ``(V_1, V_2)``,
+        with ``V_1`` being an array of adjacency vectors from the removed subgraph to the truncated graph,
+        and ``V_2`` being an array of adjacency vectors from the truncated graph to the removed subgraph.
+
+    Examples
+    --------
+    # Undirected
+    >>> A = np.array([[0, 1, 2],
+                      [1, 0, 3],
+                      [2, 3, 0]])
+    >>> remove_vertices(A, 0)
+    array([[0., 3.],
+           [3., 0.]]))
+    >>> remove_vertices(A, 0, return_removed=True)
+    (array([[0., 3.],
+            [3., 0.]]),
+     array([1., 2.]))
+
+    # Directed
+    >>> B = np.array([[0, 1, 2, 3],
+                      [4, 0, 5, 6],
+                      [7, 8, 0, 9],
+                      [10, 11, 12, 0]])
+    >>> remove_vertices(B, 0, return_removed=True)
+    (array([[ 0.,  5.,  6.],
+            [ 8.,  0.,  9.],
+            [11., 12.,  0.]]),
+    (array([ 4.,  7., 10.]), array([1., 2., 3.])))
+    >>> remove_vertices(B, [0, -1], return_removed=True)
+    (array([[0., 5.],
+            [8., 0.]]),
+    (array([[4., 7.],
+            [6., 9.]]),
+    array([[ 1.,  2.],
+            [11., 12.]])))
+    """
+    graph = import_graph(graph)
+    if isinstance(indices, list) and len(indices) >= len(graph):
+        raise IndexError("You must pass in fewer vertex indices than vertices.")
+    directed = not is_almost_symmetric(graph)
+
+    # truncate graph
+    mask = np.ones(graph.shape[0], dtype=bool)
+    mask[indices] = 0
+    A = graph[mask, :][:, mask]
+
+    if return_removed:
+        rows = graph[mask]
+        vertices = rows[:, indices].T
+        if directed:
+            cols = graph[:, mask]
+            vertices_right = cols[indices]
+            return A, (vertices, vertices_right)
+        return A, vertices
+    return A
+
+
 def remap_labels(
     y_true: Union[List, np.ndarray, pd.Series],
     y_pred: Union[List, np.ndarray, pd.Series],
