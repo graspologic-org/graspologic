@@ -16,56 +16,76 @@ class GraphMatch(BaseEstimator):
     This class solves the Graph Matching Problem and the Quadratic Assignment Problem
     (QAP) through an implementation of the Fast Approximate QAP Algorithm (FAQ) (these
     two problems are the same up to a sign change) [1].
+
     This algorithm can be thought of as finding an alignment of the vertices of two
     graphs which minimizes the number of induced edge disagreements, or, in the case
     of weighted graphs, the sum of squared differences of edge weight disagreements.
     The option to add seeds (known vertex correspondence between some nodes) is also
     available [2].
+
+
     Parameters
     ----------
+
     n_init : int, positive (default = 1)
         Number of random initializations of the starting permutation matrix that
         the FAQ algorithm will undergo. ``n_init`` automatically set to 1 if
         ``init_method`` = 'barycenter'
+
     init : string (default = 'barycenter') or 2d-array
         The initial position chosen
+
         If 2d-array, `init` must be :math:`m' x m'`, where :math:`m' = n - m`,
         and it must be doubly stochastic: each of its rows and columns must
         sum to 1.
+
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
         :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region
+
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
         doubly stochastic matrix
+
     max_iter : int, positive (default = 30)
         Integer specifying the max number of Franke-Wolfe iterations.
         FAQ typically converges with modest number of iterations.
+
     shuffle_input : bool (default = True)
         Gives users the option to shuffle the nodes of A matrix to avoid results
         from inputs that were already matched.
+
     eps : float (default = 0.1)
         A positive, threshold stopping criteria such that FW continues to iterate
         while Frobenius norm of :math:`(P_{i}-P_{i+1}) > \\text{eps}`
+
     gmp : bool (default = True)
         Gives users the option to solve QAP rather than the Graph Matching Problem
         (GMP). This is accomplished through trivial negation of the objective function.
+
     padding : string (default = 'adopted')
         Allows user to specify padding scheme if `A` and `B` are not of equal size.
         Say that `A` and `B` have :math:`n_1` and :math:`n_2` nodes, respectively, and
         :math:`n_1 < n_2`.
+
         "adopted" : matches `A` to the best fitting induced subgraph of `B`. Reduces the
         affinity between isolated vertices added to `A` through padding and low-density
         subgraphs of `B`.
+
         "naive" : matches `A` to the best fitting subgraph of `B`.
+
     Attributes
     ----------
+
     perm_inds_ : array, size (n,) where n is the number of vertices in the fitted graphs.
         The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
         to best minimize the objective function :math:`f(P) = \\text{trace}(A^T PBP^T )`.
+
     score_ : float
         The objective function value of for the optimal permutation found.
+
     n_iter_ : int
         Number of Frank-Wolfe iterations run. If ``n_init > 1``, :attr:`n_iter_` reflects the number of
         iterations performed at the initialization returned.
+
     References
     ----------
     .. [1] J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,
@@ -74,6 +94,8 @@ class GraphMatch(BaseEstimator):
         no. 4, p. e0121002, 2015.
     .. [2] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
         Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
+
+        
     """
 
     def __init__(
