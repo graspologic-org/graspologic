@@ -761,6 +761,8 @@ def pairplot_with_gmm(
     gmm: Gaussian Mixture Model object
     labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
+        If labels are not passed in then labels assume the same value as
+        the gmm clusters each point as
     label_palette : str or dict, optional,
         with no input : dictionary using 'Set1'
     cluster_palette : str or dict, optional, default: dictionary using 'Set1'
@@ -774,9 +776,14 @@ def pairplot_with_gmm(
         elements.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
+    figsize : tuple
+        the size of the 2d subplots configuration
+    kde : boolean
+        allows for access of KDE argument in histplot
     """
     # Handle X and labels
-    check_X_y(X, labels)
+    if labels is not None:
+        check_X_y(X, labels)
     # Handle gmm
     if gmm is None:
         msg = "You must input a sklearn.mixture.GaussianMixture"
