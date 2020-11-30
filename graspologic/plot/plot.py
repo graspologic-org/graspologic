@@ -674,7 +674,7 @@ def pairplot(
     return pairs
 
 
-def _plot_ellipse(
+def _plot_ellipse_and_data(
     data, X, j, k, means, covariances, ax, label_palette, cluster_palette, alpha
 ):
     r"""
@@ -728,7 +728,7 @@ def _plot_ellipse(
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
         ax.add_artist(ell)
-        # removes tick marks from off diagonal graphs 
+        # removes tick marks from off diagonal graphs
         ax.set_xticks([]), ax.set_yticks([])
         ax.set_ylabel(k), ax.set_xlabel(k)
         ax.legend().remove()
@@ -823,7 +823,7 @@ def pairplot_with_gmm(
         # handle the case where only given two dims
         if X.shape[1] == 2:
             pairplot, axes = plt.subplots(1, 1, figsize=figsize)
-            _plot_ellipse(
+            _plot_ellipse_and_data(
                 data,
                 X,
                 0,
@@ -870,7 +870,7 @@ def pairplot_with_gmm(
                     axes[i, j].set_xticks([]), axes[i, j].set_yticks([])
                 else:
                     # take care off off-diagonal scatterplots
-                    _plot_ellipse(
+                    _plot_ellipse_and_data(
                         data,
                         X,
                         j,
