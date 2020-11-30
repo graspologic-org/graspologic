@@ -4,4 +4,4 @@
 
 from .sg import SignalSubgraph
 
-__all__ = [SignalSubgraph]
+__all__ = ["SignalSubgraph"]

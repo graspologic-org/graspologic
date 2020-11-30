@@ -73,7 +73,7 @@ class SBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -100,7 +100,7 @@ class SBMEstimator(BaseGraphEstimator):
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to ``fit``.
+        belongs to if ``y`` was not passed during the call to :func:`~graspologic.models.SBMEstimator.fit`.
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
@@ -265,7 +265,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -291,14 +291,14 @@ class DCSBMEstimator(BaseGraphEstimator):
         sampled.
 
     degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
-        Degree correction vector(s) :math:`\theta`. If `degree_directed` parameter was
+        Degree correction vector(s) :math:`\theta`. If ``degree_directed`` parameter was
         False, then will be of shape (n_verts, 1) and element :math:`i` represents the
         degree correction for node :math:`i`. Otherwise, the first column contains out
         degree corrections and the second column contains in degree corrections.
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to ``fit``.
+        belongs to if ``y`` was not passed during the call to :func:`~graspologic.models.DCSBMEstimator.fit`.
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
