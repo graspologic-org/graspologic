@@ -100,8 +100,10 @@ def _transform(arr, method):
             transformer = Binarizer().fit(arr)
             arr = transformer.transform(arr)
         else:
-            msg = f"Transform must be one of {{log, log10, binarize, zero-boost, \
-            simple-all, simple-nonzero}}, not {method}."
+            msg = "Transform must be one of {log, log10, binarize, zero-boost, simple-all, \
+            simple-nonzero, not {}.".format(
+                method
+            )
             raise ValueError(msg)
 
     return arr
@@ -153,13 +155,13 @@ def heatmap(
     ax=None,
     title_pad=None,
     sort_nodes=False,
-    **kwargs,
+    **kwargs
 ):
     r"""
     Plots a graph as a color-encoded matrix.
 
-    Nodes can be grouped by providing ``inner_hier_labels`` or both
-    ``inner_hier_labels`` and ``outer_hier_labels``. Nodes can also
+    Nodes can be grouped by providing `inner_hier_labels` or both
+    `inner_hier_labels` and `outer_hier_labels`. Nodes can also
     be sorted by the degree from largest to smallest degree nodes.
     The nodes will be sorted within each group if labels are also
     provided.
@@ -238,12 +240,12 @@ def heatmap(
 
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if None
+        if ``None``
 
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is True, will sort nodes this way within block.
+        ``sort_nodes`` is ``True``, will sort nodes this way within block.
 
     **kwargs : dict, optional
         additional plotting arguments passed to Seaborn's ``heatmap``
@@ -315,7 +317,7 @@ def heatmap(
             ax=ax,
             vmin=vmin,
             vmax=vmax,
-            **kwargs,
+            **kwargs
         )
 
         if title is not None:
@@ -405,7 +407,7 @@ def gridplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the ``hue`` variable.
+        be values in the hue variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float [0, 1], default : 0.7
@@ -426,11 +428,11 @@ def gridplot(
         ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if None
+        if ``None``
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is True, will sort nodes this way within block.
+        ``sort_nodes`` is ``True``, will sort nodes this way within block.
     """
     _check_common_inputs(
         height=height,
@@ -535,12 +537,12 @@ def pairplot(
     r"""
     Plot pairwise relationships in a dataset.
 
-    By default, this function will create a grid of axes such that each dimension
+    By default, this function will create a grid of Axes such that each dimension
     in data will by shared in the y-axis across a single row and in the x-axis
     across a single column.
 
-    The off-diagonal axes show the pairwise relationships displayed as scatterplot.
-    The diagonal axes show the univariate distribution of the data for that
+    The off-diagonal Axes show the pairwise relationships displayed as scatterplot.
+    The diagonal Axes show the univariate distribution of the data for that
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
     Read more in the :ref:`tutorials <plot_tutorials>`
@@ -550,9 +552,9 @@ def pairplot(
     X : array-like, shape (n_samples, n_features)
         Input data.
     labels : array-like or list, shape (n_samples), optional
-        Labels that correspond to each sample in ``X``.
+        Labels that correspond to each sample in X.
     col_names : array-like or list, shape (n_features), optional
-        Names or labels for each feature in ``X``. If not provided, the default
+        Names or labels for each feature in X. If not provided, the default
         will be `Dimension 1, Dimension 2, etc`.
     title : str, optional, default: None
         Title of plot.
@@ -570,7 +572,7 @@ def pairplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the ``hue`` variable.
+        be values in the hue variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float, optional, default: 0.7
@@ -674,7 +676,7 @@ def pairplot(
     return pairs
 
 
-def _plot_ellipse_and_data(
+def _plot_ellipse(
     data, X, j, k, means, covariances, ax, label_palette, cluster_palette, alpha
 ):
     r"""
@@ -728,7 +730,7 @@ def _plot_ellipse_and_data(
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
         ax.add_artist(ell)
-        # removes tick marks from off diagonal graphs
+        # removes tick marks from off diagonal graphs 
         ax.set_xticks([]), ax.set_yticks([])
         ax.set_ylabel(k), ax.set_xlabel(k)
         ax.legend().remove()
@@ -823,7 +825,7 @@ def pairplot_with_gmm(
         # handle the case where only given two dims
         if X.shape[1] == 2:
             pairplot, axes = plt.subplots(1, 1, figsize=figsize)
-            _plot_ellipse_and_data(
+            _plot_ellipse(
                 data,
                 X,
                 0,
@@ -870,7 +872,7 @@ def pairplot_with_gmm(
                     axes[i, j].set_xticks([]), axes[i, j].set_yticks([])
                 else:
                     # take care off off-diagonal scatterplots
-                    _plot_ellipse_and_data(
+                    _plot_ellipse(
                         data,
                         X,
                         j,
@@ -971,7 +973,7 @@ def degreeplot(
     ----------
     X : np.ndarray (2D)
         input graph
-    labels : 1d np.ndarray or list, same length as dimensions of ``X``
+    labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
     direction : string, ('out', 'in')
         Whether to plot out degree or in degree for a directed graph
@@ -984,7 +986,7 @@ def degreeplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the ``hue`` variable.
+        be values in the hue variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
@@ -1040,7 +1042,7 @@ def edgeplot(
     ----------
     X : np.ndarray (2D)
         Input graph
-    labels : 1d np.ndarray or list, same length as dimensions of ``X``
+    labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
     nonzero : boolean, default: False
         Whether to restrict the edgeplot to only the non-zero edges
@@ -1053,7 +1055,7 @@ def edgeplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the ``hue`` variable.
+        be values in the hue variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
@@ -1349,7 +1351,7 @@ def _plot_brackets(
             ax.patch.set_alpha(0)
     ax.set_yticks([])
     ax.set_xticks([])
-    ax.tick_params(axis=axis, which="both", length=0, pad=7)
+    ax.tick_params(axis=axis, which=u"both", length=0, pad=7)
     for direction in ["left", "right", "bottom", "top"]:
         ax.spines[direction].set_visible(False)
     if axis == "x":
