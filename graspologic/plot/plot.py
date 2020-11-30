@@ -849,8 +849,8 @@ def pairplot_with_gmm(
             # in order to show only the unique pairs we do the following
             handles, labels = axes.get_legend_handles_labels()
             pairplot.legend(
-                handles[: means.shape[0] + 1],
-                labels[: means.shape[0] + 1],
+                handles[: means.shape[0]],
+                labels[: means.shape[0]],
                 loc="upper right",
             )
             if title:
@@ -869,9 +869,8 @@ def pairplot_with_gmm(
                             ax=axes[k, k],
                             color=label_palette[lab],
                         )
+                    # this removes the tick marks from the histplot 
                     axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
-                    axes[k, j].set_ylabel(None)
-                    axes[k, j].set_ylabel(j), axes[k, j].set_xlabel(k)
                 else:
                     # take care off off-diagonal scatterplots
                     _plot_ellipse(
@@ -907,8 +906,8 @@ def pairplot_with_gmm(
             labels += labels_
 
         pairplot.legend(
-            handles[: means.shape[0] + 1],
-            labels[: means.shape[0] + 1],
+            handles[: means.shape[0]],
+            labels[: means.shape[0]],
             loc="upper right",
         )
         return pairplot
