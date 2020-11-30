@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from sklearn.utils import check_array, check_consistent_length
+from sklearn.utils import check_array, check_consistent_length, check_X_y
 from sklearn.preprocessing import Binarizer
 from scipy import linalg
 import matplotlib as mpl
@@ -775,21 +775,8 @@ def pairplot_with_gmm(
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     """
-    # Handle X
-    if not isinstance(X, (list, np.ndarray)):
-        msg = "X must be array-like, not {}.".format(type(X))
-        raise TypeError(msg)
-
-    # Handle labels
-    if labels is not None:
-        if not isinstance(labels, (list, np.ndarray)):
-            msg = "Y must be array-like or list, not {}.".format(type(labels))
-            raise TypeError(msg)
-        elif X.shape[0] != len(labels):
-            msg = "Expected length {}, but got length {} instead for Y.".format(
-                X.shape[0], len(labels)
-            )
-            raise ValueError(msg)
+    # Handle X and labels
+    check_X_y(X, labels)
     # Handle gmm
     if gmm is None:
         msg = "You must input a sklearn.mixture.GaussianMixture"
