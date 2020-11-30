@@ -741,6 +741,7 @@ def pairplot_with_gmm(
     context="talk",
     font_scale=1,
     alpha=0.7,
+    figsize=(12, 12),
 ):
     r"""
     Plot pairwise relationships in a dataset.
@@ -823,7 +824,7 @@ def pairplot_with_gmm(
     with sns.plotting_context(context=context, font_scale=font_scale):
         # handle the case where only given two dims
         if X.shape[1] == 2:
-            pairplot, axes = plt.subplots(1, 1, figsize=(12, 12))
+            pairplot, axes = plt.subplots(1, 1, figsize=figsize)
             _plot_ellipse(
                 data,
                 X,
@@ -837,8 +838,8 @@ def pairplot_with_gmm(
                 alpha=alpha,
             )
             # formatting
-            axes.set_ylabel("Dim " + str(0))
-            axes.set_xlabel("Dim " + str(1))
+            axes.set_ylabel("Dimension " + str(0))
+            axes.set_xlabel("Dimension " + str(1))
             axes.label_outer()
             axes.spines["right"].set_visible(False)
             axes.spines["top"].set_visible(False)
@@ -861,7 +862,7 @@ def pairplot_with_gmm(
                 )
             return pairplot
         # for the case with more than 2 dims
-        pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=(12, 12))
+        pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=figsize)
         for k in range(X.shape[1]):
             for j in range(X.shape[1]):
                 if k == j:
