@@ -854,12 +854,6 @@ def pairplot_with_gmm(
             )
             if title:
                 pairplot.suptitle(title)
-            else:
-                pairplot.suptitle(
-                    "Fit a Gaussian mixture using "
-                    + str(means.shape[0])
-                    + " components"
-                )
             return pairplot
         # for the case with more than 2 dims
         pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=figsize)
@@ -898,10 +892,6 @@ def pairplot_with_gmm(
                 axes[i, j].set_xlabel("Dimension " + str(j))
         if title:
             pairplot.suptitle(title)
-        else:
-            pairplot.suptitle(
-                "Fit a Gaussian mixture using " + str(means.shape[0]) + " components"
-            )
         handles, labels = [], []
         for ax in axes.flat:
             ax.label_outer()
