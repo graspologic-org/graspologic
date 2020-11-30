@@ -770,8 +770,7 @@ def pairplot_with_gmm(
         with no input : dictionary using 'Set1'
     cluster_palette : str or dict, optional, default: dictionary using 'Set1'
         with no input : dictionary using 'Set1'
-    title : string
-        default : "Fit a Gaussian mixture using " + n_components + " components"
+    title : string, no default
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
