@@ -893,8 +893,8 @@ def pairplot_with_gmm(
         # formatting
         for i in range(X.shape[1]):
             for j in range(X.shape[1]):
-                axes[i, j].set_ylabel("Dim " + str(i))
-                axes[i, j].set_xlabel("Dim " + str(j))
+                axes[i, j].set_ylabel("Dimension " + str(i))
+                axes[i, j].set_xlabel("Dimension " + str(j))
         if title:
             pairplot.suptitle(title)
         else:
