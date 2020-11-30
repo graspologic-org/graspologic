@@ -862,29 +862,29 @@ def pairplot_with_gmm(
             return pairplot
         # for the case with more than 2 dims
         pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=figsize)
-        for k in range(X.shape[1]):
+        for i in range(X.shape[1]):
             for j in range(X.shape[1]):
-                if k == j:
+                if i == j:
                     # take care of the distplot on diagonal
                     for t, lab in zip([i for i in range(X.shape[1])], label_palette):
                         sns.histplot(
-                            X[Y_ == t, k],
+                            X[Y_ == t, i],
                             kde=kde,
-                            ax=axes[k, k],
+                            ax=axes[i, i],
                             color=label_palette[lab],
                         )
                     # this removes the tick marks from the histplot
-                    axes[k, j].set_xticks([]), axes[k, j].set_yticks([])
+                    axes[i, j].set_xticks([]), axes[i, j].set_yticks([])
                 else:
                     # take care off off-diagonal scatterplots
                     _plot_ellipse(
                         data,
                         X,
                         j,
-                        k,
+                        i,
                         means,
                         covariances,
-                        axes[k, j],
+                        axes[i, j],
                         label_palette,
                         cluster_palette,
                         alpha=alpha,
