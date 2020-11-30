@@ -863,7 +863,7 @@ def pairplot_with_gmm(
                 if i == j:
                     # take care of the distplot on diagonal
                     for t, lab in zip([i for i in range(X.shape[1])], label_palette):
-                        sns.histplot(
+                        sns.distplot(
                             X[Y_ == t, i],
                             kde=kde,
                             ax=axes[i, i],
