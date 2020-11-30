@@ -205,7 +205,7 @@ def test_pairplot_with_gmm_inputs():
     gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
     # test data
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         pairplot_with_gmm(X="test", gmm=gmm)
 
     with pytest.raises(ValueError):
