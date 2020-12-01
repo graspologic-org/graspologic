@@ -823,75 +823,53 @@ def pairplot_with_gmm(
         label_palette = dict(zip(np.unique(lab_names), colors))
 
     with sns.plotting_context(context=context, font_scale=font_scale):
-        # handle the case where only given two dims
+        dimensions = X.shape[1]
         if X.shape[1] == 2:
-            pairplot, axes = plt.subplots(1, 1, figsize=figsize)
-            _plot_ellipse_and_data(
-                data,
-                X,
-                0,
-                1,
-                means,
-                covariances,
-                axes,
-                label_palette,
-                cluster_palette,
-                alpha=alpha,
-            )
-            # formatting
-            axes.set_ylabel("Dimension " + str(0))
-            axes.set_xlabel("Dimension " + str(1))
-            axes.label_outer()
-            axes.spines["right"].set_visible(False)
-            axes.spines["top"].set_visible(False)
-            # we get the handels (like the colored dot in legend)
-            # we get the associated label
-            # in order to show only the unique pairs we do the following
-            handles, labels = axes.get_legend_handles_labels()
-            pairplot.legend(
-                handles[: means.shape[0]],
-                labels[: means.shape[0]],
-                loc="upper right",
-            )
-            if title:
-                pairplot.suptitle(title)
-            return pairplot
-        # for the case with more than 2 dims
-        pairplot, axes = plt.subplots(X.shape[1], X.shape[1], figsize=figsize)
-        for i in range(X.shape[1]):
-            for j in range(X.shape[1]):
-                if i == j:
+            dimensions = 1
+        pairplot, axes = plt.subplots(dimensions, dimensions, figsize=figsize, squeeze = False)
+        axes = axes.flatten()
+        for i in range(dimensions):
+            for j in range(dimensions):
+                if i == j and X.shape[1] > 2:
                     # take care of the distplot on diagonal
                     for t, lab in zip([i for i in range(X.shape[1])], label_palette):
                         sns.distplot(
                             X[Y_ == t, i],
                             kde=kde,
-                            ax=axes[i, i],
+                            ax=axes[dimensions * i + j],
                             color=label_palette[lab],
                         )
                     # this removes the tick marks from the histplot
-                    axes[i, j].set_xticks([]), axes[i, j].set_yticks([])
+                    axes[dimensions * i + j].set_xticks([])
+                    axes[dimensions * i + j].set_yticks([])
                 else:
                     # take care off off-diagonal scatterplots
+                    ax1, ax2 = j, i
+                    if X.shape[1] == 2:
+                        ax1, ax2 = 0, 1
                     _plot_ellipse_and_data(
                         data,
                         X,
-                        j,
-                        i,
+                        ax1,
+                        ax2,
                         means,
                         covariances,
-                        axes[i, j],
+                        axes[dimensions * i + j],
                         label_palette,
                         cluster_palette,
                         alpha=alpha,
                     )
         # formatting
-        for i in range(X.shape[1]):
-            for j in range(X.shape[1]):
-                axes[i, j].set_ylabel("Dimension " + str(i))
-                axes[i, j].set_xlabel("Dimension " + str(j))
         if title:
             pairplot.suptitle(title)
+        for i in range(dimensions):
+            for j in range(dimensions):
+                if X.shape[1]== 2:
+                    axes[dimensions * i + j].set_ylabel("Dimension " + str(0))
+                    axes[dimensions * i + j].set_xlabel("Dimension " + str(1))
+                else:
+                    axes[dimensions * i + j].set_ylabel("Dimension " + str(i))
+                    axes[dimensions * i + j].set_xlabel("Dimension " + str(j))
 
         # we get the handels (like the colored dot in legend)
         # we get the associated label
