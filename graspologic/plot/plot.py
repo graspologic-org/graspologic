@@ -828,7 +828,7 @@ def pairplot_with_gmm(
         if X.shape[1] == 2:
             dimensions = 1
         pairplot, axes = plt.subplots(
-            dimensions, dimensions, figsize=figsize, squeeze = False
+            dimensions, dimensions, figsize=figsize, squeeze=False
         )
         # this will allow for uniform iteration whether axes was 2d or 1d
         axes = axes.flatten()
