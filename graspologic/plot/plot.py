@@ -824,9 +824,13 @@ def pairplot_with_gmm(
 
     with sns.plotting_context(context=context, font_scale=font_scale):
         dimensions = X.shape[1]
+        # we only want 1 scatter plot for 2 features
         if X.shape[1] == 2:
             dimensions = 1
-        pairplot, axes = plt.subplots(dimensions, dimensions, figsize=figsize, squeeze = False)
+        pairplot, axes = plt.subplots(
+            dimensions, dimensions, figsize=figsize, squeeze = False
+        )
+        # this will allow for uniform iteration whether axes was 2d or 1d
         axes = axes.flatten()
         for i in range(dimensions):
             for j in range(dimensions):
@@ -845,6 +849,8 @@ def pairplot_with_gmm(
                 else:
                     # take care off off-diagonal scatterplots
                     ax1, ax2 = j, i
+                    # with only a scatter plot we must make sure we plot
+                    # the first and second feature of X
                     if X.shape[1] == 2:
                         ax1, ax2 = 0, 1
                     _plot_ellipse_and_data(
@@ -862,9 +868,10 @@ def pairplot_with_gmm(
         # formatting
         if title:
             pairplot.suptitle(title)
+
         for i in range(dimensions):
             for j in range(dimensions):
-                if X.shape[1]== 2:
+                if X.shape[1] == 2:
                     axes[dimensions * i + j].set_ylabel("Dimension " + str(0))
                     axes[dimensions * i + j].set_xlabel("Dimension " + str(1))
                 else:
