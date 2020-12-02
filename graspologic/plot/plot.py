@@ -708,8 +708,7 @@ def _plot_ellipse_and_data(
 
     References
     ----------
-    .. [1] Weiss, R., Varoquaux, G.(2011). Scikit-learn: Machine Learning in PythonJournal
-        of Machine Learning Research, 12, 2825–2830.
+    .. [1]  https://scikit-learn.org/stable/auto_examples/mixture/plot_gmm_covariances.html#sphx-glr-auto-examples-mixture-plot-gmm-covariances-py.
     """
     sns.scatterplot(
         data=data, x=X[:, j], y=X[:, k], ax=ax, hue="labels", palette=label_palette
@@ -826,7 +825,7 @@ def pairplot_with_gmm(
         if X.shape[1] == 2:
             dimensions = 1
         pairplot, axes = plt.subplots(
-            dimensions, dimensions, figsize=figsize, squeeze=False
+            dimensions, dimensions, figsize=figsize, squeeze = False
         )
         # this will allow for uniform iteration whether axes was 2d or 1d
         axes = axes.flatten()
@@ -866,7 +865,6 @@ def pairplot_with_gmm(
         # formatting
         if title:
             pairplot.suptitle(title)
-
         for i in range(dimensions):
             for j in range(dimensions):
                 if X.shape[1] == 2:
