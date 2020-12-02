@@ -812,7 +812,7 @@ def pairplot_with_gmm(
             msg = "When giving labels must supply palette in string or dictionary"
             raise ValueError(msg)
     else:
-        # no labels given we go to default. 
+        # no labels given we go to default.
         colors = sns.color_palette(cluster_palette, n_components)
         labels = np.unique(Y_)
         cluster_palette = dict(zip(np.unique(labels), colors))
@@ -873,23 +873,16 @@ def pairplot_with_gmm(
                     axes[dimensions * i + j].set_ylabel("Dimension " + str(i+1))
                     axes[dimensions * i + j].set_xlabel("Dimension " + str(j+1))
 
-        # we get the handels (like the colored dot in legend)
-        # we get the associated label
-        # in order to show only the unique pairs we do the following
-        handles, labels = [], []
         for ax in axes.flat:
             ax.label_outer()
             ax.spines["right"].set_visible(False)
             ax.spines["top"].set_visible(False)
-            handles_, labels_ = ax.get_legend_handles_labels()
-            handles += handles_
-            labels += labels_
-
-        pairplot.legend(
-            handles[: means.shape[0]],
-            labels[: means.shape[0]],
-            loc="center right",
-        )
+        # set up the legend correctly by only getting handles(colored dot)
+        # and label corresponding to unique pairs
+        if X.shape[1] == 2:
+            handles, labels = axes[0].get_legend_handles_labels()
+        else:
+            handles, labels = axes[1].get_legend_handles_labels()
         return pairplot
 
 
