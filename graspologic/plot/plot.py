@@ -762,8 +762,8 @@ def pairplot_with_gmm(
     gmm: Gaussian Mixture Model object
     labels : 1d np.ndarray or list, same length as dimensions of X
         Labels for different categories of graph nodes
-        If labels are not passed in then labels assume the same value as
-        the gmm clusters each point as
+        If labels are not passed in then they are predicted by the GaussianMixture object
+        so points will be colored by their predicted cluster.
     label_palette : str or dict, optional,
         with no input : dictionary using 'Set1'
     cluster_palette : str or dict, optional, default: dictionary using 'Set1'
