@@ -882,6 +882,11 @@ def pairplot_with_gmm(
             handles, labels = axes[0].get_legend_handles_labels()
         else:
             handles, labels = axes[1].get_legend_handles_labels()
+        pairplot.legend(
+            handles,
+            labels,
+            loc="center right",
+        )
         return pairplot
 
 
