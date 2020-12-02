@@ -19,6 +19,9 @@ from .utils import (
     binarize,
     cartprod,
     fit_plug_in_variance_estimator,
+    remove_vertices,
+    remap_labels,
+    to_weighted_edge_list,
 )
 from .ptr import pass_to_ranks
 
@@ -41,4 +44,7 @@ __all__ = [
     "cartprod",
     "pass_to_ranks",
     "fit_plug_in_variance_estimator",
+    "remove_vertices",
+    "remap_labels",
+    "to_weighted_edge_list",
 ]

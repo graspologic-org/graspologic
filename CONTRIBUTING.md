@@ -47,11 +47,13 @@ follow these guidelines! This will make it a lot faster for us to respond to you
 
 - Please include your **operating system type and version number**, as well as
   your **Python and graspologic versions**. This information
-  can be found by running the following code snippet::
+  can be found by running the following code snippet:
 
+    ```python
     import platform; print(platform.platform())
     import sys; print(f"Python {sys.version}")
     import graspologic; print(f"graspologic {graspologic.__version__}")
+    ```
 
 - Please ensure all **code snippets and error messages are formatted in
   appropriate code blocks**.  See 
@@ -101,7 +103,7 @@ branch. Steps:
 
 We recommended that your contribution complies with the following rules before you submit a pull request: 
 
-- Follow the [coding-guidelines](guidelines). 
+- Follow the [coding-guidelines](#guidelines). 
 - Give your pull request a helpful title that summarizes what your contribution does. 
 - Link your pull request to the issue (see: 
   [closing keywords](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) 
@@ -138,7 +140,7 @@ formatted and indented. Please read it and follow it.
 
 ## Docstring Guidelines
 
-Properly formatted docstrings is required for documentation generation by Sphinx. The graspologic package closely 
+Properly formatted docstrings are required for documentation generation by Sphinx. The graspologic package closely 
 follows the numpydoc guidelines. Please read and follow the 
 [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html#overview) guidelines. Refer to the 
 [example.py](https://numpydoc.readthedocs.io/en/latest/example.html#example) provided by numpydoc.
