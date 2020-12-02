@@ -357,7 +357,10 @@ def scipy_is_fully_connected(
 ):
 
     n_components, labels = connected_components(
-        csgraph=A, directed=directed, connection=connection, return_labels=return_labels
+        csgraph=graph,
+        directed=directed,
+        connection=connection,
+        return_labels=return_labels,
     )
 
     if n_components == 1:
