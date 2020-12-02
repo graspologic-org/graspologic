@@ -732,9 +732,7 @@ def _plot_ellipse_and_data(
         ell.set_alpha(alpha)
         ax.add_artist(ell)
         # removes tick marks from off diagonal graphs
-
-        ax.set_xticks([]), ax.set_yticks([])
-        ax.set_ylabel(k), ax.set_xlabel(k)
+        ax.set(xticks=[], yticks=[], xlabel= k, ylabel=k)
         ax.legend().remove()
 
 
