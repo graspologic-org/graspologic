@@ -355,8 +355,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
 def scipy_is_fully_connected(
     graph, directed=False, connection="weak", return_labels=True
 ):
-    A = import_graph(graph)
-    A = csr_matrix(graph)
+
     n_components, labels = connected_components(
         csgraph=A, directed=directed, connection=connection, return_labels=return_labels
     )
