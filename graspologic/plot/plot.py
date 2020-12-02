@@ -868,11 +868,11 @@ def pairplot_with_gmm(
         for i in range(dimensions):
             for j in range(dimensions):
                 if X.shape[1] == 2:
-                    axes[dimensions * i + j].set_ylabel("Dimension " + str(0))
-                    axes[dimensions * i + j].set_xlabel("Dimension " + str(1))
+                    axes[dimensions * i + j].set_ylabel("Dimension " + str(1))
+                    axes[dimensions * i + j].set_xlabel("Dimension " + str(2))
                 else:
-                    axes[dimensions * i + j].set_ylabel("Dimension " + str(i))
-                    axes[dimensions * i + j].set_xlabel("Dimension " + str(j))
+                    axes[dimensions * i + j].set_ylabel("Dimension " + str(i+1))
+                    axes[dimensions * i + j].set_xlabel("Dimension " + str(j+1))
 
         # we get the handels (like the colored dot in legend)
         # we get the associated label
