@@ -778,6 +778,11 @@ def pairplot_with_gmm(
         the size of the 2d subplots configuration
     kde : boolean
         allows for access of KDE argument in histplot
+
+    See Also
+    --------
+    graspologic.cluster.AutoGMMCluster
+    sklearn.mixture.GaussianMixture
     """
     # Handle X and labels
     if labels is not None:
