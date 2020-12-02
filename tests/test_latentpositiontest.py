@@ -2,7 +2,8 @@ import unittest
 import pytest
 import numpy as np
 
-from graspologic.inference import latent_position_test, _difference_norm
+from graspologic.inference import latent_position_test
+from graspologic.inference.latent_position_test import _difference_norm
 from graspologic.simulations import er_np, sbm
 
 
