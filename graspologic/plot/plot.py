@@ -823,7 +823,7 @@ def pairplot_with_gmm(
         if X.shape[1] == 2:
             dimensions = 1
         pairplot, axes = plt.subplots(
-            dimensions, dimensions, figsize=figsize, squeeze = False
+            dimensions, dimensions, figsize=figsize, squeeze=False
         )
         # this will allow for uniform iteration whether axes was 2d or 1d
         axes = axes.flatten()
@@ -869,8 +869,8 @@ def pairplot_with_gmm(
                     axes[dimensions * i + j].set_ylabel("Dimension " + str(1))
                     axes[dimensions * i + j].set_xlabel("Dimension " + str(2))
                 else:
-                    axes[dimensions * i + j].set_ylabel("Dimension " + str(i+1))
-                    axes[dimensions * i + j].set_xlabel("Dimension " + str(j+1))
+                    axes[dimensions * i + j].set_ylabel("Dimension " + str(i + 1))
+                    axes[dimensions * i + j].set_xlabel("Dimension " + str(j + 1))
 
         for ax in axes.flat:
             ax.label_outer()
