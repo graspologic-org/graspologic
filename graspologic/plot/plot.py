@@ -889,7 +889,7 @@ def pairplot_with_gmm(
         pairplot.legend(
             handles[: means.shape[0]],
             labels[: means.shape[0]],
-            loc="upper right",
+            loc="center right",
         )
         return pairplot
 
