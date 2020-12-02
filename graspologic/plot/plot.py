@@ -766,7 +766,7 @@ def pairplot_with_gmm(
         so points will be colored by their predicted cluster.
     label_palette : str or dict, optional,
         with no input : dictionary using 'Set1'
-    cluster_palette : str or dict, optional, default: dictionary using 'Set1'
+    cluster_palette : str or dict, optional, default: 'Set1'
         with no input : dictionary using 'Set1'
     title : string, no default
     context :  None, or one of {talk (default), paper, notebook, poster}
