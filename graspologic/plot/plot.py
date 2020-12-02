@@ -739,8 +739,8 @@ def pairplot_with_gmm(
     X,
     gmm,
     labels=None,
-    cluster_palette=None,
-    label_palette=None,
+    cluster_palette="Set1",
+    label_palette="Set1",
     title=None,
     context="talk",
     font_scale=1,
@@ -756,17 +756,17 @@ def pairplot_with_gmm(
 
     Parameters
     ----------
-    X : np.ndarray (2D)
-        input graph
-    gmm: Gaussian Mixture Model object
-    labels : 1d np.ndarray or list, same length as dimensions of X
-        Labels for different categories of graph nodes
+    X : array-like, shape (n_samples, n_features)
+        Input data.
+    gmm: GaussianMixture object
+    labels : array-like or list, shape (n_samples), optional
+        Labels that correspond to each sample in X.
         If labels are not passed in then labels assume the same value as
         the gmm clusters each point as
     label_palette : str or dict, optional,
-        with no input : dictionary using 'Set1'
+        default : dictionary using 'Set1'
     cluster_palette : str or dict, optional, default: dictionary using 'Set1'
-        with no input : dictionary using 'Set1'
+        default : dictionary using 'Set1'
     title : string, no default
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
@@ -797,27 +797,26 @@ def pairplot_with_gmm(
     else:
         data["labels"] = labels
     data["clusters"] = Y_
-    # creating a cluster_palette from a stirng  only if labels is given
-    if isinstance(cluster_palette, str) and labels is not None:
+    # labels are given we must check whether input is correct
+    if labels is not None:
+        if isinstance(label_palette, str):
+            colors = sns.color_palette(label_palette, n_components)
+            label_palette = dict(zip(np.unique(np.asarray(labels)), colors))
+        elif not isinstance(label_palette, dict):
+            msg = "When giving labels must supply palette in string or dictionary"
+            raise ValueError(msg)
+        if isinstance(cluster_palette, str):
+            colors = sns.color_palette(cluster_palette, n_components)
+            cluster_palette = dict(zip(np.unique(Y_), colors))
+        elif not isinstance(label_palette, dict):
+            msg = "When giving labels must supply palette in string or dictionary"
+            raise ValueError(msg)
+    else:
+        # no labels given we go to default. 
         colors = sns.color_palette(cluster_palette, n_components)
-        cluster_palette = dict(zip(np.unique(Y_), colors))
-    # creating a label_palette from a stirng  only if labels is given
-    # note that these can be same string and mapping would be same for both
-    if isinstance(label_palette, str) and labels is not None:
-        colors = sns.color_palette(label_palette, n_components)
+        labels = np.unique(Y_)
+        cluster_palette = dict(zip(np.unique(labels), colors))
         label_palette = dict(zip(np.unique(np.asarray(labels)), colors))
-    # must give labels AND palettes
-    if (labels is not None) and (cluster_palette is None or label_palette is None):
-        msg = "if give labels array must give palette dicts or string desciptors"
-        raise ValueError(msg)
-    elif labels is None and (cluster_palette is not None or label_palette is not None):
-        msg = "must give labels if using palettes for labels and clusters"
-        raise ValueError(msg)
-    # This takes care of default case, when no palettes or labels given
-    elif labels is None and cluster_palette is None and label_palette is None:
-        colors = sns.color_palette("Set1", n_components)
-        cluster_palette = dict(zip(np.unique(lab_names), colors))
-        label_palette = dict(zip(np.unique(lab_names), colors))
 
     with sns.plotting_context(context=context, font_scale=font_scale):
         dimensions = X.shape[1]
