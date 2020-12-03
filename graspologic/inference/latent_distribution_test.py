@@ -149,15 +149,11 @@ def latent_distribution_test(
         Flag whether to expect two full graphs, or the embeddings.
 
         - True
-            :func:`~graspologic.inference.LatentDistributionTest.fit` and
-            :func:`~graspologic.inference.LatentDistributionTest.fit_predict`
-            expect graphs, either as NetworkX graph objects or as adjacency matrices,
-            provided as ndarrays of size (n, n) and (m, m).
+            This function expects graphs, either as NetworkX graph objects 
+            or as adjacency matrices, provided as ndarrays of size (n, n) and (m, m).
             They will be embedded using adjacency spectral embeddings.
         - False
-            :func:`~graspologic.inference.LatentDistributionTest.fit` and
-            :func:`~graspologic.inference.LatentDistributionTest.fit_predict`
-            expect adjacency spectral embeddings of the graphs,
+            This function expects adjacency spectral embeddings of the graphs,
             they must be ndarrays of size (n, d) and (m, d), where
             d must be same. n_components attribute is ignored in this case.
 

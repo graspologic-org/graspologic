@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
-# Test
+
 import numpy as np
 
 from scipy.linalg import orthogonal_procrustes
@@ -15,7 +15,7 @@ def latent_position_test(
     A1, A2, embedding="ase", n_components=None, test_case="rotation", n_bootstraps=500
 ):
     r"""
-    Two sample hypothesis test for the problem of determining whether two random dot
+    Two-sample hypothesis test for the problem of determining whether two random dot
     product graphs have the same latent positions.
 
     This test assumes that the two input graphs are vertex aligned, that is,
