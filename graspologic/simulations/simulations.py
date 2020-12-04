@@ -827,14 +827,14 @@ def mmsbm(
         Number of vertices of the graph.
 
     p: array-like, shape (n_communities, n_communities)
-        Probability of an edge between each of the communities, where :math:`P_{ij}`
-        indicates the probability of a connection between edges in communities i, j.
-        0 < :math:`P_{ij}` < 1 for all i, j.
+        Probability of an edge between each of the communities, where `p[i, j]` 
+        indicates the probability of a connection between edges in communities [i, j].
+        0 < `p[i, j]` < 1 for all i, j.
 
     alpha: array-like, shape (n_communities,)
-        Concentration parameter :math:`\vec{\alpha}` of the Dirichlet distribution used
+        Parameter alpha of the Dirichlet distribution used
         to sample the mixed-membership vectors for each node.
-        :math:`\vec{\alpha}_i` > 0 for all i.
+        `alpha[i]` > 0 for all i.
 
     rng: numpy.random.Generator, optional (default = None)
         Numpy Random Generator object to generate sampling from distributions.
