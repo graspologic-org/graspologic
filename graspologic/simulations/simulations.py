@@ -801,7 +801,7 @@ def mmsbm(
     n,
     p,
     alpha=None,
-    rng=np.random.default_rng(),
+    rng = None,
     directed=False,
     loops=False,
     return_labels=False,
@@ -836,8 +836,10 @@ def mmsbm(
         to sample the mixed-membership vectors for each node.
         :math:`\vec{\alpha}_i` > 0 for all i.
 
-    rng: numpy.random.Generator, optional (default= numpy.random.default_rng())
+    rng: numpy.random.Generator, optional (default = None)
         Numpy Random Generator object to generate sampling from distributions.
+        If None, the random number generator is the Generator object constructed
+        by ``np.random.default_rng()``.
 
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
@@ -863,7 +865,7 @@ def mmsbm(
     -------
     A: ndarray, shape (n, n)
         Sampled adjacency matrix
-    labels: ndarray, shape (n, n)
+    labels: ndarray, shape (n, n), optional
         Array containing the membership assigned to each node when interacting with
         another node.
 
@@ -934,6 +936,8 @@ def mmsbm(
             type(rng)
         )
         raise TypeError(msg)
+    elif rng == None:
+        rng = np.random.default_rng()
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
     if type(directed) is not bool:
