@@ -542,7 +542,7 @@ def pairplot(
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
     Read more in the :ref:`tutorials <plot_tutorials>`
-    
+
     Parameters
     ----------
     X : array-like, shape (n_samples, n_features)
