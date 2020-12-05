@@ -156,17 +156,21 @@ def heatmap(
 ):
     r"""
     Plots a graph as a color-encoded matrix.
+
     Nodes can be grouped by providing ``inner_hier_labels`` or both
     ``inner_hier_labels`` and ``outer_hier_labels``. Nodes can also
     be sorted by the degree from largest to smallest degree nodes.
     The nodes will be sorted within each group if labels are also
     provided.
+
     Read more in the :ref:`tutorials <plot_tutorials>`
+
     Parameters
     ----------
     X : nx.Graph or np.ndarray object
         Graph or numpy matrix to plot
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
+
         - 'log'
             Plots the natural log of all nonzero numbers
         - 'log10'
@@ -184,45 +188,61 @@ def heatmap(
             :math:`\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}`
         - 'binarize'
             Binarize input graph such that any edge weight greater than 0 becomes 1.
+
     figsize : tuple of integers, optional, default: (10, 10)
         Width, height in inches.
+
     title : str, optional, default: None
         Title of plot.
+
     context :  None, or one of {paper, notebook, talk (default), poster}
         The name of a preconfigured set.
+
     font_scale : float, optional, default: 1
         Separate scaling factor to independently scale the size of the font
         elements.
+
     xticklabels, yticklabels : bool or list, optional
         If list-like, plot these alternate labels as the ticklabels.
+
     cmap : str, list of colors, or matplotlib.colors.Colormap, default: 'RdBu_r'
         Valid matplotlib color map.
+
     vmin, vmax : floats, optional (default=None)
         Values to anchor the colormap, otherwise they are inferred from the data and
         other keyword arguments.
+
     center : float, default: 0
         The value at which to center the colormap
+
     cbar : bool, default: True
         Whether to draw a colorbar.
+
     inner_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes. If not None, will group the nodes
         according to these labels and plot the labels on the marginal
+
     outer_hier_labels : array-like, length of X's first dimension, default: None
         Categorical labeling of the nodes, ignored without ``inner_hier_labels``
         If not None, will plot these labels as the second level of a hierarchy on the
         marginals
+
     hier_label_fontsize : int
         Size (in points) of the text labels for the ``inner_hier_labels`` and
         ``outer_hier_labels``.
+
     ax : matplotlib Axes, optional
         Axes in which to draw the plot, otherwise will generate its own axes
+
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
         if None
+
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
         ``sort_nodes`` is True, will sort nodes this way within block.
+
     **kwargs : dict, optional
         additional plotting arguments passed to Seaborn's ``heatmap``
     """
@@ -339,10 +359,13 @@ def gridplot(
 ):
     r"""
     Plots multiple graphs on top of each other with dots as edges.
+
     This function is useful for visualizing multiple graphs simultaneously.
     The size of the dots correspond to the edge weights of the graphs, and
     colors represent input graphs.
+
     Read more in the :ref:`tutorials <plot_tutorials>`
+
     Parameters
     ----------
     X : list of nx.Graph or np.ndarray object
@@ -351,6 +374,7 @@ def gridplot(
         List of strings, which are labels for each element in X.
         ``len(X) == len(labels)``.
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
+
         - 'log'
             Plots the natural log of all nonzero numbers
         - 'log10'
@@ -508,13 +532,17 @@ def pairplot(
 ):
     r"""
     Plot pairwise relationships in a dataset.
+
     By default, this function will create a grid of axes such that each dimension
     in data will by shared in the y-axis across a single row and in the x-axis
     across a single column.
+
     The off-diagonal axes show the pairwise relationships displayed as scatterplot.
     The diagonal axes show the univariate distribution of the data for that
     dimension displayed as either a histogram or kernel density estimates (KDEs).
+
     Read more in the :ref:`tutorials <plot_tutorials>`
+    
     Parameters
     ----------
     X : array-like, shape (n_samples, n_features)
@@ -920,6 +948,7 @@ def degreeplot(
     Plots the distribution of node degrees for the input graph.
     Allows for sets of node labels, will plot a distribution for each
     node category.
+
     Parameters
     ----------
     X : np.ndarray (2D)
@@ -942,6 +971,7 @@ def degreeplot(
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
+
     Returns
     -------
     ax : matplotlib axis object
@@ -987,6 +1017,7 @@ def edgeplot(
     Plots the distribution of edge weights for the input graph.
     Allows for sets of node labels, will plot edge weight distribution
     for each node category.
+
     Parameters
     ----------
     X : np.ndarray (2D)
@@ -1009,6 +1040,7 @@ def edgeplot(
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
+
     Returns
     -------
     ax : matplotlib axis object
@@ -1050,6 +1082,7 @@ def screeplot(
     r"""
     Plots the distribution of singular values for a matrix, either showing the
     raw distribution or an empirical CDF (depending on ``cumulative``)
+
     Parameters
     ----------
     X : np.ndarray (2D)
@@ -1067,6 +1100,7 @@ def screeplot(
         Whether or not to plot a cumulative cdf of singular values
     show_first : int or None, default: None
         Whether to restrict the plot to the first ``show_first`` components
+
     Returns
     -------
     ax : matplotlib axis object
