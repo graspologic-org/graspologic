@@ -149,8 +149,8 @@ def latent_distribution_test(
         Flag whether to expect two full graphs, or the embeddings.
 
         - True
-            This function expects graphs, either as NetworkX graph objects 
-            or as adjacency matrices, provided as ndarrays of size (n, n) and 
+            This function expects graphs, either as NetworkX graph objects
+            or as adjacency matrices, provided as ndarrays of size (n, n) and
             (m, m). They will be embedded using adjacency spectral embeddings.
         - False
             This function expects adjacency spectral embeddings of the graphs,
