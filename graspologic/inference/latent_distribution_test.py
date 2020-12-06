@@ -308,10 +308,16 @@ def latent_distribution_test(
     data = test_obj.test(X1_hat, X2_hat, reps=n_bootstraps, workers=workers, auto=False)
 
     null_distribution = test_obj.indep_test.null_dist
+
+    misc_stats = {
+        "null_distribution": null_distribution,
+        "n_components": n_components,
+        "Q_mat": aligner.Q_,
+    }
     sample_T_statistic = data[0]
     p_value = data[1]
 
-    return ldt_result(p_value, sample_T_statistic, null_distribution)
+    return ldt_result(p_value, sample_T_statistic, misc_stats)
 
 
 def _instantiate_metric_func(metric, test):
