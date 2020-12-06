@@ -17,6 +17,7 @@ from sklearn.metrics.pairwise import PAIRED_DISTANCES
 from sklearn.metrics.pairwise import PAIRWISE_KERNEL_FUNCTIONS
 from hyppo.ksample import KSample
 from hyppo._utils import gaussian
+from collections import namedtuple
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
 _VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
@@ -24,6 +25,10 @@ _VALID_KERNELS.append("gaussian")  # can use hyppo's medial gaussian kernel too
 _VALID_METRICS = _VALID_DISTANCES + _VALID_KERNELS
 
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
+
+ldt_result = namedtuple(
+    "ldt_result", ("p_value", "sample_T_statistic", "null_distribution")
+)
 
 
 def latent_distribution_test(
@@ -306,7 +311,7 @@ def latent_distribution_test(
     sample_T_statistic = data[0]
     p_value = data[1]
 
-    return p_value, sample_T_statistic, null_distribution
+    return ldt_result(p_value, sample_T_statistic, null_distribution)
 
 
 def _instantiate_metric_func(metric, test):

@@ -9,6 +9,9 @@ from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
+from collections import namedtuple
+
+lpt_result = namedtuple("lpt_result", ("p_value", "sample_T_statistic", "misc_stats"))
 
 
 def latent_position_test(
@@ -156,7 +159,7 @@ def latent_position_test(
         "p_value_2": p_value_2,
     }
 
-    return p_value, sample_T_statistic, misc_stats
+    return lpt_result(p_value, sample_T_statistic, misc_stats)
 
 
 def _bootstrap(
