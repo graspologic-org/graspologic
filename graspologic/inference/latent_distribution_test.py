@@ -171,8 +171,17 @@ def latent_distribution_test(
         The observed difference between the embedded latent positions of the
         two input graphs.
 
-    null_distribution : ndarray, shape (n_bootstraps,)
-        The distribution of T statistics generated under the null.
+    misc_stats : dictionary
+        A collection of other statistics obtained from the latent position test
+    
+        - null_distribution : ndarray, shape (n_bootstraps,)
+            The distribution of T statistics generated under the null.
+
+        - n_components : int
+            Number of embedding dimensions.
+
+        - Q : array, size (d, d)
+            Final orthogonal matrix, used to modify ``X``.
 
     References
     ----------
@@ -312,7 +321,7 @@ def latent_distribution_test(
     misc_stats = {
         "null_distribution": null_distribution,
         "n_components": n_components,
-        "Q_mat": aligner.Q_,
+        "Q": aligner.Q_,
     }
     sample_T_statistic = data[0]
     p_value = data[1]
