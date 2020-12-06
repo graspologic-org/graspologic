@@ -20,15 +20,13 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = er_np(20, 0.3)
         tests = {"dcorr": "euclidean", "hsic": "gaussian", "mgc": "euclidean"}
         for test in tests.keys():
-            p_val, _, _ = latent_distribution_test(
-                A1, A2, test, tests[test], n_bootstraps=10
-            )
+            ldt = latent_distribution_test(A1, A2, test, tests[test], n_bootstraps=10)
 
     def test_workers(self):
         np.random.seed(888)
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
-        p_val, _, _ = latent_distribution_test(
+        ldt = latent_distribution_test(
             A1, A2, "dcorr", "euclidean", n_bootstraps=4, workers=4
         )
 
@@ -40,9 +38,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         def metric_func(X, Y=None, workers=None):
             return pairwise_distances(X, metric="euclidean") * 0.5
 
-        p_val, _, _ = latent_distribution_test(
-            A1, A2, "dcorr", metric_func, n_bootstraps=10
-        )
+        ldt = latent_distribution_test(A1, A2, "dcorr", metric_func, n_bootstraps=10)
 
     def test_bad_kwargs(self):
         np.random.seed(888)
@@ -94,8 +90,8 @@ class TestLatentDistributionTest(unittest.TestCase):
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
 
-        _, _, null_distribution_ = latent_distribution_test(A1, A2, n_bootstraps=123)
-        assert null_distribution_.shape[0] == 123
+        ldt = latent_distribution_test(A1, A2, n_bootstraps=123)
+        assert ldt[2]["null_distribution"].shape[0] == 123
 
     def test_passing_networkx(self):
         np.random.seed(123)
@@ -211,10 +207,10 @@ class TestLatentDistributionTest(unittest.TestCase):
         A1 = sbm(2 * [b_size], B1)
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
-        p_null, _, _ = latent_distribution_test(A1, A2)
-        p_alt, _, _ = latent_distribution_test(A1, A3)
-        self.assertTrue(p_null > 0.05)
-        self.assertTrue(p_alt <= 0.05)
+        ldt_null = latent_distribution_test(A1, A2)
+        ldt_alt = latent_distribution_test(A1, A3)
+        self.assertTrue(ldt_null[0] > 0.05)
+        self.assertTrue(ldt_alt[0] <= 0.05)
 
     def test_different_sizes_null(self):
         np.random.seed(314)
@@ -222,7 +218,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         A1 = er_np(100, 0.8)
         A2 = er_np(1000, 0.8)
 
-        p_not_corrected = latent_distribution_test(
+        ldt_not_corrected = latent_distribution_test(
             A1,
             A2,
             test="hsic",
@@ -231,7 +227,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             n_bootstraps=100,
             size_correction=False,
         )
-        p_corrected_1 = latent_distribution_test(
+        ldt_corrected_1 = latent_distribution_test(
             A1,
             A2,
             test="hsic",
@@ -240,7 +236,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             n_bootstraps=100,
             size_correction=True,
         )
-        p_corrected_2 = latent_distribution_test(
+        ldt_corrected_2 = latent_distribution_test(
             A2,
             A1,
             test="hsic",
@@ -250,9 +246,9 @@ class TestLatentDistributionTest(unittest.TestCase):
             size_correction=True,
         )
 
-        self.assertTrue(p_not_corrected <= 0.05)
-        self.assertTrue(p_corrected_1 > 0.05)
-        self.assertTrue(p_corrected_2 > 0.05)
+        self.assertTrue(ldt_not_corrected[0] <= 0.05)
+        self.assertTrue(ldt_corrected_1[0] > 0.05)
+        self.assertTrue(ldt_corrected_2[0] > 0.05)
 
     def test_different_sizes_null(self):
         np.random.seed(314)
@@ -260,7 +256,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         A1 = er_np(100, 0.8)
         A2 = er_np(1000, 0.7)
 
-        p_corrected_1, _, _ = latent_distribution_test(
+        ldt_corrected_1 = latent_distribution_test(
             A1,
             A2,
             test="hsic",
@@ -269,7 +265,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             n_bootstraps=100,
             size_correction=True,
         )
-        p_corrected_2, _, _ = latent_distribution_test(
+        ldt_corrected_2 = latent_distribution_test(
             A2,
             A1,
             test="hsic",
@@ -279,8 +275,8 @@ class TestLatentDistributionTest(unittest.TestCase):
             size_correction=True,
         )
 
-        self.assertTrue(p_corrected_1 <= 0.05)
-        self.assertTrue(p_corrected_2 <= 0.05)
+        self.assertTrue(ldt_corrected_1[0] <= 0.05)
+        self.assertTrue(ldt_corrected_2[0] <= 0.05)
 
     def test_different_aligners(self):
         np.random.seed(314)
@@ -292,25 +288,23 @@ class TestLatentDistributionTest(unittest.TestCase):
         X2 = ase_2.fit_transform(A2)
         X2 = -X2
 
-        p_val_1, _, _ = latent_distribution_test(
-            X1, X2, input_graph=False, align_type=None
-        )
-        self.assertTrue(p_val_1 < 0.05)
+        ldt_1 = latent_distribution_test(X1, X2, input_graph=False, align_type=None)
+        self.assertTrue(ldt_1[0] < 0.05)
 
-        p_val_2, _, _ = latent_distribution_test(
+        ldt_2 = latent_distribution_test(
             X1, X2, input_graph=False, align_type="sign_flips"
         )
-        self.assertTrue(p_val_2 >= 0.05)
+        self.assertTrue(ldt_2[0] >= 0.05)
 
         # also checking that kws are passed through
-        p_val_3, _, _ = latent_distribution_test(
+        ldt_3 = latent_distribution_test(
             X1,
             X2,
             input_graph=False,
             align_type="seedless_procrustes",
             align_kws={"init": "sign_flips"},
         )
-        self.assertTrue(p_val_3 >= 0.05)
+        self.assertTrue(ldt_3[0] >= 0.05)
 
 
 if __name__ == "__main__":

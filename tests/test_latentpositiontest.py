@@ -13,13 +13,13 @@ class TestLatentPositionTest(unittest.TestCase):
         np.random.seed(1234556)
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
-        p_val, _, _ = latent_position_test(A1, A2)
+        lpt = latent_position_test(A1, A2)
 
     def test_ase_works(self):
         np.random.seed(1234556)
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
-        p_val, _, _ = latent_position_test(A1, A2, embedding="omnibus")
+        lpt = latent_position_test(A1, A2, embedding="omnibus")
 
     def test_bad_kwargs(self):
         np.random.seed(1234556)
@@ -48,10 +48,8 @@ class TestLatentPositionTest(unittest.TestCase):
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
 
-        _, _, misc_stats = latent_position_test(
-            A1, A2, n_bootstraps=234, n_components=None
-        )
-        assert misc_stats["null_distribution_1"].shape[0] == 234
+        lpt = latent_position_test(A1, A2, n_bootstraps=234, n_components=None)
+        assert lpt[2]["null_distribution_1"].shape[0] == 234
 
     def test_bad_matrix_inputs(self):
         np.random.seed(1234556)
@@ -115,10 +113,10 @@ class TestLatentPositionTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
-        p_null, _, _ = latent_position_test(A1, A2, n_components=2, n_bootstraps=100)
-        p_alt, _, _ = latent_position_test(A1, A3, n_components=2, n_bootstraps=100)
-        self.assertTrue(p_null > 0.05)
-        self.assertTrue(p_alt <= 0.05)
+        lpt_null = latent_position_test(A1, A2, n_components=2, n_bootstraps=100)
+        lpt_alt = latent_position_test(A1, A3, n_components=2, n_bootstraps=100)
+        self.assertTrue(lpt_null[0] > 0.05)
+        self.assertTrue(lpt_alt[0] <= 0.05)
 
 
 if __name__ == "__main__":
