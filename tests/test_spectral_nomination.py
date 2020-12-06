@@ -26,7 +26,7 @@ class TestSpectralVertexNominator:
     def _nominate(cls, seed, nominator, k=None):
         nominator.fit(cls.adj, seed, k=k)
         nom_list, dists = nominator.predict()
-        unique_att = nominator.unique_att_
+        unique_att = nominator.unique_attributes_
         assert nom_list.shape == (3 * cls.n_verts, unique_att.shape[0])
         assert dists.shape == (3 * cls.n_verts, unique_att.shape[0])
         return nom_list
@@ -89,9 +89,9 @@ class TestSpectralVertexNominator:
         g1_correct_prob = group1_correct / 100
         g2_correct_prob = group2_correct / 100
         g3_correct_prob = group3_correct / 100
-        assert np.mean(g1_correct_prob[: n_verts - 10]) > 0.75
-        assert np.mean(g2_correct_prob[: n_verts - 10]) > 0.75
-        assert np.mean(g3_correct_prob[: n_verts - 10]) > 0.75
+        assert np.mean(g1_correct_prob[: n_verts - 10]) > 0.7
+        assert np.mean(g2_correct_prob[: n_verts - 10]) > 0.7
+        assert np.mean(g3_correct_prob[: n_verts - 10]) > 0.7
 
     def test_seed_params(self):
         svn = SpectralVertexNomination(
