@@ -23,8 +23,8 @@ class TestSpectralVertexNominator:
     pre_embeded = embeder.fit_transform(adj)
 
     @classmethod
-    def _nominate(cls, seed, nominator):
-        nominator.fit(cls.adj, seed)
+    def _nominate(cls, seed, nominator, k=None):
+        nominator.fit(cls.adj, seed, k=k)
         nom_list, dists = nominator.predict()
         unique_att = nominator.unique_att_
         assert nom_list.shape == (3 * cls.n_verts, unique_att.shape[0])
@@ -34,9 +34,9 @@ class TestSpectralVertexNominator:
     @pytest.mark.parametrize(
         "nominator",
         [
-            SpectralVertexNomination(embeder="ASE", persistent=False),
-            SpectralVertexNomination(embeder="LSE", persistent=False),
-            SpectralVertexNomination(embeder=embeder, persistent=False),
+            SpectralVertexNomination(embedder="ASE", persistent=False),
+            SpectralVertexNomination(embedder="LSE", persistent=False),
+            SpectralVertexNomination(embedder=embeder, persistent=False),
             SpectralVertexNomination(embedding=pre_embeded),
         ],
     )
@@ -53,15 +53,15 @@ class TestSpectralVertexNominator:
         """
         Runs two attributed seeds and two unattributed seeds with each nominator.
         Ensures all options work. Should be fast. Nested parametrization tests all
-        all combinations of listed parameters.
+        combinations of listed parameters.
         """
         TestSpectralVertexNominator._nominate(seed, nominator)
 
     @pytest.mark.parametrize(
         "nominator",
         [
-            SpectralVertexNomination(embeder="ASE", persistent=False),
-            SpectralVertexNomination(embeder="LSE", persistent=False),
+            SpectralVertexNomination(embedder="ASE", persistent=False),
+            SpectralVertexNomination(embedder="LSE", persistent=False),
         ],
     )
     @pytest.mark.parametrize(
@@ -129,9 +129,9 @@ class TestSpectralVertexNominator:
                 np.array([1], dtype=np.int),
             )
 
-    def test_predict_params(self):
+    def test_fit_params(self):
         svn = SpectralVertexNomination()
         with pytest.raises(TypeError):
-            svn.predict(k=5.3)
+            svn.fit(np.zeros((10, 10), dtype=np.int), np.zeros(1, dtype=np.int), k=5.3)
         with pytest.raises(ValueError):
-            svn.predict(k=0)
+            svn.fit(np.zeros((10, 10), dtype=np.int), np.zeros(1, dtype=np.int), k=0)
