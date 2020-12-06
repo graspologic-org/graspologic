@@ -900,6 +900,7 @@ class Test_MMSBM(unittest.TestCase):
 
     def test_labels(self):
         rng = np.random.default_rng(self.seed)
+        np.random.seed(self.seed)
         alpha = np.array([0.0001, 100])  # assign all nodes to second group(index 1)
         A = mmsbm(
             self.n,

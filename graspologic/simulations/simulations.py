@@ -4,6 +4,7 @@
 import numpy as np
 
 from ..utils import symmetrize, cartprod
+from sklearn.utils import check_array, check_scalar
 import warnings
 
 
@@ -801,7 +802,7 @@ def mmsbm(
     n,
     p,
     alpha=None,
-    rng = None,
+    rng=None,
     directed=False,
     loops=False,
     return_labels=False,
@@ -827,7 +828,7 @@ def mmsbm(
         Number of vertices of the graph.
 
     p: array-like, shape (n_communities, n_communities)
-        Probability of an edge between each of the communities, where `p[i, j]` 
+        Probability of an edge between each of the communities, where `p[i, j]`
         indicates the probability of a connection between edges in communities [i, j].
         0 < `p[i, j]` < 1 for all i, j.
 
@@ -837,7 +838,7 @@ def mmsbm(
         `alpha[i]` > 0 for all i.
 
     rng: numpy.random.Generator, optional (default = None)
-        Numpy Random Generator object to generate sampling from distributions.
+        Numpy :ref:`Random Generator` object to generate sampling from distributions.
         If None, the random number generator is the Generator object constructed
         by ``np.random.default_rng()``.
 
@@ -855,6 +856,7 @@ def mmsbm(
         matrix. The second element is a matrix in which the :math:`(i^{th}, j^{th})`
         entry indicates the membership assigned to node i when interacting with node j.
         Community 1 is labeled with a 0, community 2 with 1, etc.
+        -1 indicates that no edge was sampled.
 
     References
     ----------
@@ -872,6 +874,7 @@ def mmsbm(
     Examples
     --------
     >>> rng = np.random.default_rng(1)
+    >>> np.random.seed(1)
     >>> n = 6
     >>> p = [[0.5, 0], [0, 1]]
 
@@ -889,48 +892,45 @@ def mmsbm(
     To sample a binary MMSBM similar to 2-block SBM with connectivity matrix B:
 
     >>> rng = np.random.default_rng(1)
-    >>> alpha = [0.005, 0.005]
+    >>> np.random.seed(1)
+    >>> alpha = [0.05, 0.05]
     >>> mmsbm(n, p, alpha, rng = rng)
-    array([[0., 0., 0., 0., 0., 0.],
-           [0., 0., 1., 0., 0., 0.],
-           [0., 1., 0., 0., 0., 0.],
+    array([[0., 1., 0., 0., 0., 0.],
+           [1., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.],
            [0., 0., 0., 0., 1., 1.],
            [0., 0., 0., 1., 0., 1.],
            [0., 0., 0., 1., 1., 0.]])
 
     """
-    if not np.issubdtype(type(n), np.integer):
-        raise TypeError("n is not of type int.")
-    else:
-        if n <= 0:
-            raise ValueError("n must be greater than 0")
-    if not isinstance(p, (list, np.ndarray)):
-        msg = "p must be a list or np.array, not {}.".format(type(p))
-        raise TypeError(msg)
-    else:
-        p = np.array(p)
-        if not np.issubdtype(p.dtype, np.number):
-            msg = "There are non-numeric elements in p"
-            raise ValueError(msg)
-        elif np.any(p < 0) or np.any(p > 1):
-            msg = "Values in p must be in between 0 and 1."
-            raise ValueError(msg)
-    if not isinstance(alpha, (list, np.ndarray)):
-        msg = "alpha must be a list or np.array, not {}.".format(type(alpha))
-        raise TypeError(msg)
-    else:
-        alpha = np.array(alpha)
-        if not np.issubdtype(alpha.dtype, np.number):
-            msg = "There are non-numeric elements in alpha"
-            raise ValueError(msg)
-        elif np.any(alpha <= 0):
-            msg = "Alpha entries must be > 0."
-            raise ValueError(msg)
-        elif alpha.shape != (len(p),):
-            msg = "alpha must be a list or np.array of dimension {c}, not {w}.".format(
-                c=(len(p),), w=np.array(alpha).shape
-            )
-            raise ValueError(msg)
+
+    check_scalar(x=n, name="n", target_type=int, min_val=1)
+
+    p = check_array(p, ensure_2d=True)
+    nx, ny = p.shape
+    if nx != ny:
+        msg = "p must be a square matrix, not {}".format(p.shape)
+        raise ValueError(msg)
+    if not np.issubdtype(p.dtype, np.number):
+        msg = "There are non-numeric elements in p"
+        raise ValueError(msg)
+    if np.any(p < 0) or np.any(p > 1):
+        msg = "Values in p must be in between 0 and 1."
+        raise ValueError(msg)
+
+    alpha = check_array(alpha, ensure_2d=False)
+    if not np.issubdtype(alpha.dtype, np.number):
+        msg = "There are non-numeric elements in alpha"
+        raise ValueError(msg)
+    if np.any(alpha <= 0):
+        msg = "Alpha entries must be > 0."
+        raise ValueError(msg)
+    if alpha.shape != (len(p),):
+        msg = "alpha must be a list or np.array of dimension {c}, not {w}.".format(
+            c=(len(p),), w=alpha.shape
+        )
+        raise ValueError(msg)
+
     if not isinstance(rng, (np.random._generator.Generator)):
         msg = "rng must be <class 'numpy.random._generator.Generator'> not {}.".format(
             type(rng)
@@ -938,6 +938,7 @@ def mmsbm(
         raise TypeError(msg)
     elif rng == None:
         rng = np.random.default_rng()
+
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
     if type(directed) is not bool:
@@ -949,45 +950,33 @@ def mmsbm(
         if np.any(p != p.T):
             raise ValueError("Specified undirected, but P is directed.")
 
-    MM_vectors = rng.dirichlet(alpha, n)
+    # Naming convention follows paper listed in references.
+    mm_vectors = rng.dirichlet(alpha, n)
 
-    MM_vectors = np.array(sorted(MM_vectors, key=lambda x: np.argmax(x)))
+    mm_vectors = np.array(sorted(mm_vectors, key=lambda x: np.argmax(x)))
 
-    A = np.zeros((n, n))
+    # labels:(n,n) matrix with all membership indicators for initiators and receivers
+    # instead of storing the indicator vector, argmax is directly computed
+    # check docstrings for more info.
+    labels = np.apply_along_axis(
+        lambda p_vector: np.argmax(
+            rng.multinomial(n=1, pvals=p_vector, size=n), axis=1
+        ),
+        axis=1,
+        arr=mm_vectors,
+    )
 
-    labels = np.zeros((n, n, len(p)))
-
+    P = np.zeros((n, n))
     for i in range(n):
-        for j in range(i, n):
-            if i == j:
-                if loops == True:
-                    Z_pp = rng.multinomial(1, MM_vectors[i], size=1)
-                    Z_pp = Z_pp[0]
-                    edge_loop = rng.binomial(1, (1.0) * Z_pp @ (p @ Z_pp.T))
-                    labels[i, j] = Z_pp
-                    A[i, j] = edge_loop
-            else:
-                Z_pq = rng.multinomial(1, MM_vectors[i], size=1)
-                Z_pq = Z_pq[0]
-                Z_qp = rng.multinomial(1, MM_vectors[j], size=1)
-                Z_qp = Z_qp[0]
-                edge_pq = rng.binomial(1, (1.0) * Z_pq @ (p @ Z_qp.T))
-                labels[i, j] = Z_pq
-                labels[j, i] = Z_qp
-                A[i, j] = edge_pq
-                if directed == False:
-                    A[j, i] = A[i, j]
-                elif directed == True:
-                    edge_qp = rng.binomial(1, (1.0) * Z_qp @ (p @ Z_pq.T))
-                    A[j, i] = edge_qp
+        for j in range(n):
+            P[i, j] = p[labels[i, j], labels[j, i]]
+
+    A = sample_edges(P, directed=directed, loops=loops)
+
+    if not loops:
+        np.fill_diagonal(labels, -1)
+
     if return_labels:
-        labels = [
-            [
-                np.argmax(membership_point_i_interacting_j)
-                for membership_point_i_interacting_j in label
-            ]
-            for label in labels
-        ]
-        labels = np.array(labels)
         return (A, labels)
+
     return A
