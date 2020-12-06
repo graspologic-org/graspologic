@@ -755,6 +755,9 @@ def pairplot_with_gmm(
     X : array-like, shape (n_samples, n_features)
         Input data.
     gmm: GaussianMixture object
+        Gaussian mixture models are a probabilistic model for representing.
+        Based on normally distributed subpopulations, GMM _cluster_tutorials
+        each data point into a corresponding subpopulation
     labels : array-like or list, shape (n_samples), optional
         Labels that correspond to each sample in X.
         If labels are not passed in then labels assume the same value as
