@@ -117,7 +117,14 @@ class SpectralVertexNomination(BaseVN):
             else:
                 raise TypeError("No embedder available")
 
-    def fit(self, X: np.ndarray, y: np.ndarray, k=None, metric="euclidean"):
+    def fit(
+        self,
+        X: np.ndarray,
+        y: np.ndarray,
+        k: int = None,
+        metric: str = "euclidean",
+        metric_params: dict = None,
+    ):
         """
         Constructs the embedding if not provided, then calculates the pairwise distance from each
         seed to each vertex in graph.
@@ -133,17 +140,18 @@ class SpectralVertexNomination(BaseVN):
             seed vertices are considered. Is ignored in the unattributed case, since it only is reasonable to
             consider all vertices.
         metric : int, default = 'euclidean'
-            distance metric to use in computing nearest neighbors.
+            distance metric to use in computing nearest neighbors, all sklearn metrics available.
+        metric_params : dict, default = None
+            arguments for the sklearn `DistanceMetric` specified via `metric` parameter.
 
         Returns
         -------
         None
         """
+        m_args = {}
+
         # ensure y has correct shape. If unattributed (1d)
         # add unique attribute to each seed vertex.
-        allowed_metrics = ["euclidean", "mahalanobis"]
-        if metric not in allowed_metrics:
-            raise KeyError("Invalid distance metric specified")
         y = self._make_2d(y)
         if not self.persistent or self.embedding is None:
             if X is None:
@@ -164,7 +172,9 @@ class SpectralVertexNomination(BaseVN):
             # seed is not attributed, or no k is specified.
             k = self.unique_att_.shape[0]
 
-        nearest_neighbors = NearestNeighbors(n_neighbors=k, metric=metric)
+        nearest_neighbors = NearestNeighbors(
+            n_neighbors=k, metric=metric, metric_params=metric_params
+        )
         y_vec = self.embedding[y[:, 0].astype(np.int)]
         nearest_neighbors.fit(y_vec)
         self.distance_matrix_, self.neigh_inds = nearest_neighbors.kneighbors(

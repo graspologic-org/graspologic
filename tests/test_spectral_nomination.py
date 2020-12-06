@@ -89,9 +89,9 @@ class TestSpectralVertexNominator:
         g1_correct_prob = group1_correct / 100
         g2_correct_prob = group2_correct / 100
         g3_correct_prob = group3_correct / 100
-        assert np.mean(g1_correct_prob[: n_verts - 10]) > 0.8
-        assert np.mean(g2_correct_prob[: n_verts - 10]) > 0.8
-        assert np.mean(g3_correct_prob[: n_verts - 10]) > 0.8
+        assert np.mean(g1_correct_prob[: n_verts - 10]) > 0.75
+        assert np.mean(g2_correct_prob[: n_verts - 10]) > 0.75
+        assert np.mean(g3_correct_prob[: n_verts - 10]) > 0.75
 
     def test_seed_params(self):
         svn = SpectralVertexNomination(
