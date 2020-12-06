@@ -173,7 +173,7 @@ def latent_distribution_test(
 
     misc_stats : dictionary
         A collection of other statistics obtained from the latent position test
-    
+
         - null_distribution : ndarray, shape (n_bootstraps,)
             The distribution of T statistics generated under the null.
 
