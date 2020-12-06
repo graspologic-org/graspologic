@@ -13,11 +13,11 @@ class SpectralVertexNomination(BaseVN):
     """
     Class for spectral vertex nomination on a single graph.
 
-    Given a graph :math:`G=(V,E)` and a subset of :math: `V` called :math: `S` (the "seed"), Single Graph Vertex
-    Nomination is the problem of ranking all V in order of relation to members of S. Spectral Vertex Nomination solves
-    this problem by embedding G into a low dimensional euclidean space (:ref:`tutorials <embed_tutorials>`), and then
+    Given a graph :math:`G=(V,E)` and a subset of :math:`V` called :math:`S` (the "seed"), Single Graph Vertex
+    Nomination is the problem of ranking all :math:`V` in order of relation to members of :math:`S`. Spectral Vertex Nomination solves
+    this problem by embedding :math:`G` into a low dimensional euclidean space (:ref:`tutorials <embed_tutorials>`), and then
     generating a nomination list by some distance based algorithm. In the simple unattributed case, for each seed vertex
-    u, the other vertices are ranked in order of euclidean distance from u. In the attributed case, vertices are ranked
+    :math:`u`, the other vertices are ranked in order of euclidean distance from :math:`u`. In the attributed case, vertices are ranked
     by relatedness to each attribute present in the set of seed vertices.
 
     Parameters
