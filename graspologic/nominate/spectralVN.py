@@ -35,13 +35,13 @@ class SpectralVertexNomination(BaseVN):
 
     Attributes
     ----------
-    attr_labels_ : np.ndarray
+    attribute_labels_ : np.ndarray
         The attributes of the vertices in the seed (parameter 'y' for fit).
         Shape is the number of seed vertices. Each value is unique in the unattributed case.
-    unique_att_ : np.ndarray
+    unique_attributes_ : np.ndarray
         Each unique attribute represented in the seed. One dimensional. In the unattributed case of SVN, the number of
         unique attributes (and therefore the shape along axis 0 of `unique_att_`) is equal to the number of seeds ( the
-        shape along axis 0 of `attr_labels_`).
+        shape along axis 0 of `attribute_labels_`).
     distance_matrix_ : np.ndarray
         The euclidean distance from each seed vertex to each vertex.
         Shape is ``(number_vertices, number_unique_attributes)`` if attributed or Shape is
@@ -79,8 +79,8 @@ class SpectralVertexNomination(BaseVN):
         elif np.ndim(embedding) != 2:
             raise IndexError("embedding must have dimension 2")
         self.persistent = persistent
-        self.attr_labels_ = None
-        self.unique_att_ = None
+        self.attribute_labels_ = None
+        self.unique_attributes_ = None
         self.distance_matrix_ = None
         self.neigh_inds = None
 
@@ -161,16 +161,19 @@ class SpectralVertexNomination(BaseVN):
             X = np.array(X)
             self._embed(X)
 
-        self.attr_labels_ = y[:, 1]
-        self.unique_att_ = np.unique(self.attr_labels_)
+        self.attribute_labels_ = y[:, 1]
+        self.unique_attributes_ = np.unique(self.attribute_labels_)
 
         if k is not None and type(k) is not int:
             raise TypeError("k must be an integer")
         elif k is not None and k <= 0:
             raise ValueError("k must be greater than 0")
-        if self.unique_att_.shape[0] == self.attr_labels_.shape[0] or k is None:
+        if (
+            self.unique_attributes_.shape[0] == self.attribute_labels_.shape[0]
+            or k is None
+        ):
             # seed is not attributed, or no k is specified.
-            k = self.unique_att_.shape[0]
+            k = self.unique_attributes_.shape[0]
 
         nearest_neighbors = NearestNeighbors(
             n_neighbors=k, metric=metric, metric_params=metric_params
@@ -198,13 +201,15 @@ class SpectralVertexNomination(BaseVN):
                         The matrix of distances associated with each element of the nomination list.
         """
         k = self.neigh_inds.shape[1]
-        num_unique = self.unique_att_.shape[0]
+        num_unique = self.unique_attributes_.shape[0]
         nd_buffer = np.tile(
-            self.attr_labels_[self.neigh_inds[:, :k]], (num_unique, 1, 1)
+            self.attribute_labels_[self.neigh_inds[:, :k]], (num_unique, 1, 1)
         ).astype(np.float64)
 
         # comparison taking place in 3-dim view, coordinates produced are therefore 3D
-        inds = np.argwhere(nd_buffer == self.unique_att_[:, np.newaxis, np.newaxis])
+        inds = np.argwhere(
+            nd_buffer == self.unique_attributes_[:, np.newaxis, np.newaxis]
+        )
 
         # nans are a neat way to operate on attributes individually
         nd_buffer[:] = np.NaN
@@ -221,7 +226,7 @@ class SpectralVertexNomination(BaseVN):
         pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.inf
         vert_order = np.argsort(pred_weights, axis=0)
 
-        inds = np.tile(self.unique_att_, (1, vert_order.shape[0])).T
+        inds = np.tile(self.unique_attributes_, (1, vert_order.shape[0])).T
         inds = np.concatenate((vert_order.reshape(-1, 1), inds), axis=1)
         pred_weights = pred_weights[inds[:, 0], inds[:, 1]]
         return vert_order, pred_weights.reshape(vert_order.shape)
