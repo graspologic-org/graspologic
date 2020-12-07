@@ -920,6 +920,7 @@ def mmsbm(
 
     if alpha == None:
         msg = "missing required input alpha"
+        raise TypeError(msg)
     alpha = check_array(alpha, ensure_2d=False)
     if not np.issubdtype(alpha.dtype, np.number):
         msg = "There are non-numeric elements in alpha"
