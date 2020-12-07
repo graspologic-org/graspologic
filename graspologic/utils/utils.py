@@ -363,9 +363,7 @@ def scipy_is_fully_connected(
         return_labels=return_labels,
     )
 
-    if n_components == 1:
-        return True
-    return False
+    return n_components == 1
 
 
 def is_fully_connected(graph):
