@@ -739,6 +739,7 @@ def pairplot_with_gmm(
     cluster_palette="Set1",
     label_palette="Set1",
     title=None,
+    legend_name=None,
     context="talk",
     font_scale=1,
     alpha=0.7,
@@ -769,6 +770,9 @@ def pairplot_with_gmm(
         default : dictionary using 'Set1'
     title : string,
         default : ""
+    legend_name : string
+        default is "Cluster" if no custom labels are passed
+        default is "" if custom labels are passed
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
@@ -789,6 +793,12 @@ def pairplot_with_gmm(
     # Handle X and labels
     if labels is not None:
         check_X_y(X, labels)
+        # if custom labels pass sets default
+        if legend_name is None:
+            legend_name = ""
+    else:
+        # sets default if no custom labels passed
+        legend_name = "Cluster"
     # Handle gmm
     if gmm is None:
         msg = "You must input a sklearn.mixture.GaussianMixture"
@@ -893,6 +903,7 @@ def pairplot_with_gmm(
             handles,
             labels,
             loc="center right",
+            title=legend_name,
         )
         return pairplot
 
