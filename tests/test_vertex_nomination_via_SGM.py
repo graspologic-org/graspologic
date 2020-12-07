@@ -9,29 +9,52 @@ np.random.seed(0)
 class TestGMP:
     def test_VNviaSGM_inputs(self):
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4), h=-1)
+            VNviaSGM(h=-1)
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4), h=1.5)
+            VNviaSGM(h=1.5)
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4), ell=-1)
+            VNviaSGM(ell=-1)
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4), ell=1.5)
+            VNviaSGM(ell=1.5)
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4), R=-1)
+            VNviaSGM(R=-1)
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4), R=1.5)
+            VNviaSGM(R=1.5)
 
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(3, 4), np.random.randn(4, 4)).fit(
-                0, [np.arange(2), np.arange(2)]
+            VNviaSGM().fit(
+                0,
+                [np.arange(2), np.arange(2)],
+                A=np.random.randn(3, 4),
+                B=np.random.randn(4, 4),
             )
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(3, 4)).fit(
-                0, [np.arange(2), np.arange(2)]
+            VNviaSGM().fit(
+                0,
+                [np.arange(2), np.arange(2)],
+                A=np.random.randn(4, 4),
+                B=np.random.randn(3, 4),
             )
         with pytest.raises(ValueError):
-            VNviaSGM(np.random.randn(4, 4), np.random.randn(4, 4)).fit(
-                0, [np.arange(2), np.arange(3)]
+            VNviaSGM().fit(
+                0,
+                [np.arange(2), np.arange(3)],
+                A=np.random.randn(4, 4),
+                B=np.random.randn(4, 4),
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                0,
+                [np.arange(2), np.arange(3)],
+                A=None,
+                B=np.random.randn(4, 4),
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                0,
+                [np.arange(2), np.arange(3)],
+                A=np.random.randn(4, 4),
+                B=None,
             )
 
     def _get_AB(self):
@@ -86,7 +109,9 @@ class TestGMP:
         voi = 6
         nseeds = 4
 
-        vnsgm = VNviaSGM(g1, g2)
-        nomlst = vnsgm.fit_predict(voi, [kklst[0:nseeds, 0], kklst[0:nseeds, 1]])
+        vnsgm = VNviaSGM()
+        nomlst = vnsgm.fit_predict(
+            voi, [kklst[0:nseeds, 0], kklst[0:nseeds, 1]], A=g1, B=g2
+        )
 
         assert nomlst[0][0] == kklst[np.where(kklst[:, 0] == voi)[0][0], 1]

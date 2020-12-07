@@ -6,28 +6,31 @@ import itertools
 
 class VNviaSGM(BaseEstimator):
     """
-    This class implements vertex nomination via seeded graph matching
+    This class implements Vertex Nomination via Seeded Graph Matching
+    (VNviaSGM) with the algorithm described in [1].
+
+
+    VNviaSGM is a nomination algorithm, so instead of completely matching two
+    graphs `A` and `B`, it proposes a nomination list of potential matches in
+    graph `B` to a vertex of interest (voi) in graph `A`. VNviaSGM matches
+    subgraphs about the given seeds and orders many times. All these results
+    are then averaged to produce a nomination probability list for the voi.
 
     Parameters
     ----------
-    G_1: 2d-array, square
-        Adjacency matrix of `G_1`, the graph where voi is known
+    order_voi_subgraph: int, positive (default = 1)
+        distance between voi used to create induced subgraph on `A`
 
-    G_2: 2d-array, square
-        Adjacency matrix of `G_2`, the graph where voi is not known
+    order_seeds_subgraph: int, positive (default = 1)
+        distance from seeds to other verticies to create induced subgraphs on `A`
+        and `B`
 
-    h: int
-        distance between voi used to create induced subgraph on `G_1`
-
-    ell: int
-        distance from seeds to other verticies to create induced subgraphs on `G_1`
-
-    R: int
+    restarts: int, positive (default = 100)
         Number of restarts for soft seeded graph matching algorithm
 
     Attributes
     ----------
-    n_seeds_used: int
+    n_seeds: int
         Number of seeds passed in `seedsA` that occured in the induced subgraph about `voi`
 
     nomination_list: 2d-array
@@ -45,63 +48,70 @@ class VNviaSGM(BaseEstimator):
 
     """
 
-    def __init__(self, G_1, G_2, h=1, ell=1, R=100):
-        if type(h) is int and h > 0:
-            self.h = h
+    def __init__(self, order_voi_subgraph=1, order_seeds_subgraph=1, restarts=100):
+        if type(order_voi_subgraph) is int and order_voi_subgraph > 0:
+            self.order_voi_subgraph = order_voi_subgraph
         else:
-            msg = "h must be an integer > 0"
+            msg = "order_voi_subgraph must be an integer > 0"
             raise ValueError(msg)
-        if type(ell) is int and ell > 0:
-            self.ell = ell
+        if type(order_seeds_subgraph) is int and order_seeds_subgraph > 0:
+            self.order_seeds_subgraph = order_seeds_subgraph
         else:
-            msg = "ell must be an integer > 0"
+            msg = "order_seeds_subgraph must be an integer > 0"
             raise ValueError(msg)
-        if type(R) is int and R > 0:
-            self.R = R
+        if type(restarts) is int and restarts > 0:
+            self.restarts = restarts
         else:
             msg = "R must be an integer > 0"
             raise ValueError(msg)
 
-        if G_1.shape[0] != G_1.shape[1] or G_2.shape[0] != G_2.shape[1]:
-            msg = "Adjacency matrix entries must be square"
-            raise ValueError(msg)
-        else:
-            self.G_1 = G_1
-            self.G_2 = G_2
-
-    def fit(self, X, y=[]):
+    def fit(self, voi, seeds=[], A=None, B=None):
         """
         Fits the model to two graphs.
 
         Parameters
         ----------
-        X: int
+        voi: int
             Vertex of interest (voi)
 
-        y: list
+        seeds: list
             List of length two `[seedsA, seedsB]` where first element is
-            the seeds associated with adjacency matrix G_1
-            and the second element the adjacency matrix associated with G_2, note
-            `len(seedsA)==len(seedsB)`. The elements of `seeds_A` and `seeds_B` are
-            vertices which are known to be matched, that is, `seeds_A[i]` is matched
-            to vertex `seeds_B[i]`.
+            the seeds associated with adjacency matrix A
+            and the second element the adjacency matrix associated with B, note
+            `len(seedsA)==len(seedsB)`. The elements of `seedsA` and `seedsB` are
+            vertices which are known to be matched, that is, `seedsA[i]` is matched
+            to vertex `seedsB[i]`.
+
+        A: 2d-array, square
+            Adjacency matrix of `A`, the graph where voi is known
+
+        B: 2d-array, square
+            Adjacency matrix of `B`, the graph where voi is not known
 
         Returns
         -------
         self: A reference to self
         """
-        voi = X
-
-        if len(y) == 0:
-            print("Must include at least one seed to produce nomination list")
-            return None
-        if len(y) != 2:
-            msg = "List must be length two, with first element containing seeds \
-                  of G_1 and the second containing seeds of G_2"
+        if A is None or B is None:
+            msg = "Adjacency matricies must be passed"
+            raise ValueError(msg)
+        elif len(A.shape) != 2 or len(B.shape) != 2:
+            msg = "Adjacency matrix entries must be square"
+            raise ValueError(msg)
+        elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
+            msg = "Adjacency matrix entries must be square"
             raise ValueError(msg)
 
-        seedsA = y[0]
-        seedsB = y[1]
+        if len(seeds) == 0:
+            print("Must include at least one seed to produce nomination list")
+            return None
+        if len(seeds) != 2:
+            msg = "List must be length two, with first element containing seeds \
+                  of A and the second containing seeds of B"
+            raise ValueError(msg)
+
+        seedsA = seeds[0]
+        seedsB = seeds[1]
 
         if len(seedsA) != len(seedsB):
             msg = "Must have the same number of seeds for each adjacency matrix"
@@ -112,21 +122,25 @@ class VNviaSGM(BaseEstimator):
 
         voi = np.reshape(np.array(voi), (1,))
 
-        # get reordering for A
-        nsx1 = np.setdiff1d(np.arange(self.G_1.shape[0]), np.concatenate((seedsA, voi)))
+        # get reordering for Ax
+        nsx1 = np.setdiff1d(np.arange(self.A.shape[0]), np.concatenate((seedsA, voi)))
         a_reord = np.concatenate((seedsA, voi, nsx1))
 
         # get reordering for B
-        nsx2 = np.setdiff1d(np.arange(self.G_2.shape[0]), seedsB)
+        nsx2 = np.setdiff1d(np.arange(self.B.shape[0]), seedsB)
         b_reord = np.concatenate((seedsB, nsx2))
 
-        AA = self.G_1[np.ix_(a_reord, a_reord)]
-        BB = self.G_2[np.ix_(b_reord, b_reord)]
+        AA = self.A[np.ix_(a_reord, a_reord)]
+        BB = self.B[np.ix_(b_reord, b_reord)]
 
         seeds_reord = np.arange(len(seedsA))
         voi_reord = len(seedsA)
 
-        subgraph_AA = np.array(_ego_list(AA, self.h, voi_reord, mindist=1))
+        subgraph_AA = np.array(
+            _get_induced_subgraph_list(
+                AA, self.order_voi_subgraph, voi_reord, mindist=1
+            )
+        )
 
         voi_reord = np.reshape(np.array(voi_reord), (1,))
 
@@ -141,8 +155,16 @@ class VNviaSGM(BaseEstimator):
             )
             return None
 
-        Nx1 = np.array(_ego_list(AA, self.ell, list(Sx1), mindist=0))
-        Nx2 = np.array(_ego_list(BB, self.ell, list(Sx2), mindist=0))
+        Nx1 = np.array(
+            _get_induced_subgraph_list(
+                AA, self.order_seeds_subgraph, list(Sx1), mindist=0
+            )
+        )
+        Nx2 = np.array(
+            _get_induced_subgraph_list(
+                BB, self.order_seeds_subgraph, list(Sx2), mindist=0
+            )
+        )
 
         foo = np.concatenate((Sx1, voi_reord))
         ind1 = np.concatenate((Sx1, voi_reord, np.setdiff1d(Nx1, foo)))
@@ -152,41 +174,49 @@ class VNviaSGM(BaseEstimator):
         BB_fin = BB[np.ix_(ind2, ind2)]
 
         seeds_fin = list(range(len(Sx1)))
-        sgm = GMP(n_init=self.R, shuffle_input=False, init="rand", padding="naive")
+        sgm = GMP(
+            n_init=self.restarts, shuffle_input=False, init="rand", padding="naive"
+        )
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 
         b_inds = b_reord[ind2]
-        self.n_seeds_used = len(Sx1)
+        self.n_seeds = len(Sx1)
 
-        nomination_list = list(zip(b_inds[self.n_seeds_used :], P_outp[0]))
+        nomination_list = list(zip(b_inds[self.n_seeds :], P_outp[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
         self.nomination_list = np.array(nomination_list)
         return self
 
-    def fit_predict(self, X, y=[]):
+    def fit_predict(self, voi, seeds=[], A=None, B=None):
         """
         Fits model to two adjacenty matricies and returns nomination list
 
         Parameters
         ----------
-        X: int
+        voi: int
             Vertex of interest (voi)
 
-        y: list
+        seeds: list
             List of length two `[seedsA, seedsB]` where first element is
-            the seeds associated with adjacency matrix G_1
-            and the second element the adjacency matrix associated with G_2, note
-            `len(seedsA)==len(seedsB)` The elements of `seeds_A` and `seeds_B` are
-            vertices which are known to be matched, that is, `seeds_A[i]` is matched
-            to vertex `seeds_B[i]`.
+            the seeds associated with adjacency matrix A
+            and the second element the adjacency matrix associated with B, note
+            `len(seedsA)==len(seedsB)` The elements of `seedsA` and `seedsB` are
+            vertices which are known to be matched, that is, `seedsA[i]` is matched
+            to vertex `seedsB[i]`.
+
+        A: 2d-array, square
+            Adjacency matrix of `A`, the graph where voi is known
+
+        B: 2d-array, square
+            Adjacency matrix of `B`, the graph where voi is not known
 
         Returns
         -------
         nomination_list : 2d-array
             The nomination array
         """
-        retval = self.fit(X, y)
+        retval = self.fit(voi, seeds, A=A, B=B)
 
         if retval is None:
             return None
@@ -194,7 +224,7 @@ class VNviaSGM(BaseEstimator):
         return self.nomination_list
 
 
-def _ego(graph_adj_matrix, order, node, mindist=1):
+def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
     """
     Generates a vertex list for the induced subgraph about a node with
     max and min distance parameters.
@@ -211,7 +241,7 @@ def _ego(graph_adj_matrix, order, node, mindist=1):
     node: int
         The vertex to center the induced subgraph about.
 
-    mindist: int
+    mindist: int (default = 1)
         The minimum distance away from the node to include in the subgraph.
 
     Returns
@@ -240,7 +270,7 @@ def _ego(graph_adj_matrix, order, node, mindist=1):
     return np.array(list(set(ress)))
 
 
-def _ego_list(graph_adj_matrix, order, node, mindist=1):
+def _get_induced_subgraph_list(graph_adj_matrix, order, node, mindist=1):
     """
     Generates a vertex list for the induced subgraph about a node with
     max and min distance parameters.
@@ -257,7 +287,7 @@ def _ego_list(graph_adj_matrix, order, node, mindist=1):
     node: int or list
         The list of vertices to center the induced subgraph about.
 
-    mindist: int
+    mindist: int (default = 1)
         The minimum distance away from the node to include in the subgraph.
 
     Returns
@@ -268,8 +298,10 @@ def _ego_list(graph_adj_matrix, order, node, mindist=1):
     if type(node) == list:
         total_res = []
         for nn in node:
-            ego_res = _ego(graph_adj_matrix, order, nn, mindist=mindist)
+            ego_res = _get_induced_subgraph(
+                graph_adj_matrix, order, nn, mindist=mindist
+            )
             total_res.extend(ego_res)
         return list(set(total_res))
     else:
-        return _ego(graph_adj_matrix, order, node)
+        return _get_induced_subgraph(graph_adj_matrix, order, node)

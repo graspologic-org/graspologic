@@ -79,6 +79,7 @@ class GraphMatch(BaseEstimator):
         The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
         to best minimize the objective function :math:`f(P) = \\text{trace}(A^T PBP^T )`.
 
+
     score_ : float
         The objective function value of for the optimal permutation found.
 
@@ -86,14 +87,17 @@ class GraphMatch(BaseEstimator):
         Number of Frank-Wolfe iterations run. If ``n_init > 1``, :attr:`n_iter_` reflects the number of
         iterations performed at the initialization returned.
 
+
     References
     ----------
     .. [1] J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,
         E.T. Harley, D.E. Fishkind, R.J. Vogelstein, and C.E. Priebe, “Fast
         approximate quadratic programming for graph matching,” PLOS one, vol. 10,
         no. 4, p. e0121002, 2015.
+
     .. [2] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
         Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
+
 
 
     """
@@ -163,14 +167,18 @@ class GraphMatch(BaseEstimator):
         ----------
         A : 2d-array, square
             A square adjacency matrix
+
         B : 2d-array, square
             A square adjacency matrix
+
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in ``A``.
+
         seeds_B : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in `B` The elements of
             ``seeds_A`` and ``seeds_B`` are vertices which are known to be matched, that is,
             ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
+
         Returns
         -------
         self : returns an instance of self
@@ -213,18 +221,23 @@ class GraphMatch(BaseEstimator):
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
+        
         Parameters
         ----------
         A : 2d-array, square
             A square adjacency matrix
+
         B : 2d-array, square
             A square adjacency matrix
+
         seeds_A : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in ``A``.
+
         seeds_B : 1d-array, shape (m , 1) where m <= number of nodes (default = [])
             An array where each entry is an index of a node in ``B`` The elements of
             ``seeds_A`` and ``seeds_B`` are vertices which are known to be matched, that is,
             ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
+
         Returns
         -------
         perm_inds_ : 1-d array, some shuffling of [0, n_vert)
