@@ -905,9 +905,9 @@ def pairplot_with_gmm(
             loc="center right",
             title=legend_name,
         )
-        # allows for the legend to not overlap with plots while also keeping 
+        # allows for the legend to not overlap with plots while also keeping
         # legend in frame
-        pairplot.subplots_adjust(right = .85)
+        pairplot.subplots_adjust(right=.85)
         return pairplot
 
 
