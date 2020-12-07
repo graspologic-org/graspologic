@@ -221,7 +221,7 @@ class GraphMatch(BaseEstimator):
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
-        
+
         Parameters
         ----------
         A : 2d-array, square
