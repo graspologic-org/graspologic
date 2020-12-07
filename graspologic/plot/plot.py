@@ -169,6 +169,7 @@ def heatmap(
     ----------
     X : nx.Graph or np.ndarray object
         Graph or numpy matrix to plot
+
     transform : None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}
 
         - 'log'

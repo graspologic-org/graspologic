@@ -11,7 +11,7 @@ stochastic block model (SBM), degree-corrected SBM, and random dot product graph
 
 .. toctree::
    :maxdepth: 1
-   
+
    tutorials/models/models
 
 .. _simulations_tutorials:
@@ -71,7 +71,7 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
    tutorials/inference/latent_position_test
    tutorials/inference/latent_distribution_test
 
-.. _plot_tutorials:
+.. _plot_tutorials: 
 
 Plotting
 ========
