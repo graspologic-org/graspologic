@@ -41,8 +41,26 @@ class TestCasc:
     def __init__(self, M):
         self.A, self.labels = M
 
-    def test_fits(self:
+    def test_fits(self):
         # make sure CASC fits on our M matrix
         casc = CASC(n_components=2)
         casc.fit(self.A)
         assert casc
+
+    def test_wrong_types(self):
+        pass
+
+    def test_wrong_values(self):
+        pass
+
+    def test_no_covariate_matrix(self):
+        pass
+
+    def test_bad_covariate_matrix(self):
+        pass
+
+    def test_labels_match_clustering(self):
+        pass
+
+    def test_covariates_improve_clustering(self):
+        pass
