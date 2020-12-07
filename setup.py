@@ -57,7 +57,7 @@ setup(
         "networkx>=2.1",
         "numpy>=1.8.1",
         "POT>=0.7.0",
-        "seaborn>=0.9.0",
+        "seaborn>= 0.11.0",
         "scikit-learn>=0.19.1",
         "scipy>=1.4.0",
     ],
