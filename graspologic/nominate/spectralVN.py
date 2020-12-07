@@ -139,14 +139,11 @@ class SpectralVertexNomination(BaseVN):
             Number of neighbors to consider if seed is attributed. Defaults to the size of the seed, i.e. all
             seed vertices are considered. Is ignored in the unattributed case, since it only is reasonable to
             consider all vertices.
-        metric : int, default = 'euclidean'
-            distance metric to use in computing nearest neighbors, all sklearn metrics available.
+        metric : str, default = 'euclidean'
+            Distance metric to use in computing nearest neighbors, all sklearn metrics available.
         metric_params : dict, default = None
-            arguments for the sklearn `DistanceMetric` specified via `metric` parameter.
+            Arguments for the sklearn `DistanceMetric` specified via `metric` parameter.
 
-        Returns
-        -------
-        None
         """
         m_args = {}
 
@@ -193,7 +190,7 @@ class SpectralVertexNomination(BaseVN):
         Returns
         -------
         Nomination List : np.ndarray
-                        shape is ``(number_vertices, number_attributes_in_seed)`` if attributed, or
+                        Shape is ``(number_vertices, number_attributes_in_seed)`` if attributed, or
                         shape is ``(number_vertices, number_vertices_in_seed)`` if unattributed. Each
                         column is an attribute or seed vertex, and the rows of each column are a list of
                         vertex indexes from the original adjacency matrix in order degree of match.
@@ -252,7 +249,7 @@ class SpectralVertexNomination(BaseVN):
         Returns
         -------
         Nomination List : np.ndarray
-                        shape is ``(number_vertices, number_attributes_in_seed)`` if attributed, or
+                        Shape is ``(number_vertices, number_attributes_in_seed)`` if attributed, or
                         shape is ``(number_vertices, number_vertices_in_seed)`` if unattributed. Each
                         column is an attribute or seed vertex, and the rows of each column are a list of
                         vertex indexes from the original adjacency matrix in order degree of match.
