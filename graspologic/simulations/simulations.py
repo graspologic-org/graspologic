@@ -814,11 +814,10 @@ def mmsbm(
     which indicates the probability of connection between nodes based upon
     their community membership.
     Each node is assigned a membership vector drawn from Dirichlet distribution
-    with parameter :math:`\vec{\alpha}`. Each entry of this vector indicates the
-    probability of that node pertaining to each community. Finally, each interaction
-    between nodes is drawn by assigning the community membership of each node according
-    to the probability specified in the mixed membership vector for that node.
-
+    with parameter :math:`\vec{\alpha}`. The entries of this vector indicate the
+    probabilities for that node of pertaining to each community when interacting with
+    another node. Each node's membership is determined according to those probabilities.
+    Finally, interactions are sampled according to the assigned memberships.
 
     Read more in the :ref:`tutorials <simulations_tutorials>`
 
@@ -829,16 +828,17 @@ def mmsbm(
 
     p: array-like, shape (n_communities, n_communities)
         Probability of an edge between each of the communities, where ``p[i, j]``
-        indicates the probability of a connection between edges in communities [i, j].
-        0 < ``p[i, j]`` < 1 for all i, j.
+        indicates the probability of a connection between edges in communities
+        :math:`(i, j)`.
+        0 < ``p[i, j]`` < 1 for all :math:`i, j`.
 
     alpha: array-like, shape (n_communities,)
         Parameter alpha of the Dirichlet distribution used
         to sample the mixed-membership vectors for each node.
-        ``alpha[i]`` > 0 for all i.
+        ``alpha[i]`` > 0 for all :math:`i`.
 
     rng: numpy.random.Generator, optional (default = None)
-        Numpy :ref:`Random Generator` object to generate sampling from distributions.
+        Numpy :numpy:`Random Generator` object to generate sampling from distributions.
         If None, the random number generator is the Generator object constructed
         by ``np.random.default_rng()``.
 
@@ -918,6 +918,8 @@ def mmsbm(
         msg = "Values in p must be in between 0 and 1."
         raise ValueError(msg)
 
+    if alpha == None:
+        msg = "missing required input alpha"
     alpha = check_array(alpha, ensure_2d=False)
     if not np.issubdtype(alpha.dtype, np.number):
         msg = "There are non-numeric elements in alpha"
@@ -926,7 +928,7 @@ def mmsbm(
         msg = "Alpha entries must be > 0."
         raise ValueError(msg)
     if alpha.shape != (len(p),):
-        msg = "alpha must be a list or np.array of dimension {c}, not {w}.".format(
+        msg = "alpha must be a list or np.array of shape {c}, not {w}.".format(
             c=(len(p),), w=alpha.shape
         )
         raise ValueError(msg)

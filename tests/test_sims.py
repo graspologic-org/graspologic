@@ -912,10 +912,11 @@ class Test_MMSBM(unittest.TestCase):
             return_labels=True,
         )
         labels = A[1]
-        expected_labels = np.ones((self.n, self.n)) - np.identity(
-            self.n
-        )  # since we expect all nodes to pertain to node 1 we expect all values for
-        # labels to be 1 besides those on the diagonal due to missingness of loop
+        expected_labels = np.ones((self.n, self.n))
+        np.fill_diagonal(expected_labels, -1)
+        # since we expect all nodes on the off diagonal to pertain to community 2
+        # we expect all values on the off diagonal to be 1
+        # We expect -1 on the diagonal as this graph has no loops
 
         # check that expected labels is the same as the labels output by function
         self.assertTrue(np.allclose(labels, expected_labels))
@@ -964,8 +965,8 @@ class Test_MMSBM(unittest.TestCase):
             n = ["1", 10]  # n must be an integer
             mmsbm(n, self.p, self.alpha, rng=self.rng)
 
-        with self.assertRaises(TypeError):
-            p = 0.5  # p must be an array or list
+        with self.assertRaises(ValueError):
+            p = 0.5  # p must be a 2d array, not scalar
             mmsbm(self.n, p, self.alpha, rng=self.rng)
 
         with self.assertRaises(ValueError):
@@ -980,9 +981,9 @@ class Test_MMSBM(unittest.TestCase):
             alpha = 1  # alpha must be an array
             mmsbm(self.n, self.p, alpha, rng=self.rng)
 
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             # test deafult alpha = None, should output typeerror
-            mmsbm(self.n, self.p, alpha, rng=self.rng)
+            mmsbm(self.n, self.p, rng=self.rng)
 
         with self.assertRaises(ValueError):
             alpha = ["str", 0.3]  # alpha must only contain numeric elements
