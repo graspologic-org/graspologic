@@ -847,9 +847,9 @@ def pairplot_with_gmm(
         for i in range(dimensions):
             for j in range(dimensions):
                 if i == j and X.shape[1] > 2:
-                    # take care of the distplot on diagonal
+                    # take care of the histplot on diagonal
                     for t, lab in zip([i for i in range(X.shape[1])], label_palette):
-                        sns.distplot(
+                        sns.histplot(
                             X[Y_ == t, i],
                             kde=kde,
                             ax=axes[dimensions * i + j],
@@ -942,7 +942,7 @@ def _distplot(
             plt.legend()
         else:
             if data.min() != data.max():
-                sns.distplot(data, hist=False, kde_kws=plt_kws)
+                sns.histplot(data, hist=False, kde_kws=plt_kws)
             else:
                 ax.axvline(data[0])
 
