@@ -850,16 +850,16 @@ def pairplot_with_gmm(
                     axes[dimensions * i + j].set_yticks([])
                 else:
                     # take care off off-diagonal scatterplots
-                    ax1, ax2 = j, i
+                    dim1, dim2 = j, i
                     # with only a scatter plot we must make sure we plot
                     # the first and second feature of X
                     if X.shape[1] == 2:
-                        ax1, ax2 = 0, 1
+                        dim1, dim2 = 0, 1
                     _plot_ellipse_and_data(
                         data,
                         X,
-                        ax1,
-                        ax2,
+                        dim1,
+                        dim2,
                         means,
                         covariances,
                         axes[dimensions * i + j],
