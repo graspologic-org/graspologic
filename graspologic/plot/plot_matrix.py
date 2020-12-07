@@ -226,10 +226,10 @@ def draw_colors(
         square=False,
     )
     if ax_type == "x":
-        ax.set_xlabel(color_class)
+        ax.set_xlabel(color_class, fontsize=20)
         ax.xaxis.set_label_position("top")
     elif ax_type == "y":
-        ax.set_ylabel(color_class)
+        ax.set_ylabel(color_class, fontsize=20)
     return ax
 
 
@@ -338,14 +338,14 @@ def draw_ticks(
 
     if ax_type == "x":
         ax.set_xticks(tick_inds)
-        ax.set_xticklabels(tick_labels, ha="center", va="bottom")
+        ax.set_xticklabels(tick_labels, ha="center", va="bottom", fontsize=20)
         ax.xaxis.tick_top()
-        ax.set_xlabel(group_class[0])
+        ax.set_xlabel(group_class[0], fontsize=20)
         ax.xaxis.set_label_position("top")
     elif ax_type == "y":
         ax.set_yticks(tick_inds)
-        ax.set_yticklabels(tick_labels, ha="right", va="center")
-        ax.set_ylabel(group_class[0])
+        ax.set_yticklabels(tick_labels, ha="right", va="center", fontsize=20)
+        ax.set_ylabel(group_class[0], fontsize=20)
 
     if group_border:
         front_sep_inds, back_sep_inds = _get_separator_info(meta, group_class)
@@ -779,10 +779,12 @@ def matrixplot(
     # draw top ticks
     if len(col_group_class) > 0 and col_ticks:
         if col_tick_pad is None:
-            col_tick_pad = len(col_group_class) * [0.5]
+            col_tick_pad = len(col_group_class) * [0.8]
         if col_first_ax:
             col_tick_pad[0] = 0
             col_first_ax = False
+        else:
+            col_tick_pad[0] = 0.5
 
         # Reverse the order of the group class, so the ticks are drawn in the opposite order
         rev_group_class = list(col_group_class[::-1])
@@ -809,10 +811,12 @@ def matrixplot(
     # draw left ticks
     if len(row_group_class) > 0 and row_ticks:
         if row_tick_pad is None:
-            row_tick_pad = len(row_group_class) * [0.5]
+            row_tick_pad = len(row_group_class) * [0.8]
         if row_first_ax:
             row_tick_pad[0] = 0
             row_first_ax = False
+        else:
+            row_tick_pad[0] = 0.5
 
         # Reverse the order of the group class, so the ticks are drawn in the opposite order
         rev_group_class = list(row_group_class[::-1])
