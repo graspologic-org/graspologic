@@ -39,7 +39,7 @@ clustering algorithms, as well as the advantages of these to comparable implemen
 
 .. toctree::
    :maxdepth: 1
-   
+
    tutorials/clustering/autogmm
    tutorials/clustering/kclust
 
@@ -71,11 +71,11 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
    tutorials/inference/latent_position_test
    tutorials/inference/latent_distribution_test
 
-.. _plot_tutorials: 
+.. _plot_tutorials:
 
 Plotting
 ========
-The following tutorials present ways to visualize the graphs, such as its adjacency matrix, and graph embeddings.
+The following tutorials present ways to visualize the graphs, such as its adjacency matrix, and graph embeddings. 
 
 .. toctree::
    :maxdepth: 1
