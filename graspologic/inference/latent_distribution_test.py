@@ -26,9 +26,7 @@ _VALID_METRICS = _VALID_DISTANCES + _VALID_KERNELS
 
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
-ldt_result = namedtuple(
-    "ldt_result", ("p_value", "sample_T_statistic", "null_distribution")
-)
+ldt_result = namedtuple("ldt_result", ("p_value", "sample_T_statistic", "misc_stats"))
 
 
 def latent_distribution_test(
