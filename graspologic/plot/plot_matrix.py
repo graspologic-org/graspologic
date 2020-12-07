@@ -47,7 +47,18 @@ def _check_length(item, name, length):
         )
 
 
-def _check_sorting_kws(length, meta, group_class, class_order, item_order, color_class):
+def _check_plotting_kws(palette, color_class):
+    if isinstance(palette, str) or isinstance(palette, dict):
+        palette = [palette]
+    elif len(palette) != len(color_class) and len(palette) != 1:
+        raise ValueError("There is not enough palette value for each color class")
+
+    return palette
+
+
+def _check_sorting_kws(
+    length, meta, group_class, class_order, item_order, color_class, highlight
+):
     if isinstance(meta, pd.DataFrame):
         # if meta is here, than everything else must be column item in meta
         _check_length(meta, "meta", length)
@@ -55,18 +66,21 @@ def _check_sorting_kws(length, meta, group_class, class_order, item_order, color
         class_order = _check_item_in_meta(meta, class_order, "class_order")
         item_order = _check_item_in_meta(meta, item_order, "item_order")
         color_class = _check_item_in_meta(meta, color_class, "color_class")
+        highlight = _check_item_in_meta(meta, highlight, "highlight")
     else:
         # otherwise, arguments can be a hodgepodge of stuff
         group_class_meta, group_class = _item_to_df(group_class, "group_class", length)
         class_order_meta, class_order = _item_to_df(class_order, "class_order", length)
         item_order_meta, item_order = _item_to_df(item_order, "item_order", length)
         color_class_meta, color_class = _item_to_df(color_class, "color_class", length)
+        highlight_meta, highlight = _item_to_df(highlight, "highlight", length)
         metas = []
         for m in [
             group_class_meta,
             class_order_meta,
             item_order_meta,
             color_class_meta,
+            highlight_meta,
         ]:
             if m is not None:
                 metas.append(m)
@@ -75,7 +89,7 @@ def _check_sorting_kws(length, meta, group_class, class_order, item_order, color
         else:
             meta = pd.DataFrame()
 
-    return meta, group_class, class_order, item_order, color_class
+    return meta, group_class, class_order, item_order, color_class, highlight
 
 
 def _get_separator_info(meta, group_class):
@@ -171,7 +185,7 @@ def draw_colors(
         Divider used to add new axes to the plot
     color_class : string or list of string, optional
         Attribute in meta by which to draw colorbars, by default None
-    palette : str, optional
+    palette : str or dict, optional
         Colormap of the colorbar, by default "tab10"
 
     Returns
@@ -458,12 +472,12 @@ def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
                 # map each node from the sorting class to certain sorting class attribute
                 meta[f"{gc}_{co}_order"] = meta[gc].map(class_value)
                 total_sort_by.append(f"{gc}_{co}_order")
-            total_sort_by.append(gc)
+        total_sort_by.append(gc)
     total_sort_by += item_order
 
     # arbitrarily sort the data from 1 to length
     meta["sort_idx"] = range(len(meta))
-    # if we actually need to sort, sort by class_order, sort_class, item_order
+    # if we actually need to sort, sort by class_order, group_class, item_order
     if len(total_sort_by) > 0:
         meta.sort_values(total_sort_by, inplace=True, kind="mergesort")
 
@@ -529,7 +543,7 @@ def matrixplot(
         Attribute in meta by which to draw colorbars, by default None
     {col, row}_highlights : string or list of string, optional
         Attribute in meta by which to draw highlighted separateors, by default None
-    {col, row}_palette : str, optional
+    {col, row}_palette : str, dict, list of str or dict, optional
         Colormap of the colorbar, by default "tab10"
     {col, row}_ticks : bool, optional
         Whether the plot has ticks, by default True
@@ -578,6 +592,7 @@ def matrixplot(
         col_class_order,
         col_item_order,
         col_color_class,
+        col_highlight,
     ) = _check_sorting_kws(
         data.shape[0],
         col_meta,
@@ -585,6 +600,7 @@ def matrixplot(
         col_class_order,
         col_item_order,
         col_color_class,
+        col_highlight,
     )
 
     (
@@ -593,6 +609,7 @@ def matrixplot(
         row_class_order,
         row_item_order,
         row_color_class,
+        row_highlight,
     ) = _check_sorting_kws(
         data.shape[0],
         row_meta,
@@ -600,7 +617,12 @@ def matrixplot(
         row_class_order,
         row_item_order,
         row_color_class,
+        row_highlight,
     )
+
+    # check for the types of the plotting arguments
+    col_palette = _check_plotting_kws(col_palette, col_color_class)
+    row_palette = _check_plotting_kws(row_palette, row_color_class)
 
     # sort the data and the metadata according to the sorting method
     col_inds, col_meta = sort_meta(
@@ -707,6 +729,11 @@ def matrixplot(
             col_first_ax = False
 
         rev_color_class = list(col_color_class[::-1])
+        if len(col_palette) > 1:
+            rev_color_palette = list(col_palette[::-1])
+        else:
+            rev_color_palette = list(col_palette * len(col_color_class))
+
         for i, sc in enumerate(rev_color_class):
             color_ax = divider.append_axes(
                 "top", size="3%", pad=col_color_pad[i], sharex=ax
@@ -718,7 +745,7 @@ def matrixplot(
                 divider=divider,
                 ax_type="x",
                 color_class=rev_color_class[i],
-                palette=col_palette,
+                palette=rev_color_palette[i],
             )
     # draw left colors
     if len(row_color_class) > 0:
@@ -729,6 +756,11 @@ def matrixplot(
             row_first_ax = False
 
         rev_color_class = list(row_color_class[::-1])
+        if len(row_palette) > 1:
+            rev_color_palette = list(row_palette[::-1])
+        else:
+            rev_color_palette = list(row_palette * len(row_color_class))
+
         for i, sc in enumerate(rev_color_class):
             color_ax = divider.append_axes(
                 "left", size="3%", pad=row_color_pad[i], sharey=ax
@@ -740,7 +772,7 @@ def matrixplot(
                 divider=divider,
                 ax_type="y",
                 color_class=rev_color_class[i],
-                palette=row_palette,
+                palette=rev_color_palette[i],
             )
 
     # draw ticks
@@ -865,7 +897,7 @@ def adjplot(
         Whether the plot should have border, by default True
     cmap : str, optional
         Colormap of the heatmap, by default "RdBu_r"
-    palette : str, optional
+    palette : str, dict, list of str or dict, optional
         Colormap of the colorbar, by default "tab10"
     ticks : bool, optional
         Whether the plot has ticks, by default True
