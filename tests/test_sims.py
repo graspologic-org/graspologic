@@ -981,8 +981,8 @@ class Test_MMSBM(unittest.TestCase):
             alpha = 1  # alpha must be an array
             mmsbm(self.n, self.p, alpha, rng=self.rng)
 
-        with self.assertRaises(TypeError):
-            # test deafult alpha = None, should output typeerror
+        with self.assertRaises(ValueError):
+            # test deafult alpha = None, should output ValueError
             mmsbm(self.n, self.p, rng=self.rng)
 
         with self.assertRaises(ValueError):

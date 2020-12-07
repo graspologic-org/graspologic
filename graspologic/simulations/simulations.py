@@ -918,10 +918,7 @@ def mmsbm(
         msg = "Values in p must be in between 0 and 1."
         raise ValueError(msg)
 
-    if alpha == None:
-        msg = "missing required input alpha"
-        raise TypeError(msg)
-    alpha = check_array(alpha, ensure_2d=False)
+    alpha = check_array(alpha, ensure_2d=False, ensure_min_features=1)
     if not np.issubdtype(alpha.dtype, np.number):
         msg = "There are non-numeric elements in alpha"
         raise ValueError(msg)
