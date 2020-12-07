@@ -170,7 +170,7 @@ def _remove_shared_ax(ax):
 def draw_colors(
     ax, ax_type="x", meta=None, divider=None, color_class=None, palette="tab10"
 ):
-    """
+    r"""
     Draw colormap onto the axis to separate the data
 
     Parameters
@@ -241,7 +241,7 @@ def draw_separators(
     plot_type="heatmap",
     gridline_kws=None,
 ):
-    """
+    r"""
     Draw separators between groups on the plot
 
     Parameters
@@ -301,7 +301,7 @@ def draw_ticks(
     group_border=True,
     plot_type="heatmap",
 ):
-    """
+    r"""
     Draw ticks onto the axis of the plot to separate the data
 
     Parameters
@@ -369,7 +369,7 @@ def draw_ticks(
 
 
 def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
-    """
+    r"""
     Draw a scattermap of the data with extra grid features
 
     Parameters
@@ -425,7 +425,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
 
 
 def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
-    """
+    r"""
     Sort the data and metadata according to the sorting method
 
     Parameters
@@ -520,7 +520,7 @@ def matrixplot(
     highlight_kws=None,
     **kws,
 ):
-    """
+    r"""
     Sorts a matrix and plots it with ticks and colors on the borders
 
     Parameters
@@ -876,7 +876,7 @@ def adjplot(
     highlight_kws=None,
     **kws,
 ):
-    """
+    r"""
     Sorts a matrix and plots it with ticks and colors on the borders
 
     Parameters
