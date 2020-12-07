@@ -39,7 +39,7 @@ clustering algorithms, as well as the advantages of these to comparable implemen
 
 .. toctree::
    :maxdepth: 1
-
+   
    tutorials/clustering/autogmm
    tutorials/clustering/kclust
 

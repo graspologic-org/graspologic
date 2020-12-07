@@ -38,3 +38,5 @@ Other
 -----
 
 .. autofunction:: remap_labels
+
+.. autofunction:: to_weighted_edge_list
