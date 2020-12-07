@@ -123,15 +123,15 @@ class VNviaSGM(BaseEstimator):
         voi = np.reshape(np.array(voi), (1,))
 
         # get reordering for Ax
-        nsx1 = np.setdiff1d(np.arange(self.A.shape[0]), np.concatenate((seedsA, voi)))
+        nsx1 = np.setdiff1d(np.arange(A.shape[0]), np.concatenate((seedsA, voi)))
         a_reord = np.concatenate((seedsA, voi, nsx1))
 
         # get reordering for B
-        nsx2 = np.setdiff1d(np.arange(self.B.shape[0]), seedsB)
+        nsx2 = np.setdiff1d(np.arange(B.shape[0]), seedsB)
         b_reord = np.concatenate((seedsB, nsx2))
 
-        AA = self.A[np.ix_(a_reord, a_reord)]
-        BB = self.B[np.ix_(b_reord, b_reord)]
+        AA = A[np.ix_(a_reord, a_reord)]
+        BB = B[np.ix_(b_reord, b_reord)]
 
         seeds_reord = np.arange(len(seedsA))
         voi_reord = len(seedsA)
