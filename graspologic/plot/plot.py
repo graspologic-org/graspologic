@@ -756,8 +756,8 @@ def pairplot_with_gmm(
     X : array-like, shape (n_samples, n_features)
         Input data.
     gmm: GaussianMixture object
-        Gaussian mixture models are a probabilistic model for representing.
-        Based on normally distributed subpopulations, GMM _cluster_tutorials
+        Gaussian mixture models are probabilistic models for representing data
+        based on normally distributed subpopulations, GMM clusters
         each data point into a corresponding subpopulation
     labels : array-like or list, shape (n_samples), optional
         Labels that correspond to each sample in X.
@@ -767,7 +767,8 @@ def pairplot_with_gmm(
         default : dictionary using 'Set1'
     cluster_palette : str or dict, optional, default: dictionary using 'Set1'
         default : dictionary using 'Set1'
-    title : string, no default
+    title : string,
+        default : ""
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
