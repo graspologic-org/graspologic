@@ -304,9 +304,13 @@ def latent_distribution_test(
     if align_type == "sign_flips":
         aligner = SignFlips(**align_kws)
         X1_hat = aligner.fit_transform(X1_hat, X2_hat)
+        Q = aligner.Q_
     elif align_type == "seedless_procrustes":
         aligner = SeedlessProcrustes(**align_kws)
         X1_hat = aligner.fit_transform(X1_hat, X2_hat)
+        Q = aligner.Q_
+    else:
+        Q = np.identity(X1_hat.shape[0])
 
     if size_correction:
         X1_hat, X2_hat = _sample_modified_ase(X1_hat, X2_hat, pooled=pooled)
@@ -321,7 +325,7 @@ def latent_distribution_test(
     misc_stats = {
         "null_distribution": null_distribution,
         "n_components": n_components,
-        "Q": aligner.Q_,
+        "Q": Q,
     }
     sample_T_statistic = data[0]
     p_value = data[1]
