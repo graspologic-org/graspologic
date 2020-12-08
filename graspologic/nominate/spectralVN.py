@@ -22,16 +22,19 @@ class SpectralVertexNomination(BaseVN):
 
     Parameters
     ----------
-    embedding: np.ndarray, default = None
-        A pre-calculated embedding may be provided, in which case it will be used for vertex nomination instead of
-        embedding the adjacency matrix using `embedder`.
+    input_graph: bool, default = True
+        Flag whether to expect two full graphs, or the embeddings.
+
+        - True
+            .fit and .fit_predict() expect graphs as adjacency matrix, provided as ndarray of shape (n, n).
+            They will be embedded using the specified embedder.
+        - False
+            .fit() and .fit_predict() expect an embedding of
+            the graph, i.e. a ndarray of size (n, d).
     embedder: str or BaseEmbed, default = 'ASE'
         May provide either a embed object or a string indicating which embedding method to use, which may be either:
         "ASE" for :py:class:`~graspologic.embed.AdjacencySpectralEmbed` or
         "LSE" for :py:class:`~graspologic.embed.LaplacianSpectralEmbed`.
-    persistent : bool, default = True
-        If ``False``, future calls to fit will overwrite an existing embedding. Must be ``True`` if an embedding is
-        provided.
 
     Attributes
     ----------
@@ -61,27 +64,17 @@ class SpectralVertexNomination(BaseVN):
 
     def __init__(
         self,
-        embedding: np.ndarray = None,
+        input_graph: bool = True,
         embedder: Union[str, BaseSpectralEmbed] = "ASE",
-        persistent: bool = True,
     ):
         super().__init__(multigraph=False)
-        self.embedding = embedding
-        if self.embedding is None or not persistent:
-            if isinstance(embedder, BaseSpectralEmbed):
-                self.embedder = embedder
-            elif embedder == "ASE":
-                self.embedder = ase()
-            elif embedder == "LSE":
-                self.embedder = lse()
-            else:
-                raise TypeError
-        elif np.ndim(embedding) != 2:
-            raise IndexError("embedding must have dimension 2")
-        self.persistent = persistent
+
+        self.embedder_ = embedder
+        self.input_graph_ = input_graph
         self.attribute_labels_ = None
         self.unique_attributes_ = None
         self.distance_matrix_ = None
+        self.embedding_ = None
         self.neigh_inds = None
 
     @staticmethod
@@ -89,33 +82,59 @@ class SpectralVertexNomination(BaseVN):
         # ensures arr is two or less dimensions.
         # if 1d, adds unique at each index on
         # the second dimension.
-        if not np.issubdtype(arr.dtype, np.integer):
-            raise TypeError("Argument must be of type int")
-        arr = np.array(arr, dtype=np.int)
-        if np.ndim(arr) > 2 or (arr.ndim == 2 and arr.shape[1] > 2):
-            raise IndexError("Argument must have shape (n) or (n, 1) or (n, 2).")
-        elif np.ndim(arr) == 1 or arr.shape[1] == 1:
+        if np.ndim(arr) == 1 or arr.shape[1] == 1:
             arr = arr.reshape(-1, 1)
             arr = np.concatenate((arr, np.arange(arr.shape[0]).reshape(-1, 1)), axis=1)
         return arr
 
-    def _embed(self, X: np.ndarray):
+    def _check_inputs(self, X: np.ndarray, y: np.ndarray, k: int):
+        if type(self.input_graph_) is not bool:
+            raise TypeError("input_graph_ must be of type bool.")
+        # check X
+        if not isinstance(X, np.ndarray):
+            raise TypeError("X must be of type np.ndarray.")
         if not self.multigraph:
             if not np.issubdtype(X.dtype, np.number):
-                raise TypeError("Adjacency matrix should have numeric type")
-            if np.ndim(X) != 2:
-                raise IndexError("Argument must have dim 2")
-            if X.shape[0] != X.shape[1]:
+                raise TypeError("Adjacency matrix or embedding should have numeric type")
+            elif np.ndim(X) != 2:
+                raise IndexError("Adjacency matrix or embedding must have dim 2")
+            elif not self.input_graph_:
+                # embedding was provided
+                if X.shape[1] > X.shape[0]:
+                    raise IndexError("dim 1 of an embedding should be smaller than dim 0.")
+            elif X.shape[0] != X.shape[1]:
                 raise IndexError("Adjacency Matrix should be square.")
         else:
             raise NotImplementedError("Multigraph SVN not implemented")
+        # check y
+        if not isinstance(y, np.ndarray):
+            raise TypeError("y must be of type np.ndarray")
+        elif not np.issubdtype(y.dtype, np.integer):
+            raise TypeError("y must have dtype int")
+        elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 2):
+            raise IndexError("y must have shape (n) or (n, 1) or (n, 2).")
+        # check k
+        if k is not None and type(k) is not int:
+            raise TypeError("k must be an integer")
+        elif k is not None and k <= 0:
+            raise ValueError("k must be greater than 0")
 
+        if self.input_graph_:
+            if not isinstance(self.embedder_ , BaseSpectralEmbed) and not isinstance(self.embedder_, str):
+                raise TypeError("embedder must be either of type str or BaseSpectralEmbed")
+
+    def _embed(self, X: np.ndarray):
         # Embed graph if embedding not provided
-        if self.embedding is None:
-            if isinstance(self.embedder, BaseSpectralEmbed):
-                self.embedding = self.embedder.fit_transform(X)
+        if self.input_graph_:
+            if isinstance(self.embedder_, BaseSpectralEmbed):
+                embedder = self.embedder_
+            elif self.embedder_ == "ASE":
+                embedder = ase()
+            elif self.embedder_ == "LSE":
+                embedder = lse()
             else:
-                raise TypeError("No embedder available")
+                raise TypeError("Requested embedding method does not exist, if str is passed must be either \'ASE\' or \'LSE\'.")
+            self.embedding = embedder.fit_transform(X)
 
     def fit(
         self,
@@ -132,7 +151,11 @@ class SpectralVertexNomination(BaseVN):
         Parameters
         ----------
         X : np.ndarray
-            Adjacency matrix representation of graph. May be None if embedding was provided.
+            - If `input_graph` is True
+                Expects a graph as an adjacency matrix, i.e. an ndarray of shape (n, n).
+                Will be embedded using the specified embedder.
+            - If `input_graph` is False
+                Expects an embedding of the graph, i.e. a ndarray of size (n, d).
         y: np.ndarray
             List of seed vertex indices, OR List of tuples of seed vertex indices and associated attributes.
         k : int, default = None
@@ -145,26 +168,14 @@ class SpectralVertexNomination(BaseVN):
             Arguments for the sklearn `DistanceMetric` specified via `metric` parameter.
 
         """
-        m_args = {}
-
         # ensure y has correct shape. If unattributed (1d)
         # add unique attribute to each seed vertex.
+        self._check_inputs(X, y, k)
         y = self._make_2d(y)
-        if not self.persistent or self.embedding is None:
-            if X is None:
-                raise ValueError(
-                    "Adjacency matrix must be provided if embedding is None."
-                )
-            X = np.array(X)
-            self._embed(X)
+        self._embed(X)
 
         self.attribute_labels_ = y[:, 1]
         self.unique_attributes_ = np.unique(self.attribute_labels_)
-
-        if k is not None and type(k) is not int:
-            raise TypeError("k must be an integer")
-        elif k is not None and k <= 0:
-            raise ValueError("k must be greater than 0")
         if (
             self.unique_attributes_.shape[0] == self.attribute_labels_.shape[0]
             or k is None
@@ -236,8 +247,12 @@ class SpectralVertexNomination(BaseVN):
 
         Parameters
         ----------
-        X : np.ndarray.
-            Adjacency matrix representation of graph. May be None if embedding was provided.
+        X : np.ndarray
+            - If `input_graph` is True
+                Expects a graph as an adjacency matrix, i.e. an ndarray of shape (n, n).
+                Will be embedded using the specified embedder.
+            - If `input_graph` is False
+                Expects an embedding of the graph, i.e. a ndarray of size (n, d).
         y : np.ndarray.
             List of seed vertex indices in adjacency matrix in column 1, and associated attributes in column 2,
             OR list of unattributed vertex indices.
