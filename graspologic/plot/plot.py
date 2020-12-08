@@ -744,7 +744,7 @@ def pairplot_with_gmm(
     font_scale=1,
     alpha=0.7,
     figsize=(12, 12),
-    histplot_kws = {"stat": "density"},
+    histplot_kws={"stat": "density"},
 ):
     r"""
     Plot pairwise relationships in a dataset.
