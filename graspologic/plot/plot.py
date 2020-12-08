@@ -1,16 +1,16 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.colors import Colormap
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib.colors import Colormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from sklearn.utils import check_array, check_consistent_length, check_X_y
-from sklearn.preprocessing import Binarizer
 from scipy import linalg
-import matplotlib as mpl
+from sklearn.preprocessing import Binarizer
+from sklearn.utils import check_array, check_consistent_length, check_X_y
 
 from ..embed import selectSVD
 from ..utils import import_graph, pass_to_ranks
@@ -744,7 +744,7 @@ def pairplot_with_gmm(
     font_scale=1,
     alpha=0.7,
     figsize=(12, 12),
-    histplot_kws = {"stat": "density"},
+    histplot_kws={"stat": "density"},
 ):
     r"""
     Plot pairwise relationships in a dataset.
