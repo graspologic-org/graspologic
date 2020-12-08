@@ -794,6 +794,12 @@ def pairplot_with_gmm(
     histplot_kws : dict, default: {}
         Keyword arguments passed down to :func:`seaborn.histplot`
 
+    Returns
+    -------
+    fig : matplotlib Figure
+    axes : np.ndarray
+        Array of matplotlib Axes
+
     See Also
     --------
     graspologic.plot.pairplot
@@ -849,9 +855,7 @@ def pairplot_with_gmm(
         # we only want 1 scatter plot for 2 features
         if X.shape[1] == 2:
             dimensions = 1
-        pairplot, axes = plt.subplots(
-            dimensions, dimensions, figsize=figsize, squeeze=False
-        )
+        fig, axes = plt.subplots(dimensions, dimensions, figsize=figsize, squeeze=False)
         # this will allow for uniform iteration whether axes was 2d or 1d
         axes = axes.flatten()
         for i in range(dimensions):
@@ -909,7 +913,7 @@ def pairplot_with_gmm(
             handles, labels = axes[0].get_legend_handles_labels()
         else:
             handles, labels = axes[1].get_legend_handles_labels()
-        pairplot.legend(
+        fig.legend(
             handles,
             labels,
             loc="center right",
@@ -917,8 +921,8 @@ def pairplot_with_gmm(
         )
         # allows for the legend to not overlap with plots while also keeping
         # legend in frame
-        pairplot.subplots_adjust(right=0.85)
-        return pairplot
+        fig.subplots_adjust(right=0.85)
+        return fig, axes
 
 
 def _distplot(
