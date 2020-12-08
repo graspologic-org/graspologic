@@ -24,7 +24,7 @@ class VNviaSGM(BaseEstimator):
         distance from seeds to other verticies to create induced subgraphs on `A`
         and `B`
 
-    init: int, positive (default = 100)
+    n_init: int, positive (default = 100)
         Number of restarts for soft seeded graph matching algorithm
 
     Attributes
@@ -143,10 +143,9 @@ class VNviaSGM(BaseEstimator):
 
         voi_reord = np.reshape(np.array(voi_reord), (1,))
 
-        Sx1 = np.intersect1d(a_reord[subgraph_AA], seeds_reord)
-        Sx2 = np.intersect1d(np.arange(BB.shape[0]), Sx1)
+        Sx1 = np.intersect1d(subgraph_AA, seeds_reord)
 
-        if len(Sx2) <= 0:
+        if len(Sx1) <= 0:
             print(
                 "Voi {} was not a member of the induced subgraph A[{}]".format(
                     voi, seedsA
@@ -161,13 +160,13 @@ class VNviaSGM(BaseEstimator):
         )
         Nx2 = np.array(
             _get_induced_subgraph_list(
-                BB, self.order_seeds_subgraph, list(Sx2), mindist=0
+                BB, self.order_seeds_subgraph, list(Sx1), mindist=0
             )
         )
 
         foo = np.concatenate((Sx1, voi_reord))
         ind1 = np.concatenate((Sx1, voi_reord, np.setdiff1d(Nx1, foo)))
-        ind2 = np.concatenate((Sx2, np.setdiff1d(Nx2, Sx2)))
+        ind2 = np.concatenate((Sx1, np.setdiff1d(Nx2, Sx1)))
 
         AA_fin = AA[np.ix_(ind1, ind1)]
         BB_fin = BB[np.ix_(ind2, ind2)]

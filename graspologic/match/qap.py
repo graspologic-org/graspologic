@@ -309,6 +309,11 @@ def _quadratic_assignment_faq(
         iterations is sufficiently small, that is, when the relative Frobenius
         norm, :math:`\frac{||P_{i}-P_{i+1}||_F}{\sqrt{len(P_{i})}} \leq tol`,
         where :math:`i` is the iteration number.
+    probability_matrix : 2d-array of floats, optional (default = None)
+        If not none the probability matrix will be in the form
+        probability_matrix[i, j], the probability that a the ith node in
+        graph A matches to the jth node in graph B (note, to work properly
+        probability_matrix should be passed in as an array of all zero floats.
     Returns
     -------
     res : OptimizeResult
@@ -474,9 +479,7 @@ def _quadratic_assignment_faq(
     row, col = linear_sum_assignment(-P)
 
     if probability_matrix is not None:
-        perm_mat = np.zeros((n_unseed, n_unseed)).astype(float)
-        perm_mat[row, col] = 1
-        probability_matrix += perm_mat
+        probability_matrix[row, col] += 1.0
 
     perm = np.concatenate((np.arange(n_seeds), col + n_seeds))
 

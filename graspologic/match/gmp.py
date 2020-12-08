@@ -189,7 +189,10 @@ class GraphMatch(BaseEstimator):
         seeds_B = column_or_1d(seeds_B)
         partial_match = np.column_stack((seeds_A, seeds_B))
 
-        n_unseed = A.shape[0] - seeds_A.shape[0]
+        if A.shape[0] > B.shape[0]:
+            n_unseed = A.shape[0] - partial_match.shape[0]
+        else:
+            n_unseed = B.shape[0] - partial_match.shape[0]
         self.probability_matrix = np.zeros((n_unseed, n_unseed))
 
         # pads A and B according to section 2.5 of [2]
