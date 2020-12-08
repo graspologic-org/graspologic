@@ -744,7 +744,7 @@ def pairplot_with_gmm(
     font_scale=1,
     alpha=0.7,
     figsize=(12, 12),
-    kde_kws = {"cumulative": True },
+    kde_kws = {"cumulative": True},
 ):
     r"""
     Plot pairwise relationships in a dataset.
