@@ -27,6 +27,8 @@ class MultipleASE(BaseEmbedMulti):
     :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a
     common latent position matrices :math:`U` and :math:`V`.
 
+    Read more in the :ref:`tutorials <embed_tutorials>`
+
     Parameters
     ----------
     n_components : int or None, default = None
