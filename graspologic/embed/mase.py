@@ -189,7 +189,7 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix, or ndarray
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
@@ -213,10 +213,10 @@ class MultipleASE(BaseEmbedMulti):
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
-            self.scores_ = Uhat.T @ graphs @ Vhat
+            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
         else:
             self.latent_right_ = None
-            self.scores_ = Uhat.T @ graphs @ Uhat
+            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
 
         return self
 
@@ -227,9 +227,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix, or ndarray
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or scipy.sparse.csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns

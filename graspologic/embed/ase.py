@@ -44,6 +44,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
+            Does not support ``graph`` input of type scipy.sparse.csr_matrix
         - 'truncated'
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
 
