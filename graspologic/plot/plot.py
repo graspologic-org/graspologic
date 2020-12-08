@@ -747,32 +747,41 @@ def pairplot_with_gmm(
     histplot_kws={},
 ):
     r"""
-    Plot pairwise relationships in a dataset.
-    By default, this function will create a grid of Axes such that each
-    dimension in data will by shared in the y-axis across a single row and
-    in the x-axis across a single column.
+    Plot pairwise relationships in a dataset, also showing a clustering predicted by
+    a Gaussian mixture model.
+
+    By default, this function will create a grid of axes such that each dimension
+    in data will by shared in the y-axis across a single row and in the x-axis
+    across a single column.
+
+    The off-diagonal axes show the pairwise relationships displayed as scatterplot.
+    The diagonal axes show the univariate distribution of the data for that
+    dimension displayed as either a histogram or kernel density estimates (KDEs).
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
     X : array-like, shape (n_samples, n_features)
         Input data.
     gmm: GaussianMixture object
-        Gaussian mixture models are probabilistic models for representing data
-        based on normally distributed subpopulations, GMM clusters
-        each data point into a corresponding subpopulation
+        A fit :class:`sklearn.mixture.GaussianMixture` object.
+        Gaussian mixture models (GMMs) are probabilistic models for representing data
+        based on normally distributed subpopulations, GMM clusters each data point into
+        a corresponding subpopulation.
     labels : array-like or list, shape (n_samples), optional
-        Labels that correspond to each sample in X.
-        If labels are not passed in then labels assume the same value as
-        the gmm clusters each point as
-    label_palette : str or dict, optional,
-        default : dictionary using 'Set1'
-    cluster_palette : str or dict, optional, default: dictionary using 'Set1'
-        default : dictionary using 'Set1'
-    title : string,
-        default : ""
-    legend_name : string
-        default is "Cluster" if no custom labels are passed
-        default is "" if custom labels are passed
+        Labels that correspond to each sample in ``X``.
+        If labels are not passed in then labels are predicted by ``gmm``.
+    label_palette : str or dict, optional, default: 'Set1'
+        Palette used to color points if ``labels`` are passed in.
+    cluster_palette : str or dict, optional, default: 'Set1'
+        Palette used to color GMM ellipses (and points if no ``labels`` are passed).
+    title : string, default: ""
+        Title of the plot.
+    legend_name : string, default: None
+        Name to put above the legend.
+        If ``None``, will be "Cluster" if no custom ``labels`` are passed, and ""
+        otherwise.
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
     font_scale : float, optional, default: 1
@@ -781,12 +790,13 @@ def pairplot_with_gmm(
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     figsize : tuple
-        the size of the 2d subplots configuration
-    histplot_kws : dictionary
-        Parameters that control the hist_plot
+        The size of the 2d subplots configuration
+    histplot_kws : dict, default: {}
+        Keyword arguments passed down to :func:`seaborn.histplot`
 
     See Also
     --------
+    graspologic.plot.pairplot
     graspologic.cluster.AutoGMMCluster
     sklearn.mixture.GaussianMixture
     """
