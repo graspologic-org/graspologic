@@ -744,7 +744,7 @@ def pairplot_with_gmm(
     font_scale=1,
     alpha=0.7,
     figsize=(12, 12),
-    kde=True,
+    kde_kws = {"cumulative": True },
 ):
     r"""
     Plot pairwise relationships in a dataset.
@@ -782,8 +782,8 @@ def pairplot_with_gmm(
         Opacity value of plotter markers between 0 and 1
     figsize : tuple
         the size of the 2d subplots configuration
-    kde : boolean
-        allows for access of KDE argument in histplot
+    kde_kws : dictionary
+        Parameters that control the KDE computation, as in kdeplot
 
     See Also
     --------
@@ -851,9 +851,9 @@ def pairplot_with_gmm(
                     for t, lab in zip([i for i in range(X.shape[1])], label_palette):
                         sns.histplot(
                             X[Y_ == t, i],
-                            kde=kde,
                             ax=axes[dimensions * i + j],
                             color=label_palette[lab],
+                            kde_kws=kde_kws,
                         )
                     # this removes the tick marks from the histplot
                     axes[dimensions * i + j].set_xticks([])
