@@ -9,7 +9,6 @@ class VNviaSGM(BaseEstimator):
     This class implements Vertex Nomination via Seeded Graph Matching
     (VNviaSGM) with the algorithm described in [1].
 
-
     VNviaSGM is a nomination algorithm, so instead of completely matching two
     graphs `A` and `B`, it proposes a nomination list of potential matches in
     graph `B` to a vertex of interest (voi) in graph `A`. VNviaSGM matches

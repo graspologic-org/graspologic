@@ -9,17 +9,17 @@ np.random.seed(0)
 class TestGMP:
     def test_VNviaSGM_inputs(self):
         with pytest.raises(ValueError):
-            VNviaSGM(h=-1)
+            VNviaSGM(order_voi_subgraph=-1)
         with pytest.raises(ValueError):
-            VNviaSGM(h=1.5)
+            VNviaSGM(order_voi_subgraph=1.5)
         with pytest.raises(ValueError):
-            VNviaSGM(ell=-1)
+            VNviaSGM(order_seeds_subgraph=-1)
         with pytest.raises(ValueError):
-            VNviaSGM(ell=1.5)
+            VNviaSGM(order_seeds_subgraph=1.5)
         with pytest.raises(ValueError):
-            VNviaSGM(R=-1)
+            VNviaSGM(restarts=-1)
         with pytest.raises(ValueError):
-            VNviaSGM(R=1.5)
+            VNviaSGM(restarts=1.5)
 
         with pytest.raises(ValueError):
             VNviaSGM().fit(
