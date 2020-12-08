@@ -17,9 +17,9 @@ class TestGMP:
         with pytest.raises(ValueError):
             VNviaSGM(order_seeds_subgraph=1.5)
         with pytest.raises(ValueError):
-            VNviaSGM(restarts=-1)
+            VNviaSGM(n_init=-1)
         with pytest.raises(ValueError):
-            VNviaSGM(restarts=1.5)
+            VNviaSGM(n_init=1.5)
 
         with pytest.raises(ValueError):
             VNviaSGM().fit(

@@ -24,7 +24,7 @@ class VNviaSGM(BaseEstimator):
         distance from seeds to other verticies to create induced subgraphs on `A`
         and `B`
 
-    restarts: int, positive (default = 100)
+    init: int, positive (default = 100)
         Number of restarts for soft seeded graph matching algorithm
 
     Attributes
@@ -47,7 +47,7 @@ class VNviaSGM(BaseEstimator):
 
     """
 
-    def __init__(self, order_voi_subgraph=1, order_seeds_subgraph=1, restarts=100):
+    def __init__(self, order_voi_subgraph=1, order_seeds_subgraph=1, n_init=100):
         if type(order_voi_subgraph) is int and order_voi_subgraph > 0:
             self.order_voi_subgraph = order_voi_subgraph
         else:
@@ -58,8 +58,8 @@ class VNviaSGM(BaseEstimator):
         else:
             msg = "order_seeds_subgraph must be an integer > 0"
             raise ValueError(msg)
-        if type(restarts) is int and restarts > 0:
-            self.restarts = restarts
+        if type(n_init) is int and n_init > 0:
+            self.n_init = n_init
         else:
             msg = "R must be an integer > 0"
             raise ValueError(msg)
@@ -173,9 +173,7 @@ class VNviaSGM(BaseEstimator):
         BB_fin = BB[np.ix_(ind2, ind2)]
 
         seeds_fin = list(range(len(Sx1)))
-        sgm = GMP(
-            n_init=self.restarts, shuffle_input=False, init="rand", padding="naive"
-        )
+        sgm = GMP(n_init=self.n_init, shuffle_input=False, init="rand", padding="naive")
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 
