@@ -19,3 +19,4 @@ Reference
    subgraph
    align
    preprocessing
+   partition
