@@ -15,7 +15,7 @@ class TestLatentPositionTest(unittest.TestCase):
         A2 = er_np(20, 0.3)
         lpt = latent_position_test(A1, A2)
 
-    def test_ase_works(self):
+    def test_omni_works(self):
         np.random.seed(1234556)
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
