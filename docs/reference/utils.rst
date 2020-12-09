@@ -34,5 +34,9 @@ IO
 
 .. autofunction:: import_edgelist
 
+Other
+-----
 
+.. autofunction:: remap_labels
 
+.. autofunction:: to_weighted_edge_list

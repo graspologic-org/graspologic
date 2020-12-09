@@ -15,6 +15,7 @@ Gridplot
 Pairplot
 --------
 .. autofunction:: pairplot
+.. autofunction:: pairplot_with_gmm
 
 Degreeplot
 ----------
