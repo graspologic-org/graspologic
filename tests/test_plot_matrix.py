@@ -114,9 +114,7 @@ def test_matrix_inputs():
 
     # test sorting_kws
     with pytest.raises(TypeError):
-        matrixplot(
-            X, col_meta=meta, row_meta=meta, col_group=123, row_group=123
-        )
+        matrixplot(X, col_meta=meta, row_meta=meta, col_group=123, row_group=123)
     with pytest.raises(TypeError):
         matrixplot(
             X, col_meta=meta, col_group_order=123, row_meta=meta, row_group_order=123
@@ -126,9 +124,7 @@ def test_matrix_inputs():
             X, col_meta=meta, col_item_order=123, row_meta=meta, row_item_order=123
         )
     with pytest.raises(TypeError):
-        matrixplot(
-            X, col_meta=meta, col_color=123, row_meta=meta, row_color=123
-        )
+        matrixplot(X, col_meta=meta, col_color=123, row_meta=meta, row_color=123)
     with pytest.raises(ValueError):
         matrixplot(
             X,
