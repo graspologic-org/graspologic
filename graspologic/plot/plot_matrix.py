@@ -105,6 +105,8 @@ def _get_separator_info(meta, group):
 def _item_to_df(item, name, length):
     if item is None:
         return None, []
+    elif (name == "group_order") and (item == "size"):
+        return None, ["size"]
 
     if isinstance(item, pd.Series):
         _check_length(item, name, length)
@@ -179,7 +181,7 @@ def draw_colors(ax, ax_type="x", meta=None, divider=None, color=None, palette="t
         Metadata of the matrix such as class, cell type, etc., by default None
     divider : AxesLocator, optional
         Divider used to add new axes to the plot
-    color : string or list of string, optional
+    color : str, list of str, or array_like, optional
         Attribute in meta by which to draw colorbars, by default None
     palette : str or dict, optional
         Colormap of the colorbar, by default "tab10"
@@ -248,7 +250,7 @@ def draw_separators(
         Setting either the x or y axis, by default "x"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group : string or list of string, optional
+    group : str, list of str, or array_like, optional
         Attribute in meta to group the graph in the plot, by default None
     plot_type : str, optional
         One of "heatmap" or "scattermap", by default "heatmap"
@@ -308,7 +310,7 @@ def draw_ticks(
         Setting either the x or y axis, by default "x"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group : string or list of string, optional
+    group : str, list of str, or array_like, optional
         Attribute in meta to group the graph in the plot, by default None
     group_border : bool, optional
         Whether to draw separator on the tick axes, by default True
@@ -430,11 +432,11 @@ def sort_meta(length, meta, group, group_order=["size"], item_order=None):
         Number of nodes
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group : string or list of string, optional
+    group : str, list of str, or array_like, optional
         Attribute in meta to group the graph in the plot, by default None
-    group_order : string or list of string, optional
+    group_order : str, list of str, or array_like, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
-    item_order : string or list of string, optional
+    item_order : str, list of str, or array_like, optional
         Attribute in meta by which to sort elements within a class, by default None
 
     Returns
@@ -529,15 +531,23 @@ def matrixplot(
         One of "heatmap" or "scattermap", by default "heatmap"
     {col, row}_meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    {col, row}_group : string or list of string, optional
+        - ``{col, row}_meta`` is pd.DataFrame
+            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
+            should only be str or list of str
+            They should contain references to columns in the metadata
+        - ``{col, row}_meta`` is None
+            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
+            should only be any array_like data structure
+            The array_like data structures will be assembled into one medadata pd.Dataframe
+    {col, row}_group : str, list of str, or array_like, optional
         Attribute in meta to group the graph in the plot, by default None
-    {col, row}_group_order : string or list of string, optional
+    {col, row}_group_order : str, list of str, or array_like, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
-    {col, row}_item_order : string or list of string, optional
+    {col, row}_item_order : str, list of str, or array_like, optional
         Attribute in meta by which to sort elements within a class, by default None
-    {col, row}_color : string or list of string, optional
+    {col, row}_color : str, list of str, or array_like, optional
         Attribute in meta by which to draw colorbars, by default None
-    {col, row}_highlights : string or list of string, optional
+    {col, row}_highlights : str, list of str, or array_like, optional
         Attribute in meta by which to draw highlighted separateors, by default None
     {col, row}_palette : str, dict, list of str or dict, optional
         Colormap of the colorbar, by default "tab10"
@@ -885,14 +895,24 @@ def adjplot(
         One of "heatmap" or "scattermap", by default "heatmap"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group : string or list of string, optional
+        - ``meta`` is pd.DataFrame
+            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
+            should only be str or list of str
+            They should contain references to columns in the metadata
+        - ``meta`` is None
+            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
+            should only any array_like data structure
+            The array_like data structures will be assembled into one medadata pd.Dataframe
+    group : str, list of str, or array_like, optional
         Attribute in meta to group the graph in the plot, by default None
-    group_order : string or list of string, optional
+    group_order : str, list of str, or array_like, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
-    item_order : string or list of string, optional
+    item_order : str, list of str, or array_like, optional
         Attribute in meta by which to sort elements within a class, by default None
-    color : string or list of string, optional
+    color : sstr, list of str, or array_like, optional
         Attribute in meta by which to draw colorbars, by default None
+    highlights : str, list of str, or array_like, optional
+        Attribute in meta by which to draw highlighted separateors, by default None
     border : bool, optional
         Whether the plot should have border, by default True
     cmap : str, optional
