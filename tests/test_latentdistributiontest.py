@@ -86,6 +86,24 @@ class TestLatentDistributionTest(unittest.TestCase):
         with pytest.raises(TypeError):
             latent_distribution_test(A1, A2, input_graph="hello")
 
+    def test_namedtuple(self):
+        np.random.seed(888)
+        A1 = er_np(20, 0.3)
+        A2 = er_np(20, 0.3)
+        ldt = latent_distribution_test(A1, A2, n_components=1)
+
+        # first argument
+        assert isinstance(ldt[0], np.floating)
+
+        # second argument
+        assert isinstance(ldt[1], float)
+
+        # third argument
+        assert isinstance(ldt[2], dict)
+        assert isinstance(ldt[2]["null_distribution"], np.ndarray)
+        assert isinstance(ldt[2]["n_components"], int)
+        assert isinstance(ldt[2]["Q"], np.ndarray)
+
     def test_n_bootstraps(self):
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
