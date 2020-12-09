@@ -357,9 +357,9 @@ def draw_ticks(
             drawer = ax.axhline
 
         for t in list(front_sep_inds):
-            drawer(t, color="black", linestyle="--", alpha=0.7, linewidth=1)
+            drawer(t, color="black", linestyle="--", alpha=1, linewidth=1)
         for t in list(back_sep_inds):
-            drawer(t, color="black", linestyle="--", alpha=0.7, linewidth=1)
+            drawer(t, color="black", linestyle="--", alpha=1, linewidth=1)
 
     return ax
 
