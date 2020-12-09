@@ -23,38 +23,38 @@ class TestGMP:
 
         with pytest.raises(ValueError):
             VNviaSGM().fit(
+                np.random.randn(3, 4),
+                np.random.randn(4, 4),
                 0,
                 [np.arange(2), np.arange(2)],
-                A=np.random.randn(3, 4),
-                B=np.random.randn(4, 4),
             )
         with pytest.raises(ValueError):
             VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(3, 4),
                 0,
                 [np.arange(2), np.arange(2)],
-                A=np.random.randn(4, 4),
-                B=np.random.randn(3, 4),
             )
         with pytest.raises(ValueError):
             VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
                 0,
                 [np.arange(2), np.arange(3)],
-                A=np.random.randn(4, 4),
-                B=np.random.randn(4, 4),
             )
         with pytest.raises(ValueError):
             VNviaSGM().fit(
+                None,
+                np.random.randn(4, 4),
                 0,
                 [np.arange(2), np.arange(3)],
-                A=None,
-                B=np.random.randn(4, 4),
             )
         with pytest.raises(ValueError):
             VNviaSGM().fit(
+                np.random.randn(4, 4),
+                None,
                 0,
                 [np.arange(2), np.arange(3)],
-                A=np.random.randn(4, 4),
-                B=None,
             )
 
     def _get_AB(self):
@@ -111,7 +111,7 @@ class TestGMP:
 
         vnsgm = VNviaSGM()
         nomlst = vnsgm.fit_predict(
-            voi, [kklst[0:nseeds, 0], kklst[0:nseeds, 1]], A=g1, B=g2
+            g1, g2, voi, [kklst[0:nseeds, 0], kklst[0:nseeds, 1]]
         )
 
         assert nomlst[0][0] == kklst[np.where(kklst[:, 0] == voi)[0][0], 1]
