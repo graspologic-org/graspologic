@@ -34,7 +34,7 @@ class VNviaSGM(BaseEstimator):
 
     n_init: int, positive (default = 100)
         Number of restarts for soft seeded graph matching algorithm. Increasing the
-        number of restarts will make the probabilites returned more precise. 
+        number of restarts will make the probabilites returned more precise.
 
     Attributes
     ----------
@@ -57,17 +57,17 @@ class VNviaSGM(BaseEstimator):
     """
 
     def __init__(self, order_voi_subgraph=1, order_seeds_subgraph=1, n_init=100):
-        if type(order_voi_subgraph) is int and order_voi_subgraph > 0:
+        if isinstance(order_voi_subgraph, int) and order_voi_subgraph > 0:
             self.order_voi_subgraph = order_voi_subgraph
         else:
             msg = "order_voi_subgraph must be an integer > 0"
             raise ValueError(msg)
-        if type(order_seeds_subgraph) is int and order_seeds_subgraph > 0:
+        if isinstance(order_seeds_subgraph, int) and order_seeds_subgraph > 0:
             self.order_seeds_subgraph = order_seeds_subgraph
         else:
             msg = "order_seeds_subgraph must be an integer > 0"
             raise ValueError(msg)
-        if type(n_init) is int and n_init > 0:
+        if isinstance(n_init, int) and n_init > 0:
             self.n_init = n_init
         else:
             msg = "R must be an integer > 0"
