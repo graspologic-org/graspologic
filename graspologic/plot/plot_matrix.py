@@ -32,7 +32,7 @@ def _check_item_in_meta(meta, item, name):
             raise TypeError(msg)
     for col_name in item:
         if col_name not in meta.columns:
-            if (name == "class_order") and (col_name == "size"):
+            if (name == "group_order") and (col_name == "size"):
                 pass
             else:
                 raise ValueError(f"{col_name} is not a column in the meta dataframe.")
@@ -47,39 +47,39 @@ def _check_length(item, name, length):
         )
 
 
-def _check_plotting_kws(palette, color_class):
+def _check_plotting_kws(palette, color):
     if isinstance(palette, str) or isinstance(palette, dict):
         palette = [palette]
-    elif len(palette) != len(color_class) and len(palette) != 1:
+    elif len(palette) != len(color) and len(palette) != 1:
         raise ValueError("There is not enough palette value for each color class")
 
     return palette
 
 
 def _check_sorting_kws(
-    length, meta, group_class, class_order, item_order, color_class, highlight
+    length, meta, group, group_order, item_order, color, highlight
 ):
     if isinstance(meta, pd.DataFrame):
         # if meta is here, than everything else must be column item in meta
         _check_length(meta, "meta", length)
-        group_class = _check_item_in_meta(meta, group_class, "group_class")
-        class_order = _check_item_in_meta(meta, class_order, "class_order")
+        group = _check_item_in_meta(meta, group, "group")
+        group_order = _check_item_in_meta(meta, group_order, "group_order")
         item_order = _check_item_in_meta(meta, item_order, "item_order")
-        color_class = _check_item_in_meta(meta, color_class, "color_class")
+        color = _check_item_in_meta(meta, color, "color")
         highlight = _check_item_in_meta(meta, highlight, "highlight")
     else:
         # otherwise, arguments can be a hodgepodge of stuff
-        group_class_meta, group_class = _item_to_df(group_class, "group_class", length)
-        class_order_meta, class_order = _item_to_df(class_order, "class_order", length)
+        group_meta, group = _item_to_df(group, "group", length)
+        group_order_meta, group_order = _item_to_df(group_order, "group_order", length)
         item_order_meta, item_order = _item_to_df(item_order, "item_order", length)
-        color_class_meta, color_class = _item_to_df(color_class, "color_class", length)
+        color_meta, color = _item_to_df(color, "color", length)
         highlight_meta, highlight = _item_to_df(highlight, "highlight", length)
         metas = []
         for m in [
-            group_class_meta,
-            class_order_meta,
+            group_meta,
+            group_order_meta,
             item_order_meta,
-            color_class_meta,
+            color_meta,
             highlight_meta,
         ]:
             if m is not None:
@@ -89,16 +89,16 @@ def _check_sorting_kws(
         else:
             meta = pd.DataFrame()
 
-    return meta, group_class, class_order, item_order, color_class, highlight
+    return meta, group, group_order, item_order, color, highlight
 
 
-def _get_separator_info(meta, group_class):
-    if meta is None or group_class is None:
+def _get_separator_info(meta, group):
+    if meta is None or group is None:
         return None
 
-    front = meta.groupby(by=group_class, sort=False).first()
+    front = meta.groupby(by=group, sort=False).first()
     front_sep_inds = front["sort_idx"].values
-    end = meta.groupby(by=group_class, sort=False).last()
+    end = meta.groupby(by=group, sort=False).last()
     back_sep_inds = end["sort_idx"].values
 
     return front_sep_inds, back_sep_inds
@@ -168,7 +168,7 @@ def _remove_shared_ax(ax):
 
 
 def draw_colors(
-    ax, ax_type="x", meta=None, divider=None, color_class=None, palette="tab10"
+    ax, ax_type="x", meta=None, divider=None, color=None, palette="tab10"
 ):
     r"""
     Draw colormap onto the axis to separate the data
@@ -183,7 +183,7 @@ def draw_colors(
         Metadata of the matrix such as class, cell type, etc., by default None
     divider : AxesLocator, optional
         Divider used to add new axes to the plot
-    color_class : string or list of string, optional
+    color : string or list of string, optional
         Attribute in meta by which to draw colorbars, by default None
     palette : str or dict, optional
         Colormap of the colorbar, by default "tab10"
@@ -193,7 +193,7 @@ def draw_colors(
     ax : matplotlib axes object
         Axes in which to draw the color map
     """
-    classes = meta[color_class]
+    classes = meta[color]
     uni_classes = np.unique(classes)
     # Create the color dictionary
     if isinstance(palette, dict):
@@ -226,10 +226,10 @@ def draw_colors(
         square=False,
     )
     if ax_type == "x":
-        ax.set_xlabel(color_class, fontsize=20)
+        ax.set_xlabel(color, fontsize=20)
         ax.xaxis.set_label_position("top")
     elif ax_type == "y":
-        ax.set_ylabel(color_class, fontsize=20)
+        ax.set_ylabel(color, fontsize=20)
     return ax
 
 
@@ -237,7 +237,7 @@ def draw_separators(
     ax,
     ax_type="x",
     meta=None,
-    group_class=None,
+    group=None,
     plot_type="heatmap",
     gridline_kws=None,
 ):
@@ -252,7 +252,7 @@ def draw_separators(
         Setting either the x or y axis, by default "x"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group_class : string or list of string, optional
+    group : string or list of string, optional
         Attribute in meta to group the graph in the plot, by default None
     plot_type : str, optional
         One of "heatmap" or "scattermap", by default "heatmap"
@@ -264,11 +264,11 @@ def draw_separators(
     ax : matplotlib axes object
         Axes in which to draw the ticks
     """
-    if len(group_class) > 0:
+    if len(group) > 0:
         if gridline_kws is None:
             gridline_kws = dict(color="grey", linestyle="--", alpha=0.7, linewidth=1)
 
-        front_sep_inds, back_sep_inds = _get_separator_info(meta, group_class)
+        front_sep_inds, back_sep_inds = _get_separator_info(meta, group)
         if plot_type == "heatmap":
             back_sep_inds = back_sep_inds + 1
         if plot_type == "scattermap":
@@ -297,7 +297,7 @@ def draw_ticks(
     ax,
     ax_type="x",
     meta=None,
-    group_class=None,
+    group=None,
     group_border=True,
     plot_type="heatmap",
 ):
@@ -312,7 +312,7 @@ def draw_ticks(
         Setting either the x or y axis, by default "x"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group_class : string or list of string, optional
+    group : string or list of string, optional
         Attribute in meta to group the graph in the plot, by default None
     group_border : bool, optional
         Whether to draw separator on the tick axes, by default True
@@ -325,30 +325,30 @@ def draw_ticks(
         Axes in which to draw the ticks
     """
     # Identify the locations of the ticks
-    if meta is None or group_class is None:
+    if meta is None or group is None:
         tick_inds = None
         tick_labels = None
     else:
         # Identify the center of each class
-        center = meta.groupby(by=group_class, sort=False).mean()
+        center = meta.groupby(by=group, sort=False).mean()
         tick_inds = np.array(center["sort_idx"].values)
         if plot_type == "heatmap":
             tick_inds = tick_inds + 0.5
-        tick_labels = list(center.index.get_level_values(group_class[0]))
+        tick_labels = list(center.index.get_level_values(group[0]))
 
     if ax_type == "x":
         ax.set_xticks(tick_inds)
         ax.set_xticklabels(tick_labels, ha="center", va="bottom", fontsize=20)
         ax.xaxis.tick_top()
-        ax.set_xlabel(group_class[0], fontsize=20)
+        ax.set_xlabel(group[0], fontsize=20)
         ax.xaxis.set_label_position("top")
     elif ax_type == "y":
         ax.set_yticks(tick_inds)
         ax.set_yticklabels(tick_labels, ha="right", va="center", fontsize=20)
-        ax.set_ylabel(group_class[0], fontsize=20)
+        ax.set_ylabel(group[0], fontsize=20)
 
     if group_border:
-        front_sep_inds, back_sep_inds = _get_separator_info(meta, group_class)
+        front_sep_inds, back_sep_inds = _get_separator_info(meta, group)
         if plot_type == "heatmap":
             back_sep_inds = back_sep_inds + 1
         if plot_type == "scattermap":
@@ -424,7 +424,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
     return ax
 
 
-def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
+def sort_meta(length, meta, group, group_order=["size"], item_order=None):
     r"""
     Sort the data and metadata according to the sorting method
 
@@ -434,9 +434,9 @@ def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
         Number of nodes
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group_class : string or list of string, optional
+    group : string or list of string, optional
         Attribute in meta to group the graph in the plot, by default None
-    class_order : string or list of string, optional
+    group_order : string or list of string, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
     item_order : string or list of string, optional
         Attribute in meta by which to sort elements within a class, by default None
@@ -460,8 +460,8 @@ def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
     # one problem with this current sorting algorithm is that we cannot sort
     # classes by size and other class attributes at the same time.
 
-    for gc in group_class:
-        for co in class_order:
+    for gc in group:
+        for co in group_order:
             if co == "size":
                 class_size = meta.groupby(gc).size()
                 # map each node from the sorting class to their sorting class size
@@ -477,7 +477,7 @@ def sort_meta(length, meta, group_class, class_order=["size"], item_order=None):
 
     # arbitrarily sort the data from 1 to length
     meta["sort_idx"] = range(len(meta))
-    # if we actually need to sort, sort by class_order, group_class, item_order
+    # if we actually need to sort, sort by group_order, group, item_order
     if len(total_sort_by) > 0:
         meta.sort_values(total_sort_by, inplace=True, kind="mergesort")
 
@@ -492,14 +492,14 @@ def matrixplot(
     col_meta=None,
     row_meta=None,
     plot_type="heatmap",
-    col_group_class=None,
-    row_group_class=None,
-    col_class_order="size",
-    row_class_order="size",
+    col_group=None,
+    row_group=None,
+    col_group_order="size",
+    row_group_order="size",
     col_item_order=None,
     row_item_order=None,
-    col_color_class=None,
-    row_color_class=None,
+    col_color=None,
+    row_color=None,
     col_highlight=None,
     row_highlight=None,
     col_palette="tab10",
@@ -533,13 +533,13 @@ def matrixplot(
         One of "heatmap" or "scattermap", by default "heatmap"
     {col, row}_meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    {col, row}_group_class : string or list of string, optional
+    {col, row}_group : string or list of string, optional
         Attribute in meta to group the graph in the plot, by default None
-    {col, row}_class_order : string or list of string, optional
+    {col, row}_group_order : string or list of string, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
     {col, row}_item_order : string or list of string, optional
         Attribute in meta by which to sort elements within a class, by default None
-    {col, row}_color_class : string or list of string, optional
+    {col, row}_color : string or list of string, optional
         Attribute in meta by which to draw colorbars, by default None
     {col, row}_highlights : string or list of string, optional
         Attribute in meta by which to draw highlighted separateors, by default None
@@ -588,55 +588,55 @@ def matrixplot(
     # check for the types of the sorting arguments
     (
         col_meta,
-        col_group_class,
-        col_class_order,
+        col_group,
+        col_group_order,
         col_item_order,
-        col_color_class,
+        col_color,
         col_highlight,
     ) = _check_sorting_kws(
         data.shape[0],
         col_meta,
-        col_group_class,
-        col_class_order,
+        col_group,
+        col_group_order,
         col_item_order,
-        col_color_class,
+        col_color,
         col_highlight,
     )
 
     (
         row_meta,
-        row_group_class,
-        row_class_order,
+        row_group,
+        row_group_order,
         row_item_order,
-        row_color_class,
+        row_color,
         row_highlight,
     ) = _check_sorting_kws(
         data.shape[0],
         row_meta,
-        row_group_class,
-        row_class_order,
+        row_group,
+        row_group_order,
         row_item_order,
-        row_color_class,
+        row_color,
         row_highlight,
     )
 
     # check for the types of the plotting arguments
-    col_palette = _check_plotting_kws(col_palette, col_color_class)
-    row_palette = _check_plotting_kws(row_palette, row_color_class)
+    col_palette = _check_plotting_kws(col_palette, col_color)
+    row_palette = _check_plotting_kws(row_palette, row_color)
 
     # sort the data and the metadata according to the sorting method
     col_inds, col_meta = sort_meta(
         data.shape[0],
         col_meta,
-        col_group_class,
-        class_order=col_class_order,
+        col_group,
+        group_order=col_group_order,
         item_order=col_item_order,
     )
     row_inds, row_meta = sort_meta(
         data.shape[0],
         row_meta,
-        row_group_class,
-        class_order=row_class_order,
+        row_group,
+        group_order=row_group_order,
         item_order=row_item_order,
     )
     data = data[np.ix_(row_inds, col_inds)]
@@ -678,7 +678,7 @@ def matrixplot(
         ax,
         ax_type="x",
         meta=col_meta,
-        group_class=col_group_class,
+        group=col_group,
         plot_type=plot_type,
         gridline_kws=gridline_kws,
     )
@@ -687,7 +687,7 @@ def matrixplot(
         ax,
         ax_type="y",
         meta=row_meta,
-        group_class=row_group_class,
+        group=row_group,
         plot_type=plot_type,
         gridline_kws=gridline_kws,
     )
@@ -701,7 +701,7 @@ def matrixplot(
             ax,
             ax_type="x",
             meta=col_meta,
-            group_class=col_highlight,
+            group=col_highlight,
             plot_type=plot_type,
             gridline_kws=highlight_kws,
         )
@@ -711,7 +711,7 @@ def matrixplot(
             ax,
             ax_type="y",
             meta=row_meta,
-            group_class=row_highlight,
+            group=row_highlight,
             plot_type=plot_type,
             gridline_kws=highlight_kws,
         )
@@ -721,20 +721,20 @@ def matrixplot(
     row_first_ax = True
     # draw colors
     # draw top colors
-    if len(col_color_class) > 0:
+    if len(col_color) > 0:
         if col_color_pad is None:
-            col_color_pad = len(col_color_class) * [0.5]
+            col_color_pad = len(col_color) * [0.5]
         if col_first_ax:
             col_color_pad[0] = 0
             col_first_ax = False
 
-        rev_color_class = list(col_color_class[::-1])
+        rev_color = list(col_color[::-1])
         if len(col_palette) > 1:
             rev_color_palette = list(col_palette[::-1])
         else:
-            rev_color_palette = list(col_palette * len(col_color_class))
+            rev_color_palette = list(col_palette * len(col_color))
 
-        for i, sc in enumerate(rev_color_class):
+        for i, sc in enumerate(rev_color):
             color_ax = divider.append_axes(
                 "top", size="3%", pad=col_color_pad[i], sharex=ax
             )
@@ -744,24 +744,24 @@ def matrixplot(
                 meta=col_meta,
                 divider=divider,
                 ax_type="x",
-                color_class=rev_color_class[i],
+                color=rev_color[i],
                 palette=rev_color_palette[i],
             )
     # draw left colors
-    if len(row_color_class) > 0:
+    if len(row_color) > 0:
         if row_color_pad is None:
-            row_color_pad = len(row_color_class) * [0.5]
+            row_color_pad = len(row_color) * [0.5]
         if row_first_ax:
             row_color_pad[0] = 0
             row_first_ax = False
 
-        rev_color_class = list(row_color_class[::-1])
+        rev_color = list(row_color[::-1])
         if len(row_palette) > 1:
             rev_color_palette = list(row_palette[::-1])
         else:
-            rev_color_palette = list(row_palette * len(row_color_class))
+            rev_color_palette = list(row_palette * len(row_color))
 
-        for i, sc in enumerate(rev_color_class):
+        for i, sc in enumerate(rev_color):
             color_ax = divider.append_axes(
                 "left", size="3%", pad=row_color_pad[i], sharey=ax
             )
@@ -771,15 +771,15 @@ def matrixplot(
                 meta=row_meta,
                 divider=divider,
                 ax_type="y",
-                color_class=rev_color_class[i],
+                color=rev_color[i],
                 palette=rev_color_palette[i],
             )
 
     # draw ticks
     # draw top ticks
-    if len(col_group_class) > 0 and col_ticks:
+    if len(col_group) > 0 and col_ticks:
         if col_tick_pad is None:
-            col_tick_pad = len(col_group_class) * [0.8]
+            col_tick_pad = len(col_group) * [0.8]
         if col_first_ax:
             col_tick_pad[0] = 0
             col_first_ax = False
@@ -787,8 +787,8 @@ def matrixplot(
             col_tick_pad[0] = 0.5
 
         # Reverse the order of the group class, so the ticks are drawn in the opposite order
-        rev_group_class = list(col_group_class[::-1])
-        for i, sc in enumerate(rev_group_class):
+        rev_group = list(col_group[::-1])
+        for i, sc in enumerate(rev_group):
 
             # Add a new axis when needed
             tick_ax = divider.append_axes(
@@ -804,14 +804,14 @@ def matrixplot(
                 tick_ax,
                 ax_type="x",
                 meta=col_meta,
-                group_class=rev_group_class[i:],
+                group=rev_group[i:],
                 plot_type=plot_type,
             )
             ax.xaxis.set_label_position("top")
     # draw left ticks
-    if len(row_group_class) > 0 and row_ticks:
+    if len(row_group) > 0 and row_ticks:
         if row_tick_pad is None:
-            row_tick_pad = len(row_group_class) * [0.8]
+            row_tick_pad = len(row_group) * [0.8]
         if row_first_ax:
             row_tick_pad[0] = 0
             row_first_ax = False
@@ -819,8 +819,8 @@ def matrixplot(
             row_tick_pad[0] = 0.5
 
         # Reverse the order of the group class, so the ticks are drawn in the opposite order
-        rev_group_class = list(row_group_class[::-1])
-        for i, sc in enumerate(rev_group_class):
+        rev_group = list(row_group[::-1])
+        for i, sc in enumerate(rev_group):
             # Add a new axis when needed
             tick_ax = divider.append_axes(
                 "left", size="1%", pad=row_tick_pad[i], sharey=ax
@@ -835,7 +835,7 @@ def matrixplot(
                 tick_ax,
                 ax_type="y",
                 meta=row_meta,
-                group_class=rev_group_class[i:],
+                group=rev_group[i:],
                 plot_type=plot_type,
             )
 
@@ -857,10 +857,10 @@ def adjplot(
     ax=None,
     meta=None,
     plot_type="heatmap",
-    group_class=None,
-    class_order="size",
+    group=None,
+    group_order="size",
     item_order=None,
-    color_class=None,
+    color=None,
     highlight=None,
     palette="tab10",
     ticks=True,
@@ -889,13 +889,13 @@ def adjplot(
         One of "heatmap" or "scattermap", by default "heatmap"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
-    group_class : string or list of string, optional
+    group : string or list of string, optional
         Attribute in meta to group the graph in the plot, by default None
-    class_order : string or list of string, optional
+    group_order : string or list of string, optional
         Attribute of the sorting class to sort classes within the graph, by default "size"
     item_order : string or list of string, optional
         Attribute in meta by which to sort elements within a class, by default None
-    color_class : string or list of string, optional
+    color : string or list of string, optional
         Attribute in meta by which to draw colorbars, by default None
     border : bool, optional
         Whether the plot should have border, by default True
@@ -937,14 +937,14 @@ def adjplot(
         col_meta=meta,
         row_meta=meta,
         plot_type=plot_type,
-        col_group_class=group_class,
-        row_group_class=group_class,
-        col_class_order=class_order,
-        row_class_order=class_order,
+        col_group=group,
+        row_group=group,
+        col_group_order=group_order,
+        row_group_order=group_order,
         col_item_order=item_order,
         row_item_order=item_order,
-        col_color_class=color_class,
-        row_color_class=color_class,
+        col_color=color,
+        row_color=color,
         col_highlight=highlight,
         row_highlight=highlight,
         col_palette=palette,
