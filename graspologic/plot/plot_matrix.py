@@ -56,9 +56,7 @@ def _check_plotting_kws(palette, color):
     return palette
 
 
-def _check_sorting_kws(
-    length, meta, group, group_order, item_order, color, highlight
-):
+def _check_sorting_kws(length, meta, group, group_order, item_order, color, highlight):
     if isinstance(meta, pd.DataFrame):
         # if meta is here, than everything else must be column item in meta
         _check_length(meta, "meta", length)
@@ -167,9 +165,7 @@ def _remove_shared_ax(ax):
         axis.set_minor_formatter(fmt)
 
 
-def draw_colors(
-    ax, ax_type="x", meta=None, divider=None, color=None, palette="tab10"
-):
+def draw_colors(ax, ax_type="x", meta=None, divider=None, color=None, palette="tab10"):
     r"""
     Draw colormap onto the axis to separate the data
 

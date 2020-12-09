@@ -14,8 +14,8 @@ def test_adjplot_inputs():
     meta = pd.DataFrame(
         {
             "hemisphere": np.random.randint(2, size=100),
-            "dVNC": np.random.randint(2, size=100),
-            "ID": np.random.randint(10, size=100),
+            "region": np.random.randint(2, size=100),
+            "cell_size": np.random.randint(10, size=100),
         }
     )
 
@@ -32,8 +32,8 @@ def test_adjplot_inputs():
         bad_meta = pd.DataFrame(
             {
                 "hemisphere": np.random.randint(2, size=1),
-                "dVNC": np.random.randint(2, size=1),
-                "ID": np.random.randint(10, size=1),
+                "region": np.random.randint(2, size=1),
+                "cell_size": np.random.randint(10, size=1),
             }
         )
         adjplot(X, meta=bad_meta)
@@ -44,21 +44,21 @@ def test_adjplot_inputs():
 
     # test sorting_kws
     with pytest.raises(TypeError):
-        adjplot(X, meta=meta, group_class=123)
+        adjplot(X, meta=meta, group=123)
     with pytest.raises(TypeError):
-        adjplot(X, meta=meta, class_order=123)
+        adjplot(X, meta=meta, group_order=123)
     with pytest.raises(TypeError):
         adjplot(X, meta=meta, item_order=123)
     with pytest.raises(TypeError):
-        adjplot(X, meta=meta, color_class=123)
+        adjplot(X, meta=meta, color=123)
     with pytest.raises(ValueError):
-        adjplot(X, meta=meta, group_class="bad value")
+        adjplot(X, meta=meta, group="bad value")
     with pytest.raises(ValueError):
-        adjplot(X, meta=meta, class_order="bad value")
+        adjplot(X, meta=meta, group_order="bad value")
     with pytest.raises(ValueError):
         adjplot(X, meta=meta, item_order="bad value")
     with pytest.raises(ValueError):
-        adjplot(X, meta=meta, color_class="bad value")
+        adjplot(X, meta=meta, color="bad value")
 
 
 def test_adjplot_output():
@@ -69,14 +69,14 @@ def test_adjplot_output():
     meta = pd.DataFrame(
         {
             "hemisphere": np.random.randint(2, size=10),
-            "dVNC": np.random.randint(2, size=10),
-            "ID": np.random.randint(10, size=10),
+            "region": np.random.randint(2, size=10),
+            "cell_size": np.random.randint(10, size=10),
         }
     )
     ax = adjplot(X, meta=meta)
-    ax = adjplot(X, meta=meta, group_class="hemisphere")
-    ax = adjplot(X, meta=meta, group_class="hemisphere", class_order="size")
-    ax = adjplot(X, meta=meta, group_class="hemisphere", item_order="ID")
+    ax = adjplot(X, meta=meta, group="hemisphere")
+    ax = adjplot(X, meta=meta, group="hemisphere", group_order="size")
+    ax = adjplot(X, meta=meta, group="hemisphere", item_order="cell_size")
 
 
 def test_matrix_inputs():
@@ -84,8 +84,8 @@ def test_matrix_inputs():
     meta = pd.DataFrame(
         {
             "hemisphere": np.random.randint(2, size=100),
-            "dVNC": np.random.randint(2, size=100),
-            "ID": np.random.randint(10, size=100),
+            "region": np.random.randint(2, size=100),
+            "cell_size": np.random.randint(10, size=100),
         }
     )
 
@@ -102,8 +102,8 @@ def test_matrix_inputs():
         bad_meta = pd.DataFrame(
             {
                 "hemisphere": np.random.randint(2, size=1),
-                "dVNC": np.random.randint(2, size=1),
-                "ID": np.random.randint(10, size=1),
+                "region": np.random.randint(2, size=1),
+                "cell_size": np.random.randint(10, size=1),
             }
         )
         matrixplot(X, col_meta=bad_meta, row_meta=bad_meta)
@@ -115,11 +115,11 @@ def test_matrix_inputs():
     # test sorting_kws
     with pytest.raises(TypeError):
         matrixplot(
-            X, col_meta=meta, row_meta=meta, col_group_class=123, row_group_class=123
+            X, col_meta=meta, row_meta=meta, col_group=123, row_group=123
         )
     with pytest.raises(TypeError):
         matrixplot(
-            X, col_meta=meta, col_class_order=123, row_meta=meta, row_class_order=123
+            X, col_meta=meta, col_group_order=123, row_meta=meta, row_group_order=123
         )
     with pytest.raises(TypeError):
         matrixplot(
@@ -127,23 +127,23 @@ def test_matrix_inputs():
         )
     with pytest.raises(TypeError):
         matrixplot(
-            X, col_meta=meta, col_color_class=123, row_meta=meta, row_color_class=123
+            X, col_meta=meta, col_color=123, row_meta=meta, row_color=123
         )
     with pytest.raises(ValueError):
         matrixplot(
             X,
             col_meta=meta,
-            col_group_class="bad value",
+            col_group="bad value",
             row_meta=meta,
-            row_group_class="bad value",
+            row_group="bad value",
         )
     with pytest.raises(ValueError):
         matrixplot(
             X,
             col_meta=meta,
-            col_class_order="bad value",
+            col_group_order="bad value",
             row_meta=meta,
-            row_class_order="bad value",
+            row_group_order="bad value",
         )
     with pytest.raises(ValueError):
         matrixplot(
@@ -157,9 +157,9 @@ def test_matrix_inputs():
         matrixplot(
             X,
             col_meta=meta,
-            col_color_class="bad value",
+            col_color="bad value",
             row_meta=meta,
-            row_color_class="bad value",
+            row_color="bad value",
         )
 
 
@@ -171,23 +171,23 @@ def test_matrix_output():
     meta = pd.DataFrame(
         {
             "hemisphere": np.random.randint(2, size=10),
-            "dVNC": np.random.randint(2, size=10),
-            "ID": np.random.randint(10, size=10),
+            "region": np.random.randint(2, size=10),
+            "cell_size": np.random.randint(10, size=10),
         }
     )
     ax = matrixplot(X, col_meta=meta, row_meta=meta)
-    ax = matrixplot(X, col_meta=meta, row_meta=meta, row_group_class="hemisphere")
+    ax = matrixplot(X, col_meta=meta, row_meta=meta, row_group="hemisphere")
     ax = matrixplot(
         X,
         col_meta=meta,
         row_meta=meta,
-        row_group_class="hemisphere",
-        col_class_order="size",
+        row_group="hemisphere",
+        col_group_order="size",
     )
     ax = matrixplot(
         X,
         col_meta=meta,
         row_meta=meta,
-        col_group_class="hemisphere",
-        row_item_order="ID",
+        col_group="hemisphere",
+        row_item_order="cell_size",
     )
