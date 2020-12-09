@@ -838,8 +838,7 @@ def mmsbm(
         ``alpha[i]`` > 0 for all :math:`i`.
 
     rng: numpy.random.Generator, optional (default = None)
-        Numpy :class:`numpy.random.Generator` Random Generator object to generate 
-        sampling from distributions.
+        :class:`numpy.random.Generator` object to sample from distributions.
         If None, the random number generator is the Generator object constructed
         by ``np.random.default_rng()``.
 
@@ -857,7 +856,7 @@ def mmsbm(
         matrix. The second element is a matrix in which the :math:`(i^{th}, j^{th})`
         entry indicates the membership assigned to node i when interacting with node j.
         Community 1 is labeled with a 0, community 2 with 1, etc.
-        -1 indicates that no edge was sampled.
+        ``nan`` indicates that no community was assigned for that interaction.
 
     References
     ----------
@@ -975,7 +974,7 @@ def mmsbm(
     A = sample_edges(P, directed=directed, loops=loops)
 
     if not loops:
-        np.fill_diagonal(labels, -1)
+        np.fill_diagonal(labels, np.nan)
 
     if return_labels:
         return (A, labels)
