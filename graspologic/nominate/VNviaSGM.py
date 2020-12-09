@@ -129,12 +129,10 @@ class VNviaSGM(BaseEstimator):
             msg = "Must include at least one seed to produce nomination list"
             raise ValueError(msg)
 
-        voi = np.reshape(np.array(voi), (1,))
-
         # get vertex reordering for Ax
         # in the form (seedsA, voi, rest in order)
-        nsx1 = np.setdiff1d(np.arange(A.shape[0]), np.concatenate((seedsA, voi)))
-        a_reord = np.concatenate((seedsA, voi, nsx1))
+        nsx1 = np.setdiff1d(np.arange(A.shape[0]), np.append(seedsA, voi))
+        a_reord = np.append(np.append(seedsA, voi), nsx1)
 
         # get reordering for B in the form (seedsB, rest in numerical order)
         nsx2 = np.setdiff1d(np.arange(B.shape[0]), seedsB)
@@ -167,8 +165,6 @@ class VNviaSGM(BaseEstimator):
             )
             return None
 
-        voi_reord = np.reshape(np.array(voi_reord), (1,))
-
         # Generate the two induced subgraphs that will be used by the matching
         # algorithm using the seeds that we identified in the previous step.
         verts_A = np.array(
@@ -187,8 +183,8 @@ class VNviaSGM(BaseEstimator):
         # For graph A, its of the form (close_seeds, voi, rest in verts_A
         # in num order). For graph B its of the form (close_seeds, rest in
         # verts_B in num order)
-        foo = np.concatenate((close_seeds, voi_reord))
-        ind1 = np.concatenate((close_seeds, voi_reord, np.setdiff1d(verts_A, foo)))
+        foo = np.append(close_seeds, voi_reord)
+        ind1 = np.append(np.append(close_seeds, voi_reord), np.setdiff1d(verts_A, foo))
         ind2 = np.concatenate((close_seeds, np.setdiff1d(verts_B, close_seeds)))
 
         # Generate adjacency matrices for the ordering found in the prev step
