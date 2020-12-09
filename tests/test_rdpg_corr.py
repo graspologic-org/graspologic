@@ -79,5 +79,3 @@ class Test_RDPG_Corr(unittest.TestCase):
         graphs2 = np.stack(graphs2)
         np.testing.assert_allclose(np.mean(graphs1, axis=0), P, atol=0.1)
         np.testing.assert_allclose(np.mean(graphs2, axis=0), P, atol=0.1)
-        np.testing.assert_allclose(np.mean(np.mean(graphs1, axis=0) - P), 0, atol=1e-4)
-        np.testing.assert_allclose(np.mean(np.mean(graphs2, axis=0) - P), 0, atol=1e-4)
