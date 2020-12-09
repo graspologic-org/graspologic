@@ -93,12 +93,15 @@ class TestLatentDistributionTest(unittest.TestCase):
         ldt = latent_distribution_test(A1, A2, n_components=1)
 
         # first argument
+        assert ldt._fields[0] == "p_value"
         assert isinstance(ldt[0], np.floating)
 
         # second argument
+        assert ldt._fields[1] == "sample_T_statistic"
         assert isinstance(ldt[1], float)
 
         # third argument
+        assert ldt._fields[2] == "misc_stats"
         assert isinstance(ldt[2], dict)
         assert isinstance(ldt[2]["null_distribution"], np.ndarray)
         assert isinstance(ldt[2]["n_components"], int)
