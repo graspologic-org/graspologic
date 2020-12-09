@@ -24,7 +24,7 @@ class SignalSubgraph:
     contmat_: array-like, shape (n_vertices, n_vertices, 2, 2)
         An array that stores the 2-by-2 contingency matrix for each point in the graph samples.
     sigsub_: tuple, shape (2, n_edges)
-        A tuple of a row index array and column index array, where n_edges is the size of the signal-subgraph determined by *constraints*.
+        A tuple of a row index array and column index array, where n_edges is the size of the signal-subgraph determined by ``constraints``.
     mask_: array-like, shape (n_vertices, n_vertices)
         An array of boolean values. Entries are true for edges that are in the signal subgraph.
 
@@ -59,8 +59,10 @@ class SignalSubgraph:
         constraints: int or vector
             The constraints that will be imposed onto the estimated signal-subgraph.
 
-            If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
-            If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
+            If ``constraints`` is an int, ``constraints`` is the number of edges in the signal-subgraph.
+            If ``constraints`` is a vector, the first element of ``constraints`` is the number of edges
+            in the signal-subgraph, and the second element of ``constraints``
+            is the number of vertices that the signal-subgraph must be incident to.
 
         Returns
         -------
@@ -161,7 +163,7 @@ class SignalSubgraph:
 
     def fit_transform(self, graphs, labels, constraints):
         """
-        A function to return the indices of the signal-subgraph. If *return_mask* is True, also returns a mask for the signal-subgraph.
+        A function to return the indices of the signal-subgraph. If ``return_mask`` is True, also returns a mask for the signal-subgraph.
 
         Parameters
         ----------
@@ -172,8 +174,10 @@ class SignalSubgraph:
         constraints: int or vector
             The constraints that will be imposed onto the estimated signal-subgraph.
 
-            If *constraints* is an int, *constraints* is the number of edges in the signal-subgraph.
-            If *constraints* is a vector, the first element of *constraints* is the number of edges in the signal-subgraph, and the second element of *constraints* is the number of vertices that the signal-subgraph must be incident to.
+            If ``constraints`` is an int, ``constraints`` is the number of edges in the signal-subgraph.
+            If ``constraints`` is a vector, the first element of ``constraints`` is the number of edges
+            in the signal-subgraph, and the second element of ``constraints``
+            is the number of vertices that the signal-subgraph must be incident to.
 
         Returns
         -------
