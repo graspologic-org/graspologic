@@ -39,11 +39,11 @@ class ClassicalMDS(BaseEstimator):
     ----------
     n_components : int, or None (default=None)
         Number of components to keep. If None, then it will run
-        ``select_dimension`` to find the optimal embedding dimension.
+        :func:`~graspologic.embed.select_dimension` to find the optimal embedding dimension.
 
     n_elbows : int, or None (default=2)
-        If ``n_components=None``, then compute the optimal embedding dimension using
-        `:func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
+        If ``n_components`` is None, then compute the optimal embedding dimension using
+        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     dissimilarity : 'euclidean' | 'precomputed', optional, default: 'euclidean'
         Dissimilarity measure to use:
@@ -51,17 +51,17 @@ class ClassicalMDS(BaseEstimator):
         - 'euclidean'
             Pairwise Euclidean distances between points in the dataset.
         - 'precomputed'
-            Pre-computed dissimilarities are passed directly to ``fit`` and
-            ``fit_transform``.
+            Pre-computed dissimilarities are passed directly to :func:`~graspologic.embed.ClassicalMDS.fit` and
+            :func:`~graspologic.embed.ClassicalMDS.fit_transform`.
 
     Attributes
     ----------
     n_components_ : int
-        Equals the parameter n_components. If input n_components was None,
+        Equals the parameter ``n_components``. If input ``n_components`` was None,
         then equals the optimal embedding dimension.
 
     n_features_in_: int
-        Number of features passed to the fit method.
+        Number of features passed to the :func:`~graspologic.embed.ClassicalMDS.fit` method.
 
     components_ : array, shape (n_components, n_features)
         Principal axes in feature space.
