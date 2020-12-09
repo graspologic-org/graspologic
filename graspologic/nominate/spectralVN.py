@@ -63,10 +63,9 @@ class SpectralVertexNomination(BaseVN):
     """
 
     def __init__(
-        self, input_graph: bool = True, embedder: Union[str, BaseSpectralEmbed] = "ASE",
+        self, input_graph: bool = True, embedder: Union[str, BaseSpectralEmbed] = "ASE"
     ):
         super().__init__(multigraph=False)
-
         self.embedder_ = embedder
         self.input_graph_ = input_graph
         self.attribute_labels_ = None
@@ -139,10 +138,12 @@ class SpectralVertexNomination(BaseVN):
             elif self.embedder_ == "LSE":
                 embedder = lse()
             else:
-                raise TypeError(
+                raise ValueError(
                     "Requested embedding method does not exist, if str is passed must be either 'ASE' or 'LSE'."
                 )
-            self.embedding = embedder.fit_transform(X)
+            self.embedding_ = embedder.fit_transform(X)
+        else:
+            self.embedding_ = X
 
     def fit(
         self,
@@ -194,10 +195,10 @@ class SpectralVertexNomination(BaseVN):
         nearest_neighbors = NearestNeighbors(
             n_neighbors=k, metric=metric, metric_params=metric_params
         )
-        y_vec = self.embedding[y[:, 0].astype(np.int)]
+        y_vec = self.embedding_[y[:, 0].astype(np.int)]
         nearest_neighbors.fit(y_vec)
         self.distance_matrix_, self.neigh_inds = nearest_neighbors.kneighbors(
-            self.embedding, return_distance=True
+            self.embedding_, return_distance=True
         )
 
     def predict(self) -> Tuple[np.ndarray, np.ndarray]:
