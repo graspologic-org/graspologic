@@ -141,8 +141,8 @@ class VNviaSGM(BaseEstimator):
         b_reord = np.concatenate((seedsB, nsx2))
 
         # Reorder the two graphs with our new vertices order
-        AA = A[np.ix_(a_reord, a_reord)]
-        BB = B[np.ix_(b_reord, b_reord)]
+        AA = A[a_reord][:, a_reord]
+        BB = B[b_reord][:, b_reord]
 
         # Record where the new seeds and voi locations are
         # in our re-ordered graphs
@@ -192,8 +192,8 @@ class VNviaSGM(BaseEstimator):
         ind2 = np.concatenate((close_seeds, np.setdiff1d(verts_B, close_seeds)))
 
         # Generate adjacency matrices for the ordering found in the prev step
-        AA_fin = AA[np.ix_(ind1, ind1)]
-        BB_fin = BB[np.ix_(ind2, ind2)]
+        AA_fin = AA[ind1][:, ind1]
+        BB_fin = BB[ind2][:, ind2]
 
         # Call the SGM algorithm using random initialization and naive padding
         # Run the alg on the adjacency matrices we found in the prev step
