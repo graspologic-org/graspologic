@@ -2,8 +2,8 @@
 # Licensed under the MIT License.
 
 import warnings
-import numpy as np
 
+import numpy as np
 from scipy import stats
 
 from ..embed import select_dimension, AdjacencySpectralEmbed
