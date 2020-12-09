@@ -30,6 +30,19 @@ stochastic block model, and random dot product graph (RDPG).
    tutorials/simulations/corr
    tutorials/simulations/rdpg_corr
 
+.. _cluster_tutorials:
+
+Clustering
+==========
+The following tutorials explain how to cluster vertex or graph embeddings with two
+clustering algorithms, as well as the advantages of these to comparable implementations.
+
+.. toctree::
+   :maxdepth: 1
+   
+   tutorials/clustering/autogmm
+   tutorials/clustering/kclust
+
 .. _embed_tutorials:
 
 Embedding
@@ -40,7 +53,9 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
    :maxdepth: 1
    
    tutorials/embedding/AdjacencySpectralEmbed
+   tutorials/embedding/OutOfSampleEmbed
    tutorials/embedding/Omnibus
+   tutorials/embedding/MASE
    
 .. _inference_tutorials: 
 
