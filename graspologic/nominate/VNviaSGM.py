@@ -21,7 +21,8 @@ class VNviaSGM(BaseEstimator):
     Parameters
     ----------
     order_voi_subgraph: int, positive (default = 1)
-        Order used to create induced subgraph on `A` about voi.
+        Order used to create induced subgraph on `A` about voi where the max
+        distance between voi and other nodes is order_voi_subgraph.
         This induced subgraph will be used to determine what seeds are used
         when the SGM algorithm is called. If no seeds are in this subgraph
         about voi, then VNviaSGM will return None.
