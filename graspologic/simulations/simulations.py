@@ -838,7 +838,8 @@ def mmsbm(
         ``alpha[i]`` > 0 for all :math:`i`.
 
     rng: numpy.random.Generator, optional (default = None)
-        Numpy Random Generator object to generate sampling from distributions.
+        Numpy :class:`numpy.random.Generator` Random Generator object to generate 
+        sampling from distributions.
         If None, the random number generator is the Generator object constructed
         by ``np.random.default_rng()``.
 
