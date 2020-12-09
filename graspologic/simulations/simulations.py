@@ -856,7 +856,7 @@ def mmsbm(
         matrix. The second element is a matrix in which the :math:`(i^{th}, j^{th})`
         entry indicates the membership assigned to node i when interacting with node j.
         Community 1 is labeled with a 0, community 2 with 1, etc.
-        ``nan`` indicates that no community was assigned for that interaction.
+        -1 indicates that no community was assigned for that interaction.
 
     References
     ----------
@@ -966,15 +966,12 @@ def mmsbm(
         arr=mm_vectors,
     )
 
-    P = np.zeros((n, n))
-    for i in range(n):
-        for j in range(n):
-            P[i, j] = p[labels[i, j], labels[j, i]]
+    P = p[(labels, labels.T)]
 
     A = sample_edges(P, directed=directed, loops=loops)
 
     if not loops:
-        np.fill_diagonal(labels, np.nan)
+        np.fill_diagonal(labels, -1)
 
     if return_labels:
         return (A, labels)

@@ -913,13 +913,13 @@ class Test_MMSBM(unittest.TestCase):
         )
         labels = A[1]
         expected_labels = np.ones((self.n, self.n))
-        np.fill_diagonal(expected_labels, np.nan)
+        np.fill_diagonal(expected_labels, -1)
         # since we expect all nodes on the off diagonal to pertain to community 2
         # we expect all values on the off diagonal to be 1
-        # We expect -1 on the diagonal as this graph has no loops
+        # We expect nan on the diagonal as this graph has no loops
 
         # check that expected labels is the same as the labels output by function
-        self.assertTrue(np.allclose(labels, expected_labels, equal_nan=True))
+        self.assertTrue(np.allclose(labels, expected_labels))
         pass
 
     def test_loop_directed(self):
