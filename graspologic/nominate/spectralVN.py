@@ -63,9 +63,7 @@ class SpectralVertexNomination(BaseVN):
     """
 
     def __init__(
-        self,
-        input_graph: bool = True,
-        embedder: Union[str, BaseSpectralEmbed] = "ASE",
+        self, input_graph: bool = True, embedder: Union[str, BaseSpectralEmbed] = "ASE",
     ):
         super().__init__(multigraph=False)
 
@@ -95,13 +93,17 @@ class SpectralVertexNomination(BaseVN):
             raise TypeError("X must be of type np.ndarray.")
         if not self.multigraph:
             if not np.issubdtype(X.dtype, np.number):
-                raise TypeError("Adjacency matrix or embedding should have numeric type")
+                raise TypeError(
+                    "Adjacency matrix or embedding should have numeric type"
+                )
             elif np.ndim(X) != 2:
                 raise IndexError("Adjacency matrix or embedding must have dim 2")
             elif not self.input_graph_:
                 # embedding was provided
                 if X.shape[1] > X.shape[0]:
-                    raise IndexError("dim 1 of an embedding should be smaller than dim 0.")
+                    raise IndexError(
+                        "dim 1 of an embedding should be smaller than dim 0."
+                    )
             elif X.shape[0] != X.shape[1]:
                 raise IndexError("Adjacency Matrix should be square.")
         else:
@@ -120,8 +122,12 @@ class SpectralVertexNomination(BaseVN):
             raise ValueError("k must be greater than 0")
 
         if self.input_graph_:
-            if not isinstance(self.embedder_ , BaseSpectralEmbed) and not isinstance(self.embedder_, str):
-                raise TypeError("embedder must be either of type str or BaseSpectralEmbed")
+            if not isinstance(self.embedder_, BaseSpectralEmbed) and not isinstance(
+                self.embedder_, str
+            ):
+                raise TypeError(
+                    "embedder must be either of type str or BaseSpectralEmbed"
+                )
 
     def _embed(self, X: np.ndarray):
         # Embed graph if embedding not provided
@@ -133,7 +139,9 @@ class SpectralVertexNomination(BaseVN):
             elif self.embedder_ == "LSE":
                 embedder = lse()
             else:
-                raise TypeError("Requested embedding method does not exist, if str is passed must be either \'ASE\' or \'LSE\'.")
+                raise TypeError(
+                    "Requested embedding method does not exist, if str is passed must be either 'ASE' or 'LSE'."
+                )
             self.embedding = embedder.fit_transform(X)
 
     def fit(
