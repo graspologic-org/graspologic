@@ -2,6 +2,7 @@ import numpy as np
 from ..match import GraphMatch as GMP
 from sklearn.base import BaseEstimator
 import itertools
+import warnings
 
 
 class VNviaSGM(BaseEstimator):
@@ -74,7 +75,7 @@ class VNviaSGM(BaseEstimator):
             msg = "R must be an integer > 0"
             raise ValueError(msg)
 
-    def fit(self, A, B, voi, seeds):
+    def fit(self, A, B, voi, seeds, max_noms=None):
         """
         Fits the model to two graphs.
 
@@ -97,16 +98,39 @@ class VNviaSGM(BaseEstimator):
             vertices which are known to be matched, that is, `seedsA[i]` is matched
             to vertex `seedsB[i]`.
 
+        max_noms: int (default = None)
+            Max number of nominations to include in the nomination list. If None is
+            passed, then all nominations computed will be returned.
+
         Returns
         -------
         self: A reference to self
         """
-        if A.ndim != 2 or B.ndim != 2:
+        if not isinstance(A, np.ndarray) or not isinstance(B, np.ndarray):
+            msg = "Adjacency matrices must be type np.ndarray"
+            raise ValueError(msg)
+        elif A.ndim != 2 or B.ndim != 2:
             msg = "Adjacency matrix entries must be two-dimensional"
             raise ValueError(msg)
         elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
             msg = "Adjacency matrix entries must be square"
             raise ValueError(msg)
+
+        if not isinstance(voi, int):
+            msg = "Voi must be an integer"
+            raise ValueError(msg)
+        elif voi < 0 or voi >= A.shape[0]:
+            msg = "Voi must be in range[0, num_verts_A)"
+            raise ValueError(msg)
+
+        if max_noms is not None:
+            if not isinstance(max_noms, int):
+                msg = "max_noms must be an integer"
+                raise ValueError(msg)
+            elif max_noms < 1:
+                msg = "max_noms must be >= 1"
+                raise ValueError(msg)
+
 
         if len(seeds) != 2:
             msg = "List must be length two, with first element containing seeds \
@@ -144,33 +168,33 @@ class VNviaSGM(BaseEstimator):
         # Determine what seeds are within a specified subgraph
         # given by `self.order_voi_subgraph`. If there are no
         # seeds in this subgraph, print a message and return None
-        subgraph_AA = np.array(
-            _get_induced_subgraph_list(
+        subgraph_AA = _get_induced_subgraph_list(
                 AA, self.order_voi_subgraph, voi_reord, mindist=1
             )
-        )
+
         close_seeds = np.intersect1d(subgraph_AA, seeds_reord)
 
         if len(close_seeds) <= 0:
-            print(
-                "Voi {} was not a member of the induced subgraph A[{}]".format(
+            warnings.warn(
+                "Voi {} was not a member of the induced subgraph A[{}], \
+                Try increasing order_voi_subgraph".format(
                     voi, seedsA
                 )
             )
-            return None
+            self.n_seeds = None
+            self.nomination_list = None
+            return self
 
         # Generate the two induced subgraphs that will be used by the matching
         # algorithm using the seeds that we identified in the previous step.
-        verts_A = np.array(
-            _get_induced_subgraph_list(
+        verts_A = _get_induced_subgraph_list(
                 AA, self.order_seeds_subgraph, list(close_seeds), mindist=0
             )
-        )
-        verts_B = np.array(
-            _get_induced_subgraph_list(
+
+        verts_B = _get_induced_subgraph_list(
                 BB, self.order_seeds_subgraph, list(close_seeds), mindist=0
             )
-        )
+
 
         # Determine the final reordering for the graphs that include only
         # the vertices found by the induced subgraphs in the previous step
@@ -205,11 +229,15 @@ class VNviaSGM(BaseEstimator):
         # sorted so it returns the vertex with the highest probability first.
         nomination_list = list(zip(b_inds[self.n_seeds :], P_outp[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
+
+        if max_noms is not None and max_noms < len(nomination_list):
+            nomination_list = nomination_list[0: max_noms]
+
         self.nomination_list = np.array(nomination_list)
 
         return self
 
-    def fit_predict(self, A, B, voi, seeds):
+    def fit_predict(self, A, B, voi, seeds, max_noms=None):
         """
         Fits model to two adjacency matrices and returns nomination list
 
@@ -232,18 +260,16 @@ class VNviaSGM(BaseEstimator):
             vertices which are known to be matched, that is, `seedsA[i]` is matched
             to vertex `seedsB[i]`.
 
+        max_noms: int (default = None)
+            Max number of nominations to include in the nomination list. If None is
+            passed, then all nominations computed will be returned.
+
         Returns
         -------
         nomination_list : 2d-array
             The nomination array
         """
-        retval = self.fit(A, B, voi, seeds)
-
-        # It is possible that the algorithm stops early and returns none
-        # if the task is impossible. Note, this does not mean that the input
-        # arguments were erroneous.
-        if retval is None:
-            return None
+        self.fit(A, B, voi, seeds, max_noms=max_noms)
 
         return self.nomination_list
 
@@ -280,18 +306,18 @@ def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
         clst = []
         for nn in dists[-1]:
             clst.extend(list(np.where(graph_adj_matrix[nn] >= 1)[0]))
-        clst = np.array(list(set(clst)))
+        clst = np.unique(clst)
 
         cn_proc = np.setdiff1d(clst, dists_conglom)
 
         dists.append(cn_proc)
 
         dists_conglom.extend(cn_proc)
-        dists_conglom = list(set(dists_conglom))
+        dists_conglom = np.unique(dists_conglom)
 
     ress = itertools.chain(*dists[mindist : order + 1])
 
-    return np.array(list(set(ress)))
+    return np.unique(ress)
 
 
 def _get_induced_subgraph_list(graph_adj_matrix, order, node, mindist=1):
@@ -326,6 +352,6 @@ def _get_induced_subgraph_list(graph_adj_matrix, order, node, mindist=1):
                 graph_adj_matrix, order, nn, mindist=mindist
             )
             total_res.extend(ego_res)
-        return list(set(total_res))
+        return np.unique(total_res)
     else:
         return _get_induced_subgraph(graph_adj_matrix, order, node)
