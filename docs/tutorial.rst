@@ -95,3 +95,12 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
    :maxdepth: 1
 
    tutorials/subgraph/subgraph
+
+Connectomics
+========
+The following tutorials demonstrate how to analyze connectomics datasets.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/connectomics/mcc
