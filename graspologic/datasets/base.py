@@ -145,13 +145,11 @@ def load_mice():
 
     data = Path(__file__).parent.joinpath("mice")
 
-    # Load all connectomes
-    graphs, n_vertices = import_edgelist(
-        data.joinpath("edgelists"), return_vertices=True
-    )
-    n_subjects = len(graphs)
+    # Load all connectomes and construct a dictionary of study metadata
+    graphs, vertices = import_edgelist(data.joinpath("edgelists"), return_vertices=True)
 
-    # Store dictionary of study metadata
+    n_vertices = len(vertices)
+    n_subjects = len(graphs)
     meta = {"n_subjects": n_subjects, "n_vertices": n_vertices}
 
     # Read the participants file and get genotype labels
