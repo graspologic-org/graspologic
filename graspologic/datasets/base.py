@@ -116,7 +116,7 @@ def load_mice():
     vertex set with a total of 332 regions of interest (ROIs) symmetrically
     distributed across the left and right hemispheres. Within a given
     hemisphere, there are seven superstructures consisting up multiple ROIs,
-    resulting in a total of 14 distinct communities ineach connectome.
+    resulting in a total of 14 distinct communities in each connectome.
 
     Returns
     -------
