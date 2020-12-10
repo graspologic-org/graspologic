@@ -1,10 +1,13 @@
 # graspologic
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
+[![PyPI version](https://img.shields.io/pypi/v/graspologic.svg)](https://pypi.org/project/graspologic/)
 [![Downloads shield](https://img.shields.io/pypi/dm/graspologic.svg)](https://pypi.org/project/graspologic/)
+[![Docs shield](https://img.shields.io/readthedocs/graspologic)](https://graspologic.readthedocs.io/)
 ![graspologic CI](https://github.com/microsoft/graspologic/workflows/graspologic%20CI/badge.svg)
-[![codecov](https://codecov.io/gh/neurodata/graspy/branch/master/graph/badge.svg)](https://codecov.io/gh/neurodata/graspy)
+[![codecov](https://codecov.io/gh/microsoft/graspologic/branch/dev/graph/badge.svg)](https://codecov.io/gh/microsoft/graspologic)
 [![DOI](https://zenodo.org/badge/147768493.svg)](https://zenodo.org/badge/latestdoi/147768493)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 ## `graspologic` is a package for graph statistical algorithms.
 
@@ -25,9 +28,9 @@ noting the missed titles so we can address all of them.
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.
 
 # Documentation
-The official documentation with usage is at https://graspy.neurodata.io/
+The official documentation with usage is at https://graspologic.readthedocs.io/en/latest/
 
-Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) in the official website for more in depth usage.
+Please visit the [tutorial section](https://graspologic.readthedocs.io/en/latest/tutorial.html) in the official website for more in depth usage.
 
 # System Requirements
 ## Hardware requirements

@@ -19,3 +19,4 @@ Reference
    align
    nomination
    preprocessing
+   partition
