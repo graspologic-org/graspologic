@@ -74,7 +74,7 @@ class VNviaSGM(BaseEstimator):
             msg = "R must be an integer > 0"
             raise ValueError(msg)
 
-    def fit(self, A, B, voi, seeds=[]):
+    def fit(self, A, B, voi, seeds):
         """
         Fits the model to two graphs.
 
@@ -101,19 +101,13 @@ class VNviaSGM(BaseEstimator):
         -------
         self: A reference to self
         """
-        if A is None or B is None:
-            msg = "Adjacency matrices must be passed"
-            raise ValueError(msg)
-        elif A.ndim != 2 or B.ndim != 2:
+        if A.ndim != 2 or B.ndim != 2:
             msg = "Adjacency matrix entries must be two-dimensional"
             raise ValueError(msg)
         elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
             msg = "Adjacency matrix entries must be square"
             raise ValueError(msg)
 
-        if len(seeds) == 0:
-            print("Must include at least one seed to produce nomination list")
-            return None
         if len(seeds) != 2:
             msg = "List must be length two, with first element containing seeds \
                   of A and the second containing seeds of B"
@@ -215,7 +209,7 @@ class VNviaSGM(BaseEstimator):
 
         return self
 
-    def fit_predict(self, A, B, voi, seeds=[]):
+    def fit_predict(self, A, B, voi, seeds):
         """
         Fits model to two adjacency matrices and returns nomination list
 
