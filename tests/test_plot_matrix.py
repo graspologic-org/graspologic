@@ -27,8 +27,6 @@ def test_adjplot_inputs():
 
     # test meta
     with pytest.raises(ValueError):
-        adjplot(X)
-    with pytest.raises(ValueError):
         bad_meta = pd.DataFrame(
             {
                 "hemisphere": np.random.randint(2, size=1),
@@ -96,8 +94,6 @@ def test_matrix_inputs():
         matrixplot(data=np.zeros((2, 2, 2)), col_meta=meta, row_meta=meta)
 
     # test meta
-    with pytest.raises(ValueError):
-        matrixplot(X)
     with pytest.raises(ValueError):
         bad_meta = pd.DataFrame(
             {
