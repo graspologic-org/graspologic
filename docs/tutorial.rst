@@ -124,7 +124,7 @@ The following tutorials shows how to align two seperate datasets with each other
 .. _connectomics_tutorials:
 
 Connectomics
-========
+============
 The following tutorials demonstrate how to apply methods in this package to the analysis of connectomics datasets. 
 
 .. toctree::
