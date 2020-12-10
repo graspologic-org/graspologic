@@ -131,7 +131,6 @@ class VNviaSGM(BaseEstimator):
                 msg = "max_noms must be >= 1"
                 raise ValueError(msg)
 
-
         if len(seeds) != 2:
             msg = "List must be length two, with first element containing seeds \
                   of A and the second containing seeds of B"
@@ -169,8 +168,8 @@ class VNviaSGM(BaseEstimator):
         # given by `self.order_voi_subgraph`. If there are no
         # seeds in this subgraph, print a message and return None
         subgraph_AA = _get_induced_subgraph_list(
-                AA, self.order_voi_subgraph, voi_reord, mindist=1
-            )
+            AA, self.order_voi_subgraph, voi_reord, mindist=1
+        )
 
         close_seeds = np.intersect1d(subgraph_AA, seeds_reord)
 
@@ -188,13 +187,12 @@ class VNviaSGM(BaseEstimator):
         # Generate the two induced subgraphs that will be used by the matching
         # algorithm using the seeds that we identified in the previous step.
         verts_A = _get_induced_subgraph_list(
-                AA, self.order_seeds_subgraph, list(close_seeds), mindist=0
-            )
+            AA, self.order_seeds_subgraph, list(close_seeds), mindist=0
+        )
 
         verts_B = _get_induced_subgraph_list(
-                BB, self.order_seeds_subgraph, list(close_seeds), mindist=0
-            )
-
+            BB, self.order_seeds_subgraph, list(close_seeds), mindist=0
+        )
 
         # Determine the final reordering for the graphs that include only
         # the vertices found by the induced subgraphs in the previous step
@@ -231,7 +229,7 @@ class VNviaSGM(BaseEstimator):
         nomination_list.sort(key=lambda x: x[1], reverse=True)
 
         if max_noms is not None and max_noms < len(nomination_list):
-            nomination_list = nomination_list[0: max_noms]
+            nomination_list = nomination_list[0:max_noms]
 
         self.nomination_list = np.array(nomination_list)
 
