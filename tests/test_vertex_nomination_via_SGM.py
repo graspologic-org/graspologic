@@ -1,6 +1,5 @@
 import pytest
 import numpy as np
-from graspologic.simulations import er_np
 from graspologic.nominate import VNviaSGM
 
 np.random.seed(0)
