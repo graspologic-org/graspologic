@@ -42,20 +42,6 @@ class TestGMP:
                 0,
                 [np.arange(2), np.arange(3)],
             )
-        with pytest.raises(ValueError):
-            VNviaSGM().fit(
-                None,
-                np.random.randn(4, 4),
-                0,
-                [np.arange(2), np.arange(3)],
-            )
-        with pytest.raises(ValueError):
-            VNviaSGM().fit(
-                np.random.randn(4, 4),
-                None,
-                0,
-                [np.arange(2), np.arange(3)],
-            )
 
     def _get_AB(self):
         A = [
