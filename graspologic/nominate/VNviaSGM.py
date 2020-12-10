@@ -38,6 +38,29 @@ class VNviaSGM(BaseEstimator):
         Number of restarts for soft seeded graph matching algorithm. Increasing the
         number of restarts will make the probabilites returned more precise.
 
+    eps : float (default = 0.1)
+        For the graph matching algorithm. A positive, threshold stopping criteria
+        such that FW continues to iterate while Frobenius norm of
+        :math:`(P_{i}-P_{i+1}) > \\text{eps}`
+
+    max_iter : int, positive (default = 30)
+        For the graph matching algorithm. Integer specifying the max number of
+        Franke-Wolfe iterations. FAQ typically converges with modest number of
+        iterations.
+
+    init : string (default = 'rand') or 2d-array
+        For the graph matching algorithm. The initial position chosen
+
+        If 2d-array, `init` must be :math:`m' x m'`, where :math:`m' = n - m`,
+        and it must be doubly stochastic: each of its rows and columns must
+        sum to 1.
+
+        "barycenter" : the non-informative “flat doubly stochastic matrix,”
+        :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region
+
+        "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
+        doubly stochastic matrix
+
     Attributes
     ----------
     n_seeds: int
@@ -58,7 +81,15 @@ class VNviaSGM(BaseEstimator):
 
     """
 
-    def __init__(self, order_voi_subgraph=1, order_seeds_subgraph=1, n_init=100):
+    def __init__(
+        self,
+        order_voi_subgraph=1,
+        order_seeds_subgraph=1,
+        n_init=100,
+        eps=0.1,
+        max_iter=30,
+        init="rand",
+    ):
         if isinstance(order_voi_subgraph, int) and order_voi_subgraph > 0:
             self.order_voi_subgraph = order_voi_subgraph
         else:
@@ -74,6 +105,11 @@ class VNviaSGM(BaseEstimator):
         else:
             msg = "R must be an integer > 0"
             raise ValueError(msg)
+
+        # Error checking of these will be handled by GMP
+        self.eps = eps
+        self.max_iter = max_iter
+        self.init = init
 
     def fit(self, A, B, voi, seeds, max_noms=None):
         """
@@ -212,8 +248,15 @@ class VNviaSGM(BaseEstimator):
         # Call the SGM algorithm using random initialization and naive padding
         # Run the alg on the adjacency matrices we found in the prev step
         seeds_fin = np.arange(len(close_seeds))
-        sgm = GMP(n_init=self.n_init, shuffle_input=False, init="rand", padding="naive")
-        corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
+        sgm = GMP(
+            n_init=self.n_init,
+            shuffle_input=False,
+            init=self.init,
+            padding="naive",
+            eps=self.eps,
+            max_iter=self.max_iter,
+        )
+        sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
 
         # Get the original vertices names in the B graph to make the nom list
