@@ -174,8 +174,8 @@ class SpectralVertexNomination(BaseVN):
             - If `input_graph` is False
                 Expects an embedding of the graph, i.e. a ndarray of size (n, d).
         y: np.ndarray
-            List of seed vertex indices, OR List of tuples of seed vertex indices and
-            associated attributes.
+            Shape (n) array of seed vertex indices, OR shape (2, n) array of seed
+            seed vertex indices and associated attributes.
         k : int, default = None
             Number of neighbors to consider if seed is attributed. Defaults to the size
             of the seed, i.e. all seed vertices are considered. Is ignored in the
@@ -186,6 +186,10 @@ class SpectralVertexNomination(BaseVN):
         metric_params : dict, default = None
             Arguments for the sklearn `DistanceMetric` specified via `metric` parameter.
 
+        Returns
+        -------
+        self : object
+            Returns an instance of self.
         """
         # ensure y has correct shape. If unattributed (1d)
         # add unique attribute to each seed vertex.
@@ -200,7 +204,7 @@ class SpectralVertexNomination(BaseVN):
             or k is None
         ):
             # seed is not attributed, or no k is specified.
-            k = self.unique_attributes_.shape[0]
+            k = self.attribute_labels_.shape[0]
 
         nearest_neighbors = NearestNeighbors(
             n_neighbors=k, metric=metric, metric_params=metric_params
@@ -210,6 +214,7 @@ class SpectralVertexNomination(BaseVN):
         self.distance_matrix_, self.neigh_inds = nearest_neighbors.kneighbors(
             self.embedding_, return_distance=True
         )
+        return self
 
     def predict(self) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -232,33 +237,55 @@ class SpectralVertexNomination(BaseVN):
         """
         k = self.neigh_inds.shape[1]
         num_unique = self.unique_attributes_.shape[0]
+
+        # nearest neighbors orders seed for each vertex, we want to order the vertices
+        # for each seed or attribute. The following code does that in an efficient
+        # manner.
+
+        # nd_buffer provides a single k x n x m (m is number of unique attributes) view
+        # for doing efficient high dimensional operations.
+
+        # first we find the indexes of attributes separated across first m dimensions.
         nd_buffer = np.tile(
             self.attribute_labels_[self.neigh_inds[:, :k]], (num_unique, 1, 1)
         ).astype(np.float64)
-
-        # comparison taking place in 3-dim view, coordinates produced are therefore 3D
         inds = np.argwhere(
             nd_buffer == self.unique_attributes_[:, np.newaxis, np.newaxis]
         )
 
-        # nans are a neat way to operate on attributes individually
+        # nd_buffer filled with nan, then distances across the attribute dimensions.
         nd_buffer[:] = np.NaN
         nd_buffer[inds[:, 0], inds[:, 1], inds[:, 2]] = self.distance_matrix_[
             inds[:, 1], inds[:, 2]
         ]
 
-        # weighting function. Outer inverse for consistency, makes equivalent to simple
-        # ranking by distance in unattributed case, and makes higher ranked vertices
-        # naturally have lower distance metric value.
-        pred_weights = np.power(np.nansum(np.power(nd_buffer, -1), axis=2), -1).T
+        # weighting function. Conditional is not needed, but avoids unnecessary
+        # computation in the unattributed case.
+        if num_unique != len(self.attribute_labels_):
+            # is attributed. Distances corresponding to seeds of the same attribute
+            # are combined via sum of inverse distance, so we get one distance per
+            # attribute. Outer inverse is for consistency with unattributed.
+            pred_weights = np.power(np.nansum(np.power(nd_buffer, -1), axis=2), -1).T
+        else:
+            # nansum to collapse nd_buffer, will only be one non-nan across
+            # attribute dimension (dim 2).
+            pred_weights = np.nansum(nd_buffer, axis=2).T
 
+        # make sure any nans are given infinite weight.
         nan_inds = np.argwhere(np.isnan(pred_weights))
         pred_weights[nan_inds[:, 0], nan_inds[:, 1]] = np.inf
+
+        # sort all vertices for each seed / attribute.
         vert_order = np.argsort(pred_weights, axis=0)
 
+        # batch compute the 2D indices matrix for sorting distances.
         inds = np.tile(self.unique_attributes_, (1, vert_order.shape[0])).T
         inds = np.concatenate((vert_order.reshape(-1, 1), inds), axis=1)
+
+        # produce sorted distances.
         pred_weights = pred_weights[inds[:, 0], inds[:, 1]]
+
+        # return without empty dimensions.
         return vert_order, pred_weights.reshape(vert_order.shape)
 
     def fit_predict(
