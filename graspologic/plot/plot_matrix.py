@@ -531,6 +531,7 @@ def matrixplot(
         One of "heatmap" or "scattermap", by default "heatmap"
     {col, row}_meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
+
         - ``{col, row}_meta`` is pd.DataFrame
             All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
             should only be str or list of str
@@ -895,6 +896,7 @@ def adjplot(
         One of "heatmap" or "scattermap", by default "heatmap"
     meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
         Metadata of the matrix such as class, cell type, etc., by default None
+
         - ``meta`` is pd.DataFrame
             All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
             should only be str or list of str
