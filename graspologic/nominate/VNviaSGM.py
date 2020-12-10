@@ -199,8 +199,10 @@ class VNviaSGM(BaseEstimator):
         # For graph A, its of the form (close_seeds, voi, rest in verts_A
         # in num order). For graph B its of the form (close_seeds, rest in
         # verts_B in num order)
-        foo = np.append(close_seeds, voi_reord)
-        ind1 = np.append(np.append(close_seeds, voi_reord), np.setdiff1d(verts_A, foo))
+        paramed_verts = np.append(close_seeds, voi_reord)
+        ind1 = np.append(
+            np.append(close_seeds, voi_reord), np.setdiff1d(verts_A, paramed_verts)
+        )
         ind2 = np.concatenate((close_seeds, np.setdiff1d(verts_B, close_seeds)))
 
         # Generate adjacency matrices for the ordering found in the prev step
@@ -209,7 +211,7 @@ class VNviaSGM(BaseEstimator):
 
         # Call the SGM algorithm using random initialization and naive padding
         # Run the alg on the adjacency matrices we found in the prev step
-        seeds_fin = list(range(len(close_seeds)))
+        seeds_fin = np.arange(len(close_seeds))
         sgm = GMP(n_init=self.n_init, shuffle_input=False, init="rand", padding="naive")
         corr = sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
@@ -275,7 +277,7 @@ class VNviaSGM(BaseEstimator):
 def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
     """
     Generates a vertex list for the induced subgraph about a node with
-    max (order_ and min distance parameters.
+    max and min distance parameters.
 
     Parameters
     ----------
@@ -313,7 +315,7 @@ def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
         dists_conglom.extend(cn_proc)
         dists_conglom = np.unique(dists_conglom)
 
-    ress = itertools.chain(*dists[mindist : order + 1])
+    ress = list(itertools.chain(*dists[mindist : order + 1]))
 
     return np.unique(ress)
 
