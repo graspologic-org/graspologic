@@ -109,6 +109,7 @@ class VNviaSGM(BaseEstimator):
                 else:
                     msg = "not a modifiable parameter of graph matching alg"
                     raise ValueError(msg)
+        self.graph_match_kws = graph_match_kws
 
     def fit(self, A, B, voi, seeds):
         """
@@ -238,10 +239,8 @@ class VNviaSGM(BaseEstimator):
         sgm = GMP(
             n_init=self.n_init,
             shuffle_input=False,
-            init=self.init,
             padding="naive",
-            eps=self.eps,
-            max_iter=self.max_iter,
+            **self.graph_match_kws,
         )
         sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
         P_outp = sgm.probability_matrix_
