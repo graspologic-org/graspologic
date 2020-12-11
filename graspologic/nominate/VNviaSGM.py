@@ -42,7 +42,7 @@ class VNviaSGM(BaseEstimator):
         Max number of nominations to include in the nomination list. If None is
         passed, then all nominations computed will be returned.
 
-    graph_match_kws : dict (default = {})
+    graph_match_kws : dict ()
         Gives users the option to pass custom arguments to the graph matching
         algorithm. Format should be {'arg_name': arg_value, ...}. See
         :class:`~graspologic.match.GraphMatch`
@@ -100,16 +100,11 @@ class VNviaSGM(BaseEstimator):
             raise ValueError(msg)
 
         # Error checking of these will be handled by GMP
-        allowed_options = ["eps", "max_iter", "init", "shuffle_input"]
-        for kk in graph_match_kws.keys():
-            if kk not in allowed_options:
-                if kk == "n_init":
-                    msg = "use VNviaSGM's n_init parameter to set this"
-                    raise ValueError(msg)
-                else:
-                    msg = "not a modifiable parameter of graph matching alg"
-                    raise ValueError(msg)
-        self.graph_match_kws = graph_match_kws
+        if isinstance(graph_match_kws, dict):
+            self.graph_match_kws = graph_match_kws
+        else:
+            msg = "graph_match_kws must be type dict"
+            raise ValueError(msg)
 
     def fit(self, A, B, voi, seeds):
         """
@@ -241,30 +236,37 @@ class VNviaSGM(BaseEstimator):
         AA_fin = AA[ind1][:, ind1]
         BB_fin = BB[ind2][:, ind2]
 
-        # Call the SGM algorithm using random initialization and naive padding
-        # Run the alg on the adjacency matrices we found in the prev step
+        # Record the number of seeds used because this may differ from the number
+        # of seeds passed. See the step where close_seeds was computed for an
+        # explanation
         seeds_fin = np.arange(len(close_seeds))
+        self.n_seeds = len(close_seeds)
+
+        # Call the SGM algorithm using user set parametrs and generate a prob
+        # vector for the voi.
         sgm = GMP(
-            n_init=self.n_init,
-            padding="naive",
-            prob_matrix=True,
             **self.graph_match_kws,
         )
-        sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
-        P_outp = sgm.probability_matrix_
+
+        prob_vector = (
+            np.zeros((AA_fin.shape[0] - self.n_seeds,))
+            if AA_fin.shape[0] > BB_fin.shape[0]
+            else np.zeros((BB_fin.shape[0] - self.n_seeds,))
+        )
+
+        for ii in range(self.n_init):
+            sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
+            prob_vector[sgm.perm_inds_[self.n_seeds] - self.n_seeds] += 1.0
+
+        prob_vector /= self.n_init
 
         # Get the original vertices names in the B graph to make the nom list
         b_inds = b_reord[ind2]
 
-        # Record the number of seeds used because this may differ from the number
-        # of seeds passed. See the step where close_seeds was computed for an
-        # explanation
-        self.n_seeds = len(close_seeds)
-
         # Generate the nomination list. Note, the probability matrix does not
         # include the seeds, so we must remove them from b_inds. Return a list
         # sorted so it returns the vertex with the highest probability first.
-        nomination_list = list(zip(b_inds[self.n_seeds :], P_outp[0]))
+        nomination_list = list(zip(b_inds[self.n_seeds :], prob_vector))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
 
         if self.max_noms is not None and self.max_noms < len(nomination_list):
