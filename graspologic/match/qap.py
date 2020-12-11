@@ -479,7 +479,8 @@ def _quadratic_assignment_faq(
     row, col = linear_sum_assignment(-P)
 
     if probability_matrix is not None:
-        probability_matrix[row, col] += 1.0
+        nsb = nonseed_B-n_seeds
+        probability_matrix[row, nsb[col]] += 1.0
 
     perm = np.concatenate((np.arange(n_seeds), col + n_seeds))
 
