@@ -247,6 +247,7 @@ class VNviaSGM(BaseEstimator):
         sgm = GMP(
             n_init=self.n_init,
             padding="naive",
+            prob_matrix=True,
             **self.graph_match_kws,
         )
         sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
