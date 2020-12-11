@@ -347,8 +347,7 @@ def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
 
         dists.append(cn_proc)
 
-        dists_conglom.extend(cn_proc)
-        dists_conglom = np.unique(dists_conglom)
+        dists_conglom = np.unique(np.append(dists_conglom, cn_proc))
 
     ress = list(itertools.chain(*dists[mindist : order + 1]))
 
