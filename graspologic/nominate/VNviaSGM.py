@@ -100,7 +100,7 @@ class VNviaSGM(BaseEstimator):
             raise ValueError(msg)
 
         # Error checking of these will be handled by GMP
-        allowed_options = ["eps", "max_iter", "init"]
+        allowed_options = ["eps", "max_iter", "init", "shuffle_input"]
         for kk in graph_match_kws.keys():
             if kk not in allowed_options:
                 if kk == "n_init":
@@ -244,7 +244,6 @@ class VNviaSGM(BaseEstimator):
         seeds_fin = np.arange(len(close_seeds))
         sgm = GMP(
             n_init=self.n_init,
-            shuffle_input=False,
             padding="naive",
             **self.graph_match_kws,
         )
@@ -298,7 +297,7 @@ class VNviaSGM(BaseEstimator):
         Returns
         -------
         nomination_list : 2d-array
-            The nomination array
+            The nomination list.
         """
         self.fit(A, B, voi, seeds)
 
