@@ -155,14 +155,20 @@ class VNviaSGM(BaseEstimator):
             msg = "Voi must be in range[0, num_verts_A)"
             raise ValueError(msg)
 
+        if not isinstance(seeds, list):
+            msg = "seeds must be a list"
+            raise ValueError(msg)
         if len(seeds) != 2:
-            msg = "List must be length two, with first element containing seeds \
+            msg = "seeds must be length two, with first element containing seeds \
                   of A and the second containing seeds of B"
             raise ValueError(msg)
 
         seedsA = seeds[0]
         seedsB = seeds[1]
 
+        if not isinstance(seedsA, list) or not isinstance(seedsB, list):
+            msg = "seeds[0] and seeds[1] must both be lists"
+            raise ValueError(msg)
         if len(seedsA) != len(seedsB):
             msg = "Must have the same number of seeds for each adjacency matrix"
             raise ValueError(msg)
