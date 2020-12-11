@@ -166,7 +166,9 @@ class VNviaSGM(BaseEstimator):
         seedsA = seeds[0]
         seedsB = seeds[1]
 
-        if not isinstance(seedsA, list) or not isinstance(seedsB, list):
+        if not (isinstance(seedsA, list) or isinstance(seedsA, np.ndarray)) or not (
+            isinstance(seedsB, list) or isinstance(seedsB, np.ndarray)
+        ):
             msg = "seeds[0] and seeds[1] must both be lists"
             raise ValueError(msg)
         if len(seedsA) != len(seedsB):
