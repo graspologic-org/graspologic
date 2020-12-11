@@ -72,9 +72,6 @@ class GraphMatch(BaseEstimator):
 
         "naive" : matches `A` to the best fitting subgraph of `B`.
 
-    prob_matrix : bool (default = False)
-        Return as an attribute a probability matrix.
-
     Attributes
     ----------
 
@@ -89,10 +86,6 @@ class GraphMatch(BaseEstimator):
     n_iter_ : int
         Number of Frank-Wolfe iterations run. If ``n_init > 1``, :attr:`n_iter_` reflects the number of
         iterations performed at the initialization returned.
-
-    probability_matrix : 2d-array
-        An array that contains probabilities. probability_matrix[i,j] is the probability that node
-        i matches node j.
 
 
     References
@@ -118,7 +111,6 @@ class GraphMatch(BaseEstimator):
         eps=0.1,
         gmp=True,
         padding="adopted",
-        prob_matrix=False,
     ):
         if type(n_init) is int and n_init > 0:
             self.n_init = n_init
@@ -167,12 +159,11 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
-        if isinstance(prob_matrix, bool):
-            self.prob_matrix = prob_matrix
 
     def fit(self, A, B, seeds_A=[], seeds_B=[]):
         """
         Fits the model with two assigned adjacency matrices
+
         Parameters
         ----------
         A : 2d-array, square
@@ -199,16 +190,6 @@ class GraphMatch(BaseEstimator):
         seeds_B = column_or_1d(seeds_B)
         partial_match = np.column_stack((seeds_A, seeds_B))
 
-        if A.shape[0] > B.shape[0]:
-            n_unseed = A.shape[0] - partial_match.shape[0]
-        else:
-            n_unseed = B.shape[0] - partial_match.shape[0]
-
-        if self.prob_matrix:
-            self.probability_matrix = np.zeros((n_unseed, n_unseed))
-        else:
-            self.probability_matrix = None
-
         # pads A and B according to section 2.5 of [2]
         if A.shape[0] != B.shape[0]:
             A, B = _adj_pad(A, B, self.padding)
@@ -220,16 +201,12 @@ class GraphMatch(BaseEstimator):
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
             "tol": self.eps,
-            "probability_matrix": self.probability_matrix,
         }
 
         res = min(
             [quadratic_assignment(A, B, options=options) for i in range(self.n_init)],
             key=lambda x: x.fun,
         )
-
-        if self.probability_matrix is not None:
-            self.probability_matrix_ = self.probability_matrix / self.n_init
 
         self.perm_inds_ = res.col_ind  # permutation indices
         self.score_ = res.fun  # objective function value

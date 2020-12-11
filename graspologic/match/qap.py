@@ -222,7 +222,6 @@ def _quadratic_assignment_faq(
     shuffle_input=False,
     maxiter=30,
     tol=0.03,
-    probability_matrix=None,
 ):
     r"""
     Solve the quadratic assignment problem (approximately).
@@ -309,11 +308,6 @@ def _quadratic_assignment_faq(
         iterations is sufficiently small, that is, when the relative Frobenius
         norm, :math:`\frac{||P_{i}-P_{i+1}||_F}{\sqrt{len(P_{i})}} \leq tol`,
         where :math:`i` is the iteration number.
-    probability_matrix : 2d-array of floats, optional (default = None)
-        If not None, the probability matrix will be such that
-        probability_matrix[i, j] represents the probability that the ith node in
-        graph A matches to the jth node in graph B (note, to work properly
-        probability_matrix should be passed in as an array of all zero floats.
     Returns
     -------
     res : OptimizeResult
@@ -476,12 +470,7 @@ def _quadratic_assignment_faq(
     # [1] Algorithm 1 Line 7 - end main loop
 
     # [1] Algorithm 1 Line 8 - project onto the set of permutation matrices
-    row, col = linear_sum_assignment(-P)
-
-    if probability_matrix is not None:
-        nsb = nonseed_B - n_seeds
-        probability_matrix[row, nsb[col]] += 1.0
-
+    _, col = linear_sum_assignment(-P)
     perm = np.concatenate((np.arange(n_seeds), col + n_seeds))
 
     unshuffled_perm = np.zeros(n, dtype=int)
