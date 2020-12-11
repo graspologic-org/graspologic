@@ -20,6 +20,8 @@ class TestGMP:
             VNviaSGM(n_init=-1)
         with pytest.raises(ValueError):
             VNviaSGM(n_init=1.5)
+        with pytest.raises(ValueError):
+            VNviaSGM(max_noms=0)
 
         with pytest.raises(ValueError):
             VNviaSGM().fit(
@@ -41,14 +43,6 @@ class TestGMP:
                 np.random.randn(4, 4),
                 0,
                 [np.arange(2), np.arange(3)],
-            )
-        with pytest.raises(ValueError):
-            VNviaSGM().fit(
-                np.random.randn(4, 4),
-                np.random.randn(4, 4),
-                0,
-                [np.arange(3), np.arange(3)],
-                max_noms=0,
             )
 
     def test_vn_algorithm(self):
