@@ -3,7 +3,7 @@ import numpy as np
 from graspologic.nominate import VNviaSGM
 from graspologic.simulations import er_np
 
-np.random.seed(0)
+np.random.seed(1)
 
 
 class TestGMP:
@@ -46,7 +46,7 @@ class TestGMP:
             )
 
     def test_vn_algorithm(self):
-        g1 = er_np(n=50, p=0.3)
+        g1 = er_np(n=50, p=0.6)
         node_shuffle = np.random.permutation(50)
 
         g2 = g1[np.ix_(node_shuffle, node_shuffle)]
@@ -55,8 +55,8 @@ class TestGMP:
         kklst.sort(key=lambda x: x[0])
         kklst = np.array(kklst)
 
-        voi = 5
-        nseeds = 4
+        voi = 7
+        nseeds = 6
 
         vnsgm = VNviaSGM()
         nomlst = vnsgm.fit_predict(
