@@ -38,28 +38,14 @@ class VNviaSGM(BaseEstimator):
         Number of restarts for soft seeded graph matching algorithm. Increasing the
         number of restarts will make the probabilites returned more precise.
 
-    eps : float (default = 0.1)
-        For the graph matching algorithm. A positive, threshold stopping criteria
-        such that FW continues to iterate while Frobenius norm of
-        :math:`(P_{i}-P_{i+1}) > \\text{eps}`
+    max_noms: int (default = None)
+        Max number of nominations to include in the nomination list. If None is
+        passed, then all nominations computed will be returned.
 
-    max_iter : int, positive (default = 30)
-        For the graph matching algorithm. Integer specifying the max number of
-        Franke-Wolfe iterations. FAQ typically converges with modest number of
-        iterations.
-
-    init : string (default = 'rand') or 2d-array
-        For the graph matching algorithm. The initial position chosen
-
-        If 2d-array, `init` must be :math:`m' x m'`, where :math:`m' = n - m`,
-        and it must be doubly stochastic: each of its rows and columns must
-        sum to 1.
-
-        "barycenter" : the non-informative “flat doubly stochastic matrix,”
-        :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region
-
-        "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
-        doubly stochastic matrix
+    graph_match_kws : dict (default = {})
+        Gives users the option to pass custom arguments to the graph matching
+        algorithm. Format should be {'arg_name': arg_value, ...}. See
+        :class:`~graspologic.match.GraphMatch`
 
     Attributes
     ----------
@@ -86,9 +72,8 @@ class VNviaSGM(BaseEstimator):
         order_voi_subgraph=1,
         order_seeds_subgraph=1,
         n_init=100,
-        eps=0.1,
-        max_iter=30,
-        init="rand",
+        max_noms=None,
+        graph_match_kws={},
     ):
         if isinstance(order_voi_subgraph, int) and order_voi_subgraph > 0:
             self.order_voi_subgraph = order_voi_subgraph
@@ -106,12 +91,26 @@ class VNviaSGM(BaseEstimator):
             msg = "R must be an integer > 0"
             raise ValueError(msg)
 
-        # Error checking of these will be handled by GMP
-        self.eps = eps
-        self.max_iter = max_iter
-        self.init = init
+        if max_noms is None:
+            self.max_noms = max_noms
+        elif isinstance(max_noms, int) and max_noms >= 1:
+            self.max_noms = max_noms
+        else:
+            msg = "max_noms must be an integer >= 1"
+            raise ValueError(msg)
 
-    def fit(self, A, B, voi, seeds, max_noms=None):
+        # Error checking of these will be handled by GMP
+        allowed_options = ["eps", "max_iter", "init"]
+        for kk in graph_match_kws.keys():
+            if kk not in allowed_options:
+                if kk == "n_init":
+                    msg = "use VNviaSGM's n_init parameter to set this"
+                    raise ValueError(msg)
+                else:
+                    msg = "not a modifiable parameter of graph matching alg"
+                    raise ValueError(msg)
+
+    def fit(self, A, B, voi, seeds):
         """
         Fits the model to two graphs.
 
@@ -134,10 +133,6 @@ class VNviaSGM(BaseEstimator):
             vertices which are known to be matched, that is, `seedsA[i]` is matched
             to vertex `seedsB[i]`.
 
-        max_noms: int (default = None)
-            Max number of nominations to include in the nomination list. If None is
-            passed, then all nominations computed will be returned.
-
         Returns
         -------
         self: A reference to self
@@ -158,14 +153,6 @@ class VNviaSGM(BaseEstimator):
         elif voi < 0 or voi >= A.shape[0]:
             msg = "Voi must be in range[0, num_verts_A)"
             raise ValueError(msg)
-
-        if max_noms is not None:
-            if not isinstance(max_noms, int):
-                msg = "max_noms must be an integer"
-                raise ValueError(msg)
-            elif max_noms < 1:
-                msg = "max_noms must be >= 1"
-                raise ValueError(msg)
 
         if len(seeds) != 2:
             msg = "List must be length two, with first element containing seeds \
@@ -273,14 +260,14 @@ class VNviaSGM(BaseEstimator):
         nomination_list = list(zip(b_inds[self.n_seeds :], P_outp[0]))
         nomination_list.sort(key=lambda x: x[1], reverse=True)
 
-        if max_noms is not None and max_noms < len(nomination_list):
-            nomination_list = nomination_list[0:max_noms]
+        if self.max_noms is not None and self.max_noms < len(nomination_list):
+            nomination_list = nomination_list[0 : self.max_noms]
 
         self.nomination_list = np.array(nomination_list)
 
         return self
 
-    def fit_predict(self, A, B, voi, seeds, max_noms=None):
+    def fit_predict(self, A, B, voi, seeds):
         """
         Fits model to two adjacency matrices and returns nomination list
 
@@ -303,16 +290,12 @@ class VNviaSGM(BaseEstimator):
             vertices which are known to be matched, that is, `seedsA[i]` is matched
             to vertex `seedsB[i]`.
 
-        max_noms: int (default = None)
-            Max number of nominations to include in the nomination list. If None is
-            passed, then all nominations computed will be returned.
-
         Returns
         -------
         nomination_list : 2d-array
             The nomination array
         """
-        self.fit(A, B, voi, seeds, max_noms=max_noms)
+        self.fit(A, B, voi, seeds)
 
         return self.nomination_list
 
