@@ -100,7 +100,7 @@ class VNviaSGM(BaseEstimator):
             raise ValueError(msg)
 
         # Error checking of these will be handled by GMP
-        allowed_options = ["eps", "max_iter", "init"]
+        allowed_options = ["eps", "max_iter", "init", "shuffle_input"]
         for kk in graph_match_kws.keys():
             if kk not in allowed_options:
                 if kk == "n_init":
@@ -169,7 +169,7 @@ class VNviaSGM(BaseEstimator):
         if not (isinstance(seedsA, list) or isinstance(seedsA, np.ndarray)) or not (
             isinstance(seedsB, list) or isinstance(seedsB, np.ndarray)
         ):
-            msg = "seeds[0] and seeds[1] must both be lists"
+            msg = "seeds[0] and seeds[1] must both be lists or arrays"
             raise ValueError(msg)
         if len(seedsA) != len(seedsB):
             msg = "Must have the same number of seeds for each adjacency matrix"
@@ -247,7 +247,6 @@ class VNviaSGM(BaseEstimator):
         sgm = GMP(
             n_init=self.n_init,
             padding="naive",
-            shuffle_input=False,
             **self.graph_match_kws,
         )
         sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
