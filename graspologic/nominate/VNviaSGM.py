@@ -42,7 +42,7 @@ class VNviaSGM(BaseEstimator):
         Max number of nominations to include in the nomination list. If None is
         passed, then all nominations computed will be returned.
 
-    graph_match_kws : dict ()
+    graph_match_kws : dict (default = {})
         Gives users the option to pass custom arguments to the graph matching
         algorithm. Format should be {'arg_name': arg_value, ...}. See
         :class:`~graspologic.match.GraphMatch`
