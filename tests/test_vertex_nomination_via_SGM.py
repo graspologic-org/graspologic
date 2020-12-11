@@ -49,13 +49,13 @@ class TestGMP:
         g1 = er_np(n=50, p=0.3)
         node_shuffle = np.random.permutation(50)
 
-        g2 = g1[node_shuffle][:, node_shuffle]
+        g2 = g1[np.ix_(node_shuffle, node_shuffle)]
 
         kklst = [(xx, yy) for xx, yy in zip(node_shuffle, np.arange(len(node_shuffle)))]
         kklst.sort(key=lambda x: x[0])
         kklst = np.array(kklst)
 
-        voi = 6
+        voi = 5
         nseeds = 4
 
         vnsgm = VNviaSGM()
