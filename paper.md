@@ -24,23 +24,24 @@ date: 12 December 2020
 bibliography: refs.bib
 
 ---
-
-# Summary
-
-Gaussian mixture modeling is a fundamental tool in clustering, as well
-as discriminant analysis and semiparametric density estimation. However,
-estimating the optimal model for any given number of components is an
-NP-hard problem, and estimating the number of components is in some
-respects an even harder problem. In R, a popular package called `mclust`
-addresses both of these problems. However, Python has lacked such a
-package. We therefore introduce `AutoGMM`, a Python algorithm for
-automatic Gaussian mixture modeling, and its hierarchical version,
-`HGMM`. `AutoGMM` builds upon `scikit-learn`’s `AgglomerativeClustering`
-and `GaussianMixture` classes, with certain modifications to make the
-results more stable. Empirically, on several different applications,
-`AutoGMM` performs approximately as well as `mclust`, and sometimes
-better. This package is freely available, and further shrinks the gap
-between functionality of R and Python for data science.
+abstract: |
+    Gaussian mixture modeling is a fundamental tool in clustering, as well
+    as discriminant analysis and semiparametric density estimation. However,
+    estimating the optimal model for any given number of components is an
+    NP-hard problem, and estimating the number of components is in some
+    respects an even harder problem. In R, a popular package called `mclust`
+    addresses both of these problems. However, Python has lacked such a
+    package. We therefore introduce `AutoGMM`, a Python algorithm for
+    automatic Gaussian mixture modeling, and its hierarchical version,
+    `HGMM`. `AutoGMM` builds upon `scikit-learn`’s `AgglomerativeClustering`
+    and `GaussianMixture` classes, with certain modifications to make the
+    results more stable. Empirically, on several different applications,
+    `AutoGMM` performs approximately as well as `mclust`, and sometimes
+    better. This package is freely available, and further shrinks the gap
+    between functionality of R and Python for data science.
+bibliography:
+- 'refs.bib'
+---
 
 Introduction
 ============
@@ -188,18 +189,14 @@ matrices in Gaussian mixture modeling [@constraints; @mclust5].
 Constraints lower the number of parameters in the model, which can
 reduce overfitting, but can introduce unnecessary bias. `scikit-learn`’s
 `GaussianMixture` class implements four covariance constraints (see
-Table [tab:constraints]).
+Table \[tab:constraints\]).
 
-[!ht] [tab:constraints]
-
-<span>c|c|c</span> Constraint name & Equivalent model in `mclust` &
-Description\
-Full & VVV & Covariances are unconstrained and can vary between
-components.\
-Tied & EEE & All components have the same, unconstrained, covariance.\
-Diag & VVI & Covariances are diagonal and can vary between components\
-Spherical & VII & Covariances are spherical and can vary between
-components\
+   Constraint name   Equivalent model in `mclust`                            Description
+  ----------------- ------------------------------ ----------------------------------------------------------------
+        Full                     VVV                Covariances are unconstrained and can vary between components.
+        Tied                     EEE                   All components have the same, unconstrained, covariance.
+        Diag                     VVI                   Covariances are diagonal and can vary between components
+      Spherical                  VII                  Covariances are spherical and can vary between components
 
 Automatic Model Selection
 -------------------------
@@ -289,7 +286,6 @@ For the synthetic Gaussian mixture dataset, we sampled 100 data points
 from a Gaussian mixture with three equally weighted components in three
 dimensions. All components have an identity covariance matrix and the
 means are:
-
 $$\mu_0 = \begin{bmatrix} 0 \\ 0 \\ 0\end{bmatrix},\; \mu_1 = \begin{bmatrix} 5 \\ 0 \\ 0\end{bmatrix},\; \mu_2 = \begin{bmatrix} 0 \\ 5 \\ 0\end{bmatrix},$$
 
 We include this dataset to verify that the algorithms can cluster data
@@ -343,8 +339,8 @@ BIC with BIC as default) (see Appendix A for details).
     2.  Increase the regularization by a factor of 10 if the EM
         algorithm diverges or any cluster contains only a single data
         point. If the regularization is increased beyond $10^0$, simply
-        report that this GMM constraint has failed and proceed to Step
-        4.
+        report that this GMM constraint has failed and proceed to
+        Step 4.
 
     3.  If the EM algorithm successfully converges, save the resulting
         GMM and proceed to Step 4.
@@ -411,38 +407,38 @@ random in `GraSPyclust`, we perform clustering 50 times and select the
 result with the best BIC. Both of these algorithms limit the number EM
 iterations performed so their computational complexities are linear with
 respect to the number of data points. The three algorithms are compared
-in Table [tab:algcomp].
+in Table \[tab:algcomp\].
 
-The data described in Section [sec:data] has underlying labels so we
+The data described in Section \[sec:data\] has underlying labels so we
 choose ARI to evaluate the clustering algorithms.
 
-[!ht] [tab:algcomp]
+[c|c|c|c|c|c|c]{} Algorithm &
 
-<span>c|c|c|c|c|c|c</span> Algorithm &
-
-<span>@c@</span>\# Initializations\
-per GMM
+  --------------------
+   \# Initializations
+        per GMM
+  --------------------
 
 & Initialization method &
 
-<span>@c@</span> \# GMM\
+[@c@]{} \# GMM\
 constraints
 
 & BIC & AIC &
 
-<span>@c@</span>$O(n)$\
+[@c@]{}$O(n)$\
 complexity
 
 \
 AutoGMM & 11 &
 
-<span>@c@</span> Agglomeration with\
+[@c@]{} Agglomeration with\
 L1/L2/cosine distances
 
 & 4 & & &\
 mclust & 1 &
 
-<span>@c@</span>Agglomeration with\
+[@c@]{}Agglomeration with\
 likelihood-inspired distances
 
 & 14 & & &\
@@ -470,10 +466,10 @@ Results {#sec:results}
 `AutoGMM`
 ---------
 
-Table [tab:model] shows the models that were chosen by each clustering
+Table \[tab:model\] shows the models that were chosen by each clustering
 algorithm on the complete datasets, and the corresponding BIC and ARI
 values. The actual clusterings are shown in Figures
-[fig:synthetic~c~luster]-[fig:drosophila~c~luster]. In the synthetic
+\[fig:synthetic\_cluster\]-\[fig:drosophila\_cluster\]. In the synthetic
 dataset, all three methods chose a spherical covariance constraint,
 which was the correct underlying covariance structure. The `GraSPyclust`
 algorithm, however, failed on this dataset, partitioning the data into
@@ -491,88 +487,101 @@ dataset, `AutoGMM` achieved ARI values between 0.5 and 0.6, which are
 not particularly impressive. In the *Drosophila* data, most of the
 disagreement between the `AutoGMM` clustering, and the neuron type
 classification arises from the subdivision of the Kenyon cell type into
-multiple subgroups (Figure [fig:drosophila~c~luster]). The authors of
+multiple subgroups (Figure \[fig:drosophila\_cluster\]). The authors of
 @drosophila, who used `mclust`, also note this result.
 
-[!ht] [tab:model]
+  --------------- ------------------ ----------- -------- ------------- --------- -- -- --
+                                                                                        
+      Dataset          AutoGMM         AutoGMM    mclust   GraSPyclust   AutoGMM        
+     Synthetic         L2, Ward       Spherical    EII      Spherical       0           
+   Breast Cancer         None         Diagonal     VVI      Diagonal        0           
+    Drosophila     Cosine, Complete     Full       VVV        Full          0           
+  --------------- ------------------ ----------- -------- ------------- --------- -- -- --
 
-<span>c|c|ccc|c|ccc</span> & & &\
-Dataset & AutoGMM & AutoGMM & mclust & GraSPyclust & AutoGMM\
-Synthetic & L2, Ward & Spherical & EII & Spherical & 0\
-Breast Cancer & None & Diagonal & VVI & Diagonal & 0\
-Drosophila & Cosine, Complete & Full & VVV & Full & 0\
+  --------------- --------- -------- ------------- -- -- --
+                                                         
+      Dataset      AutoGMM   mclust   GraSPyclust        
+     Synthetic        3        3          10             
+   Breast Cancer      4        3           4             
+    Drosophila        6        7           7             
+  --------------- --------- -------- ------------- -- -- --
 
-<span>c|ccc|ccc</span> &\
-Dataset & AutoGMM & mclust & GraSPyclust\
-Synthetic & 3 & 3 & 10\
-Breast Cancer& 4 & 3 & 4\
-Drosophila & 6 & 7 & 7\
-
-<span>c|ccc|ccc</span> & &\
-Dataset & AutoGMM & mclust & GraSPyclust & AutoGMM & mclust &
-GraSPyclust\
-Synthetic & -1120 & -1111 & -1100 & 1 & 1 & 0.64\
-Breast Cancer& -8976 & -8970 & -8974 & 0.56 & 0.57 & 0.54\
-Drosophila & 4608 & 4430 & 3299 & 0.5 & 0.57 & 0.55\
+  --------------- --------- -------- ------------- --------- -------- -------------
+                                                                      
+      Dataset      AutoGMM   mclust   GraSPyclust   AutoGMM   mclust   GraSPyclust
+     Synthetic      -1120    -1111       -1100         1        1         0.64
+   Breast Cancer    -8976    -8970       -8974       0.56      0.57       0.54
+    Drosophila      4608      4430       3299         0.5      0.57       0.55
+  --------------- --------- -------- ------------- --------- -------- -------------
 
 ![Clustering results of different algorithms on the synthetic dataset
-(Section [synthetic]). **(b-c)** `AutoGMM` and `mclust` correctly
+(Section \[synthetic\]). **(b-c)** `AutoGMM` and `mclust` correctly
 clustered the data. **(c)** `GraSPyclust` erroneously subdivided the
-true clusters .](images/combined_synthetic_square.png "fig:")
-[fig:synthetic~c~luster]
+true clusters
+.[]{data-label="fig:synthetic_cluster"}](images/combined_synthetic_square.png){width="\textwidth"}
 
 ![Clustering results of different algorithms on the breast cancer
-dataset (Section [bc]). The original data was partitioned into two
+dataset (Section \[bc\]). The original data was partitioned into two
 clusters (benign and malignant), but all algorithms here further
 subdivided the data into three or four
-clusters.](images/combined_bc_square.png "fig:") [fig:bc~c~luster]
+clusters.[]{data-label="fig:bc_cluster"}](images/combined_bc_square.png){width="\textwidth"}
 
 ![Clustering results of different algorithms on the drosophila dataset
-(Section [drosophila]). There is considerable variation in the different
-algorithms’ results. One similarity, however, is that all algorithms
-subdivided the Kenyon cell cluster (red points in **(a)**) into several
-clusters.](images/combined_drosophila_square.png "fig:")
-[fig:drosophila~c~luster]
+(Section \[drosophila\]). There is considerable variation in the
+different algorithms’ results. One similarity, however, is that all
+algorithms subdivided the Kenyon cell cluster (red points in **(a)**)
+into several
+clusters.[]{data-label="fig:drosophila_cluster"}](images/combined_drosophila_square.png){width="\textwidth"}
 
-Figure [fig:subset] shows results from clustering random subsets of the
-data. The results were compared with the Wilcoxon signed-rank test at
-$\alpha=0.05$. On all three datasets, `AutoGMM` and `mclust` acheived
+Figure \[fig:subset\] shows results from clustering random subsets of
+the data. The results were compared with the Wilcoxon signed-rank test
+at $\alpha=0.05$. On all three datasets, `AutoGMM` and `mclust` acheived
 similar ARI values. `GraSPyclust` resulted in lower ARI values on the
 synthetic dataset as compared to the `mclust`, but was not statistically
-different on the other datasets. Figure [fig:subset] shows that in all
+different on the other datasets. Figure \[fig:subset\] shows that in all
 datasets, `mclust` was the fastest algorithm, and `GraSPyclust` was the
 second fastest algorithm.
 
-Figure [fig:drosophila~b~icplot] shows the BIC curves that demonstrate
+Figure \[fig:drosophila\_bicplot\] shows the BIC curves that demonstrate
 model selection of `AutoGMM` and `mclust` on the *Drosophila* dataset.
 We excluded the BIC curves from `GraSPyclust` for simplicity. The curves
 peak at the chosen models.
 
-![image](images/ari.png) ![By clustering random subsets of the data, ARI
-and Runtime values can be compared via the Wilcoxon signed-rank test
-($\alpha=0.05$). **(a)** On the synthetic dataset, `GraSPyclust` had a
-significantly lower ARI than `mclust`. **(b), (c)** There were no
-statistically significant differences between the algorithms on the
-other datasets. **(d-f)** `mclust` was the fastest algorithm, and
-`AutoGMM` the slowest, on all three datasets. The p-value was the same
-(0.005) for all of the statistical tests in
-**(d-f)**](images/time.png "fig:") [fig:subset]
+![By clustering random subsets of the data, ARI and Runtime values can
+be compared via the Wilcoxon signed-rank test ($\alpha=0.05$). **(a)**
+On the synthetic dataset, `GraSPyclust` had a significantly lower ARI
+than `mclust`. **(b), (c)** There were no statistically significant
+differences between the algorithms on the other datasets. **(d-f)**
+`mclust` was the fastest algorithm, and `AutoGMM` the slowest, on all
+three datasets. The p-value was the same (0.005) for all of the
+statistical tests in
+**(d-f)**[]{data-label="fig:subset"}](images/ari.png "fig:"){width="\textwidth"}
+![By clustering random subsets of the data, ARI and Runtime values can
+be compared via the Wilcoxon signed-rank test ($\alpha=0.05$). **(a)**
+On the synthetic dataset, `GraSPyclust` had a significantly lower ARI
+than `mclust`. **(b), (c)** There were no statistically significant
+differences between the algorithms on the other datasets. **(d-f)**
+`mclust` was the fastest algorithm, and `AutoGMM` the slowest, on all
+three datasets. The p-value was the same (0.005) for all of the
+statistical tests in
+**(d-f)**[]{data-label="fig:subset"}](images/time.png "fig:"){width="\textwidth"}
 
 ![BIC values of all clustering options in `AutoGMM` and `mclust` on the
 *Drosophila* dataset. **(a)** There are 44 total clustering options in
 `AutoGMM`. Each curve corresponds to an agglomeration method, and each
 subplot corresponds to a covariance constraint (Table
-[tab:constraints]). **(b)** The 14 curves correspond to the 14
+\[tab:constraints\]). **(b)** The 14 curves correspond to the 14
 clustering options in `mclust`. The chosen models, from Table
-[tab:model], are marked with a vertical dashed line. Missing or
+\[tab:model\], are marked with a vertical dashed line. Missing or
 truncated curves indicate that the algorithm did not converge to a
-satisfactory solution at those points.](images/dros_bic.png "fig:")
-[fig:drosophila~b~icplot]
+satisfactory solution at those
+points.[]{data-label="fig:drosophila_bicplot"}](images/dros_bic.png){width="80.00000%"}
 
-[] ![image](images/runtimes_options.png) [fig:runtimes]
+![image](images/runtimes_options.png){width="60.00000%"}
+\[fig:runtimes\]
 
 We also investigated how algorithm runtimes scale with the number of
-data points. Figure [fig:runtimes] shows how the runtimes of all
+data points. Figure \[fig:runtimes\] shows how the runtimes of all
 clustering options of the different algorithms scale with large
 datasets. We used linear regression on the log-log data to estimate
 computational complexity. The slopes for the `AutoGMM`, `mclust`, and
@@ -590,37 +599,35 @@ deviation $0.5$ and of means in the range of $[-15,15]$. The data can be
 grouped into a 3-level hierarchy: eight clusters of one-component
 Gaussian at the finest level, four clusters of 2-component Gaussian
 mixture at the middle level, and two clusters of 4-component Gaussian
-mixture at the coarsest level (Figure [fig:synthetic]a).
-
-`HGMM` was applied to the synthetic data described above; in this
-experiment, the maximum number of components was two at each iteration.
-The resulting clustering dendogram was cut at various depths to form
-flat clusterings. A flat clustering cut at depth $d$ contains the
-cluster assignments from all leaf nodes, each of which has a maximum
-depth of $d$. Those flat clusterings were evaluated in terms of ARI
-scores. In Figure [fig:synthetic]b, each cluster at each depth is
-denoted by a unique color, and each node in the dendrogram in Figure
-[fig:synthetic]c is colored by to its predicted cluster. The 800 data
-points were sorted in increasing order (since they lie on a line).
-`HGMM` perfectly classifies the data into two or four clusters at the
-depth of one or two, respectively (Figure [fig:synthetic]b). The 8
-Gaussian mixture components are not perfectly separable (as indicated by
-Figure [fig:synthetic]a), but the flat clustering cut at depth three or
-four still achieves a relatively high ARI computed against the
-classification of eight clusters (Figure [fig:synthetic]b).
-
-A total of 50 sets of synthetic hierarchical data were generated and
-clustered by `HGMM` in the same way as above. Each of the 50 dendrograms
-was cut at all possible depths resulting in a set of flat clusterings.
-At the depth one, the clusterings of all 50 datasets were perfect
-(Figure [fig:synthetic]c). Similarly, all flat clusterings cut at the
-depth two perfectly reveal the middle-level partition of the data
-(Figure [fig:synthetic]c). Most dendrograms were not terminated at depth
-three as in the true dendrogram (Figure [fig:synthetic]c), while most
-leaf clusterings resemble closely the finest classification into eight
+mixture at the coarsest level (Figure \[fig:synthetic\]a). `HGMM` was
+applied to the synthetic data described above; in this experiment, the
+maximum number of components was two at each iteration. The resulting
+clustering dendogram was cut at various depths to form flat clusterings.
+A flat clustering cut at depth $d$ contains the cluster assignments from
+all leaf nodes, each of which has a maximum depth of $d$. Those flat
+clusterings were evaluated in terms of ARI scores. In Figure
+\[fig:synthetic\]b, each cluster at each depth is denoted by a unique
+color, and each node in the dendrogram in Figure \[fig:synthetic\]c is
+colored by to its predicted cluster. The 800 data points were sorted in
+increasing order (since they lie on a line). `HGMM` perfectly classifies
+the data into two or four clusters at the depth of one or two,
+respectively (Figure \[fig:synthetic\]b). The 8 Gaussian mixture
+components are not perfectly separable (as indicated by Figure
+\[fig:synthetic\]a), but the flat clustering cut at depth three or four
+still achieves a relatively high ARI computed against the classification
+of eight clusters (Figure \[fig:synthetic\]b). A total of 50 sets of
+synthetic hierarchical data were generated and clustered by `HGMM` in
+the same way as above. Each of the 50 dendrograms was cut at all
+possible depths resulting in a set of flat clusterings. At the depth
+one, the clusterings of all 50 datasets were perfect (Figure
+\[fig:synthetic\]c). Similarly, all flat clusterings cut at the depth
+two perfectly reveal the middle-level partition of the data (Figure
+\[fig:synthetic\]c). Most dendrograms were not terminated at depth three
+as in the true dendrogram (Figure \[fig:synthetic\]c), while most leaf
+clusterings resemble closely the finest classification into eight
 clusters suggested by an ARI of approximately $0.9$ (Figure
-[fig:synthetic]c). Moreover, the number of clusters in most leaf
-clusterings is approximately 10 (Figure [fig:synthetic]d).
+\[fig:synthetic\]c). Moreover, the number of clusters in most leaf
+clusterings is approximately 10 (Figure \[fig:synthetic\]d).
 
 ![Clustering performance of `HGMM` on synthetic hierarchical data.
 **(a)** Distribution of hierarchical simulation data (average over 100
@@ -642,7 +649,7 @@ the maximum depth of the resulting clustering. **(d)** The number of
 clusters in the leaf clustering was computed for each of 50 trials. The
 red dotted line indicates the true number of clusters. Most leaf
 clusterings have a similar number of clusters as the
-truth.](images/HGMM_synthetic.png "fig:") [fig:synthetic]
+truth.[]{data-label="fig:synthetic"}](images/HGMM_synthetic.png){width="\textwidth"}
 
 ### `HGMM` on Real Data
 
@@ -654,9 +661,9 @@ the connectome, we implemented `HGMM` with a maximum of six components
 first six dimensions of the adjacency spectral embedding, and plotted
 the dendrogram up to depth two. Notice that the depth-one clustering of
 the right hemisphere by `HGMM` is the same as the estimation from
-`AutoGMM` reported before (Figure [fig:drosophila~c~luster]b).
+`AutoGMM` reported before (Figure \[fig:drosophila\_cluster\]b).
 Recursively clustering at depth two results in fewer clusters of mixed
-neuron types on both hemispheres (Figure [fig:double~d~endrograms]).
+neuron types on both hemispheres (Figure \[fig:double\_dendrograms\]).
 This suggests that `HGMM` could be useful for revealing neuron types and
 subtypes on finer scales, paving way towards a better understanding of
 how various scales of structural domains relate to activities.
@@ -670,8 +677,8 @@ neurons (MBIN) or output neurons (MBON), Kenyon cells (KC) were colored
 based on three subclasses, young (KC(y)), multi-claw (KC(m)), and
 single-claw (KC(s)). Clusters at depth one mostly contain neurons from
 the same major class while most leaf clusters contain neurons from the
-same subclass.](images/maggot_dendrograms.png "fig:")
-[fig:double~d~endrograms]
+same
+subclass.[]{data-label="fig:double_dendrograms"}](images/maggot_dendrograms.png){width="\textwidth"}
 
 Discussion
 ==========
@@ -686,31 +693,32 @@ Gaussian mixtures whose likelihoods diverge, or have singleton clusters.
 
 `AutoGMM` was compared to `mclust`, a state of the art clustering
 package in R, and achieved similar BIC and ARI values on three datasets.
-Results from the synthetic Gaussian mixture (Table [tab:model], Figure
-[fig:synthetic~c~luster]) highlight the intuition behind `AutoGMM`’s
+Results from the synthetic Gaussian mixture (Table \[tab:model\], Figure
+\[fig:synthetic\_cluster\]) highlight the intuition behind `AutoGMM`’s
 regularization scheme. `GraSPyclust` did not perform well on the
 synthetic data, because it erroneously subdivided the 3 cluster data
 into 10 clusters. `AutoGMM` avoids this problem because its
 regularization does not allow singleton clusters. In all fairness,
 `GraSPyclust`’s performance on subsets of the synthetic data (Figure
-[fig:subset]) is much better than its performance on the complete data.
-However, its random initialization leaves it more susceptible to
+\[fig:subset\]) is much better than its performance on the complete
+data. However, its random initialization leaves it more susceptible to
 inconsistent results.
 
-Figure [fig:subset], shows that on our datasets, `mclust` is the fastest
-algorithm. However, computational complexity of all algorithms is linear
-with respect to the number of data points, and this is empirically
-validated by Figure [fig:runtimes]. Thus, `mclust` is faster by only a
-constant factor. Several features of the `mclust` algorithm contribute
-to this factor. One is that much of the computation in `mclust` is
-written in Fortran, a compiled programming language. `AutoGMM` and
-`GraSPyclust`, on the other hand, are written exclusively in Python, an
-interpreted programming language. Compiled programming languages are
-typically faster than interpreted ones. Another is that `mclust`
-evaluates fewer clustering methods (14) than `AutoGMM` (44). Indeed,
-using `AutoGMM` trades runtime for a larger space of GMMs. However, when
-users have an intuition into the structure of the data, they can
-restrict the modeling options and make the algorithm run faster.
+Figure \[fig:subset\], shows that on our datasets, `mclust` is the
+fastest algorithm. However, computational complexity of all algorithms
+is linear with respect to the number of data points, and this is
+empirically validated by Figure \[fig:runtimes\]. Thus, `mclust` is
+faster by only a constant factor. Several features of the `mclust`
+algorithm contribute to this factor. One is that much of the computation
+in `mclust` is written in Fortran, a compiled programming language.
+`AutoGMM` and `GraSPyclust`, on the other hand, are written exclusively
+in Python, an interpreted programming language. Compiled programming
+languages are typically faster than interpreted ones. Another is that
+`mclust` evaluates fewer clustering methods (14) than `AutoGMM` (44).
+Indeed, using `AutoGMM` trades runtime for a larger space of GMMs.
+However, when users have an intuition into the structure of the data,
+they can restrict the modeling options and make the algorithm run
+faster.
 
 One opportunity to speed up the runtime of `AutoGMM` would involve a
 more principled approach to selecting the regularization factor.
