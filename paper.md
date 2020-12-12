@@ -24,24 +24,24 @@ date: 12 December 2020
 bibliography: refs.bib
 
 ---
-abstract: |
-    Gaussian mixture modeling is a fundamental tool in clustering, as well
-    as discriminant analysis and semiparametric density estimation. However,
-    estimating the optimal model for any given number of components is an
-    NP-hard problem, and estimating the number of components is in some
-    respects an even harder problem. In R, a popular package called `mclust`
-    addresses both of these problems. However, Python has lacked such a
-    package. We therefore introduce `AutoGMM`, a Python algorithm for
-    automatic Gaussian mixture modeling, and its hierarchical version,
-    `HGMM`. `AutoGMM` builds upon `scikit-learn`’s `AgglomerativeClustering`
-    and `GaussianMixture` classes, with certain modifications to make the
-    results more stable. Empirically, on several different applications,
-    `AutoGMM` performs approximately as well as `mclust`, and sometimes
-    better. This package is freely available, and further shrinks the gap
-    between functionality of R and Python for data science.
-bibliography:
-- 'refs.bib'
----
+
+# Summary
+
+Gaussian mixture modeling is a fundamental tool in clustering, as well
+as discriminant analysis and semiparametric density estimation. However,
+estimating the optimal model for any given number of components is an
+NP-hard problem, and estimating the number of components is in some
+respects an even harder problem. In R, a popular package called `mclust`
+addresses both of these problems. However, Python has lacked such a
+package. We therefore introduce `AutoGMM`, a Python algorithm for
+automatic Gaussian mixture modeling, and its hierarchical version,
+`HGMM`. `AutoGMM` builds upon `scikit-learn`’s `AgglomerativeClustering`
+and `GaussianMixture` classes, with certain modifications to make the
+results more stable. Empirically, on several different applications,
+`AutoGMM` performs approximately as well as `mclust`, and sometimes
+better. This package is freely available, and further shrinks the gap
+between functionality of R and Python for data science.
+
 
 Introduction
 ============
