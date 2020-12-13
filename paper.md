@@ -11,6 +11,7 @@ authors:
     orcid: 0000-0002-8987-3486
     affiliation: 1
   - name: Benjamin D. Pedigo
+    orcid: 0000-0002-9519-1190
     affiliation: 1
   - name: Tingshan Liu
     orcid: 0000-0003-0232-2495
@@ -139,7 +140,7 @@ clusters. The k-means algorithm is usually fast, since the computational
 complexity of performing a fixed number iterations is $O(n)$
 [@cluster_review]. K-means itself needs to be initialized, and k-means++
 is a principled choice, since it bounds the k-means cost function
-[@kmeans++]. Since there is randomness in k-means++, running this
+[@kmeans]. Since there is randomness in k-means++, running this
 algorithm on the same dataset may result in different clusterings.
 `graspologic`, a Python package for graph statistics, performs EM
 initialization this way in its `GaussianCluster` class.
@@ -168,10 +169,10 @@ them can be found in @everitt.
 
 The computational complexity of agglomerative clustering can be
 prohibitive in large datasets [@xu]. Naively, agglomerative clustering
-has computational complexity of $\mc{O}(n^3)$. However, algorithmic
+has computational complexity of $O(n^3)$. However, algorithmic
 improvements have improved this upper bound @hclust_eff. @scikit-learn
 uses minimum spanning tree and nearest neighbor chain methods to achieve
-$\mc{O}(n^2)$ complexity. Efforts to make faster agglomerative methods
+$O(n^2)$ complexity. Efforts to make faster agglomerative methods
 involve novel data structures [@birch], and cluster summary statistics
 [@cure], which approximate standard agglomeration methods. The algorithm
 in @mclust5 caps the number of data points on which it performs
@@ -191,12 +192,16 @@ reduce overfitting, but can introduce unnecessary bias. `scikit-learn`’s
 `GaussianMixture` class implements four covariance constraints (see
 Table \[tab:constraints\]).
 
-   Constraint name   Equivalent model in `mclust`                            Description
-  ----------------- ------------------------------ ----------------------------------------------------------------
-        Full                     VVV                Covariances are unconstrained and can vary between components.
-        Tied                     EEE                   All components have the same, unconstrained, covariance.
-        Diag                     VVI                   Covariances are diagonal and can vary between components
-      Spherical                  VII                  Covariances are spherical and can vary between components
+  | Constraint name |  Equivalent model in `mclust` |            Description
+  |:-----------------:| :------------------------------:| :--------------------------------------------:
+  |      Full       |              VVV              |       Covariances are unconstrained<br>
+  |                 |                               |      and can vary between components.
+  |      Tied       |              EEE              |        All components have the same,<br>
+  |                 |                               |         unconstrained, covariance.
+  |      Diag       |              VVI              |         Covariances are diagonal<br>
+  |                 |                               |       and can vary between components
+  |    Spherical    |              VII              |          Covariances are spherical<br>
+  |                 |                               |        and can vary between components
 
 Automatic Model Selection
 -------------------------
@@ -412,37 +417,12 @@ in Table \[tab:algcomp\].
 The data described in Section \[sec:data\] has underlying labels so we
 choose ARI to evaluate the clustering algorithms.
 
-[c|c|c|c|c|c|c]{} Algorithm &
 
-  --------------------
-   \# Initializations
-        per GMM
-  --------------------
-
-& Initialization method &
-
-[@c@]{} \# GMM\
-constraints
-
-& BIC & AIC &
-
-[@c@]{}$O(n)$\
-complexity
-
-\
-AutoGMM & 11 &
-
-[@c@]{} Agglomeration with\
-L1/L2/cosine distances
-
-& 4 & & &\
-mclust & 1 &
-
-[@c@]{}Agglomeration with\
-likelihood-inspired distances
-
-& 14 & & &\
-GraSPyclust & 50 & K-means with k-means++ & 4 & & &\
+| Algorithm| #Initializations \ per GMM | Initialization method  | #GMM \ constraints | BIC AIC $O(n)$ complexity |
+|:-------------:|:-------------:|:-----------------:|:---------:|:------:|:-------:|:------:|
+| AutoGMM     | 11 | Agglomeration with \ L1/L2/cosine distances        | 4   | y $~$ y $~$ y   |
+| mclust      | 1  | Agglomeration with \ likelihood-inspired distances | 14  | y $~$ n $~$ y   |
+| GraSPyclust | 50 | K-means with k-means++                              | 4  | y $~$ n $~$ n   |
 
 Statistical Comparison
 ----------------------
@@ -490,29 +470,31 @@ classification arises from the subdivision of the Kenyon cell type into
 multiple subgroups (Figure \[fig:drosophila\_cluster\]). The authors of
 @drosophila, who used `mclust`, also note this result.
 
-  --------------- ------------------ ----------- -------- ------------- --------- -- -- --
-                                                                                        
-      Dataset          AutoGMM         AutoGMM    mclust   GraSPyclust   AutoGMM        
-     Synthetic         L2, Ward       Spherical    EII      Spherical       0           
-   Breast Cancer         None         Diagonal     VVI      Diagonal        0           
-    Drosophila     Cosine, Complete     Full       VVV        Full          0           
-  --------------- ------------------ ----------- -------- ------------- --------- -- -- --
+| Dataset  | Agglomeration \ AutoGMM | Covariance Constraint \ AutoGMM mclust  GraSPyclust | Regularization \ AutoGMM |
+|:-------------:|:----------------:|:--------------------:|:--------------:|
+|   Synthetic   |     L2, Ward     | Spherical $~~$   EII  $~~$  Spherical  |        0       |
+| Breast Cancer |       None       |  Diagonal $~~$  VVI   $~~$  Diagonal  |        0       |
+|   Drosophila  | Cosine, Complete |    Full   $~~$  VVV   $~~$   Full    |        0       |
 
-  --------------- --------- -------- ------------- -- -- --
-                                                         
-      Dataset      AutoGMM   mclust   GraSPyclust        
-     Synthetic        3        3          10             
-   Breast Cancer      4        3           4             
-    Drosophila        6        7           7             
-  --------------- --------- -------- ------------- -- -- --
 
-  --------------- --------- -------- ------------- --------- -------- -------------
-                                                                      
-      Dataset      AutoGMM   mclust   GraSPyclust   AutoGMM   mclust   GraSPyclust
-     Synthetic      -1120    -1111       -1100         1        1         0.64
-   Breast Cancer    -8976    -8970       -8974       0.56      0.57       0.54
-    Drosophila      4608      4430       3299         0.5      0.57       0.55
-  --------------- --------- -------- ------------- --------- -------- -------------
+| Dataset  | Number of Cluster 
+ AutoGMM $~~$ mclust $~~$ GraSPyclust |
+|:-------------:|:----------------:|                               
+  Dataset    |  AutoGMM  $~~~$ mclust  $~~~$ GraSPyclust        
+  Synthetic   |     3    $~~~~~$    3     $~~~~~$     10             
+Breast Cancer   |   4    $~~~~~$  3    $~~~~~$       4             
+Drosophila   |     6    $~~~~~$    7     $~~~~~$      7             
+
+
+| Dataset  | BIC 
+AutoGMM $~~$ mclust $~~$ GraSPyclust | AIC 
+AutoGMM $~~$ mclust $~~$ GraSPyclust |
+|:-------------:|:----------------:|:----------------:|
+  Dataset    |  AutoGMM  $~~$ mclust  $~~$ GraSPyclust  | AutoGMM  $~~$ mclust $~~$  GraSPyclust
+  Synthetic   |   -1120  $~~$  -1111   $~~$    -1100    |    1   $~~$     1     $~~$    0.64
+Breast Cancer  |  -8976  $~~$  -8970   $~~$    -8974    |  0.56   $~~$   0.57   $~~$    0.54
+Drosophila    |  4608    $~~$  4430    $~~$   3299    |    0.5   $~~$   0.57    $~~$   0.55
+
 
 ![Clustering results of different algorithms on the synthetic dataset
 (Section \[synthetic\]). **(b-c)** `AutoGMM` and `mclust` correctly
