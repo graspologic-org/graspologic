@@ -49,10 +49,10 @@ class VNviaSGM(BaseEstimator):
 
     Attributes
     ----------
-    n_seeds: int
+    n_seeds_: int
         Number of seeds passed in `seedsA` that occured in the induced subgraph about `voi`
 
-    nomination_list: 2d-array
+    nomination_list_: 2d-array
         An array containing vertex nominations in the form nomination list = [[j, p_val],...]
         where p_val is the probability that the voi matches to node j in graph B (sorted by
         descending probability)
@@ -207,18 +207,18 @@ class VNviaSGM(BaseEstimator):
                     voi, seedsA
                 )
             )
-            self.n_seeds = None
-            self.nomination_list = None
+            self.n_seeds_ = None
+            self.nomination_list_ = None
             return self
 
         # Generate the two induced subgraphs that will be used by the matching
         # algorithm using the seeds that we identified in the previous step.
         verts_A = _get_induced_subgraph_list(
-            AA, self.order_seeds_subgraph, list(close_seeds), mindist=0
+            AA, self.order_seeds_subgraph, close_seeds, mindist=0
         )
 
         verts_B = _get_induced_subgraph_list(
-            BB, self.order_seeds_subgraph, list(close_seeds), mindist=0
+            BB, self.order_seeds_subgraph, close_seeds, mindist=0
         )
 
         # Determine the final reordering for the graphs that include only
@@ -239,8 +239,8 @@ class VNviaSGM(BaseEstimator):
         # Record the number of seeds used because this may differ from the number
         # of seeds passed. See the step where close_seeds was computed for an
         # explanation
-        seeds_fin = np.arange(len(close_seeds))
-        self.n_seeds = len(close_seeds)
+        self.n_seeds_ = len(close_seeds)
+        seeds_fin = np.arange(self.n_seeds_)
 
         # Call the SGM algorithm using user set parametrs and generate a prob
         # vector for the voi.
@@ -248,15 +248,11 @@ class VNviaSGM(BaseEstimator):
             **self.graph_match_kws,
         )
 
-        prob_vector = (
-            np.zeros((AA_fin.shape[0] - self.n_seeds,))
-            if AA_fin.shape[0] > BB_fin.shape[0]
-            else np.zeros((BB_fin.shape[0] - self.n_seeds,))
-        )
+        prob_vector = np.zeros((max(AA_fin.shape[0], BB_fin.shape[0]) - self.n_seeds_))
 
         for ii in range(self.n_init):
-            sgm.fit_predict(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
-            prob_vector[sgm.perm_inds_[self.n_seeds] - self.n_seeds] += 1.0
+            sgm.fit(AA_fin, BB_fin, seeds_A=seeds_fin, seeds_B=seeds_fin)
+            prob_vector[sgm.perm_inds_[self.n_seeds_] - self.n_seeds_] += 1.0
 
         prob_vector /= self.n_init
 
@@ -266,13 +262,13 @@ class VNviaSGM(BaseEstimator):
         # Generate the nomination list. Note, the probability matrix does not
         # include the seeds, so we must remove them from b_inds. Return a list
         # sorted so it returns the vertex with the highest probability first.
-        nomination_list = list(zip(b_inds[self.n_seeds :], prob_vector))
-        nomination_list.sort(key=lambda x: x[1], reverse=True)
+        nomination_list_ = list(zip(b_inds[self.n_seeds_ :], prob_vector))
+        nomination_list_.sort(key=lambda x: x[1], reverse=True)
 
-        if self.max_noms is not None and self.max_noms < len(nomination_list):
-            nomination_list = nomination_list[0 : self.max_noms]
+        if self.max_noms is not None and self.max_noms < len(nomination_list_):
+            nomination_list_ = nomination_list_[0 : self.max_noms]
 
-        self.nomination_list = np.array(nomination_list)
+        self.nomination_list_ = np.array(nomination_list_)
 
         return self
 
@@ -301,12 +297,12 @@ class VNviaSGM(BaseEstimator):
 
         Returns
         -------
-        nomination_list : 2d-array
+        nomination_list_ : 2d-array
             The nomination list.
         """
         self.fit(A, B, voi, seeds)
 
-        return self.nomination_list
+        return self.nomination_list_
 
 
 def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
@@ -379,7 +375,7 @@ def _get_induced_subgraph_list(graph_adj_matrix, order, node, mindist=1):
     induced_subgraph : list
         The list containing all the vertices in the induced subgraph.
     """
-    if type(node) == list:
+    if isinstance(node, list) or isinstance(node, np.ndarray):
         total_res = []
         for nn in node:
             ego_res = _get_induced_subgraph(
