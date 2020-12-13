@@ -443,8 +443,8 @@ Results {#sec:results}
 
 Table 3 shows the models that were chosen by each clustering
 algorithm on the complete datasets, and the corresponding BIC and ARI
-values. The actual clusterings are shown in \autoref{fig:synthetic_cluster}
--\autoref{fig:drosophila_cluster}. In the synthetic
+values. The actual clusterings are shown in \autoref{fig:synthetic_cluster}-\autoref{fig:drosophila_cluster}. 
+In the synthetic
 dataset, all three methods chose a spherical covariance constraint,
 which was the correct underlying covariance structure. The `GraSPyclust`
 algorithm, however, failed on this dataset, partitioning the data into
