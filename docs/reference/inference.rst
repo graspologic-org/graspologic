@@ -1,11 +1,11 @@
 Inference
 =========
 
-.. currentmodule:: graspy.inference
+.. currentmodule:: graspologic.inference
 
 Two-graph hypothesis testing
 ----------------------------
 
-.. autoclass:: LatentPositionTest
+.. autofunction:: latent_position_test
 
-.. autoclass:: LatentDistributionTest
+.. autofunction:: latent_distribution_test

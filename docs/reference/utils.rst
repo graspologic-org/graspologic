@@ -1,7 +1,7 @@
 Utility
 =======
 
-.. currentmodule:: graspy.utils
+.. currentmodule:: graspologic.utils
 
 Transformations
 ---------------
@@ -25,7 +25,7 @@ Connected Components
 
 .. autofunction:: get_multigraph_union_lcc
 
-.. autofumction:: get_multigraph_intersect_lcc
+.. autofunction:: get_multigraph_intersect_lcc
 
 IO
 --
@@ -34,5 +34,9 @@ IO
 
 .. autofunction:: import_edgelist
 
+Other
+-----
 
+.. autofunction:: remap_labels
 
+.. autofunction:: to_weighted_edge_list

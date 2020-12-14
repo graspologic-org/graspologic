@@ -1,0 +1,16 @@
+# graspologic package
+# /graspologic/align @alyakin314 @bdpedigo
+# /graspologic/cluster @bdpedigo @j1c
+# /graspologic/datasets @bdpedigo
+# /graspologic/embed @j1c @bdpedigo
+# /graspologic/inference @alyakin314 @bdpedigo
+# /graspologic/match @asaadeldin11 @bdpedigo
+# /graspologic/models @bdpedigo @j1c
+# /graspologic/pipeline @j1c @bdpedigo
+# /graspologic/plot @j1c @bdpedigo
+# /graspologic/subgraph @j1c
+# /graspologic/utils/ @j1c @bdpedigo
+
+# tutorials
+
+# tests

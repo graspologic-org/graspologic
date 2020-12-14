@@ -1,15 +1,18 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose
-from graspy.models import (
+from graspologic.models import (
     EREstimator,
     DCSBMEstimator,
     SBMEstimator,
     RDPGEstimator,
     DCEREstimator,
 )
-from graspy.simulations import er_np, sbm, sample_edges
-from graspy.utils import cartprod, is_symmetric
+from graspologic.simulations import er_np, sbm, sample_edges
+from graspologic.utils import cartprod, is_symmetric
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
 
@@ -529,11 +532,11 @@ def _n_to_labels(n):
 
 def _block_to_full(block_mat, inverse, shape):
     """
-    "blows up" a k x k matrix, where k is the number of communities, 
+    "blows up" a k x k matrix, where k is the number of communities,
     into a full n x n probability matrix
 
-    block mat : k x k 
-    inverse : array like length n, 
+    block mat : k x k
+    inverse : array like length n,
     """
     block_map = cartprod(inverse, inverse).T
     mat_by_edge = block_mat[block_map[0], block_map[1]]

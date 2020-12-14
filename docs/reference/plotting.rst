@@ -2,7 +2,7 @@
 Plotting
 ********
 
-.. currentmodule:: graspy.plot
+.. currentmodule:: graspologic.plot
 
 Heatmap
 -------
@@ -15,6 +15,7 @@ Gridplot
 Pairplot
 --------
 .. autofunction:: pairplot
+.. autofunction:: pairplot_with_gmm
 
 Degreeplot
 ----------

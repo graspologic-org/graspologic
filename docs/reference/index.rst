@@ -14,5 +14,8 @@ Reference
    plotting
    datasets
    utils
-   pipeline
    match
+   subgraph
+   align
+   preprocessing
+   partition

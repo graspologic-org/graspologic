@@ -1,11 +1,14 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import pytest
 import numpy as np
 from numpy.testing import assert_allclose, assert_equal
 from sklearn.exceptions import NotFittedError
 
-from graspy.cluster.autogmm import AutoGMMCluster
-from graspy.embed.ase import AdjacencySpectralEmbed
-from graspy.simulations.simulations import sbm
+from graspologic.cluster.autogmm import AutoGMMCluster
+from graspologic.embed.ase import AdjacencySpectralEmbed
+from graspologic.simulations.simulations import sbm
 
 
 def test_inputs():
@@ -34,7 +37,7 @@ def test_inputs():
 
     # affinity is not in ['euclidean', 'manhattan', 'cosine', 'none']
     with pytest.raises(ValueError):
-        AutoGMM = AutoGMMCluster(min_components=1, affinity="graspy")
+        AutoGMM = AutoGMMCluster(min_components=1, affinity="graspologic")
 
     # linkage is not an array, string or list
     with pytest.raises(TypeError):
@@ -42,7 +45,7 @@ def test_inputs():
 
     # linkage is not in ['single', 'average', 'complete', 'ward']
     with pytest.raises(ValueError):
-        AutoGMM = AutoGMMCluster(min_components=1, linkage="graspy")
+        AutoGMM = AutoGMMCluster(min_components=1, linkage="graspologic")
 
     # euclidean is not an affinity option when ward is a linkage option
     with pytest.raises(ValueError):
@@ -54,7 +57,7 @@ def test_inputs():
 
     # covariance type is not in ['spherical', 'diag', 'tied', 'full']
     with pytest.raises(ValueError):
-        AutoGMM = AutoGMMCluster(min_components=1, covariance_type="graspy")
+        AutoGMM = AutoGMMCluster(min_components=1, covariance_type="graspologic")
 
     # min_cluster > n_samples when max_cluster is None
     with pytest.raises(ValueError):
