@@ -52,7 +52,7 @@ class SpectralVertexNomination(BaseVN):
         along axis 0 of `attribute_labels_`).
     distance_matrix_ : np.ndarray
         The euclidean distance from each seed vertex to each vertex. Shape is
-        ``(number_vertices, number_unique_attributes)`` if attributed or Shape is
+        ``(number_vertices, k)`` if attributed or shape is
         ``(number_vertices, number_seed_vertices)`` if unattributed.
 
     References
@@ -73,13 +73,13 @@ class SpectralVertexNomination(BaseVN):
         self, input_graph: bool = True, embedder: Union[str, BaseSpectralEmbed] = "ASE"
     ):
         super().__init__(multigraph=False)
-        self.embedder_ = embedder
-        self.input_graph_ = input_graph
+        self.embedder = embedder
+        self.input_graph = input_graph
+        self.neighbor_inds_ = None
         self.attribute_labels_ = None
         self.unique_attributes_ = None
         self.distance_matrix_ = None
         self.embedding_ = None
-        self.neigh_inds = None
 
     @staticmethod
     def _make_2d(arr: np.ndarray) -> np.ndarray:
@@ -92,7 +92,7 @@ class SpectralVertexNomination(BaseVN):
         return arr
 
     def _check_inputs(self, X: np.ndarray, y: np.ndarray, k: int):
-        if type(self.input_graph_) is not bool:
+        if type(self.input_graph) is not bool:
             raise TypeError("input_graph_ must be of type bool.")
         # check X
         if not isinstance(X, np.ndarray):
@@ -104,7 +104,7 @@ class SpectralVertexNomination(BaseVN):
                 )
             elif np.ndim(X) != 2:
                 raise IndexError("Adjacency matrix or embedding must have dim 2")
-            elif not self.input_graph_:
+            elif not self.input_graph:
                 # embedding was provided
                 if X.shape[1] > X.shape[0]:
                     raise IndexError(
@@ -127,9 +127,9 @@ class SpectralVertexNomination(BaseVN):
         elif k is not None and k <= 0:
             raise ValueError("k must be greater than 0")
 
-        if self.input_graph_:
-            if not isinstance(self.embedder_, BaseSpectralEmbed) and not isinstance(
-                self.embedder_, str
+        if self.input_graph:
+            if not isinstance(self.embedder, BaseSpectralEmbed) and not isinstance(
+                self.embedder, str
             ):
                 raise TypeError(
                     "embedder must be either of type str or BaseSpectralEmbed"
@@ -137,12 +137,12 @@ class SpectralVertexNomination(BaseVN):
 
     def _embed(self, X: np.ndarray):
         # Embed graph if embedding not provided
-        if self.input_graph_:
-            if isinstance(self.embedder_, BaseSpectralEmbed):
-                embedder = self.embedder_
-            elif self.embedder_ == "ASE":
+        if self.input_graph:
+            if isinstance(self.embedder, BaseSpectralEmbed):
+                embedder = self.embedder
+            elif self.embedder == "ASE":
                 embedder = ase()
-            elif self.embedder_ == "LSE":
+            elif self.embedder == "LSE":
                 embedder = lse()
             else:
                 raise ValueError(
@@ -211,7 +211,7 @@ class SpectralVertexNomination(BaseVN):
         )
         y_vec = self.embedding_[y[:, 0].astype(np.int)]
         nearest_neighbors.fit(y_vec)
-        self.distance_matrix_, self.neigh_inds = nearest_neighbors.kneighbors(
+        self.distance_matrix_, self.neighbor_inds_ = nearest_neighbors.kneighbors(
             self.embedding_, return_distance=True
         )
         return self
@@ -235,7 +235,7 @@ class SpectralVertexNomination(BaseVN):
                         The matrix of distances associated with each element of the
                         nomination list.
         """
-        k = self.neigh_inds.shape[1]
+        k = self.neighbor_inds_.shape[1]
         num_unique = self.unique_attributes_.shape[0]
 
         # nearest neighbors orders seed for each vertex, we want to order the vertices
@@ -247,7 +247,7 @@ class SpectralVertexNomination(BaseVN):
 
         # first we find the indexes of attributes separated across first m dimensions.
         nd_buffer = np.tile(
-            self.attribute_labels_[self.neigh_inds[:, :k]], (num_unique, 1, 1)
+            self.attribute_labels_[self.neighbor_inds_[:, :k]], (num_unique, 1, 1)
         ).astype(np.float64)
         inds = np.argwhere(
             nd_buffer == self.unique_attributes_[:, np.newaxis, np.newaxis]
