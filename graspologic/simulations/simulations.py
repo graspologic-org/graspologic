@@ -880,7 +880,7 @@ def mmsbm(
 
     To sample a binary MMSBM in which all nodes pertain to community two:
 
-    >>> alpha = [0.05, 100]
+    >>> alpha = [0.05, 1000]
     >>> mmsbm(n, p, alpha, rng = rng)
     array([[0., 1., 1., 1., 1., 1.],
            [1., 0., 1., 1., 1., 1.],
