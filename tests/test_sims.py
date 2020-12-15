@@ -901,35 +901,34 @@ class Test_MMSBM(unittest.TestCase):
     def test_ER_np(self):
         rng = np.random.default_rng(self.seed)
 
-        p = [[1, 0.4],
-             [0.4, 0.7]]
+        p = [[1, 0.4], [0.4, 0.7]]
 
         alpha = [1000, 0.05]
 
-        n = 100 
-        #Produce 1000 graphs with all nodes assigned to community 1, thus approximate
-        #1000 ER graphs with probability almost equal to 1.
+        n = 100
+        # Produce 1000 graphs with all nodes assigned to community 1, thus approximate
+        # 1000 ER graphs with probability almost equal to 1.
         graphs = []
 
         for i in range(1000):
             graphs.append(mmsbm(n, p, alpha, directed=True, loops=True, rng=rng))
-            graphs = np.stack(graphs)
+        graphs = np.stack(graphs)
 
-        #check that probability of these graphs is actually almost equal to that of the 
-        #first block which is 1.
+        # check that probability of these graphs is actually almost equal to that of the
+        # first block which is 1.
         self.assertAlmostEqual(np.mean(graphs), p[0][0], delta=0.001)
 
         alpha = [0.05, 1000]
-        #Produce 1000 graphs with all nodes assigned to community 2, thus approximate
-        #1000 ER graphs with probability almost equal to 0.7.
+        # Produce 1000 graphs with all nodes assigned to community 2, thus approximate
+        # 1000 ER graphs with probability almost equal to 0.7.
         graphs = []
 
         for i in range(1000):
             graphs.append(mmsbm(n, p, alpha, directed=True, loops=True, rng=rng))
-            graphs = np.stack(graphs)
+        graphs = np.stack(graphs)
 
-        #check that probability of these graphs is actually almost equal to that of the 
-        #second block which is 0.7.
+        # check that probability of these graphs is actually almost equal to that of the
+        # second block which is 0.7.
         self.assertAlmostEqual(np.mean(graphs), p[1][1], delta=0.001)
         pass
 
