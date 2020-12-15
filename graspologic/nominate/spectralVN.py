@@ -2,14 +2,14 @@
 # Licensed under the MIT License.
 
 from typing import Union, Tuple
-from .base import BaseVN
 from ..embed import BaseSpectralEmbed
 from ..embed import AdjacencySpectralEmbed as ase, LaplacianSpectralEmbed as lse
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
+from sklearn.base import BaseEstimator
 
 
-class SpectralVertexNomination(BaseVN):
+class SpectralVertexNomination(BaseEstimator):
     """
     Class for spectral vertex nomination on a single graph.
 
@@ -72,14 +72,9 @@ class SpectralVertexNomination(BaseVN):
     def __init__(
         self, input_graph: bool = True, embedder: Union[str, BaseSpectralEmbed] = "ASE"
     ):
-        super().__init__(multigraph=False)
+        super().__init__()
         self.embedder = embedder
         self.input_graph = input_graph
-        self.neighbor_inds_ = None
-        self.attribute_labels_ = None
-        self.unique_attributes_ = None
-        self.distance_matrix_ = None
-        self.embedding_ = None
 
     @staticmethod
     def _make_2d(arr: np.ndarray) -> np.ndarray:
@@ -97,23 +92,17 @@ class SpectralVertexNomination(BaseVN):
         # check X
         if not isinstance(X, np.ndarray):
             raise TypeError("X must be of type np.ndarray.")
-        if not self.multigraph:
-            if not np.issubdtype(X.dtype, np.number):
-                raise TypeError(
-                    "Adjacency matrix or embedding should have numeric type"
-                )
-            elif np.ndim(X) != 2:
-                raise IndexError("Adjacency matrix or embedding must have dim 2")
-            elif not self.input_graph:
-                # embedding was provided
-                if X.shape[1] > X.shape[0]:
-                    raise IndexError(
-                        "dim 1 of an embedding should be smaller than dim 0."
-                    )
-            elif X.shape[0] != X.shape[1]:
-                raise IndexError("Adjacency Matrix should be square.")
-        else:
-            raise NotImplementedError("Multigraph SVN not implemented")
+        if not np.issubdtype(X.dtype, np.number):
+            raise TypeError("Adjacency matrix or embedding should have numeric type")
+        elif np.ndim(X) != 2:
+            raise IndexError("Adjacency matrix or embedding must have dim 2")
+        elif not self.input_graph:
+            # embedding was provided
+            if X.shape[1] > X.shape[0]:
+                raise IndexError("dim 1 of an embedding should be smaller than dim 0.")
+        elif X.shape[0] != X.shape[1]:
+            raise IndexError("Adjacency Matrix should be square.")
+
         # check y
         if not isinstance(y, np.ndarray):
             raise TypeError("y must be of type np.ndarray")
