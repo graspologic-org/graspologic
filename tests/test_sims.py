@@ -907,7 +907,7 @@ class Test_MMSBM(unittest.TestCase):
         alpha = [1000, 0.05]
 
         n = 10
-        # Produce 1000 graphs in which the majority of nodes are very likely assigned to 
+        # Produce 1000 graphs in which the majority of nodes are very likely assigned to
         # community 1, thus approximate
         # 1000 ER graphs with probability almost equal to 1.
         graphs = []
@@ -921,7 +921,7 @@ class Test_MMSBM(unittest.TestCase):
         self.assertAlmostEqual(np.mean(graphs), p[0][0], delta=0.01)
 
         alpha = [0.05, 1000]
-        # Produce 1000 graphs in which the majority of nodes are very likely assigned to 
+        # Produce 1000 graphs in which the majority of nodes are very likely assigned to
         # community 2, thus approximate
         # 1000 ER graphs with probability almost equal to 0.7.
         graphs = []
