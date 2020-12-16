@@ -878,7 +878,7 @@ def mmsbm(
     >>> n = 6
     >>> p = [[0.5, 0], [0, 1]]
 
-    To sample a binary MMSBM in which all nodes pertain to community two:
+    To sample a binary MMSBM in which very likely all nodes pertain to community two:
 
     >>> alpha = [0.05, 1000]
     >>> mmsbm(n, p, alpha, rng = rng)
