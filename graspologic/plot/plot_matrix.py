@@ -519,63 +519,77 @@ def matrixplot(
     **kws,
 ):
     r"""
-    Sorts a matrix and plots it with ticks and colors on the borders
+    Sorts and plots a matrix in various ways, and with optional information added to the
+    margin of the matrix plot.
+
+    Read more in the :ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
-    data : np.ndarray, ndim=2
+    data : np.ndarray with ndim=2
         Matrix to plot
-    ax : matplotlib axes object, optional
-        Axes in which to draw the plot, by default None
-    plot_type : str, optional
-        One of "heatmap" or "scattermap", by default "heatmap"
-    {col, row}_meta : pd.DataFrame, pd.Series, list of pd.Series or np.array, optional
-        Metadata of the matrix such as class, cell type, etc., by default None
+    ax : matplotlib axes object (default=None)
+        Axes in which to draw the plot. If no axis is passed, one will be created.
+    plot_type : str in {"heatmap", "scattermap"} (default="heatmap")
+        "heatmap" will draw the matrix using :func:`seaborn.heatmap`, "scattermap" will
+        draw each nonzero element of the matrix using :func:`seaborn.scatterplot`.
+        "scattermap" is recommended for larger sparse matrices.
+    {row,col}_meta : pd.DataFrame or None, (default=None)
+        Metadata of the matrix.
 
-        - ``{col, row}_meta`` is pd.DataFrame
-            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
-            should only be str or list of str
-            They should contain references to columns in the metadata
-        - ``{col, row}_meta`` is None
-            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
-            should only be any array_like data structure
-            The array_like data structures will be assembled into one medadata pd.Dataframe
-    {col, row}_group : str, list of str, or array_like, optional
-        Attribute in meta to group the graph in the plot, by default None
-    {col, row}_group_order : str, list of str, or array_like, optional
-        Attribute of the sorting class to sort classes within the graph, by default "size"
-    {col, row}_item_order : str, list of str, or array_like, optional
-        Attribute in meta by which to sort elements within a class, by default None
-    {col, row}_color : str, list of str, or array_like, optional
-        Attribute in meta by which to draw colorbars, by default None
-    {col, row}_highlights : str, list of str, or array_like, optional
-        Attribute in meta by which to draw highlighted separateors, by default None
-    {col, row}_palette : str, dict, list of str or dict, optional
-        Colormap of the colorbar, by default "tab10"
-    {col, row}_ticks : bool, optional
-        Whether the plot has ticks, by default True
-    {col, row}_tick_pad : int, float, optional
-        Custom padding to use for the distance between tick axes, by default None
-    {col, row}_color_pad : int, float, optional
-        Custom padding to use for the distance between color axes, by default None
-    border : bool, optional
-        Whether the plot should have border, by default True
-    center : int, optional
-        The value at which to center the colormap when plotting divergant data., by default 0
-    cmap : str, optional
-        Colormap of the heatmap, by default "RdBu_r"
-    sizes : tuple, optional
-        Min and max sizes of dots, by default (5, 10)
-    square : bool, optional
-        Whether the plot should be square, by default False
-    gridline_kws : dict, optional
-        Plotting arguments for the separators, by default None
-    spinestyle_kws : dict, optional
-        Plotting arguments for the spine border, by default None
-    highlight_kws : dict, optional
-        Plotting arguments for the highlighted separators, by default None
-    **kwargs : dict, optional
-        Additional plotting arguments
+        - ``{row,col}_meta`` is pd.DataFrame
+            All sorting keywords (``group``, ``group_order``, ``item_order``, ``color``,
+             ``highlight``) should only be str or list of str.
+            They should contain references to columns in ``meta``.
+        - ``{row,col}_meta`` is None
+            All sorting keywords (``group``, ``group_order``, ``item_order``, ``color``,
+             ``highlight``) should only array-like with the same length as the
+            corresponding axis of ``data``.
+    {row,col}_group : str, list of str, or array-like, (default=None)
+        Attribute(s) by which to group rows/columns of ``data``. If multiple groups are 
+        specified, rows/columns will be sorted hierarchically (first by the first group),
+        then within that group by a possible second group, etc.). Behaves similarly to 
+        :func:`pandas.DataFrame.sort_values`.
+    {row,col}_group_order : str, list of str, or array-like, (default="size")
+        Attribute(s) by which to sort the groups if provided by ``{row,col}_group``.
+        Groups are sorted by the mean of this attribute in ascending order. "size" is a
+        special keyword which will sort groups by the number of elements per group.
+    {row,col}_item_order : str, list of str, or array-like (default=None)
+        Attribute(s) by which to sort the individual rows/columns within each group.
+    {row,col}_color : str, list of str, or array-like (default=None)
+        Attribute(s) to use for drawing colors on the borders of the matrix plot.
+    {row,col}_highlight : str, list of str, or array-like (default=None)
+        Attribute(s) in meta by which to draw highlighted separators between specific
+        groups, can be useful for emphasizing a particular region of the plot. Styling
+        of the highlighted separators can be specified via `spinestyle_kws`.
+    {row,col}_palette : str, dict, list of str or dict (default="tab10")
+        Colormap(s) of the color axes if specified by ``{row,col}_color``.
+    {row,col}_ticks : bool, optional (default=True)
+        Whether the plot has labels for the groups specified by ``{row,col}_group``.
+    {row,col}_tick_pad : int or float (default=None)
+        Custom padding to use for the distance between tick axes
+    {row,col}_color_pad : int or float (default=None)
+        Custom padding to use for the distance between color axes
+    border : bool (default=True)
+        Whether the plot should have a border.
+    center : int (default=0)
+        The value at which to center the colormap when plotting divergent data (only
+        used when ``plot_type="heatmap"``).
+    cmap : str (default="RdBu_r")
+        Colormap of the heatmap (only used when ``plot_type="heatmap"``).
+    sizes : tuple (default=(5, 10))
+        Min and max sizes of dots (only used when ``plot_type="scattermap"``).
+    square : bool (default=False)
+        Whether the plot should be square.
+    gridline_kws : dict (default=None)
+        Plotting arguments for the separators.
+    spinestyle_kws : dict (default=None)
+        Plotting arguments for the spine border.
+    highlight_kws : dict (default=None)
+        Plotting arguments for the highlighted separators.
+    **kwargs
+        Additional plotting arguments passed down to the plotting function which will
+        draw the matrix ``data``, see ``plot_type`` for more information.
 
     Returns
     -------
