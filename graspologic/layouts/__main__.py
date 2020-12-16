@@ -8,10 +8,10 @@ import networkx as nx
 
 from graspologic.layouts._helpers import ensure_directory_for_file
 
-from graspologic.layouts import (
-    layout_node2vec_umap_from_file,
-    layout_node2vec_tsne_from_file,
-)
+# from graspologic.layouts import (
+#     layout_node2vec_umap_from_file,
+#     layout_node2vec_tsne_from_file,
+# )
 
 logging.basicConfig(
     format="%(asctime)s:%(levelname)s:%(name)s, %(message)s", level=logging.INFO
