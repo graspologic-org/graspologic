@@ -110,6 +110,7 @@ def layout_node2vec_umap_from_file(
     image_file: Optional[str],
     location_file: Optional[str],
     dpi: int,
+    skip_header: bool = False,
     max_edges: int = 10000000,
 ):
     """
@@ -178,6 +179,7 @@ def layout_node2vec_tsne_from_file(
     image_file: Optional[str],
     location_file: Optional[str],
     dpi: int,
+    skip_header: bool = False,
     perplexity: int = 30,
     n_iters: int = 1000,
     max_edges: int = 10000000,

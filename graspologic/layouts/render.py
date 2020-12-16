@@ -15,11 +15,11 @@ def _calculate_x_y_domain(
     """
     min_x = min_y = float("inf")
     max_x = max_y = float("-inf")
-    for node_postion in positions:
-        min_x = min(min_x, node_postion.x - node_postion.size)
-        max_x = max(max_x, node_postion.x + node_postion.size)
-        min_y = min(min_y, node_postion.y - node_postion.size)
-        max_y = max(max_y, node_postion.y + node_postion.size)
+    for node_position in positions:
+        min_x = min(min_x, node_position.x - node_position.size)
+        max_x = max(max_x, node_position.x + node_position.size)
+        min_y = min(min_y, node_position.y - node_position.size)
+        max_y = max(max_y, node_position.y + node_position.size)
 
     x_delta = max_x - min_x
     y_delta = max_y - min_y
@@ -83,13 +83,14 @@ def _draw_graph(
 ):
     if len(positions) != len(graph.nodes()):
         raise ValueError(
-            f"The number of positions provided {len(positions)} is not the same as the number of nodes in the "
-            f"graph {len(graph.nodes())}"
+            f"The number of positions provided {len(positions)} is not the same as the "
+            f"number of nodes in the graph {len(graph.nodes())}"
         )
     for position in positions:
         if position.node_id not in graph:
             raise ValueError(
-                f"The node position provided for {position.node_id} references a node not found in our graph"
+                f"The node position provided for {position.node_id} references a node "
+                f"not found in our graph"
             )
 
     plt.rcParams["figure.dpi"] = dpi  # TODO, test at different dpi

@@ -5,10 +5,10 @@ import math
 from collections import defaultdict
 
 
-class grid_buckets:
+class _GridBuckets:
     """
-    One thing to note, that right now this grid must have cells the same size or bigger than the radius of the
-    largest node in the graph.
+    One thing to note, that right now this grid must have cells the same size or bigger
+    than the radius of the largest node in the graph.
     """
 
     def __init__(self, cell_size):
@@ -168,7 +168,8 @@ class grid_buckets:
 
     def print_stats(self):
         print(
-            f"cell size: {self.cell_size}, area: {self.cell_size*self.cell_size}, rows: {self._get_y_cells()}, cols: {self._get_x_cells()}"
+            f"cell size: {self.cell_size}, area: {self.cell_size*self.cell_size}, "
+            f"rows: {self._get_y_cells()}, cols: {self._get_x_cells()}"
         )
         return None
 

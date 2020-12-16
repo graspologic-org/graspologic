@@ -14,11 +14,17 @@ from pathlib import Path
 import pkg_resources
 from sklearn.preprocessing import minmax_scale
 import time
-from typing import Any, Callable, Tuple, Union, Generator, Set, List
-
+from typing import Any, Callable, Generator, Set
 
 import graspologic
 from graspologic.layouts import NodePosition
+
+# from graspologic.layouts.nooverlap._spatial import (
+#     _find_min_max_degree,
+#     _compute_sizes,
+#     _covered_size,
+#     _scale_points,
+# )
 from graspologic.preprocessing import cut_edges_by_weight, histogram_edge_weight
 
 logger = logging.getLogger(__name__)
@@ -236,127 +242,6 @@ def cut_edges_if_needed(graph, max_edges_to_keep=1000000):
     logger.info(f"num edges in lcc: {len_lcc}")
     logger.info(f"num nodes in lcc: {len(lcc.nodes())}")
     return lcc
-
-
-def _find_min_max_degree(degrees):
-    min_degree = math.inf
-    max_degree = -math.inf
-    for i, d in degrees:
-        min_degree = min(min_degree, d)
-        max_degree = max(max_degree, d)
-    return min_degree, max_degree
-
-
-def _compute_sizes(degrees, min_degree, max_degree, min_size=5.0, max_size=150.0):
-    sizes = {}
-    for i, d in degrees:
-        if max_degree == min_degree:
-            size = min_size
-        else:
-            normalized = (d - min_degree) / (max_degree - min_degree)
-            size = normalized * (max_size - min_size) + min_size
-        sizes[i] = size
-    return sizes
-
-
-def _covered_size(sizes):
-    total = 0.0
-    for k, v in sizes.items():
-        total += v * v * math.pi
-    return total
-
-
-def _get_bounds(points):
-    minx, miny, maxx, maxy = math.inf, math.inf, -math.inf, -math.inf
-    for x, y in points:
-        minx = min(x, minx)
-        miny = min(y, miny)
-        maxx = max(x, maxx)
-        maxy = max(y, maxy)
-    return minx, miny, maxx, maxy
-
-
-def _center_points_on_origin(points):
-    minx, miny, maxx, maxy = _get_bounds(points)
-    # print (minx, miny, maxx, maxy)
-    x_range = maxx - minx
-    y_range = maxy - miny
-    center_x = x_range / 2 + minx
-    center_y = y_range / 2 + miny
-    moved_points = []
-    for x, y in points:
-        moved_points.append([x - center_x, y - center_y])
-
-    minx, miny, maxx, maxy = (
-        minx - center_x,
-        miny - center_y,
-        maxx - center_x,
-        maxy - center_y,
-    )
-    # print (minx, miny, maxx, maxy)
-    return moved_points
-
-
-def _scale_to_unit_square(points):
-    minx, miny, maxx, maxy = _get_bounds(points)
-    scaled_points = []
-    for x, y in points:
-        scaled_points.append([x / maxx, y / maxy])
-    return scaled_points
-
-
-def _scale_to_new_bounds(points, minx, miny, maxx, maxy):
-    # x_range = maxx - minx
-    # y_range = maxy - miny
-    scaled = []
-    for x, y in points:
-        scaled.append([x * maxx, y * maxy])
-    return scaled
-
-
-def _new_bounds(minx, miny, maxx, maxy, covered_area, target_ratio):
-    range_x = maxx - minx
-    mid_x = minx + range_x / 2
-    range_y = maxy - miny
-    mid_y = miny + range_y / 2
-    range_ratio = range_x / range_y
-    # current_ratio = covered_area/area
-    area = range_x * range_y
-    new_area = covered_area / target_ratio
-    new_range_y = math.sqrt(new_area / range_ratio)
-    new_range_x = new_area / new_range_y
-    new_minx, new_miny, new_maxx, new_maxy = (
-        mid_x - new_range_x / 2,
-        mid_y - new_range_y / 2,
-        mid_x + new_range_x / 2,
-        mid_y + new_range_y / 2,
-    )
-    # print (minx, miny, maxx, maxy)
-    # print (new_minx, new_miny, new_maxx, new_maxy)
-
-    return new_minx, new_miny, new_maxx, new_maxy
-
-
-## through lots of experiments we have found 14% to be a good ratio
-## of color to whitespace
-def _scale_points(points, covered_area, target_ratio=0.14):
-    moved_points = _center_points_on_origin(points)
-    minx, miny, maxx, maxy = _get_bounds(moved_points)
-    # print ("centered bounds", minx, miny, maxx, maxy)
-    new_minx, new_miny, new_maxx, new_maxy = _new_bounds(
-        minx, miny, maxx, maxy, covered_area, target_ratio=target_ratio
-    )
-    # print ("new bounds", new_minx, new_miny, new_maxx, new_maxy)
-    scaled_points = _scale_to_unit_square(moved_points)
-    minx, miny, maxx, maxy = _get_bounds(scaled_points)
-    # print ("unit square", minx, miny, maxx, maxy)
-    final_locs = _scale_to_new_bounds(
-        scaled_points, new_minx, new_miny, new_maxx, new_maxy
-    )
-    # minx, miny, maxx, maxy = _get_bounds(final_locs)
-    # print ("final locs", minx, miny, maxx, maxy)
-
-    return final_locs
 
 
 def create_node2vec_embedding(graph: networkx.Graph):

@@ -1,21 +1,15 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+import math
+import logging
 from sklearn.preprocessing import normalize
 import numpy as np
-import math
-import csv
+
 from scipy.spatial import distance
-import logging
-import time
-from typing import List, Optional
 
-from graspologic.layouts.nooverlap.grid import grid_buckets
-from graspologic.layouts import NodePosition
-
+_EPSILON = 0.001
 logger = logging.getLogger(__name__)
-
-epsilon = 0.001
 
 
 def is_overlap(x1, y1, s1, x2, y2, s2):
@@ -72,8 +66,6 @@ def stats_nodes(nodes):
         min_x = min(gnode.x, min_x)
         min_y = min(gnode.y, min_y)
         max_size = max(gnode.size, max_size)
-
-    # print ("len: %d, (%g, %g), (%g, %g)" %(len(graph), min_x, min_y, max_x, max_y))
     return min_x, min_y, max_x, max_y, max_size
 
 
@@ -114,32 +106,7 @@ def find_center(nodes):
     return x, y, max_size
 
 
-class node:
-    def __init__(self, nid, x, y, size, community=9999999, color=""):
-        self.nid = nid
-        self.x = float(x)
-        self.y = float(y)
-        self.original_x = self.x
-        self.original_y = self.y
-        self.size = float(size)
-        self.community = community
-        self.color = color
-
-    def to_list(self):
-        return [self.nid, self.x, self.y, self.size, self.community, self.color]
-
-    def reset_original_position(self, newx, newy):
-        self.original_x = self.x = newx
-        self.original_y = self.y = newy
-
-    def __eq__(self, other):
-        return self.nid == other.nid
-
-    def __hash__(self):
-        return hash(self.nid)
-
-
-class quad_node:
+class _QuadNode:
     max_ratio = 0.95
 
     def __init__(self, nodes, depth, max_nodes_per_quad, parent=None):
@@ -224,22 +191,22 @@ class quad_node:
                     sw_nodes.append(node)
 
         self.NW = (
-            quad_node(nw_nodes, self.depth + 1, self.max_nodes_per_quad, self)
+            _QuadNode(nw_nodes, self.depth + 1, self.max_nodes_per_quad, self)
             if len(nw_nodes) > 0
             else None
         )
         self.NE = (
-            quad_node(ne_nodes, self.depth + 1, self.max_nodes_per_quad, self)
+            _QuadNode(ne_nodes, self.depth + 1, self.max_nodes_per_quad, self)
             if len(ne_nodes) > 0
             else None
         )
         self.SW = (
-            quad_node(sw_nodes, self.depth + 1, self.max_nodes_per_quad, self)
+            _QuadNode(sw_nodes, self.depth + 1, self.max_nodes_per_quad, self)
             if len(sw_nodes) > 0
             else None
         )
         self.SE = (
-            quad_node(se_nodes, self.depth + 1, self.max_nodes_per_quad, self)
+            _QuadNode(se_nodes, self.depth + 1, self.max_nodes_per_quad, self)
             if len(se_nodes) > 0
             else None
         )
@@ -902,7 +869,7 @@ class quad_node:
                 # then the orginal X is eual to the X where is moves and that give us a divide by zero
                 # when calculating the slope
                 # We wiggle it just a little bit to prevent an error
-                node_to_move.x += epsilon
+                node_to_move.x += _EPSILON
 
             # print ("contracting: %d, node_to_move %s, overlapping: %s" % (idx, str(node_to_move.to_list()), overlapping_node))
             while (
@@ -918,7 +885,7 @@ class quad_node:
                         "They should not be the same node!! %s" % (node_to_move.nid)
                     )
                 if node_to_move.original_x == new_x:
-                    new_x += epsilon
+                    new_x += _EPSILON
                 a = dist_original_to_over = distance.euclidean(
                     [node_to_move.original_x, node_to_move.original_y],
                     [overlapping_node.x, overlapping_node.y],
@@ -934,7 +901,7 @@ class quad_node:
                 # print ("not None, a: %g, b: %g, c: %g" %(a, b, c), node_to_move.nid, node_to_move.size, overlapping_node.size)
                 # print ("original(%g,%g), current(%g,%g), overlap(%g,%g)" %(node_to_move.original_x, node_to_move.original_y, new_x, new_y, overlapping_node.x, overlapping_node.y))
                 angle_c = math.acos((a ** 2 + b ** 2 - c ** 2) / (2 * a * b))
-                len_c_new = node_to_move.size + overlapping_node.size + epsilon
+                len_c_new = node_to_move.size + overlapping_node.size + _EPSILON
                 angle_a_new = math.asin(a * math.sin(angle_c) / len_c_new)
                 angle_b_new = 180 - math.degrees(angle_c) - math.degrees(angle_a_new)
                 new_len_b = (
@@ -1007,7 +974,7 @@ class quad_node:
                 # then the orginal X is equal to the X where is moves and that give us a divide by zero
                 # when calculating the slope
                 # We wiggle it just a little bit to make the math work
-                node_to_move.x += epsilon
+                node_to_move.x += _EPSILON
 
             # print ("contracting: %d, node_to_move %s, overlapping: %s" % (idx, str(node_to_move.to_list()), overlapping_node))
             while (
@@ -1023,7 +990,7 @@ class quad_node:
                         "They should not be the same node!! %s" % (node_to_move.nid)
                     )
                 if node_to_move.original_x == new_x:
-                    new_x += epsilon
+                    new_x += _EPSILON
                 a = dist_original_to_over = distance.euclidean(
                     [node_to_move.original_x, node_to_move.original_y],
                     [overlapping_node.x, overlapping_node.y],
@@ -1045,7 +1012,7 @@ class quad_node:
                 elif value < -1:
                     value = -0.999999
                 angle_c = math.acos(value)
-                len_c_new = node_to_move.size + overlapping_node.size + epsilon
+                len_c_new = node_to_move.size + overlapping_node.size + _EPSILON
                 angle_a_new = math.asin(a * math.sin(angle_c) / len_c_new)
                 angle_b_new = 180 - math.degrees(angle_c) - math.degrees(angle_a_new)
                 new_len_b = (
@@ -1106,92 +1073,3 @@ class quad_node:
 
         boxes.append((self.depth, self.min_x, self.min_y, self.max_x, self.max_y))
         return
-
-
-class quad_tree:
-    # used to hold objects that have x, y, and mass property
-    # nodes = []
-
-    def __init__(self, nodes, max_nodes_per_quad):
-        self.nodes = nodes
-        self.root = quad_node(nodes, 0, max_nodes_per_quad, None)
-
-    def dump_one_level_to_csv(self, level, filename, magnification):
-        stats = []
-        self.root.get_stats_for_quad(level, stats, magnification)
-        # print(type(stats))
-        # print(len(stats))
-        with open(filename, "w", encoding="utf-8", newline="") as ofile:
-            writer = csv.writer(ofile)
-            for idx, row in enumerate(stats):
-                color = "blue"
-                if row[3] > 0:
-                    color = "red"
-                writer.writerow([idx] + row[:3] + [0, color])
-
-    def get_quad_density_list(self):
-        density_list = self.root.get_density_list()
-        return sorted(density_list, reverse=True)
-
-    def layout_graph(self):
-        return self.layout_dense_first()
-
-    def tree_stats(self):
-        results = self.root.quad_stats()
-        return list(results) + [
-            results[3] / len(self.nodes),
-            results[4] / len(self.nodes),
-            self.root.sq_ratio,
-        ]
-
-    def collect_nodes(self):
-        ret_val = []
-        self.root.collect_nodes(ret_val)
-        return ret_val
-
-    def get_tree_node_bounds(self):
-        ret_val = []
-        self.root.boxes_by_level(ret_val)
-        return ret_val
-
-    def count_overlaps(self):
-        return self.root.num_overlapping()
-
-    def count_overlaps_across_quads(self):
-        return self.root.num_overlapping_across_quads(self.root.nodes)
-
-    def layout_dense_first(self, first_color=None):
-        den_list = list(self.get_quad_density_list())
-        first = True
-        # count = 0
-        for cell_density, density_ratio, cell_count, qn in den_list:
-            # print ('cell density', cell_density, 'sq_density', density_ratio, 'cell_count', cell_count)
-            qn.layout_quad()
-            if first:
-                if first_color is not None:
-                    for n in qn.parent.nodes:
-                        n.color = first_color  #'#FF0004'
-            first = False
-
-
-def remove_overlaps(list_of_node_positions: List[NodePosition]):
-
-    logger.info("removing overlaps")
-    local_nodes = []
-    for n in list_of_node_positions:
-        local_nodes.append(node(n.node_id, n.x, n.y, n.size, n.community))
-    qt = quad_tree(local_nodes, 50)
-    start = time.time()
-    # qt.layout_dense_first(first_color='#FF0004')
-    qt.layout_dense_first(first_color=None)
-    stop = time.time()
-    logger.info(f"removed overlap in {stop-start} seconds")
-
-    new_positions = []
-    for n in local_nodes:
-        new_positions.append(
-            NodePosition(
-                node_id=n.nid, x=n.x, y=n.y, size=n.size, community=n.community
-            )
-        )
-    return new_positions
