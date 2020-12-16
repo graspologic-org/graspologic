@@ -94,12 +94,10 @@ def _get_separator_info(meta, group):
     if meta is None or group is None:
         return None
 
-    front = meta.groupby(by=group, sort=False).first()
-    front_sep_inds = front["sort_idx"].values
-    end = meta.groupby(by=group, sort=False).last()
-    back_sep_inds = end["sort_idx"].values
+    sep = meta.groupby(by=group, sort=False).first()
+    sep_inds = sep["sort_idx"].values
 
-    return front_sep_inds, back_sep_inds
+    return sep_inds
 
 
 def _item_to_df(item, name, length):
@@ -266,12 +264,9 @@ def draw_separators(
         if gridline_kws is None:
             gridline_kws = dict(color="grey", linestyle="--", alpha=0.7, linewidth=1)
 
-        front_sep_inds, back_sep_inds = _get_separator_info(meta, group)
-        if plot_type == "heatmap":
-            back_sep_inds = back_sep_inds + 1
+        sep_inds = _get_separator_info(meta, group)
         if plot_type == "scattermap":
-            front_sep_inds = front_sep_inds - 0.5
-            back_sep_inds = back_sep_inds + 0.5
+            sep_inds = sep_inds - 0.5
 
         if ax_type == "x":
             lims = ax.get_xlim()
@@ -281,10 +276,7 @@ def draw_separators(
             drawer = ax.axhline
 
         # Draw the separators
-        for t in list(front_sep_inds):
-            if t not in lims:
-                drawer(t, **gridline_kws)
-        for t in list(back_sep_inds):
+        for t in list(sep_inds):
             if t not in lims:
                 drawer(t, **gridline_kws)
 
@@ -346,21 +338,16 @@ def draw_ticks(
         ax.set_ylabel(group[0], fontsize=20)
 
     if group_border:
-        front_sep_inds, back_sep_inds = _get_separator_info(meta, group)
-        if plot_type == "heatmap":
-            back_sep_inds = back_sep_inds + 1
+        sep_inds = _get_separator_info(meta, group)
         if plot_type == "scattermap":
-            front_sep_inds = front_sep_inds - 0.5
-            back_sep_inds = back_sep_inds + 0.5
+            sep_inds = sep_inds - 0.5
 
         if ax_type == "x":
             drawer = ax.axvline
         elif ax_type == "y":
             drawer = ax.axhline
 
-        for t in list(front_sep_inds):
-            drawer(t, color="black", linestyle="--", alpha=1, linewidth=1)
-        for t in list(back_sep_inds):
+        for t in list(sep_inds):
             drawer(t, color="black", linestyle="--", alpha=1, linewidth=1)
 
     return ax
@@ -435,7 +422,8 @@ def sort_meta(length, meta, group, group_order=["size"], item_order=None):
     group : str, list of str, or array_like, optional
         Attribute in meta to group the graph in the plot, by default None
     group_order : str, list of str, or array_like, optional
-        Attribute of the sorting class to sort classes within the graph, by default "size"
+        Attribute of the sorting class to sort classes within the graph,
+        by default "size"
     item_order : str, list of str, or array_like, optional
         Attribute in meta by which to sort elements within a class, by default None
 
@@ -462,12 +450,14 @@ def sort_meta(length, meta, group, group_order=["size"], item_order=None):
         for co in group_order:
             if co == "size":
                 class_size = meta.groupby(gc).size()
-                # map each node from the sorting class to their sorting class size
+                # map each node from the sorting class
+                # to their sorting class size
                 meta[f"{gc}_size_order"] = meta[gc].map(class_size)
                 total_sort_by.append(f"{gc}_size_order")
             else:
                 class_value = meta.groupby(gc)[co].mean()
-                # map each node from the sorting class to certain sorting class attribute
+                # map each node from the sorting class
+                # to certain sorting class attribute
                 meta[f"{gc}_{co}_order"] = meta[gc].map(class_value)
                 total_sort_by.append(f"{gc}_{co}_order")
         total_sort_by.append(gc)
@@ -807,7 +797,8 @@ def matrixplot(
         else:
             col_tick_pad[0] = 0.5
 
-        # Reverse the order of the group class, so the ticks are drawn in the opposite order
+        # Reverse the order of the group class, so the ticks are drawn
+        # in the opposite order
         rev_group = list(col_group[::-1])
         for i, sc in enumerate(rev_group):
 
@@ -839,7 +830,8 @@ def matrixplot(
         else:
             row_tick_pad[0] = 0.5
 
-        # Reverse the order of the group class, so the ticks are drawn in the opposite order
+        # Reverse the order of the group class, so the ticks are drawn
+        # in the opposite order
         rev_group = list(row_group[::-1])
         for i, sc in enumerate(rev_group):
             # Add a new axis when needed
@@ -912,17 +904,20 @@ def adjplot(
         Metadata of the matrix such as class, cell type, etc., by default None
 
         - ``meta`` is pd.DataFrame
-            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
+            All sorting_kws (``group``, ``group_order``, ``item_order``,
+            ``color``, ``highlights``)
             should only be str or list of str
             They should contain references to columns in the metadata
         - ``meta`` is None
-            All sorting_kws (``group``, ``group_order``, ``item_order``, ``color``, ``highlights``)
+            All sorting_kws (``group``, ``group_order``, ``item_order``,
+            ``color``, ``highlights``)
             should only any array_like data structure
             The array_like data structures will be assembled into one medadata pd.Dataframe
     group : str, list of str, or array_like, optional
         Attribute in meta to group the graph in the plot, by default None
     group_order : str, list of str, or array_like, optional
-        Attribute of the sorting class to sort classes within the graph, by default "size"
+        Attribute of the sorting class to sort classes within the graph,
+        by default "size"
     item_order : str, list of str, or array_like, optional
         Attribute in meta by which to sort elements within a class, by default None
     color : sstr, list of str, or array_like, optional
@@ -942,7 +937,8 @@ def adjplot(
     color_pad : int, float, optional
         Custom padding to use for the distance between color axes, by default None
     center : int, optional
-        The value at which to center the colormap when plotting divergant data., by default 0
+        The value at which to center the colormap when plotting divergant data,
+        by default 0
     sizes : tuple, optional
         Min and max sizes of dots, by default (5, 10)
     square : bool, optional
