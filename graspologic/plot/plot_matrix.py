@@ -539,7 +539,7 @@ def matrixplot(
         Attribute(s) by which to group rows/columns of ``data``. If multiple groups are 
         specified, rows/columns will be sorted hierarchically (first by the first group),
         then within that group by a possible second group, etc.). Behaves similarly to 
-        :func:`pandas.DataFrame.sort_values`.
+        :meth:`pandas.DataFrame.sort_values`.
     {row,col}_group_order : str, list of str, or array-like, (default="size")
         Attribute(s) by which to sort the groups if provided by ``{row,col}_group``.
         Groups are sorted by the mean of this attribute in ascending order. "size" is a
