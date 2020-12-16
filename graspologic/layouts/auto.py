@@ -28,11 +28,11 @@ def layout_tsne(
     perplexity: int,
     n_iter: int,
     max_edges: int = 10000000,
-) -> List[NodePosition]:
+) -> Tuple[nx.Graph, List[NodePosition]]:
     lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges)
     points = TSNE(perplexity=perplexity, n_iter=n_iter).fit_transform(tensors)
     positions = _node_positions_from(lcc_graph, labels, points)
-    return positions
+    return lcc_graph, positions
 
 
 def layout_umap(
@@ -40,13 +40,13 @@ def layout_umap(
     min_dist: float = 0.75,
     n_neighbors: int = 25,
     max_edges: int = 10000000,
-) -> List[NodePosition]:
+) -> Tuple[nx.Graph, List[NodePosition]]:
     lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges)
     points = umap.UMAP(min_dist=min_dist, n_neighbors=n_neighbors).fit_transform(
         tensors
     )
     positions = _node_positions_from(lcc_graph, labels, points)
-    return positions
+    return lcc_graph, positions
 
 
 def _largest_connected_component(graph: nx.Graph) -> nx.Graph:
