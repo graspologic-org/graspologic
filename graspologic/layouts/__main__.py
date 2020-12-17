@@ -5,12 +5,12 @@ import argparse
 import logging
 from pathlib import Path
 import sys
-from typing import List
+from typing import Any, Dict, List
 
 import networkx as nx
 
-from . import auto, NodePosition
-from . import render
+from . import auto, NodePosition, render
+from .colors import nominal_colors
 
 
 def _graph_from_file(
@@ -30,6 +30,84 @@ def _graph_from_file(
     return graph
 
 
+def _ensure_output_dir(path: str):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+
+
+def _location(path: str, positions: List[NodePosition], colors: Dict[Any, str]):
+    with open(path, "w") as node_positions_out:
+        print("id,x,y,size,community,color", file=node_positions_out)
+        for position in positions:
+            print(
+                f"{position.node_id},{position.x},{position.y},{position.size},"
+                f"{position.community},{colors[position.node_id]}",
+                file=node_positions_out,
+            )
+
+
+def _output(
+    arguments: argparse.Namespace, graph: nx.Graph, positions: List[NodePosition]
+):
+    partitions = {position.node_id: position.community for position in positions}
+    color_map = nominal_colors(partitions)
+    if arguments.image_file is not None:
+        render.save_graph(arguments.image_file, graph, positions, node_colors=color_map)
+    if arguments.location_file is not None:
+        _location(arguments.location_file, positions, color_map)
+
+
+def _tsne(arguments: argparse.Namespace):
+    valid_args(arguments)
+    graph = _graph_from_file(arguments.edge_list, arguments.skip_header)
+    graph, positions = auto.layout_tsne(
+        graph, perplexity=30, n_iter=1000, max_edges=arguments.max_edges
+    )
+    _output(arguments, graph, positions)
+
+
+def _umap(arguments: argparse.Namespace):
+    valid_args(arguments)
+    graph = _graph_from_file(arguments.edge_list, arguments.skip_header)
+    graph, positions = auto.layout_umap(graph, max_edges=arguments.max_edges)
+    _output(arguments, graph, positions)
+
+
+def _render(arguments: argparse.Namespace):
+    positions = []
+    node_colors = {}
+    with open(arguments.location_file, "r") as location_io:
+        next(location_io)
+        for line in location_io:
+            node_id, x, y, size, community, color = line.strip().split(",")
+            positions.append(
+                NodePosition(node_id, float(x), float(y), float(size), int(community))
+            )
+            node_colors[node_id] = color
+    if arguments.edge_list is not None:
+        graph = _graph_from_file(arguments.edge_list, arguments.skip_header)
+    else:
+        graph = nx.Graph()
+        for position in positions:
+            graph.add_node(position.node_id)
+
+    render.save_graph(
+        arguments.image_file,
+        graph,
+        positions,
+        node_colors=node_colors,
+        vertex_line_width=arguments.vertex_line_width,
+        vertex_alpha=arguments.vertex_alpha,
+        edge_line_width=arguments.edge_line_width,
+        edge_alpha=arguments.edge_alpha,
+        figure_height=arguments.figure_height,
+        figure_width=arguments.figure_width,
+        vertex_shape=arguments.vertex_shape,
+        arrows=arguments.arrows,
+        dpi=arguments.dpi,
+        light_background=arguments.light_background,
+    )
+
+
 def _common_edge_list_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.add_argument(
         "--edge_list",
@@ -39,28 +117,28 @@ def _common_edge_list_args(parser: argparse.ArgumentParser) -> argparse.Argument
     parser.add_argument(
         "--skip_header",
         help="skip first line in csv file, corresponding to header.",
-        type=bool,
+        action="store_true",
         required=False,
         default=False,
     )
     parser.add_argument(
         "--image_file",
         help="output path and filename for generated image file. "
-             "required if --location_file is omitted.",
+        "required if --location_file is omitted.",
         required=False,
         default=None,
     )
     parser.add_argument(
         "--location_file",
         help="output path and filename for location file. "
-             "required if --image_file is omitted.",
+        "required if --image_file is omitted.",
         required=False,
         default=None,
     )
     parser.add_argument(
         "--max_edges",
         help="maximum edges to keep during embedding. edges with low weights will be "
-             "pruned to keep at most this many edges",
+        "pruned to keep at most this many edges",
         type=int,
         required=False,
         default=10000000,
@@ -75,65 +153,11 @@ def _common_edge_list_args(parser: argparse.ArgumentParser) -> argparse.Argument
     return parser
 
 
-def _ensure_output_dir(path: str):
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-
-
-def _render(path: str, graph: nx.Graph, positions: List[NodePosition]):
-    # todo: colormap properly
-    colors = {position.node_id: "#000000" for position in positions}
-    render.save_graph(path, graph, positions, node_colors=colors)
-
-
-def _location(path: str, positions: List[NodePosition]):
-    with open(path, "w") as node_positions_out:
-        print("id,x,y,size,community", file=node_positions_out)
-        for position in positions:
-            print(
-                f"{position.node_id},{position.x},{position.y},{position.size},"
-                f"{position.community}", file=node_positions_out
-            )
-
-
-def _output(
-    arguments: argparse.Namespace,
-    graph: nx.Graph,
-    positions: List[NodePosition]
-):
-    if arguments.image_file is not None:
-        _render(arguments.image_file, graph, positions)
-    if arguments.location_file is not None:
-        _location(arguments.location_file, positions)
-
-
-def _tsne(arguments: argparse.Namespace):
-    valid_args(arguments)
-    graph = _graph_from_file(arguments.edge_list, arguments.skip_header)
-    graph, positions = auto.layout_tsne(
-        graph,
-        perplexity=30,
-        n_iter=1000,
-        max_edges=arguments.max_edges
-    )
-    _output(arguments, graph, positions)
-
-
-def _umap(arguments: argparse.Namespace):
-    valid_args(arguments)
-    graph = _graph_from_file(arguments.edge_list, arguments.skip_header)
-    graph, positions = auto.layout_umap(graph, max_edges=arguments.max_edges)
-    _output(arguments, graph, positions)
-
-
-def _render(arguments: argparse.Namespace):
-    pass
-
-
 def _parser() -> argparse.ArgumentParser:
     root_parser = argparse.ArgumentParser(
         prog="python -m graspologic.layouts",
         description="Runnable module that automatically generates a layout of a graph "
-                    "by a provided edge list",
+        "by a provided edge list",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
@@ -163,6 +187,98 @@ def _parser() -> argparse.ArgumentParser:
         help="Renders a graph via an input file",
     )
     render_parser.set_defaults(func=_render)
+    render_parser.add_argument(
+        "--edge_list",
+        help="edge list in csv file. must be source,target,weight.",
+        required=False,
+        default=None,
+    )
+    render_parser.add_argument(
+        "--skip_header",
+        help="skip first line in csv file, corresponding to header.",
+        action="store_true",
+        required=False,
+        default=False,
+    )
+    render_parser.add_argument(
+        "--location_file",
+        help="location file used for node positioning, partitioning, and coloring",
+        required=True,
+        default=None,
+    )
+    render_parser.add_argument(
+        "--image_file",
+        help="output path and filename for generated image file. ",
+        required=True,
+        default=None,
+    )
+    render_parser.add_argument(
+        "--dark_background",
+        dest="light_background",
+        action="store_false",
+        default=True,
+    )
+    render_parser.add_argument(
+        "--vertex_alpha",
+        help="Alpha (transparency) of vertices in visualization (default 0.9)",
+        type=float,
+        required=False,
+        default=0.9,
+    )
+    render_parser.add_argument(
+        "--vertex_line_width",
+        help="Line width of vertex outline (default 0.01)",
+        type=float,
+        required=False,
+        default=0.01,
+    )
+    render_parser.add_argument(
+        "--edge_line_width",
+        help="Line width of edge (default 0.5)",
+        type=float,
+        required=False,
+        default=0.5,
+    )
+    render_parser.add_argument(
+        "--edge_alpha",
+        help="Alpha (transparency) of edges in visualization (default 0.2)",
+        type=float,
+        required=False,
+        default=0.2,
+    )
+    render_parser.add_argument(
+        "--figure_width",
+        help="Width of figure (default 15.0)",
+        type=float,
+        required=False,
+        default=15.0,
+    )
+    render_parser.add_argument(
+        "--figure_height",
+        help="Height of figure (default 15.0)",
+        type=float,
+        required=False,
+        default=15.0,
+    )
+    render_parser.add_argument(
+        "--vertex_shape",
+        help="Matplotlib Marker for the vertex shape.",
+        required=False,
+        default="o",
+    )
+    render_parser.add_argument(
+        "--arrows",
+        dest="arrows",
+        action="store_true",
+        default=False,
+    )
+    render_parser.add_argument(
+        "--dpi",
+        help="Set dpi for image",
+        type=int,
+        required=False,
+        default=500,
+    )
     return root_parser
 
 
