@@ -52,12 +52,12 @@ setup(
         "gensim>=3.8.0,<=3.9.0", #methods signatures changed in the 4.0.0beta release
         "graspologic-native",
         "hyppo>=0.1.3",
-        "joblib>=0.17.0", # Older versions of joblib cause issue #806.  Transitive dependency of hyppo.
+        "joblib>=0.17.0",  # Older versions of joblib cause issue #806.  Transitive dependency of hyppo.
         "matplotlib>=3.0.0,<=3.3.0",
         "networkx>=2.1",
         "numpy>=1.8.1",
         "POT>=0.7.0",
-        "seaborn>=0.9.0",
+        "seaborn>= 0.11.0",
         "scikit-learn>=0.19.1",
         "scipy>=1.4.0",
         'umap-learn>=0.4.6',

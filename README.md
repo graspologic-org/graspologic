@@ -28,9 +28,9 @@ noting the missed titles so we can address all of them.
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.
 
 # Documentation
-The official documentation with usage is at https://graspy.neurodata.io/
+The official documentation with usage is at https://graspologic.readthedocs.io/en/latest/
 
-Please visit the [tutorial section](https://graspy.neurodata.io/tutorial.html) in the official website for more in depth usage.
+Please visit the [tutorial section](https://graspologic.readthedocs.io/en/latest/tutorial.html) in the official website for more in depth usage.
 
 # System Requirements
 ## Hardware requirements
