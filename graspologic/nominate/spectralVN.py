@@ -70,23 +70,14 @@ class SpectralVertexNomination(BaseEstimator):
     """
 
     def __init__(
-        self, input_graph: bool = True, embedder: Union[str, BaseSpectralEmbed] = "ASE"
+        self, input_graph: bool = True, embedder: Union[str, BaseSpectralEmbed] = "ASE", n_neighbors=None
     ):
         super().__init__()
         self.embedder = embedder
         self.input_graph = input_graph
+        self.n_neighbors = n_neighbors
 
-    @staticmethod
-    def _make_2d(arr: np.ndarray) -> np.ndarray:
-        # ensures arr is two or less dimensions.
-        # if 1d, adds unique at each index on
-        # the second dimension.
-        if np.ndim(arr) == 1 or arr.shape[1] == 1:
-            arr = arr.reshape(-1, 1)
-            arr = np.concatenate((arr, np.arange(arr.shape[0]).reshape(-1, 1)), axis=1)
-        return arr
-
-    def _check_inputs(self, X: np.ndarray, y: np.ndarray, k: int):
+    def _check_inputs(self, X: np.ndarray, y: np.ndarray):
         if type(self.input_graph) is not bool:
             raise TypeError("input_graph_ must be of type bool.")
         # check X
@@ -108,12 +99,12 @@ class SpectralVertexNomination(BaseEstimator):
             raise TypeError("y must be of type np.ndarray")
         elif not np.issubdtype(y.dtype, np.integer):
             raise TypeError("y must have dtype int")
-        elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 2):
-            raise IndexError("y must have shape (n) or (n, 1) or (n, 2).")
+        elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 1):
+            raise IndexError("y must have shape (n) or (n, 1).")
         # check k
-        if k is not None and type(k) is not int:
+        if self.n_neighbors is not None and type(self.n_neighbors) is not int:
             raise TypeError("k must be an integer")
-        elif k is not None and k <= 0:
+        elif self.n_neighbors is not None and self.n_neighbors <= 0:
             raise ValueError("k must be greater than 0")
 
         if self.input_graph:
@@ -205,7 +196,7 @@ class SpectralVertexNomination(BaseEstimator):
         )
         return self
 
-    def predict(self) -> Tuple[np.ndarray, np.ndarray]:
+    def predict(self, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominate vertex based on distance from the k nearest neighbors of each class,
         or if seed is unattributed, nominates vertices for each seed vertex.
