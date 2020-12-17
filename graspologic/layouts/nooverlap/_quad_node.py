@@ -27,7 +27,7 @@ def is_overlapping_any_node_and_index(node, new_x, new_y, nodes, start, end):
     overlapping = None
     idx = 0
     for idx, n in enumerate(nodes[start:end]):
-        if n.nid == node.nid:
+        if n.node_id == node.node_id:
             # don't check against self
             continue
         if is_overlap(n.x, n.y, n.size, new_x, new_y, node.size):
@@ -45,7 +45,7 @@ def is_overlapping_any_node_and_index_with_grid(
     for idx, n in enumerate(nodes[start:end]):
         if n not in potentially_over_lapping:
             continue
-        if n.nid == node.nid:
+        if n.node_id == node.node_id:
             # don't check against self
             continue
         if is_overlap(n.x, n.y, n.size, new_x, new_y, node.size):
@@ -83,7 +83,7 @@ def move_point_on_line(a, b, ratio):
 
 
 def scale_graph(g, scale_factor):
-    for nid, n in g.items():
+    for _, n in g.items():
         n.x, n.y = move_point_on_line([0, 0], [n.x, n.y], scale_factor)
     return g
 
@@ -774,7 +774,7 @@ class _QuadNode:
             for idx, node_a in enumerate(self.nodes):
                 # the first one does not need to move all the rest might need to move
                 for node_b in nodes_to_check:
-                    if node_a.nid == node_b.nid:
+                    if node_a.node_id == node_b.node_id:
                         continue
                     if is_overlap(
                         node_a.x, node_a.y, node_a.size, node_b.x, node_b.y, node_b.size
@@ -810,7 +810,7 @@ class _QuadNode:
     def get_overlapping_node_list(self, node, new_x, new_y, nodes):
         overlapping_nodes = []
         for n in nodes:
-            if n.nid == node.nid:
+            if n.node_id == node.node_id:
                 # don't check against self
                 continue
             if is_overlap(n.x, n.y, n.size, new_x, new_y, node.size):
@@ -820,7 +820,7 @@ class _QuadNode:
     def is_overlapping_any_node(self, node, new_x, new_y, nodes):
         overlapping = None
         for n in nodes:
-            if n.nid == node.nid:
+            if n.node_id == node.node_id:
                 # don't check against self
                 continue
             if is_overlap(n.x, n.y, n.size, new_x, new_y, node.size):
@@ -880,9 +880,9 @@ class _QuadNode:
                 slope_ca = (node_to_move.y - node_to_move.original_y) / (
                     node_to_move.x - node_to_move.original_x
                 )
-                if node_to_move.nid == overlapping_node.nid:
+                if node_to_move.node_id == overlapping_node.node_id:
                     raise Exception(
-                        "They should not be the same node!! %s" % (node_to_move.nid)
+                        "They should not be the same node!! %s" % (node_to_move.node_id)
                     )
                 if node_to_move.original_x == new_x:
                     new_x += _EPSILON
@@ -898,7 +898,7 @@ class _QuadNode:
                 )
                 node_to_move.color = "#FF0004"  # RED
                 overlapping_node.color = "#F1FD00"  # Yellow
-                # print ("not None, a: %g, b: %g, c: %g" %(a, b, c), node_to_move.nid, node_to_move.size, overlapping_node.size)
+                # print ("not None, a: %g, b: %g, c: %g" %(a, b, c), node_to_move.node_id, node_to_move.size, overlapping_node.size)
                 # print ("original(%g,%g), current(%g,%g), overlap(%g,%g)" %(node_to_move.original_x, node_to_move.original_y, new_x, new_y, overlapping_node.x, overlapping_node.y))
                 angle_c = math.acos((a ** 2 + b ** 2 - c ** 2) / (2 * a * b))
                 len_c_new = node_to_move.size + overlapping_node.size + _EPSILON
@@ -985,9 +985,9 @@ class _QuadNode:
                 slope_ca = (node_to_move.y - node_to_move.original_y) / (
                     node_to_move.x - node_to_move.original_x
                 )
-                if node_to_move.nid == overlapping_node.nid:
+                if node_to_move.node_id == overlapping_node.node_id:
                     raise Exception(
-                        "They should not be the same node!! %s" % (node_to_move.nid)
+                        "They should not be the same node!! %s" % (node_to_move.node_id)
                     )
                 if node_to_move.original_x == new_x:
                     new_x += _EPSILON
@@ -1001,7 +1001,7 @@ class _QuadNode:
                 c = dist_from_new_to_overlapping = distance.euclidean(
                     [new_x, new_y], [overlapping_node.x, overlapping_node.y]
                 )
-                # print ("not None, a: %g, b: %g, c: %g" %(a, b, c), node_to_move.nid, node_to_move.size, overlapping_node.size)
+                # print ("not None, a: %g, b: %g, c: %g" %(a, b, c), node_to_move.node_id, node_to_move.size, overlapping_node.size)
                 # print ("original(%g,%g), current(%g,%g), overlap(%g,%g)" %(node_to_move.original_x, node_to_move.original_y, new_x, new_y, overlapping_node.x, overlapping_node.y))
                 denominator = 2 * a * b
                 if 0 == denominator:
