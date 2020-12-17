@@ -146,7 +146,9 @@ class SpectralVertexNomination(BaseEstimator):
             self.embedding_ = X
 
     def fit(
-        self, X: np.ndarray, y=None,
+        self,
+        X: np.ndarray,
+        y=None,
     ):
         """
         Constructs the embedding if not provided, then calculates the pairwise distance
@@ -160,8 +162,8 @@ class SpectralVertexNomination(BaseEstimator):
                 Will be embedded using the specified embedder.
             - If `input_graph` is False
                 Expects an embedding of the graph, i.e. a ndarray of size (n, d).
-        y : None
-            - Included by sklearn convention.
+        y : NoneType
+            Included by sklearn convention.
 
         Returns
         -------
