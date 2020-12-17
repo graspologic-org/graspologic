@@ -71,11 +71,11 @@ def layout_tsne(
     Tuple[nx.Graph, List[NodePosition]]
         The largest connected component and a list of NodePositions for each node in
         the largest connected component. The NodePosition object contains:
-            - node_id
-            - x coordinate
-            - y coordinate
-            - size
-            - community
+        - node_id
+        - x coordinate
+        - y coordinate
+        - size
+        - community
 
     References
     ----------
@@ -139,11 +139,11 @@ def layout_umap(
     Tuple[nx.Graph, List[NodePosition]]
         The largest connected component and a list of NodePositions for each node in
         the largest connected component. The NodePosition object contains:
-            - node_id
-            - x coordinate
-            - y coordinate
-            - size
-            - community
+        - node_id
+        - x coordinate
+        - y coordinate
+        - size
+        - community
 
     References
     ----------
