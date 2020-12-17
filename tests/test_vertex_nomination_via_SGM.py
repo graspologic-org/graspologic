@@ -21,7 +21,7 @@ class TestGMP:
         with pytest.raises(ValueError):
             VNviaSGM(n_init=1.5)
         with pytest.raises(ValueError):
-            VNviaSGM(max_noms=0)
+            VNviaSGM(max_nominations=0)
 
         with pytest.raises(ValueError):
             VNviaSGM().fit(
