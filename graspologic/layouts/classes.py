@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 __all__ = [
     "NodePosition",

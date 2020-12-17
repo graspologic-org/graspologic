@@ -49,6 +49,18 @@ def nominal_colors(
     light_background: bool = True,
     theme_path: Optional[str] = None,
 ) -> Dict[Any, str]:
+    """
+
+    Parameters
+    ----------
+    partitions
+    light_background
+    theme_path
+
+    Returns
+    -------
+
+    """
     # get nominal colors
     color_scheme = _get_colors(light_background, theme_path)
     partition_populations = {}
@@ -79,6 +91,19 @@ def sequential_colors(
     use_log_scale: bool = False,
     theme_path: Optional[str] = None,
 ) -> Dict[Any, str]:
+    """
+
+    Parameters
+    ----------
+    node_and_value
+    light_background
+    use_log_scale
+    theme_path
+
+    Returns
+    -------
+
+    """
     color_scheme = _get_colors(light_background, theme_path)
     color_list = color_scheme["sequential"]
     num_colors = len(color_list)

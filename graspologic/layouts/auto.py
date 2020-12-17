@@ -29,6 +29,59 @@ def layout_tsne(
     n_iter: int,
     max_edges: int = 10000000,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
+    """
+    Automatic graph layout generation by creating a generalized node2vec embedding,
+    then using t-SNE for dimensionality reduction to 2d space.
+
+    By default, this function automatically attempts to prune each graph to a maximum
+    of 10,000,000 edges by removing the lowest weight edges. This pruning is approximate
+    and will leave your graph with at most ``max_edges``, but is not guaranteed to be
+    precisely ``max_edges``.
+
+    In addition to pruning edges by weight, this function also only operates over the
+    largest connected component in the graph.
+
+    After dimensionality reduction, sizes are generated for each node based upon
+    their degree centrality, and these sizes and positions are further refined by an
+    overlap removal phase. Lastly, a global partitioning algorithm
+    (:func:`graspologic.partition.leiden`) is executed for the largest connected
+    component and the partition ID is included with each node position.
+
+    Parameters
+    ----------
+    graph : :class:`networkx.Graph`
+        The graph to generate a layout for. This graph may have edges pruned if the
+        count is too high and only the largest connected component will be used to
+        automatically generate a layout.
+    perplexity : int
+        The perplexity is related to the number of nearest neighbors that is used in
+        other manifold learning algorithms. Larger datasets usually require a larger
+        perplexity. Consider selecting a value between 5 and 50. Different values can
+        result in significanlty different results.
+    n_iter : int
+        Maximum number of iterations for the optimization.
+    max_edges : int
+        The maximum number of edges to use when generating the embedding.  Default is
+        ``10000000``. The edges with the lowest weights will be pruned until at most
+        ``max_edges`` exist. Warning: this pruning is approximate and more edges than
+        are necessary may be pruned.
+
+    Returns
+    -------
+    Tuple[nx.Graph, List[NodePosition]]
+        The largest connected component and a list of NodePositions for each node in
+        the largest connected component. The NodePosition object contains:
+            - node_id
+            - x coordinate
+            - y coordinate
+            - size
+            - community
+
+    References
+    ----------
+    .. [1] van der Maaten, L.J.P.; Hinton, G.E. Visualizing High-Dimensional Data Using
+        t-SNE. Journal of Machine Learning Research 9:2579-2605, 2008.
+    """
     lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges)
     points = TSNE(perplexity=perplexity, n_iter=n_iter).fit_transform(tensors)
     positions = _node_positions_from(lcc_graph, labels, points)
@@ -41,6 +94,63 @@ def layout_umap(
     n_neighbors: int = 25,
     max_edges: int = 10000000,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
+    """
+    Automatic graph layout generation by creating a generalized node2vec embedding,
+    then using UMAP for dimensionality reduction to 2d space.
+
+    By default, this function automatically attempts to prune each graph to a maximum
+    of 10,000,000 edges by removing the lowest weight edges. This pruning is approximate
+    and will leave your graph with at most ``max_edges``, but is not guaranteed to be
+    precisely ``max_edges``.
+
+    In addition to pruning edges by weight, this function also only operates over the
+    largest connected component in the graph.
+
+    After dimensionality reduction, sizes are generated for each node based upon
+    their degree centrality, and these sizes and positions are further refined by an
+    overlap removal phase. Lastly, a global partitioning algorithm
+    (:func:`graspologic.partition.leiden`) is executed for the largest connected
+    component and the partition ID is included with each node position.
+
+    Parameters
+    ----------
+    graph : :class:`networkx.Graph`
+        The graph to generate a layout for. This graph may have edges pruned if the
+        count is too high and only the largest connected component will be used to
+        automatically generate a layout.
+    min_dist : float
+        The effective minimum distance between embedded points. Smaller values will
+        result in a more clustered/clumped embedding where nearby points on the
+        manifold are drawn closer together, while larger values will result on a more
+        even dispersal of points. The value should be set relative to the ``spread``
+        value, which determines the scale at which embedded points will be spread out.
+    n_neighbors : int
+        The size of local neighborhood (in terms of number of neighboring sample points)
+        used for manifold approximation. Larger values result in more global views of
+        the manifold, while smaller values result in more local data being preserved. 
+    max_edges : int
+        The maximum number of edges to use when generating the embedding.  Default is
+        ``10000000``. The edges with the lowest weights will be pruned until at most
+        ``max_edges`` exist. Warning: this pruning is approximate and more edges than
+        are necessary may be pruned.
+
+    Returns
+    -------
+    Tuple[nx.Graph, List[NodePosition]]
+        The largest connected component and a list of NodePositions for each node in
+        the largest connected component. The NodePosition object contains:
+            - node_id
+            - x coordinate
+            - y coordinate
+            - size
+            - community
+
+    References
+    ----------
+    .. [1] McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection
+        for Dimension Reduction, ArXiv e-prints 1802.03426, 2018
+    """
+
     lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges)
     points = umap.UMAP(min_dist=min_dist, n_neighbors=n_neighbors).fit_transform(
         tensors

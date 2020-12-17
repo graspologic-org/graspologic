@@ -174,20 +174,25 @@ def show_graph(
 
     Attempts to display it via the platform-specific display library such as TkInter
 
-    :param nx.Graph graph: Networkx graph to draw
-    :param List[NodePosition] positions: Positions of the nodes
-    :param Dict[str, str] node_colors: A map of the node id to a color value that can be rendered by matplotlib
-    :param float vertex_line_width: Line width of vertex outline (default 0.01)
-    :param float vertex_alpha: Alpha (transparency) of vertices in visualization (default 0.55)
-    :param float edge_line_width: Line width of edge (default 0.5)
-    :param float edge_alpha: Alpha (transparency) of edges in visualization (default 0.02)
-    :param float figure_width: Width of figure (default 15.0)
-    :param float figure_height: Height of figure (default 15.0)
-    :param bool light_background: Light background or dark background (default True)
-    :param str vertex_shape: Matplotlib Marker for the vertex shape.  See
-        `https://matplotlib.org/api/markers_api.html <https://matplotlib.org/api/markers_api.html>`_ for
-        a list of allowed values (default `'o'` i.e: a circle)
-    :param bool arrows: For directed graphs if true draw arrow heads. (default False)
+    Parameters
+    ----------
+    graph
+    positions
+    node_colors
+    vertex_line_width
+    vertex_alpha
+    edge_line_width
+    edge_alpha
+    figure_width
+    figure_height
+    light_background
+    vertex_shape
+    arrows
+    dpi
+
+    Returns
+    -------
+
     """
     ax = plt.gca()
     if light_background:
@@ -233,21 +238,26 @@ def save_graph(
     """
     Renders a graph to file.
 
-    :param str output_path: Output path to write your file for.
-    :param nx.Graph graph: Networkx graph to draw
-    :param List[NodePosition] positions: Positions of the nodes
-    :param Dict[Any, str] node_colors: A map of the node id to a color value that can be rendered by matplotlib
-    :param float vertex_line_width: Line width of vertex outline (default 0.01)
-    :param float vertex_alpha: Alpha (transparency) of vertices in visualization (default 0.55)
-    :param float edge_line_width: Line width of edge (default 0.5)
-    :param float edge_alpha: Alpha (transparency) of edges in visualization (default 0.02)
-    :param float figure_width: Width of figure (default 15.0)
-    :param float figure_height: Height of figure (default 15.0)
-    :param bool light_background: Light background or dark background (default True)
-    :param str vertex_shape: Matplotlib Marker for the vertex shape.  See
-        `https://matplotlib.org/api/markers_api.html <https://matplotlib.org/api/markers_api.html>`_ for
-        a list of allowed values (default `'.'` i.e: a point)
-    :param bool arrows: For directed graphs if true draw arrow heads. (default False)
+    Parameters
+    ----------
+    output_path
+    graph
+    positions
+    node_colors
+    vertex_line_width
+    vertex_alpha
+    edge_line_width
+    edge_alpha
+    figure_width
+    figure_height
+    light_background
+    vertex_shape
+    arrows
+    dpi
+
+    Returns
+    -------
+
     """
     _draw_graph(
         graph=graph,
