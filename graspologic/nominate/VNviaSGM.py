@@ -115,10 +115,10 @@ class VNviaSGM(BaseEstimator):
         Parameters
         ----------
         A: 2d-array, square
-            Adjacency matrix of `A`, the graph where ``voi`` is known
+            Adjacency matrix, the graph where ``voi`` is known
 
         B: 2d-array, square
-            Adjacency matrix of `B`, the graph where ``voi`` is not known
+            Adjacency matrix, the graph where ``voi`` is not known
 
         voi: int
             Vertex of interest
@@ -246,7 +246,9 @@ class VNviaSGM(BaseEstimator):
 
         # Call the SGM algorithm using user set parametrs and generate a prob
         # vector for the voi.
-        sgm = GMP(**self.graph_match_kws,)
+        sgm = GMP(
+            **self.graph_match_kws,
+        )
 
         prob_vector = np.zeros((max(SG_1.shape[0], SG_2.shape[0]) - self.n_seeds_))
 
@@ -265,7 +267,9 @@ class VNviaSGM(BaseEstimator):
         nomination_list_ = list(zip(b_inds[self.n_seeds_ :], prob_vector))
         nomination_list_.sort(key=lambda x: x[1], reverse=True)
 
-        if self.max_nominations is not None and self.max_nominations < len(nomination_list_):
+        if self.max_nominations is not None and self.max_nominations < len(
+            nomination_list_
+        ):
             nomination_list_ = nomination_list_[0 : self.max_nominations]
 
         self.nomination_list_ = np.array(nomination_list_)
@@ -279,10 +283,10 @@ class VNviaSGM(BaseEstimator):
         Parameters
         ----------
         A: 2d-array, square
-            Adjacency matrix of `A`, the graph where ``voi`` is known
+            Adjacency matrix, the graph where ``voi`` is known
 
         B: 2d-array, square
-            Adjacency matrix of `B`, the graph where ``voi`` is not known
+            Adjacency matrix, the graph where ``voi`` is not known
 
         voi: int
             Vertex of interest
