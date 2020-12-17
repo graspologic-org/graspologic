@@ -264,15 +264,15 @@ class VNviaSGM(BaseEstimator):
         # Generate the nomination list. Note, the probability matrix does not
         # include the seeds, so we must remove them from b_inds. Return a list
         # sorted so it returns the vertex with the highest probability first.
-        nomination_list_ = list(zip(b_inds[self.n_seeds_ :], prob_vector))
-        nomination_list_.sort(key=lambda x: x[1], reverse=True)
+        nomination_list_ = np.dstack((b_inds[self.n_seeds_ :], prob_vector))[0]
+        nomination_list_ = nomination_list_[nomination_list_[:, 1].argsort()][::-1]
 
         if self.max_nominations is not None and self.max_nominations < len(
             nomination_list_
         ):
             nomination_list_ = nomination_list_[0 : self.max_nominations]
 
-        self.nomination_list_ = np.array(nomination_list_)
+        self.nomination_list_ = nomination_list_
 
         return self
 
