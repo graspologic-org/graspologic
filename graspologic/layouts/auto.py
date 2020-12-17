@@ -127,7 +127,7 @@ def layout_umap(
     n_neighbors : int
         The size of local neighborhood (in terms of number of neighboring sample points)
         used for manifold approximation. Larger values result in more global views of
-        the manifold, while smaller values result in more local data being preserved. 
+        the manifold, while smaller values result in more local data being preserved.
     max_edges : int
         The maximum number of edges to use when generating the embedding.  Default is
         ``10000000``. The edges with the lowest weights will be pruned until at most

@@ -176,23 +176,36 @@ def show_graph(
 
     Parameters
     ----------
-    graph
-    positions
-    node_colors
-    vertex_line_width
-    vertex_alpha
-    edge_line_width
-    edge_alpha
-    figure_width
-    figure_height
-    light_background
-    vertex_shape
-    arrows
-    dpi
-
-    Returns
-    -------
-
+    graph : nx.Graph
+        The graph to be displayed. If the networkx Graph contains only nodes, no
+        edges will be displayed.
+    positions : List[:class:`graspologic.layouts.NodePosition`]
+        The positionsfor every node in the graph.
+    node_colors : Dict[Any, str]
+        A mapping of node id to colors. Must contain an entry for every node in the
+        graph.
+    vertex_line_width : float
+        Line width of vertex outline. Default is``0.01``.
+    vertex_alpha : float
+        Alpha (transparency) of vertices in visualization. Default is``0.55``.
+    edge_line_width : float
+        Line width of edge. Default is``0.5``.
+    edge_alpha : float
+        Alpha (transparency) of edges in visualization. Default is``0.02``.
+    figure_width : float
+        Width of figure. Default is ``15.0``.
+    figure_height : float
+        eight of figure. Default is``15.0``.
+    light_background : bool
+        Light background or dark background. Default is``True``.
+    vertex_shape : str
+        Matplotlib Marker for the vertex shape.  See
+        `https://matplotlib.org/api/markers_api.html <https://matplotlib.org/api/markers_api.html>`_
+        for a list of allowed values . Default is ``o`` (i.e: a circle)
+    arrows : bool
+        For directed graphs, if ``True``, draw arrow heads. Default is ``False``
+    dpi : float
+        Dots per inch of the figure.  Default is ``500``.
     """
     ax = plt.gca()
     if light_background:
@@ -240,20 +253,39 @@ def save_graph(
 
     Parameters
     ----------
-    output_path
-    graph
-    positions
-    node_colors
-    vertex_line_width
-    vertex_alpha
-    edge_line_width
-    edge_alpha
-    figure_width
-    figure_height
-    light_background
-    vertex_shape
-    arrows
-    dpi
+    output_path : str
+        The output path to write the rendered graph to. Suggested file extension is
+        ``.png``.
+    graph : nx.Graph
+        The graph to be displayed. If the networkx Graph contains only nodes, no
+        edges will be displayed.
+    positions : List[:class:`graspologic.layouts.NodePosition`]
+        The positionsfor every node in the graph.
+    node_colors : Dict[Any, str]
+        A mapping of node id to colors. Must contain an entry for every node in the
+        graph.
+    vertex_line_width : float
+        Line width of vertex outline. Default is``0.01``.
+    vertex_alpha : float
+        Alpha (transparency) of vertices in visualization. Default is``0.55``.
+    edge_line_width : float
+        Line width of edge. Default is``0.5``.
+    edge_alpha : float
+        Alpha (transparency) of edges in visualization. Default is``0.02``.
+    figure_width : float
+        Width of figure. Default is ``15.0``.
+    figure_height : float
+        eight of figure. Default is``15.0``.
+    light_background : bool
+        Light background or dark background. Default is``True``.
+    vertex_shape : str
+        Matplotlib Marker for the vertex shape.  See
+        `https://matplotlib.org/api/markers_api.html <https://matplotlib.org/api/markers_api.html>`_
+        for a list of allowed values . Default is ``o`` (i.e: a circle)
+    arrows : bool
+        For directed graphs, if ``True``, draw arrow heads. Default is ``False``
+    dpi : float
+        Dots per inch of the figure.  Default is ``100``.
 
     Returns
     -------

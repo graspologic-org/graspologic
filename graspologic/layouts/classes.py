@@ -9,6 +9,10 @@ __all__ = [
 
 
 class NodePosition(NamedTuple):
+    """
+    Contains the node id, 2d coordinates, size, and community id for a node.
+    """
+
     node_id: str
     x: float
     y: float
