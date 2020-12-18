@@ -42,7 +42,49 @@ class TestGMP:
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
                 0,
+                [np.arange(2), 1],
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
+                0,
+                np.random.randn(3, 3),
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
+                0,
                 [np.arange(2), np.arange(3)],
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
+                0,
+                [np.arange(5), np.arange(5)],
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
+                0,
+                [[], []],
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
+                0,
+                [[1, 1], [1, 2]],
+            )
+        with pytest.raises(ValueError):
+            VNviaSGM().fit(
+                np.random.randn(4, 4),
+                np.random.randn(4, 4),
+                0,
+                [[1, 5], [1, 2]],
             )
 
     def test_vn_algorithm(self):
