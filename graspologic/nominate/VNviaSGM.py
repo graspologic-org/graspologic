@@ -10,16 +10,11 @@ class VNviaSGM(BaseEstimator):
     This class implements Vertex Nomination via Seeded Graph Matching
     (VNviaSGM) with the algorithm described in [1].
 
-    VNviaSGM is a nomination algorithm, so instead of completely matching two
-    graphs ``A`` and ``B``, it proposes a nomination list of potential matches in
-    graph ``B`` to a vertex of interest (VOI) in graph ``A`` with associated
-    probabilities. VNviaSGM generates an initial induced subgraph about the
-    VOI to determine which seeds are close enough to be used.
-    All the seeds that are close enough are then used to generate subgraphs in
-    both ``A`` and ``B``. These subgraphs are matched using several random
-    initializations of the seeded graph matching algorithm (SGM), and a
-    nomination list is returned. See
-    :class:`~graspologic.match.GraphMatch` for SGM docs.
+    Rather than providing a 1-1 matching for the vertices of two
+    graphs, as in :class:`~graspologic.match.GraphMatch`, VNviaSGM
+    ranks the potential matches for a vertex of interst (VOI) in
+    one to graph to the vertices in another graph, based on
+    probability of matching.
 
     Parameters
     ----------
@@ -68,6 +63,15 @@ class VNviaSGM(BaseEstimator):
 
     Notes
     -----
+    VNviaSGM generates an initial induced
+    subgraph about the VOI to determine which seeds are close enough
+    to be used.
+
+    All the seeds that are close enough are then used to generate subgraphs in
+    both ``A`` and ``B``. These subgraphs are matched using several random
+    initializations of the seeded graph matching algorithm (SGM), and a
+    nomination list is returned. See
+    :class:`~graspologic.match.GraphMatch` for SGM docs.
 
     """
 
