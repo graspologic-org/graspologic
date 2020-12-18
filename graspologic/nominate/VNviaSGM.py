@@ -75,7 +75,7 @@ class VNviaSGM(BaseEstimator):
     ``A`` and ``B``. These subgraphs are matched using several random initializations
     of the seeded graph matching algorithm (SGM), and a nomination list is returned.
     See :class:`~graspologic.match.GraphMatch` for SGM docs.
-    
+
 
 
     """
