@@ -96,7 +96,9 @@ def _get_separator_info(meta, group):
 
     sep = meta.groupby(by=group, sort=False).first()
     sep_inds = sep["sort_idx"].values
-
+    sep_inds = list(sep["sort_idx"].values)
+    last = sort_meta.groupby(group, sort=False).last()
+    sep_inds.append(last["sort_idx"].values[-1] + 1)
     return sep_inds
 
 
@@ -348,7 +350,7 @@ def draw_ticks(
             drawer = ax.axhline
 
         for t in list(sep_inds):
-            drawer(t, color="black", linestyle="--", alpha=1, linewidth=1)
+            drawer(t, color="black", linestyle="-", alpha=1, linewidth=1)
 
     return ax
 
