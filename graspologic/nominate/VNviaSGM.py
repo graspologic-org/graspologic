@@ -261,9 +261,9 @@ class VNviaSGM(BaseEstimator):
         # For graph A, its of the form (close_seeds, voi, rest in verts_A
         # in num order). For graph B its of the form (close_seeds, rest in
         # verts_B in num order)
-        paramed_verts = np.append(close_seeds, voi_reord)
+        permed_verts = np.append(close_seeds, voi_reord)
         ind1 = np.append(
-            np.append(close_seeds, voi_reord), np.setdiff1d(verts_A, paramed_verts)
+            np.append(close_seeds, voi_reord), np.setdiff1d(verts_A, permed_verts)
         )
         ind2 = np.concatenate((close_seeds, np.setdiff1d(verts_B, close_seeds)))
 
@@ -277,7 +277,7 @@ class VNviaSGM(BaseEstimator):
         self.n_seeds_ = len(close_seeds)
         seeds_fin = np.arange(self.n_seeds_)
 
-        # Call the SGM algorithm using user set parametrs and generate a prob
+        # Call the SGM algorithm using user set parameters and generate a prob
         # vector for the voi.
         sgm = GMP(
             **self.graph_match_kws,
