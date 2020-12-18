@@ -57,14 +57,6 @@ class VNviaSGM(BaseEstimator):
         list = [[j, p_val],...] where p_val is the probability that the VOI matches
         to node j in graph B (sorted by descending probability)
 
-
-    References
-    ----------
-    .. [1] Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded
-    graph matching. Stat Anal Data Min: The ASA Data Sci Journal.
-    2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
-
-
     Notes
     -----
     VNviaSGM generates an initial induced subgraph about the VOI to determine which
@@ -74,9 +66,13 @@ class VNviaSGM(BaseEstimator):
     All the seeds that are close enough are then used to generate subgraphs in both
     ``A`` and ``B``. These subgraphs are matched using several random initializations
     of the seeded graph matching algorithm (SGM), and a nomination list is returned.
-    See :class:`~graspologic.match.GraphMatch` for SGM docs.
+    See :class:`~graspologic.match.GraphMatch` for SGM docs
 
-
+    References
+    ----------
+    .. [1] Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded
+        graph matching. Stat Anal Data Min: The ASA Data Sci Journal. 2020; 13: 229–
+        244. https://doi.org/10.1002/sam.11454
 
     """
 
