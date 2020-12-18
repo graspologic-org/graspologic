@@ -97,7 +97,7 @@ def _get_separator_info(meta, group):
     sep = meta.groupby(by=group, sort=False).first()
     sep_inds = sep["sort_idx"].values
     sep_inds = list(sep["sort_idx"].values)
-    last = sort_meta.groupby(group, sort=False).last()
+    last = meta.groupby(group, sort=False).last()
     sep_inds.append(last["sort_idx"].values[-1] + 1)
     return sep_inds
 
