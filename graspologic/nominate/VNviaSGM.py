@@ -87,17 +87,17 @@ class VNviaSGM(BaseEstimator):
         if isinstance(order_voi_subgraph, int) and order_voi_subgraph > 0:
             self.order_voi_subgraph = order_voi_subgraph
         else:
-            msg = "`order_voi_subgraph` must be an integer > 0"
+            msg = '"order_voi_subgraph" must be an integer > 0'
             raise ValueError(msg)
         if isinstance(order_seeds_subgraph, int) and order_seeds_subgraph > 0:
             self.order_seeds_subgraph = order_seeds_subgraph
         else:
-            msg = "`order_seeds_subgraph` must be an integer > 0"
+            msg = '"order_seeds_subgraph" must be an integer > 0'
             raise ValueError(msg)
         if isinstance(n_init, int) and n_init > 0:
             self.n_init = n_init
         else:
-            msg = "`n_init` must be an integer > 0"
+            msg = '"n_init" must be an integer > 0'
             raise ValueError(msg)
 
         if max_nominations is None:
@@ -105,14 +105,14 @@ class VNviaSGM(BaseEstimator):
         elif isinstance(max_nominations, int) and max_nominations >= 1:
             self.max_nominations = max_nominations
         else:
-            msg = "`max_nominations` must be an integer >= 1"
+            msg = '"max_nominations" must be an integer >= 1'
             raise ValueError(msg)
 
         # Error checking of these will be handled by GMP
         if isinstance(graph_match_kws, dict):
             self.graph_match_kws = graph_match_kws
         else:
-            msg = "`graph_match_kws` must be type dict"
+            msg = '"graph_match_kws` must be type dict'
             raise ValueError(msg)
 
     def fit(self, A, B, voi, seeds):
@@ -144,36 +144,36 @@ class VNviaSGM(BaseEstimator):
         B = np.atleast_2d(B)
 
         if not isinstance(A, np.ndarray) or not isinstance(B, np.ndarray):
-            msg = "`A` and `B` must be type np.ndarray"
+            msg = '"A" and "B" must be type np.ndarray'
             raise ValueError(msg)
         elif A.ndim != 2 or B.ndim != 2:
-            msg = "`A` and `B` must be two-dimensional"
+            msg = '"A" and "B" must be two-dimensional'
             raise ValueError(msg)
         elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
-            msg = "`A` and `B` must be square"
+            msg = '"A" and "B" must be square'
             raise ValueError(msg)
 
         if not isinstance(voi, int):
-            msg = "`voi` must be an integer"
+            msg = '"voi" must be an integer'
             raise ValueError(msg)
         elif voi < 0 or voi >= A.shape[0]:
-            msg = "`voi` must be in range[0, num_verts_A)"
+            msg = '"voi" must be in range[0, num_verts_A)'
             raise ValueError(msg)
 
         if not (isinstance(seeds, list) or isinstance(seeds, np.ndarray)):
-            msg = "`seeds` must be a list"
+            msg = '"seeds" must be a list'
             raise ValueError(msg)
 
         if isinstance(seeds, list):
             if len(seeds) != 2:
-                msg = "seeds must be length two, with first element containing seeds \
-                      of `A` and the second containing seeds of `B`"
+                msg = 'seeds must be length two, with first element containing seeds \
+                      of "A" and the second containing seeds of "B"'
                 raise ValueError(msg)
 
             if not (
                 isinstance(seeds[0], list) or isinstance(seeds[0], np.ndarray)
             ) or not (isinstance(seeds[1], list) or isinstance(seeds[1], np.ndarray)):
-                msg = "`seeds`[0] and `seeds`[1] must both be lists or arrays"
+                msg = '"seeds" elements must be lists or arrays'
                 raise ValueError(msg)
 
             seedsA = np.array(seeds[0])
@@ -183,29 +183,29 @@ class VNviaSGM(BaseEstimator):
             seeds = np.atleast_2d(seeds)
 
             if not isinstance(seeds, np.ndarray):
-                msg = "`seeds` be a list or 2d-array"
+                msg = '"seeds" be a list or 2d-array'
                 raise ValueError(msg)
             if seeds.shape[1] != 2:
-                msg = "`seeds` must have a second dimension of two"
+                msg = '"seeds" must have a second dimension of two'
                 raise ValueError(msg)
 
             seedsA = seeds[:, 0]
             seedsB = seeds[:, 1]
 
         if len(seedsA) != len(seedsB):
-            msg = "Must have the same number of seeds for each adjacency matrix"
+            msg = 'Must have the same number of seeds for each adjacency matrix'
             raise ValueError(msg)
         elif len(seedsA) == 0:
-            msg = "len('seeds') must be at least one"
+            msg = 'len("seeds") must be at least one'
             raise ValueError(msg)
         elif not len(set(seedsA)) == len(seedsA) or not len(set(seedsB)) == len(seedsB):
-            msg = "'seeds' column entries must be unique"
+            msg = '"seeds" column entries must be unique'
             raise ValueError(msg)
         elif len(seedsA) > A.shape[0]:
-            msg = "'seeds' cant have more entries than its associated adjacency matrix"
+            msg = '"seeds" cant have more entries than its associated adjacency matrix'
             raise ValueError(msg)
         elif (seedsA >= A.shape[0]).any() or (seedsB >= B.shape[0]).any():
-            msg = "`seeds` entries must be less than number of nodes in their graphs"
+            msg = '"seeds" entries must be less than number of nodes in their graphs'
             raise ValueError(msg)
 
         # get vertex reordering for Ax
@@ -237,8 +237,8 @@ class VNviaSGM(BaseEstimator):
 
         if len(close_seeds) <= 0:
             warnings.warn(
-                "Voi {} was not a member of the induced subgraph A[{}], \
-                Try increasing order_voi_subgraph".format(
+                'Voi {} was not a member of the induced subgraph A[{}], \
+                Try increasing "order_voi_subgraph"'.format(
                     voi, seedsA
                 )
             )
