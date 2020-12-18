@@ -65,7 +65,8 @@ class VNviaSGM(BaseEstimator):
     -----
     VNviaSGM generates an initial induced
     subgraph about the VOI to determine which seeds are close enough
-    to be used.
+    to be used. If no seeds are close enough, then a warning is thrown
+    and ``nomination_list_`` is set to None.
 
     All the seeds that are close enough are then used to generate subgraphs in
     both ``A`` and ``B``. These subgraphs are matched using several random
