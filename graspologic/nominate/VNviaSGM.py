@@ -15,6 +15,7 @@ class VNviaSGM(BaseEstimator):
     vertex of interst (VOI) in one to graph to the vertices in another graph, based on
     probability of matching.
 
+
     Parameters
     ----------
     order_voi_subgraph: int, positive (default = 1)
@@ -44,6 +45,7 @@ class VNviaSGM(BaseEstimator):
         algorithm. Format should be {'arg_name': arg_value, ...}. See
         :class:`~graspologic.match.GraphMatch`
 
+
     Attributes
     ----------
     n_seeds_: int
@@ -62,6 +64,7 @@ class VNviaSGM(BaseEstimator):
     graph matching. Stat Anal Data Min: The ASA Data Sci Journal. 2020; 13: 229– 244.
     https://doi.org/10.1002/sam.11454
 
+
     Notes
     -----
     VNviaSGM generates an initial induced subgraph about the VOI to determine which
@@ -69,9 +72,10 @@ class VNviaSGM(BaseEstimator):
     is thrown and ``nomination_list_`` is set to None.
 
     All the seeds that are close enough are then used to generate subgraphs in both
-    ``A`` and ``B``. These subgraphs are matched using several random initializations of
-    the seeded graph matching algorithm (SGM), and a nomination list is returned. See
-    :class:`~graspologic.match.GraphMatch` for SGM docs.
+    ``A`` and ``B``. These subgraphs are matched using several random initializations
+    ofthe seeded graph matching algorithm (SGM), and a nomination list is returned.
+    See :class:`~graspologic.match.GraphMatch` for SGM docs.
+
 
     """
 
