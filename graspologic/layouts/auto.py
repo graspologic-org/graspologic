@@ -56,15 +56,19 @@ def layout_tsne(
     perplexity : int
         The perplexity is related to the number of nearest neighbors that is used in
         other manifold learning algorithms. Larger datasets usually require a larger
-        perplexity. Consider selecting a value between 5 and 50. Different values can
+        perplexity. Consider selecting a value between 4 and 100. Different values can
         result in significanlty different results.
     n_iter : int
-        Maximum number of iterations for the optimization.
+        Maximum number of iterations for the optimization. We have found in practice
+        that larger graphs require more iterations. We hope to eventually have more
+        guidance on the number of iterations based on the size of the graph and the
+        density of the edge connections.
     max_edges : int
         The maximum number of edges to use when generating the embedding.  Default is
         ``10000000``. The edges with the lowest weights will be pruned until at most
         ``max_edges`` exist. Warning: this pruning is approximate and more edges than
-        are necessary may be pruned.
+        are necessary may be pruned. Running in 32 bit enviornment you will most
+        likely need to reduce this number or you will out of memory.
 
     Returns
     -------
@@ -119,20 +123,23 @@ def layout_umap(
         count is too high and only the largest connected component will be used to
         automatically generate a layout.
     min_dist : float
-        The effective minimum distance between embedded points. Smaller values will
-        result in a more clustered/clumped embedding where nearby points on the
-        manifold are drawn closer together, while larger values will result on a more
-        even dispersal of points. The value should be set relative to the ``spread``
-        value, which determines the scale at which embedded points will be spread out.
+        The effective minimum distance between embedded points. Default is ``0.75``.
+        Smaller values will result in a more clustered/clumped embedding where nearby
+        points on the manifold are drawn closer together, while larger values will
+        result on a more even dispersal of points. The value should be set relative to
+        the ``spread`` value, which determines the scale at which embedded points will
+        be spread out.
     n_neighbors : int
         The size of local neighborhood (in terms of number of neighboring sample points)
-        used for manifold approximation. Larger values result in more global views of
-        the manifold, while smaller values result in more local data being preserved.
+        used for manifold approximation. Default is ``25``. Larger values result in
+        more global views of the manifold, while smaller values result in more local
+        data being preserved.
     max_edges : int
         The maximum number of edges to use when generating the embedding.  Default is
         ``10000000``. The edges with the lowest weights will be pruned until at most
         ``max_edges`` exist. Warning: this pruning is approximate and more edges than
-        are necessary may be pruned.
+        are necessary may be pruned. Running in 32 bit enviornment you will most
+        likely need to reduce this number or you will out of memory.
 
     Returns
     -------
