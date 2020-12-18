@@ -112,8 +112,8 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
 .. _nomination_tutorials:
 
-Vertex Nomination
-=================
+Nomination
+==========
 The following tutorial demonstrates how to use vertex nomination via seeded graph matching.
 
 .. toctree::
