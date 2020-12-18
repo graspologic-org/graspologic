@@ -53,9 +53,9 @@ class VNviaSGM(BaseEstimator):
         VOI
 
     nomination_list_: 2d-array
-        An array containing vertex nominations in the form nomination list =
-        [[j, p_val],...] where p_val is the probability that the VOI matches to node
-        j in graph B (sorted by descending probability)
+        An array containing vertex nominations in the form nomination
+        list = [[j, p_val],...] where p_val is the probability that the VOI matches
+        to node j in graph B (sorted by descending probability)
 
 
     References
@@ -73,8 +73,9 @@ class VNviaSGM(BaseEstimator):
 
     All the seeds that are close enough are then used to generate subgraphs in both
     ``A`` and ``B``. These subgraphs are matched using several random initializations
-    ofthe seeded graph matching algorithm (SGM), and a nomination list is returned.
+    of the seeded graph matching algorithm (SGM), and a nomination list is returned.
     See :class:`~graspologic.match.GraphMatch` for SGM docs.
+    
 
 
     """
