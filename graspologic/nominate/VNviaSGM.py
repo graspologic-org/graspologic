@@ -16,8 +16,9 @@ class VNviaSGM(BaseEstimator):
     probabilities. VNviaSGM generates an initial induced subgraph about the
     VOI to determine which seeds are close enough to be used.
     All the seeds that are close enough are then used to generate subgraphs in
-    both ``A`` and ``B``. These subgraphs are matched using the seeded graph matching
-    algorithm (SGM), and a nomination list is returned. See
+    both ``A`` and ``B``. These subgraphs are matched using several random
+    initializations of the seeded graph matching algorithm (SGM), and a
+    nomination list is returned. See
     :class:`~graspologic.match.GraphMatch` for SGM docs.
 
     Parameters
@@ -131,8 +132,11 @@ class VNviaSGM(BaseEstimator):
 
         Returns
         -------
-        self: A reference to self
+        self: An instance of self
         """
+        A = np.atleast_2d(A)
+        B = np.atleast_2d(B)
+
         if not isinstance(A, np.ndarray) or not isinstance(B, np.ndarray):
             msg = "`A` and `B` must be type np.ndarray"
             raise ValueError(msg)
@@ -169,7 +173,12 @@ class VNviaSGM(BaseEstimator):
             seedsA = np.array(seeds[0])
             seedsB = np.array(seeds[1])
 
-        elif isinstance(seeds, np.ndarray):
+        else:
+            seeds = np.atleast_2d(seeds)
+
+            if not isinstance(seeds, np.ndarray):
+                msg = "`seeds` be a list or 2d-array"
+                raise ValueError(msg)
             if seeds.shape[1] != 2:
                 msg = "`seeds` must have a second dimension of two"
                 raise ValueError(msg)
