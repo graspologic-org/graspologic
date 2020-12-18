@@ -61,8 +61,8 @@ class VNviaSGM(BaseEstimator):
     References
     ----------
     .. [1] Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded
-    graph matching. Stat Anal Data Min: The ASA Data Sci Journal. 2020; 13: 229– 244.
-    https://doi.org/10.1002/sam.11454
+    graph matching. Stat Anal Data Min: The ASA Data Sci Journal.
+    2020; 13: 229– 244. https://doi.org/10.1002/sam.11454
 
 
     Notes
