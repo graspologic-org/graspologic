@@ -6,7 +6,7 @@ from graspologic.simulations import er_np
 np.random.seed(1)
 
 
-class TestGMP:
+class TestVNviaSGM:
     def test_VNviaSGM_inputs(self):
         with pytest.raises(ValueError):
             VNviaSGM(order_voi_subgraph=-1)
