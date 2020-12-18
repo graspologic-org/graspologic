@@ -156,6 +156,9 @@ def layout_umap(
     ----------
     .. [1] McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection
         for Dimension Reduction, ArXiv e-prints 1802.03426, 2018
+    .. [2] Böhm, Jan Niklas; Berens, Philipp; Kobak, Dmitry. A Unifying Perspective
+        on Neighbor Embeddings along the Attraction-Repulsion Spectrum. ArXiv e-prints
+        2007.08902v1, 17 Jul 2020.
     """
 
     lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges)
