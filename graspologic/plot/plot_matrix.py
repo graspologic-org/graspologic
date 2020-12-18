@@ -99,7 +99,7 @@ def _get_separator_info(meta, group):
     sep_inds = list(sep["sort_idx"].values)
     last = meta.groupby(group, sort=False).last()
     sep_inds.append(last["sort_idx"].values[-1] + 1)
-    return sep_inds
+    return np.array(sep_inds)
 
 
 def _item_to_df(item, name, length):
