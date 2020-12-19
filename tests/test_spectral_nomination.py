@@ -13,23 +13,14 @@ embeder = AdjacencySpectralEmbed()
 pre_embeded = embeder.fit_transform(adj)
 
 
-def _gen_att_seed(size, n_verts, labels):
-    seed = np.empty((size, 2), dtype=np.int)
-    seed[:, 0] = np.random.choice(3 * n_verts, size=size, replace=False).astype(np.int)
-    seed[:, 1] = labels[seed[:, 0]]
-    seed[-3:, 1] = np.array([0, 1, 2])  # ensure all atts represented
-    return seed
-
-
 def _nominate(X, seed, nominator=None, k=None):
     if nominator is None:
-        nominator = SpectralVertexNomination()
-    nominator.fit(X, seed, k=k)
+        nominator = SpectralVertexNomination(n_neighbors=k)
+    nominator.fit(X)
     n_verts = X.shape[0]
-    nom_list, dists = nominator.predict()
-    unique_att = nominator.unique_attributes_
-    assert nom_list.shape == (n_verts, unique_att.shape[0])
-    assert dists.shape == (n_verts, unique_att.shape[0])
+    nom_list, dists = nominator.predict(seed)
+    assert nom_list.shape == (n_verts, seed.shape[0])
+    assert dists.shape == (n_verts, seed.shape[0])
     return nom_list
 
 
@@ -84,16 +75,15 @@ def _test_adjacency_shape():
 
 
 def _test_input_graph_bool_type():
-    svn = SpectralVertexNomination(input_graph=4)
     # input graph param has wrong type
     with pytest.raises(TypeError):
-        _nominate(adj, np.zeros(3, dtype=np.int), nominator=svn)
+        svn = SpectralVertexNomination(input_graph=4)
 
 
 def _test_k_type():
-    # k of worng type
+    # k of wrong type
     with pytest.raises(TypeError):
-        _nominate(adj, np.zeros(3, dtype=np.int), k="hi")
+        _nominate(adj, np.zeros(3, dtype=np.int), k="hello world")
 
 
 def _test_k_value():
@@ -104,14 +94,13 @@ def _test_k_value():
 
 def _test_embedder_type():
     # embedder must be BaseSpectralEmbed or str
-    svn = SpectralVertexNomination(embedder=45)
     with pytest.raises(TypeError):
-        _nominate(adj, np.zeros(3, dtype=int), nominator=svn)
+        svn = SpectralVertexNomination(embedder=45)
 
 
 def _test_embedder_value():
-    svn = SpectralVertexNomination(embedder="hi")
     with pytest.raises(ValueError):
+        svn = SpectralVertexNomination(embedder="hi")
         _nominate(adj, np.zeros(3, dtype=int), nominator=svn)
 
 
@@ -135,7 +124,11 @@ class TestSpectralVertexNominatorOutputs:
 
     def test_constructor_inputs(self):
         _test_embedder_value()
+
+    def test_constructor_inputs1(self):
         _test_embedder_type()
+
+    def test_constructor_inputs2(self):
         _test_input_graph_bool_type()
 
     @pytest.mark.parametrize(
@@ -151,8 +144,7 @@ class TestSpectralVertexNominatorOutputs:
         [
             np.array([8]),
             np.array([2, 6, 9, 15, 25]),
-            _gen_att_seed(10, n_verts, labels),
-            _gen_att_seed(20, n_verts, labels),
+            np.arange(n_verts - 1, dtype=np.int),
         ],
     )
     def test_basic_unattributed(self, nominator, seed):
@@ -168,41 +160,9 @@ class TestSpectralVertexNominatorOutputs:
         [
             np.array([8]),
             np.array([2, 6, 9, 15, 25]),
-            _gen_att_seed(10, n_verts, labels),
-            _gen_att_seed(20, n_verts, labels),
+            np.arange(n_verts - 1, dtype=np.int),
         ],
     )
     def test_pre_embedded(self, seed):
         svn = SpectralVertexNomination(input_graph=False)
         _nominate(pre_embeded, seed, nominator=svn)
-
-    @pytest.mark.parametrize(
-        "nominator",
-        [
-            SpectralVertexNomination(embedder="ASE"),
-            SpectralVertexNomination(embedder="LSE"),
-        ],
-    )
-    @pytest.mark.parametrize(
-        "seed", [_gen_att_seed(20, n_verts, labels), _gen_att_seed(50, n_verts, labels)]
-    )
-    def test_attributed_accuracy(self, nominator, seed):
-        """
-        want to ensure performance is at least better than random
-        """
-        group1_correct = np.zeros(3 * n_verts)
-        group2_correct = np.zeros(3 * n_verts)
-        group3_correct = np.zeros(3 * n_verts)
-        labels = np.array([0] * n_verts + [1] * n_verts + [2] * n_verts)
-        for i in range(100):
-            _adj = np.array(sbm(3 * [n_verts], p), dtype=np.int)
-            n_list = _nominate(_adj, seed=seed, nominator=nominator)
-            group1_correct[np.argwhere(labels[n_list.T[0]] == 0)] += 1
-            group2_correct[np.argwhere(labels[n_list.T[1]] == 1)] += 1
-            group3_correct[np.argwhere(labels[n_list.T[2]] == 2)] += 1
-        g1_correct_prob = group1_correct / 100
-        g2_correct_prob = group2_correct / 100
-        g3_correct_prob = group3_correct / 100
-        assert np.mean(g1_correct_prob[: n_verts - 10]) > 0.7
-        assert np.mean(g2_correct_prob[: n_verts - 10]) > 0.7
-        assert np.mean(g3_correct_prob[: n_verts - 10]) > 0.7

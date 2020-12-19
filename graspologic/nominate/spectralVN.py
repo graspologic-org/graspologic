@@ -76,7 +76,7 @@ class SpectralVertexNomination(BaseEstimator):
         metric_params: dict = None,
     ):
         super().__init__()
-        self.embedder = embedder.lower()
+        self.embedder = embedder
         self.input_graph = input_graph
         self.n_neighbors = n_neighbors
         self.metric = metric
@@ -84,19 +84,21 @@ class SpectralVertexNomination(BaseEstimator):
         self._check_params()
 
     def _check_x(self, X: np.ndarray):
-        if type(self.input_graph) is not bool:
-            raise TypeError("input_graph_ must be of type bool.")
         # check X
         if not isinstance(X, np.ndarray):
             raise TypeError("X must be of type np.ndarray.")
-        if not np.issubdtype(X.dtype, np.number):
+        elif not np.issubdtype(X.dtype, np.number):
             raise TypeError("Adjacency matrix or embedding should have numeric type")
         elif np.ndim(X) != 2:
             raise IndexError("Adjacency matrix or embedding must have dim 2")
         elif not self.input_graph:
             # embedding was provided
             if X.shape[1] > X.shape[0]:
-                raise IndexError("dim 1 of an embedding should be smaller than dim 0.")
+                raise IndexError("Dim 1 of an embedding should be smaller than dim 0.")
+            if not np.issubdtype(X.dtype, np.float):
+                raise TypeError("Embedding should have type float")
+        elif not np.issubdtype(X.dtype, np.int):
+            raise TypeError("Adjacency matrix should have type int")
         elif X.shape[0] != X.shape[1]:
             raise IndexError("Adjacency Matrix should be square.")
 
@@ -108,9 +110,9 @@ class SpectralVertexNomination(BaseEstimator):
             raise TypeError("y must have dtype int")
         elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 1):
             raise IndexError("y must have shape (n) or (n, 1).")
-        elif y.shape[1] > self.embedding_.shape[0]:
+        elif y.shape[0] > self.embedding_.shape[0]:
             raise ValueError(
-                "the number of seeds must be less than the number of " "vertices"
+                "the number of seeds must be less than the number of vertices"
             )
 
     def _check_params(self):
@@ -123,6 +125,8 @@ class SpectralVertexNomination(BaseEstimator):
             raise TypeError("metric must be a string")
         if self.metric_params is not None and type(self.metric_params) is not dict:
             raise TypeError("metric_params must be a dictionary")
+        if type(self.input_graph) is not bool:
+            raise TypeError("input_graph_ must be of type bool.")
         if self.input_graph:
             if not isinstance(self.embedder, BaseSpectralEmbed) and not isinstance(
                 self.embedder, str
@@ -136,9 +140,11 @@ class SpectralVertexNomination(BaseEstimator):
         if self.input_graph:
             if isinstance(self.embedder, BaseSpectralEmbed):
                 embedder = self.embedder
-            elif self.embedder == "ase":
+            elif not isinstance(self.embedder, str):
+                raise TypeError("embedder must be type str or BaseSpectralEmbed")
+            elif self.embedder.lower() == "ase":
                 embedder = AdjacencySpectralEmbed()
-            elif self.embedder == "lse":
+            elif self.embedder.lower() == "lse":
                 embedder = LaplacianSpectralEmbed()
             else:
                 raise ValueError(
