@@ -70,13 +70,13 @@ class SpectralVertexNomination(BaseEstimator):
     def __init__(
         self,
         input_graph: bool = True,
-        embedder: Union[str, BaseSpectralEmbed] = "ASE",
+        embedder: Union[str, BaseSpectralEmbed] = "ase",
         n_neighbors=None,
         metric: str = "euclidean",
         metric_params: dict = None,
     ):
         super().__init__()
-        self.embedder = embedder
+        self.embedder = embedder.lower()
         self.input_graph = input_graph
         self.n_neighbors = n_neighbors
         self.metric = metric
@@ -108,6 +108,10 @@ class SpectralVertexNomination(BaseEstimator):
             raise TypeError("y must have dtype int")
         elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 1):
             raise IndexError("y must have shape (n) or (n, 1).")
+        elif y.shape[1] > self.embedding_.shape[0]:
+            raise ValueError(
+                "the number of seeds must be less than the number of " "vertices"
+            )
 
     def _check_params(self):
 
@@ -132,9 +136,9 @@ class SpectralVertexNomination(BaseEstimator):
         if self.input_graph:
             if isinstance(self.embedder, BaseSpectralEmbed):
                 embedder = self.embedder
-            elif self.embedder == "ASE":
+            elif self.embedder == "ase":
                 embedder = AdjacencySpectralEmbed()
-            elif self.embedder == "LSE":
+            elif self.embedder == "lse":
                 embedder = LaplacianSpectralEmbed()
             else:
                 raise ValueError(
@@ -146,9 +150,7 @@ class SpectralVertexNomination(BaseEstimator):
             self.embedding_ = X
 
     def fit(
-        self,
-        X: np.ndarray,
-        y=None,
+        self, X: np.ndarray, y=None,
     ):
         """
         Constructs the embedding if not provided, then calculates the pairwise distance
@@ -187,6 +189,13 @@ class SpectralVertexNomination(BaseEstimator):
     def predict(self, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominates vertices for each seed vertex. Methodology is distance based ranking.
+
+
+        Parameters
+        ----------
+        y : np.ndarray
+          The indices of the seed vertices. Should be a dim 1 array with length less
+          than :math:`|V|`.
 
         Returns
         -------
