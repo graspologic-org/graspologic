@@ -10,10 +10,12 @@ Reference
    cluster
    datasets
    embed
+   cluster
    inference
    layouts
    match
    models
+   nominate
    partition
    plotting
    preprocessing
