@@ -137,7 +137,7 @@ def sequential_colors(
         Default is ``True``. Colors selected for a light background will be slightly
         different in hue and saturation to complement a light or dark background.
     use_log_scale : bool
-        Default is ``False``.  Todo: Bryan, wtf is this
+        Default is ``False``.
     theme_path : Optional[str]
         A color scheme is provided with ``graspologic``, but if you wish to use your own
         you can generate one with `Thematic <https://microsoft.github.io/thematic>`_ and
