@@ -294,13 +294,19 @@ def valid_args(args: argparse.Namespace):
         _ensure_output_dir(args.image_file)
 
 
-parser = _parser()
+def main():
+    parser = _parser()
 
-args = parser.parse_args()
-if args.verbose is True:
-    logging.basicConfig(
-        format="%(asctime)s:%(levelname)s:%(name)s, %(message)s", level=logging.INFO
-    )
-    logger = logging.getLogger("graspologic.layouts")
+    args = parser.parse_args()
 
-args.func(args)
+    if args.verbose is True:
+        logging.basicConfig(
+            format="%(asctime)s:%(levelname)s:%(name)s, %(message)s", level=logging.INFO
+        )
+        logger = logging.getLogger("graspologic.layouts")
+
+    args.func(args)
+
+
+if __name__ == "__main__":
+    main()
