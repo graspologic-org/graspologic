@@ -284,8 +284,9 @@ def _center_points_on_origin(points: np.ndarray) -> np.ndarray:
     y_range = max_y - min_y
     center_x = x_range / 2 + min_x
     center_y = y_range / 2 + min_y
-    moved_points = [(x - center_x, y - center_y) for x, y in points]
-    return np.array(moved_points)
+    points[:, 0] -= center_x
+    points[:, 1] -= center_y
+    return points
 
 
 def _scale_to_unit_square(points: np.ndarray) -> np.ndarray:
