@@ -156,7 +156,9 @@ class SpectralVertexNomination(BaseEstimator):
             self.embedding_ = X
 
     def fit(
-        self, X: np.ndarray, y=None,
+        self,
+        X: np.ndarray,
+        y=None,
     ):
         """
         Constructs the embedding if not provided, then calculates the pairwise distance
@@ -224,7 +226,9 @@ class SpectralVertexNomination(BaseEstimator):
         return nomination_list.T.astype(np.int), distance_matrix.T
 
     def fit_predict(
-        self, X: np.ndarray, y: np.ndarray
+        self,
+        X: np.ndarray,
+        y: np.ndarray,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Calls this class' fit and then predict methods.
