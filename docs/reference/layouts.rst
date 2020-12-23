@@ -13,7 +13,7 @@ Automatic Graph Layout
 
 Colors
 ------
-.. autofunction:: nominal_colors
+.. autofunction:: categorical_colors
 .. autofunction:: sequential_colors
 
 Rendering

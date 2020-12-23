@@ -13,7 +13,7 @@ from sklearn.preprocessing import minmax_scale
 from typing import Any, Dict, Optional, Tuple
 
 
-__all__ = ["nominal_colors", "sequential_colors"]
+__all__ = ["categorical_colors", "sequential_colors"]
 
 
 def _load_thematic_json(path: Optional[str]) -> Tuple[Dict[Any, Any], Dict[Any, Any]]:
@@ -44,7 +44,7 @@ def _get_colors(light_background: bool, theme_path: Optional[str]) -> Dict[Any, 
     return light if light_background else dark
 
 
-def nominal_colors(
+def categorical_colors(
     partitions: Dict[Any, int],
     light_background: bool = True,
     theme_path: Optional[str] = None,

@@ -174,6 +174,8 @@ def show_graph(
 
     Attempts to display it via the platform-specific display library such as TkInter
 
+    Edges will be displayed with the same color as the source node.
+
     Parameters
     ----------
     graph : nx.Graph
@@ -250,6 +252,8 @@ def save_graph(
 ):
     """
     Renders a graph to file.
+
+    Edges will be displayed with the same color as the source node.
 
     Parameters
     ----------

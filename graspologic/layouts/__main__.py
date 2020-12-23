@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 import networkx as nx
 
 from . import auto, NodePosition, render
-from .colors import nominal_colors
+from .colors import categorical_colors
 
 
 def _graph_from_file(
@@ -49,7 +49,7 @@ def _output(
     arguments: argparse.Namespace, graph: nx.Graph, positions: List[NodePosition]
 ):
     partitions = {position.node_id: position.community for position in positions}
-    color_map = nominal_colors(partitions)
+    color_map = categorical_colors(partitions)
     if arguments.image_file is not None:
         render.save_graph(arguments.image_file, graph, positions, node_colors=color_map)
     if arguments.location_file is not None:
