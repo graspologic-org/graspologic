@@ -110,16 +110,18 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
    tutorials/subgraph/subgraph
 
+<<<<<<< HEAD
 .. _vertex_nomination_tutorials:
 
 Vertex Nomination
 =================
-The following tutorial demonstrates how to use attributed and unattributed single graph spectral vertex nomination to find vertices that are related to a given vertex / set of vertices of interest.
+The following tutorials demonstrate how to use unattributed single graph spectral vertex nomination or vertex nomination via seeded graph matching to find vertices that are related to a given vertex / set of vertices of interest.
 
 .. toctree::
    :maxdepth: 1
-   
+
    tutorials/vertex_nomination/SpectralVertexNomination
+   tutorials/nominate/vertex_nomination_via_SGM
 
 .. _aligning_tutorials:
 
