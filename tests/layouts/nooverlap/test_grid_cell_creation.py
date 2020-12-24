@@ -38,3 +38,6 @@ class TestGridCellCreation(unittest.TestCase):
         self.assertEqual(cell_y, 2)
         self.assertEqual(center_x, 43)
         self.assertEqual(center_y, 44)
+
+if __name__ == '__main__':
+    unittest.main()
