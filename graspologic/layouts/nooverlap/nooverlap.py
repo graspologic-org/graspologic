@@ -34,10 +34,4 @@ def remove_overlaps(node_positions: List[NodePosition]):
         )
         for node in local_nodes
     ]
-    for n in local_nodes:
-        new_positions.append(
-            NodePosition(
-                node_id=n.node_id, x=n.x, y=n.y, size=n.size, community=n.community
-            )
-        )
     return new_positions

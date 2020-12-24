@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+from graspologic.layouts.classes import NodePosition
 import math
 import logging
 from sklearn.preprocessing import normalize
@@ -11,6 +12,8 @@ from scipy.spatial import distance
 _EPSILON = 0.001
 logger = logging.getLogger(__name__)
 
+def node_positions_overlap(n1: NodePosition, n2: NodePosition):
+    return is_overlap(n1.x, n1.y, n1.size, n2.x, n2.y, n2.size)
 
 def is_overlap(x1, y1, s1, x2, y2, s2):
     min_dist = s1 + s2
