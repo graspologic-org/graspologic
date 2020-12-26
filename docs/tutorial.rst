@@ -110,7 +110,6 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
    tutorials/subgraph/subgraph
 
-<<<<<<< HEAD
 .. _vertex_nomination_tutorials:
 
 Vertex Nomination
