@@ -3,6 +3,7 @@
 
 import numpy as np
 from sklearn.base import BaseEstimator
+from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_array
 from sklearn.utils.validation import check_is_fitted
 
@@ -158,8 +159,8 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         ----------
         X : array-like, shape (n_samples, n_features)
         fcluster: bool, default=False
-            if True, returned labels will be a hierarchy of flat clusterings,
-            one for each level
+            if True, returned labels will be re-numbered so that each column
+            of labels represents a flat clustering at current level
         level: int, optional (default=None)
             the level of a single flat clustering to generate
             only available if ``fcluster`` is True
@@ -266,26 +267,23 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
                         )
                     labels[inds, 1 : child_labels.shape[1] + 1] = child_labels
                 else:
-                    # make a sudo "GaussianMixture" model for the cluster
-                    # that was not fitted
+                    # make a "GaussianMixture" model for clusters
+                    # that were not fitted
                     if self.cluster_method == "gmm":
-                        cluster_indx = len(dc.parent.children) - 1
+                        cluster_idx = len(dc.parent.children) - 1
                         parent_model = dc.parent.model_
-                        # for cases where "init_params" is "kmeans" in AutoGMM
-                        model = {
-                            "covariance_type": parent_model.covariance_type,
-                            "reg_covar": parent_model.reg_covar,
-                        }
-                        if parent_model.means_init is not None:
-                            model.update(
-                                {
-                                    "means_init": parent_model.means_init[cluster_indx],
-                                    "precisions_init": parent_model.precisions_init[
-                                        cluster_indx
-                                    ],
-                                    "weights_init": np.array([1]),
-                                }
-                            )
+                        model = GaussianMixture()
+                        if parent_model.means_init is None:
+                            # for cases where "init_params" is "kmeans" in AutoGMM
+                            # i.e., means/precisions/weights_init are not applicable
+                            model.covariance_type = parent_model.covariance_type
+                            model.reg_covar = parent_model.reg_covar
+                        else:
+                            model.means_init = parent_model.means_init[cluster_idx]
+                            model.precisions_init = parent_model.precisions_init[
+                                cluster_idx
+                            ]
+                            model.weights_init = np.array([1])
                         dc.model_ = model
 
         return labels
