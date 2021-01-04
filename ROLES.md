@@ -7,7 +7,7 @@ your issue!
 
 ## Core Contributors
 
-### Ali Saad-Eldin ([@asaadeldin11](https://github.com/asaadeldin11))
+### Ali Saad-Eldin ([@asaadeldin11](https://github.com/asaadeldin11)) (he/him)
 Ali is a Masters Student at Johns Hopkins University. He contributes and reviews code 
 mostly for the `match` and `embed` modules. 
 
