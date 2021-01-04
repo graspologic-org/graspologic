@@ -110,6 +110,20 @@ def find_center(nodes):
 
 
 class _QuadNode:
+    """
+    Represents a node in a quad tree. Each node has a list of nodes that are represented here
+    or in its children.
+    Each node knows its own depth in the tree. Each node will have less than max_nodes_per_quad
+    in the nodes list or it will have populated children.
+    Each node also has a point back up to its parent.  The root node in a tree will have None for
+    its parent attribute.
+    Each node has an x and y that are the center point which is a weighted center.
+    Each node has min_x, min_y, max_x_, max_y that defines the area of this node
+    Each node also has four child nodes NW, NE, SE, and SW they represent the nodes that are
+    that direction from the center.
+
+    Each node has a property indicating if has been laid out.
+    """
     max_ratio = 0.95
 
     def __init__(self, nodes, depth, max_nodes_per_quad, parent=None):
