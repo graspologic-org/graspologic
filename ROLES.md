@@ -36,6 +36,6 @@ Jaewon is a PhD student at Johns Hopkins University. He is a maintainer and deve
 for `graspologic`, and is responsible for reviewing code contributions, merging pull 
 requests, and making decisions on the `graspologic` API.
 
-### Nick Caurvina ([@nyecarr](https://github.com/nyecarr))
+### Nick Caurvina ([@nyecarr](https://github.com/nyecarr)) (he/him)
 Nick is a Software Engineer at Microsoft Research. Ask Nick about the network 
 embeddings and their application to business problems.
