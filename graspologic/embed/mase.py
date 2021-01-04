@@ -189,9 +189,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -227,9 +227,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray or scipy.sparse.csr_matrix, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
