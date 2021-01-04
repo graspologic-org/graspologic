@@ -26,7 +26,7 @@ can improve our tutorials.
 Carolyn is a Technical Program Manager at Microsoft. Ask Carolyn about where the project
 is going and how it’s organized.
 
-### Dwayne Pryce ([@dwaynepryce](https://github.com/dwaynepryce))
+### Dwayne Pryce ([@dwaynepryce](https://github.com/dwaynepryce)) (he/him)
 Dwayne Pryce is a Software Engineer at Microsoft Research. His primary contributions to
 `graspologic` are on the steering committee, quality of life utility functions, and
 build and release processes.
