@@ -49,7 +49,7 @@ setup(
     package_data={"version": [os.path.join("graspologic", "version", "version.txt")]},
     install_requires=[
         "anytree>=2.8.0",
-        "gensim",
+        "gensim>=3.8.0,<=3.9.0", #methods signatures changed in the 4.0.0beta release
         "graspologic-native",
         "hyppo>=0.1.3",
         "joblib>=0.17.0",  # Older versions of joblib cause issue #806.  Transitive dependency of hyppo.
@@ -60,6 +60,7 @@ setup(
         "seaborn>= 0.11.0",
         "scikit-learn>=0.19.1",
         "scipy>=1.4.0",
+        'umap-learn>=0.4.6',
     ],
     extras_require={
         "dev": [
