@@ -60,12 +60,12 @@ class TestOverlapCheck(unittest.TestCase):
         ov_idx, overlapping_node = is_overlapping_any_node_and_index(
             to_check, to_check.x, to_check.y, others, ov_idx, idx
         )
-        self.assertEquals(2, ov_idx)
+        self.assertEqual(2, ov_idx)
 
         ov_idx, overlapping_node = is_overlapping_any_node_and_index(
             to_check, to_check.x, to_check.y, others, 2, 3
         )
-        self.assertEquals(2, ov_idx)
+        self.assertEqual(2, ov_idx)
 
     def test_just_outside_box(self):
         self.assertTrue(self.qn.is_just_outside_box(5, 5, 10, 10, 1, 6, 4.9, 1))  # down
@@ -159,5 +159,3 @@ class TestOverlapCheck(unittest.TestCase):
 
         self.assertEqual(5, len(just_outside))
 
-if __name__ == '__main__':
-    unittest.main()

@@ -78,10 +78,10 @@ class TestGrid(unittest.TestCase):
         g.add_node(n3)
         g.add_node(n4)
         stats = g.get_grid_cell_stats()
-        self.assertEquals(3, len(stats), "Correct size list")
-        self.assertEquals(254, stats[0][1], "empty cells")
-        self.assertEquals(6, stats[1][1], "one item in cell")
-        self.assertEquals(4, stats[2][1], "two items in cell")
+        self.assertEqual(3, len(stats), "Correct size list")
+        self.assertEqual(254, stats[0][1], "empty cells")
+        self.assertEqual(6, stats[1][1], "one item in cell")
+        self.assertEqual(4, stats[2][1], "two items in cell")
 
 if __name__ == '__main__':
     unittest.main()
