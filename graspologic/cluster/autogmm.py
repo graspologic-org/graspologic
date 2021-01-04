@@ -378,7 +378,32 @@ class AutoGMMCluster(BaseCluster):
     # ignoring warning here because if convergence is not reached, the regularization
     # is automatically increased
     @ignore_warnings(category=ConvergenceWarning)
-    def _fit_cluster(self, X, y, params, gm_params):
+    def _fit_cluster(self, X, X_subset, y, params, agg_clustering):
+        label_init = self.label_init
+        if label_init is not None:
+            onehot = _labels_to_onehot(label_init)
+            weights_init, means_init, precisions_init = _onehot_to_initial_params(
+                X, onehot, params[1]["covariance_type"]
+            )
+            gm_params = params[1]
+            gm_params["weights_init"] = weights_init
+            gm_params["means_init"] = means_init
+            gm_params["precisions_init"] = precisions_init
+        elif params[0]["affinity"] != "none":
+            onehot = _labels_to_onehot(agg_clustering)
+            weights_init, means_init, precisions_init = _onehot_to_initial_params(
+                X_subset, onehot, params[1]["covariance_type"]
+            )
+            gm_params = params[1]
+            gm_params["weights_init"] = weights_init
+            gm_params["means_init"] = means_init
+            gm_params["precisions_init"] = precisions_init
+        else:
+            gm_params = params[1]
+            gm_params["init_params"] = "kmeans"
+        gm_params["reg_covar"] = 0
+        gm_params["max_iter"] = self.max_iter
+
         criter = np.inf  # if none of the iterations converge, bic/aic is set to inf
         # below is the regularization scheme
         while gm_params["reg_covar"] <= 1 and criter == np.inf:
@@ -416,81 +441,11 @@ class AutoGMMCluster(BaseCluster):
             "bic/aic": criter,
             "ari": ari,
             "n_components": gm_params["n_components"],
-            "affinity": params["affinity"],
-            "linkage": params["linkage"],
+            "affinity": params[0]["affinity"],
+            "linkage": params[0]["linkage"],
             "covariance_type": gm_params["covariance_type"],
             "reg_covar": gm_params["reg_covar"],
         }
-        return results
-
-    def _init_gm_params(self, X, labels, params):
-        onehot = _labels_to_onehot(labels)
-        weights_init, means_init, precisions_init = _onehot_to_initial_params(
-            X, onehot, params["covariance_type"]
-        )
-        gm_params = params.copy()
-        gm_params["weights_init"] = weights_init
-        gm_params["means_init"] = means_init
-        gm_params["precisions_init"] = precisions_init
-        gm_params["reg_covar"] = 0
-        gm_params["max_iter"] = self.max_iter
-        return gm_params
-
-    def _fit_for_data(
-        self, X, y, param_grid_gm, param_grid_ag, lower_ncomponents, upper_ncomponents
-    ):
-        results = []
-        label_init = self.label_init
-        for p_gm in param_grid_gm:
-            if label_init is not None:
-                p_ag = {}
-                p_ag["affinity"] = None
-                p_ag["linkage"] = None
-                for i, n_comp in enumerate(
-                    np.arange(lower_ncomponents, upper_ncomponents + 1)
-                ):
-                    p_gm["n_components"] = n_comp
-                    gm_params = self._init_gm_params(X, label_init, p_gm)
-                    results.append(self._fit_cluster(X, y, p_ag, gm_params))
-            else:
-                for p_ag in param_grid_ag:
-                    if p_ag["affinity"] != "none":
-                        n_comp = lower_ncomponents
-                        p_gm["n_components"] = n_comp
-                        agg = AgglomerativeClustering(**p_ag)
-                        n = X.shape[0]
-                        if self.max_agglom_size is None or n <= self.max_agglom_size:
-                            X_subset = X
-                        else:  # if dataset is huge, agglomerate a subset
-                            subset_idxs = np.random.choice(
-                                np.arange(0, n), self.max_agglom_size
-                            )
-                            X_subset = X[subset_idxs, :]
-                        agg_clustering = agg.fit_predict(X_subset)
-                        gm_params = self._init_gm_params(X_subset, agg_clustering, p_gm)
-                        hierarchical_labels = _hierarchical_labels(
-                            agg.children_, lower_ncomponents + 1, upper_ncomponents
-                        )
-                        results.append(self._fit_cluster(X, y, p_ag, gm_params))
-
-                        for i, n_comp in enumerate(
-                            np.arange(lower_ncomponents + 1, upper_ncomponents + 1)
-                        ):
-                            new_label = hierarchical_labels[:, i]
-                            p_gm["n_components"] = n_comp
-                            gm_params = self._init_gm_params(X, new_label, p_gm)
-                            results.append(self._fit_cluster(X, y, p_ag, gm_params))
-                    else:
-                        for i, n_comp in enumerate(
-                            np.arange(lower_ncomponents, upper_ncomponents + 1)
-                        ):
-                            gm_params = p_gm
-                            gm_params["init_params"] = "kmeans"
-                            gm_params["reg_covar"] = 0
-                            gm_params["max_iter"] = self.max_iter
-                            gm_params["n_components"] = n_comp
-                            results.append(self._fit_cluster(X, y, p_ag, gm_params))
-
         return results
 
     def fit(self, X, y=None):
@@ -553,20 +508,47 @@ class AutoGMMCluster(BaseCluster):
                 msg = "n_samples must be the same as the length of label_init"
                 raise ValueError(msg)
 
-        param_grid_ag = dict(
-            affinity=self.affinity, linkage=self.linkage, n_clusters=[lower_ncomponents]
-        )
-        param_grid_ag = list(ParameterGrid(param_grid_ag))
-        param_grid_ag = _process_paramgrid(param_grid_ag)
-
-        param_grid_gm = dict(
+        param_grid = dict(
+            affinity=self.affinity,
+            linkage=self.linkage,
             covariance_type=self.covariance_type,
+            n_components=range(lower_ncomponents, upper_ncomponents + 1),
             random_state=[self.random_state],
         )
-        param_grid_gm = list(ParameterGrid(param_grid_gm))
+        param_grid = list(ParameterGrid(param_grid))
+        param_grid_ag, param_grid = _process_paramgrid(param_grid)
 
-        results = self._fit_for_data(
-            X, y, param_grid_gm, param_grid_ag, lower_ncomponents, upper_ncomponents
+        n = X.shape[0]
+        if self.max_agglom_size is None or n <= self.max_agglom_size:
+            X_subset = X
+        else:  # if dataset is huge, agglomerate a subset
+            subset_idxs = np.random.choice(np.arange(0, n), self.max_agglom_size)
+            X_subset = X[subset_idxs, :]
+
+        ag_labels = []
+        if self.label_init is None:
+            for p_ag in param_grid_ag:
+                if p_ag["affinity"] != "none":
+                    agg = AgglomerativeClustering(
+                        n_clusters=self.min_components, **p_ag
+                    )
+                    agg.fit(X_subset)
+                    hierarchical_labels = _hierarchical_labels(
+                        agg.children_, lower_ncomponents, upper_ncomponents
+                    )
+                ag_labels.append(hierarchical_labels)
+
+        def _fit_for_data(p):
+            n_clusters = p[1]["n_components"]
+            if (p[0]["affinity"] != "none") and (self.label_init is None):
+                index = param_grid_ag.index(p[0])
+                agg_clustering = ag_labels[index][:, n_clusters - self.min_components]
+            else:
+                agg_clustering = []
+            return self._fit_cluster(X, X_subset, y, p, agg_clustering)
+
+        results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
+            delayed(_fit_for_data)(p) for p in param_grid
         )
         results = pd.DataFrame(results)
 
@@ -678,7 +660,12 @@ def _process_paramgrid(paramgrid):
     paramgrid_processed : list pairs of dicts
         For each pair, the first dict are the options for AgglomerativeClustering.
         The second dict include the options for GaussianMixture.
+    ag_paramgrid_processed : list of dicts
+        options for AgglomerativeClustering
     """
+    gm_keys = ["covariance_type", "n_components", "random_state"]
+    ag_keys = ["affinity", "linkage"]
+    ag_params_processed = []
     paramgrid_processed = []
 
     for params in paramgrid:
@@ -694,13 +681,13 @@ def _process_paramgrid(paramgrid):
         ):
             continue
         else:
-            ag_keys = ["affinity", "linkage"]
+            gm_params = {key: params[key] for key in gm_keys}
             ag_params = {key: params[key] for key in ag_keys}
-            ag_params["n_clusters"] = params["n_clusters"]
+            if ag_params not in ag_params_processed:
+                ag_params_processed.append(ag_params)
 
-            paramgrid_processed.append(ag_params)
-
-    return paramgrid_processed
+            paramgrid_processed.append([ag_params, gm_params])
+    return ag_params_processed, paramgrid_processed
 
 
 def _hierarchical_labels(children, min_components, max_components):
