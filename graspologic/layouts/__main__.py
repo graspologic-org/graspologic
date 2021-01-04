@@ -168,7 +168,11 @@ def _parser() -> argparse.ArgumentParser:
         default=False,
     )
 
-    subparsers = root_parser.add_subparsers(required=True)
+    subparsers = root_parser.add_subparsers(
+        required=True,
+        dest="COMMAND",
+        help="auto layout via umap, tsne, or a pure render only mode",
+    )
 
     n2vumap_parser = subparsers.add_parser(
         "n2vumap",
