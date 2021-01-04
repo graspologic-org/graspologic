@@ -158,3 +158,6 @@ class TestOverlapCheck(unittest.TestCase):
         just_outside = local_quad.get_nodes_near_lines(others)
 
         self.assertEqual(5, len(just_outside))
+
+if __name__ == '__main__':
+    unittest.main()

@@ -2,9 +2,10 @@
 # Licensed under the MIT License.
 
 import unittest
-from graspologic.layouts.nooverlap._quad_node import move_point_on_line, _QuadNode
+from graspologic.layouts.nooverlap._quad_node import move_point_on_line, _QuadNode, node_positions_overlap
 from graspologic.layouts.nooverlap._node import _Node
-
+from graspologic.layouts.nooverlap.nooverlap import remove_overlaps
+from graspologic.layouts import NodePosition
 
 class TestNoOverlap(unittest.TestCase):
     def setUp(self):
@@ -256,3 +257,25 @@ class TestNoOverlap(unittest.TestCase):
             cells, 0, 2, self.num_x, self.num_y, self.min_x, self.min_y, self.max_size
         )
         self.assertTupleEqual(result, (0, 0, 0, 0), "Failure")
+
+    def test_remove_overlap(self):
+        list_of_nodes = [NodePosition(node_id=99, x=3, y=7, size=2, community=0),
+            NodePosition(node_id=100, x=2, y=9, size=3, community=0),
+            NodePosition(node_id=101, x=2, y=9, size=3, community=0),
+            ]
+
+        overlap_count = 0
+        answer = remove_overlaps(list_of_nodes)
+        for idx, n1 in enumerate(answer):
+            print (idx, n1)
+            for idx2, n2 in enumerate (answer[idx+1:]):
+                print ("****", idx2, "****", n2)
+                if node_positions_overlap(n1, n2):
+                    overlap_count += 1
+                    print ("overlap ****", idx2, "****", n2)
+        self.assertEqual(0, overlap_count, "We found overlaps")
+
+
+
+if __name__ == '__main__':
+    unittest.main()

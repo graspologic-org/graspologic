@@ -272,12 +272,8 @@ def _covered_size(sizes: Dict[Any, float]) -> float:
 
 
 def _get_bounds(points: np.ndarray) -> Tuple[float, float, float, float]:
-    min_x, min_y, max_x, max_y = math.inf, math.inf, -math.inf, -math.inf
-    for x, y in points:
-        min_x = min(x, min_x)
-        min_y = min(y, min_y)
-        max_x = max(x, max_x)
-        max_y = max(y, max_y)
+    min_x, min_y = points.min(axis=0)
+    max_x, max_y = points.max(axis=0)
     return min_x, min_y, max_x, max_y
 
 

@@ -82,3 +82,6 @@ class TestGrid(unittest.TestCase):
         self.assertEquals(254, stats[0][1], "empty cells")
         self.assertEquals(6, stats[1][1], "one item in cell")
         self.assertEquals(4, stats[2][1], "two items in cell")
+
+if __name__ == '__main__':
+    unittest.main()
