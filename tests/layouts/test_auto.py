@@ -5,9 +5,10 @@ import unittest
 import numpy
 from graspologic.layouts.auto import _get_bounds
 
+
 class TestAuto(unittest.TestCase):
     def test_get_bounds(self):
-        y = numpy.array([(1, 2), (4,5), (-1,-2), (10,-20)])
+        y = numpy.array([(1, 2), (4, 5), (-1, -2), (10, -20)])
         minx, miny, maxx, maxy = _get_bounds(y)
         self.assertEqual(-1, minx)
         self.assertEqual(-20, miny)
@@ -15,5 +16,5 @@ class TestAuto(unittest.TestCase):
         self.assertEqual(5, maxy)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
