@@ -15,6 +15,8 @@ Reference
    datasets
    utils
    match
+   nominate
    subgraph
    align
    preprocessing
+   partition
