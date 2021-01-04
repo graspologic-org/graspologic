@@ -14,6 +14,8 @@ from sklearn.manifold import TSNE
 import umap
 
 from .classes import NodePosition
+from .nooverlap import remove_overlaps
+
 from ..embed import node2vec_embed
 from ..partition import leiden
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
@@ -232,6 +234,7 @@ def _node_positions_from(
         )
         for index, key in enumerate(labels)
     ]
+    positions = remove_overlaps(positions)
     return positions
 
 
