@@ -22,7 +22,7 @@ network model fitting and sampling, clustering, and spectral embedding (`models`
 `simulations`, `cluster`, and `embed`, respectfully). Ben is also happy to hear how we 
 can improve our tutorials.
 
-### Carolyn Buractaon ([@carolyncb](https://github.com/carolyncb))
+### Carolyn Buractaon ([@carolyncb](https://github.com/carolyncb)) (she/her)
 Carolyn is a Technical Program Manager at Microsoft. Ask Carolyn about where the project
 is going and how it’s organized.
 
