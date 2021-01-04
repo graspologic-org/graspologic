@@ -126,6 +126,7 @@ class _QuadNode:
 
     Each node has a property indicating if has been laid out.
     """
+
     max_ratio = 0.95
 
     def __init__(self, nodes, depth, max_nodes_per_quad, parent=None):
