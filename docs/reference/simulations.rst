@@ -20,3 +20,5 @@ Simulations
 
 .. autofunction:: rdpg_corr
 
+.. autofunction:: mmsbm
+
