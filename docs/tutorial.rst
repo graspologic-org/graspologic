@@ -111,17 +111,17 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
    tutorials/subgraph/subgraph
 
-.. _nomination_tutorials:
+.. _vertex_nomination_tutorials:
 
-Nomination
-==========
-The following tutorial demonstrates how to use vertex nomination via seeded graph matching.
+Vertex Nomination
+=================
+The following tutorials demonstrate how to use unattributed single graph spectral vertex nomination or vertex nomination via seeded graph matching to find vertices that are related to a given vertex / set of vertices of interest.
 
 .. toctree::
    :maxdepth: 1
-   
-   tutorials/nominate/vertex_nomination_via_SGM
 
+   tutorials/vertex_nomination/SpectralVertexNomination
+   tutorials/nominate/vertex_nomination_via_SGM
 
 .. _aligning_tutorials:
 
@@ -133,3 +133,4 @@ The following tutorials shows how to align two seperate datasets with each other
    :maxdepth: 1
 
    tutorials/aligning/aligning
+
