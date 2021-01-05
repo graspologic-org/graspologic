@@ -371,7 +371,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
         raise TypeError("Unsuported Laplacian normalization")
 
     A = import_graph(graph)
-    
+
     in_degree = np.squeeze(np.asarray(A.sum(axis=0)))
     out_degree = np.squeeze(np.asarray(A.sum(axis=1)))
 
