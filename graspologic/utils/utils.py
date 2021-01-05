@@ -7,17 +7,15 @@ from functools import reduce
 from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
 
-
 import networkx as nx
 import numpy as np
-import scipy
 import pandas as pd
-
+import scipy
 from scipy.optimize import linear_sum_assignment
+from scipy.sparse import diags, isspmatrix_csr
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
-from scipy.sparse import isspmatrix_csr, diags, dia_matrix
 
 
 def import_graph(graph, copy=True):
