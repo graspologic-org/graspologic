@@ -8,7 +8,6 @@ from sklearn.base import BaseEstimator
 
 from ..utils import augment_diagonal, import_graph, is_almost_symmetric
 from .svd import selectSVD
-import scipy
 
 
 class BaseSpectralEmbed(BaseEstimator):

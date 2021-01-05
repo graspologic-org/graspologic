@@ -143,7 +143,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        graph : array_like, scipy.sparse.csr_matrix, or networkx.Graph
+        graph : array-like, scipy.sparse.csr_matrix, or networkx.Graph
             Input graph to embed.
 
         y: Ignored
@@ -187,7 +187,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        X : array_like or tuple, original shape or (n_oos_vertices, n_vertices).
+        X : array-like or tuple, original shape or (n_oos_vertices, n_vertices).
 
             The original fitted matrix ("graph" in fit) or new out-of-sample data.
             If ``X`` is the original fitted matrix, returns a matrix close to
