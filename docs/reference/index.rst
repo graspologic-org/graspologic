@@ -6,17 +6,19 @@ Reference
 .. toctree::
    :maxdepth: 2
 
-   simulations
-   models
+   align
+   cluster
+   datasets
    embed
    cluster
    inference
-   plotting
-   datasets
-   utils
+   layouts
    match
+   models
    nominate
-   subgraph
-   align
-   preprocessing
    partition
+   plotting
+   preprocessing
+   simulations
+   subgraph
+   utils
