@@ -31,7 +31,7 @@ Dwayne Pryce is a Software Engineer at Microsoft Research. His primary contribut
 `graspologic` are on the steering committee, quality of life utility functions, and
 build and release processes.
 
-### Jaewon Chung ([@j1c](https://github.com/j1c))
+### Jaewon Chung ([@j1c](https://github.com/j1c)) (he/him)
 Jaewon is a PhD student at Johns Hopkins University. He is a maintainer and developer 
 for `graspologic`, and is responsible for reviewing code contributions, merging pull 
 requests, and making decisions on the `graspologic` API.
