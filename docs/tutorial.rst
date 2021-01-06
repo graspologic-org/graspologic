@@ -144,4 +144,3 @@ The following tutorials demonstrate how to apply methods in this package to the 
    :maxdepth: 1
    
    tutorials/connectomics/mcc
-=======
