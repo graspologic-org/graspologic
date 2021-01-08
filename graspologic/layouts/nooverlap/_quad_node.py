@@ -1,6 +1,5 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
-
 from graspologic.layouts.classes import NodePosition
 import math
 import logging
@@ -65,12 +64,12 @@ def stats_nodes(nodes):
     max_y = -math.inf
     min_y = math.inf
     max_size = -1
-    for gnode in nodes:
-        max_x = max(gnode.x, max_x)
-        max_y = max(gnode.y, max_y)
-        min_x = min(gnode.x, min_x)
-        min_y = min(gnode.y, min_y)
-        max_size = max(gnode.size, max_size)
+    for n in nodes:
+        max_x = max(n.x, max_x)
+        max_y = max(n.y, max_y)
+        min_x = min(n.x, min_x)
+        min_y = min(n.y, min_y)
+        max_size = max(n.size, max_size)
     return min_x, min_y, max_x, max_y, max_size
 
 
@@ -93,31 +92,13 @@ def scale_graph(g, scale_factor):
     return g
 
 
-def find_center(nodes):
-    num_nodes = len(nodes)
-    if num_nodes <= 0:
-        raise Exception("Zero nodes!")
-
-    min_x, min_y, max_x, max_y, max_size = stats_nodes(nodes)
-    tot_area = total_area(min_x, min_y, max_x, max_y)
-    x, y = 0.0, 0.0
-    # sum X and Y values then devide by number of nodes to get the average (x,y) or center
-    for n in nodes:
-        x += n.x
-        y += n.y
-    # need to fix x and y
-    x = x / num_nodes
-    y = y / num_nodes
-    return x, y, max_size
-
-
 class _QuadNode:
     """
     Represents a node in a quad tree. Each node has a list of nodes that are represented here
     or in its children.
     Each node knows its own depth in the tree. Each node will have less than max_nodes_per_quad
     in the nodes list or it will have populated children.
-    Each node also has a point back up to its parent.  The root node in a tree will have None for
+    Each node also has a pointer back up to its parent.  The root node in a tree will have None for
     its parent attribute.
     Each node has an x and y that are the center point which is a weighted center.
     Each node has min_x, min_y, max_x_, max_y that defines the area of this node
@@ -135,8 +116,8 @@ class _QuadNode:
         self.max_nodes_per_quad = max_nodes_per_quad
         self.is_laid_out = False
         self.parent = parent
-        self.find_center()
-        self.push_to_kids()
+        self._find_center()
+        self._push_to_kids()
         self.total_nodes_moved = 0
         self.not_first_choice = 0
 
@@ -155,10 +136,16 @@ class _QuadNode:
         total_cells = number_of_y_cells * number_of_x_cells
         return total_cells
 
-    def find_center(self):
+    def _find_center(self):
         if len(self.nodes) <= 0:
             raise Exception("Invalid to create a quad node with zero nodes!")
 
+        #TODO
+        #if we get he max size and the 2nd largest size we can make the size of the
+        #cells smaller, to potentially get more cells in each node that will in some
+        #cases make it so the don't have to bump up to the parent. The actual max
+        #length required for a size is max_size+2nd_size not max_size*2, this would
+        #be changed in get_total_cells
         self.min_x, self.min_y, self.max_x, self.max_y, self.max_size = stats_nodes(
             self.nodes
         )
@@ -166,19 +153,16 @@ class _QuadNode:
         self.square_size = self.total_square_size()
         tot_area = total_area(self.min_x, self.min_y, self.max_x, self.max_y)
         if tot_area == 0:
-            tot_area = 0.001
-        self.x, self.y = 0.0, 0.0
+            tot_area = 0.001 # just to prevent division by 0
+        self.sq_ratio = self.square_size / tot_area
+        self.cir_ratio = self.circle_size / tot_area
+
         self.total_cells = self.get_total_cells(
             self.min_x, self.min_y, self.max_x, self.max_y, self.max_size
         )
-        if tot_area == 0:
-            self.sq_ratio = 1.0
-            self.cir_ratio = 1.0
-        else:
-            self.sq_ratio = self.square_size / tot_area
-            self.cir_ratio = self.circle_size / tot_area
 
-        # sum X and Y values then devide by number of nodes to get the average (x,y) or center
+        # sum X and Y values then divide by number of nodes to get the average (x,y) or center
+        self.x, self.y = 0.0, 0.0
         for n in self.nodes:
             self.x += n.x
             self.y += n.y
@@ -186,9 +170,7 @@ class _QuadNode:
         self.x = self.x / self.num_nodes()
         self.y = self.y / self.num_nodes()
 
-    # print ("depth: %d, size: %d, center %g, %g, min (%g,%g), max(%g,%g)" %(self.depth, len(self.nodes),self.x, self.y,min_x, min_y, max_x, max_y))
-
-    def push_to_kids(self):
+    def _push_to_kids(self):
         if len(self.nodes) <= self.max_nodes_per_quad:
             # if len == nodes then we already have the center and mass initialized because of
             # the calculation done in the constructor
@@ -231,9 +213,9 @@ class _QuadNode:
             else None
         )
 
-        for quad in self.child_list():
-            if quad:
-                quad.push_to_kids()
+        #for quad in self.child_list():
+        #    if quad:
+        #        quad._push_to_kids()
         return
 
     def num_children(self):
@@ -290,40 +272,48 @@ class _QuadNode:
             total_size += n.size * n.size * 2 * 2
         return total_size
 
-    def get_stats_for_quad(self, max_depth, stats_list, magnification=10):
+    def _node_stats(self):
         tot_area = total_area(self.min_x, self.min_y, self.max_x, self.max_y)
         if tot_area == 0:
             tot_area = 0.001
-        tag = 5 if self.circle_size / tot_area > self.max_ratio else 0
-        # print ('-'*self.depth, "size: %d, (%g, %g), (%g, %g) cs: %g, tot: %g, ratio: %g, ss: %g, ratio: %g, tag: %s" %(len(self.nodes), self.min_x, self.min_y, self.max_x, self.max_y, self.circle_size, tot_area, self.circle_size/tot_area, self.square_size, self.square_size/tot_area, tag))
-        if self.depth >= max_depth:
-            stats_list.append(
-                [
+        return [
                     self.x,
                     self.y,
-                    self.circle_size / tot_area * magnification,
-                    tag,
-                    self.square_size / tot_area * magnification,
+                    self.depth,
+                    self.min_x,
+                    self.min_y,
+                    self.max_x,
+                    self.max_y,
+                    self.circle_size / tot_area,
+                    self.total_cells,
+                    len(self.nodes)
                 ]
-            )
+    def _node_stats_header(self):
+        return [
+            "x",
+            "y",
+            "depth",
+            "min_x",
+            "min_y",
+            "max_x",
+            "max_y",
+            "covered_ratio",
+            "cells",
+            "nodes"]
+
+    def get_stats_for_quad(self, max_depth, stats_list, magnification=10):
+        if self.depth >= max_depth:
+            stats_list.append(self._node_stats())
             return
 
         has_children = False
         for quad in [self.NW, self.NE, self.SW, self.SE]:
-            if quad:
+            if quad is not None:
                 quad.get_stats_for_quad(max_depth, stats_list, magnification)
                 has_children = True
-        if not has_children:
-            stats_list.append(
-                [
-                    self.x,
-                    self.y,
-                    self.circle_size / tot_area * magnification,
-                    tag,
-                    self.square_size / tot_area * magnification,
-                ]
-            )
-            return
+        #if not has_children:
+        stats_list.append(self._node_stats())
+        return
 
     def find_grid_cell_and_center(self, min_x, min_y, max_size, x, y):
         # zero the cordinates
