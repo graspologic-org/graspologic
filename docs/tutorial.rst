@@ -26,6 +26,7 @@ stochastic block model, and random dot product graph (RDPG).
 
    tutorials/simulations/erdos_renyi
    tutorials/simulations/sbm
+   tutorials/simulations/mmsbm
    tutorials/simulations/rdpg
    tutorials/simulations/corr
    tutorials/simulations/rdpg_corr
@@ -110,17 +111,17 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
    tutorials/subgraph/subgraph
 
-.. _nomination_tutorials:
+.. _vertex_nomination_tutorials:
 
-Nomination
-==========
-The following tutorial demonstrates how to use vertex nomination via seeded graph matching.
+Vertex Nomination
+=================
+The following tutorials demonstrate how to use unattributed single graph spectral vertex nomination or vertex nomination via seeded graph matching to find vertices that are related to a given vertex / set of vertices of interest.
 
 .. toctree::
    :maxdepth: 1
-   
-   tutorials/nominate/vertex_nomination_via_SGM
 
+   tutorials/vertex_nomination/SpectralVertexNomination
+   tutorials/nominate/vertex_nomination_via_SGM
 
 .. _aligning_tutorials:
 
@@ -130,5 +131,16 @@ The following tutorials shows how to align two seperate datasets with each other
 
 .. toctree::
    :maxdepth: 1
-
+   
    tutorials/aligning/aligning
+
+.. _connectomics_tutorials:
+
+Connectomics
+============
+The following tutorials demonstrate how to apply methods in this package to the analysis of connectomics datasets. 
+
+.. toctree::
+   :maxdepth: 1
+   
+   tutorials/connectomics/mcc

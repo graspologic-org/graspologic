@@ -123,3 +123,5 @@ notebooks/bpedigo
 *.DS_Store
 .idea
 *.iml
+pip-wheel-metadata
+
