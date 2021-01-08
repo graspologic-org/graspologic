@@ -216,8 +216,12 @@ def _node2vec_for_layout(
 
     start = time.time()
     tensors, labels = node2vec_embed(
-        graph=graph, dimensions=128, num_walks=10, window_size=2, iterations=3,
-        random_seed=random_seed
+        graph=graph,
+        dimensions=128,
+        num_walks=10,
+        window_size=2,
+        iterations=3,
+        random_seed=random_seed,
     )
     embedding_time = time.time() - start
     logger.info(f"embedding completed in {embedding_time} seconds")

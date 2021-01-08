@@ -93,7 +93,9 @@ def node2vec_embed(
         interpolate_walk_lengths_by_node_degree,
     )
 
-    node2vec_graph = _Node2VecGraph(graph, return_hyperparameter, inout_hyperparameter, random_seed)
+    node2vec_graph = _Node2VecGraph(
+        graph, return_hyperparameter, inout_hyperparameter, random_seed
+    )
 
     logging.info(
         f"Starting preprocessing of transition probabilities on graph with {str(len(graph.nodes()))} nodes and "
@@ -106,7 +108,9 @@ def node2vec_embed(
     node2vec_graph._preprocess_transition_probabilities()
 
     logging.info(f"Simulating walks on graph at time {str(time.time())}")
-    walks = node2vec_graph._simulate_walks(num_walks, walk_length, interpolate_walk_lengths_by_node_degree)
+    walks = node2vec_graph._simulate_walks(
+        num_walks, walk_length, interpolate_walk_lengths_by_node_degree
+    )
 
     logging.info(f"Learning embeddings at time {str(time.time())}")
     model = _learn_embeddings(walks, dimensions, window_size, workers, iterations)
@@ -208,8 +212,11 @@ class _Node2VecGraph:
     """
 
     def __init__(
-        self, graph: nx.Graph, return_hyperparameter: float, inout_hyperparameter: float,
-        random_seed: Optional[int] = None
+        self,
+        graph: nx.Graph,
+        return_hyperparameter: float,
+        inout_hyperparameter: float,
+        random_seed: Optional[int] = None,
     ):
         self.graph: nx.Graph = graph
         self.is_directed = self.graph.is_directed()
