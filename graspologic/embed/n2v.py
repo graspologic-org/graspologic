@@ -106,9 +106,7 @@ def node2vec_embed(
     node2vec_graph._preprocess_transition_probabilities()
 
     logging.info(f"Simulating walks on graph at time {str(time.time())}")
-    walks = node2vec_graph._simulate_walks(
-        num_walks, walk_length, interpolate_walk_lengths_by_node_degree, random_seed
-    )
+    walks = node2vec_graph._simulate_walks(num_walks, walk_length, interpolate_walk_lengths_by_node_degree)
 
     logging.info(f"Learning embeddings at time {str(time.time())}")
     model = _learn_embeddings(walks, dimensions, window_size, workers, iterations)
