@@ -22,6 +22,7 @@ def node2vec_embed(
     workers: int = 8,
     iterations: int = 1,
     interpolate_walk_lengths_by_node_degree: bool = True,
+    random_seed: Optional[int] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generates a node2vec embedding from a given graph. Will follow the word2vec algorithm to create the embedding.
@@ -92,7 +93,7 @@ def node2vec_embed(
         interpolate_walk_lengths_by_node_degree,
     )
 
-    node2vec_graph = _Node2VecGraph(graph, return_hyperparameter, inout_hyperparameter)
+    node2vec_graph = _Node2VecGraph(graph, return_hyperparameter, inout_hyperparameter, random_seed)
 
     logging.info(
         f"Starting preprocessing of transition probabilities on graph with {str(len(graph.nodes()))} nodes and "
@@ -106,7 +107,7 @@ def node2vec_embed(
 
     logging.info(f"Simulating walks on graph at time {str(time.time())}")
     walks = node2vec_graph._simulate_walks(
-        num_walks, walk_length, interpolate_walk_lengths_by_node_degree
+        num_walks, walk_length, interpolate_walk_lengths_by_node_degree, random_seed
     )
 
     logging.info(f"Learning embeddings at time {str(time.time())}")
@@ -204,15 +205,19 @@ class _Node2VecGraph:
         Return hyperparameter
     inout_hyperparameter : float
         Inout hyperparameter
+    random_seed : int
+        Seed for reproduciable results
     """
 
     def __init__(
-        self, graph: nx.Graph, return_hyperparameter: float, inout_hyperparameter: float
+        self, graph: nx.Graph, return_hyperparameter: float, inout_hyperparameter: float,
+        random_seed: Optional[int] = None
     ):
         self.graph: nx.Graph = graph
         self.is_directed = self.graph.is_directed()
         self.p = return_hyperparameter
         self.q = inout_hyperparameter
+        self.random_seed = random_seed
 
     def node2vec_walk(
         self,
@@ -226,6 +231,7 @@ class _Node2VecGraph:
         graph = self.graph
         alias_nodes = self.alias_nodes
         alias_edges = self.alias_edges
+        np.random.seed(self.random_seed)
 
         walk = [start_node]
 
@@ -321,6 +327,7 @@ class _Node2VecGraph:
                 [degree for _, degree in graph.degree()], [x for x in range(20, 90, 10)]
             )
 
+        random.seed(self.random_seed)
         for walk_iteration in range(num_walks):
             logging.info(
                 "Walk iteration: " + str(walk_iteration + 1) + "/" + str(num_walks)

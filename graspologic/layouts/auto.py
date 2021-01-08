@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Optional
 
 import logging
 import math
@@ -30,6 +30,7 @@ def layout_tsne(
     perplexity: int,
     n_iter: int,
     max_edges: int = 10000000,
+    random_seed: Optional[int] = None,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
     """
     Automatic graph layout generation by creating a generalized node2vec embedding,
@@ -71,6 +72,8 @@ def layout_tsne(
         ``max_edges`` exist. Warning: this pruning is approximate and more edges than
         are necessary may be pruned. Running in 32 bit enviornment you will most
         likely need to reduce this number or you will out of memory.
+    random_seed : int
+        Seed to be used for reproducable results. Default is None.
 
     Returns
     -------
@@ -88,9 +91,11 @@ def layout_tsne(
     .. [1] van der Maaten, L.J.P.; Hinton, G.E. Visualizing High-Dimensional Data Using
         t-SNE. Journal of Machine Learning Research 9:2579-2605, 2008.
     """
-    lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges)
-    points = TSNE(perplexity=perplexity, n_iter=n_iter).fit_transform(tensors)
-    positions = _node_positions_from(lcc_graph, labels, points)
+    lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges, random_seed)
+    points = TSNE(
+        perplexity=perplexity, n_iter=n_iter, random_state=random_seed
+    ).fit_transform(tensors)
+    positions = _node_positions_from(lcc_graph, labels, points, random_seed=random_seed)
     return lcc_graph, positions
 
 
@@ -99,6 +104,7 @@ def layout_umap(
     min_dist: float = 0.75,
     n_neighbors: int = 25,
     max_edges: int = 10000000,
+    random_seed: Optional[int] = None,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
     """
     Automatic graph layout generation by creating a generalized node2vec embedding,
@@ -142,6 +148,8 @@ def layout_umap(
         ``max_edges`` exist. Warning: this pruning is approximate and more edges than
         are necessary may be pruned. Running in 32 bit enviornment you will most
         likely need to reduce this number or you will out of memory.
+    random_seed : int
+        Seed to be used for reproducable results. Default is None.
 
     Returns
     -------
@@ -163,11 +171,11 @@ def layout_umap(
         2007.08902v1, 17 Jul 2020.
     """
 
-    lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges)
-    points = umap.UMAP(min_dist=min_dist, n_neighbors=n_neighbors).fit_transform(
-        tensors
-    )
-    positions = _node_positions_from(lcc_graph, labels, points)
+    lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges, random_seed)
+    points = umap.UMAP(
+        min_dist=min_dist, n_neighbors=n_neighbors, random_state=random_seed
+    ).fit_transform(tensors)
+    positions = _node_positions_from(lcc_graph, labels, points, random_seed=random_seed)
     return lcc_graph, positions
 
 
@@ -201,13 +209,15 @@ def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
 def _node2vec_for_layout(
     graph: nx.Graph,
     max_edges: int = 10000000,
+    random_seed: Optional[int] = None,
 ) -> Tuple[nx.Graph, np.ndarray, np.ndarray]:
     graph = _approximate_prune(graph, max_edges)
     graph = _largest_connected_component(graph)
 
     start = time.time()
     tensors, labels = node2vec_embed(
-        graph=graph, dimensions=128, num_walks=10, window_size=2, iterations=3
+        graph=graph, dimensions=128, num_walks=10, window_size=2, iterations=3,
+        random_seed=random_seed
     )
     embedding_time = time.time() - start
     logger.info(f"embedding completed in {embedding_time} seconds")
@@ -218,12 +228,13 @@ def _node_positions_from(
     graph: nx.Graph,
     labels: np.ndarray,
     down_projection_2d: np.ndarray,
+    random_seed: Optional[int] = None,
 ) -> List[NodePosition]:
     degree = graph.degree()
     sizes = _compute_sizes(degree)
     covered_area = _covered_size(sizes)
     scaled_points = _scale_points(down_projection_2d, covered_area)
-    partitions = leiden(graph)
+    partitions = leiden(graph, random_seed=random_seed)
     positions = [
         NodePosition(
             node_id=key,
