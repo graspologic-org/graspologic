@@ -1,6 +1,9 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+import csv
+import math
+
 from ._quad_node import _QuadNode
 
 
@@ -12,18 +15,14 @@ class _QuadTree:
         self.nodes = nodes
         self.root = _QuadNode(nodes, 0, max_nodes_per_quad, None)
 
-    def dump_one_level_to_csv(self, level, filename, magnification):
+    def get_node_stats(self, max_level=10):
         stats = []
-        self.root.get_stats_for_quad(level, stats, magnification)
-        # print(type(stats))
-        # print(len(stats))
-        with open(filename, "w", encoding="utf-8", newline="") as ofile:
-            writer = csv.writer(ofile)
-            for idx, row in enumerate(stats):
-                color = "blue"
-                if row[3] > 0:
-                    color = "red"
-                writer.writerow([idx] + row[:3] + [0, color])
+        self.root.get_stats_for_quad(max_level, stats)
+        return stats
+
+    def get_node_stats_header(self):
+        return self.root._node_stats_header()
+
 
     def get_quad_density_list(self):
         density_list = self.root.get_density_list()
