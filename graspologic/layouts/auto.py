@@ -1,24 +1,21 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from typing import Any, Dict, List, Tuple, Optional
-
 import logging
 import math
 import time
+from typing import Any, Dict, List, Optional, Tuple
 
 import networkx as nx
 import numpy as np
-
-from sklearn.manifold import TSNE
 import umap
-
-from .classes import NodePosition
-from .nooverlap import remove_overlaps
+from sklearn.manifold import TSNE
 
 from ..embed import node2vec_embed
 from ..partition import leiden
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
+from .classes import NodePosition
+from .nooverlap import remove_overlaps
 
 logger = logging.getLogger(__name__)
 
