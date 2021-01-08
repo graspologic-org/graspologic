@@ -4,7 +4,7 @@
 import csv
 import math
 
-from ._quad_node import _QuadNode
+from ._smart_quad_node import _SmartQuadNode, find_extent
 
 
 class _QuadTree:
@@ -13,7 +13,8 @@ class _QuadTree:
 
     def __init__(self, nodes, max_nodes_per_quad):
         self.nodes = nodes
-        self.root = _QuadNode(nodes, 0, max_nodes_per_quad, None)
+        extent = find_extent(nodes)
+        self.root = _SmartQuadNode(nodes, 0, extent, max_nodes_per_quad, None)
 
     def get_node_stats(self, max_level=10):
         stats = []

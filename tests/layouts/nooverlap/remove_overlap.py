@@ -80,7 +80,7 @@ def make_graph_and_positions(stats, level=None, vertex_size=20):
     positions = []
     for node_id, row in enumerate(stats):
         min_x, min_y, max_x, max_y = row[3:7]
-        print (min_x, min_y, max_x, max_y)
+        #print (min_x, min_y, max_x, max_y)
         depth = row[2]
         if level is None:
             graph.add_node(node_id)
