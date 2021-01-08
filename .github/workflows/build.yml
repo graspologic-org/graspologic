@@ -91,11 +91,11 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel twine
           pip install -r requirements.txt
       - name: Build Release with setuptools
-        if: github.ref=='refs/head/main'
+        if: github.ref=='refs/heads/main'
         run: |
           python setup.py sdist
       - name: Build Prerelease with setuptools
-        if: github.ref=='refs/head/dev'
+        if: github.ref=='refs/heads/dev'
         run: |
           python setup.py egg_info -b "dev$GITHUB_RUN_ID" sdist
       - name: Publish with twine
