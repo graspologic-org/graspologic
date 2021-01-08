@@ -16,4 +16,5 @@ import graspologic.subgraph
 import graspologic.utils
 
 from graspologic.version import __version
+
 __version__ = __version()
