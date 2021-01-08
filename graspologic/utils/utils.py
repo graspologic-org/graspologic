@@ -1063,3 +1063,12 @@ def to_weighted_edge_list(
         f"The type of graph provided {type(graph)} is not a list of 3-tuples, networkx "
         f"graph, numpy.ndarray, or scipy.sparse.csr.csr_matrix"
     )
+
+
+def suppress_common_warnings():
+    """
+    Suppresses common warnings that occur when using graspologic.
+    """
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+    warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
+    warnings.simplefilter("always", category=UserWarning)
