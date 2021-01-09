@@ -25,8 +25,8 @@ class _QuadTree:
         return self.root._node_stats_header()
 
 
-    def get_quad_density_list(self):
-        density_list = self.root.get_density_list()
+    def get_quad_leaf_density_list(self):
+        density_list = self.root.get_leaf_density_list()
         return sorted(density_list, reverse=True)
 
     def layout_graph(self):
@@ -57,15 +57,11 @@ class _QuadTree:
         return self.root.num_overlapping_across_quads(self.root.nodes)
 
     def layout_dense_first(self, first_color=None):
-        den_list = list(self.get_quad_density_list())
-        first = True
-        # count = 0
+        den_list = list(self.get_quad_leaf_density_list())
+        print (f"total quad nodes: {len(den_list)}")
+        skipped = 0
         for cell_density, density_ratio, cell_count, qn in den_list:
-            # print ('cell density', cell_density, 'sq_density', density_ratio, 'cell_count', cell_count)
-            qn.layout_quad()
-            if first:
-                if first_color is not None:
-                    for n in qn.parent.nodes:
-                        n.color = first_color  #'#FF0004'
-            first = False
+            print ('cell density', cell_density, 'cir_density', density_ratio, 'cell_count', cell_count, "nodes: ", qn.number_of_nodes(), "depth: ", qn.depth, "max node size", qn.max_size)
+            skipped += qn.layout_quad()
+        print (f"skipped: {skipped} quad nodes")
         return self.nodes

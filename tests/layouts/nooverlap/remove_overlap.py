@@ -159,14 +159,12 @@ def main():
     new_positions = remove_overlaps(node_positions)
     graph = graph_from_nodes_only(new_positions)
 
+    if args.quad_dump is not None:
+        dump_quad_stats(node_positions, args.quad_dump, png_filename=args.quad_png, max_level=50)
     if args.image_file is not None:
         render.save_graph(args.image_file, graph, new_positions, node_colors=node_colors, dpi=args.dpi)
     if args.location_file is not None:
         _location(args.location_file, new_positions, node_colors)
-    if args.quad_dump is not None:
-        dump_quad_stats(node_positions, args.quad_dump, png_filename=args.quad_png, max_level=50)
-    #if args.quad_png is not None:
-    #    draw_quad_tree()
 
 
 

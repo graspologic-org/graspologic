@@ -98,6 +98,10 @@ def scale_graph(g, scale_factor):
         n.x, n.y = move_point_on_line([0, 0], [n.x, n.y], scale_factor)
     return g
 
+class _SmartCell:
+    def __init__(self, size) -> None:
+        self.size = size
+
 class Extent(NamedTuple):
     min_x: float
     min_y: float
@@ -143,6 +147,7 @@ class _SmartQuadNode:
             raise Exception("Invalid to create a quad node with zero nodes!")
 
         self.nodes = nodes
+        self.num_nodes = len(nodes)
         self.depth = depth
         self.extent = extent
         self.max_nodes_per_quad = max_nodes_per_quad
@@ -176,6 +181,15 @@ class _SmartQuadNode:
     def child_list(self):
         return [self.NW, self.NE, self.SW, self.SE]
 
+    def get_total_cells_smart(self):
+        side_size = self.max_size * 2.0
+        self.x_range = self.extent.max_x - self.extent.min_x
+        self.y_range = self.extent.max_y - self.extent.min_y
+        number_of_x_cells = self.x_range // side_size
+        number_of_y_cells = self.y_range // side_size
+        total_cells = number_of_y_cells * number_of_x_cells
+        return total_cells
+
     def get_total_cells(self):
         side_size = self.max_size * 2.0
         self.x_range = self.extent.max_x - self.extent.min_x
@@ -192,8 +206,8 @@ class _SmartQuadNode:
             x += n.x
             y += n.y
         # need to fix x and y
-        self.x = x / self.num_nodes()
-        self.y = y / self.num_nodes()
+        self.x = x / self.num_nodes
+        self.y = y / self.num_nodes
 
     def _push_to_kids(self):
         if len(self.nodes) <= self.max_nodes_per_quad:
@@ -251,8 +265,8 @@ class _SmartQuadNode:
                 total += quad.num_children()
         return total
 
-    def num_nodes(self):
-        return len(self.nodes)
+    def number_of_nodes(self):
+        return self.num_nodes
 
     def print_node(self, max_depth):
         # print (tot_area, min_x, min_y, max_x, max_y)
@@ -557,38 +571,38 @@ class _SmartQuadNode:
 
     def layout_quad(self):
         # print("layout_quad")
-        num_skipped = 0
-        num_nodes = len(self.nodes)
-        if self.total_cells == 0:
-            nodes_per_cell = math.inf
-        else:
-            nodes_per_cell = num_nodes / self.total_cells
-
+        num_skipped = 1
         if self.is_laid_out:
             # print ("ALREADY LAID OUT!!, ratio: %g " %(nodes_per_cell))
             return num_skipped
+
+        if self.total_cells == 0:
+            nodes_per_cell = math.inf
+        else:
+            nodes_per_cell = self.num_nodes / self.total_cells
 
         has_children = False
         for quad in self.child_list():
             if quad:
                 has_children = True
         if not has_children:
-            if num_nodes > self.total_cells:
+            if self.num_nodes > self.total_cells:
                 logger.info(
-                    "We don't fit! going up one level depth: %d, cells: %d, nodes %d, ratio: %g, max_size: %g"
+                    "We don't fit! going up one level depth: %d, cells: %d, nodes %d, ratio: %g, max_size: %g, area: %g"
                     % (
                         self.depth,
                         self.total_cells,
-                        num_nodes,
+                        self.num_nodes,
                         nodes_per_cell,
                         self.max_size,
+                        self.tot_area,
                     )
                 )
                 parent = self.parent
                 # if parent is not None:
                 while parent is not None:
                     logger.info(
-                        "parent: sq_ratio: %g, cir_ratio: %g, cells %d, nodes: %d current_level %d, max_size: %g"
+                        "parent: sq_ratio: %g, cir_ratio: %g, cells %d, nodes: %d current_level %d, max_size: %g, area: %g"
                         % (
                             parent.sq_ratio,
                             parent.cir_ratio,
@@ -596,6 +610,7 @@ class _SmartQuadNode:
                             len(parent.nodes),
                             parent.depth,
                             parent.max_size,
+                            parent.tot_area,
                         )
                     )
                     if len(parent.nodes) > parent.total_cells:
@@ -699,9 +714,9 @@ class _SmartQuadNode:
                 lowest_level = math.inf
                 parent = self.parent
                 while parent is not None:
-                    max_nodes_in_grid = parent.num_nodes()
+                    max_nodes_in_grid = parent.number_of_nodes()
                     lowest_level = parent.depth
-                    if parent.num_nodes() > parent.total_cells:
+                    if parent.number_of_nodes() > parent.total_cells:
                         # doesn't fit, go up one more level
                         parent = parent.parent
                     else:
@@ -709,7 +724,7 @@ class _SmartQuadNode:
             else:
                 # we are at the bottom and we can fit everyone in here.
                 lowest_level = self.depth
-                max_nodes_in_grid = self.num_nodes()
+                max_nodes_in_grid = self.num_nodes
                 num_quad_fits = 1
         return (
             num_quad_no_kids,
@@ -808,25 +823,23 @@ class _SmartQuadNode:
                         break
         return num_overlapping_nodes
 
-    def get_density_list(self):
-        square_size = self.total_square_size()
-        ratio = square_size / self.tot_area
+    def get_leaf_density_list(self):
+        ratio = self.circle_size / self.tot_area
 
         retval = []
         has_children = False
         for quad in [self.NW, self.NE, self.SW, self.SE]:
             if quad:
-                retval += quad.get_density_list()
+                retval += quad.get_leaf_density_list()
                 has_children = True
-
-        if not has_children:
-            if self.total_cells == 0:
-                nodes_to_cells = math.inf
-            else:
-                nodes_to_cells = len(self.nodes) / self.total_cells
-            return [(nodes_to_cells, ratio, self.total_cells, self)]
-        else:
+        if has_children:
             return retval
+
+        if self.total_cells == 0:
+            nodes_to_cells = math.inf
+        else:
+            nodes_to_cells = len(self.nodes) / self.total_cells
+        return [(nodes_to_cells, ratio, self.total_cells, self)]
 
     def get_overlapping_node_list(self, node, new_x, new_y, nodes):
         overlapping_nodes = []
@@ -861,7 +874,6 @@ class _SmartQuadNode:
         logger.info("contracting nodes:%d" % (len(self.nodes)))
         node_list = self.nodes
         nodes_by_size = sorted(node_list, key=lambda n: n.size, reverse=True)
-        num_nodes = len(node_list)
         nodes_around_the_edge = self.get_nodes_near_lines(
             self.get_top_quad_node().nodes
         )
