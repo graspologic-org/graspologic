@@ -14,15 +14,9 @@ class TestN2V(unittest.TestCase):
         for s, t in g.edges():
             g.add_edge(s, t, weight=1)
 
-        embedding = n2v.node2vec_embed(
-            g,
-            random_seed=1
-        )
+        embedding = n2v.node2vec_embed(g, random_seed=1)
 
-        embedding2 = n2v.node2vec_embed(
-            g,
-            random_seed=1
-        )
+        embedding2 = n2v.node2vec_embed(g, random_seed=1)
 
         np.testing.assert_array_equal(embedding[0], embedding2[0])
 
