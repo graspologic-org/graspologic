@@ -70,8 +70,8 @@ def layout_tsne(
         are necessary may be pruned. Running in 32 bit enviornment you will most
         likely need to reduce this number or you will out of memory.
     random_seed : int
-        Seed to be used for reproducible results. Default is None and will produce 
-        a new random state. Specifying a random state will provide consistent results 
+        Seed to be used for reproducible results. Default is None and will produce
+        a new random state. Specifying a random state will provide consistent results
         between runs (In Python 3, reproducibility between interpreter launches also requires
         use of the `PYTHONHASHSEED` environment variable to control hash randomization).
 
@@ -149,7 +149,7 @@ def layout_umap(
         are necessary may be pruned. Running in 32 bit enviornment you will most
         likely need to reduce this number or you will out of memory.
     random_seed : int
-        Seed to be used for reproducible results. Default is None and will produce 
+        Seed to be used for reproducible results. Default is None and will produce
         random results.
 
     Returns

@@ -58,9 +58,9 @@ def node2vec_embed(
         will take a smaller breadth of random walks when compared to the high degree nodes. This will result in your
         lower degree walks dominating your higher degree nodes.
     random_seed : int
-        Seed to be used for reproducible results. Default is None and will produce a random output. Note that for a fully 
-        deterministically-reproducible run, you must also limit to a single worker thread (`workers=1`), to eliminate 
-        ordering jitter from OS thread scheduling. (In Python 3, reproducibility between interpreter launches also requires 
+        Seed to be used for reproducible results. Default is None and will produce a random output. Note that for a fully
+        deterministically-reproducible run, you must also limit to a single worker thread (`workers=1`), to eliminate
+        ordering jitter from OS thread scheduling. (In Python 3, reproducibility between interpreter launches also requires
         use of the `PYTHONHASHSEED` environment variable to control hash randomization).
 
     Returns
@@ -119,7 +119,9 @@ def node2vec_embed(
     )
 
     logging.info(f"Learning embeddings at time {str(time.time())}")
-    model = _learn_embeddings(walks, dimensions, window_size, workers, iterations, random_seed)
+    model = _learn_embeddings(
+        walks, dimensions, window_size, workers, iterations, random_seed
+    )
 
     end = time.time()
     logging.info(
@@ -177,7 +179,12 @@ def _preconditions(
 
 
 def _learn_embeddings(
-    walks: List[Any], dimensions: int, window_size: int, workers: int, iterations: int, random_seed: Optional[int]
+    walks: List[Any],
+    dimensions: int,
+    window_size: int,
+    workers: int,
+    iterations: int,
+    random_seed: Optional[int],
 ):
     """
     Learn embeddings by optimizing the skip-gram objective using SGD.
@@ -271,7 +278,7 @@ class _Node2VecGraph:
                             _alias_draw(
                                 alias_nodes[current][0],
                                 alias_nodes[current][1],
-                                self.random_state
+                                self.random_state,
                             )
                         ]
                     )
@@ -281,7 +288,7 @@ class _Node2VecGraph:
                         _alias_draw(
                             alias_edges[(prev, current)][0],
                             alias_edges[(prev, current)][1],
-                            self.random_state
+                            self.random_state,
                         )
                     ]
                     walk.append(next)
@@ -491,7 +498,9 @@ def _alias_setup(probabilities: List[float]):
     return sampled_probabilities, alias
 
 
-def _alias_draw(probabilities: List[float], alias: List[float], random_state: np.random.RandomState):
+def _alias_draw(
+    probabilities: List[float], alias: List[float], random_state: np.random.RandomState
+):
     """
     Draw sample from a non-uniform discrete distribution using alias sampling.
     """
