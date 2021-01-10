@@ -231,7 +231,7 @@ class _Node2VecGraph:
         graph: nx.Graph,
         return_hyperparameter: float,
         inout_hyperparameter: float,
-        random_state: np.random.RandomState,
+        random_state: Optional[np.random.RandomState] = None,
     ):
         self.graph: nx.Graph = graph
         self.is_directed = self.graph.is_directed()
