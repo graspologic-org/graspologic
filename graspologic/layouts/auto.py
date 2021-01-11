@@ -72,8 +72,8 @@ def layout_tsne(
     random_seed : int
         Seed to be used for reproducible results. Default is None and will produce
         a new random state. Specifying a random state will provide consistent results
-        between runs (In Python 3, reproducibility between interpreter launches also requires
-        use of the `PYTHONHASHSEED` environment variable to control hash randomization).
+        between runs. In addition the environment variable ``PYTHONHASHSEED`` must be 
+        set to control hash randomization.
 
     Returns
     -------

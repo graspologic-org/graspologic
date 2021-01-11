@@ -60,8 +60,8 @@ def node2vec_embed(
     random_seed : int
         Seed to be used for reproducible results. Default is None and will produce a random output. Note that for a fully
         deterministically-reproducible run, you must also limit to a single worker thread (`workers=1`), to eliminate
-        ordering jitter from OS thread scheduling. (In Python 3, reproducibility between interpreter launches also requires
-        use of the `PYTHONHASHSEED` environment variable to control hash randomization).
+        ordering jitter from OS thread scheduling. In addition the environment variable ``PYTHONHASHSEED`` must be set
+        to control hash randomization.
 
     Returns
     -------
