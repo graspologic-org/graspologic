@@ -11,20 +11,22 @@ In addition to all of the features that ``GraSPy`` had by version :ref:`release_
 This release is the result of X of work with over 73 pull requests by X contributors.
 Highlights include:
 
-- Align module
-- Automatic graph layout
+- ``align`` module for doing orthogonal alignments of data (embeddings in particular)
+- ``layouts`` module for scalable automatic graph layout
 - Unattributed spectral vertex nomination
 - Leiden global partitioning, modularity, modularity components
 - Preprocessing module
 - Vertex nomination via seeded graph matching
 - Mixed membership SBM sampling
 - Node2Vec embeddings
-- Out of sample ASE
+- Out of sample adjacency spectral embedding
 - Padded SGM
-- Divisive clustering
-- Tutorials
-- Documentation
-- Pairplot with GMM functionality
+- Divisive, hierarchical clustering
+- Pairplot with GMM
+- New tutorials, in addition to those added for the above new functionality: 
+   - MultipleASE
+   - Clustering with model selection for GMM and K-means
+- Documentation fixes
 - and many more bug fixes and enhancements to existing graspy functionality
 
 
