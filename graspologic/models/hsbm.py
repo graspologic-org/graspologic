@@ -13,13 +13,14 @@ from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from ..cluster import DivisiveCluster
 from ..cluster.divisive_cluster import _check_common_inputs
 from .sbm import _calculate_block_p, _block_to_full, _get_block_indices
-from .base import BaseGraphEstimator
+from .base import BaseGraphEstimator, _check_n_samples
 from ..utils import (
     augment_diagonal,
     pass_to_ranks,
     import_graph,
     remove_loops,
     symmetrize,
+    is_unweighted
 )
 
 
@@ -235,7 +236,135 @@ class _DivisiveGraphCluster(NodeMixin, BaseEstimator):
         return embed
 
 
-class HSBMEstimator(DivisiveCluster, _DivisiveGraphCluster, BaseGraphEstimator):
+class _HierarchicalBaseGraphEstimator(BaseGraphEstimator):
+    def __init__(self, directed=True, loops=False):
+        BaseGraphEstimator.__init__(self, directed=directed, loops=loops)
+
+    def bic(self, graph):
+        bic_per_level = []
+        y = self.vertex_assignments_
+        clustered_graphs = self.get_clustered_graphs(graph)
+        for lvl in range(y.shape[1]):
+            bic = BaseGraphEstimator.bic(self, clustered_graphs[lvl])
+            bic_per_level.append(bic)
+
+        return bic_per_level
+
+    def mse(self, graph):
+        check_is_fitted(self, "p_mat_")
+        mse_per_level = []
+        y = self.vertex_assignments_
+        clustered_graphs = self.get_clustered_graphs(graph)
+        for lvl in range(y.shape[1]):
+            mse_per_level.append(
+                np.linalg.norm(clustered_graphs[lvl] - self.p_mat_[lvl]) ** 2
+            )
+
+        return mse_per_level
+
+    def score_samples(self, graph, clip=None):
+        check_is_fitted(self, "p_mat_")
+        graph = import_graph(graph)
+        y = self.vertex_assignments_
+        clustered_graphs = self.get_clustered_graphs(graph)
+        if not is_unweighted(graph):
+            raise ValueError("Model only implemented for unweighted graphs")
+
+        log_lik_per_level = []
+        for lvl in range(y.shape[1]):
+            p_mat = self.p_mat_[lvl].copy()
+            graph = clustered_graphs[lvl]
+            if np.shape(p_mat) != np.shape(graph):
+                raise ValueError("Input graph size must be the same size as P matrix")
+
+            inds = None
+            if not self.directed and self.loops:
+                inds = np.triu_indices_from(graph)
+            elif not self.directed and not self.loops:
+                inds = np.triu_indices_from(graph, k=1)
+            elif self.directed and not self.loops:
+                xu, yu = np.triu_indices_from(graph, k=1)
+                xl, yl = np.tril_indices_from(graph, k=-1)
+                x = np.concatenate((xl, xu))
+                y = np.concatenate((yl, yu))
+                inds = (x, y)
+            if inds is not None:
+                p_mat = p_mat[inds]
+                graph = graph[inds]
+
+            if clip is not None:
+                p_mat[p_mat < clip] = clip
+                p_mat[p_mat > 1 - clip] = 1 - clip
+
+            successes = np.multiply(p_mat, graph)
+            failures = np.multiply((1 - p_mat), (1 - graph))
+            likelihood = successes + failures
+            log_lik_per_level.append(np.log(likelihood))
+
+        return log_lik_per_level
+
+    def score(self, graph):
+        check_is_fitted(self, "p_mat_")
+        y = self.vertex_assignments_
+        clustered_graphs = self.get_clustered_graphs(graph)
+        score_per_level = []
+        for lvl in range(y.shape[1]):
+            graph = clustered_graphs[lvl]
+            score_per_level.append(np.sum(self.score_samples(graph)))
+
+        return score_per_level
+
+    def sample(self, n_samples=1):
+        check_is_fitted(self, "p_mat_")
+        _check_n_samples(n_samples)
+        graphs_by_level = []
+        y = self.vertex_assignments_
+        for lvl in range(y.shape[1]):
+            n_verts = self.p_mat_[lvl].shape[0]
+            graphs = np.zeros((n_samples, n_verts, n_verts))
+            p_mat = self.p_mat_[lvl].copy()
+            p_mat[p_mat > 1] = 1
+            p_mat[p_mat < 0] = 0
+            for i in range(n_samples):
+                graphs[i, :, :] = sample_edges(
+                    p_mat, directed=self.directed, loops=self.loops
+                )
+
+        return graphs_by_level
+
+    def get_clustered_graphs(self, graph):
+        graph = import_graph(graph)
+        y = self.vertex_assignments_
+        clustered_graph_per_level = []
+        for lvl in range(y.shape[1]):
+            uni_labels = np.unique(y[:, lvl])
+            clustered_graph = np.zeros((len(uni_labels), len(uni_labels)), dtype=int)
+            for ul_from in range(len(uni_labels)):
+                for ul_to in range(ul_from + 1, len(uni_labels)):
+                    inds_from = y[:, lvl] == ul_from
+                    inds_to = y[:, lvl] == ul_to
+                    inter_clus_connec = graph[
+                        np.ix_(y[inds_from, lvl], y[inds_to, lvl])
+                    ]  # connections between cluster "inds_from" & cluster "inds_to"
+
+                    if sum(sum(inter_clus_connec)) > 0:
+                        clustered_graph[ul_from, ul_to] = 1
+                        if self.directed:
+                            clustered_graph = symmetrize(clustered_graph, "triu")
+                        else:
+                            inter_clus_connec = graph[
+                                np.ix_(y[inds_to, lvl], y[inds_from, lvl])
+                            ]
+                            if sum(sum(inter_clus_connec)) > 0:
+                                clustered_graph[ul_to, ul_from] = 1
+
+            clustered_graph_per_level.append(clustered_graph)
+        return clustered_graph_per_level
+
+
+class HSBMEstimator(
+    DivisiveCluster, _DivisiveGraphCluster, _HierarchicalBaseGraphEstimator
+):
     r"""
     Hierarchical Stochastic Block Model
 
@@ -353,7 +482,7 @@ class HSBMEstimator(DivisiveCluster, _DivisiveGraphCluster, BaseGraphEstimator):
             delta_criter=delta_criter,
         )
 
-        BaseGraphEstimator.__init__(self, directed=directed, loops=loops)
+        _HierarchicalBaseGraphEstimator.__init__(self, directed=directed, loops=loops)
 
         if not isinstance(reembed, bool):
             raise TypeError("`reembed` must be of type bool")
@@ -383,56 +512,51 @@ class HSBMEstimator(DivisiveCluster, _DivisiveGraphCluster, BaseGraphEstimator):
             self.vertex_assignments_ = y
         else:
             _, y = check_X_y(graph, y, multi_output=True)
-        self.y = y
 
         if max(y[:, 0]) == 0:
             warnings.warn("only 1 cluster estimated at the first level")
 
+        n_levels = y.shape[1]
+        self.block_weights_ = np.empty(n_levels, dtype=object)
+        self.block_p_ = np.empty(n_levels, dtype=object)
+        self.p_mat_ = np.empty(n_levels, dtype=object)
+
+        for i in range(n_levels):
+            single_label = y[:, i]
+            _, counts = np.unique(single_label, return_counts=True)
+            self.block_weights_[i] = counts / graph.shape[0]
+            block_vert_inds, block_inds, block_inv = _get_block_indices(single_label)
+            block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
+
+            if self.reembed:
+                if not self.directed:
+                    block_p = symmetrize(block_p)
+            self.block_p_[i] = block_p
+
+            p_mat = _block_to_full(block_p, block_inv, graph.shape)
+            if self.reembed:
+                if not self.loops:
+                    p_mat = remove_loops(p_mat)
+            self.p_mat_[i] = p_mat
+
         return self
 
-    def compute_model_params(self, graph, level):
-        """
-        Compute graph model parameters corresponding to a specific level
-            of the input graph
-
-        Parameters
-        ----------
-        graph : array_like or networkx.Graph
-            Same graph as the one used to fit the model
-
-        """
-        check_is_fitted(self, ["y"], all_or_any=all)
-        y = self.y[:, level - 1]
-
-        _, counts = np.unique(y, return_counts=True)
-        self.block_weights_ = counts / graph.shape[0]
-        block_vert_inds, block_inds, block_inv = _get_block_indices(y)
-
-        block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
-
-        if not self.directed:
-            block_p = symmetrize(block_p)
-        self.block_p_ = block_p
-
-        p_mat = _block_to_full(block_p, block_inv, graph.shape)
-        if not self.loops:
-            p_mat = remove_loops(p_mat)
-        self.p_mat_ = p_mat
-
     def _n_parameters(self):
-        if not hasattr(self, "block_p_"):
-            msg = "must run `compute_model_params` before checking model attributes"
-            raise AttributeError(msg)
+        n_levels = self.vertex_assignments_.shape[1]
+        n_parameters_per_level = np.empty(n_levels, dtype=object)
 
-        n_blocks = self.block_p_.shape[0]
-        n_parameters = 0
-        if self.directed:
-            n_parameters += n_blocks ** 2
-        else:
-            n_parameters += n_blocks * (n_blocks + 1) / 2
-        if hasattr(self, "vertex_assignments_"):
-            n_parameters += n_blocks - 1
-        n_parameters += 1  # level index
-        if self.reembed:
-            n_parameters += 1
-        return n_parameters
+        for i in range(n_levels):
+            n_blocks = self.block_p_[i].shape[0]
+            n_parameters = 0
+            if self.directed:
+                n_parameters += n_blocks ** 2
+            else:
+                n_parameters += n_blocks * (n_blocks + 1) / 2
+            if hasattr(self, "vertex_assignments_"):
+                n_parameters += n_blocks - 1
+            n_parameters += 1  # level index
+            if self.reembed:
+                n_parameters += 1
+
+            n_parameters_per_level[i] = n_parameters_per_level
+        return n_parameters_per_level
