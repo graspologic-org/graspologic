@@ -160,7 +160,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         X : array-like, shape (n_samples, n_features)
         fcluster: bool, default=False
             if True, returned labels will be re-numbered so that each column
-            of labels represents a flat clustering at current level
+            of labels represents a flat clustering at current level,
+            and each label corresponds to a cluster indexed the same as
+            the corresponding node in the overall clustering dendrogram
         level: int, optional (default=None)
             the level of a single flat clustering to generate
             only available if ``fcluster`` is True
@@ -296,8 +298,10 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         ----------
         X : array-like, shape (n_samples, n_features)
         fcluster: bool, default=False
-            if True, returned labels will be a hierarchy of flat clusterings,
-            one for each level
+            if True, returned labels will be re-numbered so that each column
+            of labels represents a flat clustering at current level,
+            and each label corresponds to a cluster indexed the same as
+            the corresponding node in the overall clustering dendrogram
         level: int, optional (default=None)
             the level of a single flat clustering to generate
             only available if ``fcluster`` is True
