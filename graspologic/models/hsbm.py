@@ -332,35 +332,6 @@ class _HierarchicalBaseGraphEstimator(BaseGraphEstimator):
 
         return graphs_by_level
 
-    def get_clustered_graphs(self, graph):
-        graph = import_graph(graph)
-        y = self.vertex_assignments_
-        clustered_graph_per_level = []
-        for lvl in range(y.shape[1]):
-            uni_labels = np.unique(y[:, lvl])
-            clustered_graph = np.zeros((len(uni_labels), len(uni_labels)), dtype=int)
-            for ul_from in range(len(uni_labels)):
-                for ul_to in range(ul_from + 1, len(uni_labels)):
-                    inds_from = y[:, lvl] == ul_from
-                    inds_to = y[:, lvl] == ul_to
-                    inter_clus_connec = graph[
-                        np.ix_(y[inds_from, lvl], y[inds_to, lvl])
-                    ]  # connections between cluster "inds_from" & cluster "inds_to"
-
-                    if sum(sum(inter_clus_connec)) > 0:
-                        clustered_graph[ul_from, ul_to] = 1
-                        if self.directed:
-                            clustered_graph = symmetrize(clustered_graph, "triu")
-                        else:
-                            inter_clus_connec = graph[
-                                np.ix_(y[inds_to, lvl], y[inds_from, lvl])
-                            ]
-                            if sum(sum(inter_clus_connec)) > 0:
-                                clustered_graph[ul_to, ul_from] = 1
-
-            clustered_graph_per_level.append(clustered_graph)
-        return clustered_graph_per_level
-
 
 class HSBMEstimator(
     DivisiveCluster, _DivisiveGraphCluster, _HierarchicalBaseGraphEstimator
