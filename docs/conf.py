@@ -29,8 +29,12 @@ sys.path.append(dir_realpath)
 
 import graspologic
 
-version = graspologic.version.version.__semver
-release = graspologic.version.version.version
+release = graspologic.__version__
+try:
+    split = release.split(".")
+    version = f"{split[0]}.{split[1]}"
+except BaseException:
+    version = release
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
@@ -66,12 +70,15 @@ autodoc_member_order = "bysource"  # default is alphabetical
 
 # -- sphinx.ext.intersphinx
 intersphinx_mapping = {
-    "numpy": ("https://docs.scipy.org/doc/numpy", None),
-    "python": ("https://docs.python.org/3", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
-    "sklearn": ("http://scikit-learn.org/dev", None),
+    "anytree": ("https://anytree.readthedocs.io/en/latest/", None),
     "hyppo": ("https://hyppo.neurodata.io", None),
     "matplotlib": ("https://matplotlib.org", None),
+    "networkx": ("https://networkx.org/documentation/stable", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+    "python": ("https://docs.python.org/3", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+    "seaborn": ("https://seaborn.pydata.org", None),
+    "sklearn": ("https://scikit-learn.org/dev", None),
 }
 
 # -- sphinx options ----------------------------------------------------------

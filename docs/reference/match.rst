@@ -6,7 +6,3 @@ Matching
 Graph Matching
 --------------------
 .. autoclass:: GraphMatch
-
-Sinkhorn-Knopp Algorithm
-------------------------
-.. autoclass:: SinkhornKnopp

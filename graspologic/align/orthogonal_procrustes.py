@@ -10,22 +10,22 @@ from .base import BaseAlign
 class OrthogonalProcrustes(BaseAlign):
     """
     Computes the matrix solution of the classical orthogonal Procrustes [1]_
-    problem, which is that given two matrices `X` and `Y` of equal shape
-    (n, d), find an orthogonal matrix `self.Q_` that most closely maps `X` to
-    `Y`. Subsequently, uses that matrix to transform either the original `X`,
+    problem, which is that given two matrices ``X`` and ``Y`` of equal shape
+    (n, d), find an orthogonal matrix that most closely maps ``X`` to
+    ``Y``. Subsequently, uses that matrix to transform either the original ``X``,
     or a different dataset in the same space.
 
     Note that when used to match two datasets, this method unlike
     :class:`~graspologic.align.SeedlessProcrustes`, not only requires that the
     datasets have the same number of entries, but also that there is some
     correspondence between the entries. In graph embeddings, this usually
-    corresponds to the assumption that the vertex i in graph X has the same
-    latent position as the vertex i in graph Y.
+    corresponds to the assumption that the vertex :math:`i` in graph ``X`` has the same
+    latent position as the vertex :math:`i` in graph ``Y``.
 
     Attributes
     ----------
     Q_ : array, size (d, d)
-            Final orthogonal matrix, used to modify `X`.
+            Final orthogonal matrix, used to modify ``X``.
 
     score_ : float
         Final value of the objective function: :math:`|| X Q - Y ||_F`
@@ -47,7 +47,7 @@ class OrthogonalProcrustes(BaseAlign):
     details, including the proof of the closed-form solution see [1]_.
 
     Implementation-wise, this class is a wrapper of the
-    `scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
+    :func:`scipy.linalg.orthogonal_procrustes`, which itself uses an algorithm
     described in find the optimal solution algorithm [2]_.
 
     """
@@ -60,16 +60,16 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit(self, X: np.ndarray, Y: np.ndarray) -> "OrthogonalProcrustes":
         """
-        Uses the two datasets to learn the matrix `self.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_` that aligns the
         first dataset with the second.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            Dataset to be mapped to `Y`, must have the same shape as `Y`.
+            Dataset to be mapped to ``Y``, must have the same shape as ``Y``.
 
         Y : np.ndarray, shape (m, d)
-            Target dataset, must have the same shape as `X`.
+            Target dataset, must have the same shape as ``X``.
 
 
         Returns
@@ -96,22 +96,22 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit_transform(self, X: np.ndarray, Y: np.ndarray) -> np.ndarray:
         """
-        Uses the two datasets to learn the matrix `self.Q_` that aligns the
-        first dataset with the second. Then, transforms the first dataset `X`
-        using the learned matrix `self.Q_`.
+        Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_` that aligns the
+        first dataset with the second. Then, transforms the first dataset ``X``
+        using the learned matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_`.
 
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            Dataset to be mapped to `Y`, must have the same shape as `Y`.
+            Dataset to be mapped to ``Y``, must have the same shape as ``Y``.
 
         Y : np.ndarray, shape (m, d)
-            Target dataset, must have the same shape as `X`.
+            Target dataset, must have the same shape as ``X``.
 
         Returns
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            `X` @ `self.Q_`.
+            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
         """
         return super().fit_transform(X, Y)

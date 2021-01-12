@@ -13,8 +13,9 @@ from sklearn.mixture._gaussian_mixture import (
     _estimate_gaussian_parameters,
 )
 from sklearn.model_selection import ParameterGrid
-from sklearn.utils._testing import ignore_warnings
+
 from sklearn.exceptions import ConvergenceWarning
+
 from joblib import Parallel, delayed
 import warnings
 
@@ -34,11 +35,11 @@ class AutoGMMCluster(BaseCluster):
     ----------
     min_components : int, default=2.
         The minimum number of mixture components to consider (unless
-        max_components=None, in which case this is the maximum number of
-        components to consider). If max_components is not None, min_components
-        must be less than or equal to max_components.
-        If label_init is given, min_components must match number of unique labels
-        in label_init.
+        ``max_components`` is None, in which case this is the maximum number of
+        components to consider). If ``max_components`` is not None, ``min_components``
+        must be less than or equal to ``max_components``.
+        If ``label_init`` is given, min_components must match number of unique labels
+        in ``label_init``.
 
     max_components : int or None, default=10.
         The maximum number of mixture components to consider. Must be greater
@@ -115,7 +116,7 @@ class AutoGMMCluster(BaseCluster):
 
     label_init : array-like, shape (n_samples,), optional (default=None)
         List of labels for samples if available. Used to initialize the model.
-        If provided, min_components and max_components must match the number of
+        If provided, min_components and ``max_components`` must match the number of
         unique labels given here.
 
     max_iter : int (default = 100).
@@ -380,9 +381,6 @@ class AutoGMMCluster(BaseCluster):
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
 
-    # ignoring warning here because if convergence is not reached, the regularization
-    # is automatically increased
-    @ignore_warnings(category=ConvergenceWarning)
     def _fit_cluster(self, X, y, params):
         label_init = self.label_init
         if label_init is not None:
@@ -423,7 +421,11 @@ class AutoGMMCluster(BaseCluster):
         while gm_params["reg_covar"] <= 1 and criter == np.inf:
             model = GaussianMixture(**gm_params)
             try:
-                model.fit(X)
+                # ignoring warning here because if convergence is not reached, the regularization
+                # is automatically increased
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", ConvergenceWarning)
+                    model.fit(X)
                 predictions = model.predict(X)
                 counts = [
                     sum(predictions == i) for i in range(gm_params["n_components"])
