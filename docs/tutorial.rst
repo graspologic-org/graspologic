@@ -11,24 +11,38 @@ stochastic block model (SBM), degree-corrected SBM, and random dot product graph
 
 .. toctree::
    :maxdepth: 1
-      
+
    tutorials/models/models
 
 .. _simulations_tutorials:
 
 Simulations
 ===========
-The following tutorials demonstrate how to easily sample random graphs from graph models such as the Erdos-Renyi model, 
+The following tutorials demonstrate how to easily sample random graphs from graph models such as the Erdos-Renyi model,
 stochastic block model, and random dot product graph (RDPG).
 
 .. toctree::
    :maxdepth: 1
-   
+
    tutorials/simulations/erdos_renyi
    tutorials/simulations/sbm
+   tutorials/simulations/mmsbm
    tutorials/simulations/rdpg
    tutorials/simulations/corr
    tutorials/simulations/rdpg_corr
+
+.. _cluster_tutorials:
+
+Clustering
+==========
+The following tutorials explain how to cluster vertex or graph embeddings with two
+clustering algorithms, as well as the advantages of these to comparable implementations.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/clustering/autogmm
+   tutorials/clustering/kclust
 
 .. _embed_tutorials:
 
@@ -38,16 +52,18 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
 
 .. toctree::
    :maxdepth: 1
-   
+
    tutorials/embedding/AdjacencySpectralEmbed
+   tutorials/embedding/OutOfSampleEmbed
    tutorials/embedding/Omnibus
-   
-.. _inference_tutorials: 
+   tutorials/embedding/MASE
+
+.. _inference_tutorials:
 
 Inference
 ===========================
-Statistical testing on graphs requires specialized methodology in order to account 
-for the fact that the edges and nodes of a graph are dependent on one another. Below 
+Statistical testing on graphs requires specialized methodology in order to account
+for the fact that the edges and nodes of a graph are dependent on one another. Below
 are tutorials for robust statistical hypothesis testing on multiple graphs.
 
 .. toctree::
@@ -56,11 +72,11 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
    tutorials/inference/latent_position_test
    tutorials/inference/latent_distribution_test
 
-.. _plot_tutorials: 
+.. _plot_tutorials:
 
 Plotting
 ========
-The following tutorials present ways to visualize the graphs, such as its adjacency matrix, and graph embeddings. 
+The following tutorials present ways to visualize the graphs, such as its adjacency matrix, and graph embeddings.
 
 .. toctree::
    :maxdepth: 1
@@ -68,6 +84,7 @@ The following tutorials present ways to visualize the graphs, such as its adjace
    tutorials/plotting/heatmaps
    tutorials/plotting/gridplot
    tutorials/plotting/pairplot
+   tutorials/plotting/pairplot_with_gmm
 
 .. _matching_tutorials:
 
@@ -93,3 +110,37 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
    :maxdepth: 1
 
    tutorials/subgraph/subgraph
+
+.. _vertex_nomination_tutorials:
+
+Vertex Nomination
+=================
+The following tutorials demonstrate how to use unattributed single graph spectral vertex nomination or vertex nomination via seeded graph matching to find vertices that are related to a given vertex / set of vertices of interest.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/vertex_nomination/SpectralVertexNomination
+   tutorials/nominate/vertex_nomination_via_SGM
+
+.. _aligning_tutorials:
+
+Aligning
+========
+The following tutorials shows how to align two seperate datasets with each other, for better comparison of the data.
+
+.. toctree::
+   :maxdepth: 1
+   
+   tutorials/aligning/aligning
+
+.. _connectomics_tutorials:
+
+Connectomics
+============
+The following tutorials demonstrate how to apply methods in this package to the analysis of connectomics datasets. 
+
+.. toctree::
+   :maxdepth: 1
+   
+   tutorials/connectomics/mcc

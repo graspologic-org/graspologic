@@ -3,8 +3,14 @@
 
 import numpy as np
 import pytest
-
-from graspologic.plot.plot import heatmap, gridplot, pairplot, _sort_inds
+from sklearn.mixture import GaussianMixture
+from graspologic.plot.plot import (
+    heatmap,
+    gridplot,
+    pairplot,
+    _sort_inds,
+    pairplot_with_gmm,
+)
 from graspologic.simulations.simulations import er_np, sbm
 
 
@@ -191,6 +197,37 @@ def test_pairplot_outputs():
     fig = pairplot(X, Y, col_names)
     fig = pairplot(
         X, Y, col_names, title="Test", height=1.5, variables=["Feature1", "Feature2"]
+    )
+
+
+def test_pairplot_with_gmm_inputs():
+    X = np.random.rand(15, 3)
+    gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
+    labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
+    # test data
+    with pytest.raises(ValueError):
+        pairplot_with_gmm(X="test", gmm=gmm)
+
+    with pytest.raises(ValueError):
+        pairplot_with_gmm(X=X, gmm=gmm, labels=["A"])
+
+    with pytest.raises(NameError):
+        pairplot_with_gmm(X, gmm=None)
+
+
+def test_pairplot_with_gmm_outputs():
+    X = np.random.rand(15, 3)
+    gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
+    labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
+    cluster_palette = {0: "red", 1: "blue", 2: "green"}
+    label_palette = {"A": "red", "B": "blue", "C": "green"}
+    fig = pairplot_with_gmm(X, gmm)
+    fig = pairplot_with_gmm(
+        X,
+        gmm,
+        labels=labels,
+        cluster_palette=cluster_palette,
+        label_palette=label_palette,
     )
 
 
