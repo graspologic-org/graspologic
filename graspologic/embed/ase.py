@@ -25,7 +25,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
     the dimensionality to the specified k, or if k is unspecified, can find a number of
     dimensions automatically (see :class:`~graspologic.embed.selectSVD`).
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <embed_tutorials>`
 
     Parameters
     ----------

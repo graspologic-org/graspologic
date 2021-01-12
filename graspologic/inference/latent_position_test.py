@@ -25,7 +25,7 @@ def latent_position_test(
     have their vertices sorted in the same order. Currently, the function only
     supports undirected graphs.
 
-    Read more in the :ref:`tutorials <inference_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <inference_tutorials>`
 
     Parameters
     ----------

@@ -163,7 +163,7 @@ def heatmap(
     The nodes will be sorted within each group if labels are also
     provided.
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
@@ -365,7 +365,7 @@ def gridplot(
     The size of the dots correspond to the edge weights of the graphs, and
     colors represent input graphs.
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
@@ -542,7 +542,7 @@ def pairplot(
     The diagonal axes show the univariate distribution of the data for that
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------
@@ -758,7 +758,7 @@ def pairplot_with_gmm(
     The diagonal axes show the univariate distribution of the data for that
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
 
     Parameters
     ----------

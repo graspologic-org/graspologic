@@ -16,7 +16,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     the dimensionality to the specified k, or if k is unspecified, can find a number
     of dimensions automatically.
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <embed_tutorials>`
 
     Parameters
     ----------

@@ -38,35 +38,18 @@ except BaseException:
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
-    "numpydoc",
     "sphinx.ext.ifconfig",
-    "sphinx.ext.githubpages",
-    "sphinxcontrib.rawfiles",
     "nbsphinx",
     "sphinx.ext.intersphinx",
 ]
 
-# -- sphinxcontrib.rawfiles
-rawfiles = ["CNAME"]
 
 # -- numpydoc
 # Below is needed to prevent errors
 numpydoc_show_class_members = False
 numpydoc_attributes_as_param_list = True
 numpydoc_use_blockquotes = True
-
-# -- sphinx.ext.autosummary
-autosummary_generate = True
-
-# -- sphinx.ext.autodoc
-autoclass_content = "both"
-autodoc_default_flags = ["members", "inherited-members"]
-autodoc_member_order = "bysource"  # default is alphabetical
 
 # -- sphinx.ext.intersphinx
 intersphinx_mapping = {

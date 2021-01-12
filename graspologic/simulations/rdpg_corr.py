@@ -18,7 +18,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     matrix to get probabilities between 0 and 1, or remove loops.
     A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the FLAGDWAYNEFLAG ref:`tutorials <simulations_tutorials>`
 
     Parameters
     ----------
