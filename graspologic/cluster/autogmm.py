@@ -11,8 +11,9 @@ from sklearn.mixture._gaussian_mixture import (
     _estimate_gaussian_parameters,
 )
 from sklearn.model_selection import ParameterGrid
-from sklearn.utils._testing import ignore_warnings
+
 from sklearn.exceptions import ConvergenceWarning
+
 from joblib import Parallel, delayed
 import warnings
 
@@ -409,7 +410,11 @@ class AutoGMMCluster(BaseCluster):
         while gm_params["reg_covar"] <= 1 and criter == np.inf:
             model = GaussianMixture(**gm_params)
             try:
-                model.fit(X)
+                # ignoring warning here because if convergence is not reached, the regularization
+                # is automatically increased
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", ConvergenceWarning)
+                    model.fit(X)
                 predictions = model.predict(X)
                 counts = [
                     sum(predictions == i) for i in range(gm_params["n_components"])
