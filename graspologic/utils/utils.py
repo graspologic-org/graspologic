@@ -372,8 +372,8 @@ def to_laplace(graph, form="DAD", regularizer=None):
 
     A = import_graph(graph)
 
-    in_degree = np.squeeze(np.asarray(A.sum(axis=0)))
-    out_degree = np.squeeze(np.asarray(A.sum(axis=1)))
+    in_degree = np.reshape(np.asarray(A.sum(axis=0)), (-1,))
+    out_degree = np.reshape(np.asarray(A.sum(axis=1)), (-1,))
 
     # regularize laplacian with parameter
     # set to average degree
