@@ -29,8 +29,12 @@ sys.path.append(dir_realpath)
 
 import graspologic
 
-version = graspologic.version.version.__semver
-release = graspologic.version.version.version
+release = graspologic.__version__
+try:
+    split = release.split(".")
+    version = f"{split[0]}.{split[1]}"
+except BaseException:
+    version = release
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
