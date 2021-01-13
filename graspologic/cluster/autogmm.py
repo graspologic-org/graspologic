@@ -376,9 +376,6 @@ class AutoGMMCluster(BaseCluster):
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
 
-    # ignoring warning here because if convergence is not reached, the regularization
-    # is automatically increased
-    @ignore_warnings(category=ConvergenceWarning)
     def _fit_cluster(self, X, X_subset, y, params, agg_clustering):
         label_init = self.label_init
         if label_init is not None:
@@ -410,8 +407,8 @@ class AutoGMMCluster(BaseCluster):
         while gm_params["reg_covar"] <= 1 and criter == np.inf:
             model = GaussianMixture(**gm_params)
             try:
-                # ignoring warning here because if convergence is not reached, the regularization
-                # is automatically increased
+                # ignoring warning here because if convergence is not reached,
+                # the regularization is automatically increased
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", ConvergenceWarning)
                     model.fit(X)
