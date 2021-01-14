@@ -5,7 +5,7 @@ tutorials:
 	sphinx-build -W -a docs/tutorials/ docs/tutorials/_build/html
 
 coverage:
-	python -m pytest --co --cov=graspologic
+	python -m pytest --co --cov=graspologic graspologic tests
 
 lint:
 	black --check --diff ./graspologic ./tests

@@ -79,7 +79,7 @@ jobs:
         run: |
           pip install -U pip setuptools
           pip install -r requirements.txt
-          python -m pytest --co --cov=graspologic
+          python -m pytest --co --cov=graspologic graspologic tests
   unit-and-doc-test:
     runs-on: ${{matrix.os}}
     continue-on-error: true
