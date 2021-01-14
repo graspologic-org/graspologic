@@ -299,11 +299,10 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
                             model.precisions_ = parent_model.precisions_[
                                 cluster_idx
                             ].reshape(cov_shapes[cov_shape_idx])
-                            model.precisions_cholesky_ = parent_model.precisions_cholesky_[
-                                cluster_idx
-                            ].reshape(
-                                cov_shapes[cov_shape_idx]
-                            )
+                            model.precisions_cholesky_\
+                                = parent_model.precisions_cholesky_[
+                                    cluster_idx
+                                ].reshape(cov_shapes[cov_shape_idx])
 
                         dc.model_ = model
 
