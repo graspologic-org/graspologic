@@ -7,6 +7,7 @@ import numpy as np
 
 from ..utils import import_graph, is_fully_connected
 from .base import BaseEmbedMulti
+from scipy.sparse import isspmatrix_csr
 
 
 def _get_omni_matrix(graphs):
@@ -164,6 +165,10 @@ class OmnibusEmbed(BaseEmbedMulti):
         self : object
             Returns an instance of self.
         """
+        if any([isspmatrix_csr(g) for g in graphs]):
+            msg = "OmnibusEmbed does not support scipy.sparse.csr_matrix inputs"
+            raise TypeError(msg)
+
         graphs = self._check_input_graphs(graphs)
 
         # Check if Abar is connected
