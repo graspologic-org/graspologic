@@ -30,7 +30,14 @@ jobs:
           sudo apt install pandoc
           pip install -U pip setuptools
           pip install -r requirements.txt
-          sphinx-build -W -a docs/tutorials/ docs/tutorials/_build/html # TODO: we need to package this up and make it available, in case we run publish and we don't want to rebuild the tutorials
+          sphinx-build -W -a docs/tutorials/ docs/tutorials/_build/html
+          touch docs/tutorials/_build/html/.nojekyll
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: tutorials
+          path: |
+            docs/tutorials/_build/html
   code-format-check:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -119,4 +126,15 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           twine upload dist/*
-
+      - name: Download a single artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: tutorials
+          path: docs/tutorials
+      - name: Publish tutorials
+        if: github.ref=='refs/heads/dev'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/tutorials
+          destination_dir: tutorials
