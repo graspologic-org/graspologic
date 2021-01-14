@@ -1,0 +1,12 @@
+version: 2
+sphinx:
+  configuration: docs/reference/conf.py
+
+formats:
+  - html
+
+python:
+  version: 3.8
+  install:
+    - requirements: requirements.txt
+
