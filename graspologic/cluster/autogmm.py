@@ -538,7 +538,7 @@ class AutoGMMCluster(BaseCluster):
                     hierarchical_labels = _hierarchical_labels(
                         agg.children_, lower_ncomponents, upper_ncomponents
                     )
-                ag_labels.append(hierarchical_labels)
+                    ag_labels.append(hierarchical_labels)
 
         def _fit_for_data(p):
             n_clusters = p[1]["n_components"]
