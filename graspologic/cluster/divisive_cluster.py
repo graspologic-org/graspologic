@@ -275,17 +275,36 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
                         cluster_idx = len(dc.parent.children) - 1
                         parent_model = dc.parent.model_
                         model = GaussianMixture()
-                        if parent_model.means_init is None:
-                            # for cases where "init_params" is "kmeans" in AutoGMM
-                            # i.e., means/precisions/weights_init are not applicable
-                            model.covariance_type = parent_model.covariance_type
-                            model.reg_covar = parent_model.reg_covar
+                        model.weights_ = np.array([1])
+                        model.means_ = parent_model.means_[cluster_idx].reshape(1, -1)
+                        model.covariance_type = parent_model.covariance_type
+                        if model.covariance_type == "tied":
+                            model.covariances_ = parent_model.covariances_
+                            model.precisions_ = parent_model.precisions_
+                            model.precisions_cholesky_ = (
+                                parent_model.precisions_cholesky_
+                            )
                         else:
-                            model.means_init = parent_model.means_init[cluster_idx]
-                            model.precisions_init = parent_model.precisions_init[
-                                cluster_idx
+                            cov_types = ["spherical", "diag", "full"]
+                            n_features = model.means_.shape[-1]
+                            cov_shapes = [
+                                (1,),
+                                (1, n_features),
+                                (1, n_features, n_features),
                             ]
-                            model.weights_init = np.array([1])
+                            cov_shape_idx = cov_types.index(model.covariance_type)
+                            model.covariances_ = parent_model.covariances_[
+                                cluster_idx
+                            ].reshape(cov_shapes[cov_shape_idx])
+                            model.precisions_ = parent_model.precisions_[
+                                cluster_idx
+                            ].reshape(cov_shapes[cov_shape_idx])
+                            model.precisions_cholesky_ = parent_model.precisions_cholesky_[
+                                cluster_idx
+                            ].reshape(
+                                cov_shapes[cov_shape_idx]
+                            )
+
                         dc.model_ = model
 
         return labels
