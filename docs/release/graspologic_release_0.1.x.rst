@@ -20,6 +20,7 @@ Highlights include:
 - Mixed membership SBM sampling
 - Node2Vec embeddings
 - Out of sample adjacency spectral embedding
+- Spectral Embedding with sparse inputs
 - Padded SGM
 - Divisive, hierarchical clustering
 - Pairplot with GMM
