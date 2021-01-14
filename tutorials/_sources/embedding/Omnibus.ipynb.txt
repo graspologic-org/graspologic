@@ -1,0 +1,180 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Omnibus Embedding for Multiple Graphs\n",
+    "\n",
+    "This demo shows you how to simultaneously embed two graphs using omnibus embedding from two graphs sampled from different stochastic block models (SBM). We will also compare the results to that of adjacency spectral embedding, and show why it is useful to embed the graphs simultaneously."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import graspologic\n",
+    "\n",
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Simulate two different graphs using stochastic block models (SBM)\n",
+    "\n",
+    "We sample 2-block SBMs (undirected, no self-loops) with 50 vertices, each block containing 25 vertices (n = [25, 25]), and the following block probabilities:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "P_1 = \n",
+    "\\begin{bmatrix}0.3 & 0.1\\\\\n",
+    "0.1 & 0.7\n",
+    "\\end{bmatrix},~\n",
+    "P_2 = \\begin{bmatrix}0.3 & 0.1\\\\\n",
+    "0.1 & 0.3\n",
+    "\\end{bmatrix}\n",
+    "\\end{align*}\n",
+    "\n",
+    "The only difference between the two are the block probability for the second block. We sample $G_1 \\sim \\text{SBM}(n, P_1)$ and $G_2 \\sim \\text{SBM}(n, P_2)$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import sbm\n",
+    "\n",
+    "n = [25, 25]\n",
+    "P1 = [[.3, .1], \n",
+    "      [.1, .7]]\n",
+    "P2 = [[.3, .1], \n",
+    "      [.1, .3]]\n",
+    "\n",
+    "np.random.seed(8)\n",
+    "G1 = sbm(n, P1)\n",
+    "G2 = sbm(n, P2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize the graphs using heatmap\n",
+    "\n",
+    "We visualize the sampled graphs using heatmap function. Heatmap will plot the adjacency matrix, where the colors represent the weight of the edge. In this case, we have binary graphs so the values will be either 0 or 1. \n",
+    "\n",
+    "There is clear block structure to the graphs, and we see that the second, lower right, block of $G_1$ has more edges than that of $G_2$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.plot import heatmap\n",
+    "\n",
+    "heatmap(G1, figsize=(7, 7), title='Visualization of Graph 1')\n",
+    "_ = heatmap(G2, figsize=(7, 7), title='Visualization of Graph 2')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Embed the two graphs using omnibus embedding\n",
+    "\n",
+    "The purpose of embedding graphs is to obtain a Euclidean representation, sometimes called latent positions, of the adjacency matrices. Again, we assume that the probability matrix of a graph is given by $P = XX^T$ and we are trying to estimate $X$. The benefit of omnibus embedding is that the latent positions of all embedded graphs live in the same canonical space, thus eliminating the need to align the results.\n",
+    "\n",
+    "We use all of the default parameters. Underneath, the select_dimension algorithm will automatically find the optimal embedding dimension for us. In this example, we get the following estimate,\n",
+    "\n",
+    "\\begin{align*}\n",
+    "\\hat{Z} = \n",
+    "\\begin{bmatrix}\n",
+    "\\hat{X_1}\\\\\n",
+    "\\hat{X_2}\n",
+    "\\end{bmatrix}\n",
+    "\\end{align*}\n",
+    "\n",
+    "where the first block, $\\hat{X_1}$, are the latent positions of the first graph, and the second block, $\\hat{X_2}$, are the latent positions of the second graph."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "from graspologic.embed import OmnibusEmbed\n",
+    "\n",
+    "embedder = OmnibusEmbed()\n",
+    "Zhat = embedder.fit_transform([G1, G2])\n",
+    "\n",
+    "print(Zhat.shape)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize the latent positions\n",
+    "\n",
+    "Since the two graphs have clear block structures, we should see two \"clusters\" when we visualize the latent positions. The vertices that form the first block should be close together since they have the same block probabilities, while those that form the second block should be further apart since they have different block probabilities."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Xhat1 = Zhat[0]\n",
+    "Xhat2 = Zhat[1]\n",
+    "\n",
+    "# Plot the points\n",
+    "fig, ax = plt.subplots(figsize=(10, 10))\n",
+    "ax.scatter(Xhat1[:25, 0], Xhat1[:25, 1], marker='s', c='blue', label = 'Graph 1, Block 1')\n",
+    "ax.scatter(Xhat1[25:, 0], Xhat1[25:, 1], marker='o', c='blue', label = 'Graph 1, Block 2')\n",
+    "ax.scatter(Xhat2[:25, 0], Xhat2[:25, 1], marker='s', c='red', label = 'Graph 2, Block 1')\n",
+    "ax.scatter(Xhat2[25:, 0], Xhat2[25:, 1], marker='o', c='red', label= 'Graph 2, Block 2')\n",
+    "ax.legend()\n",
+    "\n",
+    "# Plot lines between matched pairs of points\n",
+    "for i in range(50):\n",
+    "    ax.plot([Xhat1[i, 0], Xhat2[i, 0]], [Xhat1[i, 1], Xhat2[i, 1]], 'black', alpha = 0.15)\n",
+    "    \n",
+    "_ = ax.set_title('Latent Positions from Omnibus Embedding', fontsize=20)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

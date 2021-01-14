@@ -1,0 +1,167 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Stochastic Block Model (SBM)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import graspologic\n",
+    "\n",
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Unlike [Erdos-Renyi (ER) models](./erdos_renyi.ipynb), a Stochastic Block Model (SBM) produces graphs containing communities: disjoint subgraphs characterized by differing edge probabilities for vertices within and between communities [(1)](https://en.wikipedia.org/wiki/Stochastic_block_model).\n",
+    "\n",
+    "SBM is parametrized by the number of vertices in each community $n$, and a block probability matrix $P \\in \\mathbb{R}^{n x n}$ where each element specifies the probability of an edge in a particular block. One can think of SBM as a collection of ER graphs where each block corresponds to an ER graph.\n",
+    "\n",
+    "Below, we sample a two-block SBM (undirected, no self-loops) with following parameters:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "n &= [50, 50]\\\\\n",
+    "P &= \\begin{bmatrix} \n",
+    "0.5 & 0.2\\\\\n",
+    "0.2 & 0.05\n",
+    "\\end{bmatrix}\n",
+    "\\end{align*}\n",
+    "\n",
+    "The diagonals correspond to probability of an edge within blocks and the off-diagonals correspond to probability of an edge between blocks."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import sbm\n",
+    "\n",
+    "n = [50, 50]\n",
+    "p = [[0.5, 0.2],\n",
+    "     [0.2, 0.05]]\n",
+    "\n",
+    "np.random.seed(1)\n",
+    "G = sbm(n=n, p=p)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize the graph using heatmap"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.plot import heatmap\n",
+    "\n",
+    "_ = heatmap(G, title ='SBM Simulation')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Weighted SBM Graphs\n",
+    "\n",
+    "Similar to ER simulations, ``sbm()`` functions provide ways to sample weights for all edges that were sampled via a probability distribution function. In order to sample with weights, you can either:\n",
+    "\n",
+    "1. Provide a *single* probability distribution function with corresponding keyword arguments for the distribution function. All weights will be sampled using the same function.\n",
+    "2. Provide a probability distribution function with corresponding keyword arguments for each block.\n",
+    "\n",
+    "Below we sample a SBM (undirected, no self-loops) with the following parameters:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "n &= [50, 50]\\\\\n",
+    "P &= \\begin{bmatrix}0.5 & 0.2\\\\\n",
+    "0.2 & 0.05\n",
+    "\\end{bmatrix}\n",
+    "\\end{align*}\n",
+    "\n",
+    "and the weights are sampled from the following probability functions:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "PDFs &= \\begin{bmatrix}Normal & Poisson\\\\\n",
+    "Poisson & Normal\n",
+    "\\end{bmatrix}\\\\\n",
+    "Parameters   &= \\begin{bmatrix}{\\mu=3, \\sigma^2=1} & {\\lambda=5}\\\\\n",
+    "{\\lambda=5} & {\\mu=3, \\sigma^2=1}\n",
+    "\\end{bmatrix}\n",
+    "\\end{align*}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from numpy.random import normal, poisson\n",
+    "\n",
+    "n = [50, 50]\n",
+    "p = [[0.5, 0.2],\n",
+    "     [0.2, 0.05]]\n",
+    "wt = [[normal, poisson],\n",
+    "      [poisson, normal]]\n",
+    "wtargs = [[dict(loc=3, scale=1), dict(lam=5)],\n",
+    "          [dict(lam=5), dict(loc=3, scale=1)]]\n",
+    "\n",
+    "G = sbm(n=n, p=p, wt=wt, wtargs=wtargs)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize the graph using heatmap"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "_ = heatmap(G, title='Weighted SBM Simulation')"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3-final"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

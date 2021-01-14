@@ -1,0 +1,300 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Correlated Random Dot Product Graph (RDPG) Graph Pair"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations.rdpg_corr import rdpg_corr\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "%matplotlib inline\n",
+    "sns.set_context('talk')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "RDPG is a latent position generative model. An explanation of the uncorrelated model is in the [tutorial](https://graspy.neurodata.io/tutorials/simulations/rdpg.html).\n",
+    "\n",
+    "Here, we want to generate a pair of graphs with the same latent positions but with correlation between edges. \n",
+    "\n",
+    "There are several parameters in this function: $X$ and $Y$ are the input matrices (latent positions) which are used to generate the probability matrix; $r$ is the correlation between the graph pair, which should be (-1,1) (note that not all values of r may be possible for a given set of latent positions).\n",
+    "\n",
+    "Below, we sample a RDPG graph pair (undirected and no self-loops), G1 and G2, with the following parameters:\n",
+    "\\begin{align*}\n",
+    "n &= [50, 50]\\\\\n",
+    "r &= 0.5\n",
+    "\\end{align*}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "np.random.seed(1234)\n",
+    "X = np.array([[0.5, 0.2, 0.2]] * 50 + [[0.1, 0.1, 0.1]] * 50)\n",
+    "Y = None\n",
+    "r = 0.3\n",
+    "\n",
+    "G1, G2 = rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X @ X.T"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize the graphs using heatmap\n",
+    "Here, we define *difference rate* to be the number of edges between the two graphs which are not the same (exist or not exist) out of all potential edges (roughly $n^2$)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "from graspologic.plot import heatmap\n",
+    "\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(G1, ax=axs[0], cbar=False, title = 'Corr. RDPG 1')\n",
+    "heatmap(G2, ax=axs[1], cbar=False, title = 'Corr. RDPG 2')\n",
+    "heatmap(G1-G2, ax=axs[2], cbar=False, title='diff(G1-G2)')\n",
+    "ndim=G1.shape[0]\n",
+    "print(\"Difference rate is \", np.sum(abs(G1-G2))/(ndim*ndim))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Compare it to the correlated SBM graph pair"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Below, we sample a two-block SBM graph pair (undirected and no self-loops) G1 and G2 with the following parameters:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "n &= [50, 50]\\\\\n",
+    "p &= \\begin{bmatrix} \n",
+    "0.33 & 0.09\\\\\n",
+    "0.09 & 0.03\n",
+    "\\end{bmatrix}\\\\\n",
+    "r &= 0.5\n",
+    "\\end{align*}\n",
+    "\n",
+    "This happens to be the SBM formulation of the same model framed as an RDPG above. Let's see the difference between the correlated RDPG and correlated SBM graph pairs."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import sbm_corr\n",
+    "\n",
+    "np.random.seed(123)\n",
+    "directed = False\n",
+    "loops = False\n",
+    "n_per_block = 50\n",
+    "n_blocks = 2\n",
+    "block_members = np.array(n_blocks * [n_per_block])\n",
+    "n_verts = block_members.sum()\n",
+    "rho = .3\n",
+    "block_probs = np.array([[0.33, 0.09], [0.09, 0.03]])\n",
+    "\n",
+    "A1, A2 = sbm_corr(block_members, block_probs, rho, directed=directed, loops=loops)\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(A1, ax=axs[0], cbar=False, title=\"Corr. SBM 1\")\n",
+    "heatmap(A2, ax=axs[1], cbar=False, title=\"Corr. SBM 2\")\n",
+    "heatmap(A1 - A2, ax=axs[2], cbar=False, title=\"Diff (G1 - G2)\")\n",
+    "\n",
+    "ndim=G1.shape[0]\n",
+    "print(\"Difference rate with sbm_corr function is \", np.sum(abs(A1-A2))/(ndim*ndim))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can see the difference between G1 and G2 with both functions are similar."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Varying the correlation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We change the correlation between the graph pairs from -0.5 to 0.9 and see the difference between graph 1 and graph 2:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "X = np.random.dirichlet([10, 10], size=100)\n",
+    "Y = None\n",
+    "\n",
+    "np.random.seed(12345)\n",
+    "r = -0.5\n",
+    "\n",
+    "G1, G2 = rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False)\n",
+    "\n",
+    "\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(G1, ax=axs[0], cbar=False, title=\"Corr. RDPG 1\")\n",
+    "heatmap(G2, ax=axs[1], cbar=False, title=\"Corr. RDPG 2\")\n",
+    "heatmap(G1 - G2, ax=axs[2], cbar=False, title=\"Diff (G1 - G2)\")\n",
+    "ndim=G1.shape[0]\n",
+    "print(\"Difference rate when correlation = -0.5 is \", np.sum(abs(G1-G2))/(ndim*ndim))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "np.random.seed(12345)\n",
+    "r = 0.3\n",
+    "\n",
+    "G1, G2 = rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False)\n",
+    "\n",
+    "\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(G1, ax=axs[0], cbar=False, title=\"Corr. RDPG 1\")\n",
+    "heatmap(G2, ax=axs[1], cbar=False, title=\"Corr. RDPG 2\")\n",
+    "heatmap(G1 - G2, ax=axs[2], cbar=False, title=\"Diff (G1 - G2)\")\n",
+    "ndim=G1.shape[0]\n",
+    "print(\"Difference rate when correlation =0.3 is \", np.sum(abs(G1-G2))/(ndim*ndim))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "np.random.seed(12345)\n",
+    "r = 0.9\n",
+    "\n",
+    "G1, G2 = rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False)\n",
+    "\n",
+    "\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(G1, ax=axs[0], cbar=False, title=\"Corr. RDPG 1\")\n",
+    "heatmap(G2, ax=axs[1], cbar=False, title=\"Corr. RDPG 2\")\n",
+    "heatmap(G1 - G2, ax=axs[2], cbar=False, title=\"Diff (G1 - G2)\")\n",
+    "ndim=G1.shape[0]\n",
+    "print(\"Difference rate when correlation =0.9 is \", np.sum(abs(G1-G2))/(ndim*ndim))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We calculate the difference rate between graph 1 and graph 2 with different correlation ranging from -0.5 to 0.9, and show them in a scatter plot:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "np.random.seed(12345)\n",
+    "X = np.random.dirichlet([10, 10], size=100)\n",
+    "Y = None\n",
+    "rlist=[]\n",
+    "for i in range(-5,10):\n",
+    "    g1,g2 = rdpg_corr(X, Y, i/10, rescale=False, directed=False, loops=False)\n",
+    "    ndim=g1.shape[0]\n",
+    "    rate=np.sum(abs(g1-g2))/(ndim*ndim)\n",
+    "    rlist.append(rate)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "x_list = np.linspace(-0.5,0.9,15)\n",
+    "plt.plot(x_list,rlist,'o-')\n",
+    "plt.xlabel(\"Correlation\")\n",
+    "_ = plt.ylabel('Difference rate')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can see that the difference rate goes down as the correlation grows."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

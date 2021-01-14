@@ -1,0 +1,1906 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Aligning" href="../aligning/aligning.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> graspologic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../models/models.html">Random Graph Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/models.html#This-tutorial-will-introduce-the-following-random-graph-models:">This tutorial will introduce the following random graph models:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Load-some-data-from-graspologic">Load some data from <em>graspologic</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Preliminaries">Preliminaries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../models/models.html#For-each-graph-model-we-will-show:">For each graph model we will show:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Erdos-Reyni-(ER)">Erdos-Reyni (ER)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Degree-corrected-Erdos-Reyni-(DCER)">Degree-corrected Erdos-Reyni (DCER)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Stochastic-block-model-(SBM)">Stochastic block model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Degree-corrected-stochastic-block-model-(DCSBM)">Degree-corrected stochastic block model (DCSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Random-dot-product-graph-(RDPG)">Random dot product graph (RDPG)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Create-a-figure-combining-all-of-the-models">Create a figure combining all of the models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/erdos_renyi.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/erdos_renyi.html#Weighted-ER-Graphs">Weighted ER Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/erdos_renyi.html#Visualize-the-graph-using-heatmap">Visualize the graph using heatmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/sbm.html">Stochastic Block Model (SBM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/sbm.html#Visualize-the-graph-using-heatmap">Visualize the graph using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/sbm.html#Weighted-SBM-Graphs">Weighted SBM Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/sbm.html#id1">Visualize the graph using heatmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/mmsbm.html#Visualize-the-graph-using-heatmap">Visualize the graph using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/mmsbm.html#Generating-various-types-of-graphs">Generating various types of graphs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Generating-Erdos-Renyi-(ER)-graphs">Generating Erdos-Renyi (ER) graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Differences-with-Stochastic-Block-Model-(SBM)-graphs">Differences with Stochastic Block Model (SBM) graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Plot-SBM-and-MMSBM-graphs-using-heatmap">Plot SBM and MMSBM graphs using heatmap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg.html#Visualize-the-adjacency-matrix">Visualize the adjacency matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg.html#Stochastic-block-model-as-RDPG">Stochastic block model as RDPG</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/rdpg.html#Results-from-SBM-simulation-using-same-formulation-shows-similar-structure">Results from SBM simulation using same formulation shows similar structure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/corr.html">Correlated Graph Pairs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#ER-correlation-graph-pair">ER correlation graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#SBM-correlated-graph-pair">SBM correlated graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#id1">Visualize the graphs using heatmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg_corr.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg_corr.html#Compare-it-to-the-correlated-SBM-graph-pair">Compare it to the correlated SBM graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg_corr.html#Varying-the-correlation">Varying the correlation</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../clustering/autogmm.html#Using-AutoGMM-on-Synthetic-Data">Using AutoGMM on Synthetic Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering/kclust.html">K-Means Clustering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../clustering/kclust.html#Using-K-Means-on-Synthetic-Data">Using K Means on Synthetic Data</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Data-Generation">Data Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Embedding:-Undirected-Case">Embedding: Undirected Case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Embedding:-Directed-Case">Embedding: Directed Case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Dimension-specification">Dimension specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Clustering-in-the-embedded-space">Clustering in the embedded space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Undirected-out-of-sample-prediction">Undirected out-of-sample prediction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Embedding">Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Passing-in-multiple-out-of-sample-vertices">Passing in multiple out-of-sample vertices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Directed-out-of-sample-prediction">Directed out-of-sample prediction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Plotting-directed-latent-predictions">Plotting directed latent predictions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Weighted-out-of-sample-prediction">Weighted out-of-sample prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">Simulate two different graphs using stochastic block models (SBM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Embed-the-two-graphs-using-omnibus-embedding">Embed the two graphs using omnibus embedding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Visualize-the-latent-positions">Visualize the latent positions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Replicating-Omnibus-Embedding-Tutorial">Replicating Omnibus Embedding Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">Simulate two different graphs using stochastic block models (SBM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Embed-the-two-graphs-using-MASE">Embed the two graphs using MASE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualize-Common-Latent-Positions">Visualize Common Latent Positions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Recover-Original-Communities">Recover Original Communities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Sampling-More-Graphs">Sampling More Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualizing-Common-Latent-Subspace">Visualizing Common Latent Subspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualize-Score-Matrices">Visualize Score Matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Recover-Original-SBM-Membership">Recover Original SBM Membership</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../inference/latent_position_test.html">Latent Position Two-Graph Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Generate-a-stochastic-block-model-graph-to-model-as-a-random-dot-product-graph">Generate a stochastic block model graph to model as a random dot product graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Sample-new-RDPGs-from-this-latent-position">Sample new RDPGs from this latent position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Latent-position-test-where-null-is-true">Latent position test where null is true</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Matched-test-where-the-null-is-false">Matched test where the null is false</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Generate-a-stochastic-block-model-graph">Generate a stochastic block model graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Latent-distribution-test-where-null-is-true">Latent distribution test where null is true</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Plots-of-Null-Distribution-for-Dcorr-and-MGC">Plots of Null Distribution for Dcorr and MGC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Latent-distribution-test-where-null-is-false">Latent distribution test where null is false</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Plot-of-Null-Distribution">Plot of Null Distribution</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/heatmaps.html">Heatmap: Visualizing a Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/heatmaps.html#Plotting-graphs-using-heatmap">Plotting graphs using heatmap</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#Simulate-graphs-using-weighted-stochastic-block-models">Simulate graphs using weighted stochastic block models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/heatmaps.html#Plot-the-simulated-weighted-SBMs">Plot the simulated weighted SBMs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#You-can-also-change-color-maps">You can also change color maps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/heatmaps.html#Data-transformations">Data transformations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#Without-transform">Without transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#With-log-transform">With log transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#With-pass-to-ranks">With pass to ranks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/gridplot.html#Overlaying-two-sparse-graphs-using-gridplot">Overlaying two sparse graphs using gridplot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/gridplot.html#Simulate-more-graphs-using-weighted-stochastic-block-models">Simulate more graphs using weighted stochastic block models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/gridplot.html#Visualizing-both-graphs">Visualizing both graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot.html#Simulate-a-binary-graph-using-stochastic-block-model">Simulate a binary graph using stochastic block model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot.html#Embed-using-adjacency-spectral-embedding-to-obtain-lower-dimensional-representation-of-the-graph">Embed using adjacency spectral embedding to obtain lower dimensional representation of the graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot.html#Use-pairplot-to-plot-the-embedded-data">Use pairplot to plot the embedded data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot_with_gmm.html#Simulate-a-binary-graph-using-stochastic-block-model">Simulate a binary graph using stochastic block model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot_with_gmm.html#Embed-using-adjacency-spectral-embedding-to-obtain-lower-dimensional-representation-of-the-graph">Embed using adjacency spectral embedding to obtain lower dimensional representation of the graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot_with_gmm.html#Use-pairplot_with_gmm-to-plot-the-embedded-data-with-ellipses">Use pairplot_with_gmm to plot the embedded data with ellipses</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../matching/faq.html">Introduction to Graph Matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../matching/faq.html#Visualize-the-graphs-using-heat-mapping">Visualize the graphs using heat mapping</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../matching/sgm.html">Seeded Graph Matching (SGM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../matching/sgm.html#SGM-on-Correlated-Graph-Pairs">SGM on Correlated Graph Pairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matching/sgm.html#Shuffling-graph-2">Shuffling graph 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matching/sgm.html#Unshuffling-graph-2-without-seeds">Unshuffling graph 2 without seeds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matching/sgm.html#Unshuffling-graph-2-with-10-seeds">Unshuffling graph 2 with 10 seeds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../matching/padded_gm.html">Padded Graph Matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../matching/padded_gm.html#SBM-correlated-graph-pairs">SBM correlated graph pairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matching/padded_gm.html#Naive-vs-Adopted-Padding">Naive vs Adopted Padding</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../subgraph/subgraph.html">Signal Subgraph Estimators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../subgraph/subgraph.html#This-tutorial-will-introduce-the-following-signal-subgraph-estimators:">This tutorial will introduce the following signal-subgraph estimators:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../subgraph/subgraph.html#Preliminaries">Preliminaries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vertex_nomination/SpectralVertexNomination.html#What-is-Spectral-Vertex-Nomination?">What is Spectral Vertex Nomination?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aligning/aligning.html">Aligning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../aligning/aligning.html#Simple-rotation-example">Simple rotation example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#SignFlips">SignFlips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#OrthogonalProcrustes">OrthogonalProcrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#SeedlessProcrustes">SeedlessProcrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#Comparison-between-SignFlips,-OrthogonalProcrustes,-SeedlessProcrustes">Comparison between SignFlips, OrthogonalProcrustes, SeedlessProcrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../aligning/aligning.html#Shuffled-Example">Shuffled Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aligning/aligning.html#Unmatched-example">Unmatched example</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Methods for Multiscale Comparative Connectomics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Load-the-Duke-mouse-brain-dataset">Load the Duke mouse brain dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Identifying-Signal-Edges">Identifying Signal Edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Identifying-Signal-Vertices">Identifying Signal Vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Whole-brain-Comparisons">Whole-brain Comparisons</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">graspologic</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Methods for Multiscale Comparative Connectomics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/connectomics/mcc.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Methods-for-Multiscale-Comparative-Connectomics">
+<h1>Methods for Multiscale Comparative Connectomics<a class="headerlink" href="#Methods-for-Multiscale-Comparative-Connectomics" title="Permalink to this headline">¶</a></h1>
+<p>This demo shows you how to use methods in <code class="docutils literal notranslate"><span class="pre">graspologic</span></code> to analyze patterns in brain connectivity in connectomics datasets. We specifically demonstrate methods for identifying differences in edges and vertices across subjects.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">chained_assignment</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+<div class="section" id="Load-the-Duke-mouse-brain-dataset">
+<h2>Load the Duke mouse brain dataset<a class="headerlink" href="#Load-the-Duke-mouse-brain-dataset" title="Permalink to this headline">¶</a></h2>
+<p>Dataset of 32 mouse connectomes derived from whole-brain diffusion magnetic resonance imaging of four distinct mouse genotypes: BTBR T+ Itpr3tf/J (BTBR), C57BL/6J(B6), CAST/EiJ (CAST), and DBA/2J (DBA2). For each strain, connectomes were generated from eight age-matched mice (N = 8 per strain), with a sex distribution of four males and four females. Each connectome was parcellated using asymmetric Waxholm Space, yielding a vertex set with a total of 332 regions of interest (ROIs) symmetrically
+distributed across the left and right hemispheres. Within a given hemisphere, there are seven superstructures consisting up multiple ROIs, resulting in a total of 14 distinct communities in each connectome.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">graspologic.datasets</span> <span class="kn">import</span> <span class="n">load_mice</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/umap/__init__.py:9: UserWarning: Tensorflow not installed; ParametricUMAP will be unavailable
+  warn(&#34;Tensorflow not installed; ParametricUMAP will be unavailable&#34;)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Load the full mouse dataset</span>
+<span class="n">mice</span> <span class="o">=</span> <span class="n">load_mice</span><span class="p">()</span>
+
+<span class="c1"># Stack all adjacency matrices in a 3D numpy array</span>
+<span class="n">graphs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mice</span><span class="o">.</span><span class="n">graphs</span><span class="p">)</span>
+
+<span class="c1"># Get sample parameters</span>
+<span class="n">n_subjects</span> <span class="o">=</span> <span class="n">mice</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;n_subjects&quot;</span><span class="p">]</span>
+<span class="n">n_vertices</span> <span class="o">=</span> <span class="n">mice</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;n_vertices&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Split the set of graphs by genotype</span>
+<span class="n">btbr</span> <span class="o">=</span> <span class="n">graphs</span><span class="p">[</span><span class="n">mice</span><span class="o">.</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;BTBR&quot;</span><span class="p">]</span>
+<span class="n">b6</span> <span class="o">=</span> <span class="n">graphs</span><span class="p">[</span><span class="n">mice</span><span class="o">.</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;B6&quot;</span><span class="p">]</span>
+<span class="n">cast</span> <span class="o">=</span> <span class="n">graphs</span><span class="p">[</span><span class="n">mice</span><span class="o">.</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;CAST&quot;</span><span class="p">]</span>
+<span class="n">dba2</span> <span class="o">=</span> <span class="n">graphs</span><span class="p">[</span><span class="n">mice</span><span class="o">.</span><span class="n">labels</span> <span class="o">==</span> <span class="s2">&quot;DBA2&quot;</span><span class="p">]</span>
+
+<span class="n">connectomes</span> <span class="o">=</span> <span class="p">[</span><span class="n">btbr</span><span class="p">,</span> <span class="n">b6</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">dba2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Identifying-Signal-Edges">
+<h2>Identifying Signal Edges<a class="headerlink" href="#Identifying-Signal-Edges" title="Permalink to this headline">¶</a></h2>
+<p>The simplest approach for comparing connectomes is to treat them as a <em>bag of edges</em> without considering interactions between the edges. Serially performing univariate statistical analyses at each edge enables the discovery of <em>signal edges</em> whose neurological connectivity differs across categorical or dimensional phenotypes. Here, we demonstrate the possibility of using Distance Correlation (<code class="docutils literal notranslate"><span class="pre">Dcorr</span></code>), a nonparametric universally consistent test, to detect changes in edges.</p>
+<p>In this model, we assume that each edge in the connectome is independently and identically sampled from some distribution <span class="math notranslate nohighlight">\(F_i\)</span>, where <span class="math notranslate nohighlight">\(i\)</span> represents the group to which the given connectome belongs. In this setting the groups are the mouse genotypes. <code class="docutils literal notranslate"><span class="pre">Dcorr</span></code> allows us to test the following hypothesis:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+H_0:\ &amp;F_1 = F_2 = \ldots F_k \\
+H_A:\ &amp;\exists \ j \neq j' \text{ s.t. } F_j \neq F_{j'}
+\end{align*}</div><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">hyppo.ksample</span> <span class="kn">import</span> <span class="n">KSample</span>
+</pre></div>
+</div>
+</div>
+<p>Since the connectomes in this dataset are undirected, we only need to do edge comparisons on the upper triangle of the adjacency matrices.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Make iterator for traversing the upper triangle of the connectome</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">edge_pvals</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">roi_i</span><span class="p">,</span> <span class="n">roi_j</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+
+    <span class="c1"># Get the (i,j)-th edge for each connectome</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">genotype</span><span class="p">[:,</span> <span class="n">roi_i</span><span class="p">,</span> <span class="n">roi_j</span><span class="p">]</span> <span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">connectomes</span><span class="p">]</span>
+
+    <span class="c1"># Calculate the p-value for the (i,j)-th edge</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;Dcorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">samples</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">workers</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="c1"># A ValueError is thrown when any of the samples have equal edge</span>
+        <span class="c1"># weights (i.e. one of the inputs has 0 variance)</span>
+        <span class="n">statistic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">pvalue</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">edge_pvals</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">roi_i</span><span class="p">,</span> <span class="n">roi_j</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>Connectomes are a high-dimensional dataype. Thus, statistical tests on components of the connectome (e.g. edge and vertices) results in multiple comparisons. We recommend correcting for multiple comparisons using the Holm-Bonferroni (HB) corection.</p>
+<p>The algorithm is described below: 1. Sort the p-values from lowest-to-highest <span class="math notranslate nohighlight">\(P_1, P_2, \dots, P_n\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of tests 2. Correct the p-value as <span class="math notranslate nohighlight">\(P_1(n), P_2(n-1), \dots, P_n(1)\)</span> 3. If any corrected p-value is <span class="math notranslate nohighlight">\(&gt;1\)</span>, replace with <span class="math notranslate nohighlight">\(1\)</span> 4. If the corrected p-value is less than a significance level <span class="math notranslate nohighlight">\(\alpha\)</span>, reject</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Convert the nested list to a dataframe</span>
+<span class="n">edge_pvals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">edge_pvals</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ROI_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ROI_2&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">])</span>
+
+<span class="c1"># Correct p-values using the Holm-Bonferroni correction</span>
+<span class="n">edge_pvals</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;pval&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pval_rank</span> <span class="o">=</span> <span class="n">edge_pvals</span><span class="p">[</span><span class="s2">&quot;pval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+<span class="n">edge_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge_pvals</span><span class="p">[</span><span class="s2">&quot;pval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">pval_rank</span><span class="p">)</span>
+<span class="n">edge_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">pval</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">pval</span>
+<span class="p">)</span>
+
+<span class="c1"># Test for significance using alpha=0.05</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">edge_pvals</span><span class="p">[</span><span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">edge_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">alpha</span><span class="p">)</span>
+
+<span class="c1"># Get the top 10 strongest signal edges</span>
+<span class="n">edge_pvals_top</span> <span class="o">=</span> <span class="n">edge_pvals</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Replace ROI indices with actual names</span>
+<span class="k">def</span> <span class="nf">lookup_roi_name</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+    <span class="n">hemisphere</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span> <span class="k">if</span> <span class="n">index</span> <span class="o">//</span> <span class="mi">166</span> <span class="k">else</span> <span class="s2">&quot;L&quot;</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">%</span> <span class="mi">166</span>
+    <span class="n">roi_name</span> <span class="o">=</span> <span class="n">mice</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ROI == </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)[</span><span class="s2">&quot;Structure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">roi_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">hemisphere</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<span class="n">edge_pvals_top</span><span class="p">[</span><span class="s2">&quot;ROI_1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge_pvals_top</span><span class="p">[</span><span class="s2">&quot;ROI_1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lookup_roi_name</span><span class="p">)</span>
+<span class="n">edge_pvals_top</span><span class="p">[</span><span class="s2">&quot;ROI_2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge_pvals_top</span><span class="p">[</span><span class="s2">&quot;ROI_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lookup_roi_name</span><span class="p">)</span>
+
+<span class="n">edge_pvals_top</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ROI_1</th>
+      <th>ROI_2</th>
+      <th>stat</th>
+      <th>pval</th>
+      <th>holm_pval</th>
+      <th>significant</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Corpus_Callosum (L)</td>
+      <td>Striatum (R)</td>
+      <td>0.717036</td>
+      <td>9.911903e-07</td>
+      <td>0.054462</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Corpus_Callosum (L)</td>
+      <td>Internal_Capsule (R)</td>
+      <td>0.699473</td>
+      <td>1.327371e-06</td>
+      <td>0.072932</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Corpus_Callosum (L)</td>
+      <td>Reticular_Nucleus_of_Thalamus (R)</td>
+      <td>0.698197</td>
+      <td>1.355858e-06</td>
+      <td>0.074496</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Corpus_Callosum (L)</td>
+      <td>Zona_Incerta (R)</td>
+      <td>0.685735</td>
+      <td>1.668308e-06</td>
+      <td>0.091662</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Septum (R)</td>
+      <td>Corpus_Callosum (R)</td>
+      <td>0.670809</td>
+      <td>2.139082e-06</td>
+      <td>0.117525</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Note that none of the edges achieve significance at <span class="math notranslate nohighlight">\(\alpha=0.05\)</span> following Holm-Bonferroni correction. We might expect this, given that we are correcting for <span class="math notranslate nohighlight">\(N=54,946\)</span> tests. Instead of the magnitude, the <strong>ranking of the p-values</strong> can be used to determine signal edges.</p>
+</div>
+<div class="section" id="Identifying-Signal-Vertices">
+<h2>Identifying Signal Vertices<a class="headerlink" href="#Identifying-Signal-Vertices" title="Permalink to this headline">¶</a></h2>
+<p>A sample of connectomes can be jointly embedded in a low-dimensional Euclidean space using the omnibus embedding (<code class="docutils literal notranslate"><span class="pre">omni</span></code>). A host of machine learning tasks can be accomplished with this joint embedded representation of the connectome, such as clustering or classification of vertices. Here, we use the embedding to formulate a statistical test that can be used to identify vertices that are strongly associated with given phenotypes. According to a Central Limit Theorem for <code class="docutils literal notranslate"><span class="pre">omni</span></code>, these latent
+positions are universally consistent and asymptotically normal.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">OmnibusEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">pairplot</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Jointly embed graphs using omnibus embedding</span>
+<span class="n">embedder</span> <span class="o">=</span> <span class="n">OmnibusEmbed</span><span class="p">()</span>
+<span class="n">omni_embedding</span> <span class="o">=</span> <span class="n">embedder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">omni_embedding</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(32, 332, 5)
+</pre></div></div>
+</div>
+<p>For each of the 32 mice, <code class="docutils literal notranslate"><span class="pre">omni</span></code> embeds each vertex in the connectome to a latent position vector <span class="math notranslate nohighlight">\(x_i \in \mathbb{R}^5\)</span>. We test for differences in the distribution of vertex latent positions using the <code class="docutils literal notranslate"><span class="pre">MGC</span></code> independence test implemented in <code class="docutils literal notranslate"><span class="pre">hyppo</span></code>. This test essentially acts as a nonparametric MANOVA test.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">vertex_pvals</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">vertex_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">):</span>
+
+    <span class="c1"># Get the embedding of the i-th vertex for</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">omni_embedding</span><span class="p">[</span><span class="n">mice</span><span class="o">.</span><span class="n">labels</span><span class="o">==</span><span class="n">genotype</span><span class="p">,</span> <span class="n">vertex_i</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">mice</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Calculate the p-value for the i-th vertex</span>
+    <span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">KSample</span><span class="p">(</span><span class="s2">&quot;MGC&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">samples</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">workers</span><span class="o">=-</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="n">vertex_pvals</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertex_i</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/hyppo/_utils.py:67: RuntimeWarning: The number of replications is low (under 1000), and p-value calculations may be unreliable. Use the p-value result, with caution!
+  warnings.warn(msg, RuntimeWarning)
+</pre></div></div>
+</div>
+<p><strong>Important:</strong> When running on data, make sure <code class="docutils literal notranslate"><span class="pre">reps</span></code> <span class="math notranslate nohighlight">\(\geq \frac{|V|}{\alpha}\)</span> where <span class="math notranslate nohighlight">\(|V|\)</span> is the cardinality of the vertex set and <span class="math notranslate nohighlight">\(\alpha\)</span> is the significance level for your test. Again, this has to do with p-value correction: because <code class="docutils literal notranslate"><span class="pre">MGC</span></code> is a permutation test, you need many replications to ensure accurate computation of the p-value. Because this notebook is primarily for demonstration purposes, we use a small value of <code class="docutils literal notranslate"><span class="pre">reps=250</span></code>. For this dataset, a more appropriate
+number of permutations would be around <span class="math notranslate nohighlight">\(10^6\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Convert the nested list to a dataframe</span>
+<span class="n">vertex_pvals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">vertex_pvals</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ROI&quot;</span><span class="p">,</span> <span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">])</span>
+
+<span class="c1"># Correct p-values using the Holm-Bonferroni correction</span>
+<span class="n">vertex_pvals</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;pval&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pval_rank</span> <span class="o">=</span> <span class="n">vertex_pvals</span><span class="p">[</span><span class="s2">&quot;pval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+<span class="n">vertex_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex_pvals</span><span class="p">[</span><span class="s2">&quot;pval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">pval_rank</span><span class="p">)</span>
+<span class="n">vertex_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">pval</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">pval</span>
+<span class="p">)</span>
+
+<span class="c1"># Test for significance using alpha=0.05</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">vertex_pvals</span><span class="p">[</span><span class="s2">&quot;significant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">vertex_pvals</span><span class="p">[</span><span class="s2">&quot;holm_pval&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">alpha</span><span class="p">)</span>
+
+<span class="c1"># Get the top 10 strongest signal edges</span>
+<span class="n">vertex_pvals_top</span> <span class="o">=</span> <span class="n">vertex_pvals</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Replace ROI indices with actual names</span>
+<span class="n">vertex_pvals_top</span><span class="p">[</span><span class="s2">&quot;ROI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex_pvals_top</span><span class="p">[</span><span class="s2">&quot;ROI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lookup_roi_name</span><span class="p">)</span>
+
+<span class="n">vertex_pvals_top</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ROI</th>
+      <th>stat</th>
+      <th>pval</th>
+      <th>holm_pval</th>
+      <th>significant</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Cingulate_Cortex_Area_24a (L)</td>
+      <td>0.754901</td>
+      <td>0.004</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Amygdalopiriform_Transition_Area (R)</td>
+      <td>0.526762</td>
+      <td>0.004</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Piriform_Cortex (R)</td>
+      <td>0.603432</td>
+      <td>0.004</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Presubiculum (R)</td>
+      <td>0.292116</td>
+      <td>0.004</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Perirhinal_Cortex (R)</td>
+      <td>0.806250</td>
+      <td>0.004</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We can use pairplots to visualize the embeddings of specific vertices. Below are pairsplots of the corpus callosum from the left and right hemispheres.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">left</span> <span class="o">=</span> <span class="n">pairplot</span><span class="p">(</span>
+    <span class="n">omni_embedding</span><span class="p">[:,</span> <span class="mi">121</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+    <span class="n">mice</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#e7298a&quot;</span><span class="p">,</span> <span class="s2">&quot;#1b9e77&quot;</span><span class="p">,</span> <span class="s2">&quot;#d95f02&quot;</span><span class="p">,</span> <span class="s2">&quot;#7570b3&quot;</span><span class="p">],</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Left Corpus Callosum&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/connectomics_mcc_22_0.png" src="../_images/connectomics_mcc_22_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">right</span> <span class="o">=</span> <span class="n">pairplot</span><span class="p">(</span>
+    <span class="n">omni_embedding</span><span class="p">[:,</span> <span class="mi">121</span> <span class="o">+</span> <span class="mi">166</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+    <span class="n">mice</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#e7298a&quot;</span><span class="p">,</span> <span class="s2">&quot;#1b9e77&quot;</span><span class="p">,</span> <span class="s2">&quot;#d95f02&quot;</span><span class="p">,</span> <span class="s2">&quot;#7570b3&quot;</span><span class="p">],</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Right Corpus Callosum&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/connectomics_mcc_23_0.png" src="../_images/connectomics_mcc_23_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Whole-brain-Comparisons">
+<h2>Whole-brain Comparisons<a class="headerlink" href="#Whole-brain-Comparisons" title="Permalink to this headline">¶</a></h2>
+<p>We can use the results of the omnibus embedding to perform whole-brain comparisons across subjects from different phenotypes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">ClassicalMDS</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
+</pre></div>
+</div>
+</div>
+<p>Two-dimensional representations of each connectome were obtained by using Classical Multidimensional Scaling (<code class="docutils literal notranslate"><span class="pre">cmds</span></code>) to reduce the dimensionality of the embeddings obtained by <code class="docutils literal notranslate"><span class="pre">omni</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Further reduce embedding dimensionality using cMDS</span>
+<span class="n">cmds</span> <span class="o">=</span> <span class="n">ClassicalMDS</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">cmds_embedding</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">omni_embedding</span><span class="p">)</span>
+<span class="n">cmds_embedding</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cmds_embedding</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Dimension 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Dimension 2&quot;</span><span class="p">])</span>
+<span class="n">cmds_embedding</span><span class="p">[</span><span class="s2">&quot;Genotype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mice</span><span class="o">.</span><span class="n">labels</span>
+
+<span class="c1"># Embedding with BTBR</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Dimension 1&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Dimension 2&quot;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Genotype&quot;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">cmds_embedding</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#e7298a&quot;</span><span class="p">,</span> <span class="s2">&quot;#1b9e77&quot;</span><span class="p">,</span> <span class="s2">&quot;#d95f02&quot;</span><span class="p">,</span> <span class="s2">&quot;#7570b3&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/connectomics_mcc_27_0.png" src="../_images/connectomics_mcc_27_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Find the dissimilarity between subjects&#39; connectomes using the cMDS embedding</span>
+<span class="n">dis</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">dissimilarity_matrix_</span>
+<span class="n">scaled_dissimilarity</span> <span class="o">=</span> <span class="n">dis</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dis</span><span class="p">)</span>
+
+<span class="n">heatmap</span><span class="p">(</span><span class="n">scaled_dissimilarity</span><span class="p">,</span>
+        <span class="n">context</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+        <span class="n">inner_hier_labels</span><span class="o">=</span><span class="n">mice</span><span class="o">.</span><span class="n">labels</span><span class="p">,)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/connectomics_mcc_28_0.png" src="../_images/connectomics_mcc_28_0.png" />
+</div>
+</div>
+<p>Notice that mice from the same genotype are most similar to each other, as expected.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../aligning/aligning.html" class="btn btn-neutral float-left" title="Aligning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

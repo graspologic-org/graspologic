@@ -1,0 +1,110 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Gridplot: Visualize Multiple Graphs\n",
+    "\n",
+    "This example provides how to visualize graphs using the gridplot."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import graspologic\n",
+    "\n",
+    "import numpy as np\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Overlaying two sparse graphs using gridplot\n",
+    "\n",
+    "### Simulate more graphs using weighted stochastic block models\n",
+    "The 2-block model is defined as below:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "P = \n",
+    "\\begin{bmatrix}0.25 & 0.05 \\\\\n",
+    "0.05 & 0.25\n",
+    "\\end{bmatrix}\n",
+    "\\end{align*}\n",
+    "\n",
+    "We generate two weighted SBMs where the weights are distributed from a discrete uniform(1, 10) and discrete uniform(2, 5)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import sbm\n",
+    "\n",
+    "n_communities = [50, 50]\n",
+    "p = np.array([[0.25, 0.05], [0.05, 0.25]])\n",
+    "wt = np.random.randint\n",
+    "wtargs = dict(low=1, high=10)\n",
+    "\n",
+    "np.random.seed(1)\n",
+    "A_unif1= sbm(n_communities, p, wt=wt, wtargs=wtargs)\n",
+    "\n",
+    "wtargs = dict(low=2, high=5)\n",
+    "A_unif2= sbm(n_communities, p, wt=wt, wtargs=wtargs)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualizing both graphs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.plot import gridplot\n",
+    "\n",
+    "X = [A_unif1, A_unif2]\n",
+    "labels = [\"Uniform(1, 10)\", \"Uniform(2, 5)\"]\n",
+    "\n",
+    "f = gridplot(X=X, \n",
+    "             labels=labels, \n",
+    "             title='Two Weighted Stochastic Block Models', \n",
+    "             height=12, \n",
+    "             font_scale=1.5)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

@@ -1,0 +1,911 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Seeded Graph Matching (SGM) &mdash; graspologic 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Padded Graph Matching" href="padded_gm.html" />
+    <link rel="prev" title="Introduction to Graph Matching" href="faq.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> graspologic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../models/models.html">Random Graph Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/models.html#This-tutorial-will-introduce-the-following-random-graph-models:">This tutorial will introduce the following random graph models:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Load-some-data-from-graspologic">Load some data from <em>graspologic</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Preliminaries">Preliminaries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../models/models.html#For-each-graph-model-we-will-show:">For each graph model we will show:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Erdos-Reyni-(ER)">Erdos-Reyni (ER)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Degree-corrected-Erdos-Reyni-(DCER)">Degree-corrected Erdos-Reyni (DCER)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Stochastic-block-model-(SBM)">Stochastic block model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Degree-corrected-stochastic-block-model-(DCSBM)">Degree-corrected stochastic block model (DCSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Random-dot-product-graph-(RDPG)">Random dot product graph (RDPG)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html#Create-a-figure-combining-all-of-the-models">Create a figure combining all of the models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/erdos_renyi.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/erdos_renyi.html#Weighted-ER-Graphs">Weighted ER Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/erdos_renyi.html#Visualize-the-graph-using-heatmap">Visualize the graph using heatmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/sbm.html">Stochastic Block Model (SBM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/sbm.html#Visualize-the-graph-using-heatmap">Visualize the graph using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/sbm.html#Weighted-SBM-Graphs">Weighted SBM Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/sbm.html#id1">Visualize the graph using heatmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/mmsbm.html#Visualize-the-graph-using-heatmap">Visualize the graph using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/mmsbm.html#Generating-various-types-of-graphs">Generating various types of graphs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Generating-Erdos-Renyi-(ER)-graphs">Generating Erdos-Renyi (ER) graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Differences-with-Stochastic-Block-Model-(SBM)-graphs">Differences with Stochastic Block Model (SBM) graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/mmsbm.html#Plot-SBM-and-MMSBM-graphs-using-heatmap">Plot SBM and MMSBM graphs using heatmap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg.html#Visualize-the-adjacency-matrix">Visualize the adjacency matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg.html#Stochastic-block-model-as-RDPG">Stochastic block model as RDPG</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../simulations/rdpg.html#Results-from-SBM-simulation-using-same-formulation-shows-similar-structure">Results from SBM simulation using same formulation shows similar structure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/corr.html">Correlated Graph Pairs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#ER-correlation-graph-pair">ER correlation graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#SBM-correlated-graph-pair">SBM correlated graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/corr.html#id1">Visualize the graphs using heatmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg_corr.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg_corr.html#Compare-it-to-the-correlated-SBM-graph-pair">Compare it to the correlated SBM graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulations/rdpg_corr.html#Varying-the-correlation">Varying the correlation</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../clustering/autogmm.html#Using-AutoGMM-on-Synthetic-Data">Using AutoGMM on Synthetic Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering/kclust.html">K-Means Clustering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../clustering/kclust.html#Using-K-Means-on-Synthetic-Data">Using K Means on Synthetic Data</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Data-Generation">Data Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Embedding:-Undirected-Case">Embedding: Undirected Case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Embedding:-Directed-Case">Embedding: Directed Case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Dimension-specification">Dimension specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html#Clustering-in-the-embedded-space">Clustering in the embedded space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Undirected-out-of-sample-prediction">Undirected out-of-sample prediction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Embedding">Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Passing-in-multiple-out-of-sample-vertices">Passing in multiple out-of-sample vertices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Directed-out-of-sample-prediction">Directed out-of-sample prediction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Plotting-directed-latent-predictions">Plotting directed latent predictions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html#Weighted-out-of-sample-prediction">Weighted out-of-sample prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">Simulate two different graphs using stochastic block models (SBM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Embed-the-two-graphs-using-omnibus-embedding">Embed the two graphs using omnibus embedding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/Omnibus.html#Visualize-the-latent-positions">Visualize the latent positions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Replicating-Omnibus-Embedding-Tutorial">Replicating Omnibus Embedding Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">Simulate two different graphs using stochastic block models (SBM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualize-the-graphs-using-heatmap">Visualize the graphs using heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Embed-the-two-graphs-using-MASE">Embed the two graphs using MASE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualize-Common-Latent-Positions">Visualize Common Latent Positions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Recover-Original-Communities">Recover Original Communities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Sampling-More-Graphs">Sampling More Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualizing-Common-Latent-Subspace">Visualizing Common Latent Subspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Visualize-Score-Matrices">Visualize Score Matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../embedding/MASE.html#Recover-Original-SBM-Membership">Recover Original SBM Membership</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../inference/latent_position_test.html">Latent Position Two-Graph Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Generate-a-stochastic-block-model-graph-to-model-as-a-random-dot-product-graph">Generate a stochastic block model graph to model as a random dot product graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Sample-new-RDPGs-from-this-latent-position">Sample new RDPGs from this latent position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Latent-position-test-where-null-is-true">Latent position test where null is true</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_position_test.html#Matched-test-where-the-null-is-false">Matched test where the null is false</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Generate-a-stochastic-block-model-graph">Generate a stochastic block model graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Latent-distribution-test-where-null-is-true">Latent distribution test where null is true</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Plots-of-Null-Distribution-for-Dcorr-and-MGC">Plots of Null Distribution for Dcorr and MGC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Latent-distribution-test-where-null-is-false">Latent distribution test where null is false</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../inference/latent_distribution_test.html#Plot-of-Null-Distribution">Plot of Null Distribution</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/heatmaps.html">Heatmap: Visualizing a Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/heatmaps.html#Plotting-graphs-using-heatmap">Plotting graphs using heatmap</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#Simulate-graphs-using-weighted-stochastic-block-models">Simulate graphs using weighted stochastic block models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/heatmaps.html#Plot-the-simulated-weighted-SBMs">Plot the simulated weighted SBMs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#You-can-also-change-color-maps">You can also change color maps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/heatmaps.html#Data-transformations">Data transformations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#Without-transform">Without transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#With-log-transform">With log transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html#With-pass-to-ranks">With pass to ranks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/gridplot.html#Overlaying-two-sparse-graphs-using-gridplot">Overlaying two sparse graphs using gridplot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/gridplot.html#Simulate-more-graphs-using-weighted-stochastic-block-models">Simulate more graphs using weighted stochastic block models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/gridplot.html#Visualizing-both-graphs">Visualizing both graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot.html#Simulate-a-binary-graph-using-stochastic-block-model">Simulate a binary graph using stochastic block model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot.html#Embed-using-adjacency-spectral-embedding-to-obtain-lower-dimensional-representation-of-the-graph">Embed using adjacency spectral embedding to obtain lower dimensional representation of the graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot.html#Use-pairplot-to-plot-the-embedded-data">Use pairplot to plot the embedded data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot_with_gmm.html#Simulate-a-binary-graph-using-stochastic-block-model">Simulate a binary graph using stochastic block model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot_with_gmm.html#Embed-using-adjacency-spectral-embedding-to-obtain-lower-dimensional-representation-of-the-graph">Embed using adjacency spectral embedding to obtain lower dimensional representation of the graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/pairplot_with_gmm.html#Use-pairplot_with_gmm-to-plot-the-embedded-data-with-ellipses">Use pairplot_with_gmm to plot the embedded data with ellipses</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Introduction to Graph Matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#Visualize-the-graphs-using-heat-mapping">Visualize the graphs using heat mapping</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Seeded Graph Matching (SGM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#SGM-on-Correlated-Graph-Pairs">SGM on Correlated Graph Pairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Shuffling-graph-2">Shuffling graph 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Unshuffling-graph-2-without-seeds">Unshuffling graph 2 without seeds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Unshuffling-graph-2-with-10-seeds">Unshuffling graph 2 with 10 seeds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="padded_gm.html">Padded Graph Matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="padded_gm.html#SBM-correlated-graph-pairs">SBM correlated graph pairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="padded_gm.html#Naive-vs-Adopted-Padding">Naive vs Adopted Padding</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../subgraph/subgraph.html">Signal Subgraph Estimators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../subgraph/subgraph.html#This-tutorial-will-introduce-the-following-signal-subgraph-estimators:">This tutorial will introduce the following signal-subgraph estimators:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../subgraph/subgraph.html#Preliminaries">Preliminaries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vertex_nomination/SpectralVertexNomination.html#What-is-Spectral-Vertex-Nomination?">What is Spectral Vertex Nomination?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aligning/aligning.html">Aligning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../aligning/aligning.html#Simple-rotation-example">Simple rotation example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#SignFlips">SignFlips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#OrthogonalProcrustes">OrthogonalProcrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#SeedlessProcrustes">SeedlessProcrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html#Comparison-between-SignFlips,-OrthogonalProcrustes,-SeedlessProcrustes">Comparison between SignFlips, OrthogonalProcrustes, SeedlessProcrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../aligning/aligning.html#Shuffled-Example">Shuffled Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aligning/aligning.html#Unmatched-example">Unmatched example</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../connectomics/mcc.html#Load-the-Duke-mouse-brain-dataset">Load the Duke mouse brain dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connectomics/mcc.html#Identifying-Signal-Edges">Identifying Signal Edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connectomics/mcc.html#Identifying-Signal-Vertices">Identifying Signal Vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connectomics/mcc.html#Whole-brain-Comparisons">Whole-brain Comparisons</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">graspologic</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Seeded Graph Matching (SGM)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/matching/sgm.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Seeded-Graph-Matching-(SGM)">
+<h1>Seeded Graph Matching (SGM)<a class="headerlink" href="#Seeded-Graph-Matching-(SGM)" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Seeded Graph Matching (SGM) is a version of the graph matching problem where one is first given a partial alignment of the nodes. This algorithm is an modification of the Fast Approximate QAP (FAQ) algorithm (Vogelstein, 2015), as described in Seeded graph matching (Fishkind, 2018). For a more in depth explanation of the graph matching problem and FAQ, view the FAQ tutorial.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">graspologic.match</span> <span class="kn">import</span> <span class="n">GraphMatch</span> <span class="k">as</span> <span class="n">GMP</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
+<span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">er_corr</span><span class="p">,</span> <span class="n">sbm</span><span class="p">,</span> <span class="n">sbm_corr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/umap/__init__.py:9: UserWarning: Tensorflow not installed; ParametricUMAP will be unavailable
+  warn(&#34;Tensorflow not installed; ParametricUMAP will be unavailable&#34;)
+</pre></div></div>
+</div>
+<div class="section" id="SGM-on-Correlated-Graph-Pairs">
+<h2>SGM on Correlated Graph Pairs<a class="headerlink" href="#SGM-on-Correlated-Graph-Pairs" title="Permalink to this headline">¶</a></h2>
+<p>To demonstrate the effectiveness of SGM, the algorithm will be applied on a pair of correlated SBM graphs (undirected, no self loops) <span class="math notranslate nohighlight">\(G_1, G_2 \sim SBM\,(n, p, rho)\)</span> with the following parameters:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+n &amp;= [100, 100, 100]\\
+p &amp;= \begin{bmatrix}
+0.7 &amp; 0.3 &amp; 0.4\\
+0.3 &amp; 0.7 &amp; 0.3\\
+0.4 &amp; 0.3 &amp; 0.7
+\end{bmatrix}\\
+rho &amp;= 0.9
+\end{align*}</div><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">directed</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">loops</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">n_per_block</span> <span class="o">=</span> <span class="mi">75</span>
+<span class="n">n_blocks</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">block_members</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_blocks</span> <span class="o">*</span> <span class="p">[</span><span class="n">n_per_block</span><span class="p">])</span>
+<span class="n">n_verts</span> <span class="o">=</span> <span class="n">block_members</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="o">.</span><span class="mi">9</span>
+<span class="n">block_probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">block_probs</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Reds&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;SBM block probabilities&quot;</span><span class="p">)</span>
+
+<span class="n">A1</span><span class="p">,</span> <span class="n">A2</span> <span class="o">=</span> <span class="n">sbm_corr</span><span class="p">(</span><span class="n">block_members</span><span class="p">,</span> <span class="n">block_probs</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 2&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span> <span class="o">-</span> <span class="n">A2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/matching_sgm_5_0.png" src="../_images/matching_sgm_5_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/matching_sgm_5_1.png" src="../_images/matching_sgm_5_1.png" />
+</div>
+</div>
+<p>To demonstrate the effectiveness of SGM, as well as why having seeds is important, we will randomly shuffle the vertices of Graph 2. This random permutation is stored, and unshuffled, such that we have available the optimal permutation that returns the original graph 2.</p>
+</div>
+<div class="section" id="Shuffling-graph-2">
+<h2>Shuffling graph 2<a class="headerlink" href="#Shuffling-graph-2" title="Permalink to this headline">¶</a></h2>
+<p>Here we see that after shuffling graph 2, there are many more edge disagreements, as expected.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+
+<span></span><span class="n">node_shuffle_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">n_verts</span><span class="p">)</span>
+<span class="n">A2_shuffle</span> <span class="o">=</span> <span class="n">A2</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">node_shuffle_input</span><span class="p">,</span> <span class="n">node_shuffle_input</span><span class="p">)]</span>
+<span class="n">node_unshuffle_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_verts</span><span class="p">))</span>
+<span class="n">node_unshuffle_input</span><span class="p">[</span><span class="n">node_shuffle_input</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_verts</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A2_shuffle</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 2 shuffled&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span> <span class="o">-</span> <span class="n">A2_shuffle</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2 shuffled)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/matching_sgm_9_0.png" src="../_images/matching_sgm_9_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Unshuffling-graph-2-without-seeds">
+<h2>Unshuffling graph 2 without seeds<a class="headerlink" href="#Unshuffling-graph-2-without-seeds" title="Permalink to this headline">¶</a></h2>
+<p>First, we will run SGM on graph 1 and the shuffled graph 2 with no seeds, and return the match ratio, that is the fraction of vertices that have been correctly matched.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sgm</span> <span class="o">=</span> <span class="n">GMP</span><span class="p">()</span>
+<span class="n">sgm</span> <span class="o">=</span> <span class="n">sgm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span><span class="n">A2_shuffle</span><span class="p">)</span>
+<span class="n">A2_unshuffle</span> <span class="o">=</span> <span class="n">A2_shuffle</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">sgm</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">,</span> <span class="n">sgm</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">)]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A2_unshuffle</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 2 unshuffled&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span> <span class="o">-</span> <span class="n">A2_unshuffle</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2 unshuffled)&quot;</span><span class="p">)</span>
+
+<span class="n">match_ratio</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sgm</span><span class="o">.</span><span class="n">perm_inds_</span><span class="o">-</span><span class="n">node_unshuffle_input</span><span class="p">))</span><span class="o">/</span><span class="n">n_verts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Match Ratio with no seeds: &quot;</span><span class="p">,</span> <span class="n">match_ratio</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Match Ratio with no seeds:  0.004444444444444473
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/matching_sgm_11_1.png" src="../_images/matching_sgm_11_1.png" />
+</div>
+</div>
+<p>While the predicted permutation for graph 2 did recover the basic structure of the stochastic block model (i.e. graph 1 and graph 2 look qualitatively similar), we see that the number of edge disagreements between them is still quite high, and the match ratio quite low.</p>
+</div>
+<div class="section" id="Unshuffling-graph-2-with-10-seeds">
+<h2>Unshuffling graph 2 with 10 seeds<a class="headerlink" href="#Unshuffling-graph-2-with-10-seeds" title="Permalink to this headline">¶</a></h2>
+<p>Next, we will run SGM with 10 seeds randomly selected from the optimal permutation vector found ealier. Although 10 seeds is only about 4% of the 300 node graph, we will observe below how much more accurate the matching will be compared to having no seeds.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">W1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_verts</span><span class="p">)),</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">W1</span> <span class="o">=</span> <span class="n">W1</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">W2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_unshuffle_input</span><span class="p">[</span><span class="n">W1</span><span class="p">])</span>
+
+<span class="n">sgm</span> <span class="o">=</span> <span class="n">GMP</span><span class="p">()</span>
+<span class="n">sgm</span> <span class="o">=</span> <span class="n">sgm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span><span class="n">A2_shuffle</span><span class="p">,</span><span class="n">W1</span><span class="p">,</span><span class="n">W2</span><span class="p">)</span>
+<span class="n">A2_unshuffle</span> <span class="o">=</span> <span class="n">A2_shuffle</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">sgm</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">,</span> <span class="n">sgm</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">)]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A2_unshuffle</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graph 2 unshuffled&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span> <span class="o">-</span> <span class="n">A2_unshuffle</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2 unshuffled)&quot;</span><span class="p">)</span>
+
+<span class="n">match_ratio</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sgm</span><span class="o">.</span><span class="n">perm_inds_</span><span class="o">-</span><span class="n">node_unshuffle_input</span><span class="p">))</span><span class="o">/</span><span class="n">n_verts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Match Ratio with 10 seeds: &quot;</span><span class="p">,</span> <span class="n">match_ratio</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Match Ratio with 10 seeds:  1.0
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/matching_sgm_14_1.png" src="../_images/matching_sgm_14_1.png" />
+</div>
+</div>
+<p>From the results above, we see that when running SGM on the same two graphs, with no seeds there is match ratio is quite low. However including 10 seeds increases the match ratio to 100% (meaning that the shuffled graph 2 was completely correctly unshuffled).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="padded_gm.html" class="btn btn-neutral float-right" title="Padded Graph Matching" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="faq.html" class="btn btn-neutral float-left" title="Introduction to Graph Matching" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
