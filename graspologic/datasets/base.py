@@ -176,5 +176,6 @@ def load_mice():
         atlas=atlas,
         blocks=blocks,
         features=features,
+        participants=participants,
         meta=meta,
     )
