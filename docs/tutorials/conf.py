@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = "graspologic"
+project = "graspologic tutorials"
 copyright = "2020"
 authors = "Microsoft, NeuroData"
 

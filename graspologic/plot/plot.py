@@ -163,7 +163,8 @@ def heatmap(
     The nodes will be sorted within each group if labels are also
     provided.
 
-    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
+    Read more in the `Heatmap: Visualizing a Graph Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/heatmaps.html>`_
 
     Parameters
     ----------
@@ -365,7 +366,8 @@ def gridplot(
     The size of the dots correspond to the edge weights of the graphs, and
     colors represent input graphs.
 
-    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
+    Read more in the `Gridplot: Visualize Multiple Graphs Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/gridplot.html>`_
 
     Parameters
     ----------
@@ -542,7 +544,8 @@ def pairplot(
     The diagonal axes show the univariate distribution of the data for that
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
-    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
+    Read more in the `Pairplot: Visualizing High Dimensional Data Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/pairplot.html>`_
 
     Parameters
     ----------
@@ -758,7 +761,9 @@ def pairplot_with_gmm(
     The diagonal axes show the univariate distribution of the data for that
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
-    Read more in the FLAGDWAYNEFLAG ref:`tutorials <plot_tutorials>`
+    Read more in the `Pairplot with GMM: Visualizing High Dimensional Data and
+    Clustering Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/pairplot_with_gmm.html>`_
 
     Parameters
     ----------

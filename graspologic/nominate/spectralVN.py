@@ -17,10 +17,11 @@ class SpectralVertexNomination(BaseEstimator):
     (the "seed"), Single Graph Vertex Nomination is the problem of ranking all :math:`V`
     in order of relation to members of :math:`S`. Spectral Vertex Nomination solves
     this problem by embedding :math:`G` into a low dimensional euclidean space
-    (FLAGDWAYNEFLAG ref:`tutorials <embed_tutorials>`), and then generating a nomination list by some
-    distance based algorithm. In the simple unattributed case, for each seed vertex
-    :math:`u`, the other vertices are ranked in order of euclidean distance from
-    :math:`u`.
+    (see: `Adjacency Spectral Embed Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
+    ), and then generating a nomination list by some distance based algorithm. In the
+    simple unattributed case, for each seed vertex :math:`u`, the other vertices are
+    ranked in order of euclidean distance from :math:`u`.
 
     Parameters
     ----------
