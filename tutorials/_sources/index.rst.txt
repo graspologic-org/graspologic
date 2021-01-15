@@ -1,6 +1,10 @@
-********
-Tutorial
-********
+*********
+Tutorials
+*********
+.. toctree::
+   :hidden:
+
+   Reference Documentation <https://graspologic.readthedocs.io/en/latest/>
 
 .. _models_tutorials:
 
@@ -11,6 +15,7 @@ stochastic block model (SBM), degree-corrected SBM, and random dot product graph
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    models/models
 
@@ -23,6 +28,7 @@ stochastic block model, and random dot product graph (RDPG).
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    simulations/erdos_renyi
    simulations/sbm
@@ -40,6 +46,7 @@ clustering algorithms, as well as the advantages of these to comparable implemen
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    clustering/autogmm
    clustering/kclust
@@ -52,6 +59,7 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    embedding/AdjacencySpectralEmbed
    embedding/OutOfSampleEmbed
@@ -68,6 +76,7 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    inference/latent_position_test
    inference/latent_distribution_test
@@ -80,6 +89,7 @@ The following tutorials present ways to visualize the graphs, such as its adjace
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    plotting/heatmaps
    plotting/gridplot
@@ -95,6 +105,7 @@ including an introduction to the module, and how to utilize the seeding feature.
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    matching/faq
    matching/sgm
@@ -108,6 +119,7 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    subgraph/subgraph
 
@@ -119,6 +131,7 @@ The following tutorials demonstrate how to use unattributed single graph spectra
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    vertex_nomination/SpectralVertexNomination
    nominate/vertex_nomination_via_SGM
@@ -131,6 +144,7 @@ The following tutorials shows how to align two seperate datasets with each other
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    aligning/aligning
 
@@ -142,5 +156,6 @@ The following tutorials demonstrate how to apply methods in this package to the 
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    connectomics/mcc
