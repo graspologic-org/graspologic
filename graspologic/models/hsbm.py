@@ -13,7 +13,7 @@ from ..cluster import DivisiveCluster
 from ..cluster.divisive_cluster import _check_common_inputs
 from .sbm import _calculate_block_p, _block_to_full, _get_block_indices
 from .base import BaseGraphEstimator, _check_n_samples
-from .simulations import sample_edges
+from ..simulations import sample_edges
 from ..utils import (
     augment_diagonal,
     pass_to_ranks,
@@ -255,9 +255,7 @@ class _HierarchicalBaseGraphEstimator(BaseGraphEstimator):
         mse_per_level = []
         y = self.vertex_assignments_
         for lvl in range(y.shape[1]):
-            mse_per_level.append(
-                np.linalg.norm(graph - self.p_mat_[lvl]) ** 2
-            )
+            mse_per_level.append(np.linalg.norm(graph - self.p_mat_[lvl]) ** 2)
 
         return mse_per_level
 
