@@ -20,7 +20,7 @@ from ..utils import (
     import_graph,
     remove_loops,
     symmetrize,
-    is_unweighted
+    is_unweighted,
 )
 
 
