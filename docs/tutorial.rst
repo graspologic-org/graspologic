@@ -43,6 +43,7 @@ clustering algorithms, as well as the advantages of these to comparable implemen
 
    tutorials/clustering/autogmm
    tutorials/clustering/kclust
+   tutorials/clustering/divisive_cluster
 
 .. _embed_tutorials:
 
