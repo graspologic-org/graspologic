@@ -27,16 +27,18 @@ class MultipleASE(BaseEmbedMulti):
     :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a
     common latent position matrices :math:`U` and :math:`V`.
 
+    Read more in the :ref:`tutorials <embed_tutorials>`
+
     Parameters
     ----------
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
@@ -87,11 +89,18 @@ class MultipleASE(BaseEmbedMulti):
     scores_ : array, shape (n_samples, n_components, n_components)
         Estimated :math:`\hat{R}` matrices for each input graph.
 
+    singular_values_ : array, shape (n_components) OR length 2 tuple of arrays
+        If input graph is undirected, equal to the singular values of the concatenated
+        adjacency spectral embeddings. If input graph is directed, :attr:`singular_values_`
+        is a tuple of length 2, where :attr:`singular_values_[0]` corresponds to
+        the singular values of the concatenated left adjacency spectral embeddings,
+        and :attr:`singular_values_[1]` corresponds to
+        the singular values of the concatenated right adjacency spectral embeddings.
 
     Notes
     -----
-    When an input graph is directed, `n_components` of `latent_left_` may not be equal
-    to `n_components` of `latent_right_`.
+    When an input graph is directed, ``n_components`` of :attr:`latent_left_` may not be equal
+    to ``n_components`` of :attr:`latent_right_`.
     """
 
     def __init__(
@@ -166,7 +175,7 @@ class MultipleASE(BaseEmbedMulti):
 
         # Second SVD for vertices
         # The notation is slightly different than the paper
-        Uhat, _, _ = selectSVD(
+        Uhat, sing_vals_left, _ = selectSVD(
             Us,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
@@ -174,14 +183,14 @@ class MultipleASE(BaseEmbedMulti):
             n_iter=self.n_iter,
         )
 
-        Vhat, _, _ = selectSVD(
+        Vhat, sing_vals_right, _ = selectSVD(
             Vs,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
         )
-        return Uhat, Vhat
+        return Uhat, Vhat, sing_vals_left, sing_vals_right
 
     def fit(self, graphs, y=None):
         """
@@ -189,9 +198,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -209,14 +218,16 @@ class MultipleASE(BaseEmbedMulti):
             graphs = self._diag_aug(graphs)
 
         # embed
-        Uhat, Vhat = self._reduce_dim(graphs)
+        Uhat, Vhat, sing_vals_left, sing_vals_right = self._reduce_dim(graphs)
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
-            self.scores_ = Uhat.T @ graphs @ Vhat
+            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
+            self.singular_values_ = (sing_vals_left, sing_vals_right)
         else:
             self.latent_right_ = None
-            self.scores_ = Uhat.T @ graphs @ Uhat
+            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
+            self.singular_values_ = sing_vals_left
 
         return self
 
@@ -227,9 +238,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns

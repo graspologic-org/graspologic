@@ -5,6 +5,7 @@ import numpy as np
 import scipy
 import sklearn
 from scipy.stats import norm
+from scipy.sparse import isspmatrix_csr
 
 
 def _compute_likelihood(arr):
@@ -63,12 +64,12 @@ def select_dimension(
         (n_samples, n_features).
     n_components : int, optional, default: None.
         Number of components to embed. If None, ``n_components =
-        floor(log2(min(n_samples, n_features)))``. Ignored if X is 1d-array.
+        floor(log2(min(n_samples, n_features)))``. Ignored if ``X`` is 1d-array.
     n_elbows : int, optional, default: 2.
-        Number of likelihood elbows to return. Must be > 1.
+        Number of likelihood elbows to return. Must be ``> 1``.
     threshold : float, int, optional, default: None
-        If given, only consider the singular values that are > threshold. Must
-        be >= 0.
+        If given, only consider the singular values that are ``> threshold``. Must
+        be ``>= 0``.
     return_likelihoods : bool, optional, default: False
         If True, returns the all likelihoods associated with each elbow.
 
@@ -76,13 +77,13 @@ def select_dimension(
     -------
     elbows : list
         Elbows indicate subsequent optimal embedding dimensions. Number of
-        elbows may be less than n_elbows if there are not enough singular
+        elbows may be less than ``n_elbows`` if there are not enough singular
         values.
     sing_vals : list
         The singular values associated with each elbow.
     likelihoods : list of array-like
         Array of likelihoods of the corresponding to each elbow. Only returned
-        if `return_likelihoods` is True.
+        if ``return_likelihoods`` is True.
 
     References
     ----------
@@ -92,8 +93,10 @@ def select_dimension(
         pp.918-930.
     """
     # Handle input data
-    if not isinstance(X, np.ndarray):
-        msg = "X must be a numpy array, not {}.".format(type(X))
+    if not isinstance(X, np.ndarray) and not isspmatrix_csr(X):
+        msg = "X must be a numpy array or scipy.sparse.csr_matrix, not {}.".format(
+            type(X)
+        )
         raise ValueError(msg)
     if X.ndim > 2:
         msg = "X must be a 1d or 2d-array, not {}d array.".format(X.ndim)
@@ -176,7 +179,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     SciPy's wrapper for ARPACK, while truncated SVD is performed using either
     SciPy's wrapper for LAPACK or Sklearn's implementation of randomized SVD.
 
-    It also performs optimal dimensionality selectiong using Zhu & Godsie algorithm
+    It also performs optimal dimensionality selection using Zhu & Godsie algorithm
     if number of target dimension is not specified.
 
     Parameters
@@ -185,11 +188,11 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         The data to perform svd on.
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
     n_elbows : int, optional, default: 2
-        If ``n_components=None``, then compute the optimal embedding dimension using
+        If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
@@ -199,6 +202,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
+            Does not support ``graph`` input of type scipy.sparse.csr_matrix
         - 'truncated'
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
     n_iter : int, optional (default = 5)
@@ -231,6 +235,10 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     if algorithm not in ["full", "truncated", "randomized"]:
         msg = "algorithm must be one of {full, truncated, randomized}."
         raise ValueError(msg)
+
+    if algorithm == "full" and isspmatrix_csr(X):
+        msg = "'full' agorithm does not support scipy.sparse.csr_matrix inputs."
+        raise TypeError(msg)
 
     if n_components is None:
         elbows, _ = select_dimension(X, n_elbows=n_elbows, threshold=None)
