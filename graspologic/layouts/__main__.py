@@ -2,6 +2,7 @@
 # Licensed under the MIT license.
 
 import argparse
+import csv
 import logging
 from pathlib import Path
 import sys
@@ -18,11 +19,11 @@ def _graph_from_file(
     skip_header: bool = False,
 ) -> nx.Graph:
     graph = nx.Graph()
-    with open(path, "r") as edge_io:
+    with open(path, "r", encoding="utf-8") as edge_io:
+        reader = csv.reader(edge_io)
         if skip_header is True:
-            next(edge_io)
-        for line in edge_io:
-            source, target, weight = line.strip().split(",")
+            next(reader)
+        for source, target, weight in reader:
             weight = float(weight)
             if graph.has_edge(source, target):
                 weight += graph[source][target]["weight"]
