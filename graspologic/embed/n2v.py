@@ -3,7 +3,6 @@
 
 import logging
 import math
-import random
 import time
 from typing import Any, List, Optional, Tuple, Union
 
@@ -22,6 +21,7 @@ def node2vec_embed(
     workers: int = 8,
     iterations: int = 1,
     interpolate_walk_lengths_by_node_degree: bool = True,
+    random_seed: Optional[int] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generates a node2vec embedding from a given graph. Will follow the word2vec algorithm to create the embedding.
@@ -57,6 +57,11 @@ def node2vec_embed(
         number of walks as a high degree node (which it will if this setting is not on), then the lower degree nodes
         will take a smaller breadth of random walks when compared to the high degree nodes. This will result in your
         lower degree walks dominating your higher degree nodes.
+    random_seed : int
+        Seed to be used for reproducible results. Default is None and will produce a random output. Note that for a fully
+        deterministically-reproducible run, you must also limit to a single worker thread (`workers=1`), to eliminate
+        ordering jitter from OS thread scheduling. In addition the environment variable ``PYTHONHASHSEED`` must be set
+        to control hash randomization.
 
     Returns
     -------
@@ -92,7 +97,11 @@ def node2vec_embed(
         interpolate_walk_lengths_by_node_degree,
     )
 
-    node2vec_graph = _Node2VecGraph(graph, return_hyperparameter, inout_hyperparameter)
+    random_state = np.random.RandomState(seed=random_seed)
+
+    node2vec_graph = _Node2VecGraph(
+        graph, return_hyperparameter, inout_hyperparameter, random_state
+    )
 
     logging.info(
         f"Starting preprocessing of transition probabilities on graph with {str(len(graph.nodes()))} nodes and "
@@ -110,7 +119,9 @@ def node2vec_embed(
     )
 
     logging.info(f"Learning embeddings at time {str(time.time())}")
-    model = _learn_embeddings(walks, dimensions, window_size, workers, iterations)
+    model = _learn_embeddings(
+        walks, dimensions, window_size, workers, iterations, random_seed
+    )
 
     end = time.time()
     logging.info(
@@ -168,7 +179,12 @@ def _preconditions(
 
 
 def _learn_embeddings(
-    walks: List[Any], dimensions: int, window_size: int, workers: int, iterations: int
+    walks: List[Any],
+    dimensions: int,
+    window_size: int,
+    workers: int,
+    iterations: int,
+    random_seed: Optional[int],
 ):
     """
     Learn embeddings by optimizing the skip-gram objective using SGD.
@@ -186,6 +202,7 @@ def _learn_embeddings(
         sg=1,  # Training algorithm: 1 for skip-gram; otherwise CBOW
         workers=workers,
         iter=iterations,
+        seed=random_seed,
     )
 
     return model
@@ -204,15 +221,23 @@ class _Node2VecGraph:
         Return hyperparameter
     inout_hyperparameter : float
         Inout hyperparameter
+    random_state : np.random.RandomState
+        Random State for reproducible results. Default is None and will produce random
+        results
     """
 
     def __init__(
-        self, graph: nx.Graph, return_hyperparameter: float, inout_hyperparameter: float
+        self,
+        graph: nx.Graph,
+        return_hyperparameter: float,
+        inout_hyperparameter: float,
+        random_state: Optional[np.random.RandomState] = None,
     ):
         self.graph: nx.Graph = graph
         self.is_directed = self.graph.is_directed()
         self.p = return_hyperparameter
         self.q = inout_hyperparameter
+        self.random_state = random_state
 
     def node2vec_walk(
         self,
@@ -251,7 +276,9 @@ class _Node2VecGraph:
                     walk.append(
                         current_neighbors[
                             _alias_draw(
-                                alias_nodes[current][0], alias_nodes[current][1]
+                                alias_nodes[current][0],
+                                alias_nodes[current][1],
+                                self.random_state,
                             )
                         ]
                     )
@@ -261,6 +288,7 @@ class _Node2VecGraph:
                         _alias_draw(
                             alias_edges[(prev, current)][0],
                             alias_edges[(prev, current)][1],
+                            self.random_state,
                         )
                     ]
                     walk.append(next)
@@ -325,7 +353,8 @@ class _Node2VecGraph:
             logging.info(
                 "Walk iteration: " + str(walk_iteration + 1) + "/" + str(num_walks)
             )
-            random.shuffle(nodes)
+
+            self.random_state.shuffle(nodes)
             for node in nodes:
                 walks.append(
                     self.node2vec_walk(
@@ -469,14 +498,16 @@ def _alias_setup(probabilities: List[float]):
     return sampled_probabilities, alias
 
 
-def _alias_draw(probabilities: List[float], alias: List[float]):
+def _alias_draw(
+    probabilities: List[float], alias: List[float], random_state: np.random.RandomState
+):
     """
     Draw sample from a non-uniform discrete distribution using alias sampling.
     """
     number_of_outcomes = len(probabilities)
-    random_index = int(np.floor(np.random.rand() * number_of_outcomes))
+    random_index = int(np.floor(random_state.rand() * number_of_outcomes))
 
-    if np.random.rand() < alias[random_index]:
+    if random_state.rand() < alias[random_index]:
         return random_index
     else:
         return probabilities[random_index]

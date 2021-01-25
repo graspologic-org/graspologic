@@ -3,10 +3,11 @@
 
 import numpy as np
 from sklearn.base import BaseEstimator
+from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_array
 from sklearn.utils.validation import check_is_fitted
 
-from anytree import NodeMixin
+from anytree import NodeMixin, LevelOrderIter
 
 from .autogmm import AutoGMMCluster
 from .kclust import KMeansCluster
@@ -27,6 +28,18 @@ def _check_common_inputs(min_components, max_components, cluster_kws):
 
     if not isinstance(cluster_kws, dict):
         raise TypeError("cluster_kws must be a dict")
+
+
+def _check_fcluster(fcluster, level):
+    if level is not None:
+        if not isinstance(level, int):
+            raise TypeError("level must be an int")
+        elif level < 1:
+            raise ValueError("level must be positive")
+        elif fcluster is False:
+            msg = "level-specific flat clustering is availble\
+                only if 'fcluster' is enabled"
+            raise ValueError(msg)
 
 
 class DivisiveCluster(NodeMixin, BaseEstimator):
@@ -137,7 +150,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         self.fit_predict(X)
         return self
 
-    def fit_predict(self, X):
+    def fit_predict(self, X, fcluster=False, level=None):
         """
         Fits clustering models to the data as well as resulting clusters
         and using fitted models to predict a hierarchy of labels
@@ -145,12 +158,22 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
+        fcluster: bool, default=False
+            if True, returned labels will be re-numbered so that each column
+            of labels represents a flat clustering at current level,
+            and each label corresponds to a cluster indexed the same as
+            the corresponding node in the overall clustering dendrogram
+        level: int, optional (default=None)
+            the level of a single flat clustering to generate
+            only available if ``fcluster`` is True
 
         Returns
         -------
         labels : array_label, shape (n_samples, n_levels)
+            if no level specified; otherwise, shape (n_samples,)
         """
         X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
+        _check_fcluster(fcluster, level)
 
         if self.max_components > X.shape[0]:
             msg = "max_components must be >= n_samples, but max_components = "
@@ -162,6 +185,13 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         # are all zero vectors
         if (labels.shape[1] > 1) and (np.max(labels[:, -1]) == 0):
             labels = labels[:, :-1]
+
+        if level is not None:
+            if level > labels.shape[1]:
+                msg = "input exceeds max level = {}".format(labels.shape[1])
+                raise ValueError(msg)
+        if fcluster:
+            labels = self._relabel(labels, level)
 
         return labels
 
@@ -238,26 +268,86 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
                             (labels, np.zeros((len(X), 1), dtype=int))
                         )
                     labels[inds, 1 : child_labels.shape[1] + 1] = child_labels
+                else:
+                    # make a "GaussianMixture" model for clusters
+                    # that were not fitted
+                    if self.cluster_method == "gmm":
+                        cluster_idx = len(dc.parent.children) - 1
+                        parent_model = dc.parent.model_
+                        model = GaussianMixture()
+                        model.weights_ = np.array([1])
+                        model.means_ = parent_model.means_[cluster_idx].reshape(1, -1)
+                        model.covariance_type = parent_model.covariance_type
+                        if model.covariance_type == "tied":
+                            model.covariances_ = parent_model.covariances_
+                            model.precisions_ = parent_model.precisions_
+                            model.precisions_cholesky_ = (
+                                parent_model.precisions_cholesky_
+                            )
+                        else:
+                            cov_types = ["spherical", "diag", "full"]
+                            n_features = model.means_.shape[-1]
+                            cov_shapes = [
+                                (1,),
+                                (1, n_features),
+                                (1, n_features, n_features),
+                            ]
+                            cov_shape_idx = cov_types.index(model.covariance_type)
+                            model.covariances_ = parent_model.covariances_[
+                                cluster_idx
+                            ].reshape(cov_shapes[cov_shape_idx])
+                            model.precisions_ = parent_model.precisions_[
+                                cluster_idx
+                            ].reshape(cov_shapes[cov_shape_idx])
+                            model.precisions_cholesky_ = (
+                                parent_model.precisions_cholesky_[cluster_idx].reshape(
+                                    cov_shapes[cov_shape_idx]
+                                )
+                            )
+
+                        dc.model_ = model
 
         return labels
 
-    def predict(self, X):
+    def predict(self, X, fcluster=False, level=None):
         """
         Predicts a hierarchy of labels based on fitted models
 
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
+        fcluster: bool, default=False
+            if True, returned labels will be re-numbered so that each column
+            of labels represents a flat clustering at current level,
+            and each label corresponds to a cluster indexed the same as
+            the corresponding node in the overall clustering dendrogram
+        level: int, optional (default=None)
+            the level of a single flat clustering to generate
+            only available if ``fcluster`` is True
 
         Returns
         -------
         labels : array-like, shape (n_samples, n_levels)
+            if no level specified; otherwise, shape (n_samples,)
         """
 
         check_is_fitted(self, ["model_"], all_or_any=all)
         X = check_array(X, dtype=[np.float64, np.float32], ensure_min_samples=1)
+        _check_fcluster(fcluster, level)
 
         labels = self._predict_labels(X)
+        if (level is not None) and (level > labels.shape[1]):
+            msg = "input exceeds max level = {}".format(labels.shape[1])
+            raise ValueError(msg)
+
+        if fcluster:
+            # convert labels to stacked flat clusterings
+            # based on the flat clusterings on fitted data
+            inds = [(labels == row).all(1).any() for row in self._labels]
+            labels = self._new_labels[inds]
+            if level is not None:
+                labels = labels[:, level - 1]
+
         return labels
 
     def _predict_labels(self, X):
@@ -281,3 +371,39 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
                 pred_labels = np.zeros((len(X), 1), dtype=int)
 
         return pred_labels
+
+    def _relabel(self, labels, level=None):
+        # re-number "labels" so that each cluster at each level recieves
+        # a unique label = index of corresponding node in overall dendrogram
+
+        # assign each cluster a new label based on its index in the dendrogram
+        all_clusters = [node for node in LevelOrderIter(self)][1:]
+        for indx in range(len(all_clusters)):
+            all_clusters[indx]._label = indx
+
+        new_labels = labels.copy()
+        for lvl in range(1, self.height):
+            uni_paths, path_inds = np.unique(
+                labels[:, : lvl + 1], axis=0, return_index=True
+            )
+            for p in range(len(uni_paths)):
+                label_inds = (labels[:, : lvl + 1] == uni_paths[p]).all(1)
+                current_path = labels[path_inds[p], : lvl + 1]
+                cluster = self.root
+                current_lvl = 0
+                # find the cluster corresponding to "current_path"
+                while current_lvl <= lvl:
+                    if not cluster.is_leaf:
+                        cluster = cluster.children[current_path[current_lvl]]
+                        current_lvl += 1
+                    else:
+                        break
+                new_labels[label_inds, lvl] = cluster._label
+
+        # stored to do relabeling for non-fitted data
+        self._labels = labels
+        self._new_labels = new_labels
+
+        if level is not None:
+            new_labels = new_labels[:, level - 1]
+        return new_labels

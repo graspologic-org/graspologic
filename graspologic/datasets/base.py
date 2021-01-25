@@ -133,6 +133,10 @@ def load_mice():
             DataFrame of block assignments for each ROI
         features : pd.DataFrame
             DataFrame of anatomical features for each ROI in each connectome
+        participants : pd.DataFrame
+            DataFrame of subject IDs and genotypes for each connectome
+        meta : Dictionary
+            Dictionary with meta information about the dataset (n_subjects and n_vertices)
 
     References
     ----------
@@ -176,5 +180,6 @@ def load_mice():
         atlas=atlas,
         blocks=blocks,
         features=features,
+        participants=participants,
         meta=meta,
     )
