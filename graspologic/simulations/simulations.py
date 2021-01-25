@@ -75,7 +75,8 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
     p of edges being connected.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------
@@ -174,7 +175,8 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     Erdos Renyi (n, m) graph is a simple graph with n vertices and exactly m
     number of total edges.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------
@@ -318,7 +320,8 @@ def sbm(
     SBM produces a graph with specified communities, in which each community can
     have different sizes and edge probabilities.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Stochastic Block Model (SBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html>`_
 
     Parameters
     ----------
@@ -633,7 +636,8 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
     A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Random Dot Product Graph (RDPG) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html>`_
 
     Parameters
     ----------
@@ -819,7 +823,8 @@ def mmsbm(
     another node. Each node's membership is determined according to those probabilities.
     Finally, interactions are sampled according to the assigned memberships.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Mixed Membership Stochastic Blockmodel (MMSBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/mmsbm.html>`_
 
     Parameters
     ----------
