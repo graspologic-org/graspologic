@@ -409,9 +409,10 @@ def _quadratic_assignment_faq(
     if maximize:
         obj_func_scalar = -1
 
-    perm_S = np.setdiff1d(range(n), partial_match[:, 1])
+    nonseed_B = np.setdiff1d(range(n), partial_match[:, 1])
+    perm_S = np.copy(nonseed_B)
     if shuffle_input:
-        nonseed_B = rng.permutation(perm_S)
+        nonseed_B = rng.permutation(nonseed_B)
         # shuffle_input to avoid results from inputs that were already matched
 
     nonseed_A = np.setdiff1d(range(n), partial_match[:, 0])

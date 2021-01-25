@@ -198,6 +198,11 @@ class GraphMatch(BaseEstimator):
         if A.shape[0] != B.shape[0]:
             A, B = _adj_pad(A, B, self.padding)
 
+        if S is None:
+            S = np.zeros((A.shape[0], A.shape[0]))
+
+        S = check_array(S, copy=True, ensure_2d=True)
+
         options = {
             "maximize": self.gmp,
             "partial_match": partial_match,
@@ -219,7 +224,7 @@ class GraphMatch(BaseEstimator):
         self.n_iter_ = res.nit
         return self
 
-    def fit_predict(self, A, B, seeds_A=[], seeds_B=[]):
+    def fit_predict(self, A, B, seeds_A=[], seeds_B=[], S=None):
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
@@ -245,7 +250,7 @@ class GraphMatch(BaseEstimator):
         perm_inds_ : 1-d array, some shuffling of [0, n_vert)
             The optimal permutation indices to minimize the objective function
         """
-        self.fit(A, B, seeds_A, seeds_B)
+        self.fit(A, B, seeds_A, seeds_B, S)
         return self.perm_inds_
 
 
