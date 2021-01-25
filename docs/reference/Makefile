@@ -22,3 +22,4 @@ html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)"
 	@echo
 	@echo "Build finished. The HTML pages are in build/html."
+

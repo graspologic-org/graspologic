@@ -25,7 +25,8 @@ def latent_position_test(
     have their vertices sorted in the same order. Currently, the function only
     supports undirected graphs.
 
-    Read more in the :ref:`tutorials <inference_tutorials>`
+    Read more in the `Latent Position Two-Graph Testing Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/inference/latent_position_test.html>`_
 
     Parameters
     ----------

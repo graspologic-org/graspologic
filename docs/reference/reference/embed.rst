@@ -1,3 +1,5 @@
+.. _ase_tutorial: https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html
+
 Embedding
 =========
 
