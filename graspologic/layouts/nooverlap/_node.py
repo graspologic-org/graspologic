@@ -22,3 +22,9 @@ class _Node:
 
     def __hash__(self):
         return hash(self.node_id)
+
+    def __str__(self) -> str:
+        val = f"node_id: {self.node_id}, ({self.x},{self.y}), "
+        val += f"({self.original_x}, {self.original_y}), size: "
+        val += f"{self.size}, com: {self.community}, color: {self.color}"
+        return val

@@ -4,7 +4,7 @@
 import csv
 import math
 
-from ._smart_quad_node import _SmartQuadNode, find_extent
+from ._smart_quad_node import _SmartQuadNode, find_bounds
 
 
 class _QuadTree:
@@ -13,8 +13,8 @@ class _QuadTree:
 
     def __init__(self, nodes, max_nodes_per_quad):
         self.nodes = nodes
-        extent = find_extent(nodes)
-        self.root = _SmartQuadNode(nodes, 0, extent, max_nodes_per_quad, None)
+        bounds = find_bounds(nodes)
+        self.root = _SmartQuadNode(nodes, 0, bounds, max_nodes_per_quad, None)
 
     def get_node_stats(self, max_level=10):
         stats = []
@@ -62,6 +62,6 @@ class _QuadTree:
         skipped = 0
         for cell_density, density_ratio, cell_count, qn in den_list:
             print ('cell density', cell_density, 'cir_density', density_ratio, 'cell_count', cell_count, "nodes: ", qn.number_of_nodes(), "depth: ", qn.depth, "max node size", qn.max_size)
-            skipped += qn.layout_quad()
+            skipped += qn.layout()
         print (f"skipped: {skipped} quad nodes")
         return self.nodes

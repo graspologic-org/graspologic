@@ -6,7 +6,7 @@ import math
 import logging
 from sklearn.preprocessing import normalize
 import numpy as np
-from typing import NamedTuple, List
+from typing import NamedTuple, List, Tuple
 
 from scipy.spatial import distance
 
@@ -29,7 +29,8 @@ def is_overlap(x1, y1, s1, x2, y2, s2):
     return False
 
 
-def is_overlapping_any_node_and_index(node, new_x, new_y, nodes, start, end):
+def get_overlapping_any_node_and_index(node, new_x, new_y, nodes, start, end):
+    #print (f"nde: {node}, new ({new_x},{new_y}), #nodes: {len(nodes)}, start:end {start}:{end}")
     overlapping = None
     idx = 0
     for idx, n in enumerate(nodes[start:end]):
@@ -98,10 +99,6 @@ def scale_graph(g, scale_factor):
         n.x, n.y = move_point_on_line([0, 0], [n.x, n.y], scale_factor)
     return g
 
-class _SmartCell:
-    def __init__(self, size) -> None:
-        self.size = size
-
 class Extent(NamedTuple):
     min_x: float
     min_y: float
@@ -109,9 +106,13 @@ class Extent(NamedTuple):
     max_y: float
 
     def total_area(self):
-        return (self.max_x - self.min_x) * (self.max_y - self.min_y)
+        return abs((self.max_x - self.min_x) * (self.max_y - self.min_y))
+    def x_range(self) -> float:
+        return self.max_x - self.min_x
+    def y_range(self) -> float:
+        return self.max_y - self.min_y
 
-def find_extent(nodes: List[_Node]):
+def find_bounds(nodes: List[_Node]):
     max_x = -math.inf
     min_x = math.inf
     max_y = -math.inf
@@ -123,6 +124,176 @@ def find_extent(nodes: List[_Node]):
         min_y = min(n.y, min_y)
     return Extent(min_x, min_y, max_x, max_y)
 
+class _SmartCell:
+    """
+    A SmartCell either contains one node or a set of children SmartCells that
+    are inside of this SmartCell. The number children depends on the relative
+    sizes of the nodes trying to be inserted.
+    """
+    def __init__(self, bounds: Extent, size: float) -> None:
+        self.size = size
+        self.bounds = bounds
+        self.full = False
+        self.node = None
+        self.children = {}
+
+    def add_node (self, node: _Node) -> Tuple[bool, float, float]:
+        if self.is_full():
+            raise Exception(f"Can't add node to full _SmartCell, size: {node.size}")
+        center_x, center_y = 0.0, 0.0
+        if len(self.children) > 0:
+            # if we get in here we might be full after we leave we need
+            #to verify that
+            col, row, new_bounds = self.find_cell_and_bounds(node)
+            if self.contains( col, row):
+                child_cell = self.get_child_cell(col, row)
+            else:
+                child_cell = _SmartCell(new_bounds, self.children_size)
+                self.children[(col, row)] = child_cell
+
+            ##now we have the cell that we want to insert into, if it is full
+            #we need to find another one
+            if not child_cell.is_full():
+                center_x, center_y = child_cell.add_node(node)
+                self.full = child_cell.is_full() and self.are_others_full_by_cell(child_cell)
+            else:
+                #brute force search for new cell. TODO: FIX THIS
+                num_checked = 0
+                c, r = 0,0
+                breaking = False
+                for c in range(self.columns):
+                    for r in range(self.rows):
+                        num_checked += 1
+                        if self.contains(c, r):
+                            child_cell = self.get_child_cell(c, r)
+                            if not child_cell.is_full():
+                                center_x, center_y = child_cell.add_node(node)
+                                breaking = True
+                                break
+                        else:
+                            new_bounds = self.bounds_for_cell(c, r)
+                            child_cell = _SmartCell(new_bounds, self.children_size)
+                            self.children[(c, r)] = child_cell
+                            center_x, center_y = child_cell.add_node(node)
+                            breaking = True
+                            break
+                    if breaking:
+                        break
+                # if we put the last child in there then we are full.
+                #print (f"checking to see if we should be full, checked: {num_checked}, rxc: {self.rows * self.columns} child_full: {child_cell.is_full()}, c: {c}, r: {r}, others: {self.are_others_full(c,r)}")
+                self.full = child_cell.is_full() and self.are_others_full(c,r)
+        else:
+            if node.size >= self.size/2:
+                #this Cell can only fit one node, set it and mark full
+                self.node = node
+                self.full = True
+                #center_x, center_y = self.get_cell_center(0, 0)
+                center_x = self.bounds.min_x + self.size/2
+                center_y = self.bounds.min_y + self.size/2
+            else:
+                # This is the first time we are dividing into children nodes
+                #first find the cell we should be in, then create the cell
+                # we are guaranteed to not be full after this
+                self.children_size = node.size*2
+                self.columns = int(self.bounds.x_range() // self.children_size)
+                self.rows = int(self.bounds.y_range() // self.children_size)
+                col, row, new_bounds = self.find_cell_and_bounds(node)
+                new_cell = _SmartCell(new_bounds, self.children_size)
+                self.children[(col, row)] = new_cell
+                center_x, center_y = new_cell.add_node(node)
+        return center_x, center_y
+
+    def are_others_full(self, col: int, row: int):
+        if len(self.children) == 0:
+            return self.is_full()
+        for c in range(self.columns):
+            for r in range(self.rows):
+                #print (f"({c},{r}) - {row}:{col} - contains: {self.contains(c,r)}")
+                if r == row and c == col:
+                    pass
+                if not self.contains(c, r):
+                    return False
+                if not self.get_child_cell(c, r).is_full():
+                    return False
+        return True
+
+    def are_others_full_by_cell(self, child):
+        if len(self.children) == 0:
+            return self.is_full()
+        for c in range(self.columns):
+            for r in range(self.rows):
+                #print (f"by cell ({c},{r}) - contains: {self.contains(c,r)}")
+                if not self.contains(c, r):
+                    return False
+                other_child = self.get_child_cell(c, r)
+                if child != other_child and not other_child.is_full():
+                    return False
+        return True
+
+
+
+    def get_child_cell(self, col: int, row: int):
+        return self.children[(col, row)]
+
+    def is_full(self) -> bool:
+        return self.full
+
+    def contains(self, col: int, row: int):
+        return (col, row) in self.children
+
+    def bounds_for_cell(self, col: int, row: int):
+        side_size = self.children_size
+        min_x = self.bounds.min_x+(col*side_size)
+        min_y = self.bounds.min_y+(row*side_size)
+        max_x = min_x + side_size
+        max_y = min_y + side_size
+        bounds = Extent(min_x, min_y, max_x, max_y )
+        return bounds
+
+    def get_cell_center(self, col: int, row: int) -> Tuple[float, float]:
+        center_x = self.bounds.min_x + col*self.size + self.size/2
+        center_y = self.bounds.min_y + row*self.size + self.size/2
+        return center_x, center_y
+
+    def find_cell_and_bounds(self, node: _Node):
+        # zero the cordinates
+        side_size = self.children_size
+        zeroed_x = node.x - self.bounds.min_x
+        zeroed_y = node.y - self.bounds.min_y
+        column = int(zeroed_x // side_size)
+        row = int(zeroed_y // side_size)
+        bounds = self.bounds_for_cell(column, row)
+        return column, row, bounds
+
+class _SmartGrid:
+    def __init__(self, bounds: Extent, max_node_size: float) -> None:
+        self.bounds = bounds
+        self.max_node_size = max_node_size
+        self.grid = _SmartCell(bounds, max_node_size*2)
+
+    def find_grid_cell_and_center(self, x: float, y: float)-> Tuple[int, int, float, float]:
+        # zero the cordinates
+        side_size = self.max_node_size * 2.0
+        zeroed_x = x - self.bounds.min_x
+        zeroed_y = y - self.bounds.min_y
+        x_cell = int(zeroed_x // side_size)
+        y_cell = int(zeroed_y // side_size)
+        return x_cell, y_cell, self.bounds.min_x + side_size * x_cell, self.bounds.min_y + side_size * y_cell
+
+    def is_full(self) -> bool:
+        return self.grid.is_full()
+
+#    def contains_node(self, col: int, row: int) -> bool:
+#        return (col, row) in self.grid
+#
+#    def get_cell(self, col: int, row: int) -> _SmartCell:
+#        return self.grid[(col, row)]
+#
+#    def set_cell(self, col: int, row: int, new_cell: _SmartCell) -> None:
+#        self.grid[(col, row)] = new_cell
+
+    def add_node(self, node: _Node) -> Tuple[float, float]:
+        return self.grid.add_node(node)
 
 class _SmartQuadNode:
     """
@@ -155,11 +326,9 @@ class _SmartQuadNode:
         self.parent = parent
 
         #TODO
-        #if we get he max size and the 2nd largest size we can make the size of the
+        #if we get the max size and the 2nd largest size we can make the size of the
         #cells smaller, to potentially get more cells in each node that will in some
-        #cases make it so the don't have to bump up to the parent. The actual max
-        #length required for a size is max_size+2nd_size not max_size*2, this would
-        #be changed in get_total_cells
+        #cases make it so the don't have to bump up to the parent.
         self.max_size = max_node_size(self.nodes)
         self.circle_size = self.total_circle_size()
         self.square_size = self.total_square_size()
@@ -168,10 +337,13 @@ class _SmartQuadNode:
             self.tot_area = 0.001 # just to prevent division by 0
         self.sq_ratio = self.square_size / self.tot_area
         self.cir_ratio = self.circle_size / self.tot_area
+        if self.sq_ratio < 0:
+            raise Exception(f"sq_ratio: {self.sq_ratio}, sq_size: {self.square_size}, tot_size: = {self.tot_area}, bounds: {self.extent}")
 
-        self.total_cells = self.get_total_cells()
+        self.total_basic_cells = self.get_total_basic_cells()
         self._find_center()
         self._push_to_kids()
+        ## these can be removed eventually, they are for debugging
         self.total_nodes_moved = 0
         self.not_first_choice = 0
 
@@ -181,19 +353,10 @@ class _SmartQuadNode:
     def child_list(self):
         return [self.NW, self.NE, self.SW, self.SE]
 
-    def get_total_cells_smart(self):
+    def get_total_basic_cells(self):
         side_size = self.max_size * 2.0
-        self.x_range = self.extent.max_x - self.extent.min_x
-        self.y_range = self.extent.max_y - self.extent.min_y
-        number_of_x_cells = self.x_range // side_size
-        number_of_y_cells = self.y_range // side_size
-        total_cells = number_of_y_cells * number_of_x_cells
-        return total_cells
-
-    def get_total_cells(self):
-        side_size = self.max_size * 2.0
-        self.x_range = self.extent.max_x - self.extent.min_x
-        self.y_range = self.extent.max_y - self.extent.min_y
+        self.x_range = self.extent.x_range()
+        self.y_range = self.extent.y_range()
         number_of_x_cells = self.x_range // side_size
         number_of_y_cells = self.y_range // side_size
         total_cells = number_of_y_cells * number_of_x_cells
@@ -261,7 +424,7 @@ class _SmartQuadNode:
     def num_children(self):
         total = 1
         for quad in self.child_list():
-            if quad:
+            if quad is not None:
                 total += quad.num_children()
         return total
 
@@ -321,7 +484,7 @@ class _SmartQuadNode:
                     self.extent.max_x,
                     self.extent.max_y,
                     self.circle_size / self.tot_area,
-                    self.total_cells,
+                    self.total_basic_cells,
                     len(self.nodes)
                 ]
     def _node_stats_header(self):
@@ -360,6 +523,7 @@ class _SmartQuadNode:
         y_cell = int(zeroed_y // side_size)
         return x_cell, y_cell, min_x + side_size * x_cell, min_y + side_size * y_cell
 
+    #### This method could be must more intelligent about how to find the next free cell
     def find_free_cell(
         self, cells, x, y, num_x_cells, num_y_cells, min_x, min_y, max_size
     ):
@@ -441,14 +605,11 @@ class _SmartQuadNode:
 
         return new_x, new_y, min_x + square_size * new_x, min_y + square_size * new_y
 
-    def layout_node_list(self, min_x, min_y, max_x, max_y, max_size, node_list):
+    def layout_node_list(self, bounds : Extent, max_size : float, node_list: List[_Node]) -> bool:
         """
         This method will layout the nodes in the current quad.  If there are more nodes than cells an Exception
         will be raised.
-        :param min_x:
-        :param min_y:
-        :param max_x:
-        :param max_y:
+        :param bounds:
         :param max_size:
         :param node_list:
         :return:
@@ -459,25 +620,21 @@ class _SmartQuadNode:
         largest_size = nodes_by_size[0].size
         if largest_size != max_size:
             raise Exception(
-                "This can not be!!! max: %g, largest: %g" % (max_size, largest_size)
+                f"This can not be!!! max: {max_size}, largest: {largest_size}"
             )
         num_nodes = len(node_list)
 
         side_size = max_size * 2.0
-        x_range = max_x - min_x
-        y_range = max_y - min_y
+        x_range = bounds.x_range()
+        y_range = bounds.y_range()
         number_of_x_cells = x_range // side_size
         number_of_y_cells = y_range // side_size
-        total_cells = number_of_y_cells * number_of_x_cells
 
-        if num_nodes > total_cells:
-            raise Exception(
-                "Too many nodes per Cell for this quad! nodes: %d, cells: %d"
-                % (num_nodes, total_cells)
-            )
-
-        # print ("largest_size: %g, x_range: %g, y_range: %g, min(%g, %g), max(%g, %g), x_cells %d, y_cells %d, total_cells: %d, num nodes: %d"
-        #       %(largest_size, self.x_range, self.y_range, min_x, min_y, max_x, max_y, self.number_of_x_cells, self.number_of_y_cells, self.total_cells, num_nodes))
+        #if num_nodes > number_of_x_cells*number_of_y_cells:
+        #    raise Exception(
+        #        "Too many nodes per Cell for this quad! nodes: %d, cells: %d"
+        #        % (num_nodes, self.total_basic_cells)
+        #    )
 
         number_overlapping = 0
         for idx, node_to_move in enumerate(nodes_by_size):
@@ -491,48 +648,22 @@ class _SmartQuadNode:
                     placed_node.size,
                 ):
                     number_overlapping += 1
-                    # print ("Is OVERLAPPING!!!!, to_move: (%g,%g) %g, (%g,%g) %g" % (node_to_move.x, node_to_move.y, node_to_move.size, placed_node.x, placed_node.y, placed_node.size))
                     break
             if number_overlapping > 0:
                 break
+        ## if none of the nodes are overlapping then they all fit and no need to move them
         if number_overlapping == 0:
-            return 0
+            return True
 
-        cells = {}
+        smart_grid = _SmartGrid(bounds, largest_size)
         for idx, node_to_move in enumerate(nodes_by_size):
-            # the first one does not need to move all the rest might need to move
-            (
-                cell_x,
-                cell_y,
-                cell_center_x,
-                cell_center_y,
-            ) = self.find_grid_cell_and_center(
-                min_x, min_y, max_size, node_to_move.x, node_to_move.y
-            )
-            found = (cell_x, cell_y) in cells
-            self.total_nodes_moved += 1
-            if found:
-                # need to find an open cell and then move there.
-                # print ("Occupied Cell: [%d, %d], used: %s , center: (%g, %g)" % (cell_x, cell_y, str(found), cell_center_x, cell_center_y) )
-                cell_x, cell_y, cell_center_x, cell_center_y = self.find_free_cell(
-                    cells,
-                    cell_x,
-                    cell_y,
-                    number_of_x_cells,
-                    number_of_y_cells,
-                    min_x,
-                    min_y,
-                    max_size,
-                )
-                # print ("Found Cell: [%d, %d], used: %s , center: (%g, %g)" % (cell_x, cell_y, str(found), cell_center_x, cell_center_y) )
-                self.not_first_choice += 1
-            # Just a test to see how many move
-            # node_to_move.color = '#FF0004'
-            cells[(cell_x, cell_y)] = True
+            if smart_grid.is_full():
+                return False
+            cell_center_x, cell_center_y, = smart_grid.add_node(node_to_move)
             node_to_move.x = cell_center_x
             node_to_move.y = cell_center_y
 
-        return number_overlapping
+        return True
 
     def _mark_laid_out(self):
         """
@@ -544,9 +675,9 @@ class _SmartQuadNode:
             if qn is not None:
                 qn._mark_laid_out()
 
-    def get_new_bounds(self, min_x, min_y, max_x, max_y, max_size, nodes):
-        xrange = max_x - min_x
-        yrange = max_y - min_y
+    def get_new_bounds(self, extent, max_size, nodes):
+        xrange = extent.max_x - extent.min_x
+        yrange = extent.max_y - extent.min_y
         side_size = 2 * max_size
         x_cells = xrange // side_size
         y_cells = yrange // side_size
@@ -560,120 +691,71 @@ class _SmartQuadNode:
             # print ('new_cells %d, (%d, %d) needed: %d' %(total_cells, x_cells, y_cells, cells_needed))
         new_xrange = x_cells * side_size + 2
         new_yrange = y_cells * side_size + 2
-        # print("bounds", min_x, min_y, max_x, max_y, new_xrange, new_yrange, side_size, x_cells, y_cells, total_cells)
-        expanded_min_x = min_x - (new_xrange - xrange) / 2
-        expanded_min_y = min_y - (new_yrange - yrange) / 2
-        expanded_max_x = max_x + (new_xrange - xrange) / 2
-        expanded_max_y = max_y + (new_yrange - yrange) / 2
+        # print("bounds", extent.min_x, extent.min_y, extent.max_x, max_y, new_xrange, new_yrange, side_size, x_cells, y_cells, total_cells)
+        expanded_min_x = extent.min_x - (new_xrange - xrange) / 2
+        expanded_min_y = extent.min_y - (new_yrange - yrange) / 2
+        expanded_max_x = extent.max_x + (new_xrange - xrange) / 2
+        expanded_max_y = extent.max_y + (new_yrange - yrange) / 2
 
         ## now I have the number of cells we need to go back and expand the bounds
-        return expanded_min_x, expanded_min_y, expanded_max_x, expanded_max_y
+        return Extent(expanded_min_x, expanded_min_y, expanded_max_x, expanded_max_y)
 
-    def layout_quad(self):
+    def layout(self):
         # print("layout_quad")
         num_skipped = 1
         if self.is_laid_out:
             # print ("ALREADY LAID OUT!!, ratio: %g " %(nodes_per_cell))
             return num_skipped
 
-        if self.total_cells == 0:
+        if self.total_basic_cells == 0:
             nodes_per_cell = math.inf
         else:
-            nodes_per_cell = self.num_nodes / self.total_cells
+            nodes_per_cell = self.num_nodes / self.total_basic_cells
 
         has_children = False
         for quad in self.child_list():
-            if quad:
+            if quad is not None:
                 has_children = True
+
         if not has_children:
-            if self.num_nodes > self.total_cells:
-                logger.info(
-                    "We don't fit! going up one level depth: %d, cells: %d, nodes %d, ratio: %g, max_size: %g, area: %g"
-                    % (
-                        self.depth,
-                        self.total_cells,
-                        self.num_nodes,
-                        nodes_per_cell,
-                        self.max_size,
-                        self.tot_area,
-                    )
+            did_fit = self.layout_node_list(self.extent, self.max_size, self.nodes)
+            current = self
+            while not did_fit:
+                logger.info (
+                    f"Did not fit current level {current.depth}, "
+                    f"sq_ratio: {current.sq_ratio}, sq_size: {current.square_size} "
+                    f"nodes: {current.num_nodes}, bounds: {current.extent} "
+                    f"total size: {current.tot_area}"
+                 )
+                current = current.parent
+                if current is None:
+                    break
+                did_fit = current.layout_node_list(
+                    current.extent,
+                    current.max_size,
+                    current.nodes,
                 )
-                parent = self.parent
-                # if parent is not None:
-                while parent is not None:
-                    logger.info(
-                        "parent: sq_ratio: %g, cir_ratio: %g, cells %d, nodes: %d current_level %d, max_size: %g, area: %g"
-                        % (
-                            parent.sq_ratio,
-                            parent.cir_ratio,
-                            parent.total_cells,
-                            len(parent.nodes),
-                            parent.depth,
-                            parent.max_size,
-                            parent.tot_area,
-                        )
-                    )
-                    if len(parent.nodes) > parent.total_cells:
-                        # go up one more level
-                        logger.info(
-                            "A Quad at level %d does not have enough space to layout its nodes"
-                            % (parent.depth)
-                        )
-                        parent = parent.parent
-                    else:
-                        # min_x, min_y, max_x, max_y, max_size = stats_nodes(parent.nodes)
-                        # for n in parent.nodes:
-                        # 	n.color = '#FF0004'
-                        overlapping = parent.layout_node_list(
-                            parent.extent.min_x,
-                            parent.extent.min_y,
-                            parent.extent.max_x,
-                            parent.extent.max_y,
-                            parent.max_size,
-                            parent.nodes,
-                        )
-                        parent._do_contraction()
-                        break
-                if parent is None:
-                    # expand the canvas and try to lay it out.
-                    root = self.get_top_quad_node()
-                    (
-                        expanded_min_x,
-                        expanded_min_y,
-                        expanded_max_x,
-                        expanded_max_y,
-                    ) = self.get_new_bounds(
-                        root.extent.min_x,
-                        root.extent.min_y,
-                        root.extent.max_x,
-                        root.extent.max_y,
-                        root.max_size,
-                        root.nodes,
-                    )
-                    overlapping = root.layout_node_list(
-                        expanded_min_x,
-                        expanded_min_y,
-                        expanded_max_x,
-                        expanded_max_y,
-                        root.max_size,
-                        root.nodes,
-                    )
-                    self._do_contraction_with_given_nodes(root.nodes)
-                return 1
-            else:
-                # we are at the bottom and we can fit everyone in here.
-                # print ("laying out quad (%g, %g) (%g, %g) max_size %g, ss: %g, area: %g, ratio: %g, nodes: %d, npc: %g" %(self.min_x, self.min_y, self.max_x, self.max_y, self.max_size, square_size, tot_area, ratio, len(self.nodes), nodes_per_cell))
-                overlapping = self.layout_node_list(
-                    self.extent.min_x,
-                    self.extent.min_y,
-                    self.extent.max_x,
-                    self.extent.max_y,
-                    self.max_size,
-                    self.nodes,
-                )
-                # print ("Should Fit")
-                self._do_contraction()
-                # print ("jiggled nodes, overlapping %d" %(overlapping))
+
+            if did_fit:
+                logger.info (f"contracting nodes that fit")
+                current._do_contraction()
+                return
+
+            # if we get here current should be None always
+            if current is not None:
+                raise Exception("This should never happen remove after verifying correctness")
+
+            # expand the canvas and try to lay it out.
+            root = self.get_top_quad_node()
+            expanded_bounds = self.get_new_bounds(root.extent, root.max_size, root.nodes)
+            did_fit = root.layout_node_list(
+                expanded_bounds,
+                root.max_size,
+                root.nodes,
+            )
+            logger.info (f"contracting nodes that did not fit")
+            root._do_contraction()
+
         else:
             for quad in self.child_list():
                 if quad:
@@ -704,19 +786,19 @@ class _SmartQuadNode:
 
         if not has_children:
             num_quad_no_kids += 1
-            if len(self.nodes) > self.total_cells:
-                if self.total_cells == 0:
+            if len(self.nodes) > self.total_basic_cells:
+                if self.total_basic_cells == 0:
                     nodes_to_cells = math.inf
                 else:
-                    nodes_to_cells = len(self.nodes) / self.total_cells
-                # print ("too dense, nodes/cells: %g, nn: %d, cells: %d, level: %d" %(nodes_to_cells, len(self.nodes), self.total_cells, self.depth))
+                    nodes_to_cells = len(self.nodes) / self.total_basic_cells
+                # print ("too dense, nodes/cells: %g, nn: %d, cells: %d, level: %d" %(nodes_to_cells, len(self.nodes), self.total_basic_cells, self.depth))
                 num_quad_to_dense = 1
                 lowest_level = math.inf
                 parent = self.parent
                 while parent is not None:
                     max_nodes_in_grid = parent.number_of_nodes()
                     lowest_level = parent.depth
-                    if parent.number_of_nodes() > parent.total_cells:
+                    if parent.number_of_nodes() > parent.total_basic_cells:
                         # doesn't fit, go up one more level
                         parent = parent.parent
                     else:
@@ -776,11 +858,11 @@ class _SmartQuadNode:
             return False
 
     def get_top_quad_node(self):
-        tmp = self.parent
+        cur = self.parent
         prev = self
-        while tmp is not None:
-            prev = tmp
-            tmp = tmp.parent
+        while cur is not None:
+            prev = cur
+            cur = cur.parent
         return prev
 
     def get_nodes_near_lines(self, all_nodes):
@@ -835,11 +917,11 @@ class _SmartQuadNode:
         if has_children:
             return retval
 
-        if self.total_cells == 0:
+        if self.total_basic_cells == 0:
             nodes_to_cells = math.inf
         else:
-            nodes_to_cells = len(self.nodes) / self.total_cells
-        return [(nodes_to_cells, ratio, self.total_cells, self)]
+            nodes_to_cells = len(self.nodes) / self.total_basic_cells
+        return [(nodes_to_cells, ratio, self.total_basic_cells, self)]
 
     def get_overlapping_node_list(self, node, new_x, new_y, nodes):
         overlapping_nodes = []
@@ -868,121 +950,25 @@ class _SmartQuadNode:
         else:
             return x <= other_end
 
-    ### I wanted to add a little thank you to the webiste: https://www.calculator.net/triangle-calculator.html
-    ### it helped me debug the issues I was having in the calculation of the overlaps.
     def _do_contraction(self):
-        logger.info("contracting nodes:%d" % (len(self.nodes)))
         node_list = self.nodes
-        nodes_by_size = sorted(node_list, key=lambda n: n.size, reverse=True)
-        nodes_around_the_edge = self.get_nodes_near_lines(
-            self.get_top_quad_node().nodes
-        )
-        num_nodes_around_edge = len(nodes_around_the_edge)
-
-        cells = {}
-        for idx, node_to_move in enumerate(nodes_by_size):
-            # move to its original spot node_to_move.original_x, node_to_move.original_y
-            # then move it toward where it is until it does not overlap with anything already placed.
-            prev_x, prev_y = node_to_move.original_x, node_to_move.original_y
-            new_x, new_y = node_to_move.x, node_to_move.y
-            ov_idx = 0
-            ov_idx, overlapping_node = is_overlapping_any_node_and_index(
-                node_to_move,
-                node_to_move.original_x,
-                node_to_move.original_y,
-                nodes_around_the_edge + nodes_by_size,
-                ov_idx,
-                idx + num_nodes_around_edge,
-            )
-            if overlapping_node is None:
-                new_x, new_y = prev_x, prev_y
-
-            if node_to_move.x == node_to_move.original_x:
-                # this is needed just in case the min x node is overlapping.
-                # then the orginal X is eual to the X where is moves and that give us a divide by zero
-                # when calculating the slope
-                # We wiggle it just a little bit to prevent an error
-                node_to_move.x += _EPSILON
-
-            # print ("contracting: %d, node_to_move %s, overlapping: %s" % (idx, str(node_to_move.to_list()), overlapping_node))
-            while (
-                overlapping_node is not None
-                and node_to_move.x != node_to_move.original_x
-            ):
-                # slope doesn't change leave as original_xy
-                slope_ca = (node_to_move.y - node_to_move.original_y) / (
-                    node_to_move.x - node_to_move.original_x
-                )
-                if node_to_move.node_id == overlapping_node.node_id:
-                    raise Exception(
-                        "They should not be the same node!! %s" % (node_to_move.node_id)
-                    )
-                if node_to_move.original_x == new_x:
-                    new_x += _EPSILON
-                a = dist_original_to_over = distance.euclidean(
-                    [node_to_move.original_x, node_to_move.original_y],
-                    [overlapping_node.x, overlapping_node.y],
-                )
-                b = dist_from_original_to_new = distance.euclidean(
-                    [node_to_move.original_x, node_to_move.original_y], [new_x, new_y]
-                )
-                c = dist_from_new_to_overlapping = distance.euclidean(
-                    [new_x, new_y], [overlapping_node.x, overlapping_node.y]
-                )
-                node_to_move.color = "#FF0004"  # RED
-                overlapping_node.color = "#F1FD00"  # Yellow
-                # print ("not None, a: %g, b: %g, c: %g" %(a, b, c), node_to_move.node_id, node_to_move.size, overlapping_node.size)
-                # print ("original(%g,%g), current(%g,%g), overlap(%g,%g)" %(node_to_move.original_x, node_to_move.original_y, new_x, new_y, overlapping_node.x, overlapping_node.y))
-                angle_c = math.acos((a ** 2 + b ** 2 - c ** 2) / (2 * a * b))
-                len_c_new = node_to_move.size + overlapping_node.size + _EPSILON
-                angle_a_new = math.asin(a * math.sin(angle_c) / len_c_new)
-                angle_b_new = 180 - math.degrees(angle_c) - math.degrees(angle_a_new)
-                new_len_b = (
-                    len_c_new * math.sin(math.radians(angle_b_new)) / math.sin(angle_c)
-                )
-                # print ("slope: %g, angle c: %g, new angle a: %g, newlenC: %g, new angle a: %g, new lenB %g" %(slope_ca, math.degrees(angle_c), math.degrees(angle_a_new), len_c_new, math.degrees(angle_a_new), new_len_b))
-                x_new_plus = node_to_move.original_x + math.sqrt(
-                    new_len_b ** 2 / (1 + slope_ca ** 2)
-                )
-                x_new_neg = node_to_move.original_x - math.sqrt(
-                    new_len_b ** 2 / (1 + slope_ca ** 2)
-                )
-                x_plus_diff = x_new_plus - new_x
-                x_neg_diff = x_new_neg - new_x
-                # print ("both outsize, plus diff: %g, minus diff: %g" %(x_plus_diff, x_neg_diff))
-                if abs(x_plus_diff) < abs(x_neg_diff):
-                    prev_x, prev_y = new_x, new_y
-                    new_x = x_new_plus
-                    new_y = prev_y - slope_ca * prev_x + slope_ca * x_new_plus
-                else:
-                    prev_x, prev_y = new_x, new_y
-                    new_x = x_new_neg
-                    new_y = prev_y - slope_ca * prev_x + slope_ca * x_new_neg
-                # print ("before: idx: %d, node: %s" %(ov_idx, str(overlapping_node.to_list()) ))
-                ov_idx, overlapping_node = is_overlapping_any_node_and_index(
-                    node_to_move,
-                    new_x,
-                    new_y,
-                    nodes_around_the_edge + nodes_by_size,
-                    0,
-                    idx + num_nodes_around_edge,
-                )
-                # print ("after: idx: %d, node: %s" %(ov_idx, str(overlapping_node is not None) ))
-            node_to_move.x = new_x
-            node_to_move.y = new_y
-
-            # if idx > 20: # only do a few in the first quad
-            # 	break
-
+        self._do_contraction_with_given_nodes(node_list=node_list)
         return
 
+    ### I wanted to add a little thank you to the webiste: https://www.calculator.net/triangle-calculator.html
+    ### it helped me debug the issues I was having in the calculation of the overlaps.
     def _do_contraction_with_given_nodes(self, node_list):
         logger.info("contracting nodes:%d" % (len(node_list)))
         nodes_by_size = sorted(node_list, key=lambda n: n.size, reverse=True)
-        nodes_around_the_edge = []
+        if self.parent is None:
+            #if we are at the root we can skip this check there is nothing just outside of the box
+            nodes_around_the_edge = []
+        else:
+            nodes_around_the_edge = self.get_nodes_near_lines(
+                self.get_top_quad_node().nodes
+            )
         num_nodes_around_edge = len(nodes_around_the_edge)
 
-        cells = {}
         for idx, node_to_move in enumerate(nodes_by_size):
             if idx % 100 == 0:
                 logger.info(f"processing {idx}")
@@ -991,7 +977,7 @@ class _SmartQuadNode:
             prev_x, prev_y = node_to_move.original_x, node_to_move.original_y
             new_x, new_y = node_to_move.x, node_to_move.y
             ov_idx = 0
-            ov_idx, overlapping_node = is_overlapping_any_node_and_index(
+            ov_idx, overlapping_node = get_overlapping_any_node_and_index(
                 node_to_move,
                 node_to_move.original_x,
                 node_to_move.original_y,
@@ -1002,12 +988,15 @@ class _SmartQuadNode:
             if overlapping_node is None:
                 new_x, new_y = prev_x, prev_y
 
-            if node_to_move.x == 0.0:
+            #if node_to_move.x == 0.0:
+            if node_to_move.x == node_to_move.original_x:
                 # this is needed just in case the min x node is overlapping.
                 # then the orginal X is equal to the X where is moves and that give us a divide by zero
                 # when calculating the slope
-                # We wiggle it just a little bit to make the math work
+                # We wiggle it just a little bit to prevent an error
                 node_to_move.x += _EPSILON
+            if node_to_move.y == node_to_move.original_y:
+                node_to_move.y += _EPSILON
 
             # print ("contracting: %d, node_to_move %s, overlapping: %s" % (idx, str(node_to_move.to_list()), overlapping_node))
             while (
@@ -1038,11 +1027,11 @@ class _SmartQuadNode:
                 # print ("original(%g,%g), current(%g,%g), overlap(%g,%g)" %(node_to_move.original_x, node_to_move.original_y, new_x, new_y, overlapping_node.x, overlapping_node.y))
                 denominator = 2 * a * b
                 if 0 == denominator:
-                    denominator = 0.00000001
+                    denominator = 0.0000001
                 value = (a ** 2 + b ** 2 - c ** 2) / denominator
-                if value > 1:
+                if value >= 1:
                     value = 0.999999
-                elif value < -1:
+                elif value <= -1:
                     value = -0.999999
                 angle_c = math.acos(value)
                 len_c_new = node_to_move.size + overlapping_node.size + _EPSILON
@@ -1051,7 +1040,7 @@ class _SmartQuadNode:
                 new_len_b = (
                     len_c_new * math.sin(math.radians(angle_b_new)) / math.sin(angle_c)
                 )
-                # print ("slope: %g, angle c: %g, new angle a: %g, newlenC: %g, new angle a: %g, new lenB %g" %(slope_ca, math.degrees(angle_c), math.degrees(angle_a_new), len_c_new, math.degrees(angle_a_new), new_len_b))
+                #print ("slope: %g, angle c: %g, new angle a: %g, newlenC: %g, new angle a: %g, new lenB %g" %(slope_ca, math.degrees(angle_c), math.degrees(angle_a_new), len_c_new, math.degrees(angle_a_new), new_len_b))
                 x_new_plus = node_to_move.original_x + math.sqrt(
                     new_len_b ** 2 / (1 + slope_ca ** 2)
                 )
@@ -1061,16 +1050,15 @@ class _SmartQuadNode:
                 x_plus_diff = x_new_plus - new_x
                 x_neg_diff = x_new_neg - new_x
                 # print ("both outsize, plus diff: %g, minus diff: %g" %(x_plus_diff, x_neg_diff))
+                prev_x, prev_y = new_x, new_y
                 if abs(x_plus_diff) < abs(x_neg_diff):
-                    prev_x, prev_y = new_x, new_y
                     new_x = x_new_plus
                     new_y = prev_y - slope_ca * prev_x + slope_ca * x_new_plus
                 else:
-                    prev_x, prev_y = new_x, new_y
                     new_x = x_new_neg
                     new_y = prev_y - slope_ca * prev_x + slope_ca * x_new_neg
-                # print ("before: idx: %d, node: %s" %(ov_idx, str(overlapping_node.to_list()) ))
-                ov_idx, overlapping_node = is_overlapping_any_node_and_index(
+                #print (f"before: idx: {ov_idx}, ov_node: {overlapping_node}, node_to_move: {node_to_move}, around: {len(nodes_around_the_edge)}, by_size: {len(nodes_by_size)}: new (x,y): ({new_x},{new_y})")
+                ov_idx, overlapping_node = get_overlapping_any_node_and_index(
                     node_to_move,
                     new_x,
                     new_y,
