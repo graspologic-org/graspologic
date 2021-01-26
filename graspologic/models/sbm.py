@@ -56,7 +56,8 @@ class SBMEstimator(BaseGraphEstimator):
     where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\tau` is an `n\_nodes`
     length vector specifying which block each node belongs to.
 
-    Read more in the :ref:`tutorials <models_tutorials>`
+    Read more in the `Stochastic Block Model (SBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html>`_
 
     Parameters
     ----------
@@ -243,7 +244,8 @@ class DCSBMEstimator(BaseGraphEstimator):
 
     where :math:`\theta` and :math:`\eta` need not be the same.
 
-    Read more in the :ref:`tutorials <models_tutorials>`
+    Read more in the `Stochastic Block Model (SBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html>`_
 
     Parameters
     ----------

@@ -18,7 +18,9 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     matrix to get probabilities between 0 and 1, or remove loops.
     A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+
+    Read more in the `Correlated Random Dot Product Graph (RDPG) Graph Pair Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/rdpg_corr.html>`_
 
     Parameters
     ----------

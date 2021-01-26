@@ -65,7 +65,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+docs/reference/_build/
+docs/tutorials/_build/
 
 # PyBuilder
 target/
@@ -123,3 +124,5 @@ notebooks/bpedigo
 *.DS_Store
 .idea
 *.iml
+pip-wheel-metadata
+

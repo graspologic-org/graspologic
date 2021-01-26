@@ -16,8 +16,6 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     the dimensionality to the specified k, or if k is unspecified, can find a number
     of dimensions automatically.
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
-
     Parameters
     ----------
     form : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional
@@ -141,8 +139,8 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        graph : array_like or networkx.Graph
-            Input graph to embed. see :func:`~graspologic.utils.import_graph`
+        graph : array-like, scipy.sparse.csr_matrix, or networkx.Graph
+            Input graph to embed. see graspologic.utils.import_graph
 
         Returns
         -------
@@ -160,7 +158,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
                 )
                 warnings.warn(msg, UserWarning)
 
-        self.n_features_in_ = len(A)
+        self.n_features_in_ = A.shape[0]
         L_norm = to_laplace(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
         return self

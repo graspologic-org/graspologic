@@ -8,10 +8,14 @@ from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
-from .base import BaseInference
+from collections import namedtuple
+
+lpt_result = namedtuple("lpt_result", ("p_value", "sample_T_statistic", "misc_stats"))
 
 
-class LatentPositionTest(BaseInference):
+def latent_position_test(
+    A1, A2, embedding="ase", n_components=None, test_case="rotation", n_bootstraps=500
+):
     r"""
     Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same latent positions.
@@ -21,10 +25,16 @@ class LatentPositionTest(BaseInference):
     have their vertices sorted in the same order. Currently, the function only
     supports undirected graphs.
 
-    Read more in the :ref:`tutorials <inference_tutorials>`
+    Read more in the `Latent Position Two-Graph Testing Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/inference/latent_position_test.html>`_
 
     Parameters
     ----------
+    A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        The two graphs to run a hypothesis test on.
+        If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
+        where ``n_vertices`` is the same for both
+
     embedding : string, { 'ase' (default), 'omnibus'}
         String describing the embedding method to use:
 
@@ -58,23 +68,26 @@ class LatentPositionTest(BaseInference):
     n_bootstraps : int, optional (default 500)
         Number of bootstrap simulations to run to generate the null distribution
 
-    Attributes
+    Returns
     ----------
-    null_distribution_1_, null_distribution_2_ : np.ndarray (n_bootstraps,)
-        The distribution of T statistics generated under the null, using the first and
-        and second input graph, respectively. The latent positions of each sample graph
-        are used independently to sample random dot product graphs, so two null
-        distributions are generated
+    p_value : float
+        The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'
 
-    sample_T_statistic_ : float
+    sample_T_statistic : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
 
-    p_value_1_, p_value_2_ : float
-        The p value estimated from the null distributions from sample 1 and sample 2.
+    misc_stats : dictionary
+        A collection of other statistics obtained from the latent position test
 
-    p_value_ : float
-        The overall p value from the test; this is the max of :attr:`p_value_1_` and :attr:`p_value_2_`
+        - 'p_value_1', 'p_value_2' : float
+            The p value estimate from the null distributions from sample 1 and sample 2
+
+        - 'null_distribution_1', 'null_distribution_2' : np.ndarray (n_bootstraps,)
+            The distribution of T statistics generated under the null, using the first and
+            and second input graph, respectively. The latent positions of each sample graph
+            are used independently to sample random dot product graphs, so two null
+            distributions are generated
 
     See also
     --------
@@ -89,129 +102,113 @@ class LatentPositionTest(BaseInference):
        Journal of Computational and Graphical Statistics, Vol. 26(2), 2017
     """
 
-    def __init__(
-        self, embedding="ase", n_components=None, n_bootstraps=500, test_case="rotation"
-    ):
-        if type(embedding) is not str:
-            raise TypeError("embedding must be str")
-        if type(n_bootstraps) is not int:
-            raise TypeError()
-        if type(test_case) is not str:
-            raise TypeError()
-        if n_bootstraps < 1:
-            raise ValueError(
-                "{} is invalid number of bootstraps, must be greater than 1".format(
-                    n_bootstraps
-                )
+    if type(embedding) is not str:
+        raise TypeError("embedding must be str")
+    if type(n_bootstraps) is not int:
+        raise TypeError()
+    if type(test_case) is not str:
+        raise TypeError()
+    if n_bootstraps < 1:
+        raise ValueError(
+            "{} is invalid number of bootstraps, must be greater than 1".format(
+                n_bootstraps
             )
-        if embedding not in ["ase", "omnibus"]:
-            raise ValueError("{} is not a valid embedding method.".format(embedding))
-        if test_case not in ["rotation", "scalar-rotation", "diagonal-rotation"]:
-            raise ValueError(
-                "test_case must be one of 'rotation', 'scalar-rotation',"
-                + "'diagonal-rotation'"
-            )
+        )
+    if embedding not in ["ase", "omnibus"]:
+        raise ValueError("{} is not a valid embedding method.".format(embedding))
+    if test_case not in ["rotation", "scalar-rotation", "diagonal-rotation"]:
+        raise ValueError(
+            "test_case must be one of 'rotation', 'scalar-rotation',"
+            + "'diagonal-rotation'"
+        )
 
-        super().__init__(n_components=n_components)
+    A1 = import_graph(A1)
+    A2 = import_graph(A2)
+    if not is_symmetric(A1) or not is_symmetric(A2):
+        raise NotImplementedError()  # TODO asymmetric case
+    if A1.shape != A2.shape:
+        raise ValueError("Input matrices do not have matching dimensions")
+    if n_components is None:
+        # get the last elbow from ZG for each and take the maximum
+        num_dims1 = select_dimension(A1)[0][-1]
+        num_dims2 = select_dimension(A2)[0][-1]
+        n_components = max(num_dims1, num_dims2)
+    X_hats = _embed(A1, A2, embedding, n_components)
+    sample_T_statistic = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
+    null_distribution_1 = _bootstrap(
+        X_hats[0], embedding, n_components, n_bootstraps, test_case
+    )
+    null_distribution_2 = _bootstrap(
+        X_hats[1], embedding, n_components, n_bootstraps, test_case
+    )
 
-        self.embedding = embedding
-        self.n_bootstraps = n_bootstraps
-        self.test_case = test_case
-        # paper uses these always, but could be kwargs eventually. need to test
-        self.rescale = False
-        self.loops = False
+    # using exact mc p-values (see, for example, Phipson and Smyth, 2010)
+    p_value_1 = (
+        len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 1
+    ) / (n_bootstraps + 1)
+    p_value_2 = (
+        len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 1
+    ) / (n_bootstraps + 1)
 
-    def _bootstrap(self, X_hat):
-        t_bootstrap = np.zeros(self.n_bootstraps)
-        for i in range(self.n_bootstraps):
-            A1_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
-            A2_simulated = rdpg(X_hat, rescale=self.rescale, loops=self.loops)
-            X1_hat_simulated, X2_hat_simulated = self._embed(
-                A1_simulated, A2_simulated, check_lcc=False
-            )
-            t_bootstrap[i] = self._difference_norm(X1_hat_simulated, X2_hat_simulated)
-        return t_bootstrap
+    p_value = max(p_value_1, p_value_2)
 
-    def _difference_norm(self, X1, X2):
-        if self.embedding in ["ase"]:
-            if self.test_case == "rotation":
-                pass
-            elif self.test_case == "scalar-rotation":
-                X1 = X1 / np.linalg.norm(X1, ord="fro")
-                X2 = X2 / np.linalg.norm(X2, ord="fro")
-            elif self.test_case == "diagonal-rotation":
-                normX1 = np.sum(X1 ** 2, axis=1)
-                normX2 = np.sum(X2 ** 2, axis=1)
-                normX1[normX1 <= 1e-15] = 1
-                normX2[normX2 <= 1e-15] = 1
-                X1 = X1 / np.sqrt(normX1[:, None])
-                X2 = X2 / np.sqrt(normX2[:, None])
-            aligner = OrthogonalProcrustes()
-            X1 = aligner.fit_transform(X1, X2)
-        return np.linalg.norm(X1 - X2)
+    misc_stats = {
+        "null_distribution_1": null_distribution_1,
+        "null_distribution_2_": null_distribution_2,
+        "p_value_1": p_value_1,
+        "p_value_2": p_value_2,
+    }
 
-    def _embed(self, A1, A2, check_lcc=True):
-        if self.embedding == "ase":
-            X1_hat = AdjacencySpectralEmbed(
-                n_components=self.n_components, check_lcc=check_lcc
-            ).fit_transform(A1)
-            X2_hat = AdjacencySpectralEmbed(
-                n_components=self.n_components, check_lcc=check_lcc
-            ).fit_transform(A2)
-        elif self.embedding == "omnibus":
-            X_hat_compound = OmnibusEmbed(
-                n_components=self.n_components, check_lcc=check_lcc
-            ).fit_transform((A1, A2))
-            X1_hat = X_hat_compound[0]
-            X2_hat = X_hat_compound[1]
-        return (X1_hat, X2_hat)
+    return lpt_result(p_value, sample_T_statistic, misc_stats)
 
-    def fit(self, A1, A2):
-        """
-        Fits the test to the two input graphs
 
-        Parameters
-        ----------
-        A1, A2 : nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-            The two graphs to run a hypothesis test on.
-            If np.ndarray, shape must be ``(n_vertices, n_vertices)`` for both graphs,
-            where ``n_vertices`` is the same for both
+def _bootstrap(
+    X_hat, embedding, n_components, n_bootstraps, test_case, rescale=False, loops=False
+):
+    t_bootstrap = np.zeros(n_bootstraps)
+    for i in range(n_bootstraps):
+        A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+        A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+        X1_hat_simulated, X2_hat_simulated = _embed(
+            A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
+        )
+        t_bootstrap[i] = _difference_norm(
+            X1_hat_simulated, X2_hat_simulated, embedding, test_case
+        )
+    return t_bootstrap
 
-        Returns
-        -------
-        self
-        """
-        A1 = import_graph(A1)
-        A2 = import_graph(A2)
-        if not is_symmetric(A1) or not is_symmetric(A2):
-            raise NotImplementedError()  # TODO asymmetric case
-        if A1.shape != A2.shape:
-            raise ValueError("Input matrices do not have matching dimensions")
-        if self.n_components is None:
-            # get the last elbow from ZG for each and take the maximum
-            num_dims1 = select_dimension(A1)[0][-1]
-            num_dims2 = select_dimension(A2)[0][-1]
-            self.n_components = max(num_dims1, num_dims2)
-        X_hats = self._embed(A1, A2)
-        sample_T_statistic = self._difference_norm(X_hats[0], X_hats[1])
-        null_distribution_1 = self._bootstrap(X_hats[0])
-        null_distribution_2 = self._bootstrap(X_hats[1])
 
-        # uisng exact mc p-values (see, for example, Phipson and Smyth, 2010)
-        p_value_1 = (
-            len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 1
-        ) / (self.n_bootstraps + 1)
-        p_value_2 = (
-            len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 1
-        ) / (self.n_bootstraps + 1)
+def _difference_norm(X1, X2, embedding, test_case):
+    if embedding in ["ase"]:
+        if test_case == "rotation":
+            pass
+        elif test_case == "scalar-rotation":
+            X1 = X1 / np.linalg.norm(X1, ord="fro")
+            X2 = X2 / np.linalg.norm(X2, ord="fro")
+        elif test_case == "diagonal-rotation":
+            normX1 = np.sum(X1 ** 2, axis=1)
+            normX2 = np.sum(X2 ** 2, axis=1)
+            normX1[normX1 <= 1e-15] = 1
+            normX2[normX2 <= 1e-15] = 1
+            X1 = X1 / np.sqrt(normX1[:, None])
+            X2 = X2 / np.sqrt(normX2[:, None])
+        aligner = OrthogonalProcrustes()
+        X1 = aligner.fit_transform(X1, X2)
+    return np.linalg.norm(X1 - X2)
 
-        p_value = max(p_value_1, p_value_2)
 
-        self.null_distribution_1_ = null_distribution_1
-        self.null_distribution_2_ = null_distribution_2
-        self.sample_T_statistic_ = sample_T_statistic
-        self.p_value_1_ = p_value_1
-        self.p_value_2_ = p_value_2
-        self.p_value_ = p_value
-
-        return self
+def _embed(A1, A2, embedding, n_components, check_lcc=True):
+    if embedding == "ase":
+        X1_hat = AdjacencySpectralEmbed(
+            n_components=n_components, check_lcc=check_lcc
+        ).fit_transform(A1)
+        X2_hat = AdjacencySpectralEmbed(
+            n_components=n_components, check_lcc=check_lcc
+        ).fit_transform(A2)
+    elif embedding == "omnibus":
+        X_hat_compound = OmnibusEmbed(
+            n_components=n_components, check_lcc=check_lcc
+        ).fit_transform((A1, A2))
+        X1_hat = X_hat_compound[0]
+        X2_hat = X_hat_compound[1]
+    return (X1_hat, X2_hat)

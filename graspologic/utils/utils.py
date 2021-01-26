@@ -5,12 +5,14 @@ import warnings
 from collections import Iterable
 from functools import reduce
 from pathlib import Path
-from typing import List, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import networkx as nx
 import numpy as np
 import pandas as pd
+import scipy.sparse
 from scipy.optimize import linear_sum_assignment
+from scipy.sparse import csr_matrix, diags, isspmatrix_csr
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
@@ -24,7 +26,7 @@ def import_graph(graph, copy=True):
     ----------
     graph: object
         Either array-like, shape (n_vertices, n_vertices) numpy array,
-        or an object of type networkx.Graph.
+        a scipy.sparse.csr_matrix, or an object of type networkx.Graph.
 
     copy: bool, (default=True)
         Whether to return a copied version of array. If False and input is np.array,
@@ -41,7 +43,7 @@ def import_graph(graph, copy=True):
     """
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
-    elif isinstance(graph, (np.ndarray, np.memmap)):
+    elif isinstance(graph, (np.ndarray, np.memmap, csr_matrix)):
         shape = graph.shape
         if len(shape) > 3:
             msg = "Input tensor must have at most 3 dimensions, not {}.".format(
@@ -60,6 +62,7 @@ def import_graph(graph, copy=True):
         out = check_array(
             graph,
             dtype=[np.float64, np.float32],
+            accept_sparse=True,
             ensure_2d=True,
             allow_nd=True,  # For omni tensor input
             ensure_min_features=min_features,
@@ -67,7 +70,10 @@ def import_graph(graph, copy=True):
             copy=copy,
         )
     else:
-        msg = "Input must be networkx.Graph or np.array, not {}.".format(type(graph))
+        msg = "Input must be networkx.Graph, np.array, or scipy.sparse.csr_matrix,\
+        not {}.".format(
+            type(graph)
+        )
         raise TypeError(msg)
     return out
 
@@ -157,19 +163,67 @@ def import_edgelist(
 
 
 def is_symmetric(X):
-    return np.array_equal(X, X.T)
+    return abs(X - X.T).sum() == 0
 
 
 def is_loopless(X):
     return not np.any(np.diag(X) != 0)
 
 
-def is_unweighted(X):
-    return ((X == 0) | (X == 1)).all()
+def is_unweighted(
+    graph: Union[
+        np.ndarray,
+        scipy.sparse.csr_matrix,
+        nx.Graph,
+        nx.DiGraph,
+        nx.MultiGraph,
+        nx.MultiDiGraph,
+    ],
+    weight_attribute: Any = "weight",
+):
+    """
+    Attempts to determine if the provided graph is weighted.
+
+    Parameters
+    ----------
+    graph : Union[np.ndarray, scipy.sparse.csr_matrix, nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDigraph]
+        The graph to test for weightedness. If a networkx graph, we can just ask it directly by querying the weight
+        attribute specified on every edge. It's possible an individual edge can be weighted but the full graph is not.
+        If an adjacency matrix defined by a numpy.ndarray or scipy.sparse.csr_matrix, we check every value; if
+        they are only 0 and 1, we claim the graph is unweighted.
+    weight_attribute : Any
+        Default is ``weight``. Only used for networkx, and used on the edge data dictionary as a key to look up the
+        weight.
+
+    Returns
+    -------
+    bool
+        True if unweighted, False if weighted
+
+    Raises
+    ------
+    TypeError
+        If the provided graph is not a numpy.ndarray, scipy.sparse.csr_matrix, or nx.Graph
+    """
+    if isinstance(graph, np.ndarray):
+        return ((graph == 0) | (graph == 1)).all()
+    elif isinstance(graph, csr_matrix):
+        # brute force.  if anyone has a better way, please PR
+        rows, columns = graph.nonzero()
+        for i in range(0, len(rows)):
+            if graph[rows[i], columns[i]] != 1 or graph[rows[i], columns[i]] != 0:
+                return False
+        return True
+    elif isinstance(graph, nx.Graph):
+        return nx.is_weighted(graph, weight=weight_attribute)
+    else:
+        raise TypeError(
+            "This function only works on numpy.ndarray or scipy.sparse.csr_matrix instances"
+        )
 
 
 def is_almost_symmetric(X, atol=1e-15):
-    return np.allclose(X, X.T, atol=atol)
+    return abs(X - X.T).max() <= atol
 
 
 def symmetrize(graph, method="avg"):
@@ -211,17 +265,21 @@ def symmetrize(graph, method="avg"):
            [1, 1, 1]])
     """
     # graph = import_graph(graph)
+    sparse = isspmatrix_csr(graph)
+    pac = scipy.sparse if sparse else np
+
     if method == "triu":
-        graph = np.triu(graph)
+        graph = pac.triu(graph)
     elif method == "tril":
-        graph = np.tril(graph)
+        graph = pac.tril(graph)
     elif method == "avg":
-        graph = (np.triu(graph) + np.tril(graph)) / 2
+        graph = (pac.triu(graph) + pac.tril(graph)) / 2
     else:
         msg = "You have not passed a valid parameter for the method."
         raise ValueError(msg)
-    # A = A + A' - diag(A)
-    graph = graph + graph.T - np.diag(np.diag(graph))
+
+    dia = diags(graph.diagonal()) if sparse else np.diag(np.diag(graph))
+    graph = graph + graph.T - dia
     return graph
 
 
@@ -241,7 +299,10 @@ def remove_loops(graph):
         the graph with self-loops (edges between the same node) removed.
     """
     graph = import_graph(graph)
-    graph = graph - np.diag(np.diag(graph))
+
+    dia = diags(graph.diagonal()) if isspmatrix_csr(graph) else np.diag(np.diag(graph))
+
+    graph = graph - dia
 
     return graph
 
@@ -260,7 +321,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     ----------
     graph: object
         Either array-like, (n_vertices, n_vertices) numpy array,
-        or an object of type networkx.Graph.
+        scipy.sparse.csr_matrix, or an object of type networkx.Graph.
 
     form: {'I-DAD' (default), 'DAD', 'R-DAD'}, string, optional
 
@@ -304,14 +365,15 @@ def to_laplace(graph, form="DAD", regularizer=None):
            [0.70710678, 0.        , 0.        ]])
 
     """
+
     valid_inputs = ["I-DAD", "DAD", "R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
 
     A = import_graph(graph)
 
-    in_degree = np.sum(A, axis=0)
-    out_degree = np.sum(A, axis=1)
+    in_degree = np.reshape(np.asarray(A.sum(axis=0)), (-1,))
+    out_degree = np.reshape(np.asarray(A.sum(axis=1)), (-1,))
 
     # regularize laplacian with parameter
     # set to average degree
@@ -332,14 +394,16 @@ def to_laplace(graph, form="DAD", regularizer=None):
         in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
         out_root = 1 / np.sqrt(out_degree)
 
+    diag = diags if isspmatrix_csr(graph) else np.diag
+
     in_root[np.isinf(in_root)] = 0
     out_root[np.isinf(out_root)] = 0
 
-    in_root = np.diag(in_root)  # just change to sparse diag for sparse support
-    out_root = np.diag(out_root)
+    in_root = diag(in_root)  # just change to sparse diag for sparse support
+    out_root = diag(out_root)
 
     if form == "I-DAD":
-        L = np.diag(in_degree) - A
+        L = diag(in_degree) - A
         L = in_root @ L @ in_root
     elif form == "DAD" or form == "R-DAD":
         L = out_root @ A @ in_root
@@ -384,12 +448,12 @@ def is_fully_connected(graph):
     >>> is_fully_connected(a)
     False
     """
-    if type(graph) is np.ndarray:
+    if isinstance(graph, (np.ndarray, csr_matrix)):
         if is_symmetric(graph):
             g_object = nx.Graph()
         else:
             g_object = nx.DiGraph()
-        graph = nx.from_numpy_array(graph, create_using=g_object)
+        graph = nx.to_networkx_graph(graph, create_using=g_object)
     if type(graph) in [nx.Graph, nx.MultiGraph]:
         return nx.is_connected(graph)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
@@ -577,7 +641,8 @@ def augment_diagonal(graph, weight=1):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray,
+        scipy.scr_matrix.
         Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
     weight: float/int
@@ -599,17 +664,19 @@ def augment_diagonal(graph, weight=1):
            [1. , 0.5, 0. ],
            [1. , 0. , 0.5]])
     """
+
     graph = import_graph(graph)
     graph = remove_loops(graph)
 
     divisor = graph.shape[0] - 1
 
-    in_degrees = np.sum(np.abs(graph), axis=0)
-    out_degrees = np.sum(np.abs(graph), axis=1)
-    degrees = (in_degrees + out_degrees) / 2
+    in_degrees = np.squeeze(np.asarray(abs(graph).sum(axis=0)))
+    out_degrees = np.squeeze(np.asarray(abs(graph).sum(axis=1)))
 
+    degrees = (in_degrees + out_degrees) / 2
     diag = weight * degrees / divisor
-    graph += np.diag(diag)
+
+    graph += diags(diag) if isspmatrix_csr(graph) else np.diag(diag)
 
     return graph
 
@@ -875,3 +942,150 @@ def remap_labels(
         return remapped_y_pred, label_map
     else:
         return remapped_y_pred
+
+
+def to_weighted_edge_list(
+    graph: Union[
+        List[Tuple[Any, Any, Union[float, int]]],
+        nx.Graph,
+        nx.DiGraph,
+        nx.MultiGraph,
+        nx.MultiDiGraph,
+        np.ndarray,
+        scipy.sparse.csr_matrix,
+    ],
+    is_directed: Optional[bool] = None,
+    is_weighted: Optional[bool] = None,
+    weight_attribute: Any = "weight",
+    weight_default: Optional[float] = None,
+) -> List[Tuple[str, str, float]]:
+    """
+    Creates a weighted edge list with string representations of the nodes and float
+    weights.
+
+    Parameters
+    ----------
+    graph : Union[List[Tuple[Any, Any, Union[float, int]]], nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, scipy.sparse.csr_matrix]
+        A representation of a graph either as a list of tuples, a networkx graph, or an
+        adjacency matrix from numpy or scipy.sparse.csr_matrix
+    is_directed : Optional[bool]
+        Default is ``None``. Ignored if an edge tuple list or networkx graph is
+        provided, but can be used to short circuit an exhaustive matrix symmetry check
+        for numpy and scipy matrices.
+    is_weighted : Optional[bool]
+        Default is ``None``. Ignored if an edge tuple list or networkx graph is
+        provided, but can be used to short circuit an exhaustive matrix weight check for
+        numpy and scipy matrices.
+    weight_attribute : Any
+        Default is the string ``weight``.  Used to retrieve the weight from networkx
+        edge attribute dictionary.
+    weight_default : Optional[float]
+        Default is ``None``. If given an unweighted graph, will use as a default weight
+        to output in the weighted edge list.
+
+    Raises
+    ------
+    TypeError
+        If the graph is not a type we support
+    ValueError
+        If an adjacency matrix shape is not :math:`n x n`
+        If the weight attribute on a networkx graph is not a float
+        If the adjacency matrix is unweighted and a default weight is not set
+
+    Returns
+    -------
+    List[Tuple[str, str, float]]
+        A list of edges for the type of graph.  Undirected graphs will only contain a
+        single entry for an edge between any two nodes.
+    """
+    # if we're already an edge list of str, str, float, return it
+    if weight_default is not None and not isinstance(weight_default, (float, int)):
+        raise TypeError("weight default must be a float or int")
+
+    if isinstance(graph, list):
+        if len(graph) == 0:
+            return graph
+        if not isinstance(graph[0], tuple) or len(graph[0]) != 3:
+            raise TypeError(
+                "If the provided graph is a list, it must be a list of tuples with 3 "
+                "values in the form of Tuple[Any, Any, Union[int, float]], you provided"
+                f"{type(graph[0])}, {repr(graph[0])}"
+            )
+        return [
+            (str(source), str(target), float(weight))
+            for source, target, weight in graph
+        ]
+
+    if isinstance(graph, nx.Graph):
+        # will catch all networkx graph types
+        try:
+            return [
+                (
+                    str(source),
+                    str(target),
+                    float(data.get(weight_attribute, weight_default)),
+                )
+                for source, target, data in graph.edges(data=True)
+            ]
+        except TypeError:
+            # None is returned for the weight if it doesn't exist and a weight_default
+            # is not set, which results in a TypeError when you call float(None)
+            raise ValueError(
+                f"The networkx graph provided did not contain a {weight_attribute} that"
+                " could be cast to float in one of the edges"
+            )
+
+    if isinstance(graph, (np.ndarray, csr_matrix)):
+        shape = graph.shape
+        if len(shape) != 2 or shape[0] != shape[1]:
+            raise ValueError(
+                "graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be "
+                "adjacency matrices with n x n shape"
+            )
+
+        if is_weighted is None:
+            is_weighted = not is_unweighted(graph)
+
+        if not is_weighted and weight_default is None:
+            raise ValueError(
+                "the adjacency matrix provided is not weighted and a default weight has"
+                " not been set"
+            )
+
+        if is_directed is None:
+            is_directed = not is_almost_symmetric(graph)
+
+        edges = []
+        if isinstance(graph, np.ndarray):
+            for i in range(0, shape[0]):
+                start = i if not is_directed else 0
+                for j in range(start, shape[1]):
+                    weight = graph[i][j]
+                    if weight != 0:
+                        if not is_weighted and weight == 1:
+                            weight = weight_default
+                        edges.append((str(i), str(j), float(weight)))
+        else:
+            edges = []
+            rows, columns = graph.nonzero()
+            for i in range(0, len(rows)):
+                row = rows[i]
+                column = columns[i]
+                if is_directed or (not is_directed and row <= column):
+                    edges.append((str(row), str(column), float(graph[row, column])))
+
+        return edges
+
+    raise TypeError(
+        f"The type of graph provided {type(graph)} is not a list of 3-tuples, networkx "
+        f"graph, numpy.ndarray, or scipy.sparse.csr_matrix"
+    )
+
+
+def suppress_common_warnings():
+    """
+    Suppresses common warnings that occur when using graspologic.
+    """
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+    warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
+    warnings.simplefilter("always", category=UserWarning)

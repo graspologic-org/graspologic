@@ -13,3 +13,7 @@ def test_drosphila_left():
 def test_drosphila_right():
     graph = load_drosophila_right()
     graph, labels = load_drosophila_right(return_labels=True)
+
+
+def test_load_mice():
+    data = load_mice()
