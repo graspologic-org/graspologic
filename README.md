@@ -51,7 +51,7 @@ And across the following versions of Python:
 If you try to use `graspologic` for a different platform than the ones listed and notice any unexpected behavior,
 please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users
 if we have concrete examples of things not working!
-
+<!--
 ### Python Dependencies
 `graspologic` has the following direct dependencies:
 ```
@@ -82,7 +82,7 @@ sphinxcontrib-rawfiles
 sphinx-rtd-theme
 ```
 
-Please note that `pandoc` will also [need to be installed for your system](https://pandoc.org/installing.html).
+Please note that `pandoc` will also [need to be installed for your system](https://pandoc.org/installing.html).-->
 
 # Installation Guide
 ## Install from pip
