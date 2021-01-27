@@ -827,6 +827,22 @@ def pairplot_with_gmm(
     Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
     data = pd.DataFrame(data=X)
     n_components = gmm.n_components
+    
+    # reformat covariances in preparation for ellipse plotting
+    if gmm.covariance_type == "tied":
+        covariances = np.repeat(
+            gmm.covariances_[np.newaxis, :, :], n_components, axis=0
+        )
+    elif gmm.covariance_type == "diag":
+        covariances = np.array([
+            np.diag(gmm.covariances_[i]) for i in range(n_components)
+        ])
+    elif gmm.covariance_type == "spherical":
+        covariances = np.array([
+            np.diag(np.repeat(gmm.covariances_[i], X.shape[1]))\
+                for i in range(n_components)
+        ])
+    
     # setting up the data DataFrame
     if labels is None:
         lab_names = [i for i in range(n_components)]
