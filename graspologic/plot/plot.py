@@ -827,7 +827,7 @@ def pairplot_with_gmm(
     Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
     data = pd.DataFrame(data=X)
     n_components = gmm.n_components
-    
+
     # reformat covariances in preparation for ellipse plotting
     if gmm.covariance_type == "tied":
         covariances = np.repeat(
@@ -844,7 +844,7 @@ def pairplot_with_gmm(
                 for i in range(n_components)
             ]
         )
-    
+
     # setting up the data DataFrame
     if labels is None:
         lab_names = [i for i in range(n_components)]
