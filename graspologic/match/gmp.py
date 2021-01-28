@@ -245,6 +245,9 @@ class GraphMatch(BaseEstimator):
             ``seeds_A`` and ``seeds_B`` are vertices which are known to be matched, that is,
             ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
 
+        S : 2d-array, square
+            A square similarity matrix
+
         Returns
         -------
         perm_inds_ : 1-d array, some shuffling of [0, n_vert)
