@@ -6,7 +6,7 @@ import csv
 import logging
 import networkx
 import numpy
-from typing import List
+from typing import List, AnyStr
 
 from graspologic.layouts import NodePosition, render
 from graspologic.layouts.auto import _scale_points, _covered_size
@@ -25,7 +25,7 @@ def _graph_from_positions(
         graph.add_node(np.node_id, x=np.x, y=np.y, size=np.size, community=np.community)
     return graph
 
-def _positions_and_sizes(filename: networkx.Graph, skip_header: bool):
+def _positions_and_sizes(filename: AnyStr, skip_header: bool):
     sizes = {}
     node_colors = {}
     positions = []
