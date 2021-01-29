@@ -916,7 +916,7 @@ def pairplot_with_gmm(
                     )
         # formatting
         if title:
-            pairplot.suptitle(title)
+            plt.suptitle(title)
         for i in range(dimensions):
             for j in range(dimensions):
                 if X.shape[1] == 2:
