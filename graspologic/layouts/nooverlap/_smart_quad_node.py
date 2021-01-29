@@ -325,10 +325,6 @@ class _SmartQuadNode:
         self.is_laid_out = False
         self.parent = parent
 
-        #TODO
-        #if we get the max size and the 2nd largest size we can make the size of the
-        #cells smaller, to potentially get more cells in each node that will in some
-        #cases make it so the don't have to bump up to the parent.
         self.max_size = max_node_size(self.nodes)
         self.circle_size = self.total_circle_size()
         self.square_size = self.total_square_size()
@@ -339,6 +335,8 @@ class _SmartQuadNode:
         self.cir_ratio = self.circle_size / self.tot_area
         if self.sq_ratio < 0:
             raise Exception(f"sq_ratio: {self.sq_ratio}, sq_size: {self.square_size}, tot_size: = {self.tot_area}, bounds: {self.extent}")
+        self.x_range = self.extent.x_range()
+        self.y_range = self.extent.y_range()
 
         self.total_basic_cells = self.get_total_basic_cells()
         self._find_center()
@@ -355,8 +353,6 @@ class _SmartQuadNode:
 
     def get_total_basic_cells(self):
         side_size = self.max_size * 2.0
-        self.x_range = self.extent.x_range()
-        self.y_range = self.extent.y_range()
         number_of_x_cells = self.x_range // side_size
         number_of_y_cells = self.y_range // side_size
         total_cells = number_of_y_cells * number_of_x_cells
@@ -414,7 +410,7 @@ class _SmartQuadNode:
             else None
         )
         self.SE = (
-            _SmartQuadNode(se_nodes, self.depth + 1, extent_sw, self.max_nodes_per_quad, self)
+            _SmartQuadNode(se_nodes, self.depth + 1, extent_se, self.max_nodes_per_quad, self)
             if len(se_nodes) > 0
             else None
         )
@@ -505,12 +501,9 @@ class _SmartQuadNode:
             stats_list.append(self._node_stats())
             return
 
-        has_children = False
         for quad in [self.NW, self.NE, self.SW, self.SE]:
             if quad is not None:
                 quad.get_stats_for_quad(max_depth, stats_list, magnification)
-                has_children = True
-        #if not has_children:
         stats_list.append(self._node_stats())
         return
 
@@ -968,6 +961,7 @@ class _SmartQuadNode:
                 self.get_top_quad_node().nodes
             )
         num_nodes_around_edge = len(nodes_around_the_edge)
+        nodes_to_consider = nodes_around_the_edge + nodes_by_size
 
         for idx, node_to_move in enumerate(nodes_by_size):
             if idx % 100 == 0:
@@ -981,7 +975,7 @@ class _SmartQuadNode:
                 node_to_move,
                 node_to_move.original_x,
                 node_to_move.original_y,
-                nodes_around_the_edge + nodes_by_size,
+                nodes_to_consider,
                 ov_idx,
                 idx + num_nodes_around_edge,
             )
@@ -1062,7 +1056,7 @@ class _SmartQuadNode:
                     node_to_move,
                     new_x,
                     new_y,
-                    nodes_around_the_edge + nodes_by_size,
+                    nodes_to_consider,
                     0,
                     idx + num_nodes_around_edge,
                 )
