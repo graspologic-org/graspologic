@@ -61,7 +61,7 @@ class _QuadTree:
         print (f"total quad nodes: {len(den_list)}")
         skipped = 0
         for cell_density, density_ratio, cell_count, qn in den_list:
-            print ('cell density', cell_density, 'cir_density', density_ratio, 'cell_count', cell_count, "nodes: ", qn.number_of_nodes(), "depth: ", qn.depth, "max node size", qn.max_size)
+            #print ('cell density', cell_density, 'cir_density', density_ratio, 'cell_count', cell_count, "nodes: ", qn.number_of_nodes(), "depth: ", qn.depth, "max node size", qn.max_size)
             skipped += qn.layout()
         print (f"skipped: {skipped} quad nodes")
         return self.nodes
