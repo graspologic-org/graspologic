@@ -200,9 +200,9 @@ def test_pairplot_outputs():
     )
 
 
-def test_pairplot_with_gmm_inputs():
+def _test_pairplot_with_gmm_inputs(**kws):
     X = np.random.rand(15, 3)
-    gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
+    gmm = GaussianMixture(n_components=3, **kws).fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
     # test data
     with pytest.raises(ValueError):
@@ -215,9 +215,25 @@ def test_pairplot_with_gmm_inputs():
         pairplot_with_gmm(X, gmm=None)
 
 
-def test_pairplot_with_gmm_outputs():
+def test_pairplot_with_gmm_inputs_type_full():
+    _test_pairplot_with_gmm_inputs(covariance_type="full")
+
+
+def test_pairplot_with_gmm_inputs_type_diag():
+    _test_pairplot_with_gmm_inputs(covariance_type="diag")
+
+
+def test_pairplot_with_gmm_inputs_type_tied():
+    _test_pairplot_with_gmm_inputs(covariance_type="tied")
+
+
+def test_pairplot_with_gmm_inputs_type_spherical():
+    _test_pairplot_with_gmm_inputs(covariance_type="spherical")
+
+
+def _test_pairplot_with_gmm_outputs(**kws):
     X = np.random.rand(15, 3)
-    gmm = GaussianMixture(n_components=3, covariance_type="full").fit(X)
+    gmm = GaussianMixture(n_components=3, **kws).fit(X)
     labels = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
     cluster_palette = {0: "red", 1: "blue", 2: "green"}
     label_palette = {"A": "red", "B": "blue", "C": "green"}
@@ -229,6 +245,22 @@ def test_pairplot_with_gmm_outputs():
         cluster_palette=cluster_palette,
         label_palette=label_palette,
     )
+
+
+def test_pairplot_with_gmm_outputs_type_full():
+    _test_pairplot_with_gmm_outputs(covariance_type="full")
+
+
+def test_pairplot_with_gmm_outputs_type_diag():
+    _test_pairplot_with_gmm_outputs(covariance_type="diag")
+
+
+def test_pairplot_with_gmm_outputs_type_tied():
+    _test_pairplot_with_gmm_outputs(covariance_type="tied")
+
+
+def test_pairplot_with_gmm_outputs_type_spherical():
+    _test_pairplot_with_gmm_outputs(covariance_type="spherical")
 
 
 def test_sort_inds():
