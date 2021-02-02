@@ -8,7 +8,7 @@ Transformations
 
 .. autofunction:: pass_to_ranks
 
-.. autofunction:: to_laplace
+.. autofunction:: to_laplacian
 
 .. autofunction:: augment_diagonal
 
@@ -21,11 +21,11 @@ Connected Components
 
 .. autofunction:: is_fully_connected
 
-.. autofunction:: get_lcc
+.. autofunction:: largest_connected_component
 
-.. autofunction:: get_multigraph_union_lcc
+.. autofunction:: multigraph_lcc_union
 
-.. autofunction:: get_multigraph_intersect_lcc
+.. autofunction:: multigraph_lcc_intersection
 
 IO
 --

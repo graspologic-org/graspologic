@@ -34,7 +34,7 @@ API Changes
 -----------
 - ``check_lcc`` argument in ``AdjacencySpectralEmbed``, ``LaplacianSpectralEmbed``, and ``OmnibusEmbed`` classes, which checks if input graph(s) are fully connected when ``check_lcc`` is True.
 - ``gridplot`` and ``heatmap`` now have a ``inner_hier_labels`` and ``outer_hier_labels``, which are used for hierarchical labeling of nodes.
-- ``to_laplace`` function now has ``regularizer`` arg for when ``form`` is 'R-DAD'.
+- ``to_laplacian`` function now has ``regularizer`` arg for when ``form`` is 'R-DAD'.
 - ``sbm`` function now has ``dc`` and ``dc_kws`` arguments for sampling SBM with degree-correction.
 
 Deprecations
