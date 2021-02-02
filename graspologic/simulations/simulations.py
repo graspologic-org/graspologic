@@ -3,7 +3,7 @@
 
 import numpy as np
 
-from ..utils import symmetrize, cartprod
+from ..utils import symmetrize, cartesian_product
 from sklearn.utils import check_array, check_scalar
 import warnings
 
@@ -596,7 +596,7 @@ def sbm(
             block_p = p[i, j]
             # identify submatrix for community i, j
             # cartesian product to identify edges for community i,j pair
-            cprod = cartprod(cmties[i], cmties[j])
+            cprod = cartesian_product(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
             pchoice = np.random.uniform(size=len(triu))

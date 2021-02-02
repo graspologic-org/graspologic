@@ -49,73 +49,73 @@ class TestToLaplace(unittest.TestCase):
         cls.A = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
         cls.B = np.array([[0, 1, 1, 1], [0, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 0]])
 
-    def test_to_laplace_IDAD(self):
+    def test_to_laplacian_IDAD(self):
         expected_L_normed = [
             [1, -1 / (sqrt(2)), 0],
             [-1 / (sqrt(2)), 1, -1 / (sqrt(2))],
             [0, -1 / (sqrt(2)), 1],
         ]
 
-        L_normed = gus.to_laplace(self.A, form="I-DAD")
+        L_normed = gus.to_laplacian(self.A, form="I-DAD")
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
-    def test_to_laplace_DAD(self):
+    def test_to_laplacian_DAD(self):
         expected_L_normed = [
             [0, 1 / sqrt(2), 0],
             [1 / sqrt(2), 0, 1 / sqrt(2)],
             [0, 1 / sqrt(2), 0],
         ]
 
-        L_normed = gus.to_laplace(self.A, form="DAD")
+        L_normed = gus.to_laplacian(self.A, form="DAD")
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
-    def test_to_laplace_RDAD(self):
+    def test_to_laplacian_RDAD(self):
         expected_L_normed = [
             [0, 3 / sqrt(70), 0],
             [3 / sqrt(70), 0, 3 / sqrt(70)],
             [0, 3 / sqrt(70), 0],
         ]
 
-        L_normed = gus.to_laplace(self.A, form="R-DAD")
+        L_normed = gus.to_laplacian(self.A, form="R-DAD")
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
-    def test_to_laplace_regularizer_kwarg(self):
+    def test_to_laplacian_regularizer_kwarg(self):
         expected_L_normed = [
             [0, 1 / sqrt(6), 0],
             [1 / sqrt(6), 0, 1 / sqrt(6)],
             [0, 1 / sqrt(6), 0],
         ]
-        L_normed = gus.to_laplace(self.A, form="R-DAD", regularizer=1.0)
+        L_normed = gus.to_laplacian(self.A, form="R-DAD", regularizer=1.0)
 
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
-    def test_to_laplace_symmetric(self):
-        L_normed = gus.to_laplace(self.A, form="DAD")
+    def test_to_laplacian_symmetric(self):
+        L_normed = gus.to_laplacian(self.A, form="DAD")
 
         self.assertTrue(gus.is_symmetric(L_normed))
 
-    def test_to_laplace_unsuported(self):
+    def test_to_laplacian_unsuported(self):
         with self.assertRaises(TypeError):
-            gus.to_laplace(self.A, form="MOM")
+            gus.to_laplacian(self.A, form="MOM")
 
-    def test_to_laplace_unsuported_regularizer(self):
+    def test_to_laplacian_unsuported_regularizer(self):
         with self.assertRaises(TypeError):
-            gus.to_laplace(self.A, form="R-DAD", regularizer="2")
+            gus.to_laplacian(self.A, form="R-DAD", regularizer="2")
         with self.assertRaises(TypeError):
-            gus.to_laplace(self.A, form="R-DAD", regularizer=[1, 2, 3])
+            gus.to_laplacian(self.A, form="R-DAD", regularizer=[1, 2, 3])
         with self.assertRaises(ValueError):
-            gus.to_laplace(self.A, form="R-DAD", regularizer=-1.0)
+            gus.to_laplacian(self.A, form="R-DAD", regularizer=-1.0)
 
-    def test_to_laplace_directed(self):
+    def test_to_laplacian_directed(self):
         expected_L_normed = [
             [0, 1 / 5, sqrt(5) / 10, 0.2],
             [0, 0, 0, sqrt(15) / 15],
             [0, sqrt(5) / 10, 0, sqrt(5) / 10],
             [0, sqrt(5) / 10, 0.25, 0],
         ]
-        L_normed = gus.to_laplace(self.B, form="R-DAD")
+        L_normed = gus.to_laplacian(self.B, form="R-DAD")
         self.assertTrue(np.allclose(L_normed, expected_L_normed, rtol=1e-04))
 
 
@@ -176,11 +176,11 @@ class TestLCC(unittest.TestCase):
         g.add_edge(3, 6)
         g.add_edge(6, 3)
         g.add_edge(4, 2)
-        lcc, nodelist = gus.get_lcc(g, return_inds=True)
+        lcc, nodelist = gus.largest_connected_component(g, return_inds=True)
         lcc_matrix = nx.to_numpy_array(lcc)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
         np.testing.assert_array_equal(nodelist, expected_nodelist)
-        lcc = gus.get_lcc(g)
+        lcc = gus.largest_connected_component(g)
         lcc_matrix = nx.to_numpy_array(lcc)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
@@ -203,11 +203,11 @@ class TestLCC(unittest.TestCase):
         g.add_edge(3, 6)
         g.add_edge(6, 3)
         g.add_edge(4, 2)
-        lcc, nodelist = gus.get_lcc(g, return_inds=True)
+        lcc, nodelist = gus.largest_connected_component(g, return_inds=True)
         lcc_matrix = nx.to_numpy_array(lcc)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
         np.testing.assert_array_equal(nodelist, expected_nodelist)
-        lcc = gus.get_lcc(g)
+        lcc = gus.largest_connected_component(g)
         lcc_matrix = nx.to_numpy_array(lcc)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
@@ -232,10 +232,10 @@ class TestLCC(unittest.TestCase):
         g.add_edge(6, 3)
         g.add_edge(4, 2)
         g = nx.to_numpy_array(g)
-        lcc_matrix, nodelist = gus.get_lcc(g, return_inds=True)
+        lcc_matrix, nodelist = gus.largest_connected_component(g, return_inds=True)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
         np.testing.assert_array_equal(nodelist, expected_nodelist)
-        lcc_matrix = gus.get_lcc(g)
+        lcc_matrix = gus.largest_connected_component(g)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
 
     def test_multigraph_lcc_numpystack(self):
@@ -261,7 +261,7 @@ class TestLCC(unittest.TestCase):
         f.add_edge(3, 1)
         f = nx.to_numpy_array(f)
         g = nx.to_numpy_array(g)
-        lccs, nodelist = gus.get_multigraph_intersect_lcc(
+        lccs, nodelist = gus.multigraph_lcc_intersection(
             np.stack([f, g]), return_inds=True
         )
         for i, graph in enumerate(lccs):
@@ -291,7 +291,7 @@ class TestLCC(unittest.TestCase):
         expected_mats = [expected_g_lcc, expected_f_lcc]
         expected_nodelist = np.array([1, 3, 4])
 
-        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g], return_inds=True)
+        lccs, nodelist = gus.multigraph_lcc_intersection([f, g], return_inds=True)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
@@ -319,11 +319,11 @@ class TestLCC(unittest.TestCase):
         f.add_edge(3, 1)
         f = nx.to_numpy_array(f)
         g = nx.to_numpy_array(g)
-        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g], return_inds=True)
+        lccs, nodelist = gus.multigraph_lcc_intersection([f, g], return_inds=True)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
-        lccs = gus.get_multigraph_intersect_lcc([f, g], return_inds=False)
+        lccs = gus.multigraph_lcc_intersection([f, g], return_inds=False)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(graph, expected_mats[i])
 
@@ -348,11 +348,11 @@ class TestLCC(unittest.TestCase):
         f.add_edge(5, 4)
         f.remove_edge(4, 2)
         f.add_edge(3, 1)
-        lccs, nodelist = gus.get_multigraph_intersect_lcc([f, g], return_inds=True)
+        lccs, nodelist = gus.multigraph_lcc_intersection([f, g], return_inds=True)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(nx.to_numpy_array(graph), expected_mats[i])
             np.testing.assert_array_equal(nodelist, expected_nodelist)
-        lccs = gus.get_multigraph_intersect_lcc([f, g], return_inds=False)
+        lccs = gus.multigraph_lcc_intersection([f, g], return_inds=False)
         for i, graph in enumerate(lccs):
             np.testing.assert_array_equal(nx.to_numpy_array(graph), expected_mats[i])
 
@@ -360,8 +360,8 @@ class TestLCC(unittest.TestCase):
         A = np.array([[0, 1, 0], [1, 0, 0], [0, 0, 0]])
         B = np.array([[0, 0, 0], [0, 0, 1], [0, 1, 0]])
 
-        out_list = gus.get_multigraph_union_lcc([A, B])
-        out_tensor = gus.get_multigraph_union_lcc(np.stack([A, B]))
+        out_list = gus.multigraph_lcc_union([A, B])
+        out_tensor = gus.multigraph_lcc_union(np.stack([A, B]))
 
         np.testing.assert_equal(out_list, [A, B])
         np.testing.assert_array_equal(out_tensor, np.stack([A, B]))
@@ -409,7 +409,7 @@ class TestDiagonalAugment(unittest.TestCase):
     def test_lcc_bad_matrix(self):
         A = np.array([0, 1])
         with self.assertRaises(ValueError):
-            gus.get_lcc(A)
+            gus.largest_connected_component(A)
 
 
 def test_binarize():
