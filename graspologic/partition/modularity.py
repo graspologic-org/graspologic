@@ -70,7 +70,7 @@ def modularity(
     Returns
     -------
     float
-            The sum of the modularity of each of the communities.
+                The sum of the modularity of each of the communities.
 
     Raises
     ------
