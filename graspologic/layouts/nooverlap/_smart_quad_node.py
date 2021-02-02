@@ -138,14 +138,13 @@ class _SmartCell:
         self.children = {}
 
     def add_node (self, node: _Node) -> Tuple[bool, float, float]:
+        print (f"SmartCell Add node")
         if self.is_full():
             raise Exception(f"Can't add node to full _SmartCell, size: {node.size}")
         center_x, center_y = 0.0, 0.0
         if len(self.children) > 0:
-            # if we get in here we might be full after we leave we need
-            #to verify that
             col, row, new_bounds = self.find_cell_and_bounds(node)
-            if self.contains( col, row):
+            if self.contains(col, row):
                 child_cell = self.get_child_cell(col, row)
             else:
                 child_cell = _SmartCell(new_bounds, self.children_size)
@@ -155,33 +154,43 @@ class _SmartCell:
             #we need to find another one
             if not child_cell.is_full():
                 center_x, center_y = child_cell.add_node(node)
+                #need to check if it is full after adding
                 self.full = child_cell.is_full() and self.are_others_full_by_cell(child_cell)
             else:
-                #brute force search for new cell. TODO: FIX THIS
-                num_checked = 0
-                c, r = 0,0
-                breaking = False
-                for c in range(self.columns):
-                    for r in range(self.rows):
-                        num_checked += 1
-                        if self.contains(c, r):
-                            child_cell = self.get_child_cell(c, r)
-                            if not child_cell.is_full():
-                                center_x, center_y = child_cell.add_node(node)
-                                breaking = True
-                                break
-                        else:
-                            new_bounds = self.bounds_for_cell(c, r)
-                            child_cell = _SmartCell(new_bounds, self.children_size)
-                            self.children[(c, r)] = child_cell
-                            center_x, center_y = child_cell.add_node(node)
-                            breaking = True
-                            break
-                    if breaking:
-                        break
-                # if we put the last child in there then we are full.
-                #print (f"checking to see if we should be full, checked: {num_checked}, rxc: {self.rows * self.columns} child_full: {child_cell.is_full()}, c: {c}, r: {r}, others: {self.are_others_full(c,r)}")
-                self.full = child_cell.is_full() and self.are_others_full(c,r)
+                print (f"child cell was full need to find a new location ({col}, {row})")
+                col, row = self.find_free_cell(col, row)
+                child_cell = self.get_child_cell(col, row)
+                if child_cell.is_full():
+                    new_bounds = self.bounds_for_cell(col, row)
+                    child_cell = _SmartCell(new_bounds, self.children_size)
+                    self.children[(col, row)] = child_cell
+                center_x, center_y = child_cell.add_node(node)
+                self.full = child_cell.is_full() and self.are_others_full(col,row)
+                ##brute force search for new cell. TODO: FIX THIS
+                #num_checked = 0
+                #c, r = 0,0
+                #breaking = False
+                #for c in range(self.columns):
+                #    for r in range(self.rows):
+                #        num_checked += 1
+                #        if self.contains(c, r):
+                #            child_cell = self.get_child_cell(c, r)
+                #            if not child_cell.is_full():
+                #                center_x, center_y = child_cell.add_node(node)
+                #                breaking = True
+                #                break
+                #        else:
+                #            new_bounds = self.bounds_for_cell(c, r)
+                #            child_cell = _SmartCell(new_bounds, self.children_size)
+                #            self.children[(c, r)] = child_cell
+                #            center_x, center_y = child_cell.add_node(node)
+                #            breaking = True
+                #            break
+                #    if breaking:
+                #        break
+                ## if we put the last child in there then we are full.
+                ##print (f"checking to see if we should be full, checked: {num_checked}, rxc: {self.rows * self.columns} child_full: {child_cell.is_full()}, c: {c}, r: {r}, others: {self.are_others_full(c,r)}")
+                #self.full = child_cell.is_full() and self.are_others_full(c,r)
         else:
             if node.size >= self.size/2:
                 #this Cell can only fit one node, set it and mark full
@@ -191,6 +200,7 @@ class _SmartCell:
                 center_x = self.bounds.min_x + self.size/2
                 center_y = self.bounds.min_y + self.size/2
             else:
+                print (f"dividing cell")
                 # This is the first time we are dividing into children nodes
                 #first find the cell we should be in, then create the cell
                 # we are guaranteed to not be full after this
@@ -230,8 +240,6 @@ class _SmartCell:
                     return False
         return True
 
-
-
     def get_child_cell(self, col: int, row: int):
         return self.children[(col, row)]
 
@@ -241,7 +249,7 @@ class _SmartCell:
     def contains(self, col: int, row: int):
         return (col, row) in self.children
 
-    def bounds_for_cell(self, col: int, row: int):
+    def bounds_for_cell(self, col: int, row: int) -> Extent:
         side_size = self.children_size
         min_x = self.bounds.min_x+(col*side_size)
         min_y = self.bounds.min_y+(row*side_size)
@@ -255,7 +263,7 @@ class _SmartCell:
         center_y = self.bounds.min_y + row*self.size + self.size/2
         return center_x, center_y
 
-    def find_cell_and_bounds(self, node: _Node):
+    def find_cell_and_bounds(self, node: _Node) -> Tuple[int, int, Extent]:
         # zero the cordinates
         side_size = self.children_size
         zeroed_x = node.x - self.bounds.min_x
@@ -264,6 +272,87 @@ class _SmartCell:
         row = int(zeroed_y // side_size)
         bounds = self.bounds_for_cell(column, row)
         return column, row, bounds
+
+    def find_free_cell(
+        self, col: int, row: int
+    ) -> Tuple[int, int]:
+        print (f"finding free_cell ({col},{row})")
+        #side_size = self.children_size
+        new_col, new_row = col, row
+        distance_to_move = 1
+        count = 0
+        done = True
+        while (new_col, new_row) in self.children or not done:
+            done = False
+            # go right
+            # print ('newx:', new_col+1, 'end x', new_col+distance_to_move+1)
+            for new_col in range(new_col + 1, new_col + distance_to_move + 1):
+                # print ("ffc-r (%g,%g) to_move %d"  %(new_col, new_row, distance_to_move))
+                if (
+                    not (new_col, new_row) in self.children
+                    and new_col < self.columns
+                    and new_row < self.rows
+                    and new_col >= 0
+                    and new_row >= 0
+                ):
+                    # print('breaking-r')
+                    done = True
+                    break
+            if done:
+                break
+            # go up
+            for new_row in range(new_row + 1, new_row + distance_to_move + 1):
+                # print ("ffc-u (%g,%g) to_move %d"  %(new_x, new_row, distance_to_move))
+                if (
+                    not (new_col, new_row) in self.children
+                    and new_col < self.columns
+                    and new_row < self.rows
+                    and new_col >= 0
+                    and new_row >= 0
+                ):
+                    # print('breaking-u')
+                    done = True
+                    break
+            distance_to_move += 1
+            if done:
+                break
+            # go left
+            # print ('about to go left, %g, %g' %(new_col, new_row))
+            for new_col in range(new_col - 1, new_col - distance_to_move - 1, -1):
+                # print ("ffc-l (%g,%g) to_move %d"  %(new_col, new_row, distance_to_move))
+                if (
+                    not (new_col, new_row) in self.children
+                    and new_col < self.columns
+                    and new_row < self.rows
+                    and new_col >= 0
+                    and new_row >= 0
+                ):
+                    # print('breaking-l')
+                    done = True
+                    break
+            if done:
+                break
+            # go down
+            for new_row in range(new_row - 1, new_row - distance_to_move - 1, -1):
+                # print ("ffc-d (%g,%g) to_move %d"  %(new_col, new_row, distance_to_move))
+                if (
+                    not (new_col, new_row) in self.children
+                    and new_col < self.columns
+                    and new_row < self.rows
+                    and new_col >= 0
+                    and new_row >= 0
+                ):
+                    # print('breaking-d')
+                    done = True
+                    break
+            distance_to_move += 1
+            if done:
+                break
+            # keep going
+            # print ("ALL FULL", count)
+            count += 1
+
+        return new_col, new_row #, min_x + side_size * new_x, min_y + side_size * new_row
 
 class _SmartGrid:
     def __init__(self, bounds: Extent, max_node_size: float) -> None:
@@ -481,7 +570,7 @@ class _SmartQuadNode:
                     self.extent.max_y,
                     self.circle_size / self.tot_area,
                     self.total_basic_cells,
-                    len(self.nodes)
+                    self.num_nodes
                 ]
     def _node_stats_header(self):
         return [
@@ -516,87 +605,6 @@ class _SmartQuadNode:
         y_cell = int(zeroed_y // side_size)
         return x_cell, y_cell, min_x + side_size * x_cell, min_y + side_size * y_cell
 
-    #### This method could be must more intelligent about how to find the next free cell
-    def find_free_cell(
-        self, cells, x, y, num_x_cells, num_y_cells, min_x, min_y, max_size
-    ):
-        # zero the cordinates
-        square_size = max_size * 2
-        new_x, new_y = x, y
-        distance_to_move = 1
-        count = 0
-        done = True
-        while (new_x, new_y) in cells or not done:
-            done = False
-            # go right
-            # print ('newx:', new_x+1, 'end x', new_x+distance_to_move+1)
-            for new_x in range(new_x + 1, new_x + distance_to_move + 1):
-                # print ("ffc-r (%g,%g) to_move %d"  %(new_x, new_y, distance_to_move))
-                if (
-                    not (new_x, new_y) in cells
-                    and new_x < num_x_cells
-                    and new_y < num_y_cells
-                    and new_x >= 0
-                    and new_y >= 0
-                ):
-                    # print('breaking-r')
-                    done = True
-                    break
-            if done:
-                break
-            # go up
-            for new_y in range(new_y + 1, new_y + distance_to_move + 1):
-                # print ("ffc-u (%g,%g) to_move %d"  %(new_x, new_y, distance_to_move))
-                if (
-                    not (new_x, new_y) in cells
-                    and new_x < num_x_cells
-                    and new_y < num_y_cells
-                    and new_x >= 0
-                    and new_y >= 0
-                ):
-                    # print('breaking-u')
-                    done = True
-                    break
-            distance_to_move += 1
-            if done:
-                break
-            # go left
-            # print ('about to go left, %g, %g' %(new_x, new_y))
-            for new_x in range(new_x - 1, new_x - distance_to_move - 1, -1):
-                # print ("ffc-l (%g,%g) to_move %d"  %(new_x, new_y, distance_to_move))
-                if (
-                    not (new_x, new_y) in cells
-                    and new_x < num_x_cells
-                    and new_y < num_y_cells
-                    and new_x >= 0
-                    and new_y >= 0
-                ):
-                    # print('breaking-l')
-                    done = True
-                    break
-            if done:
-                break
-            # go down
-            for new_y in range(new_y - 1, new_y - distance_to_move - 1, -1):
-                # print ("ffc-d (%g,%g) to_move %d"  %(new_x, new_y, distance_to_move))
-                if (
-                    not (new_x, new_y) in cells
-                    and new_x < num_x_cells
-                    and new_y < num_y_cells
-                    and new_x >= 0
-                    and new_y >= 0
-                ):
-                    # print('breaking-d')
-                    done = True
-                    break
-            distance_to_move += 1
-            if done:
-                break
-            # keep going
-            # print ("ALL FULL", count)
-            count += 1
-
-        return new_x, new_y, min_x + square_size * new_x, min_y + square_size * new_y
 
     def layout_node_list(self, bounds : Extent, max_size : float, node_list: List[_Node]) -> bool:
         """
@@ -716,9 +724,11 @@ class _SmartQuadNode:
             while not did_fit:
                 logger.info (
                     f"Did not fit current level {current.depth}, "
-                    f"sq_ratio: {current.sq_ratio}, sq_size: {current.square_size} "
+                    f"sq_ratio: {current.sq_ratio}, sq_size: {current.square_size}, "
+                    f"total size: {current.tot_area}, basic cells: {current.total_basic_cells}, "
                     f"nodes: {current.num_nodes}, bounds: {current.extent} "
-                    f"total size: {current.tot_area}"
+                    f"x_range: {current.x_range}, y_range: {current.y_range} "
+                    f"max node size: {current.max_size}, "
                  )
                 current = current.parent
                 if current is None:
