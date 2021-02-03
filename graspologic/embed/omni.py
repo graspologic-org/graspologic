@@ -178,7 +178,7 @@ class OmnibusEmbed(BaseEmbedMulti):
                 msg = (
                     "Input graphs are not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.get_multigraph_union_lcc``."
+                    + "using ``graspologic.utils.multigraph_lcc_union``."
                 )
                 warnings.warn(msg, UserWarning)
 
