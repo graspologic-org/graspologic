@@ -1,6 +1,9 @@
 #%%
-from .base import BaseSpectralEmbed
-from ..utils import import_graph
+from graspologic.utils import import_graph, to_laplacian
+from graspologic.embed.base import BaseSpectralEmbed
+
+# from .base import BaseSpectralEmbed
+# from ..utils import import_graph, to_laplacian
 import numpy as np
 
 
@@ -14,13 +17,14 @@ class CASC(BaseSpectralEmbed):
     def fit(self, graph, covariates, y=None):
         self.is_fitted_ = True
         X = import_graph(graph)
-        # L =
+        L = to_laplacian(X)
 
     def transform(self, graph, y=None):
         A = import_graph(graph)
         pass
 
 
+#%%
 from graspologic.embed.ase import AdjacencySpectralEmbed
 
 # A good initial choice of a is the value which makes the leading eigenvalues of LL and aXX^T equal, namely
