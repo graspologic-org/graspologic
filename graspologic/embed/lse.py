@@ -4,7 +4,7 @@
 import warnings
 
 from .base import BaseSpectralEmbed
-from ..utils import import_graph, to_laplace, is_fully_connected
+from ..utils import import_graph, to_laplacian, is_fully_connected
 
 
 class LaplacianSpectralEmbed(BaseSpectralEmbed):
@@ -15,8 +15,6 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     of the graph based on its Laplacian matrix. It relies on an SVD to reduce
     the dimensionality to the specified k, or if k is unspecified, can find a number
     of dimensions automatically.
-
-    Read more in the :ref:`tutorials <embed_tutorials>`
 
     Parameters
     ----------
@@ -83,7 +81,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     --------
     graspologic.embed.selectSVD
     graspologic.embed.select_dimension
-    graspologic.utils.to_laplace
+    graspologic.utils.to_laplacian
 
     Notes
     -----
@@ -141,8 +139,8 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        graph : array_like or networkx.Graph
-            Input graph to embed. see :func:`~graspologic.utils.import_graph`
+        graph : array-like, scipy.sparse.csr_matrix, or networkx.Graph
+            Input graph to embed. see graspologic.utils.import_graph
 
         Returns
         -------
@@ -156,11 +154,11 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.get_lcc``."
+                    + "using ``graspologic.utils.largest_connected_component``."
                 )
                 warnings.warn(msg, UserWarning)
 
-        self.n_features_in_ = len(A)
-        L_norm = to_laplace(A, form=self.form, regularizer=self.regularizer)
+        self.n_features_in_ = A.shape[0]
+        L_norm = to_laplacian(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
         return self

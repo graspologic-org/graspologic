@@ -32,8 +32,8 @@ def _filter_function_for_make_cuts(
 class DefinedHistogram(NamedTuple):
     """
     Contains the histogram and the edges of the bins in the histogram.
-    The bin_edges will have a length 1 greater than the histogram, as it defines the minimal and maximal edges as well
-    as each edge in between.
+    The bin_edges will have a length 1 greater than the histogram, as it defines the
+    minimal and maximal edges as well as each edge in between.
     """
 
     histogram: np.ndarray
@@ -46,8 +46,9 @@ def histogram_edge_weight(
     weight_attribute: str = "weight",
 ) -> DefinedHistogram:
     """
-    Generates a histogram of the edge weights of the provided graph. Histogram function is fundamentally proxied
-    through to numpy's `histogram` function, and bin selection follows :func:`numpy.histogram` processes.
+    Generates a histogram of the edge weights of the provided graph. Histogram function
+    is fundamentally proxied through to numpy's `histogram` function, and bin selection
+    follows :func:`numpy.histogram` processes.
 
     Parameters
     ----------
@@ -55,27 +56,32 @@ def histogram_edge_weight(
     graph : nx.Graph
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
-        Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
+        Is passed directly through to numpy's "histogram" (and thus,
+        "histogram_bin_edges") functions.
 
         See: :func:`numpy.histogram_bin_edges`
 
-        In short: if an int is provided, we use ``bin_directive`` number of equal range bins.
+        In short: if an int is provided, we use ``bin_directive`` number of equal range
+        bins.
 
-        If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
+        If a sequence is provided, these bin edges will be used and can be sized to
+        whatever size you prefer
 
-        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be float or int.
+        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be
+        float or int.
     weight_attribute : str
         The weight attribute name in the data dictionary. Default is `weight`.
 
     Returns
     -------
-    DefinedHistogram
-        A named tuple that contains the histogram and the bin_edges used in the histogram
+    :class:`DefinedHistogram`
+        A named tuple that contains the histogram and the bin_edges used in the
+        histogram
 
     Notes
     -----
-    Edges without a `weight_attribute` field will be excluded from this histogram.  Enable logging to view any
-    messages about edges without weights.
+    Edges without a `weight_attribute` field will be excluded from this histogram.
+    Enable logging to view any messages about edges without weights.
     """
     logger = logging.getLogger(__name__)
     edge_weights: List[Union[int, float, None]] = [
@@ -114,8 +120,8 @@ def cut_edges_by_weight(
     cut_threshold : Union[int, float]
         The threshold for making cuts based on weight.
     cut_process : str
-        Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
-        exclusive or inclusive. Allowed values are
+        Describes how we should make the cut; cut all edges larger or smaller than the
+        cut_threshold, and whether exclusive or inclusive. Allowed values are
 
         - ``larger_than_inclusive``
         - ``larger_than_exclusive``
@@ -124,8 +130,9 @@ def cut_edges_by_weight(
     weight_attribute : str
         The weight attribute name in the edge's data dictionary. Default is `weight`.
     prune_isolates : bool
-        If true, remove any vertex that no longer has an edge.  Note that this only prunes vertices which have edges to
-        be pruned; any isolate vertex prior to any edge cut will be retained.
+        If true, remove any vertex that no longer has an edge.  Note that this only
+        prunes vertices which have edges to be pruned; any isolate vertex prior to any
+        edge cut will be retained.
 
     Returns
     -------
@@ -134,13 +141,14 @@ def cut_edges_by_weight(
 
     Notes
     -----
-    Edges without a `weight_attribute` field will be excluded from these cuts.  Enable logging to view any messages
-    about edges without weights.
+    Edges without a `weight_attribute` field will be excluded from these cuts.  Enable
+    logging to view any messages about edges without weights.
     """
     filter_by = _filter_function_for_make_cuts(cut_threshold, cut_process)
     if not isinstance(cut_threshold, int) and not isinstance(cut_threshold, float):
         raise TypeError(
-            f"cut_threshold must be of type int or float; you provided: {type(cut_threshold)}"
+            f"cut_threshold must be of type int or float; you provided: "
+            f"{type(cut_threshold)}"
         )
 
     logger = logging.getLogger(__name__)
@@ -185,8 +193,9 @@ def histogram_degree_centrality(
     bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
 ) -> DefinedHistogram:
     """
-    Generates a histogram of the vertex degree centrality of the provided graph. Histogram function is fundamentally
-    proxied through to numpy's `histogram` function, and bin selection follows :func:`numpy.histogram` processes.
+    Generates a histogram of the vertex degree centrality of the provided graph.
+    Histogram function is fundamentally proxied through to numpy's `histogram` function,
+    and bin selection follows :func:`numpy.histogram` processes.
 
     Parameters
     ----------
@@ -194,20 +203,25 @@ def histogram_degree_centrality(
     graph : Union[nx.Graph, nx.DiGraph]
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
-        Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
+        Is passed directly through to numpy's "histogram" (and thus,
+        "histogram_bin_edges") functions.
 
         See: :func:`numpy.histogram_bin_edges`
 
-        In short: if an int is provided, we use ``bin_directive`` number of equal range bins.
+        In short: if an int is provided, we use ``bin_directive`` number of equal range
+        bins.
 
-        If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
+        If a sequence is provided, these bin edges will be used and can be sized to
+        whatever size you prefer
 
-        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be float or int.
+        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be
+        float or int.
 
     Returns
     -------
-    DefinedHistogram
-        A named tuple that contains the histogram and the bin_edges used in the histogram
+    :class:`DefinedHistogram`
+        A named tuple that contains the histogram and the bin_edges used in the
+        histogram
     """
 
     degree_centrality_dict = nx.degree_centrality(graph)
@@ -223,8 +237,8 @@ def cut_vertices_by_degree_centrality(
     cut_process: str,
 ) -> Union[nx.Graph, nx.DiGraph]:
     """
-    Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
-    cut_threshold.
+    Given a graph and a cut_threshold and a cut_process, return a copy of the graph
+    with the vertices outside of the cut_threshold.
 
     Parameters
     ----------
@@ -233,8 +247,8 @@ def cut_vertices_by_degree_centrality(
     cut_threshold : Union[int, float]
         The threshold for making cuts based on weight.
     cut_process : str
-        Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
-        exclusive or inclusive. Allowed values are
+        Describes how we should make the cut; cut all edges larger or smaller than the
+        cut_threshold, and whether exclusive or inclusive. Allowed values are
 
         - ``larger_than_inclusive``
         - ``larger_than_exclusive``
@@ -266,47 +280,56 @@ def histogram_betweenness_centrality(
     random_seed: Optional[Union[int, random.Random, np.random.RandomState]] = None,
 ) -> DefinedHistogram:
     """
-    Generates a histogram of the vertex betweenness centrality of the provided graph. Histogram function is
-    fundamentally proxied through to numpy's `histogram` function, and bin selection follows :func:`numpy.histogram`
-    processes.
+    Generates a histogram of the vertex betweenness centrality of the provided graph.
+    Histogram function is fundamentally proxied through to numpy's `histogram` function,
+    and bin selection follows :func:`numpy.histogram` processes.
 
-    The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling by
-    providing num_random_samples (or ``k``, in networkx betweenness_centrality nomenclature).
+    The betweenness centrality calculation can take advantage of networkx'
+    implementation of randomized sampling by providing num_random_samples (or ``k``,
+    in networkx betweenness_centrality nomenclature).
 
     Parameters
     ----------
     graph : Union[nx.Graph, nx.DiGraph]
         The graph. No changes will be made to it.
     bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
-        Is passed directly through to numpy's "histogram" (and thus, "histogram_bin_edges") functions.
+        Is passed directly through to numpy's "histogram" (and thus,
+        "histogram_bin_edges") functions.
 
         See: :func:`numpy.histogram_bin_edges`
 
-        In short: if an int is provided, we use ``bin_directive`` number of equal range bins.
+        In short: if an int is provided, we use ``bin_directive`` number of equal
+        range bins.
 
-        If a sequence is provided, these bin edges will be used and can be sized to whatever size you prefer
+        If a sequence is provided, these bin edges will be used and can be sized to
+        whatever size you prefer
 
-        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be float or int.
+        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be
+        float or int.
     num_random_samples : Optional[int]
-        Use num_random_samples for vertex samples to *estimate* betweeness.  num_random_samples should be <=
-        len(graph.nodes). The larger num_random_samples is, the better the approximation. Default is ``None``.
+        Use num_random_samples for vertex samples to *estimate* betweeness.
+        num_random_samples should be <= len(graph.nodes). The larger num_random_samples
+        is, the better the approximation. Default is ``None``.
     normalized : bool
-        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for undirected graphs, and
-        :math:`1/((n-1)(n-2))` for directed graphs where n is the number of vertices in the graph. Default is ``True``
+        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for
+        undirected graphs, and  :math:`1/((n-1)(n-2))` for directed graphs where n is
+        the number of vertices in the graph. Default is ``True``
     weight_attribute : Optional[str]
-        If None, all edge weights are considered equal. Otherwise holds the name of the edge attribute used as weight.
-        Default is ``weight``
+        If None, all edge weights are considered equal. Otherwise holds the name of the
+        edge attribute used as weight. Default is ``weight``
     include_endpoints : bool
         If True include the endpoints in the shortest path counts.  Default is ``False``
     random_seed : Optional[Union[int, random.Random, np.random.RandomState]]
-        Random seed or preconfigured random instance to be used for selecting random samples. Only used if
-        num_random_samples is set. None will generate a new random  state. Specifying a random state will provide
-        consistent results between runs.
+        Random seed or preconfigured random instance to be used for selecting random
+        samples. Only used if num_random_samples is set. None will generate a new
+        random state. Specifying a random state will provide consistent results between
+        runs.
 
     Returns
     -------
-    DefinedHistogram
-        A named tuple that contains the histogram and the bin_edges used in the histogram
+    :class:`DefinedHistogram`
+        A named tuple that contains the histogram and the bin_edges used in the
+        histogram
 
     See Also
     --------
@@ -338,11 +361,12 @@ def cut_vertices_by_betweenness_centrality(
     random_seed: Optional[Union[int, random.Random, np.random.RandomState]] = None,
 ) -> Union[nx.Graph, nx.DiGraph]:
     """
-    Given a graph and a cut_threshold and a cut_process, return a copy of the graph with the vertices outside of the
-    cut_threshold.
+    Given a graph and a cut_threshold and a cut_process, return a copy of the graph
+    with the vertices outside of the cut_threshold.
 
-    The betweenness centrality calculation can take advantage of networkx' implementation of randomized sampling
-    by providing num_random_samples (or k, in networkx betweenness_centrality nomenclature).
+    The betweenness centrality calculation can take advantage of networkx'
+    implementation of randomized sampling by providing num_random_samples (or k, in
+    networkx betweenness_centrality nomenclature).
 
     Parameters
     ----------
@@ -351,28 +375,31 @@ def cut_vertices_by_betweenness_centrality(
     cut_threshold : Union[int, float]
         The threshold for making cuts based on weight.
     cut_process : str
-        Describes how we should make the cut; cut all edges larger or smaller than the cut_threshold, and whether
-        exclusive or inclusive. Allowed values are
+        Describes how we should make the cut; cut all edges larger or smaller than the
+        cut_threshold, and whether exclusive or inclusive. Allowed values are
 
         - ``larger_than_inclusive``
         - ``larger_than_exclusive``
         - ``smaller_than_inclusive``
         - ``smaller_than_exclusive``
     num_random_samples : Optional[int]
-        Use num_random_samples for vertex samples to *estimate* betweenness.  num_random_samples should be <=
-        len(graph.nodes). The larger num_random_samples is, the better the approximation. Default is ``None``.
+        Use num_random_samples for vertex samples to *estimate* betweenness.
+        num_random_samples should be <= len(graph.nodes). The larger num_random_samples
+        is, the better the approximation. Default is ``None``.
     normalized : bool
-        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for undirected graphs, and
-        :math:`1/((n-1)(n-2))` for directed graphs where n is the number of vertices in the graph. Default is ``True``
+        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for
+        undirected graphs, and :math:`1/((n-1)(n-2))` for directed graphs where n is
+        the number of vertices in the graph. Default is ``True``
     weight_attribute : Optional[str]
-        If None, all edge weights are considered equal. Otherwise holds the name of the edge attribute used as weight.
-        Default is ``weight``
+        If None, all edge weights are considered equal. Otherwise holds the name of the
+        edge attribute used as weight. Default is ``weight``
     include_endpoints : bool
         If True include the endpoints in the shortest path counts.  Default is ``False``
     random_seed : Optional[Union[int, random.Random, np.random.RandomState]]
-        Random seed or preconfigured random instance to be used for selecting random samples. Only used if
-        num_random_samples is set. None will generate a new random  state. Specifying a random state will provide
-        consistent results between runs.
+        Random seed or preconfigured random instance to be used for selecting random
+        samples. Only used if num_random_samples is set. None will generate a new
+        random state. Specifying a random state will provide consistent results between
+        runs.
 
     Returns
     -------

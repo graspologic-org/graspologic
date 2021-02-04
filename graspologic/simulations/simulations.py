@@ -3,7 +3,8 @@
 
 import numpy as np
 
-from ..utils import symmetrize, cartprod
+from ..utils import symmetrize, cartesian_product
+from sklearn.utils import check_array, check_scalar
 import warnings
 
 
@@ -74,7 +75,8 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
     p of edges being connected.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------
@@ -173,7 +175,8 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     Erdos Renyi (n, m) graph is a simple graph with n vertices and exactly m
     number of total edges.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------
@@ -317,7 +320,8 @@ def sbm(
     SBM produces a graph with specified communities, in which each community can
     have different sizes and edge probabilities.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Stochastic Block Model (SBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html>`_
 
     Parameters
     ----------
@@ -582,7 +586,7 @@ def sbm(
             block_p = p[i, j]
             # identify submatrix for community i, j
             # cartesian product to identify edges for community i,j pair
-            cprod = cartprod(cmties[i], cmties[j])
+            cprod = cartesian_product(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
             pchoice = np.random.uniform(size=len(triu))
@@ -632,7 +636,8 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
     A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Random Dot Product Graph (RDPG) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html>`_
 
     Parameters
     ----------
@@ -795,3 +800,185 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
         P[P < 0] = 0
         P[P > 1] = 1
     return P
+
+
+def mmsbm(
+    n,
+    p,
+    alpha=None,
+    rng=None,
+    directed=False,
+    loops=False,
+    return_labels=False,
+):
+    r"""
+    Samples a graph from Mixed Membership Stochastic Block Model (MMSBM).
+
+    MMSBM produces a graph given the specified block connectivity matrix B,
+    which indicates the probability of connection between nodes based upon
+    their community membership.
+    Each node is assigned a membership vector drawn from Dirichlet distribution
+    with parameter :math:`\vec{\alpha}`. The entries of this vector indicate the
+    probabilities for that node of pertaining to each community when interacting with
+    another node. Each node's membership is determined according to those probabilities.
+    Finally, interactions are sampled according to the assigned memberships.
+
+    Read more in the `Mixed Membership Stochastic Blockmodel (MMSBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/mmsbm.html>`_
+
+    Parameters
+    ----------
+    n: int
+        Number of vertices of the graph.
+
+    p: array-like, shape (n_communities, n_communities)
+        Probability of an edge between each of the communities, where ``p[i, j]``
+        indicates the probability of a connection between edges in communities
+        :math:`(i, j)`.
+        0 < ``p[i, j]`` < 1 for all :math:`i, j`.
+
+    alpha: array-like, shape (n_communities,)
+        Parameter alpha of the Dirichlet distribution used
+        to sample the mixed-membership vectors for each node.
+        ``alpha[i]`` > 0 for all :math:`i`.
+
+    rng: numpy.random.Generator, optional (default = None)
+        :class:`numpy.random.Generator` object to sample from distributions.
+        If None, the random number generator is the Generator object constructed
+        by ``np.random.default_rng()``.
+
+    directed: boolean, optional (default=False)
+        If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+        matrix will be asymmetric.
+
+    loops: boolean, optional (default=False)
+        If False, no edges will be sampled in the diagonal. Otherwise, edges
+        are sampled in the diagonal.
+
+    return_labels: boolean, optional (default=False)
+        If False, the only output is the adjacency matrix.
+        If True, output is a tuple. The first element of the tuple is the adjacency
+        matrix. The second element is a matrix in which the :math:`(i^{th}, j^{th})`
+        entry indicates the membership assigned to node i when interacting with node j.
+        Community 1 is labeled with a 0, community 2 with 1, etc.
+        -1 indicates that no community was assigned for that interaction.
+
+    References
+    ----------
+    .. [1] Airoldi, Edoardo, et al. “Mixed Membership Stochastic Blockmodels.”
+       Journal of Machine Learning Research, vol. 9, 2008, pp. 1981–2014.
+
+    Returns
+    -------
+    A: ndarray, shape (n, n)
+        Sampled adjacency matrix
+    labels: ndarray, shape (n, n), optional
+        Array containing the membership assigned to each node when interacting with
+        another node.
+
+    Examples
+    --------
+    >>> rng = np.random.default_rng(1)
+    >>> np.random.seed(1)
+    >>> n = 6
+    >>> p = [[0.5, 0], [0, 1]]
+
+    To sample a binary MMSBM in which very likely all nodes pertain to community two:
+
+    >>> alpha = [0.05, 1000]
+    >>> mmsbm(n, p, alpha, rng = rng)
+    array([[0., 1., 1., 1., 1., 1.],
+           [1., 0., 1., 1., 1., 1.],
+           [1., 1., 0., 1., 1., 1.],
+           [1., 1., 1., 0., 1., 1.],
+           [1., 1., 1., 1., 0., 1.],
+           [1., 1., 1., 1., 1., 0.]])
+
+    To sample a binary MMSBM similar to 2-block SBM with connectivity matrix B:
+
+    >>> rng = np.random.default_rng(1)
+    >>> np.random.seed(1)
+    >>> alpha = [0.05, 0.05]
+    >>> mmsbm(n, p, alpha, rng = rng)
+    array([[0., 1., 0., 0., 0., 0.],
+           [1., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 1., 1.],
+           [0., 0., 0., 1., 0., 1.],
+           [0., 0., 0., 1., 1., 0.]])
+
+    """
+
+    check_scalar(x=n, name="n", target_type=int, min_val=1)
+
+    p = check_array(p, ensure_2d=True)
+    nx, ny = p.shape
+    if nx != ny:
+        msg = "p must be a square matrix, not {}".format(p.shape)
+        raise ValueError(msg)
+    if not np.issubdtype(p.dtype, np.number):
+        msg = "There are non-numeric elements in p"
+        raise ValueError(msg)
+    if np.any(p < 0) or np.any(p > 1):
+        msg = "Values in p must be in between 0 and 1."
+        raise ValueError(msg)
+
+    alpha = check_array(alpha, ensure_2d=False, ensure_min_features=1)
+    if not np.issubdtype(alpha.dtype, np.number):
+        msg = "There are non-numeric elements in alpha"
+        raise ValueError(msg)
+    if np.any(alpha <= 0):
+        msg = "Alpha entries must be > 0."
+        raise ValueError(msg)
+    if alpha.shape != (len(p),):
+        msg = "alpha must be a list or np.array of shape {c}, not {w}.".format(
+            c=(len(p),), w=alpha.shape
+        )
+        raise ValueError(msg)
+
+    if not isinstance(rng, (np.random._generator.Generator)):
+        msg = "rng must be <class 'numpy.random._generator.Generator'> not {}.".format(
+            type(rng)
+        )
+        raise TypeError(msg)
+    elif rng == None:
+        rng = np.random.default_rng()
+
+    if type(loops) is not bool:
+        raise TypeError("loops is not of type bool.")
+    if type(directed) is not bool:
+        raise TypeError("directed is not of type bool.")
+    if type(return_labels) is not bool:
+        raise TypeError("return_labels is not of type bool.")
+
+    if not directed:
+        if np.any(p != p.T):
+            raise ValueError("Specified undirected, but P is directed.")
+
+    # Naming convention follows paper listed in references.
+    mm_vectors = rng.dirichlet(alpha, n)
+
+    mm_vectors = np.array(sorted(mm_vectors, key=lambda x: np.argmax(x)))
+
+    # labels:(n,n) matrix with all membership indicators for initiators and receivers
+    # instead of storing the indicator vector, argmax is directly computed
+    # check docstrings for more info.
+    labels = np.apply_along_axis(
+        lambda p_vector: np.argmax(
+            rng.multinomial(n=1, pvals=p_vector, size=n), axis=1
+        ),
+        axis=1,
+        arr=mm_vectors,
+    )
+
+    P = p[(labels, labels.T)]
+
+    A = sample_edges(P, directed=directed, loops=loops)
+
+    if not loops:
+        np.fill_diagonal(labels, -1)
+
+    if return_labels:
+        return (A, labels)
+
+    return A
