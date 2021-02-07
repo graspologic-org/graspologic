@@ -161,7 +161,7 @@ class TestGMP:
 
     def test_sim(self):
         n = 150
-        rho = 1.0
+        rho = 0.9
         n_per_block = int(n / 3)
         n_blocks = 3
         block_members = np.array(n_blocks * [n_per_block])
@@ -180,4 +180,4 @@ class TestGMP:
         S = xh1 @ x2.T
         res = self.barygm.fit(A1, A2, S=S)
 
-        assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
+        assert 0.7 <= (sum(res.perm_inds_ == np.arange(n)) / n)
