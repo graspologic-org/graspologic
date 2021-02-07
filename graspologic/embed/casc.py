@@ -55,7 +55,7 @@ def gen_covariates(m1, m2, labels, nclust=3, static=False):
 
     if static:
         m1_arr = np.full(n, m1)
-        m2_arr = np.full((n, ndim), m2)
+        m2_arr = np.full((n, nclust), m2)
         m2_arr[np.arange(n), labels] = m1_arr
     elif not static:
         m1_arr = np.random.choice([1, 0], p=[m1, 1 - m1], size=(n))
@@ -73,7 +73,7 @@ B = np.array([[p, q, q], [q, p, q], [q, q, p]])
 B2 = np.array([[q, p, p], [p, q, p], [p, p, q]])
 A, labels = sbm([n, n, n], B, return_labels=True)
 X_static = gen_covariates(0.8, 0.3, labels, static=True)
-X_many = gen_covariates(0.8, 0.3, labels, ndim=100)
+X_many = gen_covariates(0.8, 0.3, labels, nclust=100)
 X = gen_covariates(0.8, 0.3, labels)
 
 sns.heatmap(X_many)
