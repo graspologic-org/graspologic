@@ -373,6 +373,10 @@ def _quadratic_assignment_faq(
     # ValueError check
     A, B, partial_match = _common_input_validation(A, B, partial_match)
 
+    if S is None:
+            S = np.zeros(A.shape)
+    S = np.atleast_2d(S)
+
     msg = None
     if isinstance(P0, str) and P0 not in {"barycenter", "randomized"}:
         msg = "Invalid 'P0' parameter string"
@@ -380,14 +384,12 @@ def _quadratic_assignment_faq(
         msg = "'maxiter' must be a positive integer"
     elif tol <= 0:
         msg = "'tol' must be a positive float"
-    elif S is not None:
-        S = np.atleast_2d(S)
-        if S.shape[0] != S.shape[1]:
-            msg = "`S` must be square"
-        elif S.ndim != 2:
-            msg = "`S` must have exactly two dimensions"
-        elif S.shape != A.shape:
-            msg = "`S`, `A`, and `B` matrices must be of equal size"
+    elif S.shape[0] != S.shape[1]:
+        msg = "`S` must be square"
+    elif S.ndim != 2:
+        msg = "`S` must have exactly two dimensions"
+    elif S.shape != A.shape:
+        msg = "`S`, `A`, and `B` matrices must be of equal size"
     if msg is not None:
         raise ValueError(msg)
 

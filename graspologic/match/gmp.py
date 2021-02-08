@@ -160,7 +160,6 @@ class GraphMatch(BaseEstimator):
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
 
-    # TODO: add `S` documentation
 
     def fit(self, A, B, seeds_A=[], seeds_B=[], S=None, rng=None):
         """
@@ -182,7 +181,7 @@ class GraphMatch(BaseEstimator):
             `seeds_A` and `seeds_B` are vertices which are known to be matched, that is,
             `seeds_A[i]` is matched to vertex `seeds_B[i]`.
         S : 2d-array, square
-            A square similarity matrix
+            A square similarity matrix. Should be same shape as ``A`` and ``B``.
 
         Returns
         -------
@@ -197,11 +196,6 @@ class GraphMatch(BaseEstimator):
         # pads A and B according to section 2.5 of [2]
         if A.shape[0] != B.shape[0]:
             A, B = _adj_pad(A, B, self.padding)
-
-        if S is None:
-            S = np.zeros((A.shape[0], A.shape[0]))
-
-        S = check_array(S, copy=True, ensure_2d=True)
 
         options = {
             "maximize": self.gmp,
@@ -246,7 +240,7 @@ class GraphMatch(BaseEstimator):
             ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
 
         S : 2d-array, square
-            A square similarity matrix
+            A square similarity matrix. Should be same shape as ``A`` and ``B``.
 
         Returns
         -------
