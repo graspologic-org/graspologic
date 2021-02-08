@@ -104,8 +104,9 @@ class SeedlessProcrustes(BaseAlign):
 
     References
     ----------
-    .. [1] Agterberg, J.
-        # TODO Cite the Seedless Procrustes preprint whenever available.
+    .. [1] Agterberg, J., Tang, M., Priebe., C. E. (2020).
+        "Nonparametric Two-Sample Hypothesis Testing for Random Graphs with Negative and Repeated Eigenvalues"
+        arXiv:2012.09828
 
     .. [2] Agterberg, J., Tang, M., Priebe., C. E. (2020).
         "On Two Distinct Sources of Nonidentifiability in Latent Position Random Graph Models"
