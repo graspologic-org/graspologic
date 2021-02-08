@@ -160,7 +160,6 @@ class GraphMatch(BaseEstimator):
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
 
-
     def fit(self, A, B, seeds_A=[], seeds_B=[], S=None, rng=None):
         """
         Fits the model with two assigned adjacency matrices

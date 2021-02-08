@@ -374,7 +374,7 @@ def _quadratic_assignment_faq(
     A, B, partial_match = _common_input_validation(A, B, partial_match)
 
     if S is None:
-            S = np.zeros(A.shape)
+        S = np.zeros(A.shape)
     S = np.atleast_2d(S)
 
     msg = None
