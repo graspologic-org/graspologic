@@ -3,7 +3,7 @@
 
 import numpy as np
 
-from ..utils import symmetrize, cartprod
+from ..utils import symmetrize, cartesian_product
 from sklearn.utils import check_array, check_scalar
 import warnings
 
@@ -75,7 +75,8 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
     p of edges being connected.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------
@@ -174,7 +175,8 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     Erdos Renyi (n, m) graph is a simple graph with n vertices and exactly m
     number of total edges.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------
@@ -318,7 +320,8 @@ def sbm(
     SBM produces a graph with specified communities, in which each community can
     have different sizes and edge probabilities.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Stochastic Block Model (SBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html>`_
 
     Parameters
     ----------
@@ -583,7 +586,7 @@ def sbm(
             block_p = p[i, j]
             # identify submatrix for community i, j
             # cartesian product to identify edges for community i,j pair
-            cprod = cartprod(cmties[i], cmties[j])
+            cprod = cartesian_product(cmties[i], cmties[j])
             # get idx in 1d coordinates by ravelling
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
             pchoice = np.random.uniform(size=len(triu))
@@ -633,7 +636,8 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
     A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Random Dot Product Graph (RDPG) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html>`_
 
     Parameters
     ----------
@@ -819,7 +823,8 @@ def mmsbm(
     another node. Each node's membership is determined according to those probabilities.
     Finally, interactions are sampled according to the assigned memberships.
 
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+    Read more in the `Mixed Membership Stochastic Blockmodel (MMSBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/mmsbm.html>`_
 
     Parameters
     ----------

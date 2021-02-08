@@ -25,7 +25,8 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
     the dimensionality to the specified k, or if k is unspecified, can find a number of
     dimensions automatically (see :class:`~graspologic.embed.selectSVD`).
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+    Read more in the `Adjacency Spectral Embedding Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
 
     Parameters
     ----------
@@ -160,7 +161,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.get_lcc``."
+                    + "using ``graspologic.utils.largest_connected_component``."
                 )
                 warnings.warn(msg, UserWarning)
 

@@ -69,8 +69,8 @@ def modularity(
 
     Returns
     -------
-    Dict[int, float]
-        A dictionary of the community id to the modularity component of that community
+    float
+                The sum of the modularity of each of the communities.
 
     Raises
     ------
