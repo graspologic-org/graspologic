@@ -454,7 +454,6 @@ def scipy_is_fully_connected(
 
     if not (isspmatrix_csr(graph) or isinstance(graph, np.ndarray)):
         graph = nx.to_scipy_sparse_matrix(graph)
-        print(graph)
 
     n_components, labels = connected_components(
         csgraph=graph,
