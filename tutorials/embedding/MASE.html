@@ -510,7 +510,7 @@ B_2 = \begin{bmatrix}0.3 &amp; 0.1\\
 0.1 &amp; 0.3
 \end{bmatrix}
 \end{align*}</div><p>The only difference between the two is the within-block probability for the second block. We sample <span class="math notranslate nohighlight">\(G_1 \sim \text{SBM}(n, B_1)\)</span> and <span class="math notranslate nohighlight">\(G_2 \sim \text{SBM}(n, B_2)\)</span>.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -528,15 +528,6 @@ B_2 = \begin{bmatrix}0.3 &amp; 0.1\\
 <span class="n">G2</span> <span class="o">=</span> <span class="n">sbm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">B2</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/umap/__init__.py:9: UserWarning: Tensorflow not installed; ParametricUMAP will be unavailable
-  warn(&#34;Tensorflow not installed; ParametricUMAP will be unavailable&#34;)
-</pre></div></div>
 </div>
 </div>
 <div class="section" id="Visualize-the-graphs-using-heatmap">

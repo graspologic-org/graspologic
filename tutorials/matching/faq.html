@@ -512,7 +512,7 @@ div.rendered_html tbody tr:hover {
 \end{equation}</div><p>Since the GMP objective function is the negation of the QAP objective function, any algorithm that solves one can solve the other.</p>
 <p>This class is an implementation of the Fast Approximate Quadratic Assignment Problem (FAQ), an algorithm designed to efficiently and accurately solve the QAP, as well as GMP.</p>
 <p>[1] Optimierung, Diskrete &amp; Er, Rainer &amp; Ela, A &amp; Burkard, Rainer &amp; Dragoti-Cela, Eranda &amp; Pardalos, Panos &amp; Pitsoulis, Leonidas. (1998). The Quadratic Assignment Problem. Handbook of Combinatorial Optimization. 10.1007/978-1-4613-0303-9_27.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -521,15 +521,6 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">er_np</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/umap/__init__.py:9: UserWarning: Tensorflow not installed; ParametricUMAP will be unavailable
-  warn(&#34;Tensorflow not installed; ParametricUMAP will be unavailable&#34;)
-</pre></div></div>
 </div>
 <p>For the sake of this tutorial, we will use FAQ to solve the GMP for two graphs where we know a solution exists. Below, we sample a binary graph (undirected and no self-loops) <span class="math notranslate nohighlight">\(G_1 \sim ER_{NP}(50, 0.3)\)</span>. Then, we randomly shuffle the nodes of <span class="math notranslate nohighlight">\(G_1\)</span> to initiate <span class="math notranslate nohighlight">\(G_2\)</span>. The number of edge disagreements as a result of the node shuffle is printed below.</p>
 <div class="nbinput docutils container">

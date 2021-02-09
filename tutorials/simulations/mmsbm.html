@@ -481,7 +481,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Mixed-Membership-Stochastic-Blockmodel-(MMSBM)">
 <h1>Mixed Membership Stochastic Blockmodel (MMSBM)<a class="headerlink" href="#Mixed-Membership-Stochastic-Blockmodel-(MMSBM)" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -493,15 +493,6 @@ div.rendered_html tbody tr:hover {
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/umap/__init__.py:9: UserWarning: Tensorflow not installed; ParametricUMAP will be unavailable
-  warn(&#34;Tensorflow not installed; ParametricUMAP will be unavailable&#34;)
-</pre></div></div>
 </div>
 <p>Unlike <a class="reference internal" href="sbm.html"><span class="doc">Stochastic Block Models (SBM)</span></a>, Mixed Membership Stochastic Blockmodels (MMSBM) allow nodes to pertain to multiple communities when interacting with other nodes.</p>
 <p>Given a network with <span class="math notranslate nohighlight">\(k\)</span> communities, an MMSBM is parametrized by the number of nodes <span class="math notranslate nohighlight">\(n\)</span> of the graph, a block connectivity matrix <span class="math notranslate nohighlight">\(B \in \mathbb{R}^{k x k}\)</span> where each element specifies the probability of interaction between nodes based upon their community membership, and a vector <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> which controls the mixed-membership allowed for each node.</p>

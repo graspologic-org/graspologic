@@ -481,7 +481,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Stochastic-Block-Model-(SBM)">
 <h1>Stochastic Block Model (SBM)<a class="headerlink" href="#Stochastic-Block-Model-(SBM)" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -493,15 +493,6 @@ div.rendered_html tbody tr:hover {
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/opt/hostedtoolcache/Python/3.8.7/x64/lib/python3.8/site-packages/umap/__init__.py:9: UserWarning: Tensorflow not installed; ParametricUMAP will be unavailable
-  warn(&#34;Tensorflow not installed; ParametricUMAP will be unavailable&#34;)
-</pre></div></div>
 </div>
 <p>Unlike <a class="reference internal" href="erdos_renyi.html"><span class="doc">Erdos-Renyi (ER) models</span></a>, a Stochastic Block Model (SBM) produces graphs containing communities: disjoint subgraphs characterized by differing edge probabilities for vertices within and between communities <a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_block_model">(1)</a>.</p>
 <p>SBM is parametrized by the number of vertices in each community <span class="math notranslate nohighlight">\(n\)</span>, and a block probability matrix <span class="math notranslate nohighlight">\(P \in \mathbb{R}^{n x n}\)</span> where each element specifies the probability of an edge in a particular block. One can think of SBM as a collection of ER graphs where each block corresponds to an ER graph.</p>
