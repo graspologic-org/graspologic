@@ -117,6 +117,9 @@ class AutoGMMCluster(BaseCluster):
         If provided, min_components and ``max_components`` must match the number of
         unique labels given here.
 
+    n_init : int, optional (default = 1)
+        The number of k-means initializations to perform.
+
     max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
 
@@ -221,6 +224,7 @@ class AutoGMMCluster(BaseCluster):
         selection_criteria="bic",
         max_agglom_size=2000,
         n_jobs=None,
+        n_init = 1,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -362,6 +366,8 @@ class AutoGMMCluster(BaseCluster):
             raise TypeError("`max_agglom_size` must be an int or None")
         if max_agglom_size is not None and max_agglom_size < 2:
             raise ValueError("Must use at least 2 points for `max_agglom_size`")
+        
+        check_scalar(x=n_init, name="n_init", target_type=int, min_val=1)
 
         self.min_components = min_components
         self.max_components = max_components
@@ -375,6 +381,7 @@ class AutoGMMCluster(BaseCluster):
         self.selection_criteria = selection_criteria
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
+        self.n_init = n_init
 
     def _fit_cluster(self, X, X_subset, y, params, agg_clustering):
         label_init = self.label_init
@@ -516,6 +523,7 @@ class AutoGMMCluster(BaseCluster):
             covariance_type=self.covariance_type,
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
             random_state=[self.random_state],
+            n_init=[self.n_init]
         )
         param_grid = list(ParameterGrid(param_grid))
         param_grid_ag, param_grid = _process_paramgrid(param_grid)
