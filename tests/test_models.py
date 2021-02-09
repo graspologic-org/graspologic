@@ -12,7 +12,7 @@ from graspologic.models import (
     DCEREstimator,
 )
 from graspologic.simulations import er_np, sbm, sample_edges
-from graspologic.utils import cartprod, is_symmetric
+from graspologic.utils import cartesian_product, is_symmetric
 from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
 
@@ -538,7 +538,7 @@ def _block_to_full(block_mat, inverse, shape):
     block mat : k x k
     inverse : array like length n,
     """
-    block_map = cartprod(inverse, inverse).T
+    block_map = cartesian_product(inverse, inverse).T
     mat_by_edge = block_mat[block_map[0], block_map[1]]
     full_mat = mat_by_edge.reshape(shape)
     return full_mat

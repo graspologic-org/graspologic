@@ -8,7 +8,7 @@ from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from ..utils import (
     augment_diagonal,
-    cartprod,
+    cartesian_product,
     import_graph,
     is_unweighted,
     remove_loops,
@@ -467,7 +467,7 @@ def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
     """
 
     n_blocks = len(block_inds)
-    block_pairs = cartprod(block_inds, block_inds)
+    block_pairs = cartesian_product(block_inds, block_inds)
     block_p = np.zeros((n_blocks, n_blocks))
 
     for p in block_pairs:
@@ -492,7 +492,7 @@ def _block_to_full(block_mat, inverse, shape):
     block mat : k x k
     inverse : array like length n,
     """
-    block_map = cartprod(inverse, inverse).T
+    block_map = cartesian_product(inverse, inverse).T
     mat_by_edge = block_mat[block_map[0], block_map[1]]
     full_mat = mat_by_edge.reshape(shape)
     return full_mat
