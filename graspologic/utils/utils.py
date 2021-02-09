@@ -405,7 +405,39 @@ def to_laplace(graph, form="DAD", regularizer=None):
 def scipy_is_fully_connected(
     graph, directed=False, connection="weak", return_labels=True
 ):
+    r"""
+    Checks whether the input graph is fully connected in the undirected case
+    or weakly connected in the directed case.
 
+    Connected means one can get from any vertex :math:`u` to vertex :math:`v` by traversing
+    the graph. For a directed graph, weakly connected means that the graph
+    is connected after it is converted to an unweighted graph (ignore the
+    direction of each edge)
+
+    Parameters
+    ----------
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+        Input graph in any of the above specified formats. If np.ndarray,
+        interpreted as an :math:`n \times n` adjacency matrix
+
+    Returns
+    -------
+    boolean: True if the entire input graph is connected
+
+    References
+    ----------
+    http://mathworld.wolfram.com/ConnectedGraph.html
+    http://mathworld.wolfram.com/WeaklyConnectedDigraph.html
+
+    Examples
+    --------
+    >>> a = np.array([
+    ...    [0, 1, 0],
+    ...    [1, 0, 0],
+    ...    [0, 0, 0]])
+    >>> is_fully_connected(a)
+    False
+    """
     n_components, labels = connected_components(
         csgraph=graph,
         directed=directed,
