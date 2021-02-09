@@ -10,15 +10,10 @@ from typing import Any, List, Optional, Tuple, Union
 import networkx as nx
 import numpy as np
 import pandas as pd
-<<<<<<< HEAD
-from scipy.sparse import csr_matrix
-from scipy.sparse.csgraph import connected_components
-||||||| 5bc9d10
-=======
 import scipy.sparse
->>>>>>> e6b72994f9b71ba2cfaaa2dcf0da33ebd2483ff9
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix, diags, isspmatrix_csr
+from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
@@ -456,6 +451,11 @@ def scipy_is_fully_connected(
     >>> is_fully_connected(a)
     False
     """
+
+    if not (isspmatrix_csr(graph) or isinstance(graph, np.ndarray)):
+        graph = nx.to_scipy_sparse_matrix(graph)
+        print(graph)
+
     n_components, labels = connected_components(
         csgraph=graph,
         directed=directed,
