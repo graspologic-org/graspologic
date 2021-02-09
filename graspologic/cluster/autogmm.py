@@ -17,6 +17,8 @@ from sklearn.exceptions import ConvergenceWarning
 from joblib import Parallel, delayed
 import warnings
 
+from sklearn.utils import check_scalar
+
 from .base import BaseCluster
 
 
