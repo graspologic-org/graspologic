@@ -6,6 +6,7 @@
 <table>
   <tr>
     <td align="center"><a href="https://github.com/Nyecarr"><img src="https://avatars.githubusercontent.com/u/4693255?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nick</b></sub></a><br /><a href="https://github.com/microsoft/graspologic/commits?author=Nyecarr" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jheiko1"><img src="https://avatars.githubusercontent.com/u/39324337?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jheiko1</b></sub></a><br /><a href="https://github.com/microsoft/graspologic/commits?author=jheiko1" title="Code">💻</a></td>
   </tr>
 </table>
 
