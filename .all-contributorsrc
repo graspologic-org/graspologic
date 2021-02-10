@@ -1,1 +1,22 @@
-{}
+{
+  "projectName": "graspologic",
+  "projectOwner": "microsoft",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true,
+  "contributors": [
+    {
+      "login": "Nyecarr",
+      "name": "Nick",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4693255?v=4",
+      "profile": "https://github.com/Nyecarr",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "files": [
+    "README.md"
+  ],
+  "contributorsPerLine": 7
+}
