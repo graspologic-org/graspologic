@@ -1,5 +1,13 @@
 name: graspologic CI
-on: [push, pull_request]
+on: 
+  push:
+    paths-ignore:
+      - '.all-contributorsrc'
+      - 'CONTRIBUTORS.md'
+  pull_request:
+    paths-ignore:
+      - '.all-contributorsrc'
+      - 'CONTRIBUTORS.md' 
 jobs:
   build-reference-documentation:
     runs-on: ubuntu-latest
