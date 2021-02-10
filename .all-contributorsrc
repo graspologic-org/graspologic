@@ -17,6 +17,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ebridge2",
+      "name": "Eric Bridgeford",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8883547?v=4",
+      "profile": "http://ericwb.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
