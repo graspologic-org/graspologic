@@ -17,6 +17,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "falkben",
+      "name": "Ben Falk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/653031?v=4",
+      "profile": "https://github.com/falkben",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
