@@ -415,9 +415,7 @@ def to_laplacian(graph, form="DAD", regularizer=None):
     return L
 
 
-def scipy_is_fully_connected(
-    graph, directed=False, connection="weak", return_labels=True
-):
+def scipy_is_fully_connected(graph):
     r"""
     Checks whether the input graph is fully connected in the undirected case
     or weakly connected in the directed case.
@@ -454,12 +452,14 @@ def scipy_is_fully_connected(
 
     if not (isspmatrix_csr(graph) or isinstance(graph, np.ndarray)):
         graph = nx.to_scipy_sparse_matrix(graph)
-
+    
+    if is_symmetric(graph):
+        directed = True
+    else:
+        directed = False
+    
     n_components, labels = connected_components(
-        csgraph=graph,
-        directed=directed,
-        connection=connection,
-        return_labels=return_labels,
+        csgraph=graph, directed=directed, connection="weak", return_labels=True
     )
 
     return n_components == 1
