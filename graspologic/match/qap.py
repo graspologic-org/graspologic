@@ -469,7 +469,7 @@ def _quadratic_assignment_faq(
         BR22 = B22 @ R.T
         b22a = (AR22 * B22.T[cols]).sum()
         b22b = (A22 * BR22[cols]).sum()
-        s = (S22.T * R.T).sum()
+        s = (S22 * R).sum()
         a = (AR22.T * BR22).sum()
         b = b21 + b12 + b22a + b22b + s
         # critical point of ax^2 + bx + c is at x = -d/(2*e)
