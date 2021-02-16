@@ -22,7 +22,7 @@ This release is the result of over 8 months of work with over 25 pull requests b
 Improvements
 ------------
 - Diagonal augmentation is default behavior in AdjacencySpectralEmbed.
-- Added functionality in ``to_laplace`` to allow for directed graphs.
+- Added functionality in ``to_laplacian`` to allow for directed graphs.
 - Updated docstrings.
 - Updated documentation website.
 - Various bug fixes.
