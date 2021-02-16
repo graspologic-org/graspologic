@@ -53,7 +53,7 @@ class GraphMatch(BaseEstimator):
         Gives users the option to shuffle the nodes of A matrix to avoid results
         from inputs that were already matched.
 
-    eps : float (default = 0.1)
+    eps : float (default = 0.03)
         A positive, threshold stopping criteria such that FW continues to iterate
         while Frobenius norm of :math:`(P_{i}-P_{i+1}) > \\text{eps}`
 
@@ -77,7 +77,8 @@ class GraphMatch(BaseEstimator):
 
     perm_inds_ : array, size (n,) where n is the number of vertices in the fitted graphs.
         The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
-        to best minimize the objective function :math:`f(P) = \\text{trace}(A^T PBP^T )`.
+        to best minimize the objective function :math:`f(P) = \\text{trace}(A^T PBP^T)
+        + \\text{trace}(S^T P)`.
 
 
     score_ : float
