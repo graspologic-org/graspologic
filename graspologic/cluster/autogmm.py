@@ -675,7 +675,7 @@ def _process_paramgrid(paramgrid):
     ag_paramgrid_processed : list of dicts
         options for AgglomerativeClustering
     """
-    gm_keys = ["covariance_type", "n_components", "random_state"]
+    gm_keys = ["covariance_type", "n_components", "random_state", "n_init"]
     ag_keys = ["affinity", "linkage"]
     ag_params_processed = []
     paramgrid_processed = []
