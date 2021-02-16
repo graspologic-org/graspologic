@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-class CASE(BaseSpectralEmbed):
+class CovariateAssistedEmbedding(BaseSpectralEmbed):
     """
-    Embed a graph with covariates, using the regularized graph Laplacian.
+    Perform Spectral Embedding on a graph with covariates, using the regularized graph Laplacian.
 
     The Covariate-Assisted Spectral Embedding is a k-dimensional Euclidean representation
     of a graph based on its Laplacian (assortative) or squared Laplacian (non-assortative),
@@ -66,8 +66,24 @@ class CASE(BaseSpectralEmbed):
     spectral clustering. Biometrika, 104(2), 361-377.
     """
 
-    def __init__(self, assortative=False, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(
+        self,
+        assortative=False,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        check_lcc=True,
+        concat=False,
+    ):
+        super().__init__(
+            n_components=n_components,
+            n_elbows=n_elbows,
+            algorithm=algorithm,
+            n_iter=n_iter,
+            check_lcc=check_lcc,
+            concat=concat,
+        )
 
         self.assortative_ = assortative  # TODO: compute this automatically?
         self.is_fitted_ = False
@@ -115,27 +131,38 @@ class CASE(BaseSpectralEmbed):
         self.is_fitted_ = True
         return self
 
+    # def fit_transform(self, graph, covariates):
+    #     "Fits the model and returns the estimated latent positions."
+    #     # need to override superclass because superclass doesn't take
+    #     # in covariates as a parameter
+    #     X = covariates.copy()
+    #     self.fit(graph, X)
+
+    #     if self.latent_right_ is None:
+    #         return self.latent_left_
+    #     else:
+    #         if self.concat:
+    #             return np.concatenate((self.latent_left_, self.latent_right_), axis=1)
+    #         else:
+    #             return self.latent_left_, self.latent_right_
+
     def _get_tuning_parameter(self, LL, XXt):
         """
         Find an alpha which causes the leading eigenvectors of L@L and a*X@X.T to be
         the same.
+
+        Parameters
+        ----------
+        LL : array
+            The squared regularized graph Laplacian
+        XXt : array
+            X@X.T, where X is the covariate matrix.
+
+        Returns
+        -------
+        alpha : float
+            Tuning parameter which normalizes LL and XXt.
         """
         L_leading = np.linalg.eigvalsh(LL)[-1]
         X_leading = np.linalg.eigvalsh(XXt)[-1]
         return np.float(L_leading / X_leading)
-
-
-def gen_covariates(m1, m2, labels, ndim=3, static=False):
-    # TODO: make sure labels is 1d array-like
-    n = len(labels)
-
-    if static:
-        m1_arr = np.full(n, m1)
-        m2_arr = np.full((n, ndim), m2)
-        m2_arr[np.arange(n), labels] = m1_arr
-    elif not static:
-        m1_arr = np.random.choice([1, 0], p=[m1, 1 - m1], size=(n))
-        m2_arr = np.random.choice([1, 0], p=[m2, 1 - m2], size=(n, ndim))
-        m2_arr[np.arange(n), labels] = m1_arr
-
-    return m2_arr

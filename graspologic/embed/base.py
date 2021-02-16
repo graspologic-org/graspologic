@@ -22,7 +22,7 @@ class BaseSpectralEmbed(BaseEstimator):
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
     n_elbows : int, optional, default: 2
-        If `n_compoents=None`, then compute the optimal embedding dimension using
+        If `n_components=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
     algorithm : {'full', 'truncated' (default), 'randomized'}, optional
         SVD solver to use:
@@ -135,9 +135,9 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self
 
-    def _fit_transform(self, graph):
+    def _fit_transform(self, graph, *args, **kwargs):
         "Fits the model and returns the estimated latent positions."
-        self.fit(graph)
+        self.fit(graph, *args, **kwargs)
 
         if self.latent_right_ is None:
             return self.latent_left_
@@ -147,7 +147,7 @@ class BaseSpectralEmbed(BaseEstimator):
             else:
                 return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph, y=None):
+    def fit_transform(self, graph, y=None, *args, **kwargs):
         """
         Fit the model with graphs and apply the transformation.
 
@@ -165,7 +165,7 @@ class BaseSpectralEmbed(BaseEstimator):
             If directed, ``concat`` is True then concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
             If directed, ``concat`` is False then tuple of the latent matrices. Each of shape (n_vertices, n_components).
         """
-        return self._fit_transform(graph)
+        return self._fit_transform(graph, *args, **kwargs)
 
 
 class BaseEmbedMulti(BaseSpectralEmbed):
