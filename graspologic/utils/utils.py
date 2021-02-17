@@ -415,56 +415,6 @@ def to_laplacian(graph, form="DAD", regularizer=None):
     return L
 
 
-def scipy_is_fully_connected(graph):
-    r"""
-    Checks whether the input graph is fully connected in the undirected case
-    or weakly connected in the directed case.
-
-    Connected means one can get from any vertex :math:`u` to vertex :math:`v` by traversing
-    the graph. For a directed graph, weakly connected means that the graph
-    is connected after it is converted to an unweighted graph (ignore the
-    direction of each edge)
-
-    Parameters
-    ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray,
-        interpreted as an :math:`n \times n` adjacency matrix
-
-    Returns
-    -------
-    boolean: True if the entire input graph is connected
-
-    References
-    ----------
-    http://mathworld.wolfram.com/ConnectedGraph.html
-    http://mathworld.wolfram.com/WeaklyConnectedDigraph.html
-
-    Examples
-    --------
-    >>> a = np.array([
-    ...    [0, 1, 0],
-    ...    [1, 0, 0],
-    ...    [0, 0, 0]])
-    >>> is_fully_connected(a)
-    False
-    """
-
-    if not (isspmatrix_csr(graph) or isinstance(graph, np.ndarray)):
-        graph = nx.to_scipy_sparse_matrix(graph)
-    
-    if is_symmetric(graph):
-        directed = True
-    else:
-        directed = False
-    
-    n_components, labels = connected_components(
-        csgraph=graph, directed=directed, connection="weak", return_labels=True
-    )
-
-    return n_components == 1
-
-
 def is_fully_connected(graph):
     r"""
     Checks whether the input graph is fully connected in the undirected case
@@ -477,7 +427,8 @@ def is_fully_connected(graph):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph,
+        scipy.sparse.csr_matrix, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
 
@@ -499,16 +450,23 @@ def is_fully_connected(graph):
     >>> is_fully_connected(a)
     False
     """
+
     if isinstance(graph, (np.ndarray, csr_matrix)):
         if is_symmetric(graph):
-            g_object = nx.Graph()
+            directed = True
         else:
-            g_object = nx.DiGraph()
-        graph = nx.to_networkx_graph(graph, create_using=g_object)
-    if type(graph) in [nx.Graph, nx.MultiGraph]:
-        return nx.is_connected(graph)
-    elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
-        return nx.is_weakly_connected(graph)
+            directed = False
+
+        n_components, labels = connected_components(
+            csgraph=graph, directed=directed, connection="weak", return_labels=True
+        )
+        return n_components == 1
+
+    else:
+        if type(graph) in [nx.Graph, nx.MultiGraph]:
+            return nx.is_connected(graph)
+        elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
+            return nx.is_weakly_connected(graph)
 
 
 def largest_connected_component(graph, return_inds=False):
