@@ -1,6 +1,7 @@
 import pytest
 from pytest import mark
 import numpy as np
+from sklearn.mixture import GaussianMixture
 from graspologic.embed.case import CovariateAssistedEmbedding as CASE
 from graspologic.simulations import sbm
 from graspologic.utils import is_almost_symmetric
@@ -48,10 +49,10 @@ def M(request):
 
     # generate sbm
     directed = request.param
-    return sbm([n] * 3, P, directed=directed, return_labels=True)
+    return sbm([n] * 2, P, directed=directed, return_labels=True)
 
 
-@pytest.fixture(params=["static", "normal", "many"])
+@pytest.fixture(params=["static", "many"])
 def X(request, M):
     _, labels = M
     m1, m2 = 0.8, 0.3
@@ -81,19 +82,18 @@ def test_case_fits(case):
     assert case
 
 
+def test_labels_match(A, labels, M):
+    A_, labels_ = M
+    assert np.array_equal(A, A_)
+    assert np.array_equal(labels, labels)
+
+
 def test_wrong_inputs(A, X):
 
     with pytest.raises(TypeError):
-        "wrong assortive type"
+        "wrong assortative type"
         case = CASE(assortative=1)
 
-    with pytest.raises(ValueError):
-        "without covariates"
-        CASE().fit(A)
-
-
-def test_bad_covariate_matrix(X):
-    "not an adjacency matrix"
     with pytest.raises(ValueError):
         A_ = np.arange(30).reshape(10, 3)
         CASE().fit(A_, X)
@@ -101,63 +101,32 @@ def test_bad_covariate_matrix(X):
 
 def test_fit_transform(A, X):
     case = CASE(n_components=2)
-    assert case.fit_transform(A, covariates=X).any()
+    directed = not is_almost_symmetric(A)
+    if directed:
+        assert case.fit_transform(A, covariates=X)[0].any()
+    else:
+        assert case.fit_transform(A, covariates=X).any()
 
 
-def test_labels_match_clustering(M, case):
-    if np.array_equal(X, X.astype(bool)) and X.shape[-1] == 3:
-        # We already know binary covariates with small dimensionality
-        # make things weird
-        pytest.skip()
-    A, labels = M
+def test_labels_match_clustering(case, labels):
+    """
+    train a GMM, assert predictions match labels
+    """
+    # should get 100% accuracy since the two clusters are super different
+    latent = case.latent_left_
+    predicted_labels = GaussianMixture(n_components=2).fit_predict(latent)
+    assert np.array_equal(predicted_labels, labels) or np.array_equal(
+        1 - predicted_labels, labels
+    )
 
 
-def test_directed_correct_latent_positions():
-    # setup
-    ase = AdjacencySpectralEmbed(n_components=3)
-    P = np.array([[0.9, 0.1, 0.1], [0.3, 0.6, 0.1], [0.1, 0.5, 0.6]])
-    M, labels = sbm([200, 200, 200], P, directed=True, return_labels=True)
-
-    # one node from each community
-    oos_idx = np.nonzero(np.r_[1, np.diff(labels)[:-1]])[0]
-    labels = list(labels)
-    oos_labels = [labels.pop(i) for i in oos_idx]
-
-    # Grab out-of-sample, fit, transform
-    A, a = remove_vertices(M, indices=oos_idx, return_removed=True)
-    latent_left, latent_right = ase.fit_transform(A)
-    oos_left, oos_right = ase.transform(a)
-
-    # separate into communities
-    for i, latent in enumerate([latent_left, latent_right]):
-        left = i == 0
-        df = pd.DataFrame(
-            {
-                "Type": labels,
-                "Dimension 1": latent[:, 0],
-                "Dimension 2": latent[:, 1],
-                "Dimension 3": latent[:, 2],
-            }
-        )
-        # make sure that oos vertices are closer to their true community averages than other community averages
-        means = df.groupby("Type").mean()
-        if left:
-            avg_dist_within = np.diag(pairwise_distances(means, oos_left))
-            avg_dist_between = np.diag(pairwise_distances(means, oos_right))
-            self.assertTrue(all(avg_dist_within < avg_dist_between))
-        elif not left:
-            avg_dist_within = np.diag(pairwise_distances(means, oos_right))
-            avg_dist_between = np.diag(pairwise_distances(means, oos_left))
-            self.assertTrue(all(avg_dist_within < avg_dist_between))
-
-
-def test_covariates_improve_clustering(M):
-    if np.array_equal(X, X.astype(bool)) and X.shape[-1] == 3:
-        # We already know binary covariates with small dimensionality
-        # make things weird
-        pytest.skip()
-    A, labels = M
-    pass
+# def test_covariates_improve_clustering(M, X):
+#     if np.array_equal(X, X.astype(bool)) and X.shape[-1] == 3:
+#         # We already know binary covariates with small dimensionality
+#         # make things weird
+#         pytest.skip()
+#     A, labels = M
+#     assert A
 
 
 class TestGenCovariates:

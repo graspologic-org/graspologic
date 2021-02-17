@@ -85,6 +85,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             concat=concat,
         )
 
+        if not isinstance(assortative, bool):
+            msg = "Assortativeness of the graph should be a Boolean hyperparameter."
+            raise TypeError(msg)
         self.assortative_ = assortative  # TODO: compute this automatically?
         self.is_fitted_ = False
 
@@ -130,21 +133,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         self.is_fitted_ = True
         return self
-
-    # def fit_transform(self, graph, covariates):
-    #     "Fits the model and returns the estimated latent positions."
-    #     # need to override superclass because superclass doesn't take
-    #     # in covariates as a parameter
-    #     X = covariates.copy()
-    #     self.fit(graph, X)
-
-    #     if self.latent_right_ is None:
-    #         return self.latent_left_
-    #     else:
-    #         if self.concat:
-    #             return np.concatenate((self.latent_left_, self.latent_right_), axis=1)
-    #         else:
-    #             return self.latent_left_, self.latent_right_
 
     def _get_tuning_parameter(self, LL, XXt):
         """
