@@ -50,7 +50,8 @@ def latent_distribution_test(
     between the vertices of the two graphs, or even when the number of vertices
     is different. Currently, testing is only supported for undirected graphs.
 
-    Read more in the :ref:`tutorials <inference_tutorials>`
+    Read more in the `Latent Distribution Two-Graph Testing Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/inference/latent_distribution_test.html>`_
 
     Parameters
     ----------

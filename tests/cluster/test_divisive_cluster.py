@@ -47,6 +47,46 @@ def test_inputs():
         dc = DivisiveCluster(max_components=101)
         dc.fit(X)
 
+    # level not an int
+    with pytest.raises(TypeError):
+        rc = DivisiveCluster(max_components=2)
+        rc.fit_predict(X, fcluster=True, level="1")
+
+    with pytest.raises(TypeError):
+        rc = DivisiveCluster(max_components=2)
+        rc.fit(X)
+        rc.predict(X, fcluster=True, level="1")
+
+    # level not positive
+    with pytest.raises(ValueError):
+        rc = DivisiveCluster(max_components=2)
+        rc.fit_predict(X, fcluster=True, level=0)
+
+    with pytest.raises(ValueError):
+        rc = DivisiveCluster(max_components=2)
+        rc.fit(X)
+        rc.predict(X, fcluster=True, level=0)
+
+    # level exceeds n_level
+    with pytest.raises(ValueError):
+        dc = DivisiveCluster(max_components=2)
+        dc.fit_predict(X, fcluster=True, level=100)
+
+    with pytest.raises(ValueError):
+        dc = DivisiveCluster(max_components=2)
+        dc.fit(X)
+        dc.predict(X, fcluster=True, level=100)
+
+    # level is given but fcluster disabled
+    with pytest.raises(ValueError):
+        dc = DivisiveCluster(max_components=2)
+        dc.fit_predict(X, level=1)
+
+    with pytest.raises(ValueError):
+        dc = DivisiveCluster(max_components=2)
+        dc.fit(X)
+        dc.predict(X, level=1)
+
 
 def test_predict_without_fit():
     # Generate random data
@@ -163,18 +203,12 @@ def _test_hierarchical_four_class(**kws):
     """
     np.random.seed(1)
     dc = DivisiveCluster(max_components=2, **kws)
-    pred = dc.fit_predict(X)
-
-    # re-number "pred" so that each column represents
-    # a flat clustering at current level
-    for lvl in range(1, pred.shape[1]):
-        _, inds = np.unique(pred[:, : lvl + 1], axis=0, return_inverse=True)
-        pred[:, lvl] = inds
+    pred = dc.fit_predict(X, fcluster=True)
 
     # Assert that the 2-cluster model is the best at level 1
     assert_equal(np.max(pred[:, 0]) + 1, 2)
     # Assert that the 4-cluster model is the best at level 1
-    assert_equal(np.max(pred[:, 1]) + 1, 4)
+    assert_equal(len(np.unique(pred[:, 1])), 4)
 
     # Assert that we get perfect clustering at level 1
     ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
@@ -221,25 +255,11 @@ def test_hierarchical_six_class_delta_criter():
 
     # Perform clustering without setting delta_criter
     dc = DivisiveCluster(max_components=2)
-    pred = dc.fit_predict(X)
-
-    # re-number "pred" so that each column represents
-    # a flat clustering at current level
-    for lvl in range(1, pred.shape[1]):
-        _, inds = np.unique(pred[:, : lvl + 1], axis=0, return_inverse=True)
-        pred[:, lvl] = inds
+    pred = dc.fit_predict(X, fcluster=True)
 
     # Perform clustering while setting delta_criter
     dc = DivisiveCluster(max_components=2, delta_criter=10)
-    pred_delta_criter = dc.fit_predict(X)
-
-    # re-number "pred_delta_criter" so that each column represents
-    # a flat clustering at current level
-    for lvl in range(1, pred_delta_criter.shape[1]):
-        _, inds = np.unique(
-            pred_delta_criter[:, : lvl + 1], axis=0, return_inverse=True
-        )
-        pred_delta_criter[:, lvl] = inds
+    pred_delta_criter = dc.fit_predict(X, fcluster=True)
 
     # Assert that pred has more levels than pred_delta_criter
     assert_equal(pred.shape[1] - 1, pred_delta_criter.shape[1])

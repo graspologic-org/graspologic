@@ -1,0 +1,15 @@
+block,hemisphere,i,j
+isocortex,L,0,41
+pallium,L,41,61
+subpallium,L,61,68
+diencephalon,L,68,79
+midbrain,L,79,88
+hindbrain,L,88,116
+white_matter,L,116,166
+isocortex,R,166,207
+pallium,R,207,227
+subpallium,R,227,234
+diencephalon,R,234,245
+midbrain,R,245,254
+hindbrain,R,254,282
+white_matter,R,282,332

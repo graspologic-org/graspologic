@@ -13,8 +13,8 @@ from graspologic.simulations import sbm
 def generate_data():
     np.random.seed(1)
 
-    p1 = [[0.2, 0.1], [0.1, 0.2]]
-    p2 = [[0.1, 0.2], [0.2, 0.1]]
+    p1 = [[0.3, 0.1], [0.1, 0.3]]
+    p2 = [[0.1, 0.3], [0.3, 0.1]]
     n = [50, 50]
 
     g1 = [sbm(n, p1) for _ in range(20)]
