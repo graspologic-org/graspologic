@@ -110,7 +110,7 @@ def select_dimension(
         msg = "n_elbows must be an integer, not {}.".format(type(n_elbows))
         raise ValueError(msg)
     elif n_elbows < 1:
-        msg = "number of elbows should be an integer > 1, not {}.".format(n_elbows)
+        msg = f"number of elbows should be an integer > 1, not {n_elbows}."
         raise ValueError(msg)
 
     # Handle threshold

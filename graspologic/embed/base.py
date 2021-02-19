@@ -135,9 +135,13 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self
 
-    def _fit_transform(self, graph, *args, **kwargs):
+    def _fit_transform(self, graph=None, fit=True, *args, **kwargs):
         "Fits the model and returns the estimated latent positions."
-        self.fit(graph, *args, **kwargs)
+        if graph is None and fit:
+            raise ValueError("fitting requires a graph.")
+
+        if fit:
+            self.fit(graph, *args, **kwargs)
 
         if self.latent_right_ is None:
             return self.latent_left_

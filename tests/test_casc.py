@@ -40,10 +40,10 @@ def M(request):
     # since they exist in separate functions
 
     # parameters
-    n = 5
+    n = 10
     p, q = 0.9, 0.3
 
-    # block probability matirx
+    # block probability matrix
     P = np.full((2, 2), q)
     P[np.diag_indices_from(P)] = p
 
@@ -59,10 +59,10 @@ def X(request, M):
     return gen_covariates(m1, m2, labels, type=request.param)
 
 
-@pytest.fixture
-def case(M, X):
+@pytest.fixture(params=[True, False])
+def case(request, M, X):
     A, labels = M
-    case = CASE(n_components=2)
+    case = CASE(n_components=2, assortative=request.param)
     case.fit(A, covariates=X)
     return case
 
@@ -114,19 +114,11 @@ def test_labels_match_clustering(case, labels):
     """
     # should get 100% accuracy since the two clusters are super different
     latent = case.latent_left_
-    predicted_labels = GaussianMixture(n_components=2).fit_predict(latent)
+    gmm = GaussianMixture(n_components=2)
+    predicted_labels = gmm.fit_predict(latent)
     assert np.array_equal(predicted_labels, labels) or np.array_equal(
         1 - predicted_labels, labels
     )
-
-
-# def test_covariates_improve_clustering(M, X):
-#     if np.array_equal(X, X.astype(bool)) and X.shape[-1] == 3:
-#         # We already know binary covariates with small dimensionality
-#         # make things weird
-#         pytest.skip()
-#     A, labels = M
-#     assert A
 
 
 class TestGenCovariates:

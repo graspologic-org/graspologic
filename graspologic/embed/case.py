@@ -1,4 +1,4 @@
-#%%
+# %%
 from graspologic.utils import import_graph, to_laplacian
 from graspologic.embed.base import BaseSpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
@@ -68,12 +68,12 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
     def __init__(
         self,
-        assortative=False,
+        assortative=True,
         n_components=None,
         n_elbows=2,
         algorithm="randomized",
         n_iter=5,
-        check_lcc=True,
+        check_lcc=False,
         concat=False,
     ):
         super().__init__(
@@ -85,9 +85,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             concat=concat,
         )
 
-        if not isinstance(assortative, bool):
-            msg = "Assortativeness of the graph should be a Boolean hyperparameter."
-            raise TypeError(msg)
         self.assortative_ = assortative  # TODO: compute this automatically?
         self.is_fitted_ = False
 
@@ -130,9 +127,11 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         a = self._get_tuning_parameter(LL, XXt)
         L_ = LL + a * (XXt)
         self._reduce_dim(L_)
-
         self.is_fitted_ = True
         return self
+
+    def transform(self, X):
+        return self._fit_transform(fit=False)
 
     def _get_tuning_parameter(self, LL, XXt):
         """
