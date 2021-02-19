@@ -6,7 +6,12 @@ from abc import abstractmethod
 import numpy as np
 from sklearn.base import BaseEstimator
 
-from ..utils import augment_diagonal, import_graph, is_almost_symmetric
+from ..utils import (
+    augment_diagonal,
+    import_graph,
+    is_almost_symmetric,
+    is_fully_connected,
+)
 from .svd import selectSVD
 
 
@@ -108,7 +113,6 @@ class BaseSpectralEmbed(BaseEstimator):
         """This is for sklearn compliance."""
         return True
 
-    @abstractmethod
     def fit(self, graph, y=None):
         """
         A method for embedding.
@@ -132,8 +136,19 @@ class BaseSpectralEmbed(BaseEstimator):
         # call self._reduce_dim(A) from your respective embedding technique.
         # import graph(s) to an adjacency matrix using import_graph function
         # here
+        A = import_graph(graph)
 
-        return self
+        if self.check_lcc:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspologic.utils.largest_connected_component``."
+                )
+                warnings.warn(msg, UserWarning)
+
+        self.n_features_in_ = A.shape[0]
+        return A
 
     def _fit_transform(self, graph):
         "Fits the model and returns the estimated latent positions."
