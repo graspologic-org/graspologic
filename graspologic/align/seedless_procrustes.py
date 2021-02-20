@@ -59,30 +59,30 @@ class SeedlessProcrustes(BaseAlign):
             except this is a heuristic that can save time, but can sometimes
             yield suboptimal results.
         - 'custom'
-            Expects either an initial guess for `self.Q_` or an initial guess
-            for `self.P_`, but not both. See `initial_Q` and `initial_P`,
-            respectively. If neither is provided, initializes `initial_Q` to an
+            Expects either an initial guess for :attr:`Q_` or an initial guess
+            for :attr:`P_`, but not both. See ``initial_Q`` and ``initial_P``,
+            respectively. If neither is provided, initializes ``initial_Q`` to an
             identity with an appropriate number of dimensions.
 
     initial_Q : np.ndarray, shape (d, d) or None, optional (default=None)
-        An initial guess for the alignment matrix, `self.Q_`, if such exists.
-        Only one of `initial_Q`, `initial_P` can be provided at the same time,
-        and only if `init` argument is set to 'custom'. If None, and
-        `initial_P` is also None - initializes `initial_Q` to identity matrix.
+        An initial guess for the alignment matrix, :attr:`Q_`, if such exists.
+        Only one of ``initial_Q``, ``initial_P`` can be provided at the same time,
+        and only if ``init`` argument is set to 'custom'. If None, and
+        ``initial_P`` is also None - initializes ``initial_Q`` to identity matrix.
         Must be an orthogonal matrix, if provided.
 
     initial_P : np.ndarray, shape (n, m) or None, optional (default=None)
-        Initial guess for the optimal transport matrix, `self.P_`, if such
-        exists. Only one of `initial_Q`, `initial_P` can be provided at the
-        same time, and only if `init` argument is set to 'custom'. If None, and
-        `initial_Q` is also None - initializes `initial_Q` to identity matrix.
+        Initial guess for the optimal transport matrix, :attr:`P_`, if such
+        exists. Only one of ``initial_Q``, ``initial_P`` can be provided at the
+        same time, and only if ``init`` argument is set to 'custom'. If None, and
+        ``initial_Q`` is also None - initializes ``initial_Q`` to identity matrix.
         Must be a soft assignment matrix if provided (rows sum up to 1/n, cols
         sum up to 1/m.)
 
     Attributes
     ----------
     Q_ : array, size (d, d)
-        Final orthogonal matrix, used to modify `X`.
+        Final orthogonal matrix, used to modify ``X``.
 
     P_ : array, size (n, m) where n and m are the sizes of two datasets
         Final matrix of optimal transports, represent soft matching weights
@@ -95,17 +95,19 @@ class SeedlessProcrustes(BaseAlign):
 
     selected_initial_Q_ : array, size (d, d)
         Initial orthogonal matrix which was used as the initialization.
-        If `init` was set to `2d` or `sign_flips`, then it is the adaptively
+        If ``init`` was set to '2d' or 'sign_flips', then it is the adaptively
         selected matrix.
-        If `init` was set to custom, and `initial_Q` was provided, then equal
-        to that. If it was not provided, but `initial_P` was, then it is the
+        If ``init`` was set to 'custom', and ``initial_Q`` was provided, then equal
+        to that. If it was not provided, but ``initial_P`` was, then it is the
         matrix after the first procrustes performed. If neither was provided,
         then it is the identity matrix.
 
     References
     ----------
-    .. [1] Agterberg, J.
-        # TODO Cite the Seedless Procrustes preprint whenever available.
+
+    .. [1] Agterberg, J., Tang, M., Priebe., C. E. (2020).
+        "Nonparametric Two-Sample Hypothesis Testing for Random Graphs with Negative and Repeated Eigenvalues"
+        arXiv:2012.09828
 
     .. [2] Agterberg, J., Tang, M., Priebe., C. E. (2020).
         "On Two Distinct Sources of Nonidentifiability in Latent Position Random Graph Models"
@@ -142,9 +144,9 @@ class SeedlessProcrustes(BaseAlign):
     solving an optimal transport problem via Sinkhorn algorithm, whereas
     obtaining an orthogonal alignment matrix :math:`Q_{i+1} | P_{i}` ("M-step")
     is done via regular orthogonal procurstes. These alternating steps are
-    performed until `iterative_num_reps` is reached.
+    performed until ``iterative_num_reps`` is reached.
 
-    For more on how the initial guess can be performed, see `init`.
+    For more on how the initial guess can be performed, see ``init``.
 
     """
 
@@ -309,11 +311,11 @@ class SeedlessProcrustes(BaseAlign):
         Parameters
         ----------
         X : np.ndarray, shape (n, d)
-            Dataset to be mapped to `Y`, must have same number of dimensions
-            (axis 1) as `Y`.
+            Dataset to be mapped to ``Y``, must have same number of dimensions
+            (axis 1) as ``Y``.
 
         Y : np.ndarray, shape (m, d)
-            Target dataset, must have same number of dimensions (axis 1) as `X`.
+            Target dataset, must have same number of dimensions (axis 1) as ``X``.
 
         Returns
         -------

@@ -16,7 +16,8 @@ class EREstimator(SBMEstimator):
 
     :math:`P_{ij} = p` for all i, j
 
-    Read more in the :ref:`tutorials <models_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------
@@ -76,7 +77,8 @@ class DCEREstimator(DCSBMEstimator):
 
     :math:`P_{ij} = \theta_i \theta_j p`
 
-    Read more in the :ref:`tutorials <models_tutorials>`
+    Read more in the `Erdos-Renyi (ER) Model Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html>`_
 
     Parameters
     ----------

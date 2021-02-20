@@ -13,12 +13,14 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
     :math:`P = XX^T`. If X, Y :math:`\in\mathbb{R}^{n\times d}` is given, then
     :math:`P = XY^T`. These operations correspond to the dot products between a set of
     latent positions, so each row in X or Y represents the latent positions in
-    :math:`\mathbb{R}^{d}` for a single vertex in the random graph
+    :math:`\mathbb{R}^{d}` for a single vertex in the random graph.
     Note that this function may also rescale or clip the resulting P
     matrix to get probabilities between 0 and 1, or remove loops.
     A binary random graph is then sampled from the P matrix described
     by X (and possibly Y).
-    Read more in the :ref:`tutorials <simulations_tutorials>`
+
+    Read more in the `Correlated Random Dot Product Graph (RDPG) Graph Pair Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/rdpg_corr.html>`_
 
     Parameters
     ----------
@@ -33,7 +35,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
         The value of the correlation between the same vertices in two graphs.
 
     rescale: boolean, optional (default=True)
-        when rescale is True, will subtract the minimum value in
+        when ``rescale`` is True, will subtract the minimum value in
         P (if it is below 0) and divide by the maximum (if it is
         above 1) to ensure that P has entries between 0 and 1. If
         False, elements of P outside of [0, 1] will be clipped.

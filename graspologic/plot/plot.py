@@ -1,14 +1,16 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.colors import Colormap
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib.colors import Colormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from sklearn.utils import check_array, check_consistent_length
+from scipy import linalg
 from sklearn.preprocessing import Binarizer
+from sklearn.utils import check_array, check_consistent_length, check_X_y
 
 from ..embed import selectSVD
 from ..utils import import_graph, pass_to_ranks
@@ -97,10 +99,8 @@ def _transform(arr, method):
             transformer = Binarizer().fit(arr)
             arr = transformer.transform(arr)
         else:
-            msg = "Transform must be one of {log, log10, binarize, zero-boost, simple-all, \
-            simple-nonzero, not {}.".format(
-                method
-            )
+            msg = f"Transform must be one of {{log, log10, binarize, zero-boost, \
+            simple-all, simple-nonzero}}, not {method}."
             raise ValueError(msg)
 
     return arr
@@ -152,18 +152,19 @@ def heatmap(
     ax=None,
     title_pad=None,
     sort_nodes=False,
-    **kwargs
+    **kwargs,
 ):
     r"""
     Plots a graph as a color-encoded matrix.
 
-    Nodes can be grouped by providing `inner_hier_labels` or both
-    `inner_hier_labels` and `outer_hier_labels`. Nodes can also
+    Nodes can be grouped by providing ``inner_hier_labels`` or both
+    ``inner_hier_labels`` and ``outer_hier_labels``. Nodes can also
     be sorted by the degree from largest to smallest degree nodes.
     The nodes will be sorted within each group if labels are also
     provided.
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the `Heatmap: Visualizing a Graph Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/heatmaps.html>`_
 
     Parameters
     ----------
@@ -237,12 +238,12 @@ def heatmap(
 
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if ``None``
+        if None
 
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is ``True``, will sort nodes this way within block.
+        ``sort_nodes`` is True, will sort nodes this way within block.
 
     **kwargs : dict, optional
         additional plotting arguments passed to Seaborn's ``heatmap``
@@ -314,7 +315,7 @@ def heatmap(
             ax=ax,
             vmin=vmin,
             vmax=vmax,
-            **kwargs
+            **kwargs,
         )
 
         if title is not None:
@@ -365,7 +366,8 @@ def gridplot(
     The size of the dots correspond to the edge weights of the graphs, and
     colors represent input graphs.
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the `Gridplot: Visualize Multiple Graphs Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/gridplot.html>`_
 
     Parameters
     ----------
@@ -404,7 +406,7 @@ def gridplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the hue variable.
+        be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float [0, 1], default : 0.7
@@ -425,11 +427,11 @@ def gridplot(
         ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if ``None``
+        if None
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is ``True``, will sort nodes this way within block.
+        ``sort_nodes`` is True, will sort nodes this way within block.
     """
     _check_common_inputs(
         height=height,
@@ -534,24 +536,25 @@ def pairplot(
     r"""
     Plot pairwise relationships in a dataset.
 
-    By default, this function will create a grid of Axes such that each dimension
+    By default, this function will create a grid of axes such that each dimension
     in data will by shared in the y-axis across a single row and in the x-axis
     across a single column.
 
-    The off-diagonal Axes show the pairwise relationships displayed as scatterplot.
-    The diagonal Axes show the univariate distribution of the data for that
+    The off-diagonal axes show the pairwise relationships displayed as scatterplot.
+    The diagonal axes show the univariate distribution of the data for that
     dimension displayed as either a histogram or kernel density estimates (KDEs).
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the `Pairplot: Visualizing High Dimensional Data Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/pairplot.html>`_
 
     Parameters
     ----------
     X : array-like, shape (n_samples, n_features)
         Input data.
     labels : array-like or list, shape (n_samples), optional
-        Labels that correspond to each sample in X.
+        Labels that correspond to each sample in ``X``.
     col_names : array-like or list, shape (n_features), optional
-        Names or labels for each feature in X. If not provided, the default
+        Names or labels for each feature in ``X``. If not provided, the default
         will be `Dimension 1, Dimension 2, etc`.
     title : str, optional, default: None
         Title of plot.
@@ -569,7 +572,7 @@ def pairplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the hue variable.
+        be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float, optional, default: 0.7
@@ -673,6 +676,278 @@ def pairplot(
     return pairs
 
 
+def _plot_ellipse_and_data(
+    data, X, j, k, means, covariances, ax, label_palette, cluster_palette, alpha
+):
+    r"""
+    plot_ellipse makes a scatter plot from the two dimensions j,k where j
+    corresponds to x-axis
+    and k corresponds to the y-axis onto the axis that is ax. plot_ellipse then
+    applies a gmm ellipse onto the scatterplot
+    using the data from Y_(which is stored in data["clusters"]),
+    means, covariances.
+
+    Parameters
+    ----------
+    X : array-like, shape (n_samples, n_features)
+        Input data.
+    j : int
+        column index of feature of interest from X which will be the x-axis data.
+    k : int
+        column index of feature of interest from X which will be the y-axis data.
+    means : array-like, shape (n_components, n_features)
+        Estimated means from gmm
+    covariances : array-like, shape (with 'full') (n_components, n_features, n_features)
+        estimated covariances from gmm
+    ax : axis object
+        The location where plot_ellipse will plot
+    label_palette : dict, optional, default: dictionary using 'Set1'
+    cluster_palette : dict, optional, default: dictionary using 'Set1'
+    alpha : float, optional, default: 0.7
+        Opacity value of plotter markers between 0 and 1
+
+    References
+    ----------
+    .. [1]  https://scikit-learn.org/stable/auto_examples/mixture/plot_gmm_covariances.html#sphx-glr-auto-examples-mixture-plot-gmm-covariances-py.
+    """
+    sns.scatterplot(
+        data=data, x=X[:, j], y=X[:, k], ax=ax, hue="labels", palette=label_palette
+    )
+    for i, (mean, covar) in enumerate(zip(means, covariances)):
+        v, w = linalg.eigh(covar)
+        v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
+        u = w[0] / linalg.norm(w[0])
+        # Plot an ellipse to show the Gaussian component
+        angle = np.arctan(u[1] / u[0])
+        angle = 180.0 * angle / np.pi
+        ell = mpl.patches.Ellipse(
+            [mean[j], mean[k]],
+            v[0],
+            v[1],
+            180.0 + angle,
+            color=cluster_palette[i],
+        )
+        ell.set_clip_box(ax.bbox)
+        ell.set_alpha(alpha)
+        ax.add_artist(ell)
+        # removes tick marks from off diagonal graphs
+        ax.set(xticks=[], yticks=[], xlabel=k, ylabel=k)
+        ax.legend().remove()
+
+
+def pairplot_with_gmm(
+    X,
+    gmm,
+    labels=None,
+    cluster_palette="Set1",
+    label_palette="Set1",
+    title=None,
+    legend_name=None,
+    context="talk",
+    font_scale=1,
+    alpha=0.7,
+    figsize=(12, 12),
+    histplot_kws={},
+):
+    r"""
+    Plot pairwise relationships in a dataset, also showing a clustering predicted by
+    a Gaussian mixture model.
+
+    By default, this function will create a grid of axes such that each dimension
+    in data will by shared in the y-axis across a single row and in the x-axis
+    across a single column.
+
+    The off-diagonal axes show the pairwise relationships displayed as scatterplot.
+    The diagonal axes show the univariate distribution of the data for that
+    dimension displayed as either a histogram or kernel density estimates (KDEs).
+
+    Read more in the `Pairplot with GMM: Visualizing High Dimensional Data and
+    Clustering Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/plotting/pairplot_with_gmm.html>`_
+
+    Parameters
+    ----------
+    X : array-like, shape (n_samples, n_features)
+        Input data.
+    gmm: GaussianMixture object
+        A fit :class:`sklearn.mixture.GaussianMixture` object.
+        Gaussian mixture models (GMMs) are probabilistic models for representing data
+        based on normally distributed subpopulations, GMM clusters each data point into
+        a corresponding subpopulation.
+    labels : array-like or list, shape (n_samples), optional
+        Labels that correspond to each sample in ``X``.
+        If labels are not passed in then labels are predicted by ``gmm``.
+    label_palette : str or dict, optional, default: 'Set1'
+        Palette used to color points if ``labels`` are passed in.
+    cluster_palette : str or dict, optional, default: 'Set1'
+        Palette used to color GMM ellipses (and points if no ``labels`` are passed).
+    title : string, default: ""
+        Title of the plot.
+    legend_name : string, default: None
+        Name to put above the legend.
+        If ``None``, will be "Cluster" if no custom ``labels`` are passed, and ""
+        otherwise.
+    context :  None, or one of {talk (default), paper, notebook, poster}
+        Seaborn plotting context
+    font_scale : float, optional, default: 1
+        Separate scaling factor to independently scale the size of the font
+        elements.
+    alpha : float, optional, default: 0.7
+        Opacity value of plotter markers between 0 and 1
+    figsize : tuple
+        The size of the 2d subplots configuration
+    histplot_kws : dict, default: {}
+        Keyword arguments passed down to :func:`seaborn.histplot`
+
+    Returns
+    -------
+    fig : matplotlib Figure
+    axes : np.ndarray
+        Array of matplotlib Axes
+
+    See Also
+    --------
+    graspologic.plot.pairplot
+    graspologic.cluster.AutoGMMCluster
+    sklearn.mixture.GaussianMixture
+    """
+    # Handle X and labels
+    if labels is not None:
+        check_X_y(X, labels)
+        # if custom labels pass sets default
+        if legend_name is None:
+            legend_name = ""
+    else:
+        # sets default if no custom labels passed
+        legend_name = "Cluster"
+    # Handle gmm
+    if gmm is None:
+        msg = "You must input a sklearn.mixture.GaussianMixture"
+        raise NameError(msg)
+    Y_, means, covariances = gmm.predict(X), gmm.means_, gmm.covariances_
+    data = pd.DataFrame(data=X)
+    n_components = gmm.n_components
+
+    # reformat covariances in preparation for ellipse plotting
+    if gmm.covariance_type == "tied":
+        covariances = np.repeat(
+            gmm.covariances_[np.newaxis, :, :], n_components, axis=0
+        )
+    elif gmm.covariance_type == "diag":
+        covariances = np.array(
+            [np.diag(gmm.covariances_[i]) for i in range(n_components)]
+        )
+    elif gmm.covariance_type == "spherical":
+        covariances = np.array(
+            [
+                np.diag(np.repeat(gmm.covariances_[i], X.shape[1]))
+                for i in range(n_components)
+            ]
+        )
+
+    # setting up the data DataFrame
+    if labels is None:
+        lab_names = [i for i in range(n_components)]
+        data["labels"] = np.asarray([lab_names[Y_[i]] for i in range(Y_.shape[0])])
+    else:
+        data["labels"] = labels
+    data["clusters"] = Y_
+    # labels are given we must check whether input is correct
+    if labels is not None:
+        if isinstance(label_palette, str):
+            colors = sns.color_palette(label_palette, n_components)
+            label_palette = dict(zip(np.unique(np.asarray(labels)), colors))
+        elif not isinstance(label_palette, dict):
+            msg = "When giving labels must supply palette in string or dictionary"
+            raise ValueError(msg)
+        if isinstance(cluster_palette, str):
+            colors = sns.color_palette(cluster_palette, n_components)
+            cluster_palette = dict(zip(np.unique(Y_), colors))
+        elif not isinstance(label_palette, dict):
+            msg = "When giving labels must supply palette in string or dictionary"
+            raise ValueError(msg)
+    else:
+        # no labels given we go to default.
+        colors = sns.color_palette(cluster_palette, n_components)
+        labels = np.unique(Y_)
+        cluster_palette = dict(zip(np.unique(labels), colors))
+        label_palette = dict(zip(np.unique(np.asarray(labels)), colors))
+
+    with sns.plotting_context(context=context, font_scale=font_scale):
+        dimensions = X.shape[1]
+        # we only want 1 scatter plot for 2 features
+        if X.shape[1] == 2:
+            dimensions = 1
+        fig, axes = plt.subplots(dimensions, dimensions, figsize=figsize, squeeze=False)
+        # this will allow for uniform iteration whether axes was 2d or 1d
+        axes = axes.flatten()
+        for i in range(dimensions):
+            for j in range(dimensions):
+                if i == j and X.shape[1] > 2:
+                    # take care of the histplot on diagonal
+                    for t, lab in zip([i for i in range(X.shape[1])], label_palette):
+                        sns.histplot(
+                            X[Y_ == t, i],
+                            ax=axes[dimensions * i + j],
+                            color=label_palette[lab],
+                            **histplot_kws,
+                        )
+                    # this removes the tick marks from the histplot
+                    axes[dimensions * i + j].set_xticks([])
+                    axes[dimensions * i + j].set_yticks([])
+                else:
+                    # take care off off-diagonal scatterplots
+                    dim1, dim2 = j, i
+                    # with only a scatter plot we must make sure we plot
+                    # the first and second feature of X
+                    if X.shape[1] == 2:
+                        dim1, dim2 = 0, 1
+                    _plot_ellipse_and_data(
+                        data,
+                        X,
+                        dim1,
+                        dim2,
+                        means,
+                        covariances,
+                        axes[dimensions * i + j],
+                        label_palette,
+                        cluster_palette,
+                        alpha=alpha,
+                    )
+        # formatting
+        if title:
+            plt.suptitle(title)
+        for i in range(dimensions):
+            for j in range(dimensions):
+                if X.shape[1] == 2:
+                    axes[dimensions * i + j].set_ylabel("Dimension " + str(1))
+                    axes[dimensions * i + j].set_xlabel("Dimension " + str(2))
+                else:
+                    axes[dimensions * i + j].set_ylabel("Dimension " + str(i + 1))
+                    axes[dimensions * i + j].set_xlabel("Dimension " + str(j + 1))
+
+        for ax in axes.flat:
+            ax.label_outer()
+            ax.spines["right"].set_visible(False)
+            ax.spines["top"].set_visible(False)
+        # set up the legend correctly by only getting handles(colored dot)
+        # and label corresponding to unique pairs
+        if X.shape[1] == 2:
+            handles, labels = axes[0].get_legend_handles_labels()
+        else:
+            handles, labels = axes[1].get_legend_handles_labels()
+        fig.legend(
+            handles,
+            labels,
+            loc="center right",
+            title=legend_name,
+        )
+        # allows for the legend to not overlap with plots while also keeping
+        # legend in frame
+        fig.subplots_adjust(right=0.85)
+        return fig, axes
+
+
 def _distplot(
     data,
     labels=None,
@@ -704,7 +979,7 @@ def _distplot(
             plt.legend()
         else:
             if data.min() != data.max():
-                sns.distplot(data, hist=False, kde_kws=plt_kws)
+                sns.histplot(data, hist=False, kde_kws=plt_kws)
             else:
                 ax.axvline(data[0])
 
@@ -734,7 +1009,7 @@ def degreeplot(
     ----------
     X : np.ndarray (2D)
         input graph
-    labels : 1d np.ndarray or list, same length as dimensions of X
+    labels : 1d np.ndarray or list, same length as dimensions of ``X``
         Labels for different categories of graph nodes
     direction : string, ('out', 'in')
         Whether to plot out degree or in degree for a directed graph
@@ -747,7 +1022,7 @@ def degreeplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the hue variable.
+        be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
@@ -803,7 +1078,7 @@ def edgeplot(
     ----------
     X : np.ndarray (2D)
         Input graph
-    labels : 1d np.ndarray or list, same length as dimensions of X
+    labels : 1d np.ndarray or list, same length as dimensions of ``X``
         Labels for different categories of graph nodes
     nonzero : boolean, default: False
         Whether to restrict the edgeplot to only the non-zero edges
@@ -816,7 +1091,7 @@ def edgeplot(
         elements.
     palette : str, dict, optional, default: 'Set1'
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
-        be values in the hue variable.
+        be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
         :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
@@ -1112,7 +1387,7 @@ def _plot_brackets(
             ax.patch.set_alpha(0)
     ax.set_yticks([])
     ax.set_xticks([])
-    ax.tick_params(axis=axis, which=u"both", length=0, pad=7)
+    ax.tick_params(axis=axis, which="both", length=0, pad=7)
     for direction in ["left", "right", "bottom", "top"]:
         ax.spines[direction].set_visible(False)
     if axis == "x":

@@ -8,7 +8,7 @@ from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from ..utils import (
     augment_diagonal,
-    cartprod,
+    cartesian_product,
     import_graph,
     is_unweighted,
     remove_loops,
@@ -56,7 +56,8 @@ class SBMEstimator(BaseGraphEstimator):
     where :math:`B \in \mathbb{[0, 1]}^{K x K}` and :math:`\tau` is an `n\_nodes`
     length vector specifying which block each node belongs to.
 
-    Read more in the :ref:`tutorials <models_tutorials>`
+    Read more in the `Stochastic Block Model (SBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html>`_
 
     Parameters
     ----------
@@ -73,7 +74,7 @@ class SBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -100,7 +101,7 @@ class SBMEstimator(BaseGraphEstimator):
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to ``fit``.
+        belongs to if ``y`` was not passed during the call to :func:`~graspologic.models.SBMEstimator.fit`.
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
@@ -243,7 +244,8 @@ class DCSBMEstimator(BaseGraphEstimator):
 
     where :math:`\theta` and :math:`\eta` need not be the same.
 
-    Read more in the :ref:`tutorials <models_tutorials>`
+    Read more in the `Stochastic Block Model (SBM) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html>`_
 
     Parameters
     ----------
@@ -265,7 +267,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension``.
+        will be chosen by :func:`~graspologic.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -291,14 +293,14 @@ class DCSBMEstimator(BaseGraphEstimator):
         sampled.
 
     degree_corrections_ : np.ndarray, shape (n_verts, 1) or (n_verts, 2)
-        Degree correction vector(s) :math:`\theta`. If `degree_directed` parameter was
+        Degree correction vector(s) :math:`\theta`. If ``degree_directed`` parameter was
         False, then will be of shape (n_verts, 1) and element :math:`i` represents the
         degree correction for node :math:`i`. Otherwise, the first column contains out
         degree corrections and the second column contains in degree corrections.
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to ``fit``.
+        belongs to if ``y`` was not passed during the call to :func:`~graspologic.models.DCSBMEstimator.fit`.
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
@@ -465,7 +467,7 @@ def _calculate_block_p(graph, block_inds, block_vert_inds, return_counts=False):
     """
 
     n_blocks = len(block_inds)
-    block_pairs = cartprod(block_inds, block_inds)
+    block_pairs = cartesian_product(block_inds, block_inds)
     block_p = np.zeros((n_blocks, n_blocks))
 
     for p in block_pairs:
@@ -490,7 +492,7 @@ def _block_to_full(block_mat, inverse, shape):
     block mat : k x k
     inverse : array like length n,
     """
-    block_map = cartprod(inverse, inverse).T
+    block_map = cartesian_product(inverse, inverse).T
     mat_by_edge = block_mat[block_map[0], block_map[1]]
     full_mat = mat_by_edge.reshape(shape)
     return full_mat
