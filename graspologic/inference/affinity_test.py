@@ -20,9 +20,7 @@ class DefinedContingencyTable(NamedTuple):
 
 
 def affinity_test(
-    graph: Union[nx.Graph, nx.DiGraph, np.ndarray],
-    test: str,
-    comms: np.ndarray = None,
+    graph: Union[nx.Graph, nx.DiGraph, np.ndarray], test: str, comms: np.ndarray = None,
 ) -> DefinedContingencyTable:
     """
     Returns a test of homophilic or homotopic affinity in a graph.
@@ -119,7 +117,7 @@ def affinity_test(
 
     n = graph.shape[0]
     if comms is None:
-        comms = np.asarray([int(0.5*n), int(0.5*n)])
+        comms = np.asarray([int(0.5 * n), int(0.5 * n)])
 
     # Contingency Table
     con_table = np.zeros((2, 2))
@@ -153,9 +151,9 @@ def _calc_probs(graph, comms, test):
 
         if test == "homophilic":
 
-            block = graph[c1_0:idx[i], c1_0:idx[i]]
+            block = graph[c1_0 : idx[i], c1_0 : idx[i]]
             edge += len(block[block != 0])
-            total += comms[i]**2
+            total += comms[i] ** 2
 
         else:
 
@@ -168,8 +166,8 @@ def _calc_probs(graph, comms, test):
 
                 move = min(comm_size, further)
 
-                c1_c2 = graph[c1_0:c1_0 + move, c2_0:c2_0 + move]
-                c2_c1 = graph[c2_0:c2_0 + move, c1_0:c1_0 + move]
+                c1_c2 = graph[c1_0 : c1_0 + move, c2_0 : c2_0 + move]
+                c2_c1 = graph[c2_0 : c2_0 + move, c1_0 : c1_0 + move]
 
                 c1_bilateral = np.diag(c1_c2)
                 c2_bilateral = np.diag(c2_c1)

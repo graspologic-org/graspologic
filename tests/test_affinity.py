@@ -31,8 +31,7 @@ def test_inputs():
 
     np.random.seed(10)
     n = [50, 50]
-    p = [[0.5, 0.2],
-         [0.2, 0.50]]
+    p = [[0.5, 0.2], [0.2, 0.50]]
     X = sbm(n=n, p=p)
 
     test = 5
@@ -50,8 +49,7 @@ def test_inputs():
         affinity_test(X, "homophilic")
 
     n = [50, 50]
-    p = [[0.5, 0.2],
-         [0.2, 0.50]]
+    p = [[0.5, 0.2], [0.2, 0.50]]
     X = sbm(n=n, p=p)
 
     with pytest.raises(TypeError):
@@ -64,30 +62,28 @@ def test_inputs():
         affinity_test(X, "homophilic", comms=np.zeros((2, 2)))
 
     with pytest.raises(ValueError):
-        affinity_test(X, "homophilic", comms=np.zeros((1, )))
+        affinity_test(X, "homophilic", comms=np.zeros((1,)))
 
     X = nx.Graph()
     X.add_node(1)
     X.add_node(2)
     with pytest.raises(ValueError):
-        affinity_test(X, "homophilic", comms=np.zeros((3, )))
+        affinity_test(X, "homophilic", comms=np.zeros((3,)))
 
     n = [50, 50]
-    p = [[0.5, 0.2],
-         [0.2, 0.50]]
+    p = [[0.5, 0.2], [0.2, 0.50]]
     X = sbm(n=n, p=p)
     with pytest.raises(ValueError):
-        affinity_test(X, "homophilic", comms=np.zeros((1000, )))
+        affinity_test(X, "homophilic", comms=np.zeros((1000,)))
 
     with pytest.raises(ValueError):
-        affinity_test(X, "homophilic", comms=np.zeros((1000, )))
+        affinity_test(X, "homophilic", comms=np.zeros((1000,)))
 
 
 def test_outputs():
     np.random.seed(10)
     n = [50, 50]
-    p = [[0.5, 0.2],
-         [0.2, 0.50]]
+    p = [[0.5, 0.2], [0.2, 0.50]]
     X = sbm(n=n, p=p)
 
     table, pvalue = affinity_test(X, "homophilic")
