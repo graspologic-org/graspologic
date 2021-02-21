@@ -34,7 +34,7 @@ def affinity_test(
         The graph. We assume block communities.
     test : str
         Affinity test, either `homophilic` or `homotopic`.
-    comms : str
+    comms : np.ndarray
         Array of values indicating the sizes of the communities. If none is
         provided, it is assumed there are two communities, each taking up half
         of the nodes in the graph.
