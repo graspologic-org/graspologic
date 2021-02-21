@@ -16,11 +16,17 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
     Perform Spectral Embedding on a graph with covariates, using the regularized graph Laplacian.
 
     The Covariate-Assisted Spectral Embedding is a k-dimensional Euclidean representation
-    of a graph based on its Laplacian (assortative) or squared Laplacian (non-assortative),
-    and a vector of covariate features for each node.
+    of a graph based on a function of its Laplacian and a vector of covariate features
+    for each node.
 
     Parameters
     ----------
+    embedding_alg : str, default = "assortative"
+        Embedding algorithm to use:
+        - "assortative": Embed ``L + a*X@X.T``. Better for assortative graphs.
+        - "non-assortative": Embed ``L@L + a*X@X.T``. Better for non-assortative graphs.
+        - "cca": Embed ``L@X``. Better for large graphs.
+
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
         n_components must be <= min(X.shape). Otherwise, n_components must be
@@ -30,16 +36,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
     n_elbows : int, optional, default: 2
         If `n_components=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
-
-    algorithm : {'full', 'truncated' (default), 'randomized'}, optional
-        SVD solver to use:
-        - 'full'
-            Computes full svd using ``scipy.linalg.svd``
-        - 'truncated'
-            Computes truncated svd using ``scipy.sparse.linalg.svd``
-        - 'randomized'
-            Computes randomized svd using
-            ``sklearn.utils.extmath.randomized_svd``
 
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or
@@ -68,24 +64,25 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
     def __init__(
         self,
-        assortative=True,
+        embedding_alg="assortative",
         n_components=None,
         n_elbows=2,
-        algorithm="randomized",
         n_iter=5,
         check_lcc=False,
         concat=False,
+        normalize=False
     ):
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
-            algorithm=algorithm,
+            algorithm="full",
             n_iter=n_iter,
             check_lcc=check_lcc,
             concat=concat,
+            normalize=normalize
         )
 
-        self.assortative_ = assortative  # TODO: compute this automatically?
+        self.embedding_alg = embedding_alg  # TODO: compute this automatically?
         self.is_fitted_ = False
 
     def fit(self, graph, covariates, y=None):
@@ -116,17 +113,37 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         self : object
             Returns an instance of self.
         """
+        """Embedding algorithm to use:
+        - "assort": Embed ``L + a*X@X.T``. Better for assortative graphs.
+        - "non-assort": Embed ``L@L + a*X@X.T``. Better for non-assortative graphs.
+        - "cca": Embed ``L@X``. Better for large graphs."""
         # setup
         A = import_graph(graph)
         X = covariates.copy()
 
         # workhorse code
         L = to_laplacian(A, form="R-DAD")
-        LL = L if self.assortative_ else L @ L
-        XXt = X @ X.T
-        a = self._get_tuning_parameter(LL, XXt)
+
+        if self.embedding_alg == "assort":
+            LL = L
+            XXt = X @ X.T
+            a = self._get_tuning_parameter(LL, XXt)
+        elif self.embedding_alg == "non-assort":
+            LL = L@L
+            XXt = X @ X.T
+            a = self._get_tuning_parameter(LL, XXt)
+        elif self.embedding_alg == "cca":
+            LL = L@X
+            XXt = X
+            a = 0
+        else:
+            msg = "embedding_alg must be in {assortative, non-assortative, cca}."
+            raise ValueError(msg)
+
         L_ = LL + a * (XXt)
         self._reduce_dim(L_)
+
+        # normalize rows of latent position matrix
         self.is_fitted_ = True
         return self
 

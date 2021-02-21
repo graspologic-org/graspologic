@@ -5,6 +5,7 @@ from abc import abstractmethod
 
 import numpy as np
 from sklearn.base import BaseEstimator
+from sklearn import preprocessing
 
 from ..utils import augment_diagonal, import_graph, is_almost_symmetric
 from .svd import selectSVD
@@ -66,6 +67,7 @@ class BaseSpectralEmbed(BaseEstimator):
         n_iter=5,
         check_lcc=True,
         concat=False,
+        normalize=False,
     ):
         self.n_components = n_components
         self.n_elbows = n_elbows
@@ -76,6 +78,7 @@ class BaseSpectralEmbed(BaseEstimator):
             msg = "Parameter `concat` is expected to be type bool"
             raise TypeError(msg)
         self.concat = concat
+        self.normalize = normalize
 
     def _reduce_dim(self, A):
         """
@@ -95,13 +98,21 @@ class BaseSpectralEmbed(BaseEstimator):
             n_iter=self.n_iter,
         )
 
+        square = A.shape[0] == A.shape[1]
         self.n_components_ = D.size
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
-        if not is_almost_symmetric(A):
+        if square and not is_almost_symmetric(A):
             self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
+        if self.normalize:
+            self.latent_left_ = preprocessing.normalize(self.latent_left_)
+            self.latent_right_ = (
+                preprocessing.normalize(self.latent_right_)
+                if self.latent_right_ is not None
+                else self.latent_right_
+            )
 
     @property
     def _pairwise(self):
