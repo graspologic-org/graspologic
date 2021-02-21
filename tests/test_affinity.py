@@ -21,7 +21,9 @@ def test_inputs():
     with pytest.raises(ValueError):
         affinity_test(X, "homophilic")
 
-    X = np.zeros(1,)
+    X = np.zeros(
+        1,
+    )
     with pytest.raises(ValueError):
         affinity_test(X, "homophilic")
 

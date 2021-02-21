@@ -20,7 +20,9 @@ class DefinedContingencyTable(NamedTuple):
 
 
 def affinity_test(
-    graph: Union[nx.Graph, nx.DiGraph, np.ndarray], test: str, comms: np.ndarray = None,
+    graph: Union[nx.Graph, nx.DiGraph, np.ndarray],
+    test: str,
+    comms: np.ndarray = None,
 ) -> DefinedContingencyTable:
     """
     Returns a test of homophilic or homotopic affinity in a graph.
