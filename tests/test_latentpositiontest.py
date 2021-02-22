@@ -122,8 +122,12 @@ class TestLatentPositionTest(unittest.TestCase):
         self.assertTrue(lpt_alt[0] <= 0.05)
 
         # parallel test
-        lpt_null = latent_position_test(A1, A2, n_components=2, n_bootstraps=100, workers=-1)
-        lpt_alt = latent_position_test(A1, A3, n_components=2, n_bootstraps=100, workers=-1)
+        lpt_null = latent_position_test(
+            A1, A2, n_components=2, n_bootstraps=100, workers=-1
+        )
+        lpt_alt = latent_position_test(
+            A1, A3, n_components=2, n_bootstraps=100, workers=-1
+        )
         self.assertTrue(lpt_null[0] > 0.05)
         self.assertTrue(lpt_alt[0] <= 0.05)
 
