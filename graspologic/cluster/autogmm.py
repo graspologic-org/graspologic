@@ -120,8 +120,8 @@ class AutoGMMCluster(BaseCluster):
         unique labels given here.
 
     n_init : int, optional (default = None)
-        If `n_init` is not `None` and `label_init` is `None` then additional 
-        k-means runs will be performed with `n_init` initializations for all covariance 
+        If `n_init` is not `None` and `label_init` is `None` then additional
+        k-means runs will be performed with `n_init` initializations for all covariance
         parameters in covariance_type.
 
     max_iter : int, optional (default = 100).
@@ -395,7 +395,7 @@ class AutoGMMCluster(BaseCluster):
 
     def _fit_cluster(self, X, X_subset, y, params, agg_clustering):
         label_init = self.label_init
-        if label_init is not None and 'n_init' not in set(params[1].keys()):
+        if label_init is not None and "n_init" not in set(params[1].keys()):
             onehot = _labels_to_onehot(label_init)
             weights_init, means_init, precisions_init = _onehot_to_initial_params(
                 X, onehot, params[1]["covariance_type"]
@@ -535,7 +535,9 @@ class AutoGMMCluster(BaseCluster):
             random_state=[self.random_state],
         )
         param_grid = list(ParameterGrid(param_grid))
-        param_grid_ag, param_grid = _process_paramgrid(param_grid, self.run_multiple_init, self.n_init)
+        param_grid_ag, param_grid = _process_paramgrid(
+            param_grid, self.run_multiple_init, self.n_init
+        )
 
         n = X.shape[0]
         if self.max_agglom_size is None or n <= self.max_agglom_size:
@@ -712,12 +714,19 @@ def _process_paramgrid(paramgrid, run_multiple_init, n_init):
             ag_params = {key: params[key] for key in ag_keys}
             if ag_params not in ag_params_processed:
                 ag_params_processed.append(ag_params)
-            if gm_params not in gm_params_processed and ag_params["affinity"] == "none" and run_multiple_init:
+            if (
+                gm_params not in gm_params_processed
+                and ag_params["affinity"] == "none"
+                and run_multiple_init
+            ):
                 gm_params_processed.append(gm_params.copy())
                 gm_params_processed[-1].update({"n_init": n_init})
 
             paramgrid_processed.append([ag_params, gm_params])
-    [paramgrid_processed.append([{"affinity": "none", "linkage": "none"}, pa]) for pa in gm_params_processed]
+    [
+        paramgrid_processed.append([{"affinity": "none", "linkage": "none"}, pa])
+        for pa in gm_params_processed
+    ]
     return ag_params_processed, paramgrid_processed
 
 
