@@ -125,17 +125,14 @@ class BaseSpectralEmbed(BaseEstimator):
 
         Returns
         -------
-        lpm : LatentPosition object
-            Contains X (the estimated latent positions), Y (same as X if input is
-            undirected graph, or right estimated positions if directed graph), and d.
+        A : array-like, shape (n_vertices, n_vertices)
+            A graph
 
         See Also
         --------
         import_graph, LatentPosition
         """
-        # call self._reduce_dim(A) from your respective embedding technique.
-        # import graph(s) to an adjacency matrix using import_graph function
-        # here
+
         A = import_graph(graph)
 
         if self.check_lcc:
