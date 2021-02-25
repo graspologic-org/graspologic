@@ -13,6 +13,7 @@ from .plot import (
     edgeplot,
     screeplot,
 )
+from .plot_matrix import adjplot, matrixplot
 
 __all__ = [
     "heatmap",
@@ -22,4 +23,6 @@ __all__ = [
     "degreeplot",
     "edgeplot",
     "screeplot",
+    "adjplot",
+    "matrixplot",
 ]

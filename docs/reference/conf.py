@@ -70,6 +70,7 @@ intersphinx_mapping = {
     "matplotlib": ("https://matplotlib.org", None),
     "networkx": ("https://networkx.org/documentation/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
     "python": ("https://docs.python.org/3", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "seaborn": ("https://seaborn.pydata.org", None),
