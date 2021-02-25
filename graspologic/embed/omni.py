@@ -7,6 +7,7 @@ import numpy as np
 
 from ..utils import import_graph, is_fully_connected
 from .base import BaseEmbedMulti
+from scipy.sparse import isspmatrix_csr
 
 
 def _get_omni_matrix(graphs):
@@ -51,7 +52,8 @@ class OmnibusEmbed(BaseEmbedMulti):
     :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
     using adjacency spectral embedding.
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+    Read more in the `Omnibus Embedding for Multiple Graphs Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/embedding/Omnibus.html>`_
 
     Parameters
     ----------
@@ -164,6 +166,10 @@ class OmnibusEmbed(BaseEmbedMulti):
         self : object
             Returns an instance of self.
         """
+        if any([isspmatrix_csr(g) for g in graphs]):
+            msg = "OmnibusEmbed does not support scipy.sparse.csr_matrix inputs"
+            raise TypeError(msg)
+
         graphs = self._check_input_graphs(graphs)
 
         # Check if Abar is connected
@@ -172,7 +178,7 @@ class OmnibusEmbed(BaseEmbedMulti):
                 msg = (
                     "Input graphs are not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.get_multigraph_union_lcc``."
+                    + "using ``graspologic.utils.multigraph_lcc_union``."
                 )
                 warnings.warn(msg, UserWarning)
 

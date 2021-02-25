@@ -27,7 +27,8 @@ class MultipleASE(BaseEmbedMulti):
     :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a
     common latent position matrices :math:`U` and :math:`V`.
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+    Read more in the `Multiple Adjacency Spectral Embedding (MASE) Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/embedding/MASE.html>`_
 
     Parameters
     ----------
@@ -198,9 +199,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -222,11 +223,11 @@ class MultipleASE(BaseEmbedMulti):
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
-            self.scores_ = Uhat.T @ graphs @ Vhat
+            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
             self.singular_values_ = (sing_vals_left, sing_vals_right)
         else:
             self.latent_right_ = None
-            self.scores_ = Uhat.T @ graphs @ Uhat
+            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
             self.singular_values_ = sing_vals_left
 
         return self
@@ -238,9 +239,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns

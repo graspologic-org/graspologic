@@ -6,7 +6,12 @@ import graspologic as gs
 import numpy as np
 import networkx as nx
 from graspologic.simulations import *
-from graspologic.utils.utils import is_symmetric, is_loopless, symmetrize, cartprod
+from graspologic.utils.utils import (
+    is_symmetric,
+    is_loopless,
+    symmetrize,
+    cartesian_product,
+)
 
 
 def remove_diagonal(A):
@@ -882,3 +887,179 @@ class Test_RDPG(unittest.TestCase):
         g = rdpg(X, rescale=True, loops=False, directed=False)
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
+
+
+class Test_MMSBM(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # 120 vertex graph
+        cls.n = 120
+        # define connectivity matrix B, two blocks
+        cls.p = np.vstack(([0.3, 0.2], [0.2, 0.9]))
+        # define alpha parameter
+        cls.alpha = 0.05 * np.ones(len(cls.p))
+        # define seed
+        cls.seed = 12345
+        # define random number generator
+        cls.rng = np.random.default_rng(cls.seed)
+
+    def test_ER_np(self):
+        rng = np.random.default_rng(self.seed)
+        np.random.seed(self.seed)
+
+        p = [[1, 0.4], [0.4, 0.7]]
+
+        alpha = [1000, 0.05]
+
+        n = 10
+        # Produce 1000 graphs in which the majority of nodes are very likely assigned to
+        # community 1, thus approximate
+        # 1000 ER graphs with probability almost equal to 1.
+        graphs = []
+
+        for i in range(300):
+            graphs.append(mmsbm(n, p, alpha, directed=True, loops=True, rng=rng))
+        graphs = np.stack(graphs)
+
+        # check that probability of these graphs is actually almost equal to that of the
+        # first block which is 1.
+        self.assertAlmostEqual(np.mean(graphs), p[0][0], delta=0.01)
+
+        alpha = [0.05, 1000]
+        # Produce 1000 graphs in which the majority of nodes are very likely assigned to
+        # community 2, thus approximate
+        # 1000 ER graphs with probability almost equal to 0.7.
+        graphs = []
+
+        for i in range(300):
+            graphs.append(mmsbm(n, p, alpha, directed=True, loops=True, rng=rng))
+        graphs = np.stack(graphs)
+
+        # check that probability of these graphs is actually almost equal to that of the
+        # second block which is 0.7.
+        self.assertAlmostEqual(np.mean(graphs), p[1][1], delta=0.01)
+        pass
+
+    def test_labels(self):
+        rng = np.random.default_rng(self.seed)
+        np.random.seed(self.seed)
+        alpha = np.array([0.0001, 100])  # assign all nodes to second group(index 1)
+        A = mmsbm(
+            self.n,
+            self.p,
+            alpha,
+            rng=rng,
+            directed=False,
+            loops=False,
+            return_labels=True,
+        )
+        labels = A[1]
+        expected_labels = np.ones((self.n, self.n))
+        np.fill_diagonal(expected_labels, -1)
+        # since we expect all nodes on the off diagonal to pertain to community 2
+        # we expect all values on the off diagonal to be 1
+        # We expect nan on the diagonal as this graph has no loops
+
+        # check that expected labels is the same as the labels output by function
+        self.assertTrue(np.allclose(labels, expected_labels))
+        pass
+
+    def test_loop_directed(self):
+        rng = np.random.default_rng(self.seed)
+        A = mmsbm(self.n, self.p, self.alpha, rng=rng, directed=True, loops=True)
+
+        # check loops and directed
+        self.assertFalse(is_symmetric(A))
+        self.assertFalse(is_loopless(A))
+
+        # check dimensions
+        self.assertTrue(A.shape == (self.n, self.n))
+        pass
+
+    def test_noloop_undirected(self):
+        rng = np.random.default_rng(self.seed)
+        # Test that when loops = False and directed = False the output is undirected
+        # and with no loops
+        A = mmsbm(self.n, self.p, self.alpha, rng=rng, directed=False, loops=False)
+
+        # check loopless and undirected
+        self.assertTrue(is_symmetric(A))
+        self.assertTrue(is_loopless(A))
+
+        # check dimensions
+        self.assertTrue(A.shape == (self.n, self.n))
+        pass
+
+    def test_bad_inputs(self):
+        with self.assertRaises(ValueError):
+            n = -1  # n must be greater than 0
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
+
+        with self.assertRaises(TypeError):
+            n = "1"  # n must be an integer
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
+
+        with self.assertRaises(TypeError):
+            n = 2.5  # n must be an integer
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
+
+        with self.assertRaises(TypeError):
+            n = ["1", 10]  # n must be an integer
+            mmsbm(n, self.p, self.alpha, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            p = 0.5  # p must be a 2d array, not scalar
+            mmsbm(self.n, p, self.alpha, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            p = [[0.2, 0.1], ["str", 0.6]]  # p must only contain mumeric elements
+            mmsbm(self.n, p, self.alpha, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            p = [[5, 5], [4, 4]]  # p must be between 0 and 1
+            mmsbm(self.n, p, self.alpha, rng=self.rng)
+
+        with self.assertRaises(TypeError):
+            alpha = 1  # alpha must be an array
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            # test deafult alpha = None, should output ValueError
+            mmsbm(self.n, self.p, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            alpha = ["str", 0.3]  # alpha must only contain numeric elements
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            alpha = [0.1, -2]  # alpha entries must be > 0
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            alpha = [
+                0.1,
+                0.5,
+                0.7,
+            ]  # dimension of p is 2x2 so alpha should be of length 2.
+            mmsbm(self.n, self.p, alpha, rng=self.rng)
+
+        with self.assertRaises(TypeError):
+            rng = 2  # must be generator
+            mmsbm(self.n, self.p, self.alpha, rng=rng)
+
+        with self.assertRaises(TypeError):
+            loops = 2  # loops must be a bool
+            mmsbm(self.n, self.p, self.alpha, loops=loops, rng=self.rng)
+
+        with self.assertRaises(TypeError):
+            directed = 2  # directed must be a bool
+            mmsbm(self.n, self.p, self.alpha, directed=directed, rng=self.rng)
+
+        with self.assertRaises(ValueError):
+            # specified undirected but provided directed B matrix
+            p = np.vstack(([0.6, 0.2], [0.3, 0.4]))
+            mmsbm(self.n, p, self.alpha, directed=False, rng=self.rng)
+
+        with self.assertRaises(TypeError):
+            return_labels = 2  # return labels must be a bool
+            mmsbm(self.n, self.p, self.alpha, return_labels=return_labels, rng=self.rng)
