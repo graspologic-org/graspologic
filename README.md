@@ -30,7 +30,7 @@ A graph, or network, provides a mathematically intuitive representation of data 
 # Documentation
 The official documentation with usage is at https://graspologic.readthedocs.io/en/latest/
 
-Please visit the [tutorial section](https://graspologic.readthedocs.io/en/latest/tutorial.html) in the official website for more in depth usage.
+Please visit the [tutorial section](https://microsoft.github.io/graspologic/tutorials/index.html) in the official website for more in depth usage.
 
 # System Requirements
 ## Hardware requirements
