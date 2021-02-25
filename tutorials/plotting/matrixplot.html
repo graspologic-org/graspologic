@@ -1,0 +1,1277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Matrixplot and Adjplot: Visualize and sort matrices with metadata &mdash; graspologic tutorials 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pairplot with GMM: Visualizing High Dimensional Data and Clustering" href="pairplot_with_gmm.html" />
+    <link rel="prev" title="Pairplot: Visualizing High Dimensional Data" href="pairplot.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> graspologic tutorials
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference external" href="https://graspologic.readthedocs.io/en/latest/">Reference Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aligning/aligning.html">Aligning</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">graspologic tutorials</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Matrixplot and Adjplot: Visualize and sort matrices with metadata</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/plotting/matrixplot.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Matrixplot-and-Adjplot:-Visualize-and-sort-matrices-with-metadata">
+<h1>Matrixplot and Adjplot: Visualize and sort matrices with metadata<a class="headerlink" href="#Matrixplot-and-Adjplot:-Visualize-and-sort-matrices-with-metadata" title="Permalink to this headline">¶</a></h1>
+<p>This guide introduces <code class="docutils literal notranslate"><span class="pre">Matrixplot</span></code> and <code class="docutils literal notranslate"><span class="pre">Adjplot</span></code>. They allow the user to sort a matrix according to some metadata and plot it as either a heatmap or a scattermap. These functions also allows the user to add color or tick axes to indicate the separation between different groups or attributes.</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">Matrixplot</span></code> and <code class="docutils literal notranslate"><span class="pre">Adjplot</span></code> have almost identical inputs/functionality. <code class="docutils literal notranslate"><span class="pre">Adjplot</span></code> is just a convenient wrapper around <code class="docutils literal notranslate"><span class="pre">Matrixplot</span></code> which assumes the matrix to be plotted is square and has the same row and column metadata.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">sbm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">adjplot</span><span class="p">,</span> <span class="n">matrixplot</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="Simulate-a-binary-graph-using-stochastic-block-model">
+<h2>Simulate a binary graph using stochastic block model<a class="headerlink" href="#Simulate-a-binary-graph-using-stochastic-block-model" title="Permalink to this headline">¶</a></h2>
+<p>The 4-block model is defined as below:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+n &amp;= [50, 50, 50, 50]\\
+P &amp;=
+\begin{bmatrix}0.8 &amp; 0.1 &amp; 0.05 &amp; 0.01\\
+0.1 &amp; 0.4 &amp; 0.15 &amp; 0.02\\
+0.05 &amp; 0.15 &amp; 0.3 &amp; 0.01\\
+0.01 &amp; 0.02 &amp; 0.01 &amp; 0.4
+\end{bmatrix}
+\end{align*}</div><p>Thus, the first 50 vertices belong to block 1, the second 50 vertices belong to block 2, the third 50 vertices belong to block 3, and the last 50 vertices belong to block 4.</p>
+<p>Each block is associated with some metadata:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 35%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Block Number</p></th>
+<th class="head"><p>Hemisphere</p></th>
+<th class="head"><p>region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">n_communities</span> <span class="o">=</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]]</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">sbm</span><span class="p">(</span><span class="n">n_communities</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;hemisphere&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+        <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+        <span class="s1">&#39;cell_size&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">N</span><span class="p">)},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>With no randomization, the original data looks like this:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f956d542c70&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_5_1.png" src="../_images/plotting_matrixplot_5_1.png" />
+</div>
+</div>
+<p>Randomize the data, so we can see the visual importance of matrix sorting:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">rnd_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">rnd_idx</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">rnd_idx</span><span class="p">,</span> <span class="n">rnd_idx</span><span class="p">)]</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">rnd_idx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The data immediately after randomization:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f9595810220&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_9_1.png" src="../_images/plotting_matrixplot_9_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="The-use-of-group">
+<h2>The use of <code class="docutils literal notranslate"><span class="pre">group</span></code><a class="headerlink" href="#The-use-of-group" title="Permalink to this headline">¶</a></h2>
+<p>The parameter group can be a list or strings or np.array by which to group the matrix</p>
+<div class="section" id="Group-the-matrix-by-one-metadata-(hemisphere)">
+<h3>Group the matrix by one metadata (hemisphere)<a class="headerlink" href="#Group-the-matrix-by-one-metadata-(hemisphere)" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">],</span>
+    <span class="n">sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f9554068850&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_12_1.png" src="../_images/plotting_matrixplot_12_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Group-the-matrix-by-another-metadata-(region),-but-with-a-color-axis-to-label-the-hemisphre">
+<h3>Group the matrix by another metadata (region), but with a color axis to label the hemisphre<a class="headerlink" href="#Group-the-matrix-by-another-metadata-(region),-but-with-a-color-axis-to-label-the-hemisphre" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">],</span>
+    <span class="n">sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f95539c4eb0&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_14_1.png" src="../_images/plotting_matrixplot_14_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Group-by-two-metadata-at-the-same-time">
+<h3>Group by two metadata at the same time<a class="headerlink" href="#Group-by-two-metadata-at-the-same-time" title="Permalink to this headline">¶</a></h3>
+<p>Notice that the order of the list matters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="s2">&quot;hemisphere&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f95500627f0&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_16_1.png" src="../_images/plotting_matrixplot_16_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_16_2.png" src="../_images/plotting_matrixplot_16_2.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="The-use-of-class_order">
+<h2>The use of <code class="docutils literal notranslate"><span class="pre">class_order</span></code><a class="headerlink" href="#The-use-of-class_order" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Sort-the-grouped-classes-by-their-sizes">
+<h3>Sort the grouped classes by their sizes<a class="headerlink" href="#Sort-the-grouped-classes-by-their-sizes" title="Permalink to this headline">¶</a></h3>
+<p>If the grouped classes are of different sizes, we can sort them based on the size in ascending order.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">normal</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">n_communities</span> <span class="o">=</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]]</span>
+<span class="n">wt</span> <span class="o">=</span> <span class="p">[[</span><span class="n">normal</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+<span class="n">wtargs</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">dict</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">*</span><span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">sbm</span><span class="p">(</span><span class="n">n_communities</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">wt</span><span class="o">=</span><span class="n">wt</span><span class="p">,</span> <span class="n">wtargs</span><span class="o">=</span><span class="n">wtargs</span><span class="p">)</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;hemisphere&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+        <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+        <span class="s1">&#39;cell_size&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">7</span><span class="o">*</span><span class="n">N</span><span class="p">),</span>
+        <span class="s1">&#39;axon_length&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">N</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()},</span>
+<span class="p">)</span>
+<span class="n">rnd_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">7</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">rnd_idx</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">rnd_idx</span><span class="p">,</span> <span class="n">rnd_idx</span><span class="p">)]</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">rnd_idx</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">group_order</span><span class="o">=</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="c1"># note that this is a special keyword which was not in `meta`</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">,</span> <span class="s2">&quot;axon_length&quot;</span><span class="p">],</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Purples&quot;</span><span class="p">,</span> <span class="s2">&quot;Blues&quot;</span><span class="p">],</span>
+    <span class="n">sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f955343e220&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_20_1.png" src="../_images/plotting_matrixplot_20_1.png" />
+</div>
+</div>
+<p>If the metadata has other fields, we can also sort by the mean of certain fields in ascending order</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">group_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">,</span> <span class="s2">&quot;axon_length&quot;</span><span class="p">],</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Purples&quot;</span><span class="p">,</span> <span class="s2">&quot;Blues&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f95543a9ee0&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_22_1.png" src="../_images/plotting_matrixplot_22_1.png" />
+</div>
+</div>
+<p>We can also sort by multiple fields at the same time, including the size of the <code class="docutils literal notranslate"><span class="pre">group_class</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">group_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">,</span> <span class="s2">&quot;axon_length&quot;</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">,</span> <span class="s2">&quot;axon_length&quot;</span><span class="p">],</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Purples&quot;</span><span class="p">,</span> <span class="s2">&quot;Blues&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f954adc8b20&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_24_1.png" src="../_images/plotting_matrixplot_24_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="The-use-of-item_order">
+<h2>The use of <code class="docutils literal notranslate"><span class="pre">item_order</span></code><a class="headerlink" href="#The-use-of-item_order" title="Permalink to this headline">¶</a></h2>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">item_order</span></code> is used to sort items within each specific class</p>
+<p>Without sorting by <code class="docutils literal notranslate"><span class="pre">item_order</span></code>, the matrix remain randomized in each grouped class:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;Purples&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f954ad33c10&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_27_1.png" src="../_images/plotting_matrixplot_27_1.png" />
+</div>
+</div>
+<p>But with sorting with <code class="docutils literal notranslate"><span class="pre">item_order</span></code>, the items are ordered within each grouped class:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">item_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;Purples&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f954ae46b20&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_29_1.png" src="../_images/plotting_matrixplot_29_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="The-use-of-highlight">
+<h2>The use of <code class="docutils literal notranslate"><span class="pre">highlight</span></code><a class="headerlink" href="#The-use-of-highlight" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">highlight</span></code> can be used to highlight separators of a particular class with a different style</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">highlight_kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">highlight</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">],</span>
+    <span class="n">highlight_kws</span><span class="o">=</span><span class="n">highlight_kws</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f955360fc70&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_31_1.png" src="../_images/plotting_matrixplot_31_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="The-use-of-multiple-palettes">
+<h2>The use of multiple palettes<a class="headerlink" href="#The-use-of-multiple-palettes" title="Permalink to this headline">¶</a></h2>
+<p>Each color can be plotted with the same <code class="docutils literal notranslate"><span class="pre">palette</span></code>, or different palettes can be specified for each color</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">item_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="s2">&quot;cell_size&quot;</span><span class="p">,</span> <span class="s2">&quot;axon_length&quot;</span><span class="p">],</span>
+    <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tab10&quot;</span><span class="p">,</span> <span class="s2">&quot;tab20&quot;</span><span class="p">,</span> <span class="s2">&quot;Purples&quot;</span><span class="p">,</span> <span class="s2">&quot;Blues&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f9553ed3fd0&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_33_1.png" src="../_images/plotting_matrixplot_33_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Label-the-row-and-column-axes-with-different-metadata">
+<h2>Label the row and column axes with different metadata<a class="headerlink" href="#Label-the-row-and-column-axes-with-different-metadata" title="Permalink to this headline">¶</a></h2>
+<p>If you would like to group the row and columns by different metadata, you can use the <code class="docutils literal notranslate"><span class="pre">matrixplot</span></code> function to specify the parameters for both of the axes. Most arguments are the same, with the addition of <code class="docutils literal notranslate"><span class="pre">row_</span></code> or <code class="docutils literal notranslate"><span class="pre">col_</span></code> to specify the corresponding axis of <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+<p>Note: for adjacency matrices, one should not sort the rows and columns separately, as it breaks the representation of the graph. Here we do so just for demonstration, assuming <code class="docutils literal notranslate"><span class="pre">A</span></code> is not an adjacency matrix.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">matrixplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">col_meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">row_meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">col_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">],</span>
+    <span class="n">row_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">col_item_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">row_item_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">row_color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">row_ticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f95534f6f70&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_35_1.png" src="../_images/plotting_matrixplot_35_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Plot-using-heatmap-instead-of-scattermap">
+<h2>Plot using <code class="docutils literal notranslate"><span class="pre">heatmap</span></code> instead of <code class="docutils literal notranslate"><span class="pre">scattermap</span></code><a class="headerlink" href="#Plot-using-heatmap-instead-of-scattermap" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">matrixplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">col_meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">row_meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;heatmap&quot;</span><span class="p">,</span>
+    <span class="n">col_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hemisphere&quot;</span><span class="p">],</span>
+    <span class="n">row_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">col_item_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">row_item_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell_size&quot;</span><span class="p">],</span>
+    <span class="n">row_color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">],</span>
+    <span class="n">row_ticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f95534690d0&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_37_1.png" src="../_images/plotting_matrixplot_37_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Supply-array-likes-instead-of-meta">
+<h2>Supply array-likes instead of <code class="docutils literal notranslate"><span class="pre">meta</span></code><a class="headerlink" href="#Supply-array-likes-instead-of-meta" title="Permalink to this headline">¶</a></h2>
+<p>If <code class="docutils literal notranslate"><span class="pre">meta</span></code> is not provided, each of the sorting/grouping/coloring keywords can be supplied with array-like data structures.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">group_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">4</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">group_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">group</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">group_0</span><span class="p">,</span> <span class="n">group_1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="n">rnd_idx</span><span class="p">,</span> <span class="p">:]</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">adjplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;scattermap&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span>
+    <span class="n">sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;AxesSubplot:&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f954a8e4250&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/plotting_matrixplot_40_1.png" src="../_images/plotting_matrixplot_40_1.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="pairplot_with_gmm.html" class="btn btn-neutral float-right" title="Pairplot with GMM: Visualizing High Dimensional Data and Clustering" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pairplot.html" class="btn btn-neutral float-left" title="Pairplot: Visualizing High Dimensional Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
