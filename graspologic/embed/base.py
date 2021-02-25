@@ -145,7 +145,6 @@ class BaseSpectralEmbed(BaseEstimator):
                 warnings.warn(msg, UserWarning)
 
         self.n_features_in_ = A.shape[0]
-        print("h")
         return A
 
     def _fit_transform(self, graph):
