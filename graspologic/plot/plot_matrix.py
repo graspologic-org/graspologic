@@ -530,12 +530,10 @@ def matrixplot(
         Metadata of the matrix.
 
         - ``{row,col}_meta`` is pd.DataFrame
-            All sorting keywords (``group``, ``group_order``, ``item_order``, ``color``,
-             ``highlight``) should only be str or list of str.
+            All sorting keywords should only be str or list of str.
             They should contain references to columns in ``meta``.
         - ``{row,col}_meta`` is None
-            All sorting keywords (``group``, ``group_order``, ``item_order``, ``color``,
-             ``highlight``) should only array-like with the same length as the
+            All sorting keywords should only array-like with the same length as the
             corresponding axis of ``data``.
     {row,col}_group : str, list of str, or array-like, (default=None)
         Attribute(s) by which to group rows/columns of ``data``. If multiple groups are
@@ -915,12 +913,10 @@ def adjplot(
         Metadata of the matrix.
 
         - ``meta`` is pd.DataFrame
-            All sorting keywords (``group``, ``group_order``, ``item_order``, ``color``,
-             ``highlight``) should only be str or list of str.
+            All sorting keywords should only be str or list of str.
             They should contain references to columns in ``meta``.
         - ``meta`` is None
-            All sorting keywords (``group``, ``group_order``, ``item_order``, ``color``,
-             ``highlight``) should only array-like with the same length as the
+            All sorting keywords should only array-like with the same length as the
             corresponding axis of ``data``.
     group : str, list of str, or array-like, (default=None)
         Attribute(s) by which to group rows/columns of ``data``. If multiple groups are
