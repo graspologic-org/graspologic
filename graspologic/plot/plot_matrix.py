@@ -514,7 +514,7 @@ def matrixplot(
     Sorts and plots a matrix in various ways, and with optional information added to the
     margin of the matrix plot.
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the `Tutorial https://microsoft.github.io/graspologic/tutorials/plotting/matrixplot.html`
 
     Parameters
     ----------
@@ -897,7 +897,7 @@ def adjplot(
     matrix is square, and that the rows and columns represent the same items and have
     the same metadata (e.g. the adjacency matrix of a graph).
 
-    Read more in the :ref:`tutorials <plot_tutorials>`
+    Read more in the `Tutorial https://microsoft.github.io/graspologic/tutorials/plotting/matrixplot.html`
 
     Parameters
     ----------
