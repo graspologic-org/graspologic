@@ -357,7 +357,8 @@ def draw_ticks(
 
 def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
     r"""
-    Draw a scattermap of the data with extra grid features
+    Draw a matrix using points instead of a heatmap. Helpful for larger, sparse 
+    matrices.
 
     Parameters
     ----------
