@@ -28,3 +28,11 @@ Edgeplot
 Screeplot
 ---------
 .. autofunction:: screeplot
+
+Adjplot
+-------
+.. autofunction:: adjplot
+
+Matrixplot
+----------
+.. autofunction:: matrixplot
