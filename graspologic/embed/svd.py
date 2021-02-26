@@ -129,7 +129,8 @@ def select_dimension(
         # per recommendation by Zhu & Godsie
         k = int(np.ceil(np.log2(np.min(X.shape))))
     elif not isinstance(n_components, int):
-        msg = "n_components must be an integer, not {}.".format(type(n_components))
+        msg = "n_components must be an integer, not {}.".format(
+            type(n_components))
         raise ValueError(msg)
     else:
         k = n_components
@@ -264,6 +265,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         U = U[:, idx]
         V = V[idx, :]
     elif algorithm == "randomized":
-        U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components, n_iter=n_iter)
+        U, D, V = sklearn.utils.extmath.randomized_svd(
+            X, n_components, n_iter=n_iter)
 
     return U, D, V

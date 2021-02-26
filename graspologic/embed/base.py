@@ -22,12 +22,13 @@ class BaseSpectralEmbed(BaseEstimator):
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
+
     n_elbows : int, optional, default: 2
         If `n_components=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
+
     algorithm : {'full', 'truncated' (default), 'randomized'}, optional
         SVD solver to use:
-
         - 'full'
             Computes full svd using ``scipy.linalg.svd``
         - 'truncated'
@@ -35,17 +36,20 @@ class BaseSpectralEmbed(BaseEstimator):
         - 'randomized'
             Computes randomized svd using
             ``sklearn.utils.extmath.randomized_svd``
+
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or
         'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
+
     check_lcc : bool , optional (defult =True)
         Whether to check if input graph is connected. May result in non-optimal
         results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
+
     concat : bool, optional (default = False)
-        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
-        along axis 1.
+        If graph(s) are directed, whether to concatenate each graph's left and right 
+        (out and in) latent positions along axis 1.
 
     Attributes
     ----------
@@ -67,7 +71,6 @@ class BaseSpectralEmbed(BaseEstimator):
         n_iter=5,
         check_lcc=True,
         concat=False,
-        normalize=False,
     ):
         self.n_components = n_components
         self.n_elbows = n_elbows
@@ -78,7 +81,6 @@ class BaseSpectralEmbed(BaseEstimator):
             msg = "Parameter `concat` is expected to be type bool"
             raise TypeError(msg)
         self.concat = concat
-        self.normalize = normalize
 
     def _reduce_dim(self, A):
         """
@@ -106,13 +108,6 @@ class BaseSpectralEmbed(BaseEstimator):
             self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
-        if self.normalize:
-            self.latent_left_ = preprocessing.normalize(self.latent_left_)
-            self.latent_right_ = (
-                preprocessing.normalize(self.latent_right_)
-                if self.latent_right_ is not None
-                else self.latent_right_
-            )
 
     @property
     def _pairwise(self):
@@ -253,7 +248,8 @@ class BaseEmbedMulti(BaseSpectralEmbed):
                 raise ValueError(msg)
             out = import_graph(graphs, copy=False)
         else:
-            msg = "Input must be a list or ndarray, not {}.".format(type(graphs))
+            msg = "Input must be a list or ndarray, not {}.".format(
+                type(graphs))
             raise TypeError(msg)
 
         # Save attributes
@@ -285,6 +281,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             out = [augment_diagonal(g) for g in graphs]
         elif isinstance(graphs, np.ndarray):
             # Copying is necessary to not overwrite input array
-            out = np.array([augment_diagonal(graphs[i]) for i in range(self.n_graphs_)])
+            out = np.array([augment_diagonal(graphs[i])
+                            for i in range(self.n_graphs_)])
 
         return out
