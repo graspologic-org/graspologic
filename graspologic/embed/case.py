@@ -167,8 +167,8 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
     def _get_tuning_parameter(self):
         """
-        Find an alpha which causes the leading eigenvectors of L@L and a*X@X.T to be
-        the same.
+        Find an alpha within a range which optimizes the k-means objective function on
+        our embedding.
 
         Parameters
         ----------
