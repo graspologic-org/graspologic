@@ -10,10 +10,6 @@ from graspologic.utils import remap_labels
 
 np.set_printoptions(suppress=True)
 
-# %%
-
-# %%
-
 #%%
 
 
@@ -107,6 +103,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         self.alpha = alpha
 
         self.n_iter = n_iter
+        self.latent_right_ = None  # doesn't work for directed graphs atm
         self.is_fitted_ = False
 
     def fit(self, graph, covariates, y=None):
@@ -163,11 +160,10 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             self.alpha_ = self._get_tuning_parameter()
 
         # self._embed(plot=True)
+        L_ = self._LL + self.alpha_ * (self._XXt)
+        self._reduce_dim(L_)
         self.is_fitted_ = True
         return self
-
-    def transform(self, X):
-        return self._fit_transform(fit=False)
 
     def _get_tuning_parameter(self):
         """
@@ -213,6 +209,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             amax = L_top / X_eigvals[n_cov - 1] ** 2
 
         print(f"{amin=:.9f}, {amax=:.9f}")
+        print(f"alpha without tuning: {np.float(L_top / X_top)}")
 
         if self.alpha == -1:
             # just use the ratio of the leading eigenvalues for the
@@ -232,13 +229,20 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         alpha_range = np.linspace(amin, amax, num=self.n_iter)
         inertias = {}
         for a in alpha_range:
-            kmeans = KMeans(n_clusters=self.n_components, n_jobs=-1)
-            X_ = self._embed(alpha=a)
-            kmeans.fit(X_)
+            kmeans = KMeans(n_clusters=n_clusters, n_jobs=-1)
+            X_hat = self._embed(alpha=a)
+            kmeans.fit(X_hat)
             print(f"inertia at {a:.5f}: {kmeans.inertia_:.5f}")
             inertias[a] = kmeans.inertia_
         alpha = min(inertias, key=inertias.get)
-        print(f"Best inertia at {alpha:5f}: {inertias[alpha]:5f}")
+        print(f"Best inertia at alpha={alpha:5f}: {inertias[alpha]:5f}")
+
+        # FOR DEBUGGING
+        kmeans = KMeans(n_clusters=self.n_components, n_jobs=-1)
+        X_ = self._embed(alpha=np.float(L_top / X_top))
+        kmeans.fit(X_)
+        print(f"inertia at default alpha {a:.5f}: {kmeans.inertia_:.5f}")
+
         return alpha
 
     def _embed(self, alpha=None, plot=False):
@@ -254,8 +258,16 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             # heatmap(self._L)
             # heatmap(self._LL)
             heatmap(L_)
-        self._reduce_dim(L_)
-        return self.latent_left_
+
+        U, D, V = selectSVD(
+            L_,
+            n_components=self.n_components,
+            n_elbows=self.n_elbows,
+            algorithm="full",
+            n_iter=5,
+        )
+
+        return U @ np.diag(np.sqrt(D))
 
 
 def gen_covariates(labels, m1=0.8, m2=0.2, agreement=1, d=3):
@@ -304,30 +316,30 @@ def get_misclustering(A, model, labels, covariates=None) -> float:
     return misclustering
 
 
-from graspologic.simulations import sbm
-from graspologic.utils import remap_labels
-from graspologic.plot import pairplot
+# from graspologic.simulations import sbm
+# from graspologic.utils import remap_labels
+# from graspologic.plot import pairplot
 
-n = 100
-assortative = False
-p, q = 0.03, 0.015
-if not assortative:
-    p, q = q, p
-A, labels = sbm(
-    [n, n, n],
-    p=[[p, q, q], [q, p, q], [q, q, p]],
-    return_labels=True,
-)
-X = gen_covariates(
-    labels,
-    m1=0.8,
-    m2=0.2,
-)
-import seaborn as sns
+# n = 100
+# assortative = False
+# p, q = 0.03, 0.015
+# if not assortative:
+#     p, q = q, p
+# A, labels = sbm(
+#     [n, n, n],
+#     p=[[p, q, q], [q, p, q], [q, q, p]],
+#     return_labels=True,
+# )
+# X = gen_covariates(
+#     labels,
+#     m1=0.8,
+#     m2=0.2,
+# )
+# import seaborn as sns
 
-case = CovariateAssistedEmbedding(
-    n_components=3, embedding_alg="non-assortative", n_iter=5
-)
-Xhat = case.fit_transform(A, covariates=X)
-#%%
-pairplot(Xhat, labels=labels)
+# case = CovariateAssistedEmbedding(
+#     n_components=3, embedding_alg="non-assortative", n_iter=100
+# )
+# Xhat = case.fit_transform(A, covariates=X)
+# pairplot(Xhat, labels=labels)
+# # %%
