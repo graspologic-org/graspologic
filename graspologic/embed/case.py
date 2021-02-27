@@ -106,7 +106,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         self.latent_right_ = None  # doesn't work for directed graphs atm
         self.is_fitted_ = False
 
-    def fit(self, graph, covariates, y=None):
+    def fit(self, graph, covariates, y=None, labels=None):
         """
         Fit a CASE model to an input graph, along with its covariates. Depending on the
         embedding algorithm, we embed
@@ -163,6 +163,13 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         L_ = self._LL + self.alpha_ * (self._XXt)
         self._reduce_dim(L_)
         self.is_fitted_ = True
+        # # FOR DEBUGGING
+        # kmeans = KMeans(n_clusters=3)
+        # labels_ = kmeans.fit_predict(self.latent_left_)
+        # labels_ = remap_labels(labels, labels_)
+        # print(f"misclustering: {np.count_nonzero(labels - labels_) / len(labels)}")
+
+        # FOR DEBUGGING
         return self
 
     def _get_tuning_parameter(self):
@@ -270,57 +277,57 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         return U @ np.diag(np.sqrt(D))
 
 
-def gen_covariates(labels, m1=0.8, m2=0.2, agreement=1, d=3):
-    """
-    n x 3 matrix of covariates
+# def gen_covariates(labels, m1=0.8, m2=0.2, agreement=1, d=3):
+#     """
+#     n x 3 matrix of covariates
 
-    """
-    N = len(labels)
-    d = 3
-    B = np.full((d, d), m2)
-    B[np.diag_indices_from(B)] = m1
-    base = np.eye(d)
-    membership = np.zeros((N, d))
-    n_misassign = 0
-    for i in range(0, N):
-        assign = bool(np.random.binomial(1, agreement))
-        if assign:
-            membership[i, :] = base[labels[i], :]
-        else:
-            membership[i, :] = base[(labels[i] + 1) % (max(labels) + 1), :]
-            n_misassign += 1
+#     """
+#     N = len(labels)
+#     d = 3
+#     B = np.full((d, d), m2)
+#     B[np.diag_indices_from(B)] = m1
+#     base = np.eye(d)
+#     membership = np.zeros((N, d))
+#     n_misassign = 0
+#     for i in range(0, N):
+#         assign = bool(np.random.binomial(1, agreement))
+#         if assign:
+#             membership[i, :] = base[labels[i], :]
+#         else:
+#             membership[i, :] = base[(labels[i] + 1) % (max(labels) + 1), :]
+#             n_misassign += 1
 
-    probs = membership @ B
+#     probs = membership @ B
 
-    covariates = np.zeros(probs.shape)
-    for i in range(N):
-        for j in range(d):
-            covariates[i, j] = np.random.binomial(1, probs[i, j])
+#     covariates = np.zeros(probs.shape)
+#     for i in range(N):
+#         for j in range(d):
+#             covariates[i, j] = np.random.binomial(1, probs[i, j])
 
-    return covariates
+#     return covariates
 
 
-def get_misclustering(A, model, labels, covariates=None) -> float:
-    if covariates is None:
-        Xhat = model.fit_transform(A)
-    else:
-        Xhat = model.fit_transform(A, covariates=covariates)
+# def get_misclustering(A, model, labels, covariates=None) -> float:
+#     if covariates is None:
+#         Xhat = model.fit_transform(A)
+#     else:
+#         Xhat = model.fit_transform(A, covariates=covariates)
 
-    kmeans = KMeans(n_clusters=3)
-    labels_ = kmeans.fit_predict(Xhat)
+#     kmeans = KMeans(n_clusters=3)
+#     labels_ = kmeans.fit_predict(Xhat)
 
-    # to account for nonidentifiability
-    labels_ = remap_labels(labels, labels_)
-    misclustering = np.count_nonzero(labels - labels_) / len(labels)
+#     # to account for nonidentifiability
+#     labels_ = remap_labels(labels, labels_)
+#     misclustering = np.count_nonzero(labels - labels_) / len(labels)
 
-    return misclustering
+#     return misclustering
 
 
 # from graspologic.simulations import sbm
 # from graspologic.utils import remap_labels
 # from graspologic.plot import pairplot
 
-# n = 100
+# n = 500
 # assortative = False
 # p, q = 0.03, 0.015
 # if not assortative:
@@ -330,16 +337,12 @@ def get_misclustering(A, model, labels, covariates=None) -> float:
 #     p=[[p, q, q], [q, p, q], [q, q, p]],
 #     return_labels=True,
 # )
-# X = gen_covariates(
-#     labels,
-#     m1=0.8,
-#     m2=0.2,
-# )
+# X = gen_covariates(labels, m1=0.8, m2=0.2, agreement=0.0)
+# X = gen_covariates(labels, m1=0.8, m2=0.2, agreement=1)
 # import seaborn as sns
 
-# case = CovariateAssistedEmbedding(
-#     n_components=3, embedding_alg="non-assortative", n_iter=100
-# )
-# Xhat = case.fit_transform(A, covariates=X)
+
+# case = CovariateAssistedEmbedding(n_components=3, embedding_alg="cca", n_iter=100)
+# Xhat = case.fit_transform(A, covariates=X, labels=labels)
 # pairplot(Xhat, labels=labels)
-# # %%
+# %%
