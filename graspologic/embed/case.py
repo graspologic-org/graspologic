@@ -204,7 +204,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         X_top = X_eigvals[0]
         amin = (L_eigvals[n_clusters - 1] - L_eigvals[n_clusters]) / X_top ** 2
         if n_cov > n_clusters:
-            amax = L_top / (X_eigvals[n_blocks - 1] ** 2 - X_eigvals[n_blocks] ** 2)
+            amax = L_top / (X_eigvals[n_clusters - 1] ** 2 - X_eigvals[n_clusters] ** 2)
         else:
             amax = L_top / X_eigvals[n_cov - 1] ** 2
 
