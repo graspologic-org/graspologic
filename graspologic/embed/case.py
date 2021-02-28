@@ -4,6 +4,7 @@ from graspologic.embed.base import BaseSpectralEmbed
 from graspologic.embed.svd import selectSVD
 import numpy as np
 import scipy
+from joblib import delayed, Parallel
 from sklearn.cluster import KMeans
 from graspologic.plot import heatmap
 from graspologic.utils import remap_labels
@@ -234,115 +235,78 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # TODO: optimize... maybe with sklearn.metrics.make_scorer
         #       and a GridSearch?
         alpha_range = np.linspace(amin, amax, num=self.n_iter)
-        inertias = {}
-        for a in alpha_range:
-            kmeans = KMeans(n_clusters=n_clusters, n_jobs=-1)
-            X_hat = self._embed(alpha=a)
-            kmeans.fit(X_hat)
-            print(f"inertia at {a:.5f}: {kmeans.inertia_:.5f}")
-            inertias[a] = kmeans.inertia_
+        inertia_trials = (
+            delayed(_cluster)(alpha, LL=self._LL, XXt=self._XXt)
+            for alpha in alpha_range
+        )
+        inertias = dict(Parallel(n_jobs=-1, verbose=100)(inertia_trials))
+        # for a in alpha_range:
+        #     self._cluster(alpha, n_clusters)
+        #     inertias[a] = kmeans.inertia_
         alpha = min(inertias, key=inertias.get)
         print(f"Best inertia at alpha={alpha:5f}: {inertias[alpha]:5f}")
 
         # FOR DEBUGGING
-        kmeans = KMeans(n_clusters=self.n_components, n_jobs=-1)
-        X_ = self._embed(alpha=np.float(L_top / X_top))
-        kmeans.fit(X_)
-        print(f"inertia at default alpha {a:.5f}: {kmeans.inertia_:.5f}")
+        # kmeans = KMeans(n_clusters=self.n_components, n_jobs=-1)
+        # X_ = _embed(alpha=np.float(L_top / X_top), LL=self._LL, XXt=self._XXt)
+        # kmeans.fit(X_)
+        # print(
+        #     f"inertia at default alpha {np.float(L_top/X_top):.5f}: {kmeans.inertia_:.5f}"
+        # )
 
         return alpha
 
-    def _embed(self, alpha=None, plot=False):
-        if alpha is None:
-            alpha = self.alpha_
+    # def _cluster(self, alpha):
+    #     X_hat = self._embed(alpha=alpha)
+    #     kmeans = KMeans(n_clusters=self.n_components)
+    #     kmeans.fit(X_hat)
+    #     print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
+    #     return alpha, kmeans.inertia_
 
-        L_ = self._LL + alpha * (self._XXt)
-        if plot:
-            import matplotlib.pyplot as plt
+    # def _embed(self, alpha=None, plot=False):
+    #     if alpha is None:
+    #         alpha = self.alpha_
 
-            # sns.heatmap(self._X, ax=axs[0, 0])
-            # heatmap(self._XXt)
-            # heatmap(self._L)
-            # heatmap(self._LL)
-            heatmap(L_)
+    #     L_ = self._LL + alpha * (self._XXt)
+    #     if plot:
+    #         import matplotlib.pyplot as plt
 
-        U, D, V = selectSVD(
-            L_,
-            n_components=self.n_components,
-            n_elbows=self.n_elbows,
-            algorithm="full",
-            n_iter=5,
-        )
+    #         # sns.heatmap(self._X, ax=axs[0, 0])
+    #         # heatmap(self._XXt)
+    #         # heatmap(self._L)
+    #         # heatmap(self._LL)
+    #         heatmap(L_)
 
-        return U @ np.diag(np.sqrt(D))
+    #     U, D, V = selectSVD(
+    #         L_,
+    #         n_components=self.n_components,
+    #         n_elbows=self.n_elbows,
+    #         algorithm="full",
+    #         n_iter=5,
+    #     )
 
-
-# def gen_covariates(labels, m1=0.8, m2=0.2, agreement=1, d=3):
-#     """
-#     n x 3 matrix of covariates
-
-#     """
-#     N = len(labels)
-#     d = 3
-#     B = np.full((d, d), m2)
-#     B[np.diag_indices_from(B)] = m1
-#     base = np.eye(d)
-#     membership = np.zeros((N, d))
-#     n_misassign = 0
-#     for i in range(0, N):
-#         assign = bool(np.random.binomial(1, agreement))
-#         if assign:
-#             membership[i, :] = base[labels[i], :]
-#         else:
-#             membership[i, :] = base[(labels[i] + 1) % (max(labels) + 1), :]
-#             n_misassign += 1
-
-#     probs = membership @ B
-
-#     covariates = np.zeros(probs.shape)
-#     for i in range(N):
-#         for j in range(d):
-#             covariates[i, j] = np.random.binomial(1, probs[i, j])
-
-#     return covariates
+    #     return U @ np.diag(np.sqrt(D))
 
 
-# def get_misclustering(A, model, labels, covariates=None) -> float:
-#     if covariates is None:
-#         Xhat = model.fit_transform(A)
-#     else:
-#         Xhat = model.fit_transform(A, covariates=covariates)
-
-#     kmeans = KMeans(n_clusters=3)
-#     labels_ = kmeans.fit_predict(Xhat)
-
-#     # to account for nonidentifiability
-#     labels_ = remap_labels(labels, labels_)
-#     misclustering = np.count_nonzero(labels - labels_) / len(labels)
-
-#     return misclustering
+def _cluster(alpha, LL, XXt):
+    X_hat = _embed(alpha=alpha, LL=LL, XXt=XXt)
+    kmeans = KMeans(n_clusters=3)  # TODO
+    kmeans.fit(X_hat)
+    print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
+    return alpha, kmeans.inertia_
 
 
-# from graspologic.simulations import sbm
-# from graspologic.utils import remap_labels
-# from graspologic.plot import pairplot
+def _embed(alpha, LL, XXt):
+    L_ = LL + alpha * (XXt)
+    U, D, V = selectSVD(
+        L_,
+        n_components=3,
+        n_elbows=2,
+        algorithm="full",
+        n_iter=5,
+    )
 
-# n = 500
-# assortative = False
-# p, q = 0.03, 0.015
-# if not assortative:
-#     p, q = q, p
-# A, labels = sbm(
-#     [n, n, n],
-#     p=[[p, q, q], [q, p, q], [q, q, p]],
-#     return_labels=True,
-# )
-# X = gen_covariates(labels, m1=0.8, m2=0.2, agreement=0.0)
-# X = gen_covariates(labels, m1=0.8, m2=0.2, agreement=1)
-# import seaborn as sns
+    return U @ np.diag(np.sqrt(D))
 
 
-# case = CovariateAssistedEmbedding(n_components=3, embedding_alg="cca", n_iter=100)
-# Xhat = case.fit_transform(A, covariates=X, labels=labels)
-# pairplot(Xhat, labels=labels)
 # %%
