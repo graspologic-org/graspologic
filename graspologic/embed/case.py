@@ -141,7 +141,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # setup
         A = import_graph(graph)
 
-        # save necessary params
+        # save necessary params  # TODO: do this without saving potentially huge objects into `self`
         self._L = to_laplacian(A, form="R-DAD")
         self._R = np.shape(covariates)[1]
         self._X = covariates.copy()
@@ -149,7 +149,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # change params based on tuning algorithm
         if self.embedding_alg == "cca":
             self._LL = self._L @ self._X
-            self._XXt = self._X
+            self._XXt = 0
             self.alpha_ = 0
         elif self.embedding_alg == "assortative":
             self._LL = self._L
@@ -160,11 +160,10 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             self._XXt = self._X @ self._X.T
             self.alpha_ = self._get_tuning_parameter()
 
-        # self._embed(plot=True)
         L_ = self._LL + self.alpha_ * (self._XXt)
         self._reduce_dim(L_)
         self.is_fitted_ = True
-        # # FOR DEBUGGING
+        # # FOR DEBUGGING  # TODO: remove
         # kmeans = KMeans(n_clusters=3)
         # labels_ = kmeans.fit_predict(self.latent_left_)
         # labels_ = remap_labels(labels, labels_)
@@ -190,6 +189,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         alpha : float
             Tuning parameter which normalizes LL and XXt.
         """
+        # TODO: clean this code up if possible
         # setup
         if isinstance(self.alpha, (int, float)) and self.alpha != -1:
             return self.alpha
@@ -200,6 +200,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         XXt = self._XXt
 
         # grab eigenvalues
+        # TODO: I'm sure there's a better way than selectSVD
         _, D, _ = selectSVD(self._X, n_components=self._X.shape[1], algorithm="full")
         X_eigvals = D[0 : np.min([n_cov, n_clusters])]
         _, D, _ = selectSVD(self._L, n_components=n_clusters + 1)
@@ -234,19 +235,24 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # which minimizes clustering intertia
         # TODO: optimize... maybe with sklearn.metrics.make_scorer
         #       and a GridSearch?
+        # added parallelization with joblib
         alpha_range = np.linspace(amin, amax, num=self.n_iter)
         inertia_trials = (
-            delayed(_cluster)(alpha, LL=self._LL, XXt=self._XXt)
+            delayed(_cluster)(
+                alpha, LL=self._LL, XXt=self._XXt, n_components=n_clusters
+            )
             for alpha in alpha_range
         )
-        inertias = dict(Parallel(n_jobs=-1, verbose=100)(inertia_trials))
+        inertias = dict(Parallel(n_jobs=7, verbose=100)(inertia_trials))
+        # TODO: query max cpu's, then -2
+        # or set as class param
         # for a in alpha_range:
         #     self._cluster(alpha, n_clusters)
         #     inertias[a] = kmeans.inertia_
         alpha = min(inertias, key=inertias.get)
         print(f"Best inertia at alpha={alpha:5f}: {inertias[alpha]:5f}")
 
-        # FOR DEBUGGING
+        # FOR DEBUGGING  # TODO: remove
         # kmeans = KMeans(n_clusters=self.n_components, n_jobs=-1)
         # X_ = _embed(alpha=np.float(L_top / X_top), LL=self._LL, XXt=self._XXt)
         # kmeans.fit(X_)
@@ -256,57 +262,22 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         return alpha
 
-    # def _cluster(self, alpha):
-    #     X_hat = self._embed(alpha=alpha)
-    #     kmeans = KMeans(n_clusters=self.n_components)
-    #     kmeans.fit(X_hat)
-    #     print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
-    #     return alpha, kmeans.inertia_
 
-    # def _embed(self, alpha=None, plot=False):
-    #     if alpha is None:
-    #         alpha = self.alpha_
-
-    #     L_ = self._LL + alpha * (self._XXt)
-    #     if plot:
-    #         import matplotlib.pyplot as plt
-
-    #         # sns.heatmap(self._X, ax=axs[0, 0])
-    #         # heatmap(self._XXt)
-    #         # heatmap(self._L)
-    #         # heatmap(self._LL)
-    #         heatmap(L_)
-
-    #     U, D, V = selectSVD(
-    #         L_,
-    #         n_components=self.n_components,
-    #         n_elbows=self.n_elbows,
-    #         algorithm="full",
-    #         n_iter=5,
-    #     )
-
-    #     return U @ np.diag(np.sqrt(D))
-
-
-def _cluster(alpha, LL, XXt):
-    X_hat = _embed(alpha=alpha, LL=LL, XXt=XXt)
+def _cluster(alpha, LL, XXt, *, n_clusters):
+    latents = _embed(alpha, LL=LL, XXt=XXt, n_clusters=n_clusters)
     kmeans = KMeans(n_clusters=3)  # TODO
-    kmeans.fit(X_hat)
+    kmeans.fit(latents)
     print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
     return alpha, kmeans.inertia_
 
 
-def _embed(alpha, LL, XXt):
+def _embed(alpha, LL, XXt, *, n_clusters):
     L_ = LL + alpha * (XXt)
-    U, D, V = selectSVD(
-        L_,
-        n_components=3,
-        n_elbows=2,
-        algorithm="full",
-        n_iter=5,
-    )
+    latents, _, _ = scipy.linalg.svd(A)
+    latents = latents[:, :n_clusters]
+    return latents
 
-    return U @ np.diag(np.sqrt(D))
+    return U
 
 
 # %%
