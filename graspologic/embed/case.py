@@ -56,6 +56,13 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             k-means is run. Higher values are more computationally expensive in exchange
             for a finer-grained search of the parameter space (and better embedding).
 
+        n_jobs : int, optional (default = None)
+            The number of parallel threads to use in K-means when calculating alpha.
+            `None` or `-1` means using all processors.
+
+        verbose : int, optional (default = 0)
+            Verbosity mode.
+
         n_elbows : int, optional, default: 2
             If `n_components=None`, then compute the optimal embedding dimension using
             `select_dimension`. Otherwise, ignored.
@@ -78,10 +85,12 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
     def __init__(
         self,
+        n_components=None,
         embedding_alg="assortative",
         alpha=None,
-        tuning_runs=100,  # TODO: this default is gonna take hella long on bigger matrices
-        n_components=None,
+        tuning_runs=20,  # TODO: this default is gonna take hella long on bigger matrices. also the one in R was 100
+        n_jobs=None,
+        verbose=0,
         n_elbows=2,
         check_lcc=False,
         concat=False,
@@ -102,9 +111,14 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         if not ((alpha is None) or alpha == -1 or isinstance(alpha, float)):
             msg = "alpha must be in {None, float, -1}."
             raise TypeError(msg)
-        self.alpha = alpha
 
+        if n_jobs is None:
+            n_jobs = -1
+
+        self.n_jobs = n_jobs
+        self.alpha = alpha
         self.tuning_runs = tuning_runs
+        self.verbose = verbose
         self.latent_right_ = None  # doesn't work for directed graphs atm
         self.is_fitted_ = False
 
@@ -198,14 +212,13 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             return self.alpha
         n_clusters = self.n_components  # number of clusters
         n_cov = self._R  # number of covariates
-        I = int(n_cov <= n_clusters)
         LL = self._LL
         XXt = self._XXt
 
         # grab eigenvalues
         # TODO: I'm sure there's a better way than selectSVD
         _, D, _ = selectSVD(self._X, n_components=self._X.shape[1], algorithm="full")
-        X_eigvals = D[0 : np.min([n_cov, n_clusters])]
+        X_eigvals = D[0 : np.min([n_cov, n_clusters]) + 1]
         _, D, _ = selectSVD(
             self._L, n_components=n_clusters + 1
         )  # TODO: R code uses n_clusters+1, not sure why
@@ -246,7 +259,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             delayed(_cluster)(alpha, LL=self._LL, XXt=self._XXt, n_clusters=n_clusters)
             for alpha in alpha_range
         )
-        inertias = dict(Parallel(n_jobs=7, verbose=100)(inertia_trials))
+        inertias = dict(
+            Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(inertia_trials)
+        )
         # TODO: query max cpu's, then -2
         # or set as class param
         # for a in alpha_range:
@@ -268,7 +283,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
 def _cluster(alpha, LL, XXt, *, n_clusters):
     latents = _embed(alpha, LL=LL, XXt=XXt, n_clusters=n_clusters)
-    kmeans = KMeans(n_clusters=3)  # TODO
+    kmeans = KMeans(
+        n_clusters=n_clusters, n_init=20
+    )  # TODO : dunno how computationally expensive having a higher-than-normal n_init is
     kmeans.fit(latents)
     print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
     return alpha, kmeans.inertia_
