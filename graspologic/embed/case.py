@@ -8,6 +8,7 @@ from joblib import delayed, Parallel
 from sklearn.cluster import KMeans
 from graspologic.plot import heatmap
 from graspologic.utils import remap_labels
+from sklearn.preprocessing import normalize
 
 np.set_printoptions(suppress=True)
 
@@ -50,10 +51,10 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
                          result in suboptimal clustering in exchange for increased
                          clustering speed.
 
-        n_iter : int, optional (default = 100)
+        tuning_runs : int, optional (default = 100)
             If tuning alpha with k-means, this parameter determines the number of times
             k-means is run. Higher values are more computationally expensive in exchange
-            for a finer-grained search of the parameter space.
+            for a finer-grained search of the parameter space (and better embedding).
 
         n_elbows : int, optional, default: 2
             If `n_components=None`, then compute the optimal embedding dimension using
@@ -79,7 +80,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         self,
         embedding_alg="assortative",
         alpha=None,
-        n_iter=100,
+        tuning_runs=100,  # TODO: this default is gonna take hella long on bigger matrices
         n_components=None,
         n_elbows=2,
         check_lcc=False,
@@ -99,11 +100,11 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         self.embedding_alg = embedding_alg  # TODO: compute this automatically?
 
         if not ((alpha is None) or alpha == -1 or isinstance(alpha, float)):
-            msg = "alpha must be in {None, float, -1} and must be positive."
+            msg = "alpha must be in {None, float, -1}."
             raise TypeError(msg)
         self.alpha = alpha
 
-        self.n_iter = n_iter
+        self.tuning_runs = tuning_runs
         self.latent_right_ = None  # doesn't work for directed graphs atm
         self.is_fitted_ = False
 
@@ -140,9 +141,10 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         # setup
         A = import_graph(graph)
+        covariates = normalize(covariates, axis=0)
 
         # save necessary params  # TODO: do this without saving potentially huge objects into `self`
-        self._L = to_laplacian(A, form="R-DAD")
+        self._L = _to_reg_laplacian(A)
         self._R = np.shape(covariates)[1]
         self._X = covariates.copy()
 
@@ -160,8 +162,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             self._XXt = self._X @ self._X.T
             self.alpha_ = self._get_tuning_parameter()
 
-        L_ = self._LL + self.alpha_ * (self._XXt)
-        self._reduce_dim(L_)
+        self.latent_left_ = _embed(
+            self.alpha_, self._LL, self._XXt, n_clusters=self.n_components
+        )
         self.is_fitted_ = True
         # # FOR DEBUGGING  # TODO: remove
         # kmeans = KMeans(n_clusters=3)
@@ -203,7 +206,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # TODO: I'm sure there's a better way than selectSVD
         _, D, _ = selectSVD(self._X, n_components=self._X.shape[1], algorithm="full")
         X_eigvals = D[0 : np.min([n_cov, n_clusters])]
-        _, D, _ = selectSVD(self._L, n_components=n_clusters + 1)
+        _, D, _ = selectSVD(
+            self._L, n_components=n_clusters + 1
+        )  # TODO: R code uses n_clusters+1, not sure why
         L_eigvals = D[0 : n_clusters + 1]
         if self.embedding_alg == "non-assortative":
             L_eigvals = L_eigvals ** 2
@@ -236,11 +241,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # TODO: optimize... maybe with sklearn.metrics.make_scorer
         #       and a GridSearch?
         # added parallelization with joblib
-        alpha_range = np.linspace(amin, amax, num=self.n_iter)
+        alpha_range = np.linspace(amin, amax, num=self.tuning_runs)
         inertia_trials = (
-            delayed(_cluster)(
-                alpha, LL=self._LL, XXt=self._XXt, n_components=n_clusters
-            )
+            delayed(_cluster)(alpha, LL=self._LL, XXt=self._XXt, n_clusters=n_clusters)
             for alpha in alpha_range
         )
         inertias = dict(Parallel(n_jobs=7, verbose=100)(inertia_trials))
@@ -273,11 +276,19 @@ def _cluster(alpha, LL, XXt, *, n_clusters):
 
 def _embed(alpha, LL, XXt, *, n_clusters):
     L_ = LL + alpha * (XXt)
-    latents, _, _ = scipy.linalg.svd(A)
+    latents, _, _ = scipy.linalg.svd(L_)
     latents = latents[:, :n_clusters]
     return latents
 
-    return U
+
+def _to_reg_laplacian(A):
+    # TODO: this is the version of the Laplacian that they used in the paper. Using
+    # utils.to_laplacian(form="R-DAD") produces a slightly different matrix. Need to
+    # figure out disregularity to avoid defining functions I don't need to
+    row_sums = np.sum(A, axis=1)
+    tau = np.mean(row_sums)
+    norm_mat = np.diag(1 / np.sqrt(row_sums + tau))
+    return norm_mat @ A @ norm_mat
 
 
 # %%
