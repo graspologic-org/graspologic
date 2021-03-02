@@ -8,7 +8,7 @@ from joblib import delayed, Parallel
 from sklearn.cluster import KMeans
 from graspologic.plot import heatmap
 from graspologic.utils import remap_labels
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize, scale
 
 np.set_printoptions(suppress=True)
 
@@ -155,7 +155,10 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         # setup
         A = import_graph(graph)
+
+        # center and scale covariates to unit norm
         covariates = normalize(covariates, axis=0)
+        covariates = scale(covariates, axis=0, with_std=False)
 
         # save necessary params  # TODO: do this without saving potentially huge objects into `self`
         self._L = _to_reg_laplacian(A)
