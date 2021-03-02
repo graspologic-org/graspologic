@@ -211,14 +211,13 @@ class OmnibusEmbed(BaseEmbedMulti):
                 )
                 warnings.warn(msg, UserWarning)
 
-        # Laplacian transform
-        if self.lse:
-            graphs = _get_laplacian_matrices(graphs)
-            self.diag_aug = False
-
         # Diag augment
         if self.diag_aug:
             graphs = self._diag_aug(graphs)
+
+        # Laplacian transform
+        if self.lse:
+            graphs = _get_laplacian_matrices(graphs)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)
