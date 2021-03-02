@@ -63,6 +63,7 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
 
    embedding/AdjacencySpectralEmbed
    embedding/OutOfSampleEmbed
+   embedding/OutOfSampleLSE
    embedding/Omnibus
    embedding/MASE
 
