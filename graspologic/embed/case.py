@@ -309,6 +309,3 @@ def _to_reg_laplacian(A):
     tau = np.mean(row_sums)
     norm_mat = np.diag(1 / np.sqrt(row_sums + tau))
     return norm_mat @ A @ norm_mat
-
-
-# %%
