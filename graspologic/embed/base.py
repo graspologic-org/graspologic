@@ -113,6 +113,7 @@ class BaseSpectralEmbed(BaseEstimator):
         """This is for sklearn compliance."""
         return True
 
+    @abstractmethod
     def fit(self, graph, y=None):
         """
         A method for embedding.
