@@ -4,6 +4,7 @@
 from abc import abstractmethod
 
 import numpy as np
+import warnings
 from sklearn.base import BaseEstimator
 
 from ..utils import (
