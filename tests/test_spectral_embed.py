@@ -15,6 +15,7 @@ from graspologic.utils import remove_vertices, is_symmetric
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, pairwise_distances
 from sklearn.base import clone
+from scipy.sparse import csr_matrix
 
 np.random.seed(9002)
 
@@ -63,18 +64,20 @@ def _test_output_dim_directed(self, method):
     self.assertEqual(embed.latent_right_.shape, (n, 4))
 
 
-def _test_output_dim(self, method, *args, **kwargs):
+def _test_output_dim(self, method, sparse=False, *args, **kwargs):
     n_components = 4
     embed = method(n_components=n_components)
     n = 10
     M = 20
     A = er_nm(n, M) + 5
+    if sparse:
+        A = csr_matrix(A)
     embed._reduce_dim(A)
     self.assertEqual(embed.latent_left_.shape, (n, 4))
     self.assertTrue(embed.latent_right_ is None)
 
 
-def _test_sbm_er_binary(self, method, P, directed=False, *args, **kwargs):
+def _test_sbm_er_binary(self, method, P, directed=False, sparse=False, *args, **kwargs):
     np.random.seed(8888)
 
     num_sims = 50
@@ -88,6 +91,9 @@ def _test_sbm_er_binary(self, method, P, directed=False, *args, **kwargs):
     for sim in range(0, num_sims):
         sbm_sample = sbm(verts_per_community, P, directed=directed)
         er = er_np(verts, 0.5, directed=directed)
+        if sparse:
+            sbm_sample = csr_matrix(sbm_sample)
+            er = csr_matrix(er)
         embed_sbm = method(n_components=2, concat=directed)
         embed_er = method(n_components=2, concat=directed)
 
@@ -260,6 +266,27 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase.transform(a)
 
 
+class TestAdjacencySpectralEmbedSparse(unittest.TestCase):
+    def test_output_dim(self):
+        _test_output_dim(self, AdjacencySpectralEmbed, sparse=True)
+
+    def test_sbm_er_binary_undirected(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        _test_sbm_er_binary(
+            self, AdjacencySpectralEmbed, P, directed=False, sparse=True
+        )
+
+    def test_sbm_er_binary_directed(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        _test_sbm_er_binary(self, AdjacencySpectralEmbed, P, directed=True, sparse=True)
+
+    def test_unconnected_warning(self):
+        A = csr_matrix(er_nm(100, 10))
+        with self.assertWarns(UserWarning):
+            ase = AdjacencySpectralEmbed()
+            ase.fit(A)
+
+
 class TestLaplacianSpectralEmbed(unittest.TestCase):
     def test_output_dim(self):
         _test_output_dim(self, LaplacianSpectralEmbed)
@@ -283,6 +310,33 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         n = [50, 50]
         p = [[1, 0], [0, 1]]
         A = sbm(n, p)
+        with self.assertWarns(UserWarning):
+            lse = LaplacianSpectralEmbed()
+            lse.fit(A)
+
+
+class TestLaplacianSpectralEmbedSparse(unittest.TestCase):
+    def test_output_dim(self):
+        _test_output_dim(self, LaplacianSpectralEmbed, sparse=True)
+
+    def test_sbm_er_binary_undirected(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.3]])
+        _test_sbm_er_binary(
+            self, LaplacianSpectralEmbed, P, directed=False, sparse=True
+        )
+
+    def test_sbm_er_binary_directed(self):
+        P = np.array([[0.8, 0.2], [0.2, 0.3]])
+        _test_sbm_er_binary(self, LaplacianSpectralEmbed, P, directed=True, sparse=True)
+
+    def test_different_forms(self):
+        f = csr_matrix(np.array([[1, 2], [2, 1]]))
+        lse = LaplacianSpectralEmbed(form="I-DAD")
+
+    def test_unconnected_warning(self):
+        n = [50, 50]
+        p = [[1, 0], [0, 1]]
+        A = csr_matrix(sbm(n, p))
         with self.assertWarns(UserWarning):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)

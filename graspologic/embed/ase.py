@@ -25,7 +25,8 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
     the dimensionality to the specified k, or if k is unspecified, can find a number of
     dimensions automatically (see :class:`~graspologic.embed.selectSVD`).
 
-    Read more in the :ref:`tutorials <embed_tutorials>`
+    Read more in the `Adjacency Spectral Embedding Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
 
     Parameters
     ----------
@@ -47,6 +48,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
+            Does not support ``graph`` input of type scipy.sparse.csr_matrix
         - 'truncated'
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
 
@@ -142,7 +144,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        graph : array_like or networkx.Graph
+        graph : array-like, scipy.sparse.csr_matrix, or networkx.Graph
             Input graph to embed.
 
         y: Ignored
@@ -159,14 +161,14 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.get_lcc``."
+                    + "using ``graspologic.utils.largest_connected_component``."
                 )
                 warnings.warn(msg, UserWarning)
 
         if self.diag_aug:
             A = augment_diagonal(A)
 
-        self.n_features_in_ = len(A)
+        self.n_features_in_ = A.shape[0]
         self._reduce_dim(A)
 
         # for out-of-sample
@@ -186,7 +188,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        X : array_like or tuple, original shape or (n_oos_vertices, n_vertices).
+        X : array-like or tuple, original shape or (n_oos_vertices, n_vertices).
 
             The original fitted matrix ("graph" in fit) or new out-of-sample data.
             If ``X`` is the original fitted matrix, returns a matrix close to
