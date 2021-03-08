@@ -433,12 +433,15 @@ def _sample_modified_ase(X, Y, workers, pooled=False):
 
     # increase the variance of X by sampling from the asy dist
     X_sampled = np.zeros(X.shape)
+
     # TODO may be parallelized, but requires keeping track of random state
-    # for i in range(N):
+    # or i in range(N):
     # X_sampled[i, :] = X[i, :] + stats.multivariate_normal.rvs(cov=X_sigmas[i])
+
     X_sampled += Parallel(n_jobs=workers)(
         delayed(add_variance)(X[i, :], X_sigmas[i]) for i in range(N)
     )
+
     # return the embeddings in the appropriate order
     return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
