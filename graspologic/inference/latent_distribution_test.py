@@ -18,6 +18,7 @@ from sklearn.metrics.pairwise import PAIRWISE_KERNEL_FUNCTIONS
 from hyppo.ksample import KSample
 from hyppo._utils import gaussian
 from collections import namedtuple
+from joblib import Parallel, delayed
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
 _VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
@@ -312,7 +313,9 @@ def latent_distribution_test(
         Q = np.identity(X1_hat.shape[0])
 
     if size_correction:
-        X1_hat, X2_hat = _sample_modified_ase(X1_hat, X2_hat, pooled=pooled)
+        X1_hat, X2_hat = _sample_modified_ase(
+            X1_hat, X2_hat, workers=workers, pooled=pooled
+        )
 
     metric_func_ = _instantiate_metric_func(metric=metric, test=test)
     test_obj = KSample(test, compute_distance=metric_func_)
@@ -407,7 +410,7 @@ def _embed(A1, A2, n_components):
     return X1_hat, X2_hat
 
 
-def _sample_modified_ase(X, Y, pooled=False):
+def _sample_modified_ase(X, Y, workers, pooled=False):
     N, M = len(X), len(Y)
 
     # return if graphs are same order, else ensure X the larger graph.
@@ -431,8 +434,15 @@ def _sample_modified_ase(X, Y, pooled=False):
     # increase the variance of X by sampling from the asy dist
     X_sampled = np.zeros(X.shape)
     # TODO may be parallelized, but requires keeping track of random state
-    for i in range(N):
-        X_sampled[i, :] = X[i, :] + stats.multivariate_normal.rvs(cov=X_sigmas[i])
-
+    # for i in range(N):
+    # X_sampled[i, :] = X[i, :] + stats.multivariate_normal.rvs(cov=X_sigmas[i])
+    X_sampled += Parallel(n_jobs=workers)(
+        delayed(add_variance)(X[i, :], X_sigmas[i]) for i in range(N)
+    )
     # return the embeddings in the appropriate order
     return (Y, X_sampled) if reverse_order else (X_sampled, Y)
+
+
+def add_variance(X_orig, X_sigma):
+    return X_orig + stats.multivariate_normal.rvs(cov=X_sigma)
+
