@@ -346,6 +346,21 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)
 
+    def test_embedding(self):
+        epsilon = 0.1
+        nodes_per_community = 100
+        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        undirected, labels_ = sbm(2 * [nodes_per_community], P, return_labels=True)
+
+        oos_idx = 0
+        A, a = remove_vertices(undirected, indices=oos_idx, return_removed=True)
+
+        lse = LaplacianSpectralEmbed(n_components=2)
+        lse.fit_transform(A)
+        w = lse.transform(a) / nodes_per_community
+        self.assertTrue(P[0][0] - epsilon < w[0][0] < P[0][0] + epsilon)
+        self.assertTrue(P[0][1] - epsilon < w[0][1] < P[0][1] + epsilon)
+
 
 class TestLaplacianSpectralEmbedSparse(unittest.TestCase):
     def test_output_dim(self):
