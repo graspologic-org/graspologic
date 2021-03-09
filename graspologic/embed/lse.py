@@ -6,6 +6,7 @@ import warnings
 from .base import BaseSpectralEmbed
 from ..utils import import_graph, to_laplacian, is_fully_connected
 from sklearn.utils.validation import check_is_fitted
+import networkx as nx
 
 import numpy as np
 
