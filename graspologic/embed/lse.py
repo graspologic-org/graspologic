@@ -241,4 +241,6 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self._pinv_left = self.latent_left_ @ inv_eigs
         if self.latent_right_ is not None:
             self._pinv_right = self.latent_right_ @ inv_eigs
+
+        self.is_fitted_ = True
         return self
