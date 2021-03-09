@@ -69,10 +69,10 @@ def _test_output_dim(self, method, sparse=False, *args, **kwargs):
     embed = method(n_components=n_components)
     n = 10
     M = 20
-    A_undir = er_nm(n, M) + 5
+    A = er_nm(n, M) + 5
     if sparse:
-        A_undir = csr_matrix(A_undir)
-    embed._reduce_dim(A_undir)
+        A = csr_matrix(A)
+    embed._reduce_dim(A)
     self.assertEqual(embed.latent_left_.shape, (n, 4))
     self.assertTrue(embed.latent_right_ is None)
 
@@ -304,6 +304,10 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
             Gwd=sbm(n=n, p=p, wt=wt, wtargs=wtargs, directed=True),
         )
         self.lse = LaplacianSpectralEmbed(n_components=2)
+
+    def test_different_forms(self):
+        f = np.array([[1, 2], [2, 1]])
+        lse = LaplacianSpectralEmbed(form="I-DAD")
 
     def test_transform_correct_types(self):
         lse = LaplacianSpectralEmbed(n_components=2)
