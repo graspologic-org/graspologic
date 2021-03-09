@@ -680,7 +680,7 @@ def _process_paramgrid(paramgrid, run_multiple_init, n_init):
         If True, run additional n_init k_means initializations.
         Else, no multiple k-means initialization is performed.
 
-    n_init : int, defaults to 1.
+    n_init : int, defaults to None.
         The number of k-means initializations to perform if run_multiple_init is True
 
     Returns
