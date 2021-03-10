@@ -5,64 +5,22 @@ Release Log
 
 graspologic 0.1.0
 -----------------
-Release date: ?
+This release represents the first release of the ``GraSPy`` and `topologic`_ libraries
+merger!
 
-GraSPy 0.3
-----------
-Release date: 04 Aug 2020
-Supports Python 3.6, and 3.7
+In addition to all of the features that ``GraSPy`` had in :ref:`last-graspy-label`,
+this release includes a number of feature enhancements and bug fixes - frankly, too
+many to go into.
 
+Please treat this as a brand new first release, informed heavily by the prior
+``GraSPy``, and extra special thanks to **all** of our
+`contributors <https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTORS.md>`_!
+
+Previous GraSPy Releases
+------------------------
 .. toctree::
    :maxdepth: 1
 
-   release/release_0.3.rst
+   release/graspy_releases.rst
 
-GraSPy 0.2
-----------
-Release date: 02 Mar 2020
-Supports Python 3.5, 3.6, and 3.7
-
-.. toctree::
-   :maxdepth: 1
-
-   release/release_0.2.rst
-
-GraSPy 0.1
-----------
-Release date: 05 Aug 2019
-Supports Python 3.5, 3.6, and 3.7
-
-.. toctree::
-   :maxdepth: 1
-
-   release/release_0.1.rst
-
-GraSPy 0.0.3
-------------
-Release date: 11 June 2019
-Supports Python 3.5, 3.6, and 3.7.
-
-.. toctree::
-   :maxdepth: 1
-
-   release/release_0.0.3.rst
-
-GraSPy 0.0.2
-------------
-Release date: 26 March 2019
-Supports Python 3.5, 3.6, and 3.7.
-
-.. toctree::
-   :maxdepth: 1
-
-   release/release_0.0.2.rst
-
-GraSPy 0.0.1
-------------
-Release date: 14 December 2018
-Supports Python 3.5, 3.6, and 3.7.
-
-.. toctree::
-   :maxdepth: 1
-
-   release/release_0.0.1.rst
+.. _topologic: https://github.com/microsoft/topologic
