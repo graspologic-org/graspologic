@@ -3,10 +3,10 @@ Thanks for contributing a pull request! Please ensure you have taken a look at
 the contribution guidelines: https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md
 -->
 
-[] Does this add any new dependencies?
-[] Does this modify any existing APIs?
-[] Is the change to the API backwards compatible?
-[] Have you built the documentation (reference and/or tutorial) and verified the document generated is appropriate?
+[ ] Does this add any new dependencies?
+[ ] Does this modify any existing APIs?
+[ ] Is the change to the API backwards compatible?
+[ ] Have you built the documentation (reference and/or tutorial) and verified the document generated is appropriate?
 
 #### Reference Issues/PRs
 <!--
