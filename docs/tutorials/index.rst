@@ -94,6 +94,7 @@ The following tutorials present ways to visualize the graphs, such as its adjace
    plotting/heatmaps
    plotting/gridplot
    plotting/pairplot
+   plotting/matrixplot
    plotting/pairplot_with_gmm
 
 .. _matching_tutorials:

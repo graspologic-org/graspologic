@@ -29,8 +29,7 @@ class GraphMatch(BaseEstimator):
 
     n_init : int, positive (default = 1)
         Number of random initializations of the starting permutation matrix that
-        the FAQ algorithm will undergo. ``n_init`` automatically set to 1 if
-        ``init_method`` = 'barycenter'
+        the FAQ algorithm will undergo.
 
     init : string (default = 'barycenter') or 2d-array
         The initial position chosen
