@@ -9,6 +9,7 @@ from sklearn.cluster import KMeans
 from graspologic.plot import heatmap
 from graspologic.utils import remap_labels
 from sklearn.preprocessing import normalize, scale
+from sklearn.utils.extmath import randomized_svd
 
 np.set_printoptions(suppress=True)
 
@@ -56,9 +57,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             k-means is run. Higher values are more computationally expensive in exchange
             for a finer-grained search of the parameter space (and better embedding).
 
-        n_jobs : int, optional (default = None)
+        n_jobs : int, optional (default = -1)
             The number of parallel threads to use in K-means when calculating alpha.
-            `None` or `-1` means using all processors.
+            `-1` means using all processors.
 
         verbose : int, optional (default = 0)
             Verbosity mode.
@@ -88,8 +89,8 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         n_components=None,
         embedding_alg="assortative",
         alpha=None,
-        tuning_runs=20,  # TODO: this default is gonna take hella long on bigger matrices. also the one in R was 100
-        n_jobs=None,
+        tuning_runs=20,
+        n_jobs=-1,
         verbose=0,
         n_elbows=2,
         check_lcc=False,
@@ -102,7 +103,8 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             check_lcc=check_lcc,
             concat=concat,
         )
-
+        if not isinstance(embedding_alg, str):
+            raise TypeError("Embedding algorithm must be a string")
         if embedding_alg not in {"assortative", "non-assortative", "cca"}:
             msg = "embedding_alg must be in {assortative, non-assortative, cca}."
             raise ValueError(msg)
@@ -158,10 +160,9 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         # center and scale covariates to unit norm
         covariates = normalize(covariates, axis=0)
-        covariates = scale(covariates, axis=0, with_std=False)
 
         # save necessary params  # TODO: do this without saving potentially huge objects into `self`
-        self._L = _to_reg_laplacian(A)
+        self._L = to_laplacian(A, form="R-DAD")
         self._R = np.shape(covariates)[1]
         self._X = covariates.copy()
 
@@ -215,17 +216,12 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             return self.alpha
         n_clusters = self.n_components  # number of clusters
         n_cov = self._R  # number of covariates
-        LL = self._LL
-        XXt = self._XXt
 
         # grab eigenvalues
         # TODO: I'm sure there's a better way than selectSVD
-        _, D, _ = selectSVD(self._X, n_components=self._X.shape[1], algorithm="full")
-        X_eigvals = D[0 : np.min([n_cov, n_clusters]) + 1]
-        _, D, _ = selectSVD(
-            self._L, n_components=n_clusters + 1
-        )  # TODO: R code uses n_clusters+1, not sure why
-        L_eigvals = D[0 : n_clusters + 1]
+        X_components = np.min([n_cov, n_clusters]) + 1
+        _, X_eigvals, _ = randomized_svd(self._X, n_components=X_components)
+        _, L_eigvals, _ = randomized_svd(self._L, n_components=n_clusters + 1)
         if self.embedding_alg == "non-assortative":
             L_eigvals = L_eigvals ** 2
 
@@ -299,13 +295,3 @@ def _embed(alpha, LL, XXt, *, n_clusters):
     latents, _, _ = scipy.linalg.svd(L_)
     latents = latents[:, :n_clusters]
     return latents
-
-
-def _to_reg_laplacian(A):
-    # TODO: this is the version of the Laplacian that they used in the paper. Using
-    # utils.to_laplacian(form="R-DAD") produces a slightly different matrix. Need to
-    # figure out disregularity to avoid defining functions I don't need to
-    row_sums = np.sum(A, axis=1)
-    tau = np.mean(row_sums)
-    norm_mat = np.diag(1 / np.sqrt(row_sums + tau))
-    return norm_mat @ A @ norm_mat
