@@ -444,8 +444,6 @@ def _sample_modified_ase(X, Y, workers, pooled=False):
             )
         )
 
-    print(X_sampled)
-
     # return the embeddings in the appropriate order
     return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
