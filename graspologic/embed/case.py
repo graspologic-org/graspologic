@@ -1,7 +1,6 @@
 # %%
 from graspologic.utils import import_graph, to_laplacian
 from graspologic.embed.base import BaseSpectralEmbed
-from graspologic.embed.svd import selectSVD
 import numpy as np
 import scipy
 from joblib import delayed, Parallel
@@ -218,7 +217,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         n_cov = self._R  # number of covariates
 
         # grab eigenvalues
-        # TODO: I'm sure there's a better way than selectSVD
         X_components = np.min([n_cov, n_clusters]) + 1
         _, X_eigvals, _ = randomized_svd(self._X, n_components=X_components)
         _, L_eigvals, _ = randomized_svd(self._L, n_components=n_clusters + 1)
@@ -283,7 +281,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 def _cluster(alpha, LL, XXt, *, n_clusters):
     latents = _embed(alpha, LL=LL, XXt=XXt, n_clusters=n_clusters)
     kmeans = KMeans(
-        n_clusters=n_clusters, n_init=20
+        n_clusters=n_clusters
     )  # TODO : dunno how computationally expensive having a higher-than-normal n_init is
     kmeans.fit(latents)
     print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
@@ -292,6 +290,5 @@ def _cluster(alpha, LL, XXt, *, n_clusters):
 
 def _embed(alpha, LL, XXt, *, n_clusters):
     L_ = LL + alpha * (XXt)
-    latents, _, _ = scipy.linalg.svd(L_)
-    latents = latents[:, :n_clusters]
+    latents, _, _ = randomized_svd(L_, n_components=n_clusters)
     return latents
