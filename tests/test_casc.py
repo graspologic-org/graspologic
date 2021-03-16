@@ -62,7 +62,7 @@ def X(request, M):
 @pytest.fixture(params=["assortative", "non-assortative", "cca"])
 def case(request, M, X):
     A, _ = M
-    case = CASE(n_components=2, embedding_alg==request.param)
+    case = CASE(n_components=2, embedding_alg=request.param)
     case.fit(A, covariates=X)
     return case
 
