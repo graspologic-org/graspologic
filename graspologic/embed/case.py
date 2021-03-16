@@ -9,8 +9,12 @@ from graspologic.plot import heatmap
 from graspologic.utils import remap_labels
 from sklearn.preprocessing import normalize, scale
 from sklearn.utils.extmath import randomized_svd
+from scipy.sparse.linalg import eigsh
 
 np.set_printoptions(suppress=True)
+import warnings
+
+warnings.filterwarnings("ignore")
 
 #%%
 
@@ -168,13 +172,18 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # change params based on tuning algorithm
         if self.embedding_alg == "cca":
             self._LL = self._L @ self._X
-            self._XXt = 0
-            self.alpha_ = 0
+            self._reduce_dim(self._LL)
+            self.is_fitted_ = True
+            return self
         elif self.embedding_alg == "assortative":
+            print("X type", type(self._X))
+            print("L type", type(self._L))
             self._LL = self._L
             self._XXt = self._X @ self._X.T
             self.alpha_ = self._get_tuning_parameter()
         elif self.embedding_alg == "non-assortative":
+            print("X type", type(self._X))
+            print("L type", type(self._L))
             self._LL = self._L @ self._L
             self._XXt = self._X @ self._X.T
             self.alpha_ = self._get_tuning_parameter()
@@ -219,7 +228,10 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # grab eigenvalues
         X_components = np.min([n_cov, n_clusters]) + 1
         _, X_eigvals, _ = randomized_svd(self._X, n_components=X_components)
-        _, L_eigvals, _ = randomized_svd(self._L, n_components=n_clusters + 1)
+        # X_eigvals = get_eigvals(self._X, k=X_components)
+        # L_eigvals = get_eigvals(self._L, k=n_clusters + 1)
+        L_eigvals = np.flip(eigsh(self._L, k=n_clusters + 1, return_eigenvectors=False))
+        # _, L_eigvals, _ = randomized_svd(self._L, n_components=n_clusters + 1)
         if self.embedding_alg == "non-assortative":
             L_eigvals = L_eigvals ** 2
 
@@ -280,15 +292,58 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
 def _cluster(alpha, LL, XXt, *, n_clusters):
     latents = _embed(alpha, LL=LL, XXt=XXt, n_clusters=n_clusters)
+    if not isinstance(latents, np.ndarray):
+        print("prior to fitting, latents is type", type(latents))
     kmeans = KMeans(
         n_clusters=n_clusters
     )  # TODO : dunno how computationally expensive having a higher-than-normal n_init is
-    kmeans.fit(latents)
+    try:
+        kmeans.fit(latents)
+    except ValueError as e:
+        print(
+            f"ValueError. Nonfinite values in latents: {not np.isfinite(latents).all()}"
+        )
+        print(f"nan values: {np.any(np.isnan(latents))}")
+        print("latents is type", type(latents))
+        print(latents.shape)
+        print(alpha)
+        print(latents)
+
+        raise e
     print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
     return alpha, kmeans.inertia_
 
 
 def _embed(alpha, LL, XXt, *, n_clusters):
     L_ = LL + alpha * (XXt)
-    latents, _, _ = randomized_svd(L_, n_components=n_clusters)
-    return latents
+    L_ = L_.astype(float)
+    try:
+        vals, vecs = eigsh(L_, k=n_clusters)
+        vals = vals.astype(float)
+        vecs = vecs.astype(float)
+    except ValueError as e:
+        print(f"ValueError. Nonfinite values in L_: {not np.isfinite(L_).all()}")
+        raise e
+
+    # descending order
+    vals = np.flip(vals)
+    vecs = np.flip(vecs, axis=1)
+
+    if np.any(np.isnan(vals)):
+        print("nan values in vals")
+        raise TypeError("nan vals")
+    if np.any(np.isnan(vecs)):
+        print("nan values in vals")
+        raise TypeError("nan vals")
+
+    # latents = vecs @ np.diag(np.sqrt(vals))  # for some reason, this sometimes has a column of nans?????
+
+    return vecs
+
+
+def get_eigvals(X, k):
+    """
+    Uses Implicitly Restarted Lanczos Method.
+    """
+    eigvals = eigsh(X, k=k, return_eigenvectors=False)
+    return eigvals[::-1]
