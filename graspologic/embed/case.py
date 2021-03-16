@@ -176,14 +176,10 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             self.is_fitted_ = True
             return self
         elif self.embedding_alg == "assortative":
-            print("X type", type(self._X))
-            print("L type", type(self._L))
             self._LL = self._L
             self._XXt = self._X @ self._X.T
             self.alpha_ = self._get_tuning_parameter()
         elif self.embedding_alg == "non-assortative":
-            print("X type", type(self._X))
-            print("L type", type(self._L))
             self._LL = self._L @ self._L
             self._XXt = self._X @ self._X.T
             self.alpha_ = self._get_tuning_parameter()
@@ -192,13 +188,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             self.alpha_, self._LL, self._XXt, n_clusters=self.n_components
         )
         self.is_fitted_ = True
-        # # FOR DEBUGGING  # TODO: remove
-        # kmeans = KMeans(n_clusters=3)
-        # labels_ = kmeans.fit_predict(self.latent_left_)
-        # labels_ = remap_labels(labels, labels_)
-        # print(f"misclustering: {np.count_nonzero(labels - labels_) / len(labels)}")
-
-        # FOR DEBUGGING
         return self
 
     def _get_tuning_parameter(self):
@@ -218,7 +207,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         alpha : float
             Tuning parameter which normalizes LL and XXt.
         """
-        # TODO: clean this code up if possible
         # setup
         if isinstance(self.alpha, (int, float)) and self.alpha != -1:
             return self.alpha
@@ -228,10 +216,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # grab eigenvalues
         X_components = np.min([n_cov, n_clusters]) + 1
         _, X_eigvals, _ = randomized_svd(self._X, n_components=X_components)
-        # X_eigvals = get_eigvals(self._X, k=X_components)
-        # L_eigvals = get_eigvals(self._L, k=n_clusters + 1)
         L_eigvals = np.flip(eigsh(self._L, k=n_clusters + 1, return_eigenvectors=False))
-        # _, L_eigvals, _ = randomized_svd(self._L, n_components=n_clusters + 1)
         if self.embedding_alg == "non-assortative":
             L_eigvals = L_eigvals ** 2
 
@@ -243,9 +228,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             amax = L_top / (X_eigvals[n_clusters - 1] ** 2 - X_eigvals[n_clusters] ** 2)
         else:
             amax = L_top / X_eigvals[n_cov - 1] ** 2
-
-        # print(f"{amin=:.9f}, {amax=:.9f}")
-        print(f"alpha without tuning: {np.float(L_top / X_top)}")
 
         if self.alpha == -1:
             # just use the ratio of the leading eigenvalues for the
@@ -260,9 +242,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         # run kmeans clustering and set alpha to the value
         # which minimizes clustering intertia
-        # TODO: optimize... maybe with sklearn.metrics.make_scorer
-        #       and a GridSearch?
-        # added parallelization with joblib
         alpha_range = np.linspace(amin, amax, num=self.tuning_runs)
         inertia_trials = (
             delayed(_cluster)(alpha, LL=self._LL, XXt=self._XXt, n_clusters=n_clusters)
@@ -271,79 +250,24 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         inertias = dict(
             Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(inertia_trials)
         )
-        # TODO: query max cpu's, then -2
-        # or set as class param
-        # for a in alpha_range:
-        #     self._cluster(alpha, n_clusters)
-        #     inertias[a] = kmeans.inertia_
         alpha = min(inertias, key=inertias.get)
         print(f"Best inertia at alpha={alpha:5f}: {inertias[alpha]:5f}")
-
-        # FOR DEBUGGING  # TODO: remove
-        # kmeans = KMeans(n_clusters=self.n_components, n_jobs=-1)
-        # X_ = _embed(alpha=np.float(L_top / X_top), LL=self._LL, XXt=self._XXt)
-        # kmeans.fit(X_)
-        # print(
-        #     f"inertia at default alpha {np.float(L_top/X_top):.5f}: {kmeans.inertia_:.5f}"
-        # )
 
         return alpha
 
 
 def _cluster(alpha, LL, XXt, *, n_clusters):
     latents = _embed(alpha, LL=LL, XXt=XXt, n_clusters=n_clusters)
-    if not isinstance(latents, np.ndarray):
-        print("prior to fitting, latents is type", type(latents))
-    kmeans = KMeans(
-        n_clusters=n_clusters
-    )  # TODO : dunno how computationally expensive having a higher-than-normal n_init is
-    try:
-        kmeans.fit(latents)
-    except ValueError as e:
-        print(
-            f"ValueError. Nonfinite values in latents: {not np.isfinite(latents).all()}"
-        )
-        print(f"nan values: {np.any(np.isnan(latents))}")
-        print("latents is type", type(latents))
-        print(latents.shape)
-        print(alpha)
-        print(latents)
-
-        raise e
-    print(f"inertia at {alpha:.5f}: {kmeans.inertia_:.5f}")
+    kmeans = KMeans(n_clusters=n_clusters)
+    kmeans.fit(latents)
     return alpha, kmeans.inertia_
 
 
 def _embed(alpha, LL, XXt, *, n_clusters):
-    L_ = LL + alpha * (XXt)
-    L_ = L_.astype(float)
-    try:
-        vals, vecs = eigsh(L_, k=n_clusters)
-        vals = vals.astype(float)
-        vecs = vecs.astype(float)
-    except ValueError as e:
-        print(f"ValueError. Nonfinite values in L_: {not np.isfinite(L_).all()}")
-        raise e
+    L_ = (LL + alpha * (XXt)).astype(float)
+    _, vecs = eigsh(L_, k=n_clusters)
 
     # descending order
-    vals = np.flip(vals)
     vecs = np.flip(vecs, axis=1)
 
-    if np.any(np.isnan(vals)):
-        print("nan values in vals")
-        raise TypeError("nan vals")
-    if np.any(np.isnan(vecs)):
-        print("nan values in vals")
-        raise TypeError("nan vals")
-
-    # latents = vecs @ np.diag(np.sqrt(vals))  # for some reason, this sometimes has a column of nans?????
-
     return vecs
-
-
-def get_eigvals(X, k):
-    """
-    Uses Implicitly Restarted Lanczos Method.
-    """
-    eigvals = eigsh(X, k=k, return_eigenvectors=False)
-    return eigvals[::-1]
