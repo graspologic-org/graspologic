@@ -59,10 +59,10 @@ def X(request, M):
     return gen_covariates(m1, m2, labels, type=request.param)
 
 
-@pytest.fixture(params=[True, False])
+@pytest.fixture(params=["assortative", "non-assortative", "cca"])
 def case(request, M, X):
-    A, labels = M
-    case = CASE(n_components=2, assortative=request.param)
+    A, _ = M
+    case = CASE(n_components=2, embedding_alg==request.param)
     case.fit(A, covariates=X)
     return case
 
@@ -85,14 +85,14 @@ def test_case_fits(case):
 def test_labels_match(A, labels, M):
     A_, labels_ = M
     assert np.array_equal(A, A_)
-    assert np.array_equal(labels, labels)
+    assert np.array_equal(labels, labels_)
 
 
 def test_wrong_inputs(A, X):
 
     with pytest.raises(TypeError):
         "wrong assortative type"
-        case = CASE(assortative=1)
+        CASE(embedding_alg=1)
 
     with pytest.raises(ValueError):
         A_ = np.arange(30).reshape(10, 3)
