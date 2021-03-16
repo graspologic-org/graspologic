@@ -1,4 +1,3 @@
-# %%
 from graspologic.utils import import_graph, to_laplacian
 from graspologic.embed.base import BaseSpectralEmbed
 import numpy as np
@@ -10,14 +9,6 @@ from graspologic.utils import remap_labels
 from sklearn.preprocessing import normalize, scale
 from sklearn.utils.extmath import randomized_svd
 from scipy.sparse.linalg import eigsh
-
-np.set_printoptions(suppress=True)
-import warnings
-
-warnings.filterwarnings("ignore")
-
-#%%
-
 
 class CovariateAssistedEmbedding(BaseSpectralEmbed):
     """
@@ -257,6 +248,26 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
 
 def _cluster(alpha, LL, XXt, *, n_clusters):
+    """
+    Fit and cluster the CASE matrix.
+
+    Parameters
+    ----------
+    alpha : float
+        Tuning parameter
+    LL : np.ndarray
+        Laplacian matrix
+    XXt : np.ndarray
+        XX^T for a covariate matrix X
+    n_clusters : int
+        Number of clusters in our data
+
+    Returns
+    -------
+    tuple
+        Returns the alpha value and the k-means inertia for the clustering on that
+        alpha value.
+    """
     latents = _embed(alpha, LL=LL, XXt=XXt, n_clusters=n_clusters)
     kmeans = KMeans(n_clusters=n_clusters)
     kmeans.fit(latents)
@@ -264,6 +275,25 @@ def _cluster(alpha, LL, XXt, *, n_clusters):
 
 
 def _embed(alpha, LL, XXt, *, n_clusters):
+    """
+    Embed the CASE matrix.
+
+    Parameters
+    ----------
+    alpha : float
+        Tuning parameter
+    LL : np.ndarray
+        Laplacian matrix
+    XXt : np.ndarray
+        XX^T for a covariate matrix X
+    n_clusters : int
+        Number of clusters in our data
+
+    Returns
+    -------
+    np.ndarray
+        Latent position matrix (e.g., eigenvectors) for our embedding.
+    """
     L_ = (LL + alpha * (XXt)).astype(float)
     _, vecs = eigsh(L_, k=n_clusters)
 
