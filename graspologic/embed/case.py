@@ -244,7 +244,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         else:
             amax = L_top / X_eigvals[n_cov - 1] ** 2
 
-        print(f"{amin=:.9f}, {amax=:.9f}")
+        # print(f"{amin=:.9f}, {amax=:.9f}")
         print(f"alpha without tuning: {np.float(L_top / X_top)}")
 
         if self.alpha == -1:
