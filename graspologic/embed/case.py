@@ -10,13 +10,14 @@ from sklearn.preprocessing import normalize, scale
 from sklearn.utils.extmath import randomized_svd
 from scipy.sparse.linalg import eigsh
 
+
 class CovariateAssistedEmbedding(BaseSpectralEmbed):
     """
         Perform Spectral Embedding on a graph with covariates, using the regularized graph Laplacian.
 
         The Covariate-Assisted Spectral Embedding is a k-dimensional Euclidean representation
         of a graph based on a function of its Laplacian and a vector of covariate features
-        for each node.
+        for each node. For more information, see [1].
 
         Parameters
         ----------
@@ -102,7 +103,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         if embedding_alg not in {"assortative", "non-assortative", "cca"}:
             msg = "embedding_alg must be in {assortative, non-assortative, cca}."
             raise ValueError(msg)
-        self.embedding_alg = embedding_alg  # TODO: compute this automatically?
+        self.embedding_alg = embedding_alg
 
         if not ((alpha is None) or alpha == -1 or isinstance(alpha, float)):
             msg = "alpha must be in {None, float, -1}."
@@ -242,7 +243,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(inertia_trials)
         )
         alpha = min(inertias, key=inertias.get)
-        print(f"Best inertia at alpha={alpha:5f}: {inertias[alpha]:5f}")
 
         return alpha
 
