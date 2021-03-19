@@ -279,6 +279,11 @@ def _quadratic_assignment_faq(
         matched to node ``partial_match[i, 1]`` of `B`. Accordingly,
         ``partial_match`` is an array of size ``(m , 2)``, where ``m`` is
         not greater than the number of nodes, :math:`n`.
+    S : 2d-array, square
+        A square similarity matrix. Should be same shape as ``A`` and ``B``.   
+        Note: the scale of `S` may effect the weight placed on the term 
+        :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)` 
+        during the optimization process.
     P0 : 2d-array, "barycenter", or "randomized" (default = "barycenter")
         The initial (guess) permutation matrix or search "position"
         `P0`.
@@ -397,9 +402,6 @@ def _quadratic_assignment_faq(
     n = A.shape[0]  # number of vertices in graphs
     n_seeds = partial_match.shape[0]  # number of seeds
     n_unseed = n - n_seeds
-
-    if S is None:
-        S = np.zeros((n, n))
 
     # check outlier cases
     if n == 0 or partial_match.shape[0] == n:
