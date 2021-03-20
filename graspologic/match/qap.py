@@ -427,6 +427,7 @@ def _quadratic_assignment_faq(
     else:
         P0 = np.atleast_2d(P0)
         _check_init_input(P0, n_unseed)
+        P0 = P0[perm_A][:, perm_B]
         P = P0
 
     const_sum = A21 @ B21.T + A12.T @ B12
