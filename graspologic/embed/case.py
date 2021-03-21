@@ -5,7 +5,7 @@ import scipy
 from joblib import delayed, Parallel
 from sklearn.cluster import KMeans
 from graspologic.plot import heatmap
-from graspologic.utils import remap_labels
+from graspologic.utils import remap_labels, is_almost_symmetric
 from sklearn.preprocessing import normalize, scale
 from sklearn.utils.extmath import randomized_svd
 from scipy.sparse.linalg import eigsh
@@ -13,67 +13,62 @@ from scipy.sparse.linalg import eigsh
 
 class CovariateAssistedEmbedding(BaseSpectralEmbed):
     """
-        Perform Spectral Embedding on a graph with covariates, using the regularized graph Laplacian.
+    Perform Spectral Embedding on a graph with covariates, using the regularized graph Laplacian.
 
-        The Covariate-Assisted Spectral Embedding is a k-dimensional Euclidean representation
-        of a graph based on a function of its Laplacian and a vector of covariate features
-        for each node. For more information, see [1].
+    The Covariate-Assisted Spectral Embedding is a k-dimensional Euclidean representation
+    of a graph based on a function of its Laplacian and a vector of covariate features
+    for each node. For more information, see [1].
 
-        Parameters
-        ----------
-        embedding_alg : str, default = "assortative"
-            Embedding algorithm to use:
-            - "assortative": Embed ``L + a*X@X.T``. Better for assortative graphs.
-            - "non-assortative": Embed ``L@L + a*X@X.T``. Better for non-assortative graphs.
-            - "cca": Embed ``L@X``. Better for large graphs and faster.
-    `
-        n_components : int or None, default = None
-            Desired dimensionality of output data. If "full",
-            n_components must be <= min(X.shape). Otherwise, n_components must be
-            < min(X.shape). If None, then optimal dimensions will be chosen by
-            ``select_dimension`` using ``n_elbows`` argument.
+    Parameters
+    ----------
+    embedding_alg : str, default = "assortative"
+        Embedding algorithm to use:
+        - "assortative": Embed ``L + a*X@X.T``. Better for assortative graphs.
+        - "non-assortative": Embed ``L@L + a*X@X.T``. Better for non-assortative graphs.
+        - "cca": Embed ``L@X``. Better for large graphs and faster.
 
-        alpha : float, optional (default = None)
-            Tuning parameter to use. Not used if embedding_alg == cca:
-                -  None: Default to the ratio of the leading eigenvector of the Laplacian
-                         to the leading eigenvector of the covariate matrix.
-                - float: Use a particular alpha-value.
+    alpha : float, optional, default = None
+        Tuning parameter to use. Not used if embedding_alg == cca:
+            -  None: Default to the ratio of the leading eigenvector of the Laplacian
+                     to the leading eigenvector of the covariate matrix.
+            - float: Use a particular alpha-value.
 
-        n_elbows : int, optional, default: 2
-            If `n_components=None`, then compute the optimal embedding dimension using
-            `select_dimension`. Otherwise, ignored.
+    n_components : int or None, default = None
+        Desired dimensionality of output data. If "full",
+        n_components must be <= min(X.shape). Otherwise, n_components must be
+        < min(X.shape). If None, then optimal dimensions will be chosen by
+        ``select_dimension`` using ``n_elbows`` argument.
 
-        check_lcc : bool , optional (defult =True)
-            Whether to check if input graph is connected. May result in non-optimal
-            results if the graph is unconnected. Not checking for connectedness may
-            result in faster computation.
+    n_elbows : int, optional, default: 2
+        If `n_components=None`, then compute the optimal embedding dimension using
+        `select_dimension`. Otherwise, ignored.
 
-        concat : bool, optional (default = False)
-            If graph(s) are directed, whether to concatenate each graph's left and right
-            (out and in) latent positions along axis 1.
+    check_lcc : bool , optional, defult = True
+        Whether to check if input graph is connected. May result in non-optimal
+        results if the graph is unconnected. Not checking for connectedness may
+        result in faster computation.
 
 
-        References
-        ---------
-        .. [1] Binkiewicz, N., Vogelstein, J. T., & Rohe, K. (2017). Covariate-assisted
-        spectral clustering. Biometrika, 104(2), 361-377.
+
+    References
+    ---------
+    .. [1] Binkiewicz, N., Vogelstein, J. T., & Rohe, K. (2017). Covariate-assisted
+    spectral clustering. Biometrika, 104(2), 361-377.
     """
 
     def __init__(
         self,
-        n_components=None,
         embedding_alg="assortative",
         alpha=None,
+        n_components=None,
         n_elbows=2,
         check_lcc=False,
-        concat=False,
     ):
         super().__init__(
-            algorithm="full",
             n_components=n_components,
             n_elbows=n_elbows,
             check_lcc=check_lcc,
-            concat=concat,
+            concat=False,
         )
 
         if embedding_alg not in {"assortative", "non-assortative", "cca"}:
@@ -122,6 +117,8 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         # setup
         A = import_graph(graph)
+        if not is_almost_symmetric(A):
+            raise ValueError("Fit an undirected graph")
 
         # center and scale covariates to unit norm
         covariates = normalize(covariates, axis=0)
@@ -141,8 +138,11 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             LL = L @ L
             XXt = X @ X.T
 
-        alpha_ = self._get_tuning_parameter(LL, XXt)
-        L_ = (LL + alpha_ * (XXt)).astype(float)
+        # Get weight and create embedding matrix
+        self._get_tuning_parameter(LL, XXt)
+        L_ = (LL + self.alpha_ * (XXt)).astype(float)
+
+        # Dimensionality reduction with SVD
         self._reduce_dim(L_)
 
         self.is_fitted_ = True
@@ -175,6 +175,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
         # just use the ratio of the leading eigenvalues for the
         # tuning parameter, or the closest value in its possible range.
-        alpha = np.float(L_top / X_top)
+        self.alpha_ = np.float(L_top / X_top)
 
-        return alpha
+        return self

@@ -48,7 +48,7 @@ class BaseSpectralEmbed(BaseEstimator):
         result in faster computation.
 
     concat : bool, optional (default = False)
-        If graph(s) are directed, whether to concatenate each graph's left and right 
+        If graph(s) are directed, whether to concatenate each graph's left and right
         (out and in) latent positions along axis 1.
 
     Attributes
@@ -141,13 +141,10 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self
 
-    def _fit_transform(self, graph=None, fit=True, *args, **kwargs):
+    def _fit_transform(self, graph=None, *args, **kwargs):
         "Fits the model and returns the estimated latent positions."
-        if graph is None and fit:
-            raise ValueError("fitting requires a graph.")
 
-        if fit:
-            self.fit(graph, *args, **kwargs)
+        self.fit(graph, *args, **kwargs)
 
         if self.latent_right_ is None:
             return self.latent_left_
@@ -248,8 +245,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
                 raise ValueError(msg)
             out = import_graph(graphs, copy=False)
         else:
-            msg = "Input must be a list or ndarray, not {}.".format(
-                type(graphs))
+            msg = "Input must be a list or ndarray, not {}.".format(type(graphs))
             raise TypeError(msg)
 
         # Save attributes
@@ -281,7 +277,6 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             out = [augment_diagonal(g) for g in graphs]
         elif isinstance(graphs, np.ndarray):
             # Copying is necessary to not overwrite input array
-            out = np.array([augment_diagonal(graphs[i])
-                            for i in range(self.n_graphs_)])
+            out = np.array([augment_diagonal(graphs[i]) for i in range(self.n_graphs_)])
 
         return out
