@@ -34,7 +34,7 @@ def gen_covariates(m1, m2, labels, type, ndim=3):
 
 
 # FIXTURES
-@pytest.fixture(params=[True, False], scope="module")
+@pytest.fixture(params=[False], scope="module")
 def M(request):
     # module scope ensures that A and labels will always match
     # since they exist in separate functions
@@ -80,6 +80,7 @@ def labels(M):
 # TESTS
 # TODO: test to make sure custom alpha values work
 
+
 def test_case_fits(case):
     assert case
 
@@ -92,7 +93,7 @@ def test_labels_match(A, labels, M):
 
 def test_wrong_inputs(A, X):
 
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         "wrong assortative type"
         CASE(embedding_alg=1)
 
