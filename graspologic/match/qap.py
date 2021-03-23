@@ -3,12 +3,12 @@
 # original code can be found here
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
-import numpy as np
-import operator
-from scipy.optimize import linear_sum_assignment, OptimizeResult
-
-from scipy._lib._util import check_random_state
 import itertools
+import operator
+
+import numpy as np
+from scipy._lib._util import check_random_state
+from scipy.optimize import OptimizeResult, linear_sum_assignment
 
 
 def quadratic_assignment(A, B, method="faq", options=None):
