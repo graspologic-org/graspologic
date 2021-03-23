@@ -2,9 +2,6 @@
 # Licensed under the MIT License.
 
 import numpy as np
-import math
-from scipy.optimize import linear_sum_assignment
-from scipy.optimize import minimize_scalar
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from sklearn.utils import column_or_1d
@@ -36,21 +33,21 @@ class GraphMatch(BaseEstimator):
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
         :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region. This can
-        be thought of as the doubly stochastic matrix from which any permutation is 
+        be thought of as the doubly stochastic matrix from which any permutation is
         equally likely.
 
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
         doubly stochastic matrix.
 
-        For a custom initialization (a 1d- or 2d-array), the input repesents a 
-        permutation or assignment of the nonseeded vertices of `B`, and thus the 
+        For a custom initialization (a 1d- or 2d-array), the input repesents a
+        permutation or assignment of the nonseeded vertices of `B`, and thus the
         dimension should be equal to the number of nonseeded vertices of `B`, :math:`m'`.
-        
-        If 2d-array, `init` must be :math:`m' x m'`, and it must be doubly stochastic: 
+
+        If 2d-array, `init` must be :math:`m' x m'`, and it must be doubly stochastic:
         each of its rows and columns must sum to 1.
 
-        If 1d-array, `init` must be a set of permutation indices: the array should be 
-        of length :math:`m'` and the elements of the array must be integers from 
+        If 1d-array, `init` must be a set of permutation indices: the array should be
+        of length :math:`m'` and the elements of the array must be integers from
         :math:`0 ... m' - 1`. The FAQ algorithm will start from the permutation matrix
         corresponding to these permutation indices.
 
