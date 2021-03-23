@@ -78,6 +78,8 @@ def labels(M):
 
 
 # TESTS
+# TODO: test to make sure custom alpha values work
+
 def test_case_fits(case):
     assert case
 

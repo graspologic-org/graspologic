@@ -139,11 +139,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             XXt = X @ X.T
 
         # Get weight and create embedding matrix
-        if self.embedding_alg == "cca":
-            self.alpha_ = 0
-        else:
-            self._get_tuning_parameter(LL, XXt)
-
+        self._get_tuning_parameter(LL, XXt)
         L_ = (LL + self.alpha_ * (XXt)).astype(float)
 
         # Dimensionality reduction with SVD
@@ -171,7 +167,11 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         """
         # setup
         if self.alpha is not None:
-            return self.alpha
+            self.alpha_ = self.alpha
+            return self
+        if self.embedding_alg == "cca":
+            self.alpha_ = 0
+            return self
 
         # calculate bounds
         (L_top,) = eigsh(LL, return_eigenvectors=False, k=1)
