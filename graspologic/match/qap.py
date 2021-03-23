@@ -3,7 +3,6 @@
 # original code can be found here
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
-import itertools
 import operator
 
 import numpy as np
