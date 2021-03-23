@@ -424,11 +424,29 @@ def _quadratic_assignment_faq(
             # Sinkhorn balancing
             K = _doubly_stochastic(K)
             P = J * 0.5 + K * 0.5
-    else:
-        P0 = np.atleast_2d(P0)
-        _check_init_input(P0, n_unseed)
-        P0 = P0[perm_A][:, perm_B]
+    elif isinstance(P0, np.ndarray):
+        if P0.ndim == 2:
+            P0 = np.atleast_2d(
+                P0
+            )  # @asaadeldin11 can you explain why we want this instead of ndim == 2?
+            _check_init_input(P0, n_unseed)
+            P0 = P0[perm_A][:, perm_B]
+        elif P0.ndim == 1:
+            if len(P0) != n_unseed:
+                msg = "If `init` is a 1d-array it must be a valid permutation of the "
+                msg += "nonseeded vertices."
+                raise ValueError(msg)
+            # construct a permutation matrix from the permutation indices
+            P0 = np.eye(n_unseed)[P0]
+        else:
+            msg = "`init` was a numpy array with ndim not equal to 1 or 2. "
+            msg += "Custom initialization must be either a 1d array representing permutation "
+            msg += "indices or a 2d array which is doubly stochastic."
+            raise ValueError(msg)
         P = P0
+    else:
+        msg = "`init` must either be of type str or np.ndarray."
+        raise TypeError(msg)
 
     const_sum = A21 @ B21.T + A12.T @ B12
 
