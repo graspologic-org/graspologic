@@ -140,3 +140,23 @@ class TestGMP:
         res = gmp_adopted.fit(G1, G2)
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
+
+    def test_custom_init(self):
+        A, B = self._get_AB()
+        n = len(A)
+        pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
+        custom_init = np.eye(n)
+        custom_init = custom_init[pi]
+
+        gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
+        gm.fit(A, B)
+
+        assert (gm.perm_inds_ == pi).all()
+        assert gm.score_ == 11156
+        # we had thought about doing the test
+        # `assert gm.n_iter_ == 1`
+        # but note that GM doesn't necessarily converge in 1 iteration here
+        # this is because which we start from the optimal permutation matrix, we do 
+        # not start from the optimal over our convex relaxation (the doubly stochastics)
+        # but we do indeed recover the correct permutation after a small number of 
+        # iterations
