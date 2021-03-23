@@ -78,7 +78,18 @@ def labels(M):
 
 
 # TESTS
-# TODO: test to make sure custom alpha values work
+@pytest.mark.parametrize("alg", ["assortative", "non-assortative"])
+def test_custom_alpha(M, X, alg):
+    A, _ = M
+    a = 0.1
+    case = CASE(n_components=2, embedding_alg=alg, alpha=a)
+    latents = case.fit_transform(A, covariates=X)
+    # just check to make sure we can run with custom alpha
+
+    if case.alpha_ == 0.1:
+        assert np.any(latents)
+    else:
+        pytest.fail("no alpha value", pytrace=True)
 
 
 def test_case_fits(case):
