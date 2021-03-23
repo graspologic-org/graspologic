@@ -430,7 +430,6 @@ def _quadratic_assignment_faq(
                 P0
             )  # @asaadeldin11 can you explain why we want this instead of ndim == 2?
             _check_init_input(P0, n_unseed)
-            P0 = P0[perm_A][:, perm_B]
         elif P0.ndim == 1:
             if len(P0) != n_unseed:
                 msg = "If `init` is a 1d-array it must be a valid permutation of the "
@@ -443,7 +442,7 @@ def _quadratic_assignment_faq(
             msg += "Custom initialization must be either a 1d array representing permutation "
             msg += "indices or a 2d array which is doubly stochastic."
             raise ValueError(msg)
-        P = P0
+        P = P0[perm_A][:, perm_B]
     else:
         msg = "`init` must either be of type str or np.ndarray."
         raise TypeError(msg)
