@@ -122,7 +122,7 @@ class AutoGMMCluster(BaseCluster):
     n_init : int, optional (default = None)
         If `n_init` is not `None` and `label_init` is `None` then additional
         k-means runs will be performed with `n_init` initializations for all covariance
-        parameters in covariance_type.
+        parameters in `covariance_type`.
 
     max_iter : int, optional (default = 100).
         The maximum number of EM iterations to perform.
@@ -395,7 +395,7 @@ class AutoGMMCluster(BaseCluster):
 
     def _fit_cluster(self, X, X_subset, y, params, agg_clustering):
         label_init = self.label_init
-        if label_init is not None and "n_init" not in set(params[1].keys()):
+        if label_init is not None:
             onehot = _labels_to_onehot(label_init)
             weights_init, means_init, precisions_init = _onehot_to_initial_params(
                 X, onehot, params[1]["covariance_type"]
