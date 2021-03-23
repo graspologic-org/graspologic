@@ -3,8 +3,8 @@
 
 import numpy as np
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_array
-from sklearn.utils import column_or_1d
+from sklearn.utils import check_array, column_or_1d
+
 from .qap import quadratic_assignment
 
 
