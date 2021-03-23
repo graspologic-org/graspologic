@@ -126,11 +126,6 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"n_init" must be a positive integer'
             raise TypeError(msg)
-        if type(n_init) is int and n_init > 0:
-            self.n_init = n_init
-        else:
-            msg = '"n_init" must be a positive integer'
-            raise TypeError(msg)
         if isinstance(init, np.ndarray):
             self.init = init
         elif init == "rand":
