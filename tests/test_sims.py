@@ -6,7 +6,12 @@ import graspologic as gs
 import numpy as np
 import networkx as nx
 from graspologic.simulations import *
-from graspologic.utils.utils import is_symmetric, is_loopless, symmetrize, cartprod
+from graspologic.utils.utils import (
+    is_symmetric,
+    is_loopless,
+    symmetrize,
+    cartesian_product,
+)
 
 
 def remove_diagonal(A):

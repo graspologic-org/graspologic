@@ -1,6 +1,10 @@
-********
-Tutorial
-********
+*********
+Tutorials
+*********
+.. toctree::
+   :hidden:
+
+   Reference Documentation <https://graspologic.readthedocs.io/en/latest/>
 
 .. _models_tutorials:
 
@@ -11,8 +15,9 @@ stochastic block model (SBM), degree-corrected SBM, and random dot product graph
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/models/models
+   models/models
 
 .. _simulations_tutorials:
 
@@ -23,13 +28,14 @@ stochastic block model, and random dot product graph (RDPG).
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/simulations/erdos_renyi
-   tutorials/simulations/sbm
-   tutorials/simulations/mmsbm
-   tutorials/simulations/rdpg
-   tutorials/simulations/corr
-   tutorials/simulations/rdpg_corr
+   simulations/erdos_renyi
+   simulations/sbm
+   simulations/mmsbm
+   simulations/rdpg
+   simulations/corr
+   simulations/rdpg_corr
 
 .. _cluster_tutorials:
 
@@ -40,9 +46,10 @@ clustering algorithms, as well as the advantages of these to comparable implemen
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/clustering/autogmm
-   tutorials/clustering/kclust
+   clustering/autogmm
+   clustering/kclust
 
 .. _embed_tutorials:
 
@@ -52,11 +59,12 @@ Inference on random graphs depends on low-dimensional Euclidean representation o
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/embedding/AdjacencySpectralEmbed
-   tutorials/embedding/OutOfSampleEmbed
-   tutorials/embedding/Omnibus
-   tutorials/embedding/MASE
+   embedding/AdjacencySpectralEmbed
+   embedding/OutOfSampleEmbed
+   embedding/Omnibus
+   embedding/MASE
 
 .. _inference_tutorials:
 
@@ -68,9 +76,10 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/inference/latent_position_test
-   tutorials/inference/latent_distribution_test
+   inference/latent_position_test
+   inference/latent_distribution_test
 
 .. _plot_tutorials:
 
@@ -80,11 +89,13 @@ The following tutorials present ways to visualize the graphs, such as its adjace
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/plotting/heatmaps
-   tutorials/plotting/gridplot
-   tutorials/plotting/pairplot
-   tutorials/plotting/pairplot_with_gmm
+   plotting/heatmaps
+   plotting/gridplot
+   plotting/pairplot
+   plotting/matrixplot
+   plotting/pairplot_with_gmm
 
 .. _matching_tutorials:
 
@@ -95,10 +106,11 @@ including an introduction to the module, and how to utilize the seeding feature.
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/matching/faq
-   tutorials/matching/sgm
-   tutorials/matching/padded_gm
+   matching/faq
+   matching/sgm
+   matching/padded_gm
 
 .. _subgraph_tutorials:
 
@@ -108,8 +120,9 @@ The following tutorial demonstrates how to estimate the signal-subgraph of sampl
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/subgraph/subgraph
+   subgraph/subgraph
 
 .. _vertex_nomination_tutorials:
 
@@ -119,9 +132,10 @@ The following tutorials demonstrate how to use unattributed single graph spectra
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   tutorials/vertex_nomination/SpectralVertexNomination
-   tutorials/nominate/vertex_nomination_via_SGM
+   vertex_nomination/SpectralVertexNomination
+   nominate/vertex_nomination_via_SGM
 
 .. _aligning_tutorials:
 
@@ -131,16 +145,18 @@ The following tutorials shows how to align two seperate datasets with each other
 
 .. toctree::
    :maxdepth: 1
-   
-   tutorials/aligning/aligning
+   :titlesonly:
+
+   aligning/aligning
 
 .. _connectomics_tutorials:
 
 Connectomics
 ============
-The following tutorials demonstrate how to apply methods in this package to the analysis of connectomics datasets. 
+The following tutorials demonstrate how to apply methods in this package to the analysis of connectomics datasets.
 
 .. toctree::
    :maxdepth: 1
-   
-   tutorials/connectomics/mcc
+   :titlesonly:
+
+   connectomics/mcc

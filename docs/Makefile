@@ -1,24 +1,11 @@
-# Minimal makefile for Sphinx documentation
-#
-
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SOURCEDIR     = .
-BUILDDIR      = _build/html
-
-.PHONY: help clean html
+.PHONY: docs
 
 
 # Put it first so that "make" without argument is like "make help".
-help:
-	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  html      to make standalone HTML files"
+docs:
+	cd reference && pip install -r requirements.txt && make html
+	cd tutorials && pip install -r requirements.txt && make html
+	mkdir -p _build/html
+	cp -r reference/_build/html _build/html/reference
+	cp -r tutorials/_build/html _build/html/tutorials
 
-clean:
-	-rm -rf _build/*
-
-html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)"
-	@echo
-	@echo "Build finished. The HTML pages are in build/html."

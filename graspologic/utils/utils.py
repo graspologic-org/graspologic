@@ -307,7 +307,7 @@ def remove_loops(graph):
     return graph
 
 
-def to_laplace(graph, form="DAD", regularizer=None):
+def to_laplacian(graph, form="DAD", regularizer=None):
     r"""
     A function to convert graph adjacency matrix to graph Laplacian.
 
@@ -359,7 +359,7 @@ def to_laplace(graph, form="DAD", regularizer=None):
     ...    [0, 1, 1],
     ...    [1, 0, 0],
     ...    [1, 0, 0]])
-    >>> to_laplace(a, "DAD")
+    >>> to_laplacian(a, "DAD")
     array([[0.        , 0.70710678, 0.70710678],
            [0.70710678, 0.        , 0.        ],
            [0.70710678, 0.        , 0.        ]])
@@ -460,7 +460,7 @@ def is_fully_connected(graph):
         return nx.is_weakly_connected(graph)
 
 
-def get_lcc(graph, return_inds=False):
+def largest_connected_component(graph, return_inds=False):
     r"""
     Finds the largest connected component for the input graph.
 
@@ -510,7 +510,7 @@ def get_lcc(graph, return_inds=False):
     return lcc
 
 
-def get_multigraph_union_lcc(graphs, return_inds=False):
+def multigraph_lcc_union(graphs, return_inds=False):
     r"""
     Finds the union of all multiple graphs, then compute the largest connected
     component.
@@ -550,7 +550,7 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
         msg = "Expected list or np.ndarray, but got {} instead.".format(type(graphs))
         raise ValueError(msg)
 
-    _, idx = get_lcc(bar, return_inds=True)
+    _, idx = largest_connected_component(bar, return_inds=True)
     idx = np.array(idx)
 
     if isinstance(graphs, np.ndarray):
@@ -563,7 +563,7 @@ def get_multigraph_union_lcc(graphs, return_inds=False):
     return graphs
 
 
-def get_multigraph_intersect_lcc(graphs, return_inds=False):
+def multigraph_lcc_intersection(graphs, return_inds=False):
     r"""
     Finds the intersection of multiple graphs's largest connected components.
 
@@ -594,7 +594,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
     lcc_by_graph = []
     inds_by_graph = []
     for graph in graphs:
-        lcc, inds = get_lcc(graph, return_inds=True)
+        lcc, inds = largest_connected_component(graph, return_inds=True)
         lcc_by_graph.append(lcc)
         inds_by_graph.append(inds)
     inds_intersection = reduce(np.intersect1d, inds_by_graph)
@@ -615,7 +615,7 @@ def get_multigraph_intersect_lcc(graphs, return_inds=False):
             recurse = True
             break
     if recurse:
-        new_graphs, new_inds_intersection = get_multigraph_intersect_lcc(
+        new_graphs, new_inds_intersection = multigraph_lcc_intersection(
             new_graphs, return_inds=True
         )
         # new inds intersection are the indices of new_graph that were kept on recurse
@@ -709,7 +709,7 @@ def binarize(graph):
     return graph
 
 
-def cartprod(*arrays):
+def cartesian_product(*arrays):
     """
     Compute the cartesian product of multiple arrays
     """

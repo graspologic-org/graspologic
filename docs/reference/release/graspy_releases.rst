@@ -1,11 +1,5 @@
-..  -*- coding: utf-8 -*-
-
-Release Log
-===========
-
-graspologic 0.1.0
------------------
-Release date: ?
+GraSPy Release Log
+==================
 
 GraSPy 0.3
 ----------
@@ -15,7 +9,7 @@ Supports Python 3.6, and 3.7
 .. toctree::
    :maxdepth: 1
 
-   release/release_0.3.rst
+   release_0.3.rst
 
 GraSPy 0.2
 ----------
@@ -25,7 +19,7 @@ Supports Python 3.5, 3.6, and 3.7
 .. toctree::
    :maxdepth: 1
 
-   release/release_0.2.rst
+   release_0.2.rst
 
 GraSPy 0.1
 ----------
@@ -35,7 +29,7 @@ Supports Python 3.5, 3.6, and 3.7
 .. toctree::
    :maxdepth: 1
 
-   release/release_0.1.rst
+   release_0.1.rst
 
 GraSPy 0.0.3
 ------------
@@ -45,7 +39,7 @@ Supports Python 3.5, 3.6, and 3.7.
 .. toctree::
    :maxdepth: 1
 
-   release/release_0.0.3.rst
+   release_0.0.3.rst
 
 GraSPy 0.0.2
 ------------
@@ -55,7 +49,7 @@ Supports Python 3.5, 3.6, and 3.7.
 .. toctree::
    :maxdepth: 1
 
-   release/release_0.0.2.rst
+   release_0.0.2.rst
 
 GraSPy 0.0.1
 ------------
@@ -65,4 +59,4 @@ Supports Python 3.5, 3.6, and 3.7.
 .. toctree::
    :maxdepth: 1
 
-   release/release_0.0.1.rst
+   release_0.0.1.rst
