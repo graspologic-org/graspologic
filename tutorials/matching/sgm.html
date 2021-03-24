@@ -509,17 +509,16 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="SGM-on-Correlated-Graph-Pairs">
 <h2>SGM on Correlated Graph Pairs<a class="headerlink" href="#SGM-on-Correlated-Graph-Pairs" title="Permalink to this headline">¶</a></h2>
-<p>To demonstrate the effectiveness of SGM, the algorithm will be applied on a pair of correlated SBM graphs (undirected, no self loops) <span class="math notranslate nohighlight">\(G_1, G_2 \sim SBM\,(n, p, rho)\)</span> with the following parameters:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= [100, 100, 100]\\
-p &amp;= \begin{bmatrix}
-0.7 &amp; 0.3 &amp; 0.4\\
-0.3 &amp; 0.7 &amp; 0.3\\
-0.4 &amp; 0.3 &amp; 0.7
+<p>To demonstrate the effectiveness of SGM, the algorithm will be applied on a pair of correlated SBM graphs (undirected, no self loops) <span class="math notranslate nohighlight">\(G_1, G_2 \sim SBM\,(n, p, rho)\)</span> with the following parameters: <span class="math">\begin{align*}
+n &= [100, 100, 100]\\
+p &= \begin{bmatrix}
+0.7 & 0.3 & 0.4\\
+0.3 & 0.7 & 0.3\\
+0.4 & 0.3 & 0.7
 \end{bmatrix}\\
-rho &amp;= 0.9
-\end{align*}</div><div class="nbinput docutils container">
+rho &= 0.9
+\end{align*}</span></p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -616,7 +615,7 @@ rho &amp;= 0.9
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Match Ratio with no seeds:  0.040000000000000036
+Match Ratio with no seeds:  0.004444444444444473
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -626,7 +625,7 @@ Match Ratio with no seeds:  0.040000000000000036
 <img alt="../_images/matching_sgm_11_1.png" src="../_images/matching_sgm_11_1.png" />
 </div>
 </div>
-<p>While the predicted permutation for graph 2 did recover the basic structure of the stochastic block model (i.e. graph 1 and graph 2 look qualitatively similar), we see that the number of edge disagreements between them is still quite high, and the match ratio quite low.</p>
+<p>While the predicted permutation for graph 2 did recover the basic structure of the stochastic block model (i.e. graph 1 and graph 2 look qualitatively similar), we see that the number of edge disagreements between them is still quite high, and the match ratio quite low.</p>
 </div>
 <div class="section" id="Unshuffling-graph-2-with-10-seeds">
 <h2>Unshuffling graph 2 with 10 seeds<a class="headerlink" href="#Unshuffling-graph-2-with-10-seeds" title="Permalink to this headline">¶</a></h2>

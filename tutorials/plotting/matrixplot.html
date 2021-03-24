@@ -33,8 +33,6 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -502,22 +500,22 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Simulate-a-binary-graph-using-stochastic-block-model">
 <h2>Simulate a binary graph using stochastic block model<a class="headerlink" href="#Simulate-a-binary-graph-using-stochastic-block-model" title="Permalink to this headline">¶</a></h2>
 <p>The 4-block model is defined as below:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= [50, 50, 50, 50]\\
-P &amp;=
-\begin{bmatrix}0.8 &amp; 0.1 &amp; 0.05 &amp; 0.01\\
-0.1 &amp; 0.4 &amp; 0.15 &amp; 0.02\\
-0.05 &amp; 0.15 &amp; 0.3 &amp; 0.01\\
-0.01 &amp; 0.02 &amp; 0.01 &amp; 0.4
+<p><span class="math">\begin{align*}
+n &= [50, 50, 50, 50]\\
+P &=
+\begin{bmatrix}0.8 & 0.1 & 0.05 & 0.01\\
+0.1 & 0.4 & 0.15 & 0.02\\
+0.05 & 0.15 & 0.3 & 0.01\\
+0.01 & 0.02 & 0.01 & 0.4
 \end{bmatrix}
-\end{align*}</div><p>Thus, the first 50 vertices belong to block 1, the second 50 vertices belong to block 2, the third 50 vertices belong to block 3, and the last 50 vertices belong to block 4.</p>
+\end{align*}</span></p>
+<p>Thus, the first 50 vertices belong to block 1, the second 50 vertices belong to block 2, the third 50 vertices belong to block 3, and the last 50 vertices belong to block 4.</p>
 <p>Each block is associated with some metadata:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 40%" />
-<col style="width: 35%" />
-<col style="width: 25%" />
+<col style="width: 43%" />
+<col style="width: 36%" />
+<col style="width: 21%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Block Number</p></th>
@@ -590,7 +588,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f6473f94190&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a8d1fda30&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -636,7 +634,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f6473948400&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4c843760&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -676,7 +674,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f6473e29040&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4cea2eb0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -714,7 +712,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f6473d853d0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4d7090d0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -760,7 +758,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f6473240b50&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4c727f10&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -843,7 +841,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f647393c910&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a482b02e0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -880,7 +878,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f646ecfad30&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4c89e0d0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -917,7 +915,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f64731742b0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4d29ad90&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -958,7 +956,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f6473597e80&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a48446760&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -995,7 +993,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f646eb2bdc0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a43d09ee0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1035,7 +1033,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f646e740e50&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a43b3c6a0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1076,7 +1074,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f647344ff40&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4c7968b0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1120,7 +1118,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f6473cdc8b0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4d2af610&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1162,7 +1160,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f64732405b0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4d7fa3a0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1213,7 +1211,7 @@ P &amp;=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f647386df70&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0a4824cc10&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">

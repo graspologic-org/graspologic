@@ -498,14 +498,14 @@ div.rendered_html tbody tr:hover {
 <p>Unlike <a class="reference internal" href="erdos_renyi.html"><span class="doc">Erdos-Renyi (ER) models</span></a>, a Stochastic Block Model (SBM) produces graphs containing communities: disjoint subgraphs characterized by differing edge probabilities for vertices within and between communities <a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_block_model">(1)</a>.</p>
 <p>SBM is parametrized by the number of vertices in each community <span class="math notranslate nohighlight">\(n\)</span>, and a block probability matrix <span class="math notranslate nohighlight">\(P \in \mathbb{R}^{n x n}\)</span> where each element specifies the probability of an edge in a particular block. One can think of SBM as a collection of ER graphs where each block corresponds to an ER graph.</p>
 <p>Below, we sample a two-block SBM (undirected, no self-loops) with following parameters:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= [50, 50]\\
-P &amp;= \begin{bmatrix}
-0.5 &amp; 0.2\\
-0.2 &amp; 0.05
+<p><span class="math">\begin{align*}
+n &= [50, 50]\\
+P &= \begin{bmatrix}
+0.5 & 0.2\\
+0.2 & 0.05
 \end{bmatrix}
-\end{align*}</div><p>The diagonals correspond to probability of an edge within blocks and the off-diagonals correspond to probability of an edge between blocks.</p>
+\end{align*}</span></p>
+<p>The diagonals correspond to probability of an edge within blocks and the off-diagonals correspond to probability of an edge between blocks.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -551,22 +551,22 @@ P &amp;= \begin{bmatrix}
 <li><p>Provide a probability distribution function with corresponding keyword arguments for each block.</p></li>
 </ol>
 <p>Below we sample a SBM (undirected, no self-loops) with the following parameters:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= [50, 50]\\
-P &amp;= \begin{bmatrix}0.5 &amp; 0.2\\
-0.2 &amp; 0.05
+<p><span class="math">\begin{align*}
+n &= [50, 50]\\
+P &= \begin{bmatrix}0.5 & 0.2\\
+0.2 & 0.05
 \end{bmatrix}
-\end{align*}</div><p>and the weights are sampled from the following probability functions:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-PDFs &amp;= \begin{bmatrix}Normal &amp; Poisson\\
-Poisson &amp; Normal
+\end{align*}</span></p>
+<p>and the weights are sampled from the following probability functions:</p>
+<p><span class="math">\begin{align*}
+PDFs &= \begin{bmatrix}Normal & Poisson\\
+Poisson & Normal
 \end{bmatrix}\\
-Parameters   &amp;= \begin{bmatrix}{\mu=3, \sigma^2=1} &amp; {\lambda=5}\\
-{\lambda=5} &amp; {\mu=3, \sigma^2=1}
+Parameters   &= \begin{bmatrix}{\mu=3, \sigma^2=1} & {\lambda=5}\\
+{\lambda=5} & {\mu=3, \sigma^2=1}
 \end{bmatrix}
-\end{align*}</div><div class="nbinput nblast docutils container">
+\end{align*}</span></p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>

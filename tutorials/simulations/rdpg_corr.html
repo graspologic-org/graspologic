@@ -499,12 +499,11 @@ div.rendered_html tbody tr:hover {
 <p>RDPG is a latent position generative model. An explanation of the uncorrelated model is in the <a class="reference external" href="https://graspy.neurodata.io/tutorials/simulations/rdpg.html">tutorial</a>.</p>
 <p>Here, we want to generate a pair of graphs with the same latent positions but with correlation between edges.</p>
 <p>There are several parameters in this function: <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are the input matrices (latent positions) which are used to generate the probability matrix; <span class="math notranslate nohighlight">\(r\)</span> is the correlation between the graph pair, which should be (-1,1) (note that not all values of r may be possible for a given set of latent positions).</p>
-<p>Below, we sample a RDPG graph pair (undirected and no self-loops), G1 and G2, with the following parameters:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= [50, 50]\\
-r &amp;= 0.5
-\end{align*}</div><div class="nbinput nblast docutils container">
+<p>Below, we sample a RDPG graph pair (undirected and no self-loops), G1 and G2, with the following parameters: <span class="math">\begin{align*}
+n &= [50, 50]\\
+r &= 0.5
+\end{align*}</span></p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -580,15 +579,15 @@ Difference rate is  0.1438
 <div class="section" id="Compare-it-to-the-correlated-SBM-graph-pair">
 <h2>Compare it to the correlated SBM graph pair<a class="headerlink" href="#Compare-it-to-the-correlated-SBM-graph-pair" title="Permalink to this headline">¶</a></h2>
 <p>Below, we sample a two-block SBM graph pair (undirected and no self-loops) G1 and G2 with the following parameters:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= [50, 50]\\
-p &amp;= \begin{bmatrix}
-0.33 &amp; 0.09\\
-0.09 &amp; 0.03
+<p><span class="math">\begin{align*}
+n &= [50, 50]\\
+p &= \begin{bmatrix}
+0.33 & 0.09\\
+0.09 & 0.03
 \end{bmatrix}\\
-r &amp;= 0.5
-\end{align*}</div><p>This happens to be the SBM formulation of the same model framed as an RDPG above. Let’s see the difference between the correlated RDPG and correlated SBM graph pairs.</p>
+r &= 0.5
+\end{align*}</span></p>
+<p>This happens to be the SBM formulation of the same model framed as an RDPG above. Let’s see the difference between the correlated RDPG and correlated SBM graph pairs.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>

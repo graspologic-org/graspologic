@@ -498,15 +498,15 @@ div.rendered_html tbody tr:hover {
 <p>Unlike <a class="reference internal" href="sbm.html"><span class="doc">Stochastic Block Models (SBM)</span></a>, Mixed Membership Stochastic Blockmodels (MMSBM) allow nodes to pertain to multiple communities when interacting with other nodes.</p>
 <p>Given a network with <span class="math notranslate nohighlight">\(k\)</span> communities, an MMSBM is parametrized by the number of nodes <span class="math notranslate nohighlight">\(n\)</span> of the graph, a block connectivity matrix <span class="math notranslate nohighlight">\(B \in \mathbb{R}^{k x k}\)</span> where each element specifies the probability of interaction between nodes based upon their community membership, and a vector <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> which controls the mixed-membership allowed for each node.</p>
 <p>Below, we sample a two-block MMSBM with following parameters:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= 100\\
-P &amp;= \begin{bmatrix}
-0.7 &amp; 0.2\\
-0.2 &amp; 0.05
+<p><span class="math">\begin{align*}
+n &= 100\\
+P &= \begin{bmatrix}
+0.7 & 0.2\\
+0.2 & 0.05
 \end{bmatrix}\\
-\vec{\alpha} &amp;= \begin{bmatrix} 0.1 &amp; 0.1 \end{bmatrix}\\
-\end{align*}</div><div class="nbinput nblast docutils container">
+\vec{\alpha} &= \begin{bmatrix} 0.1 & 0.1 \end{bmatrix}\\
+\end{align*}</span></p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -556,34 +556,33 @@ P &amp;= \begin{bmatrix}
 </div>
 <div class="section" id="Generating-various-types-of-graphs">
 <h2>Generating various types of graphs<a class="headerlink" href="#Generating-various-types-of-graphs" title="Permalink to this headline">¶</a></h2>
-<p>Each node <span class="math notranslate nohighlight">\(p\)</span> is assigned a membership vector <span class="math notranslate nohighlight">\(\vec{\pi}_p \in \mathbb{R}^{k}\)</span> sampled from a <a class="reference external" href="https://en.wikipedia.org/wiki/Dirichlet_distribution">Dirichlet distribution</a>:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
+<p>Each node <span class="math notranslate nohighlight">\(p\)</span> is assigned a membership vector <span class="math notranslate nohighlight">\(\vec{\pi}_p \in \mathbb{R}^{k}\)</span> sampled from a <a class="reference external" href="https://en.wikipedia.org/wiki/Dirichlet_distribution">Dirichlet distribution</a>: <span class="math">\begin{align*}
 \vec{\pi}_p \sim \mbox{Dir}(\vec{\alpha})\\
-\end{align*}</div><p>This vector indicates the probability of a node to interact with other nodes as if belonging to a certain community. For example, in a four communities graph, let:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-\vec{\pi}_p &amp;= \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \end{bmatrix}\\
-\vec{\pi}_q &amp;= \begin{bmatrix} 0.25 &amp; 0.25 &amp; 0.25 &amp; 0.25 \end{bmatrix}\\
-\end{align*}</div><p>According to <span class="math notranslate nohighlight">\(\vec{\pi}_p\)</span>, node <span class="math notranslate nohighlight">\(p\)</span> will always behave as if pertaining to the first community when interacting with other nodes, while node <span class="math notranslate nohighlight">\(q\)</span> will interact 25% of the time as if belonging to community 1, 25% of the time as if belonging to community 2, etc.</p>
+\end{align*}</span></p>
+<p>This vector indicates the probability of a node to interact with other nodes as if belonging to a certain community. For example, in a four communities graph, let:</p>
+<p><span class="math">\begin{align*}
+\vec{\pi}_p &= \begin{bmatrix} 1 & 0 & 0 & 0 \end{bmatrix}\\
+\vec{\pi}_q &= \begin{bmatrix} 0.25 & 0.25 & 0.25 & 0.25 \end{bmatrix}\\
+\end{align*}</span></p>
+<p>According to <span class="math notranslate nohighlight">\(\vec{\pi}_p\)</span>, node <span class="math notranslate nohighlight">\(p\)</span> will always behave as if pertaining to the first community when interacting with other nodes, while node <span class="math notranslate nohighlight">\(q\)</span> will interact 25% of the time as if belonging to community 1, 25% of the time as if belonging to community 2, etc.</p>
 <p>Therefore, controlling these membership vectors by varying the parameter <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> allows generation of various types of graphs.</p>
 <div class="section" id="Generating-Erdos-Renyi-(ER)-graphs">
 <h3>Generating Erdos-Renyi (ER) graphs<a class="headerlink" href="#Generating-Erdos-Renyi-(ER)-graphs" title="Permalink to this headline">¶</a></h3>
 <p>To generate <a class="reference internal" href="erdos_renyi.html"><span class="doc">Erdos-Renyi (ER)</span></a>, one of the <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> entries can be set to be much greater than the others.</p>
 <p>For example, consider the two graphs (undirected, no self-loops) parameterized by:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= 100\\
-P &amp;= \begin{bmatrix}
-0.8 &amp; 0.2\\
-0.2 &amp; 0.5
+<p><span class="math">\begin{align*}
+n &= 100\\
+P &= \begin{bmatrix}
+0.8 & 0.2\\
+0.2 & 0.5
 \end{bmatrix}\\
-\end{align*}</div><p>With <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> respectively equal to:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-\vec{\alpha_1} &amp;= \begin{bmatrix} 100 &amp; 1 \end{bmatrix}\\
-\vec{\alpha_2} &amp;= \begin{bmatrix} 1 &amp; 100 \end{bmatrix}\\
-\end{align*}</div><div class="nbinput nblast docutils container">
+\end{align*}</span></p>
+<p>With <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> respectively equal to:</p>
+<p><span class="math">\begin{align*}
+\vec{\alpha_1} &= \begin{bmatrix} 100 & 1 \end{bmatrix}\\
+\vec{\alpha_2} &= \begin{bmatrix} 1 & 100 \end{bmatrix}\\
+\end{align*}</span></p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -642,16 +641,14 @@ P &amp;= \begin{bmatrix}
 <div class="section" id="Differences-with-Stochastic-Block-Model-(SBM)-graphs">
 <h3>Differences with Stochastic Block Model (SBM) graphs<a class="headerlink" href="#Differences-with-Stochastic-Block-Model-(SBM)-graphs" title="Permalink to this headline">¶</a></h3>
 <p>According to the <a class="reference internal" href="sbm.html"><span class="doc">Stochastic Block Models (SBM)</span></a>, each node in a graph can only pertain to one community. Therefore, one way to recreate such model with an MMSBM is to set all the entries of <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> equal to the same value. The closer the value is to <span class="math notranslate nohighlight">\(0\)</span> the more the simulated graphs will appear similar to an SBM, the closer the value is to <span class="math notranslate nohighlight">\(1\)</span> the more uniform the graph will look, thus losing the community structure dictated by the SBM.</p>
-<p>To show this we sample a four-block SBM (undirected, no self-loops) graph with following parameters:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= \begin{bmatrix} 50 &amp; 50 &amp; 50 &amp; 50 \end{bmatrix}\\
-B &amp;=\begin{bmatrix} 0.8 &amp; 0.2 &amp; 0.2 &amp; 0.2 \\ 0.2 &amp; 0.8 &amp; 0.2 &amp; 0.2 \\ 0.2 &amp; 0.2 &amp; 0.8 &amp; 0.2 \\ 0.2 &amp; 0.2 &amp; 0.2 &amp; 0.8 \end{bmatrix}
-\end{align*}</div><p>We also sample a four-block MMSBM with parameter <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> such that:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-\vec{\alpha} &amp;= \begin{bmatrix} 0.01 &amp; 0.01 &amp; 0.01 &amp; 0.01 \end{bmatrix}\\
-\end{align*}</div><div class="nbinput nblast docutils container">
+<p>To show this we sample a four-block SBM (undirected, no self-loops) graph with following parameters: <span class="math">\begin{align*}
+n &= \begin{bmatrix} 50 & 50 & 50 & 50 \end{bmatrix}\\
+B &=\begin{bmatrix} 0.8 & 0.2 & 0.2 & 0.2 \\ 0.2 & 0.8 & 0.2 & 0.2 \\ 0.2 & 0.2 & 0.8 & 0.2 \\ 0.2 & 0.2 & 0.2 & 0.8 \end{bmatrix}
+\end{align*}</span></p>
+<p>We also sample a four-block MMSBM with parameter <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> such that: <span class="math">\begin{align*}
+\vec{\alpha} &= \begin{bmatrix} 0.01 & 0.01 & 0.01 & 0.01 \end{bmatrix}\\
+\end{align*}</span></p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>

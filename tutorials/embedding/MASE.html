@@ -501,16 +501,16 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">
 <h2>Simulate two different graphs using stochastic block models (SBM)<a class="headerlink" href="#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)" title="Permalink to this headline">¶</a></h2>
 <p>We sample two 2-block SBMs (undirected, no self-loops) with 50 vertices, each block containing 25 vertices (<span class="math notranslate nohighlight">\(n = [25, 25]\)</span>), and with the following block connectivity matrices:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
+<p><span class="math">\begin{align*}
 B_1 =
-\begin{bmatrix}0.3 &amp; 0.1\\
-0.1 &amp; 0.7
+\begin{bmatrix}0.3 & 0.1\\
+0.1 & 0.7
 \end{bmatrix},~
-B_2 = \begin{bmatrix}0.3 &amp; 0.1\\
-0.1 &amp; 0.3
+B_2 = \begin{bmatrix}0.3 & 0.1\\
+0.1 & 0.3
 \end{bmatrix}
-\end{align*}</div><p>The only difference between the two is the within-block probability for the second block. We sample <span class="math notranslate nohighlight">\(G_1 \sim \text{SBM}(n, B_1)\)</span> and <span class="math notranslate nohighlight">\(G_2 \sim \text{SBM}(n, B_2)\)</span>.</p>
+\end{align*}</span></p>
+<p>The only difference between the two is the within-block probability for the second block. We sample <span class="math notranslate nohighlight">\(G_1 \sim \text{SBM}(n, B_1)\)</span> and <span class="math notranslate nohighlight">\(G_2 \sim \text{SBM}(n, B_2)\)</span>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>

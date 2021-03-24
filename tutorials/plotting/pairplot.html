@@ -33,8 +33,6 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -498,15 +496,15 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Simulate-a-binary-graph-using-stochastic-block-model">
 <h2>Simulate a binary graph using stochastic block model<a class="headerlink" href="#Simulate-a-binary-graph-using-stochastic-block-model" title="Permalink to this headline">¶</a></h2>
 <p>The 3-block model is defined as below:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-n &amp;= [50, 50, 50]\\
-P &amp;=
-\begin{bmatrix}0.5 &amp; 0.1 &amp; 0.05 \\
-0.1 &amp; 0.4 &amp; 0.15 \\
-0.05 &amp; 0.15 &amp; 0.3
+<p><span class="math">\begin{align*}
+n &= [50, 50, 50]\\
+P &=
+\begin{bmatrix}0.5 & 0.1 & 0.05 \\
+0.1 & 0.4 & 0.15 \\
+0.05 & 0.15 & 0.3
 \end{bmatrix}
-\end{align*}</div><p>Thus, the first 50 vertices belong to block 1, the second 50 vertices belong to block 2, and the last 50 vertices belong to block 3.</p>
+\end{align*}</span></p>
+<p>Thus, the first 50 vertices belong to block 1, the second 50 vertices belong to block 2, and the last 50 vertices belong to block 3.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>

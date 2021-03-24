@@ -499,15 +499,15 @@ div.rendered_html tbody tr:hover {
 <p>The effect of this is that one matches <span class="math notranslate nohighlight">\(A\)</span> to the best subgraph of <span class="math notranslate nohighlight">\(B\)</span>. That is, the isolated vertices added to <span class="math notranslate nohighlight">\(A\)</span> through padding have an affinity to the low-density subgraphs of <span class="math notranslate nohighlight">\(B\)</span>, in effect giving the isolates a false signal.</p>
 <p>Instead, we may desire to match <span class="math notranslate nohighlight">\(A\)</span> to the best fitting induced subgraph of <span class="math notranslate nohighlight">\(B\)</span>. This padding scheme is known as <span class="math notranslate nohighlight">\(\textit{adopted padding}\)</span>, and is achieved by substituting <span class="math notranslate nohighlight">\(\tilde{A} \oplus 0_{(n_2-n_1)x(n_2-n_1)}\)</span> and <span class="math notranslate nohighlight">\(\tilde{B}\)</span> in place of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, respectively, where <span class="math notranslate nohighlight">\(\tilde{A} = 2A - 1_{n_1}1_{n_1}^T\)</span> and <span class="math notranslate nohighlight">\(\tilde{B} = 2B - 1_{n_2}1_{n_2}^T\)</span>.</p>
 <p>To demonstrate the difference between the two padding schemes, we sample two graph’s <span class="math notranslate nohighlight">\(G_1'\)</span> and <span class="math notranslate nohighlight">\(G_2\)</span>, each having 400 vertices, from a <span class="math notranslate nohighlight">\(0.5 \sim SBM(4,b,\Lambda)\)</span>, where b assigns 100 vertices to each of the k = 4 blocks, and</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
-\Lambda &amp;= \begin{bmatrix}
-0.9 &amp; 0.4 &amp; 0.3 &amp; 0.2\\
-0.4 &amp; 0.9 &amp; 0.4 &amp; 0.3\\
-0.3 &amp; 0.4 &amp; 0.9 &amp; 0.4\\
-0.2 &amp; 0.3 &amp; 0.4 &amp; 0.7
+<p><span class="math">\begin{align*}
+\Lambda &= \begin{bmatrix}
+0.9 & 0.4 & 0.3 & 0.2\\
+0.4 & 0.9 & 0.4 & 0.3\\
+0.3 & 0.4 & 0.9 & 0.4\\
+0.2 & 0.3 & 0.4 & 0.7
 \end{bmatrix}\\
-\end{align*}</div><p>We realize <span class="math notranslate nohighlight">\(G_1\)</span> from <span class="math notranslate nohighlight">\(G_1'\)</span> by removing 25 nodes from each block of <span class="math notranslate nohighlight">\(G_1'\)</span>, yielding a 300 node graph (example adapted from section 2.5 of [1]).</p>
+\end{align*}</span></p>
+<p>We realize <span class="math notranslate nohighlight">\(G_1\)</span> from <span class="math notranslate nohighlight">\(G_1'\)</span> by removing 25 nodes from each block of <span class="math notranslate nohighlight">\(G_1'\)</span>, yielding a 300 node graph (example adapted from section 2.5 of [1]).</p>
 <p>The goal of the matching in this case is to recover <span class="math notranslate nohighlight">\(G_1\)</span> by matching the right most figure below and <span class="math notranslate nohighlight">\(G_2\)</span>. That is, we seek to recover the shared community structure common between two graphs of differing shapes.</p>
 <p>[1] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe, “Seeded graph matching”, Pattern Recognit. 87 (2019) 203–215</p>
 <div class="section" id="SBM-correlated-graph-pairs">

@@ -499,16 +499,16 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">
 <h2>Simulate two different graphs using stochastic block models (SBM)<a class="headerlink" href="#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)" title="Permalink to this headline">¶</a></h2>
 <p>We sample 2-block SBMs (undirected, no self-loops) with 50 vertices, each block containing 25 vertices (n = [25, 25]), and the following block probabilities:</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
+<p><span class="math">\begin{align*}
 P_1 =
-\begin{bmatrix}0.3 &amp; 0.1\\
-0.1 &amp; 0.7
+\begin{bmatrix}0.3 & 0.1\\
+0.1 & 0.7
 \end{bmatrix},~
-P_2 = \begin{bmatrix}0.3 &amp; 0.1\\
-0.1 &amp; 0.3
+P_2 = \begin{bmatrix}0.3 & 0.1\\
+0.1 & 0.3
 \end{bmatrix}
-\end{align*}</div><p>The only difference between the two are the block probability for the second block. We sample <span class="math notranslate nohighlight">\(G_1 \sim \text{SBM}(n, P_1)\)</span> and <span class="math notranslate nohighlight">\(G_2 \sim \text{SBM}(n, P_2)\)</span>.</p>
+\end{align*}</span></p>
+<p>The only difference between the two are the block probability for the second block. We sample <span class="math notranslate nohighlight">\(G_1 \sim \text{SBM}(n, P_1)\)</span> and <span class="math notranslate nohighlight">\(G_2 \sim \text{SBM}(n, P_2)\)</span>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -564,14 +564,14 @@ P_2 = \begin{bmatrix}0.3 &amp; 0.1\\
 <h2>Embed the two graphs using omnibus embedding<a class="headerlink" href="#Embed-the-two-graphs-using-omnibus-embedding" title="Permalink to this headline">¶</a></h2>
 <p>The purpose of embedding graphs is to obtain a Euclidean representation, sometimes called latent positions, of the adjacency matrices. Again, we assume that the probability matrix of a graph is given by <span class="math notranslate nohighlight">\(P = XX^T\)</span> and we are trying to estimate <span class="math notranslate nohighlight">\(X\)</span>. The benefit of omnibus embedding is that the latent positions of all embedded graphs live in the same canonical space, thus eliminating the need to align the results.</p>
 <p>We use all of the default parameters. Underneath, the select_dimension algorithm will automatically find the optimal embedding dimension for us. In this example, we get the following estimate,</p>
-<div class="math notranslate nohighlight">
-\begin{align*}
+<p><span class="math">\begin{align*}
 \hat{Z} =
 \begin{bmatrix}
 \hat{X_1}\\
 \hat{X_2}
 \end{bmatrix}
-\end{align*}</div><p>where the first block, <span class="math notranslate nohighlight">\(\hat{X_1}\)</span>, are the latent positions of the first graph, and the second block, <span class="math notranslate nohighlight">\(\hat{X_2}\)</span>, are the latent positions of the second graph.</p>
+\end{align*}</span></p>
+<p>where the first block, <span class="math notranslate nohighlight">\(\hat{X_1}\)</span>, are the latent positions of the first graph, and the second block, <span class="math notranslate nohighlight">\(\hat{X_2}\)</span>, are the latent positions of the second graph.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
