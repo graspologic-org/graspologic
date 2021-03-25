@@ -25,7 +25,7 @@ def sample_edges(P, directed=False, loops=False):
 
     Parameters
     ----------
-    P: np.ndarray, shape (n_vertices, n_vertices)
+    P: array-like, shape (n_vertices, n_vertices)
         Matrix of probabilities (between 0 and 1) for a random graph
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
@@ -46,8 +46,8 @@ def sample_edges(P, directed=False, loops=False):
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
        Journal of the American Statistical Association, Vol. 107(499), 2012
     """
-    if type(P) is not np.ndarray:
-        raise TypeError("P must be numpy.ndarray")
+    if not isinstance(P, np.ndarray):
+        raise TypeError("P must be array-like.")
     if len(P.shape) != 2:
         raise ValueError("P must have dimension 2 (n_vertices, n_dimensions)")
     if P.shape[0] != P.shape[1]:
