@@ -59,7 +59,7 @@ def X(request, M):
     return gen_covariates(m1, m2, labels, type=request.param)
 
 
-@pytest.fixture(params=["assortative", "non-assortative", "cca"])
+@pytest.fixture(params=["assortative", "non-assortative"])
 def case(request, M, X):
     A, _ = M
     case = CASE(n_components=2, embedding_alg=request.param)
