@@ -1,14 +1,9 @@
-from graspologic.utils import import_graph, to_laplacian
-from graspologic.embed.base import BaseSpectralEmbed
 import numpy as np
-import scipy
-from joblib import delayed, Parallel
-from sklearn.cluster import KMeans
-from graspologic.plot import heatmap
-from graspologic.utils import remap_labels, is_almost_symmetric
-from sklearn.preprocessing import normalize, scale
-from sklearn.utils.extmath import randomized_svd
 from scipy.sparse.linalg import eigsh
+from sklearn.preprocessing import normalize
+
+from graspologic.utils import import_graph, to_laplacian, is_almost_symmetric
+from graspologic.embed.base import BaseSpectralEmbed
 
 
 class CovariateAssistedEmbedding(BaseSpectralEmbed):
@@ -21,17 +16,16 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
     Parameters
     ----------
-    embedding_alg : str, default = "assortative"
-        Embedding algorithm to use:
-        - "assortative": Embed ``L + a*X@X.T``. Better for assortative graphs.
-        - "non-assortative": Embed ``L@L + a*X@X.T``. Better for non-assortative graphs.
-        - "cca": Embed ``L@X``. Better for large graphs and faster.
-
     alpha : float, optional, default = None
         Tuning parameter to use. Not used if embedding_alg == cca:
             -  None: Default to the ratio of the leading eigenvector of the Laplacian
                      to the leading eigenvector of the covariate matrix.
             - float: Use a particular alpha-value.
+
+    embedding_alg : str, default = "assortative"
+        Embedding algorithm to use:
+        - "assortative": Embed ``L + a*X@X.T``. Better for assortative graphs.
+        - "non-assortative": Embed ``L@L + a*X@X.T``. Better for non-assortative graphs.
 
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
@@ -58,8 +52,8 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
 
     def __init__(
         self,
-        embedding_alg="assortative",
         alpha=None,
+        embedding_alg="assortative",
         n_components=None,
         n_elbows=2,
         check_lcc=False,
@@ -71,8 +65,8 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
             concat=False,
         )
 
-        if embedding_alg not in {"assortative", "non-assortative", "cca"}:
-            msg = "embedding_alg must be in {assortative, non-assortative, cca}."
+        if embedding_alg not in {"assortative", "non-assortative"}:
+            msg = "embedding_alg must be in {assortative, non-assortative}."
             raise ValueError(msg)
         self.embedding_alg = embedding_alg
 
@@ -120,7 +114,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         if not is_almost_symmetric(A):
             raise ValueError("Fit an undirected graph")
 
-        # center and scale covariates to unit norm
+        # scale covariates to unit norm
         covariates = normalize(covariates, axis=0)
 
         # save necessary params
@@ -128,10 +122,7 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         X = covariates.copy()
 
         # change params based on tuning algorithm
-        if self.embedding_alg == "cca":
-            LL = L @ X
-            XXt = 0
-        elif self.embedding_alg == "assortative":
+        if self.embedding_alg == "assortative":
             LL = L.copy()
             XXt = X @ X.T
         elif self.embedding_alg == "non-assortative":
@@ -168,9 +159,6 @@ class CovariateAssistedEmbedding(BaseSpectralEmbed):
         # setup
         if self.alpha is not None:
             self.alpha_ = self.alpha
-            return self
-        if self.embedding_alg == "cca":
-            self.alpha_ = 0
             return self
 
         # calculate bounds
