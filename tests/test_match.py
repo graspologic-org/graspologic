@@ -156,9 +156,9 @@ class TestGMP:
         # we had thought about doing the test
         # `assert gm.n_iter_ == 1`
         # but note that GM doesn't necessarily converge in 1 iteration here
-        # this is because when we start from the optimal permutation matrix, we do 
+        # this is because when we start from the optimal permutation matrix, we do
         # not start from the optimal over our convex relaxation (the doubly stochastics)
-        # but we do indeed recover the correct permutation after a small number of 
+        # but we do indeed recover the correct permutation after a small number of
         # iterations
 
         # do the same thing, but using the permutation indices themselves
@@ -166,4 +166,24 @@ class TestGMP:
         gm.fit(A, B)
 
         assert (gm.perm_inds_ == pi).all()
+        assert gm.score_ == 11156
+
+    def test_custom_init_seeds(self):
+        A, B = self._get_AB()
+        n = len(A)
+        pi_original = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - 1
+        pi = np.array([5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - 1
+
+        pi[pi > 6] -= 1
+
+        # use seed 0 in A to 7 in B
+        seeds_A = [0]
+        seeds_B = [6]
+        custom_init = np.eye(n - 1)
+        custom_init = custom_init[pi]
+
+        gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
+        gm.fit(A, B, seeds_A=seeds_A, seeds_B=seeds_B)
+
+        assert (gm.perm_inds_ == pi_original).all()
         assert gm.score_ == 11156

@@ -441,7 +441,9 @@ def _quadratic_assignment_faq(
             msg += "Custom initialization must be either a 1d array representing permutation "
             msg += "indices or a 2d array which is doubly stochastic."
             raise ValueError(msg)
-        P = P0[nonseed_A][:, nonseed_B]
+        invert_inds = np.argsort(nonseed_B)
+        perm_nonseed_B = np.argsort(invert_inds)
+        P = P0[:, perm_nonseed_B]
     else:
         msg = "`init` must either be of type str or np.ndarray."
         raise TypeError(msg)
