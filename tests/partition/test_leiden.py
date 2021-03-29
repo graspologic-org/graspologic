@@ -57,7 +57,6 @@ def _create_edge_list() -> List[Tuple[str, str, float]]:
 
 
 class TestLeiden(unittest.TestCase):
-
     def test_correct_types(self):
         # both leiden and hierarchical_leiden require the same types and mostly the same value range restrictions
         good_args = {
