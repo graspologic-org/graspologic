@@ -57,6 +57,7 @@ def _create_edge_list() -> List[Tuple[str, str, float]]:
 
 
 class TestLeiden(unittest.TestCase):
+
     def test_correct_types(self):
         # both leiden and hierarchical_leiden require the same types and mostly the same value range restrictions
         good_args = {
@@ -173,3 +174,10 @@ class TestLeiden(unittest.TestCase):
 
         partitions = HierarchicalCluster.final_hierarchical_clustering(results)
         self.assertEqual(total_nodes, len(partitions))
+
+    # Github issue: 738
+    def test_matching_return_types(self):
+        graph = nx.erdos_renyi_graph(20, 0.4, seed=1234)
+        partitions = leiden(graph)
+        for node_id in partitions:
+            self.assertTrue(isinstance(node_id, int))
