@@ -156,7 +156,7 @@ class TestGMP:
         # we had thought about doing the test
         # `assert gm.n_iter_ == 1`
         # but note that GM doesn't necessarily converge in 1 iteration here
-        # this is because which we start from the optimal permutation matrix, we do 
+        # this is because when we start from the optimal permutation matrix, we do 
         # not start from the optimal over our convex relaxation (the doubly stochastics)
         # but we do indeed recover the correct permutation after a small number of 
         # iterations
