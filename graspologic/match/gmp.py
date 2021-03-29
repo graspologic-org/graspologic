@@ -39,17 +39,13 @@ class GraphMatch(BaseEstimator):
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
         doubly stochastic matrix.
 
-        For a custom initialization (a 1d- or 2d-array), the input repesents a
-        permutation or assignment of the nonseeded vertices of `B`, and thus the
-        dimension should be equal to the number of nonseeded vertices of `B`, :math:`m'`.
-
-        If 2d-array, `init` must be :math:`m' x m'`, and it must be doubly stochastic:
-        each of its rows and columns must sum to 1.
-
-        If 1d-array, `init` must be a set of permutation indices: the array should be
-        of length :math:`m'` and the elements of the array must be integers from
-        :math:`0 ... m' - 1`. The FAQ algorithm will start from the permutation matrix
-        corresponding to these permutation indices.
+        If 2d-array, ``init`` must be :math:`m' x m'`, where :math:`m'` is the number of
+        nonseeded vertices of ``B``. This initial position repesents a permutation or
+        assignment of the nonseeded vertices of ``B``, and thus must be doubly
+        stochastic (all of its rows and columns must sum to 1). Note that if using
+        seeds, this permutation/assignment is taken with respect to the nonseeded
+        vertices in the order in which they were input, even when
+        ``shuffle_input = True``.
 
     max_iter : int, positive (default = 30)
         Integer specifying the max number of Franke-Wolfe iterations.
@@ -65,7 +61,7 @@ class GraphMatch(BaseEstimator):
 
     gmp : bool (default = True)
         Gives users the option to solve QAP rather than the Graph Matching Problem
-        (GMP). This is accomplished through trivial negation of the objective function.
+        (GMP). This is accomplished through a negation of the objective function.
 
     padding : string (default = 'adopted')
         Allows user to specify padding scheme if `A` and `B` are not of equal size.

@@ -161,13 +161,6 @@ class TestGMP:
         # but we do indeed recover the correct permutation after a small number of
         # iterations
 
-        # do the same thing, but using the permutation indices themselves
-        gm = GMP(n_init=1, init=pi, max_iter=30, shuffle_input=True, gmp=False)
-        gm.fit(A, B)
-
-        assert (gm.perm_inds_ == pi).all()
-        assert gm.score_ == 11156
-
     def test_custom_init_seeds(self):
         A, B = self._get_AB()
         n = len(A)

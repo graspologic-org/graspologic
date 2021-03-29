@@ -424,23 +424,8 @@ def _quadratic_assignment_faq(
             K = _doubly_stochastic(K)
             P = J * 0.5 + K * 0.5
     elif isinstance(P0, np.ndarray):
-        if P0.ndim == 2:
-            P0 = np.atleast_2d(
-                P0
-            )  # @asaadeldin11 can you explain why we want this instead of ndim == 2?
-            _check_init_input(P0, n_unseed)
-        elif P0.ndim == 1:
-            if len(P0) != n_unseed:
-                msg = "If `init` is a 1d-array it must be a valid permutation of the "
-                msg += "nonseeded vertices."
-                raise ValueError(msg)
-            # construct a permutation matrix from the permutation indices
-            P0 = np.eye(n_unseed)[P0]
-        else:
-            msg = "`init` was a numpy array with ndim not equal to 1 or 2. "
-            msg += "Custom initialization must be either a 1d array representing permutation "
-            msg += "indices or a 2d array which is doubly stochastic."
-            raise ValueError(msg)
+        P0 = np.atleast_2d(P0)
+        _check_init_input(P0, n_unseed)
         invert_inds = np.argsort(nonseed_B)
         perm_nonseed_B = np.argsort(invert_inds)
         P = P0[:, perm_nonseed_B]
