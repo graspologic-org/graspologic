@@ -10,7 +10,7 @@ from .omni import OmnibusEmbed
 from .svd import select_dimension, selectSVD
 from .base import BaseSpectralEmbed
 from .mug2vec import mug2vec
-from .case import CovariateAssistedEmbedding
+from .case import CovariateAssistedEmbed
 
 
 __all__ = [
@@ -23,5 +23,5 @@ __all__ = [
     "select_dimension",
     "selectSVD",
     "BaseSpectralEmbed",
-    "CovariateAssistedEmbedding",
+    "CovariateAssistedEmbed",
 ]

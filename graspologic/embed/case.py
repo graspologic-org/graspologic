@@ -6,7 +6,7 @@ from graspologic.utils import import_graph, to_laplacian, is_almost_symmetric
 from graspologic.embed.base import BaseSpectralEmbed
 
 
-class CovariateAssistedEmbedding(BaseSpectralEmbed):
+class CovariateAssistedEmbed(BaseSpectralEmbed):
     """
     Perform Spectral Embedding on a graph with covariates, using the regularized graph Laplacian.
 

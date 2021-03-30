@@ -2,7 +2,7 @@ import pytest
 from pytest import mark
 import numpy as np
 from sklearn.mixture import GaussianMixture
-from graspologic.embed.case import CovariateAssistedEmbedding as CASE
+from graspologic.embed.case import CovariateAssistedEmbed as CASE
 from graspologic.simulations import sbm
 from graspologic.utils import is_almost_symmetric
 
