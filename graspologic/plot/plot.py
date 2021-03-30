@@ -263,17 +263,11 @@ def heatmap(
         if len(xticklabels) != X.shape[1]:
             msg = "xticklabels must have same length {}.".format(X.shape[1])
             raise ValueError(msg)
-    elif not isinstance(xticklabels, bool):
-        msg = "xticklabels must be a bool or a list, not {}".format(type(xticklabels))
-        raise TypeError(msg)
 
     if isinstance(yticklabels, list):
         if len(yticklabels) != X.shape[0]:
             msg = "yticklabels must have same length {}.".format(X.shape[0])
             raise ValueError(msg)
-    elif not isinstance(yticklabels, bool):
-        msg = "yticklabels must be a bool or a list, not {}".format(type(yticklabels))
-        raise TypeError(msg)
 
     # Handle cmap
     if not isinstance(cmap, (str, list, Colormap)):
@@ -345,6 +339,42 @@ def heatmap(
             else:
                 _plot_groups(plot, arr, inner_hier_labels, fontsize=hier_label_fontsize)
     return plot
+
+
+def binary_heatmap(X, colors=["white", "black"], **kwargs):
+    """
+    Plots an unweighted graph as a black-and-white matrix
+    with a binary colorbar.
+
+    Takes the same keyword arguments as ``plot.heatmap``.
+
+    Parameters
+    ----------
+    X : nx.Graph or np.ndarray object
+        Unweighted graph or numpy matrix to plot.
+
+    **kwargs : dict, optional
+        All keyword arguments in ``plot.heatmap``.
+
+    """
+    if len(colors) != 2:
+        raise ValueError("Colors must be length 2")
+    if "center" in kwargs:
+        raise ValueError("Center is not allowed for binary heatmaps.")
+    if "cmap" in kwargs:
+        raise ValueError(
+            "cmap is not allowed in a binary heatmap. To change colors, use the `colors` parameter."
+        )
+
+    cmap = mpl.colors.ListedColormap(colors)
+    ax = heatmap(X, center=None, cmap=cmap, **kwargs)
+    colorbar = ax.collections[0].colorbar
+    cbar = kwargs.setdefault("cbar", True)
+    if cbar:
+        colorbar.set_ticks([0.25, 0.75])
+        colorbar.set_ticklabels(["No Edge", "Edge"])
+        colorbar.ax.set_frame_on(True)
+    return ax
 
 
 def gridplot(
