@@ -7,6 +7,7 @@ import unittest
 import networkx as nx
 
 from graspologic.partition import HierarchicalCluster, hierarchical_leiden, leiden
+from graspologic.partition.leiden import _validate_and_build_edge_list
 
 from tests.utils import data_file
 
@@ -180,3 +181,137 @@ class TestLeiden(unittest.TestCase):
         partitions = leiden(graph)
         for node_id in partitions:
             self.assertTrue(isinstance(node_id, int))
+
+
+def add_edges_to_graph(graph: nx.Graph) -> nx.Graph:
+    graph.add_edge("nick", "dwayne", weight=1.0)
+    graph.add_edge("nick", "dwayne", weight=3.0)
+    graph.add_edge("dwayne", "nick", weight=2.2)
+    graph.add_edge("dwayne", "ben", weight=4.2)
+    graph.add_edge("ben", "dwayne", weight=0.001)
+    return graph
+
+
+class TestValidEdgeList(unittest.TestCase):
+    def test_empty_edge_list(self):
+        edges = []
+        results = _validate_and_build_edge_list(graph=edges, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+        self.assertEqual([], results[1])
+
+    def test_assert_wrong_types_in_tuples(self):
+        edges = [(True, 4, "sandwich")]
+        with self.assertRaises(ValueError):
+            _validate_and_build_edge_list(graph=edges, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+
+        edges = [(True, False, 3.2)]
+        results = _validate_and_build_edge_list(graph=edges, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+        self.assertEqual([("True", "False", 3.2)], results[1])
+
+    def test_empty_nx(self):
+        expected = {}, []
+        results = _validate_and_build_edge_list(graph=nx.Graph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+        self.assertEqual(expected,results)
+        results = _validate_and_build_edge_list(graph=nx.DiGraph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+        self.assertEqual(expected, results)
+        with self.assertRaises(ValueError):
+            _validate_and_build_edge_list(graph=nx.MultiGraph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+        with self.assertRaises(ValueError):
+            _validate_and_build_edge_list(graph=nx.MultiDiGraph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+
+    def test_valid_nx(self):
+        graph = add_edges_to_graph(nx.Graph())
+        expected = [("nick", "dwayne", 2.2), ("dwayne", "ben", 0.001)]
+        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+
+        graph = add_edges_to_graph(nx.DiGraph())
+        expected = [
+            ("nick", "dwayne", 3.0),
+            ("dwayne", "nick", 2.2),
+            ("dwayne", "ben", 4.2),
+            ("ben", "dwayne", 0.001),
+        ]
+        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+
+        graph = add_edges_to_graph(nx.MultiGraph())
+        expected = [
+            ("nick", "dwayne", 1.0),
+            ("nick", "dwayne", 3.0),
+            ("nick", "dwayne", 2.2),
+            ("dwayne", "ben", 4.2),
+            ("dwayne", "ben", 0.001),
+        ]
+        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+
+        graph = add_edges_to_graph(nx.MultiDiGraph())
+        expected = [
+            ("nick", "dwayne", 1.0),
+            ("nick", "dwayne", 3.0),
+            ("dwayne", "nick", 2.2),
+            ("dwayne", "ben", 4.2),
+            ("ben", "dwayne", 0.001),
+        ]
+        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+
+    def test_unweighted_nx(self):
+        graph = nx.Graph()
+        graph.add_edge("dwayne", "nick")
+        graph.add_edge("nick", "ben")
+
+        with self.assertRaises(ValueError):
+            gus.to_weighted_edge_list(graph)
+
+        self.assertEqual(
+            [("dwayne", "nick", 3.33333), ("nick", "ben", 3.33333)],
+            gus.to_weighted_edge_list(graph, weight_default=3.33333),
+        )
+
+        graph.add_edge("salad", "sandwich", weight=100)
+
+        self.assertEqual(
+            [
+                ("dwayne", "nick", 3.33333),
+                ("nick", "ben", 3.33333),
+                ("salad", "sandwich", 100),
+            ],
+            gus.to_weighted_edge_list(graph, weight_default=3.33333),
+        )
+
+    def test_matrices(self):
+        graph = add_edges_to_graph(nx.Graph())
+        di_graph = add_edges_to_graph(nx.DiGraph())
+
+        dense_undirected = nx.to_numpy_array(graph)
+        dense_directed = nx.to_numpy_array(di_graph)
+
+        sparse_undirected = nx.to_scipy_sparse_matrix(graph)
+        sparse_directed = nx.to_scipy_sparse_matrix(di_graph)
+
+        expected = [("0", "1", 2.2), ("1", "2", 0.001)]
+        self.assertEqual(expected, gus.to_weighted_edge_list(dense_undirected))
+        self.assertEqual(expected, gus.to_weighted_edge_list(sparse_undirected))
+
+        expected = [
+            ("0", "1", 3.0),
+            ("1", "0", 2.2),
+            ("1", "2", 4.2),
+            ("2", "1", 0.001),
+        ]
+        self.assertEqual(expected, gus.to_weighted_edge_list(dense_directed))
+        self.assertEqual(expected, gus.to_weighted_edge_list(sparse_directed))
+
+    def test_empty_adj_matrices(self):
+        dense = np.array([])
+        with self.assertRaises(ValueError):
+            gus.to_weighted_edge_list(dense)
+
+        sparse = scipy.sparse.csr_matrix([])
+        with self.assertRaises(ValueError):
+            gus.to_weighted_edge_list(sparse)
+
+    def test_misshapen_matrices(self):
+        data = [[3, 2, 0], [2, 0, 1]]  # this is utter gibberish
+        with self.assertRaises(ValueError):
+            gus.to_weighted_edge_list(np.array(data))
+        with self.assertRaises(ValueError):
+            gus.to_weighted_edge_list(scipy.sparse.csr_matrix(data))
+

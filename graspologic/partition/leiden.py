@@ -40,7 +40,7 @@ def _validate_and_build_edge_list(
 
     if isinstance(graph, list):
         if len(graph) == 0:
-            return graph
+            return {}, []
         if not isinstance(graph[0], tuple) or len(graph[0]) != 3:
             raise TypeError(
                 "If the provided graph is a list, it must be a list of tuples with 3 "
