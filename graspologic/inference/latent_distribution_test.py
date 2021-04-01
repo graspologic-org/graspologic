@@ -434,9 +434,6 @@ def _sample_modified_ase(X, Y, workers, pooled=False):
     # increase the variance of X by sampling from the asy dist
     X_sampled = np.zeros(X.shape)
     seeds = np.random.randint(1e8, size=X.shape)
-    # TODO may be parallelized, but requires keeping track of random state
-    # for i in range(N):
-    #    X_sampled[i, :] = X[i, :] + stats.multivariate_normal.rvs(cov=X_sigmas[i])
     for seed in seeds:
         X_sampled = np.asarray(
             Parallel(n_jobs=workers)(
