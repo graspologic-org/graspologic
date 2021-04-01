@@ -264,7 +264,7 @@ def heatmap(
             msg = "xticklabels must have same length {}.".format(X.shape[1])
             raise ValueError(msg)
 
-    elif not isinstance(xticklabels, [bool, int]):
+    elif not isinstance(xticklabels, (bool, int)):
         msg = "xticklabels must be a bool, int, or a list, not {}".format(
             type(xticklabels)
         )
@@ -274,7 +274,7 @@ def heatmap(
         if len(yticklabels) != X.shape[0]:
             msg = "yticklabels must have same length {}.".format(X.shape[0])
             raise ValueError(msg)
-    elif not isinstance(yticklabels, [bool, int]):
+    elif not isinstance(yticklabels, (bool, int)):
         msg = "yticklabels must be a bool, int, or a list, not {}".format(
             type(yticklabels)
         )
@@ -351,7 +351,9 @@ def heatmap(
     return plot
 
 
-def binary_heatmap(X, colors=["white", "black"], colorbar_ticklabels=["No Edge", "Edge"], **kwargs):
+def binary_heatmap(
+    X, colors=["white", "black"], colorbar_ticklabels=["No Edge", "Edge"], **kwargs
+):
     """
     Plots an unweighted graph as a black-and-white matrix
     with a binary colorbar.
