@@ -378,10 +378,6 @@ def _quadratic_assignment_faq(
     # ValueError check
     A, B, partial_match = _common_input_validation(A, B, partial_match)
 
-    if S is None:
-        S = np.zeros(A.shape)
-    S = np.atleast_2d(S)
-
     msg = None
     if isinstance(P0, str) and P0 not in {"barycenter", "randomized"}:
         msg = "Invalid 'P0' parameter string"

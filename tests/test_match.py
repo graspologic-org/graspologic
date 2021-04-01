@@ -77,6 +77,14 @@ class TestGMP:
                 np.arange(2),
                 np.random.random((3, 3)),
             )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((3, 3)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((4, 4)),
+            )
 
     def _get_AB(self):
         # adjacency matrices from QAPLIB instance chr12c
@@ -160,7 +168,7 @@ class TestGMP:
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
 
     def test_sim(self):
-        n = 150
+        n = 75
         rho = 0.9
         n_per_block = int(n / 3)
         n_blocks = 3
@@ -181,3 +189,11 @@ class TestGMP:
         res = self.barygm.fit(A1, A2, S=S)
 
         assert 0.7 <= (sum(res.perm_inds_ == np.arange(n)) / n)
+
+        A1 = A1[:-1, :-1]
+        xh1 = xh1[:-1, :]
+        S = xh1 @ x2.T
+
+        res = self.barygm.fit(A1, A2, S=S)
+
+        assert 0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n)

@@ -71,6 +71,17 @@ class GraphMatch(BaseEstimator):
 
         "naive" : matches `A` to the best fitting subgraph of `B`.
 
+    random_state : {None, int, `~np.random.RandomState`, `~np.random.Generator`}
+        This parameter defines the object to use for drawing random
+        variates.
+        If `random_state` is ``None`` the `~np.random.RandomState` singleton is
+        used.
+        If `random_state` is an int, a new ``RandomState`` instance is used,
+        seeded with `random_state`.
+        If `random_state` is already a ``RandomState`` or ``Generator``
+        instance, then that object is used.
+        Default is None.
+
     Attributes
     ----------
 
@@ -111,6 +122,7 @@ class GraphMatch(BaseEstimator):
         eps=0.03,
         gmp=True,
         padding="adopted",
+        random_state=None,
     ):
         if type(n_init) is int and n_init > 0:
             self.n_init = n_init
@@ -159,8 +171,9 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
+        self.random_state = random_state
 
-    def fit(self, A, B, seeds_A=[], seeds_B=[], S=None, rng=None):
+    def fit(self, A, B, seeds_A=[], seeds_B=[], S=None):
         """
         Fits the model with two assigned adjacency matrices
 
@@ -180,9 +193,10 @@ class GraphMatch(BaseEstimator):
             ``seeds_A`` and ``seeds_B`` are vertices which are known to be matched, that is,
             ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
         S : 2d-array, square
-            A square similarity matrix. Should be same shape as ``A`` and ``B``.
+            A square similarity matrix. Should be shape (n_A , n_B), the number of nodes in
+            ``A`` and ``B``, respectively.
 
-            Note: the scale of `S` may effect the weight placed on the term
+            Note: the scale of ``S`` affect the weight placed on the term
             :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)`
             during the optimization process.
 
@@ -196,15 +210,27 @@ class GraphMatch(BaseEstimator):
         seeds_B = column_or_1d(seeds_B)
         partial_match = np.column_stack((seeds_A, seeds_B))
 
+        if S is None:
+            S = np.zeros((A.shape[0], B.shape[1]))
+        S = np.atleast_2d(S)
+
+        msg = None
+        if S.ndim != 2:
+            msg = "`S` must have exactly two dimensions"
+        elif A.shape[0] != S.shape[0] or B.shape[0] != S.shape[1]:
+            msg = "`S` must be of shape (n_A, n_B)"
+        if msg is not None:
+            raise ValueError(msg)
+
         # pads A and B according to section 2.5 of [2]
         if A.shape[0] != B.shape[0]:
-            A, B = _adj_pad(A, B, self.padding)
+            A, B, S = _adj_pad(A, B, S, self.padding)
 
         options = {
             "maximize": self.gmp,
             "partial_match": partial_match,
             "S": S,
-            "rng": rng,
+            "rng": self.random_state,
             "P0": self.init,
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
@@ -243,7 +269,8 @@ class GraphMatch(BaseEstimator):
             ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
 
         S : 2d-array, square
-            A square similarity matrix. Should be same shape as ``A`` and ``B``.
+            A square similarity matrix. Should be shape (n_A , n_B), the number of nodes in
+            ``A`` and ``B``, respectively.
 
             Note: the scale of `S` may effect the weight placed on the term
             :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)`
@@ -258,7 +285,7 @@ class GraphMatch(BaseEstimator):
         return self.perm_inds_
 
 
-def _adj_pad(A, B, method):
+def _adj_pad(A, B, S, method):
     def pad(X, n):
         X_pad = np.zeros((n[1], n[1]))
         X_pad[: n[0], : n[0]] = X
@@ -271,9 +298,12 @@ def _adj_pad(A, B, method):
         A = 2 * A - np.ones((A_n, A_n))
         B = 2 * B - np.ones((B_n, B_n))
 
+    S_pad = np.zeros((n[1], n[1]))
+    S_pad[:A_n, :B_n] = S
+
     if A.shape[0] == n[0]:
         A = pad(A, n)
     else:
         B = pad(B, n)
 
-    return A, B
+    return A, B, S_pad
