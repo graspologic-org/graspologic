@@ -2,12 +2,9 @@
 # Licensed under the MIT License.
 
 import numpy as np
-import math
-from scipy.optimize import linear_sum_assignment
-from scipy.optimize import minimize_scalar
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_array
-from sklearn.utils import column_or_1d
+from sklearn.utils import check_array, column_or_1d
+
 from .qap import quadratic_assignment
 
 
@@ -29,21 +26,26 @@ class GraphMatch(BaseEstimator):
 
     n_init : int, positive (default = 1)
         Number of random initializations of the starting permutation matrix that
-        the FAQ algorithm will undergo. ``n_init`` automatically set to 1 if
-        ``init_method`` = 'barycenter'
+        the FAQ algorithm will undergo.
 
     init : string (default = 'barycenter') or 2d-array
-        The initial position chosen
-
-        If 2d-array, `init` must be :math:`m' x m'`, where :math:`m' = n - m`,
-        and it must be doubly stochastic: each of its rows and columns must
-        sum to 1.
+        The initial position chosen.
 
         "barycenter" : the non-informative “flat doubly stochastic matrix,”
-        :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region
+        :math:`J=1 \\times 1^T /n` , i.e the barycenter of the feasible region. This can
+        be thought of as the doubly stochastic matrix from which any permutation is
+        equally likely.
 
         "rand" : some random point near :math:`J, (J+K)/2`, where K is some random
-        doubly stochastic matrix
+        doubly stochastic matrix.
+
+        If 2d-array, ``init`` must be :math:`m' x m'`, where :math:`m'` is the number of
+        nonseeded vertices of ``B``. This initial position repesents a permutation or
+        assignment of the nonseeded vertices of ``B``, and thus must be doubly
+        stochastic (all of its rows and columns must sum to 1). Note that if using
+        seeds, this permutation/assignment is taken with respect to the nonseeded
+        vertices in the order in which they were input, even when
+        ``shuffle_input = True``.
 
     max_iter : int, positive (default = 30)
         Integer specifying the max number of Franke-Wolfe iterations.
@@ -59,7 +61,7 @@ class GraphMatch(BaseEstimator):
 
     gmp : bool (default = True)
         Gives users the option to solve QAP rather than the Graph Matching Problem
-        (GMP). This is accomplished through trivial negation of the objective function.
+        (GMP). This is accomplished through a negation of the objective function.
 
     padding : string (default = 'adopted')
         Allows user to specify padding scheme if `A` and `B` are not of equal size.
@@ -117,19 +119,14 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"n_init" must be a positive integer'
             raise TypeError(msg)
-        if type(n_init) is int and n_init > 0:
-            self.n_init = n_init
-        else:
-            msg = '"n_init" must be a positive integer'
-            raise TypeError(msg)
-        if init == "rand":
+        if isinstance(init, np.ndarray):
+            self.init = init
+        elif init == "rand":
             self.init = "randomized"
         elif init == "barycenter":
             self.init = "barycenter"
-        elif not isinstance(init, str):
-            self.init = init
         else:
-            msg = 'Invalid "init_method" parameter string'
+            msg = 'Invalid "init" parameter string'
             raise ValueError(msg)
         if max_iter > 0 and type(max_iter) is int:
             self.max_iter = max_iter
