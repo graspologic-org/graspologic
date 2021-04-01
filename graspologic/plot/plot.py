@@ -351,7 +351,7 @@ def heatmap(
     return plot
 
 
-def binary_heatmap(X, colors=["white", "black"], **kwargs):
+def binary_heatmap(X, colors=["white", "black"], colorbar_ticklabels=["No Edge", "Edge"], **kwargs):
     """
     Plots an unweighted graph as a black-and-white matrix
     with a binary colorbar.
