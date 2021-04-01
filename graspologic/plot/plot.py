@@ -264,11 +264,21 @@ def heatmap(
             msg = "xticklabels must have same length {}.".format(X.shape[1])
             raise ValueError(msg)
 
+    elif not isinstance(xticklabels, [bool, int]):
+        msg = "xticklabels must be a bool, int, or a list, not {}".format(
+            type(xticklabels)
+        )
+        raise TypeError(msg)
+
     if isinstance(yticklabels, list):
         if len(yticklabels) != X.shape[0]:
             msg = "yticklabels must have same length {}.".format(X.shape[0])
             raise ValueError(msg)
-
+    elif not isinstance(yticklabels, [bool, int]):
+        msg = "yticklabels must be a bool, int, or a list, not {}".format(
+            type(yticklabels)
+        )
+        raise TypeError(msg)
     # Handle cmap
     if not isinstance(cmap, (str, list, Colormap)):
         msg = "cmap must be a string, list of colors, or matplotlib.colors.Colormap,"
