@@ -8,7 +8,6 @@
 [![DOI](https://zenodo.org/badge/147768493.svg)](https://zenodo.org/badge/latestdoi/147768493)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 ## `graspologic` is a package for graph statistical algorithms.
 
 - [Overview](#overview)
