@@ -23,14 +23,15 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             - float: Use a particular alpha-value.
 
     embedding_alg : str, default = "assortative"
-        Embedding algorithm to use:
-        - "assortative": Embed ``L + a*X@X.T``. Better for assortative graphs.
-        - "non-assortative": Embed ``L@L + a*X@X.T``. Better for non-assortative graphs.
+        Embedding algorithm to use (with L the regularized Laplacian, and Y the
+        covariate matrix:
+        - "assortative": Embed ``L + a*Y@Y.T``. Better for assortative graphs.
+        - "non-assortative": Embed ``L@L + a*Y@Y.T``. Better for non-assortative graphs.
 
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        n_components must be <= min(X.shape). Otherwise, n_components must be
-        < min(X.shape). If None, then optimal dimensions will be chosen by
+        n_components must be <= min(Y.shape). Otherwise, n_components must be
+        < min(Y.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
@@ -83,13 +84,12 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         Fit a CASE model to an input graph, along with its covariates. Depending on the
         embedding algorithm, we embed
 
-        .. math:: L_ = LL + \alpha XX^T
-        .. math:: L_ = L + \alpha XX^T
-        .. math:: L_ = LX
+        .. math:: L_ = LL + \alpha YY^T
+        .. math:: L_ = L + \alpha YY^T
 
         where :math:`\alpha` is a tuning parameter which makes the leading eigenvalues
         of the two summands the same. Here, :math:`L` is the regularized
-        graph Laplacian, and :math:`X` is a matrix of covariates for each node.
+        graph Laplacian, and :math:`Y` is a matrix of covariates for each node.
 
         Parameters
         ----------
@@ -115,23 +115,25 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             raise ValueError("Fit an undirected graph")
 
         # scale covariates to unit norm
-        covariates = normalize(covariates, axis=0)
 
         # save necessary params
         L = to_laplacian(A, form="R-DAD")
-        X = covariates.copy()
+        Y = covariates.copy()
+        if Y.ndim == 1:
+            Y = Y[:, np.newaxis]
+        Y = normalize(Y, axis=0)
 
         # change params based on tuning algorithm
         if self.embedding_alg == "assortative":
             LL = L.copy()
-            XXt = X @ X.T
+            YYt = Y @ Y.T
         elif self.embedding_alg == "non-assortative":
             LL = L @ L
-            XXt = X @ X.T
+            YYt = Y @ Y.T
 
         # Get weight and create embedding matrix
-        self._get_tuning_parameter(LL, XXt)
-        L_ = (LL + self.alpha_ * (XXt)).astype(float)
+        self._get_tuning_parameter(LL, YYt)
+        L_ = (LL + self.alpha_ * (YYt)).astype(float)
 
         # Dimensionality reduction with SVD
         self._reduce_dim(L_)
@@ -139,22 +141,22 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self.is_fitted_ = True
         return self
 
-    def _get_tuning_parameter(self, LL, XXt):
+    def _get_tuning_parameter(self, LL, YYt):
         """
-        Find the alpha which causes the leading eigenspace of LL and XXt to be the same.
+        Find the alpha which causes the leading eigenspace of LL and YYt to be the same.
 
         Parameters
         ----------
         LL : array
             The regularized graph Laplacian (assortative)
             The squared regularized graph Laplacian (non-assortative)
-        XXt : array
-            X@X.T, where X is the covariate matrix.
+        YYt : array
+            Y@Y.T, where Y is the covariate matrix.
 
         Returns
         -------
         alpha : float
-            Tuning parameter which normalizes the leading eigenspace of LL and XXt.
+            Tuning parameter which normalizes the leading eigenspace of LL and YYt.
         """
         # setup
         if self.alpha is not None:
@@ -163,10 +165,10 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         # calculate bounds
         (L_top,) = eigsh(LL, return_eigenvectors=False, k=1)
-        (X_top,) = eigsh(XXt, return_eigenvectors=False, k=1)
+        (Y_top,) = eigsh(YYt, return_eigenvectors=False, k=1)
 
         # just use the ratio of the leading eigenvalues for the
         # tuning parameter, or the closest value in its possible range.
-        self.alpha_ = np.float(L_top / X_top)
+        self.alpha_ = np.float(L_top / Y_top)
 
         return self
