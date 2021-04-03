@@ -123,6 +123,8 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         graph, covariates = network
         A = import_graph(graph)
+        if A.shape[0] != A.shape[1]:
+            raise ValueError("Graph should be square")
         if not is_almost_symmetric(A):
             raise ValueError("Fit an undirected graph")
 
