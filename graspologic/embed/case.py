@@ -71,15 +71,15 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             raise ValueError(msg)
         self.embedding_alg = embedding_alg
 
-        if not ((alpha is None) or isinstance(alpha, float)):
-            msg = "alpha must be in {None, float}."
+        if not ((alpha is None) or isinstance(alpha, (float, int))):
+            msg = "alpha must be in {None, float, int}."
             raise TypeError(msg)
 
         self.alpha = alpha
         self.latent_right_ = None
         self.is_fitted_ = False
 
-    def fit(self, graph, covariates, y=None, labels=None):
+    def fit(self, network, y=None):
         """
         Fit a CASE model to an input graph, along with its covariates. Depending on the
         embedding algorithm, we embed
@@ -93,13 +93,17 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        graph : array-like or networkx.Graph
-            Input graph to embed. See graspologic.utils.import_graph
+        network : tuple or list of np.ndarrays
+            Contains the tuple (A, Y), where A is an adjacency matrix and Y is the
+            matrix of covariates.
 
-        covariates : array-like, shape (n_vertices, n_covariates)
-            Covariate matrix. Each node of the graph is associated with a set of
-            `d` covariates. Row `i` of the covariates matrix corresponds to node
-            `i`, and the number of columns are the number of covariates.
+            A : array-like or networkx.Graph
+                Input graph to embed. See graspologic.utils.import_graph
+
+            Y : array-like, shape (n_vertices, n_covariates)
+                Covariate matrix. Each node of the graph is associated with a set of
+                `d` covariates. Row `i` of the covariates matrix corresponds to node
+                `i`, and the number of columns are the number of covariates.
 
         y: Ignored
 
@@ -110,13 +114,19 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         """
 
         # setup
+        if not isinstance(network, (tuple, list)):
+            msg = "Network should be a tuple-like object of (graph, covariates)."
+            raise TypeError(msg)
+        if len(network) != 2:
+            msg = "Network should be a tuple-like object of (graph, covariates)."
+            raise ValueError(msg)
+
+        graph, covariates = network
         A = import_graph(graph)
         if not is_almost_symmetric(A):
             raise ValueError("Fit an undirected graph")
 
-        # scale covariates to unit norm
-
-        # save necessary params
+        # Create regularized Laplacian, scale covariates to unit norm
         L = to_laplacian(A, form="R-DAD")
         Y = covariates.copy()
         if Y.ndim == 1:
