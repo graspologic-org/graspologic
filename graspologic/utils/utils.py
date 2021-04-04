@@ -457,8 +457,8 @@ def is_fully_connected(graph):
         else:
             directed = False
 
-        n_components, labels = connected_components(
-            csgraph=graph, directed=directed, connection="weak", return_labels=True
+        n_components = connected_components(
+            csgraph=graph, directed=directed, connection="weak", return_labels=False
         )
         return n_components == 1
 
