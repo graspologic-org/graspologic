@@ -448,4 +448,3 @@ def _sample_modified_ase(X, Y, workers, pooled=False):
 def add_variance(X_orig, X_sigma, seed):
     np.random.seed(seed)
     return X_orig + stats.multivariate_normal.rvs(cov=X_sigma)
-
