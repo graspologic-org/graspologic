@@ -63,7 +63,7 @@ def X(request, M):
 def case(request, M, X):
     A, _ = M
     case = CASE(n_components=2, embedding_alg=request.param)
-    case.fit(A, covariates=X)
+    case.fit((A, X))
     return case
 
 
@@ -83,7 +83,7 @@ def test_custom_alpha(M, X, alg):
     A, _ = M
     a = 0.1
     case = CASE(n_components=2, embedding_alg=alg, alpha=a)
-    latents = case.fit_transform(A, covariates=X)
+    latents = case.fit_transform((A, X))
     # just check to make sure we can run with custom alpha
 
     if case.alpha_ == 0.1:
@@ -110,16 +110,16 @@ def test_wrong_inputs(A, X):
 
     with pytest.raises(ValueError):
         A_ = np.arange(30).reshape(10, 3)
-        CASE().fit(A_, X)
+        CASE().fit((A_, X))
 
 
 def test_fit_transform(A, X):
     case = CASE(n_components=2)
     directed = not is_almost_symmetric(A)
     if directed:
-        assert case.fit_transform(A, covariates=X)[0].any()
+        assert case.fit_transform((A, X))[0].any()
     else:
-        assert case.fit_transform(A, covariates=X).any()
+        assert case.fit_transform((A, X)).any()
 
 
 def test_labels_match_clustering(case, labels):
