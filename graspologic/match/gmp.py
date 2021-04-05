@@ -194,7 +194,7 @@ class GraphMatch(BaseEstimator):
             A similarity matrix. Should be shape (n_A , n_B), the number of nodes in
             ``A`` and ``B``, respectively.
 
-            Note: the scale of ``S`` affect the weight placed on the term
+            Note: the scale of ``S`` affects the weight placed on the term
             :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)`
             during the optimization process.
 
@@ -270,7 +270,7 @@ class GraphMatch(BaseEstimator):
             A similarity matrix. Should be shape (n_A , n_B), the number of nodes in
             ``A`` and ``B``, respectively.
 
-            Note: the scale of `S` may effect the weight placed on the term
+            Note: the scale of `S` affects the weight placed on the term
             :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)`
             during the optimization process.
 

@@ -208,7 +208,7 @@ class TestGMP:
         assert gm.score_ == 11156
 
     def test_sim(self):
-        n = 75
+        n = 90
         rho = 0.9
         n_per_block = int(n / 3)
         n_blocks = 3
