@@ -129,19 +129,14 @@ class GraphMatch(BaseEstimator):
         else:
             msg = '"n_init" must be a positive integer'
             raise TypeError(msg)
-        if type(n_init) is int and n_init > 0:
-            self.n_init = n_init
-        else:
-            msg = '"n_init" must be a positive integer'
-            raise TypeError(msg)
-        if isinstance(init, str) and init == "rand":
-            self.init = "randomized"
-        elif isinstance(init, str) and init == "barycenter":
-            self.init = "barycenter"
-        elif not isinstance(init, str):
+        if isinstance(init, np.ndarray):
             self.init = init
+        elif init == "rand":
+            self.init = "randomized"
+        elif init == "barycenter":
+            self.init = "barycenter"
         else:
-            msg = 'Invalid "init_method" parameter string'
+            msg = 'Invalid "init" parameter string'
             raise ValueError(msg)
         if max_iter > 0 and type(max_iter) is int:
             self.max_iter = max_iter
