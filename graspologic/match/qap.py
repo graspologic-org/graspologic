@@ -279,7 +279,7 @@ def _quadratic_assignment_faq(
         ``partial_match`` is an array of size ``(m , 2)``, where ``m`` is
         not greater than the number of nodes, :math:`n`.
     S : 2d-array, square
-        A square similarity matrix. Should be same shape as ``A`` and ``B``.   
+        A similarity matrix. Should be same shape as ``A`` and ``B``.   
         Note: the scale of `S` may effect the weight placed on the term 
         :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)` 
         during the optimization process.
