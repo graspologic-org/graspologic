@@ -267,7 +267,7 @@ class GraphMatch(BaseEstimator):
             ``seeds_A[i]`` is matched to vertex ``seeds_B[i]``.
 
         S : 2d-array, square
-            A square similarity matrix. Should be shape (n_A , n_B), the number of nodes in
+            A similarity matrix. Should be shape (n_A , n_B), the number of nodes in
             ``A`` and ``B``, respectively.
 
             Note: the scale of `S` may effect the weight placed on the term
