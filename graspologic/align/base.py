@@ -23,7 +23,7 @@ class BaseAlign(BaseEstimator):
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def _check_datasets(self, X: np.ndarray, Y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
@@ -99,7 +99,8 @@ class BaseAlign(BaseEstimator):
                 f"while vectors in fit had {self.Q_.shape[0]} dimensions."
             )
             raise ValueError(msg)
-        return X @ self.Q_
+        result: np.ndarray = X @ self.Q_
+        return result
 
     def fit_transform(self, X: np.ndarray, Y: np.ndarray) -> np.ndarray:
         """

@@ -50,21 +50,23 @@ class SignFlips(BaseAlign):
 
         self.criterion = criterion
 
-    def set_criterion_function(self):
+    def set_criterion_function(self) -> None:
         # perform a check, in case it was modified directly
         if self.criterion not in ["median", "max"]:
             raise ValueError(f"{self.criterion} is not a valid criterion")
 
         if self.criterion == "median":
 
-            def median_criterion(X):
-                return np.median(X, axis=0)
+            def median_criterion(X: np.ndarray) -> np.ndarray:
+                result: np.ndarray = np.median(X, axis=0)
+                return result
 
             self.criterion_function_ = median_criterion
         if self.criterion == "max":
 
-            def max_criterion(X):
-                return X[np.argmax(np.abs(X), axis=0), np.arange(X.shape[1])]
+            def max_criterion(X: np.ndarray) -> np.ndarray:
+                result: np.ndarray = X[np.argmax(np.abs(X), axis=0), np.arange(X.shape[1])]
+                return result
 
             self.criterion_function_ = max_criterion
 

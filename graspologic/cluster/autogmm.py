@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -381,7 +381,7 @@ class AutoGMMCluster(BaseCluster):
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
 
-    def _fit_cluster(self, X, X_subset, y, params, agg_clustering):
+    def _fit_cluster(self, X, X_subset, y, params, agg_clustering) -> Dict[str, Any]:
         label_init = self.label_init
         if label_init is not None:
             onehot = _labels_to_onehot(label_init)
