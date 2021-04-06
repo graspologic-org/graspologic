@@ -277,7 +277,7 @@ class SeedlessProcrustes(BaseAlign):
             b=probability_mass_Y,
             M=cost_matrix,
             reg=self.optimal_transport_lambda,
-            numItermax=self.optimal_transport_eps,
+            numItermax=self.optimal_transport_num_reps,
             stopThr=self.optimal_transport_eps,
         )
         return P
