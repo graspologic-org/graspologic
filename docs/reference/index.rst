@@ -65,6 +65,7 @@ graspologic is a graph statistics package in python.
    Tutorials <https://microsoft.github.io/graspologic/tutorials/index.html>
    cli
    contributing
+   in-the-wild
    release
    license
 
