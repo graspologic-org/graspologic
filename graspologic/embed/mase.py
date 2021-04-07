@@ -7,6 +7,7 @@ from sklearn.utils.validation import check_is_fitted
 from ..utils import import_graph, is_almost_symmetric
 from .base import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
+from joblib import Parallel, delayed
 
 
 class MultipleASE(BaseEmbedMulti):
@@ -134,13 +135,17 @@ class MultipleASE(BaseEmbedMulti):
 
         # embed individual graphs
         embeddings = [
-            selectSVD(
-                graph,
-                n_components=n_components,
-                algorithm=self.algorithm,
-                n_iter=self.n_iter,
+            Parallel(n_jobs=2)(
+                delayed(
+                    selectSVD(
+                        graph,
+                        n_components=n_components,
+                        algorithm=self.algorithm,
+                        n_iter=self.n_iter,
+                    )
+                    for graph in graphs
+                )
             )
-            for graph in graphs
         ]
         Us, Ds, Vs = zip(*embeddings)
 
