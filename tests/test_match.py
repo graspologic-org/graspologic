@@ -6,7 +6,9 @@ import numpy as np
 import math
 import random
 from graspologic.match import GraphMatch as GMP
-from graspologic.simulations import er_np
+from graspologic.simulations import er_np, sbm_corr
+from graspologic.embed import AdjacencySpectralEmbed
+from graspologic.align import SignFlips
 
 np.random.seed(0)
 
@@ -58,6 +60,30 @@ class TestGMP:
         with pytest.raises(ValueError):
             GMP().fit(
                 np.identity(3), np.identity(3), -1 * np.arange(2), -1 * np.arange(2)
+            )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((4, 4)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((3, 4)),
+            )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((4, 4)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((3, 3)),
+            )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((3, 3)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((4, 4)),
             )
 
     def _get_AB(self):
@@ -140,3 +166,74 @@ class TestGMP:
         res = gmp_adopted.fit(G1, G2)
 
         assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
+
+    def test_custom_init(self):
+        A, B = self._get_AB()
+        n = len(A)
+        pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
+        custom_init = np.eye(n)
+        custom_init = custom_init[pi]
+
+        gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
+        gm.fit(A, B)
+
+        assert (gm.perm_inds_ == pi).all()
+        assert gm.score_ == 11156
+        # we had thought about doing the test
+        # `assert gm.n_iter_ == 1`
+        # but note that GM doesn't necessarily converge in 1 iteration here
+        # this is because when we start from the optimal permutation matrix, we do
+        # not start from the optimal over our convex relaxation (the doubly stochastics)
+        # but we do indeed recover the correct permutation after a small number of
+        # iterations
+
+    def test_custom_init_seeds(self):
+        A, B = self._get_AB()
+        n = len(A)
+        pi_original = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - 1
+        pi = np.array([5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - 1
+
+        pi[pi > 6] -= 1
+
+        # use seed 0 in A to 7 in B
+        seeds_A = [0]
+        seeds_B = [6]
+        custom_init = np.eye(n - 1)
+        custom_init = custom_init[pi]
+
+        gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
+        gm.fit(A, B, seeds_A=seeds_A, seeds_B=seeds_B)
+
+        assert (gm.perm_inds_ == pi_original).all()
+        assert gm.score_ == 11156
+
+    def test_sim(self):
+        n = 90
+        rho = 0.9
+        n_per_block = int(n / 3)
+        n_blocks = 3
+        block_members = np.array(n_blocks * [n_per_block])
+        block_probs = np.array(
+            [[0.2, 0.01, 0.01], [0.01, 0.1, 0.01], [0.01, 0.01, 0.2]]
+        )
+        directed = False
+        loops = False
+        A1, A2 = sbm_corr(
+            block_members, block_probs, rho, directed=directed, loops=loops
+        )
+        ase = AdjacencySpectralEmbed(n_components=3, algorithm="truncated")
+        x1 = ase.fit_transform(A1)
+        x2 = ase.fit_transform(A2)
+        xh1 = SignFlips().fit_transform(x1, x2)
+        S = xh1 @ x2.T
+        res = self.barygm.fit(A1, A2, S=S)
+
+        assert 0.7 <= (sum(res.perm_inds_ == np.arange(n)) / n)
+
+        A1 = A1[:-1, :-1]
+        xh1 = xh1[:-1, :]
+        S = xh1 @ x2.T
+
+        res = self.barygm.fit(A1, A2, S=S)
+
+        assert 0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n)
