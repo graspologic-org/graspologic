@@ -719,8 +719,12 @@ def _process_paramgrid(paramgrid, run_multiple_init, n_init):
                 and ag_params["affinity"] == "none"
                 and run_multiple_init
             ):
-                gm_params_processed.append(gm_params.copy())
-                gm_params_processed[-1].update({"n_init": n_init})
+                for n in range(n_init):
+                    gm_params_processed.append(gm_params.copy())
+                    gm_params_processed[-1].update({"n_init": 1})
+                    if params["random_state"]:
+                        gm_params_processed[-1].update({"random_state": params["random_state"]+n}) #need to change random state accross runs otherwise always find the same model for each new initialization
+                    #gm_params_processed[-1].update({"n_init": 3, "random_state": None})
 
             paramgrid_processed.append([ag_params, gm_params])
     [
