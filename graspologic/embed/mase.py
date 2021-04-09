@@ -135,15 +135,15 @@ class MultipleASE(BaseEmbedMulti):
 
         # embed individual graphs
         embeddings = [
-                delayed(
-                    selectSVD(
-                        graph,
-                        n_components=n_components,
-                        algorithm=self.algorithm,
-                        n_iter=self.n_iter,
-                    )
-                    for graph in graphs
+            delayed(
+                selectSVD(
+                    graph,
+                    n_components=n_components,
+                    algorithm=self.algorithm,
+                    n_iter=self.n_iter,
                 )
+                for graph in graphs
+            )
         ]
         Us, Ds, Vs = zip(*embeddings)
 
