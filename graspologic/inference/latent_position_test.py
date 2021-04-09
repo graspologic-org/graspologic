@@ -1,20 +1,28 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from collections import namedtuple
+
 import numpy as np
+from joblib import Parallel, delayed
 from scipy.linalg import orthogonal_procrustes
 
 from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
 from ..simulations import rdpg
 from ..utils import import_graph, is_symmetric
-from collections import namedtuple
 
 lpt_result = namedtuple("lpt_result", ("p_value", "sample_T_statistic", "misc_stats"))
 
 
 def latent_position_test(
-    A1, A2, embedding="ase", n_components=None, test_case="rotation", n_bootstraps=500
+    A1,
+    A2,
+    embedding="ase",
+    n_components=None,
+    test_case="rotation",
+    n_bootstraps=500,
+    workers=1,
 ):
     r"""
     Two-sample hypothesis test for the problem of determining whether two random
@@ -67,6 +75,10 @@ def latent_position_test(
 
     n_bootstraps : int, optional (default 500)
         Number of bootstrap simulations to run to generate the null distribution
+
+    workers : int (default=1)
+        Number of workers to use. If more than 1, parallelizes the bootstrap simulations.
+        Supply -1 to use all cores available.
 
     Returns
     ----------
@@ -121,6 +133,10 @@ def latent_position_test(
             "test_case must be one of 'rotation', 'scalar-rotation',"
             + "'diagonal-rotation'"
         )
+    # check workers argument
+    if not isinstance(workers, int):
+        msg = "workers must be an int, not {}".format(type(workers))
+        raise TypeError(msg)
 
     A1 = import_graph(A1)
     A2 = import_graph(A2)
@@ -135,12 +151,19 @@ def latent_position_test(
         n_components = max(num_dims1, num_dims2)
     X_hats = _embed(A1, A2, embedding, n_components)
     sample_T_statistic = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
-    null_distribution_1 = _bootstrap(
-        X_hats[0], embedding, n_components, n_bootstraps, test_case
+
+    # Compute null distributions
+    null_distribution_1 = Parallel(n_jobs=workers)(
+        delayed(_bootstrap)(X_hats[0], embedding, n_components, n_bootstraps, test_case)
+        for _ in range(n_bootstraps)
     )
-    null_distribution_2 = _bootstrap(
-        X_hats[1], embedding, n_components, n_bootstraps, test_case
+    null_distribution_1 = np.array(null_distribution_1)
+
+    null_distribution_2 = Parallel(n_jobs=workers)(
+        delayed(_bootstrap)(X_hats[1], embedding, n_components, n_bootstraps, test_case)
+        for _ in range(n_bootstraps)
     )
+    null_distribution_2 = np.array(null_distribution_2)
 
     # using exact mc p-values (see, for example, Phipson and Smyth, 2010)
     p_value_1 = (
@@ -165,16 +188,14 @@ def latent_position_test(
 def _bootstrap(
     X_hat, embedding, n_components, n_bootstraps, test_case, rescale=False, loops=False
 ):
-    t_bootstrap = np.zeros(n_bootstraps)
-    for i in range(n_bootstraps):
-        A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
-        A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
-        X1_hat_simulated, X2_hat_simulated = _embed(
-            A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
-        )
-        t_bootstrap[i] = _difference_norm(
-            X1_hat_simulated, X2_hat_simulated, embedding, test_case
-        )
+    A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+    A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+    X1_hat_simulated, X2_hat_simulated = _embed(
+        A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
+    )
+    t_bootstrap = _difference_norm(
+        X1_hat_simulated, X2_hat_simulated, embedding, test_case
+    )
     return t_bootstrap
 
 
