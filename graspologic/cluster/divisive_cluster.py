@@ -10,6 +10,7 @@ from sklearn.utils.validation import check_is_fitted
 from anytree import NodeMixin, LevelOrderIter
 
 from .autogmm import AutoGMMCluster
+from .gclust import GaussianCluster
 from .kclust import KMeansCluster
 
 
@@ -202,14 +203,34 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
             min_components = 1
 
         if self.cluster_method == "gmm":
-            cluster = AutoGMMCluster(
+            agmm = AutoGMMCluster(
                 min_components=min_components,
                 max_components=self.max_components,
-                **self.cluster_kws
+                max_agglom_size=None,
+                **self.cluster_kws,
             )
-            cluster.fit(X)
-            model = cluster.model_
+            agmm.fit(X)
+            # agmm_bic = agmm.criter_
+            # gclust = GaussianCluster(
+            #     min_components=min_components,
+            #     max_components=self.max_components,
+            #     n_init=25,
+            #     **self.cluster_kws,
+            # )
+            # gclust.fit(X)
+            # gclust_bic = gclust.bic_.loc[gclust.n_components_, gclust.covariance_type_]
+            # if gclust_bic < agmm_bic:
+            #     print("Gclust won")
+            #     cluster = gclust
+            #     criter = gclust_bic
+            # else:
+            #     print("Autogmm won")
+            #     cluster = agmm
+            #     criter = cluster.criter_
+
+            cluster = agmm
             criter = cluster.criter_
+            model = cluster.model_
             k = cluster.n_components_
             pred = cluster.predict(X)
 
