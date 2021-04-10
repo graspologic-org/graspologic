@@ -4,6 +4,7 @@
 from abc import abstractmethod
 
 import numpy as np
+from scipy.sparse.linalg import LinearOperator
 from sklearn.base import BaseEstimator
 from sklearn import preprocessing
 
@@ -100,12 +101,14 @@ class BaseSpectralEmbed(BaseEstimator):
             n_iter=self.n_iter,
         )
 
-        square = A.shape[0] == A.shape[1]
         self.n_components_ = D.size
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
-        if square and not is_almost_symmetric(A):
-            self.latent_right_ = V.T @ np.diag(np.sqrt(D))
+        if not isinstance(A, LinearOperator):
+            # don't know a good way to check symmetry on LinearOperators without losing
+            # the majority of the speed increase we gain from them
+            if not is_almost_symmetric(A):
+                self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
 
