@@ -42,6 +42,8 @@ class TestLatentPositionTest(unittest.TestCase):
             latent_position_test(A1, A2, embedding=6)
         with pytest.raises(TypeError):
             latent_position_test(A1, A2, test_case=6)
+        with pytest.raises(TypeError):
+            latent_position_test(A1, A2, workers="oops")
 
     def test_n_bootstraps(self):
         np.random.seed(1234556)
@@ -113,8 +115,19 @@ class TestLatentPositionTest(unittest.TestCase):
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
 
+        # non parallel test
         lpt_null = latent_position_test(A1, A2, n_components=2, n_bootstraps=100)
         lpt_alt = latent_position_test(A1, A3, n_components=2, n_bootstraps=100)
+        self.assertTrue(lpt_null[0] > 0.05)
+        self.assertTrue(lpt_alt[0] <= 0.05)
+
+        # parallel test
+        lpt_null = latent_position_test(
+            A1, A2, n_components=2, n_bootstraps=100, workers=-1
+        )
+        lpt_alt = latent_position_test(
+            A1, A3, n_components=2, n_bootstraps=100, workers=-1
+        )
         self.assertTrue(lpt_null[0] > 0.05)
         self.assertTrue(lpt_alt[0] <= 0.05)
 
