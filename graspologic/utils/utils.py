@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from collections import Iterable
+from collections.abc import Iterable
 from functools import reduce
 from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
