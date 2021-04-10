@@ -40,23 +40,34 @@ def test_outputs():
 
     n_components = 3
 
+    # Full SVD
     U_full, D_full, V_full = selectSVD(A, n_components=n_components, algorithm="full")
     X_full = U_full @ np.diag(np.sqrt(D_full))
     _, _, norm_full = procrustes(X, X_full)
 
+    # Truncated SVD
     U_trunc, D_trunc, V_trunc = selectSVD(
         A, n_components=n_components, algorithm="truncated"
     )
     X_trunc = U_trunc @ np.diag(np.sqrt(D_trunc))
     _, _, norm_trunc = procrustes(X, X_trunc)
 
+    # Randomized SVD
     U_rand, D_rand, V_rand = selectSVD(
         A, n_components=n_components, algorithm="randomized", n_iter=10
     )
     X_rand = U_rand @ np.diag(np.sqrt(D_rand))
     _, _, norm_rand = procrustes(X, X_rand)
 
+    # Square SVD
+    U_square, D_square, V_square = selectSVD(
+        A, n_components=n_components, algorithm="square", n_iter=10
+    )
+    X_square = U_square @ np.diag(np.sqrt(D_square))
+    _, _, norm_square = procrustes(X, X_square)
+
     rtol = 1e-4
     atol = 1e-4
     assert_allclose(norm_full, norm_trunc, rtol, atol)
     assert_allclose(norm_full, norm_rand, rtol, atol)
+    assert_allclose(norm_full, norm_square, rtol, atol)
