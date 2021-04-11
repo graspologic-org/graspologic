@@ -6,7 +6,9 @@ import numpy as np
 import math
 import random
 from graspologic.match import GraphMatch as GMP
-from graspologic.simulations import er_np
+from graspologic.simulations import er_np, sbm_corr
+from graspologic.embed import AdjacencySpectralEmbed
+from graspologic.align import SignFlips
 
 np.random.seed(0)
 
@@ -58,6 +60,30 @@ class TestGMP:
         with pytest.raises(ValueError):
             GMP().fit(
                 np.identity(3), np.identity(3), -1 * np.arange(2), -1 * np.arange(2)
+            )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((4, 4)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((3, 4)),
+            )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((4, 4)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((3, 3)),
+            )
+        with pytest.raises(ValueError):
+            GMP().fit(
+                np.random.random((3, 3)),
+                np.random.random((4, 4)),
+                np.arange(2),
+                np.arange(2),
+                np.random.random((4, 4)),
             )
 
     def _get_AB(self):
@@ -113,6 +139,20 @@ class TestGMP:
         W2 = [pi[z] for z in W1]
         chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
+        assert 11156 == score
+
+        W1 = np.array(range(n))
+        W2 = pi
+        chr12c = self.barycenter.fit(A, B, W1, W2)
+        score = chr12c.score_
+        assert np.array_equal(chr12c.perm_inds_, pi)
+        assert 11156 == score
+
+        W1 = np.random.permutation(n)
+        W2 = [pi[z] for z in W1]
+        chr12c = self.barycenter.fit(A, B, W1, W2)
+        score = chr12c.score_
+        assert np.array_equal(chr12c.perm_inds_, pi)
         assert 11156 == score
 
     def test_rand_SGM(self):
@@ -180,3 +220,34 @@ class TestGMP:
 
         assert (gm.perm_inds_ == pi_original).all()
         assert gm.score_ == 11156
+
+    def test_sim(self):
+        n = 90
+        rho = 0.9
+        n_per_block = int(n / 3)
+        n_blocks = 3
+        block_members = np.array(n_blocks * [n_per_block])
+        block_probs = np.array(
+            [[0.2, 0.01, 0.01], [0.01, 0.1, 0.01], [0.01, 0.01, 0.2]]
+        )
+        directed = False
+        loops = False
+        A1, A2 = sbm_corr(
+            block_members, block_probs, rho, directed=directed, loops=loops
+        )
+        ase = AdjacencySpectralEmbed(n_components=3, algorithm="truncated")
+        x1 = ase.fit_transform(A1)
+        x2 = ase.fit_transform(A2)
+        xh1 = SignFlips().fit_transform(x1, x2)
+        S = xh1 @ x2.T
+        res = self.barygm.fit(A1, A2, S=S)
+
+        assert 0.7 <= (sum(res.perm_inds_ == np.arange(n)) / n)
+
+        A1 = A1[:-1, :-1]
+        xh1 = xh1[:-1, :]
+        S = xh1 @ x2.T
+
+        res = self.barygm.fit(A1, A2, S=S)
+
+        assert 0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n)
