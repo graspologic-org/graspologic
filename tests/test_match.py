@@ -141,6 +141,20 @@ class TestGMP:
         score = chr12c.score_
         assert 11156 == score
 
+        W1 = np.array(range(n))
+        W2 = pi
+        chr12c = self.barycenter.fit(A, B, W1, W2)
+        score = chr12c.score_
+        assert np.array_equal(chr12c.perm_inds_, pi)
+        assert 11156 == score
+
+        W1 = np.random.permutation(n)
+        W2 = [pi[z] for z in W1]
+        chr12c = self.barycenter.fit(A, B, W1, W2)
+        score = chr12c.score_
+        assert np.array_equal(chr12c.perm_inds_, pi)
+        assert 11156 == score
+
     def test_rand_SGM(self):
         A, B = self._get_AB()
         chr12c = self.rand.fit(A, B)
