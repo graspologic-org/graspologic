@@ -226,7 +226,7 @@ def is_unweighted(
 def is_almost_symmetric(X, atol=1e-15):
     if (X.ndim != 2) or (X.shape[0] != X.shape[1]):
         return False
-    if isinstance(X, (np.ndarray, scipy.sparse.csr.csr_matrix)):
+    if isinstance(X, (np.ndarray, scipy.sparse.spmatrix)):
         return abs(X - X.T).max() <= atol
     elif isinstance(X, LinearOperator):
         n, _ = X.shape
