@@ -278,6 +278,9 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
             raise ValueError("square can only be used on symmetric matrices")
 
         D, U = scipy.sparse.linalg.eigsh(X, k=n_components)
+        D = np.abs(
+            D
+        )  # singular values of a real symmetric matrix are the absolute values of its eigenvalues
         V = U.T
 
         # sort in decreasing order

@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.sparse.linalg import LinearOperator, eigsh
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize, scale
 
 from graspologic.utils import import_graph, to_laplacian, is_almost_symmetric
 from graspologic.embed.base import BaseSpectralEmbed
@@ -143,8 +143,8 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self._get_tuning_parameter(L, Y)
 
         # get embedding matrix as a LinearOperator (for computational efficiency)
-        mv = self._matvec(L, Y, a=self.alpha_, assortative=self.assortative)
-        L_ = LinearOperator((n, n), matvec=mv)
+        mv, rmv = self._matvec(L, Y, a=self.alpha_, assortative=self.assortative)
+        L_ = LinearOperator((n, n), matvec=mv, rmatvec=rmv)
 
         # Dimensionality reduction with SVD
         self._reduce_dim(L_)
@@ -192,7 +192,9 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
     @staticmethod
     def _matvec(L, Y, a=None, assortative=True):
         if assortative:
-            mv = lambda v: (L @ (L @ v)) + a * (Y @ (Y.T @ v))
-        else:
             mv = lambda v: (L @ v) + a * (Y @ (Y.T @ v))
-        return mv
+            rmv = lambda v: (v.T @ L) + a * ((v.T @ Y) @ Y.T)
+        else:
+            mv = lambda v: (L @ (L @ v)) + a * (Y @ (Y.T @ v))
+            rmv = lambda v: (v.T @ L) @ L + a * ((v.T @ Y) @ Y.T)
+        return mv, rmv
