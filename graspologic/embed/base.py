@@ -104,11 +104,8 @@ class BaseSpectralEmbed(BaseEstimator):
         self.n_components_ = D.size
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
-        if not isinstance(A, LinearOperator):
-            # don't know a good way to check symmetry on LinearOperators without losing
-            # the majority of the speed increase we gain from them
-            if not is_almost_symmetric(A):
-                self.latent_right_ = V.T @ np.diag(np.sqrt(D))
+        if not is_almost_symmetric(A):
+            self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
 

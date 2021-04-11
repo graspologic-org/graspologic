@@ -13,6 +13,7 @@ import pandas as pd
 import scipy.sparse
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix, diags, isspmatrix_csr
+from scipy.sparse.linalg import LinearOperator
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
@@ -223,7 +224,15 @@ def is_unweighted(
 
 
 def is_almost_symmetric(X, atol=1e-15):
-    return abs(X - X.T).max() <= atol
+    if X.shape[0] != X.shape[1]:
+        return False
+    if isinstance(X, np.ndarray):
+        return abs(X - X.T).max() <= atol
+    elif isinstance(X, LinearOperator):
+        n, _ = X.shape
+        u = np.random.rand(n)
+        v = np.random.rand(n)
+        return np.allclose(u.T @ (X @ v), v.T @ (X @ u))
 
 
 def symmetrize(graph, method="avg"):

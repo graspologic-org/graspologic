@@ -59,10 +59,10 @@ def X(request, M):
     return gen_covariates(m1, m2, labels, type=request.param)
 
 
-@pytest.fixture(params=["assortative", "non-assortative"])
+@pytest.fixture(params=[True, False])
 def case(request, M, X):
     A, _ = M
-    case = CASE(n_components=2, embedding_alg=request.param)
+    case = CASE(n_components=2, assortative=request.param)
     case.fit((A, X))
     return case
 
@@ -78,11 +78,11 @@ def labels(M):
 
 
 # TESTS
-@pytest.mark.parametrize("alg", ["assortative", "non-assortative"])
+@pytest.mark.parametrize("alg", [True, False])
 def test_custom_alpha(M, X, alg):
     A, _ = M
     a = 0.1
-    case = CASE(n_components=2, embedding_alg=alg, alpha=a)
+    case = CASE(n_components=2, assortative=alg, alpha=a)
     latents = case.fit_transform((A, X))
     # just check to make sure we can run with custom alpha
 
@@ -106,7 +106,7 @@ def test_wrong_inputs(A, X):
 
     with pytest.raises(ValueError):
         "wrong assortative type"
-        CASE(embedding_alg=1)
+        CASE(assortative="1")
 
     with pytest.raises(ValueError):
         A_ = np.arange(30).reshape(10, 3)

@@ -6,6 +6,7 @@ import scipy
 import sklearn
 from scipy.stats import norm
 from scipy.sparse import isspmatrix_csr
+from graspologic.utils import is_almost_symmetric
 
 
 def _compute_likelihood(arr):
@@ -253,15 +254,15 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         msg = "n_components must be <= min(X.shape)."
         raise ValueError(msg)
 
-    elif algorithm == "full":
+    if (algorithm in ["truncated", "randomized"]) & (n_components >= min(X.shape)):
+        msg = "n_components must be strictly < min(X.shape)."
+        raise ValueError(msg)
+
+    if algorithm == "full":
         U, D, V = scipy.linalg.svd(X)
         U = U[:, :n_components]
         D = D[:n_components]
         V = V[:n_components, :]
-
-    if (algorithm in ["truncated", "randomized"]) & (n_components >= min(X.shape)):
-        msg = "n_components must be strictly < min(X.shape)."
-        raise ValueError(msg)
 
     elif algorithm == "truncated":
         U, D, V = scipy.sparse.linalg.svds(X, k=n_components)
@@ -273,6 +274,8 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     elif algorithm == "square":
         if X.shape[0] != X.shape[1]:
             raise ValueError("square can only be used on square matrices.")
+        if not is_almost_symmetric(X):
+            raise ValueError("square can only be used on symmetric matrices")
 
         D, U = scipy.sparse.linalg.eigsh(X, k=n_components)
         V = U.T
@@ -287,6 +290,8 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components, n_iter=n_iter)
 
     else:
-        raise ValueError("algorithm must be in {'full', 'truncated', 'randomized'}")
+        raise ValueError(
+            "algorithm must be in {'full', 'truncated', 'randomized', 'square'}"
+        )
 
     return U, D, V
