@@ -224,15 +224,17 @@ def is_unweighted(
 
 
 def is_almost_symmetric(X, atol=1e-15):
-    if X.shape[0] != X.shape[1]:
+    if (X.ndim != 2) or (X.shape[0] != X.shape[1]):
         return False
-    if isinstance(X, np.ndarray):
+    if isinstance(X, (np.ndarray, scipy.sparse.csr.csr_matrix)):
         return abs(X - X.T).max() <= atol
     elif isinstance(X, LinearOperator):
         n, _ = X.shape
         u = np.random.rand(n)
         v = np.random.rand(n)
         return np.allclose(u.T @ (X @ v), v.T @ (X @ u))
+    else:
+        raise TypeError("input a correct matrix type.")
 
 
 def symmetrize(graph, method="avg"):
