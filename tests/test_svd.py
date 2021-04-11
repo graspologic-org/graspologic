@@ -8,6 +8,7 @@ from scipy.spatial import procrustes
 
 from graspologic.embed.svd import selectSVD
 from graspologic.simulations.simulations import er_np
+from graspologic.utils import symmetrize
 
 
 def test_bad_inputs():
@@ -59,6 +60,30 @@ def test_outputs():
     X_rand = U_rand @ np.diag(np.sqrt(D_rand))
     _, _, norm_rand = procrustes(X, X_rand)
 
+    rtol = 1e-4
+    atol = 1e-4
+    assert_allclose(norm_full, norm_trunc, rtol, atol)
+    assert_allclose(norm_full, norm_rand, rtol, atol)
+
+
+def test_square():
+    np.random.seed(123)
+    X = np.vstack(
+        [
+            np.repeat([[0.2, 0.2, 0.2]], 50, axis=0),
+            np.repeat([[0.5, 0.5, 0.5]], 50, axis=0),
+        ]
+    )
+    P = X @ X.T
+    A = np.random.binomial(1, P).astype(np.float)
+    A = symmetrize(A, method="triu")
+    n_components = 3
+
+    # Full SVD
+    U_full, D_full, V_full = selectSVD(A, n_components=n_components, algorithm="full")
+    X_full = U_full @ np.diag(np.sqrt(D_full))
+    _, _, norm_full = procrustes(X, X_full)
+
     # Square SVD
     U_square, D_square, V_square = selectSVD(
         A, n_components=n_components, algorithm="square", n_iter=10
@@ -68,6 +93,4 @@ def test_outputs():
 
     rtol = 1e-4
     atol = 1e-4
-    assert_allclose(norm_full, norm_trunc, rtol, atol)
-    assert_allclose(norm_full, norm_rand, rtol, atol)
     assert_allclose(norm_full, norm_square, rtol, atol)
