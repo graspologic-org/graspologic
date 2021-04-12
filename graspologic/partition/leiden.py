@@ -119,14 +119,12 @@ def _validate_and_build_edge_list(
                 " not been set"
             )
 
-        is_directed = not utils.is_almost_symmetric(graph)
-
         edges = []
         new_to_old = {}
         if isinstance(graph, np.ndarray):
             for i in range(0, shape[0]):
                 new_to_old[str(i)] = i
-                start = i if not is_directed else 0
+                start = i
                 for j in range(start, shape[1]):
                     weight = graph[i][j]
                     if weight != 0:
@@ -140,7 +138,7 @@ def _validate_and_build_edge_list(
                 column = columns[i]
                 new_to_old[str(row)] = row
                 new_to_old[str(column)] = column
-                if is_directed or (not is_directed and row <= column):
+                if row <= column:
                     edges.append((str(row), str(column), float(graph[row, column])))
 
         return new_to_old, edges
@@ -341,27 +339,11 @@ def leiden(
 
 
 class HierarchicalCluster(NamedTuple):
-    node: str
+    node: Any
     cluster: int
     parent_cluster: Optional[int]
     level: int
     is_final_cluster: bool
-
-    @classmethod
-    def from_native(
-        cls, native_cluster: gn.HierarchicalCluster
-    ) -> "HierarchicalCluster":
-        if not isinstance(native_cluster, gn.HierarchicalCluster):
-            raise TypeError(
-                "This class method is only valid for graspologic_native.HierarchicalCluster"
-            )
-        return cls(
-            node=native_cluster.node,
-            cluster=native_cluster.cluster,
-            parent_cluster=native_cluster.parent_cluster,
-            level=native_cluster.level,
-            is_final_cluster=native_cluster.is_final_cluster,
-        )
 
     @staticmethod
     def final_hierarchical_clustering(
@@ -377,6 +359,24 @@ class HierarchicalCluster(NamedTuple):
             cluster for cluster in hierarchical_clusters if cluster.is_final_cluster
         )
         return {cluster.node: cluster.cluster for cluster in final_clusters}
+
+
+def _from_native(
+    native_cluster: gn.HierarchicalCluster,
+    node_id_map: Dict[str, Any],
+) -> HierarchicalCluster:
+    if not isinstance(native_cluster, gn.HierarchicalCluster):
+        raise TypeError(
+            "This class method is only valid for graspologic_native.HierarchicalCluster"
+        )
+    node_id = node_id_map[native_cluster.node]
+    return HierarchicalCluster(
+        node=node_id,
+        cluster=native_cluster.cluster,
+        parent_cluster=native_cluster.parent_cluster,
+        level=native_cluster.level,
+        is_final_cluster=native_cluster.is_final_cluster,
+    )
 
 
 def hierarchical_leiden(
@@ -537,7 +537,7 @@ def hierarchical_leiden(
     if max_cluster_size <= 0:
         raise ValueError("max_cluster_size must be a positive int")
 
-    graph = _validate_and_build_edge_list(
+    node_id_mapping, graph = _validate_and_build_edge_list(
         graph, is_weighted, weight_attribute, check_directed, weight_default
     )
     hierarchical_clusters_native = gn.hierarchical_leiden(
@@ -552,5 +552,5 @@ def hierarchical_leiden(
     )
 
     return [
-        HierarchicalCluster.from_native(entry) for entry in hierarchical_clusters_native
+        _from_native(entry, node_id_mapping) for entry in hierarchical_clusters_native
     ]

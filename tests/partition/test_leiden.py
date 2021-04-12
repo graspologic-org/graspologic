@@ -5,9 +5,11 @@ from typing import List, Tuple
 
 import unittest
 import networkx as nx
+import numpy as np
+import scipy
 
 from graspologic.partition import HierarchicalCluster, hierarchical_leiden, leiden
-from graspologic.partition.leiden import _validate_and_build_edge_list
+from graspologic.partition.leiden import _validate_and_build_edge_list, _from_native
 
 from tests.utils import data_file
 
@@ -15,7 +17,7 @@ from tests.utils import data_file
 class TestHierarchicalCluster(unittest.TestCase):
     def test_from_native(self):
         with self.assertRaises(TypeError):
-            HierarchicalCluster.from_native("foo")
+            _from_native(1, {"1": 1})
 
         # note: it is impossible to create a native instance of a HierarchicalCluster.  We will
         # test from_native indirectly through calling graspologic.partition.hierarchical_leiden()
@@ -211,46 +213,30 @@ class TestValidEdgeList(unittest.TestCase):
         expected = {}, []
         results = _validate_and_build_edge_list(graph=nx.Graph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
         self.assertEqual(expected,results)
-        results = _validate_and_build_edge_list(graph=nx.DiGraph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
-        self.assertEqual(expected, results)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
+            _validate_and_build_edge_list(graph=nx.DiGraph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+        with self.assertRaises(TypeError):
             _validate_and_build_edge_list(graph=nx.MultiGraph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             _validate_and_build_edge_list(graph=nx.MultiDiGraph(), is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
 
     def test_valid_nx(self):
         graph = add_edges_to_graph(nx.Graph())
         expected = [("nick", "dwayne", 2.2), ("dwayne", "ben", 0.001)]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+        _, edges = _validate_and_build_edge_list(graph=graph, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
+        self.assertEqual(expected, edges)
 
-        graph = add_edges_to_graph(nx.DiGraph())
-        expected = [
-            ("nick", "dwayne", 3.0),
-            ("dwayne", "nick", 2.2),
-            ("dwayne", "ben", 4.2),
-            ("ben", "dwayne", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+        with self.assertRaises(TypeError):
+            graph = add_edges_to_graph(nx.DiGraph())
+            _validate_and_build_edge_list(graph=graph, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
 
-        graph = add_edges_to_graph(nx.MultiGraph())
-        expected = [
-            ("nick", "dwayne", 1.0),
-            ("nick", "dwayne", 3.0),
-            ("nick", "dwayne", 2.2),
-            ("dwayne", "ben", 4.2),
-            ("dwayne", "ben", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+        with self.assertRaises(TypeError):
+            graph = add_edges_to_graph(nx.MultiGraph())
+            _validate_and_build_edge_list(graph=graph, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
 
-        graph = add_edges_to_graph(nx.MultiDiGraph())
-        expected = [
-            ("nick", "dwayne", 1.0),
-            ("nick", "dwayne", 3.0),
-            ("dwayne", "nick", 2.2),
-            ("dwayne", "ben", 4.2),
-            ("ben", "dwayne", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
+        with self.assertRaises(TypeError):
+            graph = add_edges_to_graph(nx.MultiDiGraph())
+            _validate_and_build_edge_list(graph=graph, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=1.0)
 
     def test_unweighted_nx(self):
         graph = nx.Graph()
@@ -258,22 +244,23 @@ class TestValidEdgeList(unittest.TestCase):
         graph.add_edge("nick", "ben")
 
         with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(graph)
+            _validate_and_build_edge_list(graph=graph, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=None)
 
+        _, edges = _validate_and_build_edge_list(graph=graph, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=3.33333)
         self.assertEqual(
             [("dwayne", "nick", 3.33333), ("nick", "ben", 3.33333)],
-            gus.to_weighted_edge_list(graph, weight_default=3.33333),
+            edges,
         )
 
         graph.add_edge("salad", "sandwich", weight=100)
-
+        _, edges = _validate_and_build_edge_list(graph=graph, is_weighted=True, weight_attribute="weight", check_directed=False, weight_default=3.33333)
         self.assertEqual(
             [
                 ("dwayne", "nick", 3.33333),
                 ("nick", "ben", 3.33333),
                 ("salad", "sandwich", 100),
             ],
-            gus.to_weighted_edge_list(graph, weight_default=3.33333),
+            edges,
         )
 
     def test_matrices(self):
@@ -287,31 +274,30 @@ class TestValidEdgeList(unittest.TestCase):
         sparse_directed = nx.to_scipy_sparse_matrix(di_graph)
 
         expected = [("0", "1", 2.2), ("1", "2", 0.001)]
-        self.assertEqual(expected, gus.to_weighted_edge_list(dense_undirected))
-        self.assertEqual(expected, gus.to_weighted_edge_list(sparse_undirected))
+        _, edges = _validate_and_build_edge_list(graph=dense_undirected, is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
+        self.assertEqual(expected, edges)
+        _, edges = _validate_and_build_edge_list(graph=sparse_undirected, is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
+        self.assertEqual(expected, edges)
 
-        expected = [
-            ("0", "1", 3.0),
-            ("1", "0", 2.2),
-            ("1", "2", 4.2),
-            ("2", "1", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(dense_directed))
-        self.assertEqual(expected, gus.to_weighted_edge_list(sparse_directed))
+        with self.assertRaises(ValueError):
+            _validate_and_build_edge_list(graph=dense_directed, is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
+
+        with self.assertRaises(ValueError):
+            _validate_and_build_edge_list(graph=sparse_directed, is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
 
     def test_empty_adj_matrices(self):
         dense = np.array([])
         with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(dense)
+            _validate_and_build_edge_list(graph=dense, is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
 
         sparse = scipy.sparse.csr_matrix([])
         with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(sparse)
+            _validate_and_build_edge_list(graph=sparse, is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
 
     def test_misshapen_matrices(self):
         data = [[3, 2, 0], [2, 0, 1]]  # this is utter gibberish
         with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(np.array(data))
+            _validate_and_build_edge_list(graph=np.array(data), is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
         with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(scipy.sparse.csr_matrix(data))
+            _validate_and_build_edge_list(graph=scipy.sparse.csr_matrix(data), is_weighted=True, weight_attribute="weight", check_directed=True, weight_default=1.0)
 
