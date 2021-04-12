@@ -6,7 +6,6 @@ from math import sqrt
 
 import networkx as nx
 import numpy as np
-import scipy
 import pytest
 from numpy.testing import assert_equal
 

@@ -165,6 +165,12 @@ class TestLeiden(unittest.TestCase):
             args["max_cluster_size"] = 0
             hierarchical_leiden(graph=graph, **args)
 
+        as_csr = nx.to_scipy_sparse_matrix(graph)
+        partitions = leiden(graph=as_csr, **good_args)
+        node_ids = partitions.keys()
+        for node_id in node_ids:
+            self.assertTrue(isinstance(node_id, np.int32), f"{node_id} has {type(node_id)} should be an np.int32")
+
     def test_hierarchical(self):
         # most of leiden is tested in unit / integration tests in graspologic-native.
         # All we're trying to test through these unit tests are the python conversions
