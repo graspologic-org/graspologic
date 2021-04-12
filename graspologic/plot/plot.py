@@ -364,10 +364,10 @@ def binary_heatmap(
     ----------
     X : nx.Graph or np.ndarray object
         Unweighted graph or numpy matrix to plot.
-        
+
     colors : list-like or np.ndarray
         A list of exactly two colors to use for the heatmap.
-        
+
     colorbar_ticklabels : list-like
         Binary labels to use in the colorbar.
 
@@ -383,7 +383,8 @@ def binary_heatmap(
         raise ValueError(
             "cmap is not allowed in a binary heatmap. To change colors, use the `colors` parameter."
         )
-    if not (isinstance(colorbar_ticklabels, (list, tuple)) and len(colorbar_ticklabels == 2)):
+    if not (
+        isinstance(colorbar_ticklabels, (list, tuple)) and len(colorbar_ticklabels) == 2):
         raise ValueError("colorbar_ticklabels must be list-like and length 2.")
 
     cmap = mpl.colors.ListedColormap(colors)

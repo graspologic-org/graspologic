@@ -139,6 +139,22 @@ def test_heatmap_output(plot_fun):
     fig = heatmap(X, cmap="gist_rainbow")
 
 
+def test_binary_heatmap_params():
+    X = er_np(10, 0.5)
+
+    with pytest.raises(ValueError):
+        binary_heatmap(X, colors=["white"])
+
+    with pytest.raises(ValueError):
+        binary_heatmap(X, colors=["white", "white", "black"])
+
+    with pytest.raises(ValueError):
+        binary_heatmap(X, colorbar_ticklabels="1")
+
+    with pytest.raises(ValueError):
+        binary_heatmap(X, colorbar_ticklabels=["one", "two", "wrong"])
+
+
 def test_gridplot_inputs():
     X = [er_np(10, 0.5)]
     labels = ["ER(10, 0.5)"]
