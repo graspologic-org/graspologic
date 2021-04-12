@@ -17,7 +17,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
     Parameters
     ----------
     alpha : float, optional, default = None
-        Tuning parameter to use. Not used if embedding_alg == cca:
+        Tuning parameter to use:
             -  None: Default to the ratio of the leading eigenvector of the Laplacian
                      to the leading eigenvector of the covariate matrix.
             - float: Use a particular alpha-value.
@@ -25,7 +25,8 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
     assortative : bool, default = True
         Embedding algorithm to use. An assortative network is any network where the
         within-group probabilities are greater than the between-group probabilities.
-        Here, L is the regularized Laplacian, and Y is the covariate matrix.
+        Here, L is the regularized Laplacian, Y is the covariate matrix, and a is the
+        tuning parameter alpha:
             - True: Embed ``L + a*Y@Y.T``. Better for assortative graphs.
             - False: Embed ``L@L + a*Y@Y.T``. Better for non-assortative graphs.
 
@@ -43,7 +44,6 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         Whether to check if input graph is connected. May result in non-optimal
         results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
-
 
 
     References
@@ -92,6 +92,8 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         where :math:`\alpha` is a tuning parameter which makes the leading eigenvalues
         of the two summands the same. Here, :math:`L` is the regularized
         graph Laplacian, and :math:`Y` is a matrix of covariates for each node.
+
+        Covariates are row-normalized to unit l2-norm.
 
         Parameters
         ----------
