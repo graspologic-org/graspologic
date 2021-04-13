@@ -144,15 +144,14 @@ class MultipleASE(BaseEmbedMulti):
 
         # embed individual graphs
         embeddings = Parallel(n_jobs=self.n_jobs)(
-                delayed(
-                    selectSVD)
-                        (graph,
-                        n_components=n_components,
-                        algorithm=self.algorithm,
-                        n_iter=self.n_iter,
-                    )
-                    for graph in graphs
-                )
+            delayed(selectSVD)(
+                graph,
+                n_components=n_components,
+                algorithm=self.algorithm,
+                n_iter=self.n_iter,
+            )
+            for graph in graphs
+        )
         Us, Ds, Vs = zip(*embeddings)
 
         # Choose the best embedding dimension for each graphs
