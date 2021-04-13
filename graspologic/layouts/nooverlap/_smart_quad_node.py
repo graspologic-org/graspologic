@@ -708,15 +708,11 @@ class _SmartQuadNode:
             # print ("ALREADY LAID OUT!!, ratio: %g " %(nodes_per_cell))
             return num_skipped
 
-        if self.total_basic_cells == 0:
-            nodes_per_cell = math.inf
-        else:
-            nodes_per_cell = self.num_nodes / self.total_basic_cells
-
         has_children = False
         for quad in self.child_list():
             if quad is not None:
                 has_children = True
+                break
 
         if not has_children:
             did_fit = self.layout_node_list(self.extent, self.max_size, self.nodes)
@@ -762,7 +758,7 @@ class _SmartQuadNode:
         else:
             for quad in self.child_list():
                 if quad:
-                    num_skipped += quad.layout_quad()
+                    num_skipped += quad.layout()
         return num_skipped
 
     def quad_stats(self):
@@ -954,13 +950,12 @@ class _SmartQuadNode:
             return x <= other_end
 
     def _do_contraction(self):
-        node_list = self.nodes
-        self._do_contraction_with_given_nodes(node_list=node_list)
+        self._do_contraction_with_given_nodes(node_list=self.nodes)
         return
 
     ### I wanted to add a little thank you to the webiste: https://www.calculator.net/triangle-calculator.html
     ### it helped me debug the issues I was having in the calculation of the overlaps.
-    def _do_contraction_with_given_nodes(self, node_list):
+    def _do_contraction_with_given_nodes(self, node_list: List[_Node]):
         logger.info("contracting nodes:%d" % (len(node_list)))
         nodes_by_size = sorted(node_list, key=lambda n: n.size, reverse=True)
         if self.parent is None:

@@ -6,6 +6,7 @@ import csv
 import logging
 import networkx
 from typing import Any, Dict, List, Tuple
+import time
 
 from networkx.generators import community
 
@@ -141,6 +142,17 @@ def draw_quad_tree(stats: List, filename: str, dpi=500):
     return
 
 
+def scale_node_sizes(node_positions: List[NodePosition], new_min: float=5, new_max: float=150) -> List[NodePosition]:
+    sizes = [n.size for n in node_positions]
+    max_size = max(sizes)
+    min_size = min(sizes)
+    new_pos = []
+    for n in node_positions:
+        normalized = (n.size - min_size) / (max_size - min_size)
+        new_size = normalized * (new_max - new_min) + new_min
+        new_pos.append(NodePosition(n.node_id, n.x, n.y, new_size, n.community))
+    return new_pos
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -150,13 +162,20 @@ def main():
     parser.add_argument("--quad_dump", help='File name for CSV dump of quad tree', required=False, default=None)
     parser.add_argument("--quad_png", help='File name for PNG dump of quad tree', required=False, default=None)
     parser.add_argument("--dpi", help='Only used if --image_file is specified', type=int, required=False, default=500 )
+    parser.add_argument("--max_node_size", help='use to rescale nodes between 5.0 and max_node_size', type=float, required=False, default=150 )
+    parser.add_argument("--rescale_factor", help='use to rescale nodes between 5.0 and max_node_size', type=float, required=False, default=150 )
     args = parser.parse_args()
 
 
     node_positions, node_colors = _read_input_locs_file(args.input_locs)
     logger.debug(f"read nodes: {len(node_positions)}, read colors: {len(node_colors)}")
+    node_positions = scale_node_sizes(node_positions, 5, args.max_node_size)
 
+
+    start = time.time()
     new_positions = remove_overlaps(node_positions)
+    end = time.time()
+    print (f"Overlap removed in: {end-start} seconds")
     graph = graph_from_nodes_only(new_positions)
 
     if args.quad_dump is not None:
