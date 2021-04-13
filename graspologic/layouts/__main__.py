@@ -59,8 +59,13 @@ def _output(
 def _tsne(arguments: argparse.Namespace):
     valid_args(arguments)
     graph = _graph_from_file(arguments.edge_list, arguments.skip_header)
+    adjust_overlaps = not arguments.allow_overlaps
     graph, positions = auto.layout_tsne(
-        graph, perplexity=30, n_iter=1000, max_edges=arguments.max_edges
+        graph,
+        perplexity=30,
+        n_iter=1000,
+        max_edges=arguments.max_edges,
+        adjust_overlaps=adjust_overlaps,
     )
     _output(arguments, graph, positions)
 
@@ -68,7 +73,10 @@ def _tsne(arguments: argparse.Namespace):
 def _umap(arguments: argparse.Namespace):
     valid_args(arguments)
     graph = _graph_from_file(arguments.edge_list, arguments.skip_header)
-    graph, positions = auto.layout_umap(graph, max_edges=arguments.max_edges)
+    adjust_overlaps = not arguments.allow_overlaps
+    graph, positions = auto.layout_umap(
+        graph, max_edges=arguments.max_edges, adjust_overlaps=adjust_overlaps
+    )
     _output(arguments, graph, positions)
 
 
@@ -149,6 +157,12 @@ def _common_edge_list_args(parser: argparse.ArgumentParser) -> argparse.Argument
         type=int,
         required=False,
         default=500,
+    )
+    parser.add_argument(
+        "--allow_overlaps",
+        help="skip the no overlap algorithm and let nodes stack as per the results of "
+        "the down projection algorithm",
+        action="store_true",
     )
     return parser
 
