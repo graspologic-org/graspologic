@@ -134,28 +134,25 @@ class MultipleASE(BaseEmbedMulti):
             n_iter=n_iter,
             diag_aug=diag_aug,
             concat=concat,
-            n_jobs=n_jobs,
         )
         self.scaled = scaled
+        self.n_jobs = n_jobs
 
     def _reduce_dim(self, graphs):
         # first embed into log2(n_vertices) for each graph
         n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
 
         # embed individual graphs
-        embeddings = [
-            Parallel(n_jobs=self.n_jobs)(
+        embeddings = Parallel(n_jobs=self.n_jobs)(
                 delayed(
-                    selectSVD(
-                        graph,
+                    selectSVD)
+                        (graph,
                         n_components=n_components,
                         algorithm=self.algorithm,
                         n_iter=self.n_iter,
                     )
                     for graph in graphs
                 )
-            )
-        ]
         Us, Ds, Vs = zip(*embeddings)
 
         # Choose the best embedding dimension for each graphs
