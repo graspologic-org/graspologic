@@ -170,8 +170,8 @@ class TestLeiden(unittest.TestCase):
         node_ids = partitions.keys()
         for node_id in node_ids:
             self.assertTrue(
-                isinstance(node_id, np.int32),
-                f"{node_id} has {type(node_id)} should be an np.int32",
+                isinstance(node_id, (np.int32, np.intc)),
+                f"{node_id} has {type(node_id)} should be an np.int32/np.intc",
             )
 
     def test_hierarchical(self):
