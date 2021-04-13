@@ -168,9 +168,9 @@ def quadratic_assignment(A, B, method="faq", options=None):
     return res
 
 
-def _calc_score(A, B, perm):
+def _calc_score(A, B, S, perm):
     # equivalent to objective function but avoids matmul
-    return np.sum(A * B[perm][:, perm])
+    return np.sum(A * B[perm][:, perm]) + np.sum(S[np.arange(len(S)), perm])
 
 
 def _common_input_validation(A, B, partial_match):
@@ -216,6 +216,7 @@ def _quadratic_assignment_faq(
     B,
     maximize=False,
     partial_match=None,
+    S=None,
     rng=None,
     P0="barycenter",
     shuffle_input=False,
@@ -277,6 +278,11 @@ def _quadratic_assignment_faq(
         matched to node ``partial_match[i, 1]`` of `B`. Accordingly,
         ``partial_match`` is an array of size ``(m , 2)``, where ``m`` is
         not greater than the number of nodes, :math:`n`.
+    S : 2d-array, square
+        A similarity matrix. Should be same shape as ``A`` and ``B``.   
+        Note: the scale of `S` may effect the weight placed on the term 
+        :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)` 
+        during the optimization process.
     P0 : 2d-array, "barycenter", or "randomized" (default = "barycenter")
         The initial (guess) permutation matrix or search "position"
         `P0`.
@@ -378,6 +384,12 @@ def _quadratic_assignment_faq(
         msg = "'maxiter' must be a positive integer"
     elif tol <= 0:
         msg = "'tol' must be a positive float"
+    elif S.shape[0] != S.shape[1]:
+        msg = "`S` must be square"
+    elif S.ndim != 2:
+        msg = "`S` must have exactly two dimensions"
+    elif S.shape != A.shape:
+        msg = "`S`, `A`, and `B` matrices must be of equal size"
     if msg is not None:
         raise ValueError(msg)
 
@@ -388,7 +400,9 @@ def _quadratic_assignment_faq(
 
     # check outlier cases
     if n == 0 or partial_match.shape[0] == n:
-        score = _calc_score(A, B, partial_match[:, 1])
+        # Cannot assume partial_match is sorted.
+        partial_match = np.row_stack(sorted(partial_match, key=lambda x: x[0]))
+        score = _calc_score(A, B, S, partial_match[:, 1])
         res = {"col_ind": partial_match[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
 
@@ -397,6 +411,7 @@ def _quadratic_assignment_faq(
         obj_func_scalar = -1
 
     nonseed_B = np.setdiff1d(range(n), partial_match[:, 1])
+    perm_S = np.copy(nonseed_B)
     if shuffle_input:
         nonseed_B = rng.permutation(nonseed_B)
         # shuffle_input to avoid results from inputs that were already matched
@@ -405,9 +420,12 @@ def _quadratic_assignment_faq(
     perm_A = np.concatenate([partial_match[:, 0], nonseed_A])
     perm_B = np.concatenate([partial_match[:, 1], nonseed_B])
 
+    S = S[:, perm_B]
+
     # definitions according to Seeded Graph Matching [2].
     A11, A12, A21, A22 = _split_matrix(A[perm_A][:, perm_A], n_seeds)
     B11, B12, B21, B22 = _split_matrix(B[perm_B][:, perm_B], n_seeds)
+    S22 = S[perm_S, n_seeds:]
 
     # [1] Algorithm 1 Line 1 - choose initialization
     if isinstance(P0, str):
@@ -433,7 +451,7 @@ def _quadratic_assignment_faq(
         msg = "`init` must either be of type str or np.ndarray."
         raise TypeError(msg)
 
-    const_sum = A21 @ B21.T + A12.T @ B12
+    const_sum = A21 @ B21.T + A12.T @ B12 + S22
 
     # [1] Algorithm 1 Line 2 - loop while stopping criteria not met
     for n_iter in range(1, maxiter + 1):
@@ -455,8 +473,9 @@ def _quadratic_assignment_faq(
         BR22 = B22 @ R.T
         b22a = (AR22 * B22.T[cols]).sum()
         b22b = (A22 * BR22[cols]).sum()
+        s = (S22 * R).sum()
         a = (AR22.T * BR22).sum()
-        b = b21 + b12 + b22a + b22b
+        b = b21 + b12 + b22a + b22b + s
         # critical point of ax^2 + bx + c is at x = -d/(2*e)
         # if a * obj_func_scalar > 0, it is a minimum
         # if minimum is not in [0, 1], only endpoints need to be considered
@@ -480,7 +499,7 @@ def _quadratic_assignment_faq(
     unshuffled_perm = np.zeros(n, dtype=int)
     unshuffled_perm[perm_A] = perm_B[perm]
 
-    score = _calc_score(A, B, unshuffled_perm)
+    score = _calc_score(A, B, S, unshuffled_perm)
 
     res = {"col_ind": unshuffled_perm, "fun": score, "nit": n_iter}
 
