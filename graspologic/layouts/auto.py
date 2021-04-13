@@ -104,7 +104,7 @@ def layout_tsne(
         labels,
         points,
         random_seed=random_seed,
-        adjust_overlaps=adjust_overlaps
+        adjust_overlaps=adjust_overlaps,
     )
     return lcc_graph, positions
 
@@ -195,7 +195,7 @@ def layout_umap(
         labels,
         points,
         random_seed=random_seed,
-        adjust_overlaps=adjust_overlaps
+        adjust_overlaps=adjust_overlaps,
     )
     return lcc_graph, positions
 
@@ -254,7 +254,7 @@ def _node_positions_from(
     labels: np.ndarray,
     down_projection_2d: np.ndarray,
     random_seed: Optional[int] = None,
-    adjust_overlaps: bool = True
+    adjust_overlaps: bool = True,
 ) -> List[NodePosition]:
     degree = graph.degree()
     sizes = _compute_sizes(degree)
