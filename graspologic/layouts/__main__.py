@@ -34,9 +34,9 @@ def _graph_from_file(
                     first = False
                 source, target = split_vals[:2]
                 weight = 1.0
-            else: # drop it because it is malformed
+            else:  # drop it because it is malformed
                 if len(split_vals) == 0:
-                    pass # do nothing for blank lines
+                    pass  # do nothing for blank lines
                 else:
                     raise IOError(f"Expected 2 or 3 columns in {path}, no more or less")
             if graph.has_edge(source, target):
