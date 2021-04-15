@@ -223,7 +223,7 @@ class MultipleASE(BaseEmbedMulti):
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
-            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
+            self.scores_ = np.asarray([Uhat.T @ graph @ Vhat for graph in graphs])
             self.singular_values_ = (sing_vals_left, sing_vals_right)
         else:
             self.latent_right_ = None
