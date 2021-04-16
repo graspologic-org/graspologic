@@ -10,7 +10,7 @@ from graspologic.simulations import er_np, sbm_corr
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.align import SignFlips
 
-np.random.seed(0)
+np.random.seed(1)
 
 
 class TestGMP:
@@ -169,17 +169,23 @@ class TestGMP:
         score = chr12c.score_
         assert 11156 <= score < 12500
 
+    def test_parallel(self):
+        A, B = self._get_AB()
+        gmp = GMP(gmp=False, n_init=2, n_jobs=2)
+        gmp.fit(A, B)
+        score = gmp.score_
+        assert 11156 <= score < 13500
+
     def test_padding(self):
         n = 50
         p = 0.4
 
-        np.random.seed(1)
         G1 = er_np(n=n, p=p)
-        G2 = G1[: (n - 1), : (n - 1)]  # remove two nodes
+        G2 = G1[:-2, :-2]  # remove two nodes
         gmp_adopted = GMP(padding="adopted")
         res = gmp_adopted.fit(G1, G2)
 
-        assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
+        assert 0.95 <= (sum(res.perm_inds_ == np.arange(n)) / n)
 
     def test_custom_init(self):
         A, B = self._get_AB()
@@ -222,7 +228,7 @@ class TestGMP:
         assert gm.score_ == 11156
 
     def test_sim(self):
-        n = 90
+        n = 150
         rho = 0.9
         n_per_block = int(n / 3)
         n_blocks = 3
