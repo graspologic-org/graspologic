@@ -10,7 +10,7 @@ from graspologic.simulations import er_np, sbm_corr
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.align import SignFlips
 
-np.random.seed(0)
+np.random.seed(1)
 
 
 class TestGMP:
@@ -180,9 +180,8 @@ class TestGMP:
         n = 50
         p = 0.4
 
-        np.random.seed(1)
         G1 = er_np(n=n, p=p)
-        G2 = G1[: (n - 1), : (n - 1)]  # remove two nodes
+        G2 = G1[:-2, :-2]  # remove two nodes
         gmp_adopted = GMP(padding="adopted")
         res = gmp_adopted.fit(G1, G2)
 

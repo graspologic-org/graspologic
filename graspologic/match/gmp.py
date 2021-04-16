@@ -242,22 +242,17 @@ class GraphMatch(BaseEstimator):
             "maxiter": self.max_iter,
             "tol": self.eps,
         }
-        if self.n_init > 1:
-            rng = check_random_state(self.random_state)
-            results = Parallel(n_jobs=self.n_jobs)(
-                delayed(quadratic_assignment)(A, B, options={**options, **{"rng": r}})
-                for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
-            )
 
-            func = max if self.gmp else min
-            res = func(
-                results,
-                key=lambda x: x.fun,
-            )
-        else:
-            res = quadratic_assignment(
-                A, B, options={**options, **{"rng": self.random_state}}
-            )
+        rng = check_random_state(self.random_state)
+        results = Parallel(n_jobs=self.n_jobs)(
+            delayed(quadratic_assignment)(A, B, options={**options, **{"rng": r}})
+            for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
+        )
+        func = max if self.gmp else min
+        res = func(
+            results,
+            key=lambda x: x.fun,
+        )
 
         self.perm_inds_ = res.col_ind  # permutation indices
         self.score_ = res.fun  # objective function value
