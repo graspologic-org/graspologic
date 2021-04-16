@@ -86,7 +86,7 @@ class GraphMatch(BaseEstimator):
         instance, then that object is used.
         Default is None.
 
-    n_jobs : int, default=1
+    n_jobs : int or None, (default = None)
         The number of jobs to run in parallel. Parallelization is over the
         initializations, so only relevant when ``n_init > 1``. None means 1 unless in a
         joblib.parallel_backend context. -1 means using all processors. See
@@ -133,7 +133,7 @@ class GraphMatch(BaseEstimator):
         gmp=True,
         padding="adopted",
         random_state=None,
-        n_jobs=1,
+        n_jobs=None,
     ):
         if type(n_init) is int and n_init > 0:
             self.n_init = n_init
