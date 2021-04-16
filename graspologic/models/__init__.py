@@ -3,7 +3,7 @@
 
 from .base import BaseGraphEstimator
 from .er import EREstimator, DCEREstimator
-from .sbm import SBMEstimator, DCSBMEstimator
+from .sbm_estimators import SBMEstimator, DCSBMEstimator
 from .rdpg import RDPGEstimator
 
 __all__ = [
