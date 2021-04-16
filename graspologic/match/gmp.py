@@ -3,7 +3,7 @@
 
 from joblib import Parallel, delayed
 import numpy as np
-from scipy._lib._util import check_random_state
+from scipy.utils import check_random_state
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, column_or_1d
 
@@ -128,6 +128,7 @@ class GraphMatch(BaseEstimator):
         gmp=True,
         padding="adopted",
         random_state=None,
+        n_jobs=1,
     ):
         if type(n_init) is int and n_init > 0:
             self.n_init = n_init
@@ -172,6 +173,7 @@ class GraphMatch(BaseEstimator):
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
         self.random_state = random_state
+        self.n_jobs = n_jobs
 
     def fit(self, A, B, seeds_A=[], seeds_B=[], S=None):
         """
@@ -237,26 +239,22 @@ class GraphMatch(BaseEstimator):
         }
         if self.n_init > 1:
             rng = check_random_state(self.random_state)
+            results = (
+                Parallel(n_jobs=self.n_jobs)(
+                    delayed(quadratic_assignment)(
+                        A, B, options={**options, **{"rng": r}}
+                    )
+                    for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
+                ),
+            )
             if self.gmp:
-                res = max(
-                    Parallel(n_jobs=-1)(
-                        delayed(quadratic_assignment)(
-                            A, B, options={**options, **{"rng": r}}
-                        )
-                        for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
-                    ),
-                    key=lambda x: x.fun,
-                )
+                func = max
             else:
-                res = min(
-                    Parallel(n_jobs=-1)(
-                        delayed(quadratic_assignment)(
-                            A, B, options={**options, **{"rng": r}}
-                        )
-                        for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
-                    ),
-                    key=lambda x: x.fun,
-                )
+                func = min
+            res = func(
+                results,
+                key=lambda x: x.fun,
+            )
         else:
             res = quadratic_assignment(
                 A, B, options={**options, **{"rng": self.random_state}}
