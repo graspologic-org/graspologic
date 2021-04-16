@@ -5,6 +5,7 @@ import numpy as np
 
 from .base import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
+from .utils import is_almost_symmetric
 
 
 class MultipleASE(BaseEmbedMulti):
