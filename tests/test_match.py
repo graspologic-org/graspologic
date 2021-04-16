@@ -169,6 +169,13 @@ class TestGMP:
         score = chr12c.score_
         assert 11156 <= score < 12500
 
+    def test_parallel(self):
+        A, B = self._get_AB()
+        gmp = GMP(n_init=2, n_jobs=2)
+        gmp.fit(A, B)
+        score = gmp.score_
+        assert 11156 <= score < 13500
+
     def test_padding(self):
         n = 50
         p = 0.4
