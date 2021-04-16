@@ -185,7 +185,7 @@ class TestGMP:
         gmp_adopted = GMP(padding="adopted")
         res = gmp_adopted.fit(G1, G2)
 
-        assert 1.0 == (sum(res.perm_inds_ == np.arange(n)) / n)
+        assert 0.95 <= (sum(res.perm_inds_ == np.arange(n)) / n)
 
     def test_custom_init(self):
         A, B = self._get_AB()
@@ -228,7 +228,7 @@ class TestGMP:
         assert gm.score_ == 11156
 
     def test_sim(self):
-        n = 90
+        n = 150
         rho = 0.9
         n_per_block = int(n / 3)
         n_blocks = 3
