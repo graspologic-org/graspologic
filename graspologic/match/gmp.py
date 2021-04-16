@@ -1,11 +1,10 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from joblib import Parallel, delayed
 import numpy as np
-from sklearn.utils import check_random_state
+from joblib import Parallel, delayed
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_array, column_or_1d
+from sklearn.utils import check_array, check_random_state, column_or_1d
 
 from .qap import quadratic_assignment
 
@@ -90,7 +89,7 @@ class GraphMatch(BaseEstimator):
     n_jobs : int, default=1
         The number of jobs to run in parallel. Parallelization is over the
         initializations, so only relevant when ``n_init > 1``. None means 1 unless in a
-        joblib.parallel_backend context. -1 means using all processors. See 
+        joblib.parallel_backend context. -1 means using all processors. See
         :class:`joblib.Parallel` for more details.
 
     Attributes
