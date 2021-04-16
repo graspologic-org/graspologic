@@ -1,7 +1,9 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from joblib import Parallel, delayed
 import numpy as np
+from scipy._lib._util import check_random_state
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, column_or_1d
 
@@ -228,17 +230,37 @@ class GraphMatch(BaseEstimator):
             "maximize": self.gmp,
             "partial_match": partial_match,
             "S": S,
-            "rng": self.random_state,
             "P0": self.init,
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
             "tol": self.eps,
         }
-
-        res = min(
-            [quadratic_assignment(A, B, options=options) for i in range(self.n_init)],
-            key=lambda x: x.fun,
-        )
+        if self.n_init > 1:
+            rng = check_random_state(self.random_state)
+            if self.gmp:
+                res = max(
+                    Parallel(n_jobs=-1)(
+                        delayed(quadratic_assignment)(
+                            A, B, options={**options, **{"rng": r}}
+                        )
+                        for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
+                    ),
+                    key=lambda x: x.fun,
+                )
+            else:
+                res = min(
+                    Parallel(n_jobs=-1)(
+                        delayed(quadratic_assignment)(
+                            A, B, options={**options, **{"rng": r}}
+                        )
+                        for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
+                    ),
+                    key=lambda x: x.fun,
+                )
+        else:
+            res = quadratic_assignment(
+                A, B, options={**options, **{"rng": self.random_state}}
+            )
 
         self.perm_inds_ = res.col_ind  # permutation indices
         self.score_ = res.fun  # objective function value
