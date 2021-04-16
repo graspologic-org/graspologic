@@ -129,8 +129,11 @@ class MultipleASE(BaseEmbedMulti):
         self.scaled = scaled
 
     def _reduce_dim(self, graphs):
-        # first embed into log2(n_vertices) for each graph
-        n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
+        if self.n_components is None:
+            # first embed into log2(n_vertices) for each graph
+            n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
+        else:
+            n_components = self.n_components
 
         # embed individual graphs
         embeddings = [
