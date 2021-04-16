@@ -171,7 +171,7 @@ class TestGMP:
 
     def test_parallel(self):
         A, B = self._get_AB()
-        gmp = GMP(n_init=2, n_jobs=2)
+        gmp = GMP(gmp=False, n_init=2, n_jobs=2)
         gmp.fit(A, B)
         score = gmp.score_
         assert 11156 <= score < 13500

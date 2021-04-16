@@ -3,7 +3,7 @@
 
 from joblib import Parallel, delayed
 import numpy as np
-from scipy.utils import check_random_state
+from sklearn.utils import check_random_state
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, column_or_1d
 
@@ -245,18 +245,12 @@ class GraphMatch(BaseEstimator):
         }
         if self.n_init > 1:
             rng = check_random_state(self.random_state)
-            results = (
-                Parallel(n_jobs=self.n_jobs)(
-                    delayed(quadratic_assignment)(
-                        A, B, options={**options, **{"rng": r}}
-                    )
-                    for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
-                ),
+            results = Parallel(n_jobs=self.n_jobs)(
+                delayed(quadratic_assignment)(A, B, options={**options, **{"rng": r}})
+                for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
             )
-            if self.gmp:
-                func = max
-            else:
-                func = min
+
+            func = max if self.gmp else min
             res = func(
                 results,
                 key=lambda x: x.fun,
