@@ -130,8 +130,6 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         n = A.shape[0]
         if n != A.shape[1]:
             raise ValueError("Graph should be square")
-        # if not is_almost_symmetric(A):
-        #     raise ValueError("Fit an undirected graph")
 
         # Create regularized Laplacian, scale covariates to unit norm
         L = to_laplacian(A, form="R-DAD")
