@@ -430,16 +430,15 @@ def _sample_modified_ase(X, Y, workers, pooled=False):
     else:
         get_sigma = fit_plug_in_variance_estimator(X)
     X_sigmas = get_sigma(X) * (N - M) / (N * M)
-
     # increase the variance of X by sampling from the asy dist
     X_sampled = np.zeros(X.shape)
-    seeds = np.random.randint(1e8, size=X.shape)
-    for seed in seeds:
-        X_sampled = np.asarray(
-            Parallel(n_jobs=workers)(
-                delayed(add_variance)(X[i, :], X_sigmas[i], seed) for i in range(N)
-            )
+    seeds = np.random.randint(np.iinfo(np.int32).max, size=X.shape)
+    X_sampled = np.asarray(
+        Parallel(n_jobs=workers)(
+            delayed(add_variance)(X[i, :], X_sigmas[i], seed)
+            for i, seed in zip(range(N), seeds)
         )
+    )
 
     # return the embeddings in the appropriate order
     return (Y, X_sampled) if reverse_order else (X_sampled, Y)
