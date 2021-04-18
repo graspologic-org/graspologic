@@ -1027,9 +1027,9 @@ class _QuadNode:
                 if 0 == denominator:
                     denominator = 0.00000001
                 value = (a ** 2 + b ** 2 - c ** 2) / denominator
-                if value > 1:
+                if value >= 1:
                     value = 0.999999
-                elif value < -1:
+                elif value <= -1:
                     value = -0.999999
                 angle_c = math.acos(value)
                 len_c_new = node_to_move.size + overlapping_node.size + _EPSILON
