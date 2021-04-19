@@ -9,19 +9,21 @@ from typing import Any, List, Optional, Tuple, Union
 import networkx as nx
 import numpy as np
 
+from..utils import remap_node_ids
+
 
 def node2vec_embed(
-    graph: Union[nx.Graph, nx.DiGraph],
-    num_walks: int = 10,
-    walk_length: int = 80,
-    return_hyperparameter: float = 1.0,
-    inout_hyperparameter: float = 1.0,
-    dimensions: int = 128,
-    window_size: int = 10,
-    workers: int = 8,
-    iterations: int = 1,
-    interpolate_walk_lengths_by_node_degree: bool = True,
-    random_seed: Optional[int] = None,
+        graph: Union[nx.Graph, nx.DiGraph],
+        num_walks: int = 10,
+        walk_length: int = 80,
+        return_hyperparameter: float = 1.0,
+        inout_hyperparameter: float = 1.0,
+        dimensions: int = 128,
+        window_size: int = 10,
+        workers: int = 8,
+        iterations: int = 1,
+        interpolate_walk_lengths_by_node_degree: bool = True,
+        random_seed: Optional[int] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generates a node2vec embedding from a given graph. Will follow the word2vec algorithm to create the embedding.
@@ -128,7 +130,10 @@ def node2vec_embed(
         f"Completed. Ending time is {str(end)} Elapsed time is {str(start - end)}"
     )
 
-    return model.wv.vectors, model.wv.index2word
+    labels = node2vec_graph.original_graph.nodes()
+    remapped_labels = node2vec_graph.label_map_to_string
+
+    return np.array([model.wv.get_vector(remapped_labels[node]) for node in labels]), np.array(labels)
 
 
 def _assert_is_positive_int(name: str, value: int):
@@ -146,16 +151,16 @@ def _assert_is_nonnegative_float(name: str, value: float):
 
 
 def _preconditions(
-    graph: Union[nx.Graph, nx.DiGraph],
-    num_walks: int,
-    walk_length: int,
-    return_hyperparameter: float,
-    inout_hyperparameter: float,
-    dimensions: int,
-    window_size: int,
-    workers: int,
-    iterations: int,
-    interpolate_walk_lengths_by_node_degree: bool,
+        graph: Union[nx.Graph, nx.DiGraph],
+        num_walks: int,
+        walk_length: int,
+        return_hyperparameter: float,
+        inout_hyperparameter: float,
+        dimensions: int,
+        window_size: int,
+        workers: int,
+        iterations: int,
+        interpolate_walk_lengths_by_node_degree: bool,
 ):
     if not isinstance(graph, nx.Graph):
         raise TypeError("graph must be a networkx Graph or DiGraph")
@@ -179,12 +184,12 @@ def _preconditions(
 
 
 def _learn_embeddings(
-    walks: List[Any],
-    dimensions: int,
-    window_size: int,
-    workers: int,
-    iterations: int,
-    random_seed: Optional[int],
+        walks: List[Any],
+        dimensions: int,
+        window_size: int,
+        workers: int,
+        iterations: int,
+        random_seed: Optional[int],
 ):
     """
     Learn embeddings by optimizing the skip-gram objective using SGD.
@@ -227,23 +232,29 @@ class _Node2VecGraph:
     """
 
     def __init__(
-        self,
-        graph: nx.Graph,
-        return_hyperparameter: float,
-        inout_hyperparameter: float,
-        random_state: Optional[np.random.RandomState] = None,
+            self,
+            graph: nx.Graph,
+            return_hyperparameter: float,
+            inout_hyperparameter: float,
+            random_state: Optional[np.random.RandomState] = None,
     ):
-        self.graph: nx.Graph = graph
+        self.original_graph: nx.Graph = graph
+
+        graph_with_new_ids, new_id_map = remap_node_ids(graph=graph)
+
+        self.graph = graph_with_new_ids
+        self.label_map_to_string = new_id_map
+
         self.is_directed = self.graph.is_directed()
         self.p = return_hyperparameter
         self.q = inout_hyperparameter
         self.random_state = random_state
 
     def node2vec_walk(
-        self,
-        walk_length: int,
-        start_node: Any,
-        degree_percentiles: Optional[np.ndarray],
+            self,
+            walk_length: int,
+            start_node: Any,
+            degree_percentiles: Optional[np.ndarray],
     ):
         """
         Simulate a random walk starting from start node.
@@ -299,7 +310,7 @@ class _Node2VecGraph:
 
     @staticmethod
     def _get_walk_length_interpolated(
-        degree: int, percentiles: np.ndarray, max_walk_length: int
+            degree: int, percentiles: list, max_walk_length: int
     ):
         """
         Given a node's degree, determine the length of a walk that should be used. If the degree is less than the
@@ -331,10 +342,10 @@ class _Node2VecGraph:
         return math.floor(new_walk_length)
 
     def _simulate_walks(
-        self,
-        num_walks: int,
-        walk_length: int,
-        interpolate_walk_lengths_by_node_degree: bool = False,
+            self,
+            num_walks: int,
+            walk_length: int,
+            interpolate_walk_lengths_by_node_degree: bool = False,
     ):
         """
         Repeatedly simulate random walks from each node.
@@ -473,7 +484,7 @@ def _alias_setup(probabilities: List[float]):
     """
     number_of_outcomes = len(probabilities)
     alias = np.zeros(number_of_outcomes)
-    sampled_probabilities = np.zeros(number_of_outcomes, dtype=np.int)
+    sampled_probabilities = np.zeros(number_of_outcomes, dtype=int)
 
     smaller = []
     larger = []
@@ -499,7 +510,7 @@ def _alias_setup(probabilities: List[float]):
 
 
 def _alias_draw(
-    probabilities: List[float], alias: List[float], random_state: np.random.RandomState
+        probabilities: List[float], alias: List[float], random_state: np.random.RandomState
 ):
     """
     Draw sample from a non-uniform discrete distribution using alias sampling.
