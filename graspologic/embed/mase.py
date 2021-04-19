@@ -1,11 +1,10 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
-
-import numpy as np
-from sklearn.utils.validation import check_is_fitted
-from ..utils import import_graph, is_almost_symmetric
 from .base import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
+from ..utils import is_almost_symmetric
+import numpy as np
+from sklearn.utils.validation import check_is_fitted
 from joblib import delayed, Parallel
 
 
