@@ -2,8 +2,10 @@
 # Licensed under the MIT License.
 
 import unittest
+import networkx as nx
 import numpy
-from graspologic.layouts.auto import _get_bounds
+
+from graspologic.layouts.auto import _get_bounds, layout_umap
 
 
 class TestAuto(unittest.TestCase):
@@ -15,6 +17,15 @@ class TestAuto(unittest.TestCase):
         self.assertEqual(10, maxx)
         self.assertEqual(5, maxy)
 
+    def test_layout_umap_string_node_ids(self):
+        graph = nx.florentine_families_graph()
+
+        for s, t in graph.edges():
+            graph.add_edge(s, t, weight=1)
+
+        _, node_positions = layout_umap(graph=graph)
+
+        self.assertEqual(len(node_positions), len(graph.nodes()))
 
 if __name__ == "__main__":
     unittest.main()
