@@ -79,7 +79,7 @@ def import_graph(graph, copy=True):
 
 
 def import_edgelist(
-        path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
+    path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
 ):
     """
     Function for reading a single or multiple edgelists. When importing multiple
