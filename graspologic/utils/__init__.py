@@ -47,5 +47,4 @@ __all__ = [
     "remove_vertices",
     "remap_labels",
     "remap_node_ids",
-    "to_weighted_edge_list",
 ]
