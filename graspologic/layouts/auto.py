@@ -28,6 +28,7 @@ def layout_tsne(
     n_iter: int,
     max_edges: int = 10000000,
     random_seed: Optional[int] = None,
+    adjust_overlaps: bool = True,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
     """
     Automatic graph layout generation by creating a generalized node2vec embedding,
@@ -74,6 +75,9 @@ def layout_tsne(
         a new random state. Specifying a random state will provide consistent results
         between runs. In addition the environment variable ``PYTHONHASHSEED`` must be
         set to control hash randomization.
+    adjust_overlaps : bool
+        Make room for overlapping nodes while maintaining some semblance of the
+        2d spatial characteristics of each node. Default is ``True``
 
     Returns
     -------
@@ -95,7 +99,13 @@ def layout_tsne(
     points = TSNE(
         perplexity=perplexity, n_iter=n_iter, random_state=random_seed
     ).fit_transform(tensors)
-    positions = _node_positions_from(lcc_graph, labels, points, random_seed=random_seed)
+    positions = _node_positions_from(
+        lcc_graph,
+        labels,
+        points,
+        random_seed=random_seed,
+        adjust_overlaps=adjust_overlaps,
+    )
     return lcc_graph, positions
 
 
@@ -105,6 +115,7 @@ def layout_umap(
     n_neighbors: int = 25,
     max_edges: int = 10000000,
     random_seed: Optional[int] = None,
+    adjust_overlaps: bool = True,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
     """
     Automatic graph layout generation by creating a generalized node2vec embedding,
@@ -146,11 +157,14 @@ def layout_umap(
         The maximum number of edges to use when generating the embedding.  Default is
         ``10000000``. The edges with the lowest weights will be pruned until at most
         ``max_edges`` exist. Warning: this pruning is approximate and more edges than
-        are necessary may be pruned. Running in 32 bit enviornment you will most
+        are necessary may be pruned. Running in 32 bit environment you will most
         likely need to reduce this number or you will out of memory.
     random_seed : int
         Seed to be used for reproducible results. Default is None and will produce
         random results.
+    adjust_overlaps : bool
+        Make room for overlapping nodes while maintaining some semblance of the
+        2d spatial characteristics of each node. Default is ``True``
 
     Returns
     -------
@@ -176,7 +190,13 @@ def layout_umap(
     points = umap.UMAP(
         min_dist=min_dist, n_neighbors=n_neighbors, random_state=random_seed
     ).fit_transform(tensors)
-    positions = _node_positions_from(lcc_graph, labels, points, random_seed=random_seed)
+    positions = _node_positions_from(
+        lcc_graph,
+        labels,
+        points,
+        random_seed=random_seed,
+        adjust_overlaps=adjust_overlaps,
+    )
     return lcc_graph, positions
 
 
@@ -234,6 +254,7 @@ def _node_positions_from(
     labels: np.ndarray,
     down_projection_2d: np.ndarray,
     random_seed: Optional[int] = None,
+    adjust_overlaps: bool = True,
 ) -> List[NodePosition]:
     degree = graph.degree()
     sizes = _compute_sizes(degree)
@@ -250,7 +271,8 @@ def _node_positions_from(
         )
         for index, key in enumerate(labels)
     ]
-    positions = remove_overlaps(positions)
+    if adjust_overlaps is True:
+        positions = remove_overlaps(positions)
     return positions
 
 
