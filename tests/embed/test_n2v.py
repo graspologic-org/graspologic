@@ -156,4 +156,3 @@ class Node2VecEmbedTest(unittest.TestCase):
         )
 
         self.assertEqual(w, expected_walk_length)
-
