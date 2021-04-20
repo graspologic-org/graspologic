@@ -134,8 +134,8 @@ def node2vec_embed(
     remapped_labels = node2vec_graph.label_map_to_string
 
     return (
-               [model.wv.get_vector(remapped_labels[node]) for node in labels],
-               labels,
+        [model.wv.get_vector(remapped_labels[node]) for node in labels],
+        labels,
     )
 
 
