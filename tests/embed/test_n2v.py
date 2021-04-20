@@ -38,6 +38,33 @@ class Node2VecEmbedTest(unittest.TestCase):
         ari = adjusted_rand_score(original_labels, string_labels)
         np.testing.assert_array_equal(ari, 1.0)
 
+    def test_n2v_directed_undirected_returns_same_clustering(self):
+        probability_matrix = np.array([[0.8, 0.2], [0.2, 0.8]])
+        number_of_nodes_per_community = [100, 100]
+
+        sbm_sample = gc.simulations.sbm(
+            number_of_nodes_per_community, probability_matrix
+        )
+        sbm_graph = nx.from_numpy_array(sbm_sample)
+
+        graph = nx.Graph()
+        graph_directed = nx.DiGraph()
+        for s, t in sbm_graph.edges():
+            graph.add_edge(s, t, weight=1)
+
+            graph_directed.add_edge(s, t, weight=1)
+            graph_directed.add_edge(t, s, weight=1)
+
+        original_embedding = gc.embed.node2vec_embed(graph, random_seed=1)
+        directed_embedding = gc.embed.node2vec_embed(graph_directed, random_seed=1)
+
+        k = KMeans(n_clusters=2)
+        original_labels = k.fit_predict(original_embedding[0])
+        string_labels = k.fit_predict(directed_embedding[0])
+
+        ari = adjusted_rand_score(original_labels, string_labels)
+        np.testing.assert_array_equal(ari, 1.0)
+
     def test_node2vec_embed(self):
         g = nx.florentine_families_graph()
 
