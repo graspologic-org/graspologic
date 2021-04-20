@@ -238,7 +238,9 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self._reduce_dim(L_norm)
 
         # for out-of-sample
-        inv_eigs = np.diag(1 / self.singular_values_)/(self.n_features_in_/self.n_components)
+        inv_eigs = np.diag(1 / self.singular_values_) / (
+            self.n_features_in_ / self.n_components
+        )
         self._pinv_left = self.latent_left_ @ inv_eigs
         if self.latent_right_ is not None:
             self._pinv_right = self.latent_right_ @ inv_eigs
