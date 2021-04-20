@@ -1,3 +1,5 @@
+.. _last-graspy-label:
+
 Release Notes: GraSPy 0.3
 =========================
 
