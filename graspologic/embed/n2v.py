@@ -24,7 +24,7 @@ def node2vec_embed(
     iterations: int = 1,
     interpolate_walk_lengths_by_node_degree: bool = True,
     random_seed: Optional[int] = None,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[List, List]:
     """
     Generates a node2vec embedding from a given graph. Will follow the word2vec algorithm to create the embedding.
 
@@ -67,7 +67,7 @@ def node2vec_embed(
 
     Returns
     -------
-    Tuple[np.ndarray, np.ndarray]
+    Tuple[List, List]
         A tuple containing a matrix, with each row index corresponding to the embedding for each node. The tuple
         also contains a vector containing the corresponding vertex labels for each row in the matrix.
         The matrix and vector are positionally correlated.
@@ -134,8 +134,8 @@ def node2vec_embed(
     remapped_labels = node2vec_graph.label_map_to_string
 
     return (
-        np.array([model.wv.get_vector(remapped_labels[node]) for node in labels]),
-        np.array(labels),
+               [model.wv.get_vector(remapped_labels[node]) for node in labels],
+               labels,
     )
 
 
