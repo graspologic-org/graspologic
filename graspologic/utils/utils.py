@@ -999,3 +999,4 @@ def suppress_common_warnings():
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
     warnings.simplefilter("always", category=UserWarning)
+    
