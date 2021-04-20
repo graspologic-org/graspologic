@@ -21,7 +21,7 @@ from .utils import (
     fit_plug_in_variance_estimator,
     remove_vertices,
     remap_labels,
-    remap_node_ids
+    remap_node_ids,
 )
 from .ptr import pass_to_ranks
 

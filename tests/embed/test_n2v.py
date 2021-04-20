@@ -17,7 +17,9 @@ class Node2VecEmbedTest(unittest.TestCase):
         probability_matrix = np.array([[0.8, 0.2], [0.2, 0.8]])
         number_of_nodes_per_community = [100, 100]
 
-        sbm_sample = gc.simulations.sbm(number_of_nodes_per_community, probability_matrix)
+        sbm_sample = gc.simulations.sbm(
+            number_of_nodes_per_community, probability_matrix
+        )
         sbm_graph = nx.from_numpy_array(sbm_sample)
 
         graph = nx.Graph()

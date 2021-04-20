@@ -945,8 +945,7 @@ def remap_labels(
 
 
 def remap_node_ids(
-    graph: nx.Graph,
-    weight_attribute: str = 'weight'
+    graph: nx.Graph, weight_attribute: str = "weight"
 ) -> Tuple[nx.Graph, Dict[Any, str]]:
     """
     Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
@@ -970,7 +969,7 @@ def remap_node_ids(
     TypeError
     """
     if not isinstance(graph, nx.Graph):
-        raise TypeError('graph must be of type nx.Graph')
+        raise TypeError("graph must be of type nx.Graph")
 
     node_id_dict = dict()
     graph_remapped = type(graph)()
@@ -982,12 +981,11 @@ def remap_node_ids(
         if target not in node_id_dict:
             node_id_dict[target] = str(len(node_id_dict.keys()))
 
-        graph_remapped.add_edge(
-            node_id_dict[source],
-            node_id_dict[target]
-        )
+        graph_remapped.add_edge(node_id_dict[source], node_id_dict[target])
 
-        graph_remapped[node_id_dict[source]][node_id_dict[target]][weight_attribute] = weight
+        graph_remapped[node_id_dict[source]][node_id_dict[target]][
+            weight_attribute
+        ] = weight
 
     return graph_remapped, node_id_dict
 
@@ -999,4 +997,3 @@ def suppress_common_warnings():
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
     warnings.simplefilter("always", category=UserWarning)
-    

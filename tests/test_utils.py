@@ -561,18 +561,18 @@ class TestRemapNodeIds(unittest.TestCase):
         self.assertTrue(len(new_graph.nodes()) == len(graph.nodes()))
         self.assertTrue(len(new_graph.edges()) == len(graph.edges()))
 
-        for source, target, weight in graph.edges(data='weight'):
+        for source, target, weight in graph.edges(data="weight"):
             self.assertTrue(source in new_node_ids.keys())
             self.assertTrue(target in new_node_ids.keys())
 
-            new_weight = new_graph[new_node_ids[source]][new_node_ids[target]]['weight']
+            new_weight = new_graph[new_node_ids[source]][new_node_ids[target]]["weight"]
             self.assertEqual(weight, new_weight)
 
     def test_remap_node_ids_graph_has_same_edges_but_remapped(self):
         graph = nx.Graph()
 
         graph.add_edge(0, 1, weight=10)
-        graph.add_edge(1, 'someid', weight=100)
+        graph.add_edge(1, "someid", weight=100)
 
         new_graph, new_node_ids = gus.remap_node_ids(graph)
 
@@ -582,8 +582,8 @@ class TestRemapNodeIds(unittest.TestCase):
         graph = nx.DiGraph()
 
         graph.add_edge(0, 1, weight=10)
-        graph.add_edge(1, 'someid', weight=100)
-        graph.add_edge('someid', 1, weight=21)
+        graph.add_edge(1, "someid", weight=100)
+        graph.add_edge("someid", 1, weight=21)
 
         new_graph, new_node_ids = gus.remap_node_ids(graph)
 

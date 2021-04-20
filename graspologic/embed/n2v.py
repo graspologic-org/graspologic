@@ -133,7 +133,10 @@ def node2vec_embed(
     labels = node2vec_graph.original_graph.nodes()
     remapped_labels = node2vec_graph.label_map_to_string
 
-    return np.array([model.wv.get_vector(remapped_labels[node]) for node in labels]), np.array(labels)
+    return (
+        np.array([model.wv.get_vector(remapped_labels[node]) for node in labels]),
+        np.array(labels),
+    )
 
 
 def _assert_is_positive_int(name: str, value: int):
