@@ -532,9 +532,13 @@ class AutoGMMCluster(BaseCluster):
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
         )
         param_grid = list(ParameterGrid(param_grid))
-        #Append multiple_init rows if desired
+        # Append multiple_init rows if desired
         if self.n_init is not None and self.label_init is None:
-            multiple_init = [params.copy()  for params in param_grid if params["affinity"] == "none" and params["linkage"] == self.linkage[0]] 
+            multiple_init = [
+                params.copy()
+                for params in param_grid
+                if params["affinity"] == "none" and params["linkage"] == self.linkage[0]
+            ]
             for params in multiple_init:
                 params.update({"linkage": "none"})
                 for _ in range(self.n_init):
@@ -545,7 +549,7 @@ class AutoGMMCluster(BaseCluster):
             np.random.seed(self.random_state)
             seeds = np.random.randint(np.iinfo(np.int32).max, size=len(param_grid))
         else:
-            seeds = [self.random_state]*len(param_grid)
+            seeds = [self.random_state] * len(param_grid)
 
         n = X.shape[0]
         if self.max_agglom_size is None or n <= self.max_agglom_size:
