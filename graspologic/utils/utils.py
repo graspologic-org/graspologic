@@ -79,7 +79,7 @@ def import_graph(graph, copy=True):
 
 
 def import_edgelist(
-        path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
+   `     path, extension="edgelist", delimiter=None, nodetype=int, return_vertices=False
 ):
     """
     Function for reading a single or multiple edgelists. When importing multiple
@@ -143,8 +143,8 @@ def import_edgelist(
 
     if all(len(G.nodes) == 0 for G in graphs):
         msg = (
-                "All graphs have 0 vertices. Please double check if proper "
-                + "'delimiter' is given."
+            "All graphs have 0 vertices. Please double check if proper "
+            + "'delimiter' is given."
         )
         warnings.warn(msg, UserWarning)
 
@@ -171,15 +171,15 @@ def is_loopless(X):
 
 
 def is_unweighted(
-        graph: Union[
-            np.ndarray,
-            scipy.sparse.csr_matrix,
-            nx.Graph,
-            nx.DiGraph,
-            nx.MultiGraph,
-            nx.MultiDiGraph,
-        ],
-        weight_attribute: Any = "weight",
+    graph: Union[
+        np.ndarray,
+        scipy.sparse.csr_matrix,
+        nx.Graph,
+        nx.DiGraph,
+        nx.MultiGraph,
+        nx.MultiDiGraph,
+    ],
+    weight_attribute: Any = "weight",
 ):
     """
     Attempts to determine if the provided graph is weighted.
@@ -859,9 +859,9 @@ def remove_vertices(graph, indices, return_removed=False):
 
 
 def remap_labels(
-        y_true: Union[List, np.ndarray, pd.Series],
-        y_pred: Union[List, np.ndarray, pd.Series],
-        return_map: bool = False,
+    y_true: Union[List, np.ndarray, pd.Series],
+    y_pred: Union[List, np.ndarray, pd.Series],
+    return_map: bool = False,
 ) -> np.ndarray:
     """
     Remaps a categorical labeling (such as one predicted by a clustering algorithm) to
@@ -945,8 +945,8 @@ def remap_labels(
 
 
 def remap_node_ids(
-        graph: nx.Graph,
-        weight_attribute: str = 'weight'
+    graph: nx.Graph,
+    weight_attribute: str = 'weight'
 ) -> Tuple[nx.Graph, Dict[Any, str]]:
     """
     Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
