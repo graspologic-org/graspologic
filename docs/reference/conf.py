@@ -67,6 +67,7 @@ autodoc_member_order = "bysource"  # default is alphabetical
 intersphinx_mapping = {
     "anytree": ("https://anytree.readthedocs.io/en/latest/", None),
     "hyppo": ("https://hyppo.neurodata.io", None),
+    "joblib": ("https://joblib.readthedocs.io/en/latest/", None),
     "matplotlib": ("https://matplotlib.org", None),
     "networkx": ("https://networkx.org/documentation/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
