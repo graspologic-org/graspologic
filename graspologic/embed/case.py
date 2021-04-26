@@ -127,9 +127,6 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         graph, covariates = network
         A = import_graph(graph)
-        n = A.shape[0]
-        if n != A.shape[1]:
-            raise ValueError("Graph should be square")
 
         # Create regularized Laplacian, scale covariates to unit norm
         L = to_laplacian(A, form="R-DAD")
@@ -143,6 +140,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self._get_tuning_parameter(L, Y)
 
         # get embedding matrix as a LinearOperator (for computational efficiency)
+        n = A.shape[0]
         mv, rmv = self._matvec(L, Y, a=self.alpha_, assortative=self.assortative)
         L_ = LinearOperator((n, n), matvec=mv, rmatvec=rmv)
 
