@@ -17,13 +17,28 @@ def _graph_from_file(
     path: str,
     skip_header: bool = False,
 ) -> nx.Graph:
+    logger = logging.getLogger("graspologic.layouts")
     graph = nx.Graph()
     with open(path, "r") as edge_io:
         if skip_header is True:
             next(edge_io)
+        first = True
         for line in edge_io:
-            source, target, weight = line.strip().split(",")
-            weight = float(weight)
+            split_vals = line.strip().split(",")
+            if len(split_vals) == 3:
+                source, target, weight = split_vals
+                weight = float(weight)
+            elif len(split_vals) == 2:
+                if first:
+                    logger.warn("No weights found in edge list, using 1.0")
+                    first = False
+                source, target = split_vals[:2]
+                weight = 1.0
+            else:  # drop it because it is malformed
+                if len(split_vals) == 0:
+                    pass  # do nothing for blank lines
+                else:
+                    raise IOError(f"Expected 2 or 3 columns in {path}, no more or less")
             if graph.has_edge(source, target):
                 weight += graph[source][target]["weight"]
             graph.add_edge(source, target, weight=weight)
