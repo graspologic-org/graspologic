@@ -65,7 +65,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             n_elbows=n_elbows,
             check_lcc=check_lcc,
             concat=False,
-            algorithm="square",
+            algorithm="eigsh",
         )
 
         if not isinstance(assortative, bool):

@@ -206,7 +206,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
             Does not support ``graph`` input of type scipy.sparse.csr_matrix
         - 'truncated'
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
-        - 'square'
+        - 'eigsh'
             Computes svd of a real, symmetric square matrix using
             :func:`scipy.sparse.linalg.eigsh`. Extremely fast for these types of
             matrices.
@@ -237,8 +237,8 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         raise ValueError(msg)
 
     # Deal with algorithms
-    if algorithm not in ["full", "truncated", "randomized", "square"]:
-        msg = "algorithm must be one of {full, truncated, randomized, square}."
+    if algorithm not in ["full", "truncated", "randomized", "eigsh"]:
+        msg = "algorithm must be one of {full, truncated, randomized, eigsh}."
         raise ValueError(msg)
 
     if algorithm == "full" and isspmatrix_csr(X):
@@ -271,16 +271,16 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         U = U[:, idx]
         V = V[idx, :]
 
-    elif algorithm == "square":
+    elif algorithm == "eigsh":
         if X.shape[0] != X.shape[1]:
-            raise ValueError("square can only be used on square matrices.")
+            raise ValueError("eigsh can only be used on square matrices.")
         if not is_almost_symmetric(X):
-            raise ValueError("square can only be used on symmetric matrices")
+            raise ValueError("eigsh can only be used on symmetric matrices")
 
         D, U = scipy.sparse.linalg.eigsh(X, k=n_components)
-        # singular values of a real symmetric matrix are the absolute values of its 
+        # singular values of a real symmetric matrix are the absolute values of its
         # eigenvalues, so need to take np.abs
-        D = np.abs(D) 
+        D = np.abs(D)
         V = U.T
 
         # sort in decreasing order
@@ -294,7 +294,7 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
 
     else:
         raise ValueError(
-            "algorithm must be in {'full', 'truncated', 'randomized', 'square'}"
+            "algorithm must be in {'full', 'truncated', 'randomized', 'eigsh'}"
         )
 
     return U, D, V
