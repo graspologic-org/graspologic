@@ -66,7 +66,7 @@ def test_outputs():
     assert_allclose(norm_full, norm_rand, rtol, atol)
 
 
-def test_square():
+def test_eigsh():
     np.random.seed(123)
     X = np.vstack(
         [
@@ -84,9 +84,9 @@ def test_square():
     X_full = U_full @ np.diag(np.sqrt(D_full))
     _, _, norm_full = procrustes(X, X_full)
 
-    # Square SVD
+    # eigsh SVD
     U_square, D_square, V_square = selectSVD(
-        A, n_components=n_components, algorithm="square", n_iter=10
+        A, n_components=n_components, algorithm="eigsh", n_iter=10
     )
     X_square = U_square @ np.diag(np.sqrt(D_square))
     _, _, norm_square = procrustes(X, X_square)
