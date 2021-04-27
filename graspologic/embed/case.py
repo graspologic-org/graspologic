@@ -8,11 +8,12 @@ from graspologic.embed.base import BaseSpectralEmbed
 
 class CovariateAssistedEmbed(BaseSpectralEmbed):
     """
-    Perform Spectral Embedding on a graph with covariates, using the regularized graph Laplacian.
+    Perform Spectral Embedding on a graph with covariates for each node, using the
+    regularized graph Laplacian.
 
     The Covariate-Assisted Spectral Embedding is a k-dimensional Euclidean representation
-    of a graph based on a function of its Laplacian and a vector of covariate features
-    for each node. For more information, see [1].
+    of a graph. It returns an n x d matrix, similarly to Adjacency Spectral Embedding or
+    Laplacian Spectral Embedding. For more information, see [1].
 
     Parameters
     ----------
