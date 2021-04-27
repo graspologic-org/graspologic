@@ -165,11 +165,8 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self._reduce_dim(L_norm)
 
         # for out-of-sample
-        corr_comps = (
-            self.n_components_ if self.n_components is None else self.n_components
-        )
         inv_eigs = np.diag(1 / self.singular_values_) / (
-            self.n_features_in_ / corr_comps
+            self.n_features_in_ / self.n_components_
         )
         self._pinv_left = self.latent_left_ @ inv_eigs
         if self.latent_right_ is not None:
