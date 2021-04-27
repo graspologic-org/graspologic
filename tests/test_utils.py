@@ -6,7 +6,6 @@ from math import sqrt
 
 import networkx as nx
 import numpy as np
-import scipy
 import pytest
 from numpy.testing import assert_equal
 
@@ -550,126 +549,42 @@ class TestRemapLabels(unittest.TestCase):
             remap_labels(self.y_pred, ["ant", "ant", "cat", "cat", "bird", "bird"])
 
 
-def add_edges_to_graph(graph: nx.Graph) -> nx.Graph:
-    graph.add_edge("nick", "dwayne", weight=1.0)
-    graph.add_edge("nick", "dwayne", weight=3.0)
-    graph.add_edge("dwayne", "nick", weight=2.2)
-    graph.add_edge("dwayne", "ben", weight=4.2)
-    graph.add_edge("ben", "dwayne", weight=0.001)
-    return graph
+class TestRemapNodeIds(unittest.TestCase):
+    def test_remap_node_ids_invalid_typ_raises_typeerror(self):
+        invalid_types = [str, int, list]
 
+        for type in invalid_types:
+            with pytest.raises(TypeError):
+                gus.remap_node_ids(graph=type())
 
-class TestToWeightedEdgeList(unittest.TestCase):
-    def test_empty_edge_list(self):
-        edges = []
-        self.assertEqual([], gus.to_weighted_edge_list(edges))
+    def _assert_graphs_are_equivalent(self, graph, new_graph, new_node_ids):
+        self.assertTrue(len(new_graph.nodes()) == len(graph.nodes()))
+        self.assertTrue(len(new_graph.edges()) == len(graph.edges()))
 
-    def test_assert_wrong_types_in_tuples(self):
-        edges = [(True, 4, "sandwich")]
-        with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(edges)
-        edges = [(True, False, 3.2)]
-        self.assertEqual([("True", "False", 3.2)], gus.to_weighted_edge_list(edges))
+        for source, target, weight in graph.edges(data="weight"):
+            self.assertTrue(source in new_node_ids.keys())
+            self.assertTrue(target in new_node_ids.keys())
 
-    def test_empty_nx(self):
-        self.assertEqual([], gus.to_weighted_edge_list(nx.Graph()))
-        self.assertEqual([], gus.to_weighted_edge_list(nx.DiGraph()))
-        self.assertEqual([], gus.to_weighted_edge_list(nx.MultiGraph()))
-        self.assertEqual([], gus.to_weighted_edge_list(nx.MultiDiGraph()))
+            new_weight = new_graph[new_node_ids[source]][new_node_ids[target]]["weight"]
+            self.assertEqual(weight, new_weight)
 
-    def test_valid_nx(self):
-        graph = add_edges_to_graph(nx.Graph())
-        expected = [("nick", "dwayne", 2.2), ("dwayne", "ben", 0.001)]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
-
-        graph = add_edges_to_graph(nx.DiGraph())
-        expected = [
-            ("nick", "dwayne", 3.0),
-            ("dwayne", "nick", 2.2),
-            ("dwayne", "ben", 4.2),
-            ("ben", "dwayne", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
-
-        graph = add_edges_to_graph(nx.MultiGraph())
-        expected = [
-            ("nick", "dwayne", 1.0),
-            ("nick", "dwayne", 3.0),
-            ("nick", "dwayne", 2.2),
-            ("dwayne", "ben", 4.2),
-            ("dwayne", "ben", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
-
-        graph = add_edges_to_graph(nx.MultiDiGraph())
-        expected = [
-            ("nick", "dwayne", 1.0),
-            ("nick", "dwayne", 3.0),
-            ("dwayne", "nick", 2.2),
-            ("dwayne", "ben", 4.2),
-            ("ben", "dwayne", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(graph))
-
-    def test_unweighted_nx(self):
+    def test_remap_node_ids_graph_has_same_edges_but_remapped(self):
         graph = nx.Graph()
-        graph.add_edge("dwayne", "nick")
-        graph.add_edge("nick", "ben")
 
-        with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(graph)
+        graph.add_edge(0, 1, weight=10)
+        graph.add_edge(1, "someid", weight=100)
 
-        self.assertEqual(
-            [("dwayne", "nick", 3.33333), ("nick", "ben", 3.33333)],
-            gus.to_weighted_edge_list(graph, weight_default=3.33333),
-        )
+        new_graph, new_node_ids = gus.remap_node_ids(graph)
 
-        graph.add_edge("salad", "sandwich", weight=100)
+        self._assert_graphs_are_equivalent(graph, new_graph, new_node_ids)
 
-        self.assertEqual(
-            [
-                ("dwayne", "nick", 3.33333),
-                ("nick", "ben", 3.33333),
-                ("salad", "sandwich", 100),
-            ],
-            gus.to_weighted_edge_list(graph, weight_default=3.33333),
-        )
+    def test_remap_node_ids_digraph_has_same_edges_but_remapped(self):
+        graph = nx.DiGraph()
 
-    def test_matrices(self):
-        graph = add_edges_to_graph(nx.Graph())
-        di_graph = add_edges_to_graph(nx.DiGraph())
+        graph.add_edge(0, 1, weight=10)
+        graph.add_edge(1, "someid", weight=100)
+        graph.add_edge("someid", 1, weight=21)
 
-        dense_undirected = nx.to_numpy_array(graph)
-        dense_directed = nx.to_numpy_array(di_graph)
+        new_graph, new_node_ids = gus.remap_node_ids(graph)
 
-        sparse_undirected = nx.to_scipy_sparse_matrix(graph)
-        sparse_directed = nx.to_scipy_sparse_matrix(di_graph)
-
-        expected = [("0", "1", 2.2), ("1", "2", 0.001)]
-        self.assertEqual(expected, gus.to_weighted_edge_list(dense_undirected))
-        self.assertEqual(expected, gus.to_weighted_edge_list(sparse_undirected))
-
-        expected = [
-            ("0", "1", 3.0),
-            ("1", "0", 2.2),
-            ("1", "2", 4.2),
-            ("2", "1", 0.001),
-        ]
-        self.assertEqual(expected, gus.to_weighted_edge_list(dense_directed))
-        self.assertEqual(expected, gus.to_weighted_edge_list(sparse_directed))
-
-    def test_empty_adj_matrices(self):
-        dense = np.array([])
-        with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(dense)
-
-        sparse = scipy.sparse.csr_matrix([])
-        with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(sparse)
-
-    def test_misshapen_matrices(self):
-        data = [[3, 2, 0], [2, 0, 1]]  # this is utter gibberish
-        with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(np.array(data))
-        with self.assertRaises(ValueError):
-            gus.to_weighted_edge_list(scipy.sparse.csr_matrix(data))
+        self._assert_graphs_are_equivalent(graph, new_graph, new_node_ids)
