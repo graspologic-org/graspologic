@@ -10,6 +10,8 @@ from sklearn.utils.validation import check_is_fitted
 from ..utils import augment_diagonal, import_graph, is_almost_symmetric
 from .svd import selectSVD
 
+import networkx as nx
+
 
 class BaseSpectralEmbed(BaseEstimator):
     """
