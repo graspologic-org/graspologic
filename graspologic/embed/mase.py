@@ -109,12 +109,12 @@ class MultipleASE(BaseEmbedMulti):
     def __init__(
         self,
         n_components: Optional[int] = None,
-        n_elbows: Optional[int] = 2,
-        algorithm: Optional[str] = "randomized",
-        n_iter: Optional[int] = 5,
-        scaled: Optional[bool] = True,
-        diag_aug: Optional[bool] = True,
-        concat: Optional[bool] = False,
+        n_elbows: int = 2,
+        algorithm: str = "randomized",
+        n_iter: int = 5,
+        scaled: bool = True,
+        diag_aug: bool = True,
+        concat: bool = False,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
