@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse.linalg import LinearOperator, eigsh
 from sklearn.preprocessing import normalize, scale
+from typing import Tuple, Callable, Optional
 
 from graspologic.utils import import_graph, to_laplacian, is_almost_symmetric
 from graspologic.embed.base import BaseSpectralEmbed
@@ -55,11 +56,11 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
     def __init__(
         self,
-        alpha=None,
-        assortative=True,
-        n_components=None,
-        n_elbows=2,
-        check_lcc=False,
+        alpha: Optional[float] = None,
+        assortative: bool = True,
+        n_components: Optional[int] = None,
+        n_elbows: Optional[int] = 2,
+        check_lcc: bool = False,
     ):
         super().__init__(
             n_components=n_components,
@@ -82,7 +83,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self.latent_right_ = None
         self.is_fitted_ = False
 
-    def fit(self, network, y=None):
+    def fit(self, network: Tuple[np.ndarray, np.ndarray], y=None):
         """
         Fit a CASE model to an input graph, along with its covariates. Depending on the
         embedding algorithm, we embed
@@ -136,8 +137,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             Y = Y[:, np.newaxis]
         Y = normalize(Y, axis=0)
 
-        # Use ratio of the two leading eigenvalues
-        # if alpha is None
+        # Use ratio of the two leading eigenvalues if alpha is None
         self._get_tuning_parameter(L, Y)
 
         # get embedding matrix as a LinearOperator (for computational efficiency)
@@ -151,7 +151,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self.is_fitted_ = True
         return self
 
-    def _get_tuning_parameter(self, L, Y):
+    def _get_tuning_parameter(self, L: np.ndarray, Y: np.ndarray):
         """
         Find the alpha which causes the leading eigenspace of LL and YYt to be the same.
 
@@ -189,7 +189,13 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         return self
 
     @staticmethod
-    def _matvec(L, Y, a=None, assortative=True):
+    def _matvec(
+        L: np.ndarray, Y: np.ndarray, a: float, assortative: bool = True
+    ) -> Tuple[Callable, Callable]:
+        """
+        Defines matrix multiplication and matrix multiplication by transpose for the
+        LinearOperator object.
+        """
         if assortative:
             mv = lambda v: (L @ v) + a * (Y @ (Y.T @ v))
             rmv = lambda v: (v.T @ L) + a * ((v.T @ Y) @ Y.T)
