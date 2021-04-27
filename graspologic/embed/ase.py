@@ -3,7 +3,6 @@
 
 import warnings
 import numpy as np
-from sklearn.utils.validation import check_is_fitted
 import networkx as nx
 
 from .base import BaseSpectralEmbed
