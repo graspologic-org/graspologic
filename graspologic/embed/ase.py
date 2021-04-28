@@ -139,7 +139,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         self.diag_aug = diag_aug
         self.is_fitted_ = False
 
-    def fit(self, graph: Union[ArrayLike nx.Graph], y: None = None) -> "AdjacencySpectralEmbed":
+    def fit(self, graph: Union[ArrayLike, nx.Graph], y: None = None) -> "AdjacencySpectralEmbed":
         """
         Fit ASE model to input graph
 
