@@ -83,7 +83,9 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self.latent_right_ = None
         self.is_fitted_ = False
 
-    def fit(self, network: Tuple[np.ndarray, np.ndarray], y: None = None) -> "CovariateAssistedEmbed":
+    def fit(
+        self, network: Tuple[np.ndarray, np.ndarray], y: None = None
+    ) -> "CovariateAssistedEmbed":
         """
         Fit a CASE model to an input graph, along with its covariates. Depending on the
         embedding algorithm, we embed
@@ -151,7 +153,9 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self.is_fitted_ = True
         return self
 
-    def _get_tuning_parameter(self, L: np.ndarray, Y: np.ndarray) -> "CovariateAssistedEmbed":
+    def _get_tuning_parameter(
+        self, L: np.ndarray, Y: np.ndarray
+    ) -> "CovariateAssistedEmbed":
         """
         Find the alpha which causes the leading eigenspace of LL and YYt to be the same.
 
