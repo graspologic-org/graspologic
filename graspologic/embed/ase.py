@@ -117,7 +117,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
     def __init__(
         self,
-        n_components Optional[int] = None,
+        n_components: Optional[int] = None,
         n_elbows: int = 2,
         algorithm: str = "randomized",
         n_iter: int = 5,
