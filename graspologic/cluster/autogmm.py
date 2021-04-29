@@ -372,10 +372,7 @@ class AutoGMMCluster(BaseCluster):
         if max_agglom_size is not None and max_agglom_size < 2:
             raise ValueError("Must use at least 2 points for `max_agglom_size`")
 
-        check_scalar(
-            n_init, name="n_init", target_type=int, min_val=1
-        )
-
+        check_scalar(n_init, name="n_init", target_type=int, min_val=1)
 
         self.min_components = min_components
         self.max_components = max_components
@@ -534,7 +531,9 @@ class AutoGMMCluster(BaseCluster):
         )
         param_grid = list(ParameterGrid(param_grid))
 
-        param_grid_ag, param_grid = _process_paramgrid(param_grid, self.n_init, self.label_init)
+        param_grid_ag, param_grid = _process_paramgrid(
+            param_grid, self.n_init, self.label_init
+        )
 
         if isinstance(self.random_state, int):
             np.random.seed(self.random_state)
@@ -709,11 +708,7 @@ def _process_paramgrid(paramgrid, n_init, label_init):
             ag_params = {key: params[key] for key in ag_keys}
             if ag_params not in ag_params_processed:
                 ag_params_processed.append(ag_params)
-            if (
-                ag_params["affinity"] == "none"
-                and n_init > 1
-                and label_init is None
-            ):
+            if ag_params["affinity"] == "none" and n_init > 1 and label_init is None:
                 more_kmeans_init = gm_params.copy()
                 more_kmeans_init.update({"n_init": 1})
                 paramgrid_processed += [
