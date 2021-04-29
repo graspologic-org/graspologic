@@ -119,9 +119,9 @@ class AutoGMMCluster(BaseCluster):
         If provided, min_components and ``max_components`` must match the number of
         unique labels given here.
 
-    n_init : int, optional (default = None)
-        If `n_init` is not `None` and `label_init` is `None` then additional
-        k-means runs will be performed with `n_init` initializations for all covariance
+    multiple_init : int, optional (default = None)
+        If `multiple_init` is not `None` and `label_init` is `None` then additional
+        k-means runs will be performed with `multiple_init` initializations for all covariance
         parameters in `covariance_type` and for each number of mixture components
         considered.
         The resulting models are appended to `results_` for each initialization.
@@ -230,7 +230,7 @@ class AutoGMMCluster(BaseCluster):
         selection_criteria="bic",
         max_agglom_size=2000,
         n_jobs=None,
-        n_init=None,
+        multiple_init=None,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -373,8 +373,13 @@ class AutoGMMCluster(BaseCluster):
         if max_agglom_size is not None and max_agglom_size < 2:
             raise ValueError("Must use at least 2 points for `max_agglom_size`")
 
-        if n_init is not None:
-            check_scalar(x=n_init, name="n_init", target_type=int, min_val=1)
+        if multiple_init is not None:
+            check_scalar(
+                x=multiple_init, name="multiple_init", target_type=int, min_val=1
+            )
+            if label_init is not None:
+                msg = "If multiple_init is not `None`, label_init must be `None`"
+                raise ValueError(msg)
 
         self.min_components = min_components
         self.max_components = max_components
@@ -388,7 +393,7 @@ class AutoGMMCluster(BaseCluster):
         self.selection_criteria = selection_criteria
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
-        self.n_init = n_init
+        self.multiple_init = multiple_init
 
     def _fit_cluster(self, X, X_subset, y, params, agg_clustering, seed):
         label_init = self.label_init
@@ -532,18 +537,8 @@ class AutoGMMCluster(BaseCluster):
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
         )
         param_grid = list(ParameterGrid(param_grid))
-        # Append multiple_init rows if desired
-        if self.n_init is not None and self.label_init is None:
-            multiple_init = [
-                params.copy()
-                for params in param_grid
-                if params["affinity"] == "none" and params["linkage"] == self.linkage[0]
-            ]
-            for params in multiple_init:
-                params.update({"linkage": "none"})
-                for _ in range(self.n_init):
-                    param_grid.append(params)
-        param_grid_ag, param_grid = _process_paramgrid(param_grid)
+
+        param_grid_ag, param_grid = _process_paramgrid(param_grid, self.multiple_init)
 
         if isinstance(self.random_state, int):
             np.random.seed(self.random_state)
@@ -678,7 +673,7 @@ def _labels_to_onehot(labels):
     return onehot
 
 
-def _process_paramgrid(paramgrid):
+def _process_paramgrid(paramgrid, multiple_init=None):
     """
     Removes combinations of affinity and linkage that are not possible.
 
@@ -687,6 +682,9 @@ def _process_paramgrid(paramgrid):
     paramgrid : list of dicts
         Each dict has the keys 'affinity', 'covariance_type', 'linkage',
         'n_components', and 'random_state'
+
+    multiple_init : int, defaults to None.
+        The number of multiple k-means initializations to perform.
 
     Returns
     -------
@@ -699,13 +697,13 @@ def _process_paramgrid(paramgrid):
     gm_keys = ["covariance_type", "n_components"]
     ag_keys = ["affinity", "linkage"]
     ag_params_processed = []
+    gm_params_processed = []
     paramgrid_processed = []
 
     for params in paramgrid:
         if (
             params["affinity"] == "none"
             and params["linkage"] != paramgrid[0]["linkage"]
-            and params["linkage"] != "none"
         ):
             continue
         elif (
@@ -719,8 +717,18 @@ def _process_paramgrid(paramgrid):
             ag_params = {key: params[key] for key in ag_keys}
             if ag_params not in ag_params_processed:
                 ag_params_processed.append(ag_params)
+            if (
+                gm_params not in gm_params_processed
+                and ag_params["affinity"] == "none"
+                and multiple_init is not None
+            ):
+                for _ in range(multiple_init):
+                    gm_params_processed.append(gm_params.copy())
+                    gm_params_processed[-1].update({"n_init": 1})
 
             paramgrid_processed.append([ag_params, gm_params])
+    for pa in gm_params_processed:
+        paramgrid_processed.append([{"affinity": "none", "linkage": "none"}, pa])
     return ag_params_processed, paramgrid_processed
 
 
