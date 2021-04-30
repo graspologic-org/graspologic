@@ -5,7 +5,7 @@ import warnings
 from collections.abc import Iterable
 from functools import reduce
 from pathlib import Path
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import networkx as nx
 import numpy as np
@@ -953,6 +953,52 @@ def remap_labels(
         return remapped_y_pred, label_map
     else:
         return remapped_y_pred
+
+
+def remap_node_ids(
+    graph: nx.Graph, weight_attribute: str = "weight"
+) -> Tuple[nx.Graph, Dict[Any, str]]:
+    """
+    Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
+    except the node ids are remapped to a string representation.
+
+    Parameters
+    ----------
+    graph : nx.Graph
+        A graph that has node ids of arbitrary types.
+    weight_attribute : str,
+        Default is ``weight``. An optional attribute to specify which column in your graph contains the weight value.
+
+    Returns
+    -------
+    Tuple[nx.Graph, Dict[Any, str]]
+        A new graph that contains the same edges except the node ids are remapped to strings. The keys in
+        the dictionary are the old node ids and the values are the newly remapped node ids.
+
+    Raises
+    ------
+    TypeError
+    """
+    if not isinstance(graph, nx.Graph):
+        raise TypeError("graph must be of type nx.Graph")
+
+    node_id_dict = dict()
+    graph_remapped = type(graph)()
+
+    for source, target, weight in graph.edges(data=weight_attribute):
+        if source not in node_id_dict:
+            node_id_dict[source] = str(len(node_id_dict.keys()))
+
+        if target not in node_id_dict:
+            node_id_dict[target] = str(len(node_id_dict.keys()))
+
+        graph_remapped.add_edge(node_id_dict[source], node_id_dict[target])
+
+        graph_remapped[node_id_dict[source]][node_id_dict[target]][
+            weight_attribute
+        ] = weight
+
+    return graph_remapped, node_id_dict
 
 
 def suppress_common_warnings():
