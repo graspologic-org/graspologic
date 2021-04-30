@@ -9,7 +9,7 @@ from scipy.linalg import orthogonal_procrustes
 
 from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
-from ..simulations import rdpg
+from ..simulations import p_from_latent, rdpg, sample_edges
 from ..utils import import_graph, is_symmetric
 
 lpt_result = namedtuple("lpt_result", ("p_value", "sample_T_statistic", "misc_stats"))
@@ -140,8 +140,12 @@ def latent_position_test(
 
     A1 = import_graph(A1)
     A2 = import_graph(A2)
+
     if not is_symmetric(A1) or not is_symmetric(A2):
-        raise NotImplementedError()  # TODO asymmetric case
+        directed = True
+    else:
+        directed = False
+    # TODO add a warning/error for when one is directed and the other is not
     if A1.shape != A2.shape:
         raise ValueError("Input matrices do not have matching dimensions")
     if n_components is None:
@@ -149,18 +153,25 @@ def latent_position_test(
         num_dims1 = select_dimension(A1)[0][-1]
         num_dims2 = select_dimension(A2)[0][-1]
         n_components = max(num_dims1, num_dims2)
+
     X_hats = _embed(A1, A2, embedding, n_components)
     sample_T_statistic = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
 
+    P_hats = _compute_P_hats(X_hats, loops=False, rescale=False)
+
     # Compute null distributions
     null_distribution_1 = Parallel(n_jobs=workers)(
-        delayed(_bootstrap)(X_hats[0], embedding, n_components, n_bootstraps, test_case)
+        delayed(_bootstrap)(
+            P_hats[0], embedding, n_components, n_bootstraps, test_case, directed
+        )
         for _ in range(n_bootstraps)
     )
     null_distribution_1 = np.array(null_distribution_1)
 
     null_distribution_2 = Parallel(n_jobs=workers)(
-        delayed(_bootstrap)(X_hats[1], embedding, n_components, n_bootstraps, test_case)
+        delayed(_bootstrap)(
+            P_hats[1], embedding, n_components, n_bootstraps, test_case, directed
+        )
         for _ in range(n_bootstraps)
     )
     null_distribution_2 = np.array(null_distribution_2)
@@ -177,7 +188,7 @@ def latent_position_test(
 
     misc_stats = {
         "null_distribution_1": null_distribution_1,
-        "null_distribution_2_": null_distribution_2,
+        "null_distribution_2": null_distribution_2,
         "p_value_1": p_value_1,
         "p_value_2": p_value_2,
     }
@@ -186,10 +197,16 @@ def latent_position_test(
 
 
 def _bootstrap(
-    X_hat, embedding, n_components, n_bootstraps, test_case, rescale=False, loops=False
+    P_hat,
+    embedding,
+    n_components,
+    n_bootstraps,
+    test_case,
+    directed,
+    loops=False,
 ):
-    A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
-    A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
+    A1_simulated = sample_edges(P_hat, loops=loops, directed=directed)
+    A2_simulated = sample_edges(P_hat, loops=loops, directed=directed)
     X1_hat_simulated, X2_hat_simulated = _embed(
         A1_simulated, A2_simulated, embedding, n_components, check_lcc=False
     )
@@ -199,37 +216,76 @@ def _bootstrap(
     return t_bootstrap
 
 
+def _compute_P_hats(X_hats, loops=False, rescale=False):
+    # assuming that they either are both tuples (directed) or both not tuples
+    # (undirected)
+    if isinstance(X_hats[0], tuple):
+        out_latent_1 = X_hats[0][0]
+        in_latent_1 = X_hats[0][1]
+        out_latent_2 = X_hats[1][0]
+        in_latent_2 = X_hats[1][1]
+    else:
+        out_latent_1 = X_hats[0]
+        out_latent_2 = X_hats[1]
+        in_latent_1 = None
+        in_latent_2 = None
+
+    P_hat_1 = p_from_latent(out_latent_1, in_latent_1, rescale=rescale, loops=loops)
+    P_hat_2 = p_from_latent(out_latent_2, in_latent_2, rescale=rescale, loops=loops)
+
+    return (P_hat_1, P_hat_2)
+
+
 def _difference_norm(X1, X2, embedding, test_case):
     if embedding in ["ase"]:
         if test_case == "rotation":
             pass
         elif test_case == "scalar-rotation":
+            # TODO fix for the directed case
             X1 = X1 / np.linalg.norm(X1, ord="fro")
             X2 = X2 / np.linalg.norm(X2, ord="fro")
         elif test_case == "diagonal-rotation":
+            # TODO fix for the directed case
             normX1 = np.sum(X1 ** 2, axis=1)
             normX2 = np.sum(X2 ** 2, axis=1)
             normX1[normX1 <= 1e-15] = 1
             normX2[normX2 <= 1e-15] = 1
             X1 = X1 / np.sqrt(normX1[:, None])
             X2 = X2 / np.sqrt(normX2[:, None])
+        if isinstance(X1, tuple):
+            # For the directed case, we concatenate along the rows in order to learn
+            # the procrustes transformation. This is equivalent to solving for the
+            # orthogonal Q by doing:
+            # argmin_Q \| X1 Q - X2 \|_F^2 + \| Y1 Q - Y2 \|_F^2
+            X1 = np.concatenate(X1, axis=0)
+            X2 = np.concatenate(X2, axis=0)
         aligner = OrthogonalProcrustes()
         X1 = aligner.fit_transform(X1, X2)
-    return np.linalg.norm(X1 - X2)
+    if isinstance(X1, tuple):
+        X1 = np.concatenate(X1, axis=0)
+        X2 = np.concatenate(X2, axis=0)
+    return np.linalg.norm(X1 - X2, ord="fro")
 
 
-def _embed(A1, A2, embedding, n_components, check_lcc=True):
+def _embed(A1, A2, embedding, n_components, check_lcc=False):
     if embedding == "ase":
         X1_hat = AdjacencySpectralEmbed(
-            n_components=n_components, check_lcc=check_lcc
+            n_components=n_components, check_lcc=check_lcc, diag_aug=False
         ).fit_transform(A1)
         X2_hat = AdjacencySpectralEmbed(
-            n_components=n_components, check_lcc=check_lcc
+            n_components=n_components, check_lcc=check_lcc, diag_aug=False
         ).fit_transform(A2)
     elif embedding == "omnibus":
         X_hat_compound = OmnibusEmbed(
-            n_components=n_components, check_lcc=check_lcc
+            n_components=n_components, check_lcc=check_lcc, diag_aug=False
         ).fit_transform((A1, A2))
-        X1_hat = X_hat_compound[0]
-        X2_hat = X_hat_compound[1]
+        if isinstance(X_hat_compound, tuple):
+            # first indexes in/out
+            # second indexes graph1/graph2
+            # this will make X1_hat a tuple of (out,in), likewise for X2_hat
+            X1_hat = (X_hat_compound[0][0], X_hat_compound[1][0])
+            X2_hat = (X_hat_compound[0][1], X_hat_compound[1][1])
+        else:
+            X1_hat = X_hat_compound[0]
+            X2_hat = X_hat_compound[1]
     return (X1_hat, X2_hat)

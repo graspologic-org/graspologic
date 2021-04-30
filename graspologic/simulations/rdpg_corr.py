@@ -99,7 +99,7 @@ def rdpg_corr(X, Y, r, rescale=False, directed=False, loops=False):
         raise TypeError("loops is not of type bool.")
 
     # check dimensions of X and Y
-    if Y != None:
+    if Y is not None:
         if type(X) is not np.ndarray or type(Y) is not np.ndarray:
             raise TypeError("Latent positions must be numpy.ndarray")
         if X.ndim != 2 or Y.ndim != 2:
