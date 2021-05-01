@@ -158,18 +158,20 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
     ) -> "CovariateAssistedEmbed":
         """
         Find the alpha which causes the leading eigenspace of LL and YYt to be the same.
+        Saves that alpha as the class attribute ``self.alpha_``.
 
         Parameters
         ----------
-        L : array
-            The regularized graph Laplacian.
-        Y : array
-            The covariate matrix.
+        L : array, n x n
+            The regularized graph Laplacian, where ``n`` is the number of nodes.
+        Y : array, n x d
+            The covariate matrix, where ``n`` is the number of nodes and ``d`` is the
+             number of covariates.
 
         Returns
         -------
-        alpha : float
-            Tuning parameter which normalizes the leading eigenspace of LL and YYt.
+        self : object
+            Returns an instance of self.
         """
         # setup
         if self.alpha is not None:
