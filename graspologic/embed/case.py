@@ -102,13 +102,13 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         Parameters
         ----------
         network : tuple or list of np.ndarrays
-            Contains the tuple (A, Y), where A is an adjacency matrix and Y is the
-            matrix of covariates.
+            Contains the tuple (graph, covariates), where ``graph`` is an adjacency
+            matrix and ``covariates`` is the matrix of covariates.
 
-            A : array-like or networkx.Graph
+            graph : array-like or networkx.Graph
                 Input graph to embed. See graspologic.utils.import_graph
 
-            Y : array-like, shape (n_vertices, n_covariates)
+            covariates : array-like, shape (n_vertices, n_covariates)
                 Covariate matrix. Each node of the graph is associated with a set of
                 `d` covariates. Row `i` of the covariates matrix corresponds to node
                 `i`, and the number of columns are the number of covariates.
