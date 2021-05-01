@@ -33,10 +33,10 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             - False: Embed ``L@L + a*Y@Y.T``. Better for non-assortative graphs.
 
     center_covariates: bool, default = True
-        Whether or not to center the covariates to have mean 0.
+        Whether or not to center the columns of the covariates to have mean 0.
 
     scale_covariates: bool, default = True
-        Whether or not to row-scale the covariates to have unit L2-norm.
+        Whether or not to scale the columns of the covariates to have unit L2-norm.
 
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
@@ -65,7 +65,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         alpha: Optional[float] = None,
         assortative: bool = True,
         center_covariates: bool = True,
-        scale_covariates: bool = False,
+        scale_covariates: bool = True,
         n_components: Optional[int] = None,
         n_elbows: int = 2,
         check_lcc: bool = False,
