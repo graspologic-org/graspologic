@@ -32,6 +32,12 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             - True: Embed ``L + a*Y@Y.T``. Better for assortative graphs.
             - False: Embed ``L@L + a*Y@Y.T``. Better for non-assortative graphs.
 
+    center_covariates: bool, default = True
+        Whether or not to center the covariates to have mean 0.
+
+    scale_covariates: bool, default = True
+        Whether or not to row-scale the covariates to have unit L2-norm.
+
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
         n_components must be <= min(Y.shape). Otherwise, n_components must be
@@ -58,6 +64,8 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self,
         alpha: Optional[float] = None,
         assortative: bool = True,
+        center_covariates: bool = True,
+        scale_covariates: bool = False,
         n_components: Optional[int] = None,
         n_elbows: int = 2,
         check_lcc: bool = False,
@@ -81,6 +89,8 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         self.alpha = alpha
         self.latent_right_ = None
+        self._centered = center_covariates
+        self._scaled = scale_covariates
         self.is_fitted_ = False
 
     def fit(
@@ -137,7 +147,10 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         Y = covariates
         if Y.ndim == 1:
             Y = Y[:, np.newaxis]
-        Y = normalize(Y, axis=0)
+        if self._centered:
+            Y = scale(Y, with_std=False, axis=0)
+        if self._scaled:
+            Y = normalize(Y, axis=0)
 
         # Use ratio of the two leading eigenvalues if alpha is None
         self._get_tuning_parameter(L, Y)
