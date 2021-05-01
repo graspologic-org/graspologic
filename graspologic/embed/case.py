@@ -9,20 +9,19 @@ from graspologic.embed.base import BaseSpectralEmbed
 
 class CovariateAssistedEmbed(BaseSpectralEmbed):
     """
-    Perform Spectral Embedding on a graph with covariates for each node, using the
-    regularized graph Laplacian.
-
-    The Covariate-Assisted Spectral Embedding is a k-dimensional Euclidean representation
-    of a graph. It returns an n x d matrix, similarly to Adjacency Spectral Embedding or
-    Laplacian Spectral Embedding. For more information, see [1].
+    The Covariate-Assisted Spectral Embedding is a tabular representation of a graph
+    which has extra covariate information for each node. It returns an n x d matrix,
+    similarly to Adjacency Spectral Embedding or Laplacian Spectral Embedding.
 
     Parameters
     ----------
     alpha : float, optional, default = None
-        Tuning parameter to use:
-            -  None: Default to the ratio of the leading eigenvector of the Laplacian
-                     to the leading eigenvector of the covariate matrix.
-            - float: Use a particular alpha-value.
+        Tuning parameter. This is a value which lets you change how much information
+        the covariates contribute to the embedding. Higher values mean the covariates
+        contribute more information.
+            -  None: Use a weight which causes the covariates and the graph to contribute
+               the same amount of information to the embedding.
+            - float: Manually set the tuning parameter value.
 
     assortative : bool, default = True
         Embedding algorithm to use. An assortative network is any network where the
@@ -53,6 +52,18 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
 
+    Notes
+    -----
+    Depending on the embedding algorithm, we embed
+
+        .. math:: L_ = LL + \alpha YY^T
+        .. math:: L_ = L + \alpha YY^T
+
+        where :math:`\alpha` is the tuning parameter which makes the leading eigenvalues
+        of the two summands the same. Here, :math:`L` is the regularized
+        graph Laplacian, and :math:`Y` is a matrix of covariates for each node.
+
+    For more information, see [1].
 
     References
     ---------
@@ -97,17 +108,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self, network: Tuple[np.ndarray, np.ndarray], y: None = None
     ) -> "CovariateAssistedEmbed":
         """
-        Fit a CASE model to an input graph, along with its covariates. Depending on the
-        embedding algorithm, we embed
-
-        .. math:: L_ = LL + \alpha YY^T
-        .. math:: L_ = L + \alpha YY^T
-
-        where :math:`\alpha` is a tuning parameter which makes the leading eigenvalues
-        of the two summands the same. Here, :math:`L` is the regularized
-        graph Laplacian, and :math:`Y` is a matrix of covariates for each node.
-
-        Covariates are row-normalized to unit l2-norm.
+        Fit a CASE model to an input graph, along with its covariates.
 
         Parameters
         ----------
