@@ -547,3 +547,44 @@ class TestRemapLabels(unittest.TestCase):
 
         with pytest.raises(ValueError):
             remap_labels(self.y_pred, ["ant", "ant", "cat", "cat", "bird", "bird"])
+
+
+class TestRemapNodeIds(unittest.TestCase):
+    def test_remap_node_ids_invalid_typ_raises_typeerror(self):
+        invalid_types = [str, int, list]
+
+        for type in invalid_types:
+            with pytest.raises(TypeError):
+                gus.remap_node_ids(graph=type())
+
+    def _assert_graphs_are_equivalent(self, graph, new_graph, new_node_ids):
+        self.assertTrue(len(new_graph.nodes()) == len(graph.nodes()))
+        self.assertTrue(len(new_graph.edges()) == len(graph.edges()))
+
+        for source, target, weight in graph.edges(data="weight"):
+            self.assertTrue(source in new_node_ids.keys())
+            self.assertTrue(target in new_node_ids.keys())
+
+            new_weight = new_graph[new_node_ids[source]][new_node_ids[target]]["weight"]
+            self.assertEqual(weight, new_weight)
+
+    def test_remap_node_ids_graph_has_same_edges_but_remapped(self):
+        graph = nx.Graph()
+
+        graph.add_edge(0, 1, weight=10)
+        graph.add_edge(1, "someid", weight=100)
+
+        new_graph, new_node_ids = gus.remap_node_ids(graph)
+
+        self._assert_graphs_are_equivalent(graph, new_graph, new_node_ids)
+
+    def test_remap_node_ids_digraph_has_same_edges_but_remapped(self):
+        graph = nx.DiGraph()
+
+        graph.add_edge(0, 1, weight=10)
+        graph.add_edge(1, "someid", weight=100)
+        graph.add_edge("someid", 1, weight=21)
+
+        new_graph, new_node_ids = gus.remap_node_ids(graph)
+
+        self._assert_graphs_are_equivalent(graph, new_graph, new_node_ids)
