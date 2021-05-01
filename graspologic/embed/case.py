@@ -75,8 +75,8 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
             raise ValueError(msg)
         self.assortative = assortative
 
-        if not ((alpha is None) or isinstance(alpha, (float, int))):
-            msg = "alpha must be in {None, float, int}."
+        if not isinstance(alpha, (float, int, type(None))):
+            msg = "alpha's type must be in {None, float, int}."
             raise TypeError(msg)
 
         self.alpha = alpha

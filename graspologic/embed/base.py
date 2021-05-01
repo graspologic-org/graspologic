@@ -4,9 +4,7 @@
 from abc import abstractmethod
 
 import numpy as np
-from scipy.sparse.linalg import LinearOperator
 from sklearn.base import BaseEstimator
-from sklearn import preprocessing
 
 from ..utils import augment_diagonal, import_graph, is_almost_symmetric
 from .svd import selectSVD
