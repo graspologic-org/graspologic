@@ -119,9 +119,9 @@ class AutoGMMCluster(BaseCluster):
         If provided, min_components and ``max_components`` must match the number of
         unique labels given here.
 
-    n_init : int, optional (default = 1)
-        If ``n_init`` is larger than 1 and ``label_init`` is None, additional
-        ``n_init``-1 runs of :class:`sklearn.mixture.GaussianMixture`
+    kmeans_n_init : int, optional (default = 1)
+        If ``kmeans_n_init`` is larger than 1 and ``label_init`` is None, additional
+        ``kmeans_n_init``-1 runs of :class:`sklearn.mixture.GaussianMixture`
         initialized with k-means will be performed
         for all covariance parameters in ``covariance_type``.
 
@@ -224,7 +224,7 @@ class AutoGMMCluster(BaseCluster):
         covariance_type="all",
         random_state=None,
         label_init=None,
-        n_init=1,
+        kmeans_n_init=1,
         max_iter=100,
         verbose=0,
         selection_criteria="bic",
@@ -372,7 +372,7 @@ class AutoGMMCluster(BaseCluster):
         if max_agglom_size is not None and max_agglom_size < 2:
             raise ValueError("Must use at least 2 points for `max_agglom_size`")
 
-        check_scalar(n_init, name="n_init", target_type=int, min_val=1)
+        check_scalar(kmeans_n_init, name="kmeans_n_init", target_type=int, min_val=1)
 
         self.min_components = min_components
         self.max_components = max_components
@@ -381,7 +381,7 @@ class AutoGMMCluster(BaseCluster):
         self.covariance_type = new_covariance_type
         self.random_state = random_state
         self.label_init = labels_init
-        self.n_init = n_init
+        self.kmeans_n_init = kmeans_n_init
         self.max_iter = max_iter
         self.verbose = verbose
         self.selection_criteria = selection_criteria
@@ -532,7 +532,7 @@ class AutoGMMCluster(BaseCluster):
         param_grid = list(ParameterGrid(param_grid))
 
         param_grid_ag, param_grid = _process_paramgrid(
-            param_grid, self.n_init, self.label_init
+            param_grid, self.kmeans_n_init, self.label_init
         )
 
         if isinstance(self.random_state, int):
@@ -668,7 +668,7 @@ def _labels_to_onehot(labels):
     return onehot
 
 
-def _process_paramgrid(paramgrid, n_init, label_init):
+def _process_paramgrid(paramgrid, kmeans_n_init, label_init):
     """
     Removes combinations of affinity and linkage that are not possible.
 
@@ -708,12 +708,12 @@ def _process_paramgrid(paramgrid, n_init, label_init):
             ag_params = {key: params[key] for key in ag_keys}
             if ag_params not in ag_params_processed:
                 ag_params_processed.append(ag_params)
-            if ag_params["affinity"] == "none" and n_init > 1 and label_init is None:
+            if ag_params["affinity"] == "none" and kmeans_n_init > 1 and label_init is None:
                 more_kmeans_init = gm_params.copy()
-                more_kmeans_init.update({"n_init": 1})
+                more_kmeans_init.update({"kmeans_n_init": 1})
                 paramgrid_processed += [
                     [{"affinity": "none", "linkage": "none"}, more_kmeans_init]
-                ] * (n_init - 1)
+                ] * (kmeans_n_init - 1)
 
             paramgrid_processed.append([ag_params, gm_params])
     return ag_params_processed, paramgrid_processed
