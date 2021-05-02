@@ -708,7 +708,11 @@ def _process_paramgrid(paramgrid, kmeans_n_init, label_init):
             ag_params = {key: params[key] for key in ag_keys}
             if ag_params not in ag_params_processed:
                 ag_params_processed.append(ag_params)
-            if ag_params["affinity"] == "none" and kmeans_n_init > 1 and label_init is None:
+            if (
+                ag_params["affinity"] == "none"
+                and kmeans_n_init > 1
+                and label_init is None
+            ):
                 more_kmeans_init = gm_params.copy()
                 more_kmeans_init.update({"kmeans_n_init": 1})
                 paramgrid_processed += [
