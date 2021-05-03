@@ -118,6 +118,28 @@ class BaseSpectralEmbed(BaseEstimator):
     def fit(self, graph, y=None):
         """
         A method for embedding.
+        Parameters
+        ----------
+        graph: np.ndarray or networkx.Graph
+        y : Ignored
+        Returns
+        -------
+        lpm : LatentPosition object
+            Contains X (the estimated latent positions), Y (same as X if input is
+            undirected graph, or right estimated positions if directed graph), and d.
+        See Also
+        --------
+        import_graph, LatentPosition
+        """
+        # call self._reduce_dim(A) from your respective embedding technique.
+        # import graph(s) to an adjacency matrix using import_graph function
+        # here
+
+        return self
+
+    def _fit(self, graph, y=None):
+        """
+        A method for embedding.
 
         Parameters
         ----------

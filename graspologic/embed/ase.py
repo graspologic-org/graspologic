@@ -154,7 +154,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         self : object
             Returns an instance of self.
         """
-        A = super().fit(graph)
+        A = self._fit(graph)
 
         if self.diag_aug:
             A = augment_diagonal(A)
