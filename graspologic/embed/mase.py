@@ -2,11 +2,10 @@
 # Licensed under the MIT License.
 
 import numpy as np
-from sklearn.utils.validation import check_is_fitted
 
-from ..utils import import_graph, is_almost_symmetric
 from .base import BaseEmbedMulti
 from .svd import select_dimension, selectSVD
+from ..utils import is_almost_symmetric
 
 
 class MultipleASE(BaseEmbedMulti):
@@ -129,8 +128,11 @@ class MultipleASE(BaseEmbedMulti):
         self.scaled = scaled
 
     def _reduce_dim(self, graphs):
-        # first embed into log2(n_vertices) for each graph
-        n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
+        if self.n_components is None:
+            # first embed into log2(n_vertices) for each graph
+            n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
+        else:
+            n_components = self.n_components
 
         # embed individual graphs
         embeddings = [
@@ -223,7 +225,7 @@ class MultipleASE(BaseEmbedMulti):
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
-            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
+            self.scores_ = np.asarray([Uhat.T @ graph @ Vhat for graph in graphs])
             self.singular_values_ = (sing_vals_left, sing_vals_right)
         else:
             self.latent_right_ = None
