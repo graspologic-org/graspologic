@@ -452,10 +452,7 @@ def is_fully_connected(graph):
     """
 
     if isinstance(graph, (np.ndarray, csr_matrix)):
-        if is_symmetric(graph):
-            directed = False
-        else:
-            directed = True
+        directed = not is_symmetric(graph)
 
         n_components = connected_components(
             csgraph=graph, directed=directed, connection="weak", return_labels=False
