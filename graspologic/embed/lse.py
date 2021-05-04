@@ -8,6 +8,8 @@ from ..utils import import_graph, to_laplacian, is_fully_connected
 
 import numpy as np
 
+from typing import List, Optional, Union
+
 
 class LaplacianSpectralEmbed(BaseSpectralEmbed):
     r"""
@@ -112,13 +114,13 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     def __init__(
         self,
         form="DAD",
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        regularizer=None,
-        concat=False,
+        n_components: Optional[int] = None,
+        n_elbows: Optional[int] = 2,
+        algorithm: Optional[str] = "randomized",
+        n_iter: Optional[int] = 5,
+        check_lcc: Optional[bool] = True,
+        regularizer: Optional[float] = None,
+        concat: Optional[bool] = False,
     ):
         super().__init__(
             n_components=n_components,
@@ -131,7 +133,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self.form = form
         self.regularizer = regularizer
 
-    def fit(self, graph, y=None):
+    def fit(self, graph: Union[np.ndarray, networkx.Graph], y=None):
         """
         Fit LSE model to input graph
 
