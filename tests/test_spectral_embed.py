@@ -357,7 +357,7 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
 
         lse = LaplacianSpectralEmbed(n_components=2)
         X_hat = lse.fit_transform(A)
-        w = lse.transform(a) / nodes_per_community
+        w = lse.transform(a)
         self.assertTrue(X_hat[0][0] - epsilon < w[0] < X_hat[0][0] + epsilon)
         self.assertTrue(X_hat[0][1] - epsilon < w[0] < X_hat[0][1] + epsilon)
 
