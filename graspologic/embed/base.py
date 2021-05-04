@@ -247,11 +247,11 @@ class BaseSpectralEmbed(BaseEstimator):
             msg = "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
             raise ValueError(msg)
 
-        # workhorse code
-        if not directed:
-            return X @ self._pinv_left
-        elif directed:
-            return X[1] @ self._pinv_right, X[0] @ self._pinv_left
+        return self.compute_oos_prediction(X, directed)
+
+    @abstractmethod
+    def compute_oos_prediction(self, X, directed):
+        pass
 
 
 class BaseEmbedMulti(BaseSpectralEmbed):

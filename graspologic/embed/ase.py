@@ -177,3 +177,10 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         self.is_fitted_ = True
         return self
+
+    def compute_oos_prediction(self, X, directed):
+        # workhorse code
+        if not directed:
+            return X @ self._pinv_left
+        elif directed:
+            return X[1] @ self._pinv_right, X[0] @ self._pinv_left

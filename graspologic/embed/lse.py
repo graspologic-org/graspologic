@@ -7,8 +7,10 @@ from .base import BaseSpectralEmbed
 from ..utils import import_graph, to_laplacian, is_fully_connected
 
 import numpy as np
+from sklearn.utils.validation import check_is_fitted
 
 from typing import List, Optional, Union
+import networkx as nx
 
 
 class LaplacianSpectralEmbed(BaseSpectralEmbed):
@@ -133,7 +135,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self.form = form
         self.regularizer = regularizer
 
-    def fit(self, graph: Union[np.ndarray, networkx.Graph], y=None):
+    def fit(self, graph: Union[np.ndarray, nx.Graph], y=None):
         """
         Fit LSE model to input graph
 
@@ -167,12 +169,29 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self._reduce_dim(L_norm)
 
         # for out-of-sample
-        inv_eigs = np.diag(1 / self.singular_values_) / (
-            self.n_features_in_ / self.n_components_
-        )
+        inv_eigs = np.diag(1 / self.singular_values_)
+
         self._pinv_left = self.latent_left_ @ inv_eigs
         if self.latent_right_ is not None:
             self._pinv_right = self.latent_right_ @ inv_eigs
 
         self.is_fitted_ = True
         return self
+
+    def compute_oos_prediction(self, X, directed):
+        # workhorse code
+        if not directed:
+            if X.ndim == 1:
+                return X @ self._pinv_left / np.sum(X)
+            else:
+                return np.transpose(np.transpose(X @ self._pinv_left) /
+                                    np.sum(X, axis=1))
+        elif directed:
+            if X[0].ndim == 1:
+                return X[1] @ self._pinv_right / np.sum(X[1], axis=1), X[0] @ \
+                       self._pinv_left / np.sum(X[0], axis=1)
+            else:
+                return np.transpose(np.transpose(X[1] @ self._pinv_right) / np.sum(X[1],
+                    axis=1)), np.transpose(np.transpose(X[0] @ self._pinv_left) /
+                                           np.sum(X[0], axis=1))
+
