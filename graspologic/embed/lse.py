@@ -187,8 +187,11 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
                 return ((X @ self._pinv_left).T / np.sum(X, axis=1)).T
         elif directed:
             if X[0].ndim == 1:
-                return X[1] @ self._pinv_right / np.sum(X[1]),\
-                       X[0] @ self._pinv_left / np.sum(X[0])
+                return (
+                    X[1] @ self._pinv_right / np.sum(X[1]),
+                    X[0] @ self._pinv_left / np.sum(X[0]),
+                )
             else:
-                return ((X[1] @ self._pinv_right).T / np.sum(X[1], axis=1)).T, \
-                    ((X[0] @ self._pinv_left).T / np.sum(X[0], axis=1)).T
+                return ((X[1] @ self._pinv_right).T / np.sum(X[1], axis=1)).T, (
+                    (X[0] @ self._pinv_left).T / np.sum(X[0], axis=1)
+                ).T
