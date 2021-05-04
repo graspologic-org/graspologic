@@ -113,7 +113,7 @@ class BaseSpectralEmbed(BaseEstimator):
         return True
 
     @abstractmethod
-    def fit(self, graph, y=None):
+    def fit(self, graph, y=None, *args, **kwargs):
         """
         A method for embedding.
 
@@ -139,10 +139,10 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self
 
-    def _fit_transform(self, graph=None):
+    def _fit_transform(self, graph=None, *args, **kwargs):
         "Fits the model and returns the estimated latent positions."
 
-        self.fit(graph)
+        self.fit(graph, *args, **kwargs)
 
         if self.latent_right_ is None:
             return self.latent_left_
@@ -152,7 +152,7 @@ class BaseSpectralEmbed(BaseEstimator):
             else:
                 return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph, y=None):
+    def fit_transform(self, graph, y=None, *args, **kwargs):
         """
         Fit the model with graphs and apply the transformation.
 
@@ -170,7 +170,7 @@ class BaseSpectralEmbed(BaseEstimator):
             If directed, ``concat`` is True then concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
             If directed, ``concat`` is False then tuple of the latent matrices. Each of shape (n_vertices, n_components).
         """
-        return self._fit_transform(graph)
+        return self._fit_transform(graph, *args, **kwargs)
 
 
 class BaseEmbedMulti(BaseSpectralEmbed):

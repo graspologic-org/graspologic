@@ -105,24 +105,20 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self.is_fitted_ = False
 
     def fit(
-        self, network: Tuple[np.ndarray, np.ndarray], y: None = None
+        self, graph: np.ndarray, covariates: np.ndarray, y: None = None
     ) -> "CovariateAssistedEmbed":
         """
         Fit a CASE model to an input graph, along with its covariates.
 
         Parameters
         ----------
-        network : tuple or list of np.ndarrays
-            Contains the tuple (graph, covariates), where ``graph`` is an adjacency
-            matrix and ``covariates`` is the matrix of covariates.
+        graph : array-like or networkx.Graph
+            Input graph to embed. See graspologic.utils.import_graph
 
-            graph : array-like or networkx.Graph
-                Input graph to embed. See graspologic.utils.import_graph
-
-            covariates : array-like, shape (n_vertices, n_covariates)
-                Covariate matrix. Each node of the graph is associated with a set of
-                `d` covariates. Row `i` of the covariates matrix corresponds to node
-                `i`, and the number of columns are the number of covariates.
+        covariates : array-like, shape (n_vertices, n_covariates)
+            Covariate matrix. Each node of the graph is associated with a set of
+            `d` covariates. Row `i` of the covariates matrix corresponds to node
+            `i`, and the number of columns are the number of covariates.
 
         y: Ignored
 
@@ -133,14 +129,6 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         """
 
         # setup
-        if not isinstance(network, (tuple, list)):
-            msg = "Network should be a tuple-like object of (graph, covariates)."
-            raise TypeError(msg)
-        if len(network) != 2:
-            msg = "Network should be a tuple-like object of (graph, covariates)."
-            raise ValueError(msg)
-
-        graph, covariates = network
         A = import_graph(graph)
 
         # Create regularized Laplacian, scale covariates to unit norm
