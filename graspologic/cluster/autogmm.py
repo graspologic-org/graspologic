@@ -717,7 +717,7 @@ def _process_paramgrid(paramgrid, kmeans_n_init, label_init):
                 more_kmeans_init.update({"n_init": 1})
                 paramgrid_processed += [
                     [{"affinity": "none", "linkage": "none"}, more_kmeans_init]
-                ] * (kmeans_n_init)
+                ] * (kmeans_n_init - 1)
 
             paramgrid_processed.append([ag_params, gm_params])
     return ag_params_processed, paramgrid_processed
