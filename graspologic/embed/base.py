@@ -250,6 +250,14 @@ class BaseSpectralEmbed(BaseEstimator):
         return self.compute_oos_prediction(X, directed)
 
     def compute_oos_intermediates(self):
+        """
+        Computes all the information needed to compute oos predictions.
+
+        Returns
+        -------
+        A reference to self.
+
+        """
         inv_eigs = np.diag(1 / self.singular_values_)
 
         self._pinv_left = self.latent_left_ @ inv_eigs
@@ -261,6 +269,20 @@ class BaseSpectralEmbed(BaseEstimator):
         return self
 
     def check_connectivity(self, A):
+        """
+        Checks if the graph is fully connected if the `check_lcc` parameter is true.
+
+        Parameters
+        ----------
+        A: np.ndarray
+            The graph you wish to check its connectivity
+
+        Returns
+        -------
+        A reference to self.
+
+        """
+
         if self.check_lcc:
             if not is_fully_connected(A):
                 msg = (
@@ -272,6 +294,34 @@ class BaseSpectralEmbed(BaseEstimator):
 
     @abstractmethod
     def compute_oos_prediction(self, X, directed):
+        """
+        Computes the oos class specific estimation given in an input array and if the graph is directed.
+
+        Parameters
+        ----------
+        X: np.ndarray
+            Input to do oos embedding on.
+
+        directed: bool
+            Indication if graph is directed or undirected
+
+        Returns
+        -------
+        array_like or tuple, shape (n_oos_vertices, n_components)
+            or (n_vertices, n_components).
+
+            Array of latent positions. Transforms the fitted matrix if it was passed
+            in.
+
+            If ``X`` is an array or tuple containing adjacency vectors corresponding to
+            new nodes, returns the estimated latent positions for the new out-of-sample
+            adjacency vectors.
+            If undirected, returns array.
+            If directed, returns ``(X_out, X_in)``, where ``X_out`` contains
+            latent positions corresponding to nodes with edges from out-of-sample
+            vertices to in-sample vertices.
+        """
+
         pass
 
 
