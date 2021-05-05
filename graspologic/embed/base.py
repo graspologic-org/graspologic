@@ -7,7 +7,12 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
-from ..utils import augment_diagonal, import_graph, is_almost_symmetric
+from ..utils import (
+    augment_diagonal,
+    import_graph,
+    is_almost_symmetric,
+    is_fully_connected,
+)
 from .svd import selectSVD
 
 import networkx as nx
@@ -237,6 +242,13 @@ class BaseSpectralEmbed(BaseEstimator):
         if not directed and not isinstance(X, np.ndarray):
             raise TypeError("Undirected graphs require array input")
 
+        # for oos prediction
+        inv_eigs = np.diag(1 / self.singular_values_)
+
+        self._pinv_left = self.latent_left_ @ inv_eigs
+        if self.latent_right_ is not None:
+            self._pinv_right = self.latent_right_ @ inv_eigs
+
         # correct shape in y?
         latent_rows = self.latent_left_.shape[0]
         _X = X[0] if directed else X
@@ -248,25 +260,6 @@ class BaseSpectralEmbed(BaseEstimator):
             raise ValueError(msg)
 
         return self.compute_oos_prediction(X, directed)
-
-    def compute_oos_intermediates(self):
-        """
-        Computes all the information needed to compute oos predictions.
-
-        Returns
-        -------
-        A reference to self.
-
-        """
-        inv_eigs = np.diag(1 / self.singular_values_)
-
-        self._pinv_left = self.latent_left_ @ inv_eigs
-        if self.latent_right_ is not None:
-            self._pinv_right = self.latent_right_ @ inv_eigs
-
-        self.is_fitted_ = True
-
-        return self
 
     def check_connectivity(self, A):
         """

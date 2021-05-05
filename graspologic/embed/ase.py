@@ -162,7 +162,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         self.n_features_in_ = A.shape[0]
         self._reduce_dim(A)
 
-        self.compute_oos_intermediates()
+        self.is_fitted_ = True
 
         return self
 

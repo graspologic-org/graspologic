@@ -161,7 +161,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         L_norm = to_laplacian(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
 
-        self.compute_oos_intermediates()
+        self.is_fitted_ = True
 
         return self
 
