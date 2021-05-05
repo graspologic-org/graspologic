@@ -127,7 +127,6 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self : object
             Returns an instance of self.
         """
-
         # setup
         A = import_graph(graph)
 
@@ -154,6 +153,10 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         self.is_fitted_ = True
         return self
+
+    def fit_transform(self, graph: np.ndarray, covariates: np.ndarray):
+        # Allows `for self.fit_transform(graph, covariates)` without needing keyword arguments.
+        return self._fit_transform(graph, covariates=covariates)
 
     def _get_tuning_parameter(
         self, L: np.ndarray, Y: np.ndarray

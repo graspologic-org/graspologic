@@ -84,7 +84,7 @@ def test_custom_alpha(M, X, alg):
     A, _ = M
     a = 0.1
     case = CASE(n_components=2, assortative=alg, alpha=a)
-    latents = case.fit_transform(A, X)
+    latents = case.fit_transform(A, covariates=X)
     # just check to make sure we can run with custom alpha
 
     if case.alpha_ == 0.1:
@@ -111,12 +111,12 @@ def test_wrong_inputs(A, X):
 
     with pytest.raises(ValueError):
         A_ = np.arange(30).reshape(10, 3)
-        CASE().fit(A_, X)
+        CASE().fit(A_, covariates=X)
 
 
 def test_fit_transform(A, X):
     case = CASE(n_components=2)
-    assert case.fit_transform(A, X).any()
+    assert case.fit_transform(A, covariates=X).any()
 
 
 def test_labels_match_clustering(case, labels):
