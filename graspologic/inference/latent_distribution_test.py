@@ -10,7 +10,7 @@ from ..embed import select_dimension, AdjacencySpectralEmbed
 from ..utils import import_graph, fit_plug_in_variance_estimator
 from ..align import SignFlips
 from ..align import SeedlessProcrustes
-from sklearn.utils import check_array
+from sklearn.utils import check_array, check_random_state
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.metrics.pairwise import PAIRED_DISTANCES
@@ -37,6 +37,7 @@ def latent_distribution_test(
     metric="euclidean",
     n_components=None,
     n_bootstraps=500,
+    random_state=None,
     workers=1,
     size_correction=True,
     pooled=False,
@@ -87,6 +88,17 @@ def latent_distribution_test(
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
         See :class:`hyppo.ksample.KSample` for more information.
+    
+    random_state : {None, int, `~np.random.RandomState`, `~np.random.Generator`}
+        This parameter defines the object to use for drawing random
+        variates.
+        If `random_state` is ``None`` the `~np.random.RandomState` singleton is
+        used.
+        If `random_state` is an int, a new ``RandomState`` instance is used,
+        seeded with `random_state`.
+        If `random_state` is already a ``RandomState`` or ``Generator``
+        instance, then that object is used.
+        Default is None.
 
     workers : int (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
@@ -314,7 +326,7 @@ def latent_distribution_test(
 
     if size_correction:
         X1_hat, X2_hat = _sample_modified_ase(
-            X1_hat, X2_hat, workers=workers, pooled=pooled
+            X1_hat, X2_hat, workers=workers, random_state=random_state, pooled=pooled
         )
 
     metric_func_ = _instantiate_metric_func(metric=metric, test=test)
@@ -410,7 +422,7 @@ def _embed(A1, A2, n_components):
     return X1_hat, X2_hat
 
 
-def _sample_modified_ase(X, Y, workers, pooled=False):
+def _sample_modified_ase(X, Y, workers, random_state, pooled=False):
     N, M = len(X), len(Y)
 
     # return if graphs are same order, else ensure X the larger graph.
@@ -432,11 +444,11 @@ def _sample_modified_ase(X, Y, workers, pooled=False):
     X_sigmas = get_sigma(X) * (N - M) / (N * M)
     # increase the variance of X by sampling from the asy dist
     X_sampled = np.zeros(X.shape)
-    seeds = np.random.randint(np.iinfo(np.int32).max, size=X.shape)
+    rng = check_random_state(random_state)
     X_sampled = np.asarray(
         Parallel(n_jobs=workers)(
-            delayed(add_variance)(X[i, :], X_sigmas[i], seed)
-            for i, seed in zip(range(N), seeds)
+            delayed(add_variance)(X[i, :], X_sigmas[i], r)
+            for i, r in zip(range(N), rng.randint(np.iinfo(np.int32).max, size=X.shape))
         )
     )
 
