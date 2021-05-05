@@ -154,7 +154,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         """
         A = import_graph(graph)
 
-        self.check_connectivity()
+        self.check_connectivity(A)
 
         if self.diag_aug:
             A = augment_diagonal(A)
