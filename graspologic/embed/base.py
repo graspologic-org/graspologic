@@ -249,6 +249,27 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self.compute_oos_prediction(X, directed)
 
+    def compute_oos_intermediates(self):
+        inv_eigs = np.diag(1 / self.singular_values_)
+
+        self._pinv_left = self.latent_left_ @ inv_eigs
+        if self.latent_right_ is not None:
+            self._pinv_right = self.latent_right_ @ inv_eigs
+
+        self.is_fitted_ = True
+
+        return self
+
+    def check_connectivity(self, A):
+        if self.check_lcc:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspologic.utils.largest_connected_component``."
+                )
+                warnings.warn(msg, UserWarning)
+
     @abstractmethod
     def compute_oos_prediction(self, X, directed):
         pass

@@ -154,14 +154,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         """
         A = import_graph(graph)
 
-        if self.check_lcc:
-            if not is_fully_connected(A):
-                msg = (
-                    "Input graph is not fully connected. Results may not"
-                    + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.largest_connected_component``."
-                )
-                warnings.warn(msg, UserWarning)
+        self.check_connectivity()
 
         if self.diag_aug:
             A = augment_diagonal(A)
@@ -169,13 +162,8 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         self.n_features_in_ = A.shape[0]
         self._reduce_dim(A)
 
-        # for out-of-sample
-        inv_eigs = np.diag(1 / self.singular_values_)
-        self._pinv_left = self.latent_left_ @ inv_eigs
-        if self.latent_right_ is not None:
-            self._pinv_right = self.latent_right_ @ inv_eigs
+        self.compute_oos_intermediates()
 
-        self.is_fitted_ = True
         return self
 
     def compute_oos_prediction(self, X, directed):
