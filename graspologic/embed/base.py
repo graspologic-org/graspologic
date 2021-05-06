@@ -6,6 +6,7 @@ import warnings
 from abc import abstractmethod
 
 import numpy as np
+import warnings
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
@@ -122,19 +123,15 @@ class BaseSpectralEmbed(BaseEstimator):
     def fit(self, graph, y=None):
         """
         A method for embedding.
-
         Parameters
         ----------
         graph: np.ndarray or networkx.Graph
-
         y : Ignored
-
         Returns
         -------
         lpm : LatentPosition object
             Contains X (the estimated latent positions), Y (same as X if input is
             undirected graph, or right estimated positions if directed graph), and d.
-
         See Also
         --------
         import_graph, LatentPosition
@@ -144,6 +141,40 @@ class BaseSpectralEmbed(BaseEstimator):
         # here
 
         return self
+
+    def _fit(self, graph, y=None):
+        """
+        A method for embedding.
+
+        Parameters
+        ----------
+        graph: np.ndarray or networkx.Graph
+
+        y : Ignored
+
+        Returns
+        -------
+        A : array-like, shape (n_vertices, n_vertices)
+            A graph
+
+        See Also
+        --------
+        import_graph, LatentPosition
+        """
+
+        A = import_graph(graph)
+
+        if self.check_lcc:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspologic.utils.largest_connected_component``."
+                )
+                warnings.warn(msg, UserWarning)
+
+        self.n_features_in_ = A.shape[0]
+        return A
 
     def _fit_transform(self, graph):
         "Fits the model and returns the estimated latent positions."
@@ -263,29 +294,6 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self.compute_oos_prediction(X, directed)
 
-    def check_connectivity(self, A):
-        """
-        Checks if the graph is fully connected if the `check_lcc` parameter is true.
-
-        Parameters
-        ----------
-        A: np.ndarray
-            The graph you wish to check its connectivity
-
-        Returns
-        -------
-        A reference to self.
-
-        """
-
-        if self.check_lcc:
-            if not is_fully_connected(A):
-                msg = (
-                    "Input graph is not fully connected. Results may not"
-                    + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.largest_connected_component``."
-                )
-                warnings.warn(msg, UserWarning)
 
     @abstractmethod
     def compute_oos_prediction(self, X, directed):

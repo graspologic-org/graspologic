@@ -153,11 +153,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self : object
             Returns an instance of self.
         """
-        A = import_graph(graph)
-
-        self.check_connectivity(A)
-
-        self.n_features_in_ = A.shape[0]
+        A = self._fit(graph)
         L_norm = to_laplacian(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
 
