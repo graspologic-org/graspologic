@@ -88,7 +88,7 @@ def latent_distribution_test(
     n_bootstraps : int (default=200)
         Number of bootstrap iterations for the backend hypothesis test.
         See :class:`hyppo.ksample.KSample` for more information.
-    
+
     random_state : {None, int, `~np.random.RandomState`, `~np.random.Generator`}
         This parameter defines the object to use for drawing random
         variates.
@@ -100,9 +100,10 @@ def latent_distribution_test(
         instance, then that object is used.
         Default is None.
 
-    workers : int (default=1)
+    n_jobs : int (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
         Supply -1 to use all cores available to the Process.
+        See :class:joblib.Parallel for more details.
 
     size_correction : bool (default=True)
         Ignored when the two graphs have the same number of vertices. The test
