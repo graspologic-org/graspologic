@@ -59,13 +59,13 @@ def latent_distribution_test(
         The two graphs, or their embeddings to run a hypothesis test on.
         Expected variable type and shape depends on input_graph attribute
 
-    test : str (default="hsic")
+    test : str (default="dcorr")
         Backend hypothesis test to use, one of ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"].
         These tests are typically used for independence testing, but here they
         are used for a two-sample hypothesis test on the latent positions of
         two graphs. See :class:`hyppo.ksample.KSample` for more information.
 
-    metric : str or function (default="gaussian")
+    metric : str or function (default="euclidean")
         Distance or a kernel metric to use, either a callable or a valid string.
         If a callable, then it should behave similarly to either
         :func:`sklearn.metrics.pairwise_distances` or to
