@@ -147,18 +147,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self : object
             Returns an instance of self.
         """
-        A = import_graph(graph)
-
-        if self.check_lcc:
-            if not is_fully_connected(A):
-                msg = (
-                    "Input graph is not fully connected. Results may not"
-                    + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.largest_connected_component``."
-                )
-                warnings.warn(msg, UserWarning)
-
-        self.n_features_in_ = A.shape[0]
+        A = self._fit(graph)
         L_norm = to_laplacian(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
         return self
