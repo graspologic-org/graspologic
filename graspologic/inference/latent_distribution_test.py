@@ -100,7 +100,7 @@ def latent_distribution_test(
         instance, then that object is used.
         Default is None.
 
-    n_jobs : int (default=1)
+    workers : int (default=1)
         Number of workers to use. If more than 1, parallelizes the code.
         Supply -1 to use all cores available to the Process.
         See :class:joblib.Parallel for more details.
