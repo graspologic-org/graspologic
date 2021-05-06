@@ -602,7 +602,7 @@ r &= 0.5
 <span class="n">n_blocks</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">block_members</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_blocks</span> <span class="o">*</span> <span class="p">[</span><span class="n">n_per_block</span><span class="p">])</span>
 <span class="n">n_verts</span> <span class="o">=</span> <span class="n">block_members</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="n">rho</span> <span class="o">=</span> <span class="o">.</span><span class="mi">3</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">.3</span>
 <span class="n">block_probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.33</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">]])</span>
 
 <span class="n">A1</span><span class="p">,</span> <span class="n">A2</span> <span class="o">=</span> <span class="n">sbm_corr</span><span class="p">(</span><span class="n">block_members</span><span class="p">,</span> <span class="n">block_probs</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
