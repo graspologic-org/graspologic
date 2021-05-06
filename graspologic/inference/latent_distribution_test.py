@@ -362,7 +362,7 @@ def latent_distribution_test(
     if size_correction:
         X1_hat, X2_hat = _sample_modified_ase(X1_hat, X2_hat, pooled=pooled)
 
-    test_obj = KSample(test, compute_distance=metric)
+    test_obj = KSample(test, compute_distkern=metric)
 
     data = test_obj.test(X1_hat, X2_hat, reps=n_bootstraps, workers=workers, auto=False)
 
