@@ -2,22 +2,17 @@
 # Licensed under the MIT License.
 
 import warnings
+from collections import namedtuple
 
 import numpy as np
-from scipy import stats
-
-from ..embed import select_dimension, AdjacencySpectralEmbed
-from ..utils import import_graph, fit_plug_in_variance_estimator
-from ..align import SignFlips
-from ..align import SeedlessProcrustes
-from sklearn.utils import check_array
-from sklearn.metrics import pairwise_distances
-from sklearn.metrics.pairwise import pairwise_kernels
-from sklearn.metrics.pairwise import PAIRED_DISTANCES
-from sklearn.metrics.pairwise import PAIRWISE_KERNEL_FUNCTIONS
 from hyppo.ksample import KSample
-from hyppo._utils import gaussian
-from collections import namedtuple
+from scipy import stats
+from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
+from sklearn.utils import check_array
+
+from ..align import SeedlessProcrustes, SignFlips
+from ..embed import AdjacencySpectralEmbed, select_dimension
+from ..utils import fit_plug_in_variance_estimator, import_graph
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
 _VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
@@ -70,12 +65,31 @@ def latent_distribution_test(
         If a callable, then it should behave similarly to either
         :func:`sklearn.metrics.pairwise_distances` or to
         :func:`sklearn.metrics.pairwise.pairwise_kernels`.
-        If a string, then it should be either one of the keys in
-        :py:attr:`sklearn.metrics.pairwise.PAIRED_DISTANCES` one of the keys in
-        :py:attr:`sklearn.metrics.pairwise.PAIRWISE_KERNEL_FUNCTIONS`, or "gaussian",
-        which will use a gaussian kernel with an adaptively selected bandwidth.
-        It is recommended to use kernels (e.g. "gaussian") with kernel-based
-        hsic test and distances (e.g. "euclidean") with all other tests.
+
+        Valid strings for ``metric`` are, as defined in
+        :func:`sklearn.metrics.pairwise_distances`,
+            - From scikit-learn: [``"euclidean"``, ``"cityblock"``, ``"cosine"``,
+              ``"l1"``, ``"l2"``, ``"manhattan"``].
+            - From scipy.spatial.distance: [``"braycurtis"``, ``"canberra"``,
+              ``"chebyshev"``, ``"correlation"``, ``"dice"``, ``"hamming"``,
+              ``"jaccard"``, ``"kulsinski"``, ``"mahalanobis"``, ``"minkowski"``,
+              ``"rogerstanimoto"``, ``"russellrao"``, ``"seuclidean"``,
+              ``"sokalmichener"``, ``"sokalsneath"``, ``"sqeuclidean"``,
+              ``"yule"``] See the documentation for :mod:`scipy.spatial.distance` for
+              details on these metrics.
+        Alternatively, this function computes the kernel similarity among the
+        samples within each data matrix.
+
+        Valid strings for ``compute_kernel`` are, as defined in
+        :func:`sklearn.metrics.pairwise.pairwise_kernels`,
+            [``"additive_chi2"``, ``"chi2"``, ``"linear"``, ``"poly"``,
+            ``"polynomial"``, ``"rbf"``,
+            ``"laplacian"``, ``"sigmoid"``, ``"cosine"``]
+        Note ``"rbf"`` and ``"gaussian"`` are the same metric, which will use
+        an adaptively selected bandwidth.
+
+        It is recommended to use kernels (e.g. "gaussian") with kernel-based HSIC test
+        and distances (e.g. "euclidean") with all other tests.
 
     n_components : int or None (default=None)
         Number of embedding dimensions. If None, the optimal embedding
@@ -205,12 +219,40 @@ def latent_distribution_test(
     elif test not in _VALID_TESTS:
         msg = "Unknown test {}. Valid tests are {}".format(test, _VALID_TESTS)
         raise ValueError(msg)
-    # metric argument is checked when metric_func_ is instantiated
+
+    # check metric argument
+    if not isinstance(metric, str) and not callable(metric):
+        msg = "Metric must be str or callable, not {}".format(type(metric))
+        raise TypeError(msg)
+    elif metric not in _VALID_METRICS and not callable(metric):
+        msg = "Unknown metric {}. Valid metrics are {}, or a callable".format(
+            metric, _VALID_METRICS
+        )
+        raise ValueError(msg)
+
+    if metric in _VALID_DISTANCES:
+        if test == "hsic":
+            msg = (
+                f"{test} is a kernel-based test, but {metric} "
+                "is a distance. Use a different test or one of "
+                f"the kernels: {_VALID_KERNELS} as a metric."
+            )
+            raise ValueError(msg)
+    elif metric in _VALID_KERNELS:
+        if test != "hsic":
+            msg = (
+                f"{test} is a distance-based test, but {metric} "
+                "is a kernel. Use either a HSIC as the test or one of "
+                f"the distances: {_VALID_DISTANCES} as a metric."
+            )
+            raise ValueError(msg)
+
     # check n_components argument
     if n_components is not None:
         if not isinstance(n_components, int):
             msg = "n_components must be an int, not {}.".format(type(n_components))
             raise TypeError(msg)
+
     # check n_bootstraps argument
     if not isinstance(n_bootstraps, int):
         msg = "n_bootstraps must be an int, not {}".format(type(n_bootstraps))
@@ -218,18 +260,22 @@ def latent_distribution_test(
     elif n_bootstraps < 0:
         msg = "{} is invalid number of bootstraps, must be non-negative"
         raise ValueError(msg.format(n_bootstraps))
+
     # check workers argument
     if not isinstance(workers, int):
         msg = "workers must be an int, not {}".format(type(workers))
         raise TypeError(msg)
+
     # check size_correction argument
     if not isinstance(size_correction, bool):
         msg = "size_correction must be a bool, not {}".format(type(size_correction))
         raise TypeError(msg)
+
     # check pooled argument
     if not isinstance(pooled, bool):
         msg = "pooled must be a bool, not {}".format(type(pooled))
         raise TypeError(msg)
+
     # check align_type argument
     if (not isinstance(align_type, str)) and (align_type is not None):
         msg = "align_type must be a string or None, not {}".format(type(align_type))
@@ -238,12 +284,14 @@ def latent_distribution_test(
     if align_type not in align_types_supported:
         msg = "supported align types are {}".format(align_types_supported)
         raise ValueError(msg)
+
     # check align_kws argument
     if not isinstance(align_kws, dict):
         msg = "align_kws must be a dictionary of keyword arguments, not {}".format(
             type(align_kws)
         )
         raise TypeError(msg)
+
     # check input_graph argument
     if not isinstance(input_graph, bool):
         msg = "input_graph must be a bool, not {}".format(type(input_graph))
@@ -314,8 +362,7 @@ def latent_distribution_test(
     if size_correction:
         X1_hat, X2_hat = _sample_modified_ase(X1_hat, X2_hat, pooled=pooled)
 
-    metric_func_ = _instantiate_metric_func(metric=metric, test=test)
-    test_obj = KSample(test, compute_distance=metric_func_)
+    test_obj = KSample(test, compute_distance=metric)
 
     data = test_obj.test(X1_hat, X2_hat, reps=n_bootstraps, workers=workers, auto=False)
 
@@ -330,58 +377,6 @@ def latent_distribution_test(
     p_value = data[1]
 
     return ldt_result(p_value, sample_T_statistic, misc_stats)
-
-
-def _instantiate_metric_func(metric, test):
-    # check metric argument
-    if not isinstance(metric, str) and not callable(metric):
-        msg = "Metric must be str or callable, not {}".format(type(metric))
-        raise TypeError(msg)
-    elif metric not in _VALID_METRICS and not callable(metric):
-        msg = "Unknown metric {}. Valid metrics are {}, or a callable".format(
-            metric, _VALID_METRICS
-        )
-        raise ValueError(msg)
-    if callable(metric):
-        metric_func = metric
-    else:
-        if metric in _VALID_DISTANCES:
-            if test == "hsic":
-                msg = (
-                    f"{test} is a kernel-based test, but {metric} "
-                    "is a distance. results may not be optimal. it is "
-                    "recomended to use either a different test or one of "
-                    f"the kernels: {_VALID_KERNELS} as a metric."
-                )
-                warnings.warn(msg, UserWarning)
-
-            def metric_func(X, Y=None, metric=metric, workers=None):
-                return pairwise_distances(X, Y, metric=metric, n_jobs=workers)
-
-        elif metric == "gaussian":
-            if test != "hsic":
-                msg = (
-                    f"{test} is a distance-based test, but {metric} "
-                    "is a kernel. results may not be optimal. it is "
-                    "recomended to use either a hisc as a test or one of "
-                    f"the distances: {_VALID_DISTANCES} as a metric."
-                )
-                warnings.warn(msg, UserWarning)
-            metric_func = gaussian
-        else:
-            if test != "hsic":
-                msg = (
-                    f"{test} is a distance-based test, but {metric} "
-                    "is a kernel. results may not be optimal. it is "
-                    "recomended to use either a hisc as a test or one of "
-                    f"the distances: {_VALID_DISTANCES} as a metric."
-                )
-                warnings.warn(msg, UserWarning)
-
-            def metric_func(X, Y=None, metric=metric, workers=None):
-                return pairwise_kernels(X, Y, metric=metric, n_jobs=workers)
-
-    return metric_func
 
 
 def _embed(A1, A2, n_components):
