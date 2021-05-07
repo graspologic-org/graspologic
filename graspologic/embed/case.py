@@ -129,6 +129,9 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         """
         # setup
         A = import_graph(graph)
+        directed = is_almost_symmetric(A)
+        if directed:
+            raise NotImplementedError("CASE currently only works with directed graphs.")
 
         # Create regularized Laplacian, scale covariates to unit norm
         L = to_laplacian(A, form="R-DAD")
@@ -149,7 +152,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         L_ = LinearOperator((n, n), matvec=mv, rmatvec=rmv)
 
         # Dimensionality reduction with SVD
-        self._reduce_dim(L_)
+        self._reduce_dim(L_, directed=False)
 
         self.is_fitted_ = True
         return self

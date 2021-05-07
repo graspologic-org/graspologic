@@ -81,7 +81,7 @@ class BaseSpectralEmbed(BaseEstimator):
             raise TypeError(msg)
         self.concat = concat
 
-    def _reduce_dim(self, A):
+    def _reduce_dim(self, A, directed=None):
         """
         A function that reduces the dimensionality of an adjacency matrix
         using the desired embedding method.
@@ -102,7 +102,11 @@ class BaseSpectralEmbed(BaseEstimator):
         self.n_components_ = D.size
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
-        if not is_almost_symmetric(A):
+        if directed is not None:
+            directed_ = directed
+        else:
+            directed_ = is_almost_symmetric(A)
+        if not directed_:
             self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None

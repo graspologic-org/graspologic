@@ -272,11 +272,6 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         V = V[idx, :]
 
     elif algorithm == "eigsh":
-        if X.shape[0] != X.shape[1]:
-            raise ValueError("eigsh can only be used on square matrices.")
-        if not is_almost_symmetric(X):
-            raise ValueError("eigsh can only be used on symmetric matrices")
-
         D, U = scipy.sparse.linalg.eigsh(X, k=n_components)
         # singular values of a real symmetric matrix are the absolute values of its
         # eigenvalues, so need to take np.abs
