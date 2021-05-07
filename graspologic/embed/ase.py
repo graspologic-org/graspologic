@@ -163,7 +163,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         return self
 
-    def compute_oos_prediction(self, X, directed):
+    def _compute_oos_prediction(self, X, directed):
         # workhorse code
         if not directed:
             return X @ self._pinv_left
