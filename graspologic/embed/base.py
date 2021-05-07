@@ -293,7 +293,6 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self._compute_oos_prediction(X, directed)
 
-
     @abstractmethod
     def _compute_oos_prediction(self, X, directed):
         """
