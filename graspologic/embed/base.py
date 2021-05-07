@@ -296,7 +296,7 @@ class BaseSpectralEmbed(BaseEstimator):
 
 
     @abstractmethod
-    def compute_oos_prediction(self, X, directed):
+    def _compute_oos_prediction(self, X, directed):
         """
         Computes the oos class specific estimation given in an input array and if the graph is directed.
 
