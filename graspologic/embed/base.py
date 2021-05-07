@@ -230,7 +230,7 @@ class BaseSpectralEmbed(BaseEstimator):
         -------
         out : np.ndarray OR length 2 tuple of np.ndarray
 
-            Array of latent positions. Transforms the fitted matrix if it was passed
+            Array of latent positions, shape (n_oos_vertices, n_components) or (n_vertices, n_components). Transforms the fitted matrix if it was passed
             in.
 
             If ``X`` is an array or tuple containing adjacency vectors corresponding to
