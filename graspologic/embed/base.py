@@ -4,9 +4,15 @@
 from abc import abstractmethod
 
 import numpy as np
+import warnings
 from sklearn.base import BaseEstimator
 
-from ..utils import augment_diagonal, import_graph, is_almost_symmetric
+from ..utils import (
+    augment_diagonal,
+    import_graph,
+    is_almost_symmetric,
+    is_fully_connected,
+)
 from .svd import selectSVD
 
 
@@ -120,19 +126,15 @@ class BaseSpectralEmbed(BaseEstimator):
     def fit(self, graph, y=None, *args, **kwargs):
         """
         A method for embedding.
-
         Parameters
         ----------
         graph: np.ndarray or networkx.Graph
-
         y : Ignored
-
         Returns
         -------
         lpm : LatentPosition object
             Contains X (the estimated latent positions), Y (same as X if input is
             undirected graph, or right estimated positions if directed graph), and d.
-
         See Also
         --------
         import_graph, LatentPosition
@@ -143,7 +145,42 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self
 
-    def _fit_transform(self, graph=None, *args, **kwargs):
+
+    def _fit(self, graph, y=None):
+        """
+        A method for embedding.
+
+        Parameters
+        ----------
+        graph: np.ndarray or networkx.Graph
+
+        y : Ignored
+
+        Returns
+        -------
+        A : array-like, shape (n_vertices, n_vertices)
+            A graph
+
+        See Also
+        --------
+        import_graph, LatentPosition
+        """
+
+        A = import_graph(graph)
+
+        if self.check_lcc:
+            if not is_fully_connected(A):
+                msg = (
+                    "Input graph is not fully connected. Results may not"
+                    + "be optimal. You can compute the largest connected component by"
+                    + "using ``graspologic.utils.largest_connected_component``."
+                )
+                warnings.warn(msg, UserWarning)
+
+        self.n_features_in_ = A.shape[0]
+        return A
+
+    def _fit_transform(self, graph, *args, **kwargs):
         "Fits the model and returns the estimated latent positions."
 
         self.fit(graph, *args, **kwargs)
