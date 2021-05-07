@@ -145,7 +145,6 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self
 
-
     def _fit(self, graph, y=None):
         """
         A method for embedding.
