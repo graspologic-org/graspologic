@@ -6,7 +6,6 @@ import warnings
 from abc import abstractmethod
 
 import numpy as np
-import warnings
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
@@ -292,7 +291,7 @@ class BaseSpectralEmbed(BaseEstimator):
             msg = "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
             raise ValueError(msg)
 
-        return self.compute_oos_prediction(X, directed)
+        return self._compute_oos_prediction(X, directed)
 
 
     @abstractmethod
