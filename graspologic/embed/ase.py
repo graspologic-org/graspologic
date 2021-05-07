@@ -164,7 +164,18 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         return self
 
     def _compute_oos_prediction(self, X, directed):
-        # workhorse code
+        """
+        Computes the out-of-sample latent position estimation.
+        Parameters
+        ----------
+        X: np.ndarray
+            Input to do oos embedding on.
+        directed: bool
+            Indication if graph is directed or undirected
+        Returns
+        -------
+        out : array_like or tuple, shape
+        """
         if not directed:
             return X @ self._pinv_left
         elif directed:
