@@ -62,12 +62,15 @@ def latent_distribution_test(
 
     metric : str or function (default="euclidean")
         Distance or a kernel metric to use, either a callable or a valid string.
-        If a callable, then it should behave similarly to either
+        Kernel metrics (e.g. "gaussian") must be used with kernel-based HSIC test
+        and distances (e.g. "euclidean") with all other tests. If a callable,
+        then it should behave similarly to either
         :func:`sklearn.metrics.pairwise_distances` or to
         :func:`sklearn.metrics.pairwise.pairwise_kernels`.
 
-        Valid strings for ``metric`` are, as defined in
+        Valid strings for distance ``metric`` are, as defined in
         :func:`sklearn.metrics.pairwise_distances`,
+
             - From scikit-learn: [``"euclidean"``, ``"cityblock"``, ``"cosine"``,
               ``"l1"``, ``"l2"``, ``"manhattan"``].
             - From scipy.spatial.distance: [``"braycurtis"``, ``"canberra"``,
@@ -77,19 +80,16 @@ def latent_distribution_test(
               ``"sokalmichener"``, ``"sokalsneath"``, ``"sqeuclidean"``,
               ``"yule"``] See the documentation for :mod:`scipy.spatial.distance` for
               details on these metrics.
-        Alternatively, this function computes the kernel similarity among the
-        samples within each data matrix.
 
-        Valid strings for ``compute_kernel`` are, as defined in
+        Valid strings for kernel ``metric`` are, as defined in
         :func:`sklearn.metrics.pairwise.pairwise_kernels`,
+
             [``"additive_chi2"``, ``"chi2"``, ``"linear"``, ``"poly"``,
             ``"polynomial"``, ``"rbf"``,
             ``"laplacian"``, ``"sigmoid"``, ``"cosine"``]
+
         Note ``"rbf"`` and ``"gaussian"`` are the same metric, which will use
         an adaptively selected bandwidth.
-
-        It is recommended to use kernels (e.g. "gaussian") with kernel-based HSIC test
-        and distances (e.g. "euclidean") with all other tests.
 
     n_components : int or None (default=None)
         Number of embedding dimensions. If None, the optimal embedding
