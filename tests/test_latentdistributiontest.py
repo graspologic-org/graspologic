@@ -167,11 +167,11 @@ class TestLatentDistributionTest(unittest.TestCase):
         # assert len(record) == 0
         latent_distribution_test(A1, A2, test="hsic", metric="rbf")
         # some invalid combinations of test and metric
-        with pytest.warns(UserWarning):
+        with pytest.raises(ValueError):
             latent_distribution_test(A1, A2, "hsic", "euclidean")
-        with pytest.warns(UserWarning):
+        with pytest.raises(ValueError):
             latent_distribution_test(A1, A2, "dcorr", "gaussian")
-        with pytest.warns(UserWarning):
+        with pytest.raises(ValueError):
             latent_distribution_test(A1, A2, "dcorr", "rbf")
 
     def test_bad_matrix_inputs(self):
