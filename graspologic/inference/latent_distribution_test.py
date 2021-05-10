@@ -8,11 +8,13 @@ import numpy as np
 from hyppo.ksample import KSample
 from scipy import stats
 from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
-from sklearn.utils import check_array
+from sklearn.utils import check_array, check_random_state
+from joblib import Parallel, delayed
 
 from ..align import SeedlessProcrustes, SignFlips
 from ..embed import AdjacencySpectralEmbed, select_dimension
 from ..utils import fit_plug_in_variance_estimator, import_graph
+
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
 _VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
