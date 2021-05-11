@@ -184,7 +184,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
             X_0 = X[0]
             X_1 = X[1]
 
-            if X[0].ndim == 1:
+            if X_0.ndim == 1:
                 X_0 = np.expand_dims(X_0, axis=0)
                 X_1 = np.expand_dims(X_1, axis=0)
 
