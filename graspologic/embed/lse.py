@@ -115,14 +115,14 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     def __init__(
         self,
-        form="DAD",
+        form: str = "DAD",
         n_components: Optional[int] = None,
-        n_elbows: Optional[int] = 2,
-        algorithm: Optional[str] = "randomized",
-        n_iter: Optional[int] = 5,
-        check_lcc: Optional[bool] = True,
+        n_elbows: int = 2,
+        algorithm: str = "randomized",
+        n_iter: int = 5,
+        check_lcc: bool = True,
         regularizer: Optional[float] = None,
-        concat: Optional[bool] = False,
+        concat: bool = False,
     ):
         super().__init__(
             n_components=n_components,
