@@ -154,21 +154,11 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         self : object
             Returns an instance of self.
         """
-        A = import_graph(graph)
-
-        if self.check_lcc:
-            if not is_fully_connected(A):
-                msg = (
-                    "Input graph is not fully connected. Results may not"
-                    + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.largest_connected_component``."
-                )
-                warnings.warn(msg, UserWarning)
+        A = self._fit(graph)
 
         if self.diag_aug:
             A = augment_diagonal(A)
 
-        self.n_features_in_ = A.shape[0]
         self._reduce_dim(A)
 
         # for out-of-sample

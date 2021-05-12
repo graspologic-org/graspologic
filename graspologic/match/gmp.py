@@ -2,8 +2,9 @@
 # Licensed under the MIT License.
 
 import numpy as np
+from joblib import Parallel, delayed
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_array, column_or_1d
+from sklearn.utils import check_array, check_random_state, column_or_1d
 
 from .qap import quadratic_assignment
 
@@ -85,6 +86,12 @@ class GraphMatch(BaseEstimator):
         instance, then that object is used.
         Default is None.
 
+    n_jobs : int or None, (default = None)
+        The number of jobs to run in parallel. Parallelization is over the
+        initializations, so only relevant when ``n_init > 1``. None means 1 unless in a
+        joblib.parallel_backend context. -1 means using all processors. See
+        :class:`joblib.Parallel` for more details.
+
     Attributes
     ----------
 
@@ -126,6 +133,7 @@ class GraphMatch(BaseEstimator):
         gmp=True,
         padding="adopted",
         random_state=None,
+        n_jobs=None,
     ):
         if type(n_init) is int and n_init > 0:
             self.n_init = n_init
@@ -170,6 +178,7 @@ class GraphMatch(BaseEstimator):
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
         self.random_state = random_state
+        self.n_jobs = n_jobs
 
     def fit(self, A, B, seeds_A=[], seeds_B=[], S=None):
         """
@@ -228,15 +237,20 @@ class GraphMatch(BaseEstimator):
             "maximize": self.gmp,
             "partial_match": partial_match,
             "S": S,
-            "rng": self.random_state,
             "P0": self.init,
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
             "tol": self.eps,
         }
 
-        res = min(
-            [quadratic_assignment(A, B, options=options) for i in range(self.n_init)],
+        rng = check_random_state(self.random_state)
+        results = Parallel(n_jobs=self.n_jobs)(
+            delayed(quadratic_assignment)(A, B, options={**options, **{"rng": r}})
+            for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
+        )
+        func = max if self.gmp else min
+        res = func(
+            results,
             key=lambda x: x.fun,
         )
 
