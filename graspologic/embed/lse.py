@@ -1,15 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import warnings
 
 from .base import BaseSpectralEmbed
-from ..utils import import_graph, to_laplacian, is_fully_connected
+from ..utils import to_laplacian
 
 import numpy as np
-from sklearn.utils.validation import check_is_fitted
 
-from typing import List, Optional, Union
+from typing import Optional, Union
 import networkx as nx
 
 
@@ -65,13 +63,15 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         ``form`` is 'R-DAD'.
 
     concat : bool, optional (default False)
-        If graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.
+        If graph is directed, whether to concatenate left and right (out and in) latent
+        positions along axis 1.
 
 
     Attributes
     ----------
     n_features_in_: int
-        Number of features passed to the :func:`~graspologic.embed.LaplacianSpectralEmbed.fit` method.
+        Number of features passed to the
+        :func:`~graspologic.embed.LaplacianSpectralEmbed.fit` method.
 
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
