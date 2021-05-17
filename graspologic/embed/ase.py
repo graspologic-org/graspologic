@@ -59,14 +59,16 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         to the ground truth.
 
     concat : bool, optional (default False)
-        If graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.
+        If graph is directed, whether to concatenate left and right (out and in) latent
+        positions along axis 1.
 
 
 
     Attributes
     ----------
     n_features_in_: int
-        Number of features passed to the :func:`~graspologic.embed.AdjacencySpectralEmbed.fit` method.
+        Number of features passed to the 
+        :func:`~graspologic.embed.AdjacencySpectralEmbed.fit` method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None
