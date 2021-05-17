@@ -67,7 +67,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
     Attributes
     ----------
     n_features_in_: int
-        Number of features passed to the 
+        Number of features passed to the
         :func:`~graspologic.embed.AdjacencySpectralEmbed.fit` method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
