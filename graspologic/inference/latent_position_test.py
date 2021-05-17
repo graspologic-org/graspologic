@@ -5,7 +5,6 @@ from collections import namedtuple
 
 import numpy as np
 from joblib import Parallel, delayed
-from scipy.linalg import orthogonal_procrustes
 
 from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
@@ -289,3 +288,75 @@ def _embed(A1, A2, embedding, n_components, check_lcc=False):
             X1_hat = X_hat_compound[0]
             X2_hat = X_hat_compound[1]
     return (X1_hat, X2_hat)
+
+
+from abc import abstractmethod
+
+
+class _BaseTwoGraphModel:
+    def __init__(self, n_components=None, diag_aug=False, check_lcc=False):
+        self.n_components = n_components
+        self.diag_aug = diag_aug
+        self.check_lcc = check_lcc
+
+    @abstractmethod
+    def fit(graph1, graph2):
+        pass
+
+    def sample():
+        # TODO do something
+        graph1_sampled = None
+        graph2_sampled = None
+        return graph1_sampled, graph2_sampled
+
+    @abstractmethod
+    def compute_test_statistic():
+        # TODO do something
+        tstat = None
+        return tstat
+
+
+class _ASETwoGraphModel(_BaseTwoGraphModel):
+    def __init__(self, n_components=None, diag_aug=False, check_lcc=False):
+        super().__init__(
+            n_components=n_components, diag_aug=diag_aug, check_lcc=check_lcc
+        )
+
+    def fit(self, graph1, graph2):
+        # TODO add the check for where one graph is asymmetric
+
+        ase1 = AdjacencySpectralEmbed(
+            n_components=self.n_components,
+            check_lcc=self.check_lcc,
+            diag_aug=self.diag_aug,
+        ).fit(graph1)
+        ase2 = AdjacencySpectralEmbed(
+            n_components=self.n_components,
+            check_lcc=self.check_lcc,
+            diag_aug=self.diag_aug,
+        ).fit(graph2)
+
+        if ase1.latent_right_ is not None and ase2.latent_right_ is not None:
+            self.directed_ = True
+        else:
+            self.directed_ = False
+
+        # TODO compute phats
+        # TODO figure out what attributes to save here
+
+
+from graspologic.embed import MultipleASE
+
+
+class _COSIETwoGraphModel(_BaseTwoGraphModel):
+    def __init__(self, n_components=None, diag_aug=False, check_lcc=False):
+        super().__init__(
+            n_components=n_components, diag_aug=diag_aug, check_lcc=check_lcc
+        )
+
+    def fit(self, graph1, graph2):
+        mase = MultipleASE(n_components=self.n_components, diag_aug=self.diag_aug)
+        mase.fit((graph1, graph2))
+
+        score1 = mase.scores_[0]
+        score2 = mase.scores_[1]
