@@ -116,9 +116,9 @@ def latent_distribution_test(
 
     workers : int or None (default=None)
         Number of workers to use. If more than 1, parallelizes the code.
-        Supply -1 to use all cores available. None is a marker for 
-        'unset' that will be interpreted as ``workers=1`` (sequential execution) unless 
-        the call is performed under a Joblib parallel_backend context manager that sets 
+        Supply -1 to use all cores available. None is a marker for
+        'unset' that will be interpreted as ``workers=1`` (sequential execution) unless
+        the call is performed under a Joblib parallel_backend context manager that sets
         another value for ``workers``. See :class:joblib.Parallel for more details.
 
     size_correction : bool (default=True)
