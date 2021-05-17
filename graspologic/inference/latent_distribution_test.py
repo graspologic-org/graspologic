@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import warnings
 from collections import namedtuple
 
 import numpy as np
