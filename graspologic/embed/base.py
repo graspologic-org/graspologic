@@ -53,8 +53,8 @@ class BaseSpectralEmbed(BaseEstimator):
         results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
     concat : bool, optional (default = False)
-        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
-        along axis 1.
+        If graph(s) are directed, whether to concatenate each graph's left and right
+        (out and in) latent positions along axis 1.
 
     Attributes
     ----------
@@ -201,9 +201,11 @@ class BaseSpectralEmbed(BaseEstimator):
         Returns
         -------
         out : np.ndarray OR length 2 tuple of np.ndarray.
-            If undirected then returns single np.ndarray of latent position, shape(n_vertices, n_components).
-            If directed, ``concat`` is True then concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
-            If directed, ``concat`` is False then tuple of the latent matrices. Each of shape (n_vertices, n_components).
+            If undirected then returns single np.ndarray of latent position,
+            shape(n_vertices, n_components). If directed, ``concat`` is True then
+            concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
+            If directed, ``concat`` is False then tuple of the latent matrices. Each of
+            shape (n_vertices, n_components).
         """
         return self._fit_transform(graph)
 
@@ -230,7 +232,8 @@ class BaseSpectralEmbed(BaseEstimator):
         -------
         out : np.ndarray OR length 2 tuple of np.ndarray
 
-            Array of latent positions, shape (n_oos_vertices, n_components) or (n_vertices, n_components). Transforms the fitted matrix if it was passed
+            Array of latent positions, shape (n_oos_vertices, n_components) or
+            (n_vertices, n_components). Transforms the fitted matrix if it was passed
             in.
 
             If ``X`` is an array or tuple containing adjacency vectors corresponding to
@@ -295,7 +298,8 @@ class BaseSpectralEmbed(BaseEstimator):
     @abstractmethod
     def _compute_oos_prediction(self, X, directed):
         """
-        Computes the oos class specific estimation given in an input array and if the graph is directed.
+        Computes the oos class specific estimation given in an input array and if the
+        graph is directed.
 
         Parameters
         ----------
