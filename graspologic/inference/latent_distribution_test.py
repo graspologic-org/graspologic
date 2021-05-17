@@ -276,8 +276,8 @@ def latent_distribution_test(
         raise ValueError(msg.format(n_bootstraps))
 
     # check workers argument
-    if not isinstance(workers, int):
-        msg = "workers must be an int, not {}".format(type(workers))
+    if workers is not None and not isinstance(workers, (int, np.integer)):
+        msg = "workers must be an int or None, not {}".format(type(workers))
         raise TypeError(msg)
 
     # check size_correction argument
