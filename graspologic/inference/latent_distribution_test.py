@@ -33,7 +33,7 @@ def latent_distribution_test(
     n_components=None,
     n_bootstraps=500,
     random_state=None,
-    workers=1,
+    workers=None,
     size_correction=True,
     pooled=False,
     align_type="sign_flips",
@@ -114,10 +114,12 @@ def latent_distribution_test(
         instance, then that object is used.
         Default is None.
 
-    workers : int (default=1)
+    workers : int or None (default=None)
         Number of workers to use. If more than 1, parallelizes the code.
-        Supply -1 to use all cores available to the Process.
-        See :class:joblib.Parallel for more details.
+        Supply -1 to use all cores available. None is a marker for 
+        'unset' that will be interpreted as ``workers=1`` (sequential execution) unless 
+        the call is performed under a Joblib parallel_backend context manager that sets 
+        another value for ``workers``. See :class:joblib.Parallel for more details.
 
     size_correction : bool (default=True)
         Ignored when the two graphs have the same number of vertices. The test
