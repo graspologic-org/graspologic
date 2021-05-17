@@ -493,7 +493,7 @@ def _quadratic_assignment_faq(
     # [1] Algorithm 1 Line 7 - end main loop
 
     # [1] Algorithm 1 Line 8 - project onto the set of permutation matrices
-    _, col = linear_sum_assignment(-P)
+    _, col = linear_sum_assignment(P, maximize=True)
     perm = np.concatenate((np.arange(n_seeds), col + n_seeds))
 
     unshuffled_perm = np.zeros(n, dtype=int)
@@ -501,7 +501,7 @@ def _quadratic_assignment_faq(
 
     score = _calc_score(A, B, S, unshuffled_perm)
 
-    res = {"col_ind": unshuffled_perm, "fun": score, "nit": n_iter}
+    res = {"col_ind": unshuffled_perm, "fun": score, "nit": n_iter, "transport_plan": P}
 
     return OptimizeResult(res)
 

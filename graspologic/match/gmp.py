@@ -257,6 +257,7 @@ class GraphMatch(BaseEstimator):
         self.perm_inds_ = res.col_ind  # permutation indices
         self.score_ = res.fun  # objective function value
         self.n_iter_ = res.nit
+        self.transport_plan_ = res.transport_plan
         return self
 
     def fit_predict(self, A, B, seeds_A=[], seeds_B=[], S=None):
