@@ -1,17 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import warnings
-import numpy as np
-
 from .base import BaseSpectralEmbed
-from ..utils import (
-    import_graph,
-    is_fully_connected,
-    augment_diagonal,
-    pass_to_ranks,
-    is_unweighted,
-)
+from ..utils import augment_diagonal
 
 
 class AdjacencySpectralEmbed(BaseSpectralEmbed):
