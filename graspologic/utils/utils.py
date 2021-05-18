@@ -947,7 +947,7 @@ def remap_labels(
 def remap_node_ids(
         graph: nx.Graph,
         weight_attribute: str = "weight",
-        weight_default: int = 1
+        weight_default: float = 1.0
 ) -> Tuple[nx.Graph, Dict[Any, str]]:
     """
     Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
@@ -959,7 +959,7 @@ def remap_node_ids(
         A graph that has node ids of arbitrary types.
     weight_attribute : str,
         Default is ``weight``. An optional attribute to specify which column in your graph contains the weight value.
-    weight_default : str,
+    weight_default : float,
         Default is edge weight if a weight is not found on an edge
     Returns
     -------
