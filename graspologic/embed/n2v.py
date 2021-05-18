@@ -131,7 +131,6 @@ def node2vec_embed(
     )
 
     labels = list(node2vec_graph.original_graph.nodes())
-    # labels = node2vec_graph.original_graph.nodes()
     remapped_labels = node2vec_graph.label_map_to_string
 
     return (
