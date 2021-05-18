@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import logging
 import warnings
 from collections import Iterable
 from functools import reduce
@@ -973,6 +974,12 @@ def remap_node_ids(
     """
     if not isinstance(graph, nx.Graph):
         raise TypeError("graph must be of type nx.Graph")
+
+    if not nx.is_weighted(graph, weight=weight_attribute):
+        logger = logging.getLogger("graspologic.utils")
+        logger.warning(
+            f'Graph is unweighted using weight_attribute "{weight_attribute}". Defaulting weights to "{weight_default}"'
+        )
 
     node_id_dict = dict()
     graph_remapped = type(graph)()

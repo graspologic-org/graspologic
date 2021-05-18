@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import logging
 import unittest
 from math import sqrt
 
@@ -556,6 +557,22 @@ class TestRemapNodeIds(unittest.TestCase):
         for type in invalid_types:
             with pytest.raises(TypeError):
                 gus.remap_node_ids(graph=type())
+
+    def test_remap_node_ids_unweighted_graph_raises_warning(self):
+        logger = logging.getLogger('graspologic.utils')
+
+        with self.assertLogs(logger) as context_manager:
+            graph = nx.florentine_families_graph()
+
+            gus.remap_node_ids(
+                graph
+            )
+
+            self.assertEqual(
+                context_manager.output,
+                ['WARNING:graspologic.utils:Graph is unweighted using weight_attribute "weight". '
+                 'Defaulting weights to "1.0"']
+            )
 
     def _assert_graphs_are_equivalent(self, graph, new_graph, new_node_ids):
         self.assertTrue(len(new_graph.nodes()) == len(graph.nodes()))
