@@ -486,7 +486,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Out-of-Sample-(OOS)-Embedding">
 <h1>Out-of-Sample (OOS) Embedding<a class="headerlink" href="#Out-of-Sample-(OOS)-Embedding" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">Suppose we’ve embedded the nodes of a graph into Euclidean space using Adjacency Spectral Embedding (ASE).</div>
+<div class="line">Suppose we’ve embedded the nodes of a graph into Euclidean space using Adjacency Spectral Embedding (ASE) or Laplacian Spectral Embeding (LSE).</div>
 <div class="line">Then, suppose we gain access to new nodes not seen in the original graph. We sometimes wish to determine their latent positions without the computationally-expensive task of re-embedding an entirely new adjacency matrix.</div>
 </div>
 <div class="line-block">
@@ -496,7 +496,7 @@ div.rendered_html tbody tr:hover {
 <p>Here, an “adjacency vector” <span class="math notranslate nohighlight">\(w\)</span> is a vector with <span class="math notranslate nohighlight">\(n\)</span> elements, <span class="math notranslate nohighlight">\(n\)</span> being the number of in-sample vertices, and a 1 in the <span class="math notranslate nohighlight">\(i_{th}\)</span> position if the out-of-sample vertex has an edge with in-sample vertex <span class="math notranslate nohighlight">\(i\)</span> in the unweighted case.</p>
 <p><span class="math notranslate nohighlight">\(W \in \textbf{R}^{m \times n}\)</span> is a matrix with each row being an adjacency vector, for <span class="math notranslate nohighlight">\(m\)</span> out-of-sample vertices.</p>
 <div class="line-block">
-<div class="line">We can obtain this estimation with ASE’s <code class="docutils literal notranslate"><span class="pre">transform</span></code> method.</div>
+<div class="line">We can obtain this estimation with ASE’s or LSE’s <code class="docutils literal notranslate"><span class="pre">transform</span></code> method.</div>
 <div class="line">Running through the Adjacency Spectral Embedding tutorial is recommended prior to this tutorial.</div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -513,10 +513,11 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">sbm</span>
 <span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span> <span class="k">as</span> <span class="n">ASE</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">LaplacianSpectralEmbed</span> <span class="k">as</span> <span class="n">LSE</span>
 <span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span><span class="p">,</span> <span class="n">pairplot</span>
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">remove_vertices</span>
 
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">9002</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 </pre></div>
@@ -566,8 +567,8 @@ div.rendered_html tbody tr:hover {
 <img alt="../_images/embedding_OutOfSampleEmbed_5_1.png" src="../_images/embedding_OutOfSampleEmbed_5_1.png" />
 </div>
 </div>
-<div class="section" id="Embedding">
-<h3>Embedding<a class="headerlink" href="#Embedding" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Embedding-(ASE)">
+<h3>Embedding (ASE)<a class="headerlink" href="#Embedding-(ASE)" title="Permalink to this headline">¶</a></h3>
 <p>We then generate an embedding with ASE, and we use its <code class="docutils literal notranslate"><span class="pre">transform</span></code> method to determine our best estimate for the latent position of the out-of-sample vertex.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -576,11 +577,11 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate an embedding with ASE</span>
 <span class="n">ase</span> <span class="o">=</span> <span class="n">ASE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">X_hat</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">X_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="c1"># predicted latent positions</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="n">w</span>
+<span class="n">w_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">w_ase</span>
 </pre></div>
 </div>
 </div>
@@ -590,7 +591,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([0.71754581, 0.51499   ])
+array([ 0.69563801, -0.59472394])
 </pre></div></div>
 </div>
 <div class="section" id="Plotting-out-of-sample-embedding">
@@ -625,7 +626,7 @@ array([0.71754581, 0.51499   ])
     <span class="k">return</span> <span class="n">plot</span>
 
 <span class="c1"># Plot all latent positions</span>
-<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -635,7 +636,7 @@ array([0.71754581, 0.51499   ])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7f231ceddd00&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3d83695ac0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -647,11 +648,64 @@ array([0.71754581, 0.51499   ])
 </div>
 </div>
 </div>
+<div class="section" id="Embeding-(LSE)">
+<h3>Embeding (LSE)<a class="headerlink" href="#Embeding-(LSE)" title="Permalink to this headline">¶</a></h3>
+<p>Similarly, we can also use Laplacian Spectral Embedding (LSE). We generate an embedding with its transform method to determine our best estimate for the latent position of the out-of-sample vertex.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate an embedding with ASE</span>
+<span class="n">lse</span> <span class="o">=</span> <span class="n">LSE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="c1"># predicted latent positions</span>
+<span class="n">w_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">w_lse</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[ 0.07091005, -0.06055902]])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;seaborn.axisgrid.PairGrid at 0x7f3dc8a6db20&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/embedding_OutOfSampleEmbed_14_1.png" src="../_images/embedding_OutOfSampleEmbed_14_1.png" />
+</div>
+</div>
+</div>
 <div class="section" id="Passing-in-multiple-out-of-sample-vertices">
 <h3>Passing in multiple out-of-sample vertices<a class="headerlink" href="#Passing-in-multiple-out-of-sample-vertices" title="Permalink to this headline">¶</a></h3>
 <p>You can pass a 2d numpy array into <code class="docutils literal notranslate"><span class="pre">transform</span></code>. The rows are the out-of-sample vertices, and the columns are their edges to the in-sample vertices.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -675,21 +729,21 @@ a is &lt;class &#39;numpy.ndarray&#39;&gt; with shape (2, 198)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate an embedding with ASE</span>
 <span class="n">ase</span> <span class="o">=</span> <span class="n">ASE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">X_hat</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">X_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="c1"># predicted latent positions</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The out-of-sample prediction output has dimensions </span><span class="si">{</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">w_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The out-of-sample prediction output has dimensions </span><span class="si">{</span><span class="n">w_ase</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># Plot all latent positions</span>
-<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span>
-         <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span>
+         <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -703,19 +757,63 @@ The out-of-sample prediction output has dimensions (2, 2)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7f231d14f580&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3dc8a67e50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/embedding_OutOfSampleEmbed_15_2.png" src="../_images/embedding_OutOfSampleEmbed_15_2.png" />
+<img alt="../_images/embedding_OutOfSampleEmbed_18_2.png" src="../_images/embedding_OutOfSampleEmbed_18_2.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate an embedding with LSE</span>
+<span class="n">lse</span> <span class="o">=</span> <span class="n">LSE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="c1"># predicted latent positions</span>
+<span class="n">w_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The out-of-sample prediction output has dimensions </span><span class="si">{</span><span class="n">w_lse</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot all latent positions</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span>
+         <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The out-of-sample prediction output has dimensions (2, 2)
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;seaborn.axisgrid.PairGrid at 0x7f3d82d7c1c0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/embedding_OutOfSampleEmbed_19_2.png" src="../_images/embedding_OutOfSampleEmbed_19_2.png" />
 </div>
 </div>
 </div>
@@ -728,7 +826,7 @@ The out-of-sample prediction output has dimensions (2, 2)
 <div class="line">Here, “out” means “edges from out-of-sample vertices to in-sample vertices”</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -745,7 +843,7 @@ The out-of-sample prediction output has dimensions (2, 2)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -757,22 +855,22 @@ The out-of-sample prediction output has dimensions (2, 2)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/embedding_OutOfSampleEmbed_18_1.png" src="../_images/embedding_OutOfSampleEmbed_18_1.png" />
+<img alt="../_images/embedding_OutOfSampleEmbed_22_1.png" src="../_images/embedding_OutOfSampleEmbed_22_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Fit our directed graph</span>
-<span class="n">X_hat</span><span class="p">,</span> <span class="n">Y_hat</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">Y_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="c1"># predicted latent positions</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;output of `ase.transform(a)` is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;out latent positions: </span><span class="se">\n</span><span class="si">{</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;in latent positions: </span><span class="se">\n</span><span class="si">{</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">w_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;output of `ase.transform(a)` is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">w_ase</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;out latent positions: </span><span class="se">\n</span><span class="si">{</span><span class="n">w_ase</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;in latent positions: </span><span class="se">\n</span><span class="si">{</span><span class="n">w_ase</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -784,47 +882,115 @@ The out-of-sample prediction output has dimensions (2, 2)
 output of `ase.transform(a)` is &lt;class &#39;tuple&#39;&gt;
 
 out latent positions:
-[[ 0.67377785  0.56976739]
- [ 0.64340223 -0.42217671]]
+[[ 0.69382889  0.56970396]
+ [ 0.71045116 -0.64020639]]
 
 in latent positions:
-[[ 0.73600352  0.54927494]
- [ 0.68732202 -0.52651664]]
+[[ 0.68914527  0.46260394]
+ [ 0.69295841 -0.60998878]]
 </pre></div></div>
 </div>
-<div class="section" id="Plotting-directed-latent-predictions">
-<h3>Plotting directed latent predictions<a class="headerlink" href="#Plotting-directed-latent-predictions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Plotting-directed-ASE-latent-predictions">
+<h3>Plotting directed ASE latent predictions<a class="headerlink" href="#Plotting-directed-ASE-latent-predictions" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Out Latent Predictions&quot;</span><span class="p">)</span>
-<span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;In Latent Predictions&quot;</span><span class="p">)</span>
+<span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE Out Latent Predictions&quot;</span><span class="p">)</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE In Latent Predictions&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7f231d830b20&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3d830a9280&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/embedding_OutOfSampleEmbed_21_1.png" src="../_images/embedding_OutOfSampleEmbed_21_1.png" />
+<img alt="../_images/embedding_OutOfSampleEmbed_25_1.png" src="../_images/embedding_OutOfSampleEmbed_25_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/embedding_OutOfSampleEmbed_21_2.png" src="../_images/embedding_OutOfSampleEmbed_21_2.png" />
+<img alt="../_images/embedding_OutOfSampleEmbed_25_2.png" src="../_images/embedding_OutOfSampleEmbed_25_2.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Fit our directed graph</span>
+<span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">Y_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="c1"># predicted latent positions</span>
+<span class="n">w_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;output of `ase.transform(a)` is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">w_lse</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;out latent positions: </span><span class="se">\n</span><span class="si">{</span><span class="n">w_lse</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;in latent positions: </span><span class="se">\n</span><span class="si">{</span><span class="n">w_lse</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+output of `ase.transform(a)` is &lt;class &#39;tuple&#39;&gt;
+
+out latent positions:
+[[ 0.0709367   0.05849967]
+ [ 0.07096437 -0.06330408]]
+
+in latent positions:
+[[ 0.07113943  0.04806502]
+ [ 0.07069668 -0.0611713 ]]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Plotting-directed-LSE-latent-predictions">
+<h3>Plotting directed LSE latent predictions<a class="headerlink" href="#Plotting-directed-LSE-latent-predictions" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out Latent Predictions&quot;</span><span class="p">)</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE In Latent Predictions&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;seaborn.axisgrid.PairGrid at 0x7f3d7e7cdc10&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/embedding_OutOfSampleEmbed_28_1.png" src="../_images/embedding_OutOfSampleEmbed_28_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/embedding_OutOfSampleEmbed_28_2.png" src="../_images/embedding_OutOfSampleEmbed_28_2.png" />
 </div>
 </div>
 </div>
@@ -833,7 +999,7 @@ in latent positions:
 <h2>Weighted out-of-sample prediction<a class="headerlink" href="#Weighted-out-of-sample-prediction" title="Permalink to this headline">¶</a></h2>
 <p>Weighted graphs work as well. Here, we generate a directed, weighted graph and estimate the latent positions for multiple out-of-sample vertices.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -854,7 +1020,7 @@ in latent positions:
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -866,45 +1032,83 @@ in latent positions:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/embedding_OutOfSampleEmbed_24_1.png" src="../_images/embedding_OutOfSampleEmbed_24_1.png" />
+<img alt="../_images/embedding_OutOfSampleEmbed_31_1.png" src="../_images/embedding_OutOfSampleEmbed_31_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Embed and transform</span>
-<span class="n">X_hat</span><span class="p">,</span> <span class="n">Y_hat</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">Y_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">w_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
 <span class="c1"># Plot</span>
-<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Out Latent Predictions&quot;</span><span class="p">)</span>
-<span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;In Latent Predictions&quot;</span><span class="p">)</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE Out Latent Predictions&quot;</span><span class="p">)</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE In Latent Predictions&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7f231d4f6040&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3d7e654a30&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/embedding_OutOfSampleEmbed_25_1.png" src="../_images/embedding_OutOfSampleEmbed_25_1.png" />
+<img alt="../_images/embedding_OutOfSampleEmbed_32_1.png" src="../_images/embedding_OutOfSampleEmbed_32_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/embedding_OutOfSampleEmbed_25_2.png" src="../_images/embedding_OutOfSampleEmbed_25_2.png" />
+<img alt="../_images/embedding_OutOfSampleEmbed_32_2.png" src="../_images/embedding_OutOfSampleEmbed_32_2.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Embed and transform</span>
+<span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">Y_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">w_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out Latent Predictions&quot;</span><span class="p">)</span>
+<span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE In Latent Predictions&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;seaborn.axisgrid.PairGrid at 0x7f3d7e3ce580&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/embedding_OutOfSampleEmbed_33_1.png" src="../_images/embedding_OutOfSampleEmbed_33_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/embedding_OutOfSampleEmbed_33_2.png" src="../_images/embedding_OutOfSampleEmbed_33_2.png" />
 </div>
 </div>
 </div>
