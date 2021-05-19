@@ -123,6 +123,16 @@ class TestLeiden(unittest.TestCase):
             args["use_modularity"] = 1234
             leiden(graph=graph, **args)
 
+        with self.assertRaises(TypeError):
+            args = good_args.copy()
+            args["trials"] = "hotdog"
+            leiden(graph=graph, **args)
+
+        with self.assertRaises(ValueError):
+            args = good_args.copy()
+            args["trials"] = 0
+            leiden(graph=graph, **args)
+
         args = good_args.copy()
         args["random_seed"] = 1234
         leiden(graph=graph, **args)
