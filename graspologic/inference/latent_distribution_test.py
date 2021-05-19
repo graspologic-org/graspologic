@@ -446,7 +446,7 @@ def _sample_modified_ase(X, Y, workers, random_state, pooled=False):
     X_sampled = np.asarray(
         Parallel(n_jobs=workers)(
             delayed(add_variance)(X[i, :], X_sigmas[i], r)
-            for i, r in zip(range(N), rng.randint(np.iinfo(np.int32).max, size=X.shape))
+            for i, r in zip(range(N), rng.randint(np.iinfo(np.int32).max, size=N))
         )
     )
 
