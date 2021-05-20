@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from collections import Iterable
+from collections.abc import Iterable
 from functools import reduce
 from pathlib import Path
 from typing import Any, Dict, List, Tuple, Union
@@ -224,7 +224,12 @@ def is_unweighted(
 
 
 def is_almost_symmetric(X, atol=1e-15):
-    return abs(X - X.T).max() <= atol
+    if (X.ndim != 2) or (X.shape[0] != X.shape[1]):
+        return False
+    if isinstance(X, (np.ndarray, scipy.sparse.spmatrix)):
+        return abs(X - X.T).max() <= atol
+    else:
+        raise TypeError("input a correct matrix type.")
 
 
 def symmetrize(graph, method="avg"):
