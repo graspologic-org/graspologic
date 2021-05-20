@@ -35,7 +35,7 @@ def gen_covariates(m1, m2, labels, type, ndim=3):
 
 
 # FIXTURES
-@pytest.fixture(params=[False], scope="module")
+@pytest.fixture
 def M(request):
     # module scope ensures that A and labels will always match
     # since they exist in separate functions
@@ -49,8 +49,7 @@ def M(request):
     P[np.diag_indices_from(P)] = p
 
     # generate sbm
-    directed = request.param
-    return sbm([n] * 2, P, directed=directed, return_labels=True)
+    return sbm([n] * 2, P, directed=False, return_labels=True)
 
 
 @pytest.fixture(params=["static", "many"])

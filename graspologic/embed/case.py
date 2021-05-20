@@ -131,7 +131,9 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         A = import_graph(graph)
         undirected = is_almost_symmetric(A)
         if not undirected:
-            raise NotImplementedError("CASE currently only works with undirected graphs.")
+            raise NotImplementedError(
+                "CASE currently only works with undirected graphs."
+            )
 
         # Create regularized Laplacian, scale covariates to unit norm
         L = to_laplacian(A, form="R-DAD")

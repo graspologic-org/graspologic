@@ -112,7 +112,7 @@ class BaseSpectralEmbed(BaseEstimator):
             directed_ = directed
         else:
             directed_ = is_almost_symmetric(A)
-        if not directed_:
+        if directed_:
             self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
