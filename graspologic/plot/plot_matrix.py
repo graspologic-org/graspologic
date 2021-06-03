@@ -10,6 +10,7 @@ import matplotlib as mpl
 from matplotlib.colors import ListedColormap
 from scipy.sparse import csr_matrix
 
+
 def _check_data(data):
     if not isinstance(data, (np.ndarray, csr_matrix)):
         raise TypeError("Data must be a np.ndarray or scipy.sparse.csr_matrix.")
@@ -589,12 +590,12 @@ def matrixplot(
     divider : AxesLocator
         Divider used to add new axes to the plot
     """
-    
+
     # check for the plot type
     plot_type_opts = ["scattermap", "heatmap"]
     if plot_type not in plot_type_opts:
         raise ValueError(f"`plot_type` must be one of {plot_type_opts}")
-        
+
     # check for the type and dimension of the data
     _check_data(data)
 

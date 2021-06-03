@@ -79,7 +79,7 @@ def test_adjplot_output():
 
 def test_adjplot_sparse():
     X = er_np(10, 0.5)
-    adjplot(csr_matrix(X), plot_type='scattermap')
+    adjplot(csr_matrix(X), plot_type="scattermap")
 
 
 def test_matrix_inputs():
@@ -189,6 +189,7 @@ def test_matrix_output():
         row_item_order="cell_size",
     )
 
+
 def test_matrixplot_sparse():
     X = er_np(10, 0.5)
-    adjplot(csr_matrix(X), plot_type='scattermap')
+    adjplot(csr_matrix(X), plot_type="scattermap")
