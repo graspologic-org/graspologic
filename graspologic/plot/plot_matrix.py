@@ -589,13 +589,14 @@ def matrixplot(
     divider : AxesLocator
         Divider used to add new axes to the plot
     """
-    # check for the type and dimension of the data
-    _check_data(data)
-
+    
     # check for the plot type
     plot_type_opts = ["scattermap", "heatmap"]
     if plot_type not in plot_type_opts:
         raise ValueError(f"`plot_type` must be one of {plot_type_opts}")
+        
+    # check for the type and dimension of the data
+    _check_data(data)
 
     # check for the types of the sorting arguments
     (
