@@ -362,7 +362,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
 
     Parameters
     ----------
-    data : np.narray, ndim=2
+    data : np.narray, scipy.sparse.csr_matrix, ndim=2
         Matrix to plot
     ax: matplotlib axes object, optional
         Axes in which to draw the plot, by default None
@@ -519,7 +519,7 @@ def matrixplot(
 
     Parameters
     ----------
-    data : np.ndarray with ndim=2
+    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
         Matrix to plot
     ax : matplotlib axes object (default=None)
         Axes in which to draw the plot. If no axis is passed, one will be created.
@@ -902,7 +902,7 @@ def adjplot(
 
     Parameters
     ----------
-    data : np.ndarray with ndim=2
+    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
         Matrix to plot, must be square.
     ax : matplotlib axes object (default=None)
         Axes in which to draw the plot. If no axis is passed, one will be created.
