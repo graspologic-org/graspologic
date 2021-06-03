@@ -12,14 +12,14 @@ from scipy.sparse import csr_matrix
 
 
 def _check_data(data, plot_type):
-    if plot_type == 'scattermap':
+    if plot_type == "scattermap":
         if not isinstance(data, (np.ndarray, csr_matrix)):
             raise TypeError("`data` must be a np.ndarray or scipy.sparse.csr_matrix.")
-    elif plot_type == 'heatmap':
+    elif plot_type == "heatmap":
         if not isinstance(data, np.ndarray):
             msg = "`data` must be a np.ndarray. If your data is a sparse matrix, please"
             msg += " make sure that `plot_type` is set to 'scattermap'"
-            raise TypeError(msg) 
+            raise TypeError(msg)
     if data.ndim != 2:
         raise ValueError("`data` must have dimension 2.")
 
