@@ -8,11 +8,11 @@ import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib as mpl
 from matplotlib.colors import ListedColormap
-
+from scipy.sparse import csr_matrix
 
 def _check_data(data):
-    if not isinstance(data, np.ndarray):
-        raise TypeError("Data must be a np.ndarray.")
+    if not isinstance(data, (np.ndarray, csr_matrix)):
+        raise TypeError("Data must be a np.ndarray or scipy.sparse.csr_matrix.")
     if data.ndim != 2:
         raise ValueError("Data must have dimension 2.")
 
@@ -387,7 +387,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
         _, ax = plt.subplots(1, 1, figsize=(20, 20))
     n_verts = data.shape[0]
     inds = np.nonzero(data)
-    edges = data[inds]
+    edges = np.squeeze(np.asarray(data[inds]))
     scatter_df = pd.DataFrame()
     scatter_df["weight"] = edges
     scatter_df["x"] = inds[1]
