@@ -11,11 +11,17 @@ from matplotlib.colors import ListedColormap
 from scipy.sparse import csr_matrix
 
 
-def _check_data(data):
-    if not isinstance(data, (np.ndarray, csr_matrix)):
-        raise TypeError("Data must be a np.ndarray or scipy.sparse.csr_matrix.")
+def _check_data(data, plot_type):
+    if plot_type == 'scattermap':
+        if not isinstance(data, (np.ndarray, csr_matrix)):
+            raise TypeError("`data` must be a np.ndarray or scipy.sparse.csr_matrix.")
+    elif plot_type == 'heatmap':
+        if not isinstance(data, np.ndarray):
+            msg = "`data` must be a np.ndarray. If your data is a sparse matrix, please"
+            msg += " make sure that `plot_type` is set to 'scattermap'"
+            raise TypeError(msg) 
     if data.ndim != 2:
-        raise ValueError("Data must have dimension 2.")
+        raise ValueError("`data` must have dimension 2.")
 
 
 def _check_item_in_meta(meta, item, name):
@@ -521,7 +527,7 @@ def matrixplot(
     Parameters
     ----------
     data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
-        Matrix to plot
+        Matrix to plot. Sparse matrix input is only accepted if ``plot_type == 'scattermap'``.
     ax : matplotlib axes object (default=None)
         Axes in which to draw the plot. If no axis is passed, one will be created.
     plot_type : str in {"heatmap", "scattermap"} (default="heatmap")
@@ -597,7 +603,7 @@ def matrixplot(
         raise ValueError(f"`plot_type` must be one of {plot_type_opts}")
 
     # check for the type and dimension of the data
-    _check_data(data)
+    _check_data(data, plot_type)
 
     # check for the types of the sorting arguments
     (
@@ -906,6 +912,7 @@ def adjplot(
     ----------
     data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
         Matrix to plot, must be square.
+        Sparse matrix input is only accepted if ``plot_type == 'scattermap'``.
     ax : matplotlib axes object (default=None)
         Axes in which to draw the plot. If no axis is passed, one will be created.
     plot_type : str in {"heatmap", "scattermap"} (default="heatmap")
