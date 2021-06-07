@@ -481,7 +481,7 @@ def largest_connected_component(graph, return_inds=False):
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix
-        Input graph in any of the above specified formats. If np.ndarray or 
+        Input graph in any of the above specified formats. If np.ndarray or
         scipy.sparse.csr_matrix interpreted as an :math:`n \times n` adjacency matrix.
 
     return_inds: boolean, default: False
@@ -531,9 +531,10 @@ def _largest_connected_component_adjacency(
     adjacency: Union[np.ndarray, csr_matrix],
     return_inds: bool = False,
 ):
-    # weakly connected has the same definition as if the graph were undirected
-    # I don't know whether doing the exhaustive directed check is worth it here
-    # so I wrote it like this to basically assume directed
+    # If you treat an undirected graph as directed and take the largest weakly connected
+    # component, you'll get the same answer as taking the largest connected component of
+    # that undirected graph. So I wrote it this way to avoid the cost of checking for
+    # directedness, and it makes the code simpler too.
     n_components, labels = csgraph.connected_components(
         adjacency, directed=True, connection="weak", return_labels=True
     )
@@ -543,9 +544,12 @@ def _largest_connected_component_adjacency(
         lcc_label = unique_labels[lcc_label_ind]
         lcc_mask = labels == lcc_label
         lcc = adjacency[lcc_mask][:, lcc_mask]
+    else:
+        lcc = adjacency
+        lcc_mask = np.ones(adjacency.shape[0], dtype=bool)
 
     if return_inds:
-        all_inds = np.arange(len(adjacency))
+        all_inds = np.arange(adjacency.shape[0])
         lcc_inds = all_inds[lcc_mask]
         return lcc, lcc_inds
     else:

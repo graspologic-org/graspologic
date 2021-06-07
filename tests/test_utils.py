@@ -7,10 +7,10 @@ from math import sqrt
 import networkx as nx
 import numpy as np
 import pytest
-from numpy.testing import assert_equal
-
 from graspologic.utils import remap_labels
 from graspologic.utils import utils as gus
+from numpy.testing import assert_equal
+from scipy.sparse import csr_matrix
 
 
 class TestInput(unittest.TestCase):
@@ -236,6 +236,36 @@ class TestLCC(unittest.TestCase):
         np.testing.assert_array_equal(nodelist, expected_nodelist)
         lcc_matrix = gus.largest_connected_component(g)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
+
+    def test_lcc_scipy(self):
+        expected_lcc_matrix = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 1],
+                [0, 1, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+            ]
+        )
+        expected_nodelist = np.array([0, 1, 2, 3, 5])
+        adjacency = np.array(
+            [
+                [0, 1, 1, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 1, 0, 1, 0],  # connected
+                [0, 1, 0, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 0, 0, 0, 0],  # not connected
+                [0, 0, 1, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 0, 0, 0, 0],  # not connected
+            ]
+        )
+        sparse_adjacency = csr_matrix(adjacency)
+
+        lcc_matrix, nodelist = gus.largest_connected_component(
+            sparse_adjacency, return_inds=True
+        )
+        np.testing.assert_array_equal(lcc_matrix.toarray(), expected_lcc_matrix)
+        np.testing.assert_array_equal(nodelist, expected_nodelist)
 
     def test_multigraph_lcc_numpystack(self):
         expected_g_matrix = np.array(
