@@ -8,13 +8,20 @@ import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib as mpl
 from matplotlib.colors import ListedColormap
+from scipy.sparse import csr_matrix
 
 
-def _check_data(data):
-    if not isinstance(data, np.ndarray):
-        raise TypeError("Data must be a np.ndarray.")
+def _check_data(data, plot_type):
+    if plot_type == "scattermap":
+        if not isinstance(data, (np.ndarray, csr_matrix)):
+            raise TypeError("`data` must be a np.ndarray or scipy.sparse.csr_matrix.")
+    elif plot_type == "heatmap":
+        if not isinstance(data, np.ndarray):
+            msg = "`data` must be a np.ndarray. If your data is a sparse matrix, please"
+            msg += " make sure that `plot_type` is set to 'scattermap'"
+            raise TypeError(msg)
     if data.ndim != 2:
-        raise ValueError("Data must have dimension 2.")
+        raise ValueError("`data` must have dimension 2.")
 
 
 def _check_item_in_meta(meta, item, name):
@@ -362,7 +369,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
 
     Parameters
     ----------
-    data : np.narray, ndim=2
+    data : np.narray, scipy.sparse.csr_matrix, ndim=2
         Matrix to plot
     ax: matplotlib axes object, optional
         Axes in which to draw the plot, by default None
@@ -387,7 +394,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
         _, ax = plt.subplots(1, 1, figsize=(20, 20))
     n_verts = data.shape[0]
     inds = np.nonzero(data)
-    edges = data[inds]
+    edges = np.squeeze(np.asarray(data[inds]))
     scatter_df = pd.DataFrame()
     scatter_df["weight"] = edges
     scatter_df["x"] = inds[1]
@@ -519,8 +526,8 @@ def matrixplot(
 
     Parameters
     ----------
-    data : np.ndarray with ndim=2
-        Matrix to plot
+    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
+        Matrix to plot. Sparse matrix input is only accepted if ``plot_type == 'scattermap'``.
     ax : matplotlib axes object (default=None)
         Axes in which to draw the plot. If no axis is passed, one will be created.
     plot_type : str in {"heatmap", "scattermap"} (default="heatmap")
@@ -589,13 +596,14 @@ def matrixplot(
     divider : AxesLocator
         Divider used to add new axes to the plot
     """
-    # check for the type and dimension of the data
-    _check_data(data)
 
     # check for the plot type
     plot_type_opts = ["scattermap", "heatmap"]
     if plot_type not in plot_type_opts:
         raise ValueError(f"`plot_type` must be one of {plot_type_opts}")
+
+    # check for the type and dimension of the data
+    _check_data(data, plot_type)
 
     # check for the types of the sorting arguments
     (
@@ -902,8 +910,9 @@ def adjplot(
 
     Parameters
     ----------
-    data : np.ndarray with ndim=2
+    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
         Matrix to plot, must be square.
+        Sparse matrix input is only accepted if ``plot_type == 'scattermap'``.
     ax : matplotlib axes object (default=None)
         Axes in which to draw the plot. If no axis is passed, one will be created.
     plot_type : str in {"heatmap", "scattermap"} (default="heatmap")
