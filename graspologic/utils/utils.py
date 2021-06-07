@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_matrix, diags, isspmatrix_csr
+from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
 from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
@@ -498,14 +498,21 @@ def largest_connected_component(graph, return_inds=False):
         Indices from the original adjacency matrix that were kept after taking
         the largest connected component.
     """
-    input_ndarray = False
-    if type(graph) is np.ndarray:
-        input_ndarray = True
-        if is_symmetric(graph):
-            g_object = nx.Graph()
-        else:
-            g_object = nx.DiGraph()
-        graph = nx.from_numpy_array(graph, create_using=g_object)
+
+    if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
+        return _largest_connected_component_networkx(graph, return_inds=return_inds)
+    elif isinstance(graph, (np.ndarray, csr_matrix)):
+        return _largest_connected_component_adjacency(graph, return_inds=return_inds)
+    else:
+        msg = "`graph` must either be a networkx graph or an adjacency matrix in"
+        msg += " numpy ndarray or scipy csr_matrix format."
+        raise TypeError(msg)
+
+
+def _largest_connected_component_networkx(
+    graph: Union[nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph],
+    return_inds: bool = False,
+):
     if type(graph) in [nx.Graph, nx.MultiGraph]:
         lcc_nodes = max(nx.connected_components(graph), key=len)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
@@ -514,11 +521,35 @@ def largest_connected_component(graph, return_inds=False):
     lcc.remove_nodes_from([n for n in lcc if n not in lcc_nodes])
     if return_inds:
         nodelist = np.array(list(lcc_nodes))
-    if input_ndarray:
-        lcc = nx.to_numpy_array(lcc)
     if return_inds:
         return lcc, nodelist
-    return lcc
+    else:
+        return lcc
+
+
+def _largest_connected_component_adjacency(
+    adjacency: Union[np.ndarray, csr_matrix],
+    return_inds: bool = False,
+):
+    # weakly connected has the same definition as if the graph were undirected
+    # I don't know whether doing the exhaustive directed check is worth it here
+    # so I wrote it like this to basically assume directed
+    n_components, labels = csgraph.connected_components(
+        adjacency, directed=True, connection="weak", return_labels=True
+    )
+    if n_components > 1:
+        unique_labels, counts = np.unique(labels, return_counts=True)
+        lcc_label_ind = np.argmax(counts)
+        lcc_label = unique_labels[lcc_label_ind]
+        lcc_mask = labels == lcc_label
+        lcc = adjacency[lcc_mask][:, lcc_mask]
+
+    if return_inds:
+        all_inds = np.arange(len(adjacency))
+        lcc_inds = all_inds[lcc_mask]
+        return lcc, lcc_inds
+    else:
+        return lcc
 
 
 def multigraph_lcc_union(graphs, return_inds=False):
