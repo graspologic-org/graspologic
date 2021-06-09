@@ -504,8 +504,10 @@ def largest_connected_component(graph, return_inds=False):
     elif isinstance(graph, (np.ndarray, csr_matrix)):
         return _largest_connected_component_adjacency(graph, return_inds=return_inds)
     else:
-        msg = "`graph` must either be a networkx graph or an adjacency matrix in"
-        msg += " numpy ndarray or scipy csr_matrix format."
+        msg = (
+            "`graph` must either be a networkx graph or an adjacency matrix in"
+            " numpy ndarray or scipy csr_matrix format."
+        )
         raise TypeError(msg)
 
 
