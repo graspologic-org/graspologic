@@ -471,7 +471,14 @@ def is_fully_connected(graph):
             return nx.is_weakly_connected(graph)
 
 
-def largest_connected_component(graph, return_inds=False):
+def largest_connected_component(
+    graph: Union[
+        nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
+    ],
+    return_inds: bool = False,
+) -> Union[
+    nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
+]:
     r"""
     Finds the largest connected component for the input graph.
 
