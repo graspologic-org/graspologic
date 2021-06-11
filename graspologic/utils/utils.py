@@ -485,9 +485,9 @@ def largest_connected_component(graph, return_inds=False):
         scipy.sparse.csr_matrix interpreted as an :math:`n \times n` adjacency matrix.
 
     return_inds: boolean, default: False
-        Whether to return a np.ndarray containing the indices/nodes in the original
+        Whether to return a np.ndarray containing the indices of the original
         adjacency matrix that were kept and are now in the returned graph.
-        Ignored when input is networkx object
+        Ignored when input is networkx object.
 
     Returns
     -------
@@ -500,7 +500,7 @@ def largest_connected_component(graph, return_inds=False):
     """
 
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
-        return _largest_connected_component_networkx(graph, return_inds=return_inds)
+        return _largest_connected_component_networkx(graph)
     elif isinstance(graph, (np.ndarray, csr_matrix)):
         return _largest_connected_component_adjacency(graph, return_inds=return_inds)
     else:
@@ -513,7 +513,6 @@ def largest_connected_component(graph, return_inds=False):
 
 def _largest_connected_component_networkx(
     graph: Union[nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph],
-    return_inds: bool = False,
 ):
     if type(graph) in [nx.Graph, nx.MultiGraph]:
         lcc_nodes = max(nx.connected_components(graph), key=len)
@@ -521,12 +520,7 @@ def _largest_connected_component_networkx(
         lcc_nodes = max(nx.weakly_connected_components(graph), key=len)
     lcc = graph.subgraph(lcc_nodes).copy()
     lcc.remove_nodes_from([n for n in lcc if n not in lcc_nodes])
-    if return_inds:
-        nodelist = np.array(list(lcc_nodes))
-    if return_inds:
-        return lcc, nodelist
-    else:
-        return lcc
+    return lcc
 
 
 def _largest_connected_component_adjacency(
