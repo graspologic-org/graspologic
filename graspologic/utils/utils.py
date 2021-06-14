@@ -494,7 +494,6 @@ def largest_connected_component(
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices/nodes in the original
         adjacency matrix that were kept and are now in the returned graph.
-        Ignored when input is networkx object
 
     Returns
     -------
@@ -502,7 +501,7 @@ def largest_connected_component(
         New graph of the largest connected component, returned in the input format.
 
     inds: (optional)
-        Indices from the original adjacency matrix that were kept after taking
+        Indices/nodes from the original adjacency matrix that were kept after taking
         the largest connected component.
     """
 
