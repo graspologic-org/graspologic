@@ -548,9 +548,9 @@ def _largest_connected_component_adjacency(
 
         lcc_label = unique_labels[lcc_label_ind]  # grab the component label for the LCC
 
-        lcc_mask = labels == lcc_label  # create a boolean mask arry for where the
+        lcc_mask = labels == lcc_label  # create a boolean mask array for where the
         # component labels equal that of the largest connected component
-        
+
         lcc = adjacency[lcc_mask][:, lcc_mask]  # mask the adjacency matrix to only LCC
     else:
         lcc = adjacency
