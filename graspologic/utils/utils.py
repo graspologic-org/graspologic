@@ -543,10 +543,15 @@ def _largest_connected_component_adjacency(
     )
     if n_components > 1:
         unique_labels, counts = np.unique(labels, return_counts=True)
-        lcc_label_ind = np.argmax(counts)
-        lcc_label = unique_labels[lcc_label_ind]
-        lcc_mask = labels == lcc_label
-        lcc = adjacency[lcc_mask][:, lcc_mask]
+        lcc_label_ind = np.argmax(counts)  # LCC is the component with the most nodes, 
+        # so it is the component label with the highest count in the label array
+
+        lcc_label = unique_labels[lcc_label_ind]  # grab the component label for the LCC
+
+        lcc_mask = labels == lcc_label  # create a boolean mask arry for where the
+        # component labels equal that of the largest connected component
+        
+        lcc = adjacency[lcc_mask][:, lcc_mask]  # mask the adjacency matrix to only LCC
     else:
         lcc = adjacency
         lcc_mask = np.ones(adjacency.shape[0], dtype=bool)
