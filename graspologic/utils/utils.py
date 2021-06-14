@@ -548,7 +548,7 @@ def _largest_connected_component_adjacency(
     )
     if n_components > 1:
         unique_labels, counts = np.unique(labels, return_counts=True)
-        lcc_label_ind = np.argmax(counts)  # LCC is the component with the most nodes, 
+        lcc_label_ind = np.argmax(counts)  # LCC is the component with the most nodes,
         # so it is the component label with the highest count in the label array
 
         lcc_label = unique_labels[lcc_label_ind]  # grab the component label for the LCC
