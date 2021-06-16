@@ -8,14 +8,15 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import networkx as nx
 import numpy as np
-import umap
+import umap.umap_ as umap
 from sklearn.manifold import TSNE
 
-from ..embed import node2vec_embed
+from ..embed import node2vec_embed, AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from ..partition import leiden
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
 from .classes import NodePosition
 from .nooverlap import remove_overlaps
+from ..utils import symmetrize
 
 logger = logging.getLogger(__name__)
 
