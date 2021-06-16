@@ -200,8 +200,47 @@ def layout_umap(
     return lcc_graph, positions
 
 
+def layout_auto(
+        graph: nx.Graph,
+        embedding=None,
+        embedding_algorithm="n2v",
+        reducing_algorithm="umap",
+        n_components: int = 32,
+        max_edges: int = 10000000,
+        random_seed: Optional[int] = None,
+        adjust_overlaps: bool = True,
+        embed_kws={},
+        umap_kws={},
+        tsne_kws={},
+) -> Tuple[nx.Graph, List[NodePosition]]:
+    if embedding is None:
+        lcc_graph, tensors, labels = _embed_for_layout(
+            graph=graph,
+            algorithm=embedding_algorithm,
+            n_components=n_components,
+            max_edges=max_edges,
+            random_seed=random_seed,
+            **embed_kws
+        )
+    if reducing_algorithm == "umap":
+        points = umap.UMAP(random_state=random_seed, **umap_kws).fit_transform(tensors)
+    elif reducing_algorithm == "tsne":
+        points = TSNE(random_state=random_seed, **tsne_kws).fit_transform(tensors)
+    positions = _node_positions_from(
+        lcc_graph,
+        labels,
+        points,
+        random_seed=random_seed,
+        adjust_overlaps=adjust_overlaps,
+    )
+    return lcc_graph, positions
+
+
 def _largest_connected_component(graph: nx.Graph) -> nx.Graph:
-    largest_component = max(nx.connected_components(graph), key=len)
+    if isinstance(graph, nx.DiGraph):
+        largest_component = max(nx.weakly_connected_components(graph), key=len)
+    else:
+        largest_component = max(nx.connected_components(graph), key=len)
     return graph.subgraph(largest_component).copy()
 
 
@@ -225,6 +264,43 @@ def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
         logger.debug(f"after cut num edges: {len(graph.edges())}")
 
     return graph
+
+
+def _embed_for_layout(
+        graph: nx.Graph,
+        algorithm="n2v",
+        n_components: int = 32,
+        max_edges: int = 10000000,
+        random_seed: Optional[int] = None,
+        embed_kws={},
+) -> Tuple[nx.Graph, np.ndarray, np.ndarray]:
+    graph = _approximate_prune(graph, max_edges)
+    graph = _largest_connected_component(graph)
+
+    start = time.time()
+    if algorithm == "n2v":
+        tensors, labels = node2vec_embed(
+            graph=graph,
+            dimensions=128,
+            num_walks=10,
+            window_size=2,
+            iterations=3,
+            random_seed=random_seed,
+        )
+    else:
+        if algorithm == "ase":
+            embedder = AdjacencySpectralEmbed(
+                n_components=n_components, concat=True, **embed_kws
+            )
+        elif algorithm == "lse":
+            embedder = LaplacianSpectralEmbed(
+                form="R-DAD", n_components=n_components, concat=True, **embed_kws
+            )
+        labels = graph.nodes()
+        tensors = embedder.fit_transform(graph)
+    embedding_time = time.time() - start
+    logger.info(f"embedding completed in {embedding_time} seconds")
+    return graph, tensors, labels
 
 
 def _node2vec_for_layout(
@@ -260,7 +336,12 @@ def _node_positions_from(
     sizes = _compute_sizes(degree)
     covered_area = _covered_size(sizes)
     scaled_points = _scale_points(down_projection_2d, covered_area)
-    partitions = leiden(graph, random_seed=random_seed)
+    if isinstance(graph, nx.DiGraph):
+        temp_graph = symmetrize(graph)
+        logger.warning("Directed graph converted to undirected graph for community detection")
+        partitions = leiden(temp_graph, random_seed=random_seed)
+    else:
+        partitions = leiden(graph, random_seed=random_seed)
     positions = [
         NodePosition(
             node_id=key,
