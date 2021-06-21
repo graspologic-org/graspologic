@@ -976,8 +976,7 @@ def remap_node_ids(
         raise TypeError("graph must be of type nx.Graph")
 
     if not nx.is_weighted(graph, weight=weight_attribute):
-        logger = logging.getLogger("graspologic.utils")
-        logger.warning(
+        warnings.warn(
             f'Graph is unweighted using weight_attribute "{weight_attribute}". Defaulting weights to "{weight_default}"'
         )
 
