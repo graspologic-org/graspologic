@@ -1,10 +1,14 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import warnings
 
 from .base import BaseSpectralEmbed
-from ..utils import import_graph, to_laplacian, is_fully_connected
+from ..utils import to_laplacian
+
+import numpy as np
+
+from typing import Optional, Union
+import networkx as nx
 
 
 class LaplacianSpectralEmbed(BaseSpectralEmbed):
@@ -59,13 +63,15 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         ``form`` is 'R-DAD'.
 
     concat : bool, optional (default False)
-        If graph is directed, whether to concatenate left and right (out and in) latent positions along axis 1.
+        If graph is directed, whether to concatenate left and right (out and in) latent
+        positions along axis 1.
 
 
     Attributes
     ----------
     n_features_in_: int
-        Number of features passed to the :func:`~graspologic.embed.LaplacianSpectralEmbed.fit` method.
+        Number of features passed to the
+        :func:`~graspologic.embed.LaplacianSpectralEmbed.fit` method.
 
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
@@ -109,14 +115,14 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     def __init__(
         self,
-        form="DAD",
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        regularizer=None,
-        concat=False,
+        form: str = "DAD",
+        n_components: Optional[int] = None,
+        n_elbows: int = 2,
+        algorithm: str = "randomized",
+        n_iter: int = 5,
+        check_lcc: bool = True,
+        regularizer: Optional[float] = None,
+        concat: bool = False,
     ):
         super().__init__(
             n_components=n_components,
@@ -129,7 +135,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self.form = form
         self.regularizer = regularizer
 
-    def fit(self, graph, y=None):
+    def fit(self, graph: Union[np.ndarray, nx.Graph], y=None):
         """
         Fit LSE model to input graph
 
@@ -150,4 +156,38 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         A = self._fit(graph)
         L_norm = to_laplacian(A, form=self.form, regularizer=self.regularizer)
         self._reduce_dim(L_norm)
+
+        self.is_fitted_ = True
+
         return self
+
+    def _compute_oos_prediction(self, X, directed):
+        """
+        Computes the out-of-sample latent position estimation.
+        Parameters
+        ----------
+        X: np.ndarray
+            Input to do oos embedding on.
+        directed: bool
+            Indication if graph is directed or undirected
+        Returns
+        -------
+        out : array_like or tuple, shape
+        """
+
+        if not directed:
+            if X.ndim == 1:
+                X = np.expand_dims(X, axis=0)
+
+            return ((X @ self._pinv_left).T / np.sum(X, axis=1)).T
+        elif directed:
+            X_0 = X[0]
+            X_1 = X[1]
+
+            if X_0.ndim == 1:
+                X_0 = np.expand_dims(X_0, axis=0)
+                X_1 = np.expand_dims(X_1, axis=0)
+
+            return ((X_1 @ self._pinv_right).T / np.sum(X_1, axis=1)).T, (
+                (X_0 @ self._pinv_left).T / np.sum(X_0, axis=1)
+            ).T
