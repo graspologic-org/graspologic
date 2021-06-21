@@ -105,7 +105,9 @@ class Node2VecEmbedTest(unittest.TestCase):
         # vocab list should have exactly 34 elements
         self.assertEqual(len(vocab_list), 15)
 
-    def test_node2vec_embedding_unweighted_florentine_graph_correct_shape_is_returned(self):
+    def test_node2vec_embedding_unweighted_florentine_graph_correct_shape_is_returned(
+        self,
+    ):
         graph = nx.florentine_families_graph()
 
         model = gc.embed.node2vec_embed(graph)

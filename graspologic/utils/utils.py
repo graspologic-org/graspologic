@@ -946,9 +946,7 @@ def remap_labels(
 
 
 def remap_node_ids(
-        graph: nx.Graph,
-        weight_attribute: str = "weight",
-        weight_default: float = 1.0
+    graph: nx.Graph, weight_attribute: str = "weight", weight_default: float = 1.0
 ) -> Tuple[nx.Graph, Dict[Any, str]]:
     """
     Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
@@ -983,7 +981,9 @@ def remap_node_ids(
     node_id_dict = dict()
     graph_remapped = type(graph)()
 
-    for source, target, weight in graph.edges(data=weight_attribute, default=weight_default):
+    for source, target, weight in graph.edges(
+        data=weight_attribute, default=weight_default
+    ):
         if source not in node_id_dict:
             node_id_dict[source] = str(len(node_id_dict.keys()))
 

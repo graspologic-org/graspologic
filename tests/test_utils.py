@@ -563,14 +563,14 @@ class TestRemapNodeIds(unittest.TestCase):
         with warnings.catch_warnings(record=True) as warnings_context_manager:
             graph = nx.florentine_families_graph()
 
-            gus.remap_node_ids(
-                graph
-            )
+            gus.remap_node_ids(graph)
 
             self.assertEqual(len(warnings_context_manager), 1)
-            self.assertTrue(issubclass(warnings_context_manager[0].category, UserWarning))
             self.assertTrue(
-                'Graph is unweighted using' in str(warnings_context_manager[0].message)
+                issubclass(warnings_context_manager[0].category, UserWarning)
+            )
+            self.assertTrue(
+                "Graph is unweighted using" in str(warnings_context_manager[0].message)
             )
 
     def _assert_graphs_are_equivalent(self, graph, new_graph, new_node_ids):
