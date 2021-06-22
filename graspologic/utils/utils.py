@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import logging
 import warnings
 from collections import Iterable
 from functools import reduce
@@ -959,7 +958,7 @@ def remap_node_ids(
     weight_attribute : str,
         Default is ``weight``. An optional attribute to specify which column in your graph contains the weight value.
     weight_default : float,
-        Default is edge weight if a weight is not found on an edge
+        Default edge weight to use if a weight is not found on an edge in the graph
     Returns
     -------
     Tuple[nx.Graph, Dict[Any, str]]
