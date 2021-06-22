@@ -1033,14 +1033,15 @@ def remap_node_ids(
 
     if not nx.is_weighted(graph, weight=weight_attribute):
         warnings.warn(
-            f'Graph is unweighted using weight_attribute "{weight_attribute}". Defaulting weights to "{weight_default}"'
+            f'Graph has at least one unweighted edge using weight_attribute "{weight_attribute}". '
+            f'Defaulting unweighted edges to "{weight_default}"'
         )
 
     node_id_dict = dict()
     graph_remapped = type(graph)()
 
     for source, target, weight in graph.edges(
-        data=weight_attribute, default=weight_default
+            data=weight_attribute, default=weight_default
     ):
         if source not in node_id_dict:
             node_id_dict[source] = str(len(node_id_dict.keys()))

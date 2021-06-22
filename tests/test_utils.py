@@ -600,7 +600,7 @@ class TestRemapNodeIds(unittest.TestCase):
                 issubclass(warnings_context_manager[0].category, UserWarning)
             )
             self.assertTrue(
-                "Graph is unweighted using" in str(warnings_context_manager[0].message)
+                "Graph has at least one unweighted edge" in str(warnings_context_manager[0].message)
             )
 
     def _assert_graphs_are_equivalent(self, graph, new_graph, new_node_ids):
