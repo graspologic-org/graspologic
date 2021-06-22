@@ -1,11 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import warnings
+
 from abc import abstractmethod
 
 import numpy as np
-import warnings
 from sklearn.base import BaseEstimator
+from sklearn.utils.validation import check_is_fitted
 
 from ..utils import (
     augment_diagonal,
@@ -14,6 +16,8 @@ from ..utils import (
     is_fully_connected,
 )
 from .svd import selectSVD
+
+import networkx as nx
 
 
 class BaseSpectralEmbed(BaseEstimator):
@@ -27,12 +31,13 @@ class BaseSpectralEmbed(BaseEstimator):
         n_components must be <= min(X.shape). Otherwise, n_components must be
         < min(X.shape). If None, then optimal dimensions will be chosen by
         ``select_dimension`` using ``n_elbows`` argument.
+
     n_elbows : int, optional, default: 2
-        If `n_compoents=None`, then compute the optimal embedding dimension using
+        If `n_components=None`, then compute the optimal embedding dimension using
         `select_dimension`. Otherwise, ignored.
+
     algorithm : {'full', 'truncated' (default), 'randomized'}, optional
         SVD solver to use:
-
         - 'full'
             Computes full svd using ``scipy.linalg.svd``
         - 'truncated'
@@ -40,17 +45,20 @@ class BaseSpectralEmbed(BaseEstimator):
         - 'randomized'
             Computes randomized svd using
             ``sklearn.utils.extmath.randomized_svd``
+
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or
         'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
+
     check_lcc : bool , optional (defult =True)
         Whether to check if input graph is connected. May result in non-optimal
         results if the graph is unconnected. Not checking for connectedness may
         result in faster computation.
+
     concat : bool, optional (default = False)
-        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
-        along axis 1.
+        If graph(s) are directed, whether to concatenate each graph's left and right
+        (out and in) latent positions along axis 1.
 
     Attributes
     ----------
@@ -83,7 +91,7 @@ class BaseSpectralEmbed(BaseEstimator):
             raise TypeError(msg)
         self.concat = concat
 
-    def _reduce_dim(self, A):
+    def _reduce_dim(self, A, directed=None):
         """
         A function that reduces the dimensionality of an adjacency matrix
         using the desired embedding method.
@@ -104,7 +112,11 @@ class BaseSpectralEmbed(BaseEstimator):
         self.n_components_ = D.size
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
-        if not is_almost_symmetric(A):
+        if directed is not None:
+            directed_ = directed
+        else:
+            directed_ = not is_almost_symmetric(A)
+        if directed_:
             self.latent_right_ = V.T @ np.diag(np.sqrt(D))
         else:
             self.latent_right_ = None
@@ -115,7 +127,7 @@ class BaseSpectralEmbed(BaseEstimator):
         return True
 
     @abstractmethod
-    def fit(self, graph, y=None):
+    def fit(self, graph, y=None, *args, **kwargs):
         """
         A method for embedding.
         Parameters
@@ -171,9 +183,10 @@ class BaseSpectralEmbed(BaseEstimator):
         self.n_features_in_ = A.shape[0]
         return A
 
-    def _fit_transform(self, graph):
+    def _fit_transform(self, graph, *args, **kwargs):
         "Fits the model and returns the estimated latent positions."
-        self.fit(graph)
+
+        self.fit(graph, *args, **kwargs)
 
         if self.latent_right_ is None:
             return self.latent_left_
@@ -183,7 +196,7 @@ class BaseSpectralEmbed(BaseEstimator):
             else:
                 return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph, y=None):
+    def fit_transform(self, graph, y=None, *args, **kwargs):
         """
         Fit the model with graphs and apply the transformation.
 
@@ -197,11 +210,132 @@ class BaseSpectralEmbed(BaseEstimator):
         Returns
         -------
         out : np.ndarray OR length 2 tuple of np.ndarray.
-            If undirected then returns single np.ndarray of latent position, shape(n_vertices, n_components).
-            If directed, ``concat`` is True then concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
-            If directed, ``concat`` is False then tuple of the latent matrices. Each of shape (n_vertices, n_components).
+            If undirected then returns single np.ndarray of latent position,
+            shape(n_vertices, n_components). If directed, ``concat`` is True then
+            concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
+            If directed, ``concat`` is False then tuple of the latent matrices. Each of
+            shape (n_vertices, n_components).
         """
-        return self._fit_transform(graph)
+        return self._fit_transform(graph, *args, **kwargs)
+
+    def transform(self, X):
+        """
+        Obtain latent positions from an adjacency matrix or matrix of out-of-sample
+        vertices. For more details on transforming out-of-sample vertices, see the
+        :ref:`tutorials <embed_tutorials>`. For mathematical background, see [2].
+
+        Parameters
+        ----------
+        X : array-like or tuple, original shape or (n_oos_vertices, n_vertices).
+
+            The original fitted matrix ("graph" in fit) or new out-of-sample data.
+            If ``X`` is the original fitted matrix, returns a matrix close to
+            ``self.fit_transform(X)``.
+
+            If ``X`` is an out-of-sample matrix, n_oos_vertices is the number
+            of new vertices, and n_vertices is the number of vertices in the
+            original graph. If tuple, graph is directed and ``X[0]`` contains
+            edges from out-of-sample vertices to in-sample vertices.
+
+        Returns
+        -------
+        out : np.ndarray OR length 2 tuple of np.ndarray
+
+            Array of latent positions, shape (n_oos_vertices, n_components) or
+            (n_vertices, n_components). Transforms the fitted matrix if it was passed
+            in.
+
+            If ``X`` is an array or tuple containing adjacency vectors corresponding to
+            new nodes, returns the estimated latent positions for the new out-of-sample
+            adjacency vectors.
+            If undirected, returns array.
+            If directed, returns ``(X_out, X_in)``, where ``X_out`` contains
+            latent positions corresponding to nodes with edges from out-of-sample
+            vertices to in-sample vertices.
+
+        Notes
+        -----
+        If the matrix was diagonally augmented (e.g., ``self.diag_aug`` was True), ``fit``
+        followed by ``transform`` will produce a slightly different matrix than
+        ``fit_transform``.
+
+        To get the original embedding, using ``fit_transform`` is recommended. In the
+        directed case, if A is the original in-sample adjacency matrix, the tuple
+        (A.T, A) will need to be passed to ``transform`` if you do not wish to use
+        ``fit_transform``.
+        """
+
+        # checks
+        check_is_fitted(self, "is_fitted_")
+        if isinstance(X, nx.classes.graph.Graph):
+            X = import_graph(X)
+        directed = self.latent_right_ is not None
+
+        # correct types?
+        if directed and not isinstance(X, tuple):
+            if X.shape[0] == X.shape[1]:  # in case original matrix was passed
+                msg = """A square matrix A was passed to ``transform`` in the directed case. 
+                If this was the original in-sample matrix, either use ``fit_transform`` 
+                or pass a tuple (A.T, A). If this was an out-of-sample matrix, directed
+                graphs require a tuple (X_out, X_in)."""
+                raise TypeError(msg)
+            else:
+                msg = "Directed graphs require a tuple (X_out, X_in) for out-of-sample transforms."
+                raise TypeError(msg)
+        if not directed and not isinstance(X, np.ndarray):
+            raise TypeError("Undirected graphs require array input")
+
+        # for oos prediction
+        inv_eigs = np.diag(1 / self.singular_values_)
+
+        self._pinv_left = self.latent_left_ @ inv_eigs
+        if self.latent_right_ is not None:
+            self._pinv_right = self.latent_right_ @ inv_eigs
+
+        # correct shape in y?
+        latent_rows = self.latent_left_.shape[0]
+        _X = X[0] if directed else X
+        X_cols = _X.shape[-1]
+        if _X.ndim > 2:
+            raise ValueError("out-of-sample vertex must be 1d or 2d")
+        if latent_rows != X_cols:
+            msg = "out-of-sample vertex must be shape (n_oos_vertices, n_vertices)"
+            raise ValueError(msg)
+
+        return self._compute_oos_prediction(X, directed)
+
+    @abstractmethod
+    def _compute_oos_prediction(self, X, directed):
+        """
+        Computes the oos class specific estimation given in an input array and if the
+        graph is directed.
+
+        Parameters
+        ----------
+        X: np.ndarray
+            Input to do oos embedding on.
+
+        directed: bool
+            Indication if graph is directed or undirected
+
+        Returns
+        -------
+        array_like or tuple, shape (n_oos_vertices, n_components)
+            or (n_vertices, n_components).
+
+            Array of latent positions. Transforms the fitted matrix if it was passed
+            in.
+
+            If ``X`` is an array or tuple containing adjacency vectors corresponding to
+            new nodes, returns the estimated latent positions for the new out-of-sample
+            adjacency vectors.
+            If undirected, returns array.
+            If directed, returns ``(X_out, X_in)``, where ``X_out`` contains
+            latent positions corresponding to nodes with edges from out-of-sample
+            vertices to in-sample vertices.
+        """
+
+        pass
 
 
 class BaseEmbedMulti(BaseSpectralEmbed):

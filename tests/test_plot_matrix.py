@@ -4,9 +4,9 @@
 import numpy as np
 import pandas as pd
 import pytest
-
 from graspologic.plot.plot_matrix import adjplot, matrixplot
 from graspologic.simulations.simulations import er_np
+from scipy.sparse import csr, csr_matrix
 
 
 def test_adjplot_inputs():
@@ -75,6 +75,11 @@ def test_adjplot_output():
     ax = adjplot(X, meta=meta, group="hemisphere")
     ax = adjplot(X, meta=meta, group="hemisphere", group_order="size")
     ax = adjplot(X, meta=meta, group="hemisphere", item_order="cell_size")
+
+
+def test_adjplot_sparse():
+    X = er_np(10, 0.5)
+    adjplot(csr_matrix(X), plot_type="scattermap")
 
 
 def test_matrix_inputs():
@@ -183,3 +188,8 @@ def test_matrix_output():
         col_group="hemisphere",
         row_item_order="cell_size",
     )
+
+
+def test_matrixplot_sparse():
+    X = er_np(10, 0.5)
+    adjplot(csr_matrix(X), plot_type="scattermap")
