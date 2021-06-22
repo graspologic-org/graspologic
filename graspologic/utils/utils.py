@@ -1041,7 +1041,7 @@ def remap_node_ids(
     graph_remapped = type(graph)()
 
     for source, target, weight in graph.edges(
-            data=weight_attribute, default=weight_default
+        data=weight_attribute, default=weight_default
     ):
         if source not in node_id_dict:
             node_id_dict[source] = str(len(node_id_dict.keys()))
