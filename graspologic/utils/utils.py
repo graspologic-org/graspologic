@@ -591,9 +591,8 @@ def multigraph_lcc_union(graphs, return_inds=False):
         If input was a list
     """
     if isinstance(graphs, list):
-        if not isinstance(graphs[0], np.ndarray):
-            raise NotImplementedError
-
+        if not isinstance(graphs[0], (np.ndarray, csr_matrix)):
+            raise TypeError('List of graphs must contain ndarray or csr_matrix inputs.')
         out = [import_graph(g) for g in graphs]
         if len(set(map(np.shape, out))) != 1:
             msg = "All input graphs must have the same size"
@@ -615,7 +614,7 @@ def multigraph_lcc_union(graphs, return_inds=False):
     if isinstance(graphs, np.ndarray):
         graphs[:, idx[:, None], idx]
     elif isinstance(graphs, list):
-        if isinstance(graphs[0], np.ndarray):
+        if isinstance(graphs[0], (np.ndarray, csr_matrix)):
             graphs = [g[idx[:, None], idx] for g in graphs]
     if return_inds:
         return graphs, idx
@@ -659,7 +658,7 @@ def multigraph_lcc_intersection(graphs, return_inds=False):
     inds_intersection = reduce(np.intersect1d, inds_by_graph)
     new_graphs = []
     for graph in graphs:
-        if type(graph) is np.ndarray:
+        if isinstance(graph, (np.ndarray, csr_matrix)):
             lcc = graph[inds_intersection, :][:, inds_intersection]
         else:
             lcc = graph.subgraph(inds_intersection).copy()
@@ -679,7 +678,7 @@ def multigraph_lcc_intersection(graphs, return_inds=False):
         )
         # new inds intersection are the indices of new_graph that were kept on recurse
         # need to do this because indices could have shifted during recursion
-        if type(graphs[0]) is np.ndarray:
+        if isinstance(graph[0], (np.ndarray, csr_matrix)):
             inds_intersection = inds_intersection[new_inds_intersection]
         else:
             inds_intersection = new_inds_intersection
