@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import io
 import networkx as nx
 import numpy as np
 import unittest
@@ -105,6 +104,34 @@ class Node2VecEmbedTest(unittest.TestCase):
 
         # vocab list should have exactly 34 elements
         self.assertEqual(len(vocab_list), 15)
+
+    def test_node2vec_embedding_unweighted_florentine_graph_correct_shape_is_returned(
+        self,
+    ):
+        graph = nx.florentine_families_graph()
+
+        model = gc.embed.node2vec_embed(graph)
+        model_matrix: np.ndarray = model[0]
+        vocab_list = model[1]
+        self.assertIsNotNone(model)
+        self.assertIsNotNone(model[0])
+        self.assertIsNotNone(model[1])
+
+        # model matrix should be 34 x 128
+        self.assertEqual(model_matrix.shape[0], 15)
+        self.assertEqual(model_matrix.shape[1], 128)
+
+        # vocab list should have exactly 34 elements
+        self.assertEqual(len(vocab_list), 15)
+
+    def test_node2vec_same_labels_are_returned(self):
+        graph = nx.florentine_families_graph()
+        node_ids = list(graph.nodes())
+
+        embedding, labels = gc.embed.node2vec_embed(graph)
+
+        for i in range(len(node_ids)):
+            self.assertEqual(node_ids[i], labels[i])
 
     def test_node2vec_embedding_barbell_graph_correct_shape_is_returned(self):
         graph = nx.barbell_graph(25, 2)
