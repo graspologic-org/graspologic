@@ -270,8 +270,8 @@ class TestLCC(unittest.TestCase):
     def test_lcc_scipy_empty(self):
         adjacency = np.array([[0, 1], [1, 0]])
         adjacency = csr_matrix(adjacency)
-        
-        # remove the actual connecting edges. this is now a disconnected graph 
+
+        # remove the actual connecting edges. this is now a disconnected graph
         # with two nodes. however, scipy still stores the entry that now has a 0 in it
         # as having a 'nonempty' value, which is used in the lcc calculation
         adjacency[0, 1] = 0
