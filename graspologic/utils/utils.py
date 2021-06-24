@@ -539,6 +539,9 @@ def _largest_connected_component_adjacency(
     adjacency: Union[np.ndarray, csr_matrix],
     return_inds: bool = False,
 ):
+    if isinstance(adjacency, csr_matrix):
+        adjacency.eliminate_zeros()
+
     # If you treat an undirected graph as directed and take the largest weakly connected
     # component, you'll get the same answer as taking the largest connected component of
     # that undirected graph. So I wrote it this way to avoid the cost of checking for
