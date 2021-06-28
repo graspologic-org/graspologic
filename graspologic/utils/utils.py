@@ -212,7 +212,7 @@ def is_unweighted(
         # brute force.  if anyone has a better way, please PR
         rows, columns = graph.nonzero()
         for i in range(0, len(rows)):
-            if graph[rows[i], columns[i]] != 1 or graph[rows[i], columns[i]] != 0:
+            if graph[rows[i], columns[i]] != 1 and graph[rows[i], columns[i]] != 0:
                 return False
         return True
     elif isinstance(graph, nx.Graph):
