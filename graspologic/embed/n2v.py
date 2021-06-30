@@ -130,7 +130,7 @@ def node2vec_embed(
         f"Completed. Ending time is {str(end)} Elapsed time is {str(start - end)}"
     )
 
-    labels = node2vec_graph.original_graph.nodes()
+    labels = list(node2vec_graph.original_graph.nodes())
     remapped_labels = node2vec_graph.label_map_to_string
 
     return (
