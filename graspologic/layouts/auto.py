@@ -11,7 +11,7 @@ import numpy as np
 import umap.umap_ as umap
 from sklearn.manifold import TSNE
 
-from ..embed import node2vec_embed, AdjacencySpectralEmbed, LaplacianSpectralEmbed
+from ..embed import node2vec_embed
 from ..partition import leiden
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
 from .classes import NodePosition
