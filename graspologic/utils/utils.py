@@ -503,6 +503,13 @@ def largest_connected_component(
     inds: (optional)
         Indices/nodes from the original adjacency matrix that were kept after taking
         the largest connected component.
+
+    Notes
+    -----
+    For networks input in ``scipy.sparse.csr_matrix`` format, explicit zeros are removed
+    prior to finding the largest connected component, thus they are not treated as
+    edges. This differs from the convention in 
+    :func:`scipy.sparse.csgraph.connected_components`.
     """
 
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
