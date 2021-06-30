@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import networkx as nx
 import numpy as np
-import umap.umap_ as umap
+import umap
 from sklearn.manifold import TSNE
 
 from ..embed import node2vec_embed
