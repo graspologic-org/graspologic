@@ -1004,7 +1004,7 @@ def remap_labels(
 
 
 def remap_node_ids(
-    graph: nx.Graph, weight_attribute: str = "weight"
+    graph: nx.Graph, weight_attribute: str = "weight", weight_default: float = 1.0
 ) -> Tuple[nx.Graph, Dict[Any, str]]:
     """
     Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
@@ -1016,7 +1016,8 @@ def remap_node_ids(
         A graph that has node ids of arbitrary types.
     weight_attribute : str,
         Default is ``weight``. An optional attribute to specify which column in your graph contains the weight value.
-
+    weight_default : float,
+        Default edge weight to use if a weight is not found on an edge in the graph
     Returns
     -------
     Tuple[nx.Graph, Dict[Any, str]]
@@ -1030,10 +1031,18 @@ def remap_node_ids(
     if not isinstance(graph, nx.Graph):
         raise TypeError("graph must be of type nx.Graph")
 
+    if not nx.is_weighted(graph, weight=weight_attribute):
+        warnings.warn(
+            f'Graph has at least one unweighted edge using weight_attribute "{weight_attribute}". '
+            f'Defaulting unweighted edges to "{weight_default}"'
+        )
+
     node_id_dict = dict()
     graph_remapped = type(graph)()
 
-    for source, target, weight in graph.edges(data=weight_attribute):
+    for source, target, weight in graph.edges(
+        data=weight_attribute, default=weight_default
+    ):
         if source not in node_id_dict:
             node_id_dict[source] = str(len(node_id_dict.keys()))
 
