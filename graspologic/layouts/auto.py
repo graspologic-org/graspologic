@@ -266,7 +266,9 @@ def _node_positions_from(
     scaled_points = _scale_points(down_projection_2d, covered_area)
     if isinstance(graph, nx.DiGraph):
         temp_graph = symmetrize(graph)
-        logger.warning("Directed graph converted to undirected graph for community detection")
+        logger.warning(
+            "Directed graph converted to undirected graph for community detection"
+        )
         partitions = leiden(temp_graph, random_seed=random_seed)
     else:
         partitions = leiden(graph, random_seed=random_seed)
