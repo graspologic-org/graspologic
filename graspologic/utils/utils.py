@@ -508,7 +508,7 @@ def largest_connected_component(
     -----
     For networks input in ``scipy.sparse.csr_matrix`` format, explicit zeros are removed
     prior to finding the largest connected component, thus they are not treated as
-    edges. This differs from the convention in 
+    edges. This differs from the convention in
     :func:`scipy.sparse.csgraph.connected_components`.
     """
 
