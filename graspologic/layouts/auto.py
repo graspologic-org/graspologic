@@ -16,7 +16,7 @@ from ..partition import leiden
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
 from .classes import NodePosition
 from .nooverlap import remove_overlaps
-from ..utils import symmetrize
+from ..utils import symmetrize, largest_connected_component
 
 logger = logging.getLogger(__name__)
 
@@ -201,14 +201,6 @@ def layout_umap(
     return lcc_graph, positions
 
 
-def _largest_connected_component(graph: nx.Graph) -> nx.Graph:
-    if isinstance(graph, nx.DiGraph):
-        largest_component = max(nx.weakly_connected_components(graph), key=len)
-    else:
-        largest_component = max(nx.connected_components(graph), key=len)
-    return graph.subgraph(largest_component).copy()
-
-
 def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
     num_edges = len(graph.edges())
     logger.info(f"num edges: {num_edges}")
@@ -237,7 +229,7 @@ def _node2vec_for_layout(
     random_seed: Optional[int] = None,
 ) -> Tuple[nx.Graph, np.ndarray, np.ndarray]:
     graph = _approximate_prune(graph, max_edges)
-    graph = _largest_connected_component(graph)
+    graph = largest_connected_component(graph)
 
     start = time.time()
     tensors, labels = node2vec_embed(
