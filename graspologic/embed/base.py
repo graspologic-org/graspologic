@@ -4,6 +4,7 @@
 import warnings
 
 from abc import abstractmethod
+from typing import Optional
 
 import numpy as np
 from sklearn.base import BaseEstimator
@@ -15,7 +16,7 @@ from ..utils import (
     is_almost_symmetric,
     is_fully_connected,
 )
-from .svd import selectSVD
+from .svd import select_svd
 
 import networkx as nx
 
@@ -60,6 +61,10 @@ class BaseSpectralEmbed(BaseEstimator):
         If graph(s) are directed, whether to concatenate each graph's left and right
         (out and in) latent positions along axis 1.
 
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``, but allows you to seed the
+        randomized svd solver for deterministic, albeit randomized behavior.
+
     Attributes
     ----------
     n_components_ : int
@@ -69,7 +74,7 @@ class BaseSpectralEmbed(BaseEstimator):
 
     See Also
     --------
-    graspologic.embed.selectSVD, graspologic.embed.select_dimension
+    graspologic.embed.select_svd, graspologic.embed.select_dimension
     """
 
     def __init__(
@@ -80,6 +85,7 @@ class BaseSpectralEmbed(BaseEstimator):
         n_iter=5,
         check_lcc=True,
         concat=False,
+        svd_seed: Optional[int] = None,
     ):
         self.n_components = n_components
         self.n_elbows = n_elbows
@@ -90,6 +96,7 @@ class BaseSpectralEmbed(BaseEstimator):
             msg = "Parameter `concat` is expected to be type bool"
             raise TypeError(msg)
         self.concat = concat
+        self.svd_seed = svd_seed
 
     def _reduce_dim(self, A, directed=None):
         """
@@ -101,12 +108,13 @@ class BaseSpectralEmbed(BaseEstimator):
         A: array-like, shape (n_vertices, n_vertices)
             Adjacency matrix to embed.
         """
-        U, D, V = selectSVD(
+        U, D, V = select_svd(
             A,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
+            svd_seed=self.svd_seed,
         )
 
         self.n_components_ = D.size
@@ -348,6 +356,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
         check_lcc=True,
         diag_aug=True,
         concat=False,
+        svd_seed: Optional[int] = None,
     ):
         super().__init__(
             n_components=n_components,
@@ -356,6 +365,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             n_iter=n_iter,
             check_lcc=check_lcc,
             concat=concat,
+            svd_seed=svd_seed,
         )
 
         if not isinstance(diag_aug, bool):

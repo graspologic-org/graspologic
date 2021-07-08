@@ -13,6 +13,9 @@ lint:
 test:
 	pytest tests
 
+fast-test:
+	pytest tests --ignore=tests/test_latentdistributiontest.py --ignore=tests/test_latentpositiontest.py
+
 type-check:
 	mypy ./graspologic
 

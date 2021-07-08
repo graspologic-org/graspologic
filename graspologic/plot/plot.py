@@ -12,7 +12,7 @@ from scipy import linalg
 from sklearn.preprocessing import Binarizer
 from sklearn.utils import check_array, check_consistent_length, check_X_y
 
-from ..embed import selectSVD
+from ..embed import select_svd
 from ..utils import import_graph, pass_to_ranks
 
 
@@ -1173,7 +1173,7 @@ def screeplot(
     if not isinstance(cumulative, bool):
         msg = "cumulative must be a boolean"
         raise TypeError(msg)
-    _, D, _ = selectSVD(X, n_components=X.shape[1], algorithm="full")
+    _, D, _ = select_svd(X, n_components=X.shape[1], algorithm="full")
     D /= D.sum()
     if cumulative:
         y = np.cumsum(D[:show_first])

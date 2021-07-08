@@ -5,15 +5,14 @@ from collections import namedtuple
 
 import numpy as np
 from hyppo.ksample import KSample
+from joblib import Parallel, delayed
 from scipy import stats
 from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
 from sklearn.utils import check_array, check_random_state
-from joblib import Parallel, delayed
 
 from ..align import SeedlessProcrustes, SignFlips
 from ..embed import AdjacencySpectralEmbed, select_dimension
 from ..utils import fit_plug_in_variance_estimator, import_graph
-
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
 _VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
@@ -96,7 +95,7 @@ def latent_distribution_test(
     n_components : int or None (default=None)
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
-        See :func:`~graspologic.embed.selectSVD` for more information.
+        See :func:`~graspologic.embed.select_svd` for more information.
         This argument is ignored if ``input_graph`` is False.
 
     n_bootstraps : int (default=200)

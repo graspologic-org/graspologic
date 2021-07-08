@@ -3,6 +3,8 @@
 
 import warnings
 
+from typing import Optional
+
 import numpy as np
 
 from ..utils import import_graph, is_fully_connected
@@ -119,7 +121,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     See Also
     --------
-    graspologic.embed.selectSVD
+    graspologic.embed.select_svd
     graspologic.embed.select_dimension
 
     References
@@ -139,6 +141,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         check_lcc=True,
         diag_aug=True,
         concat=False,
+        svd_seed: Optional[int] = None,
     ):
         super().__init__(
             n_components=n_components,
@@ -148,6 +151,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             check_lcc=check_lcc,
             diag_aug=diag_aug,
             concat=concat,
+            svd_seed=svd_seed,
         )
 
     def fit(self, graphs, y=None):

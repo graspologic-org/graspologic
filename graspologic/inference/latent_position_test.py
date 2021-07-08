@@ -5,7 +5,6 @@ from collections import namedtuple
 
 import numpy as np
 from joblib import Parallel, delayed
-from scipy.linalg import orthogonal_procrustes
 
 from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
@@ -105,7 +104,7 @@ def latent_position_test(
     --------
     graspologic.embed.AdjacencySpectralEmbed
     graspologic.embed.OmnibusEmbed
-    graspologic.embed.selectSVD
+    graspologic.embed.select_svd
 
     References
     ----------

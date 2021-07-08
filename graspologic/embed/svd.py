@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional
+
 import numpy as np
 import scipy
 import sklearn
@@ -171,7 +173,14 @@ def select_dimension(
         return elbows, values
 
 
-def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
+def select_svd(
+    X,
+    n_components=None,
+    n_elbows=2,
+    algorithm="randomized",
+    n_iter=5,
+    svd_seed: Optional[int] = None,
+):
     r"""
     Dimensionality reduction using SVD.
 
@@ -285,7 +294,12 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         V = V[idx, :]
 
     elif algorithm == "randomized":
-        U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components, n_iter=n_iter)
+        # for some reason, randomized_svd defaults random_state to 0 if not provided
+        # which is weird because None is a valid starting point too
+        svd_seed = svd_seed if svd_seed is not None else 0
+        U, D, V = sklearn.utils.extmath.randomized_svd(
+            X, n_components, n_iter=n_iter, random_state=svd_seed
+        )
 
     else:
         raise ValueError(

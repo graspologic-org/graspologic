@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional
+
 from .base import BaseSpectralEmbed
 from ..utils import augment_diagonal
 
@@ -12,7 +14,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation
     of the graph based on its adjacency matrix. It relies on an SVD to reduce
     the dimensionality to the specified k, or if k is unspecified, can find a number of
-    dimensions automatically (see :class:`~graspologic.embed.selectSVD`).
+    dimensions automatically (see :class:`~graspologic.embed.select_svd`).
 
     Read more in the `Adjacency Spectral Embedding Tutorial
     <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
@@ -62,6 +64,10 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         If graph is directed, whether to concatenate left and right (out and in) latent
         positions along axis 1.
 
+    svd_seed : int or None (default None)
+        Only applicable for ``algorithm="randomized"``, but allows you to seed the
+        randomized svd solver for deterministic, albeit randomized behavior.
+
 
 
     Attributes
@@ -79,7 +85,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
     See Also
     --------
-    graspologic.embed.selectSVD
+    graspologic.embed.select_svd
     graspologic.embed.select_dimension
 
     Notes
@@ -114,6 +120,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         check_lcc=True,
         diag_aug=True,
         concat=False,
+        svd_seed: Optional[int] = None,
     ):
         super().__init__(
             n_components=n_components,

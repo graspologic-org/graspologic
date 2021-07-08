@@ -1,10 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional
+
 import numpy as np
 
 from .base import BaseEmbedMulti
-from .svd import select_dimension, selectSVD
+from .svd import select_dimension, select_svd
 from ..utils import is_almost_symmetric
 
 
@@ -112,6 +114,7 @@ class MultipleASE(BaseEmbedMulti):
         scaled=True,
         diag_aug=True,
         concat=False,
+        svd_seed: Optional[int] = None,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -124,6 +127,7 @@ class MultipleASE(BaseEmbedMulti):
             n_iter=n_iter,
             diag_aug=diag_aug,
             concat=concat,
+            svd_seed=svd_seed,
         )
         self.scaled = scaled
 
@@ -136,11 +140,12 @@ class MultipleASE(BaseEmbedMulti):
 
         # embed individual graphs
         embeddings = [
-            selectSVD(
+            select_svd(
                 graph,
                 n_components=n_components,
                 algorithm=self.algorithm,
                 n_iter=self.n_iter,
+                svd_seed=self.svd_seed,
             )
             for graph in graphs
         ]
@@ -178,20 +183,22 @@ class MultipleASE(BaseEmbedMulti):
 
         # Second SVD for vertices
         # The notation is slightly different than the paper
-        Uhat, sing_vals_left, _ = selectSVD(
+        Uhat, sing_vals_left, _ = select_svd(
             Us,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
+            svd_seed=self.svd_seed,
         )
 
-        Vhat, sing_vals_right, _ = selectSVD(
+        Vhat, sing_vals_right, _ = select_svd(
             Vs,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
+            svd_seed=self.svd_seed,
         )
         return Uhat, Vhat, sing_vals_left, sing_vals_right
 

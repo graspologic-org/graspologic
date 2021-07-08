@@ -85,7 +85,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     See Also
     --------
-    graspologic.embed.selectSVD
+    graspologic.embed.select_svd
     graspologic.embed.select_dimension
     graspologic.utils.to_laplacian
 
@@ -123,6 +123,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         check_lcc: bool = True,
         regularizer: Optional[float] = None,
         concat: bool = False,
+        svd_seed: Optional[int] = None,
     ):
         super().__init__(
             n_components=n_components,
@@ -131,6 +132,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
             n_iter=n_iter,
             check_lcc=check_lcc,
             concat=concat,
+            svd_seed=svd_seed,
         )
         self.form = form
         self.regularizer = regularizer

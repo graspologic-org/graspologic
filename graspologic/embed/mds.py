@@ -1,11 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional
+
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 
-from .svd import selectSVD
+from .svd import select_svd
 from ..utils import is_symmetric
 
 
@@ -82,7 +84,13 @@ class ClassicalMDS(BaseEstimator):
     Aalborg University, Denmark 46.5 (2003).
     """
 
-    def __init__(self, n_components=None, n_elbows=2, dissimilarity="euclidean"):
+    def __init__(
+        self,
+        n_components=None,
+        n_elbows=2,
+        dissimilarity="euclidean",
+        svd_seed: Optional[int] = None,
+    ):
         # Check inputs
         if n_components is not None:
             if not isinstance(n_components, int):
@@ -101,6 +109,7 @@ class ClassicalMDS(BaseEstimator):
         self.dissimilarity = dissimilarity
 
         self.n_elbows = n_elbows
+        self.svd_seed = svd_seed
 
     def _compute_euclidean_distances(self, X):
         """
@@ -187,8 +196,12 @@ class ClassicalMDS(BaseEstimator):
             algorithm = "full"
         else:
             algorithm = "randomized"
-        U, D, V = selectSVD(
-            B, n_elbows=self.n_elbows, algorithm=algorithm, n_components=n_components
+        U, D, V = select_svd(
+            B,
+            n_elbows=self.n_elbows,
+            algorithm=algorithm,
+            n_components=n_components,
+            svd_seed=self.svd_seed,
         )
 
         self.n_components_ = len(D)
