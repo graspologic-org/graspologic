@@ -4,6 +4,7 @@
 import logging
 import math
 import time
+from copy import deepcopy
 from typing import Any, Dict, List, Optional, Tuple
 
 import networkx as nx
@@ -245,6 +246,25 @@ def _node2vec_for_layout(
     return graph, tensors, labels
 
 
+def _to_undirected(graph: nx.DiGraph, method: str = 'avg') -> nx.Graph:
+    sym_g = nx.Graph()
+    sym_g.add_nodes_from((n, deepcopy(d)) for n, d in graph.nodes.items())
+    if method == 'avg':
+        weight_scale = 0.5
+    elif method == 'sum':
+        weight_scale = 1
+    else:
+        raise ValueError(f"Method must be 'avg' or 'sum', not {method}")
+    for source, target, weight in graph.edges.data("weight"):
+        if sym_g.has_edge(source, target):
+            sym_g[source][target]["weight"] = (
+                sym_g[source][target]["weight"] + weight * weight_scale
+            )
+        else:
+            sym_g.add_edge(source, target, weight=weight*weight_scale)
+    return sym_g
+
+
 def _node_positions_from(
     graph: nx.Graph,
     labels: np.ndarray,
@@ -256,8 +276,8 @@ def _node_positions_from(
     sizes = _compute_sizes(degree)
     covered_area = _covered_size(sizes)
     scaled_points = _scale_points(down_projection_2d, covered_area)
-    if isinstance(graph, nx.DiGraph):
-        temp_graph = symmetrize(graph)
+    if graph.is_directed():
+        temp_graph = _to_undirected(graph)
         logger.warning(
             "Directed graph converted to undirected graph for community detection"
         )
