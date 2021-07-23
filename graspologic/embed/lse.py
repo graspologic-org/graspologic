@@ -83,6 +83,10 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
 
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
     See Also
     --------
     graspologic.embed.select_svd

@@ -224,6 +224,10 @@ def select_svd(
         'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
 
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
     Returns
     -------
     U : array-like, shape (n_samples, n_components)

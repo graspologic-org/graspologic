@@ -63,6 +63,10 @@ class mug2vec(BaseEstimator):
         If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
+    svd_seed : int or None (default ``None``)
+        Allows you to seed the randomized svd solver used in the Omnibus embedding
+        for deterministic, albeit pseudo-randomized behavior.
+
     Attributes
     ----------
     omnibus_n_components_ : int

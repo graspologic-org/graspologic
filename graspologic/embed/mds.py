@@ -74,6 +74,10 @@ class ClassicalMDS(BaseEstimator):
     dissimilarity_matrix_ : array, shape (n_features, n_features)
         Dissimilarity matrix
 
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``n_components!=1``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
     See Also
     --------
     graspologic.embed.select_dimension

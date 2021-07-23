@@ -33,9 +33,9 @@ class GraphBuilder:
         self,
         source: Any,
         target: Any,
-        weight: int = 1,
+        weight: float = 1.0,
         sum_weight: bool = True,
-        **attributes: Dict[Any, Any]
+        **attributes: Any
     ):
         source_id = self._map_node_id(source)
         target_id = self._map_node_id(target)
@@ -47,7 +47,7 @@ class GraphBuilder:
                 source_id, target_id, weight=old + weight, **attributes
             )
         else:
-            self._graph.add_edge(source_id, target_id, **attributes)
+            self._graph.add_edge(source_id, target_id, weight=weight, **attributes)
 
     def build(self) -> Tuple[nx.Graph, Dict[Any, int], List[Any]]:
         old_to_new = self._id_map

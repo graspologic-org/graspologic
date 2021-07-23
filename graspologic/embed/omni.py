@@ -99,6 +99,10 @@ class OmnibusEmbed(BaseEmbedMulti):
         If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
     Attributes
     ----------
     n_graphs_ : int

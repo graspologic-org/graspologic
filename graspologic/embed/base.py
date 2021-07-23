@@ -2,23 +2,21 @@
 # Licensed under the MIT License.
 
 import warnings
-
 from abc import abstractmethod
 from typing import Optional
 
+import networkx as nx
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
+from .svd import select_svd
 from ..utils import (
     augment_diagonal,
     import_graph,
     is_almost_symmetric,
     is_fully_connected,
 )
-from .svd import select_svd
-
-import networkx as nx
 
 
 class BaseSpectralEmbed(BaseEstimator):
@@ -62,8 +60,8 @@ class BaseSpectralEmbed(BaseEstimator):
         (out and in) latent positions along axis 1.
 
     svd_seed : int or None (default ``None``)
-        Only applicable for ``algorithm="randomized"``, but allows you to seed the
-        randomized svd solver for deterministic, albeit randomized behavior.
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
 
     Attributes
     ----------

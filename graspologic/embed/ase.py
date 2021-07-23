@@ -64,9 +64,9 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         If graph is directed, whether to concatenate left and right (out and in) latent
         positions along axis 1.
 
-    svd_seed : int or None (default None)
-        Only applicable for ``algorithm="randomized"``, but allows you to seed the
-        randomized svd solver for deterministic, albeit randomized behavior.
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
 
 
 
@@ -129,6 +129,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
             n_iter=n_iter,
             check_lcc=check_lcc,
             concat=concat,
+            svd_seed=svd_seed,
         )
 
         if not isinstance(diag_aug, bool):
