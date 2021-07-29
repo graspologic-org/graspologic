@@ -16,6 +16,7 @@ Reference
    models
    nominate
    partition
+   pipeline
    plotting
    preprocessing
    simulations

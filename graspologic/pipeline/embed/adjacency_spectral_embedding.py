@@ -7,12 +7,14 @@ import warnings
 import networkx as nx
 import numpy as np
 
+from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
 from .embeddings import Embeddings
 from ..preconditions import (
     check_argument,
     check_argument_types,
     check_optional_argument_types,
+    is_real_weighted,
 )
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.utils import is_fully_connected, pass_to_ranks
@@ -31,8 +33,10 @@ def adjacency_spectral_embedding(
     Given a weighted directed or undirected networkx graph (*not* multigraph),
     generate an Embeddings object.
 
-    Adjacency spectral embeddings are extremely egocentric. Further details
-    can be found in the See Also section and the Reference papers listed below.
+    Adjacency spectral embeddings are extremely egocentric.
+
+    `Adjacency Spectral Embedding Tutorial
+    <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
 
     In addition to diagonal augmentation, all graphs will have pass to ranks executed.
 
@@ -44,31 +48,52 @@ def adjacency_spectral_embedding(
         it should not be a multigraph; if you have a multigraph you must first decide
         how you want to handle the weights of the edges between two nodes, whether
         summed, averaged, last-wins, maximum-weight-only, etc)
-    dimensions : int (default=``100``)
+    dimensions : int (default=100)
         Dimensions to use for the svd solver.
         For undirected graphs, if ``elbow_cut==None``, you will receive an embedding
         that has ``nodes`` rows and ``dimensions`` columns.
-        For directed graphs, if ``elbow_cut==None``, you will recieve an embedding that
+        For directed graphs, if ``elbow_cut==None``, you will receive an embedding that
         has ``nodes`` rows and ``2*dimensions`` columns.
         If ``elbow_cut`` is specified to be not ``None``, we will cut the embedding at
-        ``elbow_cut``th elbow.
-    elbow_cut : Optional[int] (default=``None``)
-        An optional process where we will use the generated embedding
-    elbow_cut
-    svd_solver_algorithm
-    svd_solver_iterations
-    svd_seed
-    weight_attribute
+        ``elbow_cut`` elbow, but the provided ``dimensions`` will be used in the
+        creation of the SVD.
+    elbow_cut : Optional[int] (default=None)
+        Using a process described by Zhu & Ghodsi in their paper "Automatic
+        dimensionality selection from the scree plot via the use of profile likelihood",
+        truncate the dimensionality of the return on the ``elbow_cut``-th elbow.
+        By default this value is ``None`` but can be used to reduce the dimensionality
+        of the returned tensors.
+    svd_solver_algorithm : str (default="randomized")
+        allowed values: {'randomized', 'full', 'truncated'}
+
+        SVD solver to use:
+
+            - 'randomized'
+                Computes randomized svd using
+                :func:`sklearn.utils.extmath.randomized_svd`
+            - 'full'
+                Computes full svd using :func:`scipy.linalg.svd`
+                Does not support ``graph`` input of type scipy.sparse.csr_matrix
+            - 'truncated'
+                Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+    svd_solver_iterations : int (default=5)
+        Number of iterations for randomized SVD solver. Not used by 'full' or
+        'truncated'. The default is larger than the default in randomized_svd
+        to handle sparse matrices that may have large slowly decaying spectrum.
+    svd_seed : Optional[int] (default=None)
+        Used to seed the PRNG used in the ``randomized`` svd solver algorithm.
+    weight_attribute : str (default="weight")
+        The edge dictionary key that contains the weight of the edge.
 
     Returns
     -------
+    Embeddings
 
     See Also
     --------
+    graspologic.pipeline.embed.Embeddings
     graspologic.embed.AdjacencySpectralEmbed
     graspologic.embed.select_svd
-    `Adjacency Spectral Embedding Tutorial
-    <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
 
     Notes
     -----
@@ -92,12 +117,24 @@ def adjacency_spectral_embedding(
         Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
         of Machine Learning Research, 80, 2975-2984.
 
+    .. [3] Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
+        scree plot via the use of profile likelihood. Computational Statistics & Data
+        Analysis, 51(2), pp.918-930.
+
     """
     check_argument_types(dimensions, int, "dimensions must be an int")
     check_argument(dimensions >= 1, "dimensions must be positive")
 
     check_optional_argument_types(elbow_cut, int, "elbow_cut must be an int or None")
-    check_argument(elbow_cut >= 1, "elbow_cut must be positive")
+    check_argument(elbow_cut is None or elbow_cut >= 1, "elbow_cut must be positive")
+
+    check_argument_types(
+        svd_solver_algorithm, str, "svd_solver_algorithm must be a str"
+    )
+    check_argument(
+        svd_solver_algorithm in __SVD_SOLVER_TYPES,
+        f"svd_solver_algorithm must be one of the values in {','.join(__SVD_SOLVER_TYPES)}",
+    )
 
     check_argument_types(
         svd_solver_iterations, int, "svd_solver_iterations must be an int"
@@ -106,26 +143,36 @@ def adjacency_spectral_embedding(
 
     check_optional_argument_types(svd_seed, int, "svd_seed must be an int or None")
     check_argument(
-        0 <= svd_seed <= 2 ** 32 - 1, "svd_seed must be a nonnegative, 32-bit integer"
+        svd_seed is None or 0 <= svd_seed <= 2 ** 32 - 1,
+        "svd_seed must be a nonnegative, 32-bit integer",
     )
 
     check_argument_types(
         graph,
-        (nx.Graph, nx.DiGraph),
-        "graph must be of type networkx.Graph or networkx.DiGraph",
+        (nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph),
+        "graph must be of type networkx.Graph, networkx.DiGraph, "
+        "networkx.OrderedGraph, networkx.OrderedDiGraph",
     )
     check_argument(
         not graph.is_multigraph(),
-        "Multigraphs are not supported; you must determine how to represent at most one edge between any two nodes, and handle the corresponding weights accordingly",
+        "Multigraphs are not supported; you must determine how to represent at most "
+        "one edge between any two nodes, and handle the corresponding weights "
+        "accordingly",
     )
 
-    if not nx.is_weighted(graph, weight=weight_attribute):
+    if not is_real_weighted(graph, weight_attribute=weight_attribute):
         warnings.warn(
-            "Unweighted graphs are treated as if every edge has a weight of 1. If this is incorrect, please add a 'weight' attribute to every edge and call this function again."
+            f"Graphs with edges that do not have a real numeric weight set for every "
+            f"{weight_attribute} attribute on every edge are treated as an unweighted "
+            f"graph - which presumes all weights are `1.0`. If this is incorrect, "
+            f"please add a '{weight_attribute}' attribute to every edge with a real, "
+            f"numeric value (e.g. an integer or a float) and call this function again."
         )
+        weight_attribute = None  # this supercedes what the user said, because
+        # not all of the weights are real numbers, if they exist at all
         # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
 
-    graph_as_csr = nx.to_scipy_sparse_matrix(graph)
+    graph_as_csr = nx.to_scipy_sparse_matrix(graph, weight=weight_attribute)
 
     if not is_fully_connected(graph):
         warnings.warn("More than one connected component detected")
@@ -149,7 +196,7 @@ def adjacency_spectral_embedding(
         if graph.is_directed():
             results = np.concatenate(results, axis=1)
     else:
-        column_index = _index_of_elbow(embedder.singular_values_)
+        column_index = _index_of_elbow(embedder.singular_values_, elbow_cut)
         if graph.is_directed():
             left, right = results
             left = left[:, :column_index]

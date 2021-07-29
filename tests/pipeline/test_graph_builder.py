@@ -39,7 +39,7 @@ class TestGraphBuilder(unittest.TestCase):
         self.assertDictEqual(
             expected_old_to_new, old_to_new, "The old to new dictionary should match"
         )
-        nx.testing.assert_graphs_equal(compressed_nx, expected_graph)
+        self.assertTrue(nx.utils.graphs_equal(compressed_nx, expected_graph))
 
     def test_weighted_graph_builder(self):
         edges = [("nick", "dax", 5.0), ("foo", "bar", 3.2)]
@@ -53,7 +53,7 @@ class TestGraphBuilder(unittest.TestCase):
             builder.add_edge(source, target, weight)
 
         compressed, old_to_new, new_to_old = builder.build()
-        nx.testing.assert_graphs_equal(expected_nx, compressed)
+        self.assertTrue(nx.utils.graphs_equal(expected_nx, compressed))
         self.assertListEqual(expected_new_to_old, new_to_old)
         self.assertDictEqual(expected_old_to_new, old_to_new)
 
@@ -88,7 +88,7 @@ class TestGraphBuilder(unittest.TestCase):
 
         self.assertListEqual(expected_new_to_old, new_to_old)
         self.assertDictEqual(expected_old_to_new, old_to_new)
-        nx.testing.assert_graphs_equal(expected_nx, compressed)
+        self.assertTrue(nx.utils.graphs_equal(expected_nx, compressed))
 
     def test_int_graph_builder(self):
         edges = [(5000, 5001, 10.3), (13, 0, 11.1)]
@@ -106,10 +106,25 @@ class TestGraphBuilder(unittest.TestCase):
         compressed, old_to_new, new_to_old = builder.build()
         self.assertListEqual(new_to_old, expected_new_to_old)
         self.assertDictEqual(old_to_new, expected_old_to_new)
-        nx.testing.assert_graphs_equal(compressed, expected_nx)
+        self.assertTrue(nx.utils.graphs_equal(expected_nx, compressed))
 
     def test_directed_graph_builder(self):
-        self.assertTrue(False)
+        edges = [("nick", "dax", 14.0), ("dax", "ben", 3.0), ("dax", "nick", 2.2)]
+        builder = GraphBuilder(directed=True)
+        for source, target, weight in edges:
+            builder.add_edge(source, target, weight)
+
+        expected_nx = nx.DiGraph()
+        expected_nx.add_edge(0, 1, weight=14.0)
+        expected_nx.add_edge(1, 2, weight=3.0)
+        expected_nx.add_edge(1, 0, weight=2.2)
+        expected_old_to_new = {"nick": 0, "dax": 1, "ben": 2}
+        expected_new_to_old = ["nick", "dax", "ben"]
+
+        compressed, old_to_new, new_to_old = builder.build()
+        self.assertListEqual(new_to_old, expected_new_to_old)
+        self.assertDictEqual(old_to_new, expected_old_to_new)
+        self.assertTrue(nx.utils.graphs_equal(expected_nx, compressed))
 
     def test_other_edge_attributes(self):
         builder = GraphBuilder()
@@ -128,4 +143,4 @@ class TestGraphBuilder(unittest.TestCase):
         compressed, old_to_new, new_to_old = builder.build()
         self.assertListEqual(new_to_old, expected_new_to_old)
         self.assertDictEqual(old_to_new, expected_old_to_new)
-        nx.testing.assert_graphs_equal(compressed, expected_nx)
+        self.assertTrue(nx.utils.graphs_equal(expected_nx, compressed))

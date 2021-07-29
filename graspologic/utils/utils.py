@@ -151,6 +151,8 @@ def import_edgelist(
 
     # Compute union of all vertices
     vertices = np.sort(reduce(np.union1d, [G.nodes for G in graphs]))
+    for g in graphs:
+        g.add_nodes_from(vertices)
     out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
 
     # only return adjacency matrix if input is only 1 graph
