@@ -1,7 +1,9 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import logging
 import unittest
+import warnings
 from math import sqrt
 
 import networkx as nx
@@ -266,6 +268,18 @@ class TestLCC(unittest.TestCase):
         )
         np.testing.assert_array_equal(lcc_matrix.toarray(), expected_lcc_matrix)
         np.testing.assert_array_equal(nodelist, expected_nodelist)
+
+    def test_lcc_scipy_empty(self):
+        adjacency = np.array([[0, 1], [1, 0]])
+        adjacency = csr_matrix(adjacency)
+
+        # remove the actual connecting edges. this is now a disconnected graph
+        # with two nodes. however, scipy still stores the entry that now has a 0 in it
+        # as having a 'nonempty' value, which is used in the lcc calculation
+        adjacency[0, 1] = 0
+        adjacency[1, 0] = 0
+        lcc_adjacency = gus.largest_connected_component(adjacency)
+        assert lcc_adjacency.shape[0] == 1
 
     def test_multigraph_lcc_numpystack(self):
         expected_g_matrix = np.array(
@@ -586,6 +600,21 @@ class TestRemapNodeIds(unittest.TestCase):
         for type in invalid_types:
             with pytest.raises(TypeError):
                 gus.remap_node_ids(graph=type())
+
+    def test_remap_node_ids_unweighted_graph_raises_warning(self):
+        with warnings.catch_warnings(record=True) as warnings_context_manager:
+            graph = nx.florentine_families_graph()
+
+            gus.remap_node_ids(graph)
+
+            self.assertEqual(len(warnings_context_manager), 1)
+            self.assertTrue(
+                issubclass(warnings_context_manager[0].category, UserWarning)
+            )
+            self.assertTrue(
+                "Graph has at least one unweighted edge"
+                in str(warnings_context_manager[0].message)
+            )
 
     def _assert_graphs_are_equivalent(self, graph, new_graph, new_node_ids):
         self.assertTrue(len(new_graph.nodes()) == len(graph.nodes()))
