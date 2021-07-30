@@ -4,7 +4,6 @@
 import logging
 import math
 import time
-from copy import deepcopy
 from typing import Any, Dict, List, Optional, Tuple
 
 import networkx as nx
@@ -246,22 +245,24 @@ def _node2vec_for_layout(
     return graph, tensors, labels
 
 
-def _to_undirected(graph: nx.DiGraph, method: str = 'avg') -> nx.Graph:
+def _to_undirected(graph: nx.DiGraph) -> nx.Graph:
     sym_g = nx.Graph()
-    sym_g.add_nodes_from((n, deepcopy(d)) for n, d in graph.nodes.items())
-    if method == 'avg':
-        weight_scale = 0.5
-    elif method == 'sum':
-        weight_scale = 1
-    else:
-        raise ValueError(f"Method must be 'avg' or 'sum', not {method}")
+    weighted = nx.is_weighted(graph)
     for source, target, weight in graph.edges.data("weight"):
-        if sym_g.has_edge(source, target):
-            sym_g[source][target]["weight"] = (
-                sym_g[source][target]["weight"] + weight * weight_scale
-            )
+        if weight is not None:
+            edge_weighted = True
+            if sym_g.has_edge(source, target):
+                sym_g[source][target]["weight"] = (
+                    sym_g[source][target]["weight"] + weight * 0.5
+                )
+            else:
+                sym_g.add_edge(source, target, weight=weight * 0.5)
         else:
-            sym_g.add_edge(source, target, weight=weight*weight_scale)
+            edge_weighted = False
+            sym_g.add_edge(source, target)
+        if weighted != edge_weighted:
+            msg = "Graph must be fully weighted or unweighted"
+            raise ValueError(msg)
     return sym_g
 
 
