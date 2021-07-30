@@ -45,11 +45,18 @@ class TestAuto(unittest.TestCase):
 
         self.assertEqual(len(node_positions), len(graph.nodes()))
 
-    def test_layout_umap_directed(self):
+    def test_layout_umap_directed_weighted(self):
         graph = nx.erdos_renyi_graph(10, 0.7, directed=True)
 
         for s, t in graph.edges():
             graph.edges[s, t]["weight"] = numpy.random.randint(0, 10)
+
+        _, node_positions = layout_umap(graph=graph)
+
+        self.assertEqual(len(node_positions), len(graph.nodes()))
+
+    def test_layout_umap_directed_unweighted(self):
+        graph = nx.erdos_renyi_graph(10, 0.7, directed=True)
 
         _, node_positions = layout_umap(graph=graph)
 
