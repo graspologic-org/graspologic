@@ -10,7 +10,7 @@ import numpy as np
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
 from .embeddings import Embeddings
-from ..preconditions import (
+from graspologic.preconditions import (
     check_argument,
     check_argument_types,
     check_optional_argument_types,
@@ -30,15 +30,23 @@ def adjacency_spectral_embedding(
     weight_attribute: str = "weight",
 ) -> Embeddings:
     """
-    Given a weighted directed or undirected networkx graph (*not* multigraph),
-    generate an Embeddings object.
+    Given a directed or undirected networkx graph (*not* multigraph), generate an
+    Embeddings object.
 
-    Adjacency spectral embeddings are extremely egocentric.
+    Adjacency spectral embeddings are extremely egocentric, implying that results are
+    slanted toward the core-periphery of each node. This is in contrast to Laplacian
+    spectral embeddings, which look further into the latent space when it captures
+    change.
 
     `Adjacency Spectral Embedding Tutorial
     <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
 
-    In addition to diagonal augmentation, all graphs will have pass to ranks executed.
+    Graphs will always have their diagonal augmented. In other words, a self-loop
+    will be created for each node with a weight corresponding to the weighted degree.
+
+    Lastly, all weights will be rescaled based on their relative rank in the graph,
+    which is beneficial in minimizing anomalous results if some edge weights are
+    extremely atypical of the rest of the graph.
 
     Parameters
     ----------

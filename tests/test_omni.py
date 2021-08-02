@@ -119,7 +119,6 @@ class TestOmni(unittest.TestCase):
             omni.fit(graphs)
 
     def test_diag_aug(self):
-        np.random.seed(5)
         n = 100
         p = 0.25
 
@@ -127,8 +126,8 @@ class TestOmni(unittest.TestCase):
         graphs_arr = np.array(graphs_list)
 
         # Test that array and list inputs results in same embeddings
-        omni_arr = OmnibusEmbed(diag_aug=True).fit_transform(graphs_arr)
-        omni_list = OmnibusEmbed(diag_aug=True).fit_transform(graphs_list)
+        omni_arr = OmnibusEmbed(diag_aug=True, svd_seed=5).fit_transform(graphs_arr)
+        omni_list = OmnibusEmbed(diag_aug=True, svd_seed=5).fit_transform(graphs_list)
 
         np.testing.assert_array_equal(omni_list, omni_arr)
 

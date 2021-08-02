@@ -19,6 +19,5 @@ is to bridge this gap.
 # Licensed under the MIT license.
 
 from . import embed
-from . import preconditions
 
 from .graph_builder import GraphBuilder

@@ -3,7 +3,7 @@
 
 import unittest
 
-from graspologic.pipeline import preconditions
+from graspologic import preconditions
 
 
 class TestPreconditions(unittest.TestCase):

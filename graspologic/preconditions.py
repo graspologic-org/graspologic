@@ -59,7 +59,7 @@ def check_argument(check: bool, message: str):
     """
     Raises a ValueError if the provided check is false
 
-    >>> from graspologic.pipeline import preconditions
+    >>> from graspologic import preconditions
     >>> x = 5
     >>> preconditions.check_argument(x < 5, "x must be less than 5")
     Traceback (most recent call last):
