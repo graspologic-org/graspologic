@@ -16,6 +16,7 @@ Reference
    models
    nominate
    partition
+   preconditions
    pipeline
    plotting
    preprocessing

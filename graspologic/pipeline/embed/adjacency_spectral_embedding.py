@@ -51,11 +51,14 @@ def adjacency_spectral_embedding(
     Parameters
     ----------
     graph : Union[nx.Graph, nx.DiGraph]
-        A simple, weighted graph, either undirected or directed. The graph **must** be
-        fully weighted (every edge has a weight), it **must** be a simple graph (meaning
-        it should not be a multigraph; if you have a multigraph you must first decide
-        how you want to handle the weights of the edges between two nodes, whether
-        summed, averaged, last-wins, maximum-weight-only, etc)
+        An undirected or directed graph. The graph **must**:
+
+        - be fully numerically weighted (every edge must have a real, numeric weight
+          or else it will be treated as an unweighted graph)
+        - be a basic graph (meaning it should not be a multigraph; if you have a
+          multigraph you must first decide how you want to handle the weights of the
+          edges between two nodes, whether summed, averaged, last-wins,
+          maximum-weight-only, etc)
     dimensions : int (default=100)
         Dimensions to use for the svd solver.
         For undirected graphs, if ``elbow_cut==None``, you will receive an embedding
