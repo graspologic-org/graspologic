@@ -10,6 +10,7 @@ import graspologic.layouts
 import graspologic.models
 import graspologic.nominate
 import graspologic.partition
+import graspologic.pipeline
 import graspologic.preprocessing
 import graspologic.plot
 import graspologic.simulations
