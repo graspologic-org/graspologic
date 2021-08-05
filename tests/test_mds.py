@@ -5,11 +5,15 @@ import unittest
 
 import numpy as np
 from numpy.testing import assert_almost_equal
+from sklearn.utils.estimator_checks import check_estimator
 
 from graspologic.embed.mds import ClassicalMDS
 
 
 class TestMDS(unittest.TestCase):
+    def test_sklearn_conventions(self):
+        check_estimator(ClassicalMDS())
+
     def test_input(self):
         X = np.random.normal(0, 1, size=(10, 3))
 

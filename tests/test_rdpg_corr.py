@@ -5,11 +5,9 @@ import unittest
 from graspologic.simulations.simulations import sample_edges, p_from_latent
 from graspologic.simulations.rdpg_corr import rdpg_corr
 import numpy as np
-import pytest
-import warnings
 
 
-class Test_RDPG_Corr(unittest.TestCase):
+class TestRDPGCorr(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.r = 0.3

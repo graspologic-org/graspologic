@@ -2,15 +2,12 @@
 # Licensed under the MIT License.
 
 import unittest
-import graspologic as gs
 import numpy as np
-import networkx as nx
 from graspologic.simulations import *
 from graspologic.utils.utils import (
     is_symmetric,
     is_loopless,
     symmetrize,
-    cartesian_product,
 )
 
 
@@ -24,7 +21,7 @@ def remove_diagonal(A):
     return A[dind]
 
 
-class Test_ER(unittest.TestCase):
+class TestER(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = 20
@@ -48,7 +45,7 @@ class Test_ER(unittest.TestCase):
         self.assertTrue(A.shape == (self.n, self.n))
 
 
-class Test_ZINM(unittest.TestCase):
+class TestZINM(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = 20
@@ -192,7 +189,7 @@ class Test_ZINM(unittest.TestCase):
             er_nm(self.n, m)
 
 
-class Test_ZINP(unittest.TestCase):
+class TestZINP(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = 50
@@ -350,7 +347,7 @@ class Test_ZINP(unittest.TestCase):
             er_np(self.n, self.p, dc=dc)
 
 
-class Test_WSBM(unittest.TestCase):
+class TestWSBM(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # 120 vertex graph w one community having 50 and another
@@ -818,7 +815,7 @@ class Test_WSBM(unittest.TestCase):
             sbm(self.n, self.Psy, dc=dc, dc_kws=dc_kws)
 
 
-class Test_RDPG(unittest.TestCase):
+class TestRDPG(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = [50, 70]
@@ -889,7 +886,7 @@ class Test_RDPG(unittest.TestCase):
         self.assertTrue(is_loopless(g))
 
 
-class Test_MMSBM(unittest.TestCase):
+class TestMMSBM(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # 120 vertex graph

@@ -1,5 +1,7 @@
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
 import unittest
-import pytest
 import numpy as np
 
 from graspologic.inference import latent_position_test
@@ -26,23 +28,23 @@ class TestLatentPositionTest(unittest.TestCase):
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_position_test(A1, A2, n_components=-100)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_position_test(A1, A2, test_case="oops")
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_position_test(A1, A2, n_bootstraps=-100)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_position_test(A1, A2, embedding="oops")
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_position_test(A1, A2, n_bootstraps=0.5)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_position_test(A1, A2, n_components=0.5)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_position_test(A1, A2, embedding=6)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_position_test(A1, A2, test_case=6)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_position_test(A1, A2, workers="oops")
 
     def test_n_bootstraps(self):
@@ -58,14 +60,14 @@ class TestLatentPositionTest(unittest.TestCase):
         A1 = er_np(20, 0.3)
         A2 = er_np(20, 0.3)
         A1[2, 0] = 1  # make asymmetric
-        with pytest.raises(NotImplementedError):  # TODO : remove when we implement
+        with self.assertRaises(NotImplementedError):  # TODO : remove when we implement
             latent_position_test(A1, A2)
 
         bad_matrix = [[1, 2]]
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_position_test(bad_matrix, A2)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_position_test(A1[:2, :2], A2)
 
     def test_rotation_norm(self):

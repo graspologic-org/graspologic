@@ -8,11 +8,9 @@ from graspologic.simulations.simulations_corr import (
     sbm_corr,
 )
 import numpy as np
-import pytest
-import warnings
 
 
-class Test_Sample_Corr(unittest.TestCase):
+class TestSampleCorr(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = 500
@@ -38,10 +36,10 @@ class Test_Sample_Corr(unittest.TestCase):
             R = "0.5"
             sample_edges_corr(self.P, R, directed=False, loops=False)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             sample_edges_corr(self.P, self.r, directed="hey", loops=False)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             sample_edges_corr(self.P, self.r, directed=False, loops=6)
 
     def test_sample_edges_corr(self):
@@ -67,7 +65,7 @@ class Test_Sample_Corr(unittest.TestCase):
         self.assertTrue(g2.shape == (self.n, self.n))
 
 
-class Test_ER_Corr(unittest.TestCase):
+class TestERCorr(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = 500
@@ -125,7 +123,7 @@ class Test_ER_Corr(unittest.TestCase):
         self.assertTrue(g2.shape == (self.n, self.n))
 
 
-class Test_SBM_Corr(unittest.TestCase):
+class TestSBMCorr(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = [100, 100]
@@ -166,10 +164,10 @@ class Test_SBM_Corr(unittest.TestCase):
             r = 5.0
             sbm_corr(self.n, self.p, r, directed=False, loops=False)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             sbm_corr(self.n, self.p, self.r, directed="hey", loops=False)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             sbm_corr(self.n, self.p, self.r, directed=False, loops=6)
 
     def test_sbm_corr(self):
