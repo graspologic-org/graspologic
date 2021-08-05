@@ -88,7 +88,24 @@ branch. Steps:
    Always use a `feature` branch. Pull requests directly to either `dev` or `main` will be rejected
    until you create a feature branch based on `dev`.
 
-4. Develop the feature on your feature branch. Add changed files using `git add` and then `git commit` files:
+4. Unit testing
+
+   It's important to write unit tests for your bug fix and your features. When fixing a bug, first create a test that explicitly exercises the bug and results in a test case failure.  Then create the fix and run the test again to verify your results.
+
+   For new features, we advocate using [TDD](https://en.wikipedia.org/wiki/Test-driven_development) wherever possible.
+
+   We also explicitly ask that you hew toward the `unittest` Python module for conformance.  This will ensure it plays nicely with most common IDEs on the market.
+
+6. Code formatting:
+   It's important to us that you follow the standards of our project.  Please use `black` and `isort` prior to
+   committing.
+
+   ```bash
+   black graspologic/ tests/
+   isort graspologic/ tests/
+   ```
+
+7. Develop the feature on your feature branch. Add changed files using `git add` and then `git commit` files:
 
    ```bash
    git add modified_files
@@ -120,8 +137,9 @@ We recommended that your contribution complies with the following rules before y
   [`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running `mypy ./graspologic`
 - All code should be automatically formatted by `black`. You can run this formatter by calling:
   ```bash
-  pip install black
+  pip install black isort
   black path/to/your_module.py
+  isort path/to/your_module.py
   ```
 - Ensure all tests are passing locally using `pytest`. Install the necessary
   packages by: 

@@ -2,8 +2,9 @@
 # Licensed under the MIT License.
 
 import numpy as np
-from .utils import import_graph, is_unweighted, is_symmetric, is_loopless, symmetrize
 from scipy.stats import rankdata
+
+from .utils import import_graph, is_loopless, is_symmetric, is_unweighted, symmetrize
 
 
 def pass_to_ranks(graph, method="simple-nonzero"):

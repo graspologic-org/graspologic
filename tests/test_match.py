@@ -1,13 +1,15 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import unittest
-import numpy as np
 import random
+import unittest
+
+import numpy as np
+
+from graspologic.align import SignFlips
+from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.match import GraphMatch as GMP
 from graspologic.simulations import er_np, sbm_corr
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.align import SignFlips
 
 np.random.seed(1)
 

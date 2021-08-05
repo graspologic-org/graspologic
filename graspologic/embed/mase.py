@@ -5,9 +5,9 @@ from typing import Optional
 
 import numpy as np
 
+from ..utils import is_almost_symmetric
 from .base import BaseEmbedMulti
 from .svd import select_dimension, select_svd
-from ..utils import is_almost_symmetric
 
 
 class MultipleASE(BaseEmbedMulti):

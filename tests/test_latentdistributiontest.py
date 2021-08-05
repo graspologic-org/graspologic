@@ -2,8 +2,9 @@
 # Licensed under the MIT License.
 
 import unittest
-import numpy as np
+
 import networkx as nx
+import numpy as np
 from sklearn.metrics import pairwise_distances
 
 from graspologic.embed import AdjacencySpectralEmbed

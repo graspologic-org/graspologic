@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import numpy as np
 from numpy.testing import assert_equal
 from sklearn.exceptions import NotFittedError

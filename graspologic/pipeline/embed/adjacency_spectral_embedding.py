@@ -1,23 +1,24 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from typing import Optional, Union
 import warnings
+from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
 
-from . import __SVD_SOLVER_TYPES  # from the module init
-from ._elbow import _index_of_elbow
-from .embeddings import Embeddings
+from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.preconditions import (
     check_argument,
     check_argument_types,
     check_optional_argument_types,
     is_real_weighted,
 )
-from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.utils import is_fully_connected, pass_to_ranks
+
+from . import __SVD_SOLVER_TYPES  # from the module init
+from ._elbow import _index_of_elbow
+from .embeddings import Embeddings
 
 
 def adjacency_spectral_embedding(

@@ -2,13 +2,11 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import numpy as np
+
 from graspologic.simulations import *
-from graspologic.utils.utils import (
-    is_symmetric,
-    is_loopless,
-    symmetrize,
-)
+from graspologic.utils.utils import is_loopless, is_symmetric, symmetrize
 
 
 def remove_diagonal(A):

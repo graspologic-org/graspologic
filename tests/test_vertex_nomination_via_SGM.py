@@ -2,7 +2,9 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import numpy as np
+
 from graspologic.nominate import VNviaSGM
 from graspologic.simulations import er_np
 

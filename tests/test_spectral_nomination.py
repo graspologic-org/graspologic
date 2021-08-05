@@ -3,10 +3,12 @@
 
 import itertools
 import unittest
+
 import numpy as np
+
 from graspologic.embed.ase import AdjacencySpectralEmbed
-from graspologic.simulations.simulations import sbm
 from graspologic.nominate import SpectralVertexNomination
+from graspologic.simulations.simulations import sbm
 
 # global constants for tests
 n_verts = 50

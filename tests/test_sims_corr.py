@@ -2,12 +2,14 @@
 # Licensed under the MIT License.
 
 import unittest
+
+import numpy as np
+
 from graspologic.simulations.simulations_corr import (
-    sample_edges_corr,
     er_corr,
+    sample_edges_corr,
     sbm_corr,
 )
-import numpy as np
 
 
 class TestSampleCorr(unittest.TestCase):

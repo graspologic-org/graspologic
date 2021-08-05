@@ -1,14 +1,16 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import numpy as np
 import unittest
+
+import numpy as np
 from sklearn.mixture import GaussianMixture
+
 from graspologic.plot.plot import (
-    heatmap,
-    gridplot,
-    pairplot,
     _sort_inds,
+    gridplot,
+    heatmap,
+    pairplot,
     pairplot_with_gmm,
 )
 from graspologic.simulations.simulations import er_np, sbm

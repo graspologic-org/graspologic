@@ -1,10 +1,11 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import numpy as np
 from abc import abstractmethod
-from sklearn.utils import check_array
+
+import numpy as np
 from sklearn.base import BaseEstimator
+from sklearn.utils import check_array
 
 
 class BaseAlign(BaseEstimator):

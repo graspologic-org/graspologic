@@ -9,7 +9,6 @@ import numpy as np
 import graspologic.utils
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.pipeline.embed import adjacency_spectral_embedding
-
 from tests.utils import data_file
 
 

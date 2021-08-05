@@ -2,14 +2,15 @@
 # Licensed under the MIT License.
 
 import unittest
+
+from graspologic.layouts import NodePosition
+from graspologic.layouts.nooverlap._node import _Node
 from graspologic.layouts.nooverlap._quad_node import (
-    move_point_on_line,
     _QuadNode,
+    move_point_on_line,
     node_positions_overlap,
 )
-from graspologic.layouts.nooverlap._node import _Node
 from graspologic.layouts.nooverlap.nooverlap import remove_overlaps
-from graspologic.layouts import NodePosition
 
 
 class TestNoOverlap(unittest.TestCase):

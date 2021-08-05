@@ -6,8 +6,9 @@ from typing import Optional
 import numpy as np
 import scipy
 import sklearn
-from scipy.stats import norm
 from scipy.sparse import isspmatrix_csr
+from scipy.stats import norm
+
 from graspologic.utils import is_almost_symmetric
 
 

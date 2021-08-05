@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import numpy as np
 
 from graspologic.inference import latent_position_test

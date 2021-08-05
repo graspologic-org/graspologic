@@ -1,11 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import pytest
 import unittest
+
 import numpy as np
+import pytest
 from scipy.stats import beta
 from sklearn.mixture import GaussianMixture
+
 from graspologic.embed.case import CovariateAssistedEmbed as CASE
 from graspologic.simulations import sbm
 

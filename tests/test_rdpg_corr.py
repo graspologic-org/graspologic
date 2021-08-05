@@ -2,9 +2,11 @@
 # Licensed under the MIT License.
 
 import unittest
-from graspologic.simulations.simulations import sample_edges, p_from_latent
-from graspologic.simulations.rdpg_corr import rdpg_corr
+
 import numpy as np
+
+from graspologic.simulations.rdpg_corr import rdpg_corr
+from graspologic.simulations.simulations import p_from_latent, sample_edges
 
 
 class TestRDPGCorr(unittest.TestCase):

@@ -2,13 +2,13 @@
 # Licensed under the MIT License.
 
 
-from .base import BaseSpectralEmbed
-from ..utils import to_laplacian
+from typing import Optional, Union
 
+import networkx as nx
 import numpy as np
 
-from typing import Optional, Union
-import networkx as nx
+from ..utils import to_laplacian
+from .base import BaseSpectralEmbed
 
 
 class LaplacianSpectralEmbed(BaseSpectralEmbed):

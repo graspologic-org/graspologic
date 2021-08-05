@@ -1,12 +1,14 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import unittest
+
 import numpy as np
 import pandas as pd
-import unittest
+from scipy.sparse import csr_matrix
+
 from graspologic.plot.plot_matrix import adjplot, matrixplot
 from graspologic.simulations.simulations import er_np
-from scipy.sparse import csr_matrix
 
 
 class TestPlotMatrix(unittest.TestCase):

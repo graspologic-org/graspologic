@@ -1,8 +1,9 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import numpy as np
 import unittest
+
+import numpy as np
 from numpy.testing import assert_equal
 from scipy.linalg import orth
 

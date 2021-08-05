@@ -2,14 +2,13 @@
 # Licensed under the MIT License.
 
 import warnings
-
 from typing import Optional
 
 import numpy as np
+from scipy.sparse import isspmatrix_csr
 
 from ..utils import import_graph, is_fully_connected
 from .base import BaseEmbedMulti
-from scipy.sparse import isspmatrix_csr
 
 
 def _get_omni_matrix(graphs):

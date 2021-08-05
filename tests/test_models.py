@@ -1,20 +1,22 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import numpy as np
 import unittest
+
+import numpy as np
 from numpy.testing import assert_allclose
-from graspologic.models import (
-    EREstimator,
-    DCSBMEstimator,
-    SBMEstimator,
-    RDPGEstimator,
-    DCEREstimator,
-)
-from graspologic.simulations import er_np, sbm, sample_edges
-from graspologic.utils import cartesian_product, is_symmetric
-from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
+from sklearn.metrics import adjusted_rand_score
+
+from graspologic.models import (
+    DCEREstimator,
+    DCSBMEstimator,
+    EREstimator,
+    RDPGEstimator,
+    SBMEstimator,
+)
+from graspologic.simulations import er_np, sample_edges, sbm
+from graspologic.utils import cartesian_product, is_symmetric
 
 
 class TestER(unittest.TestCase):

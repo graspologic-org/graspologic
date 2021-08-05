@@ -7,10 +7,11 @@ from math import sqrt
 
 import networkx as nx
 import numpy as np
-from graspologic.utils import remap_labels
-from graspologic.utils import utils as gus
 from numpy.testing import assert_equal
 from scipy.sparse import csr_matrix
+
+from graspologic.utils import remap_labels
+from graspologic.utils import utils as gus
 
 
 class TestInput(unittest.TestCase):

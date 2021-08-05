@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import os
 import tempfile
+import unittest
 from pathlib import Path
 
 import networkx as nx
 import numpy as np
-import unittest
-import os
 
 import graspologic as gs
 
