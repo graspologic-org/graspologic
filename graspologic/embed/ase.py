@@ -3,8 +3,8 @@
 
 from typing import Optional
 
-from .base import BaseSpectralEmbed
 from ..utils import augment_diagonal
+from .base import BaseSpectralEmbed
 
 
 class AdjacencySpectralEmbed(BaseSpectralEmbed):

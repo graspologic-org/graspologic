@@ -6,9 +6,9 @@ from typing import Optional
 import numpy as np
 from sklearn.base import BaseEstimator
 
+from ..utils import pass_to_ranks
 from .mds import ClassicalMDS
 from .omni import OmnibusEmbed
-from ..utils import pass_to_ranks
 
 
 class mug2vec(BaseEstimator):

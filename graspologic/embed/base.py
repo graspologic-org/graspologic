@@ -10,13 +10,13 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
-from .svd import select_svd
 from ..utils import (
     augment_diagonal,
     import_graph,
     is_almost_symmetric,
     is_fully_connected,
 )
+from .svd import select_svd
 
 
 class BaseSpectralEmbed(BaseEstimator):

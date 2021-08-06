@@ -1,10 +1,10 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import pytest
 import unittest
-import numpy as np
+
 import networkx as nx
+import numpy as np
 from sklearn.metrics import pairwise_distances
 
 from graspologic.embed import AdjacencySpectralEmbed
@@ -46,45 +46,45 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = er_np(20, 0.3)
 
         # check test argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, test=0)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, test="foo")
         # check metric argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, metric=0)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, metric="some_kind_of_kernel")
         # check n_components argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, n_components=0.5)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, n_components=-100)
         # check n_bootstraps argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, n_bootstraps=0.5)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, n_bootstraps=-100)
         # check workers argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, workers=0.5)
             latent_distribution_test(A1, A2, workers="oops")
         # check size_correction argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, size_correction=0)
         # check pooled argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, pooled=0)
         # check align_type argument
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, align_type="foo")
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, align_type={"not a": "string"})
         # check align_kws argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, align_kws="foo")
         # check input_graph argument
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             latent_distribution_test(A1, A2, input_graph="hello")
 
     def test_n_bootstraps(self):
@@ -159,7 +159,7 @@ class TestLatentDistributionTest(unittest.TestCase):
         A2 = er_np(100, 0.3)
         # some valid combinations of test and metric
         # # would love to do this, but currently FutureWarning breaks this
-        # with pytest.warns(None) as record:
+        # with self.assertWarns(None) as record:
         #     for test in self.tests.keys():
         #         ldt = LatentDistributionTest(test, self.tests[test])
         #         ldt.fit(A1, A2)
@@ -168,11 +168,11 @@ class TestLatentDistributionTest(unittest.TestCase):
         # assert len(record) == 0
         latent_distribution_test(A1, A2, test="hsic", metric="rbf")
         # some invalid combinations of test and metric
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, "hsic", "euclidean")
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, "dcorr", "gaussian")
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             latent_distribution_test(A1, A2, "dcorr", "rbf")
 
     def test_bad_matrix_inputs(self):

@@ -1,19 +1,20 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import sys
+import os
+import tempfile
+import unittest
 from pathlib import Path
 
 import networkx as nx
 import numpy as np
-import pytest
 
 import graspologic as gs
 
 
-class TestImportGraph:
+class TestImportGraph(unittest.TestCase):
     @classmethod
-    def setup_class(cls):
+    def setUpClass(cls) -> None:
         # simple ERxN graph
         n = 15
         p = 0.5
@@ -34,20 +35,25 @@ class TestImportGraph:
 
     def test_wrongtypein(self):
         a = 5
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             gs.utils.import_graph(a)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             gs.utils.import_graph(None)
 
     def test_nonsquare(self):
         non_square = np.hstack((self.A, self.A))
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             gs.utils.import_graph(non_square)
 
 
-class TestImportEdgelist:
-    @pytest.fixture(autouse=True)
-    def setup_class(self, tmpdir):
+class TestImportEdgelist(unittest.TestCase):
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.tmpdir.cleanup()
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.tmpdir = tempfile.TemporaryDirectory()
         n = 10
         p = 0.5
         wt = np.random.exponential
@@ -55,33 +61,33 @@ class TestImportEdgelist:
 
         np.random.seed(1)
 
-        self.A = gs.simulations.er_np(n, p)
-        self.B = gs.simulations.er_np(n, p, wt=wt, wtargs=wtargs)
+        cls.A = gs.simulations.er_np(n, p)
+        cls.B = gs.simulations.er_np(n, p, wt=wt, wtargs=wtargs)
 
-        G_A = nx.from_numpy_array(self.A)
-        G_B = nx.from_numpy_array(self.B)
+        G_A = nx.from_numpy_array(cls.A)
+        G_B = nx.from_numpy_array(cls.B)
         G_B = nx.relabel_nodes(G_B, lambda x: x + 10)  # relabel nodes to go from 10-19.
 
-        self.A_path = str(tmpdir / "A_unweighted.edgelist")
-        self.B_path = str(tmpdir / "B.edgelist")
-        self.root = str(tmpdir)
+        cls.root = str(cls.tmpdir.name)
+        cls.A_path = os.path.join(cls.root, "A_unweighted.edgelist")
+        cls.B_path = os.path.join(cls.root, "B.edgelist")
 
-        nx.write_edgelist(G_A, self.A_path, data=False)
-        nx.write_weighted_edgelist(G_B, self.B_path)
+        nx.write_edgelist(G_A, cls.A_path, data=False)
+        nx.write_weighted_edgelist(G_B, cls.B_path)
 
     def test_in(self):
         A_from_edgelist = gs.utils.import_edgelist(self.A_path)
         B_from_edgelist = gs.utils.import_edgelist(self.B_path)
 
-        assert np.allclose(A_from_edgelist, self.A)
-        assert np.allclose(B_from_edgelist, self.B)
+        np.testing.assert_allclose(A_from_edgelist, self.A)
+        np.testing.assert_allclose(B_from_edgelist, self.B)
 
     def test_in_Path_obj(self):
         A_from_edgelist = gs.utils.import_edgelist(Path(self.A_path))
         B_from_edgelist = gs.utils.import_edgelist(Path(self.B_path))
 
-        assert np.allclose(A_from_edgelist, self.A)
-        assert np.allclose(B_from_edgelist, self.B)
+        np.testing.assert_allclose(A_from_edgelist, self.A)
+        np.testing.assert_allclose(B_from_edgelist, self.B)
 
     def test_multiple_in(self):
         graphs = gs.utils.import_edgelist(self.root)
@@ -91,16 +97,16 @@ class TestImportEdgelist:
         B = np.zeros((20, 20))
         B[10:, 10:] = self.B
 
-        assert len(graphs) == 2
-        assert all(graph.shape == (20, 20) for graph in graphs)
-        assert np.allclose(graphs[0], A)
-        assert np.allclose(graphs[1], B)
+        self.assertEqual(len(graphs), 2)
+        self.assertTrue(all(graph.shape == (20, 20) for graph in graphs))
+        np.testing.assert_allclose(graphs[0], A)
+        np.testing.assert_allclose(graphs[1], B)
 
     def test_wrongtypein(self):
         path = 5
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             gs.utils.import_edgelist(path)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             gs.utils.import_edgelist(None)
 
     def test_vertices(self):
@@ -110,15 +116,15 @@ class TestImportEdgelist:
         _, A_vertices = gs.utils.import_edgelist(self.A_path, return_vertices=True)
         _, B_vertices = gs.utils.import_edgelist(self.B_path, return_vertices=True)
 
-        assert np.allclose(expected_vertices_A, A_vertices)
-        assert np.allclose(expected_vertices_B, B_vertices)
+        np.testing.assert_allclose(expected_vertices_A, A_vertices)
+        np.testing.assert_allclose(expected_vertices_B, B_vertices)
 
     def test_no_graphs_found(self):
         path = str(self.root + "invalid_edgelist.edgelist")
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             gs.utils.import_edgelist(path)
 
     def test_bad_delimiter(self):
         delimiter = ","
-        with pytest.warns(UserWarning):
+        with self.assertWarns(UserWarning):
             graphs = gs.utils.import_edgelist(self.root, delimiter=delimiter)

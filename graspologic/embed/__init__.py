@@ -2,16 +2,15 @@
 # Licensed under the MIT License.
 
 from .ase import AdjacencySpectralEmbed
+from .base import BaseSpectralEmbed
+from .case import CovariateAssistedEmbed
 from .lse import LaplacianSpectralEmbed
 from .mase import MultipleASE
 from .mds import ClassicalMDS
+from .mug2vec import mug2vec
 from .n2v import node2vec_embed
 from .omni import OmnibusEmbed
 from .svd import select_dimension, select_svd
-from .base import BaseSpectralEmbed
-from .mug2vec import mug2vec
-from .case import CovariateAssistedEmbed
-
 
 __all__ = [
     "ClassicalMDS",

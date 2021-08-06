@@ -1,13 +1,17 @@
-import pytest
-from pytest import mark
+# Copyright (c) Microsoft Corporation and contributors.
+# Licensed under the MIT License.
+
+import unittest
+
 import numpy as np
+import pytest
 from scipy.stats import beta
 from sklearn.mixture import GaussianMixture
+
 from graspologic.embed.case import CovariateAssistedEmbed as CASE
 from graspologic.simulations import sbm
-from graspologic.utils import is_almost_symmetric
 
-np.random.seed(420)
+np.random.seed(5)
 
 # UTILITY FUNCTIONS
 def gen_covariates(m1, m2, labels, type, ndim=3):
