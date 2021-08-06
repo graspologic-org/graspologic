@@ -74,12 +74,10 @@ class TestSelectDimension(unittest.TestCase):
             bad_X = np.random.normal(size=100).reshape(100, -1)
             select_dimension(X=bad_X)
 
-
     def test_output_synthetic(self):
         data, l = generate_data(10, 3)
         elbows, _, _ = select_dimension(X=data, n_elbows=2, return_likelihoods=True)
         assert_equal(elbows, [2, 4])
-
 
     def test_output_simple(self):
         """
@@ -88,7 +86,6 @@ class TestSelectDimension(unittest.TestCase):
         X = np.array([10, 9, 3, 2, 1])
         elbows, _ = select_dimension(X, n_elbows=1)
         assert_equal(elbows[0], 2)
-
 
     def test_output_uniform(self):
         """
@@ -101,7 +98,6 @@ class TestSelectDimension(unittest.TestCase):
         X = np.sort(np.hstack([x1, x2]))[::-1]
         elbows, _ = select_dimension(X, n_elbows=1)
         assert_equal(elbows[0], 50)
-
 
     def test_output_two_block_sbm(self):
         np.random.seed(10)

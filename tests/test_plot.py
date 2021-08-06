@@ -48,7 +48,6 @@ def _test_pairplot_with_gmm_outputs(**kws):
 
 
 class TestPlot(unittest.TestCase):
-
     def test_common_inputs(self):
         X = er_np(100, 0.5)
         grid_labels = ["Test1"]
@@ -124,7 +123,6 @@ class TestPlot(unittest.TestCase):
         with self.assertRaises(TypeError):
             gridplot([X], hier_label_fontsize="f")
 
-
     def test_heatmap_inputs(self):
         """
         test parameter checks
@@ -154,7 +152,6 @@ class TestPlot(unittest.TestCase):
             cbar = 1
             heatmap(X, cbar=cbar)
 
-
     def test_heatmap_output(self):
         """
         simple function to see if plot is made without errors
@@ -163,13 +160,14 @@ class TestPlot(unittest.TestCase):
         xticklabels = ["Dimension {}".format(i) for i in range(10)]
         yticklabels = ["Dimension {}".format(i) for i in range(10)]
 
-        fig = heatmap(X, transform="log", xticklabels=xticklabels, yticklabels=yticklabels)
+        fig = heatmap(
+            X, transform="log", xticklabels=xticklabels, yticklabels=yticklabels
+        )
         fig = heatmap(X, transform="zero-boost")
         fig = heatmap(X, transform="simple-all")
         fig = heatmap(X, transform="simple-nonzero")
         fig = heatmap(X, transform="binarize")
         fig = heatmap(X, cmap="gist_rainbow")
-
 
     def test_gridplot_inputs(self):
         X = [er_np(10, 0.5)]
@@ -186,7 +184,6 @@ class TestPlot(unittest.TestCase):
             transform = "bad transform"
             gridplot(X, labels=labels, transform=transform)
 
-
     def test_gridplot_outputs(self):
         """
         simple function to see if plot is made without errors
@@ -196,7 +193,6 @@ class TestPlot(unittest.TestCase):
         fig = gridplot(X, labels)
         fig = gridplot(X, labels, transform="zero-boost")
         fig = gridplot(X, labels, "simple-all", title="Test", font_scale=0.9)
-
 
     def test_pairplot_inputs(self):
         X = np.random.rand(15, 3)
@@ -221,7 +217,6 @@ class TestPlot(unittest.TestCase):
         with self.assertRaises(KeyError):
             pairplot(X, col_names=["1", "2", "3"], variables=["A", "B"])
 
-
     def test_pairplot_outputs(self):
         X = np.random.rand(15, 3)
         Y = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
@@ -231,20 +226,22 @@ class TestPlot(unittest.TestCase):
         fig = pairplot(X, Y)
         fig = pairplot(X, Y, col_names)
         fig = pairplot(
-            X, Y, col_names, title="Test", height=1.5, variables=["Feature1", "Feature2"]
+            X,
+            Y,
+            col_names,
+            title="Test",
+            height=1.5,
+            variables=["Feature1", "Feature2"],
         )
 
     def test_pairplot_with_gmm_inputs_type_full(self):
         _test_pairplot_with_gmm_inputs(self, covariance_type="full")
 
-
     def test_pairplot_with_gmm_inputs_type_diag(self):
         _test_pairplot_with_gmm_inputs(self, covariance_type="diag")
 
-
     def test_pairplot_with_gmm_inputs_type_tied(self):
         _test_pairplot_with_gmm_inputs(self, covariance_type="tied")
-
 
     def test_pairplot_with_gmm_inputs_type_spherical(self):
         _test_pairplot_with_gmm_inputs(self, covariance_type="spherical")
@@ -252,18 +249,14 @@ class TestPlot(unittest.TestCase):
     def test_pairplot_with_gmm_outputs_type_full(self):
         _test_pairplot_with_gmm_outputs(covariance_type="full")
 
-
     def test_pairplot_with_gmm_outputs_type_diag(self):
         _test_pairplot_with_gmm_outputs(covariance_type="diag")
-
 
     def test_pairplot_with_gmm_outputs_type_tied(self):
         _test_pairplot_with_gmm_outputs(covariance_type="tied")
 
-
     def test_pairplot_with_gmm_outputs_type_spherical(self):
         _test_pairplot_with_gmm_outputs(covariance_type="spherical")
-
 
     def test_sort_inds(self):
         B = np.array(

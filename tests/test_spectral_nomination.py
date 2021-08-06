@@ -51,7 +51,9 @@ class TestSpectralVertexNominatorOutputs(unittest.TestCase):
         svn = SpectralVertexNomination(input_graph=False)
         with self.assertRaises(IndexError):
             self._nominate(
-                np.zeros((10, 20), dtype=np.int), np.zeros(3, dtype=np.int), nominator=svn
+                np.zeros((10, 20), dtype=np.int),
+                np.zeros(3, dtype=np.int),
+                nominator=svn,
             )
         # adj matrix should be square
         with self.assertRaises(IndexError):

@@ -47,7 +47,6 @@ class TestImportGraph(unittest.TestCase):
 
 
 class TestImportEdgelist(unittest.TestCase):
-
     @classmethod
     def tearDownClass(cls) -> None:
         cls.tmpdir.cleanup()

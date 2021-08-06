@@ -9,7 +9,10 @@ coverage:
 
 lint:
 	black --check --diff ./graspologic ./tests
-
+	isort --check-only ./graspologic ./tests
+format:
+	black ./graspologic ./tests
+	isort ./graspologic ./tests
 test:
 	pytest tests
 

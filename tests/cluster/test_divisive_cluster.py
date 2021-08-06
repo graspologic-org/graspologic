@@ -127,7 +127,6 @@ class TestDivisiveCluster(unittest.TestCase):
             dc.fit(X)
             dc.predict(X, level=1)
 
-
     def test_predict_without_fit(self):
         # Generate random data
         X = np.random.normal(0, 1, size=(100, 3))
@@ -135,7 +134,6 @@ class TestDivisiveCluster(unittest.TestCase):
         with self.assertRaises(NotFittedError):
             dc = DivisiveCluster(max_components=2)
             dc.predict(X)
-
 
     def test_predict_on_nonfitted_data_gmm(self):
         # Generate random data to fit on
@@ -173,7 +171,6 @@ class TestDivisiveCluster(unittest.TestCase):
         assert_equal(np.max(pred2) + 1, 2)
         ari_2 = adjusted_rand_score(y_new, pred2[:, 0])
         assert_allclose(ari_2, 1)
-
 
     def test_predict_on_nonfitted_data_kmeans(self):
         # Generate random data to fit on
@@ -219,18 +216,14 @@ class TestDivisiveCluster(unittest.TestCase):
             n_cluster2 = np.max(pred2[:, lvl]) + 1
             assert_array_less(n_cluster2, n_cluster1 + 1)
 
-
     def test_hierarchical_four_class_gmm(self):
         _test_hierarchical_four_class(cluster_method="gmm")
-    
 
     def test_hierarchical_four_class_aic(self):
         _test_hierarchical_four_class(cluster_kws=dict(selection_criteria="aic"))
 
-
     def test_hierarchical_four_class_kmeans(self):
         _test_hierarchical_four_class(cluster_method="kmeans")
-
 
     def test_hierarchical_six_class_delta_criter(self):
         """

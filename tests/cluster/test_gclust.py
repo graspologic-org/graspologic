@@ -77,7 +77,6 @@ class TestGaussianCluster(unittest.TestCase):
             gclust = GaussianCluster(1000, 1001)
             gclust.fit_predict(X)
 
-
     def test_predict_without_fit(self):
         # Generate random data
         X = np.random.normal(0, 1, size=(100, 3))
@@ -85,7 +84,6 @@ class TestGaussianCluster(unittest.TestCase):
         with self.assertRaises(NotFittedError):
             gclust = GaussianCluster(min_components=2)
             gclust.predict(X)
-
 
     def test_no_y(self):
         np.random.seed(2)
@@ -101,7 +99,6 @@ class TestGaussianCluster(unittest.TestCase):
         gclust.fit(X)
 
         assert_equal(gclust.n_components_, 2)
-
 
     def test_two_class(self):
         """
@@ -131,7 +128,6 @@ class TestGaussianCluster(unittest.TestCase):
             # Asser that we get perfect clustering
             assert_allclose(gclust.ari_.loc[n_components], 1)
 
-
     def test_five_class(self):
         """
         Easily separable five gaussian problem.
@@ -152,7 +148,6 @@ class TestGaussianCluster(unittest.TestCase):
             )
             gclust.fit(X)
             assert_equal(gclust.n_components_, 5)
-
 
     def test_ase_three_blocks(self):
         """
@@ -185,7 +180,6 @@ class TestGaussianCluster(unittest.TestCase):
 
             # Asser that we get perfect clustering
             assert_allclose(gclust.ari_.loc[n_components], 1)
-
 
     def test_covariances(self):
         """

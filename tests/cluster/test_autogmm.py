@@ -51,7 +51,9 @@ class TestAutoGMM(unittest.TestCase):
 
         # euclidean is not an affinity option when ward is a linkage option
         with self.assertRaises(ValueError):
-            AutoGMM = AutoGMMCluster(min_components=1, affinity="manhattan", linkage="ward")
+            AutoGMM = AutoGMMCluster(
+                min_components=1, affinity="manhattan", linkage="ward"
+            )
 
         # covariance type is not an array, string or list
         with self.assertRaises(TypeError):
@@ -121,7 +123,6 @@ class TestAutoGMM(unittest.TestCase):
         with self.assertRaises(ValueError):
             AutoGMM = AutoGMMCluster(selection_criteria="cic")
 
-
     def test_labels_init(self):
         X = np.random.normal(0, 1, size=(5, 3))
 
@@ -148,7 +149,6 @@ class TestAutoGMM(unittest.TestCase):
         )
         AutoGMM.fit_predict(X)
 
-
     def test_predict_without_fit(self):
         # Generate random data
         X = np.random.normal(0, 1, size=(100, 3))
@@ -157,14 +157,12 @@ class TestAutoGMM(unittest.TestCase):
             AutoGMM = AutoGMMCluster(min_components=2)
             AutoGMM.predict(X)
 
-
     def test_cosine_on_0(self):
         X = np.array([[0, 1, 0], [1, 0, 1], [0, 0, 0], [1, 1, 0], [0, 0, 1]])
 
         with self.assertRaises(ValueError):
             AutoGMM = AutoGMMCluster(min_components=3, affinity="all")
             AutoGMM.fit(X)
-
 
     def test_cosine_with_0(self):
         X = np.array(
@@ -187,7 +185,6 @@ class TestAutoGMM(unittest.TestCase):
             AutoGMM = AutoGMMCluster(min_components=2, affinity="all")
             AutoGMM.fit(X)
 
-
     def test_no_y(self):
         np.random.seed(1)
 
@@ -202,7 +199,6 @@ class TestAutoGMM(unittest.TestCase):
         AutoGMM.fit(X)
 
         assert_equal(AutoGMM.n_components_, 2)
-
 
     def test_two_class(self):
         """
@@ -229,7 +225,6 @@ class TestAutoGMM(unittest.TestCase):
         # Asser that we get perfect clustering
         assert_allclose(AutoGMM.ari_, 1)
 
-
     def test_two_class_parallel(self):
         """
         Easily separable two gaussian problem.
@@ -254,7 +249,6 @@ class TestAutoGMM(unittest.TestCase):
 
         # Asser that we get perfect clustering
         assert_allclose(AutoGMM.ari_, 1)
-
 
     def test_two_class_aic(self):
         """
@@ -283,7 +277,6 @@ class TestAutoGMM(unittest.TestCase):
         assert_equal(AutoGMM.ari_ >= -1, True)
         assert_equal(AutoGMM.ari_ <= 1, True)
 
-
     def test_five_class(self):
         """
         Easily separable five gaussian problem.
@@ -296,11 +289,12 @@ class TestAutoGMM(unittest.TestCase):
 
         X = np.vstack([np.random.multivariate_normal(mu, cov, n) for mu in mus])
 
-        AutoGMM = AutoGMMCluster(min_components=3, max_components=10, covariance_type="all")
+        AutoGMM = AutoGMMCluster(
+            min_components=3, max_components=10, covariance_type="all"
+        )
         AutoGMM.fit(X)
 
         assert_equal(AutoGMM.n_components_, 5)
-
 
     def test_five_class_aic(self):
         """
@@ -325,7 +319,6 @@ class TestAutoGMM(unittest.TestCase):
         # AIC fails often so there is no assertion here
         assert_equal(AutoGMM.n_components_ >= 3, True)
         assert_equal(AutoGMM.n_components_ <= 10, True)
-
 
     def test_ase_three_blocks(self):
         """
@@ -356,7 +349,6 @@ class TestAutoGMM(unittest.TestCase):
 
         # Asser that we get perfect clustering
         assert_allclose(AutoGMM.ari_, 1)
-
 
     def test_covariances(self):
         """

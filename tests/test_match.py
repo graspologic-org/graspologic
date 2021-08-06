@@ -15,7 +15,6 @@ np.random.seed(1)
 
 
 class TestGMP(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.barycenter = GMP(gmp=False)
@@ -227,7 +226,7 @@ class TestGMP(unittest.TestCase):
         gm.fit(A, B, seeds_A=seeds_A, seeds_B=seeds_B)
 
         self.assertTrue((gm.perm_inds_ == pi_original).all())
-        self.assertEqual(gm.score_,  11156)
+        self.assertEqual(gm.score_, 11156)
 
     def test_sim(self):
         n = 150
