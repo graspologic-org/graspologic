@@ -11,4 +11,5 @@ by nearest neighbor services and visualization routines.
 __SVD_SOLVER_TYPES = ["randomized", "full", "truncated"]
 
 from .adjacency_spectral_embedding import adjacency_spectral_embedding
+from .laplacian_spectral_embedding import laplacian_spectral_embedding
 from .embeddings import Embeddings, EmbeddingsView
