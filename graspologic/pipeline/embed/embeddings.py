@@ -17,9 +17,9 @@ guarantee the appropriate latent positions are returned for each node.
 
 from collections import OrderedDict
 from typing import Any, Tuple
-from beartype import beartype
 
 import numpy as np
+from beartype import beartype
 
 
 class Embeddings:

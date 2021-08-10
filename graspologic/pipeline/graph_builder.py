@@ -4,9 +4,9 @@
 import numbers
 from collections import OrderedDict
 from typing import Any, Dict, List, Tuple, Union
-from beartype import beartype
 
 import networkx as nx
+from beartype import beartype
 
 __all__ = ["GraphBuilder"]
 
