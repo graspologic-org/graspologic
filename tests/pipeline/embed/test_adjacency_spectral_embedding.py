@@ -7,6 +7,7 @@ import networkx as nx
 import numpy as np
 
 import graspologic.utils
+from beartype.roar import BeartypeCallHintPepParamException
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.pipeline.embed import adjacency_spectral_embedding
 from tests.utils import data_file
@@ -42,11 +43,11 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
 
     def test_argument_validation(self):
         # graph types
-        with self.assertRaises(TypeError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             adjacency_spectral_embedding(
                 graph=np.array([[1, 2], [2, 1]]), **self.default_parameters
             )
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             adjacency_spectral_embedding(
                 graph=nx.MultiDiGraph(), **self.default_parameters
             )

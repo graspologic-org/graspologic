@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
+from beartype import beartype
 
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.preconditions import (
@@ -21,8 +22,9 @@ from ._elbow import _index_of_elbow
 from .embeddings import Embeddings
 
 
+@beartype
 def adjacency_spectral_embedding(
-    graph: Union[nx.Graph, nx.DiGraph],
+    graph: Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: str = "randomized",
@@ -51,7 +53,7 @@ def adjacency_spectral_embedding(
 
     Parameters
     ----------
-    graph : Union[nx.Graph, nx.DiGraph]
+    graph : Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph]
         An undirected or directed graph. The graph **must**:
 
         - be fully numerically weighted (every edge must have a real, numeric weight
@@ -159,12 +161,6 @@ def adjacency_spectral_embedding(
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    check_argument_types(
-        graph,
-        (nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph),
-        "graph must be of type networkx.Graph, networkx.DiGraph, "
-        "networkx.OrderedGraph, networkx.OrderedDiGraph",
-    )
     check_argument(
         not graph.is_multigraph(),
         "Multigraphs are not supported; you must determine how to represent at most "
