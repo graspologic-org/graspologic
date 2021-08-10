@@ -4,6 +4,7 @@
 import numbers
 from collections import OrderedDict
 from typing import Any, Dict, List, Tuple, Union
+from beartype import beartype
 
 import networkx as nx
 
@@ -27,12 +28,14 @@ class GraphBuilder:
         :class:`networkx.DiGraph` object.
     """
 
+    @beartype
     def __init__(self, directed: bool = False):
         # OrderedDict is the default for {} anyway, but I wanted to be very explicit,
         # since we absolutely rely on the ordering
         self._id_map = OrderedDict()
         self._graph = nx.DiGraph() if directed else nx.Graph()
 
+    @beartype
     def add_edge(
         self,
         source: Any,
