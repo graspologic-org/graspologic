@@ -1,10 +1,12 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-import networkx as nx
 from typing import Any, Dict, List, Optional, Tuple
-from graspologic.layouts.classes import NodePosition
+
 import matplotlib.pyplot as plt
+import networkx as nx
+
+from graspologic.layouts.classes import NodePosition
 
 
 def _calculate_x_y_domain(

@@ -7,8 +7,8 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 
-from .svd import select_svd
 from ..utils import is_symmetric
+from .svd import select_svd
 
 
 def _get_centering_matrix(n):

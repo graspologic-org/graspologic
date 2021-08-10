@@ -19,5 +19,4 @@ is to bridge this gap.
 # Licensed under the MIT license.
 
 from . import embed
-
 from .graph_builder import GraphBuilder

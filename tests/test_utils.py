@@ -1,18 +1,17 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import logging
 import unittest
 import warnings
 from math import sqrt
 
 import networkx as nx
 import numpy as np
-import pytest
-from graspologic.utils import remap_labels
-from graspologic.utils import utils as gus
 from numpy.testing import assert_equal
 from scipy.sparse import csr_matrix
+
+from graspologic.utils import remap_labels
+from graspologic.utils import utils as gus
 
 
 class TestInput(unittest.TestCase):
@@ -530,18 +529,18 @@ class TestRemoveVertices(unittest.TestCase):
 
     def test_exceptions(self):
         # ensure proper errors are thrown when invalid inputs are passed.
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             gus.remove_vertices(9001, 0)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             nonsquare = np.vstack((self.directed, self.directed))
             gus.remove_vertices(nonsquare, 0)
 
-        with pytest.raises(IndexError):
+        with self.assertRaises(IndexError):
             indices = np.arange(len(self.directed) + 1)
             gus.remove_vertices(self.directed, indices)
 
-        with pytest.raises(IndexError):
+        with self.assertRaises(IndexError):
             idx = len(self.directed) + 1
             gus.remove_vertices(self.directed, indices)
 
@@ -579,17 +578,17 @@ class TestRemapLabels(unittest.TestCase):
         assert_equal(y_true, y_pred_remapped)
 
     def test_inputs(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             # handled by sklearn confusion matrix
             remap_labels(self.y_true[1:], self.y_pred)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             remap_labels(8, self.y_pred)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             remap_labels(self.y_pred, self.y_true, return_map="hi")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             remap_labels(self.y_pred, ["ant", "ant", "cat", "cat", "bird", "bird"])
 
 
@@ -598,7 +597,7 @@ class TestRemapNodeIds(unittest.TestCase):
         invalid_types = [str, int, list]
 
         for type in invalid_types:
-            with pytest.raises(TypeError):
+            with self.assertRaises(TypeError):
                 gus.remap_node_ids(graph=type())
 
     def test_remap_node_ids_unweighted_graph_raises_warning(self):

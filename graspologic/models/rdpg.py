@@ -3,10 +3,10 @@
 
 import numpy as np
 
-from .base import BaseGraphEstimator
 from ..embed import AdjacencySpectralEmbed
 from ..simulations import p_from_latent
-from ..utils import import_graph, augment_diagonal, is_unweighted
+from ..utils import augment_diagonal, import_graph, is_unweighted
+from .base import BaseGraphEstimator
 
 
 class RDPGEstimator(BaseGraphEstimator):

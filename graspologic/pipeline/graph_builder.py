@@ -3,7 +3,7 @@
 
 import numbers
 from collections import OrderedDict
-from typing import Any, Dict, List, Union, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 import networkx as nx
 

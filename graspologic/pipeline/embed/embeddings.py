@@ -15,9 +15,10 @@ guarantee the appropriate latent positions are returned for each node.
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from typing import Any, Tuple
-import numpy as np
 from collections import OrderedDict
+from typing import Any, Tuple
+
+import numpy as np
 
 
 class Embeddings:

@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import networkx as nx
 import numpy
 

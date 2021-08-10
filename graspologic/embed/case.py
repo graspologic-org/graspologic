@@ -1,10 +1,11 @@
+from typing import Callable, Optional, Tuple
+
 import numpy as np
 from scipy.sparse.linalg import LinearOperator, eigsh
 from sklearn.preprocessing import normalize, scale
-from typing import Tuple, Callable, Optional
 
-from graspologic.utils import import_graph, to_laplacian, is_almost_symmetric
 from graspologic.embed.base import BaseSpectralEmbed
+from graspologic.utils import import_graph, is_almost_symmetric, to_laplacian
 
 
 class CovariateAssistedEmbed(BaseSpectralEmbed):

@@ -6,7 +6,7 @@ import unittest
 import networkx as nx
 import numpy as np
 import pandas as pd
-from numpy.random import poisson, normal
+from numpy.random import normal, poisson
 from numpy.testing import assert_equal
 from scipy.sparse import csr_matrix
 from sklearn.base import clone
@@ -15,7 +15,7 @@ from sklearn.metrics import adjusted_rand_score, pairwise_distances
 
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
-from graspologic.simulations.simulations import er_np, er_nm, sbm
+from graspologic.simulations.simulations import er_nm, er_np, sbm
 from graspologic.utils import remove_vertices
 
 
