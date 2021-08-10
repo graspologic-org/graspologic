@@ -162,6 +162,10 @@ Uniformly formatted code makes it easier to share code ownership. Graspologic pa
 Python guidelines detailed in [PEP8](https://www.python.org/dev/peps/pep-0008/) that detail how code should be 
 formatted and indented. Please read it and follow it.
 
+All new functions should have PEP-compliant type hints and "@beartype" annotations.  This allows us a reasonable level 
+of confidence that arguments passed into the API are what we expect them to be without sacrificing runtime speed.  See 
+https://github.com/beartype/beartype for more information.
+
 ## Docstring Guidelines
 
 Properly formatted docstrings are required for documentation generation by Sphinx. The graspologic package closely 
