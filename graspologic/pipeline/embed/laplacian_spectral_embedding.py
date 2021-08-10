@@ -21,7 +21,6 @@ from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
 from .embeddings import Embeddings
 
-
 __FORMS = ["DAD", "I-DAD", "R-DAD"]
 
 
@@ -146,7 +145,9 @@ def laplacian_spectral_embedding(
 
     """
     check_argument_types(form, str, "form must be a str")
-    check_argument(form in __FORMS, f"form must be one of the values in {','.join(__FORMS)}")
+    check_argument(
+        form in __FORMS, f"form must be one of the values in {','.join(__FORMS)}"
+    )
 
     check_argument_types(dimensions, int, "dimensions must be an int")
     check_argument(dimensions >= 1, "dimensions must be positive")
@@ -173,8 +174,14 @@ def laplacian_spectral_embedding(
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    check_optional_argument_types(regularizer, numbers.Real, "regularizer must be of type int, float, or some subclass of numbers.Real")
-    check_argument(regularizer is None or regularizer >= 0, "regularizer must be nonnegative")
+    check_optional_argument_types(
+        regularizer,
+        numbers.Real,
+        "regularizer must be of type int, float, or some subclass of numbers.Real",
+    )
+    check_argument(
+        regularizer is None or regularizer >= 0, "regularizer must be nonnegative"
+    )
 
     check_argument_types(
         graph,

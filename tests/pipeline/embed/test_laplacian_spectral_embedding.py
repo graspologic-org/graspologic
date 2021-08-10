@@ -2,7 +2,6 @@
 # Licensed under the MIT license.
 
 import unittest
-
 from typing import Optional, Union
 
 import networkx as nx
@@ -125,7 +124,9 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
         sparse = nx.to_scipy_sparse_matrix(graph)
         loopless = graspologic.utils.remove_loops(sparse)
         ranked = graspologic.utils.pass_to_ranks(loopless)
-        lse = LaplacianSpectralEmbed(n_components=100, n_elbows=None, svd_seed=1234, form="R-DAD")
+        lse = LaplacianSpectralEmbed(
+            n_components=100, n_elbows=None, svd_seed=1234, form="R-DAD"
+        )
         core_response = lse.fit_transform(ranked)
 
         embedding = laplacian_spectral_embedding(self.graph.copy(), svd_seed=1234)

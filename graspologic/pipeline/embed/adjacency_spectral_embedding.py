@@ -14,8 +14,12 @@ from graspologic.preconditions import (
     check_optional_argument_types,
     is_real_weighted,
 )
-from graspologic.utils import is_fully_connected, pass_to_ranks, remove_loops, \
-    augment_diagonal
+from graspologic.utils import (
+    augment_diagonal,
+    is_fully_connected,
+    pass_to_ranks,
+    remove_loops,
+)
 
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
