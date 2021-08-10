@@ -13,11 +13,11 @@ from sklearn.manifold import TSNE
 
 from ..embed import node2vec_embed
 from ..partition import leiden
+from ..preconditions import is_real_weighted
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
+from ..utils import largest_connected_component
 from .classes import NodePosition
 from .nooverlap import remove_overlaps
-from ..utils import largest_connected_component
-from ..preconditions import is_real_weighted
 
 logger = logging.getLogger(__name__)
 
