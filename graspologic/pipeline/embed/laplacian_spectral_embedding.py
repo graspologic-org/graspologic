@@ -220,7 +220,7 @@ def laplacian_spectral_embedding(
     node_labels = np.array(list(graph.nodes()))
 
     embedder = LaplacianSpectralEmbed(
-        form="R-DAD",
+        form=form,
         n_components=dimensions,
         n_elbows=None,  # in the short term, we do our own elbow finding
         algorithm=svd_solver_algorithm,
