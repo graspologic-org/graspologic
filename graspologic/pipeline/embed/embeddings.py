@@ -19,9 +19,11 @@ from collections import OrderedDict
 from typing import Any, Tuple
 
 import numpy as np
+from beartype import beartype
 
 
 class Embeddings:
+    @beartype
     def __init__(self, labels: np.ndarray, embeddings: np.ndarray):
         """
         ``Embeddings`` is an iterable, indexed interface over the parallel numpy arrays
@@ -94,6 +96,7 @@ class Embeddings:
 
 
 class _EmbeddingsIter:
+    @beartype
     def __init__(self, embeddings: Embeddings):
         self._embeddings = embeddings
         self._index = 0
@@ -111,6 +114,7 @@ class _EmbeddingsIter:
 
 
 class EmbeddingsView(OrderedDict):
+    @beartype
     def __init__(self, embeddings: Embeddings):
         if embeddings is None:
             raise ValueError("embeddings must not be None")

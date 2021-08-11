@@ -5,6 +5,7 @@ import unittest
 
 import networkx as nx
 import numpy as np
+from beartype.roar import BeartypeCallHintPepParamException
 
 import graspologic.utils
 from graspologic.embed import AdjacencySpectralEmbed
@@ -42,7 +43,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
 
     def test_argument_validation(self):
         # graph types
-        with self.assertRaises(TypeError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             adjacency_spectral_embedding(
                 graph=np.array([[1, 2], [2, 1]]), **self.default_parameters
             )
@@ -54,7 +55,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
         # dimensions
         dimensions = [None, 1.3, "1"]
         for dimension in dimensions:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestAdjacencySpectralEmbedding.parameters()
                 params["dimensions"] = dimension
                 params["graph"] = self.graph
@@ -63,13 +64,13 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
         # elbow_cuts
         elbow_cuts = ["3", 1.3]
         for elbow_cut in elbow_cuts:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestAdjacencySpectralEmbedding.parameters()
                 params["elbow_cut"] = elbow_cut
                 params["graph"] = self.graph
                 adjacency_spectral_embedding(**params)
 
-        with self.assertRaises(TypeError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestAdjacencySpectralEmbedding.parameters()
             params["svd_solver_algorithm"] = 1
             params["graph"] = self.graph
@@ -84,7 +85,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
         # svd_solver_iterations
         svd_solver_iterations = [None, "5", 5.1]
         for ssi in svd_solver_iterations:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestAdjacencySpectralEmbedding.parameters()
                 params["svd_solver_iterations"] = ssi
                 params["graph"] = self.graph
@@ -93,7 +94,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
         # svd_seed
         svd_seeds = ["5", 5.1]
         for svd_seed in svd_seeds:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestAdjacencySpectralEmbedding.parameters()
                 params["svd_seed"] = svd_seed
                 params["graph"] = self.graph

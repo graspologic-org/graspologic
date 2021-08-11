@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
+from beartype import beartype
 
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.preconditions import (
@@ -21,8 +22,9 @@ from ._elbow import _index_of_elbow
 from .embeddings import Embeddings
 
 
+@beartype
 def adjacency_spectral_embedding(
-    graph: Union[nx.Graph, nx.DiGraph],
+    graph: Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: str = "randomized",
@@ -51,7 +53,7 @@ def adjacency_spectral_embedding(
 
     Parameters
     ----------
-    graph : Union[nx.Graph, nx.DiGraph]
+    graph : Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph]
         An undirected or directed graph. The graph **must**:
 
         - be fully numerically weighted (every edge must have a real, numeric weight
@@ -134,37 +136,22 @@ def adjacency_spectral_embedding(
         Analysis, 51(2), pp.918-930.
 
     """
-    check_argument_types(dimensions, int, "dimensions must be an int")
     check_argument(dimensions >= 1, "dimensions must be positive")
 
-    check_optional_argument_types(elbow_cut, int, "elbow_cut must be an int or None")
     check_argument(elbow_cut is None or elbow_cut >= 1, "elbow_cut must be positive")
 
-    check_argument_types(
-        svd_solver_algorithm, str, "svd_solver_algorithm must be a str"
-    )
     check_argument(
         svd_solver_algorithm in __SVD_SOLVER_TYPES,
         f"svd_solver_algorithm must be one of the values in {','.join(__SVD_SOLVER_TYPES)}",
     )
 
-    check_argument_types(
-        svd_solver_iterations, int, "svd_solver_iterations must be an int"
-    )
     check_argument(svd_solver_iterations >= 1, "svd_solver_iterations must be positive")
 
-    check_optional_argument_types(svd_seed, int, "svd_seed must be an int or None")
     check_argument(
         svd_seed is None or 0 <= svd_seed <= 2 ** 32 - 1,
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    check_argument_types(
-        graph,
-        (nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph),
-        "graph must be of type networkx.Graph, networkx.DiGraph, "
-        "networkx.OrderedGraph, networkx.OrderedDiGraph",
-    )
     check_argument(
         not graph.is_multigraph(),
         "Multigraphs are not supported; you must determine how to represent at most "

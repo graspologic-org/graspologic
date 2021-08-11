@@ -96,16 +96,21 @@ branch. Steps:
 
    We also explicitly ask that you hew toward the `unittest` Python module for conformance.  This will ensure it plays nicely with most common IDEs on the market.
 
-6. Code formatting:
+5. Code formatting:
    It's important to us that you follow the standards of our project.  Please use `black` and `isort` prior to
    committing.
 
+   ```bash
+   # Run "black" and "isort" using Make
+   make format
+   ```
+   OR
    ```bash
    black graspologic/ tests/
    isort graspologic/ tests/
    ```
 
-7. Develop the feature on your feature branch. Add changed files using `git add` and then `git commit` files:
+6. Develop the feature on your feature branch. Add changed files using `git add` and then `git commit` files:
 
    ```bash
    git add modified_files
@@ -156,6 +161,10 @@ We recommended that your contribution complies with the following rules before y
 Uniformly formatted code makes it easier to share code ownership. Graspologic package closely follows the official 
 Python guidelines detailed in [PEP8](https://www.python.org/dev/peps/pep-0008/) that detail how code should be 
 formatted and indented. Please read it and follow it.
+
+All new functions should have PEP-compliant type hints and "@beartype" annotations.  This allows us a reasonable level 
+of confidence that arguments passed into the API are what we expect them to be without sacrificing runtime speed.  See 
+https://github.com/beartype/beartype for more information.
 
 ## Docstring Guidelines
 
