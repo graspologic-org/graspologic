@@ -4,7 +4,6 @@
 import unittest
 
 import numpy as np
-
 from beartype.roar import BeartypeCallHintPepParamException
 
 from graspologic.pipeline.embed import Embeddings
