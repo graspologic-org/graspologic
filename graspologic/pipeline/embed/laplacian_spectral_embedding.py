@@ -7,14 +7,10 @@ from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
+from beartype import beartype
 
 from graspologic.embed import LaplacianSpectralEmbed
-from graspologic.preconditions import (
-    check_argument,
-    check_argument_types,
-    check_optional_argument_types,
-    is_real_weighted,
-)
+from graspologic.preconditions import check_argument, is_real_weighted
 from graspologic.utils import is_fully_connected, pass_to_ranks, remove_loops
 
 from . import __SVD_SOLVER_TYPES  # from the module init
@@ -24,6 +20,7 @@ from .embeddings import Embeddings
 __FORMS = ["DAD", "I-DAD", "R-DAD"]
 
 
+@beartype
 def laplacian_spectral_embedding(
     graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
     form: str = "R-DAD",
@@ -107,6 +104,10 @@ def laplacian_spectral_embedding(
     -------
     Embeddings
 
+    Raises
+    ------
+    beartype.roar.BeartypeCallHintPepParamException if parameters do not match type hints
+
     See Also
     --------
     graspologic.pipeline.embed.Embeddings
@@ -144,51 +145,30 @@ def laplacian_spectral_embedding(
         Analysis, 51(2), pp.918-930.
 
     """
-    check_argument_types(form, str, "form must be a str")
     check_argument(
         form in __FORMS, f"form must be one of the values in {','.join(__FORMS)}"
     )
 
-    check_argument_types(dimensions, int, "dimensions must be an int")
     check_argument(dimensions >= 1, "dimensions must be positive")
 
-    check_optional_argument_types(elbow_cut, int, "elbow_cut must be an int or None")
     check_argument(elbow_cut is None or elbow_cut >= 1, "elbow_cut must be positive")
 
-    check_argument_types(
-        svd_solver_algorithm, str, "svd_solver_algorithm must be a str"
-    )
     check_argument(
         svd_solver_algorithm in __SVD_SOLVER_TYPES,
         f"svd_solver_algorithm must be one of the values in {','.join(__SVD_SOLVER_TYPES)}",
     )
 
-    check_argument_types(
-        svd_solver_iterations, int, "svd_solver_iterations must be an int"
-    )
     check_argument(svd_solver_iterations >= 1, "svd_solver_iterations must be positive")
 
-    check_optional_argument_types(svd_seed, int, "svd_seed must be an int or None")
     check_argument(
         svd_seed is None or 0 <= svd_seed <= 2 ** 32 - 1,
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    check_optional_argument_types(
-        regularizer,
-        numbers.Real,
-        "regularizer must be of type int, float, or some subclass of numbers.Real",
-    )
     check_argument(
         regularizer is None or regularizer >= 0, "regularizer must be nonnegative"
     )
 
-    check_argument_types(
-        graph,
-        (nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph),
-        "graph must be of type networkx.Graph, networkx.DiGraph, "
-        "networkx.OrderedGraph, networkx.OrderedDiGraph",
-    )
     check_argument(
         not graph.is_multigraph(),
         "Multigraphs are not supported; you must determine how to represent at most "

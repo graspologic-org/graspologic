@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
+from beartype.roar import BeartypeCallHintPepParamException
 
 import graspologic.utils
 from graspologic.embed import LaplacianSpectralEmbed
@@ -41,7 +42,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
 
     def test_argument_validation(self):
         # graph types
-        with self.assertRaises(TypeError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestLaplacianSpectralEmbedding.parameters()
             params["graph"] = np.array([[1, 2], [2, 1]])
             laplacian_spectral_embedding(**params)
@@ -53,7 +54,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
         # dimensions
         dimensions = [None, 1.3, "1"]
         for dimension in dimensions:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestLaplacianSpectralEmbedding.parameters(self.graph)
                 params["dimensions"] = dimension
                 laplacian_spectral_embedding(**params)
@@ -61,12 +62,12 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
         # elbow_cuts
         elbow_cuts = ["3", 1.3]
         for elbow_cut in elbow_cuts:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestLaplacianSpectralEmbedding.parameters(self.graph)
                 params["elbow_cut"] = elbow_cut
                 laplacian_spectral_embedding(**params)
 
-        with self.assertRaises(TypeError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestLaplacianSpectralEmbedding.parameters(self.graph)
             params["svd_solver_algorithm"] = 1
             laplacian_spectral_embedding(**params)
@@ -79,7 +80,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
         # svd_solver_iterations
         svd_solver_iterations = [None, "5", 5.1]
         for ssi in svd_solver_iterations:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestLaplacianSpectralEmbedding.parameters(self.graph)
                 params["svd_solver_iterations"] = ssi
                 laplacian_spectral_embedding(**params)
@@ -87,7 +88,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
         # svd_seed
         svd_seeds = ["5", 5.1]
         for svd_seed in svd_seeds:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestLaplacianSpectralEmbedding.parameters(self.graph)
                 params["svd_seed"] = svd_seed
                 laplacian_spectral_embedding(**params)
@@ -95,7 +96,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
         # form
         forms = [0, None]
         for form in forms:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(BeartypeCallHintPepParamException):
                 params = TestLaplacianSpectralEmbedding.parameters(self.graph)
                 params["form"] = form
                 laplacian_spectral_embedding(**params)
@@ -105,7 +106,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
             laplacian_spectral_embedding(**params)
 
         # regularizer
-        with self.assertRaises(TypeError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestLaplacianSpectralEmbedding.parameters(self.graph)
             params["regularizer"] = "1"
             laplacian_spectral_embedding(**params)
