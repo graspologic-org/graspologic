@@ -27,7 +27,7 @@ from .embeddings import Embeddings
 
 
 def adjacency_spectral_embedding(
-    graph: Union[nx.Graph, nx.DiGraph],
+    graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: str = "randomized",
@@ -56,7 +56,7 @@ def adjacency_spectral_embedding(
 
     Parameters
     ----------
-    graph : Union[nx.Graph, nx.DiGraph]
+    graph : Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]
         An undirected or directed graph. The graph **must**:
 
         - be fully numerically weighted (every edge must have a real, numeric weight
@@ -189,18 +189,20 @@ def adjacency_spectral_embedding(
         # not all of the weights are real numbers, if they exist at all
         # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
 
-    graph_as_csr = nx.to_scipy_sparse_matrix(graph, weight=weight_attribute)
+    node_labels = np.array(list(graph.nodes()))
+
+    graph_as_csr = nx.to_scipy_sparse_matrix(
+        graph, weight=weight_attribute, nodelist=node_labels
+    )
 
     if not is_fully_connected(graph):
         warnings.warn("More than one connected component detected")
 
-    graph_as_csr = remove_loops(graph_as_csr)
+    graph_sans_loops = remove_loops(graph_as_csr)
 
-    graph_as_csr = pass_to_ranks(graph_as_csr)
+    ranked_graph = pass_to_ranks(graph_sans_loops)
 
-    graph_as_csr = augment_diagonal(graph_as_csr)
-
-    node_labels = np.array(list(graph.nodes()))
+    augmented_graph = augment_diagonal(ranked_graph)
 
     embedder = AdjacencySpectralEmbed(
         n_components=dimensions,
@@ -211,7 +213,7 @@ def adjacency_spectral_embedding(
         concat=False,
         diag_aug=False,
     )
-    results = embedder.fit_transform(graph_as_csr)
+    results = embedder.fit_transform(augmented_graph)
 
     if elbow_cut is None:
         if graph.is_directed():
