@@ -17,8 +17,8 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation
     of the graph based on its Laplacian matrix. It relies on an SVD to reduce
-    the dimensionality to the specified k, or if k is unspecified, can find a number
-    of dimensions automatically.
+    the dimensionality to the specified ``n_components``, or if ``n_components`` is
+    unspecified, can find a number of dimensions automatically.
 
     Parameters
     ----------
@@ -121,7 +121,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self,
         form: str = "DAD",
         n_components: Optional[int] = None,
-        n_elbows: int = 2,
+        n_elbows: Optional[int] = 2,
         algorithm: str = "randomized",
         n_iter: int = 5,
         check_lcc: bool = True,

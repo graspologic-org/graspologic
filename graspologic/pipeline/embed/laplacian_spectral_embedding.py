@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+import numbers
 import warnings
 from typing import Optional, Union
 
@@ -8,46 +9,39 @@ import networkx as nx
 import numpy as np
 from beartype import beartype
 
-from graspologic.embed import AdjacencySpectralEmbed
+from graspologic.embed import LaplacianSpectralEmbed
 from graspologic.preconditions import check_argument, is_real_weighted
-from graspologic.utils import (
-    augment_diagonal,
-    is_fully_connected,
-    pass_to_ranks,
-    remove_loops,
-)
+from graspologic.utils import is_fully_connected, pass_to_ranks, remove_loops
 
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
 from .embeddings import Embeddings
 
+__FORMS = ["DAD", "I-DAD", "R-DAD"]
+
 
 @beartype
-def adjacency_spectral_embedding(
-    graph: Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph],
+def laplacian_spectral_embedding(
+    graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    form: str = "R-DAD",
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: str = "randomized",
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
+    regularizer: Optional[numbers.Real] = None,
 ) -> Embeddings:
     """
     Given a directed or undirected networkx graph (*not* multigraph), generate an
     Embeddings object.
 
-    Adjacency spectral embeddings are extremely egocentric, implying that results are
-    slanted toward the core-periphery of each node. This is in contrast to Laplacian
-    spectral embeddings, which look further into the latent space when it captures
-    change.
+    The laplacian spectral embedding process is similar to the adjacency spectral
+    embedding process, with the key differentiator being that the LSE process looks
+    further into the latent space when it captures changes, whereas the ASE process
+    is egocentric and focused on immediate differentiators in a node's periphery.
 
-    `Adjacency Spectral Embedding Tutorial
-    <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
-
-    Graphs will always have their diagonal augmented. In other words, a self-loop
-    will be created for each node with a weight corresponding to the weighted degree.
-
-    Lastly, all weights will be rescaled based on their relative rank in the graph,
+    All weights will be rescaled based on their relative rank in the graph,
     which is beneficial in minimizing anomalous results if some edge weights are
     extremely atypical of the rest of the graph.
 
@@ -62,6 +56,9 @@ def adjacency_spectral_embedding(
           multigraph you must first decide how you want to handle the weights of the
           edges between two nodes, whether summed, averaged, last-wins,
           maximum-weight-only, etc)
+    form : str (default="R-DAD")
+        Specifies the type of Laplacian normalization to use. Allowed values are:
+        { "DAD", "I-DAD", "R-DAD" }
     dimensions : int (default=100)
         Dimensions to use for the svd solver.
         For undirected graphs, if ``elbow_cut==None``, you will receive an embedding
@@ -98,6 +95,10 @@ def adjacency_spectral_embedding(
         Used to seed the PRNG used in the ``randomized`` svd solver algorithm.
     weight_attribute : str (default="weight")
         The edge dictionary key that contains the weight of the edge.
+    regularizer : Optional[numbers.Real] (default=None)
+        Only used when form="R-DAD". Must be None or nonnegative.
+        Constant to be added to the diagonal of degree matrix. If None, average
+        node degree is added. If int or float, must be >= 0.
 
     Returns
     -------
@@ -111,8 +112,9 @@ def adjacency_spectral_embedding(
     See Also
     --------
     graspologic.pipeline.embed.Embeddings
-    graspologic.embed.AdjacencySpectralEmbed
+    graspologic.embed.LaplacianSpectralEmbed
     graspologic.embed.select_svd
+    graspologic.utils.to_laplacian
 
     Notes
     -----
@@ -121,7 +123,7 @@ def adjacency_spectral_embedding(
     .. math:: A = U \Sigma V^T
 
     is used to find an orthonormal basis for a matrix, which in our case is the
-    adjacency matrix of the graph. These basis vectors (in the matrices U or V) are
+    Laplacian matrix of the graph. These basis vectors (in the matrices U or V) are
     ordered according to the amount of variance they explain in the original matrix.
     By selecting a subset of these basis vectors (through our choice of dimensionality
     reduction) we can find a lower dimensional space in which to represent the graph.
@@ -130,17 +132,24 @@ def adjacency_spectral_embedding(
     ----------
     .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-       Journal of the American Statistical Association, Vol. 107(499), 2012
+       Journal of the American Statistical Association, Vol. 107(499), 2012.
 
-    .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
-        Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
-        of Machine Learning Research, 80, 2975-2984.
+    .. [2] Von Luxburg, Ulrike. "A tutorial on spectral clustering," Statistics
+        and computing, Vol. 17(4), pp. 395-416, 2007.
 
-    .. [3] Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
+    .. [3] Rohe, Karl, Sourav Chatterjee, and Bin Yu. "Spectral clustering and
+        the high-dimensional stochastic blockmodel," The Annals of Statistics,
+        Vol. 39(4), pp. 1878-1915, 2011.
+
+    .. [4] Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
         scree plot via the use of profile likelihood. Computational Statistics & Data
         Analysis, 51(2), pp.918-930.
 
     """
+    check_argument(
+        form in __FORMS, f"form must be one of the values in {','.join(__FORMS)}"
+    )
+
     check_argument(dimensions >= 1, "dimensions must be positive")
 
     check_argument(elbow_cut is None or elbow_cut >= 1, "elbow_cut must be positive")
@@ -155,6 +164,10 @@ def adjacency_spectral_embedding(
     check_argument(
         svd_seed is None or 0 <= svd_seed <= 2 ** 32 - 1,
         "svd_seed must be a nonnegative, 32-bit integer",
+    )
+
+    check_argument(
+        regularizer is None or regularizer >= 0, "regularizer must be nonnegative"
     )
 
     check_argument(
@@ -189,18 +202,16 @@ def adjacency_spectral_embedding(
 
     ranked_graph = pass_to_ranks(graph_sans_loops)
 
-    augmented_graph = augment_diagonal(ranked_graph)
-
-    embedder = AdjacencySpectralEmbed(
+    embedder = LaplacianSpectralEmbed(
+        form=form,
         n_components=dimensions,
         n_elbows=None,  # in the short term, we do our own elbow finding
         algorithm=svd_solver_algorithm,
         n_iter=svd_solver_iterations,
         svd_seed=svd_seed,
         concat=False,
-        diag_aug=False,
     )
-    results = embedder.fit_transform(augmented_graph)
+    results = embedder.fit_transform(ranked_graph)
 
     if elbow_cut is None:
         if graph.is_directed():
