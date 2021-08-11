@@ -42,7 +42,7 @@ def laplacian_spectral_embedding(
     The laplacian spectral embedding process is similar to the adjacency spectral
     embedding process, with the key differentiator being that the LSE process looks
     further into the latent space when it captures changes, whereas the ASE process
-    is egocentric and focused on immediate differentiators in a node's core periphery.
+    is egocentric and focused on immediate differentiators in a node's periphery.
 
     All weights will be rescaled based on their relative rank in the graph,
     which is beneficial in minimizing anomalous results if some edge weights are
