@@ -138,7 +138,7 @@ class mug2vec(BaseEstimator):
         # Check these prior to PTR just in case
         self._check_inputs()
 
-        if pass_to_ranks is not None:
+        if self.pass_to_ranks is not None:
             graphs = [pass_to_ranks(g, self.pass_to_ranks) for g in graphs]
 
         omni = OmnibusEmbed(
