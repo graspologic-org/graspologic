@@ -157,3 +157,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
             digraph, dimensions=dimensions, elbow_cut=2, svd_seed=1234
         )
         self.assertTrue(results.embeddings().shape[1] < dimensions * 2)
+        results = laplacian_spectral_embedding(
+            digraph, dimensions=dimensions, elbow_cut=None, svd_seed=1234
+        )
+        self.assertTrue(results.embeddings().shape[1] == dimensions * 2)
