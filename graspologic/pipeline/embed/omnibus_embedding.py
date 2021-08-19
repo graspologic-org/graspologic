@@ -241,7 +241,6 @@ def _elbow_cut_if_needed(elbow_cut, is_directed, singular_values, embedding):
     if elbow_cut is None:
         if is_directed:
             embedding = np.concatenate(embedding, axis=1)
-            # embedding = np.concatenate([embedding[0], embedding[1]], axis=1)
     else:
         column_index = _index_of_elbow(singular_values, elbow_cut)
 
