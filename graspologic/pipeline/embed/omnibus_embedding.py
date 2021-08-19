@@ -112,15 +112,20 @@ def omnibus_embedding_pairwise(
 
       References
       ----------
-      .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
+      .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017,
+         November). A central limit theorem for an omnibus embedding of multiple random
+         dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International
+         Conference on (pp. 964-967). IEEE.
+
+      .. [2] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
          Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
          Journal of the American Statistical Association, Vol. 107(499), 2012
 
-      .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
+      .. [3] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
           Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
           of Machine Learning Research, 80, 2975-2984.
 
-      .. [3] Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
+      .. [4] Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
           scree plot via the use of profile likelihood. Computational Statistics & Data
           Analysis, 51(2), pp.918-930.
     """
