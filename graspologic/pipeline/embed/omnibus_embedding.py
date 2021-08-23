@@ -46,9 +46,9 @@ def omnibus_embedding_pairwise(
     which is beneficial in minimizing anomalous results if some edge weights are
     extremely atypical of the rest of the graph.
 
-      Parameters
-      ----------
-      graphs : List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]]
+    Parameters
+    ----------
+    graphs : List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]]
           A list of undirected or directed graphs. The graphs **must**:
 
           - be fully numerically weighted (every edge must have a real, numeric weight
@@ -57,7 +57,7 @@ def omnibus_embedding_pairwise(
             multigraph you must first decide how you want to handle the weights of the
             edges between two nodes, whether summed, averaged, last-wins,
             maximum-weight-only, etc)
-      dimensions : int (default=100)
+    dimensions : int (default=100)
           Dimensions to use for the svd solver.
           For undirected graphs, if ``elbow_cut==None``, you will receive an embedding
           that has ``nodes`` rows and ``dimensions`` columns.
@@ -66,13 +66,13 @@ def omnibus_embedding_pairwise(
           If ``elbow_cut`` is specified to be not ``None``, we will cut the embedding at
           ``elbow_cut`` elbow, but the provided ``dimensions`` will be used in the
           creation of the SVD.
-      elbow_cut : Optional[int] (default=None)
+    elbow_cut : Optional[int] (default=None)
           Using a process described by Zhu & Ghodsi in their paper "Automatic
           dimensionality selection from the scree plot via the use of profile likelihood",
           truncate the dimensionality of the return on the ``elbow_cut``-th elbow.
           By default this value is ``None`` but can be used to reduce the dimensionality
           of the returned tensors.
-      svd_solver_algorithm : str (default="randomized")
+    svd_solver_algorithm : str (default="randomized")
           allowed values: {'randomized', 'full', 'truncated'}
 
           SVD solver to use:
@@ -85,47 +85,47 @@ def omnibus_embedding_pairwise(
                   Does not support ``graph`` input of type scipy.sparse.csr_matrix
               - 'truncated'
                   Computes truncated svd using :func:`scipy.sparse.linalg.svds`
-      svd_solver_iterations : int (default=5)
+    svd_solver_iterations : int (default=5)
           Number of iterations for randomized SVD solver. Not used by 'full' or
           'truncated'. The default is larger than the default in randomized_svd
           to handle sparse matrices that may have large slowly decaying spectrum.
-      svd_seed : Optional[int] (default=None)
+    svd_seed : Optional[int] (default=None)
           Used to seed the PRNG used in the ``randomized`` svd solver algorithm.
-      weight_attribute : str (default="weight")
+    weight_attribute : str (default="weight")
           The edge dictionary key that contains the weight of the edge.
 
-      Returns
-      -------
-      List[Tuple[Embeddings, Embeddings]]
+    Returns
+    -------
+    List[Tuple[Embeddings, Embeddings]]
 
-      Raises
-      ------
-      beartype.roar.BeartypeCallHintPepParamException if parameters do not match type hints
-      ValueError if values are not within appropriate ranges or allowed values
+    Raises
+    ------
+    beartype.roar.BeartypeCallHintPepParamException if parameters do not match type hints
+    ValueError if values are not within appropriate ranges or allowed values
 
-      See Also
-      --------
-      graspologic.pipeline.embed.Embeddings
-      graspologic.embed.OmnibusEmbed
-      graspologic.embed.AdjacencySpectralEmbed
-      graspologic.embed.select_svd
+    See Also
+    --------
+    graspologic.pipeline.embed.Embeddings
+    graspologic.embed.OmnibusEmbed
+    graspologic.embed.AdjacencySpectralEmbed
+    graspologic.embed.select_svd
 
-      References
-      ----------
-      .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017,
+    References
+    ----------
+    .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017,
          November). A central limit theorem for an omnibus embedding of multiple random
          dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International
          Conference on (pp. 964-967). IEEE.
 
-      .. [2] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
+    .. [2] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
          Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
          Journal of the American Statistical Association, Vol. 107(499), 2012
 
-      .. [3] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
+    .. [3] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
           Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
           of Machine Learning Research, 80, 2975-2984.
 
-      .. [4] Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
+    .. [4] Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
           scree plot via the use of profile likelihood. Computational Statistics & Data
           Analysis, 51(2), pp.918-930.
     """
