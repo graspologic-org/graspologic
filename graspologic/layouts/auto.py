@@ -11,182 +11,299 @@ import numpy as np
 import umap
 from sklearn.manifold import TSNE
 
-from ..embed import node2vec_embed
+from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed, node2vec_embed
 from ..partition import leiden
 from ..preconditions import is_real_weighted
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
-from ..utils import largest_connected_component
+from ..utils import is_fully_connected, largest_connected_component
 from .classes import NodePosition
 from .nooverlap import remove_overlaps
 
 logger = logging.getLogger(__name__)
 
 
-# automatically generates a layout by running node2vec over the graph and down
-# projecting the embedding into 2d space via umap or tsne
-def layout_tsne(
+def preprocess_for_layout(
     graph: nx.Graph,
-    perplexity: int,
-    n_iter: int,
     max_edges: int = 10000000,
-    weight_attribute: str = "weight",
-    random_seed: Optional[int] = None,
-    adjust_overlaps: bool = True,
-) -> Tuple[nx.Graph, List[NodePosition]]:
+) -> nx.Graph:
     """
-    Automatic graph layout generation by creating a generalized node2vec embedding,
-    then using t-SNE for dimensionality reduction to 2d space.
+    Automatically attempts to prune each graph to ``max_edges`` by removing the
+    lowest weight edges. This pruning is approximate and will leave your graph with
+    at most ``max_edges``, but is not guaranteed to be precisely ``max_edges``.
 
-    By default, this function automatically attempts to prune each graph to a maximum
-    of 10,000,000 edges by removing the lowest weight edges. This pruning is approximate
-    and will leave your graph with at most ``max_edges``, but is not guaranteed to be
-    precisely ``max_edges``.
-
-    In addition to pruning edges by weight, this function also only operates over the
-    largest connected component in the graph.
-
-    After dimensionality reduction, sizes are generated for each node based upon
-    their degree centrality, and these sizes and positions are further refined by an
-    overlap removal phase. Lastly, a global partitioning algorithm
-    (:func:`graspologic.partition.leiden`) is executed for the largest connected
-    component and the partition ID is included with each node position.
+    In addition to pruning edges by weight, this function also finds the largest
+    connected component in the graph.
 
     Parameters
     ----------
     graph : :class:`networkx.Graph`
-        The graph to generate a layout for. This graph may have edges pruned if the
-        count is too high and only the largest connected component will be used to
-        automatically generate a layout.
-    perplexity : int
-        The perplexity is related to the number of nearest neighbors that is used in
+        The graph to be processed. This graph may have edges pruned if the count is
+        too high and the largest connected component will be found.
+    max_edges : int (default=10000000)
+        The maximum number of edges to use when generating the embedding. The edges with
+        the lowest weights will be pruned until at most ``max_edges`` exist. Warning:
+        this pruning is approximate and more edges than are necessary may be pruned.
+        Running in 32 bit environment you will most likely need to reduce this number
+        or you will run out of memory.
+
+    Returns
+    -------
+    nx.Graph
+        The largest connected component of the graph after pruning edges if applicable.
+    """
+    graph = _approximate_prune(graph, max_edges)
+    graph = largest_connected_component(graph)
+    return graph
+
+
+def embed_for_layout(
+    graph: nx.Graph,
+    algorithm: str = "n2v",
+    validated: bool = False,
+    dimensions: int = 128,
+    num_walks: int = 10,
+    window_size: int = 2,
+    iterations: int = 3,
+    n_components: Optional[int] = None,
+    svd_algorithm: str = "randomized",
+    random_seed: Optional[int] = None,
+    embed_kwds={},
+) -> Tuple[np.array, np.array]:
+    """
+    Generates a node2vec embedding, an adjacency spectral embedding, or a laplacian
+    spectral embedding from a given graph.
+
+    Parameters
+    ----------
+    graph : :class:`networkx.Graph`
+        The graph for which the embedding is generated. Only the largest connected component
+        will be used to calculate the embedding.
+    algorithm: str (default="n2v")
+        The embedding algorithm to be used.
+            - 'n2v'
+                Generates embedding using :func:`~graspologic.embed.node2vec_embed`
+            - 'ase'
+                Generates embedding using :class:`~graspologic.embed.AdjacencySpectralEmbed`
+            - 'lse'
+                Generates embedding using :class:`~graspologic.embed.LaplacianSpectralEmbed`
+    validated: bool (default=False)
+        Whether the graph has been checked if it is fully connected in the undirected case
+        or weakly connected in the directed case. If False and the input is not connected,
+        the function will use its largest connected component to generate an embedding.
+    dimensions: int (default=128)
+        Applicable to node2vec embedding. Dimensionality of the word vectors.
+    num_walks: int (default=10)
+        Applicable to node2vec embedding. Number of walks per source.
+    window_size: int (default=2)
+        Applicable to node2vec embedding. Maximum distance between the current and predicted
+        word within a sentence.
+    iterations: int (default=3)
+        Applicable to node2vec embedding. Number of epochs in stochastic gradient descent (SGD)
+    n_components: int, optional (default=None)
+        Applicable to adjacency spectral embedding or laplacian spectral embedding. Desired
+        dimensionality of output data. If the SVD solver of the embedding algorithm is
+        "full", ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components``
+        must be ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
+        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
+    svd_algorithm: str (default="randomized")
+        Applicable to adjacency or laplacian spectral embedding. SVD solver to use:
+            - 'randomized'
+                Computes randomized svd using
+                :func:`sklearn.utils.extmath.randomized_svd`
+            - 'full'
+                Computes full svd using :func:`scipy.linalg.svd`
+                Does not support ``graph`` input of type scipy.sparse.csr_matrix
+            - 'truncated'
+                Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+    random_seed: int, optional (default=None)
+        Seed to be used for reproducible results. Default is None and will produce a
+        random output. For adjacency or laplacian spectral embedding, only applicable
+        if ``svd_algorithm="randomized``. Specifying a random state will provide
+        consistent results between runs. In addition the environment variable
+        ``PYTHONHASHSEED`` must be set to control hash randomization.
+    embed_kwds: optional keywords
+        See :func:`~graspologic.embed.node2vec_embed`,
+        :class:`~graspologic.embed.AdjacencySpectralEmbed`, and
+        :class:`~graspologic.embed.LaplacianSpectralEmbed` for other optional keywords.
+
+    Returns
+    -------
+    Tuple[np.ndarray, np.ndarray]
+        A tuple containing a matrix, with each row index corresponding to the embedding
+        for each node, and a vector containing the corresponding vertex labels for each
+        row in the matrix. The matrix and vector are positionally correlated.
+
+    References
+    ----------
+    .. [1] Aditya Grover and Jure Leskovec  "node2vec: Scalable Feature Learning for Networks."
+        Knowledge Discovery and Data Mining, 2016.
+    .. [2] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
+       Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
+       Journal of the American Statistical Association, Vol. 107(499), 2012
+    .. [3] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
+        Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
+        of Machine Learning Research, 80, 2975-2984.
+    .. [4] Von Luxburg, Ulrike. "A tutorial on spectral clustering," Statistics
+        and computing, Vol. 17(4), pp. 395-416, 2007.
+    .. [5] Rohe, Karl, Sourav Chatterjee, and Bin Yu. "Spectral clustering and
+        the high-dimensional stochastic blockmodel," The Annals of Statistics,
+        Vol. 39(4), pp. 1878-1915, 2011.
+    """
+    if validated is False:
+        if is_fully_connected(graph) is False:
+            graph = preprocess_for_layout(graph)
+            msg = (
+                "Input graph is not fully connected. Largest connected component of graph will be used to generate "
+                "an embedding."
+            )
+            logger.warning(msg)
+
+    start = time.time()
+    if algorithm == "n2v":
+        valid_n2v_kwds = [
+            "num_walks",
+            "walk_length",
+            "return_hyperparameter",
+            "inout_hyperparameter",
+            "dimensions",
+            "window_size",
+            "iterations",
+            "workers",
+            "interpolate_walk_lengths_by_node_degree",
+        ]
+        if any(kwd not in valid_n2v_kwds for kwd in embed_kwds):
+            invalid_args = ", ".join(
+                [kwd for kwd in embed_kwds if kwd not in valid_n2v_kwds]
+            )
+            raise ValueError(f"Received invalid argument(s): {invalid_args}")
+        tensors, labels = node2vec_embed(
+            graph=graph,
+            dimensions=dimensions,
+            num_walks=num_walks,
+            window_size=window_size,
+            iterations=iterations,
+            random_seed=random_seed,
+            **embed_kwds,
+        )
+    else:
+        if algorithm == "ase":
+            valid_ase_kwds = [
+                "n_elbows",
+                "algorithm",
+                "n_iter",
+                "check_lcc",
+                "diag_aug",
+                "concat",
+                "svd_seed",
+            ]
+            if any(kwd not in valid_ase_kwds for kwd in embed_kwds):
+                invalid_args = ", ".join(
+                    [kwd for kwd in embed_kwds if kwd not in valid_ase_kwds]
+                )
+                raise ValueError(f"Received invalid argument(s): {invalid_args}")
+            embedder = AdjacencySpectralEmbed(
+                n_components=n_components,
+                algorithm=svd_algorithm,
+                svd_seed=random_seed,
+                concat=True,
+                **embed_kwds,
+            )
+        elif algorithm == "lse":
+            valid_lse_kwds = [
+                "form",
+                "n_elbows",
+                "algorithm",
+                "n_iter",
+                "check_lcc",
+                "regularizer",
+                "concat",
+            ]
+            if any(kwd not in valid_lse_kwds for kwd in embed_kwds):
+                invalid_args = ", ".join(
+                    [kwd for kwd in embed_kwds if kwd not in valid_lse_kwds]
+                )
+                raise ValueError(f"Received invalid argument(s): {invalid_args}")
+            embedder = LaplacianSpectralEmbed(
+                n_components=n_components,
+                algorithm=svd_algorithm,
+                svd_seed=random_seed,
+                concat=True,
+                **embed_kwds,
+            )
+        else:
+            raise ValueError(
+                f"Algorithm must be 'n2v', 'ase', or 'lse', not {algorithm}"
+            )
+        labels = graph.nodes()
+        tensors = embedder.fit_transform(graph)
+    embedding_time = time.time() - start
+    logger.info(f"embedding completed in {embedding_time} seconds")
+    return tensors, labels
+
+
+def reduce_dim_for_layout(
+    embedding: np.ndarray,
+    algorithm: str = "umap",
+    metric: str = "euclidean",
+    min_dist: float = 0.75,
+    n_neighbors: int = 25,
+    perplexity: int = 30,
+    n_iter: int = 1000,
+    random_seed: Optional[int] = None,
+    reduce_kwds={},
+) -> np.ndarray:
+    """
+    Reduces the dimensionality of a given embedding to 2d space using UMAP or t-SNE.
+
+    Parameters
+    ----------
+    embedding: np.ndarray
+        The embedding to be reduced.
+    algorithm: str (default="umap")
+        The dimensionality reduction algorithm.
+            - 'umap'
+                Dimensionality reduction using UMAP.
+            - 'tsne'
+                Dimensionality reduction using t-SNE.
+    metric: str (default="euclidean")
+        Controls how distance is computed in the space of input data. See
+        :class:`~umap.UMAP` or :class:`~sklearn.manifold.TSNE` for additional
+        supported arguments.
+    min_dist : float (default=0.75)
+        Applicable to UMAP. The effective minimum distance between embedded points.
+        Smaller values will result in a more clustered/clumped embedding where
+        nearby points on the manifold are drawn closer together, while larger values
+        will result on a more even dispersal of points. The value should be set
+        relative to the ``spread`` value, which determines the scale at which
+        embedded points will be spread out.
+    n_neighbors : int (default=25)
+        Applicable to UMAP. The size of local neighborhood (in terms of number of
+        neighboring sample points) used for manifold approximation. Larger values
+        result in more global views of the manifold, while smaller values result in
+        more local data being preserved.
+    perplexity: int (default=30)
+        Applicable to t-SNE. Related to the number of nearest neighbors that is used in
         other manifold learning algorithms. Larger datasets usually require a larger
         perplexity. Consider selecting a value between 4 and 100. Different values can
         result in significantly different results.
-    n_iter : int
-        Maximum number of iterations for the optimization. We have found in practice
-        that larger graphs require more iterations. We hope to eventually have more
-        guidance on the number of iterations based on the size of the graph and the
-        density of the edge connections.
-    max_edges : int
-        The maximum number of edges to use when generating the embedding.  Default is
-        ``10000000``. The edges with the lowest weights will be pruned until at most
-        ``max_edges`` exist. Warning: this pruning is approximate and more edges than
-        are necessary may be pruned. Running in 32 bit environment you will most
-        likely need to reduce this number or you will out of memory.
-    weight_attribute: str
-        The edge dictionary data attribute that holds the weight. Default is ``weight``.
-        Note that the graph must be fully weighted or unweighted.
-    random_seed : int
+    n_iter : int (default=1000)
+        Applicable to t-SNE. Maximum number of iterations for the optimization. We
+        have found in practice that larger graphs require more iterations. We hope
+        to eventually have more guidance on the number of iterations based on the
+        size of the graph and the density of the edge connections.
+    random_seed : int, optional (default=None)
         Seed to be used for reproducible results. Default is None and will produce
         a new random state. Specifying a random state will provide consistent results
         between runs. In addition the environment variable ``PYTHONHASHSEED`` must be
         set to control hash randomization.
-    adjust_overlaps : bool
-        Make room for overlapping nodes while maintaining some semblance of the
-        2d spatial characteristics of each node. Default is ``True``
+    reduce_kwds: optional keywords
+        See :class:`~umap.UMAP` or :class:`~sklearn.manifold.TSNE` for a description
+        of optional keywords.
 
     Returns
     -------
-    Tuple[nx.Graph, List[NodePosition]]
-        The largest connected component and a list of NodePositions for each node in
-        the largest connected component. The NodePosition object contains:
-        - node_id
-        - x coordinate
-        - y coordinate
-        - size
-        - community
-
-    References
-    ----------
-    .. [1] van der Maaten, L.J.P.; Hinton, G.E. Visualizing High-Dimensional Data Using
-        t-SNE. Journal of Machine Learning Research 9:2579-2605, 2008.
-    """
-    lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges, random_seed)
-    points = TSNE(
-        perplexity=perplexity, n_iter=n_iter, random_state=random_seed
-    ).fit_transform(tensors)
-    positions = _node_positions_from(
-        lcc_graph,
-        labels,
-        points,
-        random_seed=random_seed,
-        adjust_overlaps=adjust_overlaps,
-        weight_attribute=weight_attribute,
-    )
-    return lcc_graph, positions
-
-
-def layout_umap(
-    graph: nx.Graph,
-    min_dist: float = 0.75,
-    n_neighbors: int = 25,
-    max_edges: int = 10000000,
-    weight_attribute: str = "weight",
-    random_seed: Optional[int] = None,
-    adjust_overlaps: bool = True,
-) -> Tuple[nx.Graph, List[NodePosition]]:
-    """
-    Automatic graph layout generation by creating a generalized node2vec embedding,
-    then using UMAP for dimensionality reduction to 2d space.
-
-    By default, this function automatically attempts to prune each graph to a maximum
-    of 10,000,000 edges by removing the lowest weight edges. This pruning is approximate
-    and will leave your graph with at most ``max_edges``, but is not guaranteed to be
-    precisely ``max_edges``.
-
-    In addition to pruning edges by weight, this function also only operates over the
-    largest connected component in the graph.
-
-    After dimensionality reduction, sizes are generated for each node based upon
-    their degree centrality, and these sizes and positions are further refined by an
-    overlap removal phase. Lastly, a global partitioning algorithm
-    (:func:`graspologic.partition.leiden`) is executed for the largest connected
-    component and the partition ID is included with each node position.
-
-    Parameters
-    ----------
-    graph : :class:`networkx.Graph`
-        The graph to generate a layout for. This graph may have edges pruned if the
-        count is too high and only the largest connected component will be used to
-        automatically generate a layout.
-    min_dist : float
-        The effective minimum distance between embedded points. Default is ``0.75``.
-        Smaller values will result in a more clustered/clumped embedding where nearby
-        points on the manifold are drawn closer together, while larger values will
-        result on a more even dispersal of points. The value should be set relative to
-        the ``spread`` value, which determines the scale at which embedded points will
-        be spread out.
-    n_neighbors : int
-        The size of local neighborhood (in terms of number of neighboring sample points)
-        used for manifold approximation. Default is ``25``. Larger values result in
-        more global views of the manifold, while smaller values result in more local
-        data being preserved.
-    max_edges : int
-        The maximum number of edges to use when generating the embedding.  Default is
-        ``10000000``. The edges with the lowest weights will be pruned until at most
-        ``max_edges`` exist. Warning: this pruning is approximate and more edges than
-        are necessary may be pruned. Running in 32 bit environment you will most
-        likely need to reduce this number or you will out of memory.
-    weight_attribute: str
-        The edge dictionary data attribute that holds the weight. Default is ``weight``.
-        Note that the graph must be fully weighted or unweighted.
-    random_seed : int
-        Seed to be used for reproducible results. Default is None and will produce
-        random results.
-    adjust_overlaps : bool
-        Make room for overlapping nodes while maintaining some semblance of the
-        2d spatial characteristics of each node. Default is ``True``
-
-    Returns
-    -------
-    Tuple[nx.Graph, List[NodePosition]]
-        The largest connected component and a list of NodePositions for each node in
-        the largest connected component. The NodePosition object contains:
-        - node_id
-        - x coordinate
-        - y coordinate
-        - size
-        - community
+    np.ndarray
+        An array containing the input data reduced to 2d space.
 
     References
     ----------
@@ -195,21 +312,238 @@ def layout_umap(
     .. [2] Böhm, Jan Niklas; Berens, Philipp; Kobak, Dmitry. A Unifying Perspective
         on Neighbor Embeddings along the Attraction-Repulsion Spectrum. ArXiv e-prints
         2007.08902v1, 17 Jul 2020.
+    .. [3] van der Maaten, L.J.P.; Hinton, G.E. Visualizing High-Dimensional Data Using
+        t-SNE. Journal of Machine Learning Research 9:2579-2605, 2008.
     """
+    if algorithm == "umap":
+        valid_umap_kwds = [
+            "a",
+            "angular_rp_forest",
+            "b",
+            "force_approximation_algorithm",
+            "init",
+            "learning_rate",
+            "local_connectivity",
+            "low_memory",
+            "metric",
+            "metric_kwds",
+            "min_dist",
+            "n_components",
+            "n_epochs",
+            "n_neighbors",
+            "negative_sample_rate",
+            "output_metric",
+            "output_metric_kwds",
+            "random_state",
+            "repulsion_strength",
+            "set_op_mix_ratio",
+            "spread",
+            "target_metric",
+            "target_metric_kwds",
+            "target_n_neighbors",
+            "target_weight",
+            "transform_queue_size",
+            "transform_seed",
+            "unique",
+            "verbose",
+        ]
+        if any(kwd not in valid_umap_kwds for kwd in reduce_kwds):
+            invalid_args = ", ".join(
+                [kwd for kwd in reduce_kwds if kwd not in valid_umap_kwds]
+            )
+            raise ValueError(f"Received invalid argument(s): {invalid_args}")
+        points_2d = umap.UMAP(
+            n_components=2,
+            metric=metric,
+            min_dist=min_dist,
+            n_neighbors=n_neighbors,
+            random_state=random_seed,
+            **reduce_kwds,
+        ).fit_transform(embedding)
+    elif algorithm == "tsne":
+        valid_tsne_kwds = [
+            "n_components",
+            "perplexity",
+            "early_exaggeration",
+            "learning_rate",
+            "n_iter",
+            "n_iter_without_progress",
+            "min_grad_norm",
+            "metric",
+            "init",
+            "verbose",
+            "random_state",
+            "method",
+            "angle",
+            "n_jobs",
+            "square_distances",
+        ]
+        if any(kwd not in valid_tsne_kwds for kwd in reduce_kwds):
+            invalid_args = ", ".join(
+                [kwd for kwd in reduce_kwds if kwd not in valid_tsne_kwds]
+            )
+            raise ValueError(f"Received invalid argument(s): {invalid_args}")
+        points_2d = TSNE(
+            n_components=2,
+            metric=metric,
+            perplexity=perplexity,
+            n_iter=n_iter,
+            random_state=random_seed,
+            **reduce_kwds,
+        ).fit_transform(embedding)
+    else:
+        raise ValueError(f'Algorithm must be "umap" or "tsne", not {algorithm}.')
+    return points_2d
 
-    lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges, random_seed)
-    points = umap.UMAP(
-        min_dist=min_dist, n_neighbors=n_neighbors, random_state=random_seed
-    ).fit_transform(tensors)
-    positions = _node_positions_from(
-        lcc_graph,
-        labels,
-        points,
-        random_seed=random_seed,
-        adjust_overlaps=adjust_overlaps,
-        weight_attribute=weight_attribute,
-    )
-    return lcc_graph, positions
+
+def get_partitions(
+    graph: nx.Graph,
+    weight_attribute: str = "weight",
+    validated: bool = False,
+    random_seed: Optional[int] = None,
+) -> Dict[str, int]:
+    """
+    Executes a global partitioning algorithm (:func:`graspologic.partition.leiden`)
+    on the graph and generates a partition ID associated with each node position.
+
+    Parameters
+    ----------
+    graph : :class:`networkx.Graph`
+        The graph for which the partitions are generated. The algorithm will run
+        only on the largest connected component. If the graph is directed, the
+        function will automatically convert it to an undirected graph by averaging
+        the weight of the edges.
+    weight_attribute: str (default="weight")
+        The edge dictionary data attribute that holds the weight. The graph must
+        be fully weighted or fully unweighted. If the edges are partially weighted,
+        the function will raise an error.
+    validated: bool (default=False)
+        Whether the graph has been checked if it is fully connected in the undirected
+        case or weakly connected in the directed case. If False and the input is not
+        connected, the function will throw a warning and use its largest connected
+        component to generate partitions.
+    random_seed : int, optional (default=None)
+        Seed to be used for reproducible results. Default is None and will produce
+        a new random state. Specifying a random state will provide consistent results
+        between runs. In addition the environment variable ``PYTHONHASHSEED`` must be
+        set to control hash randomization.
+
+    Returns
+    -------
+    Dict[str, int]
+        A dictionary containing the nodes and their partition IDs generated by leiden.
+        The keys in the dictionary are the string representations of the nodes.
+    """
+    if validated is False:
+        if is_fully_connected(graph) is False:
+            graph = preprocess_for_layout(graph)
+            msg = (
+                "Input graph is not fully connected. Largest connected component "
+                "of graph will be used to generate partitions."
+            )
+            logger.warning(msg)
+
+    if graph.is_directed():
+        temp_graph = _to_undirected(graph, weight_attribute)
+        msg = "Directed graph converted to undirected graph for community detection."
+        logger.warning(msg)
+        partitions = leiden(temp_graph, random_seed=random_seed)
+    else:
+        partitions = leiden(graph, random_seed=random_seed)
+    return partitions
+
+
+def get_node_positions(
+    graph: nx.Graph,
+    points_2d: np.ndarray,
+    labels: Optional[np.ndarray] = None,
+    weight_attribute: str = "weight",
+    validated: bool = False,
+    random_seed: Optional[int] = None,
+    adjust_overlaps: bool = True,
+) -> List[NodePosition]:
+    """
+    Calculates the position and size of each node based upon their degree centrality.
+    These positions and sizes can be further refined by an optional overlap removal
+    phase.
+
+    Parameters
+    ----------
+    graph : :class:`networkx.Graph`
+        The graph for which the node positions are calculated. The function will
+        run only on the largest connected component. If the graph is directed, it
+        will automatically be converted to an undirected graph by averaging the
+        weight of the edges.
+    points_2d: np.ndarray
+        The input data reduced to 2d space. The number of nodes in the graph and
+        the array must be the same.
+    labels: np.ndarray, optional (default=None)
+        An array containing the nodes to calculate positions for. If None, the
+        function will find positions and sizes of all nodes of the graph by
+        default. If not None, the function will only find positions and sizes of
+        the nodes specified by the input.
+    weight_attribute: str (default="weight")
+        The edge dictionary data attribute that holds the weight. The graph must
+        be fully weighted or fully unweighted. If the edges are partially weighted,
+        the function will raise an error.
+    validated: bool (default=False)
+        Whether the graph has been checked if it is fully connected in the undirected
+        case or weakly connected in the directed case. If False and the input is not
+        connected, the function will throw a warning and use its largest connected
+        component to generate partitions.
+    random_seed : int, optional (default=None)
+        Seed to be used for reproducible results. Default is None and will produce
+        a new random state. Specifying a random state will provide consistent results
+        between runs. In addition the environment variable ``PYTHONHASHSEED`` must be
+        set to control hash randomization.
+    adjust_overlaps : bool (default=True)
+        Make room for overlapping nodes while maintaining some semblance of the 2d
+        spatial characteristics of each node.
+
+    Returns
+    -------
+    List[NodePosition]
+        A list of NodePositions for each node. The NodePosition object contains:
+            - node_id
+            - x coordinate
+            - y coordinate
+            - size
+            - community
+    """
+    if validated is False:
+        if is_fully_connected(graph) is False:
+            graph = preprocess_for_layout(graph)
+            msg = (
+                "Input graph is not fully connected. Only the largest connected "
+                "component will be used."
+            )
+            logger.warning(msg)
+
+    if np.shape(graph)[0] != np.shape(points_2d)[0]:
+        msg = "Input graph and input data points must have same number of nodes."
+        raise ValueError(msg)
+
+    if labels is None:
+        labels = graph.nodes()
+
+    degree = graph.degree()
+    sizes = _compute_sizes(degree)
+    covered_area = _covered_size(sizes)
+    scaled_points = _scale_points(points_2d, covered_area)
+    partitions = get_partitions(graph, weight_attribute, random_seed)
+    positions = [
+        NodePosition(
+            node_id=key,
+            x=scaled_points[index][0],
+            y=scaled_points[index][1],
+            size=sizes[key],
+            community=partitions[key],
+        )
+        for index, key in enumerate(labels)
+    ]
+    if adjust_overlaps is True:
+        positions = remove_overlaps(positions)
+    return positions
 
 
 def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
@@ -234,28 +568,6 @@ def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
     return graph
 
 
-def _node2vec_for_layout(
-    graph: nx.Graph,
-    max_edges: int = 10000000,
-    random_seed: Optional[int] = None,
-) -> Tuple[nx.Graph, np.ndarray, np.ndarray]:
-    graph = _approximate_prune(graph, max_edges)
-    graph = largest_connected_component(graph)
-
-    start = time.time()
-    tensors, labels = node2vec_embed(
-        graph=graph,
-        dimensions=128,
-        num_walks=10,
-        window_size=2,
-        iterations=3,
-        random_seed=random_seed,
-    )
-    embedding_time = time.time() - start
-    logger.info(f"embedding completed in {embedding_time} seconds")
-    return graph, tensors, labels
-
-
 def _to_undirected(graph: nx.DiGraph, weight_attribute: str = "weight") -> nx.Graph:
     sym_g = nx.Graph()
     weighted = is_real_weighted(graph, weight_attribute=weight_attribute)
@@ -276,41 +588,6 @@ def _to_undirected(graph: nx.DiGraph, weight_attribute: str = "weight") -> nx.Gr
             msg = "Graph must be fully weighted or unweighted"
             raise ValueError(msg)
     return sym_g
-
-
-def _node_positions_from(
-    graph: nx.Graph,
-    labels: np.ndarray,
-    down_projection_2d: np.ndarray,
-    weight_attribute: str = "weight",
-    random_seed: Optional[int] = None,
-    adjust_overlaps: bool = True,
-) -> List[NodePosition]:
-    degree = graph.degree()
-    sizes = _compute_sizes(degree)
-    covered_area = _covered_size(sizes)
-    scaled_points = _scale_points(down_projection_2d, covered_area)
-    if graph.is_directed():
-        temp_graph = _to_undirected(graph, weight_attribute=weight_attribute)
-        logger.warning(
-            "Directed graph converted to undirected graph for community detection"
-        )
-        partitions = leiden(temp_graph, random_seed=random_seed)
-    else:
-        partitions = leiden(graph, random_seed=random_seed)
-    positions = [
-        NodePosition(
-            node_id=key,
-            x=scaled_points[index][0],
-            y=scaled_points[index][1],
-            size=sizes[key],
-            community=partitions[key],
-        )
-        for index, key in enumerate(labels)
-    ]
-    if adjust_overlaps is True:
-        positions = remove_overlaps(positions)
-    return positions
 
 
 def _find_min_max_degree(
