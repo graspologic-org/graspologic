@@ -1,11 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import numpy as np
-
-from ..utils import symmetrize, cartesian_product
-from sklearn.utils import check_array, check_scalar
 import warnings
+
+import numpy as np
+from sklearn.utils import check_array, check_scalar
+
+from ..utils import cartesian_product, symmetrize
 
 
 def _n_to_labels(n):

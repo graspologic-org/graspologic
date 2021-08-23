@@ -5,9 +5,9 @@ import logging
 import time
 from typing import List
 
+from .. import NodePosition
 from ._node import _Node
 from ._quad_tree import _QuadTree
-from .. import NodePosition
 
 logger = logging.getLogger(__name__)
 

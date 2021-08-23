@@ -1,88 +1,90 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import pytest
+import unittest
+
 import numpy as np
+
 from graspologic.nominate import VNviaSGM
 from graspologic.simulations import er_np
 
 np.random.seed(1)
 
 
-class TestVNviaSGM:
+class TestVNviaSGM(unittest.TestCase):
     def test_VNviaSGM_inputs(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM(order_voi_subgraph=-1)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM(order_voi_subgraph=1.5)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM(order_seeds_subgraph=-1)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM(order_seeds_subgraph=1.5)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM(n_init=-1)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM(n_init=1.5)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM(max_nominations=0)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(3, 4),
                 np.random.randn(4, 4),
                 0,
                 [np.arange(2), np.arange(2)],
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(3, 4),
                 0,
                 [np.arange(2), np.arange(2)],
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
                 0,
                 [np.arange(2), 1],
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
                 0,
                 np.random.randn(3, 3),
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
                 0,
                 [np.arange(2), np.arange(3)],
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
                 0,
                 [np.arange(5), np.arange(5)],
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
                 0,
                 [[], []],
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
                 0,
                 [[1, 1], [1, 2]],
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             VNviaSGM().fit(
                 np.random.randn(4, 4),
                 np.random.randn(4, 4),
@@ -108,4 +110,4 @@ class TestVNviaSGM:
             g1, g2, voi, [kklst[0:nseeds, 0], kklst[0:nseeds, 1]]
         )
 
-        assert nomlst[0][0] == kklst[np.where(kklst[:, 0] == voi)[0][0], 1]
+        self.assertEqual(nomlst[0][0], kklst[np.where(kklst[:, 0] == voi)[0][0], 1])

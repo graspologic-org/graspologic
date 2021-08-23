@@ -151,6 +151,8 @@ def import_edgelist(
 
     # Compute union of all vertices
     vertices = np.sort(reduce(np.union1d, [G.nodes for G in graphs]))
+    for g in graphs:
+        g.add_nodes_from(vertices)
     out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
 
     # only return adjacency matrix if input is only 1 graph
@@ -212,7 +214,7 @@ def is_unweighted(
         # brute force.  if anyone has a better way, please PR
         rows, columns = graph.nonzero()
         for i in range(0, len(rows)):
-            if graph[rows[i], columns[i]] != 1 or graph[rows[i], columns[i]] != 0:
+            if graph[rows[i], columns[i]] != 1 and graph[rows[i], columns[i]] != 0:
                 return False
         return True
     elif isinstance(graph, nx.Graph):

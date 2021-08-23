@@ -1,11 +1,14 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional
+
 import numpy as np
 import scipy
 import sklearn
-from scipy.stats import norm
 from scipy.sparse import isspmatrix_csr
+from scipy.stats import norm
+
 from graspologic.utils import is_almost_symmetric
 
 
@@ -171,7 +174,14 @@ def select_dimension(
         return elbows, values
 
 
-def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
+def select_svd(
+    X,
+    n_components=None,
+    n_elbows=2,
+    algorithm="randomized",
+    n_iter=5,
+    svd_seed: Optional[int] = None,
+):
     r"""
     Dimensionality reduction using SVD.
 
@@ -214,6 +224,10 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         Number of iterations for randomized SVD solver. Not used by 'full' or
         'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
+
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
 
     Returns
     -------
@@ -285,7 +299,12 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         V = V[idx, :]
 
     elif algorithm == "randomized":
-        U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components, n_iter=n_iter)
+        # for some reason, randomized_svd defaults random_state to 0 if not provided
+        # which is weird because None is a valid starting point too
+        svd_seed = svd_seed if svd_seed is not None else 0
+        U, D, V = sklearn.utils.extmath.randomized_svd(
+            X, n_components, n_iter=n_iter, random_state=svd_seed
+        )
 
     else:
         raise ValueError(

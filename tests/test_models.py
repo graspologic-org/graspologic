@@ -1,25 +1,27 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import pytest
+import unittest
+
 import numpy as np
 from numpy.testing import assert_allclose
-from graspologic.models import (
-    EREstimator,
-    DCSBMEstimator,
-    SBMEstimator,
-    RDPGEstimator,
-    DCEREstimator,
-)
-from graspologic.simulations import er_np, sbm, sample_edges
-from graspologic.utils import cartesian_product, is_symmetric
-from sklearn.metrics import adjusted_rand_score
 from sklearn.exceptions import NotFittedError
+from sklearn.metrics import adjusted_rand_score
+
+from graspologic.models import (
+    DCEREstimator,
+    DCSBMEstimator,
+    EREstimator,
+    RDPGEstimator,
+    SBMEstimator,
+)
+from graspologic.simulations import er_np, sample_edges, sbm
+from graspologic.utils import cartesian_product, is_symmetric
 
 
-class TestER:
+class TestER(unittest.TestCase):
     @classmethod
-    def setup_class(cls):
+    def setUpClass(cls):
         np.random.seed(8888)
         cls.graph = er_np(1000, 0.5)
         cls.p = 0.5
@@ -31,26 +33,26 @@ class TestER:
     def test_ER_inputs(self):
         ere = EREstimator()
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             EREstimator(directed="hey")
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             EREstimator(loops=6)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             ere.fit(self.graph[:, :99])
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             ere.fit(self.graph[..., np.newaxis])
 
     def test_ER_fit(self):
         assert self.p_hat - self.p < 0.001
 
     def test_ER_sample(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             self.estimator.sample(n_samples=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             self.estimator.sample(n_samples="nope")
         g = er_np(100, 0.5)
         estimator = EREstimator(directed=True, loops=False)
@@ -65,16 +67,16 @@ class TestER:
         estimator = EREstimator(directed=False)
         _test_score(estimator, p_mat, graph)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.score_samples(graph=er_np(500, 0.5))
 
     def test_ER_nparams(self):
         assert self.estimator._n_parameters() == 1
 
 
-class TestDCER:
+class TestDCER(unittest.TestCase):
     @classmethod
-    def setup_class(cls):
+    def setUpClass(cls) -> None:
         np.random.seed(8888)
         n = 1000
         p = 0.5
@@ -92,23 +94,23 @@ class TestDCER:
         estimator = DCEREstimator()
         _test_score(estimator, p_mat, graph)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.score_samples(graph=graph[1:500, 1:500])
 
     def test_DCER_inputs(self):
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCEREstimator(directed="hey")
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCEREstimator(loops=6)
 
         graph = er_np(100, 0.5)
         dcere = DCEREstimator()
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             dcere.fit(graph[:, :99])
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             dcere.fit(graph[..., np.newaxis])
 
     def test_DCER_fit(self):
@@ -124,14 +126,14 @@ class TestDCER:
         estimator = DCEREstimator(directed=True, loops=False)
         g = self.graph
         p_mat = self.p_mat
-        with pytest.raises(NotFittedError):
+        with self.assertRaises(NotFittedError):
             estimator.sample()
 
         estimator.fit(g)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.sample(n_samples=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             estimator.sample(n_samples="nope")
         B = 0.5
         dc = np.random.uniform(0.25, 0.75, size=100)
@@ -150,64 +152,63 @@ class TestDCER:
         assert e._n_parameters() == (n_verts + 1)
 
 
-class TestSBM:
-    @classmethod
-    def setup_class(cls):
+class TestSBM(unittest.TestCase):
+    def setUp(self) -> None:
         estimator = SBMEstimator(directed=True, loops=False)
         B = np.array([[0.9, 0.1], [0.1, 0.9]])
         g = sbm([50, 50], B, directed=True)
         labels = _n_to_labels([50, 50])
         p_mat = _block_to_full(B, labels, (100, 100))
         p_mat -= np.diag(np.diag(p_mat))
-        cls.estimator = estimator
-        cls.p_mat = p_mat
-        cls.graph = g
-        cls.labels = labels
+        self.estimator = estimator
+        self.p_mat = p_mat
+        self.graph = g
+        self.labels = labels
 
     def test_SBM_inputs(self):
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             SBMEstimator(directed="hey")
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             SBMEstimator(loops=6)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             SBMEstimator(n_components="XD")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             SBMEstimator(n_components=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             SBMEstimator(min_comm="1")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             SBMEstimator(min_comm=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             SBMEstimator(max_comm="ay")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             SBMEstimator(max_comm=-1)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             SBMEstimator(min_comm=4, max_comm=2)
 
         graph = er_np(100, 0.5)
         bad_y = np.zeros(99)
         sbe = SBMEstimator()
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             sbe.fit(graph, y=bad_y)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             sbe.fit(graph[:, :99])
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             sbe.fit(graph[..., np.newaxis])
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             SBMEstimator(cluster_kws=1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             SBMEstimator(embed_kws=1)
 
     def test_SBM_fit_supervised(self):
@@ -248,14 +249,14 @@ class TestSBM:
         g = self.graph
         p_mat = self.p_mat
         labels = self.labels
-        with pytest.raises(NotFittedError):
+        with self.assertRaises(NotFittedError):
             estimator.sample()
 
         estimator.fit(g, y=labels)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.sample(n_samples=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             estimator.sample(n_samples="nope")
 
         _test_sample(estimator, p_mat)
@@ -271,7 +272,7 @@ class TestSBM:
         estimator = SBMEstimator(max_comm=4)
         _test_score(estimator, p_mat, graph)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.score_samples(graph=graph[1:100, 1:100])
 
     def test_SBM_nparams(self):
@@ -285,9 +286,9 @@ class TestSBM:
         assert e._n_parameters() == (1 + 3)
 
 
-class TestDCSBM:
+class TestDCSBM(unittest.TestCase):
     @classmethod
-    def setup_class(cls):
+    def setUpClass(cls) -> None:
         np.random.seed(8888)
         B = np.array(
             [
@@ -314,7 +315,7 @@ class TestDCSBM:
         estimator = DCSBMEstimator()
         _test_score(estimator, p_mat, graph)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.score_samples(graph=graph[1:100, 1:100])
 
     def test_DCSBM_fit_supervised(self):
@@ -326,49 +327,49 @@ class TestDCSBM:
         assert_allclose(dcsbe.p_mat_, p_mat, atol=0.1)
 
     def test_DCSBM_inputs(self):
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCSBMEstimator(directed="hey")
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCSBMEstimator(loops=6)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCSBMEstimator(n_components="XD")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             DCSBMEstimator(n_components=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCSBMEstimator(min_comm="1")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             DCSBMEstimator(min_comm=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCSBMEstimator(max_comm="ay")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             DCSBMEstimator(max_comm=-1)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             DCSBMEstimator(min_comm=4, max_comm=2)
 
         graph = er_np(100, 0.5)
         bad_y = np.zeros(99)
         dcsbe = DCSBMEstimator()
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             dcsbe.fit(graph, y=bad_y)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             dcsbe.fit(graph[:, :99])
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             dcsbe.fit(graph[..., np.newaxis])
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCSBMEstimator(cluster_kws=1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             DCSBMEstimator(embed_kws=1)
 
     def test_DCSBM_fit_unsupervised(self):
@@ -400,14 +401,14 @@ class TestDCSBM:
         p_mat -= np.diag(np.diag(p_mat))
         g = sample_edges(p_mat, directed=True)
 
-        with pytest.raises(NotFittedError):
+        with self.assertRaises(NotFittedError):
             estimator.sample()
 
         estimator.fit(g, y=labels)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.sample(n_samples=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             estimator.sample(n_samples="nope")
         estimator.p_mat_ = p_mat
         _test_sample(estimator, p_mat, n_samples=1000, atol=0.1)
@@ -434,9 +435,8 @@ class TestDCSBM:
         assert e._n_parameters() == (n_verts + 10)
 
 
-class TestRDPG:
-    @classmethod
-    def setup_class(cls):
+class TestRDPG(unittest.TestCase):
+    def setUp(self) -> None:
         np.random.seed(8888)
         n_verts = 500
         point1 = np.array([0.1, 0.9])
@@ -447,34 +447,34 @@ class TestRDPG:
         p_mat = latent @ latent.T
         p_mat -= np.diag(np.diag(p_mat))
         g = sample_edges(p_mat)
-        cls.p_mat = p_mat
-        cls.graph = g
+        self.p_mat = p_mat
+        self.graph = g
 
     def test_RDPG_intputs(self):
         rdpge = RDPGEstimator()
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             RDPGEstimator(loops=6)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             rdpge.fit(self.graph[:, :99])
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             rdpge.fit(self.graph[..., np.newaxis])
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             RDPGEstimator(ase_kws=5)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             RDPGEstimator(diag_aug_weight="f")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             RDPGEstimator(diag_aug_weight=-1)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             RDPGEstimator(plus_c_weight="F")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             RDPGEstimator(plus_c_weight=-1)
 
     def test_RDPG_fit(self):
@@ -506,7 +506,7 @@ class TestRDPG:
         estimator = RDPGEstimator()
         _test_score(estimator, p_mat, graph)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             estimator.score_samples(graph=graph[1:100, 1:100])
 
     def test_RDPG_nparams(self):

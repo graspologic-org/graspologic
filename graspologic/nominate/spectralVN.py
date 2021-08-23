@@ -1,12 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Union, Tuple
-from ..embed import BaseSpectralEmbed
-from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
+from typing import Tuple, Union
+
 import numpy as np
-from sklearn.neighbors import NearestNeighbors
 from sklearn.base import BaseEstimator
+from sklearn.neighbors import NearestNeighbors
+
+from ..embed import AdjacencySpectralEmbed, BaseSpectralEmbed, LaplacianSpectralEmbed
 
 
 class SpectralVertexNomination(BaseEstimator):

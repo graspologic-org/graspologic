@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import networkx as nx
-import numpy as np
 import unittest
 
-from sklearn.metrics import adjusted_rand_score
+import networkx as nx
+import numpy as np
 from sklearn.cluster import KMeans
+from sklearn.metrics import adjusted_rand_score
 
 import graspologic as gc
 

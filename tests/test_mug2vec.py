@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import unittest
+
 import numpy as np
-import pytest
-from numpy.testing import assert_equal
 
 from graspologic.cluster import GaussianCluster
 from graspologic.embed import mug2vec
@@ -26,33 +26,33 @@ def generate_data():
     return g, y
 
 
-def test_mug2vec():
-    graphs, labels = generate_data()
+class TestMug2Vec(unittest.TestCase):
+    def test_mug2vec(self):
+        graphs, labels = generate_data()
 
-    mugs = mug2vec(pass_to_ranks=None)
-    xhat = mugs.fit_transform(graphs)
+        mugs = mug2vec(pass_to_ranks=None, svd_seed=1)
+        xhat = mugs.fit_transform(graphs)
 
-    gmm = GaussianCluster(5)
-    gmm.fit(xhat, labels)
+        gmm = GaussianCluster(5)
+        gmm.fit(xhat, labels)
 
-    assert_equal(gmm.n_components_, 2)
+        self.assertEqual(gmm.n_components_, 2)
 
+    def test_inputs(self):
+        graphs, labels = generate_data()
 
-def test_inputs():
-    graphs, labels = generate_data()
+        mugs = mug2vec(omnibus_components=-1, svd_seed=1)
+        with self.assertRaises(ValueError):
+            mugs.fit(graphs)
 
-    mugs = mug2vec(omnibus_components=-1)
-    with pytest.raises(ValueError):
-        mugs.fit(graphs)
+        mugs = mug2vec(cmds_components=-1, svd_seed=1)
+        with self.assertRaises(ValueError):
+            mugs.fit(graphs)
 
-    mugs = mug2vec(cmds_components=-1)
-    with pytest.raises(ValueError):
-        mugs.fit(graphs)
+        mugs = mug2vec(omnibus_n_elbows=-1, svd_seed=1)
+        with self.assertRaises(ValueError):
+            mugs.fit(graphs)
 
-    mugs = mug2vec(omnibus_n_elbows=-1)
-    with pytest.raises(ValueError):
-        mugs.fit(graphs)
-
-    mugs = mug2vec(cmds_n_elbows=-1)
-    with pytest.raises(ValueError):
-        mugs.fit(graphs)
+        mugs = mug2vec(cmds_n_elbows=-1, svd_seed=1)
+        with self.assertRaises(ValueError):
+            mugs.fit(graphs)
