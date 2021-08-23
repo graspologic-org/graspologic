@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import numpy as np
+
 from graspologic.simulations import p_from_latent, sample_edges_corr
 
 

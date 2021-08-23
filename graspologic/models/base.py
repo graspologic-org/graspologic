@@ -7,8 +7,8 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
-from ..utils import import_graph, is_unweighted
 from ..simulations import sample_edges
+from ..utils import import_graph, is_unweighted
 
 
 def _calculate_p(block):

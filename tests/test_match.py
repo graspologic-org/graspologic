@@ -1,67 +1,68 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import pytest
-import numpy as np
-import math
 import random
+import unittest
+
+import numpy as np
+
+from graspologic.align import SignFlips
+from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.match import GraphMatch as GMP
 from graspologic.simulations import er_np, sbm_corr
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.align import SignFlips
 
 np.random.seed(1)
 
 
-class TestGMP:
+class TestGMP(unittest.TestCase):
     @classmethod
-    def setup_class(cls):
+    def setUpClass(cls) -> None:
         cls.barycenter = GMP(gmp=False)
         cls.rand = GMP(n_init=100, init="rand", gmp=False)
         cls.barygm = GMP(gmp=True)
 
     def test_SGM_inputs(self):
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             GMP(n_init=-1.5)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP(init="random")
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             GMP(max_iter=-1.5)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             GMP(shuffle_input="hey")
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             GMP(eps=-1)
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             GMP(gmp="hey")
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             GMP(padding=2)
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP(padding="hey")
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(
                 np.random.random((3, 4)),
                 np.random.random((3, 4)),
                 np.arange(2),
                 np.arange(2),
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(
                 np.random.random((3, 4)),
                 np.random.random((3, 4)),
                 np.arange(2),
                 np.arange(2),
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(np.identity(3), np.identity(3), np.identity(3), np.arange(2))
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(np.identity(3), np.identity(3), np.arange(1), np.arange(2))
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(np.identity(3), np.identity(3), np.arange(5), np.arange(5))
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(
                 np.identity(3), np.identity(3), -1 * np.arange(2), -1 * np.arange(2)
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(
                 np.random.random((4, 4)),
                 np.random.random((4, 4)),
@@ -69,7 +70,7 @@ class TestGMP:
                 np.arange(2),
                 np.random.random((3, 4)),
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(
                 np.random.random((4, 4)),
                 np.random.random((4, 4)),
@@ -77,7 +78,7 @@ class TestGMP:
                 np.arange(2),
                 np.random.random((3, 3)),
             )
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             GMP().fit(
                 np.random.random((3, 3)),
                 np.random.random((4, 4)),
@@ -133,33 +134,33 @@ class TestGMP:
         W2 = [pi[z] for z in W1]
         chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
-        assert 11156 <= score < 21000
+        self.assertTrue(11156 <= score < 21000)
 
         W1 = np.sort(random.sample(list(range(n)), n - 1))
         W2 = [pi[z] for z in W1]
         chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
-        assert 11156 == score
+        self.assertEqual(11156, score)
 
         W1 = np.array(range(n))
         W2 = pi
         chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
-        assert np.array_equal(chr12c.perm_inds_, pi)
-        assert 11156 == score
+        np.testing.assert_array_equal(chr12c.perm_inds_, pi)
+        self.assertTrue(11156, score)
 
         W1 = np.random.permutation(n)
         W2 = [pi[z] for z in W1]
         chr12c = self.barycenter.fit(A, B, W1, W2)
         score = chr12c.score_
-        assert np.array_equal(chr12c.perm_inds_, pi)
-        assert 11156 == score
+        np.testing.assert_array_equal(chr12c.perm_inds_, pi)
+        self.assertTrue(11156, score)
 
     def test_rand_SGM(self):
         A, B = self._get_AB()
         chr12c = self.rand.fit(A, B)
         score = chr12c.score_
-        assert 11156 <= score < 13500
+        self.assertTrue(11156 <= score < 13500)
 
         n = A.shape[0]
         pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
@@ -167,14 +168,14 @@ class TestGMP:
         W2 = [pi[z] for z in W1]
         chr12c = self.rand.fit(A, B, W1, W2)
         score = chr12c.score_
-        assert 11156 <= score < 12500
+        self.assertTrue(11156 <= score < 12500)
 
     def test_parallel(self):
         A, B = self._get_AB()
         gmp = GMP(gmp=False, n_init=2, n_jobs=2)
         gmp.fit(A, B)
         score = gmp.score_
-        assert 11156 <= score < 13500
+        self.assertTrue(11156 <= score < 13500)
 
     def test_padding(self):
         n = 50
@@ -185,7 +186,7 @@ class TestGMP:
         gmp_adopted = GMP(padding="adopted")
         res = gmp_adopted.fit(G1, G2)
 
-        assert 0.95 <= (sum(res.perm_inds_ == np.arange(n)) / n)
+        self.assertTrue(0.95 <= (sum(res.perm_inds_ == np.arange(n)) / n))
 
     def test_custom_init(self):
         A, B = self._get_AB()
@@ -197,8 +198,8 @@ class TestGMP:
         gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
         gm.fit(A, B)
 
-        assert (gm.perm_inds_ == pi).all()
-        assert gm.score_ == 11156
+        self.assertTrue((gm.perm_inds_ == pi).all())
+        self.assertEqual(gm.score_, 11156)
         # we had thought about doing the test
         # `assert gm.n_iter_ == 1`
         # but note that GM doesn't necessarily converge in 1 iteration here
@@ -224,8 +225,8 @@ class TestGMP:
         gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
         gm.fit(A, B, seeds_A=seeds_A, seeds_B=seeds_B)
 
-        assert (gm.perm_inds_ == pi_original).all()
-        assert gm.score_ == 11156
+        self.assertTrue((gm.perm_inds_ == pi_original).all())
+        self.assertEqual(gm.score_, 11156)
 
     def test_sim(self):
         n = 150
@@ -248,7 +249,7 @@ class TestGMP:
         S = xh1 @ x2.T
         res = self.barygm.fit(A1, A2, S=S)
 
-        assert 0.7 <= (sum(res.perm_inds_ == np.arange(n)) / n)
+        self.assertTrue(0.7 <= (sum(res.perm_inds_ == np.arange(n)) / n))
 
         A1 = A1[:-1, :-1]
         xh1 = xh1[:-1, :]
@@ -256,4 +257,4 @@ class TestGMP:
 
         res = self.barygm.fit(A1, A2, S=S)
 
-        assert 0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n)
+        self.assertTrue(0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n))
