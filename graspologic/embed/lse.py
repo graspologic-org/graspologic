@@ -2,13 +2,13 @@
 # Licensed under the MIT License.
 
 
-from .base import BaseSpectralEmbed
-from ..utils import to_laplacian
+from typing import Optional, Union
 
+import networkx as nx
 import numpy as np
 
-from typing import Optional, Union
-import networkx as nx
+from ..utils import to_laplacian
+from .base import BaseSpectralEmbed
 
 
 class LaplacianSpectralEmbed(BaseSpectralEmbed):
@@ -17,8 +17,8 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     The laplacian spectral embedding (LSE) is a k-dimensional Euclidean representation
     of the graph based on its Laplacian matrix. It relies on an SVD to reduce
-    the dimensionality to the specified k, or if k is unspecified, can find a number
-    of dimensions automatically.
+    the dimensionality to the specified ``n_components``, or if ``n_components`` is
+    unspecified, can find a number of dimensions automatically.
 
     Parameters
     ----------
@@ -83,9 +83,13 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     singular_values_ : array, shape (n_components)
         Singular values associated with the latent position matrices.
 
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
     See Also
     --------
-    graspologic.embed.selectSVD
+    graspologic.embed.select_svd
     graspologic.embed.select_dimension
     graspologic.utils.to_laplacian
 
@@ -117,12 +121,13 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self,
         form: str = "DAD",
         n_components: Optional[int] = None,
-        n_elbows: int = 2,
+        n_elbows: Optional[int] = 2,
         algorithm: str = "randomized",
         n_iter: int = 5,
         check_lcc: bool = True,
         regularizer: Optional[float] = None,
         concat: bool = False,
+        svd_seed: Optional[int] = None,
     ):
         super().__init__(
             n_components=n_components,
@@ -131,6 +136,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
             n_iter=n_iter,
             check_lcc=check_lcc,
             concat=concat,
+            svd_seed=svd_seed,
         )
         self.form = form
         self.regularizer = regularizer

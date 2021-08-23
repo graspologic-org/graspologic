@@ -2,9 +2,10 @@
 # Licensed under the MIT license.
 
 import math
-import networkx as nx
 from collections import defaultdict
 from typing import Any, Dict
+
+import networkx as nx
 
 
 def _modularity_component(

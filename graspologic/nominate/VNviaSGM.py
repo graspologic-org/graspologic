@@ -1,8 +1,10 @@
-import numpy as np
-from ..match import GraphMatch as GMP
-from sklearn.base import BaseEstimator
 import itertools
 import warnings
+
+import numpy as np
+from sklearn.base import BaseEstimator
+
+from ..match import GraphMatch as GMP
 
 
 class VNviaSGM(BaseEstimator):

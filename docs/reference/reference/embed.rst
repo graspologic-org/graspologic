@@ -10,7 +10,7 @@ Decomposition
 
 .. autofunction:: select_dimension
 
-.. autofunction:: selectSVD
+.. autofunction:: select_svd
 
 Single graph embedding
 ----------------------

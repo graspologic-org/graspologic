@@ -2,12 +2,13 @@
 # Licensed under the MIT license.
 
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
+
+import graspologic_native as gn
 import networkx as nx
 import numpy as np
 import scipy
-from .. import utils
 
-import graspologic_native as gn
+from .. import utils
 
 
 def _validate_and_build_edge_list(

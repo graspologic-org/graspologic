@@ -1,16 +1,15 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+import unittest
 from typing import List, Tuple
 
-import unittest
 import networkx as nx
 import numpy as np
 import scipy
 
 from graspologic.partition import HierarchicalCluster, hierarchical_leiden, leiden
-from graspologic.partition.leiden import _validate_and_build_edge_list, _from_native
-
+from graspologic.partition.leiden import _from_native, _validate_and_build_edge_list
 from tests.utils import data_file
 
 
