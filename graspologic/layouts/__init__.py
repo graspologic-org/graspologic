@@ -2,16 +2,17 @@
 # Licensed under the MIT license.
 
 
-from .auto import (
+from .classes import NodePosition
+from .colors import categorical_colors, sequential_colors
+from .render import save_graph, show_graph
+
+from .auto import (  # isort:skip
     embed_for_layout,
     get_node_positions,
     get_partitions,
     preprocess_for_layout,
     reduce_dim_for_layout,
 )
-from .classes import NodePosition
-from .colors import categorical_colors, sequential_colors
-from .render import save_graph, show_graph
 
 # isort:skip
 
