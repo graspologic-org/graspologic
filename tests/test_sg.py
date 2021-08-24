@@ -1,10 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import graspologic.subgraph as sg
 import unittest
+
 import numpy as np
 from numpy.testing import assert_equal
+
+import graspologic.subgraph as sg
 
 
 class TestEstimateSubgraph(unittest.TestCase):

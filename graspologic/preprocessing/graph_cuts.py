@@ -4,9 +4,9 @@
 import logging
 import random
 from typing import Any, Callable, List, NamedTuple, Optional, Tuple, Union
+
 import networkx as nx
 import numpy as np
-
 
 LARGER_THAN_INCLUSIVE = "larger_than_inclusive"
 LARGER_THAN_EXCLUSIVE = "larger_than_exclusive"
