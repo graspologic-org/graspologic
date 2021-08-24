@@ -2,13 +2,14 @@
 # Licensed under the MIT License.
 
 import unittest
-import numpy as np
+
 import networkx as nx
+import numpy as np
+from testfixtures import LogCapture
 
 from graspologic.preprocessing import graph_cuts
-from ..utils import data_file
 
-from testfixtures import LogCapture
+from ..utils import data_file
 
 
 def _get_florentine_graph():

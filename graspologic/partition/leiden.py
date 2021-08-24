@@ -2,12 +2,13 @@
 # Licensed under the MIT license.
 
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
+
+import graspologic_native as gn
 import networkx as nx
 import numpy as np
 import scipy
-from .. import utils
 
-import graspologic_native as gn
+from .. import utils
 
 
 def _validate_and_build_edge_list(
@@ -209,6 +210,7 @@ def leiden(
     is_weighted: Optional[bool] = None,
     weight_default: float = 1.0,
     check_directed: bool = True,
+    trials: int = 1,
 ) -> Dict[str, int]:
     """
     Leiden is a global network partitioning algorithm. Given a graph, it will iterate
@@ -241,7 +243,7 @@ def leiden(
         for the node clustering and no nodes are moved to a new cluster in another
         iteration. As there is an element of randomness to the Leiden algorithm, it is
         sometimes useful to set ``extra_forced_iterations`` to a number larger than 0
-        where the entire process is forced to attempt further refinement.
+        where the process is forced to attempt further refinement.
     resolution : float
         Default is ``1.0``. Higher resolution values lead to more communities and lower
         resolution values leads to fewer communities. Must be greater than 0.
@@ -277,6 +279,13 @@ def leiden(
         if it is found to be a directed graph. If you know it is undirected and wish to
         avoid this scan, you can set this value to ``False`` and only the lower triangle
         of the adjacency matrix will be used to generate the weighted edge list.
+    trials : int
+        Default is ``1``. Runs leiden ``trials`` times, keeping the best partitioning
+        as judged by the quality maximization function (default: modularity, see
+        ``use_modularity`` parameter for details). This differs from
+        ``extra_forced_iterations`` by starting over from scratch each for each trial,
+        while ``extra_forced_iterations`` attempts to make microscopic adjustments from
+        the "final" state.
 
     Returns
     -------
@@ -317,11 +326,15 @@ def leiden(
         weight_default,
         check_directed,
     )
+    if not isinstance(trials, int):
+        raise TypeError("trials must be a positive integer")
+    if trials < 1:
+        raise ValueError("trials must be a positive integer")
     node_id_mapping, graph = _validate_and_build_edge_list(
         graph, is_weighted, weight_attribute, check_directed, weight_default
     )
 
-    _improved, _modularity, partitions = gn.leiden(
+    _modularity, partitions = gn.leiden(
         edges=graph,
         starting_communities=starting_communities,
         resolution=resolution,
@@ -329,6 +342,7 @@ def leiden(
         iterations=extra_forced_iterations + 1,
         use_modularity=use_modularity,
         seed=random_seed,
+        trials=trials,
     )
 
     proper_partitions = {
