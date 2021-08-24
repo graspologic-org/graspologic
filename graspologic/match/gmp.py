@@ -86,6 +86,9 @@ class GraphMatch(BaseEstimator):
         instance, then that object is used.
         Default is None.
 
+    verbose : int, default=0
+        Controls the verbosity when fitting and predicting.
+
     n_jobs : int or None, (default = None)
         The number of jobs to run in parallel. Parallelization is over the
         initializations, so only relevant when ``n_init > 1``. None means 1 unless in a
@@ -133,6 +136,7 @@ class GraphMatch(BaseEstimator):
         gmp=True,
         padding="adopted",
         random_state=None,
+        verbose=0,
         n_jobs=None,
     ):
         if type(n_init) is int and n_init > 0:
@@ -178,6 +182,7 @@ class GraphMatch(BaseEstimator):
             msg = '"padding" parameter must be of type string'
             raise TypeError(msg)
         self.random_state = random_state
+        self.verbose = verbose
         self.n_jobs = n_jobs
 
     def fit(self, A, B, seeds_A=[], seeds_B=[], S=None):
@@ -244,7 +249,7 @@ class GraphMatch(BaseEstimator):
         }
 
         rng = check_random_state(self.random_state)
-        results = Parallel(n_jobs=self.n_jobs)(
+        results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
             delayed(quadratic_assignment)(A, B, options={**options, **{"rng": r}})
             for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
         )
