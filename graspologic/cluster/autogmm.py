@@ -1,9 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import warnings
+
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 from sklearn.cluster import AgglomerativeClustering
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
 from sklearn.mixture._gaussian_mixture import (
@@ -11,11 +15,6 @@ from sklearn.mixture._gaussian_mixture import (
     _estimate_gaussian_parameters,
 )
 from sklearn.model_selection import ParameterGrid
-
-from sklearn.exceptions import ConvergenceWarning
-
-from joblib import Parallel, delayed
-import warnings
 
 from .base import BaseCluster
 

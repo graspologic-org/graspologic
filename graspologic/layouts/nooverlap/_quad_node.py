@@ -1,13 +1,14 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from graspologic.layouts.classes import NodePosition
-import math
 import logging
-from sklearn.preprocessing import normalize
-import numpy as np
+import math
 
+import numpy as np
 from scipy.spatial import distance
+from sklearn.preprocessing import normalize
+
+from graspologic.layouts.classes import NodePosition
 
 _EPSILON = 0.001
 logger = logging.getLogger(__name__)

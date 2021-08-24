@@ -13,7 +13,9 @@ from sklearn.manifold import TSNE
 
 from ..embed import node2vec_embed
 from ..partition import leiden
+from ..preconditions import is_real_weighted
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight
+from ..utils import largest_connected_component
 from .classes import NodePosition
 from .nooverlap import remove_overlaps
 
@@ -27,6 +29,7 @@ def layout_tsne(
     perplexity: int,
     n_iter: int,
     max_edges: int = 10000000,
+    weight_attribute: str = "weight",
     random_seed: Optional[int] = None,
     adjust_overlaps: bool = True,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
@@ -58,7 +61,7 @@ def layout_tsne(
         The perplexity is related to the number of nearest neighbors that is used in
         other manifold learning algorithms. Larger datasets usually require a larger
         perplexity. Consider selecting a value between 4 and 100. Different values can
-        result in significanlty different results.
+        result in significantly different results.
     n_iter : int
         Maximum number of iterations for the optimization. We have found in practice
         that larger graphs require more iterations. We hope to eventually have more
@@ -68,8 +71,11 @@ def layout_tsne(
         The maximum number of edges to use when generating the embedding.  Default is
         ``10000000``. The edges with the lowest weights will be pruned until at most
         ``max_edges`` exist. Warning: this pruning is approximate and more edges than
-        are necessary may be pruned. Running in 32 bit enviornment you will most
+        are necessary may be pruned. Running in 32 bit environment you will most
         likely need to reduce this number or you will out of memory.
+    weight_attribute: str
+        The edge dictionary data attribute that holds the weight. Default is ``weight``.
+        Note that the graph must be fully weighted or unweighted.
     random_seed : int
         Seed to be used for reproducible results. Default is None and will produce
         a new random state. Specifying a random state will provide consistent results
@@ -105,6 +111,7 @@ def layout_tsne(
         points,
         random_seed=random_seed,
         adjust_overlaps=adjust_overlaps,
+        weight_attribute=weight_attribute,
     )
     return lcc_graph, positions
 
@@ -114,6 +121,7 @@ def layout_umap(
     min_dist: float = 0.75,
     n_neighbors: int = 25,
     max_edges: int = 10000000,
+    weight_attribute: str = "weight",
     random_seed: Optional[int] = None,
     adjust_overlaps: bool = True,
 ) -> Tuple[nx.Graph, List[NodePosition]]:
@@ -159,6 +167,9 @@ def layout_umap(
         ``max_edges`` exist. Warning: this pruning is approximate and more edges than
         are necessary may be pruned. Running in 32 bit environment you will most
         likely need to reduce this number or you will out of memory.
+    weight_attribute: str
+        The edge dictionary data attribute that holds the weight. Default is ``weight``.
+        Note that the graph must be fully weighted or unweighted.
     random_seed : int
         Seed to be used for reproducible results. Default is None and will produce
         random results.
@@ -196,13 +207,9 @@ def layout_umap(
         points,
         random_seed=random_seed,
         adjust_overlaps=adjust_overlaps,
+        weight_attribute=weight_attribute,
     )
     return lcc_graph, positions
-
-
-def _largest_connected_component(graph: nx.Graph) -> nx.Graph:
-    largest_component = max(nx.connected_components(graph), key=len)
-    return graph.subgraph(largest_component).copy()
 
 
 def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
@@ -233,7 +240,7 @@ def _node2vec_for_layout(
     random_seed: Optional[int] = None,
 ) -> Tuple[nx.Graph, np.ndarray, np.ndarray]:
     graph = _approximate_prune(graph, max_edges)
-    graph = _largest_connected_component(graph)
+    graph = largest_connected_component(graph)
 
     start = time.time()
     tensors, labels = node2vec_embed(
@@ -249,10 +256,33 @@ def _node2vec_for_layout(
     return graph, tensors, labels
 
 
+def _to_undirected(graph: nx.DiGraph, weight_attribute: str = "weight") -> nx.Graph:
+    sym_g = nx.Graph()
+    weighted = is_real_weighted(graph, weight_attribute=weight_attribute)
+    for source, target, weight in graph.edges.data(weight_attribute):
+        if weight is not None:
+            edge_weighted = True
+            if sym_g.has_edge(source, target):
+                sym_g[source][target][weight_attribute] = (
+                    sym_g[source][target][weight_attribute] + weight * 0.5
+                )
+            else:
+                sym_g.add_edge(source, target)
+                sym_g.edges[source, target].update({weight_attribute: weight * 0.5})
+        else:
+            edge_weighted = False
+            sym_g.add_edge(source, target)
+        if weighted != edge_weighted:
+            msg = "Graph must be fully weighted or unweighted"
+            raise ValueError(msg)
+    return sym_g
+
+
 def _node_positions_from(
     graph: nx.Graph,
     labels: np.ndarray,
     down_projection_2d: np.ndarray,
+    weight_attribute: str = "weight",
     random_seed: Optional[int] = None,
     adjust_overlaps: bool = True,
 ) -> List[NodePosition]:
@@ -260,7 +290,14 @@ def _node_positions_from(
     sizes = _compute_sizes(degree)
     covered_area = _covered_size(sizes)
     scaled_points = _scale_points(down_projection_2d, covered_area)
-    partitions = leiden(graph, random_seed=random_seed)
+    if graph.is_directed():
+        temp_graph = _to_undirected(graph, weight_attribute=weight_attribute)
+        logger.warning(
+            "Directed graph converted to undirected graph for community detection"
+        )
+        partitions = leiden(temp_graph, random_seed=random_seed)
+    else:
+        partitions = leiden(graph, random_seed=random_seed)
     positions = [
         NodePosition(
             node_id=key,
