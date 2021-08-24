@@ -225,7 +225,7 @@ class TestAutoGMM(unittest.TestCase):
         # Asser that we get perfect clustering
         assert_allclose(AutoGMM.ari_, 1)
 
-    def test_two_class_multiple_kmeans_inits():
+    def test_two_class_multiple_kmeans_inits(self):
         """
         Easily separable two gaussian problem.
         """
@@ -250,7 +250,7 @@ class TestAutoGMM(unittest.TestCase):
         # Asser that we get perfect clustering
         assert_allclose(AutoGMM.ari_, 1)
 
-    def test_two_class_parallel():
+    def test_two_class_parallel(self):
         """
         Easily separable two gaussian problem.
         """
