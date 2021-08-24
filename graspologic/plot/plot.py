@@ -351,53 +351,6 @@ def heatmap(
     return plot
 
 
-def binary_heatmap(
-    X, colors=["white", "black"], colorbar_ticklabels=["No Edge", "Edge"], **kwargs
-):
-    """
-    Plots an unweighted graph as a black-and-white matrix
-    with a binary colorbar.
-
-    Takes the same keyword arguments as ``plot.heatmap``.
-
-    Parameters
-    ----------
-    X : nx.Graph or np.ndarray object
-        Unweighted graph or numpy matrix to plot.
-
-    colors : list-like or np.ndarray
-        A list of exactly two colors to use for the heatmap.
-
-    colorbar_ticklabels : list-like
-        Binary labels to use in the colorbar.
-
-    **kwargs : dict, optional
-        All keyword arguments in ``plot.heatmap``.
-
-    """
-    if len(colors) != 2:
-        raise ValueError("Colors must be length 2")
-    if "center" in kwargs:
-        raise ValueError("Center is not allowed for binary heatmaps.")
-    if "cmap" in kwargs:
-        raise ValueError(
-            "cmap is not allowed in a binary heatmap. To change colors, use the `colors` parameter."
-        )
-    if not (
-        isinstance(colorbar_ticklabels, (list, tuple)) and len(colorbar_ticklabels) == 2):
-        raise ValueError("colorbar_ticklabels must be list-like and length 2.")
-
-    cmap = mpl.colors.ListedColormap(colors)
-    ax = heatmap(X, center=None, cmap=cmap, **kwargs)
-    colorbar = ax.collections[0].colorbar
-    cbar = kwargs.setdefault("cbar", True)
-    if cbar:
-        colorbar.set_ticks([0.25, 0.75])
-        colorbar.set_ticklabels(colorbar_ticklabels)
-        colorbar.ax.set_frame_on(True)
-    return ax
-
-
 def gridplot(
     X,
     labels=None,
