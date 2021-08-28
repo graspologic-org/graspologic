@@ -1,12 +1,14 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional
+
 import numpy as np
 from sklearn.base import BaseEstimator
 
+from ..utils import pass_to_ranks
 from .mds import ClassicalMDS
 from .omni import OmnibusEmbed
-from ..utils import pass_to_ranks
 
 
 class mug2vec(BaseEstimator):
@@ -61,6 +63,10 @@ class mug2vec(BaseEstimator):
         If ``n_components`` is None, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
+    svd_seed : int or None (default ``None``)
+        Allows you to seed the randomized svd solver used in the Omnibus embedding
+        for deterministic, albeit pseudo-randomized behavior.
+
     Attributes
     ----------
     omnibus_n_components_ : int
@@ -90,12 +96,14 @@ class mug2vec(BaseEstimator):
         omnibus_n_elbows=2,
         cmds_components=None,
         cmds_n_elbows=2,
+        svd_seed: Optional[int] = None,
     ):
         self.pass_to_ranks = pass_to_ranks
         self.omnibus_components = omnibus_components
         self.omnibus_n_elbows = omnibus_n_elbows
         self.cmds_components = cmds_components
         self.cmds_n_elbows = cmds_n_elbows
+        self.svd_seed = svd_seed
 
     def _check_inputs(self):
         variables = self.get_params()
@@ -130,18 +138,22 @@ class mug2vec(BaseEstimator):
         # Check these prior to PTR just in case
         self._check_inputs()
 
-        if pass_to_ranks is not None:
+        if self.pass_to_ranks is not None:
             graphs = [pass_to_ranks(g, self.pass_to_ranks) for g in graphs]
 
         omni = OmnibusEmbed(
-            n_components=self.omnibus_components, n_elbows=self.omnibus_n_elbows
+            n_components=self.omnibus_components,
+            n_elbows=self.omnibus_n_elbows,
+            svd_seed=self.svd_seed,
         )
         omnibus_embedding = omni.fit_transform(graphs)
 
         self.omnibus_n_components_ = omnibus_embedding.shape[-1]
 
         cmds = ClassicalMDS(
-            n_components=self.cmds_components, n_elbows=self.cmds_n_elbows
+            n_components=self.cmds_components,
+            n_elbows=self.cmds_n_elbows,
+            svd_seed=self.svd_seed,
         )
         self.embeddings_ = cmds.fit_transform(omnibus_embedding)
         self.cmds_components_ = self.embeddings_.shape[-1]

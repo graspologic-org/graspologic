@@ -1,10 +1,12 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+
 from .classes import NodePosition
 from .colors import categorical_colors, sequential_colors
 from .render import save_graph, show_graph
-from .auto import layout_tsne, layout_umap
+
+from .auto import layout_tsne, layout_umap  # isort:skip
 
 __all__ = [
     "NodePosition",

@@ -2,22 +2,21 @@
 # Licensed under the MIT License.
 
 import unittest
-import pytest
+
+import networkx as nx
 import numpy as np
 import pandas as pd
-from numpy.random import poisson, normal
+from numpy.random import normal, poisson
 from numpy.testing import assert_equal
-import networkx as nx
-from graspologic.embed.ase import AdjacencySpectralEmbed
-from graspologic.embed.lse import LaplacianSpectralEmbed
-from graspologic.simulations.simulations import er_np, er_nm, sbm
-from graspologic.utils import remove_vertices, is_symmetric
+from scipy.sparse import csr_matrix
+from sklearn.base import clone
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, pairwise_distances
-from sklearn.base import clone
-from scipy.sparse import csr_matrix
 
-np.random.seed(9002)
+from graspologic.embed.ase import AdjacencySpectralEmbed
+from graspologic.embed.lse import LaplacianSpectralEmbed
+from graspologic.simulations.simulations import er_nm, er_np, sbm
+from graspologic.utils import remove_vertices
 
 
 def _kmeans_comparison(data, labels, n_clusters):
@@ -78,8 +77,6 @@ def _test_output_dim(self, method, sparse=False, *args, **kwargs):
 
 
 def _test_sbm_er_binary(self, method, P, directed=False, sparse=False, *args, **kwargs):
-    np.random.seed(8888)
-
     num_sims = 50
     verts = 200
     communities = 2
@@ -94,8 +91,8 @@ def _test_sbm_er_binary(self, method, P, directed=False, sparse=False, *args, **
         if sparse:
             sbm_sample = csr_matrix(sbm_sample)
             er = csr_matrix(er)
-        embed_sbm = method(n_components=2, concat=directed)
-        embed_er = method(n_components=2, concat=directed)
+        embed_sbm = method(n_components=2, concat=directed, svd_seed=8888)
+        embed_er = method(n_components=2, concat=directed, svd_seed=8888)
 
         labels_sbm = np.zeros((verts), dtype=np.int8)
         labels_er = np.zeros((verts), dtype=np.int8)
@@ -121,7 +118,6 @@ def _test_sbm_er_binary(self, method, P, directed=False, sparse=False, *args, **
 
 class TestAdjacencySpectralEmbed(unittest.TestCase):
     def setUp(self):
-        np.random.seed(9001)
         n = [10, 10]
         p = np.array([[0.9, 0.1], [0.1, 0.9]])
         wt = [[normal, poisson], [poisson, normal]]
@@ -135,7 +131,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             Guwd=sbm(n=n, p=p, directed=True),
             Gwd=sbm(n=n, p=p, wt=wt, wtargs=wtargs, directed=True),
         )
-        self.ase = AdjacencySpectralEmbed(n_components=2)
+        self.ase = AdjacencySpectralEmbed(n_components=2, svd_seed=9001)
 
     def test_output_dim(self):
         _test_output_dim(self, AdjacencySpectralEmbed)
@@ -166,18 +162,20 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         atol = 0.15
         for diag_aug in [True, False]:
             for g, A in self.testgraphs.items():
-                ase = AdjacencySpectralEmbed(n_components=2, diag_aug=diag_aug)
+                ase = AdjacencySpectralEmbed(
+                    n_components=2, diag_aug=diag_aug, svd_seed=9001
+                )
                 ase.fit(A)
                 Y = ase.fit_transform(A)
                 if isinstance(Y, np.ndarray):
                     X = ase.transform(A)
-                    self.assertTrue(np.allclose(X, Y, atol=atol))
+                    np.testing.assert_allclose(X, Y, atol=atol)
                 elif isinstance(Y, tuple):
                     with self.assertRaises(TypeError):
                         X = ase.transform(A)
                     X = ase.transform((A.T, A))
-                    self.assertTrue(np.allclose(X[0], Y[0], atol=atol))
-                    self.assertTrue(np.allclose(X[1], Y[1], atol=atol))
+                    np.testing.assert_allclose(X[0], Y[0], atol=atol)
+                    np.testing.assert_allclose(X[1], Y[1], atol=atol)
                 else:
                     raise TypeError
 
@@ -250,16 +248,16 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
     def test_exceptions(self):
         ase = clone(self.ase)
 
-        with pytest.raises(Exception):
+        with self.assertRaises(Exception):
             ase.fit(self.testgraphs["Gwd"])
             ase.transform("9001")
 
-        with pytest.raises(Exception):
+        with self.assertRaises(Exception):
             Guwd = self.testgraphs["Guwd"]
             ase.fit(Guwd)
             ase.transform(np.ones(len(Guwd)))
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             A, a = remove_vertices(self.testgraphs["Gw"], [0, 1], return_removed=True)
             a = a.T
             ase.fit(A)
@@ -288,6 +286,41 @@ class TestAdjacencySpectralEmbedSparse(unittest.TestCase):
 
 
 class TestLaplacianSpectralEmbed(unittest.TestCase):
+    def setUp(self):
+        n = [10, 10]
+        p = np.array([[0.9, 0.1], [0.1, 0.9]])
+        wt = [[normal, poisson], [poisson, normal]]
+        wtargs = [
+            [dict(loc=3, scale=1), dict(lam=5)],
+            [dict(lam=5), dict(loc=3, scale=1)],
+        ]
+        self.testgraphs = dict(
+            Guw=sbm(n=n, p=p),
+            Gw=sbm(n=n, p=p, wt=wt, wtargs=wtargs),
+            Guwd=sbm(n=n, p=p, directed=True),
+            Gwd=sbm(n=n, p=p, wt=wt, wtargs=wtargs, directed=True),
+        )
+        self.lse = LaplacianSpectralEmbed(n_components=2, svd_seed=9001)
+
+    def test_different_forms(self):
+        f = np.array([[1, 2], [2, 1]])
+        lse = LaplacianSpectralEmbed(form="I-DAD")
+
+    def test_transform_correct_types(self):
+        lse = LaplacianSpectralEmbed(n_components=2)
+        for graph in self.testgraphs.values():
+            A, a = remove_vertices(graph, 1, return_removed=True)
+            lse.fit(A)
+            directed = lse.latent_right_ is not None
+            w = lse.transform(a)
+            if directed:
+                self.assertIsInstance(w, tuple)
+                self.assertIsInstance(w[0], np.ndarray)
+                self.assertIsInstance(w[1], np.ndarray)
+            elif not directed:
+                self.assertIsInstance(w, np.ndarray)
+                self.assertEqual(np.atleast_2d(w).shape[1], 2)
+
     def test_output_dim(self):
         _test_output_dim(self, LaplacianSpectralEmbed)
 
@@ -302,10 +335,6 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         P = np.array([[0.8, 0.2], [0.2, 0.3]])
         _test_sbm_er_binary(self, LaplacianSpectralEmbed, P, directed=True)
 
-    def test_different_forms(self):
-        f = np.array([[1, 2], [2, 1]])
-        lse = LaplacianSpectralEmbed(form="I-DAD")
-
     def test_unconnected_warning(self):
         n = [50, 50]
         p = [[1, 0], [0, 1]]
@@ -313,6 +342,21 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         with self.assertWarns(UserWarning):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)
+
+    def test_embedding(self):
+        epsilon = 0.1
+        nodes_per_community = 100
+        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        undirected, labels_ = sbm(2 * [nodes_per_community], P, return_labels=True)
+
+        oos_idx = 0
+        A, a = remove_vertices(undirected, indices=oos_idx, return_removed=True)
+
+        lse = LaplacianSpectralEmbed(n_components=2)
+        X_hat = lse.fit_transform(A)
+        w = lse.transform(a)
+        self.assertTrue(X_hat[0][0] - epsilon < w[0][0] < X_hat[0][0] + epsilon)
+        self.assertTrue(X_hat[0][1] - epsilon < w[0][1] < X_hat[0][1] + epsilon)
 
 
 class TestLaplacianSpectralEmbedSparse(unittest.TestCase):

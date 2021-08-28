@@ -2,12 +2,13 @@
 # Licensed under the MIT License.
 
 import unittest
+import warnings
 from math import sqrt
 
 import networkx as nx
 import numpy as np
-import pytest
 from numpy.testing import assert_equal
+from scipy.sparse import csr_matrix
 
 from graspologic.utils import remap_labels
 from graspologic.utils import utils as gus
@@ -236,6 +237,48 @@ class TestLCC(unittest.TestCase):
         np.testing.assert_array_equal(nodelist, expected_nodelist)
         lcc_matrix = gus.largest_connected_component(g)
         np.testing.assert_array_equal(lcc_matrix, expected_lcc_matrix)
+
+    def test_lcc_scipy(self):
+        expected_lcc_matrix = np.array(
+            [
+                [0, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 1],
+                [0, 1, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+            ]
+        )
+        expected_nodelist = np.array([0, 1, 2, 3, 5])
+        adjacency = np.array(
+            [
+                [0, 1, 1, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 1, 0, 1, 0],  # connected
+                [0, 1, 0, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 0, 0, 0, 0],  # not connected
+                [0, 0, 1, 0, 0, 0, 0],  # connected
+                [0, 0, 0, 0, 0, 0, 0],  # not connected
+            ]
+        )
+        sparse_adjacency = csr_matrix(adjacency)
+
+        lcc_matrix, nodelist = gus.largest_connected_component(
+            sparse_adjacency, return_inds=True
+        )
+        np.testing.assert_array_equal(lcc_matrix.toarray(), expected_lcc_matrix)
+        np.testing.assert_array_equal(nodelist, expected_nodelist)
+
+    def test_lcc_scipy_empty(self):
+        adjacency = np.array([[0, 1], [1, 0]])
+        adjacency = csr_matrix(adjacency)
+
+        # remove the actual connecting edges. this is now a disconnected graph
+        # with two nodes. however, scipy still stores the entry that now has a 0 in it
+        # as having a 'nonempty' value, which is used in the lcc calculation
+        adjacency[0, 1] = 0
+        adjacency[1, 0] = 0
+        lcc_adjacency = gus.largest_connected_component(adjacency)
+        assert lcc_adjacency.shape[0] == 1
 
     def test_multigraph_lcc_numpystack(self):
         expected_g_matrix = np.array(
@@ -486,18 +529,18 @@ class TestRemoveVertices(unittest.TestCase):
 
     def test_exceptions(self):
         # ensure proper errors are thrown when invalid inputs are passed.
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             gus.remove_vertices(9001, 0)
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             nonsquare = np.vstack((self.directed, self.directed))
             gus.remove_vertices(nonsquare, 0)
 
-        with pytest.raises(IndexError):
+        with self.assertRaises(IndexError):
             indices = np.arange(len(self.directed) + 1)
             gus.remove_vertices(self.directed, indices)
 
-        with pytest.raises(IndexError):
+        with self.assertRaises(IndexError):
             idx = len(self.directed) + 1
             gus.remove_vertices(self.directed, indices)
 
@@ -535,17 +578,17 @@ class TestRemapLabels(unittest.TestCase):
         assert_equal(y_true, y_pred_remapped)
 
     def test_inputs(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             # handled by sklearn confusion matrix
             remap_labels(self.y_true[1:], self.y_pred)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             remap_labels(8, self.y_pred)
 
-        with pytest.raises(TypeError):
+        with self.assertRaises(TypeError):
             remap_labels(self.y_pred, self.y_true, return_map="hi")
 
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             remap_labels(self.y_pred, ["ant", "ant", "cat", "cat", "bird", "bird"])
 
 
@@ -554,8 +597,23 @@ class TestRemapNodeIds(unittest.TestCase):
         invalid_types = [str, int, list]
 
         for type in invalid_types:
-            with pytest.raises(TypeError):
+            with self.assertRaises(TypeError):
                 gus.remap_node_ids(graph=type())
+
+    def test_remap_node_ids_unweighted_graph_raises_warning(self):
+        with warnings.catch_warnings(record=True) as warnings_context_manager:
+            graph = nx.florentine_families_graph()
+
+            gus.remap_node_ids(graph)
+
+            self.assertEqual(len(warnings_context_manager), 1)
+            self.assertTrue(
+                issubclass(warnings_context_manager[0].category, UserWarning)
+            )
+            self.assertTrue(
+                "Graph has at least one unweighted edge"
+                in str(warnings_context_manager[0].message)
+            )
 
     def _assert_graphs_are_equivalent(self, graph, new_graph, new_node_ids):
         self.assertTrue(len(new_graph.nodes()) == len(graph.nodes()))
