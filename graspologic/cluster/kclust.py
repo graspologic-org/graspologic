@@ -12,9 +12,9 @@ class KMeansCluster(BaseCluster):
     """
     KMeans Cluster.
 
-    It computes all possible models from one component to ``max_clusters``. 
+    It computes all possible models from one component to ``max_clusters``.
     When the true labels are known, the best model is given by the model with highest
-    adjusted Rand index (ARI). 
+    adjusted Rand index (ARI).
     Otherwise, the best model is given by the model with highest silhouette score.
 
     Parameters
