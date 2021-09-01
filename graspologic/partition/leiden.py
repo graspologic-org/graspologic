@@ -68,7 +68,7 @@ def _validate_and_build_edge_list(
                 f"{type(graph[0])}, {repr(graph[0])}"
             )
 
-        new_to_old = {}
+        new_to_old: Dict[str, Any] = {}
         stringified_new = []
 
         for source, target, weight in graph:
@@ -161,7 +161,7 @@ def _validate_common_arguments(
     is_weighted: Optional[bool] = None,
     weight_default: float = 1.0,
     check_directed: bool = True,
-):
+) -> None:
     if starting_communities is not None and not isinstance(starting_communities, dict):
         raise TypeError("starting_communities must be a dictionary")
     if not isinstance(extra_forced_iterations, int):
