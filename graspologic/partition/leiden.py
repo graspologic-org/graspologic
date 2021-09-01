@@ -141,7 +141,7 @@ def _validate_and_build_edge_list(
 
             # populate the node map using values of the same type as the CSR rows
             for i in np.arange(shape[0], dtype=rows.dtype):
-                new_to_old[str(i)] = i
+                _put_node_in_node_str_map(i, new_to_old)
 
         return new_to_old, edges
 
