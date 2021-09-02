@@ -9,6 +9,21 @@ jobs:
         inputs:
           outputFormat: sarif
           debugMode: false
+  - job: static_analysis
+    displayName: Static Code Analysis
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - task: Semmle@0
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        inputs:
+          sourceCodeDirectory: '$(Build.SourcesDirectory)'
+          language: 'python'
+          querySuite: 'Recommended'
+          timeout: '1800'
+          ram: '16384'
+          addProjectDirToScanningExclusionList: true 
   - job: component_governance
     displayName: Component Governance
     pool:
