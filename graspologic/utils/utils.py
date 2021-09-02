@@ -225,11 +225,35 @@ def is_unweighted(
         )
 
 
-def is_almost_symmetric(X, atol=1e-15):
-    if (X.ndim != 2) or (X.shape[0] != X.shape[1]):
+def is_almost_symmetric(
+    x: Union[np.ndarray, scipy.sparse.spmatrix], atol: float = 1e-15
+) -> bool:
+    """
+    Returns True if input x is nearly symmetric, which means that the entries differ by
+    no more than atol.
+
+    Parameters
+    ----------
+    x: Union[np.ndarray, scipy.sparse.spmatrix]
+        a square matrix
+    atol : float
+        a threshold for comparing the difference between off-diagonal entries
+        default 1e-15
+
+    Returns
+    -------
+    bool
+        True if x is a nearly symmetric square matrix
+
+    Raises
+    ------
+    TypeError
+        If the provided graph is not a numpy.ndarray or scipy.sparse.spmatrix
+    """
+    if (x.ndim != 2) or (x.shape[0] != x.shape[1]):
         return False
-    if isinstance(X, (np.ndarray, scipy.sparse.spmatrix)):
-        return abs(X - X.T).max() <= atol
+    if isinstance(x, (np.ndarray, scipy.sparse.spmatrix)):
+        return abs(x - x.T).max() <= atol
     else:
         raise TypeError("input a correct matrix type.")
 
