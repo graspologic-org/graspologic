@@ -225,7 +225,9 @@ def is_unweighted(
         )
 
 
-def is_almost_symmetric(x: Union[np.ndarray, scipy.sparse.spmatrix], atol: float = 1e-15) -> bool:
+def is_almost_symmetric(
+    x: Union[np.ndarray, scipy.sparse.spmatrix], atol: float = 1e-15
+) -> bool:
     """
     Returns True if input x is nearly symmetric, which means that the entries differ by
     no more than atol.
