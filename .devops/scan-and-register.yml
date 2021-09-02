@@ -14,16 +14,16 @@ jobs:
     pool:
       vmImage: "windows-latest"
     steps:
-      - task: Semmle@0
+      - task: Semmle@0
         env:
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
         inputs:
-          sourceCodeDirectory: '$(Build.SourcesDirectory)'
-          language: 'python'
-          querySuite: 'Recommended'
-          timeout: '1800'
-          ram: '16384'
-          addProjectDirToScanningExclusionList: true 
+          sourceCodeDirectory: '$(Build.SourcesDirectory)'
+          language: 'python'
+          querySuite: 'Recommended'
+          timeout: '1800'
+          ram: '16384'
+          addProjectDirToScanningExclusionList: true
   - job: component_governance
     displayName: Component Governance
     pool:
