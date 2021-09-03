@@ -60,6 +60,7 @@ jobs:
           pip install -U pip setuptools
           pip install -r requirements.txt
           black --check --diff ./graspologic ./tests
+          isort --check-only ./graspologic ./tests
   mypy-type-check:
     runs-on: ubuntu-latest
     continue-on-error: true

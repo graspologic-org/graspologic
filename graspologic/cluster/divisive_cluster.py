@@ -2,12 +2,11 @@
 # Licensed under the MIT License.
 
 import numpy as np
+from anytree import LevelOrderIter, NodeMixin
 from sklearn.base import BaseEstimator
 from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_array
 from sklearn.utils.validation import check_is_fitted
-
-from anytree import NodeMixin, LevelOrderIter
 
 from .autogmm import AutoGMMCluster
 from .kclust import KMeansCluster

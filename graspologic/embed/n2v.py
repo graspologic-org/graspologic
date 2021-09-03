@@ -9,6 +9,8 @@ from typing import Any, List, Optional, Tuple, Union
 import networkx as nx
 import numpy as np
 
+from ..utils import remap_node_ids
+
 
 def node2vec_embed(
     graph: Union[nx.Graph, nx.DiGraph],
@@ -22,7 +24,7 @@ def node2vec_embed(
     iterations: int = 1,
     interpolate_walk_lengths_by_node_degree: bool = True,
     random_seed: Optional[int] = None,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.array, List[Any]]:
     """
     Generates a node2vec embedding from a given graph. Will follow the word2vec algorithm to create the embedding.
 
@@ -65,7 +67,7 @@ def node2vec_embed(
 
     Returns
     -------
-    Tuple[np.ndarray, np.ndarray]
+    Tuple[np.array, List[Any]]
         A tuple containing a matrix, with each row index corresponding to the embedding for each node. The tuple
         also contains a vector containing the corresponding vertex labels for each row in the matrix.
         The matrix and vector are positionally correlated.
@@ -128,7 +130,13 @@ def node2vec_embed(
         f"Completed. Ending time is {str(end)} Elapsed time is {str(start - end)}"
     )
 
-    return model.wv.vectors, model.wv.index2word
+    labels = list(node2vec_graph.original_graph.nodes())
+    remapped_labels = node2vec_graph.label_map_to_string
+
+    return (
+        np.array([model.wv.get_vector(remapped_labels[node]) for node in labels]),
+        labels,
+    )
 
 
 def _assert_is_positive_int(name: str, value: int):
@@ -233,7 +241,13 @@ class _Node2VecGraph:
         inout_hyperparameter: float,
         random_state: Optional[np.random.RandomState] = None,
     ):
-        self.graph: nx.Graph = graph
+        self.original_graph: nx.Graph = graph
+
+        graph_with_new_ids, new_id_map = remap_node_ids(graph=graph)
+
+        self.graph = graph_with_new_ids
+        self.label_map_to_string = new_id_map
+
         self.is_directed = self.graph.is_directed()
         self.p = return_hyperparameter
         self.q = inout_hyperparameter
@@ -299,7 +313,7 @@ class _Node2VecGraph:
 
     @staticmethod
     def _get_walk_length_interpolated(
-        degree: int, percentiles: np.ndarray, max_walk_length: int
+        degree: int, percentiles: list, max_walk_length: int
     ):
         """
         Given a node's degree, determine the length of a walk that should be used. If the degree is less than the
@@ -473,7 +487,7 @@ def _alias_setup(probabilities: List[float]):
     """
     number_of_outcomes = len(probabilities)
     alias = np.zeros(number_of_outcomes)
-    sampled_probabilities = np.zeros(number_of_outcomes, dtype=np.int)
+    sampled_probabilities = np.zeros(number_of_outcomes, dtype=int)
 
     smaller = []
     larger = []

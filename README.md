@@ -8,7 +8,6 @@
 [![DOI](https://zenodo.org/badge/147768493.svg)](https://zenodo.org/badge/latestdoi/147768493)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 ## `graspologic` is a package for graph statistical algorithms.
 
 - [Overview](#overview)
@@ -18,11 +17,6 @@
 - [Contributing](#contributing)
 - [License](#license)
 - [Issues](#issues)
-
-# Notice: `graspologic` is the merger project of `GraSPy` and `topologic`
-We're actively merging these projects into one, but you may see some references to `graspy` or `topologic` from time to time in documentation and
-issues. If you notice anything in the documentation referencing either graspy or topologic, please raise an issue (if one does not already exist)
-noting the missed titles so we can address all of them.
 
 # Overview
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.

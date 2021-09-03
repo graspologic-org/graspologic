@@ -2,16 +2,16 @@
 # Licensed under the MIT license.
 
 import atexit
-from itertools import cycle
 import json
 import math
-import numpy as np
 import os
+from itertools import cycle
 from pathlib import Path
-import pkg_resources
-from sklearn.preprocessing import minmax_scale
 from typing import Any, Dict, Optional, Tuple
 
+import numpy as np
+import pkg_resources
+from sklearn.preprocessing import minmax_scale
 
 __all__ = ["categorical_colors", "sequential_colors"]
 

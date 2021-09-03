@@ -1,9 +1,10 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from .sbm import SBMEstimator, DCSBMEstimator
-from ..utils import import_graph
 import numpy as np
+
+from ..utils import import_graph
+from .sbm_estimators import DCSBMEstimator, SBMEstimator
 
 
 class EREstimator(SBMEstimator):

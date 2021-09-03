@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from abc import abstractmethod
 from typing import Tuple, TypeVar
 
 import numpy as np
-from abc import abstractmethod
-from sklearn.utils import check_array
 from sklearn.base import BaseEstimator
+from sklearn.utils import check_array
 
 Self = TypeVar("Self", bound="BaseAlign")
 

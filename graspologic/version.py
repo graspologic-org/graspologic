@@ -1,11 +1,11 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import datetime
-import pkg_resources
 import configparser
-
+import datetime
 from typing import Optional
+
+import pkg_resources
 
 
 def __from_distribution() -> Optional[str]:

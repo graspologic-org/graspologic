@@ -1,12 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import numpy as np
-from sklearn.utils.validation import check_is_fitted
+from typing import Optional
 
-from ..utils import import_graph, is_almost_symmetric
+import numpy as np
+
+from ..utils import is_almost_symmetric
 from .base import BaseEmbedMulti
-from .svd import select_dimension, selectSVD
+from .svd import select_dimension, select_svd
 
 
 class MultipleASE(BaseEmbedMulti):
@@ -71,6 +72,10 @@ class MultipleASE(BaseEmbedMulti):
         If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
 
     Attributes
     ----------
@@ -113,6 +118,7 @@ class MultipleASE(BaseEmbedMulti):
         scaled=True,
         diag_aug=True,
         concat=False,
+        svd_seed: Optional[int] = None,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -125,20 +131,25 @@ class MultipleASE(BaseEmbedMulti):
             n_iter=n_iter,
             diag_aug=diag_aug,
             concat=concat,
+            svd_seed=svd_seed,
         )
         self.scaled = scaled
 
     def _reduce_dim(self, graphs):
-        # first embed into log2(n_vertices) for each graph
-        n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
+        if self.n_components is None:
+            # first embed into log2(n_vertices) for each graph
+            n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
+        else:
+            n_components = self.n_components
 
         # embed individual graphs
         embeddings = [
-            selectSVD(
+            select_svd(
                 graph,
                 n_components=n_components,
                 algorithm=self.algorithm,
                 n_iter=self.n_iter,
+                svd_seed=self.svd_seed,
             )
             for graph in graphs
         ]
@@ -176,20 +187,22 @@ class MultipleASE(BaseEmbedMulti):
 
         # Second SVD for vertices
         # The notation is slightly different than the paper
-        Uhat, sing_vals_left, _ = selectSVD(
+        Uhat, sing_vals_left, _ = select_svd(
             Us,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
+            svd_seed=self.svd_seed,
         )
 
-        Vhat, sing_vals_right, _ = selectSVD(
+        Vhat, sing_vals_right, _ = select_svd(
             Vs,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
+            svd_seed=self.svd_seed,
         )
         return Uhat, Vhat, sing_vals_left, sing_vals_right
 
@@ -223,7 +236,7 @@ class MultipleASE(BaseEmbedMulti):
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
-            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
+            self.scores_ = np.asarray([Uhat.T @ graph @ Vhat for graph in graphs])
             self.singular_values_ = (sing_vals_left, sing_vals_right)
         else:
             self.latent_right_ = None

@@ -2,17 +2,17 @@
 # Licensed under the MIT License.
 
 import warnings
-from collections import Iterable
 from functools import reduce
 from pathlib import Path
-from typing import Any, Callable, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 import networkx as nx
 import numpy as np
 import pandas as pd
 import scipy.sparse
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_matrix, diags, isspmatrix_csr
+from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
+from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
@@ -56,11 +56,13 @@ def import_graph(
     networkx.Graph, numpy.array
     """
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
-        out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float_)
+        out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float)
     elif isinstance(graph, (np.ndarray, np.memmap, csr_matrix)):
         shape = graph.shape
         if len(shape) > 3:
-            msg = f"Input tensor must have at most 3 dimensions, not {len(shape)}."
+            msg = "Input tensor must have at most 3 dimensions, not {}.".format(
+                len(shape)
+            )
             raise ValueError(msg)
         elif len(shape) == 3:
             if shape[1] != shape[2]:
@@ -82,8 +84,10 @@ def import_graph(
             copy=copy,
         )
     else:
-        msg = f"Input must be networkx.Graph, np.array, or " \
-              f"scipy.sparse.csr_matrix,not {type(graph)}."
+        msg = "Input must be networkx.Graph, np.array, or scipy.sparse.csr_matrix,\
+        not {}.".format(
+            type(graph)
+        )
         raise TypeError(msg)
     return out
 
@@ -171,6 +175,8 @@ def import_edgelist(
 
     # Compute union of all vertices
     vertices = np.sort(reduce(np.union1d, [G.nodes for G in graphs]))
+    for g in graphs:
+        g.add_nodes_from(vertices)
     out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
 
     # only return adjacency matrix if input is only 1 graph
@@ -225,7 +231,7 @@ def is_unweighted(
         # brute force.  if anyone has a better way, please PR
         rows, columns = graph.nonzero()
         for i in range(0, len(rows)):
-            if graph[rows[i], columns[i]] != 1 or graph[rows[i], columns[i]] != 0:
+            if graph[rows[i], columns[i]] != 1 and graph[rows[i], columns[i]] != 0:
                 return False
         return True
     elif isinstance(graph, nx.Graph):
@@ -236,8 +242,37 @@ def is_unweighted(
         )
 
 
-def is_almost_symmetric(X: np.ndarray, atol: float = 1e-15) -> bool:
-    return abs(X - X.T).max() <= atol
+def is_almost_symmetric(
+    x: Union[np.ndarray, scipy.sparse.spmatrix], atol: float = 1e-15
+) -> bool:
+    """
+    Returns True if input x is nearly symmetric, which means that the entries differ by
+    no more than atol.
+
+    Parameters
+    ----------
+    x: Union[np.ndarray, scipy.sparse.spmatrix]
+        a square matrix
+    atol : float
+        a threshold for comparing the difference between off-diagonal entries
+        default 1e-15
+
+    Returns
+    -------
+    bool
+        True if x is a nearly symmetric square matrix
+
+    Raises
+    ------
+    TypeError
+        If the provided graph is not a numpy.ndarray or scipy.sparse.spmatrix
+    """
+    if (x.ndim != 2) or (x.shape[0] != x.shape[1]):
+        return False
+    if isinstance(x, (np.ndarray, scipy.sparse.spmatrix)):
+        return abs(x - x.T).max() <= atol
+    else:
+        raise TypeError("input a correct matrix type.")
 
 
 def symmetrize(graph, method: str = "avg"):
@@ -440,7 +475,8 @@ def is_fully_connected(graph):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph,
+        scipy.sparse.csr_matrix, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
 
@@ -462,19 +498,30 @@ def is_fully_connected(graph):
     >>> is_fully_connected(a)
     False
     """
+
     if isinstance(graph, (np.ndarray, csr_matrix)):
-        if is_symmetric(graph):
-            g_object = nx.Graph()
-        else:
-            g_object = nx.DiGraph()
-        graph = nx.to_networkx_graph(graph, create_using=g_object)
-    if type(graph) in [nx.Graph, nx.MultiGraph]:
-        return nx.is_connected(graph)
-    elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
-        return nx.is_weakly_connected(graph)
+        directed = not is_symmetric(graph)
+
+        n_components = connected_components(
+            csgraph=graph, directed=directed, connection="weak", return_labels=False
+        )
+        return n_components == 1
+
+    else:
+        if type(graph) in [nx.Graph, nx.MultiGraph]:
+            return nx.is_connected(graph)
+        elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
+            return nx.is_weakly_connected(graph)
 
 
-def largest_connected_component(graph, return_inds=False):
+def largest_connected_component(
+    graph: Union[
+        nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
+    ],
+    return_inds: bool = False,
+) -> Union[
+    nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
+]:
     r"""
     Finds the largest connected component for the input graph.
 
@@ -483,32 +530,47 @@ def largest_connected_component(graph, return_inds=False):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray,
-        interpreted as an :math:`n \times n` adjacency matrix
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix
+        Input graph in any of the above specified formats. If np.ndarray or
+        scipy.sparse.csr_matrix interpreted as an :math:`n \times n` adjacency matrix.
 
     return_inds: boolean, default: False
-        Whether to return a np.ndarray containing the indices in the original
+        Whether to return a np.ndarray containing the indices/nodes in the original
         adjacency matrix that were kept and are now in the returned graph.
-        Ignored when input is networkx object
 
     Returns
     -------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        New graph of the largest connected component of the input parameter.
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix
+        New graph of the largest connected component, returned in the input format.
 
     inds: (optional)
-        Indices from the original adjacency matrix that were kept after taking
+        Indices/nodes from the original adjacency matrix that were kept after taking
         the largest connected component.
+
+    Notes
+    -----
+    For networks input in ``scipy.sparse.csr_matrix`` format, explicit zeros are removed
+    prior to finding the largest connected component, thus they are not treated as
+    edges. This differs from the convention in
+    :func:`scipy.sparse.csgraph.connected_components`.
     """
-    input_ndarray = False
-    if type(graph) is np.ndarray:
-        input_ndarray = True
-        if is_symmetric(graph):
-            g_object = nx.Graph()
-        else:
-            g_object = nx.DiGraph()
-        graph = nx.from_numpy_array(graph, create_using=g_object)
+
+    if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
+        return _largest_connected_component_networkx(graph, return_inds=return_inds)
+    elif isinstance(graph, (np.ndarray, csr_matrix)):
+        return _largest_connected_component_adjacency(graph, return_inds=return_inds)
+    else:
+        msg = (
+            "`graph` must either be a networkx graph or an adjacency matrix in"
+            " numpy ndarray or scipy csr_matrix format."
+        )
+        raise TypeError(msg)
+
+
+def _largest_connected_component_networkx(
+    graph: Union[nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph],
+    return_inds: bool = False,
+):
     if type(graph) in [nx.Graph, nx.MultiGraph]:
         lcc_nodes = max(nx.connected_components(graph), key=len)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
@@ -517,11 +579,47 @@ def largest_connected_component(graph, return_inds=False):
     lcc.remove_nodes_from([n for n in lcc if n not in lcc_nodes])
     if return_inds:
         nodelist = np.array(list(lcc_nodes))
-    if input_ndarray:
-        lcc = nx.to_numpy_array(lcc)
     if return_inds:
         return lcc, nodelist
-    return lcc
+    else:
+        return lcc
+
+
+def _largest_connected_component_adjacency(
+    adjacency: Union[np.ndarray, csr_matrix],
+    return_inds: bool = False,
+):
+    if isinstance(adjacency, csr_matrix):
+        adjacency.eliminate_zeros()
+
+    # If you treat an undirected graph as directed and take the largest weakly connected
+    # component, you'll get the same answer as taking the largest connected component of
+    # that undirected graph. So I wrote it this way to avoid the cost of checking for
+    # directedness, and it makes the code simpler too.
+    n_components, labels = csgraph.connected_components(
+        adjacency, directed=True, connection="weak", return_labels=True
+    )
+    if n_components > 1:
+        unique_labels, counts = np.unique(labels, return_counts=True)
+        lcc_label_ind = np.argmax(counts)  # LCC is the component with the most nodes,
+        # so it is the component label with the highest count in the label array
+
+        lcc_label = unique_labels[lcc_label_ind]  # grab the component label for the LCC
+
+        lcc_mask = labels == lcc_label  # create a boolean mask array for where the
+        # component labels equal that of the largest connected component
+
+        lcc = adjacency[lcc_mask][:, lcc_mask]  # mask the adjacency matrix to only LCC
+    else:
+        lcc = adjacency
+        lcc_mask = np.ones(adjacency.shape[0], dtype=bool)
+
+    if return_inds:
+        all_inds = np.arange(adjacency.shape[0])
+        lcc_inds = all_inds[lcc_mask]
+        return lcc, lcc_inds
+    else:
+        return lcc
 
 
 def multigraph_lcc_union(graphs, return_inds=False):
@@ -958,142 +1056,59 @@ def remap_labels(
         return remapped_y_pred
 
 
-def to_weighted_edge_list(
-    graph: Union[
-        List[Tuple[Any, Any, Union[float, int]]],
-        nx.Graph,
-        nx.DiGraph,
-        nx.MultiGraph,
-        nx.MultiDiGraph,
-        np.ndarray,
-        scipy.sparse.csr_matrix,
-    ],
-    is_directed: Optional[bool] = None,
-    is_weighted: Optional[bool] = None,
-    weight_attribute: Any = "weight",
-    weight_default: Optional[float] = None,
-) -> List[Tuple[str, str, float]]:
+def remap_node_ids(
+    graph: nx.Graph, weight_attribute: str = "weight", weight_default: float = 1.0
+) -> Tuple[nx.Graph, Dict[Any, str]]:
     """
-    Creates a weighted edge list with string representations of the nodes and float
-    weights.
+    Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
+    except the node ids are remapped to a string representation.
 
     Parameters
     ----------
-    graph : Union[List[Tuple[Any, Any, Union[float, int]]], nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, scipy.sparse.csr_matrix]
-        A representation of a graph either as a list of tuples, a networkx graph, or an
-        adjacency matrix from numpy or scipy.sparse.csr_matrix
-    is_directed : Optional[bool]
-        Default is ``None``. Ignored if an edge tuple list or networkx graph is
-        provided, but can be used to short circuit an exhaustive matrix symmetry check
-        for numpy and scipy matrices.
-    is_weighted : Optional[bool]
-        Default is ``None``. Ignored if an edge tuple list or networkx graph is
-        provided, but can be used to short circuit an exhaustive matrix weight check for
-        numpy and scipy matrices.
-    weight_attribute : Any
-        Default is the string ``weight``.  Used to retrieve the weight from networkx
-        edge attribute dictionary.
-    weight_default : Optional[float]
-        Default is ``None``. If given an unweighted graph, will use as a default weight
-        to output in the weighted edge list.
+    graph : nx.Graph
+        A graph that has node ids of arbitrary types.
+    weight_attribute : str,
+        Default is ``weight``. An optional attribute to specify which column in your graph contains the weight value.
+    weight_default : float,
+        Default edge weight to use if a weight is not found on an edge in the graph
+    Returns
+    -------
+    Tuple[nx.Graph, Dict[Any, str]]
+        A new graph that contains the same edges except the node ids are remapped to strings. The keys in
+        the dictionary are the old node ids and the values are the newly remapped node ids.
 
     Raises
     ------
     TypeError
-        If the graph is not a type we support
-    ValueError
-        If an adjacency matrix shape is not :math:`n x n`
-        If the weight attribute on a networkx graph is not a float
-        If the adjacency matrix is unweighted and a default weight is not set
-
-    Returns
-    -------
-    List[Tuple[str, str, float]]
-        A list of edges for the type of graph.  Undirected graphs will only contain a
-        single entry for an edge between any two nodes.
     """
-    # if we're already an edge list of str, str, float, return it
-    if weight_default is not None and not isinstance(weight_default, (float, int)):
-        raise TypeError("weight default must be a float or int")
+    if not isinstance(graph, nx.Graph):
+        raise TypeError("graph must be of type nx.Graph")
 
-    if isinstance(graph, list):
-        if len(graph) == 0:
-            return graph
-        if not isinstance(graph[0], tuple) or len(graph[0]) != 3:
-            raise TypeError(
-                "If the provided graph is a list, it must be a list of tuples with 3 "
-                "values in the form of Tuple[Any, Any, Union[int, float]], you provided"
-                f"{type(graph[0])}, {repr(graph[0])}"
-            )
-        return [
-            (str(source), str(target), float(weight))
-            for source, target, weight in graph
-        ]
+    if not nx.is_weighted(graph, weight=weight_attribute):
+        warnings.warn(
+            f'Graph has at least one unweighted edge using weight_attribute "{weight_attribute}". '
+            f'Defaulting unweighted edges to "{weight_default}"'
+        )
 
-    if isinstance(graph, nx.Graph):
-        # will catch all networkx graph types
-        try:
-            return [
-                (
-                    str(source),
-                    str(target),
-                    float(data.get(weight_attribute, weight_default)),
-                )
-                for source, target, data in graph.edges(data=True)
-            ]
-        except TypeError:
-            # None is returned for the weight if it doesn't exist and a weight_default
-            # is not set, which results in a TypeError when you call float(None)
-            raise ValueError(
-                f"The networkx graph provided did not contain a {weight_attribute} that"
-                " could be cast to float in one of the edges"
-            )
+    node_id_dict = dict()
+    graph_remapped = type(graph)()
 
-    if isinstance(graph, (np.ndarray, csr_matrix)):
-        shape = graph.shape
-        if len(shape) != 2 or shape[0] != shape[1]:
-            raise ValueError(
-                "graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be "
-                "adjacency matrices with n x n shape"
-            )
+    for source, target, weight in graph.edges(
+        data=weight_attribute, default=weight_default
+    ):
+        if source not in node_id_dict:
+            node_id_dict[source] = str(len(node_id_dict.keys()))
 
-        if is_weighted is None:
-            is_weighted = not is_unweighted(graph)
+        if target not in node_id_dict:
+            node_id_dict[target] = str(len(node_id_dict.keys()))
 
-        if not is_weighted and weight_default is None:
-            raise ValueError(
-                "the adjacency matrix provided is not weighted and a default weight has"
-                " not been set"
-            )
+        graph_remapped.add_edge(node_id_dict[source], node_id_dict[target])
 
-        if is_directed is None:
-            is_directed = not is_almost_symmetric(graph)
+        graph_remapped[node_id_dict[source]][node_id_dict[target]][
+            weight_attribute
+        ] = weight
 
-        edges = []
-        if isinstance(graph, np.ndarray):
-            for i in range(0, shape[0]):
-                start = i if not is_directed else 0
-                for j in range(start, shape[1]):
-                    weight = graph[i][j]
-                    if weight != 0:
-                        if not is_weighted and weight == 1:
-                            weight = weight_default
-                        edges.append((str(i), str(j), float(weight)))
-        else:
-            edges = []
-            rows, columns = graph.nonzero()
-            for i in range(0, len(rows)):
-                row = rows[i]
-                column = columns[i]
-                if is_directed or (not is_directed and row <= column):
-                    edges.append((str(row), str(column), float(graph[row, column])))
-
-        return edges
-
-    raise TypeError(
-        f"The type of graph provided {type(graph)} is not a list of 3-tuples, networkx "
-        f"graph, numpy.ndarray, or scipy.sparse.csr_matrix"
-    )
+    return graph_remapped, node_id_dict
 
 
 def suppress_common_warnings():
