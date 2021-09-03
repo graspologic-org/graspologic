@@ -9,6 +9,24 @@ on:
       - '.all-contributorsrc'
       - 'CONTRIBUTORS.md' 
 jobs:
+  analyze:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: 'python'
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
   build-reference-documentation:
     runs-on: ubuntu-latest
     continue-on-error: true
