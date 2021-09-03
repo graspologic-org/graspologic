@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from graspologic.types import *
+
 import graspologic.align
 import graspologic.cluster
 import graspologic.datasets
