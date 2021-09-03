@@ -32,7 +32,7 @@ class GraphBuilder:
     def __init__(self, directed: bool = False):
         # OrderedDict is the default for {} anyway, but I wanted to be very explicit,
         # since we absolutely rely on the ordering
-        self._id_map = OrderedDict()
+        self._id_map: Dict[Any, int] = OrderedDict()
         self._graph = nx.DiGraph() if directed else nx.Graph()
 
     @beartype

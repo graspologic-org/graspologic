@@ -167,7 +167,8 @@ def laplacian_spectral_embedding(
     )
 
     check_argument(
-        regularizer is None or regularizer >= 0, "regularizer must be nonnegative"
+        regularizer is None or float(regularizer) >= 0,
+        "regularizer must be nonnegative",
     )
 
     check_argument(
@@ -177,6 +178,7 @@ def laplacian_spectral_embedding(
         "accordingly",
     )
 
+    used_weight_attribute: Optional[str] = weight_attribute
     if not is_real_weighted(graph, weight_attribute=weight_attribute):
         warnings.warn(
             f"Graphs with edges that do not have a real numeric weight set for every "
@@ -185,14 +187,14 @@ def laplacian_spectral_embedding(
             f"please add a '{weight_attribute}' attribute to every edge with a real, "
             f"numeric value (e.g. an integer or a float) and call this function again."
         )
-        weight_attribute = None  # this supercedes what the user said, because
+        used_weight_attribute = None  # this supercedes what the user said, because
         # not all of the weights are real numbers, if they exist at all
         # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
 
     node_labels = np.array(list(graph.nodes()))
 
     graph_as_csr = nx.to_scipy_sparse_matrix(
-        graph, weight=weight_attribute, nodelist=node_labels
+        graph, weight=used_weight_attribute, nodelist=node_labels
     )
 
     if not is_fully_connected(graph):
