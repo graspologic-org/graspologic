@@ -87,7 +87,10 @@ class GraphMatch(BaseEstimator):
         Default is None.
 
     verbose : int, default=0
-        Controls the verbosity when fitting and predicting.
+        This parameter controls the verbosity of the output.
+        The frequency of the messages increases with the verbosity level.
+        If non zero, progress messages are printed. If >10, all messages are printed.
+        
 
     n_jobs : int or None, (default = None)
         The number of jobs to run in parallel. Parallelization is over the
