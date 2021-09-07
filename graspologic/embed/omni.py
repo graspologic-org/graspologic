@@ -2,13 +2,53 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Optional
+from typing import List, Optional
 
 import numpy as np
-from scipy.sparse import isspmatrix_csr
+from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
-from ..utils import import_graph, is_fully_connected
+from ..utils import average_matrices, import_graph, is_fully_connected
 from .base import BaseEmbedMulti
+
+
+def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> np.ndarray:
+    """
+    Generate the omnibus matrix from a list of sparse adjacency matrices as described by 'A central limit theorem
+    for an omnibus embedding of random dot product graphs.'
+
+    Given an iterable of matrices a, b, ... n then the omnibus matrix is defined as::
+
+        [[           a, .5 * (a + b), ..., .5 * (a + n)],
+         [.5 * (b + a),            b, ..., .5 * (b + n)],
+         [         ...,          ..., ...,          ...],
+         [.5 * (n + a),  .5 * (n + b, ...,            n]
+        ]
+    """
+
+    rows = []
+
+    # Iterate over each column
+    for column_index in range(0, len(matrices)):
+
+        current_row = []
+        current_matrix = matrices[column_index]
+
+        for row_index in range(0, len(matrices)):
+            if row_index == column_index:
+                # we are on the diagonal, we do not need to perform any calculation and instead add the current matrix
+                # to the current_row
+                current_row.append(current_matrix)
+            else:
+                # otherwise we are not on the diagonal and we average the current_matrix with the matrix at row_index
+                # and add that to our current_row
+                matrices_averaged = (current_matrix + matrices[row_index]) * 0.5
+                current_row.append(matrices_averaged)
+
+        # an entire row has been generated, we will create a horizontal stack of each matrix in the row completing the
+        # row
+        rows.append(hstack(current_row))
+
+    return vstack(rows)
 
 
 def _get_omni_matrix(graphs):
@@ -25,6 +65,9 @@ def _get_omni_matrix(graphs):
     out : 2d-array
         Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)
     """
+    if isspmatrix_csr(graphs[0]):
+        return _get_omnibus_matrix_sparse(graphs)
+
     shape = graphs[0].shape
     n = shape[0]  # number of vertices
     m = len(graphs)  # number of graphs
@@ -173,15 +216,15 @@ class OmnibusEmbed(BaseEmbedMulti):
         self : object
             Returns an instance of self.
         """
-        if any([isspmatrix_csr(g) for g in graphs]):
-            msg = "OmnibusEmbed does not support scipy.sparse.csr_matrix inputs"
-            raise TypeError(msg)
+        # if any([isspmatrix_csr(g) for g in graphs]):
+        #     msg = "OmnibusEmbed does not support scipy.sparse.csr_matrix inputs"
+        #     raise TypeError(msg)
 
         graphs = self._check_input_graphs(graphs)
 
         # Check if Abar is connected
         if self.check_lcc:
-            if not is_fully_connected(np.mean(graphs, axis=0)):
+            if not is_fully_connected(average_matrices(graphs)):
                 msg = (
                     "Input graphs are not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"

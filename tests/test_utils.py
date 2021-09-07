@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import random
 import unittest
 import warnings
 from math import sqrt
@@ -12,6 +13,25 @@ from scipy.sparse import csr_matrix
 
 from graspologic.utils import remap_labels
 from graspologic.utils import utils as gus
+
+
+class TestAverageMatrices(unittest.TestCase):
+    def test_mean_dense_and_sparse_are_equivalent(self):
+        trials = 20
+
+        for _ in range(trials):
+            number_of_graphs = random.randint(2, 10)
+
+            dim = random.randint(2, 100)
+            dim2 = random.randint(2, 100)
+
+            graphs = [np.random.rand(dim, dim2) for _ in range(number_of_graphs)]
+            graphs_sparse = [csr_matrix(graph) for graph in graphs]
+
+            graphs_averaged = gus.average_matrices(graphs)
+            graphs_sparse_averaged = gus.average_matrices(graphs_sparse).todense()
+
+            np.testing.assert_almost_equal(graphs_averaged, graphs_sparse_averaged)
 
 
 class TestInput(unittest.TestCase):
