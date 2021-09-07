@@ -6,6 +6,7 @@ from typing import List, Optional, Tuple, Union
 
 import networkx as nx
 import numpy as np
+import scipy as sp
 from beartype import beartype
 
 from graspologic.embed import OmnibusEmbed
@@ -158,6 +159,7 @@ def omnibus_embedding_pairwise(
 
     union_graph_lcc = largest_connected_component(union_graph)
     union_graph_lcc_nodes = union_graph_lcc.nodes()
+
     union_node_ids = np.array(list(union_graph_lcc_nodes))
 
     previous_graph = graphs[0].copy()
@@ -261,15 +263,27 @@ def _elbow_cut_if_needed(elbow_cut, is_directed, singular_values, embedding):
 
 
 def _augment_graph(graph, node_ids, weight_attribute):
-    graph_as_array = nx.to_numpy_array(
+    graph_sparse = nx.to_scipy_sparse_matrix(
         graph, weight=weight_attribute, nodelist=node_ids
     )
 
-    graphs_loops_removed = remove_loops(graph_as_array)
+    graphs_loops_removed = remove_loops(graph_sparse)
     graphs_ranked = pass_to_ranks(graphs_loops_removed)
     graphs_diag_augmented = augment_diagonal(graphs_ranked)
 
     return graphs_diag_augmented
+
+
+# def _augment_graph(graph, node_ids, weight_attribute):
+#     graph_as_array = nx.to_numpy_array(
+#         graph, weight=weight_attribute, nodelist=node_ids
+#     )
+#
+#     graphs_loops_removed = remove_loops(graph_as_array)
+#     graphs_ranked = pass_to_ranks(graphs_loops_removed)
+#     graphs_diag_augmented = augment_diagonal(graphs_ranked)
+#
+#     return graphs_diag_augmented
 
 
 def _sync_nodes(graph_to_reduce, set_of_valid_nodes):
