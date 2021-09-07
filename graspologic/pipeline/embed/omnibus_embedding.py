@@ -274,18 +274,6 @@ def _augment_graph(graph, node_ids, weight_attribute):
     return graphs_diag_augmented
 
 
-# def _augment_graph(graph, node_ids, weight_attribute):
-#     graph_as_array = nx.to_numpy_array(
-#         graph, weight=weight_attribute, nodelist=node_ids
-#     )
-#
-#     graphs_loops_removed = remove_loops(graph_as_array)
-#     graphs_ranked = pass_to_ranks(graphs_loops_removed)
-#     graphs_diag_augmented = augment_diagonal(graphs_ranked)
-#
-#     return graphs_diag_augmented
-
-
 def _sync_nodes(graph_to_reduce, set_of_valid_nodes):
     to_remove = []
     for n in graph_to_reduce.nodes():

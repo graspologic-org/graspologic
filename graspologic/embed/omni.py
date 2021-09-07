@@ -216,10 +216,6 @@ class OmnibusEmbed(BaseEmbedMulti):
         self : object
             Returns an instance of self.
         """
-        # if any([isspmatrix_csr(g) for g in graphs]):
-        #     msg = "OmnibusEmbed does not support scipy.sparse.csr_matrix inputs"
-        #     raise TypeError(msg)
-
         graphs = self._check_input_graphs(graphs)
 
         # Check if Abar is connected
