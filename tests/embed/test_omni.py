@@ -7,6 +7,7 @@ import numpy as np
 from numpy import array_equal
 from numpy.linalg import norm
 from numpy.testing import assert_allclose
+from scipy.sparse import csr_matrix
 
 from graspologic.embed.omni import OmnibusEmbed, _get_omni_matrix
 from graspologic.simulations.simulations import er_nm, er_np
