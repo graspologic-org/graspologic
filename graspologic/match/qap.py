@@ -470,7 +470,7 @@ def _quadratic_assignment_faq(
         grad_fp = const_sum + A22 @ P @ B22.T + A22.T @ P @ B22
         # [1] Algorithm 1 Line 4 - get direction Q by solving Eq. 8
         if verbose>3:
-            print("Solving for direction Q")
+            print("Solving for direction Q (LAP step)")
         _, cols = linear_sum_assignment(grad_fp, maximize=maximize)
         Q = np.eye(n_unseed)[cols]
 
