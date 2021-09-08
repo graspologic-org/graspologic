@@ -462,10 +462,8 @@ def _quadratic_assignment_faq(
 
     # [1] Algorithm 1 Line 2 - loop while stopping criteria not met
     for n_iter in range(1, maxiter + 1):
-        if verbose==1:
-            print("Running Frank-Wolfe iterations")
-        elif verbose>1:
-            print(f"Iteration {n_iter}")
+        if verbose>=1:
+            print(f"Running Frank-Wolfe iteration {n_iter}")
         # [1] Algorithm 1 Line 3 - compute the gradient of f(P) = -tr(APB^tP^t)
         if verbose>2:
             print("Computing the gradient")
