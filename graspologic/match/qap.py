@@ -222,6 +222,7 @@ def _quadratic_assignment_faq(
     shuffle_input=False,
     maxiter=30,
     tol=0.03,
+    verbose=0
 ):
     r"""
     Solve the quadratic assignment problem (approximately).
@@ -313,6 +314,10 @@ def _quadratic_assignment_faq(
         iterations is sufficiently small, that is, when the relative Frobenius
         norm, :math:`\frac{||P_{i}-P_{i+1}||_F}{\sqrt{len(P_{i})}} \leq tol`,
         where :math:`i` is the iteration number.
+    verbose : int, positive (default=0)
+        This parameter controls the verbosity of the output.
+        The frequency of the messages increases with the verbosity level.
+        If non zero, progress messages are printed. If >10, all messages are printed.
     Returns
     -------
     res : OptimizeResult
@@ -428,6 +433,8 @@ def _quadratic_assignment_faq(
     S22 = S[perm_S, n_seeds:]
 
     # [1] Algorithm 1 Line 1 - choose initialization
+    if verbose>3:
+            print("Initializing graph matching")
     if isinstance(P0, str):
         # initialize J, a doubly stochastic barycenter
         J = np.ones((n_unseed, n_unseed)) / n_unseed
@@ -455,13 +462,23 @@ def _quadratic_assignment_faq(
 
     # [1] Algorithm 1 Line 2 - loop while stopping criteria not met
     for n_iter in range(1, maxiter + 1):
+        if verbose==1:
+            print("Running Frank-Wolfe iterations")
+        elif verbose>1:
+            print(f"Iteration {n_iter}")
         # [1] Algorithm 1 Line 3 - compute the gradient of f(P) = -tr(APB^tP^t)
+        if verbose>2:
+            print("Computing the gradient")
         grad_fp = const_sum + A22 @ P @ B22.T + A22.T @ P @ B22
         # [1] Algorithm 1 Line 4 - get direction Q by solving Eq. 8
+        if verbose>3:
+            print("Solving for direction Q")
         _, cols = linear_sum_assignment(grad_fp, maximize=maximize)
         Q = np.eye(n_unseed)[cols]
 
         # [1] Algorithm 1 Line 5 - compute the step size
+        if verbose>4:
+            print("Computing the step size")
         # Noting that e.g. trace(Ax) = trace(A)*x, expand and re-collect
         # terms as ax**2 + bx + c. c does not affect location of minimum
         # and can be ignored. Also, note that trace(A@B) = (A.T*B).sum();
@@ -485,6 +502,8 @@ def _quadratic_assignment_faq(
             alpha = np.argmin([0, (b + a) * obj_func_scalar])
 
         # [1] Algorithm 1 Line 6 - Update P
+        if verbose>5:
+            print("Updating P")
         P_i1 = alpha * P + (1 - alpha) * Q
         if np.linalg.norm(P - P_i1) / np.sqrt(n_unseed) < tol:
             P = P_i1

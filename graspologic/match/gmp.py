@@ -249,6 +249,7 @@ class GraphMatch(BaseEstimator):
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
             "tol": self.eps,
+            "verbose": self.verbose
         }
 
         rng = check_random_state(self.random_state)
