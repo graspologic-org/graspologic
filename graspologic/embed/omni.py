@@ -5,13 +5,15 @@ import warnings
 from typing import List, Optional
 
 import numpy as np
-from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
+from beartype import beartype
+from scipy.sparse import coo_matrix, csr_matrix, hstack, isspmatrix_csr, vstack
 
 from ..utils import average_matrices, import_graph, is_fully_connected
 from .base import BaseEmbedMulti
 
 
-def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> np.ndarray:
+@beartype
+def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> coo_matrix:
     """
     Generate the omnibus matrix from a list of sparse adjacency matrices as described by 'A central limit theorem
     for an omnibus embedding of random dot product graphs.'
