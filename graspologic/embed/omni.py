@@ -30,20 +30,18 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> coo_matrix:
     rows = []
 
     # Iterate over each column
-    for column_index in range(0, len(matrices)):
-
+    for column_index, column_matrix in enumerate(matrices):
         current_row = []
-        current_matrix = matrices[column_index]
 
-        for row_index in range(0, len(matrices)):
+        for row_index, row_matrix in enumerate(matrices):
             if row_index == column_index:
                 # we are on the diagonal, we do not need to perform any calculation and instead add the current matrix
                 # to the current_row
-                current_row.append(current_matrix)
+                current_row.append(column_matrix)
             else:
                 # otherwise we are not on the diagonal and we average the current_matrix with the matrix at row_index
                 # and add that to our current_row
-                matrices_averaged = (current_matrix + matrices[row_index]) * 0.5
+                matrices_averaged = (column_matrix + row_matrix) * 0.5
                 current_row.append(matrices_averaged)
 
         # an entire row has been generated, we will create a horizontal stack of each matrix in the row completing the
