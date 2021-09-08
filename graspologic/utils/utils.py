@@ -39,7 +39,7 @@ def average_matrices(
     """
     if isinstance(matrices[0], np.ndarray):
         return np.mean(matrices, axis=0)
-    elif isspmatrix_csr:
+    elif isspmatrix_csr(matrices[0]):
         return sum(matrices) / len(matrices)
 
 
