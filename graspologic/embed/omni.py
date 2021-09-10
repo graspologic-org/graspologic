@@ -6,14 +6,14 @@ from typing import List, Optional
 
 import numpy as np
 from beartype import beartype
-from scipy.sparse import coo_matrix, csr_matrix, hstack, isspmatrix_csr, vstack
+from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
-from ..utils import average_matrices, import_graph, is_fully_connected
+from ..utils import average_matrices, is_fully_connected
 from .base import BaseEmbedMulti
 
 
 @beartype
-def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> coo_matrix:
+def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
     """
     Generate the omnibus matrix from a list of sparse adjacency matrices as described by 'A central limit theorem
     for an omnibus embedding of random dot product graphs.'
@@ -48,7 +48,7 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> coo_matrix:
         # row
         rows.append(hstack(current_row))
 
-    return vstack(rows)
+    return vstack(rows, format="csr")
 
 
 def _get_omni_matrix(graphs):
@@ -206,7 +206,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph or ndarray, or csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).

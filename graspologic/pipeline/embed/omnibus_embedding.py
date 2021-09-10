@@ -6,7 +6,6 @@ from typing import List, Optional, Tuple, Union
 
 import networkx as nx
 import numpy as np
-import scipy as sp
 from beartype import beartype
 
 from graspologic.embed import OmnibusEmbed
