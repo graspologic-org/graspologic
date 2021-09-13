@@ -160,15 +160,15 @@ class OmnibusEmbed(BaseEmbedMulti):
         a vector corresponding to the degree (or sum of edge weights for a
         weighted network) before embedding.
 
-    concat : bool, optional (default False)
+    concat : bool, optional (default = False)
         If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
-    svd_seed : int or None (default ``None``)
+    svd_seed : int or None (default = ``None``)
         Only applicable for ``algorithm="randomized"``; allows you to seed the
         randomized svd solver for deterministic, albeit pseudo-randomized behavior.
 
-    lse : bool, optional (default False)
+    lse : bool, optional (default = False)
         Whether to construct the OMNI matrix use the laplacian matrices
         of the graphs and embed the OMNI matrix with LSE
 

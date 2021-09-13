@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import List, Optional, Tuple, Union
+from typing import Hashable, List, Optional, Set, Tuple, Union
 
 import networkx as nx
 import numpy as np
@@ -153,6 +153,7 @@ def omnibus_embedding_pairwise(
     )
 
     weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
+    perform_augment_diagonal = not use_laplacian
 
     graph_embeddings = []
 
@@ -162,7 +163,7 @@ def omnibus_embedding_pairwise(
         union_graph.add_edges_from(graph.edges())
 
     union_graph_lcc = largest_connected_component(union_graph)
-    union_graph_lcc_nodes = union_graph_lcc.nodes()
+    union_graph_lcc_nodes = set(list(union_graph_lcc.nodes()))
 
     union_node_ids = np.array(list(union_graph_lcc_nodes))
 
@@ -178,10 +179,16 @@ def omnibus_embedding_pairwise(
 
         # remove self loops, run pass to ranks and diagonal augmentation
         previous_graph_augmented = _augment_graph(
-            previous_graph, union_graph_lcc_nodes, weight_attribute
+            previous_graph,
+            union_graph_lcc_nodes,
+            weight_attribute,
+            perform_augment_diagonal=perform_augment_diagonal,
         )
         current_graph_augmented = _augment_graph(
-            current_graph, union_graph_lcc_nodes, weight_attribute
+            current_graph,
+            union_graph_lcc_nodes,
+            weight_attribute,
+            perform_augment_diagonal=perform_augment_diagonal,
         )
 
         model = OmnibusEmbed(
@@ -218,7 +225,10 @@ def omnibus_embedding_pairwise(
     return graph_embeddings
 
 
-def _graphs_precondition_checks(graphs, weight_attribute):
+def _graphs_precondition_checks(
+    graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
+    weight_attribute: str,
+) -> Optional[str]:
     is_directed = graphs[0].is_directed()
 
     for graph in graphs:
@@ -249,7 +259,12 @@ def _graphs_precondition_checks(graphs, weight_attribute):
     return weight_attribute
 
 
-def _elbow_cut_if_needed(elbow_cut, is_directed, singular_values, embedding):
+def _elbow_cut_if_needed(
+    elbow_cut: Optional[int],
+    is_directed: bool,
+    singular_values: np.ndarray,
+    embedding: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
+) -> np.ndarray:
     if elbow_cut is None:
         if is_directed:
             embedding = np.concatenate(embedding, axis=1)
@@ -267,19 +282,29 @@ def _elbow_cut_if_needed(elbow_cut, is_directed, singular_values, embedding):
     return embedding
 
 
-def _augment_graph(graph, node_ids, weight_attribute):
+def _augment_graph(
+    graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    node_ids: Set[Hashable],
+    weight_attribute: Optional[str],
+    perform_augment_diagonal: bool = True,
+) -> np.ndarray:
     graph_sparse = nx.to_scipy_sparse_matrix(
         graph, weight=weight_attribute, nodelist=node_ids
     )
 
     graphs_loops_removed = remove_loops(graph_sparse)
     graphs_ranked = pass_to_ranks(graphs_loops_removed)
-    graphs_diag_augmented = augment_diagonal(graphs_ranked)
 
-    return graphs_diag_augmented
+    if perform_augment_diagonal:
+        return augment_diagonal(graphs_ranked)
+
+    return graphs_ranked
 
 
-def _sync_nodes(graph_to_reduce, set_of_valid_nodes):
+def _sync_nodes(
+    graph_to_reduce: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    set_of_valid_nodes: Set[Hashable],
+) -> None:
     to_remove = []
     for n in graph_to_reduce.nodes():
         if n not in set_of_valid_nodes:
