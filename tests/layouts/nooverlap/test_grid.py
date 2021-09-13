@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import unittest
+
 from graspologic.layouts.nooverlap._grid import _GridBuckets
 from graspologic.layouts.nooverlap._node import _Node
 

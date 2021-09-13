@@ -3,12 +3,11 @@
 # original code can be found here
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
-import numpy as np
 import operator
-from scipy.optimize import linear_sum_assignment, OptimizeResult
 
+import numpy as np
 from scipy._lib._util import check_random_state
-import itertools
+from scipy.optimize import OptimizeResult, linear_sum_assignment
 
 
 def quadratic_assignment(A, B, method="faq", options=None):
@@ -162,16 +161,16 @@ def quadratic_assignment(A, B, method="faq", options=None):
         options = {}
 
     method = method.lower()
-    methods = {"faq": _quadratic_assignment_faq, "2opt": _quadratic_assignment_2opt}
+    methods = {"faq": _quadratic_assignment_faq}
     if method not in methods:
         raise ValueError(f"method {method} must be in {methods}.")
     res = methods[method](A, B, **options)
     return res
 
 
-def _calc_score(A, B, perm):
+def _calc_score(A, B, S, perm):
     # equivalent to objective function but avoids matmul
-    return np.sum(A * B[perm][:, perm])
+    return np.sum(A * B[perm][:, perm]) + np.sum(S[np.arange(len(S)), perm])
 
 
 def _common_input_validation(A, B, partial_match):
@@ -217,6 +216,7 @@ def _quadratic_assignment_faq(
     B,
     maximize=False,
     partial_match=None,
+    S=None,
     rng=None,
     P0="barycenter",
     shuffle_input=False,
@@ -278,6 +278,11 @@ def _quadratic_assignment_faq(
         matched to node ``partial_match[i, 1]`` of `B`. Accordingly,
         ``partial_match`` is an array of size ``(m , 2)``, where ``m`` is
         not greater than the number of nodes, :math:`n`.
+    S : 2d-array, square
+        A similarity matrix. Should be same shape as ``A`` and ``B``.   
+        Note: the scale of `S` may effect the weight placed on the term 
+        :math:`\\text{trace}(S^T P)` relative to :math:`\\text{trace}(A^T PBP^T)` 
+        during the optimization process.
     P0 : 2d-array, "barycenter", or "randomized" (default = "barycenter")
         The initial (guess) permutation matrix or search "position"
         `P0`.
@@ -379,6 +384,12 @@ def _quadratic_assignment_faq(
         msg = "'maxiter' must be a positive integer"
     elif tol <= 0:
         msg = "'tol' must be a positive float"
+    elif S.shape[0] != S.shape[1]:
+        msg = "`S` must be square"
+    elif S.ndim != 2:
+        msg = "`S` must have exactly two dimensions"
+    elif S.shape != A.shape:
+        msg = "`S`, `A`, and `B` matrices must be of equal size"
     if msg is not None:
         raise ValueError(msg)
 
@@ -389,7 +400,9 @@ def _quadratic_assignment_faq(
 
     # check outlier cases
     if n == 0 or partial_match.shape[0] == n:
-        score = _calc_score(A, B, partial_match[:, 1])
+        # Cannot assume partial_match is sorted.
+        partial_match = np.row_stack(sorted(partial_match, key=lambda x: x[0]))
+        score = _calc_score(A, B, S, partial_match[:, 1])
         res = {"col_ind": partial_match[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
 
@@ -398,6 +411,7 @@ def _quadratic_assignment_faq(
         obj_func_scalar = -1
 
     nonseed_B = np.setdiff1d(range(n), partial_match[:, 1])
+    perm_S = np.copy(nonseed_B)
     if shuffle_input:
         nonseed_B = rng.permutation(nonseed_B)
         # shuffle_input to avoid results from inputs that were already matched
@@ -406,9 +420,12 @@ def _quadratic_assignment_faq(
     perm_A = np.concatenate([partial_match[:, 0], nonseed_A])
     perm_B = np.concatenate([partial_match[:, 1], nonseed_B])
 
+    S = S[:, perm_B]
+
     # definitions according to Seeded Graph Matching [2].
     A11, A12, A21, A22 = _split_matrix(A[perm_A][:, perm_A], n_seeds)
     B11, B12, B21, B22 = _split_matrix(B[perm_B][:, perm_B], n_seeds)
+    S22 = S[perm_S, n_seeds:]
 
     # [1] Algorithm 1 Line 1 - choose initialization
     if isinstance(P0, str):
@@ -424,12 +441,17 @@ def _quadratic_assignment_faq(
             # Sinkhorn balancing
             K = _doubly_stochastic(K)
             P = J * 0.5 + K * 0.5
-    else:
+    elif isinstance(P0, np.ndarray):
         P0 = np.atleast_2d(P0)
         _check_init_input(P0, n_unseed)
-        P = P0
+        invert_inds = np.argsort(nonseed_B)
+        perm_nonseed_B = np.argsort(invert_inds)
+        P = P0[:, perm_nonseed_B]
+    else:
+        msg = "`init` must either be of type str or np.ndarray."
+        raise TypeError(msg)
 
-    const_sum = A21 @ B21.T + A12.T @ B12
+    const_sum = A21 @ B21.T + A12.T @ B12 + S22
 
     # [1] Algorithm 1 Line 2 - loop while stopping criteria not met
     for n_iter in range(1, maxiter + 1):
@@ -451,8 +473,9 @@ def _quadratic_assignment_faq(
         BR22 = B22 @ R.T
         b22a = (AR22 * B22.T[cols]).sum()
         b22b = (A22 * BR22[cols]).sum()
+        s = (S22 * R).sum()
         a = (AR22.T * BR22).sum()
-        b = b21 + b12 + b22a + b22b
+        b = b21 + b12 + b22a + b22b + s
         # critical point of ax^2 + bx + c is at x = -d/(2*e)
         # if a * obj_func_scalar > 0, it is a minimum
         # if minimum is not in [0, 1], only endpoints need to be considered
@@ -476,7 +499,7 @@ def _quadratic_assignment_faq(
     unshuffled_perm = np.zeros(n, dtype=int)
     unshuffled_perm[perm_A] = perm_B[perm]
 
-    score = _calc_score(A, B, unshuffled_perm)
+    score = _calc_score(A, B, S, unshuffled_perm)
 
     res = {"col_ind": unshuffled_perm, "fun": score, "nit": n_iter}
 
@@ -529,185 +552,3 @@ def _doubly_stochastic(P, tol=1e-3):
         P_eps = r[:, None] * P * c
 
     return P_eps
-
-
-def _quadratic_assignment_2opt(
-    A,
-    B,
-    maximize=False,
-    partial_match=None,
-    rng=None,
-    partial_guess=None,
-    **unknown_options,
-):
-    r"""
-    Solve the quadratic assignment problem (approximately).
-    This function solves the Quadratic Assignment Problem (QAP) and the
-    Graph Matching Problem (GMP) using the 2-opt algorithm [3]_.
-    Quadratic assignment solves problems of the following form:
-    .. math::
-        \min_P & \ {\ \text{trace}(A^T P B P^T)}\\
-        \mbox{s.t. } & {P \ \epsilon \ \mathcal{P}}\\
-    where :math:`\mathcal{P}` is the set of all permutation matrices,
-    and :math:`A` and :math:`B` are square matrices.
-    Graph matching tries to *maximize* the same objective function.
-    This algorithm can be thought of as finding the alignment of the
-    nodes of two graphs that minimizes the number of induced edge
-    disagreements, or, in the case of weighted graphs, the sum of squared
-    edge weight differences.
-    Note that the quadratic assignment problem is NP-hard, is not
-    known to be solvable in polynomial time, and is computationally
-    intractable. Therefore, the results given are approximations,
-    not guaranteed to be exact solutions.
-    Parameters
-    ----------
-    A : 2d-array, square
-        The square matrix :math:`A` in the objective function above.
-    B : 2d-array, square
-        The square matrix :math:`B` in the objective function above.
-    method :  str in {'faq', '2opt'} (default: 'faq')
-        The algorithm used to solve the problem. This is the method-specific
-        documentation for '2opt'.
-        :ref:`'faq' <optimize.qap-faq>` is also available.
-    Options
-    -------
-    maximize : bool (default = False)
-        Setting `maximize` to ``True`` solves the Graph Matching Problem (GMP)
-        rather than the Quadratic Assingnment Problem (QAP).
-    rng : {None, int, `~np.random.RandomState`, `~np.random.Generator`}
-        This parameter defines the object to use for drawing random
-        variates.
-        If `rng` is ``None`` the `~np.random.RandomState` singleton is
-        used.
-        If `rng` is an int, a new ``RandomState`` instance is used,
-        seeded with `rng`.
-        If `rng` is already a ``RandomState`` or ``Generator``
-        instance, then that object is used.
-        Default is None.
-    partial_match : 2d-array of integers, optional, (default = None)
-        Allows the user to fix part of the matching between the two
-        matrices. In the literature, a partial match is also known as a
-        "seed".
-        Each row of `partial_match` specifies the indices of a pair of
-        corresponding nodes, that is, node ``partial_match[i, 0]`` of `A` is
-        matched to node ``partial_match[i, 1]`` of `B`. Accordingly,
-        ``partial_match`` is an array of size ``(m , 2)``, where ``m`` is
-        not greater than the number of nodes.
-    partial_guess : 2d-array of integers, optional, (default = None)
-        Allows the user to provide a guess for the matching between the two
-        matrices. Unlike `partial_match`, `partial_guess` does not fix the
-        indices; they are still free to be optimized.
-        Each row of `partial_guess` specifies the indices of a pair of
-        corresponding nodes, that is, node ``partial_guess[i, 0]`` of `A` is
-        matched to node ``partial_guess[i, 1]`` of `B`. Accordingly,
-        ``partial_guess`` is an array of size ``(m , 2)``, where ``m`` is
-        less than or equal to the number of nodes.
-    Returns
-    -------
-    res : OptimizeResult
-        A :class:`scipy.optimize.OptimizeResult` containing the following
-        fields.
-        col_ind : 1-D array
-            An array of column indices corresponding with the best
-            permutation of the nodes of `B` found.
-        fun : float
-            The corresponding value of the objective function.
-        nit : int
-            The number of iterations performed during optimization.
-    Notes
-    -----
-    This is a greedy algorithm that works similarly to bubble sort: beginning
-    with an initial permutation, it iteratively swaps pairs of indices to
-    improve the objective function until no such improvements are possible.
-    References
-    ----------
-    .. [3] "2-opt," Wikipedia.
-           https://en.wikipedia.org/wiki/2-opt
-    """
-
-    _check_unknown_options(unknown_options)
-    rng = check_random_state(rng)
-    A, B, partial_match = _common_input_validation(A, B, partial_match)
-
-    N = len(A)
-    # check outlier cases
-    if N == 0 or partial_match.shape[0] == N:
-        score = _calc_score(A, B, partial_match[:, 1])
-        res = {"col_ind": partial_match[:, 1], "fun": score, "nit": 0}
-        return OptimizeResult(res)
-
-    if partial_guess is None:
-        partial_guess = np.array([[], []]).T
-    partial_guess = np.atleast_2d(partial_guess).astype(int)
-
-    msg = None
-    if partial_guess.shape[0] > A.shape[0]:
-        msg = "`partial_guess` can have only as " "many entries as there are nodes"
-    elif partial_guess.shape[1] != 2:
-        msg = "`partial_guess` must have two columns"
-    elif partial_guess.ndim != 2:
-        msg = "`partial_guess` must have exactly two dimensions"
-    elif (partial_guess < 0).any():
-        msg = "`partial_guess` must contain only positive indices"
-    elif (partial_guess >= len(A)).any():
-        msg = "`partial_guess` entries must be less than number of nodes"
-    elif not len(set(partial_guess[:, 0])) == len(partial_guess[:, 0]) or not len(
-        set(partial_guess[:, 1])
-    ) == len(partial_guess[:, 1]):
-        msg = "`partial_guess` column entries must be unique"
-    if msg is not None:
-        raise ValueError(msg)
-
-    fixed_rows = None
-    if partial_match.size or partial_guess.size:
-        # use partial_match and partial_guess for initial permutation,
-        # but randomly permute the rest.
-        guess_rows = np.zeros(N, dtype=bool)
-        guess_cols = np.zeros(N, dtype=bool)
-        fixed_rows = np.zeros(N, dtype=bool)
-        fixed_cols = np.zeros(N, dtype=bool)
-        perm = np.zeros(N, dtype=int)
-
-        rg, cg = partial_guess.T
-        guess_rows[rg] = True
-        guess_cols[cg] = True
-        perm[guess_rows] = cg
-
-        # match overrides guess
-        rf, cf = partial_match.T
-        fixed_rows[rf] = True
-        fixed_cols[cf] = True
-        perm[fixed_rows] = cf
-
-        random_rows = ~fixed_rows & ~guess_rows
-        random_cols = ~fixed_cols & ~guess_cols
-        perm[random_rows] = rng.permutation(np.arange(N)[random_cols])
-    else:
-        perm = rng.permutation(np.arange(N))
-
-    best_score = _calc_score(A, B, perm)
-
-    i_free = np.arange(N)
-    if fixed_rows is not None:
-        i_free = i_free[~fixed_rows]
-
-    better = operator.gt if maximize else operator.lt
-    n_iter = 0
-    done = False
-    while not done:
-        # equivalent to nested for loops i in range(N), j in range(i, N)
-        for i, j in itertools.combinations_with_replacement(i_free, 2):
-            n_iter += 1
-            perm[i], perm[j] = perm[j], perm[i]
-            score = _calc_score(A, B, perm)
-            if better(score, best_score):
-                best_score = score
-                break
-            # faster to swap back than to create a new list every time
-            perm[i], perm[j] = perm[j], perm[i]
-        else:  # no swaps made
-            done = True
-
-    res = {"col_ind": perm, "fun": best_score, "nit": n_iter}
-
-    return OptimizeResult(res)

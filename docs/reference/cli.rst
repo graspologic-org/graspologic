@@ -35,6 +35,7 @@ Which will return something like:
 .. code-block:: none
 
     usage: python -m graspologic.layouts n2vumap [-h] --edge_list EDGE_LIST [--skip_header] [--image_file IMAGE_FILE] [--location_file LOCATION_FILE] [--max_edges MAX_EDGES] [--dpi DPI]
+                                             [--allow_overlaps]
 
     optional arguments:
       -h, --help            show this help message and exit
@@ -48,3 +49,4 @@ Which will return something like:
       --max_edges MAX_EDGES
                             maximum edges to keep during embedding. edges with low weights will be pruned to keep at most this many edges
       --dpi DPI             used with --image_file to render an image at this dpi
+      --allow_overlaps      skip the no overlap algorithm and let nodes stack as per the results of the down projection algorithm
