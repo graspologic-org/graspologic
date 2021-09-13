@@ -188,10 +188,7 @@ class TestOmnibusEmbedding(unittest.TestCase):
             g2.add_edge(i, 1, weight=i)
 
         embeddings = omnibus_embedding_pairwise(
-            graphs=[g, g2],
-            dimensions=dimensions,
-            elbow_cut=None,
-            use_laplacian=True
+            graphs=[g, g2], dimensions=dimensions, elbow_cut=None, use_laplacian=True
         )
 
         for previous_embedding, current_embedding in embeddings:

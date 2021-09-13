@@ -31,7 +31,7 @@ def omnibus_embedding_pairwise(
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
-    use_laplacian: bool = False
+    use_laplacian: bool = False,
 ) -> List[Tuple[Embeddings, Embeddings]]:
     """
     Generates a pairwise omnibus embedding for each pair of graphs in a list of graphs using the adjacency matrix.
@@ -193,7 +193,7 @@ def omnibus_embedding_pairwise(
             diag_aug=False,
             concat=False,
             svd_seed=svd_seed,
-            lse=use_laplacian
+            lse=use_laplacian,
         )
 
         previous_embedding, current_embedding = model.fit_transform(
