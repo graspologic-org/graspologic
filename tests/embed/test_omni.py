@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 from numpy.linalg import norm
-from numpy.testing import allclose, assert_allclose
+from numpy.testing import assert_allclose
 from scipy.sparse import csr_matrix
 
 from graspologic.embed.omni import OmnibusEmbed, _get_omni_matrix
@@ -237,7 +237,9 @@ class TestOmni(unittest.TestCase):
             LBar = compute_bar(omni.fit_transform([Lbar, Lbar]))
 
             tol = 1.0e-2
-            assert allclose(norm(OmniBar, axis=1), norm(LBar, axis=1), rtol=tol, atol=tol)
+            assert_allclose(
+                norm(OmniBar, axis=1), norm(LBar, axis=1), rtol=tol, atol=tol
+            )
 
         run(diag_aug=True)
         run(diag_aug=False)

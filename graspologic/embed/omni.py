@@ -110,101 +110,101 @@ def _get_omni_matrix(graphs):
 
 class OmnibusEmbed(BaseEmbedMulti):
     r"""
-    Omnibus embedding of arbitrary number of input graphs with matched vertex
-    sets.
+        Omnibus embedding of arbitrary number of input graphs with matched vertex
+        sets.
 
-    Given :math:`A_1, A_2, ..., A_m` a collection of (possibly weighted) adjacency
-    matrices of a collection :math:`m` undirected graphs with matched vertices.
-    Then the :math:`(mn \times mn)` omnibus matrix, :math:`M`, has the subgraph where
-    :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
-    using adjacency spectral embedding.
+        Given :math:`A_1, A_2, ..., A_m` a collection of (possibly weighted) adjacency
+        matrices of a collection :math:`m` undirected graphs with matched vertices.
+        Then the :math:`(mn \times mn)` omnibus matrix, :math:`M`, has the subgraph where
+        :math:`M_{ij} = \frac{1}{2}(A_i + A_j)`. The omnibus matrix is then embedded
+        using adjacency spectral embedding.
 
-    Read more in the `Omnibus Embedding for Multiple Graphs Tutorial
-    <https://microsoft.github.io/graspologic/tutorials/embedding/Omnibus.html>`_
+        Read more in the `Omnibus Embedding for Multiple Graphs Tutorial
+        <https://microsoft.github.io/graspologic/tutorials/embedding/Omnibus.html>`_
 
-    Parameters
-    ----------
-    n_components : int or None, default = None
-        Desired dimensionality of output data. If "full",
-        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
-        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
-        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
+        Parameters
+        ----------
+        n_components : int or None, default = None
+            Desired dimensionality of output data. If "full",
+            ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
+            ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
+            :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
-    n_elbows : int, optional, default: 2
-        If ``n_components`` is None, then compute the optimal embedding dimension using
-        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
+        n_elbows : int, optional, default: 2
+            If ``n_components`` is None, then compute the optimal embedding dimension using
+            :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
-    algorithm : {'randomized' (default), 'full', 'truncated'}, optional
-        SVD solver to use:
+        algorithm : {'randomized' (default), 'full', 'truncated'}, optional
+            SVD solver to use:
 
-        - 'randomized'
-            Computes randomized svd using
-            :func:`sklearn.utils.extmath.randomized_svd`
-        - 'full'
-            Computes full svd using :func:`scipy.linalg.svd`
-        - 'truncated'
-            Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+            - 'randomized'
+                Computes randomized svd using
+                :func:`sklearn.utils.extmath.randomized_svd`
+            - 'full'
+                Computes full svd using :func:`scipy.linalg.svd`
+            - 'truncated'
+                Computes truncated svd using :func:`scipy.sparse.linalg.svds`
 
-    n_iter : int, optional (default = 5)
-        Number of iterations for randomized SVD solver. Not used by 'full' or
-        'truncated'. The default is larger than the default in randomized_svd
-        to handle sparse matrices that may have large slowly decaying spectrum.
+        n_iter : int, optional (default = 5)
+            Number of iterations for randomized SVD solver. Not used by 'full' or
+            'truncated'. The default is larger than the default in randomized_svd
+            to handle sparse matrices that may have large slowly decaying spectrum.
 
-    check_lcc : bool , optional (defult = True)
-        Whether to check if the average of all input graphs are connected. May result
-        in non-optimal results if the average graph is unconnected. If True and average
-        graph is unconnected, a UserWarning is thrown.
+        check_lcc : bool , optional (defult = True)
+            Whether to check if the average of all input graphs are connected. May result
+            in non-optimal results if the average graph is unconnected. If True and average
+            graph is unconnected, a UserWarning is thrown.
 
-    diag_aug : bool, optional (default = True)
-        Whether to replace the main diagonal of each adjacency matrices with
-        a vector corresponding to the degree (or sum of edge weights for a
-        weighted network) before embedding.
+        diag_aug : bool, optional (default = True)
+            Whether to replace the main diagonal of each adjacency matrices with
+            a vector corresponding to the degree (or sum of edge weights for a
+            weighted network) before embedding.
 
-    concat : bool, optional (default False)
-        If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
-        along axis 1.
+        concat : bool, optional (default False)
+            If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+            along axis 1.
 
-<<<<<<< HEAD
-    lse : bool, optional (default False)
-        Whether to construct the OMNI matrix use the laplacian matrices
-        of the graphs and embed the OMNI matrix with LSE
-=======
-    svd_seed : int or None (default ``None``)
-        Only applicable for ``algorithm="randomized"``; allows you to seed the
-        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
->>>>>>> dev
+    <<<<<<< HEAD
+        lse : bool, optional (default False)
+            Whether to construct the OMNI matrix use the laplacian matrices
+            of the graphs and embed the OMNI matrix with LSE
+    =======
+        svd_seed : int or None (default ``None``)
+            Only applicable for ``algorithm="randomized"``; allows you to seed the
+            randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+    >>>>>>> dev
 
-    Attributes
-    ----------
-    n_graphs_ : int
-        Number of graphs
+        Attributes
+        ----------
+        n_graphs_ : int
+            Number of graphs
 
-    n_vertices_ : int
-        Number of vertices in each graph
+        n_vertices_ : int
+            Number of vertices in each graph
 
-    latent_left_ : array, shape (n_graphs, n_vertices, n_components)
-        Estimated left latent positions of the graph.
+        latent_left_ : array, shape (n_graphs, n_vertices, n_components)
+            Estimated left latent positions of the graph.
 
-    latent_right_ : array, shape (n_graphs, n_vertices, n_components), or None
-        Only computed when the graph is directed, or adjacency matrix is
-        asymmetric. Estimated right latent positions of the graph. Otherwise,
-        None.
+        latent_right_ : array, shape (n_graphs, n_vertices, n_components), or None
+            Only computed when the graph is directed, or adjacency matrix is
+            asymmetric. Estimated right latent positions of the graph. Otherwise,
+            None.
 
-    singular_values_ : array, shape (n_components)
-        Singular values associated with the latent position matrices.
+        singular_values_ : array, shape (n_components)
+            Singular values associated with the latent position matrices.
 
 
-    See Also
-    --------
-    graspologic.embed.select_svd
-    graspologic.embed.select_dimension
+        See Also
+        --------
+        graspologic.embed.select_svd
+        graspologic.embed.select_dimension
 
-    References
-    ----------
-    .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017,
-       November). A central limit theorem for an omnibus embedding of multiple random
-       dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International
-       Conference on (pp. 964-967). IEEE.
+        References
+        ----------
+        .. [1] Levin, K., Athreya, A., Tang, M., Lyzinski, V., & Priebe, C. E. (2017,
+           November). A central limit theorem for an omnibus embedding of multiple random
+           dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International
+           Conference on (pp. 964-967). IEEE.
     """
 
     def __init__(

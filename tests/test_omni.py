@@ -190,6 +190,3 @@ def test_omni_embed_directed():
 
     run(diag_aug=True)
     run(diag_aug=False)
-
-
-
