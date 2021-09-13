@@ -22,7 +22,7 @@ from sklearn.utils.multiclass import type_of_target, unique_labels
 
 @beartype
 def average_matrices(
-    matrices: Union[np.ndarray, List[Union[np.ndarray, csr_matrix]]]
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
 ) -> Union[np.ndarray, csr_matrix]:
     """
     Helper method to encapsulate calculating the average of matrices represented either as a
@@ -30,7 +30,7 @@ def average_matrices(
 
     Parameters
     ----------
-    matrices: Union[np.ndarray, List[Union[np.ndarray, csr_matrix]]]
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
         The list of matrices to be averaged
 
     Returns
