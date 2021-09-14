@@ -169,8 +169,8 @@ class OmnibusEmbed(BaseEmbedMulti):
         randomized svd solver for deterministic, albeit pseudo-randomized behavior.
 
     lse : bool, optional (default = False)
-        Whether to construct the OMNI matrix use the laplacian matrices
-        of the graphs and embed the OMNI matrix with LSE
+        Whether to construct the Omni matrix use the laplacian matrices
+        of the graphs and embed the Omni matrix with LSE
 
     Attributes
     ----------
