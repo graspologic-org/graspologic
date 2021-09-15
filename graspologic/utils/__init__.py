@@ -4,6 +4,7 @@
 from .ptr import pass_to_ranks
 from .utils import (
     augment_diagonal,
+    average_matrices,
     binarize,
     cartesian_product,
     fit_plug_in_variance_estimator,
@@ -26,6 +27,7 @@ from .utils import (
 )
 
 __all__ = [
+    "average_matrices",
     "import_graph",
     "import_edgelist",
     "is_symmetric",
