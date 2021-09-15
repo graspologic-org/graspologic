@@ -1,36 +1,16 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Multiple Adjacency Spectral Embedding (MASE) &mdash; graspologic tutorials 0.3.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
@@ -38,43 +18,23 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Omnibus Embedding for Multiple Graphs" href="Omnibus.html" />
     <link rel="prev" title="Covariate-Assisted Embedding" href="CovariateAssistedEmbed.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> graspologic tutorials
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.3
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference external" href="https://graspologic.readthedocs.io/en/latest/">Reference Documentation</a></li>
 </ul>
@@ -149,71 +98,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">graspologic tutorials</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Multiple Adjacency Spectral Embedding (MASE)</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/embedding/MASE.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -484,7 +392,7 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Multiple-Adjacency-Spectral-Embedding-(MASE)">
+<section id="Multiple-Adjacency-Spectral-Embedding-(MASE)">
 <h1>Multiple Adjacency Spectral Embedding (MASE)<a class="headerlink" href="#Multiple-Adjacency-Spectral-Embedding-(MASE)" title="Permalink to this headline">¶</a></h1>
 <p>Multiple Adjacency Spectral Embedding (MASE) is an extension of Adjacency Spectral Embedding (see ASE <a class="reference external" href="https://graspy.neurodata.io/tutorials/embedding/adjacencyspectralembed">tutorial</a>) for an arbitrary number of graphs. Once graphs are embedded, the low-dimensional Euclidean representation can be used to visualize the latent positions of vertices, perform inference, etc.</p>
 <div class="nbinput nblast docutils container">
@@ -498,11 +406,11 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="section" id="Replicating-Omnibus-Embedding-Tutorial">
+<section id="Replicating-Omnibus-Embedding-Tutorial">
 <h2>Replicating Omnibus Embedding Tutorial<a class="headerlink" href="#Replicating-Omnibus-Embedding-Tutorial" title="Permalink to this headline">¶</a></h2>
 <p>In order to demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">MultipleASE</span></code> class, we will use a simple example: two 2-block stochastic block models (SBMs) with different block probabilities. Indeed, we will use the same models as in the omnibus <a class="reference external" href="https://graspy.neurodata.io/tutorials/embedding/omnibus">tutorial</a> to facilitate direct comparison.</p>
-</div>
-<div class="section" id="Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">
+</section>
+<section id="Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">
 <h2>Simulate two different graphs using stochastic block models (SBM)<a class="headerlink" href="#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)" title="Permalink to this headline">¶</a></h2>
 <p>We sample two 2-block SBMs (undirected, no self-loops) with 50 vertices, each block containing 25 vertices (<span class="math notranslate nohighlight">\(n = [25, 25]\)</span>), and with the following block connectivity matrices:</p>
 <p><span class="math">\begin{align*}
@@ -534,8 +442,8 @@ B_2 = \begin{bmatrix}0.3 & 0.1\\
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="Visualize-the-graphs-using-heatmap">
+</section>
+<section id="Visualize-the-graphs-using-heatmap">
 <h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this headline">¶</a></h2>
 <p>We visualize the sampled graphs using the <code class="docutils literal notranslate"><span class="pre">heatmap()</span></code> function. <code class="docutils literal notranslate"><span class="pre">heatmap()</span></code> will plot the adjacency matrix, where the colors represent the weight of each edge. In this case, we have binary graphs so the values will be either 0 or 1.</p>
 <p>We see that there is clear block structure to the graphs. Furthermore, the lower right quarter of <span class="math notranslate nohighlight">\(G_1\)</span>, representing the within-group connections for the second group, is more dense than that of <span class="math notranslate nohighlight">\(G_2\)</span>.</p>
@@ -565,8 +473,8 @@ B_2 = \begin{bmatrix}0.3 & 0.1\\
 <img alt="../_images/embedding_MASE_9_1.png" src="../_images/embedding_MASE_9_1.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Embed-the-two-graphs-using-MASE">
+</section>
+<section id="Embed-the-two-graphs-using-MASE">
 <h2>Embed the two graphs using MASE<a class="headerlink" href="#Embed-the-two-graphs-using-MASE" title="Permalink to this headline">¶</a></h2>
 <p>Just as ASE fits a single input graph to the Random Dot Product Graph (RDPG) model, MASE fits many input graphs to the common subspace independent-edge (COSIE) model, which is an extension of the RDPG model to multiple graphs. The COSIE model assumes that all of the graphs have important shared properties, but can also have meaningful differences. As a result, COSIE decomposes the set of graphs into a set of shared latent positions <span class="math notranslate nohighlight">\(V\)</span> that describe similarities, and a set of score
 matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that describe how each individual graph is different. Mathematically, for the adjacency matrix of an undirected graph <span class="math notranslate nohighlight">\(A^{(i)}\)</span>,</p>
@@ -594,8 +502,8 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 (50, 2)
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Visualize-Common-Latent-Positions">
+</section>
+<section id="Visualize-Common-Latent-Positions">
 <h2>Visualize Common Latent Positions<a class="headerlink" href="#Visualize-Common-Latent-Positions" title="Permalink to this headline">¶</a></h2>
 <p>Since the two graphs have clear block structures, with higher within-block probabilities than between-block, we see two distinct “clusters” when we visualize the shared latent positions.</p>
 <div class="nbinput docutils container">
@@ -630,8 +538,8 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 <img alt="../_images/embedding_MASE_16_0.png" src="../_images/embedding_MASE_16_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Recover-Original-Communities">
+</section>
+<section id="Recover-Original-Communities">
 <h2>Recover Original Communities<a class="headerlink" href="#Recover-Original-Communities" title="Permalink to this headline">¶</a></h2>
 <p>We can apply a simple clustering algorithm (kmeans) to recover the original communities.</p>
 <div class="nbinput docutils container">
@@ -662,8 +570,8 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </div>
 </div>
 <p>Even with only one graph sampled from each SBM, we can perfectly recover the two communities!</p>
-</div>
-<div class="section" id="Sampling-More-Graphs">
+</section>
+<section id="Sampling-More-Graphs">
 <h2>Sampling More Graphs<a class="headerlink" href="#Sampling-More-Graphs" title="Permalink to this headline">¶</a></h2>
 <p>We can recover a more accurate representation of the two SBM populations with more sample graphs. Let’s try with 100 graphs sampled from each.</p>
 <div class="nbinput nblast docutils container">
@@ -678,8 +586,8 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="Visualizing-Common-Latent-Subspace">
+</section>
+<section id="Visualizing-Common-Latent-Subspace">
 <h2>Visualizing Common Latent Subspace<a class="headerlink" href="#Visualizing-Common-Latent-Subspace" title="Permalink to this headline">¶</a></h2>
 <p>Now, the clustering is even more distinct, as we would expect with more samples.</p>
 <div class="nbinput docutils container">
@@ -698,8 +606,8 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 <img alt="../_images/embedding_MASE_26_0.png" src="../_images/embedding_MASE_26_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Visualize-Score-Matrices">
+</section>
+<section id="Visualize-Score-Matrices">
 <h2>Visualize Score Matrices<a class="headerlink" href="#Visualize-Score-Matrices" title="Permalink to this headline">¶</a></h2>
 <p>Now that we have more samples, we can apply the same process to visualize the individual score matrices. Note, since the score matrices are symmetric, <span class="math notranslate nohighlight">\(2 \times 2\)</span> matrices, we only need a 3-dimensional vector to represent each. In this case, we can clearly see two distinct clusters: one for the score matrices from the first SBM population another for the score matrices from the second.</p>
 <div class="nbinput docutils container">
@@ -734,8 +642,8 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 <img alt="../_images/embedding_MASE_29_0.png" src="../_images/embedding_MASE_29_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Recover-Original-SBM-Membership">
+</section>
+<section id="Recover-Original-SBM-Membership">
 <h2>Recover Original SBM Membership<a class="headerlink" href="#Recover-Original-SBM-Membership" title="Permalink to this headline">¶</a></h2>
 <p>As before, we can apply a simple clustering algorithm (kmeans) to recover from which SBM population each graph was generated.</p>
 <div class="nbinput docutils container">
@@ -768,55 +676,38 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </div>
 </div>
 <p>With this method we can perfectly recover the original SBM population to which each graph belongs!</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="Omnibus.html" class="btn btn-neutral float-right" title="Omnibus Embedding for Multiple Graphs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="CovariateAssistedEmbed.html" class="btn btn-neutral float-left" title="Covariate-Assisted Embedding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Omnibus.html" class="btn btn-neutral float-right" title="Omnibus Embedding for Multiple Graphs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020.
-
-    </p>
+    <p>&#169; Copyright 2020.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

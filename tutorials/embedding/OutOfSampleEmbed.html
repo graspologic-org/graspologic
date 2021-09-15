@@ -1,36 +1,16 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Out-of-Sample (OOS) Embedding &mdash; graspologic tutorials 0.3.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
@@ -38,43 +18,23 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Covariate-Assisted Embedding" href="CovariateAssistedEmbed.html" />
     <link rel="prev" title="Adjacency Spectral Embed" href="AdjacencySpectralEmbed.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> graspologic tutorials
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.3
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference external" href="https://graspologic.readthedocs.io/en/latest/">Reference Documentation</a></li>
 </ul>
@@ -149,71 +98,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">graspologic tutorials</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Out-of-Sample (OOS) Embedding</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/embedding/OutOfSampleEmbed.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -484,7 +392,7 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Out-of-Sample-(OOS)-Embedding">
+<section id="Out-of-Sample-(OOS)-Embedding">
 <h1>Out-of-Sample (OOS) Embedding<a class="headerlink" href="#Out-of-Sample-(OOS)-Embedding" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
 <div class="line">Suppose we’ve embedded the nodes of a graph into Euclidean space using Adjacency Spectral Embedding (ASE) or Laplacian Spectral Embeding (LSE).</div>
@@ -524,7 +432,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="section" id="Undirected-out-of-sample-prediction">
+<section id="Undirected-out-of-sample-prediction">
 <h2>Undirected out-of-sample prediction<a class="headerlink" href="#Undirected-out-of-sample-prediction" title="Permalink to this headline">¶</a></h2>
 <p>Here, we embed an undirected two-block stochastic block model with ASE. We then use its transform method to find an out-of-sample prediction for both a single vertex and multiple vertices.</p>
 <p>We begin by generating data.</p>
@@ -559,7 +467,7 @@ div.rendered_html tbody tr:hover {
 <img alt="../_images/embedding_OutOfSampleEmbed_5_0.png" src="../_images/embedding_OutOfSampleEmbed_5_0.png" />
 </div>
 </div>
-<div class="section" id="Embedding-(ASE)">
+<section id="Embedding-(ASE)">
 <h3>Embedding (ASE)<a class="headerlink" href="#Embedding-(ASE)" title="Permalink to this headline">¶</a></h3>
 <p>We then generate an embedding with ASE, and we use its <code class="docutils literal notranslate"><span class="pre">transform</span></code> method to determine our best estimate for the latent position of the out-of-sample vertex.</p>
 <div class="nbinput docutils container">
@@ -586,7 +494,7 @@ div.rendered_html tbody tr:hover {
 array([ 0.69563801, -0.59472394])
 </pre></div></div>
 </div>
-<div class="section" id="Plotting-out-of-sample-embedding">
+<section id="Plotting-out-of-sample-embedding">
 <h4>Plotting out-of-sample embedding<a class="headerlink" href="#Plotting-out-of-sample-embedding" title="Permalink to this headline">¶</a></h4>
 <div class="line-block">
 <div class="line">Here, we plot the original latent positions as well as the out-of-sample vertices. Note that the out-of-sample vertices are near their expected latent positions despite not having been run through the original embedding.</div>
@@ -629,9 +537,9 @@ array([ 0.69563801, -0.59472394])
 <img alt="../_images/embedding_OutOfSampleEmbed_11_0.png" src="../_images/embedding_OutOfSampleEmbed_11_0.png" />
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="Embeding-(LSE)">
+</section>
+</section>
+<section id="Embeding-(LSE)">
 <h3>Embeding (LSE)<a class="headerlink" href="#Embeding-(LSE)" title="Permalink to this headline">¶</a></h3>
 <p>Similarly, we can also use Laplacian Spectral Embedding (LSE). We generate an embedding with its transform method to determine our best estimate for the latent position of the out-of-sample vertex.</p>
 <div class="nbinput docutils container">
@@ -674,8 +582,8 @@ array([[ 0.07091005, -0.06055902]])
 <img alt="../_images/embedding_OutOfSampleEmbed_14_0.png" src="../_images/embedding_OutOfSampleEmbed_14_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Passing-in-multiple-out-of-sample-vertices">
+</section>
+<section id="Passing-in-multiple-out-of-sample-vertices">
 <h3>Passing in multiple out-of-sample vertices<a class="headerlink" href="#Passing-in-multiple-out-of-sample-vertices" title="Permalink to this headline">¶</a></h3>
 <p>You can pass a 2d numpy array into <code class="docutils literal notranslate"><span class="pre">transform</span></code>. The rows are the out-of-sample vertices, and the columns are their edges to the in-sample vertices.</p>
 <div class="nbinput docutils container">
@@ -772,9 +680,9 @@ The out-of-sample prediction output has dimensions (2, 2)
 <img alt="../_images/embedding_OutOfSampleEmbed_19_1.png" src="../_images/embedding_OutOfSampleEmbed_19_1.png" />
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="Directed-out-of-sample-prediction">
+</section>
+</section>
+<section id="Directed-out-of-sample-prediction">
 <h2>Directed out-of-sample prediction<a class="headerlink" href="#Directed-out-of-sample-prediction" title="Permalink to this headline">¶</a></h2>
 <p>Not all graphs are undirected. When finding out-of-sample latent positions for directed graphs, <span class="math notranslate nohighlight">\(A \in \textbf{R}^{n \times n}\)</span> is not symmetric. <span class="math notranslate nohighlight">\(A_{i,j}\)</span> represents the edge from node <span class="math notranslate nohighlight">\(i\)</span> to node <span class="math notranslate nohighlight">\(j\)</span>, whereas <span class="math notranslate nohighlight">\(A_{j, i}\)</span> represents the edge from node <span class="math notranslate nohighlight">\(j\)</span> to node <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <div class="line-block">
@@ -837,7 +745,7 @@ in latent positions:
  [ 0.69295841 -0.60998878]]
 </pre></div></div>
 </div>
-<div class="section" id="Plotting-directed-ASE-latent-predictions">
+<section id="Plotting-directed-ASE-latent-predictions">
 <h3>Plotting directed ASE latent predictions<a class="headerlink" href="#Plotting-directed-ASE-latent-predictions" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -855,7 +763,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fd2041c8b50&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3e7ffadca0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -904,8 +812,8 @@ in latent positions:
  [ 0.07069668 -0.0611713 ]]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Plotting-directed-LSE-latent-predictions">
+</section>
+<section id="Plotting-directed-LSE-latent-predictions">
 <h3>Plotting directed LSE latent predictions<a class="headerlink" href="#Plotting-directed-LSE-latent-predictions" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -923,7 +831,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fd204080250&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3e8494c8e0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -940,9 +848,9 @@ in latent positions:
 <img alt="../_images/embedding_OutOfSampleEmbed_28_2.png" src="../_images/embedding_OutOfSampleEmbed_28_2.png" />
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="Weighted-out-of-sample-prediction">
+</section>
+</section>
+<section id="Weighted-out-of-sample-prediction">
 <h2>Weighted out-of-sample prediction<a class="headerlink" href="#Weighted-out-of-sample-prediction" title="Permalink to this headline">¶</a></h2>
 <p>Weighted graphs work as well. Here, we generate a directed, weighted graph and estimate the latent positions for multiple out-of-sample vertices.</p>
 <div class="nbinput docutils container">
@@ -1003,7 +911,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fd203ef4d60&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3e7fbb3460&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1041,7 +949,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fd2046824c0&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f3e7c88c6d0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1058,55 +966,38 @@ in latent positions:
 <img alt="../_images/embedding_OutOfSampleEmbed_33_2.png" src="../_images/embedding_OutOfSampleEmbed_33_2.png" />
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="CovariateAssistedEmbed.html" class="btn btn-neutral float-right" title="Covariate-Assisted Embedding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="AdjacencySpectralEmbed.html" class="btn btn-neutral float-left" title="Adjacency Spectral Embed" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CovariateAssistedEmbed.html" class="btn btn-neutral float-right" title="Covariate-Assisted Embedding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020.
-
-    </p>
+    <p>&#169; Copyright 2020.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

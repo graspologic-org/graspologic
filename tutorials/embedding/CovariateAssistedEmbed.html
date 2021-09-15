@@ -1,36 +1,16 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Covariate-Assisted Embedding &mdash; graspologic tutorials 0.3.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
@@ -38,43 +18,23 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Multiple Adjacency Spectral Embedding (MASE)" href="MASE.html" />
     <link rel="prev" title="Out-of-Sample (OOS) Embedding" href="OutOfSampleEmbed.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> graspologic tutorials
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.3
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference external" href="https://graspologic.readthedocs.io/en/latest/">Reference Documentation</a></li>
 </ul>
@@ -149,71 +98,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">graspologic tutorials</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Covariate-Assisted Embedding</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/embedding/CovariateAssistedEmbed.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -484,12 +392,12 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Covariate-Assisted-Embedding">
+<section id="Covariate-Assisted-Embedding">
 <h1>Covariate-Assisted Embedding<a class="headerlink" href="#Covariate-Assisted-Embedding" title="Permalink to this headline">¶</a></h1>
 <p>In many network problems, our network might be more than just the information contained in its adjacency matrix - we might have extra information in the form of a set of covariates for each node. Covariate-Assisted Embedding (CASE) uses both these covariates and our adjacency matrix to create and embed a new representation of our network.</p>
 <p>There are two primary reasons that we might want to explore using node covariates in addition to topological structure. First, they might improve our embedding if the latent structure of our covariates lines up with the latent structure of our adjacency matrix. Second, figuring out what the clusters of an embedding actually mean can sometimes be difficult - and covariates can create a natural structure.</p>
 <p>To illustrate CASE, we’ll use a model in which some of our community information is in the covariates and some is in our adjacency matrix. we’ll generate an SBM with three communities, with the first and second communities indistinguishable, then a set of covariates, with the second and third communities indistinguishable. Using CASE, we can find an embedding that lets us find distinct community structure.</p>
-<div class="section" id="SBM">
+<section id="SBM">
 <h2>SBM<a class="headerlink" href="#SBM" title="Permalink to this headline">¶</a></h2>
 <p>First, we sample a 3-block SBM with 1500 nodes, 500 nodes per community. We’ll use the following block probability matrix:</p>
 <p><span class="math">\begin{align*}
@@ -603,8 +511,8 @@ B =
 </div>
 </div>
 <p>As you can see, we’d have a tough time clustering this. It would be nice if we could use extra information to more clearly distinguish between communities 0 and 1. We don’t have this information in our adjacency matrix: it needs to come from our covariates.</p>
-</div>
-<div class="section" id="Covariates">
+</section>
+<section id="Covariates">
 <h2>Covariates<a class="headerlink" href="#Covariates" title="Permalink to this headline">¶</a></h2>
 <p>Here, we sample a matrix of covariates <span class="math notranslate nohighlight">\(Y\)</span>. Each node is associated with its own group of 30 covariates. The <span class="math notranslate nohighlight">\(i_{th}\)</span> row of <span class="math notranslate nohighlight">\(Y\)</span> contains the covariates associated with node <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <p>Covariates in community 1 will be drawn from a <span class="math notranslate nohighlight">\(Beta(2,5)\)</span> distribution, whereas covariates in communities 2 or 3 will be drawn from a <span class="math notranslate nohighlight">\(Beta(2,2)\)</span> distribution.</p>
@@ -694,7 +602,7 @@ B =
 </div>
 </div>
 <p>Instead of the first and second communities being indistinguishable, the second and third now are. We’d like to see full separation between all three communities, so we need some kind of representation of our network that allows us to use both the information in the adjacency matrix and the information in the covariates.</p>
-<div class="section" id="CASE">
+<section id="CASE">
 <h3>CASE<a class="headerlink" href="#CASE" title="Permalink to this headline">¶</a></h3>
 <p>Covariate-Assisted Spectral Embedding is a simple way of combining our network and our covariates into a single model. In the most straightforward version of CASE, we sum the network’s regularized Laplacian matrix <span class="math notranslate nohighlight">\(L\)</span> and a function of our covariate matrix <span class="math notranslate nohighlight">\(YY^\top\)</span>. Here, <span class="math notranslate nohighlight">\(Y\)</span> is just our covariate matrix, in which row <span class="math notranslate nohighlight">\(i\)</span> contains the covariates associated with node <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <div class="math notranslate nohighlight">
@@ -724,9 +632,9 @@ B =
 <img alt="../_images/embedding_CovariateAssistedEmbed_20_0.png" src="../_images/embedding_CovariateAssistedEmbed_20_0.png" />
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="Exploring-Possible-Weights">
+</section>
+</section>
+<section id="Exploring-Possible-Weights">
 <h2>Exploring Possible Weights<a class="headerlink" href="#Exploring-Possible-Weights" title="Permalink to this headline">¶</a></h2>
 <p>Rather than simply letting the weight <span class="math notranslate nohighlight">\(\alpha\)</span> be set automatically, you can also set a custom value. Below is a comparison of potential <span class="math notranslate nohighlight">\(\alpha\)</span> values in our experimental setup. There are 9 possible <span class="math notranslate nohighlight">\(\alpha\)</span> values, ranging between <span class="math notranslate nohighlight">\(10^{-5}\)</span> and 100.</p>
 <div class="nbinput docutils container">
@@ -756,7 +664,7 @@ B =
 </div>
 <p>If we were to set the weight manually, it looks like we’d want a weight around 0.5. In practice, if the default weight is producing undesirable results, a shrewd data scientist could find a good weight by clustering with k-means or a GMM, then performing a line search (for example, <code class="docutils literal notranslate"><span class="pre">minimize_scalar</span></code> in scipy’s <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html">optimize</a> module) on some metric which optimizes cluster separation, like BIC or sklearn’s <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html">silhouette
 score</a>.</p>
-<div class="section" id="Non-Assortative-Graphs">
+<section id="Non-Assortative-Graphs">
 <h3>Non-Assortative Graphs<a class="headerlink" href="#Non-Assortative-Graphs" title="Permalink to this headline">¶</a></h3>
 <p>If your graph is <strong>non-assortative</strong> - meaning, the between-block probabilities are greater than the within-block probabilities - it’s better to square our Laplacian. This gets rid of a lot of annoying negative eigenvalues, and we end up embedding <span class="math notranslate nohighlight">\(LL + aYY^\top\)</span>. Below, you can see the embedding in the non-assortative case. In practice, if you don’t know whether your graph is assortative or non-assortative, you can try both algorithms and use whichever one works best.</p>
 <div class="nbinput docutils container">
@@ -785,56 +693,39 @@ score</a>.</p>
 <img alt="../_images/embedding_CovariateAssistedEmbed_27_0.png" src="../_images/embedding_CovariateAssistedEmbed_27_0.png" />
 </div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="MASE.html" class="btn btn-neutral float-right" title="Multiple Adjacency Spectral Embedding (MASE)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="OutOfSampleEmbed.html" class="btn btn-neutral float-left" title="Out-of-Sample (OOS) Embedding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MASE.html" class="btn btn-neutral float-right" title="Multiple Adjacency Spectral Embedding (MASE)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020.
-
-    </p>
+    <p>&#169; Copyright 2020.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
