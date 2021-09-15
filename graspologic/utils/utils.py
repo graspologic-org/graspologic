@@ -235,12 +235,7 @@ def is_unweighted(
     if isinstance(graph, np.ndarray):
         return ((graph == 0) | (graph == 1)).all()
     elif isinstance(graph, csr_matrix):
-        # brute force.  if anyone has a better way, please PR
-        rows, columns = graph.nonzero()
-        for i in range(0, len(rows)):
-            if graph[rows[i], columns[i]] != 1 and graph[rows[i], columns[i]] != 0:
-                return False
-        return True
+        return graph.count_nonzero() == (graph == 1).count_nonzero()
     elif isinstance(graph, nx.Graph):
         return nx.is_weighted(graph, weight=weight_attribute)
     else:
