@@ -8,7 +8,7 @@ import numpy as np
 from beartype import beartype
 from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
-from ..utils import average_matrices, is_fully_connected
+from ..utils import average_matrices, is_fully_connected, to_laplacian
 from .base import BaseEmbedMulti
 
 
@@ -49,6 +49,29 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
         rows.append(hstack(current_row))
 
     return vstack(rows, format="csr")
+
+
+def _get_laplacian_matrices(graphs):
+    """
+    Helper function to convert graph adjacency matrices to graph Laplacian
+
+    Parameters
+    ----------
+    graphs : list
+        List of array-like with shapes (n_vertices, n_vertices).
+
+    Returns
+    -------
+    out : list
+        List of array-like with shapes (n_vertices, n_vertices).
+    """
+    if isinstance(graphs, list):
+        out = [to_laplacian(g) for g in graphs]
+    elif isinstance(graphs, np.ndarray):
+        # Copying is necessary to not overwrite input array
+        out = np.array([to_laplacian(graphs[i]) for i in range(len(graphs))])
+
+    return out
 
 
 def _get_omni_matrix(graphs):
@@ -137,13 +160,17 @@ class OmnibusEmbed(BaseEmbedMulti):
         a vector corresponding to the degree (or sum of edge weights for a
         weighted network) before embedding.
 
-    concat : bool, optional (default False)
+    concat : bool, optional (default = False)
         If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
-    svd_seed : int or None (default ``None``)
+    svd_seed : int or None (default = ``None``)
         Only applicable for ``algorithm="randomized"``; allows you to seed the
         randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
+    lse : bool, optional (default = False)
+        Whether to construct the Omni matrix use the laplacian matrices
+        of the graphs and embed the Omni matrix with LSE
 
     Attributes
     ----------
@@ -188,6 +215,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         diag_aug=True,
         concat=False,
         svd_seed: Optional[int] = None,
+        lse=False,
     ):
         super().__init__(
             n_components=n_components,
@@ -199,6 +227,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             concat=concat,
             svd_seed=svd_seed,
         )
+        self.lse = lse
 
     def fit(self, graphs, y=None):
         """
@@ -231,6 +260,10 @@ class OmnibusEmbed(BaseEmbedMulti):
         # Diag augment
         if self.diag_aug:
             graphs = self._diag_aug(graphs)
+
+        # Laplacian transform
+        if self.lse:
+            graphs = _get_laplacian_matrices(graphs)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)

@@ -173,3 +173,26 @@ class TestOmnibusEmbedding(unittest.TestCase):
                 previous_embedding.embeddings().shape,
                 (g.number_of_nodes(), expected_dimensions),
             )
+
+    def test_omnibus_embedding_lse_digraph_elbowcuts_none_returns_full_embedding(self):
+        dimensions = 100
+        expected_dimensions = dimensions * 2
+        number_of_nodes = 1000
+
+        g = nx.DiGraph()
+        for i in range(number_of_nodes):
+            g.add_edge(1, i, weight=1)
+
+        g2 = g.copy()
+        for i in range(number_of_nodes):
+            g2.add_edge(i, 1, weight=i)
+
+        embeddings = omnibus_embedding_pairwise(
+            graphs=[g, g2], dimensions=dimensions, elbow_cut=None, use_laplacian=True
+        )
+
+        for previous_embedding, current_embedding in embeddings:
+            self.assertEqual(
+                previous_embedding.embeddings().shape,
+                (g.number_of_nodes(), expected_dimensions),
+            )
