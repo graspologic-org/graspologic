@@ -2,10 +2,9 @@
 # Licensed under the MIT License.
 
 import warnings
-from collections.abc import Iterable
 from functools import reduce
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 import networkx as nx
 import numpy as np
