@@ -23,7 +23,8 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     Parameters
     ----------
     form : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional
-        Specifies the type of Laplacian normalization to use.
+        Specifies the type of Laplacian normalization to use. See
+        :func:`~graspologic.utils.to_laplacian` for more details regarding form.
 
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
