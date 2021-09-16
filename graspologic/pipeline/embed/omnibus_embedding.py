@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import Any, List, Optional, Set, Tuple, Union
+from typing import Any, Hashable, List, Optional, Set, Tuple, Union
 
 import networkx as nx
 import numpy as np
@@ -31,6 +31,7 @@ def omnibus_embedding_pairwise(
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
+    use_laplacian: bool = False,
 ) -> List[Tuple[Embeddings, Embeddings]]:
     """
     Generates a pairwise omnibus embedding for each pair of graphs in a list of graphs using the adjacency matrix.
@@ -93,6 +94,10 @@ def omnibus_embedding_pairwise(
           Used to seed the PRNG used in the ``randomized`` svd solver algorithm.
     weight_attribute : str (default="weight")
           The edge dictionary key that contains the weight of the edge.
+    use_laplacian : bool (default=False)
+          Determine whether to use the Laplacian matrix of each graph in order to
+          calculate the omnibus embedding using the Laplacian spectral embedding
+          technique.
 
     Returns
     -------
@@ -147,7 +152,8 @@ def omnibus_embedding_pairwise(
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    used_weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
+    weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
+    perform_augment_diagonal = not use_laplacian
 
     graph_embeddings = []
 
@@ -157,8 +163,9 @@ def omnibus_embedding_pairwise(
         union_graph.add_edges_from(graph.edges())
 
     union_graph_lcc: Union[nx.Graph, nx.Digraph, nx.OrderedGraph, nx.OrderedDiGraph] = largest_connected_component(union_graph)
-    union_graph_lcc_nodes: Set[Any] = set(union_graph_lcc.nodes())
-    union_node_ids = np.array(union_graph_lcc_nodes)
+    union_graph_lcc_nodes: Set[Any] = set(list(union_graph_lcc.nodes()))
+
+    union_node_ids = np.array(list(union_graph_lcc_nodes))
 
     previous_graph = graphs[0].copy()
 
@@ -172,10 +179,16 @@ def omnibus_embedding_pairwise(
 
         # remove self loops, run pass to ranks and diagonal augmentation
         previous_graph_augmented = _augment_graph(
-            previous_graph, union_graph_lcc_nodes, used_weight_attribute
+            previous_graph,
+            union_graph_lcc_nodes,
+            weight_attribute,
+            perform_augment_diagonal=perform_augment_diagonal,
         )
         current_graph_augmented = _augment_graph(
-            current_graph, union_graph_lcc_nodes, used_weight_attribute
+            current_graph,
+            union_graph_lcc_nodes,
+            weight_attribute,
+            perform_augment_diagonal=perform_augment_diagonal,
         )
 
         model = OmnibusEmbed(
@@ -187,6 +200,7 @@ def omnibus_embedding_pairwise(
             diag_aug=False,
             concat=False,
             svd_seed=svd_seed,
+            lse=use_laplacian,
         )
 
         previous_embedding, current_embedding = model.fit_transform(
@@ -252,7 +266,6 @@ def _elbow_cut_if_needed(
     singular_values: np.ndarray,
     embedding: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
 ) -> np.ndarray:
-
     if elbow_cut is None:
         if is_directed:
             embedding = np.concatenate(embedding, axis=1)
@@ -272,23 +285,27 @@ def _elbow_cut_if_needed(
 
 def _augment_graph(
     graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
-    node_ids: Set[Any],
+    node_ids: Set[Hashable],
     weight_attribute: Optional[str],
+    perform_augment_diagonal: bool = True,
 ) -> np.ndarray:
-    graph_as_array: np.ndarray = nx.to_numpy_array(
+    graph_sparse = nx.to_scipy_sparse_matrix(
         graph, weight=weight_attribute, nodelist=node_ids
     )
 
-    graphs_loops_removed: np.ndarray = remove_loops(graph_as_array)
+    graphs_loops_removed: np.ndarray = remove_loops(graph_sparse)
     graphs_ranked: np.ndarray = pass_to_ranks(graphs_loops_removed)
-    graphs_diag_augmented: np.ndarray = augment_diagonal(graphs_ranked)
 
-    return graphs_diag_augmented
+    if perform_augment_diagonal:
+        graphs_diag_augmented: np.ndarray = augment_diagonal(graphs_ranked)
+        return graphs_diag_augmented
+
+    return graphs_ranked
 
 
 def _sync_nodes(
     graph_to_reduce: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
-    set_of_valid_nodes: Set[Any],
+    set_of_valid_nodes: Set[Hashable],
 ) -> None:
     to_remove = []
     for n in graph_to_reduce.nodes():
