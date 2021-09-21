@@ -27,19 +27,12 @@ class _GridBuckets:
         return x_val * self.cell_size, y_val * self.cell_size
 
     def get_grid_cells(
-        self,
-        x: float,
-        y: float,
-        node_size: float
+        self, x: float, y: float, node_size: float
     ) -> Set[Tuple[int, int]]:
         return self._get_grid_cells(x, y, node_size, False)
 
     def _get_grid_cells(
-        self,
-        x: float,
-        y: float,
-        node_size: float,
-        update_max: bool = True
+        self, x: float, y: float, node_size: float, update_max: bool = True
     ) -> Set[Tuple[int, int]]:
         """
         Each node will be at least one cell but up to four cells.
@@ -102,7 +95,9 @@ class _GridBuckets:
     def get_potential_overlapping_nodes_by_node(self, node: _Node) -> Set[_Node]:
         return self.get_potential_overlapping_nodes(node.x, node.y, node.size)
 
-    def get_potential_overlapping_nodes(self, x: float, y: float, size: float) -> Set[_Node]:
+    def get_potential_overlapping_nodes(
+        self, x: float, y: float, size: float
+    ) -> Set[_Node]:
         cells = self._get_grid_cells(x, y, size, update_max=False)
         nodes: Set[_Node] = set()
         for c in cells:
@@ -122,7 +117,9 @@ class _GridBuckets:
         y_cells = self._get_y_cells()
         return x_cells * y_cells
 
-    def add_nodes(self, node_list: List[_Node], only_once: bool = False) -> '_GridBuckets':
+    def add_nodes(
+        self, node_list: List[_Node], only_once: bool = False
+    ) -> "_GridBuckets":
         for n in node_list:
             if only_once:
                 self.add_node_once(n)

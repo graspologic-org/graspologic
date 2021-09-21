@@ -27,7 +27,7 @@ def is_overlap(
     node_1_size: float,
     node_2_x: float,
     node_2_y: float,
-    node_2_size: float
+    node_2_size: float,
 ) -> bool:  # type: ignore
     min_dist = node_1_size + node_2_size
     if abs(node_2_x - node_1_x) > min_dist or abs(node_2_y - node_1_y) > min_dist:
@@ -37,7 +37,9 @@ def is_overlap(
     return d <= node_1_size + node_2_size
 
 
-def is_overlapping_any_node_and_index(node: _Node, new_x: float, new_y: float, nodes: List[_Node], start: int, end: int) -> Tuple[int, Optional[_Node]]:
+def is_overlapping_any_node_and_index(
+    node: _Node, new_x: float, new_y: float, nodes: List[_Node], start: int, end: int
+) -> Tuple[int, Optional[_Node]]:
     overlapping: Optional[_Node] = None
     idx = 0
     for idx, n in enumerate(nodes[start:end]):
@@ -84,12 +86,7 @@ def stats_nodes(nodes: List[_Node]) -> Tuple[float, float, float, float, float]:
     return min_x, min_y, max_x, max_y, max_size
 
 
-def total_area(
-    min_x: float,
-    min_y: float,
-    max_x: float,
-    max_y: float
-) -> float:
+def total_area(min_x: float, min_y: float, max_x: float, max_y: float) -> float:
     return (max_x - min_x) * (max_y - min_y)
 
 
@@ -131,12 +128,12 @@ class _QuadNode:
         nodes: List[_Node],
         depth: int,
         max_nodes_per_quad: int,
-        parent: Optional["_QuadNode"] = None
+        parent: Optional["_QuadNode"] = None,
     ):
-        self.NW: Optional['_QuadNode'] = None
-        self.NE: Optional['_QuadNode'] = None
-        self.SW: Optional['_QuadNode'] = None
-        self.SE: Optional['_QuadNode'] = None
+        self.NW: Optional["_QuadNode"] = None
+        self.NE: Optional["_QuadNode"] = None
+        self.SW: Optional["_QuadNode"] = None
+        self.SE: Optional["_QuadNode"] = None
         self.x = 0.0
         self.y = 0.0
         self.x_range = 0.0
@@ -164,19 +161,14 @@ class _QuadNode:
         self.total_nodes_moved = 0
         self.not_first_choice = 0
 
-    def __lt__(self, other: '_QuadNode') -> bool:
+    def __lt__(self, other: "_QuadNode") -> bool:
         return self.x < other.x
 
     def child_list(self) -> List["_QuadNode"]:
-        return [self.NW, self.NE, self.SW, self.SE] # type: ignore
+        return [self.NW, self.NE, self.SW, self.SE]  # type: ignore
 
     def get_total_cells(
-        self,
-        min_x: float,
-        min_y: float,
-        max_x: float,
-        max_y: float,
-        max_size: float
+        self, min_x: float, min_y: float, max_x: float, max_y: float, max_size: float
     ) -> int:
         side_size = max_size * 2.0
         self.x_range = max_x - min_x
@@ -217,7 +209,7 @@ class _QuadNode:
         self.x = self.x / self.num_nodes()
         self.y = self.y / self.num_nodes()
 
-    def push_to_kids(self: '_QuadNode') -> None:
+    def push_to_kids(self: "_QuadNode") -> None:
         if len(self.nodes) <= self.max_nodes_per_quad:
             # if len == nodes then we already have the center and mass initialized because of
             # the calculation done in the constructor
@@ -287,12 +279,7 @@ class _QuadNode:
         return total_size
 
     def find_grid_cell_and_center(
-        self,
-        min_x: float,
-        min_y: float,
-        max_size: float,
-        x: float,
-        y: float
+        self, min_x: float, min_y: float, max_size: float, x: float, y: float
     ) -> Tuple[int, int, float, float]:
         # zero the coordinates
         side_size = max_size * 2.0
@@ -311,7 +298,7 @@ class _QuadNode:
         num_y_cells: int,
         min_x: float,
         min_y: float,
-        max_size: float
+        max_size: float,
     ) -> Tuple[int, int, float, float]:
         # zero the coordinates
         square_size = max_size * 2
@@ -390,7 +377,7 @@ class _QuadNode:
         max_x: float,
         max_y: float,
         max_size: float,
-        node_list: List[_Node]
+        node_list: List[_Node],
     ) -> int:
         """
         This method will layout the nodes in the current quad.  If there are more nodes
@@ -487,7 +474,15 @@ class _QuadNode:
             if qn is not None:
                 qn._mark_laid_out()
 
-    def get_new_bounds(self, min_x: float, min_y: float, max_x: float, max_y: float, max_size: float, nodes: List[_Node]) -> Tuple[float, float, float, float]:
+    def get_new_bounds(
+        self,
+        min_x: float,
+        min_y: float,
+        max_x: float,
+        max_y: float,
+        max_size: float,
+        nodes: List[_Node],
+    ) -> Tuple[float, float, float, float]:
         xrange = max_x - min_x
         yrange = max_y - min_y
         side_size = 2 * max_size
@@ -706,7 +701,17 @@ class _QuadNode:
                         break
         return num_overlapping_nodes
 
-    def is_just_outside_box(self, minx: float, miny: float, maxx: float, maxy: float, maxsize: float, x: float, y: float, size: float) -> bool:
+    def is_just_outside_box(
+        self,
+        minx: float,
+        miny: float,
+        maxx: float,
+        maxy: float,
+        maxsize: float,
+        x: float,
+        y: float,
+        size: float,
+    ) -> bool:
         dist = maxsize + size
         if x > minx - dist and x < maxx + dist:
             if y <= maxy + dist and y > miny - dist:
@@ -725,7 +730,7 @@ class _QuadNode:
 
         return False
 
-    def get_top_quad_node(self) -> '_QuadNode':
+    def get_top_quad_node(self) -> "_QuadNode":
         tmp = self.parent
         prev = self
         while tmp is not None:
@@ -773,14 +778,14 @@ class _QuadNode:
                         break
         return num_overlapping_nodes
 
-    def get_density_list(self) -> List[Tuple[float, float, int, '_QuadNode']]:
+    def get_density_list(self) -> List[Tuple[float, float, int, "_QuadNode"]]:
         square_size = self.total_square_size()
         tot_area = total_area(self.min_x, self.min_y, self.max_x, self.max_y)
         if tot_area == 0:
             tot_area = 0.001
         ratio = square_size / tot_area
 
-        retval: List[Tuple[float, float, int, '_QuadNode']] = []
+        retval: List[Tuple[float, float, int, "_QuadNode"]] = []
         has_children = False
         for quad in [self.NW, self.NE, self.SW, self.SE]:
             if quad:
@@ -796,7 +801,9 @@ class _QuadNode:
         else:
             return retval
 
-    def get_overlapping_node_list(self, node: _Node, new_x: float, new_y: float, nodes: List[_Node]) -> List[_Node]:
+    def get_overlapping_node_list(
+        self, node: _Node, new_x: float, new_y: float, nodes: List[_Node]
+    ) -> List[_Node]:
         overlapping_nodes = []
         for n in nodes:
             if n.node_id == node.node_id:
@@ -806,7 +813,9 @@ class _QuadNode:
                 overlapping_nodes.append(n)
         return overlapping_nodes
 
-    def is_overlapping_any_node(self, node: _Node, new_x: float, new_y: float, nodes: List[_Node]) -> Optional[_Node]:
+    def is_overlapping_any_node(
+        self, node: _Node, new_x: float, new_y: float, nodes: List[_Node]
+    ) -> Optional[_Node]:
         overlapping = None
         for n in nodes:
             if n.node_id == node.node_id:
@@ -835,7 +844,7 @@ class _QuadNode:
         )
         num_nodes_around_edge = len(nodes_around_the_edge)
 
-        #cells = {}
+        # cells = {}
         for idx, node_to_move in enumerate(nodes_by_size):
             # move to its original spot node_to_move.original_x, node_to_move.original_y
             # then move it toward where it is until it does not overlap with anything already placed.
@@ -938,7 +947,7 @@ class _QuadNode:
         nodes_around_the_edge: List[_Node] = []
         num_nodes_around_edge = len(nodes_around_the_edge)
 
-        #cells = {}
+        # cells = {}
         for idx, node_to_move in enumerate(nodes_by_size):
             if idx % 100 == 0:
                 logger.info(f"processing {idx}")
@@ -1053,7 +1062,9 @@ class _QuadNode:
         if not has_children:
             all_nodes.extend(self.nodes)
 
-    def boxes_by_level(self, boxes: List[Tuple[int, float, float, float, float]]) -> None:
+    def boxes_by_level(
+        self, boxes: List[Tuple[int, float, float, float, float]]
+    ) -> None:
         has_children = False
         for quad in [self.NW, self.NE, self.SW, self.SE]:
             if quad:

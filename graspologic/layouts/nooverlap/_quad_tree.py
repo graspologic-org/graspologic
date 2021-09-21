@@ -10,11 +10,7 @@ class _QuadTree:
     # used to hold objects that have x, y, and mass property
     # nodes = []
 
-    def __init__(
-        self,
-        nodes: List[_Node],
-        max_nodes_per_quad: int
-    ):
+    def __init__(self, nodes: List[_Node], max_nodes_per_quad: int):
         self.nodes = nodes
         self.root = _QuadNode(nodes, 0, max_nodes_per_quad, None)
 

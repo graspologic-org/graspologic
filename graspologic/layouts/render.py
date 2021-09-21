@@ -63,8 +63,7 @@ def _scale_node_sizes_for_rendering(
     spatial_domain = (0, spatial_domain[1] - spatial_domain[0])
     return [
         _scale_value(spatial_domain, spatial_range, s * 2 * 72.0 / dpi) ** 2
-        for s
-        in sizes
+        for s in sizes
     ]
 
 

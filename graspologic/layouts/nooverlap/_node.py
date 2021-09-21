@@ -12,7 +12,7 @@ class _Node:
         y: float,
         size: float,
         community: int = 9999999,
-        color: str = ""
+        color: str = "",
     ):
         self.node_id = node_id
         self.x = float(x)
@@ -23,11 +23,7 @@ class _Node:
         self.community = community
         self.color = color
 
-    def reset_original_position(
-        self,
-        new_x: float,
-        new_y: float
-    ) -> None:
+    def reset_original_position(self, new_x: float, new_y: float) -> None:
         self.original_x = self.x = new_x
         self.original_y = self.y = new_y
 
