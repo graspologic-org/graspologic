@@ -386,6 +386,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pbourke",
+      "name": "Patrick Bourke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37699?v=4",
+      "profile": "http://www.patrickbourke.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
