@@ -4,12 +4,18 @@
 import numpy as np
 from scipy.stats import rankdata
 
-from .utils import import_graph, is_unweighted, is_symmetric, is_loopless, symmetrize, GraphRepresentation
+from ..types import GraphRepresentation
+from .utils import (
+    import_graph,
+    is_unweighted,
+    is_symmetric,
+    is_loopless,
+    symmetrize,
+)
 
 
 def pass_to_ranks(
-    graph: GraphRepresentation,
-    method: str = "simple-nonzero"
+    graph: GraphRepresentation, method: str = "simple-nonzero"
 ) -> GraphRepresentation:
     """
     Rescales edge weights of an adjacency matrix based on their relative rank in

@@ -29,16 +29,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
 
-
-GraphRepresentation = Union[
-    nx.Graph,
-    nx.DiGraph,
-    nx.MultiGraph,
-    nx.MultiDiGraph,
-    np.ndarray,
-    np.memmap,
-    scipy.sparse.csr_matrix,
-]
+from ..types import GraphRepresentation
 
 
 @beartype
