@@ -35,12 +35,12 @@ _CACHED_LIGHT, _CACHED_DARK = _load_thematic_json(None)
 
 
 def _get_colors(light_background: bool, theme_path: Optional[str]) -> Dict[Any, Any]:
-    (
-        light,
-        dark,
-    ) = _CACHED_LIGHT, _CACHED_DARK if theme_path is None else _load_thematic_json(
-        theme_path
-    )
+    light = _CACHED_LIGHT
+    dark = _CACHED_DARK
+
+    if theme_path is not None:
+        light, dark = _load_thematic_json(theme_path)
+
     return light if light_background else dark
 
 

@@ -24,16 +24,17 @@ def _graph_from_file(
             next(edge_io)
         first = True
         for line in edge_io:
+            weight: float
             split_vals = line.strip().split(",")
             if len(split_vals) == 3:
                 source, target, weight_str = split_vals
-                weight: float = float(weight_str)
+                weight = float(weight_str)
             elif len(split_vals) == 2:
                 if first:
                     logger.warn("No weights found in edge list, using 1.0")
                     first = False
                 source, target = split_vals[:2]
-                weight: float = 1.0
+                weight = 1.0
             else:  # drop it because it is malformed
                 if len(split_vals) == 0:
                     pass  # do nothing for blank lines
