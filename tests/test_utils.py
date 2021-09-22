@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import random
 import unittest
 import warnings
 from math import sqrt
@@ -12,6 +13,25 @@ from scipy.sparse import csr_matrix
 
 from graspologic.utils import remap_labels
 from graspologic.utils import utils as gus
+
+
+class TestAverageMatrices(unittest.TestCase):
+    def test_mean_dense_and_sparse_are_equivalent(self):
+        trials = 20
+
+        for _ in range(trials):
+            number_of_graphs = random.randint(2, 10)
+
+            dim = random.randint(2, 100)
+            dim2 = random.randint(2, 100)
+
+            graphs = [np.random.rand(dim, dim2) for _ in range(number_of_graphs)]
+            graphs_sparse = [csr_matrix(graph) for graph in graphs]
+
+            graphs_averaged = gus.average_matrices(graphs)
+            graphs_sparse_averaged = gus.average_matrices(graphs_sparse).todense()
+
+            np.testing.assert_almost_equal(graphs_averaged, graphs_sparse_averaged)
 
 
 class TestInput(unittest.TestCase):
@@ -133,10 +153,42 @@ class TestChecks(unittest.TestCase):
             np.random.normal(size=nedge),
         )
 
-    def test_is_unweighted(self):
+    def test_is_unweighted_for_mixed_zeros_ones_ndarray(self):
         B = np.array([[0, 1, 0, 0], [1, 0, 1, 0], [0, 1.0, 0, 0], [1, 0, 1, 0]])
         self.assertTrue(gus.is_unweighted(B))
+
+    def test_is_unweighted_for_random_ndarray(self):
         self.assertFalse(gus.is_unweighted(self.A))
+
+    def test_is_unweighted_for_zeros_ndarray(self):
+        self.assertTrue(gus.is_unweighted(np.zeros((10, 10))))
+
+    def test_is_unweighted_for_ones_ndarray(self):
+        self.assertTrue(gus.is_unweighted(np.ones((10, 10))))
+
+    def test_is_unweighted_for_zeros_csr_matrix(self):
+        m = csr_matrix((10, 10))
+        self.assertTrue(gus.is_unweighted(m))
+
+    def test_is_unweighted_for_ones_csr_matrix(self):
+        m = csr_matrix(np.ones((10, 10)))
+        self.assertTrue(gus.is_unweighted(m))
+
+    def test_is_unweighted_for_mixed_zeros_ones_csr_matrix(self):
+        m = csr_matrix((10_000, 10_000))
+        m[0, 1] = 1
+        m[1, 1] = 0
+        m[9_999, 9_999] = 1.0
+        self.assertTrue(gus.is_unweighted(m))
+
+    def test_is_unweighted_for_random_csr_matrix(self):
+        dim = 10_000
+        num_nonzero = 20
+        rows = np.random.randint(0, dim, num_nonzero)
+        columns = np.random.randint(0, dim, num_nonzero)
+        m = csr_matrix((dim, dim))
+        m[rows, columns] = np.random.random(num_nonzero)
+        self.assertFalse(gus.is_unweighted(m))
 
     def test_is_fully_connected(self):
         # graph where node at index [3] only connects to self
