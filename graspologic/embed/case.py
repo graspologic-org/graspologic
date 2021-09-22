@@ -105,7 +105,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self._scaled = scale_covariates
         self.is_fitted_ = False
 
-    def fit(
+    def fit( # type: ignore
         self, graph: np.ndarray, covariates: np.ndarray, y: None = None
     ) -> "CovariateAssistedEmbed":
         """
@@ -160,7 +160,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self.is_fitted_ = True
         return self
 
-    def fit_transform(self, graph: np.ndarray, covariates: np.ndarray):
+    def fit_transform(self, graph: np.ndarray, covariates: np.ndarray):  # type: ignore
         # Allows `for self.fit_transform(graph, covariates)` without needing keyword arguments.
         return self._fit_transform(graph, covariates=covariates)
 
@@ -201,7 +201,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         # just use the ratio of the leading eigenvalues for the
         # tuning parameter, or the closest value in its possible range.
-        self.alpha_ = np.float(L_top / YYt_top)
+        self.alpha_ = np.float_(L_top / YYt_top)
 
         return self
 

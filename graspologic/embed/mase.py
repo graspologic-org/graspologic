@@ -7,7 +7,7 @@ import numpy as np
 
 from ..utils import is_almost_symmetric
 from .base import BaseEmbedMulti
-from .svd import select_dimension, select_svd
+from .svd import select_dimension, select_svd, SvdAlgorithmType
 
 
 class MultipleASE(BaseEmbedMulti):
@@ -111,13 +111,13 @@ class MultipleASE(BaseEmbedMulti):
 
     def __init__(
         self,
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        scaled=True,
-        diag_aug=True,
-        concat=False,
+        n_components: Optional[int] = None,
+        n_elbows: int = 2,
+        algorithm: SvdAlgorithmType = "randomized",
+        n_iter: int = 5,
+        scaled: bool = True,
+        diag_aug: bool = True,
+        concat: bool = False,
         svd_seed: Optional[int] = None,
     ):
         if not isinstance(scaled, bool):
@@ -135,7 +135,7 @@ class MultipleASE(BaseEmbedMulti):
         )
         self.scaled = scaled
 
-    def _reduce_dim(self, graphs):
+    def _reduce_dim(self, graphs):  # type: ignore
         if self.n_components is None:
             # first embed into log2(n_vertices) for each graph
             n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
@@ -206,7 +206,7 @@ class MultipleASE(BaseEmbedMulti):
         )
         return Uhat, Vhat, sing_vals_left, sing_vals_right
 
-    def fit(self, graphs, y=None):
+    def fit(self, graphs, y=None):  # type: ignore
         """
         Fit the model with graphs.
 
@@ -245,7 +245,7 @@ class MultipleASE(BaseEmbedMulti):
 
         return self
 
-    def fit_transform(self, graphs, y=None):
+    def fit_transform(self, graphs, y=None):  # type: ignore
         """
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.

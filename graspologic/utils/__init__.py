@@ -24,6 +24,7 @@ from .utils import (
     remove_vertices,
     symmetrize,
     to_laplacian,
+    LaplacianFormType
 )
 
 __all__ = [
@@ -37,6 +38,7 @@ __all__ = [
     "symmetrize",
     "remove_loops",
     "to_laplacian",
+    "LaplacianFormType",
     "is_fully_connected",
     "largest_connected_component",
     "multigraph_lcc_union",

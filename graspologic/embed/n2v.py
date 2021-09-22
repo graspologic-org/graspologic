@@ -8,6 +8,7 @@ from typing import Any, List, Optional, Tuple, Union
 
 import networkx as nx
 import numpy as np
+from gensim.models import Word2Vec
 
 from ..utils import remap_node_ids
 
@@ -24,7 +25,7 @@ def node2vec_embed(
     iterations: int = 1,
     interpolate_walk_lengths_by_node_degree: bool = True,
     random_seed: Optional[int] = None,
-) -> Tuple[np.array, List[Any]]:
+) -> Tuple[np.ndarray, List[Any]]:
     """
     Generates a node2vec embedding from a given graph. Will follow the word2vec algorithm to create the embedding.
 
@@ -139,14 +140,14 @@ def node2vec_embed(
     )
 
 
-def _assert_is_positive_int(name: str, value: int):
+def _assert_is_positive_int(name: str, value: int) -> None:
     if not isinstance(value, int):
         raise TypeError(f"{name} must be an int")
     if value <= 0:
         raise ValueError(f"{name} must be > 0")
 
 
-def _assert_is_nonnegative_float(name: str, value: float):
+def _assert_is_nonnegative_float(name: str, value: float) -> None:
     if not isinstance(value, float):
         raise TypeError(f"{name} must be a float")
     if value < 0.0:
@@ -164,7 +165,7 @@ def _preconditions(
     workers: int,
     iterations: int,
     interpolate_walk_lengths_by_node_degree: bool,
-):
+) -> None:
     if not isinstance(graph, nx.Graph):
         raise TypeError("graph must be a networkx Graph or DiGraph")
     if graph.is_multigraph():
@@ -193,12 +194,10 @@ def _learn_embeddings(
     workers: int,
     iterations: int,
     random_seed: Optional[int],
-):
+) -> Word2Vec:
     """
     Learn embeddings by optimizing the skip-gram objective using SGD.
     """
-    from gensim.models import Word2Vec
-
     walks = [list(map(str, walk)) for walk in walks]
 
     # Documentation - https://radimrehurek.com/gensim/models/word2vec.html
@@ -251,14 +250,14 @@ class _Node2VecGraph:
         self.is_directed = self.graph.is_directed()
         self.p = return_hyperparameter
         self.q = inout_hyperparameter
-        self.random_state = random_state
+        self.random_state = random_state if random_state is not None else np.random.RandomState()
 
     def node2vec_walk(
         self,
         walk_length: int,
         start_node: Any,
         degree_percentiles: Optional[np.ndarray],
-    ):
+    ) -> List[Any]:
         """
         Simulate a random walk starting from start node.
         """
@@ -313,8 +312,8 @@ class _Node2VecGraph:
 
     @staticmethod
     def _get_walk_length_interpolated(
-        degree: int, percentiles: list, max_walk_length: int
-    ):
+        degree: int, percentiles: Union[np.ndarray, List[float]], max_walk_length: int
+    ) -> int:
         """
         Given a node's degree, determine the length of a walk that should be used. If the degree is less than the
         first element of the percentiles list, default the walk length to 1. Otherwise, if the degree is greater
@@ -349,7 +348,7 @@ class _Node2VecGraph:
         num_walks: int,
         walk_length: int,
         interpolate_walk_lengths_by_node_degree: bool = False,
-    ):
+    ) -> List[List[Any]]:
         """
         Repeatedly simulate random walks from each node.
         """
@@ -380,7 +379,7 @@ class _Node2VecGraph:
 
         return walks
 
-    def _get_alias_edge(self, source: Any, destination: Any):
+    def _get_alias_edge(self, source: Any, destination: Any) -> Tuple[np.ndarray, np.ndarray]:
         """
         Get the alias edge setup lists for a given edge.
         """
@@ -407,7 +406,7 @@ class _Node2VecGraph:
 
         return _alias_setup(normalized_probs)
 
-    def _preprocess_transition_probabilities(self, weight_default: float = 1.0):
+    def _preprocess_transition_probabilities(self, weight_default: float = 1.0) -> None:
         """
         Preprocessing of transition probabilities for guiding the random walks.
         """
@@ -478,7 +477,7 @@ class _Node2VecGraph:
         return
 
 
-def _alias_setup(probabilities: List[float]):
+def _alias_setup(probabilities: List[float]) -> Tuple[np.ndarray, np.ndarray]:
     """
     Compute utility lists for non-uniform sampling from discrete distributions.
     Refer to
@@ -513,8 +512,8 @@ def _alias_setup(probabilities: List[float]):
 
 
 def _alias_draw(
-    probabilities: List[float], alias: List[float], random_state: np.random.RandomState
-):
+    probabilities: Union[np.ndarray, List[int]], alias: Union[np.ndarray, List[float]], random_state: np.random.RandomState
+) -> int:
     """
     Draw sample from a non-uniform discrete distribution using alias sampling.
     """

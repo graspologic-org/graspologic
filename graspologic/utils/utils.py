@@ -374,9 +374,12 @@ def remove_loops(graph: GraphRepresentation) -> Union[np.ndarray, csr_matrix]:
     return graph
 
 
+LaplacianFormType = Literal["I-DAD", "DAD", "R-DAD"]
+
+
 def to_laplacian(
     graph: GraphRepresentation,
-    form: Literal["I-DAD", "DAD", "R-DAD"] = "DAD",
+    form: LaplacianFormType = "DAD",
     regularizer: Optional[float] = None,
 ) -> np.ndarray:
     r"""

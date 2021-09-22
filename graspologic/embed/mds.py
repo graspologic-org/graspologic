@@ -1,17 +1,17 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Optional
+from typing import Any, Literal, Optional, Union, Tuple
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 
 from ..utils import is_symmetric
-from .svd import select_svd
+from .svd import select_svd, SvdAlgorithmType
 
 
-def _get_centering_matrix(n):
+def _get_centering_matrix(n: int) -> np.ndarray:
     """
     Compute the centering array
 
@@ -90,11 +90,11 @@ class ClassicalMDS(BaseEstimator):
 
     def __init__(
         self,
-        n_components=None,
-        n_elbows=2,
-        dissimilarity="euclidean",
+        n_components: Optional[int] = None,
+        n_elbows: int = 2,
+        dissimilarity: Literal["euclidean", "precomputed"] = "euclidean",
         svd_seed: Optional[int] = None,
-    ):
+    ) -> None:
         # Check inputs
         if n_components is not None:
             if not isinstance(n_components, int):
@@ -115,7 +115,7 @@ class ClassicalMDS(BaseEstimator):
         self.n_elbows = n_elbows
         self.svd_seed = svd_seed
 
-    def _compute_euclidean_distances(self, X):
+    def _compute_euclidean_distances(self, X: np.ndarray) -> np.ndarray:
         """
         Computes pairwise distance between row vectors or matrices
 
@@ -137,6 +137,8 @@ class ClassicalMDS(BaseEstimator):
         shape = X.shape
         n_samples = shape[0]
 
+        order: Literal[2, "fro"]
+        axis: Union[int, Tuple[int, int]]
         if X.ndim == 2:
             order = 2
             axis = 1
@@ -150,7 +152,7 @@ class ClassicalMDS(BaseEstimator):
 
         return out
 
-    def fit(self, X, y=None):
+    def fit(self, X: np.ndarray, y: Optional[Any] = None) -> 'ClassicalMDS':
         """
         Fit the model with X.
 
@@ -196,6 +198,7 @@ class ClassicalMDS(BaseEstimator):
 
         n_components = self.n_components
 
+        algorithm: SvdAlgorithmType
         if n_components == 1:
             algorithm = "full"
         else:
@@ -216,7 +219,7 @@ class ClassicalMDS(BaseEstimator):
 
         return self
 
-    def fit_transform(self, X, y=None):
+    def fit_transform(self, X: np.ndarray, y: Optional[Any] = None) -> np.ndarray:
         """
         Fit the data from X, and returns the embedded coordinates.
 

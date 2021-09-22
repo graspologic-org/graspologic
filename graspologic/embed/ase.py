@@ -1,10 +1,11 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Optional
+from typing import Any, Optional
 
+from ..types import GraphRepresentation
 from ..utils import augment_diagonal
-from .base import BaseSpectralEmbed
+from .base import BaseSpectralEmbed, SvdAlgorithmType
 
 
 class AdjacencySpectralEmbed(BaseSpectralEmbed):
@@ -113,15 +114,15 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
     def __init__(
         self,
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        diag_aug=True,
-        concat=False,
+        n_components: Optional[int] = None,
+        n_elbows: int = 2,
+        algorithm: SvdAlgorithmType = "randomized",
+        n_iter: int = 5,
+        check_lcc: bool = True,
+        diag_aug: bool = True,
+        concat: bool = False,
         svd_seed: Optional[int] = None,
-    ):
+    ) -> None:
         super().__init__(
             n_components=n_components,
             n_elbows=n_elbows,
@@ -137,7 +138,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         self.diag_aug = diag_aug
         self.is_fitted_ = False
 
-    def fit(self, graph, y=None):
+    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None, *args: Any, **kwargs: Any) -> 'AdjacencySpectralEmbed':
         """
         Fit ASE model to input graph
 
@@ -164,7 +165,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         return self
 
-    def _compute_oos_prediction(self, X, directed):
+    def _compute_oos_prediction(self, X, directed): # type: ignore
         """
         Computes the out-of-sample latent position estimation.
         Parameters
