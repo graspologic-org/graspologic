@@ -3,6 +3,7 @@
 
 from os.path import dirname, join
 from pathlib import Path
+from typing import Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -11,7 +12,7 @@ from sklearn.utils import Bunch
 from ..utils import import_edgelist
 
 
-def load_drosophila_left(return_labels=False):
+def load_drosophila_left(return_labels: bool = False) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Load the left Drosophila larva mushroom body connectome
 
@@ -57,7 +58,7 @@ def load_drosophila_left(return_labels=False):
         return graph
 
 
-def load_drosophila_right(return_labels=False):
+def load_drosophila_right(return_labels: bool = False) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Load the right Drosophila larva mushroom body connectome
 
@@ -103,7 +104,7 @@ def load_drosophila_right(return_labels=False):
         return graph
 
 
-def load_mice():
+def load_mice() -> Bunch:
     """
     Load connectomes of mice from distinct genotypes.
 
