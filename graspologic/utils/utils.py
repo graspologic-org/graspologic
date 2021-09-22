@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from collections import Iterable
+from collections.abc import Iterable
 from functools import reduce
 from pathlib import Path
 from typing import Any, Dict, List, Tuple, Union
@@ -11,11 +11,36 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import scipy.sparse
+from beartype import beartype
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_matrix, diags, isspmatrix_csr
+from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
+from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
+
+
+@beartype
+def average_matrices(
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
+) -> Union[np.ndarray, csr_matrix]:
+    """
+    Helper method to encapsulate calculating the average of matrices represented either as a
+    list of numpy.ndarray or a list of scipy.sparse.csr_matrix.
+
+    Parameters
+    ----------
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
+        The list of matrices to be averaged
+
+    Returns
+    -------
+    Union[np.ndarray, csr_matrix]
+    """
+    if isinstance(matrices[0], np.ndarray):
+        return np.mean(matrices, axis=0)
+    elif isspmatrix_csr(matrices[0]):
+        return sum(matrices) / len(matrices)
 
 
 def import_graph(graph, copy=True):
@@ -150,6 +175,8 @@ def import_edgelist(
 
     # Compute union of all vertices
     vertices = np.sort(reduce(np.union1d, [G.nodes for G in graphs]))
+    for g in graphs:
+        g.add_nodes_from(vertices)
     out = [nx.to_numpy_array(G, nodelist=vertices, dtype=np.float) for G in graphs]
 
     # only return adjacency matrix if input is only 1 graph
@@ -208,12 +235,7 @@ def is_unweighted(
     if isinstance(graph, np.ndarray):
         return ((graph == 0) | (graph == 1)).all()
     elif isinstance(graph, csr_matrix):
-        # brute force.  if anyone has a better way, please PR
-        rows, columns = graph.nonzero()
-        for i in range(0, len(rows)):
-            if graph[rows[i], columns[i]] != 1 or graph[rows[i], columns[i]] != 0:
-                return False
-        return True
+        return graph.count_nonzero() == (graph == 1).count_nonzero()
     elif isinstance(graph, nx.Graph):
         return nx.is_weighted(graph, weight=weight_attribute)
     else:
@@ -222,8 +244,37 @@ def is_unweighted(
         )
 
 
-def is_almost_symmetric(X, atol=1e-15):
-    return abs(X - X.T).max() <= atol
+def is_almost_symmetric(
+    x: Union[np.ndarray, scipy.sparse.spmatrix], atol: float = 1e-15
+) -> bool:
+    """
+    Returns True if input x is nearly symmetric, which means that the entries differ by
+    no more than atol.
+
+    Parameters
+    ----------
+    x: Union[np.ndarray, scipy.sparse.spmatrix]
+        a square matrix
+    atol : float
+        a threshold for comparing the difference between off-diagonal entries
+        default 1e-15
+
+    Returns
+    -------
+    bool
+        True if x is a nearly symmetric square matrix
+
+    Raises
+    ------
+    TypeError
+        If the provided graph is not a numpy.ndarray or scipy.sparse.spmatrix
+    """
+    if (x.ndim != 2) or (x.shape[0] != x.shape[1]):
+        return False
+    if isinstance(x, (np.ndarray, scipy.sparse.spmatrix)):
+        return abs(x - x.T).max() <= atol
+    else:
+        raise TypeError("input a correct matrix type.")
 
 
 def symmetrize(graph, method="avg"):
@@ -426,7 +477,8 @@ def is_fully_connected(graph):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph,
+        scipy.sparse.csr_matrix, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
 
@@ -448,19 +500,30 @@ def is_fully_connected(graph):
     >>> is_fully_connected(a)
     False
     """
+
     if isinstance(graph, (np.ndarray, csr_matrix)):
-        if is_symmetric(graph):
-            g_object = nx.Graph()
-        else:
-            g_object = nx.DiGraph()
-        graph = nx.to_networkx_graph(graph, create_using=g_object)
-    if type(graph) in [nx.Graph, nx.MultiGraph]:
-        return nx.is_connected(graph)
-    elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
-        return nx.is_weakly_connected(graph)
+        directed = not is_symmetric(graph)
+
+        n_components = connected_components(
+            csgraph=graph, directed=directed, connection="weak", return_labels=False
+        )
+        return n_components == 1
+
+    else:
+        if type(graph) in [nx.Graph, nx.MultiGraph]:
+            return nx.is_connected(graph)
+        elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
+            return nx.is_weakly_connected(graph)
 
 
-def largest_connected_component(graph, return_inds=False):
+def largest_connected_component(
+    graph: Union[
+        nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
+    ],
+    return_inds: bool = False,
+) -> Union[
+    nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
+]:
     r"""
     Finds the largest connected component for the input graph.
 
@@ -469,32 +532,47 @@ def largest_connected_component(graph, return_inds=False):
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        Input graph in any of the above specified formats. If np.ndarray,
-        interpreted as an :math:`n \times n` adjacency matrix
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix
+        Input graph in any of the above specified formats. If np.ndarray or
+        scipy.sparse.csr_matrix interpreted as an :math:`n \times n` adjacency matrix.
 
     return_inds: boolean, default: False
-        Whether to return a np.ndarray containing the indices in the original
+        Whether to return a np.ndarray containing the indices/nodes in the original
         adjacency matrix that were kept and are now in the returned graph.
-        Ignored when input is networkx object
 
     Returns
     -------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray
-        New graph of the largest connected component of the input parameter.
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix
+        New graph of the largest connected component, returned in the input format.
 
     inds: (optional)
-        Indices from the original adjacency matrix that were kept after taking
+        Indices/nodes from the original adjacency matrix that were kept after taking
         the largest connected component.
+
+    Notes
+    -----
+    For networks input in ``scipy.sparse.csr_matrix`` format, explicit zeros are removed
+    prior to finding the largest connected component, thus they are not treated as
+    edges. This differs from the convention in
+    :func:`scipy.sparse.csgraph.connected_components`.
     """
-    input_ndarray = False
-    if type(graph) is np.ndarray:
-        input_ndarray = True
-        if is_symmetric(graph):
-            g_object = nx.Graph()
-        else:
-            g_object = nx.DiGraph()
-        graph = nx.from_numpy_array(graph, create_using=g_object)
+
+    if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
+        return _largest_connected_component_networkx(graph, return_inds=return_inds)
+    elif isinstance(graph, (np.ndarray, csr_matrix)):
+        return _largest_connected_component_adjacency(graph, return_inds=return_inds)
+    else:
+        msg = (
+            "`graph` must either be a networkx graph or an adjacency matrix in"
+            " numpy ndarray or scipy csr_matrix format."
+        )
+        raise TypeError(msg)
+
+
+def _largest_connected_component_networkx(
+    graph: Union[nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph],
+    return_inds: bool = False,
+):
     if type(graph) in [nx.Graph, nx.MultiGraph]:
         lcc_nodes = max(nx.connected_components(graph), key=len)
     elif type(graph) in [nx.DiGraph, nx.MultiDiGraph]:
@@ -503,11 +581,47 @@ def largest_connected_component(graph, return_inds=False):
     lcc.remove_nodes_from([n for n in lcc if n not in lcc_nodes])
     if return_inds:
         nodelist = np.array(list(lcc_nodes))
-    if input_ndarray:
-        lcc = nx.to_numpy_array(lcc)
     if return_inds:
         return lcc, nodelist
-    return lcc
+    else:
+        return lcc
+
+
+def _largest_connected_component_adjacency(
+    adjacency: Union[np.ndarray, csr_matrix],
+    return_inds: bool = False,
+):
+    if isinstance(adjacency, csr_matrix):
+        adjacency.eliminate_zeros()
+
+    # If you treat an undirected graph as directed and take the largest weakly connected
+    # component, you'll get the same answer as taking the largest connected component of
+    # that undirected graph. So I wrote it this way to avoid the cost of checking for
+    # directedness, and it makes the code simpler too.
+    n_components, labels = csgraph.connected_components(
+        adjacency, directed=True, connection="weak", return_labels=True
+    )
+    if n_components > 1:
+        unique_labels, counts = np.unique(labels, return_counts=True)
+        lcc_label_ind = np.argmax(counts)  # LCC is the component with the most nodes,
+        # so it is the component label with the highest count in the label array
+
+        lcc_label = unique_labels[lcc_label_ind]  # grab the component label for the LCC
+
+        lcc_mask = labels == lcc_label  # create a boolean mask array for where the
+        # component labels equal that of the largest connected component
+
+        lcc = adjacency[lcc_mask][:, lcc_mask]  # mask the adjacency matrix to only LCC
+    else:
+        lcc = adjacency
+        lcc_mask = np.ones(adjacency.shape[0], dtype=bool)
+
+    if return_inds:
+        all_inds = np.arange(adjacency.shape[0])
+        lcc_inds = all_inds[lcc_mask]
+        return lcc, lcc_inds
+    else:
+        return lcc
 
 
 def multigraph_lcc_union(graphs, return_inds=False):
@@ -945,7 +1059,7 @@ def remap_labels(
 
 
 def remap_node_ids(
-    graph: nx.Graph, weight_attribute: str = "weight"
+    graph: nx.Graph, weight_attribute: str = "weight", weight_default: float = 1.0
 ) -> Tuple[nx.Graph, Dict[Any, str]]:
     """
     Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
@@ -957,7 +1071,8 @@ def remap_node_ids(
         A graph that has node ids of arbitrary types.
     weight_attribute : str,
         Default is ``weight``. An optional attribute to specify which column in your graph contains the weight value.
-
+    weight_default : float,
+        Default edge weight to use if a weight is not found on an edge in the graph
     Returns
     -------
     Tuple[nx.Graph, Dict[Any, str]]
@@ -971,10 +1086,18 @@ def remap_node_ids(
     if not isinstance(graph, nx.Graph):
         raise TypeError("graph must be of type nx.Graph")
 
+    if not nx.is_weighted(graph, weight=weight_attribute):
+        warnings.warn(
+            f'Graph has at least one unweighted edge using weight_attribute "{weight_attribute}". '
+            f'Defaulting unweighted edges to "{weight_default}"'
+        )
+
     node_id_dict = dict()
     graph_remapped = type(graph)()
 
-    for source, target, weight in graph.edges(data=weight_attribute):
+    for source, target, weight in graph.edges(
+        data=weight_attribute, default=weight_default
+    ):
         if source not in node_id_dict:
             node_id_dict[source] = str(len(node_id_dict.keys()))
 

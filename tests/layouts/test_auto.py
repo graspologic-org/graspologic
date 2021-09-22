@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import networkx as nx
 import numpy
 
@@ -42,6 +43,23 @@ class TestAuto(unittest.TestCase):
             graph_int_node_ids.add_edge(ids_as_ints[s], ids_as_ints[t], weight=1)
 
         _, node_positions = layout_umap(graph=graph_int_node_ids)
+
+        self.assertEqual(len(node_positions), len(graph.nodes()))
+
+    def test_layout_umap_directed_weighted(self):
+        graph = nx.erdos_renyi_graph(10, 0.7, directed=True)
+
+        for s, t in graph.edges():
+            graph.edges[s, t]["weight"] = numpy.random.randint(1, 10)
+
+        _, node_positions = layout_umap(graph=graph)
+
+        self.assertEqual(len(node_positions), len(graph.nodes()))
+
+    def test_layout_umap_directed_unweighted(self):
+        graph = nx.erdos_renyi_graph(10, 0.7, directed=True)
+
+        _, node_positions = layout_umap(graph=graph)
 
         self.assertEqual(len(node_positions), len(graph.nodes()))
 

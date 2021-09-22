@@ -1,16 +1,15 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from typing import List, Tuple
-
 import unittest
+from typing import Dict, List, Tuple
+
 import networkx as nx
 import numpy as np
 import scipy
 
 from graspologic.partition import HierarchicalCluster, hierarchical_leiden, leiden
-from graspologic.partition.leiden import _validate_and_build_edge_list, _from_native
-
+from graspologic.partition.leiden import _from_native, _validate_and_build_edge_list
 from tests.utils import data_file
 
 
@@ -123,6 +122,16 @@ class TestLeiden(unittest.TestCase):
             args["use_modularity"] = 1234
             leiden(graph=graph, **args)
 
+        with self.assertRaises(TypeError):
+            args = good_args.copy()
+            args["trials"] = "hotdog"
+            leiden(graph=graph, **args)
+
+        with self.assertRaises(ValueError):
+            args = good_args.copy()
+            args["trials"] = 0
+            leiden(graph=graph, **args)
+
         args = good_args.copy()
         args["random_seed"] = 1234
         leiden(graph=graph, **args)
@@ -194,6 +203,118 @@ class TestLeiden(unittest.TestCase):
             self.assertTrue(isinstance(node_id, int))
 
 
+class TestLeidenIsolates(unittest.TestCase):
+    """
+    Tests to verify fix for Github issue: 803 - isolate nodes are dropped silently
+    """
+
+    def setUp(self) -> None:
+        # prepare a graph with an isolate node
+        self.graph: nx.Graph = nx.complete_graph(10)
+        nodelist = sorted(self.graph.nodes)
+        for node in nodelist[1:]:
+            self.graph.remove_edge(0, node)
+
+    def assert_isolate_not_in_result(self, partitions: Dict[str, int]):
+        """verify that isolate node was not returned"""
+        self.assertTrue(
+            0 not in partitions, "the isolate node is not in the result from leiden"
+        )
+        self.assertTrue(
+            3 in partitions, "a node that was not removed is in the result from leiden"
+        )
+        self.assertEqual(
+            9,
+            len(partitions),
+            "the result contains all nodes in the connected component",
+        )
+
+    def assert_isolate_not_in_hierarchical_result(
+        self, partitions: List[HierarchicalCluster]
+    ):
+        """verify that isolate node was not returned"""
+        all_nodes = {p.node for p in partitions}
+
+        self.assertTrue(
+            0 not in all_nodes, "the isolate node is not in the result from leiden"
+        )
+        self.assertTrue(
+            3 in all_nodes, "a node that was not removed is in the result from leiden"
+        )
+        self.assertEqual(
+            9,
+            len(all_nodes),
+            "the result contains all nodes in the connected component",
+        )
+
+    def test_isolate_nodes_in_nx_graph_are_not_returned(self):
+        self.assertEqual(
+            10,
+            len(self.graph.nodes),
+            "the input graph contains all nodes including isolate",
+        )
+
+        with self.assertWarnsRegex(
+            UserWarning, "isolate", msg="should warn about isolates in input graph"
+        ):
+            partitions = leiden(self.graph)
+
+        self.assert_isolate_not_in_result(partitions)
+
+        with self.assertWarnsRegex(
+            UserWarning, "isolate", msg="hierarchical leiden should warn about isolates"
+        ):
+            hierarchical_partitions = hierarchical_leiden(self.graph)
+
+        self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)
+
+    def test_isolate_nodes_in_ndarray_are_not_returned(self):
+        ndarray_adj_matrix = nx.to_numpy_array(self.graph)
+
+        self.assertEqual(
+            10,
+            ndarray_adj_matrix.shape[0],
+            "the input array contains all nodes including isolate",
+        )
+
+        with self.assertWarnsRegex(
+            UserWarning, "isolate", msg="should warn about isolates in input graph"
+        ):
+            partitions = leiden(ndarray_adj_matrix)
+
+        self.assert_isolate_not_in_result(partitions)
+
+        with self.assertWarnsRegex(
+            UserWarning, "isolate", msg="hierarchical leiden should warn about isolates"
+        ):
+            hierarchical_partitions = hierarchical_leiden(ndarray_adj_matrix)
+
+        self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)
+
+    def test_isolate_nodes_in_csr_matrix_are_not_returned(self):
+        sparse_adj_matrix = nx.to_scipy_sparse_matrix(self.graph)
+
+        self.assertEqual(
+            10,
+            sparse_adj_matrix.shape[0],
+            "the input csr contains all nodes including isolate",
+        )
+
+        with self.assertWarnsRegex(
+            UserWarning, "isolate", msg="should warn about isolates in input graph"
+        ):
+            partitions = leiden(sparse_adj_matrix)
+
+        self.assert_isolate_not_in_result(partitions)
+
+        with self.assertWarnsRegex(
+            UserWarning, "isolate", msg="hierarchical leiden should warn about isolates"
+        ):
+            hierarchical_partitions = hierarchical_leiden(sparse_adj_matrix)
+
+        self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)
+
+
 def add_edges_to_graph(graph: nx.Graph) -> nx.Graph:
     graph.add_edge("nick", "dwayne", weight=1.0)
     graph.add_edge("nick", "dwayne", weight=3.0)
@@ -214,6 +335,28 @@ class TestValidEdgeList(unittest.TestCase):
             weight_default=1.0,
         )
         self.assertEqual([], results[1])
+
+    def test_assert_list_does_not_contain_tuples(self):
+        edges = ["invalid"]
+        with self.assertRaisesRegex(TypeError, "list of tuples"):
+            _validate_and_build_edge_list(
+                graph=edges,
+                is_weighted=True,
+                weight_attribute="weight",
+                check_directed=False,
+                weight_default=1.0,
+            )
+
+    def test_assert_list_contains_misshapen_tuple(self):
+        edges = [(1, 2, 1.0, 1.0)]
+        with self.assertRaisesRegex(TypeError, "list of tuples"):
+            _validate_and_build_edge_list(
+                graph=edges,
+                is_weighted=True,
+                weight_attribute="weight",
+                check_directed=False,
+                weight_default=1.0,
+            )
 
     def test_assert_wrong_types_in_tuples(self):
         edges = [(True, 4, "sandwich")]
@@ -436,6 +579,39 @@ class TestValidEdgeList(unittest.TestCase):
         with self.assertRaises(ValueError):
             _validate_and_build_edge_list(
                 graph=scipy.sparse.csr_matrix(data),
+                is_weighted=True,
+                weight_attribute="weight",
+                check_directed=True,
+                weight_default=1.0,
+            )
+
+    def test_invalid_weight_default(self):
+        graph = nx.complete_graph(10)
+        with self.assertRaisesRegex(TypeError, "weight default"):
+            _validate_and_build_edge_list(
+                graph=graph,
+                is_weighted=True,
+                weight_attribute="weight",
+                check_directed=True,
+                weight_default="invalid",
+            )
+
+    def test_nx_graph_node_str_collision(self):
+        graph = nx.Graph()
+        graph.add_edge("1", 1, weight=1.0)
+        with self.assertRaisesRegex(ValueError, "representation collision"):
+            _validate_and_build_edge_list(
+                graph=graph,
+                is_weighted=True,
+                weight_attribute="weight",
+                check_directed=True,
+                weight_default=1.0,
+            )
+
+    def test_edgelist_node_str_collision(self):
+        with self.assertRaisesRegex(ValueError, "representation collision"):
+            _validate_and_build_edge_list(
+                graph=[("1", 1, 1.0)],
                 is_weighted=True,
                 weight_attribute="weight",
                 check_directed=True,
