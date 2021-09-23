@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 from abc import ABC, abstractmethod
+from typing import Any, Optional
 
 import numpy as np
 
@@ -16,7 +17,7 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
     """
 
     @abstractmethod
-    def fit(self, X: np.ndarray, y=None):
+    def fit(self, X: np.ndarray, y: Optional[Any] = None) -> 'BaseCluster':
         """
         Compute clusters based on given method.
 
@@ -35,7 +36,7 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
         self
         """
 
-    def predict(self, X, y=None):  # pragma: no cover
+    def predict(self, X: np.ndarray, y: Optional[Any] = None) -> np.ndarray:  # pragma: no cover
         """
         Predict clusters based on best model.
 
@@ -59,7 +60,7 @@ class BaseCluster(ABC, BaseEstimator, ClusterMixin):
 
         return labels
 
-    def fit_predict(self, X, y=None):  # pragma: no cover
+    def fit_predict(self, X: np.ndarray, y: Optional[Any] = None) -> np.ndarray:  # pragma: no cover
         """
         Fit the models and predict clusters based on best model.
 
