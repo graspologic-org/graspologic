@@ -1128,6 +1128,7 @@ def edgeplot(
 
 def screeplot(
     X,
+    ax,
     title="Scree plot",
     context="talk",
     font_scale=1,
