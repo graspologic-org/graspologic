@@ -121,6 +121,7 @@ class SBMEstimator(BaseGraphEstimator):
     """
 
     block_p_: np.ndarray
+    vertex_assignments_: np.ndarray
 
     def __init__(
         self,
@@ -159,7 +160,7 @@ class SBMEstimator(BaseGraphEstimator):
             max_components=self.max_comm,
             **self.cluster_kws
         )
-        vertex_assignments = gc.fit_predict(latent)
+        vertex_assignments = gc.fit_predict(latent)  # type: ignore
         self.vertex_assignments_ = vertex_assignments
 
     def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'SBMEstimator':
@@ -363,7 +364,7 @@ class DCSBMEstimator(BaseGraphEstimator):
             max_components=self.max_comm,
             **self.cluster_kws
         )
-        self.vertex_assignments_ = gc.fit_predict(latent)
+        self.vertex_assignments_ = gc.fit_predict(latent)  # type: ignore
 
     def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'DCSBMEstimator':
         """
