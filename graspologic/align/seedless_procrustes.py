@@ -226,26 +226,29 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         # check initial_Q argument
         if initial_Q is not None:
-            if not isinstance(initial_Q, np.ndarray):
-                msg = f"Initial_Q must be np.ndarray or None, not {type(initial_Q)}"
+            initial_Q_checked = initial_Q  # this makes the type checker happy
+            if not isinstance(initial_Q_checked, np.ndarray):
+                msg = f"Initial_Q must be np.ndarray or None, not {type(initial_Q_checked)}"
                 raise TypeError(msg)
-            initial_Q = check_array(initial_Q, copy=True)
-            if initial_Q.shape[0] != initial_Q.shape[1]:
+            initial_Q_checked = check_array(initial_Q_checked, copy=True)
+            if initial_Q_checked.shape[0] != initial_Q_checked.shape[1]:
                 msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
-            if not np.allclose(initial_Q.T @ initial_Q, np.eye(initial_Q.shape[0])):
+            if not np.allclose(initial_Q_checked.T @ initial_Q_checked, np.eye(initial_Q_checked.shape[0])):
                 msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
+            initial_Q = initial_Q_checked
         # check initial_P argument
         if initial_P is not None:
-            if not isinstance(initial_P, np.ndarray):
-                msg = f"Initial_P must be np.ndarray or None, not {type(initial_P)}"
+            initial_P_checked = initial_P  # this makes the type checker happy
+            if not isinstance(initial_P_checked, np.ndarray):
+                msg = f"Initial_P must be np.ndarray or None, not {type(initial_P_checked)}"
                 raise TypeError(msg)
-            initial_P = check_array(initial_P, copy=True)
-            n, m = initial_P.shape
+            initial_P_checked = check_array(initial_P_checked, copy=True)
+            n, m = initial_P_checked.shape
             if not (
-                np.allclose(initial_P.sum(axis=0), np.ones(m) / m)
-                and np.allclose(initial_P.sum(axis=1), np.ones(n) / n)
+                np.allclose(initial_P_checked.sum(axis=0), np.ones(m) / m)
+                and np.allclose(initial_P_checked.sum(axis=1), np.ones(n) / n)
             ):
                 msg = (
                     "Initial_P must be a soft assignment matrix "
@@ -253,6 +256,7 @@ class SeedlessProcrustes(BaseAlign):
                     "and columns add up to (1/number of rows))"
                 )
                 raise ValueError(msg)
+            initial_P = initial_P_checked
 
         super().__init__()
 
@@ -347,7 +351,7 @@ class SeedlessProcrustes(BaseAlign):
                 )
                 objectives[i] = self._compute_objective(X, Y, Q, P)
             # pick the best one, using the objective function value
-            best = np.argmin(objectives)
+            best = np.argmin(objectives).item()
             self.selected_initial_Q_ = _sign_flip_matrix_from_int(best, d)
             self.P_, self.Q_ = P_matrices[best], Q_matrices[best]
         elif self.init == "sign_flips":
