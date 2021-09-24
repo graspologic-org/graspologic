@@ -1,19 +1,21 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import List, Tuple, Union
+
 import numpy as np
 
 from graspologic.simulations import sample_edges
 
 
-def check_dirloop(directed, loops):
-    if type(directed) is not bool:
+def check_dirloop(directed: bool, loops: bool) -> None:
+    if not isinstance(directed, bool):
         raise TypeError("directed is not of type bool.")
-    if type(loops) is not bool:
+    if not isinstance(loops, bool):
         raise TypeError("loops is not of type bool.")
 
 
-def check_r(r):
+def check_r(r: float) -> None:
     if not np.issubdtype(type(r), np.floating):
         raise TypeError("r is not of type float.")
     elif r < -1 or r > 1:
@@ -21,7 +23,7 @@ def check_r(r):
         raise ValueError(msg)
 
 
-def check_rel_er(p, r):
+def check_rel_er(p: float, r: float) -> None:
     if p + r * (1 - p) < 0:
         msg = "p + r * (1 - p) should be bigger than 0"
         raise ValueError(msg)
@@ -31,7 +33,7 @@ def check_rel_er(p, r):
         raise ValueError(msg)
 
 
-def check_rel_sbm(p, r):
+def check_rel_sbm(p: np.ndarray, r: float) -> None:
     for i in range(np.array(p).shape[0]):
         for j in range(np.array(p).shape[1]):
             if p[i][j] + r * (1 - p[i][j]) < 0:
@@ -43,7 +45,7 @@ def check_rel_sbm(p, r):
                 raise ValueError(msg)
 
 
-def sample_edges_corr(P, R, directed=False, loops=False):
+def sample_edges_corr(P: np.ndarray, R: np.ndarray, directed: bool = False, loops: bool = False) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a pair of correlated graphs with Bernoulli distribution.
     Both G1 and G2 are binary matrices.
@@ -125,7 +127,7 @@ def sample_edges_corr(P, R, directed=False, loops=False):
     return G1, G2
 
 
-def er_corr(n, p, r, directed=False, loops=False):
+def er_corr(n: int, p: float, r: float, directed: bool = False, loops: bool = False) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a pair of correlated graphs with specified edge probability
     Both G1 and G2 are binary matrices.
@@ -207,7 +209,7 @@ def er_corr(n, p, r, directed=False, loops=False):
     return G1, G2
 
 
-def sbm_corr(n, p, r, directed=False, loops=False):
+def sbm_corr(n: Union[np.ndarray, List[int]], p: np.ndarray, r: float, directed: bool = False, loops: bool = False) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a pair of correlated graphs with specified edge probability
     Both G1 and G2 are binary matrices.
