@@ -1,10 +1,14 @@
 import itertools
+from typing import Any, Dict, List, Optional, Union
 import warnings
 
 import numpy as np
 from sklearn.base import BaseEstimator
 
 from ..match import GraphMatch as GMP
+
+# Type aliases
+SeedsType = Union[np.ndarray, List[List[int]]]
 
 
 class VNviaSGM(BaseEstimator):
@@ -77,14 +81,15 @@ class VNviaSGM(BaseEstimator):
         244. https://doi.org/10.1002/sam.11454
 
     """
+    nomination_list_: Optional[np.ndarray]
 
     def __init__(
         self,
-        order_voi_subgraph=1,
-        order_seeds_subgraph=1,
-        n_init=100,
-        max_nominations=None,
-        graph_match_kws={},
+        order_voi_subgraph: int = 1,
+        order_seeds_subgraph: int = 1,
+        n_init: int = 100,
+        max_nominations: Optional[int] = None,
+        graph_match_kws: Dict[str, Any] = {},
     ):
         if isinstance(order_voi_subgraph, int) and order_voi_subgraph > 0:
             self.order_voi_subgraph = order_voi_subgraph
@@ -117,7 +122,7 @@ class VNviaSGM(BaseEstimator):
             msg = '"graph_match_kws` must be type dict'
             raise ValueError(msg)
 
-    def fit(self, A, B, voi, seeds):
+    def fit(self, A: np.ndarray, B: np.ndarray, voi: int, seeds: SeedsType) -> 'VNviaSGM':
         """
         Fits the model to two graphs.
 
@@ -311,7 +316,7 @@ class VNviaSGM(BaseEstimator):
 
         return self
 
-    def fit_predict(self, A, B, voi, seeds):
+    def fit_predict(self, A: np.ndarray, B: np.ndarray, voi: int, seeds: SeedsType) -> Optional[np.ndarray]:
         """
         Fits model to two adjacency matrices and returns nomination list
 
@@ -342,7 +347,7 @@ class VNviaSGM(BaseEstimator):
         return self.nomination_list_
 
 
-def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
+def _get_induced_subgraph(graph_adj_matrix: np.ndarray, order: int, node: int, mindist: int = 1) -> np.ndarray:
     """
     Generates a vertex list for the induced subgraph about a node with
     max and min distance parameters.
@@ -387,7 +392,7 @@ def _get_induced_subgraph(graph_adj_matrix, order, node, mindist=1):
     return np.unique(ress)
 
 
-def _get_induced_subgraph_list(graph_adj_matrix, order, node, mindist=1):
+def _get_induced_subgraph_list(graph_adj_matrix: np.ndarray, order: int, node: int, mindist: int =1) -> np.ndarray:
     """
     Generates a vertex list for the induced subgraph about a node with
     max and min distance parameters.
