@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import List, Tuple, Union
+
 import numpy as np
 from scipy.stats import fisher_exact
 
@@ -46,7 +48,12 @@ class SignalSubgraph:
                 out[i, j, :, :] = [[a, rowsum0 - a], [b, rowsum1 - b]]
         self.contmat_ = out
 
-    def fit(self, graphs, labels, constraints):
+    def fit(
+        self,
+        graphs: np.ndarray,
+        labels: Union[List, np.ndarray],
+        constraints: Union[int, List]
+    ) -> 'SignalSubgraph':
         """
         Fit the signal-subgraph estimator according to the constraints given.
 
@@ -161,7 +168,12 @@ class SignalSubgraph:
         self.sigsub_ = sigsub
         return self
 
-    def fit_transform(self, graphs, labels, constraints):
+    def fit_transform(
+        self,
+        graphs: np.ndarray,
+        labels: Union[List, np.ndarray],
+        constraints: Union[int, List]
+    ) -> Tuple:
         """
         A function to return the indices of the signal-subgraph. If ``return_mask`` is True, also returns a mask for the signal-subgraph.
 
