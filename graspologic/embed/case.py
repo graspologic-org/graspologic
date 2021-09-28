@@ -79,7 +79,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         center_covariates: bool = True,
         scale_covariates: bool = True,
         n_components: Optional[int] = None,
-        n_elbows: int = 2,
+        n_elbows: Optional[int] = 2,
         check_lcc: bool = False,
     ):
         super().__init__(

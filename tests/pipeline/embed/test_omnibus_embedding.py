@@ -56,7 +56,7 @@ class TestOmnibusEmbedding(unittest.TestCase):
             params["graphs"] = self.graphs
             omnibus_embedding_pairwise(**params)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = self._default_parameters()
             params["svd_solver_algorithm"] = "sandwich"
             params["graphs"] = self.graphs

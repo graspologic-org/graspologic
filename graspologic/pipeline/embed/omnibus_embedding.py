@@ -9,6 +9,7 @@ import numpy as np
 from beartype import beartype
 
 from graspologic.embed import OmnibusEmbed
+from graspologic.embed.base import SvdAlgorithmType
 from graspologic.preconditions import check_argument, is_real_weighted
 from graspologic.utils import (
     augment_diagonal,
@@ -27,7 +28,7 @@ def omnibus_embedding_pairwise(
     graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
-    svd_solver_algorithm: str = "randomized",
+    svd_solver_algorithm: SvdAlgorithmType = "randomized",
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
@@ -152,7 +153,7 @@ def omnibus_embedding_pairwise(
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
+    used_weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
     perform_augment_diagonal = not use_laplacian
 
     graph_embeddings = []
@@ -181,13 +182,13 @@ def omnibus_embedding_pairwise(
         previous_graph_augmented = _augment_graph(
             previous_graph,
             union_graph_lcc_nodes,
-            weight_attribute,
+            used_weight_attribute,
             perform_augment_diagonal=perform_augment_diagonal,
         )
         current_graph_augmented = _augment_graph(
             current_graph,
             union_graph_lcc_nodes,
-            weight_attribute,
+            used_weight_attribute,
             perform_augment_diagonal=perform_augment_diagonal,
         )
 
@@ -266,21 +267,24 @@ def _elbow_cut_if_needed(
     singular_values: np.ndarray,
     embedding: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
 ) -> np.ndarray:
+    embedding_arr: np.ndarray
     if elbow_cut is None:
-        if is_directed:
-            embedding = np.concatenate(embedding, axis=1)
+        if isinstance(embedding, tuple) or is_directed:
+            embedding_arr = np.concatenate(embedding, axis=1)
+        else:
+            embedding_arr = embedding
     else:
         column_index = _index_of_elbow(singular_values, elbow_cut)
 
-        if is_directed:
+        if isinstance(embedding, tuple) or is_directed:
             left, right = embedding
             left = left[:, :column_index]
             right = right[:, :column_index]
-            embedding = np.concatenate((left, right), axis=1)
+            embedding_arr = np.concatenate((left, right), axis=1)
         else:
-            embedding = embedding[:, :column_index]
+            embedding_arr = embedding[:, :column_index]
 
-    return embedding
+    return embedding_arr
 
 
 def _augment_graph(

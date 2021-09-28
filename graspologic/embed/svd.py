@@ -180,7 +180,7 @@ def select_dimension(
 def select_svd(
     X: Union[np.ndarray, sp.csr_matrix],
     n_components: Optional[int] = None,
-    n_elbows: int = 2,
+    n_elbows: Optional[int] = 2,
     algorithm: SvdAlgorithmType = "randomized",
     n_iter: int = 5,
     svd_seed: Optional[int] = None,
@@ -263,9 +263,12 @@ def select_svd(
         raise TypeError(msg)
 
     if n_components is None:
-        dims = select_dimension(X, n_elbows=n_elbows, threshold=None)
-        elbows = dims[0]
-        n_components = elbows[-1]
+        if n_elbows is None:
+            raise ValueError("both n_components and n_elbows are None. One must be provided.")
+        else:
+            dims = select_dimension(X, n_elbows=n_elbows, threshold=None)
+            elbows = dims[0]
+            n_components = elbows[-1]
 
     # Check
     if (algorithm == "full") & (n_components > min(X.shape)):

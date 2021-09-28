@@ -79,7 +79,7 @@ class BaseSpectralEmbed(BaseEstimator):
     def __init__(
         self,
         n_components: Optional[int] = None,
-        n_elbows: int = 2,
+        n_elbows: Optional[int] = 2,
         algorithm: SvdAlgorithmType = "randomized",
         n_iter: int = 5,
         check_lcc: bool =True,
@@ -351,7 +351,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
     def __init__(
         self,
         n_components: Optional[int] = None,
-        n_elbows: int = 2,
+        n_elbows: Optional[int] = 2,
         algorithm: SvdAlgorithmType = "randomized",
         n_iter: int = 5,
         check_lcc: bool = True,

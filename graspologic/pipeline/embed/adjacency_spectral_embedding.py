@@ -8,6 +8,7 @@ import networkx as nx
 import numpy as np
 from beartype import beartype
 
+from graspologic.embed.base import SvdAlgorithmType
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.preconditions import check_argument, is_real_weighted
 from graspologic.utils import (
@@ -27,7 +28,7 @@ def adjacency_spectral_embedding(
     graph: Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
-    svd_solver_algorithm: str = "randomized",
+    svd_solver_algorithm: SvdAlgorithmType = "randomized",
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
@@ -202,19 +203,22 @@ def adjacency_spectral_embedding(
         diag_aug=False,
     )
     results = embedder.fit_transform(augmented_graph)
+    results_arr: np.ndarray
 
     if elbow_cut is None:
-        if graph.is_directed():
-            results = np.concatenate(results, axis=1)
+        if isinstance(results, tuple) or graph.is_directed():
+            results_arr = np.concatenate(results, axis=1)
+        else:
+            results_arr = results
     else:
         column_index = _index_of_elbow(embedder.singular_values_, elbow_cut)
-        if graph.is_directed():
+        if isinstance(results, tuple):
             left, right = results
             left = left[:, :column_index]
             right = right[:, :column_index]
-            results = np.concatenate((left, right), axis=1)
+            results_arr = np.concatenate((left, right), axis=1)
         else:
-            results = results[:, :column_index]
+            results_arr = results[:, :column_index]
 
-    embeddings = Embeddings(node_labels, results)
+    embeddings = Embeddings(node_labels, results_arr)
     return embeddings
