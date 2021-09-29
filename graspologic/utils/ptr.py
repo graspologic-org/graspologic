@@ -25,11 +25,11 @@ def pass_to_ranks(
         - 'simple-nonzero'
             assigns ranks to all non-zero edges, settling ties using
             the average. Ranks are then scaled by
-            :math:`\frac{rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
+            :math:`\\frac{rank(\\text{non-zero edges})}{\\text{total non-zero edges} + 1}`
         - 'simple-all'
             assigns ranks to all non-zero edges, settling ties using
             the average. Ranks are then scaled by
-            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`
+            :math:`\\frac{rank(\\text{non-zero edges})}{n^2 + 1}`
             where n is the number of nodes
         - 'zero-boost'
             preserves the edge weight for all 0s, but ranks the other
