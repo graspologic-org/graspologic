@@ -62,8 +62,9 @@ class Node2VecEmbedTest(unittest.TestCase):
         undirected_embedding = gc.embed.node2vec_embed(graph, random_seed=1)
         directed_embedding = gc.embed.node2vec_embed(graph_directed, random_seed=1)
 
-        k = KMeans(n_clusters=2)
+        k = KMeans(n_clusters=2, random_state=1234)
         undirected_labels = k.fit_predict(undirected_embedding[0])
+        k = KMeans(n_clusters=2, random_state=1234)
         directed_labels = k.fit_predict(directed_embedding[0])
 
         expected_labels = np.zeros(40, dtype=int)
