@@ -1,15 +1,15 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Optional, Union, Tuple
-from typing_extensions import Literal
+from typing import Any, Optional, Tuple, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
+from typing_extensions import Literal
 
 from ..utils import is_symmetric
-from .svd import select_svd, SvdAlgorithmType
+from .svd import SvdAlgorithmType, select_svd
 
 
 def _get_centering_matrix(n: int) -> np.ndarray:
@@ -153,7 +153,7 @@ class ClassicalMDS(BaseEstimator):
 
         return out
 
-    def fit(self, X: np.ndarray, y: Optional[Any] = None) -> 'ClassicalMDS':
+    def fit(self, X: np.ndarray, y: Optional[Any] = None) -> "ClassicalMDS":
         """
         Fit the model with X.
 

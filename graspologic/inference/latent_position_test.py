@@ -2,11 +2,11 @@
 # Licensed under the MIT License.
 
 from collections import namedtuple
-from typing import cast, Optional, Tuple
-from typing_extensions import Literal
+from typing import Optional, Tuple, cast
 
 import numpy as np
 from joblib import Parallel, delayed
+from typing_extensions import Literal
 
 from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
@@ -162,13 +162,17 @@ def latent_position_test(
 
     # Compute null distributions
     null_distribution_1 = Parallel(n_jobs=workers)(
-        delayed(_bootstrap)(X_hats[0], embedding, num_components, n_bootstraps, test_case)
+        delayed(_bootstrap)(
+            X_hats[0], embedding, num_components, n_bootstraps, test_case
+        )
         for _ in range(n_bootstraps)
     )
     null_distribution_1 = np.array(null_distribution_1)
 
     null_distribution_2 = Parallel(n_jobs=workers)(
-        delayed(_bootstrap)(X_hats[1], embedding, num_components, n_bootstraps, test_case)
+        delayed(_bootstrap)(
+            X_hats[1], embedding, num_components, n_bootstraps, test_case
+        )
         for _ in range(n_bootstraps)
     )
     null_distribution_2 = np.array(null_distribution_2)
@@ -194,7 +198,13 @@ def latent_position_test(
 
 
 def _bootstrap(
-    X_hat: np.ndarray, embedding: LptEmbeddingType, n_components: int, n_bootstraps: int, test_case: LptHypothesisTestType, rescale: bool = False, loops: bool = False
+    X_hat: np.ndarray,
+    embedding: LptEmbeddingType,
+    n_components: int,
+    n_bootstraps: int,
+    test_case: LptHypothesisTestType,
+    rescale: bool = False,
+    loops: bool = False,
 ) -> float:
     A1_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
     A2_simulated = rdpg(X_hat, rescale=rescale, loops=loops)
@@ -207,7 +217,12 @@ def _bootstrap(
     return t_bootstrap
 
 
-def _difference_norm(X1: np.ndarray, X2: np.ndarray, embedding: LptEmbeddingType, test_case: LptHypothesisTestType) -> float:
+def _difference_norm(
+    X1: np.ndarray,
+    X2: np.ndarray,
+    embedding: LptEmbeddingType,
+    test_case: LptHypothesisTestType,
+) -> float:
     if embedding in ["ase"]:
         if test_case == "rotation":
             pass
@@ -226,16 +241,28 @@ def _difference_norm(X1: np.ndarray, X2: np.ndarray, embedding: LptEmbeddingType
     return np.linalg.norm(X1 - X2)
 
 
-def _embed(A1: np.ndarray, A2: np.ndarray, embedding: LptEmbeddingType, n_components: int, check_lcc: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+def _embed(
+    A1: np.ndarray,
+    A2: np.ndarray,
+    embedding: LptEmbeddingType,
+    n_components: int,
+    check_lcc: bool = True,
+) -> Tuple[np.ndarray, np.ndarray]:
     X1_hat: np.ndarray
     X2_hat: np.ndarray
     if embedding == "ase":
-        X1_hat = cast(np.ndarray, AdjacencySpectralEmbed(
-            n_components=n_components, check_lcc=check_lcc
-        ).fit_transform(A1))
-        X2_hat = cast(np.ndarray, AdjacencySpectralEmbed(
-            n_components=n_components, check_lcc=check_lcc
-        ).fit_transform(A2))
+        X1_hat = cast(
+            np.ndarray,
+            AdjacencySpectralEmbed(
+                n_components=n_components, check_lcc=check_lcc
+            ).fit_transform(A1),
+        )
+        X2_hat = cast(
+            np.ndarray,
+            AdjacencySpectralEmbed(
+                n_components=n_components, check_lcc=check_lcc
+            ).fit_transform(A2),
+        )
     elif embedding == "omnibus":
         X_hat_compound = OmnibusEmbed(
             n_components=n_components, check_lcc=check_lcc

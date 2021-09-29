@@ -65,7 +65,9 @@ class SignFlips(BaseAlign):
         if self.criterion == "max":
 
             def max_criterion(X: np.ndarray) -> np.ndarray:
-                result: np.ndarray = X[np.argmax(np.abs(X), axis=0), np.arange(X.shape[1])]
+                result: np.ndarray = X[
+                    np.argmax(np.abs(X), axis=0), np.arange(X.shape[1])
+                ]
                 return result
 
             self.criterion_function_ = max_criterion

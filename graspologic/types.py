@@ -15,7 +15,4 @@ AdjacencyMatrix = Union[np.ndarray, sp.csr_matrix]
 
 GraphRepresentation = Union[np.ndarray, sp.csr_matrix, nx.Graph]
 
-__all__ = [
-    'AdjacencyMatrix',
-    'GraphRepresentation'
-]
+__all__ = ["AdjacencyMatrix", "GraphRepresentation"]

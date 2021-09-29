@@ -45,7 +45,9 @@ def check_rel_sbm(p: np.ndarray, r: float) -> None:
                 raise ValueError(msg)
 
 
-def sample_edges_corr(P: np.ndarray, R: np.ndarray, directed: bool = False, loops: bool = False) -> Tuple[np.ndarray, np.ndarray]:
+def sample_edges_corr(
+    P: np.ndarray, R: np.ndarray, directed: bool = False, loops: bool = False
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a pair of correlated graphs with Bernoulli distribution.
     Both G1 and G2 are binary matrices.
@@ -127,7 +129,9 @@ def sample_edges_corr(P: np.ndarray, R: np.ndarray, directed: bool = False, loop
     return G1, G2
 
 
-def er_corr(n: int, p: float, r: float, directed: bool = False, loops: bool = False) -> Tuple[np.ndarray, np.ndarray]:
+def er_corr(
+    n: int, p: float, r: float, directed: bool = False, loops: bool = False
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a pair of correlated graphs with specified edge probability
     Both G1 and G2 are binary matrices.
@@ -209,7 +213,13 @@ def er_corr(n: int, p: float, r: float, directed: bool = False, loops: bool = Fa
     return G1, G2
 
 
-def sbm_corr(n: Union[np.ndarray, List[int]], p: np.ndarray, r: float, directed: bool = False, loops: bool = False) -> Tuple[np.ndarray, np.ndarray]:
+def sbm_corr(
+    n: Union[np.ndarray, List[int]],
+    p: np.ndarray,
+    r: float,
+    directed: bool = False,
+    loops: bool = False,
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a pair of correlated graphs with specified edge probability
     Both G1 and G2 are binary matrices.

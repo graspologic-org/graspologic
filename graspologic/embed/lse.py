@@ -8,7 +8,7 @@ import networkx as nx
 import numpy as np
 
 from ..types import GraphRepresentation
-from ..utils import to_laplacian, LaplacianFormType
+from ..utils import LaplacianFormType, to_laplacian
 from .base import BaseSpectralEmbed, SvdAlgorithmType
 
 
@@ -142,7 +142,13 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self.form = form
         self.regularizer = regularizer
 
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None, *args: Any, **kwargs: Any) -> 'LaplacianSpectralEmbed':
+    def fit(
+        self,
+        graph: GraphRepresentation,
+        y: Optional[Any] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> "LaplacianSpectralEmbed":
         """
         Fit LSE model to input graph
 
@@ -168,7 +174,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
         return self
 
-    def _compute_oos_prediction(self, X, directed): # type: ignore
+    def _compute_oos_prediction(self, X, directed):  # type: ignore
         """
         Computes the out-of-sample latent position estimation.
         Parameters

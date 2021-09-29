@@ -52,8 +52,8 @@ class SignalSubgraph:
         self,
         graphs: np.ndarray,
         labels: Union[List, np.ndarray],
-        constraints: Union[int, List]
-    ) -> 'SignalSubgraph':
+        constraints: Union[int, List],
+    ) -> "SignalSubgraph":
         """
         Fit the signal-subgraph estimator according to the constraints given.
 
@@ -172,7 +172,7 @@ class SignalSubgraph:
         self,
         graphs: np.ndarray,
         labels: Union[List, np.ndarray],
-        constraints: Union[int, List]
+        constraints: Union[int, List],
     ) -> Tuple:
         """
         A function to return the indices of the signal-subgraph. If ``return_mask`` is True, also returns a mask for the signal-subgraph.

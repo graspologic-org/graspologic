@@ -113,7 +113,9 @@ class RDPGEstimator(BaseGraphEstimator):
         self.diag_aug_weight = diag_aug_weight
         self.plus_c_weight = plus_c_weight
 
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'RDPGEstimator':
+    def fit(
+        self, graph: GraphRepresentation, y: Optional[Any] = None
+    ) -> "RDPGEstimator":
         graph = import_graph(graph)
         if not is_unweighted(graph):
             raise NotImplementedError(

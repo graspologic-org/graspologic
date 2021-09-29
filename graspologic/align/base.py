@@ -26,7 +26,9 @@ class BaseAlign(BaseEstimator):
     def __init__(self) -> None:
         pass
 
-    def _check_datasets(self, X: np.ndarray, Y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def _check_datasets(
+        self, X: np.ndarray, Y: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Ensures that the datasets are numpy, 2d, finite, and have the same
         number of components. Does not check for same number of vertices.

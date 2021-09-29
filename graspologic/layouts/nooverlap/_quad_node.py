@@ -10,8 +10,9 @@ import numpy as np
 from scipy.spatial import distance
 from sklearn.preprocessing import normalize
 
-from ._node import _Node
 from graspologic.layouts.classes import NodePosition
+
+from ._node import _Node
 
 _EPSILON = 0.001
 logger = logging.getLogger(__name__)

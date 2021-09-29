@@ -14,10 +14,10 @@ from graspologic.embed.base import SvdAlgorithmType
 from graspologic.preconditions import check_argument, is_real_weighted
 from graspologic.utils import is_fully_connected, pass_to_ranks, remove_loops
 
+from ...utils import LaplacianFormType
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
 from .embeddings import Embeddings
-from ...utils import LaplacianFormType
 
 __FORMS = ["DAD", "I-DAD", "R-DAD"]
 

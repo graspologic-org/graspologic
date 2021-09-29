@@ -4,6 +4,7 @@
 import math
 from collections import defaultdict
 from typing import Dict, List, Set, Tuple
+
 from ._node import _Node
 
 

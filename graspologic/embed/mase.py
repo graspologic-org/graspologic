@@ -7,7 +7,7 @@ import numpy as np
 
 from ..utils import is_almost_symmetric
 from .base import BaseEmbedMulti
-from .svd import select_dimension, select_svd, SvdAlgorithmType
+from .svd import SvdAlgorithmType, select_dimension, select_svd
 
 
 class MultipleASE(BaseEmbedMulti):

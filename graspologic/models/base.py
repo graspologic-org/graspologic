@@ -8,8 +8,8 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
-from ..types import GraphRepresentation
 from ..simulations import sample_edges
+from ..types import GraphRepresentation
 from ..utils import import_graph, is_unweighted
 
 
@@ -85,7 +85,9 @@ class BaseGraphEstimator(BaseEstimator):
         check_is_fitted(self, "p_mat_")
         return np.linalg.norm(graph - self.p_mat_) ** 2
 
-    def score_samples(self, graph: np.ndarray, clip: Optional[float] = None) -> np.ndarray:
+    def score_samples(
+        self, graph: np.ndarray, clip: Optional[float] = None
+    ) -> np.ndarray:
         """
         Compute the weighted log probabilities for each potential edge.
 
@@ -171,7 +173,9 @@ class BaseGraphEstimator(BaseEstimator):
         return True
 
     @abstractmethod
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'BaseGraphEstimator':
+    def fit(
+        self, graph: GraphRepresentation, y: Optional[Any] = None
+    ) -> "BaseGraphEstimator":
         """
         Calculate the parameters for the given graph model
         """

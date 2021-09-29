@@ -115,7 +115,11 @@ def _transform(arr: np.ndarray, method: Optional[str]) -> np.ndarray:
 
 
 def _process_graphs(
-    graphs: Collection[np.ndarray], inner_hier_labels: Optional[Union[np.ndarray, List[Any]]], outer_hier_labels: Optional[Union[np.ndarray, List[Any]]], transform: Optional[str], sort_nodes: bool
+    graphs: Collection[np.ndarray],
+    inner_hier_labels: Optional[Union[np.ndarray, List[Any]]],
+    outer_hier_labels: Optional[Union[np.ndarray, List[Any]]],
+    transform: Optional[str],
+    sort_nodes: bool,
 ) -> List[np.ndarray]:
     """Handles transformation and sorting of graphs for plotting"""
     for g in graphs:
@@ -694,7 +698,7 @@ def _plot_ellipse_and_data(
     ax: matplotlib.axes.Axes,
     label_palette: Dict[Any, str],
     cluster_palette: Dict[Any, str],
-    alpha: float
+    alpha: float,
 ) -> None:
     r"""
     plot_ellipse makes a scatter plot from the two dimensions j,k where j
@@ -1213,10 +1217,10 @@ def screeplot(
 
 
 def _sort_inds(
-        graph: np.ndarray,
-        inner_labels: np.ndarray,
-        outer_labels: np.ndarray,
-        sort_nodes: bool
+    graph: np.ndarray,
+    inner_labels: np.ndarray,
+    outer_labels: np.ndarray,
+    sort_nodes: bool,
 ) -> np.ndarray:
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
     sort_df["inner_labels"] = inner_labels
@@ -1252,10 +1256,10 @@ def _sort_inds(
 
 
 def _sort_graph(
-        graph: np.ndarray,
-        inner_labels: np.ndarray,
-        outer_labels: np.ndarray,
-        sort_nodes: bool
+    graph: np.ndarray,
+    inner_labels: np.ndarray,
+    outer_labels: np.ndarray,
+    sort_nodes: bool,
 ) -> np.ndarray:
     inds = _sort_inds(graph, inner_labels, outer_labels, sort_nodes)
     graph = graph[inds, :][:, inds]
@@ -1263,8 +1267,7 @@ def _sort_graph(
 
 
 def _get_freqs(
-        inner_labels: np.ndarray,
-        outer_labels: np.ndarray
+    inner_labels: np.ndarray, outer_labels: np.ndarray
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     # use this because unique would give alphabetical
     _, outer_freq = _unique_like(outer_labels)
@@ -1300,11 +1303,11 @@ def _unique_like(vals: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
 
 # assume that the graph has already been plotted in sorted form
 def _plot_groups(
-        ax: matplotlib.pyplot.Axes,
-        graph: np.ndarray,
-        inner_labels: Union[np.ndarray, List[Any]],
-        outer_labels: Optional[Union[np.ndarray, List[Any]]] = None,
-        fontsize: int = 30
+    ax: matplotlib.pyplot.Axes,
+    graph: np.ndarray,
+    inner_labels: Union[np.ndarray, List[Any]],
+    outer_labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    fontsize: int = 30,
 ) -> matplotlib.pyplot.Axes:
     inner_labels_arr = np.array(inner_labels)
     plot_outer = True
@@ -1425,7 +1428,7 @@ def _plot_brackets(
     level: str,
     axis: str,
     max_size: int,
-    fontsize: int
+    fontsize: int,
 ) -> None:
     for x0, width in zip(tick_loc, tick_width):
         x = np.linspace(x0 - width, x0 + width, 1000)

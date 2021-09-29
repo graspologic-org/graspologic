@@ -138,7 +138,13 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         self.diag_aug = diag_aug
         self.is_fitted_ = False
 
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None, *args: Any, **kwargs: Any) -> 'AdjacencySpectralEmbed':
+    def fit(
+        self,
+        graph: GraphRepresentation,
+        y: Optional[Any] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> "AdjacencySpectralEmbed":
         """
         Fit ASE model to input graph
 
@@ -165,7 +171,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
         return self
 
-    def _compute_oos_prediction(self, X, directed): # type: ignore
+    def _compute_oos_prediction(self, X, directed):  # type: ignore
         """
         Computes the out-of-sample latent position estimation.
         Parameters

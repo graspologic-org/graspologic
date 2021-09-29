@@ -4,12 +4,12 @@
 import warnings
 from abc import abstractmethod
 from typing import Any, List, Optional, Tuple, Union
-from typing_extensions import Literal
 
 import networkx as nx
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
+from typing_extensions import Literal
 
 from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import (
@@ -18,7 +18,7 @@ from ..utils import (
     is_almost_symmetric,
     is_fully_connected,
 )
-from .svd import select_svd, SvdAlgorithmType
+from .svd import SvdAlgorithmType, select_svd
 
 
 class BaseSpectralEmbed(BaseEstimator):
@@ -83,7 +83,7 @@ class BaseSpectralEmbed(BaseEstimator):
         n_elbows: Optional[int] = 2,
         algorithm: SvdAlgorithmType = "randomized",
         n_iter: int = 5,
-        check_lcc: bool =True,
+        check_lcc: bool = True,
         concat: bool = False,
         svd_seed: Optional[int] = None,
     ):
@@ -137,7 +137,13 @@ class BaseSpectralEmbed(BaseEstimator):
         return True
 
     @abstractmethod
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None, *args: Any, **kwargs: Any) -> 'BaseSpectralEmbed':
+    def fit(
+        self,
+        graph: GraphRepresentation,
+        y: Optional[Any] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> "BaseSpectralEmbed":
         """
         A method for embedding.
         Parameters
@@ -193,7 +199,9 @@ class BaseSpectralEmbed(BaseEstimator):
         self.n_features_in_ = A.shape[0]
         return A
 
-    def _fit_transform(self, graph: GraphRepresentation, *args: Any, **kwargs: Any) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+    def _fit_transform(
+        self, graph: GraphRepresentation, *args: Any, **kwargs: Any
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         "Fits the model and returns the estimated latent positions."
 
         self.fit(graph, *args, **kwargs)
@@ -206,7 +214,13 @@ class BaseSpectralEmbed(BaseEstimator):
             else:
                 return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph: GraphRepresentation, y: Optional[Any] = None, *args: Any, **kwargs: Any) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+    def fit_transform(
+        self,
+        graph: GraphRepresentation,
+        y: Optional[Any] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         """
         Fit the model with graphs and apply the transformation.
 
@@ -228,7 +242,7 @@ class BaseSpectralEmbed(BaseEstimator):
         """
         return self._fit_transform(graph, *args, **kwargs)
 
-    def transform(self, X): # type: ignore
+    def transform(self, X):  # type: ignore
         """
         Obtain latent positions from an adjacency matrix or matrix of out-of-sample
         vertices. For more details on transforming out-of-sample vertices, see the
@@ -315,7 +329,7 @@ class BaseSpectralEmbed(BaseEstimator):
         return self._compute_oos_prediction(X, directed)
 
     @abstractmethod
-    def _compute_oos_prediction(self, X, directed): # type: ignore
+    def _compute_oos_prediction(self, X, directed):  # type: ignore
         """
         Computes the oos class specific estimation given in an input array and if the
         graph is directed.
@@ -374,7 +388,9 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             raise TypeError("`diag_aug` must be of type bool")
         self.diag_aug = diag_aug
 
-    def _check_input_graphs(self, graphs: List[GraphRepresentation]) -> Union[AdjacencyMatrix, List[AdjacencyMatrix]]:
+    def _check_input_graphs(
+        self, graphs: List[GraphRepresentation]
+    ) -> Union[AdjacencyMatrix, List[AdjacencyMatrix]]:
         """
         Checks if all graphs in list have same shapes.
 
@@ -429,7 +445,9 @@ class BaseEmbedMulti(BaseSpectralEmbed):
 
         return out
 
-    def _diag_aug(self, graphs: Union[np.ndarray, List[GraphRepresentation]]) -> Union[np.ndarray, List[AdjacencyMatrix]]:
+    def _diag_aug(
+        self, graphs: Union[np.ndarray, List[GraphRepresentation]]
+    ) -> Union[np.ndarray, List[AdjacencyMatrix]]:
         """
         Augments the diagonal off each input graph. Returns the original
         input object type.

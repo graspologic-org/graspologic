@@ -250,7 +250,9 @@ class _Node2VecGraph:
         self.is_directed = self.graph.is_directed()
         self.p = return_hyperparameter
         self.q = inout_hyperparameter
-        self.random_state = random_state if random_state is not None else np.random.RandomState()
+        self.random_state = (
+            random_state if random_state is not None else np.random.RandomState()
+        )
 
     def node2vec_walk(
         self,
@@ -379,7 +381,9 @@ class _Node2VecGraph:
 
         return walks
 
-    def _get_alias_edge(self, source: Any, destination: Any) -> Tuple[np.ndarray, np.ndarray]:
+    def _get_alias_edge(
+        self, source: Any, destination: Any
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Get the alias edge setup lists for a given edge.
         """
@@ -512,7 +516,9 @@ def _alias_setup(probabilities: List[float]) -> Tuple[np.ndarray, np.ndarray]:
 
 
 def _alias_draw(
-    probabilities: Union[np.ndarray, List[int]], alias: Union[np.ndarray, List[float]], random_state: np.random.RandomState
+    probabilities: Union[np.ndarray, List[int]],
+    alias: Union[np.ndarray, List[float]],
+    random_state: np.random.RandomState,
 ) -> int:
     """
     Draw sample from a non-uniform discrete distribution using alias sampling.

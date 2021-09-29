@@ -3,6 +3,7 @@
 
 from .ptr import pass_to_ranks
 from .utils import (
+    LaplacianFormType,
     augment_diagonal,
     average_matrices,
     binarize,
@@ -24,7 +25,6 @@ from .utils import (
     remove_vertices,
     symmetrize,
     to_laplacian,
-    LaplacianFormType
 )
 
 __all__ = [

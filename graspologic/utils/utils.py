@@ -4,18 +4,7 @@
 import warnings
 from functools import reduce
 from pathlib import Path
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
-)
-from typing_extensions import Literal
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
 import networkx as nx
 import numpy as np
@@ -28,6 +17,7 @@ from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
+from typing_extensions import Literal
 
 from ..types import GraphRepresentation
 

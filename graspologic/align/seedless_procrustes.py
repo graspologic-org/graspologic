@@ -3,13 +3,13 @@
 
 from typing import Optional, Tuple, Union
 
-import ot
 import numpy as np
+import ot
 from sklearn.utils import check_array
 
 from .base import BaseAlign
-from .sign_flips import SignFlips
 from .orthogonal_procrustes import OrthogonalProcrustes
+from .sign_flips import SignFlips
 
 
 class SeedlessProcrustes(BaseAlign):
@@ -157,7 +157,7 @@ class SeedlessProcrustes(BaseAlign):
         optimal_transport_lambda: float = 0.1,
         optimal_transport_eps: float = 0.01,
         optimal_transport_num_reps: int = 1000,
-        iterative_num_reps:int = 100,
+        iterative_num_reps: int = 100,
         init: str = "2d",
         initial_Q: Optional[np.ndarray] = None,
         initial_P: Optional[np.ndarray] = None,
@@ -234,7 +234,10 @@ class SeedlessProcrustes(BaseAlign):
             if initial_Q_checked.shape[0] != initial_Q_checked.shape[1]:
                 msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
-            if not np.allclose(initial_Q_checked.T @ initial_Q_checked, np.eye(initial_Q_checked.shape[0])):
+            if not np.allclose(
+                initial_Q_checked.T @ initial_Q_checked,
+                np.eye(initial_Q_checked.shape[0]),
+            ):
                 msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
             initial_Q = initial_Q_checked
@@ -268,7 +271,9 @@ class SeedlessProcrustes(BaseAlign):
         self.initial_Q = initial_Q
         self.initial_P = initial_P
 
-    def _optimal_transport(self, X: np.ndarray, Y: np.ndarray, Q: np.ndarray) -> np.ndarray:
+    def _optimal_transport(
+        self, X: np.ndarray, Y: np.ndarray, Q: np.ndarray
+    ) -> np.ndarray:
         # "E step" of the SeedlessProcrustes.
         n, d = X.shape
         m, _ = Y.shape
@@ -296,7 +301,9 @@ class SeedlessProcrustes(BaseAlign):
         Q: np.ndarray = aligner.fit(X, P @ Y).Q_
         return Q
 
-    def _iterative_ot(self, X: np.ndarray, Y: np.ndarray, Q: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def _iterative_ot(
+        self, X: np.ndarray, Y: np.ndarray, Q: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
         # this P is not used. it is set to default in case numreps=0
         P: np.ndarray = np.ones((X.shape[0], Y.shape[0])) / (X.shape[0] * Y.shape[0])
         for i in range(self.iterative_num_reps):
@@ -305,11 +312,11 @@ class SeedlessProcrustes(BaseAlign):
         return P, Q
 
     def _compute_objective(
-            self,
-            X: np.ndarray,
-            Y: np.ndarray,
-            Q: Optional[np.ndarray] = None,
-            P: Optional[np.ndarray] = None
+        self,
+        X: np.ndarray,
+        Y: np.ndarray,
+        Q: Optional[np.ndarray] = None,
+        P: Optional[np.ndarray] = None,
     ) -> Union[float, np.ndarray]:
         if Q is None:
             Q = self.Q_

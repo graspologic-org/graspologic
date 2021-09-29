@@ -59,7 +59,7 @@ class EREstimator(SBMEstimator):
     def __init__(self, directed: bool = True, loops: bool = False):
         super().__init__(directed=directed, loops=loops)
 
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'EREstimator':
+    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> "EREstimator":
         graph = import_graph(graph)
         er = super().fit(graph, y=np.ones(graph.shape[0]))
         self.p_ = er.block_p_[0, 0]
@@ -135,12 +135,16 @@ class DCEREstimator(DCSBMEstimator):
 
     """
 
-    def __init__(self, directed: bool = True, loops: bool = False, degree_directed: bool = False):
+    def __init__(
+        self, directed: bool = True, loops: bool = False, degree_directed: bool = False
+    ):
         super().__init__(
             directed=directed, loops=loops, degree_directed=degree_directed
         )
 
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'DCEREstimator':
+    def fit(
+        self, graph: GraphRepresentation, y: Optional[Any] = None
+    ) -> "DCEREstimator":
         dcer = super().fit(graph, y=np.ones(graph.shape[0]))
         self.p_ = dcer.block_p_[0, 0]
         delattr(self, "block_p_")

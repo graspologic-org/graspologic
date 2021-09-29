@@ -3,7 +3,6 @@
 
 import warnings
 from typing import Any, Dict, List, Optional, Tuple, Union
-from typing_extensions import Literal
 
 import numpy as np
 import pandas as pd
@@ -18,12 +17,13 @@ from sklearn.mixture._gaussian_mixture import (
 )
 from sklearn.model_selection import ParameterGrid
 from sklearn.utils import check_scalar
+from typing_extensions import Literal
 
 from .base import BaseCluster
 
-
 ParamGridType = List[Dict[str, Any]]
 CovarianceType = Literal["full", "tied", "diag", "spherical"]
+
 
 class AutoGMMCluster(BaseCluster):
     """
@@ -393,7 +393,15 @@ class AutoGMMCluster(BaseCluster):
         self.max_agglom_size = max_agglom_size
         self.n_jobs = n_jobs
 
-    def _fit_cluster(self, X: np.ndarray, X_subset: np.ndarray, y: Optional[np.ndarray], params: ParamGridType, agg_clustering: Union[List[int], np.ndarray], seed: int) -> Dict[str, Any]:
+    def _fit_cluster(
+        self,
+        X: np.ndarray,
+        X_subset: np.ndarray,
+        y: Optional[np.ndarray],
+        params: ParamGridType,
+        agg_clustering: Union[List[int], np.ndarray],
+        seed: int,
+    ) -> Dict[str, Any]:
         label_init = self.label_init
         if label_init is not None:
             onehot = _labels_to_onehot(label_init)
@@ -468,7 +476,7 @@ class AutoGMMCluster(BaseCluster):
         }
         return results
 
-    def fit(self, X: np.ndarray, y: Optional[np.ndarray] = None) -> 'AutoGMMCluster':
+    def fit(self, X: np.ndarray, y: Optional[np.ndarray] = None) -> "AutoGMMCluster":
         """
         Fits gaussian mixture model to the data.
         Initialize with agglomerative clustering then
@@ -542,7 +550,9 @@ class AutoGMMCluster(BaseCluster):
 
         if isinstance(self.random_state, int):
             np.random.seed(self.random_state)
-            seeds = np.random.randint(np.iinfo(np.int32).max, size=len(processed_param_grid))
+            seeds = np.random.randint(
+                np.iinfo(np.int32).max, size=len(processed_param_grid)
+            )
         else:
             seeds = [self.random_state] * len(processed_param_grid)
 
@@ -576,7 +586,8 @@ class AutoGMMCluster(BaseCluster):
             return self._fit_cluster(X, X_subset, y, p, agg_clustering, seed)
 
         results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
-            delayed(_fit_for_data)(p, seed) for p, seed in zip(processed_param_grid, seeds)
+            delayed(_fit_for_data)(p, seed)
+            for p, seed in zip(processed_param_grid, seeds)
         )
         results = pd.DataFrame(results)
 
@@ -617,7 +628,9 @@ def _increase_reg(reg: float) -> float:
     return reg
 
 
-def _onehot_to_initial_params(X: np.ndarray, onehot: np.ndarray, cov_type: CovarianceType) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def _onehot_to_initial_params(
+    X: np.ndarray, onehot: np.ndarray, cov_type: CovarianceType
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Computes cluster weights, cluster means and cluster precisions from
     a given clustering.
@@ -673,7 +686,9 @@ def _labels_to_onehot(labels: Union[List[int], np.ndarray]) -> np.ndarray:
     return onehot
 
 
-def _process_paramgrid(paramgrid: ParamGridType, kmeans_n_init: int, label_init: Optional[np.ndarray]) -> Tuple[ParamGridType, List[ParamGridType]]:
+def _process_paramgrid(
+    paramgrid: ParamGridType, kmeans_n_init: int, label_init: Optional[np.ndarray]
+) -> Tuple[ParamGridType, List[ParamGridType]]:
     """
     Removes combinations of affinity and linkage that are not possible.
 
@@ -728,7 +743,9 @@ def _process_paramgrid(paramgrid: ParamGridType, kmeans_n_init: int, label_init:
     return ag_params_processed, paramgrid_processed
 
 
-def _hierarchical_labels(children: np.ndarray, min_components: int, max_components: int) -> np.ndarray:
+def _hierarchical_labels(
+    children: np.ndarray, min_components: int, max_components: int
+) -> np.ndarray:
     n_samples = len(children) + 1
     hierarchical_labels = np.arange(n_samples).reshape((-1, 1))
     merge_start = n_samples - max_components - 1

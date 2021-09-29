@@ -1,8 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import warnings
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from sklearn.utils import check_array, check_scalar
@@ -18,7 +18,9 @@ def _n_to_labels(n: np.ndarray) -> np.ndarray:
     return labels
 
 
-def sample_edges(P: np.ndarray, directed: bool = False, loops: bool = False) -> np.ndarray:
+def sample_edges(
+    P: np.ndarray, directed: bool = False, loops: bool = False
+) -> np.ndarray:
     """
     Gemerates a binary random graph based on the P matrix provided
 
@@ -71,14 +73,14 @@ def sample_edges(P: np.ndarray, directed: bool = False, loops: bool = False) -> 
 
 
 def er_np(
-        n: int,
-        p: float,
-        directed: bool = False,
-        loops: bool = False,
-        wt: Union[int, np.ndarray, List[int]] = 1,
-        wtargs: Optional[Dict[str, Any]] = None,
-        dc: Optional[Union[Callable, np.ndarray]] = None,
-        dc_kws: Dict[str, Any] ={}
+    n: int,
+    p: float,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Union[int, np.ndarray, List[int]] = 1,
+    wtargs: Optional[Dict[str, Any]] = None,
+    dc: Optional[Union[Callable, np.ndarray]] = None,
+    dc_kws: Dict[str, Any] = {},
 ) -> np.ndarray:
     r"""
     Samples a Erdos Renyi (n, p) graph with specified edge probability.
@@ -180,12 +182,12 @@ def er_np(
 
 
 def er_nm(
-        n: int,
-        m: int,
-        directed: bool = False,
-        loops: bool = False,
-        wt: Union[int, np.ndarray, List[int]] = 1,
-        wtargs: Optional[Dict[str, Any]] = None
+    n: int,
+    m: int,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Union[int, np.ndarray, List[int]] = 1,
+    wtargs: Optional[Dict[str, Any]] = None,
 ) -> np.ndarray:
     r"""
     Samples an Erdos Renyi (n, m) graph with specified number of edges.
@@ -640,13 +642,13 @@ def sbm(
 
 
 def rdpg(
-        X: np.ndarray,
-        Y: Optional[np.ndarray] = None,
-        rescale: bool = False,
-        directed: bool = False,
-        loops: bool = False,
-        wt: Optional[Union[int, float, Callable]] = 1,
-        wtargs: Optional[Dict[str, Any]] = None
+    X: np.ndarray,
+    Y: Optional[np.ndarray] = None,
+    rescale: bool = False,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Optional[Union[int, float, Callable]] = 1,
+    wtargs: Optional[Dict[str, Any]] = None,
 ) -> np.ndarray:
     r"""
     Samples a random graph based on the latent positions in X (and
@@ -759,10 +761,10 @@ def rdpg(
 
 
 def p_from_latent(
-        X: np.ndarray,
-        Y: Optional[np.ndarray] = None,
-        rescale: bool = False,
-        loops: bool = True
+    X: np.ndarray,
+    Y: Optional[np.ndarray] = None,
+    rescale: bool = False,
+    loops: bool = True,
 ) -> np.ndarray:
     r"""
     Gemerates a matrix of connection probabilities for a random graph
@@ -961,7 +963,9 @@ def mmsbm(
         raise ValueError("alpha must not be None")
     else:
         alpha_checked = alpha
-        alpha_checked = check_array(alpha_checked, ensure_2d=False, ensure_min_features=1)
+        alpha_checked = check_array(
+            alpha_checked, ensure_2d=False, ensure_min_features=1
+        )
         if not np.issubdtype(alpha_checked.dtype, np.number):
             msg = "There are non-numeric elements in alpha"
             raise ValueError(msg)
@@ -975,9 +979,7 @@ def mmsbm(
             raise ValueError(msg)
 
     if not isinstance(rng, np.random.Generator):
-        msg = "rng must be <class 'numpy.random.Generator'> not {}.".format(
-            type(rng)
-        )
+        msg = "rng must be <class 'numpy.random.Generator'> not {}.".format(type(rng))
         raise TypeError(msg)
     elif rng == None:
         rng = np.random.default_rng()

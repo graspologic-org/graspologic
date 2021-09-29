@@ -2,13 +2,13 @@
 # Licensed under the MIT License.
 
 from typing import List, Optional, Union
-from typing_extensions import Literal
 
 import numpy as np
 import pandas as pd
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import ParameterGrid
+from typing_extensions import Literal
 
 from .base import BaseCluster
 
@@ -107,7 +107,11 @@ class GaussianCluster(BaseCluster):
         self,
         min_components: int = 2,
         max_components: Optional[int] = None,
-        covariance_type: Union[Literal["all", GaussianCovarianceType], List[GaussianCovarianceType], np.ndarray] = "all",
+        covariance_type: Union[
+            Literal["all", GaussianCovarianceType],
+            List[GaussianCovarianceType],
+            np.ndarray,
+        ] = "all",
         tol: float = 1e-3,
         reg_covar: float = 1e-6,
         max_iter: int = 100,
@@ -174,7 +178,7 @@ class GaussianCluster(BaseCluster):
         self.init_params = init_params
         self.random_state = random_state
 
-    def fit(self, X: np.ndarray, y: Optional[np.ndarray] = None) -> 'GaussianCluster':
+    def fit(self, X: np.ndarray, y: Optional[np.ndarray] = None) -> "GaussianCluster":
         """
         Fits gaussian mixure model to the data.
         Estimate model parameters with the EM algorithm.

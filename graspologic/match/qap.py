@@ -5,14 +5,19 @@
 
 import operator
 from typing import Any, Dict, Optional, Tuple, Union
-from typing_extensions import Literal
 
 import numpy as np
 from scipy._lib._util import check_random_state
 from scipy.optimize import OptimizeResult, linear_sum_assignment
+from typing_extensions import Literal
 
 
-def quadratic_assignment(A: np.ndarray, B: np.ndarray, method: Literal["faq"] = "faq", options: Optional[Dict[str, Any]] = None) -> OptimizeResult:
+def quadratic_assignment(
+    A: np.ndarray,
+    B: np.ndarray,
+    method: Literal["faq"] = "faq",
+    options: Optional[Dict[str, Any]] = None,
+) -> OptimizeResult:
     r"""
     Approximates solution to the quadratic assignment problem and
     the graph matching problem.
@@ -169,12 +174,16 @@ def quadratic_assignment(A: np.ndarray, B: np.ndarray, method: Literal["faq"] = 
     return res
 
 
-def _calc_score(A: np.ndarray, B: np.ndarray, S: np.ndarray, perm: np.ndarray) -> np.ndarray:
+def _calc_score(
+    A: np.ndarray, B: np.ndarray, S: np.ndarray, perm: np.ndarray
+) -> np.ndarray:
     # equivalent to objective function but avoids matmul
     return np.sum(A * B[perm][:, perm]) + np.sum(S[np.arange(len(S)), perm])
 
 
-def _common_input_validation(A: np.ndarray, B: np.ndarray, partial_match: Optional[np.ndarray]) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def _common_input_validation(
+    A: np.ndarray, B: np.ndarray, partial_match: Optional[np.ndarray]
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     A = np.atleast_2d(A)
     B = np.atleast_2d(B)
 
@@ -405,7 +414,9 @@ def _quadratic_assignment_faq(
     # check outlier cases
     if n == 0 or partial_match_value.shape[0] == n:
         # Cannot assume partial_match is sorted.
-        partial_match_value = np.row_stack(sorted(partial_match_value, key=lambda x: x[0]))
+        partial_match_value = np.row_stack(
+            sorted(partial_match_value, key=lambda x: x[0])
+        )
         score = _calc_score(A, B, s_value, partial_match_value[:, 1])
         res = {"col_ind": partial_match_value[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
@@ -527,7 +538,9 @@ def _check_init_input(P0: np.ndarray, n: int) -> None:
         raise ValueError(msg)
 
 
-def _split_matrix(X: np.ndarray, n: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def _split_matrix(
+    X: np.ndarray, n: int
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     # definitions according to Seeded Graph Matching [2].
     upper, lower = X[:n], X[n:]
     return upper[:, :n], upper[:, n:], lower[:, :n], lower[:, n:]

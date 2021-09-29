@@ -20,7 +20,13 @@ from ..utils import (
 from .base import BaseGraphEstimator, _calculate_p
 
 
-def _check_common_inputs(n_components: Optional[int], min_comm: int, max_comm: int, cluster_kws: Dict[str, Any], embed_kws: Dict[str, Any]) -> None:
+def _check_common_inputs(
+    n_components: Optional[int],
+    min_comm: int,
+    max_comm: int,
+    cluster_kws: Dict[str, Any],
+    embed_kws: Dict[str, Any],
+) -> None:
     if not isinstance(n_components, int) and n_components is not None:
         raise TypeError("n_components must be an int or None")
     elif n_components is not None and n_components < 1:
@@ -163,7 +169,9 @@ class SBMEstimator(BaseGraphEstimator):
         vertex_assignments = gc.fit_predict(latent)  # type: ignore
         self.vertex_assignments_ = vertex_assignments
 
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'SBMEstimator':
+    def fit(
+        self, graph: GraphRepresentation, y: Optional[Any] = None
+    ) -> "SBMEstimator":
         """
         Fit the SBM to a graph, optionally with known block labels
 
@@ -366,7 +374,9 @@ class DCSBMEstimator(BaseGraphEstimator):
         )
         self.vertex_assignments_ = gc.fit_predict(latent)  # type: ignore
 
-    def fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> 'DCSBMEstimator':
+    def fit(
+        self, graph: GraphRepresentation, y: Optional[Any] = None
+    ) -> "DCSBMEstimator":
         """
         Fit the DCSBM to a graph, optionally with known block labels
 
@@ -467,7 +477,12 @@ def _get_block_indices(y: np.ndarray) -> Tuple[List[int], Collection[int], np.nd
     return block_vert_inds, block_inds, block_inv
 
 
-def _calculate_block_p(graph: np.ndarray, block_inds: Collection[int], block_vert_inds: List[int], return_counts: bool = False) -> np.ndarray:
+def _calculate_block_p(
+    graph: np.ndarray,
+    block_inds: Collection[int],
+    block_vert_inds: List[int],
+    return_counts: bool = False,
+) -> np.ndarray:
     """
     graph : input n x n graph
     block_inds : list of length n_communities
@@ -493,7 +508,9 @@ def _calculate_block_p(graph: np.ndarray, block_inds: Collection[int], block_ver
     return block_p
 
 
-def _block_to_full(block_mat: np.ndarray, inverse: np.ndarray, shape: Tuple[int, ...]) -> np.ndarray:
+def _block_to_full(
+    block_mat: np.ndarray, inverse: np.ndarray, shape: Tuple[int, ...]
+) -> np.ndarray:
     """
     "blows up" a k x k matrix, where k is the number of communities,
     into a full n x n probability matrix

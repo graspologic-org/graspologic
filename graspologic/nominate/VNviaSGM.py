@@ -1,6 +1,6 @@
 import itertools
-from typing import Any, Dict, List, Optional, Union
 import warnings
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
@@ -81,6 +81,7 @@ class VNviaSGM(BaseEstimator):
         244. https://doi.org/10.1002/sam.11454
 
     """
+
     nomination_list_: Optional[np.ndarray]
 
     def __init__(
@@ -122,7 +123,9 @@ class VNviaSGM(BaseEstimator):
             msg = '"graph_match_kws` must be type dict'
             raise ValueError(msg)
 
-    def fit(self, A: np.ndarray, B: np.ndarray, voi: int, seeds: SeedsType) -> 'VNviaSGM':
+    def fit(
+        self, A: np.ndarray, B: np.ndarray, voi: int, seeds: SeedsType
+    ) -> "VNviaSGM":
         """
         Fits the model to two graphs.
 
@@ -316,7 +319,9 @@ class VNviaSGM(BaseEstimator):
 
         return self
 
-    def fit_predict(self, A: np.ndarray, B: np.ndarray, voi: int, seeds: SeedsType) -> Optional[np.ndarray]:
+    def fit_predict(
+        self, A: np.ndarray, B: np.ndarray, voi: int, seeds: SeedsType
+    ) -> Optional[np.ndarray]:
         """
         Fits model to two adjacency matrices and returns nomination list
 
@@ -347,7 +352,9 @@ class VNviaSGM(BaseEstimator):
         return self.nomination_list_
 
 
-def _get_induced_subgraph(graph_adj_matrix: np.ndarray, order: int, node: int, mindist: int = 1) -> np.ndarray:
+def _get_induced_subgraph(
+    graph_adj_matrix: np.ndarray, order: int, node: int, mindist: int = 1
+) -> np.ndarray:
     """
     Generates a vertex list for the induced subgraph about a node with
     max and min distance parameters.
@@ -392,7 +399,9 @@ def _get_induced_subgraph(graph_adj_matrix: np.ndarray, order: int, node: int, m
     return np.unique(ress)
 
 
-def _get_induced_subgraph_list(graph_adj_matrix: np.ndarray, order: int, node: int, mindist: int =1) -> np.ndarray:
+def _get_induced_subgraph_list(
+    graph_adj_matrix: np.ndarray, order: int, node: int, mindist: int = 1
+) -> np.ndarray:
     """
     Generates a vertex list for the induced subgraph about a node with
     max and min distance parameters.

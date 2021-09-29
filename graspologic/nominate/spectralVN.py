@@ -2,11 +2,11 @@
 # Licensed under the MIT License.
 
 from typing import Any, Dict, Optional, Tuple, Union
-from typing_extensions import Literal
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.neighbors import NearestNeighbors
+from typing_extensions import Literal
 
 from ..embed import AdjacencySpectralEmbed, BaseSpectralEmbed, LaplacianSpectralEmbed
 
@@ -165,7 +165,7 @@ class SpectralVertexNomination(BaseEstimator):
         self,
         X: np.ndarray,
         y: Optional[Any] = None,
-    ) -> 'SpectralVertexNomination':
+    ) -> "SpectralVertexNomination":
         """
         Constructs the embedding if not provided, then calculates the pairwise distance
         from each seed to each vertex in graph.

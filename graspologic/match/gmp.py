@@ -2,12 +2,12 @@
 # Licensed under the MIT License.
 
 from typing import List, Optional, Tuple, Union
-from typing_extensions import Literal
 
 import numpy as np
 from joblib import Parallel, delayed
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, check_random_state, column_or_1d
+from typing_extensions import Literal
 
 from .qap import quadratic_assignment
 
@@ -131,6 +131,7 @@ class GraphMatch(BaseEstimator):
 
 
     """
+
     init: Union[InitMethodType, np.ndarray]
 
     def __init__(
@@ -190,7 +191,14 @@ class GraphMatch(BaseEstimator):
         self.random_state = random_state
         self.n_jobs = n_jobs
 
-    def fit(self, A: np.ndarray, B: np.ndarray, seeds_A: ArrayLikeOfIndexes = [], seeds_B: ArrayLikeOfIndexes = [], S: Optional[np.ndarray] = None) -> 'GraphMatch':
+    def fit(
+        self,
+        A: np.ndarray,
+        B: np.ndarray,
+        seeds_A: ArrayLikeOfIndexes = [],
+        seeds_B: ArrayLikeOfIndexes = [],
+        S: Optional[np.ndarray] = None,
+    ) -> "GraphMatch":
         """
         Fits the model with two assigned adjacency matrices
 
@@ -269,7 +277,14 @@ class GraphMatch(BaseEstimator):
         self.n_iter_ = res.nit
         return self
 
-    def fit_predict(self, A: np.ndarray, B: np.ndarray, seeds_A: ArrayLikeOfIndexes = [], seeds_B: ArrayLikeOfIndexes = [], S: Optional[np.ndarray] = None) -> np.ndarray:
+    def fit_predict(
+        self,
+        A: np.ndarray,
+        B: np.ndarray,
+        seeds_A: ArrayLikeOfIndexes = [],
+        seeds_B: ArrayLikeOfIndexes = [],
+        S: Optional[np.ndarray] = None,
+    ) -> np.ndarray:
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
@@ -307,7 +322,9 @@ class GraphMatch(BaseEstimator):
         return self.perm_inds_
 
 
-def _adj_pad(A: np.ndarray, B: np.ndarray, S: np.ndarray, method: PaddingType) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def _adj_pad(
+    A: np.ndarray, B: np.ndarray, S: np.ndarray, method: PaddingType
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     def pad(X: np.ndarray, n: np.ndarray) -> np.ndarray:
         X_pad = np.zeros((n[1], n[1]))
         X_pad[: n[0], : n[0]] = X

@@ -8,7 +8,14 @@ import numpy as np
 from graspologic.simulations import p_from_latent, sample_edges_corr
 
 
-def rdpg_corr(X: np.ndarray, Y: np.ndarray, r: float, rescale: bool = False, directed: bool = False, loops: bool = False) -> Tuple[np.ndarray, np.ndarray]:
+def rdpg_corr(
+    X: np.ndarray,
+    Y: np.ndarray,
+    r: float,
+    rescale: bool = False,
+    directed: bool = False,
+    loops: bool = False,
+) -> Tuple[np.ndarray, np.ndarray]:
     r"""
     Samples a random graph pair based on the latent positions in X (and
     optionally in Y)

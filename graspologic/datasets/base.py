@@ -12,7 +12,9 @@ from sklearn.utils import Bunch
 from ..utils import import_edgelist
 
 
-def load_drosophila_left(return_labels: bool = False) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+def load_drosophila_left(
+    return_labels: bool = False,
+) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Load the left Drosophila larva mushroom body connectome
 
@@ -58,7 +60,9 @@ def load_drosophila_left(return_labels: bool = False) -> Union[np.ndarray, Tuple
         return graph
 
 
-def load_drosophila_right(return_labels: bool = False) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+def load_drosophila_right(
+    return_labels: bool = False,
+) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Load the right Drosophila larva mushroom body connectome
 

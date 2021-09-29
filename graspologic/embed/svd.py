@@ -2,18 +2,17 @@
 # Licensed under the MIT License.
 
 from typing import List, Optional, Tuple, Union
-from typing_extensions import Literal
 
 import numpy as np
 import scipy
-import sklearn
 import scipy.sparse as sp
+import sklearn
 from scipy.stats import norm
+from typing_extensions import Literal
 
 from graspologic.utils import is_almost_symmetric
 
-
-SvdAlgorithmType = Literal['full', 'truncated', 'randomized', 'eigsh']
+SvdAlgorithmType = Literal["full", "truncated", "randomized", "eigsh"]
 
 
 def _compute_likelihood(arr: np.ndarray) -> np.ndarray:
@@ -58,8 +57,14 @@ def _compute_likelihood(arr: np.ndarray) -> np.ndarray:
 
 
 def select_dimension(
-    X: Union[np.ndarray, sp.csr_matrix], n_components: Optional[int] = None, n_elbows: int = 2, threshold: Optional[float] = None, return_likelihoods: bool = False
-) -> Union[Tuple[List[int], List[float]], Tuple[List[int], List[float], List[np.ndarray]]]:
+    X: Union[np.ndarray, sp.csr_matrix],
+    n_components: Optional[int] = None,
+    n_elbows: int = 2,
+    threshold: Optional[float] = None,
+    return_likelihoods: bool = False,
+) -> Union[
+    Tuple[List[int], List[float]], Tuple[List[int], List[float], List[np.ndarray]]
+]:
     """
     Generates profile likelihood from array based on Zhu and Godsie method.
     Elbows correspond to the optimal embedding dimension.
@@ -265,7 +270,9 @@ def select_svd(
 
     if n_components is None:
         if n_elbows is None:
-            raise ValueError("both n_components and n_elbows are None. One must be provided.")
+            raise ValueError(
+                "both n_components and n_elbows are None. One must be provided."
+            )
         else:
             dims = select_dimension(X, n_elbows=n_elbows, threshold=None)
             elbows = dims[0]

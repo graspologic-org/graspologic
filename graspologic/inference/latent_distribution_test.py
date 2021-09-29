@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 from typing import Any, Callable, Dict, NamedTuple, Optional, Tuple, Union
-from typing_extensions import Literal
 
 import numpy as np
 from hyppo.ksample import KSample
@@ -10,11 +9,12 @@ from joblib import Parallel, delayed
 from scipy import stats
 from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
 from sklearn.utils import check_array, check_random_state
+from typing_extensions import Literal
 
 from ..align import SeedlessProcrustes, SignFlips
 from ..embed import AdjacencySpectralEmbed, select_dimension
-from ..utils import fit_plug_in_variance_estimator, import_graph
 from ..types import AdjacencyMatrix, GraphRepresentation
+from ..utils import fit_plug_in_variance_estimator, import_graph
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
 _VALID_KERNELS = list(PAIRWISE_KERNEL_FUNCTIONS.keys())
@@ -39,7 +39,9 @@ def latent_distribution_test(
     metric: Union[str, Callable] = "euclidean",
     n_components: Optional[int] = None,
     n_bootstraps: int = 500,
-    random_state: Optional[Union[int, np.random.RandomState, np.random.Generator]] = None,
+    random_state: Optional[
+        Union[int, np.random.RandomState, np.random.Generator]
+    ] = None,
     workers: Optional[int] = None,
     size_correction: bool = True,
     pooled: bool = False,
@@ -404,7 +406,9 @@ def latent_distribution_test(
     return ldt_result(p_value, sample_T_statistic, misc_stats)
 
 
-def _embed(A1: AdjacencyMatrix, A2: AdjacencyMatrix, n_components: Optional[int]) -> Tuple[np.ndarray, np.ndarray]:
+def _embed(
+    A1: AdjacencyMatrix, A2: AdjacencyMatrix, n_components: Optional[int]
+) -> Tuple[np.ndarray, np.ndarray]:
     if n_components is None:
         num_dims1 = select_dimension(A1)[0][-1]
         num_dims2 = select_dimension(A2)[0][-1]

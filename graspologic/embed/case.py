@@ -105,7 +105,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         self._scaled = scale_covariates
         self.is_fitted_ = False
 
-    def fit( # type: ignore
+    def fit(  # type: ignore
         self, graph: np.ndarray, covariates: np.ndarray, y: None = None
     ) -> "CovariateAssistedEmbed":
         """

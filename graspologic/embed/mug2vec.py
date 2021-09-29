@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 from typing import Any, List, Optional
-from typing_extensions import Literal
 
 import numpy as np
 from sklearn.base import BaseEstimator
+from typing_extensions import Literal
 
 from ..types import GraphRepresentation
 from ..utils import pass_to_ranks
@@ -93,7 +93,9 @@ class mug2vec(BaseEstimator):
 
     def __init__(
         self,
-        pass_to_ranks: Literal["simple-nonzero", "simple-all", "zero-boost"] = "simple-nonzero",
+        pass_to_ranks: Literal[
+            "simple-nonzero", "simple-all", "zero-boost"
+        ] = "simple-nonzero",
         omnibus_components: Optional[int] = None,
         omnibus_n_elbows: int = 2,
         cmds_components: Optional[int] = None,
@@ -120,7 +122,9 @@ class mug2vec(BaseEstimator):
                     msg = "{} must be > 0.".format(name)
                     raise ValueError(msg)
 
-    def fit(self, graphs: List[GraphRepresentation], y: Optional[Any] = None) -> 'mug2vec':
+    def fit(
+        self, graphs: List[GraphRepresentation], y: Optional[Any] = None
+    ) -> "mug2vec":
         """
         Computes a vector for each graph.
 
@@ -162,7 +166,9 @@ class mug2vec(BaseEstimator):
 
         return self
 
-    def fit_transform(self, graphs: List[GraphRepresentation], y: Optional[Any] = None) -> np.ndarray:
+    def fit_transform(
+        self, graphs: List[GraphRepresentation], y: Optional[Any] = None
+    ) -> np.ndarray:
         """
         Computes a vector for each graph.
 

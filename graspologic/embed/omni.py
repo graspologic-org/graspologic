@@ -8,7 +8,7 @@ import numpy as np
 from beartype import beartype
 from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
-from ..types import GraphRepresentation, AdjacencyMatrix
+from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import average_matrices, is_fully_connected, to_laplacian
 from .base import BaseEmbedMulti
 from .svd import SvdAlgorithmType
@@ -53,7 +53,9 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
     return vstack(rows, format="csr")
 
 
-def _get_laplacian_matrices(graphs: Union[np.ndarray, List[GraphRepresentation]]) -> Union[np.ndarray, List[np.ndarray]]:
+def _get_laplacian_matrices(
+    graphs: Union[np.ndarray, List[GraphRepresentation]]
+) -> Union[np.ndarray, List[np.ndarray]]:
     """
     Helper function to convert graph adjacency matrices to graph Laplacian
 
@@ -77,7 +79,9 @@ def _get_laplacian_matrices(graphs: Union[np.ndarray, List[GraphRepresentation]]
     return out
 
 
-def _get_omni_matrix(graphs: Union[AdjacencyMatrix, List[AdjacencyMatrix]]) -> np.ndarray:
+def _get_omni_matrix(
+    graphs: Union[AdjacencyMatrix, List[AdjacencyMatrix]]
+) -> np.ndarray:
     """
     Helper function for creating the omnibus matrix.
 

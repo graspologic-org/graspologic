@@ -186,7 +186,7 @@ class Node2VecEmbedTest(unittest.TestCase):
 
     def test_random_state_is_initialized_in_constructor(self):
         graph = nx.barbell_graph(25, 2)
-        start_node = '0'
+        start_node = "0"
 
         n2v = gc.embed.n2v._Node2VecGraph(graph, 1, 1)
         n2v._preprocess_transition_probabilities()

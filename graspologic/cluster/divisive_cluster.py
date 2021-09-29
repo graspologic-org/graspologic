@@ -1,8 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, cast, Dict, Optional, Tuple
-from typing_extensions import Literal
+from typing import Any, Dict, Optional, Tuple, cast
 
 import numpy as np
 from anytree import LevelOrderIter, NodeMixin
@@ -10,12 +9,15 @@ from sklearn.base import BaseEstimator
 from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_array
 from sklearn.utils.validation import check_is_fitted
+from typing_extensions import Literal
 
 from .autogmm import AutoGMMCluster
 from .kclust import KMeansCluster
 
 
-def _check_common_inputs(min_components: int, max_components: int, cluster_kws: Dict[str, Any]) -> None:
+def _check_common_inputs(
+    min_components: int, max_components: int, cluster_kws: Dict[str, Any]
+) -> None:
     if not isinstance(min_components, int):
         raise TypeError("min_components must be an int")
     elif min_components < 1:
@@ -106,7 +108,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
             Engineering, 4(1), 13-26.
     """
 
-    parent: Optional['DivisiveCluster']
+    parent: Optional["DivisiveCluster"]
 
     def __init__(
         self,
@@ -138,7 +140,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         self.max_level = max_level
         self.delta_criter = delta_criter
 
-    def fit(self, X: np.ndarray) -> 'DivisiveCluster':
+    def fit(self, X: np.ndarray) -> "DivisiveCluster":
         """
         Fits clustering models to the data as well as resulting clusters
 
@@ -154,7 +156,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         self.fit_predict(X)
         return self
 
-    def fit_predict(self, X: np.ndarray, fcluster: bool = False, level: Optional[int] = None) -> np.ndarray:
+    def fit_predict(
+        self, X: np.ndarray, fcluster: bool = False, level: Optional[int] = None
+    ) -> np.ndarray:
         """
         Fits clustering models to the data as well as resulting clusters
         and using fitted models to predict a hierarchy of labels
@@ -244,7 +248,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
 
     def _fit(self, X: np.ndarray) -> np.ndarray:
         pred = self._cluster_and_decide(X)
-        self.children: Tuple['DivisiveCluster'] = cast(Tuple['DivisiveCluster'], tuple())
+        self.children: Tuple["DivisiveCluster"] = cast(
+            Tuple["DivisiveCluster"], tuple()
+        )
 
         uni_labels = np.unique(pred)
         labels = pred.reshape((-1, 1)).copy()
@@ -313,7 +319,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
 
         return labels
 
-    def predict(self, X: np.ndarray, fcluster: bool = False, level: Optional[int] = None) -> np.ndarray:
+    def predict(
+        self, X: np.ndarray, fcluster: bool = False, level: Optional[int] = None
+    ) -> np.ndarray:
         """
         Predicts a hierarchy of labels based on fitted models
 

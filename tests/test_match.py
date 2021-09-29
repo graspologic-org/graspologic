@@ -9,7 +9,7 @@ import numpy as np
 from graspologic.align import SignFlips
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.match import GraphMatch as GMP
-from graspologic.match.qap import quadratic_assignment, _quadratic_assignment_faq
+from graspologic.match.qap import _quadratic_assignment_faq, quadratic_assignment
 from graspologic.simulations import er_np, sbm_corr
 
 np.random.seed(1)
@@ -277,7 +277,9 @@ class TestQuadraticAssignment(unittest.TestCase):
         with self.assertRaises(ValueError):
             _quadratic_assignment_faq(arr, arr, S=np.ones((2, 2, 2)))
 
-    def test_quadratic_assignment_faq_requires_S_argument_with_same_dimensions_as_A_and_B(self):
+    def test_quadratic_assignment_faq_requires_S_argument_with_same_dimensions_as_A_and_B(
+        self,
+    ):
         arr = np.ones((2, 2))
         with self.assertRaises(ValueError):
             _quadratic_assignment_faq(arr, arr, S=np.ones((3, 3)))
