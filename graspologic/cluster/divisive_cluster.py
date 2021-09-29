@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, cast, Dict, Literal, Optional, Tuple
+from typing import Any, cast, Dict, Optional, Tuple
+from typing_extensions import Literal
 
 import numpy as np
 from anytree import LevelOrderIter, NodeMixin

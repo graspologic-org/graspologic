@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Literal, Optional, Union
+from typing import List, Optional, Union
+from typing_extensions import Literal
 
 import numpy as np
 import pandas as pd

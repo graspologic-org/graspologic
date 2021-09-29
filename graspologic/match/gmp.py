@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Literal, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
+from typing_extensions import Literal
 
 import numpy as np
 from joblib import Parallel, delayed

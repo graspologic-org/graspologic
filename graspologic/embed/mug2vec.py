@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, List, Literal, Optional
+from typing import Any, List, Optional
+from typing_extensions import Literal
 
 import numpy as np
 from sklearn.base import BaseEstimator

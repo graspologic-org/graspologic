@@ -4,7 +4,8 @@
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
 import operator
-from typing import Any, Dict, Literal, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple, Union
+from typing_extensions import Literal
 
 import numpy as np
 from scipy._lib._util import check_random_state

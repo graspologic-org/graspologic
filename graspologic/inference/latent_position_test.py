@@ -2,7 +2,8 @@
 # Licensed under the MIT License.
 
 from collections import namedtuple
-from typing import cast, Literal, Optional, Tuple
+from typing import cast, Optional, Tuple
+from typing_extensions import Literal
 
 import numpy as np
 from joblib import Parallel, delayed

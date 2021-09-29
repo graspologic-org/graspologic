@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Callable, Dict, Literal, NamedTuple, Optional, Tuple, Union
+from typing import Any, Callable, Dict, NamedTuple, Optional, Tuple, Union
+from typing_extensions import Literal
 
 import numpy as np
 from hyppo.ksample import KSample

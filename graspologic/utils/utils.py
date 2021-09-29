@@ -10,12 +10,12 @@ from typing import (
     Dict,
     Iterable,
     List,
-    Literal,
     Optional,
     Sequence,
     Tuple,
     Union,
 )
+from typing_extensions import Literal
 
 import networkx as nx
 import numpy as np

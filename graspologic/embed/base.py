@@ -3,7 +3,8 @@
 
 import warnings
 from abc import abstractmethod
-from typing import Any, List, Literal, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
+from typing_extensions import Literal
 
 import networkx as nx
 import numpy as np

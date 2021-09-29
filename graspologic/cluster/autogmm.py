@@ -2,7 +2,8 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Any, Dict, List, Literal, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
+from typing_extensions import Literal
 
 import numpy as np
 import pandas as pd
