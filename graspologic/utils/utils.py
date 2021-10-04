@@ -11,12 +11,36 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import scipy.sparse
+from beartype import beartype
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
 from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
+
+
+@beartype
+def average_matrices(
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
+) -> Union[np.ndarray, csr_matrix]:
+    """
+    Helper method to encapsulate calculating the average of matrices represented either as a
+    list of numpy.ndarray or a list of scipy.sparse.csr_matrix.
+
+    Parameters
+    ----------
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
+        The list of matrices to be averaged
+
+    Returns
+    -------
+    Union[np.ndarray, csr_matrix]
+    """
+    if isinstance(matrices[0], np.ndarray):
+        return np.mean(matrices, axis=0)
+    elif isspmatrix_csr(matrices[0]):
+        return sum(matrices) / len(matrices)
 
 
 def import_graph(graph, copy=True):
@@ -211,12 +235,7 @@ def is_unweighted(
     if isinstance(graph, np.ndarray):
         return ((graph == 0) | (graph == 1)).all()
     elif isinstance(graph, csr_matrix):
-        # brute force.  if anyone has a better way, please PR
-        rows, columns = graph.nonzero()
-        for i in range(0, len(rows)):
-            if graph[rows[i], columns[i]] != 1 and graph[rows[i], columns[i]] != 0:
-                return False
-        return True
+        return graph.count_nonzero() == (graph == 1).count_nonzero()
     elif isinstance(graph, nx.Graph):
         return nx.is_weighted(graph, weight=weight_attribute)
     else:
