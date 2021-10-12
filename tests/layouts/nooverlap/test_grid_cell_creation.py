@@ -2,8 +2,9 @@
 # Licensed under the MIT License.
 
 import unittest
-from graspologic.layouts.nooverlap._quad_node import _QuadNode
+
 from graspologic.layouts.nooverlap._node import _Node
+from graspologic.layouts.nooverlap._quad_node import _QuadNode
 
 
 class TestGridCellCreation(unittest.TestCase):

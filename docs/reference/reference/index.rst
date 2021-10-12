@@ -10,13 +10,14 @@ Reference
    cluster
    datasets
    embed
-   cluster
    inference
    layouts
    match
    models
    nominate
    partition
+   preconditions
+   pipeline
    plotting
    preprocessing
    simulations

@@ -1,13 +1,14 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from graspologic.layouts.classes import NodePosition
-import math
 import logging
-from sklearn.preprocessing import normalize
-import numpy as np
+import math
 
+import numpy as np
 from scipy.spatial import distance
+from sklearn.preprocessing import normalize
+
+from graspologic.layouts.classes import NodePosition
 
 _EPSILON = 0.001
 logger = logging.getLogger(__name__)
@@ -1027,9 +1028,9 @@ class _QuadNode:
                 if 0 == denominator:
                     denominator = 0.00000001
                 value = (a ** 2 + b ** 2 - c ** 2) / denominator
-                if value > 1:
+                if value >= 1:
                     value = 0.999999
-                elif value < -1:
+                elif value <= -1:
                     value = -0.999999
                 angle_c = math.acos(value)
                 len_c_new = node_to_move.size + overlapping_node.size + _EPSILON

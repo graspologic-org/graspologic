@@ -2,8 +2,10 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import numpy as np
-from graspologic.utils import pass_to_ranks, is_unweighted
+
+from graspologic.utils import is_unweighted, pass_to_ranks
 
 
 class TestPTR(unittest.TestCase):

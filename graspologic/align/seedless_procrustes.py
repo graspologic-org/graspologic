@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import ot
 import numpy as np
+import ot
 from sklearn.utils import check_array
 
 from .base import BaseAlign
-from .sign_flips import SignFlips
 from .orthogonal_procrustes import OrthogonalProcrustes
+from .sign_flips import SignFlips
 
 
 class SeedlessProcrustes(BaseAlign):
@@ -277,7 +277,7 @@ class SeedlessProcrustes(BaseAlign):
             b=probability_mass_Y,
             M=cost_matrix,
             reg=self.optimal_transport_lambda,
-            numItermax=self.optimal_transport_eps,
+            numItermax=self.optimal_transport_num_reps,
             stopThr=self.optimal_transport_eps,
         )
         return P

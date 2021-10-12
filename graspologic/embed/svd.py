@@ -1,11 +1,15 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional
+
 import numpy as np
 import scipy
 import sklearn
-from scipy.stats import norm
 from scipy.sparse import isspmatrix_csr
+from scipy.stats import norm
+
+from graspologic.utils import is_almost_symmetric
 
 
 def _compute_likelihood(arr):
@@ -110,7 +114,7 @@ def select_dimension(
         msg = "n_elbows must be an integer, not {}.".format(type(n_elbows))
         raise ValueError(msg)
     elif n_elbows < 1:
-        msg = "number of elbows should be an integer > 1, not {}.".format(n_elbows)
+        msg = f"number of elbows should be an integer > 1, not {n_elbows}."
         raise ValueError(msg)
 
     # Handle threshold
@@ -170,7 +174,14 @@ def select_dimension(
         return elbows, values
 
 
-def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5):
+def select_svd(
+    X,
+    n_components=None,
+    n_elbows=2,
+    algorithm="randomized",
+    n_iter=5,
+    svd_seed: Optional[int] = None,
+):
     r"""
     Dimensionality reduction using SVD.
 
@@ -205,10 +216,18 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
             Does not support ``graph`` input of type scipy.sparse.csr_matrix
         - 'truncated'
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
+        - 'eigsh'
+            Computes svd of a real, symmetric square matrix using
+            :func:`scipy.sparse.linalg.eigsh`. Extremely fast for these types of
+            matrices.
     n_iter : int, optional (default = 5)
         Number of iterations for randomized SVD solver. Not used by 'full' or
         'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
+
+    svd_seed : int or None (default ``None``)
+        Only applicable for ``algorithm="randomized"``; allows you to seed the
+        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
 
     Returns
     -------
@@ -232,8 +251,8 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
         raise ValueError(msg)
 
     # Deal with algorithms
-    if algorithm not in ["full", "truncated", "randomized"]:
-        msg = "algorithm must be one of {full, truncated, randomized}."
+    if algorithm not in ["full", "truncated", "randomized", "eigsh"]:
+        msg = "algorithm must be one of {full, truncated, randomized, eigsh}."
         raise ValueError(msg)
 
     if algorithm == "full" and isspmatrix_csr(X):
@@ -248,22 +267,48 @@ def selectSVD(X, n_components=None, n_elbows=2, algorithm="randomized", n_iter=5
     if (algorithm == "full") & (n_components > min(X.shape)):
         msg = "n_components must be <= min(X.shape)."
         raise ValueError(msg)
-    elif algorithm == "full":
+
+    if (algorithm in ["truncated", "randomized"]) & (n_components >= min(X.shape)):
+        msg = "n_components must be strictly < min(X.shape)."
+        raise ValueError(msg)
+
+    if algorithm == "full":
         U, D, V = scipy.linalg.svd(X)
         U = U[:, :n_components]
         D = D[:n_components]
         V = V[:n_components, :]
 
-    if (algorithm in ["truncated", "randomized"]) & (n_components >= min(X.shape)):
-        msg = "n_components must be strictly < min(X.shape)."
-        raise ValueError(msg)
     elif algorithm == "truncated":
         U, D, V = scipy.sparse.linalg.svds(X, k=n_components)
         idx = np.argsort(D)[::-1]  # sort in decreasing order
         D = D[idx]
         U = U[:, idx]
         V = V[idx, :]
+
+    elif algorithm == "eigsh":
+        D, U = scipy.sparse.linalg.eigsh(X, k=n_components)
+        # singular values of a real symmetric matrix are the absolute values of its
+        # eigenvalues, so need to take np.abs
+        D = np.abs(D)
+        V = U.T
+
+        # sort in decreasing order
+        idx = np.argsort(D)[::-1]
+        D = D[idx]
+        U = U[:, idx]
+        V = V[idx, :]
+
     elif algorithm == "randomized":
-        U, D, V = sklearn.utils.extmath.randomized_svd(X, n_components, n_iter=n_iter)
+        # for some reason, randomized_svd defaults random_state to 0 if not provided
+        # which is weird because None is a valid starting point too
+        svd_seed = svd_seed if svd_seed is not None else 0
+        U, D, V = sklearn.utils.extmath.randomized_svd(
+            X, n_components, n_iter=n_iter, random_state=svd_seed
+        )
+
+    else:
+        raise ValueError(
+            "algorithm must be in {'full', 'truncated', 'randomized', 'eigsh'}"
+        )
 
     return U, D, V

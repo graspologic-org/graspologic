@@ -9,34 +9,38 @@ from typing import Any, List, Optional, Tuple, Union
 import networkx as nx
 import numpy as np
 
+from ..utils import remap_node_ids
+
 
 def node2vec_embed(
     graph: Union[nx.Graph, nx.DiGraph],
     num_walks: int = 10,
-    walk_length: int = 80,
+    walk_length: int = 40,
     return_hyperparameter: float = 1.0,
     inout_hyperparameter: float = 1.0,
     dimensions: int = 128,
-    window_size: int = 10,
+    window_size: int = 2,
     workers: int = 8,
-    iterations: int = 1,
+    iterations: int = 3,
     interpolate_walk_lengths_by_node_degree: bool = True,
     random_seed: Optional[int] = None,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.array, List[Any]]:
     """
-    Generates a node2vec embedding from a given graph. Will follow the word2vec algorithm to create the embedding.
+    Generates a node2vec embedding from a given graph. Will follow the word2vec
+    algorithm to create the embedding.
 
     Parameters
     ----------
 
     graph: Union[nx.Graph, nx.DiGraph]
-        A networkx graph or digraph.  A multigraph should be turned into a non-multigraph so that the calling user
-        properly handles the multi-edges (i.e. aggregate weights or take last edge weight).
-        If the graph is unweighted, the weight of each edge will default to 1.
+        A networkx graph or digraph.  A multigraph should be turned into a
+        non-multigraph so that the calling user properly handles the multi-edges
+        (i.e. aggregate weights or take last edge weight). If the graph is unweighted,
+        the weight of each edge will default to 1.
     num_walks : int
         Number of walks per source. Default is 10.
     walk_length: int
-        Length of walk per source. Default is 80.
+        Length of walk per source. Default is 40.
     return_hyperparameter : float
         Return hyperparameter (p). Default is 1.0
     inout_hyperparameter : float
@@ -44,31 +48,36 @@ def node2vec_embed(
     dimensions : int
         Dimensionality of the word vectors. Default is 128.
     window_size : int
-        Maximum distance between the current and predicted word within a sentence. Default is 10.
+        Maximum distance between the current and predicted word within a sentence.
+        Default is 2.
     workers : int
         Use these many worker threads to train the model. Default is 8.
     iterations : int
-        Number of epochs in stochastic gradient descent (SGD)
+        Number of epochs in stochastic gradient descent (SGD). Default is 3.
     interpolate_walk_lengths_by_node_degree : bool
         Use a dynamic walk length that corresponds to each nodes
-        degree. If the node is in the bottom 20 percentile, default to a walk length of 1. If it is in the top 10
-        percentile, use ``walk_length``. If it is in the 20-80 percentiles, linearly interpolate between 1 and ``walk_length``.
-        This will reduce lower degree nodes from biasing your resulting embedding. If a low degree node has the same
-        number of walks as a high degree node (which it will if this setting is not on), then the lower degree nodes
-        will take a smaller breadth of random walks when compared to the high degree nodes. This will result in your
-        lower degree walks dominating your higher degree nodes.
+        degree. If the node is in the bottom 20 percentile, default to a walk length of
+        1. If it is in the top 10 percentile, use ``walk_length``. If it is in the
+        20-80 percentiles, linearly interpolate between 1 and ``walk_length``.
+        This will reduce lower degree nodes from biasing your resulting embedding. If a
+        low degree node has the same number of walks as a high degree node (which it
+        will if this setting is not on), then the lower degree nodes will take a
+        smaller breadth of random walks when compared to the high degree nodes. This
+        will result in your lower degree walks dominating your higher degree nodes.
     random_seed : int
-        Seed to be used for reproducible results. Default is None and will produce a random output. Note that for a fully
-        deterministically-reproducible run, you must also limit to a single worker thread (`workers=1`), to eliminate
-        ordering jitter from OS thread scheduling. In addition the environment variable ``PYTHONHASHSEED`` must be set
-        to control hash randomization.
+        Seed to be used for reproducible results. Default is None and will produce a
+        random output. Note that for a fully deterministically-reproducible run, you
+        must also limit to a single worker thread (`workers=1`), to eliminate ordering
+        jitter from OS thread scheduling. In addition the environment variable
+        ``PYTHONHASHSEED`` must be set to control hash randomization.
 
     Returns
     -------
-    Tuple[np.ndarray, np.ndarray]
-        A tuple containing a matrix, with each row index corresponding to the embedding for each node. The tuple
-        also contains a vector containing the corresponding vertex labels for each row in the matrix.
-        The matrix and vector are positionally correlated.
+    Tuple[np.array, List[Any]]
+        A tuple containing a matrix, with each row index corresponding to the embedding
+        for each node. The tuple also contains a vector containing the corresponding
+        vertex labels for each row in the matrix. The matrix and vector are
+        positionally correlated.
 
     Notes
     -----
@@ -80,8 +89,8 @@ def node2vec_embed(
 
     References
     ----------
-    .. [1] Aditya Grover and Jure Leskovec  "node2vec: Scalable Feature Learning for Networks."
-        Knowledge Discovery and Data Mining, 2016.
+    .. [1] Aditya Grover and Jure Leskovec  "node2vec: Scalable Feature Learning for
+        Networks." Knowledge Discovery and Data Mining, 2016.
     """
 
     _preconditions(
@@ -128,7 +137,13 @@ def node2vec_embed(
         f"Completed. Ending time is {str(end)} Elapsed time is {str(start - end)}"
     )
 
-    return model.wv.vectors, model.wv.index2word
+    labels = list(node2vec_graph.original_graph.nodes())
+    remapped_labels = node2vec_graph.label_map_to_string
+
+    return (
+        np.array([model.wv.get_vector(remapped_labels[node]) for node in labels]),
+        labels,
+    )
 
 
 def _assert_is_positive_int(name: str, value: int):
@@ -233,7 +248,13 @@ class _Node2VecGraph:
         inout_hyperparameter: float,
         random_state: Optional[np.random.RandomState] = None,
     ):
-        self.graph: nx.Graph = graph
+        self.original_graph: nx.Graph = graph
+
+        graph_with_new_ids, new_id_map = remap_node_ids(graph=graph)
+
+        self.graph = graph_with_new_ids
+        self.label_map_to_string = new_id_map
+
         self.is_directed = self.graph.is_directed()
         self.p = return_hyperparameter
         self.q = inout_hyperparameter
@@ -299,7 +320,7 @@ class _Node2VecGraph:
 
     @staticmethod
     def _get_walk_length_interpolated(
-        degree: int, percentiles: np.ndarray, max_walk_length: int
+        degree: int, percentiles: list, max_walk_length: int
     ):
         """
         Given a node's degree, determine the length of a walk that should be used. If the degree is less than the
@@ -473,7 +494,7 @@ def _alias_setup(probabilities: List[float]):
     """
     number_of_outcomes = len(probabilities)
     alias = np.zeros(number_of_outcomes)
-    sampled_probabilities = np.zeros(number_of_outcomes, dtype=np.int)
+    sampled_probabilities = np.zeros(number_of_outcomes, dtype=int)
 
     smaller = []
     larger = []
