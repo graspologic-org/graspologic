@@ -4,12 +4,14 @@
 import unittest
 
 import numpy as np
+import pandas as pd
 from sklearn.mixture import GaussianMixture
 
 from graspologic.plot.plot import (
     _sort_inds,
     gridplot,
     heatmap,
+    networkplot,
     pairplot,
     pairplot_with_gmm,
 )
@@ -50,12 +52,16 @@ def _test_pairplot_with_gmm_outputs(**kws):
 class TestPlot(unittest.TestCase):
     def test_common_inputs(self):
         X = er_np(100, 0.5)
+        x = np.random.rand(100, 1)
+        y = np.random.rand(100, 1)
         grid_labels = ["Test1"]
 
         # test figsize
+        figsize = "bad figsize"
         with self.assertRaises(TypeError):
-            figsize = "bad figsize"
             heatmap(X, figsize=figsize)
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=x, y=y, figsize=figsize)
 
         # test height
         height = "1"
@@ -72,6 +78,8 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, title=title)
         with self.assertRaises(TypeError):
             pairplot(X, title=title)
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=x, y=y, title=title)
 
         # test context
         context = 123
@@ -81,6 +89,8 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, context=context)
         with self.assertRaises(TypeError):
             pairplot(X, context=context)
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=x, y=y, context=context)
 
         context = "journal"
         with self.assertRaises(ValueError):
@@ -89,6 +99,8 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, context=context)
         with self.assertRaises(ValueError):
             pairplot(X, context=context)
+        with self.assertRaises(ValueError):
+            networkplot(network=X, x=x, y=y, context=context)
 
         # test font scales
         font_scales = ["1", []]
@@ -98,7 +110,9 @@ class TestPlot(unittest.TestCase):
             with self.assertRaises(TypeError):
                 gridplot([X], grid_labels, font_scale=font_scale)
             with self.assertRaises(TypeError):
-                pairplot(X, cont_scale=font_scale)
+                pairplot(X, font_scale=font_scale)
+            with self.assertRaises(TypeError):
+                networkplot(network=X, x=x, y=y, font_scale=font_scale)
 
         # ticklabels
         with self.assertRaises(TypeError):
@@ -257,6 +271,53 @@ class TestPlot(unittest.TestCase):
 
     def test_pairplot_with_gmm_outputs_type_spherical(self):
         _test_pairplot_with_gmm_outputs(covariance_type="spherical")
+
+    def test_networkplot_inputs(self):
+        X = np.random.rand(15, 3)
+        x = np.random.rand(15, 1)
+        y = np.random.rand(15, 1)
+
+        with self.assertRaises(TypeError):
+            networkplot(network="test", x=x, y=y)
+
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=["A"], y=["A"])
+
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x="source", y="target", meta_data="data")
+
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=x, y=y, meta_data="data")
+
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=x, y=y, node_alpha="test")
+
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=x, y=y, edge_alpha="test")
+
+        with self.assertRaises(TypeError):
+            networkplot(network=X, x=x, y=y, edge_linewidth="test")
+
+    def test_networkplot_outputs(self):
+        X = np.random.rand(15, 3)
+        xarray = np.random.rand(15, 1)
+        yarray = np.random.rand(15, 1)
+        xstring = "source"
+        ystring = "target"
+        meta_df = pd.DataFrame(index=range(X.shape[0]))
+        meta_df.loc[:, "source"] = xarray
+        meta_df.loc[:, "target"] = yarray
+
+        fig = networkplot(network=X, x=xarray, y=yarray)
+        fig = networkplot(network=X, x=xstring, y=ystring, meta_data=meta_df)
+        fig = networkplot(
+            network=X,
+            x=xarray,
+            y=yarray,
+            node_alpha=0.5,
+            edge_alpha=0.4,
+            edge_linewidth=0.6,
+        )
 
     def test_sort_inds(self):
         B = np.array(
