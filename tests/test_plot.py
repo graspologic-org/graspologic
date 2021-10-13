@@ -5,6 +5,7 @@ import unittest
 
 import numpy as np
 import pandas as pd
+from scipy.sparse import csr_matrix
 from sklearn.mixture import GaussianMixture
 
 from graspologic.plot.plot import (
@@ -309,7 +310,11 @@ class TestPlot(unittest.TestCase):
         meta_df.loc[:, "target"] = yarray
 
         fig = networkplot(network=X, x=xarray, y=yarray)
+        fig = networkplot(network=csr_matrix(X), x=xarray, y=yarray)
         fig = networkplot(network=X, x=xstring, y=ystring, meta_data=meta_df)
+        fig = networkplot(
+            network=csr_matrix(X), x=xstring, y=ystring, meta_data=meta_df
+        )
         fig = networkplot(
             network=X,
             x=xarray,
