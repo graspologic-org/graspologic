@@ -1149,7 +1149,7 @@ def networkplot(
     title: str = "",
     context: str = "talk",
     font_scale: float = 1.0,
-    figsize: tuple[int, int] = (10, 5),
+    figsize: Tuple[int, int] = (10, 5),
     ax: Optional[Axes] = None,
 ) -> Axes:
     r"""
