@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from beartype import beartype
+from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection
 from matplotlib.colors import Colormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -1135,40 +1137,49 @@ def edgeplot(
     return ax
 
 
+@beartype
 def networkplot(
-    network: Union[np.ndarray, csr_matrix],
+    adjacency: Union[np.ndarray, csr_matrix],
     x: Union[np.ndarray, str],
     y: Union[np.ndarray, str],
-    meta_data: Optional[pd.DataFrame] = None,
+    node_data: Optional[pd.DataFrame] = None,
     node_alpha: float = 0.2,
     edge_linewidth: float = 0.2,
     edge_alpha: float = 0.2,
-    title: str = "Network Plot",
+    title: str = "",
     context: str = "talk",
     font_scale: float = 1.0,
-    figsize: Tuple[int, int] = (10, 5),
-) -> plt.axes:
+    figsize: tuple[int, int] = (10, 5),
+    ax: Optional[Axes] = None,
+) -> Axes:
     r"""
-    Plots input network.
+    Plots 2D layout of input network. Allows for an adjacency matrix
+    with x, y as 1D arrays that represent the coordinates of each node,
+    or an adjacency matrix with ``node_data`` and x, y as keys.
+
+    Note that the indices of the positions (``x, y`` or ``node_data``)
+    are assumed to correspond with the adjacency matrix.
 
     Parameters
     ----------
-    network: np.ndarray, csr_matrix
-        Input network.
+    adjacency: np.ndarray, csr_matrix
+        Adjacency matrix of input network.
     x,y: np.ndarray, str
         Variables that specify the positions on the x and y axes. Either an
         array of x, y coordinates or a string that accesses a vector in
-        ``meta_data``.
-    meta_data: pd.DataFrame, optional, default: None
-        Input data. When ``meta_data`` is None, x, y must be np.ndarrays.
-        When ``meta_data`` is a dataframe, x, y must be strings.
-    node_alpha: float, default: 0.5
+        ``node_data``. If ``x, y`` are arrays, they must be indexed the
+        same way as the adjacency matrix of the input network.
+    node_data: pd.DataFrame, optional, default: None
+        Input data. When ``node_data`` is None, ``x, y`` must be np.ndarrays.
+        When ``node_data`` is a dataframe, ``x, y`` must be strings. Must be
+        indexed the same way as the adjacency matrix of the input network.
+    node_alpha: float, default: 0.2
         Proportional opacity of the nodes.
-    edge_linewidth: float, default: 0.5
+    edge_linewidth: float, default: 0.2
         Linewidth of the edges.
-    edge_alpha: float, default: 0.5
+    edge_alpha: float, default: 0.2
         Proportional opacity of the edges.
-    title: str, default "Network Plot"
+    title: str
         Plot title.
     context :  None, or one of {talk (default), paper, notebook, poster}
         Seaborn plotting context
@@ -1177,6 +1188,8 @@ def networkplot(
         elements.
     figsize : tuple of length 2, default: (10, 5)
         Size of the figure (width, height)
+    ax: matplotlib.axes.Axes, optional, default: None
+        Axes in which to draw the plot. Otherwise, will generate own axes.
 
     Returns
     -------
@@ -1187,23 +1200,12 @@ def networkplot(
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
     )
-    network_err_msg = "Network must be a numpy array or scipy csr matrix."
-    check_optional_argument_types(network, (np.ndarray, csr_matrix), network_err_msg)
-    xy_err_msg = "x and y must be numpy arrays or strings."
-    check_optional_argument_types(x, (np.ndarray, str), xy_err_msg)
-    check_optional_argument_types(y, (np.ndarray, str), xy_err_msg)
-    check_argument(type(x) == type(y), "x and y must be the same type.")
-    data_err_msg = "Meta_data must be None or a pandas DataFrame."
-    check_optional_argument_types(meta_data, pd.DataFrame, data_err_msg)
-    check_argument_types(node_alpha, float, "Node_alpha must be of type float.")
-    check_argument_types(edge_alpha, float, "Edge_alpha must be of type float.")
-    check_argument_types(edge_linewidth, float, "Edge_linewidth must be of type float.")
 
-    index = range(network.shape[0])
+    index = range(adjacency.shape[0])
     if isinstance(x, np.ndarray):
-        check_consistent_length(network, x, y)
+        check_consistent_length(adjacency, x, y)
         check_argument(
-            meta_data is None, "If x and y are numpy arrays, meta_data must be None."
+            node_data is None, "If x and y are numpy arrays, meta_data must be None."
         )
         plot_df = pd.DataFrame(index=index)
         x_key = "x"
@@ -1211,22 +1213,21 @@ def networkplot(
         plot_df.loc[:, x_key] = x
         plot_df.loc[:, y_key] = y
     elif isinstance(x, str):
+        check_consistent_length(adjacency, node_data)
         check_argument(
-            meta_data is not None,
+            node_data is not None,
             "If x and y are strings, meta_data must be pandas DataFrame.",
         )
-        plot_df = meta_data.copy()
+        plot_df = node_data.copy()
         x_key = x
         y_key = y
     else:
-        raise TypeError(xy_err_msg)
+        raise TypeError("x and y must be numpy arrays or strings.")
 
-    rows = []
-    pre_inds, post_inds = network.nonzero()
-    for i, (pre_ind, post_ind) in enumerate(zip(pre_inds, post_inds)):
-        pre = index[pre_ind]
-        post = index[post_ind]
-        rows.append({"pre": pre, "post": post})
+    pre_inds, post_inds = adjacency.nonzero()
+    pre = np.array(index)[pre_inds.astype(int)]
+    post = np.array(index)[post_inds.astype(int)]
+    rows = {"pre": pre, "post": post}
 
     edgelist = pd.DataFrame(rows)
     pre_edgelist = edgelist.copy()
@@ -1241,20 +1242,22 @@ def networkplot(
     coords = list(zip(pre_coords, post_coords))
 
     with sns.plotting_context(context=context, font_scale=font_scale):
-        fig, ax = plt.subplots(1, 1, figsize=figsize)
+        if ax is None:
+            fig, ax = plt.subplots(1, 1, figsize=figsize)
         sns.scatterplot(
             data=plot_df,
             x=x_key,
             y=y_key,
             ax=ax,
             alpha=node_alpha,
+            zorder=0,
         )
         plt.title(title)
         lc = LineCollection(
             segments=coords,
             alpha=edge_alpha,
             linewidths=edge_linewidth,
-            zorder=0,
+            zorder=1,
         )
         ax.add_collection(lc)
 
