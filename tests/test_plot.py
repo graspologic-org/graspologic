@@ -3,6 +3,8 @@
 
 import unittest
 
+import beartype.roar
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
@@ -61,8 +63,9 @@ class TestPlot(unittest.TestCase):
         figsize = "bad figsize"
         with self.assertRaises(TypeError):
             heatmap(X, figsize=figsize)
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=x, y=y, figsize=figsize)
+        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, figsize=figsize)
 
         # test height
         height = "1"
@@ -79,8 +82,9 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, title=title)
         with self.assertRaises(TypeError):
             pairplot(X, title=title)
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=x, y=y, title=title)
+        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, title=title)
 
         # test context
         context = 123
@@ -90,8 +94,9 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, context=context)
         with self.assertRaises(TypeError):
             pairplot(X, context=context)
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=x, y=y, context=context)
+        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, context=context)
 
         context = "journal"
         with self.assertRaises(ValueError):
@@ -101,7 +106,7 @@ class TestPlot(unittest.TestCase):
         with self.assertRaises(ValueError):
             pairplot(X, context=context)
         with self.assertRaises(ValueError):
-            networkplot(network=X, x=x, y=y, context=context)
+            networkplot(adjacency=X, x=x, y=y, context=context)
 
         # test font scales
         font_scales = ["1", []]
@@ -112,8 +117,9 @@ class TestPlot(unittest.TestCase):
                 gridplot([X], grid_labels, font_scale=font_scale)
             with self.assertRaises(TypeError):
                 pairplot(X, font_scale=font_scale)
-            with self.assertRaises(TypeError):
-                networkplot(network=X, x=x, y=y, font_scale=font_scale)
+            with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+                with self.assertRaises(TypeError):
+                    networkplot(adjacency=X, x=x, y=y, font_scale=font_scale)
 
         # ticklabels
         with self.assertRaises(TypeError):
@@ -277,27 +283,32 @@ class TestPlot(unittest.TestCase):
         X = np.random.rand(15, 3)
         x = np.random.rand(15, 1)
         y = np.random.rand(15, 1)
+        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+            with self.assertRaises(TypeError):
+                networkplot(adjacency="test", x=x, y=y)
 
-        with self.assertRaises(TypeError):
-            networkplot(network="test", x=x, y=y)
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=["A"], y=["A"])
 
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=["A"], y=["A"])
+            with self.assertRaises(TypeError):
+                networkplot(
+                    adjacency=csr_matrix(X), x="source", y="target", node_data="data"
+                )
 
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x="source", y="target", meta_data="data")
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, node_data="data")
 
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=x, y=y, meta_data="data")
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, node_alpha="test")
 
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=x, y=y, node_alpha="test")
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=csr_matrix(X), x=x, y=y, edge_alpha="test")
 
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=x, y=y, edge_alpha="test")
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, edge_linewidth="test")
 
-        with self.assertRaises(TypeError):
-            networkplot(network=X, x=x, y=y, edge_linewidth="test")
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, ax="test")
 
     def test_networkplot_outputs(self):
         X = np.random.rand(15, 3)
@@ -305,23 +316,26 @@ class TestPlot(unittest.TestCase):
         yarray = np.random.rand(15, 1)
         xstring = "source"
         ystring = "target"
-        meta_df = pd.DataFrame(index=range(X.shape[0]))
-        meta_df.loc[:, "source"] = xarray
-        meta_df.loc[:, "target"] = yarray
+        node_df = pd.DataFrame(index=range(X.shape[0]))
+        node_df.loc[:, "source"] = xarray
+        node_df.loc[:, "target"] = yarray
 
-        fig = networkplot(network=X, x=xarray, y=yarray)
-        fig = networkplot(network=csr_matrix(X), x=xarray, y=yarray)
-        fig = networkplot(network=X, x=xstring, y=ystring, meta_data=meta_df)
+        fig = networkplot(adjacency=X, x=xarray, y=yarray)
+        fig = networkplot(adjacency=csr_matrix(X), x=xarray, y=yarray)
+        fig = networkplot(adjacency=X, x=xstring, y=ystring, node_data=node_df)
         fig = networkplot(
-            network=csr_matrix(X), x=xstring, y=ystring, meta_data=meta_df
+            adjacency=csr_matrix(X), x=xstring, y=ystring, node_data=node_df
         )
+        fig = plt.figure()
+        ax = fig.add_subplot(211)
         fig = networkplot(
-            network=X,
+            adjacency=X,
             x=xarray,
             y=yarray,
             node_alpha=0.5,
             edge_alpha=0.4,
             edge_linewidth=0.6,
+            ax=ax,
         )
 
     def test_sort_inds(self):
