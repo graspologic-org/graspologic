@@ -1143,7 +1143,7 @@ def networkplot(
     node_alpha: float = 0.2,
     edge_linewidth: float = 0.2,
     edge_alpha: float = 0.2,
-    title: str = "Network Plot",
+    title: str = "",
     context: str = "talk",
     font_scale: float = 1.0,
     figsize: Tuple[int, int] = (10, 5),
