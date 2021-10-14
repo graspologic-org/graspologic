@@ -50,7 +50,7 @@ class TestAuto(unittest.TestCase):
         graph = nx.erdos_renyi_graph(10, 0.7, directed=True)
 
         for s, t in graph.edges():
-            graph.edges[s, t]["weight"] = numpy.random.randint(0, 10)
+            graph.edges[s, t]["weight"] = numpy.random.randint(1, 10)
 
         _, node_positions = layout_umap(graph=graph)
 
