@@ -127,7 +127,10 @@ branch. Steps:
 We recommended that your contribution complies with the following rules before you submit a pull request: 
 
 - Follow the [coding-guidelines](#guidelines). 
-- Give your pull request a helpful title that summarizes what your contribution does. 
+- Give your pull request (PR) a helpful title that summarizes what your contribution does. We are using PR titles to automatically generate release notes; examples of helpful PR title formats include: 
+   - `Added Feature[Set] {Title|Short Descriptor} in ModuleOrPackageName`
+   - `Fixed bug in [ClassName.method_name|ModuleOrPackageName.function_name] where ShortDescription`
+   - `Updated [ClassName[.method_name]|ModuleOrPackageName.function_name] to ShortDescription`
 - Link your pull request to the issue (see: 
   [closing keywords](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) 
   for an easy way of linking your issue)
