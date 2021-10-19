@@ -299,7 +299,22 @@ class TestPlot(unittest.TestCase):
                 networkplot(adjacency=X, x=x, y=y, node_data="data")
 
             with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, node_hue=(5, 5))
+
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, palette=4)
+
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, node_size=(5, 5))
+
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, node_sizes=4)
+
+            with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, node_alpha="test")
+
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, edge_hue=4)
 
             with self.assertRaises(TypeError):
                 networkplot(adjacency=csr_matrix(X), x=x, y=y, edge_alpha="test")
@@ -310,6 +325,9 @@ class TestPlot(unittest.TestCase):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, ax="test")
 
+            with self.assertRaises(TypeError):
+                networkplot(adjacency=X, x=x, y=y, legend=4)
+
     def test_networkplot_outputs(self):
         X = np.random.rand(15, 3)
         xarray = np.random.rand(15, 1)
@@ -319,6 +337,10 @@ class TestPlot(unittest.TestCase):
         node_df = pd.DataFrame(index=range(X.shape[0]))
         node_df.loc[:, "source"] = xarray
         node_df.loc[:, "target"] = yarray
+        hue = np.random.randint(2, size=15)
+        palette = {0: (0.8, 0.4, 0.2), 1: (0, 0.9, 0.4)}
+        size = np.random.rand(15)
+        sizes = (10, 200)
 
         fig = networkplot(adjacency=X, x=xarray, y=yarray)
         fig = networkplot(adjacency=csr_matrix(X), x=xarray, y=yarray)
@@ -332,6 +354,10 @@ class TestPlot(unittest.TestCase):
             adjacency=X,
             x=xarray,
             y=yarray,
+            node_hue=hue,
+            palette=palette,
+            node_size=size,
+            node_sizes=sizes,
             node_alpha=0.5,
             edge_alpha=0.4,
             edge_linewidth=0.6,
