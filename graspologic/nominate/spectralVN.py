@@ -99,8 +99,6 @@ class SpectralVertexNomination(BaseEstimator):
                 raise IndexError("Dim 1 of an embedding should be smaller than dim 0.")
             if not np.issubdtype(X.dtype, np.float):
                 raise TypeError("Embedding should have type float")
-        elif not np.issubdtype(X.dtype, np.int):
-            raise TypeError("Adjacency matrix should have type int")
         elif X.shape[0] != X.shape[1]:
             raise IndexError("Adjacency Matrix should be square.")
 
