@@ -4,6 +4,7 @@
 from typing import Tuple, Union
 
 import numpy as np
+from numpy.typing import ArrayLike
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from sklearn.neighbors import NearestNeighbors
@@ -193,7 +194,7 @@ class SpectralVertexNomination(BaseEstimator):
         self.nearest_neighbors_.fit(self.embedding_)
         return self
 
-    def predict(self, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def predict(self, y: ArrayLike) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominates vertices for each seed vertex. Methodology is distance based ranking.
 
