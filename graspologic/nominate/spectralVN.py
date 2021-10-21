@@ -4,7 +4,6 @@
 from typing import Tuple, Union
 
 import numpy as np
-from numpy.typing import ArrayLike
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from sklearn.neighbors import NearestNeighbors
