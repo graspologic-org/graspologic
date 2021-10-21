@@ -5,8 +5,8 @@ from typing import Tuple, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_array
 from sklearn.neighbors import NearestNeighbors
+from sklearn.utils import check_array
 
 from ..embed import AdjacencySpectralEmbed, BaseSpectralEmbed, LaplacianSpectralEmbed
 
