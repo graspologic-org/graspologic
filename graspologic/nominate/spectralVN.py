@@ -194,7 +194,7 @@ class SpectralVertexNomination(BaseEstimator):
         self.nearest_neighbors_.fit(self.embedding_)
         return self
 
-    def predict(self, y: ArrayLike) -> Tuple[np.ndarray, np.ndarray]:
+    def predict(self, y: Union[list, np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominates vertices for each seed vertex. Methodology is distance based ranking.
 
