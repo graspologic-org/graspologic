@@ -1233,7 +1233,7 @@ def networkplot(
     font_scale : float, optional, default: 1.0
         Separate scaling factor to independently scale the size of the font
         elements.
-    figsize : tuple of length 2, default: (10, 5)
+    figsize : tuple of length 2, default: (10, 10)
         Size of the figure (width, height)
     ax: matplotlib.axes.Axes, optional, default: None
         Axes in which to draw the plot. Otherwise, will generate own axes.
