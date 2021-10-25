@@ -1,4 +1,4 @@
-# Copyright (c) Microsoft Corporation and contributors.
+﻿# Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
 from typing import Optional, Tuple, Union
@@ -1147,14 +1147,14 @@ def networkplot(
     palette: Optional[Union[str, list, dict]] = None,
     node_size: Optional[Union[np.ndarray, str]] = None,
     node_sizes: Optional[Union[list, dict, tuple]] = None,
-    node_alpha: float = 0.2,
+    node_alpha: float = 0.8,
     edge_hue: str = "source",
     edge_linewidth: float = 0.2,
     edge_alpha: float = 0.2,
     title: str = "",
     context: str = "talk",
     font_scale: float = 1.0,
-    figsize: Tuple[int, int] = (10, 5),
+    figsize: Tuple[int, int] = (10, 10),
     ax: Optional[Axes] = None,
     legend: str = False,
 ) -> Axes:
@@ -1218,7 +1218,7 @@ def networkplot(
         its values, or a tuple defining the minimum and maximum size values.
         Note that ``node_sizes`` will not affect the output plot if ``node_hue``
         is not given.
-    node_alpha: float, default: 0.2
+    node_alpha: float, default: 0.8
         Proportional opacity of the nodes.
     edge_hue: str, one of {source (default), target}
         Determines edge color based on its source or target node.
@@ -1346,7 +1346,7 @@ def networkplot(
             ax=ax,
             legend=legend,
             alpha=node_alpha,
-            zorder=0,
+            zorder=1,
         )
         plt.title(title)
         lc = LineCollection(
@@ -1354,9 +1354,10 @@ def networkplot(
             alpha=edge_alpha,
             linewidths=edge_linewidth,
             colors=edge_colors,
-            zorder=1,
+            zorder=0,
         )
         ax.add_collection(lc)
+        ax.set(xticks=[], yticks=[])
 
     return ax
 
