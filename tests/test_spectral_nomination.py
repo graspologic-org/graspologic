@@ -32,17 +32,11 @@ class TestSpectralVertexNominatorOutputs(unittest.TestCase):
 
     def test_seed_inputs(self):
         with self.assertRaises(IndexError):
-            self._nominate(adj, np.zeros((5, 5, 5), dtype=np.int))
-        with self.assertRaises(IndexError):
             self._nominate(adj, np.zeros((1, 50), dtype=np.int))
         with self.assertRaises(TypeError):
             self._nominate(adj, np.random.random((10, 2)))
-        with self.assertRaises(TypeError):
-            self._nominate(adj, [0] * 10)
 
     def test_X_inputs(self):
-        with self.assertRaises(TypeError):
-            self._nominate(np.random.random((10, 10)), np.zeros(3, dtype=np.int))
         with self.assertRaises(IndexError):
             self._nominate(np.zeros((5, 5, 5), dtype=np.int), np.zeros(3, dtype=np.int))
         with self.assertRaises(TypeError):
