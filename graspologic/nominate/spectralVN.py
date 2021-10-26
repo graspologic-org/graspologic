@@ -6,6 +6,7 @@ from typing import Tuple, Union
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.neighbors import NearestNeighbors
+from sklearn.utils import check_array
 
 from ..embed import AdjacencySpectralEmbed, BaseSpectralEmbed, LaplacianSpectralEmbed
 
@@ -99,16 +100,12 @@ class SpectralVertexNomination(BaseEstimator):
                 raise IndexError("Dim 1 of an embedding should be smaller than dim 0.")
             if not np.issubdtype(X.dtype, np.float):
                 raise TypeError("Embedding should have type float")
-        elif not np.issubdtype(X.dtype, np.int):
-            raise TypeError("Adjacency matrix should have type int")
         elif X.shape[0] != X.shape[1]:
             raise IndexError("Adjacency Matrix should be square.")
 
     def _check_y(self, y: np.ndarray):
         # check y
-        if not isinstance(y, np.ndarray):
-            raise TypeError("y must be of type np.ndarray")
-        elif not np.issubdtype(y.dtype, np.integer):
+        if not np.issubdtype(y.dtype, np.integer):
             raise TypeError("y must have dtype int")
         elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 1):
             raise IndexError("y must have shape (n) or (n, 1).")
@@ -196,7 +193,7 @@ class SpectralVertexNomination(BaseEstimator):
         self.nearest_neighbors_.fit(self.embedding_)
         return self
 
-    def predict(self, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def predict(self, y: Union[list, np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominates vertices for each seed vertex. Methodology is distance based ranking.
 
@@ -218,6 +215,7 @@ class SpectralVertexNomination(BaseEstimator):
                         The matrix of distances associated with each element of the
                         nomination list.
         """
+        y = check_array(y, ensure_2d=False)
         self._check_y(y)
         y = y.reshape(-1)
         y_vec = self.embedding_[y.astype(np.int)]
