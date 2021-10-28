@@ -81,9 +81,12 @@ intersphinx_mapping = {
 
 # -- sphinx options ----------------------------------------------------------
 source_suffix = ".rst"
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints", "tutorials"]
 master_doc = "index"
 source_encoding = "utf-8"
+if tags.has("build_tutorials"):
+    # Tutorials are excluded by default.  Remove the exclusion since we want to build the tutorials
+    exclude_patterns.remove("tutorials")
 
 # -- Options for HTML output -------------------------------------------------
 # Add any paths that contain templates here, relative to this directory.
