@@ -1337,7 +1337,7 @@ def networkplot(
 
     with sns.plotting_context(context=context, font_scale=font_scale):
         if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=figsize)
+            _, ax = plt.subplots(1, 1, figsize=figsize)
         sns.scatterplot(
             data=plot_df,
             x=x_key,
@@ -1351,7 +1351,7 @@ def networkplot(
             alpha=node_alpha,
             zorder=1,
         )
-        plt.title(title)
+        ax.set_title(title)
         lc = LineCollection(
             segments=coords,
             alpha=edge_alpha,
