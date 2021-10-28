@@ -24,7 +24,7 @@ copyright = "2020"
 authors = "Microsoft, NeuroData"
 
 realpath = os.path.realpath(__file__)
-dir_realpath = os.path.dirname(os.path.dirname(realpath))
+dir_realpath = os.path.dirname(realpath)
 sys.path.append(dir_realpath)
 
 import graspologic
@@ -43,6 +43,7 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
+    "nbsphinx",
     "numpydoc",
     "sphinx.ext.ifconfig",
     "sphinx.ext.githubpages",
