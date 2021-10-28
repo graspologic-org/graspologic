@@ -1228,7 +1228,7 @@ def networkplot(
         between brief or full representation based on number of levels. If
         False, no legend data is added and no legend is drawn.
     node_kws: dict, optional
-        Optional arguments for :func:`seaborn.color_palette`.
+        Optional arguments for :func:`seaborn.scatterplot`.
     edge_kws: dict, optional
         Optional arguments for :class:'matplotlib.collections.LineCollection'.
 
