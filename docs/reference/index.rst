@@ -1,7 +1,5 @@
 ..  -*- coding: utf-8 -*-
 
-.. _contents:
-
 Overview of graspologic_
 ========================
 
@@ -67,7 +65,6 @@ graspologic is a graph statistics package in python.
    contributing
    in-the-wild
    release
-   license
 
 .. toctree::
    :maxdepth: 1
