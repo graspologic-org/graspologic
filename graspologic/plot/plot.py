@@ -1159,29 +1159,11 @@ def networkplot(
     legend: str = False,
 ) -> Axes:
     r"""
-    Plots 2D layout of input network. Allows for an adjacency matrix
+    Plots a 2D layout of a network. Allows for an adjacency matrix
     with ``x, y`` as 1D arrays that represent the coordinates of each
     node, or an adjacency matrix with ``node_data`` and ``x, y`` as
-    keys. Note that the indices of the positions given are assumed to
-    correspond with the adjacency matrix.
-
-    Node colors are determined by ``node_hue`` and ``palette``, and if
-    ``node_hue`` is None, all nodes will have the same default color
-    used by :func:`seaborn.scatterplot`. If ``node_hue`` is given but
-    ``palette`` is None, ``palette`` is set to 'Set1' and ``node_hue``
-    will be treated as numeric variables. Edge colors are determined by
-    its nodes, and ``edge_hue`` dictates whether the edges are colored
-    based on its source or target nodes.
-
-    Node sizes can also vary based on ``node_size`` and ``node_sizes``,
-    and if ``node_size`` is None, all nodes will be of the same default
-    size used by :func:`seaborn.scatterplot`. If ``node_size`` is given
-    but ``node_sizes`` is None, ``node_size`` will be treated as numeric
-    variables.
-
-    Note that ``palette`` and ``node_sizes`` will not affect the output
-    plot if ``node_hue`` and ``node_size`` are None, and ``node_hue`` and
-    ``node_size`` must be the same types as ``x, y``.
+    keys. Note that the nodes in the adjacency matrix are assumed to be ordered the same
+    way as in ``x``, ``y``, and ``node_data``.
 
     Parameters
     ----------
@@ -1248,6 +1230,27 @@ def networkplot(
     -------
     ax : matplotlib axis object
         Output plot
+
+    Notes
+    -----
+    Node colors are determined by ``node_hue`` and ``palette``, and if
+    ``node_hue`` is None, all nodes will have the same default color
+    used by :func:`seaborn.scatterplot`. If ``node_hue`` is given but
+    ``palette`` is None, ``palette`` is set to 'Set1' and ``node_hue``
+    will be treated as numeric variables. Edge colors are determined by
+    its nodes, and ``edge_hue`` dictates whether the edges are colored
+    based on its source or target nodes.
+
+    Node sizes can also vary based on ``node_size`` and ``node_sizes``,
+    and if ``node_size`` is None, all nodes will be of the same default
+    size used by :func:`seaborn.scatterplot`. If ``node_size`` is given
+    but ``node_sizes`` is None, ``node_size`` will be treated as numeric
+    variables.
+
+    Note that ``palette`` and ``node_sizes`` will not affect the output
+    plot if ``node_hue`` and ``node_size`` are None, and ``node_hue`` and
+    ``node_size`` must be the same types as ``x, y``.
+
     """
 
     _check_common_inputs(
