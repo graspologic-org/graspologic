@@ -58,7 +58,8 @@ def laplacian_spectral_embedding(
           maximum-weight-only, etc)
     form : str (default="R-DAD")
         Specifies the type of Laplacian normalization to use. Allowed values are:
-        { "DAD", "I-DAD", "R-DAD" }
+        { "DAD", "I-DAD", "R-DAD" }.  See
+        :func:`~graspologic.utils.to_laplacian` for more details regarding form.
     dimensions : int (default=100)
         Dimensions to use for the svd solver.
         For undirected graphs, if ``elbow_cut==None``, you will receive an embedding
