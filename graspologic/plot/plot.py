@@ -1230,7 +1230,7 @@ def networkplot(
     node_kws: dict, optional
         Optional arguments for :func:`seaborn.scatterplot`.
     edge_kws: dict, optional
-        Optional arguments for :class:'matplotlib.collections.LineCollection'.
+        Optional arguments for :class:`matplotlib.collections.LineCollection`.
 
     Returns
     -------
