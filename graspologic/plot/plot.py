@@ -1157,6 +1157,8 @@ def networkplot(
     figsize: Tuple[int, int] = (10, 10),
     ax: Optional[Axes] = None,
     legend: str = False,
+    node_kws: dict = {},
+    edge_kws: dict = {},
 ) -> Axes:
     r"""
     Plots a 2D layout of a network. Allows for an adjacency matrix
@@ -1225,6 +1227,10 @@ def networkplot(
         every group will get an entry in the legend. If “auto”, choose
         between brief or full representation based on number of levels. If
         False, no legend data is added and no legend is drawn.
+    node_kws: dict, optional
+        Optional arguments for :func:`seaborn.color_palette`.
+    edge_kws: dict, optional
+        Optional arguments for :class:'matplotlib.collections.LineCollection'.
 
     Returns
     -------
@@ -1350,6 +1356,7 @@ def networkplot(
             legend=legend,
             alpha=node_alpha,
             zorder=1,
+            **node_kws,
         )
         ax.set_title(title)
         lc = LineCollection(
@@ -1358,6 +1365,7 @@ def networkplot(
             linewidths=edge_linewidth,
             colors=edge_colors,
             zorder=0,
+            **edge_kws,
         )
         ax.add_collection(lc)
         ax.set(xticks=[], yticks=[])
