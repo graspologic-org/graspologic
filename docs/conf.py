@@ -15,6 +15,7 @@
 import os
 import sys
 
+sys.path.append(os.path.abspath('./sphinx-ext/'))
 sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
@@ -48,6 +49,7 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
+    "toctree_filter",
 ]
 
 # -- numpydoc
@@ -82,11 +84,13 @@ intersphinx_mapping = {
 # -- sphinx options ----------------------------------------------------------
 source_suffix = ".rst"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints", "tutorials"]
+toc_filter_exclude = ['tutorials/index']
 master_doc = "index"
 source_encoding = "utf-8"
 if tags.has("build_tutorials"):
     # Tutorials are excluded by default.  Remove the exclusion since we want to build the tutorials
     exclude_patterns.remove("tutorials")
+    toc_filter_exclude = []
 
 # -- Options for HTML output -------------------------------------------------
 # Add any paths that contain templates here, relative to this directory.

@@ -55,7 +55,7 @@ Topologic was originally designed and written by Patrick Bourke, Jonathan McLean
 Documentation
 =============
 
-.. toctree::
+.. toctree-filt::
    :maxdepth: 1
 
    license
