@@ -52,12 +52,24 @@ GraSPy was originally designed and written by Jaewon Chung, Benjamin Pedigo, and
 
 Topologic was originally designed and written by Patrick Bourke, Jonathan McLean, Nick Caurvina, and Dwayne Pryce.
 
-Documentation
-=============
-
 .. toctree-filt::
    :maxdepth: 1
+   :caption: Documentation
 
    license
    reference/index
    tutorials/index
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Useful Links
+
+   graspologic @ GitHub <http://www.github.com/microsoft/graspologic/>
+   graspologic @ PyPI <https://pypi.org/project/graspologic/>
+   Issue Tracker <https://github.com/microsoft/graspologic/issues>
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`search`
