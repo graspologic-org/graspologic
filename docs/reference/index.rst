@@ -5,7 +5,6 @@
 
    install
    reference/index
-   Tutorials <https://microsoft.github.io/graspologic/tutorials/index.html>
    cli
    contributing
    in-the-wild

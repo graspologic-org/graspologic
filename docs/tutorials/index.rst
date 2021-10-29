@@ -4,8 +4,6 @@ Tutorials
 .. toctree::
    :hidden:
 
-   Reference Documentation <https://graspologic.readthedocs.io/en/latest/>
-
 .. _models_tutorials:
 
 Models
