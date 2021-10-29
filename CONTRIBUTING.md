@@ -122,6 +122,22 @@ branch. Steps:
    git push -u origin my-feature
    ```
 
+## Local Developer Setup
+1. Make sure you have a compatible version of Python 3 installed
+2. From the project root, create a virtual environment and install all development dependencies
+    ```bash
+   # Create virtual environment
+   python3 -m venv venv
+   
+   # Activate the virtual environment
+   source venv/bin/activate
+   
+   # Install development dependencies
+   pip install -U pip setuptools
+   pip install -r requirements.txt
+   ```
+3. Start playing with Graspologic code!
+
 ## Pull Request Checklist
 
 We recommended that your contribution complies with the following rules before you submit a pull request: 
