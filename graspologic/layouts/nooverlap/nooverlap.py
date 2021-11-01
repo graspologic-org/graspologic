@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+from __future__ import annotations
 import logging
 import time
-from __future__ import annotations
 
 from .. import NodePosition
 from ._node import _Node

@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from __future__ import annotations
 import warnings
 from collections.abc import Iterable
 from functools import reduce
 from pathlib import Path
 from typing import Any, Dict, Union
-from __future__ import annotations
 
 import networkx as nx
 import numpy as np

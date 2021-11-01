@@ -1,10 +1,10 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+from __future__ import annotations
 import numbers
 from collections import OrderedDict
 from typing import Any, Dict, Union
-from __future__ import annotations
 
 import networkx as nx
 from beartype import beartype

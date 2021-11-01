@@ -1,11 +1,11 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+from __future__ import annotations
 import logging
 import math
 import time
 from typing import Any, Dict, Optional
-from __future__ import annotations
 
 import networkx as nx
 import numpy as np

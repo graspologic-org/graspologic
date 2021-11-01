@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+from __future__ import annotations
 import warnings
 from typing import Hashable, Optional, Set, Union
-from __future__ import annotations
 
 import networkx as nx
 import numpy as np

@@ -1,8 +1,8 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
+from __future__ import annotations
 
 from typing import Any, Dict, Optional
-from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import networkx as nx

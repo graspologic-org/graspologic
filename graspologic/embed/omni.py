@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from __future__ import annotations
 import warnings
 from typing import Optional
 
@@ -10,7 +11,6 @@ from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
 from ..utils import average_matrices, is_fully_connected, to_laplacian
 from .base import BaseEmbedMulti
-from __future__ import annotations
 
 
 @beartype

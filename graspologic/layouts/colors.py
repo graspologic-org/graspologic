@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+from __future__ import annotations
 import atexit
 import json
 import math
@@ -8,7 +9,6 @@ import os
 from itertools import cycle
 from pathlib import Path
 from typing import Any, Dict, Optional
-from __future__ import annotations
 
 import numpy as np
 import pkg_resources

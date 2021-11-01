@@ -1,10 +1,10 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from __future__ import annotations
 import logging
 import random
 from typing import Any, Callable, NamedTuple, Optional, Union
-from __future__ import annotations
 
 import networkx as nx
 import numpy as np

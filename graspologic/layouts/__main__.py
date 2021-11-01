@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+from __future__ import annotations
 import argparse
 import logging
 import sys
@@ -11,7 +12,6 @@ import networkx as nx
 
 from . import NodePosition, auto, render
 from .colors import categorical_colors
-from __future__ import annotations
 
 
 def _graph_from_file(
