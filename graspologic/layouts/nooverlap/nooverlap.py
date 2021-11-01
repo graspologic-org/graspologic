@@ -3,7 +3,7 @@
 
 import logging
 import time
-from typing import List
+from __future__ import annotations
 
 from .. import NodePosition
 from ._node import _Node

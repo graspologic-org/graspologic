@@ -5,12 +5,13 @@ import argparse
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import networkx as nx
 
 from . import NodePosition, auto, render
 from .colors import categorical_colors
+from __future__ import annotations
 
 
 def _graph_from_file(

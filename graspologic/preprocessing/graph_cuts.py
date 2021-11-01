@@ -3,7 +3,8 @@
 
 import logging
 import random
-from typing import Any, Callable, List, NamedTuple, Optional, Tuple, Union
+from typing import Any, Callable, NamedTuple, Optional, Union
+from __future__ import annotations
 
 import networkx as nx
 import numpy as np

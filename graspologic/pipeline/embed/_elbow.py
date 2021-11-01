@@ -2,7 +2,8 @@
 # Licensed under the MIT license.
 
 
-from typing import List, Tuple, Union
+from typing import Union
+from __future__ import annotations
 
 import numpy as np
 from scipy.stats import norm

@@ -4,8 +4,8 @@
 import logging
 import math
 import time
-from typing import Any, List, Optional, Tuple, Union
-
+from typing import Any, Optional, Union
+from __future__ import annotations
 import networkx as nx
 import numpy as np
 

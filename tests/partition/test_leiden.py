@@ -2,7 +2,8 @@
 # Licensed under the MIT license.
 
 import unittest
-from typing import Dict, List, Tuple
+from typing import Dict
+from __future__ import annotations
 
 import networkx as nx
 import numpy as np

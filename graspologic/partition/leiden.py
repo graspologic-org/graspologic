@@ -2,9 +2,9 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
+from typing import Any, Dict, NamedTuple, Optional, Union
+from __future__ import annotations
 
-import graspologic_native as gn
 import networkx as nx
 import numpy as np
 import scipy

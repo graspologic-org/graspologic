@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import List, Optional
+from typing import Optional
 
 import numpy as np
 from beartype import beartype
@@ -10,6 +10,7 @@ from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
 from ..utils import average_matrices, is_fully_connected, to_laplacian
 from .base import BaseEmbedMulti
+from __future__ import annotations
 
 
 @beartype
