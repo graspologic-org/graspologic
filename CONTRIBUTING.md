@@ -124,7 +124,7 @@ branch. Steps:
 
 ## Local Developer Setup
 1. Make sure you have a compatible version of Python 3 installed
-2. From the project root, create a virtual environment and install all development dependencies
+2. From the project root, create a virtual environment and install all development dependencies.  This example uses Python 3.8 but you may use any Python version supported by graspologic.
 
    **Bash**
     ```bash
