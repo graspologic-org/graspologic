@@ -129,7 +129,7 @@ branch. Steps:
    **Bash**
     ```bash
    # Create virtual environment
-   python3 -m venv venv
+   python3.8 -m venv venv
    
    # Activate the virtual environment
    source venv/bin/activate
@@ -138,10 +138,10 @@ branch. Steps:
    pip install -U pip setuptools
    pip install -r requirements.txt
    ```
-   **Windows (CMD)**
+   **CMD (Windows)**
     ```cmd
-   rem Create virtual environment
-   python3 -m venv venv
+   rem Create virtual environment.  Depending on your installation you might need "py -3.8 -m venv venv" instead
+   python3.8 -m venv venv
    
    rem Activate the virtual environment
    .\venv\Scripts\activate.bat
@@ -150,10 +150,10 @@ branch. Steps:
    pip install -U pip setuptools
    pip install -r requirements.txt
    ```
-   **Windows (PowerShell)**
+   **PowerShell**
     ```powershell
    # Create virtual environment
-   python3 -m venv venv
+   python3.8 -m venv venv
    
    # Activate the virtual environment
    .\venv\Scripts\Activate.ps1
