@@ -125,12 +125,38 @@ branch. Steps:
 ## Local Developer Setup
 1. Make sure you have a compatible version of Python 3 installed
 2. From the project root, create a virtual environment and install all development dependencies
+
+   **Bash**
     ```bash
    # Create virtual environment
    python3 -m venv venv
    
    # Activate the virtual environment
    source venv/bin/activate
+   
+   # Install development dependencies
+   pip install -U pip setuptools
+   pip install -r requirements.txt
+   ```
+   **Windows (CMD)**
+    ```cmd
+   rem Create virtual environment
+   python3 -m venv venv
+   
+   rem Activate the virtual environment
+   .\venv\Scripts\activate.bat
+   
+   rem Install development dependencies
+   pip install -U pip setuptools
+   pip install -r requirements.txt
+   ```
+   **Windows (PowerShell)**
+    ```powershell
+   # Create virtual environment
+   python3 -m venv venv
+   
+   # Activate the virtual environment
+   .\venv\Scripts\Activate.ps1
    
    # Install development dependencies
    pip install -U pip setuptools
