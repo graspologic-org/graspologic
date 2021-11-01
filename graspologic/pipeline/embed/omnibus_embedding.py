@@ -24,7 +24,7 @@ from .embeddings import Embeddings
 
 @beartype
 def omnibus_embedding_pairwise(
-    graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
+    graphs: list[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: str = "randomized",
@@ -32,7 +32,7 @@ def omnibus_embedding_pairwise(
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
     use_laplacian: bool = False,
-) -> List[Tuple[Embeddings, Embeddings]]:
+) -> list[tuple[Embeddings, Embeddings]]:
     """
     Generates a pairwise omnibus embedding for each pair of graphs in a list of graphs using the adjacency matrix.
     If given graphs A, B, and C, the embeddings will be computed for A, B and B, C.
@@ -49,7 +49,7 @@ def omnibus_embedding_pairwise(
 
     Parameters
     ----------
-    graphs : List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]]
+    graphs : list[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]]
           A list of undirected or directed graphs. The graphs **must**:
 
           - be fully numerically weighted (every edge must have a real, numeric weight
@@ -101,7 +101,7 @@ def omnibus_embedding_pairwise(
 
     Returns
     -------
-    List[Tuple[Embeddings, Embeddings]]
+    list[tuple[Embeddings, Embeddings]]
 
     Raises
     ------
@@ -226,7 +226,7 @@ def omnibus_embedding_pairwise(
 
 
 def _graphs_precondition_checks(
-    graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
+    graphs: list[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
     weight_attribute: str,
 ) -> Optional[str]:
     is_directed = graphs[0].is_directed()
@@ -263,7 +263,7 @@ def _elbow_cut_if_needed(
     elbow_cut: Optional[int],
     is_directed: bool,
     singular_values: np.ndarray,
-    embedding: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
+    embedding: Union[np.ndarray, tuple[np.ndarray, np.ndarray]],
 ) -> np.ndarray:
     if elbow_cut is None:
         if is_directed:

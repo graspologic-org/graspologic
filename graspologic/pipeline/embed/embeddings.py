@@ -78,7 +78,7 @@ class Embeddings:
     def __len__(self):
         return self._labels.shape[0]
 
-    def __getitem__(self, index: int) -> Tuple[Any, np.ndarray]:
+    def __getitem__(self, index: int) -> tuple[Any, np.ndarray]:
         if index >= len(self):
             raise IndexError(
                 f"index '{index}' is out of bounds of "

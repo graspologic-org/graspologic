@@ -10,8 +10,8 @@ from graspologic.layouts.classes import NodePosition
 
 
 def _calculate_x_y_domain(
-    positions: List[NodePosition],
-) -> Tuple[Tuple[float, float], Tuple[float, float]]:
+    positions: list[NodePosition],
+) -> tuple[tuple[float, float], tuple[float, float]]:
     """calculate the overall x/y domain, converting to a square
     so we can have a consistent scale
     """
@@ -40,7 +40,7 @@ def _calculate_x_y_domain(
 
 
 def _scale_value(
-    domain: Tuple[float, float], data_range: Tuple[float, float], value: float
+    domain: tuple[float, float], data_range: tuple[float, float], value: float
 ) -> float:
     return data_range[0] + (data_range[1] - data_range[0]) * (
         (value - domain[0]) / (domain[1] - domain[0])
@@ -48,9 +48,9 @@ def _scale_value(
 
 
 def _scale_node_sizes_for_rendering(
-    sizes: List[float],
-    spatial_domain: Tuple[float, float],
-    spatial_range: Tuple[float, float],
+    sizes: list[float],
+    spatial_domain: tuple[float, float],
+    spatial_range: tuple[float, float],
     dpi: float,
 ):
     """scale the size again to match the rendered pixel range
@@ -71,7 +71,7 @@ def _scale_node_sizes_for_rendering(
 
 def _draw_graph(
     graph: nx.Graph,
-    positions: List[NodePosition],
+    positions: list[NodePosition],
     node_colors: Dict[Any, str],
     vertex_alpha: float,
     edge_line_width: float,
@@ -158,7 +158,7 @@ def _draw_graph(
 
 def show_graph(
     graph: nx.Graph,
-    positions: List[NodePosition],
+    positions: list[NodePosition],
     node_colors: Dict[Any, str],
     vertex_line_width: float = 0.01,
     vertex_alpha: float = 0.55,
@@ -183,7 +183,7 @@ def show_graph(
     graph : nx.Graph
         The graph to be displayed. If the networkx Graph contains only nodes, no
         edges will be displayed.
-    positions : List[:class:`graspologic.layouts.NodePosition`]
+    positions : list[:class:`graspologic.layouts.NodePosition`]
         The positionsfor every node in the graph.
     node_colors : Dict[Any, str]
         A mapping of node id to colors. Must contain an entry for every node in the
@@ -239,7 +239,7 @@ def show_graph(
 def save_graph(
     output_path: str,
     graph: nx.Graph,
-    positions: List[NodePosition],
+    positions: list[NodePosition],
     node_colors: Dict[Any, str],
     vertex_line_width: float = 0.01,
     vertex_alpha: float = 0.55,
@@ -265,7 +265,7 @@ def save_graph(
     graph : nx.Graph
         The graph to be displayed. If the networkx Graph contains only nodes, no
         edges will be displayed.
-    positions : List[:class:`graspologic.layouts.NodePosition`]
+    positions : list[:class:`graspologic.layouts.NodePosition`]
         The positionsfor every node in the graph.
     node_colors : Dict[Any, str]
         A mapping of node id to colors. Must contain an entry for every node in the

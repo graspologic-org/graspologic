@@ -85,11 +85,11 @@ class GraphBuilder:
         else:
             self._graph.add_edge(source_id, target_id, weight=weight, **attributes)
 
-    def build(self) -> Tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], List[Any]]:
+    def build(self) -> tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], list[Any]]:
         """
         Returns
         -------
-        Tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], List[Any]]
+        tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], list[Any]]
             The returned tuple is either an undirected or directed graph, depending on
             the constructor argument ``directed``. The second value in the tuple is a
             dictionary of original node ids to their assigned integer ids. The third

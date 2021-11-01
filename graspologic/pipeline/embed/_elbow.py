@@ -49,7 +49,7 @@ def _compute_likelihood(arr):
     return likelihoods
 
 
-def _find_elbows(priority_ordered_matrix: np.ndarray, n_elbows: int) -> List[int]:
+def _find_elbows(priority_ordered_matrix: np.ndarray, n_elbows: int) -> list[int]:
     # use Ghodsi & Zhu method for finding elbow
     idx = 0
     elbows = []
@@ -65,7 +65,7 @@ def _find_elbows(priority_ordered_matrix: np.ndarray, n_elbows: int) -> List[int
 
 
 def _index_of_elbow(
-    priority_ordered_matrix: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
+    priority_ordered_matrix: Union[np.ndarray, tuple[np.ndarray, np.ndarray]],
     n_elbows: int,
 ) -> int:
     if isinstance(priority_ordered_matrix, tuple):

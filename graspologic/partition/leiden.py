@@ -33,7 +33,7 @@ def _put_node_in_node_str_map(node: Any, node_str_map: Dict[str, Any]) -> str:
 
 def _validate_and_build_edge_list(
     graph: Union[
-        List[Tuple[Any, Any, Union[int, float]]],
+        list[tuple[Any, Any, Union[int, float]]],
         nx.Graph,
         np.ndarray,
         scipy.sparse.csr.csr_matrix,
@@ -42,7 +42,7 @@ def _validate_and_build_edge_list(
     weight_attribute: str,
     check_directed: bool,
     weight_default: float,
-) -> Tuple[Dict[str, Any], List[Tuple[str, str, float]]]:
+) -> tuple[Dict[str, Any], list[tuple[str, str, float]]]:
     if isinstance(graph, (nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         raise TypeError("directed or multigraphs are not supported in these functions")
     if (
@@ -64,7 +64,7 @@ def _validate_and_build_edge_list(
         if not isinstance(graph[0], tuple) or len(graph[0]) != 3:
             raise TypeError(
                 "If the provided graph is a list, it must be a list of tuples with 3 "
-                "values in the form of Tuple[Any, Any, Union[int, float]], you provided"
+                "values in the form of tuple[Any, Any, Union[int, float]], you provided"
                 f"{type(graph[0])}, {repr(graph[0])}"
             )
 
@@ -196,7 +196,7 @@ def _validate_common_arguments(
 
 def leiden(
     graph: Union[
-        List[Tuple[Any, Any, Union[int, float]]],
+        list[tuple[Any, Any, Union[int, float]]],
         nx.Graph,
         np.ndarray,
         scipy.sparse.csr.csr_matrix,
@@ -223,7 +223,7 @@ def leiden(
 
     Parameters
     ----------
-    graph : Union[List[Tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix]
+    graph : Union[list[tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix]
         A graph representation, whether a weighted edge list referencing an undirected
         graph, an undirected networkx graph, or an undirected adjacency matrix in either
         numpy.ndarray or scipy.sparse.csr.csr_matrix form.
@@ -368,7 +368,7 @@ class HierarchicalCluster(NamedTuple):
 
     @staticmethod
     def final_hierarchical_clustering(
-        hierarchical_clusters: List[
+        hierarchical_clusters: list[
             Union["HierarchicalCluster", gn.HierarchicalCluster]
         ],
     ) -> Dict[str, int]:
@@ -402,7 +402,7 @@ def _from_native(
 
 def hierarchical_leiden(
     graph: Union[
-        List[Tuple[Any, Any, Union[int, float]]],
+        list[tuple[Any, Any, Union[int, float]]],
         nx.Graph,
         np.ndarray,
         scipy.sparse.csr.csr_matrix,
@@ -418,7 +418,7 @@ def hierarchical_leiden(
     is_weighted: Optional[bool] = None,
     weight_default: float = 1.0,
     check_directed: bool = True,
-) -> List[HierarchicalCluster]:
+) -> list[HierarchicalCluster]:
     """
 
     Leiden is a global network partitioning algorithm. Given a graph, it will iterate
@@ -435,7 +435,7 @@ def hierarchical_leiden(
     subnetwork is then treated as a wholly separate entity, leiden is run over it, and
     the new, smaller communities are then mapped into the original community map space.
 
-    The results also differ substantially; the returned List[HierarchicalCluster] is
+    The results also differ substantially; the returned list[HierarchicalCluster] is
     more of a log of state at each level. All HierarchicalClusters at level 0 should be
     considered to be the results of running :func:`graspologic.partition.leiden`. Every
     community whose membership is greater than ``max_cluster_size`` will then
@@ -449,7 +449,7 @@ def hierarchical_leiden(
 
     Parameters
     ----------
-    graph : Union[List[Tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix]
+    graph : Union[list[tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix]
         A graph representation, whether a weighted edge list referencing an undirected
         graph, an undirected networkx graph, or an undirected adjacency matrix in
         either numpy.ndarray or scipy.sparse.csr.csr_matrix form.
@@ -519,7 +519,7 @@ def hierarchical_leiden(
 
     Returns
     -------
-    List[HierarchicalCluster]
+    list[HierarchicalCluster]
         The results of running hierarchical leiden over the provided graph, a list of
         HierarchicalClusters identifying the state of every node and cluster at each
         level. The function

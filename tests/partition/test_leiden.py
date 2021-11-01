@@ -49,7 +49,7 @@ class TestHierarchicalCluster(unittest.TestCase):
         )
 
 
-def _create_edge_list() -> List[Tuple[str, str, float]]:
+def _create_edge_list() -> list[tuple[str, str, float]]:
     edges = []
     with open(data_file("large-graph.csv"), "r") as edges_io:
         for line in edges_io:
@@ -230,7 +230,7 @@ class TestLeidenIsolates(unittest.TestCase):
         )
 
     def assert_isolate_not_in_hierarchical_result(
-        self, partitions: List[HierarchicalCluster]
+        self, partitions: list[HierarchicalCluster]
     ):
         """verify that isolate node was not returned"""
         all_nodes = {p.node for p in partitions}

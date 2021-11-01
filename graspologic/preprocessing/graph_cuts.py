@@ -17,7 +17,7 @@ SMALLER_THAN_EXCLUSIVE = "smaller_than_exclusive"
 def _filter_function_for_make_cuts(
     cut_threshold: Union[int, float],
     cut_process: str,
-) -> Callable[[Tuple[Any, Union[int, float]]], bool]:
+) -> Callable[[tuple[Any, Union[int, float]]], bool]:
     filter_functions = {
         LARGER_THAN_EXCLUSIVE: lambda x: x[1] > cut_threshold,
         LARGER_THAN_INCLUSIVE: lambda x: x[1] >= cut_threshold,
@@ -42,7 +42,7 @@ class DefinedHistogram(NamedTuple):
 
 def histogram_edge_weight(
     graph: Union[nx.Graph, nx.DiGraph],
-    bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
+    bin_directive: Union[int, list[Union[float, int]], np.ndarray, str] = 10,
     weight_attribute: str = "weight",
 ) -> DefinedHistogram:
     """
@@ -55,7 +55,7 @@ def histogram_edge_weight(
 
     graph : nx.Graph
         The graph. No changes will be made to it.
-    bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
+    bin_directive : Union[int, list[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus,
         "histogram_bin_edges") functions.
 
@@ -84,11 +84,11 @@ def histogram_edge_weight(
     Enable logging to view any messages about edges without weights.
     """
     logger = logging.getLogger(__name__)
-    edge_weights: List[Union[int, float, None]] = [
+    edge_weights: list[Union[int, float, None]] = [
         weight for _, _, weight in graph.edges(data=weight_attribute)
     ]
-    none_weights: List[None] = [weight for weight in edge_weights if weight is None]
-    actual_weights: List[Union[int, float]] = [
+    none_weights: list[None] = [weight for weight in edge_weights if weight is None]
+    actual_weights: list[Union[int, float]] = [
         weight for weight in edge_weights if weight is not None
     ]
 
@@ -153,14 +153,14 @@ def cut_edges_by_weight(
 
     logger = logging.getLogger(__name__)
     graph_copy = graph.copy()
-    edge_weights: List[Tuple[Tuple[Any, Any], Union[int, float, None]]] = [
+    edge_weights: list[tuple[tuple[Any, Any], Union[int, float, None]]] = [
         ((source, target), weight)
         for source, target, weight in graph.edges(data=weight_attribute)
     ]
-    none_weights: List[Tuple[Tuple[Any, Any], None]] = [
+    none_weights: list[tuple[tuple[Any, Any], None]] = [
         (edge, weight) for edge, weight in edge_weights if weight is None
     ]
-    actual_weights: List[Tuple[Tuple[Any, Any], Union[int, float]]] = [
+    actual_weights: list[tuple[tuple[Any, Any], Union[int, float]]] = [
         (edge, weight) for edge, weight in edge_weights if weight is not None
     ]
 
@@ -190,7 +190,7 @@ def cut_edges_by_weight(
 
 def histogram_degree_centrality(
     graph: Union[nx.Graph, nx.DiGraph],
-    bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
+    bin_directive: Union[int, list[Union[float, int]], np.ndarray, str] = 10,
 ) -> DefinedHistogram:
     """
     Generates a histogram of the vertex degree centrality of the provided graph.
@@ -202,7 +202,7 @@ def histogram_degree_centrality(
 
     graph : Union[nx.Graph, nx.DiGraph]
         The graph. No changes will be made to it.
-    bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
+    bin_directive : Union[int, list[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus,
         "histogram_bin_edges") functions.
 
@@ -272,7 +272,7 @@ def cut_vertices_by_degree_centrality(
 
 def histogram_betweenness_centrality(
     graph: Union[nx.Graph, nx.DiGraph],
-    bin_directive: Union[int, List[Union[float, int]], np.ndarray, str] = 10,
+    bin_directive: Union[int, list[Union[float, int]], np.ndarray, str] = 10,
     num_random_samples: Optional[int] = None,
     normalized: bool = True,
     weight_attribute: Optional[str] = "weight",
@@ -292,7 +292,7 @@ def histogram_betweenness_centrality(
     ----------
     graph : Union[nx.Graph, nx.DiGraph]
         The graph. No changes will be made to it.
-    bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]
+    bin_directive : Union[int, list[Union[float, int]], numpy.ndarray, str]
         Is passed directly through to numpy's "histogram" (and thus,
         "histogram_bin_edges") functions.
 

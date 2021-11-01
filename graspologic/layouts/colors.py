@@ -16,7 +16,7 @@ from sklearn.preprocessing import minmax_scale
 __all__ = ["categorical_colors", "sequential_colors"]
 
 
-def _load_thematic_json(path: Optional[str]) -> Tuple[Dict[Any, Any], Dict[Any, Any]]:
+def _load_thematic_json(path: Optional[str]) -> tuple[Dict[Any, Any], Dict[Any, Any]]:
     if path is not None and Path(path).is_file():
         colors_path = path
     else:

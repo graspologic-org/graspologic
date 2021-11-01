@@ -8,7 +8,7 @@ import networkx as nx
 
 
 def check_argument_types(
-    value: Any, required_types: Union[type, Tuple[type, ...]], message: str
+    value: Any, required_types: Union[type, tuple[type, ...]], message: str
 ) -> None:
     """
     Raises a TypeError if the provided ``value`` is not one of the ``required_types``
@@ -17,7 +17,7 @@ def check_argument_types(
     ----------
     value : Any
         The argument to test for valid type
-    required_types : Union[type, Tuple[type, ...]]
+    required_types : Union[type, tuple[type, ...]]
         A type or a n-ary tuple of types to test for validity
     message : str
         The message to use as the body of the TypeError
@@ -31,7 +31,7 @@ def check_argument_types(
 
 
 def check_optional_argument_types(
-    value: Any, required_types: Union[type, Tuple[type, ...]], message: str
+    value: Any, required_types: Union[type, tuple[type, ...]], message: str
 ) -> None:
     """
     Raises a TypeError if the provided ``value`` is not one of the ``required_types``,
@@ -41,7 +41,7 @@ def check_optional_argument_types(
     ----------
     value : Any
         The argument to test for valid type
-    required_types : Union[type, Tuple[type, ...]]
+    required_types : Union[type, tuple[type, ...]]
         A type or a n-ary tuple of types to test for validity
     message : str
         The message to use as the body of the TypeError
@@ -70,7 +70,7 @@ def check_argument(check: bool, message: str):
     ----------
     value : Any
         The argument to test for valid type
-    required_types : Union[type, Tuple[type, ...]]
+    required_types : Union[type, tuple[type, ...]]
         A type or a n-ary tuple of types to test for validity
     message : str
         The message to use as the body of the TypeError

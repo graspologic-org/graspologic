@@ -13,7 +13,7 @@ from .base import BaseEmbedMulti
 
 
 @beartype
-def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
+def _get_omnibus_matrix_sparse(matrices: list[csr_matrix]) -> csr_matrix:
     """
     Generate the omnibus matrix from a list of sparse adjacency matrices as described by 'A central limit theorem
     for an omnibus embedding of random dot product graphs.'

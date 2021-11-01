@@ -24,7 +24,7 @@ def node2vec_embed(
     iterations: int = 3,
     interpolate_walk_lengths_by_node_degree: bool = True,
     random_seed: Optional[int] = None,
-) -> Tuple[np.array, List[Any]]:
+) -> tuple[np.array, list[Any]]:
     """
     Generates a node2vec embedding from a given graph. Will follow the word2vec
     algorithm to create the embedding.
@@ -73,7 +73,7 @@ def node2vec_embed(
 
     Returns
     -------
-    Tuple[np.array, List[Any]]
+    tuple[np.array, list[Any]]
         A tuple containing a matrix, with each row index corresponding to the embedding
         for each node. The tuple also contains a vector containing the corresponding
         vertex labels for each row in the matrix. The matrix and vector are
@@ -194,7 +194,7 @@ def _preconditions(
 
 
 def _learn_embeddings(
-    walks: List[Any],
+    walks: list[Any],
     dimensions: int,
     window_size: int,
     workers: int,
@@ -485,7 +485,7 @@ class _Node2VecGraph:
         return
 
 
-def _alias_setup(probabilities: List[float]):
+def _alias_setup(probabilities: list[float]):
     """
     Compute utility lists for non-uniform sampling from discrete distributions.
     Refer to
@@ -520,7 +520,7 @@ def _alias_setup(probabilities: List[float]):
 
 
 def _alias_draw(
-    probabilities: List[float], alias: List[float], random_state: np.random.RandomState
+    probabilities: list[float], alias: list[float], random_state: np.random.RandomState
 ):
     """
     Draw sample from a non-uniform discrete distribution using alias sampling.

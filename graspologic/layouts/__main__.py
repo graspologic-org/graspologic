@@ -49,7 +49,7 @@ def _ensure_output_dir(path: str):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
 
 
-def _location(path: str, positions: List[NodePosition], colors: Dict[Any, str]):
+def _location(path: str, positions: list[NodePosition], colors: Dict[Any, str]):
     with open(path, "w") as node_positions_out:
         print("id,x,y,size,community,color", file=node_positions_out)
         for position in positions:
@@ -61,7 +61,7 @@ def _location(path: str, positions: List[NodePosition], colors: Dict[Any, str]):
 
 
 def _output(
-    arguments: argparse.Namespace, graph: nx.Graph, positions: List[NodePosition]
+    arguments: argparse.Namespace, graph: nx.Graph, positions: list[NodePosition]
 ):
     partitions = {position.node_id: position.community for position in positions}
     color_map = categorical_colors(partitions)

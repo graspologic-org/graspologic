@@ -32,7 +32,7 @@ def layout_tsne(
     weight_attribute: str = "weight",
     random_seed: Optional[int] = None,
     adjust_overlaps: bool = True,
-) -> Tuple[nx.Graph, List[NodePosition]]:
+) -> tuple[nx.Graph, list[NodePosition]]:
     """
     Automatic graph layout generation by creating a generalized node2vec embedding,
     then using t-SNE for dimensionality reduction to 2d space.
@@ -87,7 +87,7 @@ def layout_tsne(
 
     Returns
     -------
-    Tuple[nx.Graph, List[NodePosition]]
+    tuple[nx.Graph, list[NodePosition]]
         The largest connected component and a list of NodePositions for each node in
         the largest connected component. The NodePosition object contains:
         - node_id
@@ -124,7 +124,7 @@ def layout_umap(
     weight_attribute: str = "weight",
     random_seed: Optional[int] = None,
     adjust_overlaps: bool = True,
-) -> Tuple[nx.Graph, List[NodePosition]]:
+) -> tuple[nx.Graph, list[NodePosition]]:
     """
     Automatic graph layout generation by creating a generalized node2vec embedding,
     then using UMAP for dimensionality reduction to 2d space.
@@ -179,7 +179,7 @@ def layout_umap(
 
     Returns
     -------
-    Tuple[nx.Graph, List[NodePosition]]
+    tuple[nx.Graph, list[NodePosition]]
         The largest connected component and a list of NodePositions for each node in
         the largest connected component. The NodePosition object contains:
         - node_id
@@ -238,7 +238,7 @@ def _node2vec_for_layout(
     graph: nx.Graph,
     max_edges: int = 10000000,
     random_seed: Optional[int] = None,
-) -> Tuple[nx.Graph, np.ndarray, np.ndarray]:
+) -> tuple[nx.Graph, np.ndarray, np.ndarray]:
     graph = _approximate_prune(graph, max_edges)
     graph = largest_connected_component(graph)
 
@@ -285,7 +285,7 @@ def _node_positions_from(
     weight_attribute: str = "weight",
     random_seed: Optional[int] = None,
     adjust_overlaps: bool = True,
-) -> List[NodePosition]:
+) -> list[NodePosition]:
     degree = graph.degree()
     sizes = _compute_sizes(degree)
     covered_area = _covered_size(sizes)
@@ -315,7 +315,7 @@ def _node_positions_from(
 
 def _find_min_max_degree(
     degrees: nx.classes.reportviews.DegreeView,
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     min_degree = math.inf
     max_degree = -math.inf
     for _, degree in degrees:
@@ -346,7 +346,7 @@ def _covered_size(sizes: Dict[Any, float]) -> float:
     return total
 
 
-def _get_bounds(points: np.ndarray) -> Tuple[float, float, float, float]:
+def _get_bounds(points: np.ndarray) -> tuple[float, float, float, float]:
     min_x, min_y = points.min(axis=0)
     max_x, max_y = points.max(axis=0)
     return min_x, min_y, max_x, max_y
@@ -383,7 +383,7 @@ def _new_bounds(
     max_y: float,
     covered_area: float,
     target_ratio: float,
-) -> Tuple[float, float, float, float]:
+) -> tuple[float, float, float, float]:
     range_x = max_x - min_x
     mid_x = min_x + range_x / 2
     range_y = max_y - min_y

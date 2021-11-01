@@ -22,7 +22,7 @@ from sklearn.utils.multiclass import type_of_target, unique_labels
 
 @beartype
 def average_matrices(
-    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
+    matrices: Union[np.ndarray, Union[list[np.ndarray], list[csr_matrix]]]
 ) -> Union[np.ndarray, csr_matrix]:
     """
     Helper method to encapsulate calculating the average of matrices represented either as a
@@ -30,7 +30,7 @@ def average_matrices(
 
     Parameters
     ----------
-    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
+    matrices: Union[np.ndarray, Union[list[np.ndarray], list[csr_matrix]]]
         The list of matrices to be averaged
 
     Returns
@@ -1060,7 +1060,7 @@ def remap_labels(
 
 def remap_node_ids(
     graph: nx.Graph, weight_attribute: str = "weight", weight_default: float = 1.0
-) -> Tuple[nx.Graph, Dict[Any, str]]:
+) -> tuple[nx.Graph, Dict[Any, str]]:
     """
     Given a graph with arbitrarily types node ids, return a new graph that contains the exact same edgelist
     except the node ids are remapped to a string representation.
@@ -1075,7 +1075,7 @@ def remap_node_ids(
         Default edge weight to use if a weight is not found on an edge in the graph
     Returns
     -------
-    Tuple[nx.Graph, Dict[Any, str]]
+    tuple[nx.Graph, Dict[Any, str]]
         A new graph that contains the same edges except the node ids are remapped to strings. The keys in
         the dictionary are the old node ids and the values are the newly remapped node ids.
 

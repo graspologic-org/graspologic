@@ -208,7 +208,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
     @staticmethod
     def _matvec(
         L: np.ndarray, Y: np.ndarray, a: float, assortative: bool = True
-    ) -> Tuple[Callable, Callable]:
+    ) -> tuple[Callable, Callable]:
         """
         Defines matrix multiplication and matrix multiplication by transpose for the
         LinearOperator object.
