@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graspologic.embed.n2v &mdash; graspologic 0.5.1dev1418679884 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> graspologic
+          </a>
+              <div class="version">
+                0.5.1dev1418679884
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>graspologic.embed.n2v</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graspologic.embed.n2v</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
+<span class="c1"># Licensed under the MIT License.</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">remap_node_ids</span>
+
+
+<div class="viewcode-block" id="node2vec_embed"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.node2vec_embed">[docs]</a><span class="k">def</span> <span class="nf">node2vec_embed</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">num_walks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+    <span class="n">return_hyperparameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">inout_hyperparameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">dimensions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+    <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a node2vec embedding from a given graph. Will follow the word2vec</span>
+<span class="sd">    algorithm to create the embedding.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    graph: Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        A networkx graph or digraph.  A multigraph should be turned into a</span>
+<span class="sd">        non-multigraph so that the calling user properly handles the multi-edges</span>
+<span class="sd">        (i.e. aggregate weights or take last edge weight). If the graph is unweighted,</span>
+<span class="sd">        the weight of each edge will default to 1.</span>
+<span class="sd">    num_walks : int</span>
+<span class="sd">        Number of walks per source. Default is 10.</span>
+<span class="sd">    walk_length: int</span>
+<span class="sd">        Length of walk per source. Default is 40.</span>
+<span class="sd">    return_hyperparameter : float</span>
+<span class="sd">        Return hyperparameter (p). Default is 1.0</span>
+<span class="sd">    inout_hyperparameter : float</span>
+<span class="sd">        Inout hyperparameter (q). Default is 1.0</span>
+<span class="sd">    dimensions : int</span>
+<span class="sd">        Dimensionality of the word vectors. Default is 128.</span>
+<span class="sd">    window_size : int</span>
+<span class="sd">        Maximum distance between the current and predicted word within a sentence.</span>
+<span class="sd">        Default is 2.</span>
+<span class="sd">    workers : int</span>
+<span class="sd">        Use these many worker threads to train the model. Default is 8.</span>
+<span class="sd">    iterations : int</span>
+<span class="sd">        Number of epochs in stochastic gradient descent (SGD). Default is 3.</span>
+<span class="sd">    interpolate_walk_lengths_by_node_degree : bool</span>
+<span class="sd">        Use a dynamic walk length that corresponds to each nodes</span>
+<span class="sd">        degree. If the node is in the bottom 20 percentile, default to a walk length of</span>
+<span class="sd">        1. If it is in the top 10 percentile, use ``walk_length``. If it is in the</span>
+<span class="sd">        20-80 percentiles, linearly interpolate between 1 and ``walk_length``.</span>
+<span class="sd">        This will reduce lower degree nodes from biasing your resulting embedding. If a</span>
+<span class="sd">        low degree node has the same number of walks as a high degree node (which it</span>
+<span class="sd">        will if this setting is not on), then the lower degree nodes will take a</span>
+<span class="sd">        smaller breadth of random walks when compared to the high degree nodes. This</span>
+<span class="sd">        will result in your lower degree walks dominating your higher degree nodes.</span>
+<span class="sd">    random_seed : int</span>
+<span class="sd">        Seed to be used for reproducible results. Default is None and will produce a</span>
+<span class="sd">        random output. Note that for a fully deterministically-reproducible run, you</span>
+<span class="sd">        must also limit to a single worker thread (`workers=1`), to eliminate ordering</span>
+<span class="sd">        jitter from OS thread scheduling. In addition the environment variable</span>
+<span class="sd">        ``PYTHONHASHSEED`` must be set to control hash randomization.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[np.array, List[Any]]</span>
+<span class="sd">        A tuple containing a matrix, with each row index corresponding to the embedding</span>
+<span class="sd">        for each node. The tuple also contains a vector containing the corresponding</span>
+<span class="sd">        vertex labels for each row in the matrix. The matrix and vector are</span>
+<span class="sd">        positionally correlated.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The original reference implementation of node2vec comes from Aditya Grover from</span>
+<span class="sd">        https://github.com/aditya-grover/node2vec/.</span>
+
+<span class="sd">    Further details on the Alias Method used in this functionality can be found at</span>
+<span class="sd">        https://lips.cs.princeton.edu/the-alias-method-efficient-sampling-with-many-discrete-outcomes/</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Aditya Grover and Jure Leskovec  &quot;node2vec: Scalable Feature Learning for</span>
+<span class="sd">        Networks.&quot; Knowledge Discovery and Data Mining, 2016.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_preconditions</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">num_walks</span><span class="p">,</span>
+        <span class="n">walk_length</span><span class="p">,</span>
+        <span class="n">return_hyperparameter</span><span class="p">,</span>
+        <span class="n">inout_hyperparameter</span><span class="p">,</span>
+        <span class="n">dimensions</span><span class="p">,</span>
+        <span class="n">window_size</span><span class="p">,</span>
+        <span class="n">workers</span><span class="p">,</span>
+        <span class="n">iterations</span><span class="p">,</span>
+        <span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
+
+    <span class="n">node2vec_graph</span> <span class="o">=</span> <span class="n">_Node2VecGraph</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span> <span class="n">return_hyperparameter</span><span class="p">,</span> <span class="n">inout_hyperparameter</span><span class="p">,</span> <span class="n">random_state</span>
+    <span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Starting preprocessing of transition probabilities on graph with </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span><span class="si">}</span><span class="s2"> nodes and &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()))</span><span class="si">}</span><span class="s2"> edges&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting at time </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">node2vec_graph</span><span class="o">.</span><span class="n">_preprocess_transition_probabilities</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulating walks on graph at time </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">walks</span> <span class="o">=</span> <span class="n">node2vec_graph</span><span class="o">.</span><span class="n">_simulate_walks</span><span class="p">(</span>
+        <span class="n">num_walks</span><span class="p">,</span> <span class="n">walk_length</span><span class="p">,</span> <span class="n">interpolate_walk_lengths_by_node_degree</span>
+    <span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Learning embeddings at time </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">_learn_embeddings</span><span class="p">(</span>
+        <span class="n">walks</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">workers</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">random_seed</span>
+    <span class="p">)</span>
+
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Completed. Ending time is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">)</span><span class="si">}</span><span class="s2"> Elapsed time is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node2vec_graph</span><span class="o">.</span><span class="n">original_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+    <span class="n">remapped_labels</span> <span class="o">=</span> <span class="n">node2vec_graph</span><span class="o">.</span><span class="n">label_map_to_string</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">wv</span><span class="o">.</span><span class="n">get_vector</span><span class="p">(</span><span class="n">remapped_labels</span><span class="p">[</span><span class="n">node</span><span class="p">])</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">]),</span>
+        <span class="n">labels</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_assert_is_positive_int</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be an int&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be &gt; 0&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_assert_is_nonnegative_float</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be a float&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be &gt;= 0.0&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_preconditions</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">num_walks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">return_hyperparameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">inout_hyperparameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">dimensions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;graph must be a networkx Graph or DiGraph&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">is_multigraph</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;This function does not work on multigraphs - because there are two reasonable ways to treat a &quot;</span>
+            <span class="s2">&quot;multigraph with different behaviors, we insist that the caller create an appropriate Graph or &quot;</span>
+            <span class="s2">&quot;DiGraph that represents the manner in which they&#39;d like the multigraph to be treated for the &quot;</span>
+            <span class="s2">&quot;purposes of this embedding&quot;</span>
+        <span class="p">)</span>
+    <span class="n">_assert_is_positive_int</span><span class="p">(</span><span class="s2">&quot;num_walks&quot;</span><span class="p">,</span> <span class="n">num_walks</span><span class="p">)</span>
+    <span class="n">_assert_is_positive_int</span><span class="p">(</span><span class="s2">&quot;walk_length&quot;</span><span class="p">,</span> <span class="n">walk_length</span><span class="p">)</span>
+    <span class="n">_assert_is_nonnegative_float</span><span class="p">(</span><span class="s2">&quot;return_hyperparameter&quot;</span><span class="p">,</span> <span class="n">return_hyperparameter</span><span class="p">)</span>
+    <span class="n">_assert_is_nonnegative_float</span><span class="p">(</span><span class="s2">&quot;inout_hyperparameter&quot;</span><span class="p">,</span> <span class="n">inout_hyperparameter</span><span class="p">)</span>
+    <span class="n">_assert_is_positive_int</span><span class="p">(</span><span class="s2">&quot;dimensions&quot;</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">)</span>
+    <span class="n">_assert_is_positive_int</span><span class="p">(</span><span class="s2">&quot;window_size&quot;</span><span class="p">,</span> <span class="n">window_size</span><span class="p">)</span>
+    <span class="n">_assert_is_positive_int</span><span class="p">(</span><span class="s2">&quot;workers&quot;</span><span class="p">,</span> <span class="n">workers</span><span class="p">)</span>
+    <span class="n">_assert_is_positive_int</span><span class="p">(</span><span class="s2">&quot;iterations&quot;</span><span class="p">,</span> <span class="n">iterations</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;interpolate_walk_lengths_by_node_degree must be a bool&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_learn_embeddings</span><span class="p">(</span>
+    <span class="n">walks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
+    <span class="n">dimensions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Learn embeddings by optimizing the skip-gram objective using SGD.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">gensim.models</span> <span class="kn">import</span> <span class="n">Word2Vec</span>
+
+    <span class="n">walks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">walk</span><span class="p">))</span> <span class="k">for</span> <span class="n">walk</span> <span class="ow">in</span> <span class="n">walks</span><span class="p">]</span>
+
+    <span class="c1"># Documentation - https://radimrehurek.com/gensim/models/word2vec.html</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Word2Vec</span><span class="p">(</span>
+        <span class="n">walks</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">dimensions</span><span class="p">,</span>
+        <span class="n">window</span><span class="o">=</span><span class="n">window_size</span><span class="p">,</span>
+        <span class="n">min_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">sg</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Training algorithm: 1 for skip-gram; otherwise CBOW</span>
+        <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+        <span class="nb">iter</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">class</span> <span class="nc">_Node2VecGraph</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Temporary inner state object for constructing the random walks</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    graph: nx.Graph</span>
+<span class="sd">        A networkx graph</span>
+<span class="sd">    return_hyperparameter : float</span>
+<span class="sd">        Return hyperparameter</span>
+<span class="sd">    inout_hyperparameter : float</span>
+<span class="sd">        Inout hyperparameter</span>
+<span class="sd">    random_state : np.random.RandomState</span>
+<span class="sd">        Random State for reproducible results. Default is None and will produce random</span>
+<span class="sd">        results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+        <span class="n">return_hyperparameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">inout_hyperparameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span> <span class="o">=</span> <span class="n">graph</span>
+
+        <span class="n">graph_with_new_ids</span><span class="p">,</span> <span class="n">new_id_map</span> <span class="o">=</span> <span class="n">remap_node_ids</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">graph_with_new_ids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_map_to_string</span> <span class="o">=</span> <span class="n">new_id_map</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_directed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">is_directed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">return_hyperparameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">inout_hyperparameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+
+    <span class="k">def</span> <span class="nf">node2vec_walk</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">start_node</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">degree_percentiles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulate a random walk starting from start node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+        <span class="n">alias_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias_nodes</span>
+        <span class="n">alias_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias_edges</span>
+
+        <span class="n">walk</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_node</span><span class="p">]</span>
+
+        <span class="c1"># Percentiles will be provided if we are using the &#39;interpolate_walk_lengths_by_node_degree&#39; feature.</span>
+        <span class="c1"># the intent of the code is to default the bottom 20% of to a minimal walk length, default the top 10% to a</span>
+        <span class="c1"># maximum walk length, and interpolate the inner 70% linearly from min to max.</span>
+
+        <span class="c1"># This is to avoid having your random walks be dominated by low degree nodes. If the low degree nodes have the</span>
+        <span class="c1"># same number of walks as the high degree nodes, the low degree nodes will take a smaller breadth of paths</span>
+        <span class="c1"># (due to their being less nodes to choose from) and will bias your resulting Word2Vec embedding</span>
+        <span class="k">if</span> <span class="n">degree_percentiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">degree</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start_node</span><span class="p">)</span>
+            <span class="n">walk_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_walk_length_interpolated</span><span class="p">(</span>
+                <span class="n">degree</span><span class="p">,</span> <span class="n">degree_percentiles</span><span class="p">,</span> <span class="n">walk_length</span>
+            <span class="p">)</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">walk_length</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">walk</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">current_neighbors</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">current</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_neighbors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">walk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">current_neighbors</span><span class="p">[</span>
+                            <span class="n">_alias_draw</span><span class="p">(</span>
+                                <span class="n">alias_nodes</span><span class="p">[</span><span class="n">current</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                <span class="n">alias_nodes</span><span class="p">[</span><span class="n">current</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">prev</span> <span class="o">=</span> <span class="n">walk</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="nb">next</span> <span class="o">=</span> <span class="n">current_neighbors</span><span class="p">[</span>
+                        <span class="n">_alias_draw</span><span class="p">(</span>
+                            <span class="n">alias_edges</span><span class="p">[(</span><span class="n">prev</span><span class="p">,</span> <span class="n">current</span><span class="p">)][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">alias_edges</span><span class="p">[(</span><span class="n">prev</span><span class="p">,</span> <span class="n">current</span><span class="p">)][</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">]</span>
+                    <span class="n">walk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">next</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">walk</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_walk_length_interpolated</span><span class="p">(</span>
+        <span class="n">degree</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">percentiles</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">max_walk_length</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a node&#39;s degree, determine the length of a walk that should be used. If the degree is less than the</span>
+<span class="sd">        first element of the percentiles list, default the walk length to 1. Otherwise, if the degree is greater</span>
+<span class="sd">        than the last element of the list, default it to the max_walk_length. If it falls in the middle, do a linear</span>
+<span class="sd">        interpolation to decide the length of the walk.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_walk_length</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">percentile</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">percentiles</span><span class="p">):</span>
+            <span class="c1"># if we are below the first percentile in the list, default to a walk length of 1</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">degree</span> <span class="o">&lt;</span> <span class="n">percentile</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">1</span>
+
+            <span class="c1"># otherwise, find which bucket we are going to be in.</span>
+            <span class="k">if</span> <span class="n">degree</span> <span class="o">&lt;=</span> <span class="n">percentile</span><span class="p">:</span>
+                <span class="n">new_walk_length</span> <span class="o">=</span> <span class="n">max_walk_length</span> <span class="o">*</span> <span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="c1"># the degree is above the last percentile</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">new_walk_length</span><span class="p">:</span>
+            <span class="n">new_walk_length</span> <span class="o">=</span> <span class="n">max_walk_length</span>
+
+        <span class="c1"># a walk length of 0 is invalid but can happen depending on the percentiles used</span>
+        <span class="k">if</span> <span class="n">new_walk_length</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">new_walk_length</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">new_walk_length</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_simulate_walks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_walks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Repeatedly simulate random walks from each node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+        <span class="n">walks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+
+        <span class="n">degree_percentiles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">:</span>
+            <span class="n">degree_percentiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">degree</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">degree</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">degree</span><span class="p">()],</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">walk_iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_walks</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Walk iteration: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">walk_iteration</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_walks</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+                <span class="n">walks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">node2vec_walk</span><span class="p">(</span>
+                        <span class="n">walk_length</span><span class="o">=</span><span class="n">walk_length</span><span class="p">,</span>
+                        <span class="n">start_node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span>
+                        <span class="n">degree_percentiles</span><span class="o">=</span><span class="n">degree_percentiles</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">walks</span>
+
+    <span class="k">def</span> <span class="nf">_get_alias_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the alias edge setup lists for a given edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+
+        <span class="n">unnormalized_probs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">destination_neighbor</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">destination</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">destination_neighbor</span> <span class="o">==</span> <span class="n">source</span><span class="p">:</span>
+                <span class="n">unnormalized_probs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">graph</span><span class="p">[</span><span class="n">destination</span><span class="p">][</span><span class="n">destination_neighbor</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">graph</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">destination_neighbor</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+                <span class="n">unnormalized_probs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">graph</span><span class="p">[</span><span class="n">destination</span><span class="p">][</span><span class="n">destination_neighbor</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">unnormalized_probs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">graph</span><span class="p">[</span><span class="n">destination</span><span class="p">][</span><span class="n">destination_neighbor</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">q</span>
+                <span class="p">)</span>
+        <span class="n">norm_const</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">unnormalized_probs</span><span class="p">)</span>
+        <span class="n">normalized_probs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">u_prob</span><span class="p">)</span> <span class="o">/</span> <span class="n">norm_const</span> <span class="k">for</span> <span class="n">u_prob</span> <span class="ow">in</span> <span class="n">unnormalized_probs</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">_alias_setup</span><span class="p">(</span><span class="n">normalized_probs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_preprocess_transition_probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocessing of transition probabilities for guiding the random walks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+        <span class="n">is_directed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_directed</span>
+
+        <span class="n">alias_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">total_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">current_node</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">quotient</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_nodes</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Beginning preprocessing of transition probabilities for </span><span class="si">{</span><span class="n">total_nodes</span><span class="si">}</span><span class="s2"> vertices&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="n">current_node</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">current_node</span> <span class="o">&gt;</span> <span class="n">bucket</span> <span class="o">*</span> <span class="n">quotient</span><span class="p">:</span>
+                <span class="n">bucket</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed </span><span class="si">{</span><span class="n">current_node</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">total_nodes</span><span class="si">}</span><span class="s2"> vertices&quot;</span><span class="p">)</span>
+
+            <span class="n">unnormalized_probs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">nbr</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="n">weight_default</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">nbr</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+            <span class="p">]</span>
+            <span class="n">norm_const</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">unnormalized_probs</span><span class="p">)</span>
+            <span class="n">normalized_probs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="nb">float</span><span class="p">(</span><span class="n">u_prob</span><span class="p">)</span> <span class="o">/</span> <span class="n">norm_const</span> <span class="k">for</span> <span class="n">u_prob</span> <span class="ow">in</span> <span class="n">unnormalized_probs</span>
+            <span class="p">]</span>
+            <span class="n">alias_nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">_alias_setup</span><span class="p">(</span><span class="n">normalized_probs</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Completed preprocessing of transition probabilities for vertices&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">alias_edges</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">total_edges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">current_edge</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">quotient</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_edges</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Beginning preprocessing of transition probabilities for </span><span class="si">{</span><span class="n">total_edges</span><span class="si">}</span><span class="s2"> edges&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_directed</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+                <span class="n">current_edge</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">current_edge</span> <span class="o">&gt;</span> <span class="n">bucket</span> <span class="o">*</span> <span class="n">quotient</span><span class="p">:</span>
+                    <span class="n">bucket</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed </span><span class="si">{</span><span class="n">current_edge</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">total_edges</span><span class="si">}</span><span class="s2"> edges&quot;</span><span class="p">)</span>
+
+                <span class="n">alias_edges</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_alias_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+                <span class="n">current_edge</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">current_edge</span> <span class="o">&gt;</span> <span class="n">bucket</span> <span class="o">*</span> <span class="n">quotient</span><span class="p">:</span>
+                    <span class="n">bucket</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed </span><span class="si">{</span><span class="n">current_edge</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">total_edges</span><span class="si">}</span><span class="s2"> edges&quot;</span><span class="p">)</span>
+
+                <span class="n">alias_edges</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_alias_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">alias_edges</span><span class="p">[(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_alias_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed preprocessing of transition probabilities for edges&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">alias_nodes</span> <span class="o">=</span> <span class="n">alias_nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alias_edges</span> <span class="o">=</span> <span class="n">alias_edges</span>
+
+        <span class="k">return</span>
+
+
+<span class="k">def</span> <span class="nf">_alias_setup</span><span class="p">(</span><span class="n">probabilities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute utility lists for non-uniform sampling from discrete distributions.</span>
+<span class="sd">    Refer to</span>
+<span class="sd">     https://lips.cs.princeton.edu/the-alias-method-efficient-sampling-with-many-discrete-outcomes/</span>
+<span class="sd">    for details</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">number_of_outcomes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)</span>
+    <span class="n">alias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">number_of_outcomes</span><span class="p">)</span>
+    <span class="n">sampled_probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">number_of_outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">smaller</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">larger</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">prob</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">probabilities</span><span class="p">):</span>
+        <span class="n">alias</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">number_of_outcomes</span> <span class="o">*</span> <span class="n">prob</span>
+        <span class="k">if</span> <span class="n">alias</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">smaller</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">larger</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">smaller</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">larger</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">small</span> <span class="o">=</span> <span class="n">smaller</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">large</span> <span class="o">=</span> <span class="n">larger</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="n">sampled_probabilities</span><span class="p">[</span><span class="n">small</span><span class="p">]</span> <span class="o">=</span> <span class="n">large</span>
+        <span class="n">alias</span><span class="p">[</span><span class="n">large</span><span class="p">]</span> <span class="o">=</span> <span class="n">alias</span><span class="p">[</span><span class="n">large</span><span class="p">]</span> <span class="o">+</span> <span class="n">alias</span><span class="p">[</span><span class="n">small</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span>
+        <span class="k">if</span> <span class="n">alias</span><span class="p">[</span><span class="n">large</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">smaller</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">large</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">larger</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">large</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sampled_probabilities</span><span class="p">,</span> <span class="n">alias</span>
+
+
+<span class="k">def</span> <span class="nf">_alias_draw</span><span class="p">(</span>
+    <span class="n">probabilities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">alias</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">random_state</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draw sample from a non-uniform discrete distribution using alias sampling.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">number_of_outcomes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)</span>
+    <span class="n">random_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="n">number_of_outcomes</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">alias</span><span class="p">[</span><span class="n">random_index</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">random_index</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">random_index</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
