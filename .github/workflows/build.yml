@@ -47,15 +47,6 @@ jobs:
           name: documentation-site
           path: |
             docs/_build/html
-      - name: Create version environment variable
-        run: |
-          echo "GRASPOLOGIC_VERSION=`python setup.py --version`" >> $GITHUB_ENV
-      - name: Publish reference docs (main branch)
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
-          destination_dir: ${{ env.GRASPOLOGIC_VERSION }}
   code-format-check:
     runs-on: ubuntu-latest
     continue-on-error: true
