@@ -122,6 +122,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel twine
           pip install -r requirements.txt
+      - name: Create version environment variable
+        run: |
+          echo "GRASPOLOGIC_VERSION=`python setup.py --version`" >> $GITHUB_ENV
       - name: Build Release with setuptools
         if: github.ref=='refs/heads/main'
         run: |
@@ -142,10 +145,17 @@ jobs:
         with:
           name: tutorials
           path: docs/tutorials
-      - name: Publish reference docs
+      - name: Publish reference docs (dev branch)
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref=='refs/heads/dev'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
           destination_dir: pre-release
+      - name: Publish reference docs (main branch)
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref=='refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+          destination_dir: ${{ env.GRASPOLOGIC_VERSION }}
