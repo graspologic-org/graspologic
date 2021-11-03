@@ -31,7 +31,8 @@ sys.path.append(dir_realpath)
 import graspologic
 
 version = graspologic.__version__
-if os.environ.get("GITHUB_REF", "") == "refs/heads/devDocumentationUpdate":
+# Append "dev" and the github run to the version when on the dev branch
+if os.environ.get("GITHUB_REF", "") == "refs/heads/dev":
     version = f"{version}dev{os.environ['GITHUB_RUN_ID']}"
 
 release = version
