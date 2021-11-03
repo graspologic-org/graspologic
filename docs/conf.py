@@ -30,12 +30,11 @@ sys.path.append(dir_realpath)
 
 import graspologic
 
-release = graspologic.__version__
-try:
-    split = release.split(".")
-    version = f"{split[0]}.{split[1]}"
-except BaseException:
-    version = release
+version = graspologic.__version__
+if os.environ.get("GITHUB_REF", "") == "refs/heads/devDocumentationUpdate":
+    version = f"{version}dev{os.environ['GITHUB_RUN_ID']}"
+
+release = version
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
