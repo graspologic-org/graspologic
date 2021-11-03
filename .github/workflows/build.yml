@@ -40,29 +40,13 @@ jobs:
           sudo apt install pandoc
           pip install -U pip setuptools
           pip install -r requirements.txt
-          sphinx-build -W -a docs/reference/ docs/reference/_build/html
-  build-tutorial-documentation:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-      - name: "Run Tutorial Documentation Generation"
-        run: |
-          sudo apt install pandoc
-          pip install -U pip setuptools
-          pip install -r requirements.txt
-          sphinx-build -W -a docs/tutorials/ docs/tutorials/_build/html
-          touch docs/tutorials/_build/html/.nojekyll
+          sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: tutorials
+          name: latest
           path: |
-            docs/tutorials/_build/html
+            docs/_build/html
   code-format-check:
     runs-on: ubuntu-latest
     continue-on-error: true
