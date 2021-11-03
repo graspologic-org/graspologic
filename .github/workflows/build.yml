@@ -44,7 +44,7 @@ jobs:
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: latest
+          name: documentation-site
           path: |
             docs/_build/html
       - name: Publish reference docs
