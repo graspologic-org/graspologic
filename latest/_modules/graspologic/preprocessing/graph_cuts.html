@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graspologic.preprocessing.graph_cuts &mdash; graspologic 0.3.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> graspologic
+          </a>
+              <div class="version">
+                0.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>graspologic.preprocessing.graph_cuts</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graspologic.preprocessing.graph_cuts</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
+<span class="c1"># Licensed under the MIT License.</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">LARGER_THAN_INCLUSIVE</span> <span class="o">=</span> <span class="s2">&quot;larger_than_inclusive&quot;</span>
+<span class="n">LARGER_THAN_EXCLUSIVE</span> <span class="o">=</span> <span class="s2">&quot;larger_than_exclusive&quot;</span>
+<span class="n">SMALLER_THAN_INCLUSIVE</span> <span class="o">=</span> <span class="s2">&quot;smaller_than_inclusive&quot;</span>
+<span class="n">SMALLER_THAN_EXCLUSIVE</span> <span class="o">=</span> <span class="s2">&quot;smaller_than_exclusive&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_filter_function_for_make_cuts</span><span class="p">(</span>
+    <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span> <span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">filter_functions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">LARGER_THAN_EXCLUSIVE</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">cut_threshold</span><span class="p">,</span>
+        <span class="n">LARGER_THAN_INCLUSIVE</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">cut_threshold</span><span class="p">,</span>
+        <span class="n">SMALLER_THAN_EXCLUSIVE</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">cut_threshold</span><span class="p">,</span>
+        <span class="n">SMALLER_THAN_INCLUSIVE</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">cut_threshold</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">cut_process</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filter_functions</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Provided cut_process &#39;</span><span class="si">{</span><span class="n">cut_process</span><span class="si">}</span><span class="s2">&#39; is not a valid value&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filter_functions</span><span class="p">[</span><span class="n">cut_process</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="DefinedHistogram"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.DefinedHistogram">[docs]</a><span class="k">class</span> <span class="nc">DefinedHistogram</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Contains the histogram and the edges of the bins in the histogram.</span>
+<span class="sd">    The bin_edges will have a length 1 greater than the histogram, as it defines the</span>
+<span class="sd">    minimal and maximal edges as well as each edge in between.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">histogram</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">bin_edges</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></div>
+
+
+<div class="viewcode-block" id="histogram_edge_weight"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_edge_weight">[docs]</a><span class="k">def</span> <span class="nf">histogram_edge_weight</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DefinedHistogram</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a histogram of the edge weights of the provided graph. Histogram function</span>
+<span class="sd">    is fundamentally proxied through to numpy&#39;s `histogram` function, and bin selection</span>
+<span class="sd">    follows :func:`numpy.histogram` processes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    graph : nx.Graph</span>
+<span class="sd">        The graph. No changes will be made to it.</span>
+<span class="sd">    bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]</span>
+<span class="sd">        Is passed directly through to numpy&#39;s &quot;histogram&quot; (and thus,</span>
+<span class="sd">        &quot;histogram_bin_edges&quot;) functions.</span>
+
+<span class="sd">        See: :func:`numpy.histogram_bin_edges`</span>
+
+<span class="sd">        In short: if an int is provided, we use ``bin_directive`` number of equal range</span>
+<span class="sd">        bins.</span>
+
+<span class="sd">        If a sequence is provided, these bin edges will be used and can be sized to</span>
+<span class="sd">        whatever size you prefer</span>
+
+<span class="sd">        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be</span>
+<span class="sd">        float or int.</span>
+<span class="sd">    weight_attribute : str</span>
+<span class="sd">        The weight attribute name in the data dictionary. Default is `weight`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`DefinedHistogram`</span>
+<span class="sd">        A named tuple that contains the histogram and the bin_edges used in the</span>
+<span class="sd">        histogram</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Edges without a `weight_attribute` field will be excluded from this histogram.</span>
+<span class="sd">    Enable logging to view any messages about edges without weights.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">edge_weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">weight</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">none_weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">weight</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">edge_weights</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">actual_weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">weight</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">edge_weights</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">none_weights</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Graph contains </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">none_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> edges with no </span><span class="si">{</span><span class="n">weight_attribute</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; Histogram excludes these values.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">actual_weights</span><span class="p">,</span> <span class="n">bin_directive</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">DefinedHistogram</span><span class="p">(</span><span class="n">histogram</span><span class="o">=</span><span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="n">bin_edges</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cut_edges_by_weight"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_edges_by_weight">[docs]</a><span class="k">def</span> <span class="nf">cut_edges_by_weight</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+    <span class="n">prune_isolates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Thresholds edges (removing them from the graph and returning a copy) by weight.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        The graph that will be copied and pruned.</span>
+<span class="sd">    cut_threshold : Union[int, float]</span>
+<span class="sd">        The threshold for making cuts based on weight.</span>
+<span class="sd">    cut_process : str</span>
+<span class="sd">        Describes how we should make the cut; cut all edges larger or smaller than the</span>
+<span class="sd">        cut_threshold, and whether exclusive or inclusive. Allowed values are</span>
+
+<span class="sd">        - ``larger_than_inclusive``</span>
+<span class="sd">        - ``larger_than_exclusive``</span>
+<span class="sd">        - ``smaller_than_inclusive``</span>
+<span class="sd">        - ``smaller_than_exclusive``</span>
+<span class="sd">    weight_attribute : str</span>
+<span class="sd">        The weight attribute name in the edge&#39;s data dictionary. Default is `weight`.</span>
+<span class="sd">    prune_isolates : bool</span>
+<span class="sd">        If true, remove any vertex that no longer has an edge.  Note that this only</span>
+<span class="sd">        prunes vertices which have edges to be pruned; any isolate vertex prior to any</span>
+<span class="sd">        edge cut will be retained.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        Pruned copy of the same type of graph provided</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Edges without a `weight_attribute` field will be excluded from these cuts.  Enable</span>
+<span class="sd">    logging to view any messages about edges without weights.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filter_by</span> <span class="o">=</span> <span class="n">_filter_function_for_make_cuts</span><span class="p">(</span><span class="n">cut_threshold</span><span class="p">,</span> <span class="n">cut_process</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cut_threshold</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cut_threshold</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cut_threshold must be of type int or float; you provided: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">cut_threshold</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">graph_copy</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">edge_weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">((</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">),</span> <span class="n">weight</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">none_weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">edge</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">edge_weights</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="p">]</span>
+    <span class="n">actual_weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">edge</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">edge_weights</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">none_weights</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Graph contains </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">none_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> edges with no </span><span class="si">{</span><span class="n">weight_attribute</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;Ignoring these when cutting by weight&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">edges_to_cut</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">actual_weights</span> <span class="k">if</span> <span class="n">filter_by</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">edge</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">edges_to_cut</span><span class="p">:</span>
+        <span class="n">source</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">edge</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">source</span> <span class="ow">in</span> <span class="n">graph_copy</span>
+            <span class="ow">and</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">graph_copy</span>
+            <span class="ow">and</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">graph_copy</span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">graph_copy</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prune_isolates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph_copy</span><span class="p">[</span><span class="n">source</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">graph_copy</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph_copy</span><span class="p">[</span><span class="n">target</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">graph_copy</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">graph_copy</span></div>
+
+
+<div class="viewcode-block" id="histogram_degree_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_degree_centrality">[docs]</a><span class="k">def</span> <span class="nf">histogram_degree_centrality</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DefinedHistogram</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a histogram of the vertex degree centrality of the provided graph.</span>
+<span class="sd">    Histogram function is fundamentally proxied through to numpy&#39;s `histogram` function,</span>
+<span class="sd">    and bin selection follows :func:`numpy.histogram` processes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    graph : Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        The graph. No changes will be made to it.</span>
+<span class="sd">    bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]</span>
+<span class="sd">        Is passed directly through to numpy&#39;s &quot;histogram&quot; (and thus,</span>
+<span class="sd">        &quot;histogram_bin_edges&quot;) functions.</span>
+
+<span class="sd">        See: :func:`numpy.histogram_bin_edges`</span>
+
+<span class="sd">        In short: if an int is provided, we use ``bin_directive`` number of equal range</span>
+<span class="sd">        bins.</span>
+
+<span class="sd">        If a sequence is provided, these bin edges will be used and can be sized to</span>
+<span class="sd">        whatever size you prefer</span>
+
+<span class="sd">        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be</span>
+<span class="sd">        float or int.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`DefinedHistogram`</span>
+<span class="sd">        A named tuple that contains the histogram and the bin_edges used in the</span>
+<span class="sd">        histogram</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">degree_centrality_dict</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree_centrality</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">degree_centrality_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">bin_directive</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">DefinedHistogram</span><span class="p">(</span><span class="n">histogram</span><span class="o">=</span><span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="n">bin_edges</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cut_vertices_by_degree_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_vertices_by_degree_centrality">[docs]</a><span class="k">def</span> <span class="nf">cut_vertices_by_degree_centrality</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a graph and a cut_threshold and a cut_process, return a copy of the graph</span>
+<span class="sd">    with the vertices outside of the cut_threshold.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        The graph that will be copied and pruned.</span>
+<span class="sd">    cut_threshold : Union[int, float]</span>
+<span class="sd">        The threshold for making cuts based on weight.</span>
+<span class="sd">    cut_process : str</span>
+<span class="sd">        Describes how we should make the cut; cut all edges larger or smaller than the</span>
+<span class="sd">        cut_threshold, and whether exclusive or inclusive. Allowed values are</span>
+
+<span class="sd">        - ``larger_than_inclusive``</span>
+<span class="sd">        - ``larger_than_exclusive``</span>
+<span class="sd">        - ``smaller_than_inclusive``</span>
+<span class="sd">        - ``smaller_than_exclusive``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        Pruned copy of the same type of graph provided</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">graph_copy</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">degree_centrality_dict</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree_centrality</span><span class="p">(</span><span class="n">graph_copy</span><span class="p">)</span>
+    <span class="n">filter_by</span> <span class="o">=</span> <span class="n">_filter_function_for_make_cuts</span><span class="p">(</span><span class="n">cut_threshold</span><span class="p">,</span> <span class="n">cut_process</span><span class="p">)</span>
+    <span class="n">vertices_to_cut</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">filter_by</span><span class="p">,</span> <span class="n">degree_centrality_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">for</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">degree_centrality</span> <span class="ow">in</span> <span class="n">vertices_to_cut</span><span class="p">:</span>
+        <span class="n">graph_copy</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">graph_copy</span></div>
+
+
+<div class="viewcode-block" id="histogram_betweenness_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_betweenness_centrality">[docs]</a><span class="k">def</span> <span class="nf">histogram_betweenness_centrality</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">num_random_samples</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">weight_attribute</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+    <span class="n">include_endpoints</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DefinedHistogram</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a histogram of the vertex betweenness centrality of the provided graph.</span>
+<span class="sd">    Histogram function is fundamentally proxied through to numpy&#39;s `histogram` function,</span>
+<span class="sd">    and bin selection follows :func:`numpy.histogram` processes.</span>
+
+<span class="sd">    The betweenness centrality calculation can take advantage of networkx&#39;</span>
+<span class="sd">    implementation of randomized sampling by providing num_random_samples (or ``k``,</span>
+<span class="sd">    in networkx betweenness_centrality nomenclature).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        The graph. No changes will be made to it.</span>
+<span class="sd">    bin_directive : Union[int, List[Union[float, int]], numpy.ndarray, str]</span>
+<span class="sd">        Is passed directly through to numpy&#39;s &quot;histogram&quot; (and thus,</span>
+<span class="sd">        &quot;histogram_bin_edges&quot;) functions.</span>
+
+<span class="sd">        See: :func:`numpy.histogram_bin_edges`</span>
+
+<span class="sd">        In short: if an int is provided, we use ``bin_directive`` number of equal</span>
+<span class="sd">        range bins.</span>
+
+<span class="sd">        If a sequence is provided, these bin edges will be used and can be sized to</span>
+<span class="sd">        whatever size you prefer</span>
+
+<span class="sd">        Note that the :class:`numpy.ndarray` should be ndim=1 and the values should be</span>
+<span class="sd">        float or int.</span>
+<span class="sd">    num_random_samples : Optional[int]</span>
+<span class="sd">        Use num_random_samples for vertex samples to *estimate* betweeness.</span>
+<span class="sd">        num_random_samples should be &lt;= len(graph.nodes). The larger num_random_samples</span>
+<span class="sd">        is, the better the approximation. Default is ``None``.</span>
+<span class="sd">    normalized : bool</span>
+<span class="sd">        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for</span>
+<span class="sd">        undirected graphs, and  :math:`1/((n-1)(n-2))` for directed graphs where n is</span>
+<span class="sd">        the number of vertices in the graph. Default is ``True``</span>
+<span class="sd">    weight_attribute : Optional[str]</span>
+<span class="sd">        If None, all edge weights are considered equal. Otherwise holds the name of the</span>
+<span class="sd">        edge attribute used as weight. Default is ``weight``</span>
+<span class="sd">    include_endpoints : bool</span>
+<span class="sd">        If True include the endpoints in the shortest path counts.  Default is ``False``</span>
+<span class="sd">    random_seed : Optional[Union[int, random.Random, np.random.RandomState]]</span>
+<span class="sd">        Random seed or preconfigured random instance to be used for selecting random</span>
+<span class="sd">        samples. Only used if num_random_samples is set. None will generate a new</span>
+<span class="sd">        random state. Specifying a random state will provide consistent results between</span>
+<span class="sd">        runs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`DefinedHistogram`</span>
+<span class="sd">        A named tuple that contains the histogram and the bin_edges used in the</span>
+<span class="sd">        histogram</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    networkx.algorithms.centrality.betweenness_centrality</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">betweenness_centrality_dict</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span>
+        <span class="n">G</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">num_random_samples</span><span class="p">,</span>
+        <span class="n">normalized</span><span class="o">=</span><span class="n">normalized</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">,</span>
+        <span class="n">endpoints</span><span class="o">=</span><span class="n">include_endpoints</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">betweenness_centrality_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">bin_directive</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">DefinedHistogram</span><span class="p">(</span><span class="n">histogram</span><span class="o">=</span><span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="n">bin_edges</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cut_vertices_by_betweenness_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_vertices_by_betweenness_centrality">[docs]</a><span class="k">def</span> <span class="nf">cut_vertices_by_betweenness_centrality</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
+    <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">num_random_samples</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">weight_attribute</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+    <span class="n">include_endpoints</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a graph and a cut_threshold and a cut_process, return a copy of the graph</span>
+<span class="sd">    with the vertices outside of the cut_threshold.</span>
+
+<span class="sd">    The betweenness centrality calculation can take advantage of networkx&#39;</span>
+<span class="sd">    implementation of randomized sampling by providing num_random_samples (or k, in</span>
+<span class="sd">    networkx betweenness_centrality nomenclature).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        The graph that will be copied and pruned.</span>
+<span class="sd">    cut_threshold : Union[int, float]</span>
+<span class="sd">        The threshold for making cuts based on weight.</span>
+<span class="sd">    cut_process : str</span>
+<span class="sd">        Describes how we should make the cut; cut all edges larger or smaller than the</span>
+<span class="sd">        cut_threshold, and whether exclusive or inclusive. Allowed values are</span>
+
+<span class="sd">        - ``larger_than_inclusive``</span>
+<span class="sd">        - ``larger_than_exclusive``</span>
+<span class="sd">        - ``smaller_than_inclusive``</span>
+<span class="sd">        - ``smaller_than_exclusive``</span>
+<span class="sd">    num_random_samples : Optional[int]</span>
+<span class="sd">        Use num_random_samples for vertex samples to *estimate* betweenness.</span>
+<span class="sd">        num_random_samples should be &lt;= len(graph.nodes). The larger num_random_samples</span>
+<span class="sd">        is, the better the approximation. Default is ``None``.</span>
+<span class="sd">    normalized : bool</span>
+<span class="sd">        If True the betweenness values are normalized by :math:`2/((n-1)(n-2))` for</span>
+<span class="sd">        undirected graphs, and :math:`1/((n-1)(n-2))` for directed graphs where n is</span>
+<span class="sd">        the number of vertices in the graph. Default is ``True``</span>
+<span class="sd">    weight_attribute : Optional[str]</span>
+<span class="sd">        If None, all edge weights are considered equal. Otherwise holds the name of the</span>
+<span class="sd">        edge attribute used as weight. Default is ``weight``</span>
+<span class="sd">    include_endpoints : bool</span>
+<span class="sd">        If True include the endpoints in the shortest path counts.  Default is ``False``</span>
+<span class="sd">    random_seed : Optional[Union[int, random.Random, np.random.RandomState]]</span>
+<span class="sd">        Random seed or preconfigured random instance to be used for selecting random</span>
+<span class="sd">        samples. Only used if num_random_samples is set. None will generate a new</span>
+<span class="sd">        random state. Specifying a random state will provide consistent results between</span>
+<span class="sd">        runs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[nx.Graph, nx.DiGraph]</span>
+<span class="sd">        Pruned copy of the same type of graph provided</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    networkx.algorithms.centrality.betweenness_centrality</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">graph_copy</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">betweenness_centrality_dict</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span>
+        <span class="n">G</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">num_random_samples</span><span class="p">,</span>
+        <span class="n">normalized</span><span class="o">=</span><span class="n">normalized</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">,</span>
+        <span class="n">endpoints</span><span class="o">=</span><span class="n">include_endpoints</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">filter_by</span> <span class="o">=</span> <span class="n">_filter_function_for_make_cuts</span><span class="p">(</span><span class="n">cut_threshold</span><span class="p">,</span> <span class="n">cut_process</span><span class="p">)</span>
+    <span class="n">vertices_to_cut</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">filter_by</span><span class="p">,</span> <span class="n">betweenness_centrality_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">for</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">degree_centrality</span> <span class="ow">in</span> <span class="n">vertices_to_cut</span><span class="p">:</span>
+        <span class="n">graph_copy</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">graph_copy</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

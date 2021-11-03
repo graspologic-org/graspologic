@@ -1,0 +1,216 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Seeded Graph Matching (SGM)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "import random\n",
+    "np.random.seed(8888)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Seeded Graph Matching (SGM) is a version of the graph matching problem where one is first given a partial alignment of the nodes. This algorithm is an modification of the Fast Approximate QAP (FAQ) algorithm (Vogelstein, 2015), as described in Seeded graph matching (Fishkind, 2018). For a more in depth explanation of the graph matching problem and FAQ, view the FAQ tutorial."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.match import GraphMatch as GMP\n",
+    "from graspologic.plot import heatmap\n",
+    "from graspologic.simulations import er_corr, sbm, sbm_corr"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## SGM on Correlated Graph Pairs\n",
+    "To demonstrate the effectiveness of SGM, the algorithm will be applied on a pair of correlated SBM graphs (undirected, no self loops) $G_1, G_2 \\sim SBM\\,(n, p, rho)$  with the following parameters:\n",
+    "\\begin{align*}\n",
+    "n &= [100, 100, 100]\\\\\n",
+    "p &= \\begin{bmatrix} \n",
+    "0.7 & 0.3 & 0.4\\\\\n",
+    "0.3 & 0.7 & 0.3\\\\\n",
+    "0.4 & 0.3 & 0.7\n",
+    "\\end{bmatrix}\\\\\n",
+    "rho &= 0.9\n",
+    "\\end{align*}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "directed = False\n",
+    "loops = False\n",
+    "n_per_block = 75\n",
+    "n_blocks = 3\n",
+    "block_members = np.array(n_blocks * [n_per_block])\n",
+    "n_verts = block_members.sum()\n",
+    "rho = .9\n",
+    "block_probs = np.array([[0.7, 0.3, 0.4], [0.3, 0.7, 0.3], [0.4, 0.3, 0.7]])\n",
+    "fig, ax = plt.subplots(1, 1, figsize=(4, 4))\n",
+    "sns.heatmap(block_probs, cbar=False, annot=True, square=True, cmap=\"Reds\", ax=ax)\n",
+    "ax.set_title(\"SBM block probabilities\")\n",
+    "\n",
+    "A1, A2 = sbm_corr(block_members, block_probs, rho, directed=directed, loops=loops)\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(A1, ax=axs[0], cbar=False, title=\"Graph 1\")\n",
+    "heatmap(A2, ax=axs[1], cbar=False, title=\"Graph 2\")\n",
+    "_ = heatmap(A1 - A2, ax=axs[2], cbar=False, title=\"Diff (G1 - G2)\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To demonstrate the effectiveness of SGM, as well as why having seeds is important, we will randomly shuffle the vertices of Graph 2. This random permutation is stored, and unshuffled, such that we have available the optimal permutation that returns the original graph 2. \n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Shuffling graph 2"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Here we see that after shuffling graph 2, there are many more edge disagreements, as expected."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "node_shuffle_input = np.random.permutation(n_verts)\n",
+    "A2_shuffle = A2[np.ix_(node_shuffle_input, node_shuffle_input)]\n",
+    "node_unshuffle_input = np.array(range(n_verts))\n",
+    "node_unshuffle_input[node_shuffle_input] = np.array(range(n_verts))\n",
+    "\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(A1, ax=axs[0], cbar=False, title=\"Graph 1\")\n",
+    "heatmap(A2_shuffle, ax=axs[1], cbar=False, title=\"Graph 2 shuffled\")\n",
+    "_ = heatmap(A1 - A2_shuffle, ax=axs[2], cbar=False, title=\"Diff (G1 - G2 shuffled)\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Unshuffling graph 2 without seeds\n",
+    "First, we will run SGM on graph 1 and the shuffled graph 2 with no seeds, and return the match ratio, that is the fraction of vertices that have been correctly matched."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sgm = GMP()\n",
+    "sgm = sgm.fit(A1,A2_shuffle)\n",
+    "A2_unshuffle = A2_shuffle[np.ix_(sgm.perm_inds_, sgm.perm_inds_)]\n",
+    "\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(A1, ax=axs[0], cbar=False, title=\"Graph 1\")\n",
+    "heatmap(A2_unshuffle, ax=axs[1], cbar=False, title=\"Graph 2 unshuffled\")\n",
+    "heatmap(A1 - A2_unshuffle, ax=axs[2], cbar=False, title=\"Diff (G1 - G2 unshuffled)\")\n",
+    "\n",
+    "match_ratio = 1-(np.count_nonzero(abs(sgm.perm_inds_-node_unshuffle_input))/n_verts)\n",
+    "print(\"Match Ratio with no seeds: \", match_ratio)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "While the predicted permutation for graph 2 did recover the basic structure of the stochastic block model (i.e. graph 1 and graph 2 look qualitatively similar), we see that the number of edge disagreements between them is still quite high, and the match ratio quite low. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Unshuffling graph 2 with 10 seeds\n",
+    "Next, we will run SGM with 10 seeds randomly selected from the optimal permutation vector found ealier. Although 10 seeds is only about 4% of the 300 node graph, we will observe below how much more accurate the matching will be compared to having no seeds."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "W1 = np.sort(random.sample(list(range(n_verts)),10))\n",
+    "W1 = W1.astype(int)\n",
+    "W2 = np.array(node_unshuffle_input[W1])\n",
+    "    \n",
+    "sgm = GMP()\n",
+    "sgm = sgm.fit(A1,A2_shuffle,W1,W2)\n",
+    "A2_unshuffle = A2_shuffle[np.ix_(sgm.perm_inds_, sgm.perm_inds_)]\n",
+    "\n",
+    "fig, axs = plt.subplots(1, 3, figsize=(10, 5))\n",
+    "heatmap(A1, ax=axs[0], cbar=False, title=\"Graph 1\")\n",
+    "heatmap(A2_unshuffle, ax=axs[1], cbar=False, title=\"Graph 2 unshuffled\")\n",
+    "heatmap(A1 - A2_unshuffle, ax=axs[2], cbar=False, title=\"Diff (G1 - G2 unshuffled)\")\n",
+    "\n",
+    "match_ratio = 1-(np.count_nonzero(abs(sgm.perm_inds_-node_unshuffle_input))/n_verts)\n",
+    "print(\"Match Ratio with 10 seeds: \", match_ratio)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "From the results above, we see that when running SGM on the same two graphs, with no seeds there is match ratio is quite low. However including 10 seeds increases the match ratio to 100% (meaning that the shuffled graph 2 was completely correctly unshuffled)."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
