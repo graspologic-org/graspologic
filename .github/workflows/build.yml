@@ -47,13 +47,6 @@ jobs:
           name: documentation-site
           path: |
             docs/_build/html
-      - name: Publish reference docs
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref=='refs/heads/devDocumentationUpdate'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
-          destination_dir: pre-release
   code-format-check:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -149,10 +142,10 @@ jobs:
         with:
           name: tutorials
           path: docs/tutorials
-      - name: Publish tutorials
-        if: github.ref=='refs/heads/dev'
+      - name: Publish reference docs
         uses: peaceiris/actions-gh-pages@v3
+        if: github.ref=='refs/heads/dev'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/tutorials
-          destination_dir: tutorials
+          publish_dir: docs/_build/html
+          destination_dir: pre-release
