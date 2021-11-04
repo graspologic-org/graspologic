@@ -269,6 +269,16 @@ class BaseSpectralEmbed(BaseEstimator):
         directed case, if A is the original in-sample adjacency matrix, the tuple
         (A.T, A) will need to be passed to ``transform`` if you do not wish to use
         ``fit_transform``.
+
+        References
+        ----------
+        .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
+        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
+        Journal of the American Statistical Association, Vol. 107(499), 2012
+
+        .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
+            Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
+            of Machine Learning Research, 80, 2975-2984
         """
 
         # checks
