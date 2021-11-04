@@ -130,6 +130,12 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel twine
           pip install -r requirements.txt
           pip freeze > versions_at_release.txt
+      - name: Archive version artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: versions_at_release
+          path: |
+            versions_at_release.txt
       - name: Create version environment variable
         run: |
           echo "GRASPOLOGIC_VERSION=`python setup.py --version`" >> $GITHUB_ENV
