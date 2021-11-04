@@ -142,24 +142,24 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           twine upload dist/*
-      - name: Download a single artifact
+      - name: Download documentation artifact
         uses: actions/download-artifact@v2
         with:
-          name: tutorials
-          path: docs/tutorials
+          name: documentation-site
+          path: docs/documentation-site
       - name: Publish reference docs (dev branch)
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref=='refs/heads/dev'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
+          publish_dir: docs/documentation-site
           destination_dir: pre-release
       - name: Publish reference docs (main branch)
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref=='refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
+          publish_dir: docs/documentation-site
           destination_dir: ${{ env.GRASPOLOGIC_VERSION }}
       - name: Create tag and GitHub release
         uses: ncipollo/release-action@v1
