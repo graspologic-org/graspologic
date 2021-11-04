@@ -125,6 +125,7 @@ jobs:
       - name: Create version environment variable
         run: |
           echo "GRASPOLOGIC_VERSION=`python setup.py --version`" >> $GITHUB_ENV
+          echo "GRASPOLOGIC_TAG=v`python setup.py --version`" >> $GITHUB_ENV
       - name: Build Release with setuptools
         if: github.ref=='refs/heads/main'
         run: |
@@ -159,3 +160,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
           destination_dir: ${{ env.GRASPOLOGIC_VERSION }}
+      - name: Create tag and GitHub release
+        uses: ncipollo/release-action@v1
+        if: github.ref=='refs/heads/main'
+        with:
+          tag: ${{ env.GRASPOLOGIC_TAG }}
+          token: ${{ secrets.GITHUB_TOKEN }}
