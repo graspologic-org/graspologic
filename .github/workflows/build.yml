@@ -122,6 +122,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel twine
           pip install -r requirements.txt
+          pip freeze > versions_at_release.txt
       - name: Create version environment variable
         run: |
           echo "GRASPOLOGIC_VERSION=`python setup.py --version`" >> $GITHUB_ENV
@@ -166,3 +167,4 @@ jobs:
         with:
           tag: ${{ env.GRASPOLOGIC_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: versions_at_release.txt
