@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.plot.plot &mdash; graspologic 0.5.1dev1418679884 documentation</title>
+  <title>graspologic.plot.plot &mdash; graspologic 0.3.1dev1423404498 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.5.1dev1418679884
+                0.3.1dev1423404498
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -47,6 +47,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
@@ -140,23 +157,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
@@ -195,6 +195,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
@@ -258,18 +259,29 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">LineCollection</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">Colormap</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">Binarizer</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_consistent_length</span><span class="p">,</span> <span class="n">check_X_y</span>
 
 <span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">select_svd</span>
+<span class="kn">from</span> <span class="nn">..preconditions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">check_argument</span><span class="p">,</span>
+    <span class="n">check_argument_types</span><span class="p">,</span>
+    <span class="n">check_optional_argument_types</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">import_graph</span><span class="p">,</span> <span class="n">pass_to_ranks</span>
 
 
@@ -1381,6 +1393,242 @@
         <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Edge weight&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">ax</span></div>
+
+
+<span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">networkplot</span><span class="p">(</span>
+    <span class="n">adjacency</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">],</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="n">node_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">node_hue</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">palette</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">node_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">node_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">node_alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">edge_hue</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span>
+    <span class="n">edge_linewidth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">edge_alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;talk&quot;</span><span class="p">,</span>
+    <span class="n">font_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">legend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">node_kws</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">edge_kws</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a 2D layout of a network. Allows for an adjacency matrix</span>
+<span class="sd">    with ``x, y`` as 1D arrays that represent the coordinates of each</span>
+<span class="sd">    node, or an adjacency matrix with ``node_data`` and ``x, y`` as</span>
+<span class="sd">    keys. Note that the nodes in the adjacency matrix are assumed to be ordered the same</span>
+<span class="sd">    way as in ``x``, ``y``, and ``node_data``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency: np.ndarray, csr_matrix</span>
+<span class="sd">        Adjacency matrix of input network.</span>
+<span class="sd">    x,y: np.ndarray, str</span>
+<span class="sd">        Variables that specify the positions on the x and y axes. Either an</span>
+<span class="sd">        array of x, y coordinates or a string that accesses a vector in</span>
+<span class="sd">        ``node_data``. If ``x, y`` are arrays, they must be indexed the</span>
+<span class="sd">        same way as the adjacency matrix of the input network.</span>
+<span class="sd">    node_data: pd.DataFrame, optional, default: None</span>
+<span class="sd">        Input data. When ``node_data`` is None, ``x, y`` must be np.ndarrays.</span>
+<span class="sd">        When ``node_data`` is a dataframe, ``x, y`` must be strings. Must be</span>
+<span class="sd">        indexed the same way as the adjacency matrix of the input network.</span>
+<span class="sd">    node_hue: np.ndarray, str, optional, default: None</span>
+<span class="sd">        Variable that produces nodes with different colors. Can be either</span>
+<span class="sd">        categorical or numeric, and colors are mapped based on ``palette``.</span>
+<span class="sd">        However if ``palette`` is None, ``node_hue`` is treated as numeric</span>
+<span class="sd">        and &#39;Set1&#39; is used as ``palette``.</span>
+<span class="sd">    palette: str, list, dict, optional, default: None</span>
+<span class="sd">        Method for choosing colors specified in ``node_hue``. Can be a string</span>
+<span class="sd">        argument supported by :func:`seaborn.color_palette`, a list of colors,</span>
+<span class="sd">        or a dictionary with ``node_hue`` variables as keys and colors as its</span>
+<span class="sd">        values. Note that ``palette`` will not affect the plot if ``node_hue``</span>
+<span class="sd">        is not given.</span>
+<span class="sd">    node_size: np.ndarray, str, optional, default: None</span>
+<span class="sd">        Variable that produces nodes with different sizes. Can be either categorical</span>
+<span class="sd">        or numeric, and sizes are determined based on ``node_sizes``. If the</span>
+<span class="sd">        argument ``node_sizes`` is None, ``node_size`` will be treated as</span>
+<span class="sd">        numeric variables.</span>
+<span class="sd">    node_sizes: list, dict, tuple, optional, default: None</span>
+<span class="sd">        Method for choosing sizes specified in ``node_size``. Can be a list of</span>
+<span class="sd">        sizes, a dictionary with ``node_size`` variables as keys and sizes as</span>
+<span class="sd">        its values, or a tuple defining the minimum and maximum size values.</span>
+<span class="sd">        Note that ``node_sizes`` will not affect the output plot if ``node_hue``</span>
+<span class="sd">        is not given.</span>
+<span class="sd">    node_alpha: float, default: 0.8</span>
+<span class="sd">        Proportional opacity of the nodes.</span>
+<span class="sd">    edge_hue: str, one of {source (default), target}</span>
+<span class="sd">        Determines edge color based on its source or target node.</span>
+<span class="sd">    edge_linewidth: float, default: 0.2</span>
+<span class="sd">        Linewidth of the edges.</span>
+<span class="sd">    edge_alpha: float, default: 0.2</span>
+<span class="sd">        Proportional opacity of the edges.</span>
+<span class="sd">    title: str</span>
+<span class="sd">        Plot title.</span>
+<span class="sd">    context :  None, or one of {talk (default), paper, notebook, poster}</span>
+<span class="sd">        Seaborn plotting context</span>
+<span class="sd">    font_scale : float, optional, default: 1.0</span>
+<span class="sd">        Separate scaling factor to independently scale the size of the font</span>
+<span class="sd">        elements.</span>
+<span class="sd">    figsize : tuple of length 2, default: (10, 10)</span>
+<span class="sd">        Size of the figure (width, height)</span>
+<span class="sd">    ax: matplotlib.axes.Axes, optional, default: None</span>
+<span class="sd">        Axes in which to draw the plot. Otherwise, will generate own axes.</span>
+<span class="sd">    legend: False (default), or one of {brief, full, auto}</span>
+<span class="sd">        How to draw the legend. If “brief”, numeric hue and size variables</span>
+<span class="sd">        will be represented with a sample of evenly spaced values. If “full”,</span>
+<span class="sd">        every group will get an entry in the legend. If “auto”, choose</span>
+<span class="sd">        between brief or full representation based on number of levels. If</span>
+<span class="sd">        False, no legend data is added and no legend is drawn.</span>
+<span class="sd">    node_kws: dict, optional</span>
+<span class="sd">        Optional arguments for :func:`seaborn.scatterplot`.</span>
+<span class="sd">    edge_kws: dict, optional</span>
+<span class="sd">        Optional arguments for :class:`matplotlib.collections.LineCollection`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ax : matplotlib axis object</span>
+<span class="sd">        Output plot</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Node colors are determined by ``node_hue`` and ``palette``, and if</span>
+<span class="sd">    ``node_hue`` is None, all nodes will have the same default color</span>
+<span class="sd">    used by :func:`seaborn.scatterplot`. If ``node_hue`` is given but</span>
+<span class="sd">    ``palette`` is None, ``palette`` is set to &#39;Set1&#39; and ``node_hue``</span>
+<span class="sd">    will be treated as numeric variables. Edge colors are determined by</span>
+<span class="sd">    its nodes, and ``edge_hue`` dictates whether the edges are colored</span>
+<span class="sd">    based on its source or target nodes.</span>
+
+<span class="sd">    Node sizes can also vary based on ``node_size`` and ``node_sizes``,</span>
+<span class="sd">    and if ``node_size`` is None, all nodes will be of the same default</span>
+<span class="sd">    size used by :func:`seaborn.scatterplot`. If ``node_size`` is given</span>
+<span class="sd">    but ``node_sizes`` is None, ``node_size`` will be treated as numeric</span>
+<span class="sd">    variables.</span>
+
+<span class="sd">    Note that ``palette`` and ``node_sizes`` will not affect the output</span>
+<span class="sd">    plot if ``node_hue`` and ``node_size`` are None, and ``node_hue`` and</span>
+<span class="sd">    ``node_size`` must be the same types as ``x, y``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_check_common_inputs</span><span class="p">(</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span>
+    <span class="p">)</span>
+
+    <span class="n">index</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">adjacency</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">check_consistent_length</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">check_argument</span><span class="p">(</span>
+            <span class="n">node_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;If x and y are numpy arrays, meta_data must be None.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">plot_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">x_key</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+        <span class="n">y_key</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
+        <span class="n">plot_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">x_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">plot_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">y_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="k">if</span> <span class="n">node_hue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_argument</span><span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_hue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span>
+                <span class="s2">&quot;If x and y are numpy arrays, node_hue must be a list or a numpy array.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">check_consistent_length</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">node_hue</span><span class="p">)</span>
+            <span class="n">hue_key</span> <span class="o">=</span> <span class="s2">&quot;hue&quot;</span>
+            <span class="n">plot_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">hue_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_hue</span>
+            <span class="k">if</span> <span class="n">palette</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">palette</span> <span class="o">=</span> <span class="s2">&quot;Set1&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hue_key</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">check_consistent_length</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">node_data</span><span class="p">)</span>
+        <span class="n">check_argument</span><span class="p">(</span>
+            <span class="n">node_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;If x and y are strings, meta_data must be pandas DataFrame.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">plot_df</span> <span class="o">=</span> <span class="n">node_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">x_key</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">y_key</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="k">if</span> <span class="n">node_hue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_argument</span><span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_hue</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+                <span class="s2">&quot;If x and y are strings, node_hue must also be a string.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">hue_key</span> <span class="o">=</span> <span class="n">node_hue</span>
+            <span class="k">if</span> <span class="n">palette</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">palette</span> <span class="o">=</span> <span class="s2">&quot;Set1&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hue_key</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;x and y must be numpy arrays or strings.&quot;</span><span class="p">)</span>
+
+    <span class="n">pre_inds</span><span class="p">,</span> <span class="n">post_inds</span> <span class="o">=</span> <span class="n">adjacency</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+    <span class="n">pre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">index</span><span class="p">)[</span><span class="n">pre_inds</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">index</span><span class="p">)[</span><span class="n">post_inds</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">pre</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">post</span><span class="p">}</span>
+
+    <span class="n">edgelist</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+    <span class="n">pre_edgelist</span> <span class="o">=</span> <span class="n">edgelist</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">post_edgelist</span> <span class="o">=</span> <span class="n">edgelist</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">pre_edgelist</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_edgelist</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">x_key</span><span class="p">])</span>
+    <span class="n">pre_edgelist</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_edgelist</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">y_key</span><span class="p">])</span>
+    <span class="n">post_edgelist</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">post_edgelist</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">x_key</span><span class="p">])</span>
+    <span class="n">post_edgelist</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">post_edgelist</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">y_key</span><span class="p">])</span>
+    <span class="n">pre_coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">pre_edgelist</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">pre_edgelist</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]))</span>
+    <span class="n">post_coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">post_edgelist</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">post_edgelist</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]))</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">pre_coords</span><span class="p">,</span> <span class="n">post_coords</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">node_hue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span>
+                <span class="n">palette</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">hue_key</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="p">)</span>
+            <span class="n">plot_palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">hue_key</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="n">palette</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">plot_palette</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">hue_key</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="n">palette</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">plot_palette</span> <span class="o">=</span> <span class="n">palette</span>
+        <span class="n">edgelist</span><span class="p">[</span><span class="n">hue_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">edgelist</span><span class="p">[</span><span class="n">edge_hue</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">plot_df</span><span class="p">[</span><span class="n">hue_key</span><span class="p">])</span>
+        <span class="n">edge_colors</span> <span class="o">=</span> <span class="n">edgelist</span><span class="p">[</span><span class="n">hue_key</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">plot_palette</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plot_palette</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">edge_colors</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">with</span> <span class="n">sns</span><span class="o">.</span><span class="n">plotting_context</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">plot_df</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">x_key</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">y_key</span><span class="p">,</span>
+            <span class="n">hue</span><span class="o">=</span><span class="n">hue_key</span><span class="p">,</span>
+            <span class="n">palette</span><span class="o">=</span><span class="n">plot_palette</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span>
+            <span class="n">sizes</span><span class="o">=</span><span class="n">node_sizes</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">node_alpha</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">node_kws</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">lc</span> <span class="o">=</span> <span class="n">LineCollection</span><span class="p">(</span>
+            <span class="n">segments</span><span class="o">=</span><span class="n">coords</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">edge_alpha</span><span class="p">,</span>
+            <span class="n">linewidths</span><span class="o">=</span><span class="n">edge_linewidth</span><span class="p">,</span>
+            <span class="n">colors</span><span class="o">=</span><span class="n">edge_colors</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">edge_kws</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">lc</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[])</span>
+
+    <span class="k">return</span> <span class="n">ax</span>
 
 
 <div class="viewcode-block" id="screeplot"><a class="viewcode-back" href="../../../reference/reference/plotting.html#graspologic.plot.screeplot">[docs]</a><span class="k">def</span> <span class="nf">screeplot</span><span class="p">(</span>

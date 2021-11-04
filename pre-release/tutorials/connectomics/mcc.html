@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 0.5.1dev1418679884 documentation</title>
+  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 0.3.1dev1423404498 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.5.1dev1418679884
+                0.3.1dev1423404498
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -51,6 +51,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#os-requirements">OS Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/reference/index.html">Reference</a><ul>
@@ -144,23 +161,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../reference/cli.html">CLI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../reference/contributing.html">Contributing to graspologic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../reference/in-the-wild.html">graspologic in the wild</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../reference/in-the-wild.html#papers">Papers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
@@ -199,6 +199,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#matching">Matching</a><ul>
@@ -902,6 +903,14 @@ number of permutations would be around <span class="math notranslate nohighlight
     </tr>
     <tr>
       <th>1</th>
+      <td>Hypothalamus (R)</td>
+      <td>0.664767</td>
+      <td>0.003984</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>Amygdalopiriform_Transition_Area (R)</td>
       <td>0.526762</td>
       <td>0.003984</td>
@@ -909,7 +918,7 @@ number of permutations would be around <span class="math notranslate nohighlight
       <td>False</td>
     </tr>
     <tr>
-      <th>2</th>
+      <th>3</th>
       <td>Piriform_Cortex (R)</td>
       <td>0.603432</td>
       <td>0.003984</td>
@@ -917,17 +926,9 @@ number of permutations would be around <span class="math notranslate nohighlight
       <td>False</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>4</th>
       <td>Presubiculum (R)</td>
       <td>0.292116</td>
-      <td>0.003984</td>
-      <td>1.0</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Perirhinal_Cortex (R)</td>
-      <td>0.806250</td>
       <td>0.003984</td>
       <td>1.0</td>
       <td>False</td>
