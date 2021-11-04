@@ -40,8 +40,15 @@ jobs:
           sudo apt install pandoc
           pip install -U pip setuptools
           pip install -r requirements.txt
+          pip freeze > versions_at_documentation_build.txt
           sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
-      - name: Archive production artifacts
+      - name: Archive documentation version artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: versions_at_documentation_build
+          path: |
+            versions_at_documentation_build.txt
+      - name: Archive documentation artifacts
         uses: actions/upload-artifact@v2
         with:
           name: documentation-site
