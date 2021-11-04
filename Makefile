@@ -27,4 +27,4 @@ type-check:
 
 validate: lint coverage docs test
 
-.PHONY: docs tutorials coverage lint test type-check validate
+.PHONY: docs docsWithTutorials coverage lint format test type-check validate
