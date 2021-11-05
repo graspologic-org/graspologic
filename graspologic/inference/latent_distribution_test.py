@@ -21,7 +21,7 @@ _VALID_METRICS = _VALID_DISTANCES + _VALID_KERNELS
 
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
-ldt_result = namedtuple("ldt_result", ("p_value", "sample_T_statistic", "misc_stats"))
+ldt_result = namedtuple("ldt_result", ("stat", "pvalue", "misc_dict"))
 
 
 def latent_distribution_test(
@@ -192,14 +192,14 @@ def latent_distribution_test(
 
     Returns
     ----------
-    p_value : float
-        The overall p value from the test.
-
-    sample_T_statistic : float
+    stat : float
         The observed difference between the embedded latent positions of the
         two input graphs.
 
-    misc_stats : dictionary
+    pvalue : float
+        The overall p value from the test.
+
+    misc_dict : dictionary
         A collection of other statistics obtained from the latent position test
 
         - null_distribution : ndarray, shape (n_bootstraps,)
@@ -385,15 +385,15 @@ def latent_distribution_test(
 
     null_distribution = test_obj.indep_test.null_dist
 
-    misc_stats = {
+    misc_dict = {
         "null_distribution": null_distribution,
         "n_components": n_components,
         "Q": Q,
     }
-    sample_T_statistic = data[0]
-    p_value = data[1]
+    stat = data[0]
+    pvalue = data[1]
 
-    return ldt_result(p_value, sample_T_statistic, misc_stats)
+    return ldt_result(stat, pvalue, misc_dict)
 
 
 def _embed(A1, A2, n_components):
