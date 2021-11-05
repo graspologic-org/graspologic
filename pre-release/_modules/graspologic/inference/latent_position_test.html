@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.inference.latent_position_test &mdash; graspologic 0.3.1dev1426904835 documentation</title>
+  <title>graspologic.inference.latent_position_test &mdash; graspologic 0.3.1dev1427434799 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1dev1426904835
+                0.3.1dev1427434799
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -269,7 +269,7 @@
 <span class="kn">from</span> <span class="nn">..simulations</span> <span class="kn">import</span> <span class="n">rdpg</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">import_graph</span><span class="p">,</span> <span class="n">is_symmetric</span>
 
-<span class="n">lpt_result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;lpt_result&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;p_value&quot;</span><span class="p">,</span> <span class="s2">&quot;sample_T_statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;misc_stats&quot;</span><span class="p">))</span>
+<span class="n">lpt_result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;lpt_result&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;misc_dict&quot;</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="latent_position_test"><a class="viewcode-back" href="../../../reference/reference/inference.html#graspologic.inference.latent_position_test">[docs]</a><span class="k">def</span> <span class="nf">latent_position_test</span><span class="p">(</span>
@@ -339,14 +339,14 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
-<span class="sd">    p_value : float</span>
-<span class="sd">        The overall p value from the test; this is the max of &#39;p_value_1&#39; and &#39;p_value_2&#39;</span>
-
-<span class="sd">    sample_T_statistic : float</span>
+<span class="sd">    stat : float</span>
 <span class="sd">        The observed difference between the embedded positions of the two input graphs</span>
 <span class="sd">        after an alignment (the type of alignment depends on ``test_case``)</span>
 
-<span class="sd">    misc_stats : dictionary</span>
+<span class="sd">    pvalue : float</span>
+<span class="sd">        The overall p value from the test; this is the max of &#39;p_value_1&#39; and &#39;p_value_2&#39;</span>
+
+<span class="sd">    misc_dict : dictionary</span>
 <span class="sd">        A collection of other statistics obtained from the latent position test</span>
 
 <span class="sd">        - &#39;p_value_1&#39;, &#39;p_value_2&#39; : float</span>
@@ -407,7 +407,7 @@
         <span class="n">num_dims2</span> <span class="o">=</span> <span class="n">select_dimension</span><span class="p">(</span><span class="n">A2</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">n_components</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num_dims1</span><span class="p">,</span> <span class="n">num_dims2</span><span class="p">)</span>
     <span class="n">X_hats</span> <span class="o">=</span> <span class="n">_embed</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">n_components</span><span class="p">)</span>
-    <span class="n">sample_T_statistic</span> <span class="o">=</span> <span class="n">_difference_norm</span><span class="p">(</span><span class="n">X_hats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_hats</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">test_case</span><span class="p">)</span>
+    <span class="n">stat</span> <span class="o">=</span> <span class="n">_difference_norm</span><span class="p">(</span><span class="n">X_hats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_hats</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">test_case</span><span class="p">)</span>
 
     <span class="c1"># Compute null distributions</span>
     <span class="n">null_distribution_1</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">workers</span><span class="p">)(</span>
@@ -423,23 +423,23 @@
     <span class="n">null_distribution_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">null_distribution_2</span><span class="p">)</span>
 
     <span class="c1"># using exact mc p-values (see, for example, Phipson and Smyth, 2010)</span>
-    <span class="n">p_value_1</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">null_distribution_1</span><span class="p">[</span><span class="n">null_distribution_1</span> <span class="o">&gt;=</span> <span class="n">sample_T_statistic</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_bootstraps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">p_value_2</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">null_distribution_2</span><span class="p">[</span><span class="n">null_distribution_2</span> <span class="o">&gt;=</span> <span class="n">sample_T_statistic</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_bootstraps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">p_value_1</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">null_distribution_1</span><span class="p">[</span><span class="n">null_distribution_1</span> <span class="o">&gt;=</span> <span class="n">stat</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">n_bootstraps</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="n">p_value_2</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">null_distribution_2</span><span class="p">[</span><span class="n">null_distribution_2</span> <span class="o">&gt;=</span> <span class="n">stat</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">n_bootstraps</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
 
-    <span class="n">p_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_value_1</span><span class="p">,</span> <span class="n">p_value_2</span><span class="p">)</span>
+    <span class="n">pvalue</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_value_1</span><span class="p">,</span> <span class="n">p_value_2</span><span class="p">)</span>
 
-    <span class="n">misc_stats</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">misc_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;null_distribution_1&quot;</span><span class="p">:</span> <span class="n">null_distribution_1</span><span class="p">,</span>
         <span class="s2">&quot;null_distribution_2_&quot;</span><span class="p">:</span> <span class="n">null_distribution_2</span><span class="p">,</span>
         <span class="s2">&quot;p_value_1&quot;</span><span class="p">:</span> <span class="n">p_value_1</span><span class="p">,</span>
         <span class="s2">&quot;p_value_2&quot;</span><span class="p">:</span> <span class="n">p_value_2</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">lpt_result</span><span class="p">(</span><span class="n">p_value</span><span class="p">,</span> <span class="n">sample_T_statistic</span><span class="p">,</span> <span class="n">misc_stats</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">lpt_result</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">,</span> <span class="n">misc_dict</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_bootstrap</span><span class="p">(</span>

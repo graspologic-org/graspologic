@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inference &mdash; graspologic 0.3.1dev1426904835 documentation</title>
+  <title>Inference &mdash; graspologic 0.3.1dev1427434799 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1dev1426904835
+                0.3.1dev1427434799
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -370,16 +370,16 @@ Supply -1 to use all cores available.</p>
 </div></blockquote>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>p_value</strong> : float</p>
-<blockquote>
-<div><p>The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'</p>
-</div></blockquote>
-<p><strong>sample_T_statistic</strong> : float</p>
+<dd class="field-even"><p><strong>stat</strong> : float</p>
 <blockquote>
 <div><p>The observed difference between the embedded positions of the two input graphs
 after an alignment (the type of alignment depends on <code class="docutils literal notranslate"><span class="pre">test_case</span></code>)</p>
 </div></blockquote>
-<p><strong>misc_stats</strong> : dictionary</p>
+<p><strong>pvalue</strong> : float</p>
+<blockquote>
+<div><p>The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'</p>
+</div></blockquote>
+<p><strong>misc_dict</strong> : dictionary</p>
 <blockquote>
 <div><p>A collection of other statistics obtained from the latent position test</p>
 <ul class="simple">
@@ -607,16 +607,16 @@ d must be same. n_components attribute is ignored in this case.</p>
 </div></blockquote>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>p_value</strong> : float</p>
-<blockquote>
-<div><p>The overall p value from the test.</p>
-</div></blockquote>
-<p><strong>sample_T_statistic</strong> : float</p>
+<dd class="field-even"><p><strong>stat</strong> : float</p>
 <blockquote>
 <div><p>The observed difference between the embedded latent positions of the
 two input graphs.</p>
 </div></blockquote>
-<p><strong>misc_stats</strong> : dictionary</p>
+<p><strong>pvalue</strong> : float</p>
+<blockquote>
+<div><p>The overall p value from the test.</p>
+</div></blockquote>
+<p><strong>misc_dict</strong> : dictionary</p>
 <blockquote>
 <div><p>A collection of other statistics obtained from the latent position test</p>
 <ul class="simple">

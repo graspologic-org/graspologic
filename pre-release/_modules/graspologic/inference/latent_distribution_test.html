@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.inference.latent_distribution_test &mdash; graspologic 0.3.1dev1426904835 documentation</title>
+  <title>graspologic.inference.latent_distribution_test &mdash; graspologic 0.3.1dev1427434799 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1dev1426904835
+                0.3.1dev1427434799
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -279,7 +279,7 @@
 
 <span class="n">_VALID_TESTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cca&quot;</span><span class="p">,</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">,</span> <span class="s2">&quot;hhg&quot;</span><span class="p">,</span> <span class="s2">&quot;rv&quot;</span><span class="p">,</span> <span class="s2">&quot;hsic&quot;</span><span class="p">,</span> <span class="s2">&quot;mgc&quot;</span><span class="p">]</span>
 
-<span class="n">ldt_result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;ldt_result&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;p_value&quot;</span><span class="p">,</span> <span class="s2">&quot;sample_T_statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;misc_stats&quot;</span><span class="p">))</span>
+<span class="n">ldt_result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;ldt_result&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;misc_dict&quot;</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="latent_distribution_test"><a class="viewcode-back" href="../../../reference/reference/inference.html#graspologic.inference.latent_distribution_test">[docs]</a><span class="k">def</span> <span class="nf">latent_distribution_test</span><span class="p">(</span>
@@ -450,14 +450,14 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
-<span class="sd">    p_value : float</span>
-<span class="sd">        The overall p value from the test.</span>
-
-<span class="sd">    sample_T_statistic : float</span>
+<span class="sd">    stat : float</span>
 <span class="sd">        The observed difference between the embedded latent positions of the</span>
 <span class="sd">        two input graphs.</span>
 
-<span class="sd">    misc_stats : dictionary</span>
+<span class="sd">    pvalue : float</span>
+<span class="sd">        The overall p value from the test.</span>
+
+<span class="sd">    misc_dict : dictionary</span>
 <span class="sd">        A collection of other statistics obtained from the latent position test</span>
 
 <span class="sd">        - null_distribution : ndarray, shape (n_bootstraps,)</span>
@@ -643,15 +643,15 @@
 
     <span class="n">null_distribution</span> <span class="o">=</span> <span class="n">test_obj</span><span class="o">.</span><span class="n">indep_test</span><span class="o">.</span><span class="n">null_dist</span>
 
-    <span class="n">misc_stats</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">misc_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;null_distribution&quot;</span><span class="p">:</span> <span class="n">null_distribution</span><span class="p">,</span>
         <span class="s2">&quot;n_components&quot;</span><span class="p">:</span> <span class="n">n_components</span><span class="p">,</span>
         <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="n">Q</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">sample_T_statistic</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">p_value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">stat</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pvalue</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">ldt_result</span><span class="p">(</span><span class="n">p_value</span><span class="p">,</span> <span class="n">sample_T_statistic</span><span class="p">,</span> <span class="n">misc_stats</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">ldt_result</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">,</span> <span class="n">misc_dict</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_embed</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">n_components</span><span class="p">):</span>
