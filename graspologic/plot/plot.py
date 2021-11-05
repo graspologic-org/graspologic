@@ -1,18 +1,29 @@
-# Copyright (c) Microsoft Corporation and contributors.
+﻿# Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
+
+from typing import Optional, Tuple, Union
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from beartype import beartype
+from matplotlib.axes import Axes
+from matplotlib.collections import LineCollection
 from matplotlib.colors import Colormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy import linalg
+from scipy.sparse import csr_matrix
 from sklearn.preprocessing import Binarizer
 from sklearn.utils import check_array, check_consistent_length, check_X_y
 
 from ..embed import select_svd
+from ..preconditions import (
+    check_argument,
+    check_argument_types,
+    check_optional_argument_types,
+)
 from ..utils import import_graph, pass_to_ranks
 
 
@@ -1123,6 +1134,242 @@ def edgeplot(
         palette=palette,
         xlabel="Edge weight",
     )
+    return ax
+
+
+@beartype
+def networkplot(
+    adjacency: Union[np.ndarray, csr_matrix],
+    x: Union[np.ndarray, str],
+    y: Union[np.ndarray, str],
+    node_data: Optional[pd.DataFrame] = None,
+    node_hue: Optional[Union[np.ndarray, str]] = None,
+    palette: Optional[Union[str, list, dict]] = None,
+    node_size: Optional[Union[np.ndarray, str]] = None,
+    node_sizes: Optional[Union[list, dict, tuple]] = None,
+    node_alpha: float = 0.8,
+    edge_hue: str = "source",
+    edge_linewidth: float = 0.2,
+    edge_alpha: float = 0.2,
+    title: str = "",
+    context: str = "talk",
+    font_scale: float = 1.0,
+    figsize: Tuple[int, int] = (10, 10),
+    ax: Optional[Axes] = None,
+    legend: str = False,
+    node_kws: dict = {},
+    edge_kws: dict = {},
+) -> Axes:
+    r"""
+    Plots a 2D layout of a network. Allows for an adjacency matrix
+    with ``x, y`` as 1D arrays that represent the coordinates of each
+    node, or an adjacency matrix with ``node_data`` and ``x, y`` as
+    keys. Note that the nodes in the adjacency matrix are assumed to be ordered the same
+    way as in ``x``, ``y``, and ``node_data``.
+
+    Parameters
+    ----------
+    adjacency: np.ndarray, csr_matrix
+        Adjacency matrix of input network.
+    x,y: np.ndarray, str
+        Variables that specify the positions on the x and y axes. Either an
+        array of x, y coordinates or a string that accesses a vector in
+        ``node_data``. If ``x, y`` are arrays, they must be indexed the
+        same way as the adjacency matrix of the input network.
+    node_data: pd.DataFrame, optional, default: None
+        Input data. When ``node_data`` is None, ``x, y`` must be np.ndarrays.
+        When ``node_data`` is a dataframe, ``x, y`` must be strings. Must be
+        indexed the same way as the adjacency matrix of the input network.
+    node_hue: np.ndarray, str, optional, default: None
+        Variable that produces nodes with different colors. Can be either
+        categorical or numeric, and colors are mapped based on ``palette``.
+        However if ``palette`` is None, ``node_hue`` is treated as numeric
+        and 'Set1' is used as ``palette``.
+    palette: str, list, dict, optional, default: None
+        Method for choosing colors specified in ``node_hue``. Can be a string
+        argument supported by :func:`seaborn.color_palette`, a list of colors,
+        or a dictionary with ``node_hue`` variables as keys and colors as its
+        values. Note that ``palette`` will not affect the plot if ``node_hue``
+        is not given.
+    node_size: np.ndarray, str, optional, default: None
+        Variable that produces nodes with different sizes. Can be either categorical
+        or numeric, and sizes are determined based on ``node_sizes``. If the
+        argument ``node_sizes`` is None, ``node_size`` will be treated as
+        numeric variables.
+    node_sizes: list, dict, tuple, optional, default: None
+        Method for choosing sizes specified in ``node_size``. Can be a list of
+        sizes, a dictionary with ``node_size`` variables as keys and sizes as
+        its values, or a tuple defining the minimum and maximum size values.
+        Note that ``node_sizes`` will not affect the output plot if ``node_hue``
+        is not given.
+    node_alpha: float, default: 0.8
+        Proportional opacity of the nodes.
+    edge_hue: str, one of {source (default), target}
+        Determines edge color based on its source or target node.
+    edge_linewidth: float, default: 0.2
+        Linewidth of the edges.
+    edge_alpha: float, default: 0.2
+        Proportional opacity of the edges.
+    title: str
+        Plot title.
+    context :  None, or one of {talk (default), paper, notebook, poster}
+        Seaborn plotting context
+    font_scale : float, optional, default: 1.0
+        Separate scaling factor to independently scale the size of the font
+        elements.
+    figsize : tuple of length 2, default: (10, 10)
+        Size of the figure (width, height)
+    ax: matplotlib.axes.Axes, optional, default: None
+        Axes in which to draw the plot. Otherwise, will generate own axes.
+    legend: False (default), or one of {brief, full, auto}
+        How to draw the legend. If “brief”, numeric hue and size variables
+        will be represented with a sample of evenly spaced values. If “full”,
+        every group will get an entry in the legend. If “auto”, choose
+        between brief or full representation based on number of levels. If
+        False, no legend data is added and no legend is drawn.
+    node_kws: dict, optional
+        Optional arguments for :func:`seaborn.scatterplot`.
+    edge_kws: dict, optional
+        Optional arguments for :class:`matplotlib.collections.LineCollection`.
+
+    Returns
+    -------
+    ax : matplotlib axis object
+        Output plot
+
+    Notes
+    -----
+    Node colors are determined by ``node_hue`` and ``palette``, and if
+    ``node_hue`` is None, all nodes will have the same default color
+    used by :func:`seaborn.scatterplot`. If ``node_hue`` is given but
+    ``palette`` is None, ``palette`` is set to 'Set1' and ``node_hue``
+    will be treated as numeric variables. Edge colors are determined by
+    its nodes, and ``edge_hue`` dictates whether the edges are colored
+    based on its source or target nodes.
+
+    Node sizes can also vary based on ``node_size`` and ``node_sizes``,
+    and if ``node_size`` is None, all nodes will be of the same default
+    size used by :func:`seaborn.scatterplot`. If ``node_size`` is given
+    but ``node_sizes`` is None, ``node_size`` will be treated as numeric
+    variables.
+
+    Note that ``palette`` and ``node_sizes`` will not affect the output
+    plot if ``node_hue`` and ``node_size`` are None, and ``node_hue`` and
+    ``node_size`` must be the same types as ``x, y``.
+
+    """
+
+    _check_common_inputs(
+        figsize=figsize, title=title, context=context, font_scale=font_scale
+    )
+
+    index = range(adjacency.shape[0])
+    if isinstance(x, np.ndarray):
+        check_consistent_length(adjacency, x, y)
+        check_argument(
+            node_data is None, "If x and y are numpy arrays, meta_data must be None."
+        )
+        plot_df = pd.DataFrame(index=index)
+        x_key = "x"
+        y_key = "y"
+        plot_df.loc[:, x_key] = x
+        plot_df.loc[:, y_key] = y
+        if node_hue is not None:
+            check_argument(
+                isinstance(node_hue, np.ndarray),
+                "If x and y are numpy arrays, node_hue must be a list or a numpy array.",
+            )
+            check_consistent_length(x, node_hue)
+            hue_key = "hue"
+            plot_df.loc[:, hue_key] = node_hue
+            if palette is None:
+                palette = "Set1"
+        else:
+            hue_key = None
+    elif isinstance(x, str):
+        check_consistent_length(adjacency, node_data)
+        check_argument(
+            node_data is not None,
+            "If x and y are strings, meta_data must be pandas DataFrame.",
+        )
+        plot_df = node_data.copy()
+        x_key = x
+        y_key = y
+        if node_hue is not None:
+            check_argument(
+                isinstance(node_hue, str),
+                "If x and y are strings, node_hue must also be a string.",
+            )
+            hue_key = node_hue
+            if palette is None:
+                palette = "Set1"
+        else:
+            hue_key = None
+    else:
+        raise TypeError("x and y must be numpy arrays or strings.")
+
+    pre_inds, post_inds = adjacency.nonzero()
+    pre = np.array(index)[pre_inds.astype(int)]
+    post = np.array(index)[post_inds.astype(int)]
+    rows = {"source": pre, "target": post}
+
+    edgelist = pd.DataFrame(rows)
+    pre_edgelist = edgelist.copy()
+    post_edgelist = edgelist.copy()
+
+    pre_edgelist["x"] = pre_edgelist["source"].map(plot_df[x_key])
+    pre_edgelist["y"] = pre_edgelist["source"].map(plot_df[y_key])
+    post_edgelist["x"] = post_edgelist["target"].map(plot_df[x_key])
+    post_edgelist["y"] = post_edgelist["target"].map(plot_df[y_key])
+    pre_coords = list(zip(pre_edgelist["x"], pre_edgelist["y"]))
+    post_coords = list(zip(post_edgelist["x"], post_edgelist["y"]))
+    coords = list(zip(pre_coords, post_coords))
+
+    if node_hue is not None:
+        if isinstance(palette, str):
+            palette = sns.color_palette(
+                palette, n_colors=len(plot_df[hue_key].unique())
+            )
+            plot_palette = dict(zip(plot_df[hue_key].unique(), palette))
+        elif isinstance(palette, list):
+            plot_palette = dict(zip(plot_df[hue_key].unique(), palette))
+        elif isinstance(palette, dict):
+            plot_palette = palette
+        edgelist[hue_key] = edgelist[edge_hue].map(plot_df[hue_key])
+        edge_colors = edgelist[hue_key].map(plot_palette)
+    else:
+        plot_palette = None
+        edge_colors = None
+
+    with sns.plotting_context(context=context, font_scale=font_scale):
+        if ax is None:
+            _, ax = plt.subplots(1, 1, figsize=figsize)
+        sns.scatterplot(
+            data=plot_df,
+            x=x_key,
+            y=y_key,
+            hue=hue_key,
+            palette=plot_palette,
+            size=node_size,
+            sizes=node_sizes,
+            ax=ax,
+            legend=legend,
+            alpha=node_alpha,
+            zorder=1,
+            **node_kws,
+        )
+        ax.set_title(title)
+        lc = LineCollection(
+            segments=coords,
+            alpha=edge_alpha,
+            linewidths=edge_linewidth,
+            colors=edge_colors,
+            zorder=0,
+            **edge_kws,
+        )
+        ax.add_collection(lc)
+        ax.set(xticks=[], yticks=[])
+
     return ax
 
 
