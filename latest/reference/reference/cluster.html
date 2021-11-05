@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clustering &mdash; graspologic 0.3.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Datasets" href="datasets.html" />
+    <link rel="prev" title="Aligning" href="align.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> graspologic
+          </a>
+              <div class="version">
+                0.3.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#latent-position-models">Latent position models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="index.html">Reference</a> &raquo;</li>
+      <li>Clustering</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/reference/reference/cluster.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="clustering">
+<h1>Clustering<a class="headerlink" href="#clustering" title="Permalink to this headline">¶</a></h1>
+<section id="k-means-clustering">
+<h2>K-Means Clustering<a class="headerlink" href="#k-means-clustering" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.cluster.KMeansCluster">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">graspologic.cluster.</span></span><span class="sig-name descname"><span class="pre">KMeansCluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/kclust.html#KMeansCluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.KMeansCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>KMeans Cluster.</p>
+<p>It computes all possible models from one component to
+<code class="docutils literal notranslate"><span class="pre">max_clusters</span></code>. The best model is given by the lowest silhouette score.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>max_clusters</strong> : int, defaults to 1.</p>
+<blockquote>
+<div><p>The maximum number of mixture components to consider.</p>
+</div></blockquote>
+<p><strong>random_state</strong> : int, RandomState instance or None, optional (default=None)</p>
+<blockquote>
+<div><p>If int, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the random number generator;
+If RandomState instance, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <code class="docutils literal notranslate"><span class="pre">np.random</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><p><strong>n_clusters_</strong> : int</p>
+<blockquote>
+<div><p>Optimal number of components. If y is given, it is based on largest
+ARI. Otherwise, it is based on smallest loss.</p>
+</div></blockquote>
+<p><strong>model_</strong> : KMeans object</p>
+<blockquote>
+<div><p>Fitted KMeans object fitted with optimal n_components.</p>
+</div></blockquote>
+<p><strong>silhouette_</strong> : list</p>
+<blockquote>
+<div><p>List of silhouette scores computed for all possible number
+of clusters given by <code class="docutils literal notranslate"><span class="pre">range(2,</span> <span class="pre">max_clusters)</span></code>.</p>
+</div></blockquote>
+<p><strong>ari_</strong> : list</p>
+<blockquote>
+<div><p>Only computed when y is given. List of ARI values computed for
+all possible number of clusters given by <code class="docutils literal notranslate"><span class="pre">range(2,</span> <span class="pre">max_clusters)</span></code>.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="gaussian-mixture-models-clustering">
+<h2>Gaussian Mixture Models Clustering<a class="headerlink" href="#gaussian-mixture-models-clustering" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.cluster.GaussianCluster">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">graspologic.cluster.</span></span><span class="sig-name descname"><span class="pre">GaussianCluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">covariance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/gclust.html#GaussianCluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.GaussianCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gaussian Mixture Model (GMM)</p>
+<p>Representation of a Gaussian mixture model probability distribution.
+This class allows to estimate the parameters of a Gaussian mixture
+distribution. It computes all possible models from one component to
+<code class="docutils literal notranslate"><span class="pre">max_components</span></code>. The best model is given by the lowest BIC score.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>min_components</strong> : int, default=2.</p>
+<blockquote>
+<div><p>The minimum number of mixture components to consider (unless
+<code class="docutils literal notranslate"><span class="pre">max_components</span></code> is None, in which case this is the maximum number of
+components to consider). If <code class="docutils literal notranslate"><span class="pre">max_componens</span></code> is not None, <code class="docutils literal notranslate"><span class="pre">min_components</span></code>
+must be less than or equal to <code class="docutils literal notranslate"><span class="pre">max_components</span></code>.</p>
+</div></blockquote>
+<p><strong>max_components</strong> : int or None, default=None.</p>
+<blockquote>
+<div><p>The maximum number of mixture components to consider. Must be greater
+than or equal to <code class="docutils literal notranslate"><span class="pre">min_components</span></code>.</p>
+</div></blockquote>
+<p><strong>covariance_type</strong> : {'all' (default), 'full', 'tied', 'diag', 'spherical'}, optional</p>
+<blockquote>
+<div><p>String or list/array describing the type of covariance parameters to use.
+If a string, it must be one of:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>'all'</dt><dd><p>considers all covariance structures in ['spherical', 'diag', 'tied', 'full']</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'full'</dt><dd><p>each component has its own general covariance matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'tied'</dt><dd><p>all components share the same general covariance matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'diag'</dt><dd><p>each component has its own diagonal covariance matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'spherical'</dt><dd><p>each component has its own single variance</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="simple">
+<dt>If a list/array, it must be a list/array of strings containing only</dt><dd><p>'spherical', 'tied', 'diag', and/or 'full'.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>tol</strong> : float, defaults to 1e-3.</p>
+<blockquote>
+<div><p>The convergence threshold. EM iterations will stop when the
+lower bound average gain is below this threshold.</p>
+</div></blockquote>
+<p><strong>reg_covar</strong> : float, defaults to 1e-6.</p>
+<blockquote>
+<div><p>Non-negative regularization added to the diagonal of covariance.
+Allows to assure that the covariance matrices are all positive.</p>
+</div></blockquote>
+<p><strong>max_iter</strong> : int, defaults to 100.</p>
+<blockquote>
+<div><p>The number of EM iterations to perform.</p>
+</div></blockquote>
+<p><strong>n_init</strong> : int, defaults to 1.</p>
+<blockquote>
+<div><p>The number of initializations to perform. The best results are kept.</p>
+</div></blockquote>
+<p><strong>init_params</strong> : {'kmeans', 'random'}, defaults to 'kmeans'.</p>
+<blockquote>
+<div><p>The method used to initialize the weights, the means and the
+precisions.
+Must be one of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;kmeans&#39;</span> <span class="p">:</span> <span class="n">responsibilities</span> <span class="n">are</span> <span class="n">initialized</span> <span class="n">using</span> <span class="n">kmeans</span><span class="o">.</span>
+<span class="s1">&#39;random&#39;</span> <span class="p">:</span> <span class="n">responsibilities</span> <span class="n">are</span> <span class="n">initialized</span> <span class="n">randomly</span><span class="o">.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>random_state</strong> : int, RandomState instance or None, optional (default=None)</p>
+<blockquote>
+<div><p>If int, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the random number generator;
+If RandomState instance, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <code class="docutils literal notranslate"><span class="pre">np.random</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><p><strong>n_components_</strong> : int</p>
+<blockquote>
+<div><p>Optimal number of components based on BIC.</p>
+</div></blockquote>
+<p><strong>covariance_type_</strong> : str</p>
+<blockquote>
+<div><p>Optimal covariance type based on BIC.</p>
+</div></blockquote>
+<p><strong>model_</strong> : GaussianMixture object</p>
+<blockquote>
+<div><p>Fitted GaussianMixture object fitted with optimal number of components
+and optimal covariance structure.</p>
+</div></blockquote>
+<p><strong>bic_</strong> : pandas.DataFrame</p>
+<blockquote>
+<div><p>A pandas DataFrame of BIC values computed for all possible number of clusters
+given by <code class="docutils literal notranslate"><span class="pre">range(min_components,</span> <span class="pre">max_components</span> <span class="pre">+</span> <span class="pre">1)</span></code> and all covariance
+structures given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">covariance_type</span></code>.</p>
+</div></blockquote>
+<p><strong>ari_</strong> : pandas.DataFrame</p>
+<blockquote>
+<div><p>Only computed when y is given. Pandas Dataframe containing ARI values computed
+for all possible number of clusters given by <code class="docutils literal notranslate"><span class="pre">range(min_components,</span>
+<span class="pre">max_components)</span></code> and all covariance structures given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">covariance_type</span></code>.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.cluster.AutoGMMCluster">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">graspologic.cluster.</span></span><span class="sig-name descname"><span class="pre">AutoGMMCluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affinity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linkage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">covariance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kmeans_n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_agglom_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/autogmm.html#AutoGMMCluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.AutoGMMCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatic Gaussian Mixture Model (GMM) selection.</p>
+<p>Clustering algorithm using a hierarchical agglomerative clustering then Gaussian
+mixtured model (GMM) fitting. Different combinations of agglomeration, GMM, and
+cluster numbers are used and the clustering with the best selection
+criterion (bic/aic) is chosen.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>min_components</strong> : int, default=2.</p>
+<blockquote>
+<div><p>The minimum number of mixture components to consider (unless
+<code class="docutils literal notranslate"><span class="pre">max_components</span></code> is None, in which case this is the maximum number of
+components to consider). If <code class="docutils literal notranslate"><span class="pre">max_components</span></code> is not None, <code class="docutils literal notranslate"><span class="pre">min_components</span></code>
+must be less than or equal to <code class="docutils literal notranslate"><span class="pre">max_components</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">label_init</span></code> is given, min_components must match number of unique labels
+in <code class="docutils literal notranslate"><span class="pre">label_init</span></code>.</p>
+</div></blockquote>
+<p><strong>max_components</strong> : int or None, default=10.</p>
+<blockquote>
+<div><p>The maximum number of mixture components to consider. Must be greater
+than or equal to min_components.
+If label_init is given, min_components must match number of unique labels
+in label_init.</p>
+</div></blockquote>
+<p><strong>affinity</strong> : {'euclidean','manhattan','cosine','none', 'all' (default)}, optional</p>
+<blockquote>
+<div><p>String or list/array describing the type of affinities to use in agglomeration.
+If a string, it must be one of:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>'euclidean'</dt><dd><p>L2 norm</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'manhattan'</dt><dd><p>L1 norm</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'cosine'</dt><dd><p>cosine similarity</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'none'</dt><dd><p>no agglomeration - GMM is initialized with k-means</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'all'</dt><dd><p>considers all affinities in ['euclidean','manhattan','cosine','none']</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>If a list/array, it must be a list/array of strings containing only
+'euclidean', 'manhattan', 'cosine', and/or 'none'.</p>
+<p>Note that cosine similarity can only work when all of the rows are not the zero vector.
+If the input matrix has a zero row, cosine similarity will be skipped and a warning will
+be thrown.</p>
+</div></blockquote>
+<p><strong>linkage</strong> : {'ward','complete','average','single', 'all' (default)}, optional</p>
+<blockquote>
+<div><p>String or list/array describing the type of linkages to use in agglomeration.
+If a string, it must be one of:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>'ward'</dt><dd><p>ward's clustering, can only be used with euclidean affinity</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'complete'</dt><dd><p>complete linkage</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'average'</dt><dd><p>average linkage</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'single'</dt><dd><p>single linkage</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'all'</dt><dd><p>considers all linkages in ['ward','complete','average','single']</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>If a list/array, it must be a list/array of strings containing only
+'ward', 'complete', 'average', and/or 'single'.</p>
+</div></blockquote>
+<p><strong>covariance_type</strong> : {'full', 'tied', 'diag', 'spherical', 'all' (default)} , optional</p>
+<blockquote>
+<div><p>String or list/array describing the type of covariance parameters to use.
+If a string, it must be one of:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>'full'</dt><dd><p>each component has its own general covariance matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'tied'</dt><dd><p>all components share the same general covariance matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'diag'</dt><dd><p>each component has its own diagonal covariance matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'spherical'</dt><dd><p>each component has its own single variance</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'all'</dt><dd><p>considers all covariance structures in ['spherical', 'diag', 'tied', 'full']</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>If a list/array, it must be a list/array of strings containing only
+'spherical', 'tied', 'diag', and/or 'spherical'.</p>
+</div></blockquote>
+<p><strong>random_state</strong> : int, RandomState instance or None, optional (default=None)</p>
+<blockquote>
+<div><p>There is randomness in k-means initialization of
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>. This parameter is passed to
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> to control the random state.
+If int, random_state is used as the random number generator seed;
+If RandomState instance, random_state is the random number generator;
+If None, the random number generator is the RandomState instance used
+by <code class="docutils literal notranslate"><span class="pre">np.random</span></code>.</p>
+</div></blockquote>
+<p><strong>label_init</strong> : array-like, shape (n_samples,), optional (default=None)</p>
+<blockquote>
+<div><p>List of labels for samples if available. Used to initialize the model.
+If provided, min_components and <code class="docutils literal notranslate"><span class="pre">max_components</span></code> must match the number of
+unique labels given here.</p>
+</div></blockquote>
+<p><strong>kmeans_n_init</strong> : int, optional (default = 1)</p>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code> is larger than 1 and <code class="docutils literal notranslate"><span class="pre">label_init</span></code> is None, additional
+<code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code>-1 runs of <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>
+initialized with k-means will be performed
+for all covariance parameters in <code class="docutils literal notranslate"><span class="pre">covariance_type</span></code>.</p>
+</div></blockquote>
+<p><strong>max_iter</strong> : int, optional (default = 100).</p>
+<blockquote>
+<div><p>The maximum number of EM iterations to perform.</p>
+</div></blockquote>
+<p><strong>selection_criteria</strong> : str {&quot;bic&quot; or &quot;aic&quot;}, optional, (default=&quot;bic&quot;)</p>
+<blockquote>
+<div><p>select the best model based on Bayesian Information Criterion (bic) or
+Aikake Information Criterion (aic)</p>
+</div></blockquote>
+<p><strong>verbose</strong> : int, optional (default = 0)</p>
+<blockquote>
+<div><p>Enable verbose output. If 1 then it prints the current initialization and each
+iteration step. If greater than 1 then it prints also the log probability and
+the time needed for each step.</p>
+</div></blockquote>
+<p><strong>max_agglom_size</strong> : int or None, optional (default = 2000)</p>
+<blockquote>
+<div><p>The maximum number of datapoints on which to do agglomerative clustering as the
+initialization to GMM. If the number of datapoints is larger than this value,
+a random subset of the data is used for agglomerative initialization. If None,
+all data is used for agglomerative clustering for initialization.</p>
+</div></blockquote>
+<p><strong>n_jobs</strong> : int or None, optional (default = None)</p>
+<blockquote>
+<div><p>The number of jobs to use for the computation. This works by computing each of
+the initialization runs in parallel. None means 1 unless in a
+<code class="docutils literal notranslate"><span class="pre">joblib.parallel_backend</span> <span class="pre">context</span></code>. -1 means using all processors.
+See <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-n-jobs">https://scikit-learn.org/stable/glossary.html#term-n-jobs</a> for more details.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><p><strong>results_</strong> : pandas.DataFrame</p>
+<blockquote>
+<div><p>Contains exhaustive information about all the clustering runs.
+Columns are:</p>
+<dl class="simple">
+<dt>'model'<span class="classifier">GaussianMixture object</span></dt><dd><p>GMM clustering fit to the data</p>
+</dd>
+<dt>'bic/aic'<span class="classifier">float</span></dt><dd><p>Bayesian Information Criterion</p>
+</dd>
+<dt>'ari'<span class="classifier">float or nan</span></dt><dd><p>Adjusted Rand Index between GMM classification, and true classification,
+nan if y is not given</p>
+</dd>
+<dt>'n_components'<span class="classifier">int</span></dt><dd><p>number of clusters</p>
+</dd>
+<dt>'affinity'<span class="classifier">{'euclidean','manhattan','cosine','none'}</span></dt><dd><p>affinity used in Agglomerative Clustering</p>
+</dd>
+<dt>'linkage'<span class="classifier">{'ward','complete','average','single'}</span></dt><dd><p>linkage used in Agglomerative Clustering</p>
+</dd>
+<dt>'covariance_type'<span class="classifier">{'full', 'tied', 'diag', 'spherical'}</span></dt><dd><p>covariance type used in GMM</p>
+</dd>
+<dt>'reg_covar'<span class="classifier">float</span></dt><dd><p>regularization used in GMM</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt><strong>criter_</strong><span class="classifier">the best (lowest) Bayesian Information Criterion</span></dt><dd></dd>
+</dl>
+<p><strong>n_components_</strong> : int</p>
+<blockquote>
+<div><p>number of clusters in the model with the best bic/aic</p>
+</div></blockquote>
+<p><strong>covariance_type_</strong> : str</p>
+<blockquote>
+<div><p>covariance type in the model with the best bic/aic</p>
+</div></blockquote>
+<p><strong>affinity_</strong> : str</p>
+<blockquote>
+<div><p>affinity used in the model with the best bic/aic</p>
+</div></blockquote>
+<p><strong>linkage_</strong> : str</p>
+<blockquote>
+<div><p>linkage used in the model with the best bic/aic</p>
+</div></blockquote>
+<p><strong>reg_covar_</strong> : float</p>
+<blockquote>
+<div><p>regularization used in the model with the best bic/aic</p>
+</div></blockquote>
+<p><strong>ari_</strong> : float</p>
+<blockquote>
+<div><p>ARI from the model with the best bic/aic, nan if no y is given</p>
+</div></blockquote>
+<p><strong>model_</strong> : <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a></p>
+<blockquote>
+<div><p>object with the best bic/aic</p>
+</div></blockquote>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#graspologic.cluster.GaussianCluster" title="graspologic.cluster.GaussianCluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.cluster.GaussianCluster</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="#graspologic.cluster.KMeansCluster" title="graspologic.cluster.KMeansCluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.cluster.KMeansCluster</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>This algorithm was strongly inspired by mclust, a clustering package in R</p>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r079f3eab5477-1"><span class="brackets">1</span></dt>
+<dd><p>Jeffrey D. Banfield and Adrian E. Raftery. Model-based gaussian and
+non-gaussian clustering. Biometrics, 49:803–821, 1993.</p>
+</dd>
+<dt class="label" id="r079f3eab5477-2"><span class="brackets">2</span></dt>
+<dd><p>Abhijit Dasgupta and Adrian E. Raftery. Detecting features in spatial point
+processes with clutter via model-based clustering. Journal of the American
+Statistical Association, 93(441):294–302, 1998.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="hierarchical-clustering">
+<h2>Hierarchical Clustering<a class="headerlink" href="#hierarchical-clustering" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.cluster.DivisiveCluster">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">graspologic.cluster.</span></span><span class="sig-name descname"><span class="pre">DivisiveCluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gmm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_criter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/divisive_cluster.html#DivisiveCluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.DivisiveCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively clusters data based on a chosen clustering algorithm.
+This algorithm implements a &quot;divisive&quot; or &quot;top-down&quot; approach.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cluster_method</strong> : str {&quot;gmm&quot;, &quot;kmeans&quot;}, defaults to &quot;gmm&quot;.</p>
+<blockquote>
+<div><p>The underlying clustering method to apply. If &quot;gmm&quot; will use
+<a class="reference internal" href="#graspologic.cluster.AutoGMMCluster" title="graspologic.cluster.AutoGMMCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">AutoGMMCluster</span></code></a>. If &quot;kmeans&quot;, will use
+<a class="reference internal" href="#graspologic.cluster.KMeansCluster" title="graspologic.cluster.KMeansCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">KMeansCluster</span></code></a>.</p>
+</div></blockquote>
+<p><strong>min_components</strong> : int, defaults to 1.</p>
+<blockquote>
+<div><p>The minimum number of mixture components/clusters to consider
+for the first split if &quot;gmm&quot; is selected as <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code>;
+and is set to 1 for later splits.
+If <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code> is &quot;kmeans&quot;, it is set to 2 for all splits.</p>
+</div></blockquote>
+<p><strong>max_components</strong> : int, defaults to 2.</p>
+<blockquote>
+<div><p>The maximum number of mixture components/clusters to consider
+at each split.</p>
+</div></blockquote>
+<p><strong>min_split</strong> : int, defaults to 1.</p>
+<blockquote>
+<div><p>The minimum size of a cluster for it to be considered to be split again.</p>
+</div></blockquote>
+<p><strong>max_level</strong> : int, defaults to 4.</p>
+<blockquote>
+<div><p>The maximum number of times to recursively cluster the data.</p>
+</div></blockquote>
+<p><strong>delta_criter</strong> : float, non-negative, defaults to 0.</p>
+<blockquote>
+<div><p>The smallest difference between selection criterion values of a new
+model and the current model that is required to accept the new model.
+Applicable only if <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code> is &quot;gmm&quot;.</p>
+</div></blockquote>
+<p><strong>cluster_kws</strong> : dict, defaults to {}</p>
+<blockquote>
+<div><p>Keyword arguments (except <code class="docutils literal notranslate"><span class="pre">min_components</span></code> and <code class="docutils literal notranslate"><span class="pre">max_components</span></code>) for chosen
+clustering method.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><p><strong>model_</strong> : GaussianMixture or KMeans object</p>
+<blockquote>
+<div><p>Fitted clustering object based on which <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code> was used.</p>
+</div></blockquote>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#graspologic.cluster.AutoGMMCluster" title="graspologic.cluster.AutoGMMCluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.cluster.AutoGMMCluster</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="#graspologic.cluster.KMeansCluster" title="graspologic.cluster.KMeansCluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.cluster.KMeansCluster</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://anytree.readthedocs.io/en/latest/api/anytree.node.html#anytree.node.nodemixin.NodeMixin" title="(in anytree v2.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">anytree.node.nodemixin.NodeMixin</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>This class inherits from <a class="reference external" href="https://anytree.readthedocs.io/en/latest/api/anytree.node.html#anytree.node.nodemixin.NodeMixin" title="(in anytree v2.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">anytree.node.nodemixin.NodeMixin</span></code></a>, a lightweight
+class for doing various simple operations on trees.</p>
+<p>This algorithm was strongly inspired by maggotcluster, a divisive
+clustering algorithm in <a class="reference external" href="https://github.com/neurodata/maggot_models">https://github.com/neurodata/maggot_models</a> and the
+algorithm for estimating a hierarchical stochastic block model presented in <a class="reference internal" href="#rd81910683b5d-2" id="id3">[2]</a>.</p>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="rd81910683b5d-1"><span class="brackets">1</span></dt>
+<dd><p>Athey, T. L., &amp; Vogelstein, J. T. (2019).
+AutoGMM: Automatic Gaussian Mixture Modeling in Python.
+arXiv preprint arXiv:1909.02688.</p>
+</dd>
+<dt class="label" id="rd81910683b5d-2"><span class="brackets"><a class="fn-backref" href="#id3">2</a></span></dt>
+<dd><p>Lyzinski, V., Tang, M., Athreya, A., Park, Y., &amp; Priebe, C. E
+(2016). Community detection and classification in hierarchical
+stochastic blockmodels. IEEE Transactions on Network Science and
+Engineering, 4(1), 13-26.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="align.html" class="btn btn-neutral float-left" title="Aligning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="datasets.html" class="btn btn-neutral float-right" title="Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
