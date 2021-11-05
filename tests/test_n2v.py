@@ -2,8 +2,10 @@
 # Licensed under the MIT License.
 
 import unittest
+
 import networkx as nx
 import numpy as np
+
 import graspologic.embed.n2v as n2v
 from graspologic.embed.n2v import _Node2VecGraph
 
