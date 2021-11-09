@@ -15,35 +15,42 @@
 import os
 import sys
 
+sys.path.append(os.path.abspath('./sphinx-ext/'))
 sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = "graspologic tutorials"
+project = "graspologic"
 copyright = "2020"
 authors = "Microsoft, NeuroData"
 
 realpath = os.path.realpath(__file__)
-dir_realpath = os.path.dirname(os.path.dirname(realpath))
+dir_realpath = os.path.dirname(realpath)
 sys.path.append(dir_realpath)
 
 import graspologic
 
-release = graspologic.__version__
-try:
-    split = release.split(".")
-    version = f"{split[0]}.{split[1]}"
-except BaseException:
-    version = release
+version = graspologic.__version__
+# Append "dev" and the github run to the version when on the dev branch
+if os.environ.get("GITHUB_REF", "") == "refs/heads/dev":
+    version = f"{version}dev{os.environ['GITHUB_RUN_ID']}"
+
+release = version
 
 # -- Extension configuration -------------------------------------------------
 extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
-    "sphinx.ext.ifconfig",
     "nbsphinx",
+    "numpydoc",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
+    "toctree_filter",
 ]
-
 
 # -- numpydoc
 # Below is needed to prevent errors
@@ -51,13 +58,23 @@ numpydoc_show_class_members = False
 numpydoc_attributes_as_param_list = True
 numpydoc_use_blockquotes = True
 
+# -- sphinx.ext.autosummary
+autosummary_generate = True
+
+# -- sphinx.ext.autodoc
+autoclass_content = "both"
+autodoc_default_flags = ["members", "inherited-members"]
+autodoc_member_order = "bysource"  # default is alphabetical
+
 # -- sphinx.ext.intersphinx
 intersphinx_mapping = {
     "anytree": ("https://anytree.readthedocs.io/en/latest/", None),
     "hyppo": ("https://hyppo.neurodata.io", None),
+    "joblib": ("https://joblib.readthedocs.io/en/latest/", None),
     "matplotlib": ("https://matplotlib.org", None),
     "networkx": ("https://networkx.org/documentation/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
     "python": ("https://docs.python.org/3", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "seaborn": ("https://seaborn.pydata.org", None),
@@ -66,9 +83,14 @@ intersphinx_mapping = {
 
 # -- sphinx options ----------------------------------------------------------
 source_suffix = ".rst"
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints", "tutorials"]
+toc_filter_exclude = ['tutorials/index']
 master_doc = "index"
 source_encoding = "utf-8"
+if tags.has("build_tutorials"):
+    # Tutorials are excluded by default.  Remove the exclusion since we want to build the tutorials
+    exclude_patterns.remove("tutorials")
+    toc_filter_exclude = []
 
 # -- Options for HTML output -------------------------------------------------
 # Add any paths that contain templates here, relative to this directory.

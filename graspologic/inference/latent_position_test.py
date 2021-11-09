@@ -14,7 +14,7 @@ from ..simulations import rdpg
 from ..types import GraphRepresentation
 from ..utils import import_graph, is_symmetric
 
-lpt_result = namedtuple("lpt_result", ("p_value", "sample_T_statistic", "misc_stats"))
+lpt_result = namedtuple("lpt_result", ("stat", "pvalue", "misc_dict"))
 
 LptEmbeddingType = Literal["ase", "omnibus"]
 LptHypothesisTestType = Literal["rotation", "scalar-rotation", "diagonal-rotation"]
@@ -87,14 +87,14 @@ def latent_position_test(
 
     Returns
     ----------
-    p_value : float
-        The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'
-
-    sample_T_statistic : float
+    stat : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
 
-    misc_stats : dictionary
+    pvalue : float
+        The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'
+
+    misc_dict : dictionary
         A collection of other statistics obtained from the latent position test
 
         - 'p_value_1', 'p_value_2' : float
@@ -158,7 +158,7 @@ def latent_position_test(
     else:
         num_components = n_components
     X_hats = _embed(A1, A2, embedding, num_components)
-    sample_T_statistic = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
+    stat = _difference_norm(X_hats[0], X_hats[1], embedding, test_case)
 
     # Compute null distributions
     null_distribution_1 = Parallel(n_jobs=workers)(
@@ -178,23 +178,23 @@ def latent_position_test(
     null_distribution_2 = np.array(null_distribution_2)
 
     # using exact mc p-values (see, for example, Phipson and Smyth, 2010)
-    p_value_1 = (
-        len(null_distribution_1[null_distribution_1 >= sample_T_statistic]) + 1
-    ) / (n_bootstraps + 1)
-    p_value_2 = (
-        len(null_distribution_2[null_distribution_2 >= sample_T_statistic]) + 1
-    ) / (n_bootstraps + 1)
+    p_value_1 = (len(null_distribution_1[null_distribution_1 >= stat]) + 1) / (
+        n_bootstraps + 1
+    )
+    p_value_2 = (len(null_distribution_2[null_distribution_2 >= stat]) + 1) / (
+        n_bootstraps + 1
+    )
 
-    p_value = max(p_value_1, p_value_2)
+    pvalue = max(p_value_1, p_value_2)
 
-    misc_stats = {
+    misc_dict = {
         "null_distribution_1": null_distribution_1,
         "null_distribution_2_": null_distribution_2,
         "p_value_1": p_value_1,
         "p_value_2": p_value_2,
     }
 
-    return lpt_result(p_value, sample_T_statistic, misc_stats)
+    return lpt_result(stat, pvalue, misc_dict)
 
 
 def _bootstrap(
