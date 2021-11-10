@@ -108,7 +108,7 @@ jobs:
           mypy ./graspologic
   publish:
     runs-on: ubuntu-latest
-    needs: [static-code-analysis, build-reference-documentation, code-format-check, unit-and-doc-test]
+    needs: [static-code-analysis, build-reference-documentation, code-format-check, tests-and-type-checks]
     if: github.ref=='refs/heads/main' || github.ref=='refs/heads/dev'
     steps:
       - uses: actions/checkout@v2
