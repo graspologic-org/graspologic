@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
@@ -197,7 +197,7 @@ class SpectralVertexNomination(BaseEstimator):
         self.nearest_neighbors_.fit(self.embedding_)
         return self
 
-    def predict(self, y: Union[list, np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+    def predict(self, y: Union[List, np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominates vertices for each seed vertex. Methodology is distance based ranking.
 
@@ -219,10 +219,10 @@ class SpectralVertexNomination(BaseEstimator):
                         The matrix of distances associated with each element of the
                         nomination list.
         """
-        y = check_array(y, ensure_2d=False)
-        self._check_y(y)
-        y = y.reshape(-1)
-        y_vec = self.embedding_[y.astype(np.int)]  # type: ignore
+        y_checked: np.ndarray = check_array(y, ensure_2d=False)
+        self._check_y(y_checked)
+        y_checked = y_checked.reshape(-1)
+        y_vec = self.embedding_[y_checked.astype(np.int)]  # type: ignore
         if not hasattr(self, "nearest_neighbors_"):
             raise ValueError("Fit must be called before predict.")
         distance_matrix, nomination_list = self.nearest_neighbors_.kneighbors(y_vec)
