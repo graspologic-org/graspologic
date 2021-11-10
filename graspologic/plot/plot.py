@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import sklearn.mixture
 from beartype import beartype
 from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection
@@ -16,7 +17,6 @@ from matplotlib.colors import Colormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy import linalg
 from scipy.sparse import csr_matrix
-import sklearn.mixture
 from sklearn.preprocessing import Binarizer
 from sklearn.utils import check_array, check_consistent_length, check_X_y
 
