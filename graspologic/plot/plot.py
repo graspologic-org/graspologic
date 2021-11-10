@@ -1179,7 +1179,7 @@ def networkplot(
     font_scale: float = 1.0,
     figsize: Tuple[int, int] = (10, 10),
     ax: Optional[Axes] = None,
-    legend: str = False,
+    legend: Optional[str] = None,
     node_kws: dict = {},
     edge_kws: dict = {},
 ) -> Axes:
@@ -1244,12 +1244,12 @@ def networkplot(
         Size of the figure (width, height)
     ax: matplotlib.axes.Axes, optional, default: None
         Axes in which to draw the plot. Otherwise, will generate own axes.
-    legend: False (default), or one of {brief, full, auto}
+    legend: None (default), or one of {brief, full, auto}
         How to draw the legend. If “brief”, numeric hue and size variables
         will be represented with a sample of evenly spaced values. If “full”,
         every group will get an entry in the legend. If “auto”, choose
         between brief or full representation based on number of levels. If
-        False, no legend data is added and no legend is drawn.
+        None, no legend data is added and no legend is drawn.
     node_kws: dict, optional
         Optional arguments for :func:`seaborn.scatterplot`.
     edge_kws: dict, optional
@@ -1287,6 +1287,7 @@ def networkplot(
     )
 
     index = range(adjacency.shape[0])
+    hue_key: Optional[str]
     if isinstance(x, np.ndarray):
         check_consistent_length(adjacency, x, y)
         check_argument(
@@ -1309,20 +1310,20 @@ def networkplot(
                 palette = "Set1"
         else:
             hue_key = None
-    elif isinstance(x, str):
+    elif isinstance(x, str) and isinstance(y, str):
         check_consistent_length(adjacency, node_data)
-        check_argument(
-            node_data is not None,
-            "If x and y are strings, meta_data must be pandas DataFrame.",
-        )
+        if not isinstance(node_data, pd.DataFrame):
+            raise ValueError(
+                "If x and y are strings, node_data must be pandas DataFrame."
+            )
         plot_df = node_data.copy()
         x_key = x
         y_key = y
         if node_hue is not None:
-            check_argument(
-                isinstance(node_hue, str),
-                "If x and y are strings, node_hue must also be a string.",
-            )
+            if not isinstance(node_hue, str):
+                raise ValueError(
+                    "If x and y are strings, node_hue must also be a string."
+                )
             hue_key = node_hue
             if palette is None:
                 palette = "Set1"
@@ -1348,12 +1349,14 @@ def networkplot(
     post_coords = list(zip(post_edgelist["x"], post_edgelist["y"]))
     coords = list(zip(pre_coords, post_coords))
 
+    plot_palette: Optional[Dict]
+
     if node_hue is not None:
         if isinstance(palette, str):
-            palette = sns.color_palette(
+            sns_palette: List = sns.color_palette(
                 palette, n_colors=len(plot_df[hue_key].unique())
             )
-            plot_palette = dict(zip(plot_df[hue_key].unique(), palette))
+            plot_palette = dict(zip(plot_df[hue_key].unique(), sns_palette))
         elif isinstance(palette, list):
             plot_palette = dict(zip(plot_df[hue_key].unique(), palette))
         elif isinstance(palette, dict):
