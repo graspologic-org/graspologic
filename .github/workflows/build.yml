@@ -83,7 +83,7 @@ jobs:
           pip install -U pip setuptools wheel
           pip install -r requirements.txt
           python -m pytest --co --cov=graspologic graspologic tests
-  tests-and-type-checks:
+  unit-and-doc-test:
     runs-on: ${{matrix.os}}
     continue-on-error: true
     strategy:
@@ -108,7 +108,7 @@ jobs:
           mypy ./graspologic
   publish:
     runs-on: ubuntu-latest
-    needs: [static-code-analysis, build-reference-documentation, code-format-check, tests-and-type-checks]
+    needs: [static-code-analysis, build-reference-documentation, code-format-check, unit-and-doc-test]
     if: github.ref=='refs/heads/main' || github.ref=='refs/heads/dev'
     steps:
       - uses: actions/checkout@v2
