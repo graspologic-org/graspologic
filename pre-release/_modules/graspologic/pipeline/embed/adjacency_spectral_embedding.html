@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.pipeline.embed.adjacency_spectral_embedding &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.pipeline.embed.adjacency_spectral_embedding &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -267,6 +267,7 @@
 <span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
 
 <span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span>
+<span class="kn">from</span> <span class="nn">graspologic.embed.base</span> <span class="kn">import</span> <span class="n">SvdAlgorithmType</span>
 <span class="kn">from</span> <span class="nn">graspologic.preconditions</span> <span class="kn">import</span> <span class="n">check_argument</span><span class="p">,</span> <span class="n">is_real_weighted</span>
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">augment_diagonal</span><span class="p">,</span>
@@ -285,7 +286,7 @@
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">OrderedGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">OrderedDiGraph</span><span class="p">],</span>
     <span class="n">dimensions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
     <span class="n">elbow_cut</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">svd_solver_algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
+    <span class="n">svd_solver_algorithm</span><span class="p">:</span> <span class="n">SvdAlgorithmType</span> <span class="o">=</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
     <span class="n">svd_solver_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
     <span class="n">svd_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
@@ -422,6 +423,7 @@
         <span class="s2">&quot;accordingly&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
+    <span class="n">used_weight_attribute</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight_attribute</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_real_weighted</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">):</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Graphs with edges that do not have a real numeric weight set for every &quot;</span>
@@ -430,14 +432,14 @@
             <span class="sa">f</span><span class="s2">&quot;please add a &#39;</span><span class="si">{</span><span class="n">weight_attribute</span><span class="si">}</span><span class="s2">&#39; attribute to every edge with a real, &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;numeric value (e.g. an integer or a float) and call this function again.&quot;</span>
         <span class="p">)</span>
-        <span class="n">weight_attribute</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># this supercedes what the user said, because</span>
+        <span class="n">used_weight_attribute</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># this supercedes what the user said, because</span>
         <span class="c1"># not all of the weights are real numbers, if they exist at all</span>
         <span class="c1"># this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()</span>
 
     <span class="n">node_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span>
 
     <span class="n">graph_as_csr</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_scipy_sparse_matrix</span><span class="p">(</span>
-        <span class="n">graph</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">node_labels</span>
+        <span class="n">graph</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">used_weight_attribute</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">node_labels</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_fully_connected</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
@@ -459,21 +461,24 @@
         <span class="n">diag_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">embedder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">augmented_graph</span><span class="p">)</span>
+    <span class="n">results_arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 
     <span class="k">if</span> <span class="n">elbow_cut</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">is_directed</span><span class="p">():</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="n">graph</span><span class="o">.</span><span class="n">is_directed</span><span class="p">():</span>
+            <span class="n">results_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results_arr</span> <span class="o">=</span> <span class="n">results</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">column_index</span> <span class="o">=</span> <span class="n">_index_of_elbow</span><span class="p">(</span><span class="n">embedder</span><span class="o">.</span><span class="n">singular_values_</span><span class="p">,</span> <span class="n">elbow_cut</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">is_directed</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
             <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">results</span>
             <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="p">[:,</span> <span class="p">:</span><span class="n">column_index</span><span class="p">]</span>
             <span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="p">[:,</span> <span class="p">:</span><span class="n">column_index</span><span class="p">]</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">results_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="p">[:,</span> <span class="p">:</span><span class="n">column_index</span><span class="p">]</span>
+            <span class="n">results_arr</span> <span class="o">=</span> <span class="n">results</span><span class="p">[:,</span> <span class="p">:</span><span class="n">column_index</span><span class="p">]</span>
 
-    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">Embeddings</span><span class="p">(</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">Embeddings</span><span class="p">(</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">results_arr</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">embeddings</span></div>
 </pre></div>
 

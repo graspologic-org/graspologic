@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.inference.latent_position_test &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.inference.latent_position_test &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -260,27 +260,33 @@
 <span class="c1"># Licensed under the MIT License.</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">..align</span> <span class="kn">import</span> <span class="n">OrthogonalProcrustes</span>
 <span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">,</span> <span class="n">OmnibusEmbed</span><span class="p">,</span> <span class="n">select_dimension</span>
 <span class="kn">from</span> <span class="nn">..simulations</span> <span class="kn">import</span> <span class="n">rdpg</span>
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">GraphRepresentation</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">import_graph</span><span class="p">,</span> <span class="n">is_symmetric</span>
 
 <span class="n">lpt_result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;lpt_result&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;misc_dict&quot;</span><span class="p">))</span>
 
+<span class="n">LptEmbeddingType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ase&quot;</span><span class="p">,</span> <span class="s2">&quot;omnibus&quot;</span><span class="p">]</span>
+<span class="n">LptHypothesisTestType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;rotation&quot;</span><span class="p">,</span> <span class="s2">&quot;scalar-rotation&quot;</span><span class="p">,</span> <span class="s2">&quot;diagonal-rotation&quot;</span><span class="p">]</span>
+
 
 <div class="viewcode-block" id="latent_position_test"><a class="viewcode-back" href="../../../reference/reference/inference.html#graspologic.inference.latent_position_test">[docs]</a><span class="k">def</span> <span class="nf">latent_position_test</span><span class="p">(</span>
-    <span class="n">A1</span><span class="p">,</span>
-    <span class="n">A2</span><span class="p">,</span>
-    <span class="n">embedding</span><span class="o">=</span><span class="s2">&quot;ase&quot;</span><span class="p">,</span>
-    <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">test_case</span><span class="o">=</span><span class="s2">&quot;rotation&quot;</span><span class="p">,</span>
-    <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-<span class="p">):</span>
+    <span class="n">A1</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span>
+    <span class="n">A2</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="p">:</span> <span class="n">LptEmbeddingType</span> <span class="o">=</span> <span class="s2">&quot;ase&quot;</span><span class="p">,</span>
+    <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">test_case</span><span class="p">:</span> <span class="n">LptHypothesisTestType</span> <span class="o">=</span> <span class="s2">&quot;rotation&quot;</span><span class="p">,</span>
+    <span class="n">n_bootstraps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">lpt_result</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Two-sample hypothesis test for the problem of determining whether two random</span>
 <span class="sd">    dot product graphs have the same latent positions.</span>
@@ -401,23 +407,30 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>  <span class="c1"># TODO asymmetric case</span>
     <span class="k">if</span> <span class="n">A1</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">A2</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input matrices do not have matching dimensions&quot;</span><span class="p">)</span>
+    <span class="n">num_components</span><span class="p">:</span> <span class="nb">int</span>
     <span class="k">if</span> <span class="n">n_components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># get the last elbow from ZG for each and take the maximum</span>
         <span class="n">num_dims1</span> <span class="o">=</span> <span class="n">select_dimension</span><span class="p">(</span><span class="n">A1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">num_dims2</span> <span class="o">=</span> <span class="n">select_dimension</span><span class="p">(</span><span class="n">A2</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">n_components</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num_dims1</span><span class="p">,</span> <span class="n">num_dims2</span><span class="p">)</span>
-    <span class="n">X_hats</span> <span class="o">=</span> <span class="n">_embed</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">n_components</span><span class="p">)</span>
+        <span class="n">num_components</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num_dims1</span><span class="p">,</span> <span class="n">num_dims2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">num_components</span> <span class="o">=</span> <span class="n">n_components</span>
+    <span class="n">X_hats</span> <span class="o">=</span> <span class="n">_embed</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">num_components</span><span class="p">)</span>
     <span class="n">stat</span> <span class="o">=</span> <span class="n">_difference_norm</span><span class="p">(</span><span class="n">X_hats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_hats</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">test_case</span><span class="p">)</span>
 
     <span class="c1"># Compute null distributions</span>
     <span class="n">null_distribution_1</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">workers</span><span class="p">)(</span>
-        <span class="n">delayed</span><span class="p">(</span><span class="n">_bootstrap</span><span class="p">)(</span><span class="n">X_hats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">n_components</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="p">,</span> <span class="n">test_case</span><span class="p">)</span>
+        <span class="n">delayed</span><span class="p">(</span><span class="n">_bootstrap</span><span class="p">)(</span>
+            <span class="n">X_hats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">num_components</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="p">,</span> <span class="n">test_case</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_bootstraps</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">null_distribution_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">null_distribution_1</span><span class="p">)</span>
 
     <span class="n">null_distribution_2</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">workers</span><span class="p">)(</span>
-        <span class="n">delayed</span><span class="p">(</span><span class="n">_bootstrap</span><span class="p">)(</span><span class="n">X_hats</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">n_components</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="p">,</span> <span class="n">test_case</span><span class="p">)</span>
+        <span class="n">delayed</span><span class="p">(</span><span class="n">_bootstrap</span><span class="p">)(</span>
+            <span class="n">X_hats</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">num_components</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="p">,</span> <span class="n">test_case</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_bootstraps</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">null_distribution_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">null_distribution_2</span><span class="p">)</span>
@@ -443,8 +456,14 @@
 
 
 <span class="k">def</span> <span class="nf">_bootstrap</span><span class="p">(</span>
-    <span class="n">X_hat</span><span class="p">,</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">n_components</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="p">,</span> <span class="n">test_case</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">):</span>
+    <span class="n">X_hat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="p">:</span> <span class="n">LptEmbeddingType</span><span class="p">,</span>
+    <span class="n">n_components</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_bootstraps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">test_case</span><span class="p">:</span> <span class="n">LptHypothesisTestType</span><span class="p">,</span>
+    <span class="n">rescale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="n">A1_simulated</span> <span class="o">=</span> <span class="n">rdpg</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="n">rescale</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
     <span class="n">A2_simulated</span> <span class="o">=</span> <span class="n">rdpg</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="n">rescale</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
     <span class="n">X1_hat_simulated</span><span class="p">,</span> <span class="n">X2_hat_simulated</span> <span class="o">=</span> <span class="n">_embed</span><span class="p">(</span>
@@ -456,7 +475,12 @@
     <span class="k">return</span> <span class="n">t_bootstrap</span>
 
 
-<span class="k">def</span> <span class="nf">_difference_norm</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">test_case</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_difference_norm</span><span class="p">(</span>
+    <span class="n">X1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">X2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="p">:</span> <span class="n">LptEmbeddingType</span><span class="p">,</span>
+    <span class="n">test_case</span><span class="p">:</span> <span class="n">LptHypothesisTestType</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">embedding</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ase&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">test_case</span> <span class="o">==</span> <span class="s2">&quot;rotation&quot;</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -475,14 +499,28 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X1</span> <span class="o">-</span> <span class="n">X2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_embed</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">embedding</span><span class="p">,</span> <span class="n">n_components</span><span class="p">,</span> <span class="n">check_lcc</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_embed</span><span class="p">(</span>
+    <span class="n">A1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">A2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="p">:</span> <span class="n">LptEmbeddingType</span><span class="p">,</span>
+    <span class="n">n_components</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">check_lcc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="n">X1_hat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">X2_hat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
     <span class="k">if</span> <span class="n">embedding</span> <span class="o">==</span> <span class="s2">&quot;ase&quot;</span><span class="p">:</span>
-        <span class="n">X1_hat</span> <span class="o">=</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">(</span>
-            <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">check_lcc</span><span class="o">=</span><span class="n">check_lcc</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span>
-        <span class="n">X2_hat</span> <span class="o">=</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">(</span>
-            <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">check_lcc</span><span class="o">=</span><span class="n">check_lcc</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span>
+        <span class="n">X1_hat</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+            <span class="n">AdjacencySpectralEmbed</span><span class="p">(</span>
+                <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">check_lcc</span><span class="o">=</span><span class="n">check_lcc</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A1</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">X2_hat</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+            <span class="n">AdjacencySpectralEmbed</span><span class="p">(</span>
+                <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">check_lcc</span><span class="o">=</span><span class="n">check_lcc</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A2</span><span class="p">),</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">embedding</span> <span class="o">==</span> <span class="s2">&quot;omnibus&quot;</span><span class="p">:</span>
         <span class="n">X_hat_compound</span> <span class="o">=</span> <span class="n">OmnibusEmbed</span><span class="p">(</span>
             <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">check_lcc</span><span class="o">=</span><span class="n">check_lcc</span>

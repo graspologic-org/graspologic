@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.sbm_estimators &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.models.sbm_estimators &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -259,11 +259,14 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_X_y</span>
 
 <span class="kn">from</span> <span class="nn">..cluster</span> <span class="kn">import</span> <span class="n">GaussianCluster</span>
 <span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">,</span> <span class="n">LaplacianSpectralEmbed</span>
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">GraphRepresentation</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">augment_diagonal</span><span class="p">,</span>
     <span class="n">cartesian_product</span><span class="p">,</span>
@@ -275,7 +278,13 @@
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseGraphEstimator</span><span class="p">,</span> <span class="n">_calculate_p</span>
 
 
-<span class="k">def</span> <span class="nf">_check_common_inputs</span><span class="p">(</span><span class="n">n_components</span><span class="p">,</span> <span class="n">min_comm</span><span class="p">,</span> <span class="n">max_comm</span><span class="p">,</span> <span class="n">cluster_kws</span><span class="p">,</span> <span class="n">embed_kws</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_check_common_inputs</span><span class="p">(</span>
+    <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">min_comm</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">max_comm</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">cluster_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">embed_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_components</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n_components</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;n_components must be an int or None&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">n_components</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n_components</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -375,15 +384,18 @@
 <span class="sd">            blockmodels: First steps. Social networks, 5(2), 109-137.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">block_p_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">vertex_assignments_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">min_comm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">max_comm</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">cluster_kws</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">embed_kws</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_comm</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">max_comm</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">cluster_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">embed_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
 
@@ -395,7 +407,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_comm</span> <span class="o">=</span> <span class="n">max_comm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embed_kws</span> <span class="o">=</span> <span class="n">embed_kws</span>
 
-    <span class="k">def</span> <span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Do some kind of clustering algorithm to estimate communities</span>
 
@@ -412,10 +424,12 @@
             <span class="n">max_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_comm</span><span class="p">,</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_kws</span>
         <span class="p">)</span>
-        <span class="n">vertex_assignments</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">latent</span><span class="p">)</span>
+        <span class="n">vertex_assignments</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">latent</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vertex_assignments_</span> <span class="o">=</span> <span class="n">vertex_assignments</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SBMEstimator&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the SBM to a graph, optionally with known block labels</span>
 
@@ -464,13 +478,13 @@
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">n_blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">n_blocks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">n_parameters</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
             <span class="n">n_parameters</span> <span class="o">+=</span> <span class="n">n_blocks</span> <span class="o">**</span> <span class="mi">2</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">n_parameters</span> <span class="o">+=</span> <span class="n">n_blocks</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_blocks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">n_parameters</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_blocks</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_blocks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;vertex_assignments_&quot;</span><span class="p">):</span>
             <span class="n">n_parameters</span> <span class="o">+=</span> <span class="n">n_blocks</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">n_parameters</span></div>
@@ -583,14 +597,14 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">degree_directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">min_comm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">max_comm</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">cluster_kws</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">embed_kws</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">degree_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_comm</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">max_comm</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">cluster_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">embed_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
         <span class="n">_check_common_inputs</span><span class="p">(</span><span class="n">n_components</span><span class="p">,</span> <span class="n">min_comm</span><span class="p">,</span> <span class="n">max_comm</span><span class="p">,</span> <span class="n">cluster_kws</span><span class="p">,</span> <span class="n">embed_kws</span><span class="p">)</span>
@@ -605,7 +619,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_comm</span> <span class="o">=</span> <span class="n">max_comm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embed_kws</span> <span class="o">=</span> <span class="n">embed_kws</span>
 
-    <span class="k">def</span> <span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>  <span class="c1"># TODO use directed LSE</span>
         <span class="n">lse</span> <span class="o">=</span> <span class="n">LaplacianSpectralEmbed</span><span class="p">(</span>
             <span class="n">form</span><span class="o">=</span><span class="s2">&quot;R-DAD&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_kws</span>
@@ -616,9 +630,11 @@
             <span class="n">max_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_comm</span><span class="p">,</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_kws</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vertex_assignments_</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">latent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertex_assignments_</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">latent</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DCSBMEstimator&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the DCSBM to a graph, optionally with known block labels</span>
 
@@ -681,26 +697,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span> <span class="o">=</span> <span class="n">block_p</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">n_blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">n_blocks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">n_parameters</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
             <span class="n">n_parameters</span> <span class="o">+=</span> <span class="n">n_blocks</span> <span class="o">**</span> <span class="mi">2</span>  <span class="c1"># B matrix</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">n_parameters</span> <span class="o">+=</span> <span class="n">n_blocks</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_blocks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># Undirected B matrix</span>
+            <span class="n">n_parameters</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_blocks</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_blocks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Undirected B matrix</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;vertex_assignments_&quot;</span><span class="p">):</span>
             <span class="n">n_parameters</span> <span class="o">+=</span> <span class="n">n_blocks</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">n_parameters</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree_corrections_</span><span class="o">.</span><span class="n">size</span>
         <span class="k">return</span> <span class="n">n_parameters</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_block_indices</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_get_block_indices</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    y is a length n_verts vector of labels</span>
 
 <span class="sd">    returns a length n_verts vector in the same order as the input</span>
 <span class="sd">    indicates which block each node is</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">block_labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">block_inv</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">block_sizes</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
     <span class="n">block_labels</span><span class="p">,</span> <span class="n">block_inv</span><span class="p">,</span> <span class="n">block_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
         <span class="n">y</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
@@ -716,7 +735,12 @@
     <span class="k">return</span> <span class="n">block_vert_inds</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_inv</span>
 
 
-<span class="k">def</span> <span class="nf">_calculate_block_p</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_calculate_block_p</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">block_inds</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">block_vert_inds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">return_counts</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    graph : input n x n graph</span>
 <span class="sd">    block_inds : list of length n_communities</span>
@@ -725,7 +749,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">n_blocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">block_inds</span><span class="p">)</span>
-    <span class="n">block_pairs</span> <span class="o">=</span> <span class="n">cartesian_product</span><span class="p">(</span><span class="n">block_inds</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">)</span>
+    <span class="n">block_pairs</span> <span class="o">=</span> <span class="n">cartesian_product</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">block_inds</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">block_inds</span><span class="p">))</span>
     <span class="n">block_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_blocks</span><span class="p">,</span> <span class="n">n_blocks</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">block_pairs</span><span class="p">:</span>
@@ -742,7 +766,9 @@
     <span class="k">return</span> <span class="n">block_p</span>
 
 
-<span class="k">def</span> <span class="nf">_block_to_full</span><span class="p">(</span><span class="n">block_mat</span><span class="p">,</span> <span class="n">inverse</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_block_to_full</span><span class="p">(</span>
+    <span class="n">block_mat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inverse</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;blows up&quot; a k x k matrix, where k is the number of communities,</span>
 <span class="sd">    into a full n x n probability matrix</span>

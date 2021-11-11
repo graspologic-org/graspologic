@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.layouts.colors &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.layouts.colors &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -284,8 +284,8 @@
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">colors_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">thematic_json_io</span><span class="p">:</span>
         <span class="n">thematic_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">thematic_json_io</span><span class="p">)</span>
-    <span class="n">light</span> <span class="o">=</span> <span class="n">thematic_json</span><span class="p">[</span><span class="s2">&quot;light&quot;</span><span class="p">]</span>
-    <span class="n">dark</span> <span class="o">=</span> <span class="n">thematic_json</span><span class="p">[</span><span class="s2">&quot;dark&quot;</span><span class="p">]</span>
+    <span class="n">light</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">thematic_json</span><span class="p">[</span><span class="s2">&quot;light&quot;</span><span class="p">]</span>
+    <span class="n">dark</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">thematic_json</span><span class="p">[</span><span class="s2">&quot;dark&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">light</span><span class="p">,</span> <span class="n">dark</span>
 
 
@@ -293,12 +293,12 @@
 
 
 <span class="k">def</span> <span class="nf">_get_colors</span><span class="p">(</span><span class="n">light_background</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">theme_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="p">(</span>
-        <span class="n">light</span><span class="p">,</span>
-        <span class="n">dark</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">=</span> <span class="n">_CACHED_LIGHT</span><span class="p">,</span> <span class="n">_CACHED_DARK</span> <span class="k">if</span> <span class="n">theme_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_load_thematic_json</span><span class="p">(</span>
-        <span class="n">theme_path</span>
-    <span class="p">)</span>
+    <span class="n">light</span> <span class="o">=</span> <span class="n">_CACHED_LIGHT</span>
+    <span class="n">dark</span> <span class="o">=</span> <span class="n">_CACHED_DARK</span>
+
+    <span class="k">if</span> <span class="n">theme_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">light</span><span class="p">,</span> <span class="n">dark</span> <span class="o">=</span> <span class="n">_load_thematic_json</span><span class="p">(</span><span class="n">theme_path</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">light</span> <span class="k">if</span> <span class="n">light_background</span> <span class="k">else</span> <span class="n">dark</span>
 
 
@@ -343,7 +343,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">color_scheme</span> <span class="o">=</span> <span class="n">_get_colors</span><span class="p">(</span><span class="n">light_background</span><span class="p">,</span> <span class="n">theme_path</span><span class="p">)</span>
-    <span class="n">partition_populations</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">partition_populations</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="n">partitions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">count</span> <span class="o">=</span> <span class="n">partition_populations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">partition</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">partition_populations</span><span class="p">[</span><span class="n">partition</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span>

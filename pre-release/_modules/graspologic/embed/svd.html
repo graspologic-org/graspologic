@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.svd &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.embed.svd &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -259,18 +259,21 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">sklearn</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">isspmatrix_csr</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_almost_symmetric</span>
 
+<span class="n">SvdAlgorithmType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="s2">&quot;truncated&quot;</span><span class="p">,</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span> <span class="s2">&quot;eigsh&quot;</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">_compute_likelihood</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">_compute_likelihood</span><span class="p">(</span><span class="n">arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the log likelihoods based on normal distribution given</span>
 <span class="sd">    a 1d-array of sorted values. If the input has no variance,</span>
@@ -312,8 +315,14 @@
 
 
 <div class="viewcode-block" id="select_dimension"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.select_dimension">[docs]</a><span class="k">def</span> <span class="nf">select_dimension</span><span class="p">(</span>
-    <span class="n">X</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_elbows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_likelihoods</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">):</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">],</span>
+    <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n_elbows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">return_likelihoods</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span>
+<span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates profile likelihood from array based on Zhu and Godsie method.</span>
 <span class="sd">    Elbows correspond to the optimal embedding dimension.</span>
@@ -355,7 +364,7 @@
 <span class="sd">        pp.918-930.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Handle input data</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sp</span><span class="o">.</span><span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;X must be a numpy array or scipy.sparse.csr_matrix, not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="p">)</span>
@@ -421,7 +430,7 @@
         <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Cant compute likelihoods with 1 numbers</span>
             <span class="k">break</span>
         <span class="n">lq</span> <span class="o">=</span> <span class="n">_compute_likelihood</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
-        <span class="n">idx</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">lq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">idx</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">lq</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">elbows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
         <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">likelihoods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lq</span><span class="p">)</span>
@@ -433,13 +442,13 @@
 
 
 <div class="viewcode-block" id="select_svd"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.select_svd">[docs]</a><span class="k">def</span> <span class="nf">select_svd</span><span class="p">(</span>
-    <span class="n">X</span><span class="p">,</span>
-    <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">n_elbows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
-    <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">],</span>
+    <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n_elbows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">algorithm</span><span class="p">:</span> <span class="n">SvdAlgorithmType</span> <span class="o">=</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
+    <span class="n">n_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
     <span class="n">svd_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dimensionality reduction using SVD.</span>
 
@@ -513,13 +522,19 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;algorithm must be one of {full, truncated, randomized, eigsh}.&quot;</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span> <span class="ow">and</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span> <span class="ow">and</span> <span class="n">sp</span><span class="o">.</span><span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&#39;full&#39; agorithm does not support scipy.sparse.csr_matrix inputs.&quot;</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">n_components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">elbows</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">select_dimension</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_elbows</span><span class="o">=</span><span class="n">n_elbows</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-        <span class="n">n_components</span> <span class="o">=</span> <span class="n">elbows</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n_elbows</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;both n_components and n_elbows are None. One must be provided.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dims</span> <span class="o">=</span> <span class="n">select_dimension</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_elbows</span><span class="o">=</span><span class="n">n_elbows</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">elbows</span> <span class="o">=</span> <span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">n_components</span> <span class="o">=</span> <span class="n">elbows</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Check</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">n_components</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)):</span>

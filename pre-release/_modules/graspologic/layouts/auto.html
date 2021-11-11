@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.layouts.auto &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.layouts.auto &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -262,7 +262,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -470,7 +470,7 @@
     <span class="k">return</span> <span class="n">lcc_graph</span><span class="p">,</span> <span class="n">positions</span></div>
 
 
-<span class="k">def</span> <span class="nf">_approximate_prune</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">max_edges_to_keep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_approximate_prune</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">max_edges_to_keep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
     <span class="n">num_edges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num edges: </span><span class="si">{</span><span class="n">num_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -496,13 +496,15 @@
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">max_edges</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">,</span>
     <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">_approximate_prune</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_edges</span><span class="p">)</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="n">largest_connected_component</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">lcc</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span> <span class="o">=</span> <span class="n">largest_connected_component</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">tensors</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
     <span class="n">tensors</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">node2vec_embed</span><span class="p">(</span>
-        <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+        <span class="n">graph</span><span class="o">=</span><span class="n">lcc</span><span class="p">,</span>
         <span class="n">dimensions</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
         <span class="n">num_walks</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="n">window_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -511,7 +513,7 @@
     <span class="p">)</span>
     <span class="n">embedding_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;embedding completed in </span><span class="si">{</span><span class="n">embedding_time</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">graph</span><span class="p">,</span> <span class="n">tensors</span><span class="p">,</span> <span class="n">labels</span>
+    <span class="k">return</span> <span class="n">lcc</span><span class="p">,</span> <span class="n">tensors</span><span class="p">,</span> <span class="n">labels</span>
 
 
 <span class="k">def</span> <span class="nf">_to_undirected</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
@@ -538,7 +540,7 @@
 
 <span class="k">def</span> <span class="nf">_node_positions_from</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
-    <span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">labels</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
     <span class="n">down_projection_2d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
     <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -558,7 +560,7 @@
         <span class="n">partitions</span> <span class="o">=</span> <span class="n">leiden</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
     <span class="n">positions</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">NodePosition</span><span class="p">(</span>
-            <span class="n">node_id</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+            <span class="n">node_id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">),</span>
             <span class="n">x</span><span class="o">=</span><span class="n">scaled_points</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">y</span><span class="o">=</span><span class="n">scaled_points</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">size</span><span class="o">=</span><span class="n">sizes</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.mug2vec &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.embed.mug2vec &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -259,11 +259,13 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">GraphRepresentation</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">pass_to_ranks</span>
 <span class="kn">from</span> <span class="nn">.mds</span> <span class="kn">import</span> <span class="n">ClassicalMDS</span>
 <span class="kn">from</span> <span class="nn">.omni</span> <span class="kn">import</span> <span class="n">OmnibusEmbed</span>
@@ -349,13 +351,15 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pass_to_ranks</span><span class="o">=</span><span class="s2">&quot;simple-nonzero&quot;</span><span class="p">,</span>
-        <span class="n">omnibus_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">omnibus_n_elbows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">cmds_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">cmds_n_elbows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">pass_to_ranks</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+            <span class="s2">&quot;simple-nonzero&quot;</span><span class="p">,</span> <span class="s2">&quot;simple-all&quot;</span><span class="p">,</span> <span class="s2">&quot;zero-boost&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;simple-nonzero&quot;</span><span class="p">,</span>
+        <span class="n">omnibus_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">omnibus_n_elbows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">cmds_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">cmds_n_elbows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">svd_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pass_to_ranks</span> <span class="o">=</span> <span class="n">pass_to_ranks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">omnibus_components</span> <span class="o">=</span> <span class="n">omnibus_components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">omnibus_n_elbows</span> <span class="o">=</span> <span class="n">omnibus_n_elbows</span>
@@ -363,7 +367,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cmds_n_elbows</span> <span class="o">=</span> <span class="n">cmds_n_elbows</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">svd_seed</span> <span class="o">=</span> <span class="n">svd_seed</span>
 
-    <span class="k">def</span> <span class="nf">_check_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_check_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
         <span class="n">variables</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;pass_to_ranks&quot;</span><span class="p">)</span>
 
@@ -376,7 +380,9 @@
                     <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> must be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;mug2vec&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes a vector for each graph.</span>
 
@@ -413,12 +419,14 @@
             <span class="n">n_elbows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmds_n_elbows</span><span class="p">,</span>
             <span class="n">svd_seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">svd_seed</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">embeddings_</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">omnibus_embedding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embeddings_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">omnibus_embedding</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cmds_components_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embeddings_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes a vector for each graph.</span>
 
@@ -433,7 +441,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        embeddings : returns an instance of self.</span>
+<span class="sd">        embeddings : embeddings generated by fit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
 

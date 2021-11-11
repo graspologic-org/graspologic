@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.cluster.gclust &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.cluster.gclust &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -259,13 +259,19 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">adjusted_rand_score</span>
 <span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="kn">import</span> <span class="n">GaussianMixture</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">ParameterGrid</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseCluster</span>
+
+<span class="n">GaussianInitParamsType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;random&quot;</span><span class="p">,</span> <span class="s2">&quot;kmeans&quot;</span><span class="p">]</span>
+<span class="n">GaussianCovarianceType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;spherical&quot;</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">,</span> <span class="s2">&quot;tied&quot;</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="GaussianCluster"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.GaussianCluster">[docs]</a><span class="k">class</span> <span class="nc">GaussianCluster</span><span class="p">(</span><span class="n">BaseCluster</span><span class="p">):</span>
@@ -357,15 +363,19 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">min_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">max_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">covariance_type</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
-        <span class="n">reg_covar</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
-        <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">n_init</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">init_params</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
-        <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_components</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">max_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">covariance_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">GaussianCovarianceType</span><span class="p">],</span>
+            <span class="n">List</span><span class="p">[</span><span class="n">GaussianCovarianceType</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">reg_covar</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="n">n_init</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">init_params</span><span class="p">:</span> <span class="n">GaussianInitParamsType</span> <span class="o">=</span> <span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_components</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">min_components</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -426,7 +436,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_params</span> <span class="o">=</span> <span class="n">init_params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GaussianCluster&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits gaussian mixure model to the data.</span>
 <span class="sd">        Estimate model parameters with the EM algorithm.</span>
@@ -474,7 +484,7 @@
         <span class="c1"># Get parameters</span>
         <span class="n">random_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span>
 
-        <span class="n">param_grid</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">param_grid_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">covariance_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariance_type</span><span class="p">,</span>
             <span class="n">n_components</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">lower_ncomponents</span><span class="p">,</span> <span class="n">upper_ncomponents</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
             <span class="n">tol</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tol</span><span class="p">],</span>
@@ -485,11 +495,11 @@
             <span class="n">random_state</span><span class="o">=</span><span class="p">[</span><span class="n">random_state</span><span class="p">],</span>
         <span class="p">)</span>
 
-        <span class="n">param_grid</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ParameterGrid</span><span class="p">(</span><span class="n">param_grid</span><span class="p">))</span>
+        <span class="n">param_grid</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ParameterGrid</span><span class="p">(</span><span class="n">param_grid_values</span><span class="p">))</span>
 
-        <span class="n">models</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_mixture_components</span><span class="p">)]</span>
-        <span class="n">bics</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_mixture_components</span><span class="p">)]</span>
-        <span class="n">aris</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_mixture_components</span><span class="p">)]</span>
+        <span class="n">models</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">GaussianMixture</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_mixture_components</span><span class="p">)]</span>
+        <span class="n">bics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_mixture_components</span><span class="p">)]</span>
+        <span class="n">aris</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_mixture_components</span><span class="p">)]</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">param_grid</span><span class="p">):</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>

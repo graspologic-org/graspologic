@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.simulations.simulations &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.simulations.simulations &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -260,6 +260,7 @@
 <span class="c1"># Licensed under the MIT License.</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_scalar</span>
@@ -267,7 +268,7 @@
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">cartesian_product</span><span class="p">,</span> <span class="n">symmetrize</span>
 
 
-<span class="k">def</span> <span class="nf">_n_to_labels</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_n_to_labels</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="n">n_cumsum</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)):</span>
@@ -275,7 +276,9 @@
     <span class="k">return</span> <span class="n">labels</span>
 
 
-<span class="k">def</span> <span class="nf">sample_edges</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">sample_edges</span><span class="p">(</span>
+    <span class="n">P</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gemerates a binary random graph based on the P matrix provided</span>
 
@@ -327,7 +330,16 @@
         <span class="k">return</span> <span class="n">A</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="er_np"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.er_np">[docs]</a><span class="k">def</span> <span class="nf">er_np</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">wt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wtargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dc_kws</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="er_np"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.er_np">[docs]</a><span class="k">def</span> <span class="nf">er_np</span><span class="p">(</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">wt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">wtargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dc_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Samples a Erdos Renyi (n, p) graph with specified edge probability.</span>
 
@@ -424,10 +436,17 @@
     <span class="n">n_sbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n</span><span class="p">])</span>
     <span class="n">p_sbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">p</span><span class="p">]])</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">sbm</span><span class="p">(</span><span class="n">n_sbm</span><span class="p">,</span> <span class="n">p_sbm</span><span class="p">,</span> <span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">wtargs</span><span class="p">,</span> <span class="n">dc</span><span class="p">,</span> <span class="n">dc_kws</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">g</span></div>
+    <span class="k">return</span> <span class="n">g</span>  <span class="c1"># type: ignore</span></div>
 
 
-<div class="viewcode-block" id="er_nm"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.er_nm">[docs]</a><span class="k">def</span> <span class="nf">er_nm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">wt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wtargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="er_nm"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.er_nm">[docs]</a><span class="k">def</span> <span class="nf">er_nm</span><span class="p">(</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">wt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">wtargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Samples an Erdos Renyi (n, m) graph with specified number of edges.</span>
 
@@ -552,7 +571,7 @@
     <span class="c1"># unravel back</span>
     <span class="n">triu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">triu</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="c1"># check weight function</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">wt</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">wt</span><span class="p">):</span>
         <span class="n">wt</span> <span class="o">=</span> <span class="n">wt</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="n">wtargs</span><span class="p">)</span>
     <span class="n">A</span><span class="p">[</span><span class="n">triu</span><span class="p">]</span> <span class="o">=</span> <span class="n">wt</span>
 
@@ -563,16 +582,16 @@
 
 
 <div class="viewcode-block" id="sbm"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm">[docs]</a><span class="k">def</span> <span class="nf">sbm</span><span class="p">(</span>
-    <span class="n">n</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">,</span>
-    <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">wt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">wtargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">dc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">dc_kws</span><span class="o">=</span><span class="p">{},</span>
-    <span class="n">return_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">):</span>
+    <span class="n">n</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">wt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">wtargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dc_kws</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">return_labels</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Samples a graph from the stochastic block model (SBM).</span>
 
@@ -845,7 +864,7 @@
             <span class="n">block_p</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
             <span class="c1"># identify submatrix for community i, j</span>
             <span class="c1"># cartesian product to identify edges for community i,j pair</span>
-            <span class="n">cprod</span> <span class="o">=</span> <span class="n">cartesian_product</span><span class="p">(</span><span class="n">cmties</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cmties</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">cprod</span> <span class="o">=</span> <span class="n">cartesian_product</span><span class="p">(</span><span class="n">cmties</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cmties</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
             <span class="c1"># get idx in 1d coordinates by ravelling</span>
             <span class="n">triu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel_multi_index</span><span class="p">((</span><span class="n">cprod</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">cprod</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
             <span class="n">pchoice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">triu</span><span class="p">))</span>
@@ -880,7 +899,15 @@
     <span class="k">return</span> <span class="n">A</span></div>
 
 
-<div class="viewcode-block" id="rdpg"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg">[docs]</a><span class="k">def</span> <span class="nf">rdpg</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">wt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wtargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="rdpg"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg">[docs]</a><span class="k">def</span> <span class="nf">rdpg</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">Y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rescale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">wt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">wtargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Samples a random graph based on the latent positions in X (and</span>
 <span class="sd">    optionally in Y)</span>
@@ -981,15 +1008,22 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">wt</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;You have not passed a function for wt.&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">wt</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">wt</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">wtargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wtargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">wts</span> <span class="o">=</span> <span class="n">wt</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">A</span><span class="p">)),</span> <span class="o">**</span><span class="n">wtargs</span><span class="p">)</span>
         <span class="n">A</span><span class="p">[</span><span class="n">A</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">wts</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">A</span> <span class="o">*=</span> <span class="n">wt</span>
+        <span class="n">A</span> <span class="o">*=</span> <span class="n">wt</span>  <span class="c1"># type: ignore</span>
     <span class="k">return</span> <span class="n">A</span></div>
 
 
-<span class="k">def</span> <span class="nf">p_from_latent</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">p_from_latent</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">Y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rescale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gemerates a matrix of connection probabilities for a random graph</span>
 <span class="sd">    based on a set of latent positions</span>
@@ -1062,14 +1096,14 @@
 
 
 <div class="viewcode-block" id="mmsbm"><a class="viewcode-back" href="../../../reference/reference/simulations.html#graspologic.simulations.mmsbm">[docs]</a><span class="k">def</span> <span class="nf">mmsbm</span><span class="p">(</span>
-    <span class="n">n</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">return_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">):</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">return_labels</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Samples a graph from Mixed Membership Stochastic Block Model (MMSBM).</span>
 
@@ -1182,23 +1216,28 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Values in p must be in between 0 and 1.&quot;</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="n">alpha</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ensure_min_features</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;There are non-numeric elements in alpha&quot;</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Alpha entries must be &gt; 0.&quot;</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">alpha</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">),):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;alpha must be a list or np.array of shape </span><span class="si">{c}</span><span class="s2">, not </span><span class="si">{w}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">),),</span> <span class="n">w</span><span class="o">=</span><span class="n">alpha</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">alpha_checked</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;alpha must not be None&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">alpha_checked</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="n">alpha_checked</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span>
+            <span class="n">alpha_checked</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ensure_min_features</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">alpha_checked</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;There are non-numeric elements in alpha&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">alpha_checked</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Alpha entries must be &gt; 0.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">alpha_checked</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">),):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;alpha must be a list or np.array of shape </span><span class="si">{c}</span><span class="s2">, not </span><span class="si">{w}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">),),</span> <span class="n">w</span><span class="o">=</span><span class="n">alpha_checked</span><span class="o">.</span><span class="n">shape</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">_generator</span><span class="o">.</span><span class="n">Generator</span><span class="p">)):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;rng must be &lt;class &#39;numpy.random._generator.Generator&#39;&gt; not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">type</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span>
-        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;rng must be &lt;class &#39;numpy.random.Generator&#39;&gt; not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rng</span><span class="p">))</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">rng</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
@@ -1215,7 +1254,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Specified undirected, but P is directed.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Naming convention follows paper listed in references.</span>
-    <span class="n">mm_vectors</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">mm_vectors</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">alpha_checked</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
     <span class="n">mm_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">mm_vectors</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
 

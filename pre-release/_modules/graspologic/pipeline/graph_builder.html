@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.pipeline.graph_builder &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.pipeline.graph_builder &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -259,7 +259,6 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation.</span>
 <span class="c1"># Licensed under the MIT license.</span>
 
-<span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -290,7 +289,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="c1"># OrderedDict is the default for {} anyway, but I wanted to be very explicit,</span>
         <span class="c1"># since we absolutely rely on the ordering</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_id_map</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span> <span class="k">if</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 
     <span class="nd">@beartype</span>
@@ -298,7 +297,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
         <span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-        <span class="n">weight</span><span class="p">:</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">sum_weight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attributes</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -321,7 +320,7 @@
 <span class="sd">            source node id</span>
 <span class="sd">        target : Any</span>
 <span class="sd">            target node id</span>
-<span class="sd">        weight : numbers.Real (default=1.0)</span>
+<span class="sd">        weight : Union[int, float] (default=1.0)</span>
 <span class="sd">            The weight for the edge. If none is provided, the weight is defaulted to 1.</span>
 <span class="sd">        sum_weight : bool (default=True)</span>
 <span class="sd">            If an edge between the ``source`` and ``target`` already exist, should we</span>

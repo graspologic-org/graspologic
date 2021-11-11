@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.nominate.VNviaSGM &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.nominate.VNviaSGM &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -258,11 +258,15 @@
   <h1>Source code for graspologic.nominate.VNviaSGM</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span>
 
 <span class="kn">from</span> <span class="nn">..match</span> <span class="kn">import</span> <span class="n">GraphMatch</span> <span class="k">as</span> <span class="n">GMP</span>
+
+<span class="c1"># Type aliases</span>
+<span class="n">SeedsType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span>
 
 
 <div class="viewcode-block" id="VNviaSGM"><a class="viewcode-back" href="../../../reference/reference/nominate.html#graspologic.nominate.VNviaSGM">[docs]</a><span class="k">class</span> <span class="nc">VNviaSGM</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
@@ -336,13 +340,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">nomination_list_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">order_voi_subgraph</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">order_seeds_subgraph</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">n_init</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">max_nominations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">graph_match_kws</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">order_voi_subgraph</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">order_seeds_subgraph</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">n_init</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="n">max_nominations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">graph_match_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order_voi_subgraph</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">order_voi_subgraph</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">order_voi_subgraph</span> <span class="o">=</span> <span class="n">order_voi_subgraph</span>
@@ -375,7 +381,9 @@
             <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;graph_match_kws` must be type dict&#39;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">voi</span><span class="p">,</span> <span class="n">seeds</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">voi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">seeds</span><span class="p">:</span> <span class="n">SeedsType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;VNviaSGM&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits the model to two graphs.</span>
 
@@ -569,7 +577,9 @@
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">voi</span><span class="p">,</span> <span class="n">seeds</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">voi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">seeds</span><span class="p">:</span> <span class="n">SeedsType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits model to two adjacency matrices and returns nomination list</span>
 
@@ -600,7 +610,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nomination_list_</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_induced_subgraph</span><span class="p">(</span><span class="n">graph_adj_matrix</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">mindist</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_get_induced_subgraph</span><span class="p">(</span>
+    <span class="n">graph_adj_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mindist</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a vertex list for the induced subgraph about a node with</span>
 <span class="sd">    max and min distance parameters.</span>
@@ -645,7 +657,9 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ress</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_get_induced_subgraph_list</span><span class="p">(</span><span class="n">graph_adj_matrix</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">mindist</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_get_induced_subgraph_list</span><span class="p">(</span>
+    <span class="n">graph_adj_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mindist</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a vertex list for the induced subgraph about a node with</span>
 <span class="sd">    max and min distance parameters.</span>

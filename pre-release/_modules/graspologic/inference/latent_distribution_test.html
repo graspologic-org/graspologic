@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.inference.latent_distribution_test &mdash; graspologic 0.3.2dev1435563653 documentation</title>
+  <title>graspologic.inference.latent_distribution_test &mdash; graspologic 1.0.0dev1450174836 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.2dev1435563653
+                1.0.0dev1450174836
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -259,7 +259,7 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">hyppo.ksample</span> <span class="kn">import</span> <span class="n">KSample</span>
@@ -267,9 +267,11 @@
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">PAIRED_DISTANCES</span><span class="p">,</span> <span class="n">PAIRWISE_KERNEL_FUNCTIONS</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_random_state</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">..align</span> <span class="kn">import</span> <span class="n">SeedlessProcrustes</span><span class="p">,</span> <span class="n">SignFlips</span>
 <span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">,</span> <span class="n">select_dimension</span>
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">GraphRepresentation</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">fit_plug_in_variance_estimator</span><span class="p">,</span> <span class="n">import_graph</span>
 
 <span class="n">_VALID_DISTANCES</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">PAIRED_DISTANCES</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -279,24 +281,32 @@
 
 <span class="n">_VALID_TESTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cca&quot;</span><span class="p">,</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">,</span> <span class="s2">&quot;hhg&quot;</span><span class="p">,</span> <span class="s2">&quot;rv&quot;</span><span class="p">,</span> <span class="s2">&quot;hsic&quot;</span><span class="p">,</span> <span class="s2">&quot;mgc&quot;</span><span class="p">]</span>
 
-<span class="n">ldt_result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;ldt_result&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;misc_dict&quot;</span><span class="p">))</span>
+<span class="n">LdtTestType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;cca&quot;</span><span class="p">,</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">,</span> <span class="s2">&quot;hhg&quot;</span><span class="p">,</span> <span class="s2">&quot;rv&quot;</span><span class="p">,</span> <span class="s2">&quot;hsic&quot;</span><span class="p">,</span> <span class="s2">&quot;mgc&quot;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">ldt_result</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">stat</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">pvalue</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">misc_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="latent_distribution_test"><a class="viewcode-back" href="../../../reference/reference/inference.html#graspologic.inference.latent_distribution_test">[docs]</a><span class="k">def</span> <span class="nf">latent_distribution_test</span><span class="p">(</span>
-    <span class="n">A1</span><span class="p">,</span>
-    <span class="n">A2</span><span class="p">,</span>
-    <span class="n">test</span><span class="o">=</span><span class="s2">&quot;dcorr&quot;</span><span class="p">,</span>
-    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
-    <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">workers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">size_correction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">pooled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">align_type</span><span class="o">=</span><span class="s2">&quot;sign_flips&quot;</span><span class="p">,</span>
-    <span class="n">align_kws</span><span class="o">=</span><span class="p">{},</span>
-    <span class="n">input_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">):</span>
+    <span class="n">A1</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span>
+    <span class="n">A2</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span>
+    <span class="n">test</span><span class="p">:</span> <span class="n">LdtTestType</span> <span class="o">=</span> <span class="s2">&quot;dcorr&quot;</span><span class="p">,</span>
+    <span class="n">metric</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
+    <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n_bootstraps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+        <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">workers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">size_correction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">pooled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">align_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;sign_flips&quot;</span><span class="p">,</span> <span class="s2">&quot;seedless_procrustes&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;sign_flips&quot;</span><span class="p">,</span>
+    <span class="n">align_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">input_graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ldt_result</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Two-sample hypothesis test for the problem of determining whether two random</span>
 <span class="sd">    dot product graphs have the same distributions of latent positions.</span>
 
@@ -654,7 +664,9 @@
     <span class="k">return</span> <span class="n">ldt_result</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">,</span> <span class="n">misc_dict</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_embed</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">n_components</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_embed</span><span class="p">(</span>
+    <span class="n">A1</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">A2</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="k">if</span> <span class="n">n_components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">num_dims1</span> <span class="o">=</span> <span class="n">select_dimension</span><span class="p">(</span><span class="n">A1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">num_dims2</span> <span class="o">=</span> <span class="n">select_dimension</span><span class="p">(</span><span class="n">A2</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -674,10 +686,10 @@
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">X1_hat</span><span class="p">,</span> <span class="n">X2_hat</span>
+    <span class="k">return</span> <span class="n">X1_hat</span><span class="p">,</span> <span class="n">X2_hat</span>  <span class="c1"># type: ignore</span>
 
 
-<span class="k">def</span> <span class="nf">_sample_modified_ase</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">workers</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">pooled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_sample_modified_ase</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">workers</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">pooled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
     <span class="n">N</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
 
     <span class="c1"># return if graphs are same order, else ensure X the larger graph.</span>
@@ -711,7 +723,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">X_sampled</span><span class="p">)</span> <span class="k">if</span> <span class="n">reverse_order</span> <span class="k">else</span> <span class="p">(</span><span class="n">X_sampled</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">add_variance</span><span class="p">(</span><span class="n">X_orig</span><span class="p">,</span> <span class="n">X_sigma</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">add_variance</span><span class="p">(</span><span class="n">X_orig</span><span class="p">,</span> <span class="n">X_sigma</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">X_orig</span> <span class="o">+</span> <span class="n">stats</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">X_sigma</span><span class="p">)</span>
 </pre></div>
