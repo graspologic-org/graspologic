@@ -72,7 +72,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
             params["svd_solver_algorithm"] = 1
             laplacian_spectral_embedding(**params)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestLaplacianSpectralEmbedding.parameters(self.graph)
             params["svd_solver_algorithm"] = "sandwich"
             laplacian_spectral_embedding(**params)
@@ -100,7 +100,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
                 params = TestLaplacianSpectralEmbedding.parameters(self.graph)
                 params["form"] = form
                 laplacian_spectral_embedding(**params)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestLaplacianSpectralEmbedding.parameters(self.graph)
             params["form"] = "formless"
             laplacian_spectral_embedding(**params)

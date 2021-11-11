@@ -1,13 +1,15 @@
 ﻿# Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Optional, Tuple, Union
+from typing import Any, Collection, Dict, List, Optional, Tuple, Union
 
 import matplotlib as mpl
+import matplotlib.axes
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import sklearn.mixture
 from beartype import beartype
 from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection
@@ -24,19 +26,23 @@ from ..preconditions import (
     check_argument_types,
     check_optional_argument_types,
 )
+from ..types import GraphRepresentation
 from ..utils import import_graph, pass_to_ranks
+
+# Type aliases
+FigSizeType = Tuple[int, int]
 
 
 def _check_common_inputs(
-    figsize=None,
-    height=None,
-    title=None,
-    context=None,
-    font_scale=None,
-    legend_name=None,
-    title_pad=None,
-    hier_label_fontsize=None,
-):
+    figsize: Optional[FigSizeType] = None,
+    height: Optional[float] = None,
+    title: Optional[str] = None,
+    context: Optional[str] = None,
+    font_scale: Optional[float] = None,
+    legend_name: Optional[str] = None,
+    title_pad: Optional[float] = None,
+    hier_label_fontsize: Optional[float] = None,
+) -> None:
     # Handle figsize
     if figsize is not None:
         if not isinstance(figsize, tuple):
@@ -94,7 +100,7 @@ def _check_common_inputs(
             raise TypeError(msg)
 
 
-def _transform(arr, method):
+def _transform(arr: np.ndarray, method: Optional[str]) -> np.ndarray:
     if method is not None:
         if method in ["log", "log10"]:
             # arr = np.log(arr, where=(arr > 0))
@@ -118,8 +124,12 @@ def _transform(arr, method):
 
 
 def _process_graphs(
-    graphs, inner_hier_labels, outer_hier_labels, transform, sort_nodes
-):
+    graphs: Collection[np.ndarray],
+    inner_hier_labels: Optional[Union[np.ndarray, List[Any]]],
+    outer_hier_labels: Optional[Union[np.ndarray, List[Any]]],
+    transform: Optional[str],
+    sort_nodes: bool,
+) -> List[np.ndarray]:
     """Handles transformation and sorting of graphs for plotting"""
     for g in graphs:
         check_consistent_length(g, inner_hier_labels, outer_hier_labels)
@@ -144,27 +154,27 @@ def _process_graphs(
 
 
 def heatmap(
-    X,
-    transform=None,
-    figsize=(10, 10),
-    title=None,
-    context="talk",
-    font_scale=1,
-    xticklabels=False,
-    yticklabels=False,
-    cmap="RdBu_r",
-    vmin=None,
-    vmax=None,
-    center=0,
-    cbar=True,
-    inner_hier_labels=None,
-    outer_hier_labels=None,
-    hier_label_fontsize=30,
-    ax=None,
-    title_pad=None,
-    sort_nodes=False,
-    **kwargs,
-):
+    X: GraphRepresentation,
+    transform: Optional[str] = None,
+    figsize: Tuple[int, int] = (10, 10),
+    title: Optional[str] = None,
+    context: str = "talk",
+    font_scale: int = 1,
+    xticklabels: bool = False,
+    yticklabels: bool = False,
+    cmap: str = "RdBu_r",
+    vmin: Optional[float] = None,
+    vmax: Optional[float] = None,
+    center: int = 0,
+    cbar: bool = True,
+    inner_hier_labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    outer_hier_labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    hier_label_fontsize: int = 30,
+    ax: Optional[matplotlib.axes.Axes] = None,
+    title_pad: Optional[float] = None,
+    sort_nodes: bool = False,
+    **kwargs: Any,
+) -> matplotlib.axes.Axes:
     r"""
     Plots a graph as a color-encoded matrix.
 
@@ -249,12 +259,12 @@ def heatmap(
 
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if None
+        if ``None``
 
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is True, will sort nodes this way within block.
+        ``sort_nodes`` is ``True``, will sort nodes this way within block.
 
     **kwargs : dict, optional
         additional plotting arguments passed to Seaborn's ``heatmap``
@@ -353,23 +363,23 @@ def heatmap(
 
 
 def gridplot(
-    X,
-    labels=None,
-    transform=None,
-    height=10,
-    title=None,
-    context="talk",
-    font_scale=1,
-    alpha=0.7,
-    sizes=(10, 200),
-    palette="Set1",
-    legend_name="Type",
-    inner_hier_labels=None,
-    outer_hier_labels=None,
-    hier_label_fontsize=30,
-    title_pad=None,
-    sort_nodes=False,
-):
+    X: GraphRepresentation,
+    labels: Optional[List[str]] = None,
+    transform: Optional[str] = None,
+    height: int = 10,
+    title: Optional[str] = None,
+    context: str = "talk",
+    font_scale: float = 1,
+    alpha: float = 0.7,
+    sizes: Tuple[int, int] = (10, 200),
+    palette: str = "Set1",
+    legend_name: str = "Type",
+    inner_hier_labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    outer_hier_labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    hier_label_fontsize: int = 30,
+    title_pad: Optional[float] = None,
+    sort_nodes: bool = False,
+) -> matplotlib.axes.Axes:
     r"""
     Plots multiple graphs on top of each other with dots as edges.
 
@@ -438,11 +448,11 @@ def gridplot(
         ``outer_hier_labels``.
     title_pad : int, float or None, optional (default=None)
         Custom padding to use for the distance of the title from the heatmap. Autoscales
-        if None
+        if ``None``
     sort_nodes : boolean, optional (default=False)
         Whether or not to sort the nodes of the graph by the sum of edge weights
         (degree for an unweighted graph). If ``inner_hier_labels`` is passed and
-        ``sort_nodes`` is True, will sort nodes this way within block.
+        ``sort_nodes`` is ``True``, will sort nodes this way within block.
     """
     _check_common_inputs(
         height=height,
@@ -529,21 +539,21 @@ def gridplot(
 
 
 def pairplot(
-    X,
-    labels=None,
-    col_names=None,
-    title=None,
-    legend_name=None,
-    variables=None,
-    height=2.5,
-    context="talk",
-    font_scale=1,
-    palette="Set1",
-    alpha=0.7,
-    size=50,
-    marker=".",
-    diag_kind="auto",
-):
+    X: np.ndarray,
+    labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    col_names: Optional[Union[np.ndarray, List[Any]]] = None,
+    title: Optional[str] = None,
+    legend_name: Optional[str] = None,
+    variables: Optional[List[str]] = None,
+    height: float = 2.5,
+    context: str = "talk",
+    font_scale: float = 1,
+    palette: str = "Set1",
+    alpha: float = 0.7,
+    size: float = 50,
+    marker: str = ".",
+    diag_kind: str = "auto",
+) -> sns.PairGrid:
     r"""
     Plot pairwise relationships in a dataset.
 
@@ -688,8 +698,17 @@ def pairplot(
 
 
 def _plot_ellipse_and_data(
-    data, X, j, k, means, covariances, ax, label_palette, cluster_palette, alpha
-):
+    data: pd.DataFrame,
+    X: np.ndarray,
+    j: int,
+    k: int,
+    means: np.ndarray,
+    covariances: np.ndarray,
+    ax: matplotlib.axes.Axes,
+    label_palette: Dict[Any, str],
+    cluster_palette: Dict[Any, str],
+    alpha: float,
+) -> None:
     r"""
     plot_ellipse makes a scatter plot from the two dimensions j,k where j
     corresponds to x-axis
@@ -747,19 +766,19 @@ def _plot_ellipse_and_data(
 
 
 def pairplot_with_gmm(
-    X,
-    gmm,
-    labels=None,
-    cluster_palette="Set1",
-    label_palette="Set1",
-    title=None,
-    legend_name=None,
-    context="talk",
-    font_scale=1,
-    alpha=0.7,
-    figsize=(12, 12),
-    histplot_kws={},
-):
+    X: np.ndarray,
+    gmm: sklearn.mixture.GaussianMixture,
+    labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    cluster_palette: Union[str, Dict] = "Set1",
+    label_palette: Union[str, Dict] = "Set1",
+    title: Optional[str] = None,
+    legend_name: Optional[str] = None,
+    context: str = "talk",
+    font_scale: float = 1,
+    alpha: float = 0.7,
+    figsize: Tuple[int, int] = (12, 12),
+    histplot_kws: Optional[Dict[str, Any]] = None,
+) -> Tuple[matplotlib.pyplot.Figure, matplotlib.pyplot.Axes]:
     r"""
     Plot pairwise relationships in a dataset, also showing a clustering predicted by
     a Gaussian mixture model.
@@ -892,6 +911,10 @@ def pairplot_with_gmm(
         fig, axes = plt.subplots(dimensions, dimensions, figsize=figsize, squeeze=False)
         # this will allow for uniform iteration whether axes was 2d or 1d
         axes = axes.flatten()
+
+        if histplot_kws is None:
+            histplot_kws = {}
+
         for i in range(dimensions):
             for j in range(dimensions):
                 if i == j and X.shape[1] > 2:
@@ -960,17 +983,17 @@ def pairplot_with_gmm(
 
 
 def _distplot(
-    data,
-    labels=None,
-    direction="out",
-    title="",
-    context="talk",
-    font_scale=1,
-    figsize=(10, 5),
-    palette="Set1",
-    xlabel="",
-    ylabel="Density",
-):
+    data: np.ndarray,
+    labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    direction: str = "out",
+    title: str = "",
+    context: str = "talk",
+    font_scale: float = 1,
+    figsize: Tuple[int, int] = (10, 5),
+    palette: str = "Set1",
+    xlabel: str = "",
+    ylabel: str = "Density",
+) -> matplotlib.pyplot.Axes:
 
     plt.figure(figsize=figsize)
     ax = plt.gca()
@@ -1002,15 +1025,15 @@ def _distplot(
 
 
 def degreeplot(
-    X,
-    labels=None,
-    direction="out",
-    title="Degree plot",
-    context="talk",
-    font_scale=1,
-    figsize=(10, 5),
-    palette="Set1",
-):
+    X: np.ndarray,
+    labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    direction: str = "out",
+    title: str = "Degree plot",
+    context: str = "talk",
+    font_scale: float = 1,
+    figsize: Tuple[int, int] = (10, 5),
+    palette: str = "Set1",
+) -> matplotlib.pyplot.Axes:
     r"""
     Plots the distribution of node degrees for the input graph.
     Allows for sets of node labels, will plot a distribution for each
@@ -1071,15 +1094,15 @@ def degreeplot(
 
 
 def edgeplot(
-    X,
-    labels=None,
-    nonzero=False,
-    title="Edge plot",
-    context="talk",
-    font_scale=1,
-    figsize=(10, 5),
-    palette="Set1",
-):
+    X: np.ndarray,
+    labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    nonzero: bool = False,
+    title: str = "Edge plot",
+    context: str = "talk",
+    font_scale: float = 1,
+    figsize: Tuple[int, int] = (10, 5),
+    palette: str = "Set1",
+) -> matplotlib.pyplot.Axes:
     r"""
     Plots the distribution of edge weights for the input graph.
     Allows for sets of node labels, will plot edge weight distribution
@@ -1120,7 +1143,7 @@ def edgeplot(
     check_consistent_length((X, labels))
     edges = X.ravel()
     labels = np.tile(labels, (1, X.shape[1]))
-    labels = labels.ravel()
+    labels = labels.ravel()  # type: ignore
     if nonzero:
         labels = labels[edges != 0]
         edges = edges[edges != 0]
@@ -1156,7 +1179,7 @@ def networkplot(
     font_scale: float = 1.0,
     figsize: Tuple[int, int] = (10, 10),
     ax: Optional[Axes] = None,
-    legend: str = False,
+    legend: Optional[str] = None,
     node_kws: dict = {},
     edge_kws: dict = {},
 ) -> Axes:
@@ -1221,12 +1244,12 @@ def networkplot(
         Size of the figure (width, height)
     ax: matplotlib.axes.Axes, optional, default: None
         Axes in which to draw the plot. Otherwise, will generate own axes.
-    legend: False (default), or one of {brief, full, auto}
+    legend: None (default), or one of {brief, full, auto}
         How to draw the legend. If “brief”, numeric hue and size variables
         will be represented with a sample of evenly spaced values. If “full”,
         every group will get an entry in the legend. If “auto”, choose
         between brief or full representation based on number of levels. If
-        False, no legend data is added and no legend is drawn.
+        None, no legend data is added and no legend is drawn.
     node_kws: dict, optional
         Optional arguments for :func:`seaborn.scatterplot`.
     edge_kws: dict, optional
@@ -1264,6 +1287,7 @@ def networkplot(
     )
 
     index = range(adjacency.shape[0])
+    hue_key: Optional[str]
     if isinstance(x, np.ndarray):
         check_consistent_length(adjacency, x, y)
         check_argument(
@@ -1286,20 +1310,20 @@ def networkplot(
                 palette = "Set1"
         else:
             hue_key = None
-    elif isinstance(x, str):
+    elif isinstance(x, str) and isinstance(y, str):
         check_consistent_length(adjacency, node_data)
-        check_argument(
-            node_data is not None,
-            "If x and y are strings, meta_data must be pandas DataFrame.",
-        )
+        if not isinstance(node_data, pd.DataFrame):
+            raise ValueError(
+                "If x and y are strings, node_data must be pandas DataFrame."
+            )
         plot_df = node_data.copy()
         x_key = x
         y_key = y
         if node_hue is not None:
-            check_argument(
-                isinstance(node_hue, str),
-                "If x and y are strings, node_hue must also be a string.",
-            )
+            if not isinstance(node_hue, str):
+                raise ValueError(
+                    "If x and y are strings, node_hue must also be a string."
+                )
             hue_key = node_hue
             if palette is None:
                 palette = "Set1"
@@ -1325,12 +1349,14 @@ def networkplot(
     post_coords = list(zip(post_edgelist["x"], post_edgelist["y"]))
     coords = list(zip(pre_coords, post_coords))
 
+    plot_palette: Optional[Dict]
+
     if node_hue is not None:
         if isinstance(palette, str):
-            palette = sns.color_palette(
+            sns_palette: List = sns.color_palette(
                 palette, n_colors=len(plot_df[hue_key].unique())
             )
-            plot_palette = dict(zip(plot_df[hue_key].unique(), palette))
+            plot_palette = dict(zip(plot_df[hue_key].unique(), sns_palette))
         elif isinstance(palette, list):
             plot_palette = dict(zip(plot_df[hue_key].unique(), palette))
         elif isinstance(palette, dict):
@@ -1374,14 +1400,14 @@ def networkplot(
 
 
 def screeplot(
-    X,
-    title="Scree plot",
-    context="talk",
-    font_scale=1,
-    figsize=(10, 5),
-    cumulative=True,
-    show_first=None,
-):
+    X: np.ndarray,
+    title: str = "Scree plot",
+    context: str = "talk",
+    font_scale: float = 1,
+    figsize: Tuple[int, int] = (10, 5),
+    cumulative: bool = True,
+    show_first: Optional[int] = None,
+) -> matplotlib.pyplot.Axes:
     r"""
     Plots the distribution of singular values for a matrix, either showing the
     raw distribution or an empirical CDF (depending on ``cumulative``)
@@ -1438,7 +1464,12 @@ def screeplot(
     return ax
 
 
-def _sort_inds(graph, inner_labels, outer_labels, sort_nodes):
+def _sort_inds(
+    graph: np.ndarray,
+    inner_labels: np.ndarray,
+    outer_labels: np.ndarray,
+    sort_nodes: bool,
+) -> np.ndarray:
     sort_df = pd.DataFrame(columns=("inner_labels", "outer_labels"))
     sort_df["inner_labels"] = inner_labels
     sort_df["outer_labels"] = outer_labels
@@ -1472,13 +1503,20 @@ def _sort_inds(graph, inner_labels, outer_labels, sort_nodes):
     return sorted_inds
 
 
-def _sort_graph(graph, inner_labels, outer_labels, sort_nodes):
+def _sort_graph(
+    graph: np.ndarray,
+    inner_labels: np.ndarray,
+    outer_labels: np.ndarray,
+    sort_nodes: bool,
+) -> np.ndarray:
     inds = _sort_inds(graph, inner_labels, outer_labels, sort_nodes)
     graph = graph[inds, :][:, inds]
     return graph
 
 
-def _get_freqs(inner_labels, outer_labels=None):
+def _get_freqs(
+    inner_labels: np.ndarray, outer_labels: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     # use this because unique would give alphabetical
     _, outer_freq = _unique_like(outer_labels)
     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
@@ -1495,14 +1533,14 @@ def _get_freqs(inner_labels, outer_labels=None):
     return inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum
 
 
-def _get_freq_vec(vals):
+def _get_freq_vec(vals: np.ndarray) -> np.ndarray:
     # give each set of labels a vector corresponding to its frequency
     _, inv, counts = np.unique(vals, return_counts=True, return_inverse=True)
     count_vec = counts[inv]
     return count_vec
 
 
-def _unique_like(vals):
+def _unique_like(vals: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     # gives output like
     uniques, inds, counts = np.unique(vals, return_index=True, return_counts=True)
     inds_sort = np.argsort(inds)
@@ -1512,22 +1550,30 @@ def _unique_like(vals):
 
 
 # assume that the graph has already been plotted in sorted form
-def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
-    inner_labels = np.array(inner_labels)
+def _plot_groups(
+    ax: matplotlib.pyplot.Axes,
+    graph: np.ndarray,
+    inner_labels: Union[np.ndarray, List[Any]],
+    outer_labels: Optional[Union[np.ndarray, List[Any]]] = None,
+    fontsize: int = 30,
+) -> matplotlib.pyplot.Axes:
+    inner_labels_arr = np.array(inner_labels)
     plot_outer = True
     if outer_labels is None:
-        outer_labels = np.ones_like(inner_labels)
+        outer_labels_arr = np.ones_like(inner_labels)
         plot_outer = False
+    else:
+        outer_labels_arr = np.array(outer_labels)
 
-    sorted_inds = _sort_inds(graph, inner_labels, outer_labels, False)
-    inner_labels = inner_labels[sorted_inds]
-    outer_labels = outer_labels[sorted_inds]
+    sorted_inds = _sort_inds(graph, inner_labels_arr, outer_labels_arr, False)
+    inner_labels_arr = inner_labels_arr[sorted_inds]
+    outer_labels_arr = outer_labels_arr[sorted_inds]
 
     inner_freq, inner_freq_cumsum, outer_freq, outer_freq_cumsum = _get_freqs(
-        inner_labels, outer_labels
+        inner_labels_arr, outer_labels_arr
     )
-    inner_unique, _ = _unique_like(inner_labels)
-    outer_unique, _ = _unique_like(outer_labels)
+    inner_unique, _ = _unique_like(inner_labels_arr)
+    outer_unique, _ = _unique_like(outer_labels_arr)
 
     n_verts = graph.shape[0]
     axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.3, zorder=3, color="grey")
@@ -1622,8 +1668,16 @@ def _plot_groups(ax, graph, inner_labels, outer_labels=None, fontsize=30):
 
 
 def _plot_brackets(
-    ax, group_names, tick_loc, tick_width, curve, level, axis, max_size, fontsize
-):
+    ax: matplotlib.pyplot.Axes,
+    group_names: np.ndarray,
+    tick_loc: np.ndarray,
+    tick_width: np.ndarray,
+    curve: np.ndarray,
+    level: str,
+    axis: str,
+    max_size: int,
+    fontsize: int,
+) -> None:
     for x0, width in zip(tick_loc, tick_width):
         x = np.linspace(x0 - width, x0 + width, 1000)
         if axis == "x":

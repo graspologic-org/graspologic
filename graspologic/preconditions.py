@@ -55,7 +55,7 @@ def check_optional_argument_types(
     check_argument_types(value, required_types, message)
 
 
-def check_argument(check: bool, message: str):
+def check_argument(check: bool, message: str) -> None:
     """
     Raises a ValueError if the provided check is false
 

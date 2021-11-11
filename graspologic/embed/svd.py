@@ -1,18 +1,21 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Optional
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 import scipy
+import scipy.sparse as sp
 import sklearn
-from scipy.sparse import isspmatrix_csr
 from scipy.stats import norm
+from typing_extensions import Literal
 
 from graspologic.utils import is_almost_symmetric
 
+SvdAlgorithmType = Literal["full", "truncated", "randomized", "eigsh"]
 
-def _compute_likelihood(arr):
+
+def _compute_likelihood(arr: np.ndarray) -> np.ndarray:
     """
     Computes the log likelihoods based on normal distribution given
     a 1d-array of sorted values. If the input has no variance,
@@ -54,8 +57,14 @@ def _compute_likelihood(arr):
 
 
 def select_dimension(
-    X, n_components=None, n_elbows=2, threshold=None, return_likelihoods=False
-):
+    X: Union[np.ndarray, sp.csr_matrix],
+    n_components: Optional[int] = None,
+    n_elbows: int = 2,
+    threshold: Optional[float] = None,
+    return_likelihoods: bool = False,
+) -> Union[
+    Tuple[List[int], List[float]], Tuple[List[int], List[float], List[np.ndarray]]
+]:
     """
     Generates profile likelihood from array based on Zhu and Godsie method.
     Elbows correspond to the optimal embedding dimension.
@@ -97,7 +106,7 @@ def select_dimension(
         pp.918-930.
     """
     # Handle input data
-    if not isinstance(X, np.ndarray) and not isspmatrix_csr(X):
+    if not isinstance(X, np.ndarray) and not sp.isspmatrix_csr(X):
         msg = "X must be a numpy array or scipy.sparse.csr_matrix, not {}.".format(
             type(X)
         )
@@ -163,7 +172,7 @@ def select_dimension(
         if arr.size <= 1:  # Cant compute likelihoods with 1 numbers
             break
         lq = _compute_likelihood(arr)
-        idx += np.argmax(lq) + 1
+        idx += np.argmax(lq).item() + 1
         elbows.append(idx)
         values.append(D[idx - 1])
         likelihoods.append(lq)
@@ -175,13 +184,13 @@ def select_dimension(
 
 
 def select_svd(
-    X,
-    n_components=None,
-    n_elbows=2,
-    algorithm="randomized",
-    n_iter=5,
+    X: Union[np.ndarray, sp.csr_matrix],
+    n_components: Optional[int] = None,
+    n_elbows: Optional[int] = 2,
+    algorithm: SvdAlgorithmType = "randomized",
+    n_iter: int = 5,
     svd_seed: Optional[int] = None,
-):
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     r"""
     Dimensionality reduction using SVD.
 
@@ -255,13 +264,19 @@ def select_svd(
         msg = "algorithm must be one of {full, truncated, randomized, eigsh}."
         raise ValueError(msg)
 
-    if algorithm == "full" and isspmatrix_csr(X):
+    if algorithm == "full" and sp.isspmatrix_csr(X):
         msg = "'full' agorithm does not support scipy.sparse.csr_matrix inputs."
         raise TypeError(msg)
 
     if n_components is None:
-        elbows, _ = select_dimension(X, n_elbows=n_elbows, threshold=None)
-        n_components = elbows[-1]
+        if n_elbows is None:
+            raise ValueError(
+                "both n_components and n_elbows are None. One must be provided."
+            )
+        else:
+            dims = select_dimension(X, n_elbows=n_elbows, threshold=None)
+            elbows = dims[0]
+            n_components = elbows[-1]
 
     # Check
     if (algorithm == "full") & (n_components > min(X.shape)):

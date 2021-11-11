@@ -2,21 +2,23 @@
 # Licensed under the MIT License.
 
 from abc import abstractmethod
+from typing import Any, Optional
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 
 from ..simulations import sample_edges
+from ..types import GraphRepresentation
 from ..utils import import_graph, is_unweighted
 
 
-def _calculate_p(block):
+def _calculate_p(block: np.ndarray) -> float:
     n_edges = np.count_nonzero(block)
     return n_edges / block.size
 
 
-def _check_n_samples(n_samples):
+def _check_n_samples(n_samples: float) -> None:
     if not isinstance(n_samples, (int, float)):
         raise TypeError("n_samples must be a scalar value")
     if n_samples < 1:
@@ -26,7 +28,7 @@ def _check_n_samples(n_samples):
         )
 
 
-def _n_to_labels(n):
+def _n_to_labels(n: np.ndarray) -> np.ndarray:
     n_cumsum = n.cumsum()
     labels = np.zeros(n.sum(), dtype=np.int64)
     for i in range(1, len(n)):
@@ -35,7 +37,7 @@ def _n_to_labels(n):
 
 
 class BaseGraphEstimator(BaseEstimator):
-    def __init__(self, directed=True, loops=False):
+    def __init__(self, directed: bool = True, loops: bool = False):
         if not isinstance(directed, bool):
             raise TypeError("`directed` must be of type bool")
         if not isinstance(loops, bool):
@@ -43,7 +45,7 @@ class BaseGraphEstimator(BaseEstimator):
         self.directed = directed
         self.loops = loops
 
-    def bic(self, graph):
+    def bic(self, graph: np.ndarray) -> float:
         """
         Bayesian information criterion for the current model on the input graph.
 
@@ -63,7 +65,7 @@ class BaseGraphEstimator(BaseEstimator):
         check_is_fitted(self, "p_mat_")
         return 2 * np.log(self.n_verts) * self._n_parameters() - 2 * self.score(graph)
 
-    def mse(self, graph):
+    def mse(self, graph: np.ndarray) -> float:
         """
         Compute mean square error for the current model on the input graph
 
@@ -83,7 +85,9 @@ class BaseGraphEstimator(BaseEstimator):
         check_is_fitted(self, "p_mat_")
         return np.linalg.norm(graph - self.p_mat_) ** 2
 
-    def score_samples(self, graph, clip=None):
+    def score_samples(
+        self, graph: np.ndarray, clip: Optional[float] = None
+    ) -> np.ndarray:
         """
         Compute the weighted log probabilities for each potential edge.
 
@@ -142,7 +146,7 @@ class BaseGraphEstimator(BaseEstimator):
         likelihood = successes + failures
         return np.log(likelihood)
 
-    def score(self, graph):
+    def score(self, graph: np.ndarray) -> float:
         """
         Compute the average log-likelihood over each potential edge of the
         given graph.
@@ -164,18 +168,20 @@ class BaseGraphEstimator(BaseEstimator):
         return np.sum(self.score_samples(graph))
 
     @property
-    def _pairwise(self):
+    def _pairwise(self) -> bool:
         """This is for sklearn compliance."""
         return True
 
     @abstractmethod
-    def fit(self, graph, y=None):
+    def fit(
+        self, graph: GraphRepresentation, y: Optional[Any] = None
+    ) -> "BaseGraphEstimator":
         """
         Calculate the parameters for the given graph model
         """
         return self
 
-    def sample(self, n_samples=1):
+    def sample(self, n_samples: int = 1) -> np.ndarray:
         """
         Sample graphs (realizations) from the fitted model
 
@@ -210,6 +216,6 @@ class BaseGraphEstimator(BaseEstimator):
         return graphs
 
     @abstractmethod
-    def _n_parameters(self):
+    def _n_parameters(self) -> int:
         n_parameters = 1
         return n_parameters

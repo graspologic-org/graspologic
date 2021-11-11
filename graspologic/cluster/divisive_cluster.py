@@ -1,18 +1,23 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Any, Dict, Optional, Tuple, cast
+
 import numpy as np
 from anytree import LevelOrderIter, NodeMixin
 from sklearn.base import BaseEstimator
 from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_array
 from sklearn.utils.validation import check_is_fitted
+from typing_extensions import Literal
 
 from .autogmm import AutoGMMCluster
 from .kclust import KMeansCluster
 
 
-def _check_common_inputs(min_components, max_components, cluster_kws):
+def _check_common_inputs(
+    min_components: int, max_components: int, cluster_kws: Dict[str, Any]
+) -> None:
     if not isinstance(min_components, int):
         raise TypeError("min_components must be an int")
     elif min_components < 1:
@@ -29,7 +34,7 @@ def _check_common_inputs(min_components, max_components, cluster_kws):
         raise TypeError("cluster_kws must be a dict")
 
 
-def _check_fcluster(fcluster, level):
+def _check_fcluster(fcluster: bool, level: Optional[int]) -> None:
     if level is not None:
         if not isinstance(level, int):
             raise TypeError("level must be an int")
@@ -103,15 +108,17 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
             Engineering, 4(1), 13-26.
     """
 
+    parent: Optional["DivisiveCluster"]
+
     def __init__(
         self,
-        cluster_method="gmm",
-        min_components=1,
-        max_components=2,
-        cluster_kws={},
-        min_split=1,
-        max_level=4,
-        delta_criter=0,
+        cluster_method: Literal["gmm", "kmeans"] = "gmm",
+        min_components: int = 1,
+        max_components: int = 2,
+        cluster_kws: Dict[str, Any] = {},
+        min_split: int = 1,
+        max_level: int = 4,
+        delta_criter: float = 0,
     ):
 
         _check_common_inputs(min_components, max_components, cluster_kws)
@@ -133,7 +140,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         self.max_level = max_level
         self.delta_criter = delta_criter
 
-    def fit(self, X):
+    def fit(self, X: np.ndarray) -> "DivisiveCluster":
         """
         Fits clustering models to the data as well as resulting clusters
 
@@ -149,7 +156,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         self.fit_predict(X)
         return self
 
-    def fit_predict(self, X, fcluster=False, level=None):
+    def fit_predict(
+        self, X: np.ndarray, fcluster: bool = False, level: Optional[int] = None
+    ) -> np.ndarray:
         """
         Fits clustering models to the data as well as resulting clusters
         and using fitted models to predict a hierarchy of labels
@@ -194,7 +203,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
 
         return labels
 
-    def _cluster_and_decide(self, X):
+    def _cluster_and_decide(self, X: np.ndarray) -> np.ndarray:
         if self.is_root:
             min_components = self.min_components
         else:
@@ -237,9 +246,11 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         self.model_ = model
         return pred
 
-    def _fit(self, X):
+    def _fit(self, X: np.ndarray) -> np.ndarray:
         pred = self._cluster_and_decide(X)
-        self.children = []
+        self.children: Tuple["DivisiveCluster"] = cast(
+            Tuple["DivisiveCluster"], tuple()
+        )
 
         uni_labels = np.unique(pred)
         labels = pred.reshape((-1, 1)).copy()
@@ -308,7 +319,9 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
 
         return labels
 
-    def predict(self, X, fcluster=False, level=None):
+    def predict(
+        self, X: np.ndarray, fcluster: bool = False, level: Optional[int] = None
+    ) -> np.ndarray:
         """
         Predicts a hierarchy of labels based on fitted models
 
@@ -349,7 +362,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
 
         return labels
 
-    def _predict_labels(self, X):
+    def _predict_labels(self, X: np.ndarray) -> np.ndarray:
         if not self.is_leaf:
             pred_labels = np.zeros((len(X), self.height), dtype=int)
             current_pred_labels = self.model_.predict(X)
@@ -371,7 +384,7 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
 
         return pred_labels
 
-    def _relabel(self, labels, level=None):
+    def _relabel(self, labels: np.ndarray, level: Optional[int] = None) -> np.ndarray:
         # re-number "labels" so that each cluster at each level recieves
         # a unique label = index of corresponding node in overall dendrogram
 
