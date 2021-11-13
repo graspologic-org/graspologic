@@ -291,6 +291,8 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     def fit_transform(self, graphs, y=None):  # type: ignore
         """
+        not implemented
+
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
@@ -310,4 +312,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             If graphs were directed and ``concat`` is True, left and right (out and in) latent positions are concatenated.
             In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.
         """
+        raise NotImplementedError(
+            "out of sample transform does not work for multiple graph embeddings"
+        )
         return self._fit_transform(graphs)

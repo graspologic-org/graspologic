@@ -247,6 +247,8 @@ class MultipleASE(BaseEmbedMulti):
 
     def fit_transform(self, graphs, y=None):  # type: ignore
         """
+        not implemented
+
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
@@ -265,4 +267,7 @@ class MultipleASE(BaseEmbedMulti):
             The first corresponds to the left latent positions, and the second to the right latent positions.
             When ``concat`` is True left and right (out and in) latent positions are concatenated along axis 1.
         """
+        raise NotImplementedError(
+            "out of sample transform does not work for multiple graph embeddings"
+        )
         return self._fit_transform(graphs)
