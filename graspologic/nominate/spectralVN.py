@@ -1,14 +1,18 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import check_array
+from typing_extensions import Literal
 
 from ..embed import AdjacencySpectralEmbed, BaseSpectralEmbed, LaplacianSpectralEmbed
+
+# Type aliases
+EmbedderType = Union[Literal["ase", "ASE", "lse", "LSE"], BaseSpectralEmbed]
 
 
 class SpectralVertexNomination(BaseEstimator):
@@ -37,7 +41,7 @@ class SpectralVertexNomination(BaseEstimator):
         - False
             .fit() and .fit_predict() expect an embedding of the graph, i.e. a ndarray
             of size (n, d).
-    embedder: str or BaseEmbed, default = 'ASE'
+    embedder: str or BaseSpectralEmbed, default = 'ASE'
         May provide either a embed object or a string indicating which embedding method
         to use, which may be either:
         "ASE" for :py:class:`~graspologic.embed.AdjacencySpectralEmbed` or
@@ -73,10 +77,10 @@ class SpectralVertexNomination(BaseEstimator):
     def __init__(
         self,
         input_graph: bool = True,
-        embedder: Union[str, BaseSpectralEmbed] = "ase",
-        n_neighbors=None,
+        embedder: EmbedderType = "ase",
+        n_neighbors: Optional[int] = None,
         metric: str = "euclidean",
-        metric_params: dict = None,
+        metric_params: Optional[Dict[str, Any]] = None,
     ):
         super().__init__()
         self.embedder = embedder
@@ -86,7 +90,7 @@ class SpectralVertexNomination(BaseEstimator):
         self.metric_params = metric_params
         self._check_params()
 
-    def _check_x(self, X: np.ndarray):
+    def _check_x(self, X: np.ndarray) -> None:
         # check X
         if not isinstance(X, np.ndarray):
             raise TypeError("X must be of type np.ndarray.")
@@ -98,23 +102,23 @@ class SpectralVertexNomination(BaseEstimator):
             # embedding was provided
             if X.shape[1] > X.shape[0]:
                 raise IndexError("Dim 1 of an embedding should be smaller than dim 0.")
-            if not np.issubdtype(X.dtype, np.float):
+            if not np.issubdtype(X.dtype, np.floating):
                 raise TypeError("Embedding should have type float")
         elif X.shape[0] != X.shape[1]:
             raise IndexError("Adjacency Matrix should be square.")
 
-    def _check_y(self, y: np.ndarray):
+    def _check_y(self, y: np.ndarray) -> None:
         # check y
         if not np.issubdtype(y.dtype, np.integer):
             raise TypeError("y must have dtype int")
         elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 1):
             raise IndexError("y must have shape (n) or (n, 1).")
-        elif y.shape[0] > self.embedding_.shape[0]:
+        elif y.shape[0] > self.embedding_.shape[0]:  # type: ignore
             raise ValueError(
                 "the number of seeds must be less than the number of vertices"
             )
 
-    def _check_params(self):
+    def _check_params(self) -> None:
 
         if self.n_neighbors is not None and type(self.n_neighbors) is not int:
             raise TypeError("k must be an integer")
@@ -134,7 +138,7 @@ class SpectralVertexNomination(BaseEstimator):
                     "embedder must be either of type str or BaseSpectralEmbed"
                 )
 
-    def _embed(self, X: np.ndarray):
+    def _embed(self, X: np.ndarray) -> None:
         # Embed graph if embedding not provided
         if self.input_graph:
             if isinstance(self.embedder, BaseSpectralEmbed):
@@ -157,8 +161,8 @@ class SpectralVertexNomination(BaseEstimator):
     def fit(
         self,
         X: np.ndarray,
-        y=None,
-    ):
+        y: Optional[Any] = None,
+    ) -> "SpectralVertexNomination":
         """
         Constructs the embedding if not provided, then calculates the pairwise distance
         from each seed to each vertex in graph.
@@ -193,7 +197,7 @@ class SpectralVertexNomination(BaseEstimator):
         self.nearest_neighbors_.fit(self.embedding_)
         return self
 
-    def predict(self, y: Union[list, np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+    def predict(self, y: Union[List, np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
         """
         Nominates vertices for each seed vertex. Methodology is distance based ranking.
 
@@ -215,15 +219,15 @@ class SpectralVertexNomination(BaseEstimator):
                         The matrix of distances associated with each element of the
                         nomination list.
         """
-        y = check_array(y, ensure_2d=False)
-        self._check_y(y)
-        y = y.reshape(-1)
-        y_vec = self.embedding_[y.astype(np.int)]
+        y_checked: np.ndarray = check_array(y, ensure_2d=False)
+        self._check_y(y_checked)
+        y_checked = y_checked.reshape(-1)
+        y_vec = self.embedding_[y_checked.astype(np.int)]  # type: ignore
         if not hasattr(self, "nearest_neighbors_"):
             raise ValueError("Fit must be called before predict.")
         distance_matrix, nomination_list = self.nearest_neighbors_.kneighbors(y_vec)
         # transpose for consistency with literature
-        return nomination_list.T.astype(np.int), distance_matrix.T
+        return nomination_list.T.astype(np.int_), distance_matrix.T
 
     def fit_predict(
         self,

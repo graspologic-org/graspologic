@@ -186,3 +186,12 @@ class Node2VecEmbedTest(unittest.TestCase):
         )
 
         self.assertEqual(w, expected_walk_length)
+
+    def test_random_state_is_initialized_in_constructor(self):
+        graph = nx.barbell_graph(25, 2)
+        start_node = "0"
+
+        n2v = gc.embed.n2v._Node2VecGraph(graph, 1, 1)
+        n2v._preprocess_transition_probabilities()
+        walk = n2v.node2vec_walk(5, start_node, None)
+        self.assertGreater(len(walk), 0)

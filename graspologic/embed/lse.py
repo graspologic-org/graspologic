@@ -2,13 +2,14 @@
 # Licensed under the MIT License.
 
 
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 import networkx as nx
 import numpy as np
 
-from ..utils import to_laplacian
-from .base import BaseSpectralEmbed
+from ..types import GraphRepresentation
+from ..utils import LaplacianFormType, to_laplacian
+from .base import BaseSpectralEmbed, SvdAlgorithmType
 
 
 class LaplacianSpectralEmbed(BaseSpectralEmbed):
@@ -120,10 +121,10 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     def __init__(
         self,
-        form: str = "DAD",
+        form: LaplacianFormType = "DAD",
         n_components: Optional[int] = None,
         n_elbows: Optional[int] = 2,
-        algorithm: str = "randomized",
+        algorithm: SvdAlgorithmType = "randomized",
         n_iter: int = 5,
         check_lcc: bool = True,
         regularizer: Optional[float] = None,
@@ -142,7 +143,13 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         self.form = form
         self.regularizer = regularizer
 
-    def fit(self, graph: Union[np.ndarray, nx.Graph], y=None):
+    def fit(
+        self,
+        graph: GraphRepresentation,
+        y: Optional[Any] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> "LaplacianSpectralEmbed":
         """
         Fit LSE model to input graph
 
@@ -168,7 +175,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
         return self
 
-    def _compute_oos_prediction(self, X, directed):
+    def _compute_oos_prediction(self, X, directed):  # type: ignore
         """
         Computes the out-of-sample latent position estimation.
         Parameters

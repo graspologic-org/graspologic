@@ -883,6 +883,14 @@ class TestRDPG(unittest.TestCase):
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
 
+    def test_weight_function_args_can_be_none(self):
+        def weight_fn(size):
+            return size
+
+        X = np.array([[1, 1], [1, 1], [1, 1], [1, 0], [1, 0]])
+        A = rdpg(X, wt=weight_fn)
+        self.assertTrue(A.shape, (5, 5))
+
 
 class TestMMSBM(unittest.TestCase):
     @classmethod

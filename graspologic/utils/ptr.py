@@ -4,11 +4,14 @@
 import numpy as np
 from scipy.stats import rankdata
 
+from ..types import GraphRepresentation
 from .utils import import_graph, is_loopless, is_symmetric, is_unweighted, symmetrize
 
 
-def pass_to_ranks(graph, method="simple-nonzero"):
-    r"""
+def pass_to_ranks(
+    graph: GraphRepresentation, method: str = "simple-nonzero"
+) -> GraphRepresentation:
+    """
     Rescales edge weights of an adjacency matrix based on their relative rank in
     the graph.
 
@@ -22,11 +25,11 @@ def pass_to_ranks(graph, method="simple-nonzero"):
         - 'simple-nonzero'
             assigns ranks to all non-zero edges, settling ties using
             the average. Ranks are then scaled by
-            :math:`\frac{rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`
+            :math:`\\frac{rank(\\text{non-zero edges})}{\\text{total non-zero edges} + 1}`
         - 'simple-all'
             assigns ranks to all non-zero edges, settling ties using
             the average. Ranks are then scaled by
-            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`
+            :math:`\\frac{rank(\\text{non-zero edges})}{n^2 + 1}`
             where n is the number of nodes
         - 'zero-boost'
             preserves the edge weight for all 0s, but ranks the other

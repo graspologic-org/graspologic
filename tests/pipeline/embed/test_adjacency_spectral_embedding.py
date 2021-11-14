@@ -76,7 +76,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
             params["graph"] = self.graph
             adjacency_spectral_embedding(**params)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestAdjacencySpectralEmbedding.parameters()
             params["svd_solver_algorithm"] = "sandwich"
             params["graph"] = self.graph

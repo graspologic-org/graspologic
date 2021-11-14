@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from sklearn.utils import check_array, check_scalar
@@ -9,7 +10,7 @@ from sklearn.utils import check_array, check_scalar
 from ..utils import cartesian_product, symmetrize
 
 
-def _n_to_labels(n):
+def _n_to_labels(n: np.ndarray) -> np.ndarray:
     n_cumsum = n.cumsum()
     labels = np.zeros(n.sum(), dtype=np.int64)
     for i in range(1, len(n)):
@@ -17,7 +18,9 @@ def _n_to_labels(n):
     return labels
 
 
-def sample_edges(P, directed=False, loops=False):
+def sample_edges(
+    P: np.ndarray, directed: bool = False, loops: bool = False
+) -> np.ndarray:
     """
     Gemerates a binary random graph based on the P matrix provided
 
@@ -69,7 +72,16 @@ def sample_edges(P, directed=False, loops=False):
         return A - np.diag(np.diag(A))
 
 
-def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws={}):
+def er_np(
+    n: int,
+    p: float,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Union[int, np.ndarray, List[int]] = 1,
+    wtargs: Optional[Dict[str, Any]] = None,
+    dc: Optional[Union[Callable, np.ndarray]] = None,
+    dc_kws: Dict[str, Any] = {},
+) -> np.ndarray:
     r"""
     Samples a Erdos Renyi (n, p) graph with specified edge probability.
 
@@ -166,10 +178,17 @@ def er_np(n, p, directed=False, loops=False, wt=1, wtargs=None, dc=None, dc_kws=
     n_sbm = np.array([n])
     p_sbm = np.array([[p]])
     g = sbm(n_sbm, p_sbm, directed, loops, wt, wtargs, dc, dc_kws)
-    return g
+    return g  # type: ignore
 
 
-def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
+def er_nm(
+    n: int,
+    m: int,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Union[int, np.ndarray, List[int]] = 1,
+    wtargs: Optional[Dict[str, Any]] = None,
+) -> np.ndarray:
     r"""
     Samples an Erdos Renyi (n, m) graph with specified number of edges.
 
@@ -294,7 +313,7 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
     # unravel back
     triu = np.unravel_index(triu, A.shape)
     # check weight function
-    if not np.issubdtype(type(wt), np.number):
+    if callable(wt):
         wt = wt(size=m, **wtargs)
     A[triu] = wt
 
@@ -305,16 +324,16 @@ def er_nm(n, m, directed=False, loops=False, wt=1, wtargs=None):
 
 
 def sbm(
-    n,
-    p,
-    directed=False,
-    loops=False,
-    wt=1,
-    wtargs=None,
-    dc=None,
-    dc_kws={},
-    return_labels=False,
-):
+    n: Union[np.ndarray, List[int]],
+    p: np.ndarray,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Union[int, np.ndarray, List[int]] = 1,
+    wtargs: Optional[Union[np.ndarray, Dict[str, Any]]] = None,
+    dc: Optional[Union[Callable, np.ndarray]] = None,
+    dc_kws: Union[Dict[str, Any], List[Dict[str, Any]], np.ndarray] = {},
+    return_labels: bool = False,
+) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Samples a graph from the stochastic block model (SBM).
 
@@ -587,7 +606,7 @@ def sbm(
             block_p = p[i, j]
             # identify submatrix for community i, j
             # cartesian product to identify edges for community i,j pair
-            cprod = cartesian_product(cmties[i], cmties[j])
+            cprod = cartesian_product(cmties[i], cmties[j])  # type: ignore
             # get idx in 1d coordinates by ravelling
             triu = np.ravel_multi_index((cprod[:, 0], cprod[:, 1]), A.shape)
             pchoice = np.random.uniform(size=len(triu))
@@ -622,7 +641,15 @@ def sbm(
     return A
 
 
-def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=None):
+def rdpg(
+    X: np.ndarray,
+    Y: Optional[np.ndarray] = None,
+    rescale: bool = False,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Optional[Union[int, float, Callable]] = 1,
+    wtargs: Optional[Dict[str, Any]] = None,
+) -> np.ndarray:
     r"""
     Samples a random graph based on the latent positions in X (and
     optionally in Y)
@@ -723,15 +750,22 @@ def rdpg(X, Y=None, rescale=False, directed=False, loops=False, wt=1, wtargs=Non
         if not callable(wt):
             raise TypeError("You have not passed a function for wt.")
 
-    if not np.issubdtype(type(wt), np.number):
+    if callable(wt):
+        if wtargs is None:
+            wtargs = dict()
         wts = wt(size=(np.count_nonzero(A)), **wtargs)
         A[A > 0] = wts
     else:
-        A *= wt
+        A *= wt  # type: ignore
     return A
 
 
-def p_from_latent(X, Y=None, rescale=False, loops=True):
+def p_from_latent(
+    X: np.ndarray,
+    Y: Optional[np.ndarray] = None,
+    rescale: bool = False,
+    loops: bool = True,
+) -> np.ndarray:
     r"""
     Gemerates a matrix of connection probabilities for a random graph
     based on a set of latent positions
@@ -804,14 +838,14 @@ def p_from_latent(X, Y=None, rescale=False, loops=True):
 
 
 def mmsbm(
-    n,
-    p,
-    alpha=None,
-    rng=None,
-    directed=False,
-    loops=False,
-    return_labels=False,
-):
+    n: int,
+    p: np.ndarray,
+    alpha: Optional[np.ndarray] = None,
+    rng: Optional[np.random.Generator] = None,
+    directed: bool = False,
+    loops: bool = False,
+    return_labels: bool = False,
+) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     r"""
     Samples a graph from Mixed Membership Stochastic Block Model (MMSBM).
 
@@ -924,23 +958,28 @@ def mmsbm(
         msg = "Values in p must be in between 0 and 1."
         raise ValueError(msg)
 
-    alpha = check_array(alpha, ensure_2d=False, ensure_min_features=1)
-    if not np.issubdtype(alpha.dtype, np.number):
-        msg = "There are non-numeric elements in alpha"
-        raise ValueError(msg)
-    if np.any(alpha <= 0):
-        msg = "Alpha entries must be > 0."
-        raise ValueError(msg)
-    if alpha.shape != (len(p),):
-        msg = "alpha must be a list or np.array of shape {c}, not {w}.".format(
-            c=(len(p),), w=alpha.shape
+    alpha_checked: np.ndarray
+    if alpha is None:
+        raise ValueError("alpha must not be None")
+    else:
+        alpha_checked = alpha
+        alpha_checked = check_array(
+            alpha_checked, ensure_2d=False, ensure_min_features=1
         )
-        raise ValueError(msg)
+        if not np.issubdtype(alpha_checked.dtype, np.number):
+            msg = "There are non-numeric elements in alpha"
+            raise ValueError(msg)
+        if np.any(alpha_checked <= 0):
+            msg = "Alpha entries must be > 0."
+            raise ValueError(msg)
+        if alpha_checked.shape != (len(p),):
+            msg = "alpha must be a list or np.array of shape {c}, not {w}.".format(
+                c=(len(p),), w=alpha_checked.shape
+            )
+            raise ValueError(msg)
 
-    if not isinstance(rng, (np.random._generator.Generator)):
-        msg = "rng must be <class 'numpy.random._generator.Generator'> not {}.".format(
-            type(rng)
-        )
+    if not isinstance(rng, np.random.Generator):
+        msg = "rng must be <class 'numpy.random.Generator'> not {}.".format(type(rng))
         raise TypeError(msg)
     elif rng == None:
         rng = np.random.default_rng()
@@ -957,7 +996,7 @@ def mmsbm(
             raise ValueError("Specified undirected, but P is directed.")
 
     # Naming convention follows paper listed in references.
-    mm_vectors = rng.dirichlet(alpha, n)
+    mm_vectors = rng.dirichlet(alpha_checked, n)
 
     mm_vectors = np.array(sorted(mm_vectors, key=lambda x: np.argmax(x)))
 
