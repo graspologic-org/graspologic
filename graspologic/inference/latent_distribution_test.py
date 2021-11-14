@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from collections import namedtuple
+from typing import Any, Callable, Dict, NamedTuple, Optional, Tuple, Union
 
 import numpy as np
 from hyppo.ksample import KSample
@@ -9,9 +9,11 @@ from joblib import Parallel, delayed
 from scipy import stats
 from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
 from sklearn.utils import check_array, check_random_state
+from typing_extensions import Literal
 
 from ..align import SeedlessProcrustes, SignFlips
 from ..embed import AdjacencySpectralEmbed, select_dimension
+from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import fit_plug_in_variance_estimator, import_graph
 
 _VALID_DISTANCES = list(PAIRED_DISTANCES.keys())
@@ -21,24 +23,32 @@ _VALID_METRICS = _VALID_DISTANCES + _VALID_KERNELS
 
 _VALID_TESTS = ["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
 
-ldt_result = namedtuple("ldt_result", ("p_value", "sample_T_statistic", "misc_stats"))
+LdtTestType = Literal["cca", "dcorr", "hhg", "rv", "hsic", "mgc"]
+
+
+class ldt_result(NamedTuple):
+    stat: float
+    pvalue: float
+    misc_dict: Dict[str, Any]
 
 
 def latent_distribution_test(
-    A1,
-    A2,
-    test="dcorr",
-    metric="euclidean",
-    n_components=None,
-    n_bootstraps=500,
-    random_state=None,
-    workers=None,
-    size_correction=True,
-    pooled=False,
-    align_type="sign_flips",
-    align_kws={},
-    input_graph=True,
-):
+    A1: GraphRepresentation,
+    A2: GraphRepresentation,
+    test: LdtTestType = "dcorr",
+    metric: Union[str, Callable] = "euclidean",
+    n_components: Optional[int] = None,
+    n_bootstraps: int = 500,
+    random_state: Optional[
+        Union[int, np.random.RandomState, np.random.Generator]
+    ] = None,
+    workers: Optional[int] = None,
+    size_correction: bool = True,
+    pooled: bool = False,
+    align_type: Optional[Literal["sign_flips", "seedless_procrustes"]] = "sign_flips",
+    align_kws: Dict[str, Any] = {},
+    input_graph: bool = True,
+) -> ldt_result:
     """Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same distributions of latent positions.
 
@@ -192,14 +202,14 @@ def latent_distribution_test(
 
     Returns
     ----------
-    p_value : float
-        The overall p value from the test.
-
-    sample_T_statistic : float
+    stat : float
         The observed difference between the embedded latent positions of the
         two input graphs.
 
-    misc_stats : dictionary
+    pvalue : float
+        The overall p value from the test.
+
+    misc_dict : dictionary
         A collection of other statistics obtained from the latent position test
 
         - null_distribution : ndarray, shape (n_bootstraps,)
@@ -385,18 +395,20 @@ def latent_distribution_test(
 
     null_distribution = test_obj.indep_test.null_dist
 
-    misc_stats = {
+    misc_dict = {
         "null_distribution": null_distribution,
         "n_components": n_components,
         "Q": Q,
     }
-    sample_T_statistic = data[0]
-    p_value = data[1]
+    stat = data[0]
+    pvalue = data[1]
 
-    return ldt_result(p_value, sample_T_statistic, misc_stats)
+    return ldt_result(stat, pvalue, misc_dict)
 
 
-def _embed(A1, A2, n_components):
+def _embed(
+    A1: AdjacencyMatrix, A2: AdjacencyMatrix, n_components: Optional[int]
+) -> Tuple[np.ndarray, np.ndarray]:
     if n_components is None:
         num_dims1 = select_dimension(A1)[0][-1]
         num_dims2 = select_dimension(A2)[0][-1]
@@ -416,10 +428,10 @@ def _embed(A1, A2, n_components):
         )
         raise ValueError(msg)
 
-    return X1_hat, X2_hat
+    return X1_hat, X2_hat  # type: ignore
 
 
-def _sample_modified_ase(X, Y, workers, random_state, pooled=False):
+def _sample_modified_ase(X, Y, workers, random_state, pooled=False):  # type: ignore
     N, M = len(X), len(Y)
 
     # return if graphs are same order, else ensure X the larger graph.
@@ -453,6 +465,6 @@ def _sample_modified_ase(X, Y, workers, random_state, pooled=False):
     return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
 
-def add_variance(X_orig, X_sigma, seed):
+def add_variance(X_orig, X_sigma, seed):  # type: ignore
     np.random.seed(seed)
     return X_orig + stats.multivariate_normal.rvs(cov=X_sigma)

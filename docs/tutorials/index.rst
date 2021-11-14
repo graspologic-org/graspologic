@@ -4,8 +4,6 @@ Tutorials
 .. toctree::
    :hidden:
 
-   Reference Documentation <https://graspologic.readthedocs.io/en/latest/>
-
 .. _models_tutorials:
 
 Models
@@ -97,6 +95,7 @@ The following tutorials present ways to visualize the graphs, such as its adjace
    plotting/pairplot
    plotting/matrixplot
    plotting/pairplot_with_gmm
+   plotting/networkplot
 
 .. _matching_tutorials:
 

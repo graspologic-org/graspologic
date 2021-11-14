@@ -8,7 +8,7 @@ import numpy as np
 from scipy.stats import norm
 
 
-def _compute_likelihood(arr):
+def _compute_likelihood(arr: np.ndarray) -> np.ndarray:
     """
     Computes the log likelihoods based on normal distribution given
     a 1d-array of sorted values. If the input has no variance,
@@ -58,7 +58,7 @@ def _find_elbows(priority_ordered_matrix: np.ndarray, n_elbows: int) -> List[int
         if arr.size <= 1:  # Cant compute likelihoods with 1 numbers
             break
         lq = _compute_likelihood(arr)
-        idx += np.argmax(lq) + 1
+        idx += int(np.argmax(lq)) + 1
         elbows.append(idx)
 
     return elbows

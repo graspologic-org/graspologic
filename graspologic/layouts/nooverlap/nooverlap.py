@@ -12,7 +12,7 @@ from ._quad_tree import _QuadTree
 logger = logging.getLogger(__name__)
 
 
-def remove_overlaps(node_positions: List[NodePosition]):
+def remove_overlaps(node_positions: List[NodePosition]) -> List[NodePosition]:
     start = time.time()
     logger.info("removing overlaps")
     local_nodes = [

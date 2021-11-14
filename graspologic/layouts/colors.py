@@ -26,8 +26,8 @@ def _load_thematic_json(path: Optional[str]) -> Tuple[Dict[Any, Any], Dict[Any, 
 
     with open(colors_path) as thematic_json_io:
         thematic_json = json.load(thematic_json_io)
-    light = thematic_json["light"]
-    dark = thematic_json["dark"]
+    light: Dict[Any, Any] = thematic_json["light"]
+    dark: Dict[Any, Any] = thematic_json["dark"]
     return light, dark
 
 
@@ -35,12 +35,12 @@ _CACHED_LIGHT, _CACHED_DARK = _load_thematic_json(None)
 
 
 def _get_colors(light_background: bool, theme_path: Optional[str]) -> Dict[Any, Any]:
-    (
-        light,
-        dark,
-    ) = _CACHED_LIGHT, _CACHED_DARK if theme_path is None else _load_thematic_json(
-        theme_path
-    )
+    light = _CACHED_LIGHT
+    dark = _CACHED_DARK
+
+    if theme_path is not None:
+        light, dark = _load_thematic_json(theme_path)
+
     return light if light_background else dark
 
 
@@ -85,7 +85,7 @@ def categorical_colors(
 
     """
     color_scheme = _get_colors(light_background, theme_path)
-    partition_populations = {}
+    partition_populations: Dict[Any, int] = {}
     for node_id, partition in partitions.items():
         count = partition_populations.get(partition, 0) + 1
         partition_populations[partition] = count

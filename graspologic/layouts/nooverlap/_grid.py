@@ -3,6 +3,9 @@
 
 import math
 from collections import defaultdict
+from typing import Dict, List, Set, Tuple
+
+from ._node import _Node
 
 
 class _GridBuckets:
@@ -11,23 +14,27 @@ class _GridBuckets:
     than the radius of the largest node in the graph.
     """
 
-    def __init__(self, cell_size):
+    def __init__(self, cell_size: int):
         self.cell_size = cell_size
-        self.grid = defaultdict(list)
+        self.grid: Dict[Tuple[int, int], List[_Node]] = defaultdict(list)
         self.min_x = math.inf
         self.min_y = math.inf
         self.max_x = -math.inf
         self.max_y = -math.inf
 
-    def get_cell(self, x, y):
-        xval = x // self.cell_size
-        yval = y // self.cell_size
-        return xval * self.cell_size, yval * self.cell_size
+    def get_cell(self, x: float, y: float) -> Tuple[int, int]:
+        x_val = int(x // self.cell_size)
+        y_val = int(y // self.cell_size)
+        return x_val * self.cell_size, y_val * self.cell_size
 
-    def get_grid_cells(self, x, y, node_size):
+    def get_grid_cells(
+        self, x: float, y: float, node_size: float
+    ) -> Set[Tuple[int, int]]:
         return self._get_grid_cells(x, y, node_size, False)
 
-    def _get_grid_cells(self, x, y, node_size, update_max=True):
+    def _get_grid_cells(
+        self, x: float, y: float, node_size: float, update_max: bool = True
+    ) -> Set[Tuple[int, int]]:
         """
         Each node will be at least one cell but up to four cells.
         It depends on the grid cell size and the size and location of the node
@@ -51,7 +58,7 @@ class _GridBuckets:
         sw = self.get_cell(min_x, min_y)
         return {nw, ne, se, sw}
 
-    def add_node(self, node):
+    def add_node(self, node: _Node) -> _Node:
         """
         Node to add must have an x, y, and size property
         :param node: The node to add to the grid
@@ -62,7 +69,7 @@ class _GridBuckets:
             self.grid[cell].append(node)
         return node
 
-    def add_node_once(self, node):
+    def add_node_once(self, node: _Node) -> _Node:
         """
         Node to add must have an x, y, and size property
         :param node: The node to add to the grid
@@ -72,7 +79,7 @@ class _GridBuckets:
         self.grid[cell].append(node)
         return node
 
-    def remove_node(self, node):
+    def remove_node(self, node: _Node) -> _Node:
         """
         Will throw an exception if the node is not in the grid.
         :param node:  node to remove
@@ -83,33 +90,37 @@ class _GridBuckets:
             self.grid[cell].remove(node)
         return node
 
-    def get_nodes_for_cell(self, cell):
+    def get_nodes_for_cell(self, cell: Tuple[int, int]) -> List[_Node]:
         return self.grid[cell]
 
-    def get_potential_overlapping_nodes_by_node(self, node):
+    def get_potential_overlapping_nodes_by_node(self, node: _Node) -> Set[_Node]:
         return self.get_potential_overlapping_nodes(node.x, node.y, node.size)
 
-    def get_potential_overlapping_nodes(self, x, y, size):
+    def get_potential_overlapping_nodes(
+        self, x: float, y: float, size: float
+    ) -> Set[_Node]:
         cells = self._get_grid_cells(x, y, size, update_max=False)
-        nodes = set()
+        nodes: Set[_Node] = set()
         for c in cells:
             nodes.update(self.grid[c])
         return nodes
 
-    def _get_x_cells(self):
+    def _get_x_cells(self) -> int:
         xrange = self.max_x - self.min_x
-        return xrange // self.cell_size
+        return int(xrange // self.cell_size)
 
-    def _get_y_cells(self):
+    def _get_y_cells(self) -> int:
         yrange = self.max_y - self.min_y
-        return yrange // self.cell_size
+        return int(yrange // self.cell_size)
 
-    def num_cells(self):
+    def num_cells(self) -> int:
         x_cells = self._get_x_cells()
         y_cells = self._get_y_cells()
         return x_cells * y_cells
 
-    def add_nodes(self, node_list, only_once=False):
+    def add_nodes(
+        self, node_list: List[_Node], only_once: bool = False
+    ) -> "_GridBuckets":
         for n in node_list:
             if only_once:
                 self.add_node_once(n)
@@ -117,39 +128,39 @@ class _GridBuckets:
                 self.add_node(n)
         return self
 
-    def max_in_cell(self):
+    def max_in_cell(self) -> int:
         max_in_cell = -1
         for c in self.grid:
             max_in_cell = max(max_in_cell, len(self.grid[c]))
         return max_in_cell
 
-    def get_grid_cell_stats(self, with_zeros=True):
-        num_nodes_in_cell_to_count_of_cells = defaultdict(int)
+    def get_grid_cell_stats(self, with_zeros: bool = True) -> List[Tuple[int, int]]:
+        num_nodes_in_cell_to_count_of_cells: Dict[int, int] = defaultdict(int)
         for c in self.grid:
             num_nodes_in_cell_to_count_of_cells[len(self.grid[c])] += 1
         if with_zeros:
             number_of_cells = self.num_cells()
             number_of_zeros = int(number_of_cells - len(self.grid))
             num_nodes_in_cell_to_count_of_cells[0] = number_of_zeros
-        return [
-            (cell_count, node_count)
-            for cell_count, node_count in sorted(
-                num_nodes_in_cell_to_count_of_cells.items()
-            )
-        ]
 
-    def get_grid_bounds(self):
-        x_min, y_min = math.inf, math.inf
-        x_max, y_max = -math.inf, -math.inf
-        for x, y in self.grid:
+        return sorted(list(t for t in num_nodes_in_cell_to_count_of_cells.items()))
+
+    def get_grid_bounds(self) -> Tuple[int, int, int, int]:
+        # initialize min and max to the x, y coordinates of the first cell
+        grid_iter = iter(self.grid)
+        init_x, init_y = next(grid_iter)
+        x_min, y_min = init_x, init_y
+        x_max, y_max = init_x, init_y
+
+        for x, y in grid_iter:
             x_min = min(x_min, x)
             y_min = min(y_min, y)
             x_max = max(x_max, x)
             y_max = max(y_max, y)
         return x_min, y_min, x_max, y_max
 
-    def get_all_grid_cells(self):
-        rows = []
+    def get_all_grid_cells(self) -> List[List[int]]:
+        rows: List[List[int]] = []
         x_min, y_min, x_max, y_max = self.get_grid_bounds()
         cell_size = self.cell_size
         # print (type(y_min), type(y_max), type(cell_size))
@@ -166,21 +177,20 @@ class _GridBuckets:
         # 	print (c)
         return rows
 
-    def print_stats(self):
+    def print_stats(self) -> None:
         print(
             f"cell size: {self.cell_size}, area: {self.cell_size*self.cell_size}, "
             f"rows: {self._get_y_cells()}, cols: {self._get_x_cells()}"
         )
-        return None
 
-    def _get_area(self, node_list):
+    def _get_area(self, node_list: List[_Node]) -> float:
         area = 0.0
         for n in node_list:
             area += n.size * n.size * 4
         return area
 
-    def get_all_grid_cells_by_area(self):
-        rows = []
+    def get_all_grid_cells_by_area(self) -> List[List[float]]:
+        rows: List[List[float]] = []
         x_min, y_min, x_max, y_max = self.get_grid_bounds()
         cell_size = self.cell_size
         # print (type(y_min), type(y_max), type(cell_size))
