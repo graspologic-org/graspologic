@@ -1163,8 +1163,8 @@ def edgeplot(
 @beartype
 def networkplot(
     adjacency: Union[np.ndarray, csr_matrix],
-    x: Union[np.ndarray, str],
-    y: Union[np.ndarray, str],
+    x: Union[np.ndarray, str, list, tuple],
+    y: Union[np.ndarray, str, list, tuple],
     node_data: Optional[pd.DataFrame] = None,
     node_hue: Optional[Union[np.ndarray, str]] = None,
     palette: Optional[Union[str, list, dict]] = None,
@@ -1194,7 +1194,7 @@ def networkplot(
     ----------
     adjacency: np.ndarray, csr_matrix
         Adjacency matrix of input network.
-    x,y: np.ndarray, str
+    x,y: np.ndarray, str, list, tuple
         Variables that specify the positions on the x and y axes. Either an
         array of x, y coordinates or a string that accesses a vector in
         ``node_data``. If ``x, y`` are arrays, they must be indexed the
@@ -1285,6 +1285,8 @@ def networkplot(
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
     )
+    x = np.array(x)
+    y = np.array(y)
 
     index = range(adjacency.shape[0])
     hue_key: Optional[str]
