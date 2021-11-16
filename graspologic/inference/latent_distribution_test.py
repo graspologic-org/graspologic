@@ -48,6 +48,7 @@ def latent_distribution_test(
     align_type: Optional[Literal["sign_flips", "seedless_procrustes"]] = "sign_flips",
     align_kws: Dict[str, Any] = {},
     input_graph: bool = True,
+    svd_seed: int = None,
 ) -> ldt_result:
     """Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same distributions of latent positions.
@@ -326,7 +327,7 @@ def latent_distribution_test(
         A1 = import_graph(A1)
         A2 = import_graph(A2)
 
-        X1_hat, X2_hat = _embed(A1, A2, n_components)
+        X1_hat, X2_hat = _embed(A1, A2, n_components, svd_seed)
     else:
         # check for nx objects, since they are castable to arrays,
         # but we don't want that
@@ -391,7 +392,14 @@ def latent_distribution_test(
 
     test_obj = KSample(test, compute_distkern=metric)
 
-    data = test_obj.test(X1_hat, X2_hat, reps=n_bootstraps, workers=workers, auto=False)
+    data = test_obj.test(
+        X1_hat,
+        X2_hat,
+        reps=n_bootstraps,
+        workers=workers,
+        auto=False,
+        random_state=random_state,
+    )
 
     null_distribution = test_obj.indep_test.null_dist
 
@@ -407,14 +415,14 @@ def latent_distribution_test(
 
 
 def _embed(
-    A1: AdjacencyMatrix, A2: AdjacencyMatrix, n_components: Optional[int]
+    A1: AdjacencyMatrix, A2: AdjacencyMatrix, n_components: Optional[int], svd_seed: int
 ) -> Tuple[np.ndarray, np.ndarray]:
     if n_components is None:
         num_dims1 = select_dimension(A1)[0][-1]
         num_dims2 = select_dimension(A2)[0][-1]
         n_components = max(num_dims1, num_dims2)
 
-    ase = AdjacencySpectralEmbed(n_components=n_components)
+    ase = AdjacencySpectralEmbed(n_components=n_components, svd_seed=svd_seed)
     X1_hat = ase.fit_transform(A1)
     X2_hat = ase.fit_transform(A2)
 
@@ -453,11 +461,17 @@ def _sample_modified_ase(X, Y, workers, random_state, pooled=False):  # type: ig
     X_sigmas = get_sigma(X) * (N - M) / (N * M)
     # increase the variance of X by sampling from the asy dist
     X_sampled = np.zeros(X.shape)
-    rng = check_random_state(random_state)
+    if random_state is not None:
+        rng = check_random_state(random_state)
+        random_state = rng.randint(np.iinfo(np.int32).max, size=N)
+
+    else:
+        random_state = np.random.randint(np.iinfo(np.int32).max, size=N)
+
     X_sampled = np.asarray(
         Parallel(n_jobs=workers)(
             delayed(add_variance)(X[i, :], X_sigmas[i], r)
-            for i, r in zip(range(N), rng.randint(np.iinfo(np.int32).max, size=N))
+            for i, r in zip(range(N), random_state)
         )
     )
 
@@ -465,6 +479,6 @@ def _sample_modified_ase(X, Y, workers, random_state, pooled=False):  # type: ig
     return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
 
-def add_variance(X_orig, X_sigma, seed):  # type: ignore
-    np.random.seed(seed)
-    return X_orig + stats.multivariate_normal.rvs(cov=X_sigma)
+def add_variance(X_orig, X_sigma, random_state):  # type: ignore
+    rng = check_random_state(random_state)
+    return rng.multivariate_normal.rvs(mean=X_orig, cov=X_sigma)
