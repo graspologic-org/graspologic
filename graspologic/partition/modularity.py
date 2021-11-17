@@ -3,9 +3,11 @@
 
 import math
 from collections import defaultdict
-from typing import Any, Dict
+from typing import Any
 
 import networkx as nx
+
+from graspologic.types import Dict
 
 
 def _modularity_component(

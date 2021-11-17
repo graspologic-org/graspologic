@@ -4,11 +4,13 @@
 import logging
 import math
 import time
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import networkx as nx
 import numpy as np
 from gensim.models import Word2Vec
+
+from graspologic.types import List, Tuple
 
 from ..utils import remap_node_ids
 

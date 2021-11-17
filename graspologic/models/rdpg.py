@@ -1,9 +1,11 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import numpy as np
+
+from graspologic.types import Dict
 
 from ..embed import AdjacencySpectralEmbed
 from ..simulations import p_from_latent

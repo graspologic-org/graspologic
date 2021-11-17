@@ -1,11 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 import ot
 from sklearn.utils import check_array
+
+from graspologic.types import Tuple
 
 from .base import BaseAlign
 from .orthogonal_procrustes import OrthogonalProcrustes

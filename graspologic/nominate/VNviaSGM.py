@@ -1,9 +1,11 @@
 import itertools
 import warnings
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
+
+from graspologic.types import Dict, List
 
 from ..match import GraphMatch as GMP
 

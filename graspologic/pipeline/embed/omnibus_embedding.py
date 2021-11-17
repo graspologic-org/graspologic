@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import Any, Hashable, List, Optional, Set, Tuple, Union
+from typing import Any, Hashable, Optional, Union
 
 import networkx as nx
 import numpy as np
@@ -11,6 +11,7 @@ from beartype import beartype
 from graspologic.embed import OmnibusEmbed
 from graspologic.embed.base import SvdAlgorithmType
 from graspologic.preconditions import check_argument, is_real_weighted
+from graspologic.types import List, Set, Tuple
 from graspologic.utils import (
     augment_diagonal,
     largest_connected_component,

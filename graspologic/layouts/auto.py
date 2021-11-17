@@ -4,12 +4,14 @@
 import logging
 import math
 import time
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Optional, Sequence
 
 import networkx as nx
 import numpy as np
 import umap
 from sklearn.manifold import TSNE
+
+from graspologic.types import Dict, List, Tuple
 
 from ..embed import node2vec_embed
 from ..partition import leiden
