@@ -1,11 +1,11 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import random
 import unittest
 
 import networkx as nx
 import numpy
-import random
 
 from graspologic.layouts.auto import _get_bounds, layout_umap
 
@@ -71,11 +71,8 @@ class TestAuto(unittest.TestCase):
         for source, target in form.edges():
             graph.add_edge(str(source), str(target), weight=rng.uniform(0.0, 10.0))
 
-        result_graph, positions = layout_umap(
-            graph,
-            max_edges=100
-        )
-        self.assertTrue(False)
+        result_graph, positions = layout_umap(graph, max_edges=100)
+        self.assertTrue(result_graph.number_of_edges() <= 100)
 
 
 if __name__ == "__main__":
