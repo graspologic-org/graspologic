@@ -1,10 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Tuple, Union
+from typing import Union
 
 import numpy as np
 from scipy.stats import fisher_exact
+
+from graspologic.types import List, Tuple
 
 
 class SignalSubgraph:

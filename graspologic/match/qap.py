@@ -4,12 +4,14 @@
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
 import operator
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 from scipy._lib._util import check_random_state
 from scipy.optimize import OptimizeResult, linear_sum_assignment
 from typing_extensions import Literal
+
+from graspologic.types import Dict, Tuple
 
 
 def quadratic_assignment(

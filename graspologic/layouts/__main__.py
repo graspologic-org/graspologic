@@ -5,9 +5,11 @@ import argparse
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import networkx as nx
+
+from graspologic.types import Dict, List
 
 from . import NodePosition, auto, render
 from .colors import categorical_colors

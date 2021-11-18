@@ -6,6 +6,7 @@ import unittest
 import networkx as nx
 import numpy as np
 import pandas as pd
+import pytest
 from numpy.random import normal, poisson
 from numpy.testing import assert_equal
 from scipy.sparse import csr_matrix
@@ -149,7 +150,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
 
     def test_unconnected_warning(self):
         A = er_nm(100, 10)
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             ase = AdjacencySpectralEmbed()
             ase.fit(A)
 
@@ -280,7 +281,7 @@ class TestAdjacencySpectralEmbedSparse(unittest.TestCase):
 
     def test_unconnected_warning(self):
         A = csr_matrix(er_nm(100, 10))
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             ase = AdjacencySpectralEmbed()
             ase.fit(A)
 
@@ -339,7 +340,7 @@ class TestLaplacianSpectralEmbed(unittest.TestCase):
         n = [50, 50]
         p = [[1, 0], [0, 1]]
         A = sbm(n, p)
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)
 
@@ -381,7 +382,7 @@ class TestLaplacianSpectralEmbedSparse(unittest.TestCase):
         n = [50, 50]
         p = [[1, 0], [0, 1]]
         A = csr_matrix(sbm(n, p))
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)
 

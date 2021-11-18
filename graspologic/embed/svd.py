@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 import scipy
@@ -10,6 +10,7 @@ import sklearn
 from scipy.stats import norm
 from typing_extensions import Literal
 
+from graspologic.types import List, Tuple
 from graspologic.utils import is_almost_symmetric
 
 SvdAlgorithmType = Literal["full", "truncated", "randomized", "eigsh"]

@@ -16,10 +16,12 @@ guarantee the appropriate latent positions are returned for each node.
 # Licensed under the MIT license.
 
 from collections import OrderedDict
-from typing import Any, Tuple
+from typing import Any
 
 import numpy as np
 from beartype import beartype
+
+from graspologic.types import Tuple
 
 
 class Embeddings:

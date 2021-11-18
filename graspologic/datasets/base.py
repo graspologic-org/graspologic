@@ -3,11 +3,13 @@
 
 from os.path import dirname, join
 from pathlib import Path
-from typing import Tuple, Union
+from typing import Union
 
 import numpy as np
 import pandas as pd
 from sklearn.utils import Bunch
+
+from graspologic.types import Tuple
 
 from ..utils import import_edgelist
 
