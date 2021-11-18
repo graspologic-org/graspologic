@@ -5,6 +5,7 @@ import unittest
 
 import networkx as nx
 import numpy
+import random
 
 from graspologic.layouts.auto import _get_bounds, layout_umap
 
@@ -62,6 +63,19 @@ class TestAuto(unittest.TestCase):
         _, node_positions = layout_umap(graph=graph)
 
         self.assertEqual(len(node_positions), len(graph.nodes()))
+
+    def test_exercise_approximate_prune(self):
+        form = nx.erdos_renyi_graph(100, 0.7, directed=False)
+        graph = nx.Graph()
+        rng = random.Random(12345)
+        for source, target in form.edges():
+            graph.add_edge(str(source), str(target), weight=rng.uniform(0.0, 10.0))
+
+        result_graph, positions = layout_umap(
+            graph,
+            max_edges=100
+        )
+        self.assertTrue(False)
 
 
 if __name__ == "__main__":
