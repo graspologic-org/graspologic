@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.pipeline.embed.embeddings &mdash; graspologic 1.0.0dev1450174836 documentation</title>
+  <title>graspologic.pipeline.embed.embeddings &mdash; graspologic 1.0.0dev1477896363 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1450174836
+                1.0.0dev1477896363
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -274,10 +274,12 @@
 <span class="c1"># Licensed under the MIT license.</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+
+<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 
 <div class="viewcode-block" id="Embeddings"><a class="viewcode-back" href="../../../../reference/reference/pipeline.html#graspologic.pipeline.embed.embeddings.Embeddings">[docs]</a><span class="k">class</span> <span class="nc">Embeddings</span><span class="p">:</span>
