@@ -4,6 +4,7 @@
 import unittest
 
 import numpy as np
+import pytest
 from numpy.testing import assert_allclose, assert_equal
 from sklearn.exceptions import NotFittedError
 
@@ -181,7 +182,7 @@ class TestAutoGMM(unittest.TestCase):
             ]
         )
 
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             AutoGMM = AutoGMMCluster(min_components=2, affinity="all")
             AutoGMM.fit(X)
 
