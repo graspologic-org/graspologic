@@ -2,11 +2,13 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
 from beartype import beartype
 from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
+
+from graspologic.types import List
 
 from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import average_matrices, is_fully_connected, to_laplacian

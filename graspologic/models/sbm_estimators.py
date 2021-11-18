@@ -1,10 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Collection, Dict, List, Optional, Tuple
+from typing import Any, Collection, Optional
 
 import numpy as np
 from sklearn.utils import check_X_y
+
+from graspologic.types import Dict, List, Tuple
 
 from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed

@@ -2,9 +2,11 @@
 # Licensed under the MIT license.
 
 import numbers
-from typing import Any, Tuple, Union
+from typing import Any, Union
 
 import networkx as nx
+
+from graspologic.types import Tuple
 
 
 def check_argument_types(

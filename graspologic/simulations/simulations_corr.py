@@ -1,11 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Tuple, Union
+from typing import Union
 
 import numpy as np
 
 from graspologic.simulations import sample_edges
+from graspologic.types import List, Tuple
 
 
 def check_dirloop(directed: bool, loops: bool) -> None:

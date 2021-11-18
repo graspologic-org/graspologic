@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Callable, Dict, NamedTuple, Optional, Tuple, Union
+from typing import Any, Callable, NamedTuple, Optional, Union
 
 import numpy as np
 from hyppo.ksample import KSample
@@ -10,6 +10,8 @@ from scipy import stats
 from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
 from sklearn.utils import check_array, check_random_state
 from typing_extensions import Literal
+
+from graspologic.types import Dict, Tuple
 
 from ..align import SeedlessProcrustes, SignFlips
 from ..embed import AdjacencySpectralEmbed, select_dimension

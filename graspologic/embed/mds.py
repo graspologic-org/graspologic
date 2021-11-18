@@ -1,12 +1,14 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from typing_extensions import Literal
+
+from graspologic.types import Tuple
 
 from ..utils import is_symmetric
 from .svd import SvdAlgorithmType, select_svd
