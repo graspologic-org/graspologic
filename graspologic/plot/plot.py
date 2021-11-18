@@ -1,7 +1,7 @@
 ﻿# Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Collection, Dict, List, Optional, Tuple, Union
+from typing import Any, Collection, Optional, Union
 
 import matplotlib as mpl
 import matplotlib.axes
@@ -19,6 +19,8 @@ from scipy import linalg
 from scipy.sparse import csr_matrix
 from sklearn.preprocessing import Binarizer
 from sklearn.utils import check_array, check_consistent_length, check_X_y
+
+from graspologic.types import Dict, List, Tuple
 
 from ..embed import select_svd
 from ..preconditions import (

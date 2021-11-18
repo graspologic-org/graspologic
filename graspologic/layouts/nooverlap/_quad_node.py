@@ -4,13 +4,14 @@
 import logging
 import math
 import typing
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Optional
 
 import numpy as np
 from scipy.spatial import distance
 from sklearn.preprocessing import normalize
 
 from graspologic.layouts.classes import NodePosition
+from graspologic.types import Dict, List, Set, Tuple
 
 from ._node import _Node
 

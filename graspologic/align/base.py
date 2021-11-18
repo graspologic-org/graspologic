@@ -2,11 +2,13 @@
 # Licensed under the MIT License.
 
 from abc import abstractmethod
-from typing import Tuple, TypeVar
+from typing import TypeVar
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
+
+from graspologic.types import Tuple
 
 Self = TypeVar("Self", bound="BaseAlign")
 

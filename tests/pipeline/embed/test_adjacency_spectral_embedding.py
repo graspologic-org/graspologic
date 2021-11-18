@@ -5,6 +5,7 @@ import unittest
 
 import networkx as nx
 import numpy as np
+import pytest
 from beartype.roar import BeartypeCallHintPepParamException
 
 import graspologic.utils
@@ -102,7 +103,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
 
     def test_unweighted_graph_warning(self):
         graph = self.graph
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             adjacency_spectral_embedding(graph)
 
     def test_dimensions(self):

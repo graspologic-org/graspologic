@@ -4,6 +4,7 @@
 import unittest
 
 import numpy as np
+import pytest
 from numpy.linalg import norm
 from numpy.testing import assert_allclose
 from scipy.sparse import csr_matrix
@@ -115,7 +116,7 @@ class TestOmni(unittest.TestCase):
         graphs = [er_nm(n, m) for _ in range(2)]
         omni = OmnibusEmbed()
 
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             omni.fit(graphs)
 
     def test_diag_aug(self):

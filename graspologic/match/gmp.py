@@ -1,13 +1,15 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 from joblib import Parallel, delayed
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, check_random_state, column_or_1d
 from typing_extensions import Literal
+
+from graspologic.types import List, Tuple
 
 from .qap import quadratic_assignment
 

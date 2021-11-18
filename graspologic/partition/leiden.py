@@ -2,12 +2,14 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
+from typing import Any, NamedTuple, Optional, Union
 
 import graspologic_native as gn
 import networkx as nx
 import numpy as np
 import scipy
+
+from graspologic.types import Dict, List, Tuple
 
 from .. import utils
 
