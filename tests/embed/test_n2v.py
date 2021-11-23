@@ -29,7 +29,9 @@ class Node2VecEmbedTest(unittest.TestCase):
             graph_as_strings.add_edge(str(s), str(t), weight=1)
 
         original_embedding = gc.embed.node2vec_embed(graph, random_seed=random_seed)
-        string_embedding = gc.embed.node2vec_embed(graph_as_strings, random_seed=random_seed)
+        string_embedding = gc.embed.node2vec_embed(
+            graph_as_strings, random_seed=random_seed
+        )
 
         k = KMeans(n_clusters=2, random_state=random_seed)
 
