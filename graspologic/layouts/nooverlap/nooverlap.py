@@ -3,7 +3,8 @@
 
 import logging
 import time
-from typing import List
+
+from graspologic.types import List
 
 from .. import NodePosition
 from ._node import _Node

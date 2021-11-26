@@ -2,11 +2,13 @@
 # Licensed under the MIT License.
 
 from collections import namedtuple
-from typing import Optional, Tuple, cast
+from typing import Optional, cast
 
 import numpy as np
 from joblib import Parallel, delayed
 from typing_extensions import Literal
+
+from graspologic.types import Tuple
 
 from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension

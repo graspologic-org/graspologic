@@ -6,6 +6,7 @@ from typing import Dict, List, Tuple
 
 import networkx as nx
 import numpy as np
+import pytest
 import scipy
 
 from graspologic.partition import HierarchicalCluster, hierarchical_leiden, leiden
@@ -254,16 +255,12 @@ class TestLeidenIsolates(unittest.TestCase):
             "the input graph contains all nodes including isolate",
         )
 
-        with self.assertWarnsRegex(
-            UserWarning, "isolate", msg="should warn about isolates in input graph"
-        ):
+        with pytest.warns(UserWarning, match="isolate"):
             partitions = leiden(self.graph)
 
         self.assert_isolate_not_in_result(partitions)
 
-        with self.assertWarnsRegex(
-            UserWarning, "isolate", msg="hierarchical leiden should warn about isolates"
-        ):
+        with pytest.warns(UserWarning, match="isolate"):
             hierarchical_partitions = hierarchical_leiden(self.graph)
 
         self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)
@@ -277,16 +274,12 @@ class TestLeidenIsolates(unittest.TestCase):
             "the input array contains all nodes including isolate",
         )
 
-        with self.assertWarnsRegex(
-            UserWarning, "isolate", msg="should warn about isolates in input graph"
-        ):
+        with pytest.warns(UserWarning, match="isolate"):
             partitions = leiden(ndarray_adj_matrix)
 
         self.assert_isolate_not_in_result(partitions)
 
-        with self.assertWarnsRegex(
-            UserWarning, "isolate", msg="hierarchical leiden should warn about isolates"
-        ):
+        with pytest.warns(UserWarning, match="isolate"):
             hierarchical_partitions = hierarchical_leiden(ndarray_adj_matrix)
 
         self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)
@@ -300,16 +293,12 @@ class TestLeidenIsolates(unittest.TestCase):
             "the input csr contains all nodes including isolate",
         )
 
-        with self.assertWarnsRegex(
-            UserWarning, "isolate", msg="should warn about isolates in input graph"
-        ):
+        with pytest.warns(UserWarning, match="isolate"):
             partitions = leiden(sparse_adj_matrix)
 
         self.assert_isolate_not_in_result(partitions)
 
-        with self.assertWarnsRegex(
-            UserWarning, "isolate", msg="hierarchical leiden should warn about isolates"
-        ):
+        with pytest.warns(UserWarning, match="isolate"):
             hierarchical_partitions = hierarchical_leiden(sparse_adj_matrix)
 
         self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)

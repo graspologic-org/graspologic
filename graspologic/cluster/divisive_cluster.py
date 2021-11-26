@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Dict, Optional, Tuple, cast
+from typing import Any, Optional, cast
 
 import numpy as np
 from anytree import LevelOrderIter, NodeMixin
@@ -10,6 +10,8 @@ from sklearn.mixture import GaussianMixture
 from sklearn.utils import check_array
 from sklearn.utils.validation import check_is_fitted
 from typing_extensions import Literal
+
+from graspologic.types import Dict, Tuple
 
 from .autogmm import AutoGMMCluster
 from .kclust import KMeansCluster

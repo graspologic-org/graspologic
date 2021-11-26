@@ -2,10 +2,12 @@
 # Licensed under the MIT license.
 
 
-from typing import List, Tuple, Union
+from typing import Union
 
 import numpy as np
 from scipy.stats import norm
+
+from graspologic.types import List, Tuple
 
 
 def _compute_likelihood(arr: np.ndarray) -> np.ndarray:

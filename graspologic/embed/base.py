@@ -3,13 +3,15 @@
 
 import warnings
 from abc import abstractmethod
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import networkx as nx
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 from typing_extensions import Literal
+
+from graspologic.types import List, Tuple
 
 from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import (
