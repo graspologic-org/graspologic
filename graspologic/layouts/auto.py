@@ -227,7 +227,7 @@ def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000) -> nx.
             if counts >= max_edges_to_keep:
                 bin_edge_for_maximum_weight = bins[i + 1]
                 break
-        threshold = bins[bin_edge_for_maximum_weight]
+        threshold = bin_edge_for_maximum_weight
         graph = cut_edges_by_weight(
             graph, cut_threshold=threshold, cut_process="smaller_than_inclusive"
         )
