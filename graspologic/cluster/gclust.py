@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -9,6 +9,8 @@ from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import ParameterGrid
 from typing_extensions import Literal
+
+from graspologic.types import List
 
 from .base import BaseCluster
 
