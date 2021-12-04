@@ -1397,6 +1397,8 @@ def networkplot(
         )
         ax.add_collection(lc)
         ax.set(xticks=[], yticks=[])
+        ax.xticks(x, " ")
+        ax.yticks(y, " ")
 
     return ax
 
