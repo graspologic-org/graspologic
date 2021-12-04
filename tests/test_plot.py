@@ -381,10 +381,11 @@ class TestPlot(unittest.TestCase):
         """
         X = np.random.rand(3,2)
         title = "screee plot"
-        fig = gridplot(X)
-        fig = gridplot(X, title)
-        fig = gridplot(X, title, cumulative=1)
-        fig = gridplot(X, title, cumulative=1, show_first=1)
+        fig = screeplot(X)
+        fig = screeplot(X, title)
+        fig = screeplot(X, title, cumulative=1)
+        fig = screeplot(X, title, cumulative=1, show_first=1)
+        fig = screeplot(X, title, cumulative=1, show_first=1, ax=plt.gca())
 
     def test_sort_inds(self):
         B = np.array(
