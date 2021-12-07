@@ -18,13 +18,15 @@ class KMeansCluster(BaseCluster):
     """
     KMeans Cluster.
 
-    It computes all possible models from one component to
-    ``max_clusters``. The best model is given by the lowest silhouette score.
+    It computes all possible models from one component to ``max_clusters``.
+    When the true labels are known, the best model is given by the model with highest
+    adjusted Rand index (ARI).
+    Otherwise, the best model is given by the model with highest silhouette score.
 
     Parameters
     ----------
-    max_clusters : int, defaults to 1.
-        The maximum number of mixture components to consider.
+    max_clusters : int, default=2.
+        The maximum number of clusters to consider. Must be ``>=2``.
 
     random_state : int, RandomState instance or None, optional (default=None)
         If int, ``random_state`` is the seed used by the random number generator;
@@ -35,11 +37,11 @@ class KMeansCluster(BaseCluster):
     Attributes
     ----------
     n_clusters_ : int
-        Optimal number of components. If y is given, it is based on largest
-        ARI. Otherwise, it is based on smallest loss.
+        Optimal number of clusters. If y is given, it is based on largest
+        ARI. Otherwise, it is based on highest silhouette score.
 
     model_ : KMeans object
-        Fitted KMeans object fitted with optimal n_components.
+        Fitted KMeans object fitted with ``n_clusters_``.
 
     silhouette_ : list
         List of silhouette scores computed for all possible number
