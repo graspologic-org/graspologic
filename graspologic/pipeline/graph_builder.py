@@ -1,12 +1,13 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-import numbers
 from collections import OrderedDict
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Union
 
 import networkx as nx
 from beartype import beartype
+
+from graspologic.types import Dict, List, Tuple
 
 __all__ = ["GraphBuilder"]
 
@@ -32,7 +33,7 @@ class GraphBuilder:
     def __init__(self, directed: bool = False):
         # OrderedDict is the default for {} anyway, but I wanted to be very explicit,
         # since we absolutely rely on the ordering
-        self._id_map = OrderedDict()
+        self._id_map: Dict[Any, int] = OrderedDict()
         self._graph = nx.DiGraph() if directed else nx.Graph()
 
     @beartype
@@ -40,7 +41,7 @@ class GraphBuilder:
         self,
         source: Any,
         target: Any,
-        weight: numbers.Real = 1.0,
+        weight: Union[int, float] = 1.0,
         sum_weight: bool = True,
         **attributes: Any
     ) -> None:
@@ -63,7 +64,7 @@ class GraphBuilder:
             source node id
         target : Any
             target node id
-        weight : numbers.Real (default=1.0)
+        weight : Union[int, float] (default=1.0)
             The weight for the edge. If none is provided, the weight is defaulted to 1.
         sum_weight : bool (default=True)
             If an edge between the ``source`` and ``target`` already exist, should we

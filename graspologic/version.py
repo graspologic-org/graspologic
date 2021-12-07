@@ -16,7 +16,7 @@ def __from_distribution() -> Optional[str]:
     This is the common case when you've installed graspologic from PyPI
     """
     try:
-        return pkg_resources.get_distribution("graspologic").version
+        return str(pkg_resources.get_distribution("graspologic").version)
     except BaseException:
         return None
 

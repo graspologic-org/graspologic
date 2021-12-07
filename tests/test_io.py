@@ -2,12 +2,14 @@
 # Licensed under the MIT License.
 
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import networkx as nx
 import numpy as np
+import pytest
 
 import graspologic as gs
 
@@ -126,5 +128,5 @@ class TestImportEdgelist(unittest.TestCase):
 
     def test_bad_delimiter(self):
         delimiter = ","
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             graphs = gs.utils.import_edgelist(self.root, delimiter=delimiter)

@@ -1,12 +1,23 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional, Union
+
 import numpy as np
 from joblib import Parallel, delayed
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, check_random_state, column_or_1d
+from typing_extensions import Literal
+
+from graspologic.types import List, Tuple
 
 from .qap import quadratic_assignment
+
+# Type aliases
+PaddingType = Literal["adopted", "naive"]
+InitMethodType = Literal["barycenter", "rand", "randomized"]
+RandomStateType = Optional[Union[int, np.random.RandomState, np.random.Generator]]
+ArrayLikeOfIndexes = Union[List[int], np.ndarray]
 
 
 class GraphMatch(BaseEstimator):
@@ -123,17 +134,19 @@ class GraphMatch(BaseEstimator):
 
     """
 
+    init: Union[InitMethodType, np.ndarray]
+
     def __init__(
         self,
-        n_init=1,
-        init="barycenter",
-        max_iter=30,
-        shuffle_input=True,
-        eps=0.03,
-        gmp=True,
-        padding="adopted",
-        random_state=None,
-        n_jobs=None,
+        n_init: int = 1,
+        init: Union[InitMethodType, np.ndarray] = "barycenter",
+        max_iter: int = 30,
+        shuffle_input: bool = True,
+        eps: float = 0.03,
+        gmp: bool = True,
+        padding: PaddingType = "adopted",
+        random_state: RandomStateType = None,
+        n_jobs: Optional[int] = None,
     ):
         if type(n_init) is int and n_init > 0:
             self.n_init = n_init
@@ -180,7 +193,14 @@ class GraphMatch(BaseEstimator):
         self.random_state = random_state
         self.n_jobs = n_jobs
 
-    def fit(self, A, B, seeds_A=[], seeds_B=[], S=None):
+    def fit(
+        self,
+        A: np.ndarray,
+        B: np.ndarray,
+        seeds_A: ArrayLikeOfIndexes = [],
+        seeds_B: ArrayLikeOfIndexes = [],
+        S: Optional[np.ndarray] = None,
+    ) -> "GraphMatch":
         """
         Fits the model with two assigned adjacency matrices
 
@@ -259,7 +279,14 @@ class GraphMatch(BaseEstimator):
         self.n_iter_ = res.nit
         return self
 
-    def fit_predict(self, A, B, seeds_A=[], seeds_B=[], S=None):
+    def fit_predict(
+        self,
+        A: np.ndarray,
+        B: np.ndarray,
+        seeds_A: ArrayLikeOfIndexes = [],
+        seeds_B: ArrayLikeOfIndexes = [],
+        S: Optional[np.ndarray] = None,
+    ) -> np.ndarray:
         """
         Fits the model with two assigned adjacency matrices, returning optimal
         permutation indices
@@ -297,8 +324,10 @@ class GraphMatch(BaseEstimator):
         return self.perm_inds_
 
 
-def _adj_pad(A, B, S, method):
-    def pad(X, n):
+def _adj_pad(
+    A: np.ndarray, B: np.ndarray, S: np.ndarray, method: PaddingType
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def pad(X: np.ndarray, n: np.ndarray) -> np.ndarray:
         X_pad = np.zeros((n[1], n[1]))
         X_pad[: n[0], : n[0]] = X
         return X_pad

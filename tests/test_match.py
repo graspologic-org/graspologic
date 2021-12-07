@@ -9,6 +9,7 @@ import numpy as np
 from graspologic.align import SignFlips
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.match import GraphMatch as GMP
+from graspologic.match.qap import _quadratic_assignment_faq, quadratic_assignment
 from graspologic.simulations import er_np, sbm_corr
 
 np.random.seed(1)
@@ -258,3 +259,27 @@ class TestGMP(unittest.TestCase):
         res = self.barygm.fit(A1, A2, S=S)
 
         self.assertTrue(0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n))
+
+
+class TestQuadraticAssignment(unittest.TestCase):
+    def test_quadratic_assignment_does_not_accept_method_2opt(self):
+        arr = np.ones((2, 2))
+        with self.assertRaises(ValueError):
+            quadratic_assignment(arr, arr, method="2opt")
+
+    def test_quadratic_assignment_faq_requires_non_empty_S_argument(self):
+        arr = np.ones((2, 2))
+        with self.assertRaises(ValueError):
+            _quadratic_assignment_faq(arr, arr)
+
+    def test_quadratic_assignment_faq_requires_square_S_argument(self):
+        arr = np.ones((2, 2))
+        with self.assertRaises(ValueError):
+            _quadratic_assignment_faq(arr, arr, S=np.ones((2, 2, 2)))
+
+    def test_quadratic_assignment_faq_requires_S_argument_with_same_dimensions_as_A_and_B(
+        self,
+    ):
+        arr = np.ones((2, 2))
+        with self.assertRaises(ValueError):
+            _quadratic_assignment_faq(arr, arr, S=np.ones((3, 3)))
