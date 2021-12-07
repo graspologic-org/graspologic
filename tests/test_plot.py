@@ -17,7 +17,7 @@ from graspologic.plot.plot import (
     networkplot,
     pairplot,
     pairplot_with_gmm,
-    screeplot
+    screeplot,
 )
 from graspologic.simulations.simulations import er_np, sbm
 
@@ -364,9 +364,9 @@ class TestPlot(unittest.TestCase):
             edge_linewidth=0.6,
             ax=ax,
         )
-        
+
     def test_screeplot_inputs(self):
-        X = np.random.rand(3,2)
+        X = np.random.rand(3, 2)
 
         with self.assertRaises(TypeError):
             screeplot(X=X, show_first="test")
@@ -374,18 +374,17 @@ class TestPlot(unittest.TestCase):
         with self.assertRaises(TypeError):
             screeplot(X=X, cumulative="test")
 
-
     def test_screeplot_outputs(self):
         """
         simple function to see if plot is made without errors
         """
-        X = np.random.rand(3,2)
+        X = np.random.rand(3, 2)
         title = "screee plot"
         fig = screeplot(X)
         fig = screeplot(X, title)
-        fig = screeplot(X, title, cumulative=1)
-        fig = screeplot(X, title, cumulative=1, show_first=1)
-        fig = screeplot(X, title, cumulative=1, show_first=1, ax=plt.gca())
+        fig = screeplot(X, title, cumulative=True)
+        fig = screeplot(X, title, cumulative=True, show_first=1)
+        fig = screeplot(X, title, cumulative=True, show_first=1, ax=plt.gca())
 
     def test_sort_inds(self):
         B = np.array(
