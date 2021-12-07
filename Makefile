@@ -1,8 +1,11 @@
-docs:
-	sphinx-build -W -a docs/reference/ docs/reference/_build/html
+clean:
+	rm -rf docs/_build
 
-tutorials:
-	sphinx-build -W -a docs/tutorials/ docs/tutorials/_build/html
+docs:
+	sphinx-build -W -a docs/ docs/_build/html
+
+docsWithTutorials:
+	sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
 
 coverage:
 	python -m pytest --co --cov=graspologic graspologic tests
@@ -24,4 +27,4 @@ type-check:
 
 validate: lint coverage docs test
 
-.PHONY: docs tutorials coverage lint test type-check validate
+.PHONY: docs docsWithTutorials coverage lint format test type-check validate

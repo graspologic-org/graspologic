@@ -122,12 +122,57 @@ branch. Steps:
    git push -u origin my-feature
    ```
 
+## Local Developer Setup
+1. Make sure you have a compatible version of Python 3 installed
+2. From the project root, create a virtual environment and install all development dependencies.  This example uses Python 3.8 but you may use any Python version supported by graspologic.
+
+   **Bash**
+    ```bash
+   # Create virtual environment
+   python3.8 -m venv venv
+   
+   # Activate the virtual environment
+   source venv/bin/activate
+   
+   # Install development dependencies
+   pip install -U pip setuptools
+   pip install -r requirements.txt
+   ```
+   **CMD (Windows)**
+    ```cmd
+   rem Create virtual environment.  Depending on your installation you might need "py -3.8 -m venv venv" instead
+   python3.8 -m venv venv
+   
+   rem Activate the virtual environment
+   .\venv\Scripts\activate.bat
+   
+   rem Install development dependencies
+   pip install -U pip setuptools
+   pip install -r requirements.txt
+   ```
+   **PowerShell**
+    ```powershell
+   # Create virtual environment
+   python3.8 -m venv venv
+   
+   # Activate the virtual environment
+   .\venv\Scripts\Activate.ps1
+   
+   # Install development dependencies
+   pip install -U pip setuptools
+   pip install -r requirements.txt
+   ```
+3. Start playing with Graspologic code!
+
 ## Pull Request Checklist
 
 We recommended that your contribution complies with the following rules before you submit a pull request: 
 
 - Follow the [coding-guidelines](#guidelines). 
-- Give your pull request a helpful title that summarizes what your contribution does. 
+- Give your pull request (PR) a helpful title that summarizes what your contribution does. We are using PR titles to automatically generate release notes; examples of helpful PR title formats include: 
+   - `Added Feature[Set] {Title|Short Descriptor} in ModuleOrPackageName`
+   - `Fixed bug in [ClassName.method_name|ModuleOrPackageName.function_name] where ShortDescription`
+   - `Updated [ClassName[.method_name]|ModuleOrPackageName.function_name] to ShortDescription`
 - Link your pull request to the issue (see: 
   [closing keywords](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) 
   for an easy way of linking your issue)

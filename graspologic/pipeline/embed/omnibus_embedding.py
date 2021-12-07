@@ -2,14 +2,16 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import List, Optional, Tuple, Union
+from typing import Any, Hashable, Optional, Union
 
 import networkx as nx
 import numpy as np
 from beartype import beartype
 
 from graspologic.embed import OmnibusEmbed
+from graspologic.embed.base import SvdAlgorithmType
 from graspologic.preconditions import check_argument, is_real_weighted
+from graspologic.types import List, Set, Tuple
 from graspologic.utils import (
     augment_diagonal,
     largest_connected_component,
@@ -27,10 +29,11 @@ def omnibus_embedding_pairwise(
     graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
-    svd_solver_algorithm: str = "randomized",
+    svd_solver_algorithm: SvdAlgorithmType = "randomized",
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
+    use_laplacian: bool = False,
 ) -> List[Tuple[Embeddings, Embeddings]]:
     """
     Generates a pairwise omnibus embedding for each pair of graphs in a list of graphs using the adjacency matrix.
@@ -93,6 +96,10 @@ def omnibus_embedding_pairwise(
           Used to seed the PRNG used in the ``randomized`` svd solver algorithm.
     weight_attribute : str (default="weight")
           The edge dictionary key that contains the weight of the edge.
+    use_laplacian : bool (default=False)
+          Determine whether to use the Laplacian matrix of each graph in order to
+          calculate the omnibus embedding using the Laplacian spectral embedding
+          technique.
 
     Returns
     -------
@@ -147,7 +154,8 @@ def omnibus_embedding_pairwise(
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
+    used_weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
+    perform_augment_diagonal = not use_laplacian
 
     graph_embeddings = []
 
@@ -156,8 +164,11 @@ def omnibus_embedding_pairwise(
     for graph in graphs[1:]:
         union_graph.add_edges_from(graph.edges())
 
-    union_graph_lcc = largest_connected_component(union_graph)
-    union_graph_lcc_nodes = union_graph_lcc.nodes()
+    union_graph_lcc: Union[
+        nx.Graph, nx.Digraph, nx.OrderedGraph, nx.OrderedDiGraph
+    ] = largest_connected_component(union_graph)
+    union_graph_lcc_nodes: Set[Any] = set(list(union_graph_lcc.nodes()))
+
     union_node_ids = np.array(list(union_graph_lcc_nodes))
 
     previous_graph = graphs[0].copy()
@@ -172,10 +183,16 @@ def omnibus_embedding_pairwise(
 
         # remove self loops, run pass to ranks and diagonal augmentation
         previous_graph_augmented = _augment_graph(
-            previous_graph, union_graph_lcc_nodes, weight_attribute
+            previous_graph,
+            union_graph_lcc_nodes,
+            used_weight_attribute,
+            perform_augment_diagonal=perform_augment_diagonal,
         )
         current_graph_augmented = _augment_graph(
-            current_graph, union_graph_lcc_nodes, weight_attribute
+            current_graph,
+            union_graph_lcc_nodes,
+            used_weight_attribute,
+            perform_augment_diagonal=perform_augment_diagonal,
         )
 
         model = OmnibusEmbed(
@@ -187,6 +204,7 @@ def omnibus_embedding_pairwise(
             diag_aug=False,
             concat=False,
             svd_seed=svd_seed,
+            lse=use_laplacian,
         )
 
         previous_embedding, current_embedding = model.fit_transform(
@@ -211,8 +229,12 @@ def omnibus_embedding_pairwise(
     return graph_embeddings
 
 
-def _graphs_precondition_checks(graphs, weight_attribute):
+def _graphs_precondition_checks(
+    graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
+    weight_attribute: str,
+) -> Optional[str]:
     is_directed = graphs[0].is_directed()
+    used_weight_attribute: Optional[str] = weight_attribute
 
     for graph in graphs:
         check_argument(
@@ -235,44 +257,63 @@ def _graphs_precondition_checks(graphs, weight_attribute):
                 f"please add a '{weight_attribute}' attribute to every edge with a real, "
                 f"numeric value (e.g. an integer or a float) and call this function again."
             )
-            weight_attribute = None  # this supercedes what the user said, because
+            used_weight_attribute = None  # this supercedes what the user said, because
             # not all of the weights are real numbers, if they exist at all
             # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
 
-    return weight_attribute
+    return used_weight_attribute
 
 
-def _elbow_cut_if_needed(elbow_cut, is_directed, singular_values, embedding):
+def _elbow_cut_if_needed(
+    elbow_cut: Optional[int],
+    is_directed: bool,
+    singular_values: np.ndarray,
+    embedding: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
+) -> np.ndarray:
+    embedding_arr: np.ndarray
     if elbow_cut is None:
-        if is_directed:
-            embedding = np.concatenate(embedding, axis=1)
+        if isinstance(embedding, tuple) or is_directed:
+            embedding_arr = np.concatenate(embedding, axis=1)
+        else:
+            embedding_arr = embedding
     else:
         column_index = _index_of_elbow(singular_values, elbow_cut)
 
-        if is_directed:
+        if isinstance(embedding, tuple) or is_directed:
             left, right = embedding
             left = left[:, :column_index]
             right = right[:, :column_index]
-            embedding = np.concatenate((left, right), axis=1)
+            embedding_arr = np.concatenate((left, right), axis=1)
         else:
-            embedding = embedding[:, :column_index]
+            embedding_arr = embedding[:, :column_index]
 
-    return embedding
+    return embedding_arr
 
 
-def _augment_graph(graph, node_ids, weight_attribute):
-    graph_as_array = nx.to_numpy_array(
+def _augment_graph(
+    graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    node_ids: Set[Hashable],
+    weight_attribute: Optional[str],
+    perform_augment_diagonal: bool = True,
+) -> np.ndarray:
+    graph_sparse = nx.to_scipy_sparse_matrix(
         graph, weight=weight_attribute, nodelist=node_ids
     )
 
-    graphs_loops_removed = remove_loops(graph_as_array)
-    graphs_ranked = pass_to_ranks(graphs_loops_removed)
-    graphs_diag_augmented = augment_diagonal(graphs_ranked)
+    graphs_loops_removed: np.ndarray = remove_loops(graph_sparse)
+    graphs_ranked: np.ndarray = pass_to_ranks(graphs_loops_removed)
 
-    return graphs_diag_augmented
+    if perform_augment_diagonal:
+        graphs_diag_augmented: np.ndarray = augment_diagonal(graphs_ranked)
+        return graphs_diag_augmented
+
+    return graphs_ranked
 
 
-def _sync_nodes(graph_to_reduce, set_of_valid_nodes):
+def _sync_nodes(
+    graph_to_reduce: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    set_of_valid_nodes: Set[Hashable],
+) -> None:
     to_remove = []
     for n in graph_to_reduce.nodes():
         if n not in set_of_valid_nodes:

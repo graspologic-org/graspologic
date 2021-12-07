@@ -4,12 +4,14 @@
 import logging
 import math
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional, Sequence
 
 import networkx as nx
 import numpy as np
 import umap
 from sklearn.manifold import TSNE
+
+from graspologic.types import Dict, List, Tuple
 
 from ..embed import node2vec_embed
 from ..partition import leiden
@@ -212,7 +214,7 @@ def layout_umap(
     return lcc_graph, positions
 
 
-def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
+def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000) -> nx.Graph:
     num_edges = len(graph.edges())
     logger.info(f"num edges: {num_edges}")
 
@@ -225,7 +227,7 @@ def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000):
             if counts >= max_edges_to_keep:
                 bin_edge_for_maximum_weight = bins[i + 1]
                 break
-        threshold = bins[bin_edge_for_maximum_weight]
+        threshold = bin_edge_for_maximum_weight
         graph = cut_edges_by_weight(
             graph, cut_threshold=threshold, cut_process="smaller_than_inclusive"
         )
@@ -238,13 +240,15 @@ def _node2vec_for_layout(
     graph: nx.Graph,
     max_edges: int = 10000000,
     random_seed: Optional[int] = None,
-) -> Tuple[nx.Graph, np.ndarray, np.ndarray]:
+) -> Tuple[nx.Graph, np.ndarray, List[Any]]:
     graph = _approximate_prune(graph, max_edges)
-    graph = largest_connected_component(graph)
+    lcc: nx.Graph = largest_connected_component(graph)
 
     start = time.time()
+    tensors: np.ndarray
+    labels: List[Any]
     tensors, labels = node2vec_embed(
-        graph=graph,
+        graph=lcc,
         dimensions=128,
         num_walks=10,
         window_size=2,
@@ -253,7 +257,7 @@ def _node2vec_for_layout(
     )
     embedding_time = time.time() - start
     logger.info(f"embedding completed in {embedding_time} seconds")
-    return graph, tensors, labels
+    return lcc, tensors, labels
 
 
 def _to_undirected(graph: nx.DiGraph, weight_attribute: str = "weight") -> nx.Graph:
@@ -280,7 +284,7 @@ def _to_undirected(graph: nx.DiGraph, weight_attribute: str = "weight") -> nx.Gr
 
 def _node_positions_from(
     graph: nx.Graph,
-    labels: np.ndarray,
+    labels: Sequence[Any],
     down_projection_2d: np.ndarray,
     weight_attribute: str = "weight",
     random_seed: Optional[int] = None,
@@ -300,7 +304,7 @@ def _node_positions_from(
         partitions = leiden(graph, random_seed=random_seed)
     positions = [
         NodePosition(
-            node_id=key,
+            node_id=str(key),
             x=scaled_points[index][0],
             y=scaled_points[index][1],
             size=sizes[key],

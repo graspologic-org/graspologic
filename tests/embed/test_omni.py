@@ -4,13 +4,14 @@
 import unittest
 
 import numpy as np
-from numpy import array_equal
+import pytest
 from numpy.linalg import norm
 from numpy.testing import assert_allclose
+from scipy.sparse import csr_matrix
 
 from graspologic.embed.omni import OmnibusEmbed, _get_omni_matrix
 from graspologic.simulations.simulations import er_nm, er_np
-from graspologic.utils.utils import is_symmetric, symmetrize
+from graspologic.utils.utils import is_symmetric, symmetrize, to_laplacian
 
 
 def generate_data(n, seed=1, symetric=True):
@@ -115,7 +116,7 @@ class TestOmni(unittest.TestCase):
         graphs = [er_nm(n, m) for _ in range(2)]
         omni = OmnibusEmbed()
 
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             omni.fit(graphs)
 
     def test_diag_aug(self):
@@ -185,6 +186,91 @@ class TestOmni(unittest.TestCase):
             tol = 1.0e-2
             np.testing.assert_allclose(
                 norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol
+            )
+
+        run(diag_aug=True)
+        run(diag_aug=False)
+
+    def test_omni_embed_sparse(self):
+        def compute_bar(arr):
+            n = arr.shape[0] // 2
+            return (arr[:n] + arr[n:]) / 2
+
+        def run(diag_aug):
+            X, A1, A2 = generate_data(1000, seed=2)
+            Abar = (A1 + A2) / 2
+
+            omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug)
+            OmniBar = compute_bar(omni.fit_transform([csr_matrix(A1), csr_matrix(A2)]))
+
+            omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug)
+            ABar = compute_bar(omni.fit_transform([Abar, Abar]))
+
+            tol = 1.0e-2
+            np.testing.assert_allclose(
+                norm(OmniBar, axis=1), norm(ABar, axis=1), rtol=tol, atol=tol
+            )
+
+        run(diag_aug=True)
+        run(diag_aug=False)
+
+    def test_omni_embed_lse(self):
+        """
+        We compare the difference of norms of OmniBar and LBar.
+        LBar is the lowest variance estimate of the latent positions X.
+        OmniBar should be reasonablly close to LBar when n_vertices is high.
+        """
+
+        def compute_bar(arr):
+            n = arr.shape[0] // 2
+            return (arr[:n] + arr[n:]) / 2
+
+        def run(diag_aug):
+            X, A1, A2 = generate_data(1000, seed=2)
+            L1 = to_laplacian(A1)
+            L2 = to_laplacian(A2)
+            Lbar = (L1 + L2) / 2
+
+            omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug, lse=True)
+            OmniBar = compute_bar(omni.fit_transform([L1, L2]))
+
+            omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug, lse=True)
+            LBar = compute_bar(omni.fit_transform([Lbar, Lbar]))
+
+            tol = 1.0e-2
+            assert_allclose(
+                norm(OmniBar, axis=1), norm(LBar, axis=1), rtol=tol, atol=tol
+            )
+
+        run(diag_aug=True)
+        run(diag_aug=False)
+
+    def test_omni_embed_lse_sparse(self):
+        """
+        We compare the difference of norms of OmniBar and LBar.
+        LBar is the lowest variance estimate of the latent positions X.
+        OmniBar should be reasonablly close to LBar when n_vertices is high.
+        """
+
+        def compute_bar(arr):
+            n = arr.shape[0] // 2
+            return (arr[:n] + arr[n:]) / 2
+
+        def run(diag_aug):
+            X, A1, A2 = generate_data(1000, seed=2)
+            L1 = to_laplacian(A1)
+            L2 = to_laplacian(A2)
+            Lbar = (L1 + L2) / 2
+
+            omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug, lse=True)
+            OmniBar = compute_bar(omni.fit_transform([csr_matrix(L1), csr_matrix(L2)]))
+
+            omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug, lse=True)
+            LBar = compute_bar(omni.fit_transform([Lbar, Lbar]))
+
+            tol = 1.0e-2
+            assert_allclose(
+                norm(OmniBar, axis=1), norm(LBar, axis=1), rtol=tol, atol=tol
             )
 
         run(diag_aug=True)

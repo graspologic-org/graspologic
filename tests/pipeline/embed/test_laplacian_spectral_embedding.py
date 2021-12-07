@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
+import pytest
 from beartype.roar import BeartypeCallHintPepParamException
 
 import graspologic.utils
@@ -72,7 +73,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
             params["svd_solver_algorithm"] = 1
             laplacian_spectral_embedding(**params)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestLaplacianSpectralEmbedding.parameters(self.graph)
             params["svd_solver_algorithm"] = "sandwich"
             laplacian_spectral_embedding(**params)
@@ -100,7 +101,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
                 params = TestLaplacianSpectralEmbedding.parameters(self.graph)
                 params["form"] = form
                 laplacian_spectral_embedding(**params)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestLaplacianSpectralEmbedding.parameters(self.graph)
             params["form"] = "formless"
             laplacian_spectral_embedding(**params)
@@ -117,7 +118,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
 
     def test_unweighted_graph_warning(self):
         graph = self.graph
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             laplacian_spectral_embedding(graph)
 
     def test_dimensions(self):

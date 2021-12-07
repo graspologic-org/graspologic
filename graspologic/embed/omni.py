@@ -2,16 +2,88 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
-from scipy.sparse import isspmatrix_csr
+from beartype import beartype
+from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
-from ..utils import import_graph, is_fully_connected
+from graspologic.types import List
+
+from ..types import AdjacencyMatrix, GraphRepresentation
+from ..utils import average_matrices, is_fully_connected, to_laplacian
 from .base import BaseEmbedMulti
+from .svd import SvdAlgorithmType
 
 
-def _get_omni_matrix(graphs):
+@beartype
+def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
+    """
+    Generate the omnibus matrix from a list of sparse adjacency matrices as described by 'A central limit theorem
+    for an omnibus embedding of random dot product graphs.'
+
+    Given an iterable of matrices a, b, ... n then the omnibus matrix is defined as::
+
+        [[           a, .5 * (a + b), ..., .5 * (a + n)],
+         [.5 * (b + a),            b, ..., .5 * (b + n)],
+         [         ...,          ..., ...,          ...],
+         [.5 * (n + a),  .5 * (n + b, ...,            n]
+        ]
+    """
+
+    rows = []
+
+    # Iterate over each column
+    for column_index, column_matrix in enumerate(matrices):
+        current_row = []
+
+        for row_index, row_matrix in enumerate(matrices):
+            if row_index == column_index:
+                # we are on the diagonal, we do not need to perform any calculation and instead add the current matrix
+                # to the current_row
+                current_row.append(column_matrix)
+            else:
+                # otherwise we are not on the diagonal and we average the current_matrix with the matrix at row_index
+                # and add that to our current_row
+                matrices_averaged = (column_matrix + row_matrix) * 0.5
+                current_row.append(matrices_averaged)
+
+        # an entire row has been generated, we will create a horizontal stack of each matrix in the row completing the
+        # row
+        rows.append(hstack(current_row))
+
+    return vstack(rows, format="csr")
+
+
+def _get_laplacian_matrices(
+    graphs: Union[np.ndarray, List[GraphRepresentation]]
+) -> Union[np.ndarray, List[np.ndarray]]:
+    """
+    Helper function to convert graph adjacency matrices to graph Laplacian
+
+    Parameters
+    ----------
+    graphs : list
+        List of array-like with shapes (n_vertices, n_vertices).
+
+    Returns
+    -------
+    out : list
+        List of array-like with shapes (n_vertices, n_vertices).
+    """
+    out: Union[np.ndarray, List[np.ndarray]]
+    if isinstance(graphs, list):
+        out = [to_laplacian(g) for g in graphs]
+    elif isinstance(graphs, np.ndarray):
+        # Copying is necessary to not overwrite input array
+        out = np.array([to_laplacian(graphs[i]) for i in range(len(graphs))])
+
+    return out
+
+
+def _get_omni_matrix(
+    graphs: Union[AdjacencyMatrix, List[AdjacencyMatrix]]
+) -> np.ndarray:
     """
     Helper function for creating the omnibus matrix.
 
@@ -25,6 +97,9 @@ def _get_omni_matrix(graphs):
     out : 2d-array
         Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)
     """
+    if isspmatrix_csr(graphs[0]):
+        return _get_omnibus_matrix_sparse(graphs)  # type: ignore
+
     shape = graphs[0].shape
     n = shape[0]  # number of vertices
     m = len(graphs)  # number of graphs
@@ -94,13 +169,17 @@ class OmnibusEmbed(BaseEmbedMulti):
         a vector corresponding to the degree (or sum of edge weights for a
         weighted network) before embedding.
 
-    concat : bool, optional (default False)
+    concat : bool, optional (default = False)
         If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
-    svd_seed : int or None (default ``None``)
+    svd_seed : int or None (default = ``None``)
         Only applicable for ``algorithm="randomized"``; allows you to seed the
         randomized svd solver for deterministic, albeit pseudo-randomized behavior.
+
+    lse : bool, optional (default = False)
+        Whether to construct the Omni matrix use the laplacian matrices
+        of the graphs and embed the Omni matrix with LSE
 
     Attributes
     ----------
@@ -137,14 +216,15 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     def __init__(
         self,
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        diag_aug=True,
-        concat=False,
+        n_components: Optional[int] = None,
+        n_elbows: Optional[int] = 2,
+        algorithm: SvdAlgorithmType = "randomized",
+        n_iter: int = 5,
+        check_lcc: bool = True,
+        diag_aug: bool = True,
+        concat: bool = False,
         svd_seed: Optional[int] = None,
+        lse: bool = False,
     ):
         super().__init__(
             n_components=n_components,
@@ -156,14 +236,15 @@ class OmnibusEmbed(BaseEmbedMulti):
             concat=concat,
             svd_seed=svd_seed,
         )
+        self.lse = lse
 
-    def fit(self, graphs, y=None):
+    def fit(self, graphs, y=None):  # type: ignore
         """
         Fit the model with graphs.
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or ndarray
+        graphs : list of nx.Graph or ndarray, or csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
@@ -173,15 +254,11 @@ class OmnibusEmbed(BaseEmbedMulti):
         self : object
             Returns an instance of self.
         """
-        if any([isspmatrix_csr(g) for g in graphs]):
-            msg = "OmnibusEmbed does not support scipy.sparse.csr_matrix inputs"
-            raise TypeError(msg)
-
         graphs = self._check_input_graphs(graphs)
 
         # Check if Abar is connected
         if self.check_lcc:
-            if not is_fully_connected(np.mean(graphs, axis=0)):
+            if not is_fully_connected(average_matrices(graphs)):
                 msg = (
                     "Input graphs are not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
@@ -192,6 +269,10 @@ class OmnibusEmbed(BaseEmbedMulti):
         # Diag augment
         if self.diag_aug:
             graphs = self._diag_aug(graphs)
+
+        # Laplacian transform
+        if self.lse:
+            graphs = _get_laplacian_matrices(graphs)
 
         # Create omni matrix
         omni_matrix = _get_omni_matrix(graphs)
@@ -210,7 +291,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         return self
 
-    def fit_transform(self, graphs, y=None):
+    def fit_transform(self, graphs, y=None):  # type: ignore
         """
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.

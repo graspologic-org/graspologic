@@ -56,7 +56,7 @@ class TestOmnibusEmbedding(unittest.TestCase):
             params["graphs"] = self.graphs
             omnibus_embedding_pairwise(**params)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = self._default_parameters()
             params["svd_solver_algorithm"] = "sandwich"
             params["graphs"] = self.graphs
@@ -154,17 +154,41 @@ class TestOmnibusEmbedding(unittest.TestCase):
     def test_omnibus_embedding_digraph_elbowcuts_none_returns_full_embedding(self):
         dimensions = 100
         expected_dimensions = dimensions * 2
+        number_of_nodes = 1000
 
         g = nx.DiGraph()
-        for i in range(1000):
+        for i in range(number_of_nodes):
             g.add_edge(1, i, weight=1)
 
         g2 = g.copy()
-        for i in range(1000):
+        for i in range(number_of_nodes):
             g2.add_edge(i, 1, weight=i)
 
         embeddings = omnibus_embedding_pairwise(
             graphs=[g, g2], dimensions=dimensions, elbow_cut=None
+        )
+
+        for previous_embedding, current_embedding in embeddings:
+            self.assertEqual(
+                previous_embedding.embeddings().shape,
+                (g.number_of_nodes(), expected_dimensions),
+            )
+
+    def test_omnibus_embedding_lse_digraph_elbowcuts_none_returns_full_embedding(self):
+        dimensions = 100
+        expected_dimensions = dimensions * 2
+        number_of_nodes = 1000
+
+        g = nx.DiGraph()
+        for i in range(number_of_nodes):
+            g.add_edge(1, i, weight=1)
+
+        g2 = g.copy()
+        for i in range(number_of_nodes):
+            g2.add_edge(i, 1, weight=i)
+
+        embeddings = omnibus_embedding_pairwise(
+            graphs=[g, g2], dimensions=dimensions, elbow_cut=None, use_laplacian=True
         )
 
         for previous_embedding, current_embedding in embeddings:

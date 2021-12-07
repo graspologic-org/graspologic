@@ -1,14 +1,36 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
+import warnings
+from typing import Any, NamedTuple, Optional, Union
 
 import graspologic_native as gn
 import networkx as nx
 import numpy as np
 import scipy
 
+from graspologic.types import Dict, List, Tuple
+
 from .. import utils
+
+
+def _put_node_in_node_str_map(node: Any, node_str_map: Dict[str, Any]) -> str:
+    """Add a node to the node_str_map, keyed by the node's string representation
+    which is returned by this function. Raise a ValueError in case of key collision."""
+    node_str = str(node)
+
+    if node_str in node_str_map and node_str_map[node_str] != node:
+        raise ValueError(
+            "str() representation collision in dataset. Please ensure that "
+            "str(node_id) cannot result in multiple node_ids being turned "
+            "into the same string. This exception is unlikely but would "
+            "result if a non primitive node ID of some sort had a "
+            "barebones __str__() definition for it."
+        )
+
+    node_str_map[node_str] = node
+
+    return node_str
 
 
 def _validate_and_build_edge_list(
@@ -35,7 +57,6 @@ def _validate_and_build_edge_list(
             "was found to be directed"
         )
 
-        # if we're already an edge list of str, str, float, return it
     if weight_default is not None and not isinstance(weight_default, (float, int)):
         raise TypeError("weight default must be a float or int")
 
@@ -49,26 +70,14 @@ def _validate_and_build_edge_list(
                 f"{type(graph[0])}, {repr(graph[0])}"
             )
 
-        new_to_old = {}
+        new_to_old: Dict[str, Any] = {}
         stringified_new = []
 
         for source, target, weight in graph:
-            source_str = str(source)
-            target_str = str(target)
-            weight = float(weight)
-            if (source_str in new_to_old and new_to_old[source_str] != source) or (
-                target_str in new_to_old and new_to_old[target_str] != target
-            ):
-                raise ValueError(
-                    "str() representation collision in dataset. Please ensure that "
-                    "str(node_id) cannot result in multiple node_ids being turned "
-                    "into the same string. This exception is unlikely but would "
-                    "result if a non primitive node ID of some sort had a "
-                    "barebones __str__() definition for it."
-                )
-            new_to_old[source_str] = source
-            new_to_old[target_str] = target
-            stringified_new.append((source_str, target_str, weight))
+            source_str = _put_node_in_node_str_map(source, new_to_old)
+            target_str = _put_node_in_node_str_map(target, new_to_old)
+            weight_as_float = float(weight)
+            stringified_new.append((source_str, target_str, weight_as_float))
 
         return new_to_old, stringified_new
 
@@ -76,24 +85,16 @@ def _validate_and_build_edge_list(
         # will catch all networkx graph types
         try:
             new_to_old = {}
+            for node in graph.nodes:
+                _put_node_in_node_str_map(node, new_to_old)
+
             stringified_new = []
             for source, target, data in graph.edges(data=True):
                 source_str = str(source)
                 target_str = str(target)
                 weight = float(data.get(weight_attribute, weight_default))
-                if (source_str in new_to_old and new_to_old[source_str] != source) or (
-                    target_str in new_to_old and new_to_old[target_str] != target
-                ):
-                    raise ValueError(
-                        "str() representation collision in dataset. Please ensure that "
-                        "str(node_id) cannot result in multiple node_ids being turned "
-                        "into the same string. This exception is unlikely but would "
-                        "result if a non primitive node ID of some sort had a "
-                        "barebones __str__() definition for it."
-                    )
-                new_to_old[source_str] = source
-                new_to_old[target_str] = target
                 stringified_new.append((source_str, target_str, weight))
+
             return new_to_old, stringified_new
         except TypeError:
             # None is returned for the weight if it doesn't exist and a weight_default
@@ -137,10 +138,12 @@ def _validate_and_build_edge_list(
             for i in range(0, len(rows)):
                 row = rows[i]
                 column = columns[i]
-                new_to_old[str(row)] = row
-                new_to_old[str(column)] = column
                 if row <= column:
                     edges.append((str(row), str(column), float(graph[row, column])))
+
+            # populate the node map using values of the same type as the CSR rows
+            for i in np.arange(shape[0], dtype=rows.dtype):
+                _put_node_in_node_str_map(i, new_to_old)
 
         return new_to_old, edges
 
@@ -160,7 +163,7 @@ def _validate_common_arguments(
     is_weighted: Optional[bool] = None,
     weight_default: float = 1.0,
     check_directed: bool = True,
-):
+) -> None:
     if starting_communities is not None and not isinstance(starting_communities, dict):
         raise TypeError("starting_communities must be a dictionary")
     if not isinstance(extra_forced_iterations, int):
@@ -291,8 +294,8 @@ def leiden(
     -------
     Dict[str, int]
         The results of running leiden over the provided graph, a dictionary containing
-        mappings of node -> community id. The keys in the dictionary are the string
-        representations of the nodes.
+        mappings of node -> community id. Isolate nodes in the input graph are not returned
+        in the result.
 
     Raises
     ------
@@ -330,12 +333,12 @@ def leiden(
         raise TypeError("trials must be a positive integer")
     if trials < 1:
         raise ValueError("trials must be a positive integer")
-    node_id_mapping, graph = _validate_and_build_edge_list(
+    node_id_mapping, edges = _validate_and_build_edge_list(
         graph, is_weighted, weight_attribute, check_directed, weight_default
     )
 
     _modularity, partitions = gn.leiden(
-        edges=graph,
+        edges=edges,
         starting_communities=starting_communities,
         resolution=resolution,
         randomness=randomness,
@@ -348,6 +351,12 @@ def leiden(
     proper_partitions = {
         node_id_mapping[key]: value for key, value in partitions.items()
     }
+
+    if len(proper_partitions) < len(node_id_mapping):
+        warnings.warn(
+            "Leiden partitions do not contain all nodes from the input graph because input graph "
+            "contained isolate nodes."
+        )
 
     return proper_partitions
 
@@ -394,7 +403,12 @@ def _from_native(
 
 
 def hierarchical_leiden(
-    graph: Union[List[Tuple[str, str, float]], nx.Graph],
+    graph: Union[
+        List[Tuple[Any, Any, Union[int, float]]],
+        nx.Graph,
+        np.ndarray,
+        scipy.sparse.csr.csr_matrix,
+    ],
     max_cluster_size: int = 1000,
     starting_communities: Optional[Dict[str, int]] = None,
     extra_forced_iterations: int = 0,
@@ -512,7 +526,8 @@ def hierarchical_leiden(
         HierarchicalClusters identifying the state of every node and cluster at each
         level. The function
         :func:`graspologic.partition.HierarchicalCluster.final_hierarchical_clustering`
-        can be used to create a dictionary mapping of node -> cluster ID
+        can be used to create a dictionary mapping of node -> cluster ID. Isolate nodes
+        in the input graph are not returned in the result.
 
     Raises
     ------
@@ -565,6 +580,17 @@ def hierarchical_leiden(
         seed=random_seed,
     )
 
-    return [
-        _from_native(entry, node_id_mapping) for entry in hierarchical_clusters_native
-    ]
+    result_partitions = []
+    all_nodes = set()
+    for entry in hierarchical_clusters_native:
+        partition = _from_native(entry, node_id_mapping)
+        result_partitions.append(partition)
+        all_nodes.add(partition.node)
+
+    if len(result_partitions) < len(node_id_mapping):
+        warnings.warn(
+            "Leiden partitions do not contain all nodes from the input graph because input graph "
+            "contained isolate nodes."
+        )
+
+    return result_partitions

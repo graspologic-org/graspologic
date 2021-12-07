@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+import random
 import unittest
 
 import networkx as nx
@@ -50,7 +51,7 @@ class TestAuto(unittest.TestCase):
         graph = nx.erdos_renyi_graph(10, 0.7, directed=True)
 
         for s, t in graph.edges():
-            graph.edges[s, t]["weight"] = numpy.random.randint(0, 10)
+            graph.edges[s, t]["weight"] = numpy.random.randint(1, 10)
 
         _, node_positions = layout_umap(graph=graph)
 
@@ -62,6 +63,16 @@ class TestAuto(unittest.TestCase):
         _, node_positions = layout_umap(graph=graph)
 
         self.assertEqual(len(node_positions), len(graph.nodes()))
+
+    def test_exercise_approximate_prune(self):
+        form = nx.erdos_renyi_graph(100, 0.7, directed=False)
+        graph = nx.Graph()
+        rng = random.Random(12345)
+        for source, target in form.edges():
+            graph.add_edge(str(source), str(target), weight=rng.uniform(0.0, 10.0))
+
+        result_graph, positions = layout_umap(graph, max_edges=100)
+        self.assertTrue(result_graph.number_of_edges() <= 100)
 
 
 if __name__ == "__main__":
