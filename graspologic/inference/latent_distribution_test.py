@@ -50,7 +50,6 @@ def latent_distribution_test(
     align_type: Optional[Literal["sign_flips", "seedless_procrustes"]] = "sign_flips",
     align_kws: Dict[str, Any] = {},
     input_graph: bool = True,
-    svd_seed: int = None,
 ) -> ldt_result:
     """Two-sample hypothesis test for the problem of determining whether two random
     dot product graphs have the same distributions of latent positions.
@@ -329,7 +328,7 @@ def latent_distribution_test(
         A1 = import_graph(A1)
         A2 = import_graph(A2)
 
-        X1_hat, X2_hat = _embed(A1, A2, n_components, svd_seed)
+        X1_hat, X2_hat = _embed(A1, A2, n_components)
     else:
         # check for nx objects, since they are castable to arrays,
         # but we don't want that
@@ -417,14 +416,14 @@ def latent_distribution_test(
 
 
 def _embed(
-    A1: AdjacencyMatrix, A2: AdjacencyMatrix, n_components: Optional[int], svd_seed: int
+    A1: AdjacencyMatrix, A2: AdjacencyMatrix, n_components: Optional[int]
 ) -> Tuple[np.ndarray, np.ndarray]:
     if n_components is None:
         num_dims1 = select_dimension(A1)[0][-1]
         num_dims2 = select_dimension(A2)[0][-1]
         n_components = max(num_dims1, num_dims2)
 
-    ase = AdjacencySpectralEmbed(n_components=n_components, svd_seed=svd_seed)
+    ase = AdjacencySpectralEmbed(n_components=n_components)
     X1_hat = ase.fit_transform(A1)
     X2_hat = ase.fit_transform(A2)
 
