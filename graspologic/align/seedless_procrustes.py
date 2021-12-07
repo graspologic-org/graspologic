@@ -1,9 +1,13 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional, Union
+
 import numpy as np
 import ot
 from sklearn.utils import check_array
+
+from graspologic.types import Tuple
 
 from .base import BaseAlign
 from .orthogonal_procrustes import OrthogonalProcrustes
@@ -152,13 +156,13 @@ class SeedlessProcrustes(BaseAlign):
 
     def __init__(
         self,
-        optimal_transport_lambda=0.1,
-        optimal_transport_eps=0.01,
-        optimal_transport_num_reps=1000,
-        iterative_num_reps=100,
-        init="2d",
-        initial_Q=None,
-        initial_P=None,
+        optimal_transport_lambda: float = 0.1,
+        optimal_transport_eps: float = 0.01,
+        optimal_transport_num_reps: int = 1000,
+        iterative_num_reps: int = 100,
+        init: str = "2d",
+        initial_Q: Optional[np.ndarray] = None,
+        initial_P: Optional[np.ndarray] = None,
     ):
         # check optimal_transport_lambda argument
         if type(optimal_transport_lambda) is not float:
@@ -224,26 +228,32 @@ class SeedlessProcrustes(BaseAlign):
             raise ValueError(msg)
         # check initial_Q argument
         if initial_Q is not None:
-            if not isinstance(initial_Q, np.ndarray):
-                msg = f"Initial_Q must be np.ndarray or None, not {type(initial_Q)}"
+            initial_Q_checked = initial_Q  # this makes the type checker happy
+            if not isinstance(initial_Q_checked, np.ndarray):
+                msg = f"Initial_Q must be np.ndarray or None, not {type(initial_Q_checked)}"
                 raise TypeError(msg)
-            initial_Q = check_array(initial_Q, copy=True)
-            if initial_Q.shape[0] != initial_Q.shape[1]:
+            initial_Q_checked = check_array(initial_Q_checked, copy=True)
+            if initial_Q_checked.shape[0] != initial_Q_checked.shape[1]:
                 msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
-            if not np.allclose(initial_Q.T @ initial_Q, np.eye(initial_Q.shape[0])):
+            if not np.allclose(
+                initial_Q_checked.T @ initial_Q_checked,
+                np.eye(initial_Q_checked.shape[0]),
+            ):
                 msg = "Initial_Q must be a square orthogonal matrix"
                 raise ValueError(msg)
+            initial_Q = initial_Q_checked
         # check initial_P argument
         if initial_P is not None:
-            if not isinstance(initial_P, np.ndarray):
-                msg = f"Initial_P must be np.ndarray or None, not {type(initial_P)}"
+            initial_P_checked = initial_P  # this makes the type checker happy
+            if not isinstance(initial_P_checked, np.ndarray):
+                msg = f"Initial_P must be np.ndarray or None, not {type(initial_P_checked)}"
                 raise TypeError(msg)
-            initial_P = check_array(initial_P, copy=True)
-            n, m = initial_P.shape
+            initial_P_checked = check_array(initial_P_checked, copy=True)
+            n, m = initial_P_checked.shape
             if not (
-                np.allclose(initial_P.sum(axis=0), np.ones(m) / m)
-                and np.allclose(initial_P.sum(axis=1), np.ones(n) / n)
+                np.allclose(initial_P_checked.sum(axis=0), np.ones(m) / m)
+                and np.allclose(initial_P_checked.sum(axis=1), np.ones(n) / n)
             ):
                 msg = (
                     "Initial_P must be a soft assignment matrix "
@@ -251,6 +261,7 @@ class SeedlessProcrustes(BaseAlign):
                     "and columns add up to (1/number of rows))"
                 )
                 raise ValueError(msg)
+            initial_P = initial_P_checked
 
         super().__init__()
 
@@ -262,7 +273,9 @@ class SeedlessProcrustes(BaseAlign):
         self.initial_Q = initial_Q
         self.initial_P = initial_P
 
-    def _optimal_transport(self, X, Y, Q):
+    def _optimal_transport(
+        self, X: np.ndarray, Y: np.ndarray, Q: np.ndarray
+    ) -> np.ndarray:
         # "E step" of the SeedlessProcrustes.
         n, d = X.shape
         m, _ = Y.shape
@@ -272,7 +285,9 @@ class SeedlessProcrustes(BaseAlign):
         cost_matrix = (
             np.linalg.norm((X @ Q).reshape(n, 1, d) - Y.reshape(1, m, d), axis=2) ** 2
         )
-        P = ot.sinkhorn(
+        # Note: the type info on ot.sinkhorn can support a return type of Tuple[np.ndarray, Dict[str, Any]], but only
+        # if this function is called with log=True, which we aren't doing.
+        P: np.ndarray = ot.sinkhorn(
             a=probability_mass_X,
             b=probability_mass_Y,
             M=cost_matrix,
@@ -282,28 +297,36 @@ class SeedlessProcrustes(BaseAlign):
         )
         return P
 
-    def _procrustes(self, X, Y, P):
+    def _procrustes(self, X: np.ndarray, Y: np.ndarray, P: np.ndarray) -> np.ndarray:
         # "M step" of the SeedlessProcurstes.
         aligner = OrthogonalProcrustes()
-        Q = aligner.fit(X, P @ Y).Q_
+        Q: np.ndarray = aligner.fit(X, P @ Y).Q_
         return Q
 
-    def _iterative_ot(self, X, Y, Q):
+    def _iterative_ot(
+        self, X: np.ndarray, Y: np.ndarray, Q: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
         # this P is not used. it is set to default in case numreps=0
-        P = np.ones((X.shape[0], Y.shape[0])) / (X.shape[0] * Y.shape[0])
+        P: np.ndarray = np.ones((X.shape[0], Y.shape[0])) / (X.shape[0] * Y.shape[0])
         for i in range(self.iterative_num_reps):
             P = self._optimal_transport(X, Y, Q)
             Q = self._procrustes(X, Y, P)
         return P, Q
 
-    def _compute_objective(self, X, Y, Q=None, P=None):
+    def _compute_objective(
+        self,
+        X: np.ndarray,
+        Y: np.ndarray,
+        Q: Optional[np.ndarray] = None,
+        P: Optional[np.ndarray] = None,
+    ) -> Union[float, np.ndarray]:
         if Q is None:
             Q = self.Q_
         if P is None:
             P = self.P_
         return np.linalg.norm(X @ Q - P @ Y, ord="fro")
 
-    def fit(self, X, Y):
+    def fit(self, X: np.ndarray, Y: np.ndarray) -> "SeedlessProcrustes":
         """
         Uses the two datasets to learn the matrix `self.Q_` that aligns the
         first dataset with the second.
@@ -337,7 +360,7 @@ class SeedlessProcrustes(BaseAlign):
                 )
                 objectives[i] = self._compute_objective(X, Y, Q, P)
             # pick the best one, using the objective function value
-            best = np.argmin(objectives)
+            best = np.argmin(objectives).item()
             self.selected_initial_Q_ = _sign_flip_matrix_from_int(best, d)
             self.P_, self.Q_ = P_matrices[best], Q_matrices[best]
         elif self.init == "sign_flips":
@@ -360,7 +383,7 @@ class SeedlessProcrustes(BaseAlign):
         return self
 
 
-def _sign_flip_matrix_from_int(val_int, d):
+def _sign_flip_matrix_from_int(val_int: int, d: int) -> np.ndarray:
     val_bin = bin(val_int)[2:]
     val_bin = "0" * (d - len(val_bin)) + val_bin
     return np.diag(np.array([(float(i) - 0.5) * -2 for i in val_bin]))

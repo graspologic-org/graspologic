@@ -16,10 +16,12 @@ guarantee the appropriate latent positions are returned for each node.
 # Licensed under the MIT license.
 
 from collections import OrderedDict
-from typing import Any, Tuple
+from typing import Any
 
 import numpy as np
 from beartype import beartype
+
+from graspologic.types import Tuple
 
 
 class Embeddings:
@@ -75,7 +77,7 @@ class Embeddings:
     def as_dict(self) -> "EmbeddingsView":
         return EmbeddingsView(self)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self._labels.shape[0]
 
     def __getitem__(self, index: int) -> Tuple[Any, np.ndarray]:
@@ -87,7 +89,7 @@ class Embeddings:
         else:
             return self._labels[index], self._embeddings[index]
 
-    def __iter__(self):
+    def __iter__(self) -> "_EmbeddingsIter":
         return _EmbeddingsIter(self)
 
 
@@ -97,7 +99,7 @@ class _EmbeddingsIter:
         self._embeddings = embeddings
         self._index = 0
 
-    def __next__(self):
+    def __next__(self) -> Tuple[Any, np.ndarray]:
         if self._index >= len(self._embeddings):
             raise StopIteration
         else:
@@ -105,7 +107,7 @@ class _EmbeddingsIter:
             self._index += 1
             return result
 
-    def __iter__(self):
+    def __iter__(self) -> "_EmbeddingsIter":
         return self
 
 

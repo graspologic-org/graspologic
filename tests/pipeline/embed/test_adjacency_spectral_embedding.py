@@ -5,6 +5,7 @@ import unittest
 
 import networkx as nx
 import numpy as np
+import pytest
 from beartype.roar import BeartypeCallHintPepParamException
 
 import graspologic.utils
@@ -76,7 +77,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
             params["graph"] = self.graph
             adjacency_spectral_embedding(**params)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BeartypeCallHintPepParamException):
             params = TestAdjacencySpectralEmbedding.parameters()
             params["svd_solver_algorithm"] = "sandwich"
             params["graph"] = self.graph
@@ -102,7 +103,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
 
     def test_unweighted_graph_warning(self):
         graph = self.graph
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             adjacency_spectral_embedding(graph)
 
     def test_dimensions(self):
