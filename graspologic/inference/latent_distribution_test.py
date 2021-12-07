@@ -483,4 +483,4 @@ def _sample_modified_ase(X, Y, workers, random_state, pooled=False):  # type: ig
 
 def add_variance(X_orig, X_sigma, random_state):  # type: ignore
     rng = check_random_state(random_state)
-    return rng.multivariate_normal.rvs(mean=X_orig, cov=X_sigma)
+    return rng.multivariate_normal(mean=X_orig, cov=X_sigma)
