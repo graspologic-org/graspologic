@@ -1457,9 +1457,12 @@ def screeplot(
         y = np.cumsum(D[:show_first])
     else:
         y = D[:show_first]
-    _ = plt.figure(figsize=figsize)
+    fig = plt.figure(figsize=figsize)
     if ax is None:
         ax = plt.gca()
+    else:
+        ax.remove()
+        ax.set_figure(fig)
     xlabel = "Component"
     ylabel = "Variance explained"
     with sns.plotting_context(context=context, font_scale=font_scale):
