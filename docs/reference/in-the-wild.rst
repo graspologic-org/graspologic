@@ -12,6 +12,9 @@ Papers
   empirically justified for analysis of connectome data," using graspologic for most 
   analysis and examples.
 
+* `Graph matching via optimal transport <https://arxiv.org/abs/2111.05366>`_:
+  Authors in the NeuroData group improved on a state-of-the-art technique for graph matching, making the algorithm faster and more accurate on
+  larger and less-correlated networks.
 
 Blog posts
 """"""""""

@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -18,6 +18,8 @@ from sklearn.mixture._gaussian_mixture import (
 from sklearn.model_selection import ParameterGrid
 from sklearn.utils import check_scalar
 from typing_extensions import Literal
+
+from graspologic.types import Dict, List, Tuple
 
 from .base import BaseCluster
 

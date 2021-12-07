@@ -4,6 +4,7 @@
 import unittest
 
 import numpy as np
+import pytest
 
 from graspologic.simulations import *
 from graspologic.utils.utils import is_loopless, is_symmetric, symmetrize
@@ -778,7 +779,7 @@ class TestWSBM(unittest.TestCase):
             dc = -1 * np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)
 
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             # Check that probabilities sum to 1 in each block
             dc = np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)

@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
+import pytest
 from beartype.roar import BeartypeCallHintPepParamException
 
 import graspologic.utils
@@ -117,7 +118,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
 
     def test_unweighted_graph_warning(self):
         graph = self.graph
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             laplacian_spectral_embedding(graph)
 
     def test_dimensions(self):

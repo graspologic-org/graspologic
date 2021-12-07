@@ -2,10 +2,12 @@
 # Licensed under the MIT license.
 
 from collections import OrderedDict
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Union
 
 import networkx as nx
 from beartype import beartype
+
+from graspologic.types import Dict, List, Tuple
 
 __all__ = ["GraphBuilder"]
 

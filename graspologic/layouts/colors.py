@@ -7,11 +7,13 @@ import math
 import os
 from itertools import cycle
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Optional
 
 import numpy as np
 import pkg_resources
 from sklearn.preprocessing import minmax_scale
+
+from graspologic.types import Dict, Tuple
 
 __all__ = ["categorical_colors", "sequential_colors"]
 

@@ -2,10 +2,12 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Optional, Union
 
 import numpy as np
 from sklearn.utils import check_array, check_scalar
+
+from graspologic.types import Dict, List, Tuple
 
 from ..utils import cartesian_product, symmetrize
 
