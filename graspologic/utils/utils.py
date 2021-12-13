@@ -668,7 +668,7 @@ def multigraph_lcc_union(
     """
     if isinstance(graphs, list):
         if not isinstance(graphs[0], (np.ndarray, csr_matrix)):
-            raise TypeError('List of graphs must contain ndarray or csr_matrix inputs.')
+            raise TypeError("List of graphs must contain ndarray or csr_matrix inputs.")
         out = [import_graph(g) for g in graphs]
         if len(set(map(np.shape, out))) != 1:
             msg = "All input graphs must have the same size"
