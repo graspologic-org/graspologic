@@ -393,7 +393,14 @@ def latent_distribution_test(
 
     test_obj = KSample(test, compute_distkern=metric)
 
-    data = test_obj.test(X1_hat, X2_hat, reps=n_bootstraps, workers=workers, auto=False)
+    data = test_obj.test(
+        X1_hat,
+        X2_hat,
+        reps=n_bootstraps,
+        workers=workers,
+        auto=False,
+        random_state=random_state,
+    )
 
     null_distribution = test_obj.indep_test.null_dist
 
@@ -455,11 +462,17 @@ def _sample_modified_ase(X, Y, workers, random_state, pooled=False):  # type: ig
     X_sigmas = get_sigma(X) * (N - M) / (N * M)
     # increase the variance of X by sampling from the asy dist
     X_sampled = np.zeros(X.shape)
-    rng = check_random_state(random_state)
+    if random_state is not None:
+        rng = check_random_state(random_state)
+        random_state = rng.randint(np.iinfo(np.int32).max, size=N)
+
+    else:
+        random_state = np.random.randint(np.iinfo(np.int32).max, size=N)
+
     X_sampled = np.asarray(
         Parallel(n_jobs=workers)(
             delayed(add_variance)(X[i, :], X_sigmas[i], r)
-            for i, r in zip(range(N), rng.randint(np.iinfo(np.int32).max, size=N))
+            for i, r in zip(range(N), random_state)
         )
     )
 
@@ -467,6 +480,6 @@ def _sample_modified_ase(X, Y, workers, random_state, pooled=False):  # type: ig
     return (Y, X_sampled) if reverse_order else (X_sampled, Y)
 
 
-def add_variance(X_orig, X_sigma, seed):  # type: ignore
-    np.random.seed(seed)
-    return X_orig + stats.multivariate_normal.rvs(cov=X_sigma)
+def add_variance(X_orig, X_sigma, random_state):  # type: ignore
+    rng = check_random_state(random_state)
+    return rng.multivariate_normal(mean=X_orig, cov=X_sigma)
