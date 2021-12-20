@@ -8,210 +8,187 @@ import graspologic_native as gn
 import networkx as nx
 import numpy as np
 import scipy
+from beartype import beartype
 
-from graspologic.types import Dict, List, Tuple
+from graspologic.types import AdjacencyMatrix, Dict, GraphRepresentation, List, Tuple
 
 from .. import utils
+from ..preconditions import check_argument
 
 
-def _put_node_in_node_str_map(node: Any, node_str_map: Dict[str, Any]) -> str:
-    """Add a node to the node_str_map, keyed by the node's string representation
-    which is returned by this function. Raise a ValueError in case of key collision."""
-    node_str = str(node)
+class _IdentityMapper:
+    def __init__(self) -> None:
+        self._inner_mapping: Dict[str, Any] = {}
 
-    if node_str in node_str_map and node_str_map[node_str] != node:
-        raise ValueError(
-            "str() representation collision in dataset. Please ensure that "
-            "str(node_id) cannot result in multiple node_ids being turned "
-            "into the same string. This exception is unlikely but would "
-            "result if a non primitive node ID of some sort had a "
-            "barebones __str__() definition for it."
-        )
+    def __call__(self, value: Any) -> str:
+        as_str = str(value)
+        mapped = self._inner_mapping.get(as_str, value)
+        if mapped != value:
+            # we could conceivably address this by also using the hashcode of the value and
+            # storing submaps but that is not super likely to occur
+            raise ValueError(
+                "str(value) results in a collision between distinct values"
+            )
+        self._inner_mapping[as_str] = mapped
+        return as_str
 
-    node_str_map[node_str] = node
+    def original(self, as_str: str) -> Any:
+        return self._inner_mapping[as_str]
 
-    return node_str
+    def __len__(self) -> int:
+        return len(self._inner_mapping)
 
 
-def _validate_and_build_edge_list(
-    graph: Union[
-        List[Tuple[Any, Any, Union[int, float]]],
-        nx.Graph,
-        np.ndarray,
-        scipy.sparse.csr.csr_matrix,
-    ],
+@beartype
+def _nx_to_edge_list(
+    graph: nx.Graph,
+    identifier: _IdentityMapper,
     is_weighted: Optional[bool],
     weight_attribute: str,
-    check_directed: bool,
     weight_default: float,
-) -> Tuple[Dict[str, Any], List[Tuple[str, str, float]]]:
-    if isinstance(graph, (nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
-        raise TypeError("directed or multigraphs are not supported in these functions")
-    if (
-        isinstance(graph, (np.ndarray, scipy.sparse.csr.csr_matrix))
-        and check_directed is True
-        and not utils.is_almost_symmetric(graph)
-    ):
+) -> Tuple[int, List[Tuple[str, str, float]]]:
+    check_argument(
+        isinstance(graph, nx.Graph)
+        and not (graph.is_directed() or graph.is_multigraph()),
+        "Only undirected networkx graphs are supported",
+    )
+    native_safe: List[Tuple[str, str, float]] = []
+    edge_iter = (
+        graph.edges(data=weight_attribute)
+        if is_weighted is True
+        else graph.edges(data=weight_attribute, default=weight_default)
+    )
+    for source, target, weight in edge_iter:
+        source_str = identifier(source)
+        target_str = identifier(target)
+        native_safe.append((source_str, target_str, float(weight)))
+    return graph.number_of_nodes(), native_safe
+
+
+@beartype
+def _adjacency_matrix_to_edge_list(
+    matrix: AdjacencyMatrix,
+    identifier: _IdentityMapper,
+    check_directed: Optional[bool],
+    is_weighted: Optional[bool],
+    weight_default: float,
+) -> Tuple[int, List[Tuple[str, str, float]]]:
+    check_argument(
+        check_directed is True and utils.is_almost_symmetric(matrix),
+        "leiden only supports undirected graphs and the adjacency matrix provided "
+        "was found to be directed",
+    )
+    shape = matrix.shape
+    if len(shape) != 2 or shape[0] != shape[1]:
         raise ValueError(
-            "leiden only supports undirected graphs and the adjacency matrix provided "
-            "was found to be directed"
+            "graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be "
+            "adjacency matrices with n x n shape"
         )
 
-    if weight_default is not None and not isinstance(weight_default, (float, int)):
-        raise TypeError("weight default must be a float or int")
+    if is_weighted is None:
+        is_weighted = not utils.is_unweighted(matrix)
 
-    if isinstance(graph, list):
-        if len(graph) == 0:
-            return {}, []
-        if not isinstance(graph[0], tuple) or len(graph[0]) != 3:
-            raise TypeError(
-                "If the provided graph is a list, it must be a list of tuples with 3 "
-                "values in the form of Tuple[Any, Any, Union[int, float]], you provided"
-                f"{type(graph[0])}, {repr(graph[0])}"
-            )
+    native_safe: List[Tuple[str, str, float]] = []
+    if isinstance(matrix, np.ndarray):
+        for i in range(0, shape[0]):
+            source = identifier(i)
+            for j in range(i, shape[1]):
+                target = identifier(j)
+                weight = matrix[i][j]
+                if weight != 0:
+                    if not is_weighted and weight == 1:
+                        weight = weight_default
+                    native_safe.append((source, target, float(weight)))
+    else:
+        rows, columns = matrix.nonzero()
+        for i in range(0, len(rows)):
+            source = rows[i]
+            source_str = identifier(source)
+            target = columns[i]
+            target_str = identifier(target)
+            weight = float(matrix[source, target])
+            if source <= target:
+                native_safe.append((source_str, target_str, weight))
 
-        new_to_old: Dict[str, Any] = {}
-        stringified_new = []
+    return shape[0], native_safe
 
-        for source, target, weight in graph:
-            source_str = _put_node_in_node_str_map(source, new_to_old)
-            target_str = _put_node_in_node_str_map(target, new_to_old)
-            weight_as_float = float(weight)
-            stringified_new.append((source_str, target_str, weight_as_float))
 
-        return new_to_old, stringified_new
+@beartype
+def _edge_list_to_edge_list(
+    edges: List[Tuple[Any, Any, Union[int, float]]], identifier: _IdentityMapper
+) -> Tuple[int, List[Tuple[str, str, float]]]:
+    native_safe: List[Tuple[str, str, float]] = []
+    temp_node_set = set()
 
-    if isinstance(graph, nx.Graph):
-        # will catch all networkx graph types
-        try:
-            new_to_old = {}
-            for node in graph.nodes:
-                _put_node_in_node_str_map(node, new_to_old)
+    for source, target, weight in edges:
+        source_str = identifier(source)
+        target_str = identifier(target)
+        weight_as_float = float(weight)
+        if source_str != target_str:
+            native_safe.append((source_str, target_str, weight_as_float))
+            temp_node_set.add(source_str)
+            temp_node_set.add(target_str)
+    return len(temp_node_set), native_safe
 
-            stringified_new = []
-            for source, target, data in graph.edges(data=True):
-                source_str = str(source)
-                target_str = str(target)
-                weight = float(data.get(weight_attribute, weight_default))
-                stringified_new.append((source_str, target_str, weight))
 
-            return new_to_old, stringified_new
-        except TypeError:
-            # None is returned for the weight if it doesn't exist and a weight_default
-            # is not set, which results in a TypeError when you call float(None)
-            raise ValueError(
-                f"The networkx graph provided did not contain a {weight_attribute} that"
-                " could be cast to float in one of the edges"
-            )
+@beartype
+def _community_python_to_native(
+    starting_communities: Optional[Dict[Any, int]], identity: _IdentityMapper
+) -> Optional[Dict[str, int]]:
+    if starting_communities is None:
+        return None
+    native_safe: Dict[str, int] = {}
+    for (node_id, partition) in starting_communities.items():
+        node_id_as_str = identity(node_id)
+        native_safe[node_id_as_str] = partition
+    return native_safe
 
-    if isinstance(graph, (np.ndarray, scipy.sparse.csr.csr_matrix)):
-        shape = graph.shape
-        if len(shape) != 2 or shape[0] != shape[1]:
-            raise ValueError(
-                "graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be "
-                "adjacency matrices with n x n shape"
-            )
 
-        if is_weighted is None:
-            is_weighted = not utils.is_unweighted(graph)
+@beartype
+def _community_native_to_python(
+    communities: Dict[str, int], identity: _IdentityMapper
+) -> Dict[Any, int]:
+    return {
+        identity.original(node_id_as_str): partition
+        for node_id_as_str, partition in communities.items()
+    }
 
-        if not is_weighted and weight_default is None:
-            raise ValueError(
-                "the adjacency matrix provided is not weighted and a default weight has"
-                " not been set"
-            )
 
-        edges = []
-        new_to_old = {}
-        if isinstance(graph, np.ndarray):
-            for i in range(0, shape[0]):
-                new_to_old[str(i)] = i
-                start = i
-                for j in range(start, shape[1]):
-                    weight = graph[i][j]
-                    if weight != 0:
-                        if not is_weighted and weight == 1:
-                            weight = weight_default
-                        edges.append((str(i), str(j), float(weight)))
-        else:
-            rows, columns = graph.nonzero()
-            for i in range(0, len(rows)):
-                row = rows[i]
-                column = columns[i]
-                if row <= column:
-                    edges.append((str(row), str(column), float(graph[row, column])))
-
-            # populate the node map using values of the same type as the CSR rows
-            for i in np.arange(shape[0], dtype=rows.dtype):
-                _put_node_in_node_str_map(i, new_to_old)
-
-        return new_to_old, edges
-
-    raise TypeError(
-        f"The type of graph provided {type(graph)} is not a list of 3-tuples, networkx "
-        f"graph, numpy.ndarray, or scipy.sparse.csr_matrix"
+@beartype
+def _validate_common_arguments(
+    extra_forced_iterations: int = 0,
+    resolution: Union[float, int] = 1.0,
+    randomness: Union[float, int] = 0.001,
+    random_seed: Optional[int] = None,
+) -> None:
+    check_argument(
+        extra_forced_iterations >= 0,
+        "extra_forced_iterations must be a non negative integer",
+    )
+    check_argument(resolution > 0, "resolution must be a positive float")
+    check_argument(randomness > 0, "randomness must be a positive float")
+    check_argument(
+        random_seed is None or random_seed > 0,
+        "random_seed must be a positive integer (the native PRNG implementation is"
+        " an unsigned 64 bit integer)",
     )
 
 
-def _validate_common_arguments(
-    starting_communities: Optional[Dict[str, int]] = None,
-    extra_forced_iterations: int = 0,
-    resolution: float = 1.0,
-    randomness: float = 0.001,
-    use_modularity: bool = True,
-    random_seed: Optional[int] = None,
-    is_weighted: Optional[bool] = None,
-    weight_default: float = 1.0,
-    check_directed: bool = True,
-) -> None:
-    if starting_communities is not None and not isinstance(starting_communities, dict):
-        raise TypeError("starting_communities must be a dictionary")
-    if not isinstance(extra_forced_iterations, int):
-        raise TypeError("iterations must be an int")
-    if not isinstance(resolution, (int, float)):
-        raise TypeError("resolution must be a float")
-    if not isinstance(randomness, (int, float)):
-        raise TypeError("randomness must be a float")
-    if not isinstance(use_modularity, bool):
-        raise TypeError("use_modularity must be a bool")
-    if random_seed is not None and not isinstance(random_seed, int):
-        raise TypeError("random_seed must either be an int or None")
-    if is_weighted is not None and not isinstance(is_weighted, bool):
-        raise TypeError("is_weighted must either be a bool or None")
-    if not isinstance(weight_default, (int, float)):
-        raise TypeError("weight_default must be a float")
-    if not isinstance(check_directed, bool):
-        raise TypeError("check_directed must be a bool")
-
-    if extra_forced_iterations < 0:
-        raise ValueError("iterations must be a non negative integer")
-    if resolution <= 0:
-        raise ValueError("resolution must be a positive float")
-    if randomness <= 0:
-        raise ValueError("randomness must be a positive float")
-    if random_seed is not None and random_seed <= 0:
-        raise ValueError(
-            "random_seed must be a positive integer (the native PRNG implementation is"
-            " an unsigned 64 bit integer)"
-        )
-
-
+@beartype
 def leiden(
     graph: Union[
         List[Tuple[Any, Any, Union[int, float]]],
-        nx.Graph,
-        np.ndarray,
-        scipy.sparse.csr.csr_matrix,
+        GraphRepresentation,
     ],
-    starting_communities: Optional[Dict[str, int]] = None,
+    starting_communities: Optional[Dict[Any, int]] = None,
     extra_forced_iterations: int = 0,
-    resolution: float = 1.0,
-    randomness: float = 0.001,
+    resolution: Union[int, float] = 1.0,
+    randomness: Union[int, float] = 0.001,
     use_modularity: bool = True,
     random_seed: Optional[int] = None,
     weight_attribute: str = "weight",
     is_weighted: Optional[bool] = None,
-    weight_default: float = 1.0,
+    weight_default: Union[int, float] = 1.0,
     check_directed: bool = True,
     trials: int = 1,
 ) -> Dict[str, int]:
@@ -225,11 +202,11 @@ def leiden(
 
     Parameters
     ----------
-    graph : Union[List[Tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix]
+    graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]
         A graph representation, whether a weighted edge list referencing an undirected
         graph, an undirected networkx graph, or an undirected adjacency matrix in either
         numpy.ndarray or scipy.sparse.csr.csr_matrix form.
-    starting_communities : Optional[Dict[str, int]]
+    starting_communities : Optional[Dict[Any, int]]
         Default is ``None``. An optional community mapping dictionary that contains the
         string representation of the node and the community it belongs to. Note this map
         must contain precisely the same nodes as the graph and every node must have a
@@ -292,7 +269,7 @@ def leiden(
 
     Returns
     -------
-    Dict[str, int]
+    Dict[Any, int]
         The results of running leiden over the provided graph, a dictionary containing
         mappings of node -> community id. Isolate nodes in the input graph are not returned
         in the result.
@@ -319,27 +296,34 @@ def leiden(
 
     """
     _validate_common_arguments(
-        starting_communities,
         extra_forced_iterations,
         resolution,
         randomness,
-        use_modularity,
         random_seed,
-        is_weighted,
-        weight_default,
-        check_directed,
     )
-    if not isinstance(trials, int):
-        raise TypeError("trials must be a positive integer")
-    if trials < 1:
-        raise ValueError("trials must be a positive integer")
-    node_id_mapping, edges = _validate_and_build_edge_list(
-        graph, is_weighted, weight_attribute, check_directed, weight_default
+    check_argument(trials >= 1, "Trials must be a positive integer")
+
+    identifier = _IdentityMapper()
+    node_count: int
+    edges: List[Tuple[str, str, float]]
+    if isinstance(graph, nx.Graph):
+        node_count, edges = _nx_to_edge_list(
+            graph, identifier, is_weighted, weight_attribute, weight_default
+        )
+    elif isinstance(graph, list):
+        node_count, edges = _edge_list_to_edge_list(graph, identifier)
+    else:
+        node_count, edges = _adjacency_matrix_to_edge_list(
+            graph, identifier, check_directed, is_weighted, weight_default
+        )
+
+    native_friendly_communities = _community_python_to_native(
+        starting_communities, identifier
     )
 
-    _modularity, partitions = gn.leiden(
+    _quality, native_partitions = gn.leiden(
         edges=edges,
-        starting_communities=starting_communities,
+        starting_communities=native_friendly_communities,
         resolution=resolution,
         randomness=randomness,
         iterations=extra_forced_iterations + 1,
@@ -348,11 +332,9 @@ def leiden(
         trials=trials,
     )
 
-    proper_partitions = {
-        node_id_mapping[key]: value for key, value in partitions.items()
-    }
+    proper_partitions = _community_native_to_python(native_partitions, identifier)
 
-    if len(proper_partitions) < len(node_id_mapping):
+    if len(proper_partitions) < node_count:
         warnings.warn(
             "Leiden partitions do not contain all nodes from the input graph because input graph "
             "contained isolate nodes."
@@ -368,31 +350,25 @@ class HierarchicalCluster(NamedTuple):
     level: int
     is_final_cluster: bool
 
-    @staticmethod
-    def final_hierarchical_clustering(
-        hierarchical_clusters: List[
-            Union["HierarchicalCluster", gn.HierarchicalCluster]
-        ],
-    ) -> Dict[str, int]:
-        if not isinstance(hierarchical_clusters, list):
-            raise TypeError(
-                "This static method requires a list of hierarchical clusters"
-            )
-        final_clusters = (
-            cluster for cluster in hierarchical_clusters if cluster.is_final_cluster
-        )
-        return {cluster.node: cluster.cluster for cluster in final_clusters}
+
+class HierarchicalClusters(List[HierarchicalCluster]):
+    def first_level_hierarchical_clustering(self) -> Dict[Any, int]:
+        return {entry.node: entry.cluster for entry in self if entry.level == 0}
+
+    def final_level_hierarchical_clustering(self) -> Dict[Any, int]:
+        return {entry.node: entry.cluster for entry in self if entry.is_final_cluster}
 
 
 def _from_native(
     native_cluster: gn.HierarchicalCluster,
-    node_id_map: Dict[str, Any],
+    identifier: _IdentityMapper,
 ) -> HierarchicalCluster:
+
     if not isinstance(native_cluster, gn.HierarchicalCluster):
         raise TypeError(
             "This class method is only valid for graspologic_native.HierarchicalCluster"
         )
-    node_id = node_id_map[native_cluster.node]
+    node_id: Any = identifier.original(native_cluster.node)
     return HierarchicalCluster(
         node=node_id,
         cluster=native_cluster.cluster,
@@ -402,6 +378,7 @@ def _from_native(
     )
 
 
+@beartype
 def hierarchical_leiden(
     graph: Union[
         List[Tuple[Any, Any, Union[int, float]]],
@@ -412,15 +389,15 @@ def hierarchical_leiden(
     max_cluster_size: int = 1000,
     starting_communities: Optional[Dict[str, int]] = None,
     extra_forced_iterations: int = 0,
-    resolution: float = 1.0,
-    randomness: float = 0.001,
+    resolution: Union[int, float] = 1.0,
+    randomness: Union[int, float] = 0.001,
     use_modularity: bool = True,
     random_seed: Optional[int] = None,
     weight_attribute: str = "weight",
     is_weighted: Optional[bool] = None,
-    weight_default: float = 1.0,
+    weight_default: Union[int, float] = 1.0,
     check_directed: bool = True,
-) -> List[HierarchicalCluster]:
+) -> HierarchicalClusters:
     """
 
     Leiden is a global network partitioning algorithm. Given a graph, it will iterate
@@ -447,7 +424,7 @@ def hierarchical_leiden(
 
     Once a node's membership registration in a community cannot be changed any further,
     it is marked with the flag
-    ``graspologic.partition.HierarchicalCluster.is_final_cluster = 1``.
+    ``graspologic.partition.HierarchicalCluster.is_final_cluster = True``.
 
     Parameters
     ----------
@@ -521,13 +498,10 @@ def hierarchical_leiden(
 
     Returns
     -------
-    List[HierarchicalCluster]
+    HierarchicalClusters
         The results of running hierarchical leiden over the provided graph, a list of
         HierarchicalClusters identifying the state of every node and cluster at each
-        level. The function
-        :func:`graspologic.partition.HierarchicalCluster.final_hierarchical_clustering`
-        can be used to create a dictionary mapping of node -> cluster ID. Isolate nodes
-        in the input graph are not returned in the result.
+        level. Isolate nodes in the input graph are not returned in the result.
 
     Raises
     ------
@@ -551,27 +525,34 @@ def hierarchical_leiden(
 
     """
     _validate_common_arguments(
-        starting_communities,
         extra_forced_iterations,
         resolution,
         randomness,
-        use_modularity,
         random_seed,
-        is_weighted,
-        weight_default,
-        check_directed,
     )
-    if not isinstance(max_cluster_size, int):
-        raise TypeError("max_cluster_size must be an int")
-    if max_cluster_size <= 0:
-        raise ValueError("max_cluster_size must be a positive int")
+    check_argument(max_cluster_size > 0, "max_cluster_size must be a positive int")
 
-    node_id_mapping, graph = _validate_and_build_edge_list(
-        graph, is_weighted, weight_attribute, check_directed, weight_default
+    identifier = _IdentityMapper()
+    node_count: int
+    edges: List[Tuple[str, str, float]]
+    if isinstance(graph, nx.Graph):
+        node_count, edges = _nx_to_edge_list(
+            graph, identifier, is_weighted, weight_attribute, weight_default
+        )
+    elif isinstance(graph, list):
+        node_count, edges = _edge_list_to_edge_list(graph, identifier)
+    else:
+        node_count, edges = _adjacency_matrix_to_edge_list(
+            graph, identifier, check_directed, is_weighted, weight_default
+        )
+
+    native_friendly_communities = _community_python_to_native(
+        starting_communities, identifier
     )
+
     hierarchical_clusters_native = gn.hierarchical_leiden(
-        edges=graph,
-        starting_communities=starting_communities,
+        edges=edges,
+        starting_communities=native_friendly_communities,
         resolution=resolution,
         randomness=randomness,
         iterations=extra_forced_iterations + 1,
@@ -580,14 +561,14 @@ def hierarchical_leiden(
         seed=random_seed,
     )
 
-    result_partitions = []
+    result_partitions = HierarchicalClusters()
     all_nodes = set()
     for entry in hierarchical_clusters_native:
-        partition = _from_native(entry, node_id_mapping)
+        partition = _from_native(entry, identifier)
         result_partitions.append(partition)
         all_nodes.add(partition.node)
 
-    if len(result_partitions) < len(node_id_mapping):
+    if len(all_nodes) < node_count:
         warnings.warn(
             "Leiden partitions do not contain all nodes from the input graph because input graph "
             "contained isolate nodes."
