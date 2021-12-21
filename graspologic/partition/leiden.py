@@ -208,11 +208,11 @@ def leiden(
         numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
         regarding node ids used.
     starting_communities : Optional[Dict[Any, int]]
-        Default is ``None``. An optional community mapping dictionary that contains a node 
+        Default is ``None``. An optional community mapping dictionary that contains a node
         id mapping to the community it belongs to. Please see the Notes section regarding
         node ids used.
 
-        If no community map is provided, the default behavior is to create a node 
+        If no community map is provided, the default behavior is to create a node
         community identity map, where every node is in their own community.
     extra_forced_iterations : int
         Default is ``0``. Leiden will run until a maximum quality score has been found
@@ -364,7 +364,7 @@ class HierarchicalCluster(NamedTuple):
 
 class HierarchicalClusters(List[HierarchicalCluster]):
     """
-    HierarchicalClusters is a subclass of Python's :class:`list` class with two 
+    HierarchicalClusters is a subclass of Python's :class:`list` class with two
     helper methods for retrieving dictionary views of the first and final
     level of hierarchical clustering in dictionary form.  The rest of the
     HierarchicalCluster entries in this list can be seen as a transition
@@ -373,12 +373,13 @@ class HierarchicalClusters(List[HierarchicalCluster]):
     with the two helper methods on this list providing you the starting point
     community map and ending point community map.
     """
+
     def first_level_hierarchical_clustering(self) -> Dict[Any, int]:
         """
         Returns
         -------
         Dict[Any, int]
-            The initial leiden algorithm clustering results as a dictionary 
+            The initial leiden algorithm clustering results as a dictionary
             of node id to community id.
         """
         return {entry.node: entry.cluster for entry in self if entry.level == 0}
@@ -388,7 +389,7 @@ class HierarchicalClusters(List[HierarchicalCluster]):
         Returns
         -------
         Dict[Any, int]
-            The last leiden algorithm clustering results as a dictionary 
+            The last leiden algorithm clustering results as a dictionary
             of node id to community id.
         """
         return {entry.node: entry.cluster for entry in self if entry.is_final_cluster}
@@ -479,11 +480,11 @@ def hierarchical_leiden(
         cluster's membership is < ``max_cluster_size`` or if they cannot be broken into
         more than one new community.
     starting_communities : Optional[Dict[Any, int]]
-        Default is ``None``. An optional community mapping dictionary that contains a node 
+        Default is ``None``. An optional community mapping dictionary that contains a node
         id mapping to the community it belongs to. Please see the Notes section regarding
         node ids used.
 
-        If no community map is provided, the default behavior is to create a node 
+        If no community map is provided, the default behavior is to create a node
         community identity map, where every node is in their own community.
     extra_forced_iterations : int
         Default is ``0``. Leiden will run until a maximum quality score has been found
