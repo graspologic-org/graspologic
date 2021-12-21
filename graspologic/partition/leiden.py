@@ -191,7 +191,7 @@ def leiden(
     weight_default: Union[int, float] = 1.0,
     check_directed: bool = True,
     trials: int = 1,
-) -> Dict[str, int]:
+) -> Dict[Any, int]:
     """
     Leiden is a global network partitioning algorithm. Given a graph, it will iterate
     through the network node by node, and test for an improvement in our quality
@@ -220,10 +220,10 @@ def leiden(
         iteration. As there is an element of randomness to the Leiden algorithm, it is
         sometimes useful to set ``extra_forced_iterations`` to a number larger than 0
         where the process is forced to attempt further refinement.
-    resolution : float
+    resolution : Union[int, float]
         Default is ``1.0``. Higher resolution values lead to more communities and lower
         resolution values leads to fewer communities. Must be greater than 0.
-    randomness : float
+    randomness : Union[int, float]
         Default is ``0.001``. The larger the randomness value, the more exploration of
         the partition space is possible. This is a major difference from the Louvain
         algorithm, which is purely greedy in the partition exploration.
@@ -243,7 +243,7 @@ def leiden(
         matrices and attempt to determine whether it is weighted or not. This flag can
         short circuit this test and the values in the adjacency matrix will be treated
         as weights.
-    weight_default : float
+    weight_default : Union[int, float]
         Default is ``1.0``. If the graph is a networkx graph and the graph does not have
         a fully weighted sequence of edges, this default will be used. If the adjacency
         matrix is found or specified to be unweighted, this weight_default will be used
@@ -492,10 +492,10 @@ def hierarchical_leiden(
         iteration. As there is an element of randomness to the Leiden algorithm, it is
         sometimes useful to set ``extra_forced_iterations`` to a number larger than 0
         where the entire process is forced to attempt further refinement.
-    resolution : float
+    resolution : Union[int, float]
         Default is ``1.0``. Higher resolution values lead to more communities and lower
         resolution values leads to fewer communities. Must be greater than 0.
-    randomness : float
+    randomness : Union[int, float]
         Default is ``0.001``. The larger the randomness value, the more exploration of
         the partition space is possible. This is a major difference from the Louvain
         algorithm, which is purely greedy in the partition exploration.
@@ -515,7 +515,7 @@ def hierarchical_leiden(
         matrices and attempt to determine whether it is weighted or not. This flag can
         short circuit this test and the values in the adjacency matrix will be treated
         as weights.
-    weight_default : float
+    weight_default : Union[int, float]
         Default is ``1.0``. If the graph is a networkx graph and the graph does not
         have a fully weighted sequence of edges, this default will be used. If the
         adjacency matrix is found or specified to be unweighted, this weight_default
