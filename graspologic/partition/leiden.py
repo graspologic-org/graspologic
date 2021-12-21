@@ -205,19 +205,15 @@ def leiden(
     graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]
         A graph representation, whether a weighted edge list referencing an undirected
         graph, an undirected networkx graph, or an undirected adjacency matrix in either
-        numpy.ndarray or scipy.sparse.csr.csr_matrix form.
+        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
+        regarding node ids used.
     starting_communities : Optional[Dict[Any, int]]
-        Default is ``None``. An optional community mapping dictionary that contains the
-        string representation of the node and the community it belongs to. Note this map
-        must contain precisely the same nodes as the graph and every node must have a
-        positive community id. This mapping forms the starting point of Leiden
-        clustering and can be very useful in saving the state of a previous partition
-        schema from a previous graph and then adjusting the graph based on new temporal
-        data (additions, removals, weight changes, connectivity changes, etc). New nodes
-        should get their own unique community positive integer, but the original
-        partition can be very useful to speed up future runs of leiden. If no community
-        map is provided, the default behavior is to create a node community identity
-        map, where every node is in their own community.
+        Default is ``None``. An optional community mapping dictionary that contains a node 
+        id mapping to the community it belongs to. Please see the Notes section regarding
+        node ids used.
+
+        If no community map is provided, the default behavior is to create a node 
+        community identity map, where every node is in their own community.
     extra_forced_iterations : int
         Default is ``0``. Leiden will run until a maximum quality score has been found
         for the node clustering and no nodes are moved to a new cluster in another
@@ -243,7 +239,7 @@ def leiden(
     is_weighted : Optional[bool]
         Default is ``None``. Only used when creating a weighted edge list of tuples
         when the source graph is an adjacency matrix. The
-        :func:`graspologic.utils.to_weighted_edge_list` function will scan these
+        :func:`graspologic.utils.is_unweighted` function will scan these
         matrices and attempt to determine whether it is weighted or not. This flag can
         short circuit this test and the values in the adjacency matrix will be treated
         as weights.
@@ -278,10 +274,11 @@ def leiden(
     ------
     ValueError
     TypeError
+    BeartypeCallHintPepParamException
 
     See Also
     --------
-    graspologic.utils.to_weighted_edge_list
+    graspologic.utils.is_unweighted
 
     References
     ----------
@@ -291,9 +288,12 @@ def leiden(
 
     Notes
     -----
+    No two different nodes are allowed to encode to the **same** str representation,
+    e.g. node_a id of ``"1"`` and node_b id of ``1`` are different object types
+    but str(node_a) == str(node_b). This collision will result in a ``ValueError``
+
     This function is implemented in the `graspologic-native` Python module, a module
     written in Rust for Python.
-
     """
     _validate_common_arguments(
         extra_forced_iterations,
@@ -345,17 +345,52 @@ def leiden(
 
 class HierarchicalCluster(NamedTuple):
     node: Any
+    """Node id"""
     cluster: int
+    """Leiden cluster id"""
     parent_cluster: Optional[int]
+    """Only used when level != 0, but will indicate the previous cluster id that this node was in"""
     level: int
+    """
+    Each time a community has a higher population than we would like, we create a subnetwork 
+    of that community and process it again to break it into smaller chunks. Each time we 
+    detect this, the level increases by 1
+    """
     is_final_cluster: bool
+    """
+    Whether this is the terminal cluster in the hierarchical leiden process or not
+    """
 
 
 class HierarchicalClusters(List[HierarchicalCluster]):
+    """
+    HierarchicalClusters is a subclass of Python's :class:`list` class with two 
+    helper methods for retrieving dictionary views of the first and final
+    level of hierarchical clustering in dictionary form.  The rest of the
+    HierarchicalCluster entries in this list can be seen as a transition
+    state log of our :func:`graspologic.partition.hierarchical_leiden` process
+    as it continuously tries to break down communities over a certain size,
+    with the two helper methods on this list providing you the starting point
+    community map and ending point community map.
+    """
     def first_level_hierarchical_clustering(self) -> Dict[Any, int]:
+        """
+        Returns
+        -------
+        Dict[Any, int]
+            The initial leiden algorithm clustering results as a dictionary 
+            of node id to community id.
+        """
         return {entry.node: entry.cluster for entry in self if entry.level == 0}
 
     def final_level_hierarchical_clustering(self) -> Dict[Any, int]:
+        """
+        Returns
+        -------
+        Dict[Any, int]
+            The last leiden algorithm clustering results as a dictionary 
+            of node id to community id.
+        """
         return {entry.node: entry.cluster for entry in self if entry.is_final_cluster}
 
 
@@ -428,10 +463,11 @@ def hierarchical_leiden(
 
     Parameters
     ----------
-    graph : Union[List[Tuple[Any, Any, Union[int, float]]], nx.Graph, np.ndarray, scipy.sparse.csr.csr_matrix]
+    graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]
         A graph representation, whether a weighted edge list referencing an undirected
-        graph, an undirected networkx graph, or an undirected adjacency matrix in
-        either numpy.ndarray or scipy.sparse.csr.csr_matrix form.
+        graph, an undirected networkx graph, or an undirected adjacency matrix in either
+        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
+        regarding node ids used.
     max_cluster_size : int
         Default is ``1000``. Any partition or cluster with
         membership >= ``max_cluster_size`` will be isolated into a subnetwork. This
@@ -442,18 +478,13 @@ def hierarchical_leiden(
         membership >= ``max_cluster_size`` and the process continues until every
         cluster's membership is < ``max_cluster_size`` or if they cannot be broken into
         more than one new community.
-    starting_communities : Optional[Dict[str, int]]
-        Default is ``None``. An optional community mapping dictionary that contains the
-        string representation of the node and the community it belongs to. Note this
-        map must contain precisely the same nodes as the graph and every node must
-        have a positive community id. This mapping forms the starting point of Leiden
-        clustering and can be very useful in saving the state of a previous partition
-        schema from a previous graph and then adjusting the graph based on new temporal
-        data (additions, removals, weight changes, connectivity changes, etc). New
-        nodes should get their own unique community positive integer, but the original
-        partition can be very useful to speed up future runs of leiden. If no community
-        map is provided, the default behavior is to create a node community identity
-        map, where every node is in their own community.
+    starting_communities : Optional[Dict[Any, int]]
+        Default is ``None``. An optional community mapping dictionary that contains a node 
+        id mapping to the community it belongs to. Please see the Notes section regarding
+        node ids used.
+
+        If no community map is provided, the default behavior is to create a node 
+        community identity map, where every node is in their own community.
     extra_forced_iterations : int
         Default is ``0``. Leiden will run until a maximum quality score has been found
         for the node clustering and no nodes are moved to a new cluster in another
@@ -479,7 +510,7 @@ def hierarchical_leiden(
     is_weighted : Optional[bool]
         Default is ``None``. Only used when creating a weighted edge list of tuples
         when the source graph is an adjacency matrix. The
-        :func:`graspologic.utils.to_weighted_edge_list` function will scan these
+        :func:`graspologic.utils.is_unweighted` function will scan these
         matrices and attempt to determine whether it is weighted or not. This flag can
         short circuit this test and the values in the adjacency matrix will be treated
         as weights.
@@ -507,10 +538,11 @@ def hierarchical_leiden(
     ------
     ValueError
     TypeError
+    BeartypeCallHintPepParamException
 
     See Also
     --------
-    graspologic.utils.to_weighted_edge_list
+    graspologic.utils.is_unweighted
 
     References
     ----------
@@ -520,9 +552,12 @@ def hierarchical_leiden(
 
     Notes
     -----
+    No two different nodes are allowed to encode to the **same** str representation,
+    e.g. node_a id of ``"1"`` and node_b id of ``1`` are different object types
+    but str(node_a) == str(node_b). This collision will result in a ``ValueError``
+
     This function is implemented in the `graspologic-native` Python module, a module
     written in Rust for Python.
-
     """
     _validate_common_arguments(
         extra_forced_iterations,
