@@ -1571,7 +1571,7 @@ def _plot_groups(
 ) -> matplotlib.pyplot.Axes:
     inner_labels_arr = np.array(inner_labels)
     if outer_labels is not None:
-      outer_labels_arr = np.array(outer_labels)
+        outer_labels_arr = np.array(outer_labels)
     plot_outer = True
     if outer_labels is None:
         outer_labels_arr = np.ones_like(inner_labels)
