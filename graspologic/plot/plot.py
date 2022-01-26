@@ -753,7 +753,11 @@ def _plot_ellipse_and_data(
         angle = np.arctan(u[1] / u[0])
         angle = 180.0 * angle / np.pi
         ell = mpl.patches.Ellipse(
-            [mean[j], mean[k]], v[0], v[1], 180.0 + angle, color=cluster_palette[i],
+            [mean[j], mean[k]], 
+            v[0],
+            v[1],
+            180.0 + angle,
+            color=cluster_palette[i],
         )
         ell.set_clip_box(ax.bbox)
         ell.set_alpha(alpha)
@@ -969,7 +973,10 @@ def pairplot_with_gmm(
         else:
             handles, labels = axes[1].get_legend_handles_labels()
         fig.legend(
-            handles, labels, loc="center right", title=legend_name,
+            handles,
+            labels,
+            loc="center right",
+            title=legend_name,
         )
         # allows for the legend to not overlap with plots while also keeping
         # legend in frame
