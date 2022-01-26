@@ -241,12 +241,7 @@ def draw_colors(ax, ax_type="x", meta=None, divider=None, color=None, palette="t
 
 
 def draw_separators(
-    ax,
-    ax_type="x",
-    meta=None,
-    group=None,
-    plot_type="heatmap",
-    gridline_kws=None,
+    ax, ax_type="x", meta=None, group=None, plot_type="heatmap", gridline_kws=None,
 ):
     r"""
     Draw separators between groups on the plot
@@ -295,12 +290,7 @@ def draw_separators(
 
 
 def draw_ticks(
-    ax,
-    ax_type="x",
-    meta=None,
-    group=None,
-    group_border=True,
-    plot_type="heatmap",
+    ax, ax_type="x", meta=None, group=None, group_border=True, plot_type="heatmap",
 ):
     r"""
     Draw ticks onto the axis of the plot to separate the data

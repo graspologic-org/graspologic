@@ -1,4 +1,4 @@
-# Copyright (c) Microsoft Corporation and contributors.
+ # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
 import unittest
@@ -280,7 +280,7 @@ class TestPlot(unittest.TestCase):
         _test_pairplot_with_gmm_outputs(covariance_type="spherical")
 
     def test_networkplot_inputs(self):
-        X = np.random.rand(15, 3)
+        X = er_np(15, 0.5)
         x = np.random.rand(15, 1)
         y = np.random.rand(15, 1)
         with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
@@ -328,8 +328,8 @@ class TestPlot(unittest.TestCase):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, legend=4)
 
-    def test_networkplot_outputs(self):
-        X = np.random.rand(15, 3)
+    def test_networkplot_outputs_int(self):
+        X = er_np(15, 0.5)
         xarray = np.random.rand(15, 1)
         yarray = np.random.rand(15, 1)
         xstring = "source"
@@ -362,6 +362,30 @@ class TestPlot(unittest.TestCase):
             edge_alpha=0.4,
             edge_linewidth=0.6,
             ax=ax,
+        )
+
+    def test_networkplot_outputs_str(self):
+        X = er_np(15, 0.7)
+        node_df = pd.DataFrame(index=['node {}'.format(i) for i in range(15)])
+        node_df.loc[:, "source"] = np.random.rand(15, 1)
+        node_df.loc[:, "target"] = np.random.rand(15, 1)
+        node_df.loc[:, "hue"] = np.random.randint(2, size=15)
+        palette = {0: (0.8, 0.4, 0.2), 1: (0, 0.9, 0.4)}
+        size = np.random.rand(15)
+        sizes = (10, 200)
+
+        fig = networkplot(
+            adjacency=X,
+            x="source",
+            y="target",
+            node_data=node_df,
+            node_hue="hue",
+            palette=palette,
+            node_size=size,
+            node_sizes=sizes,
+            node_alpha=0.5,
+            edge_alpha=0.4,
+            edge_linewidth=0.6,
         )
 
     def test_sort_inds(self):

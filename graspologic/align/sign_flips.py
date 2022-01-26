@@ -37,8 +37,7 @@ class SignFlips(BaseAlign):
     """
 
     def __init__(
-        self,
-        criterion: str = "median",
+        self, criterion: str = "median",
     ):
         # checking criterion argument
         if type(criterion) is not str:

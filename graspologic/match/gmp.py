@@ -269,10 +269,7 @@ class GraphMatch(BaseEstimator):
             for r in rng.randint(np.iinfo(np.int32).max, size=self.n_init)
         )
         func = max if self.gmp else min
-        res = func(
-            results,
-            key=lambda x: x.fun,
-        )
+        res = func(results, key=lambda x: x.fun,)
 
         self.perm_inds_ = res.col_ind  # permutation indices
         self.score_ = res.fun  # objective function value

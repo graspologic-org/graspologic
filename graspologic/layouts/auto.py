@@ -237,9 +237,7 @@ def _approximate_prune(graph: nx.Graph, max_edges_to_keep: int = 1000000) -> nx.
 
 
 def _node2vec_for_layout(
-    graph: nx.Graph,
-    max_edges: int = 10000000,
-    random_seed: Optional[int] = None,
+    graph: nx.Graph, max_edges: int = 10000000, random_seed: Optional[int] = None,
 ) -> Tuple[nx.Graph, np.ndarray, List[Any]]:
     graph = _approximate_prune(graph, max_edges)
     lcc: nx.Graph = largest_connected_component(graph)

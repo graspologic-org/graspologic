@@ -52,9 +52,7 @@ class OrthogonalProcrustes(BaseAlign):
 
     """
 
-    def __init__(
-        self,
-    ) -> None:
+    def __init__(self,) -> None:
 
         super().__init__()
 

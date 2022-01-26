@@ -176,10 +176,7 @@ def _validate_common_arguments(
 
 @beartype
 def leiden(
-    graph: Union[
-        List[Tuple[Any, Any, Union[int, float]]],
-        GraphRepresentation,
-    ],
+    graph: Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation,],
     starting_communities: Optional[Dict[Any, int]] = None,
     extra_forced_iterations: int = 0,
     resolution: Union[int, float] = 1.0,
@@ -296,10 +293,7 @@ def leiden(
     written in Rust for Python.
     """
     _validate_common_arguments(
-        extra_forced_iterations,
-        resolution,
-        randomness,
-        random_seed,
+        extra_forced_iterations, resolution, randomness, random_seed,
     )
     check_argument(trials >= 1, "Trials must be a positive integer")
 
@@ -396,8 +390,7 @@ class HierarchicalClusters(List[HierarchicalCluster]):
 
 
 def _from_native(
-    native_cluster: gn.HierarchicalCluster,
-    identifier: _IdentityMapper,
+    native_cluster: gn.HierarchicalCluster, identifier: _IdentityMapper,
 ) -> HierarchicalCluster:
 
     if not isinstance(native_cluster, gn.HierarchicalCluster):
@@ -561,10 +554,7 @@ def hierarchical_leiden(
     written in Rust for Python.
     """
     _validate_common_arguments(
-        extra_forced_iterations,
-        resolution,
-        randomness,
-        random_seed,
+        extra_forced_iterations, resolution, randomness, random_seed,
     )
     check_argument(max_cluster_size > 0, "max_cluster_size must be a positive int")
 

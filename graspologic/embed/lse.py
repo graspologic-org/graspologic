@@ -202,6 +202,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
                 X_0 = np.expand_dims(X_0, axis=0)
                 X_1 = np.expand_dims(X_1, axis=0)
 
-            return ((X_1 @ self._pinv_right).T / np.sum(X_1, axis=1)).T, (
-                (X_0 @ self._pinv_left).T / np.sum(X_0, axis=1)
-            ).T
+            return (
+                ((X_1 @ self._pinv_right).T / np.sum(X_1, axis=1)).T,
+                ((X_0 @ self._pinv_left).T / np.sum(X_0, axis=1)).T,
+            )

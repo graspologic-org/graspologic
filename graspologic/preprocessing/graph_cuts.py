@@ -17,8 +17,7 @@ SMALLER_THAN_EXCLUSIVE = "smaller_than_exclusive"
 
 
 def _filter_function_for_make_cuts(
-    cut_threshold: Union[int, float],
-    cut_process: str,
+    cut_threshold: Union[int, float], cut_process: str,
 ) -> Callable[[Tuple[Any, Union[int, float]]], bool]:
     filter_functions = {
         LARGER_THAN_EXCLUSIVE: lambda x: x[1] > cut_threshold,
