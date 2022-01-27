@@ -1,4 +1,4 @@
- # Copyright (c) Microsoft Corporation and contributors.
+# Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
 import unittest
@@ -366,7 +366,7 @@ class TestPlot(unittest.TestCase):
 
     def test_networkplot_outputs_str(self):
         X = er_np(15, 0.7)
-        node_df = pd.DataFrame(index=['node {}'.format(i) for i in range(15)])
+        node_df = pd.DataFrame(index=["node {}".format(i) for i in range(15)])
         node_df.loc[:, "source"] = np.random.rand(15, 1)
         node_df.loc[:, "target"] = np.random.rand(15, 1)
         node_df.loc[:, "hue"] = np.random.randint(2, size=15)

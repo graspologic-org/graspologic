@@ -212,7 +212,8 @@ def is_loopless(X: np.ndarray) -> bool:
 
 
 def is_unweighted(
-    graph: GraphRepresentation, weight_attribute: Any = "weight",
+    graph: GraphRepresentation,
+    weight_attribute: Any = "weight",
 ) -> bool:
     """
     Attempts to determine if the provided graph is weighted.
@@ -600,7 +601,8 @@ def _largest_connected_component_networkx(
 
 
 def _largest_connected_component_adjacency(
-    adjacency: Union[np.ndarray, csr_matrix], return_inds: bool = False,
+    adjacency: Union[np.ndarray, csr_matrix],
+    return_inds: bool = False,
 ) -> Union[
     np.ndarray, csr_matrix, Tuple[np.ndarray, np.ndarray], Tuple[csr_matrix, csr_matrix]
 ]:

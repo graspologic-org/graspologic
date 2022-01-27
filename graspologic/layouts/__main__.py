@@ -15,7 +15,10 @@ from . import NodePosition, auto, render
 from .colors import categorical_colors
 
 
-def _graph_from_file(path: str, skip_header: bool = False,) -> nx.Graph:
+def _graph_from_file(
+    path: str,
+    skip_header: bool = False,
+) -> nx.Graph:
     logger = logging.getLogger("graspologic.layouts")
     graph = nx.Graph()
     with open(path, "r") as edge_io:
@@ -191,26 +194,33 @@ def _parser() -> argparse.ArgumentParser:
     )
 
     root_parser.add_argument(
-        "--verbose", type=bool, required=False, default=False,
+        "--verbose",
+        type=bool,
+        required=False,
+        default=False,
     )
 
     subparsers = root_parser.add_subparsers(
-        dest="COMMAND", help="auto layout via umap, tsne, or a pure render only mode",
+        dest="COMMAND",
+        help="auto layout via umap, tsne, or a pure render only mode",
     )
     subparsers.required = True
 
     n2vumap_parser = subparsers.add_parser(
-        "n2vumap", help="Auto layout using UMAP for dimensionality reduction",
+        "n2vumap",
+        help="Auto layout using UMAP for dimensionality reduction",
     )
     _common_edge_list_args(n2vumap_parser)
     n2vumap_parser.set_defaults(func=_umap)
     n2vtsne_parser = subparsers.add_parser(
-        "n2vtsne", help="Auto layout using tSNE for dimensionality reduction",
+        "n2vtsne",
+        help="Auto layout using tSNE for dimensionality reduction",
     )
     _common_edge_list_args(n2vtsne_parser)
     n2vtsne_parser.set_defaults(func=_tsne)
     render_parser = subparsers.add_parser(
-        "render", help="Renders a graph via an input file",
+        "render",
+        help="Renders a graph via an input file",
     )
     render_parser.set_defaults(func=_render)
     render_parser.add_argument(
@@ -293,10 +303,17 @@ def _parser() -> argparse.ArgumentParser:
         default="o",
     )
     render_parser.add_argument(
-        "--arrows", dest="arrows", action="store_true", default=False,
+        "--arrows",
+        dest="arrows",
+        action="store_true",
+        default=False,
     )
     render_parser.add_argument(
-        "--dpi", help="Set dpi for image", type=int, required=False, default=500,
+        "--dpi",
+        help="Set dpi for image",
+        type=int,
+        required=False,
+        default=500,
     )
     return root_parser
 

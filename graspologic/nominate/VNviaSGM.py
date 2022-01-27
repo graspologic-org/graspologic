@@ -291,7 +291,9 @@ class VNviaSGM(BaseEstimator):
 
         # Call the SGM algorithm using user set parameters and generate a prob
         # vector for the voi.
-        sgm = GMP(**self.graph_match_kws,)
+        sgm = GMP(
+            **self.graph_match_kws,
+        )
 
         prob_vector = np.zeros((max(SG_1.shape[0], SG_2.shape[0]) - self.n_seeds_))
 
