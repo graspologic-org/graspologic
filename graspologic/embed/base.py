@@ -401,7 +401,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
         self.diag_aug = diag_aug
 
     def _check_input_graphs(
-        self, graphs: List[GraphRepresentation]
+        self, graphs: Union[List[GraphRepresentation], np.ndarray]
     ) -> Union[AdjacencyMatrix, List[AdjacencyMatrix]]:
         """
         Checks if all graphs in list have same shapes.
