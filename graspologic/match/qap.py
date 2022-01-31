@@ -591,7 +591,8 @@ def check_random_state(
     if seed is None or seed is np.random:
         return np.random.mtrand._rand
     if isinstance(seed, (numbers.Integral, np.integer)):
-        return np.random.RandomState(seed)
+        int_seed: int = int(seed)  # necessary for typing/mypy
+        return np.random.RandomState(int_seed)
     if isinstance(seed, np.random.RandomState):
         return seed
     try:
