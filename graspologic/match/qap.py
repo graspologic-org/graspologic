@@ -3,13 +3,13 @@
 # original code can be found here
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
+import numbers
 import operator
 from typing import Any, Optional, Union
 
 import numpy as np
 from scipy.optimize import OptimizeResult, linear_sum_assignment
 from typing_extensions import Literal
-import numbers
 
 from graspologic.types import Dict, Tuple
 
