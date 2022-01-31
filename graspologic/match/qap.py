@@ -416,9 +416,8 @@ def _quadratic_assignment_faq(
     # check outlier cases
     if n == 0 or partial_match_value.shape[0] == n:
         # Cannot assume partial_match is sorted.
-        partial_match_value = np.row_stack(
-            sorted(partial_match_value, key=lambda x: x[0])
-        )
+        sort_inds = np.argsort(partial_match_value[:, 0])
+        partial_match_value = partial_match_value[sort_inds]
         score = _calc_score(A, B, s_value, partial_match_value[:, 1])
         res = {"col_ind": partial_match_value[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
