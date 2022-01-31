@@ -426,6 +426,8 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             If all graphs do not have same shape, or input list is empty or has
             one element.
         """
+        out: Union[List[AdjacencyMatrix], np.ndarray]
+
         # Convert input to np.arrays
         # This check is needed because np.stack will always duplicate array in memory.
         if isinstance(graphs, (list, tuple)):
