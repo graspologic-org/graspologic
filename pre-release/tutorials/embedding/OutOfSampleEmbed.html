@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Out-of-Sample (OOS) Embedding &mdash; graspologic 1.0.0dev1608280730 documentation</title>
+  <title>Out-of-Sample (OOS) Embedding &mdash; graspologic 1.0.0dev1780785580 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,8 +16,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1608280730
+                1.0.0dev1780785580
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -471,7 +471,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -551,8 +551,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -579,8 +578,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate parameters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate parameters</span>
 <span class="n">nodes_per_community</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
               <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]])</span>
@@ -613,8 +611,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate an embedding with ASE</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate an embedding with ASE</span>
 <span class="n">ase</span> <span class="o">=</span> <span class="n">ASE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">X_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
@@ -643,8 +640,7 @@ array([ 0.69563801, -0.59472394])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">plot_oos</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">oos_vertices</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_oos</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">oos_vertices</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
     <span class="c1"># Plot the in-sample latent positions</span>
     <span class="n">plot</span> <span class="o">=</span> <span class="n">pairplot</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
 
@@ -685,8 +681,7 @@ array([ 0.69563801, -0.59472394])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate an embedding with ASE</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate an embedding with ASE</span>
 <span class="n">lse</span> <span class="o">=</span> <span class="n">LSE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">X_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
@@ -709,8 +704,7 @@ array([[ 0.07091005, -0.06055902]])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out-of-Sample Embeddings (2-block SBM)&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -729,8 +723,7 @@ array([[ 0.07091005, -0.06055902]])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Grab out-of-sample vertices</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grab out-of-sample vertices</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">labels_</span><span class="p">)</span>
 <span class="n">oos_idx</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">oos_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">oos_idx</span><span class="p">]</span>
@@ -753,8 +746,7 @@ a is &lt;class &#39;numpy.ndarray&#39;&gt; with shape (2, 198)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate an embedding with ASE</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate an embedding with ASE</span>
 <span class="n">ase</span> <span class="o">=</span> <span class="n">ASE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">X_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
@@ -788,8 +780,7 @@ The out-of-sample prediction output has dimensions (2, 2)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate an embedding with LSE</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate an embedding with LSE</span>
 <span class="n">lse</span> <span class="o">=</span> <span class="n">LSE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">X_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
@@ -832,8 +823,7 @@ The out-of-sample prediction output has dimensions (2, 2)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate a directed SBM</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a directed SBM</span>
 <span class="n">directed</span> <span class="o">=</span> <span class="n">sbm</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">[</span><span class="n">nodes_per_community</span><span class="p">],</span> <span class="n">P</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">oos_idx</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -856,8 +846,7 @@ The out-of-sample prediction output has dimensions (2, 2)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Fit our directed graph</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit our directed graph</span>
 <span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">Y_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="c1"># predicted latent positions</span>
@@ -890,8 +879,7 @@ in latent positions:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE Out Latent Predictions&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE Out Latent Predictions&quot;</span><span class="p">)</span>
 <span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat_ase</span><span class="p">,</span> <span class="n">w_ase</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ASE In Latent Predictions&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -902,7 +890,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fa1d7cb8850&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f8e4eb1bb80&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -923,8 +911,7 @@ in latent positions:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Fit our directed graph</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit our directed graph</span>
 <span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">Y_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="c1"># predicted latent positions</span>
@@ -958,8 +945,7 @@ in latent positions:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out Latent Predictions&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_oos</span><span class="p">(</span><span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE Out Latent Predictions&quot;</span><span class="p">)</span>
 <span class="n">plot_oos</span><span class="p">(</span><span class="n">Y_hat_lse</span><span class="p">,</span> <span class="n">w_lse</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">,</span> <span class="n">oos_labels</span><span class="o">=</span><span class="n">oos_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;LSE In Latent Predictions&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -970,7 +956,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fa1d32a1af0&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f8e5310cfd0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -996,8 +982,7 @@ in latent positions:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate a weighted, directed SBM</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a weighted, directed SBM</span>
 <span class="n">wt</span> <span class="o">=</span> <span class="p">[[</span><span class="n">normal</span><span class="p">,</span> <span class="n">poisson</span><span class="p">],</span>
       <span class="p">[</span><span class="n">poisson</span><span class="p">,</span> <span class="n">normal</span><span class="p">]]</span>
 <span class="n">wtargs</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">dict</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">lam</span><span class="o">=</span><span class="mi">5</span><span class="p">)],</span>
@@ -1033,8 +1018,7 @@ in latent positions:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Embed and transform</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Embed and transform</span>
 <span class="n">X_hat_ase</span><span class="p">,</span> <span class="n">Y_hat_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 <span class="n">w_ase</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
@@ -1050,7 +1034,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fa1d7ff8040&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f8e4eaf2880&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1071,8 +1055,7 @@ in latent positions:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Embed and transform</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Embed and transform</span>
 <span class="n">X_hat_lse</span><span class="p">,</span> <span class="n">Y_hat_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 <span class="n">w_lse</span> <span class="o">=</span> <span class="n">lse</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
@@ -1088,7 +1071,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fa1d7d6c610&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f8e4e815370&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">

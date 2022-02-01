@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Latent Position Two-Graph Testing &mdash; graspologic 1.0.0dev1608280730 documentation</title>
+  <title>Latent Position Two-Graph Testing &mdash; graspologic 1.0.0dev1780785580 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,8 +16,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1608280730
+                1.0.0dev1780785580
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -471,7 +471,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -537,8 +537,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">88889999</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">graspologic.inference</span> <span class="kn">import</span> <span class="n">latent_position_test</span>
@@ -558,8 +557,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">n_components</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># the number of embedding dimensions for ASE</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_components</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># the number of embedding dimensions for ASE</span>
 <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
@@ -601,8 +599,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">A1</span> <span class="o">=</span> <span class="n">rdpg</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A1</span> <span class="o">=</span> <span class="n">rdpg</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
           <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
           <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
           <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -668,8 +665,7 @@ thought of as equivalent to node <span class="math notranslate nohighlight">\(i\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># note: may want to use more bootstraps in practice, low number used here is for speed</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># note: may want to use more bootstraps in practice, low number used here is for speed</span>
 <span class="n">lpt</span> <span class="o">=</span> <span class="n">latent_position_test</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;p = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpt</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 </pre></div>
@@ -692,8 +688,7 @@ p = 0.801980198019802
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">A3</span> <span class="o">=</span> <span class="n">rdpg</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A3</span> <span class="o">=</span> <span class="n">rdpg</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
           <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
           <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
           <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -744,8 +739,7 @@ p = 0.801980198019802
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># note: may want to use more bootstraps in practice, low number used here is for speed</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># note: may want to use more bootstraps in practice, low number used here is for speed</span>
 <span class="n">lpt</span> <span class="o">=</span> <span class="n">latent_position_test</span><span class="p">(</span><span class="n">A3</span><span class="p">,</span> <span class="n">A4</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;p = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpt</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 </pre></div>

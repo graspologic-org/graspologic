@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.mds &mdash; graspologic 1.0.0dev1608280730 documentation</title>
+  <title>graspologic.embed.mds &mdash; graspologic 1.0.0dev1780785580 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1608280730
+                1.0.0dev1780785580
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -455,7 +455,7 @@
             <span class="n">dissimilarity_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_euclidean_distances</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">)</span>
 
         <span class="n">J</span> <span class="o">=</span> <span class="n">_get_centering_matrix</span><span class="p">(</span><span class="n">dissimilarity_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">B</span> <span class="o">=</span> <span class="n">J</span> <span class="o">@</span> <span class="p">(</span><span class="n">dissimilarity_matrix</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">@</span> <span class="n">J</span> <span class="o">*</span> <span class="o">-</span><span class="mf">0.5</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">J</span> <span class="o">@</span> <span class="p">(</span><span class="n">dissimilarity_matrix</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">@</span> <span class="n">J</span> <span class="o">*</span> <span class="o">-</span><span class="mf">0.5</span>
 
         <span class="n">n_components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span>
 
@@ -474,7 +474,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components_</span> <span class="o">=</span> <span class="n">U</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">singular_values_</span> <span class="o">=</span> <span class="n">D</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">singular_values_</span> <span class="o">=</span> <span class="n">D</span><span class="o">**</span><span class="mf">0.5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dissimilarity_matrix_</span> <span class="o">=</span> <span class="n">dissimilarity_matrix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_features_in_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
