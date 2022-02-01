@@ -197,7 +197,7 @@ class ClassicalMDS(BaseEstimator):
             dissimilarity_matrix = self._compute_euclidean_distances(X=X)
 
         J = _get_centering_matrix(dissimilarity_matrix.shape[0])
-        B = J @ (dissimilarity_matrix ** 2) @ J * -0.5
+        B = J @ (dissimilarity_matrix**2) @ J * -0.5
 
         n_components = self.n_components
 
@@ -216,7 +216,7 @@ class ClassicalMDS(BaseEstimator):
 
         self.n_components_ = len(D)
         self.components_ = U
-        self.singular_values_ = D ** 0.5
+        self.singular_values_ = D**0.5
         self.dissimilarity_matrix_ = dissimilarity_matrix
         self.n_features_in_ = X.shape[1]
 
