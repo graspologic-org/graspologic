@@ -93,7 +93,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{matrix.python_version}} ${{matrix.os}}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{matrix.python_version}}
       - name: Install dependencies Python ${{matrix.python_version}} ${{matrix.os}}
