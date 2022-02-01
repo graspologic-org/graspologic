@@ -3,11 +3,11 @@
 # original code can be found here
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
+import numbers
 import operator
 from typing import Any, Optional, Union
 
 import numpy as np
-from scipy._lib._util import check_random_state
 from scipy.optimize import OptimizeResult, linear_sum_assignment
 from typing_extensions import Literal
 
@@ -416,9 +416,8 @@ def _quadratic_assignment_faq(
     # check outlier cases
     if n == 0 or partial_match_value.shape[0] == n:
         # Cannot assume partial_match is sorted.
-        partial_match_value = np.row_stack(
-            sorted(partial_match_value, key=lambda x: x[0])
-        )
+        sort_inds = np.argsort(partial_match_value[:, 0])
+        partial_match_value = partial_match_value[sort_inds]
         score = _calc_score(A, B, s_value, partial_match_value[:, 1])
         res = {"col_ind": partial_match_value[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
@@ -571,3 +570,37 @@ def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
         P_eps = r[:, None] * P * c
 
     return P_eps
+
+
+# copy-pasted from scipy scipy._lib._util
+# which was copy-pasted from scikit-learn utils/validation.py
+# this was just modified to add proper typing for returns
+# also, shouldn't have been importing private function from scipy anyway
+def check_random_state(
+    seed: Union[None, int, np.random.RandomState, np.random.Generator]
+) -> Union[np.random.RandomState, np.random.Generator]:
+    """Turn seed into a np.random.RandomState instance
+
+    If seed is None (or np.random), return the RandomState singleton used
+    by np.random.
+    If seed is an int, return a new RandomState instance seeded with seed.
+    If seed is already a RandomState instance, return it.
+    If seed is a new-style np.random.Generator, return it.
+    Otherwise raise ValueError.
+    """
+    if seed is None or seed is np.random:
+        return np.random.mtrand._rand
+    if isinstance(seed, (numbers.Integral, np.integer)):
+        int_seed: int = int(seed)  # necessary for typing/mypy
+        return np.random.RandomState(int_seed)
+    if isinstance(seed, np.random.RandomState):
+        return seed
+    try:
+        # Generator is only available in numpy >= 1.17
+        if isinstance(seed, np.random.Generator):
+            return seed
+    except AttributeError:
+        pass
+    raise ValueError(
+        "%r cannot be used to seed a numpy.random.RandomState" " instance" % seed
+    )

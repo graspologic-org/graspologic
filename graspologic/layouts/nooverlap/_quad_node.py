@@ -900,7 +900,7 @@ class _QuadNode:
                 overlapping_node.color = "#F1FD00"  # Yellow
                 # print ("not None, a: %g, b: %g, c: %g" %(a, b, c), node_to_move.node_id, node_to_move.size, overlapping_node.size)
                 # print ("original(%g,%g), current(%g,%g), overlap(%g,%g)" %(node_to_move.original_x, node_to_move.original_y, new_x, new_y, overlapping_node.x, overlapping_node.y))
-                angle_c = math.acos((a ** 2 + b ** 2 - c ** 2) / (2 * a * b))
+                angle_c = math.acos((a**2 + b**2 - c**2) / (2 * a * b))
                 len_c_new = node_to_move.size + overlapping_node.size + _EPSILON
                 angle_a_new = math.asin(a * math.sin(angle_c) / len_c_new)
                 angle_b_new = 180 - math.degrees(angle_c) - math.degrees(angle_a_new)
@@ -909,10 +909,10 @@ class _QuadNode:
                 )
                 # print ("slope: %g, angle c: %g, new angle a: %g, newlenC: %g, new angle a: %g, new lenB %g" %(slope_ca, math.degrees(angle_c), math.degrees(angle_a_new), len_c_new, math.degrees(angle_a_new), new_len_b))
                 x_new_plus = node_to_move.original_x + math.sqrt(
-                    new_len_b ** 2 / (1 + slope_ca ** 2)
+                    new_len_b**2 / (1 + slope_ca**2)
                 )
                 x_new_neg = node_to_move.original_x - math.sqrt(
-                    new_len_b ** 2 / (1 + slope_ca ** 2)
+                    new_len_b**2 / (1 + slope_ca**2)
                 )
                 x_plus_diff = x_new_plus - new_x
                 x_neg_diff = x_new_neg - new_x
@@ -1006,7 +1006,7 @@ class _QuadNode:
                 denominator = 2 * a * b
                 if 0 == denominator:
                     denominator = 0.00000001
-                value = (a ** 2 + b ** 2 - c ** 2) / denominator
+                value = (a**2 + b**2 - c**2) / denominator
                 if value >= 1:
                     value = 0.999999
                 elif value <= -1:
@@ -1020,10 +1020,10 @@ class _QuadNode:
                 )
                 # print ("slope: %g, angle c: %g, new angle a: %g, newlenC: %g, new angle a: %g, new lenB %g" %(slope_ca, math.degrees(angle_c), math.degrees(angle_a_new), len_c_new, math.degrees(angle_a_new), new_len_b))
                 x_new_plus = node_to_move.original_x + math.sqrt(
-                    new_len_b ** 2 / (1 + slope_ca ** 2)
+                    new_len_b**2 / (1 + slope_ca**2)
                 )
                 x_new_neg = node_to_move.original_x - math.sqrt(
-                    new_len_b ** 2 / (1 + slope_ca ** 2)
+                    new_len_b**2 / (1 + slope_ca**2)
                 )
                 x_plus_diff = x_new_plus - new_x
                 x_neg_diff = x_new_neg - new_x
