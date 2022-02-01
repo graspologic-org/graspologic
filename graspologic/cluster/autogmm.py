@@ -556,7 +556,7 @@ class AutoGMMCluster(BaseCluster):
                 np.iinfo(np.int32).max, size=len(processed_param_grid)
             )
         else:
-            seeds = [self.random_state] * len(processed_param_grid)
+            seeds = np.array([self.random_state] * len(processed_param_grid))
 
         n = X.shape[0]
         if self.max_agglom_size is None or n <= self.max_agglom_size:
