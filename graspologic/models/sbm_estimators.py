@@ -226,7 +226,7 @@ class SBMEstimator(BaseGraphEstimator):
         n_blocks: int = self.block_p_.shape[0]
         n_parameters = 0
         if self.directed:
-            n_parameters += n_blocks ** 2
+            n_parameters += n_blocks**2
         else:
             n_parameters += int(n_blocks * (n_blocks + 1) / 2)
         if hasattr(self, "vertex_assignments_"):
@@ -445,7 +445,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         n_blocks: int = self.block_p_.shape[0]
         n_parameters = 0
         if self.directed:
-            n_parameters += n_blocks ** 2  # B matrix
+            n_parameters += n_blocks**2  # B matrix
         else:
             n_parameters += int(n_blocks * (n_blocks + 1) / 2)  # Undirected B matrix
         if hasattr(self, "vertex_assignments_"):

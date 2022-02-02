@@ -277,7 +277,7 @@ def er_nm(
     # compute max number of edges to sample
     if loops:
         if directed:
-            max_edges = n ** 2
+            max_edges = n**2
             msg = "n^2"
         else:
             max_edges = n * (n + 1) // 2

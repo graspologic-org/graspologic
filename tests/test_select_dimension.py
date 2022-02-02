@@ -16,7 +16,7 @@ def generate_data(n=10, elbows=3, seed=1):
     Generate data matrix with a specific number of elbows on scree plot
     """
     np.random.seed(seed)
-    x = np.random.binomial(1, 0.6, (n ** 2)).reshape(n, n)
+    x = np.random.binomial(1, 0.6, (n**2)).reshape(n, n)
     xorth = orth(x)
     d = np.zeros(xorth.shape[0])
     for i in range(0, len(d), int(len(d) / (elbows + 1))):
