@@ -113,6 +113,7 @@ jobs:
           export DEPS='dependencies_${{matrix.python_version}}_${{matrix.os}}.txt'
           echo "${{matrix.python_version}} ${{matrix.os}}" > $DEPS
           pipdeptree >> $DEPS
+        shell: bash
       - name: Archive dependency tree
         uses: actions/upload-artifact@v2
         with:
