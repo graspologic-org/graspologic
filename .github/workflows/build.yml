@@ -32,7 +32,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
       - name: "Run Reference Documentation Generation"
@@ -60,7 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
       - name: Run Format Check
@@ -75,7 +75,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
       - name: Run Test Coverage
@@ -93,7 +93,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{matrix.python_version}} ${{matrix.os}}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{matrix.python_version}}
       - name: Install dependencies Python ${{matrix.python_version}} ${{matrix.os}}
@@ -113,7 +113,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
       - name: Install dependencies

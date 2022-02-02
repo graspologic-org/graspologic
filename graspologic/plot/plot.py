@@ -1319,6 +1319,7 @@ def networkplot(
                 "If x and y are strings, node_data must be pandas DataFrame."
             )
         plot_df = node_data.copy()
+        plot_df = plot_df.reset_index(drop=True)
         x_key = x
         y_key = y
         if node_hue is not None:
