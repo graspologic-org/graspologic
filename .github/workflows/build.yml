@@ -19,8 +19,6 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    strategy:
-      fail-fast: false
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -32,7 +30,6 @@ jobs:
       uses: github/codeql-action/analyze@v1
   build-reference-documentation:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -62,7 +59,6 @@ jobs:
             docs/_build/html
   code-format-check:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -77,7 +73,6 @@ jobs:
           isort --check-only ./graspologic ./tests
   test-coverage:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -91,11 +86,11 @@ jobs:
           python -m pytest --co --cov=graspologic graspologic tests
   unit-and-doc-test:
     runs-on: ${{matrix.os}}
-    continue-on-error: true
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python_version: [3.6, 3.7, 3.8, 3.9]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{matrix.python_version}} ${{matrix.os}}
