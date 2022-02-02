@@ -469,7 +469,7 @@ def sbm(
             msg = "There are non-numeric elements in p"
             raise ValueError(msg)
         elif p.shape != (n.size, n.size):
-            msg = "p is must have shape len(n) x len(n), not {}".format(p.shape)
+            msg = "p must have shape len(n) x len(n), not {}".format(p.shape)
             raise ValueError(msg)
         elif np.any(p < 0) or np.any(p > 1):
             msg = "Values in p must be in between 0 and 1."
