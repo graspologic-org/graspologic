@@ -23,6 +23,14 @@ graspologic 1.0.0
   `#889 <https://github.com/microsoft/graspologic/pull/889>`
 - Added type hinting
   `#543 <https://github.com/microsoft/graspologic/pull/543>`
+- Modified order of returns in inference module
+  `#859 <https://github.com/microsoft/graspologic/pull/859>`
+- Changes to documentation publish pipeline
+  `#874 <https://github.com/microsoft/graspologic/pull/874>`
+- Added function networkplot for drawing 2D networks
+  `#860 <https://github.com/microsoft/graspologic/pull/860>`
+- Removed dtype requirement in vertex nomination 
+  `#865 <https://github.com/microsoft/graspologic/pull/865>`
 
 
 graspologic 0.3.0
