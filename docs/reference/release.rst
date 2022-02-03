@@ -3,6 +3,28 @@
 Release Log
 ===========
 
+graspologic 1.0.0
+-----------------
+- Fixed a type in an error message 
+  `#904 <https://github.com/microsoft/graspologic/pull/904>`
+- Added support for arbitrarily indexed node data for networkplot 
+  `#906 <https://github.com/microsoft/graspologic/pull/906>`
+- Fixed compatibility issues with gensim, black, mypy, and 
+  setup-python `#913 <https://github.com/microsoft/graspologic/pull/913>`
+- Fixed a bug in leiden/hierarchical_leiden 
+  `#902 <https://github.com/microsoft/graspologic/pull/902>`
+- Ensured reproducibility in latent_distribution_test
+  `#892 <https://github.com/microsoft/graspologic/pull/892>`
+- Fixed documentation in KMeansCluster
+  `#892 <https://github.com/microsoft/graspologic/pull/829>`
+- Fixed bug in automatic layouts
+  `#894 <https://github.com/microsoft/graspologic/pull/894>`
+- Added Python 3.9 support
+  `#889 <https://github.com/microsoft/graspologic/pull/889>`
+- Added type hinting
+  `#543 <https://github.com/microsoft/graspologic/pull/543>`
+
+
 graspologic 0.3.0
 -----------------
 - Fixed imports for hyppo >= 0.2.0
