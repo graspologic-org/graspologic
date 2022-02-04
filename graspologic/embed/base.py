@@ -3,20 +3,24 @@
 
 import warnings
 from abc import abstractmethod
-from typing import Optional
+from typing import Any, Optional, Union
 
 import networkx as nx
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
+from typing_extensions import Literal
 
+from graspologic.types import List, Tuple
+
+from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import (
     augment_diagonal,
     import_graph,
     is_almost_symmetric,
     is_fully_connected,
 )
-from .svd import select_svd
+from .svd import SvdAlgorithmType, select_svd
 
 
 class BaseSpectralEmbed(BaseEstimator):
@@ -77,12 +81,12 @@ class BaseSpectralEmbed(BaseEstimator):
 
     def __init__(
         self,
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        concat=False,
+        n_components: Optional[int] = None,
+        n_elbows: Optional[int] = 2,
+        algorithm: SvdAlgorithmType = "randomized",
+        n_iter: int = 5,
+        check_lcc: bool = True,
+        concat: bool = False,
         svd_seed: Optional[int] = None,
     ):
         self.n_components = n_components
@@ -96,7 +100,7 @@ class BaseSpectralEmbed(BaseEstimator):
         self.concat = concat
         self.svd_seed = svd_seed
 
-    def _reduce_dim(self, A, directed=None):
+    def _reduce_dim(self, A: AdjacencyMatrix, directed: Optional[bool] = None) -> None:
         """
         A function that reduces the dimensionality of an adjacency matrix
         using the desired embedding method.
@@ -118,6 +122,8 @@ class BaseSpectralEmbed(BaseEstimator):
         self.n_components_ = D.size
         self.singular_values_ = D
         self.latent_left_ = U @ np.diag(np.sqrt(D))
+
+        directed_: bool
         if directed is not None:
             directed_ = directed
         else:
@@ -128,12 +134,18 @@ class BaseSpectralEmbed(BaseEstimator):
             self.latent_right_ = None
 
     @property
-    def _pairwise(self):
+    def _pairwise(self) -> bool:
         """This is for sklearn compliance."""
         return True
 
     @abstractmethod
-    def fit(self, graph, y=None, *args, **kwargs):
+    def fit(
+        self,
+        graph: GraphRepresentation,
+        y: Optional[Any] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> "BaseSpectralEmbed":
         """
         A method for embedding.
         Parameters
@@ -155,7 +167,7 @@ class BaseSpectralEmbed(BaseEstimator):
 
         return self
 
-    def _fit(self, graph, y=None):
+    def _fit(self, graph: GraphRepresentation, y: Optional[Any] = None) -> np.ndarray:
         """
         A method for embedding.
 
@@ -189,7 +201,9 @@ class BaseSpectralEmbed(BaseEstimator):
         self.n_features_in_ = A.shape[0]
         return A
 
-    def _fit_transform(self, graph, *args, **kwargs):
+    def _fit_transform(
+        self, graph: GraphRepresentation, *args: Any, **kwargs: Any
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         "Fits the model and returns the estimated latent positions."
 
         self.fit(graph, *args, **kwargs)
@@ -202,7 +216,13 @@ class BaseSpectralEmbed(BaseEstimator):
             else:
                 return self.latent_left_, self.latent_right_
 
-    def fit_transform(self, graph, y=None, *args, **kwargs):
+    def fit_transform(
+        self,
+        graph: GraphRepresentation,
+        y: Optional[Any] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         """
         Fit the model with graphs and apply the transformation.
 
@@ -224,7 +244,7 @@ class BaseSpectralEmbed(BaseEstimator):
         """
         return self._fit_transform(graph, *args, **kwargs)
 
-    def transform(self, X):
+    def transform(self, X):  # type: ignore
         """
         Obtain latent positions from an adjacency matrix or matrix of out-of-sample
         vertices. For more details on transforming out-of-sample vertices, see the
@@ -321,7 +341,7 @@ class BaseSpectralEmbed(BaseEstimator):
         return self._compute_oos_prediction(X, directed)
 
     @abstractmethod
-    def _compute_oos_prediction(self, X, directed):
+    def _compute_oos_prediction(self, X, directed):  # type: ignore
         """
         Computes the oos class specific estimation given in an input array and if the
         graph is directed.
@@ -357,13 +377,13 @@ class BaseSpectralEmbed(BaseEstimator):
 class BaseEmbedMulti(BaseSpectralEmbed):
     def __init__(
         self,
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        diag_aug=True,
-        concat=False,
+        n_components: Optional[int] = None,
+        n_elbows: Optional[int] = 2,
+        algorithm: SvdAlgorithmType = "randomized",
+        n_iter: int = 5,
+        check_lcc: bool = True,
+        diag_aug: bool = True,
+        concat: bool = False,
         svd_seed: Optional[int] = None,
     ):
         super().__init__(
@@ -380,7 +400,9 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             raise TypeError("`diag_aug` must be of type bool")
         self.diag_aug = diag_aug
 
-    def _check_input_graphs(self, graphs):
+    def _check_input_graphs(
+        self, graphs: Union[List[GraphRepresentation], np.ndarray]
+    ) -> Union[AdjacencyMatrix, List[AdjacencyMatrix]]:
         """
         Checks if all graphs in list have same shapes.
 
@@ -404,6 +426,8 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             If all graphs do not have same shape, or input list is empty or has
             one element.
         """
+        out: Union[List[AdjacencyMatrix], np.ndarray]
+
         # Convert input to np.arrays
         # This check is needed because np.stack will always duplicate array in memory.
         if isinstance(graphs, (list, tuple)):
@@ -435,7 +459,9 @@ class BaseEmbedMulti(BaseSpectralEmbed):
 
         return out
 
-    def _diag_aug(self, graphs):
+    def _diag_aug(
+        self, graphs: Union[np.ndarray, List[GraphRepresentation]]
+    ) -> Union[np.ndarray, List[AdjacencyMatrix]]:
         """
         Augments the diagonal off each input graph. Returns the original
         input object type.
@@ -454,6 +480,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             If input is list of ndarray, then list is returned.
             If input is ndarray, then ndarray is returned.
         """
+        out: Union[np.ndarray, List[AdjacencyMatrix]]
         if isinstance(graphs, list):
             out = [augment_diagonal(g) for g in graphs]
         elif isinstance(graphs, np.ndarray):

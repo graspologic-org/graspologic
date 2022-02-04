@@ -1,10 +1,15 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Any, Optional
+
 import numpy as np
+
+from graspologic.types import Dict
 
 from ..embed import AdjacencySpectralEmbed
 from ..simulations import p_from_latent
+from ..types import GraphRepresentation
 from ..utils import augment_diagonal, import_graph, is_unweighted
 from .base import BaseGraphEstimator
 
@@ -86,11 +91,11 @@ class RDPGEstimator(BaseGraphEstimator):
 
     def __init__(
         self,
-        loops=False,
-        n_components=None,
-        ase_kws={},
-        diag_aug_weight=1,
-        plus_c_weight=1,
+        loops: bool = False,
+        n_components: Optional[int] = None,
+        ase_kws: Dict[str, Any] = {},
+        diag_aug_weight: float = 1,
+        plus_c_weight: float = 1,
     ):
         super().__init__(loops=loops)
 
@@ -110,7 +115,9 @@ class RDPGEstimator(BaseGraphEstimator):
         self.diag_aug_weight = diag_aug_weight
         self.plus_c_weight = plus_c_weight
 
-    def fit(self, graph, y=None):
+    def fit(
+        self, graph: GraphRepresentation, y: Optional[Any] = None
+    ) -> "RDPGEstimator":
         graph = import_graph(graph)
         if not is_unweighted(graph):
             raise NotImplementedError(
@@ -123,7 +130,7 @@ class RDPGEstimator(BaseGraphEstimator):
         )
         latent = ase.fit_transform(graph)
         self.latent_ = latent
-        if type(self.latent_) == tuple:
+        if isinstance(self.latent_, tuple):
             X = self.latent_[0]
             Y = self.latent_[1]
             self.directed = True
@@ -137,8 +144,8 @@ class RDPGEstimator(BaseGraphEstimator):
         self.p_mat_ = p_mat
         return self
 
-    def _n_parameters(self):
-        if type(self.latent_) == tuple:
+    def _n_parameters(self) -> int:
+        if isinstance(self.latent_, tuple):
             return 2 * self.latent_[0].size
         else:
             return self.latent_.size

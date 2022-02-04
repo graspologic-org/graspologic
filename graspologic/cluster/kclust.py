@@ -1,24 +1,32 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional, Union
+
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, silhouette_score
+
+from graspologic.types import List
 
 from .base import BaseCluster
 
 
 class KMeansCluster(BaseCluster):
+    ari_: Optional[List[float]]
+
     """
     KMeans Cluster.
 
-    It computes all possible models from one component to
-    ``max_clusters``. The best model is given by the lowest silhouette score.
+    It computes all possible models from one component to ``max_clusters``.
+    When the true labels are known, the best model is given by the model with highest
+    adjusted Rand index (ARI).
+    Otherwise, the best model is given by the model with highest silhouette score.
 
     Parameters
     ----------
-    max_clusters : int, defaults to 1.
-        The maximum number of mixture components to consider.
+    max_clusters : int, default=2.
+        The maximum number of clusters to consider. Must be ``>=2``.
 
     random_state : int, RandomState instance or None, optional (default=None)
         If int, ``random_state`` is the seed used by the random number generator;
@@ -29,11 +37,11 @@ class KMeansCluster(BaseCluster):
     Attributes
     ----------
     n_clusters_ : int
-        Optimal number of components. If y is given, it is based on largest
-        ARI. Otherwise, it is based on smallest loss.
+        Optimal number of clusters. If y is given, it is based on largest
+        ARI. Otherwise, it is based on highest silhouette score.
 
     model_ : KMeans object
-        Fitted KMeans object fitted with optimal n_components.
+        Fitted KMeans object fitted with ``n_clusters_``.
 
     silhouette_ : list
         List of silhouette scores computed for all possible number
@@ -44,7 +52,11 @@ class KMeansCluster(BaseCluster):
         all possible number of clusters given by ``range(2, max_clusters)``.
     """
 
-    def __init__(self, max_clusters=2, random_state=None):
+    def __init__(
+        self,
+        max_clusters: int = 2,
+        random_state: Optional[Union[int, np.random.RandomState]] = None,
+    ):
         if isinstance(max_clusters, int):
             if max_clusters <= 1:
                 msg = "n_components must be >= 2 or None."
@@ -56,7 +68,7 @@ class KMeansCluster(BaseCluster):
             raise TypeError(msg)
         self.random_state = random_state
 
-    def fit(self, X, y=None):
+    def fit(self, X: np.ndarray, y: Optional[np.ndarray] = None) -> "KMeansCluster":
         """
         Fits kmeans model to the data.
 

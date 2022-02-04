@@ -212,14 +212,14 @@ class TestLatentDistributionTest(unittest.TestCase):
         # non-parallel test
         ldt_null = latent_distribution_test(A1, A2)
         ldt_alt = latent_distribution_test(A1, A3)
-        self.assertTrue(ldt_null[0] > 0.05)
-        self.assertTrue(ldt_alt[0] <= 0.05)
+        self.assertTrue(ldt_null[1] > 0.05)
+        self.assertTrue(ldt_alt[1] <= 0.05)
 
         # parallel test
         ldt_null = latent_distribution_test(A1, A2, workers=-1)
         ldt_alt = latent_distribution_test(A1, A3, workers=-1)
-        self.assertTrue(ldt_null[0] > 0.05)
-        self.assertTrue(ldt_alt[0] <= 0.05)
+        self.assertTrue(ldt_null[1] > 0.05)
+        self.assertTrue(ldt_alt[1] <= 0.05)
 
     def test_different_sizes_null(self):
         np.random.seed(314)
@@ -255,9 +255,9 @@ class TestLatentDistributionTest(unittest.TestCase):
             size_correction=True,
         )
 
-        self.assertTrue(ldt_not_corrected[0] <= 0.05)
-        self.assertTrue(ldt_corrected_1[0] > 0.05)
-        self.assertTrue(ldt_corrected_2[0] > 0.05)
+        self.assertTrue(ldt_not_corrected[1] <= 0.05)
+        self.assertTrue(ldt_corrected_1[1] > 0.05)
+        self.assertTrue(ldt_corrected_2[1] > 0.05)
 
     def test_different_sizes_null(self):
         np.random.seed(314)
@@ -284,8 +284,8 @@ class TestLatentDistributionTest(unittest.TestCase):
             size_correction=True,
         )
 
-        self.assertTrue(ldt_corrected_1[0] <= 0.05)
-        self.assertTrue(ldt_corrected_2[0] <= 0.05)
+        self.assertTrue(ldt_corrected_1[1] <= 0.05)
+        self.assertTrue(ldt_corrected_2[1] <= 0.05)
 
     def test_different_aligners(self):
         np.random.seed(314)
@@ -298,12 +298,12 @@ class TestLatentDistributionTest(unittest.TestCase):
         X2 = -X2
 
         ldt_1 = latent_distribution_test(X1, X2, input_graph=False, align_type=None)
-        self.assertTrue(ldt_1[0] < 0.05)
+        self.assertTrue(ldt_1[1] < 0.05)
 
         ldt_2 = latent_distribution_test(
             X1, X2, input_graph=False, align_type="sign_flips"
         )
-        self.assertTrue(ldt_2[0] >= 0.05)
+        self.assertTrue(ldt_2[1] >= 0.05)
 
         # also checking that kws are passed through
         ldt_3 = latent_distribution_test(
@@ -313,7 +313,7 @@ class TestLatentDistributionTest(unittest.TestCase):
             align_type="seedless_procrustes",
             align_kws={"init": "sign_flips"},
         )
-        self.assertTrue(ldt_3[0] >= 0.05)
+        self.assertTrue(ldt_3[1] >= 0.05)
 
 
 if __name__ == "__main__":

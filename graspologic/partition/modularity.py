@@ -3,9 +3,11 @@
 
 import math
 from collections import defaultdict
-from typing import Any, Dict
+from typing import Any
 
 import networkx as nx
+
+from graspologic.types import Dict
 
 
 def _modularity_component(
@@ -27,7 +29,7 @@ def _assertions(
     partitions: Dict[Any, int],
     weight_attribute: str,
     resolution: float,
-):
+) -> None:
     if not isinstance(graph, nx.Graph):
         raise TypeError("graph must be a networkx undirected graph")
     if graph.is_directed():

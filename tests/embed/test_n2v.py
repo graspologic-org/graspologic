@@ -12,11 +12,10 @@ import graspologic as gc
 
 
 class Node2VecEmbedTest(unittest.TestCase):
-    # these are not deterministic tests and can't be trusted to work consistently.
-    # See Issue #880
-    #     def test_n2v_returns_same_labels_with_different_nodeid_types(self):
-    #         probability_matrix = np.array([[0.95, 0.01], [0.01, 0.95]])
-    #         number_of_nodes_per_community = [20, 20]
+    def test_n2v_returns_same_labels_with_different_nodeid_types(self):
+        random_seed = 1
+        probability_matrix = np.array([[0.95, 0.01], [0.01, 0.95]])
+        number_of_nodes_per_community = [20, 20]
 
     #         sbm_sample = gc.simulations.sbm(
     #             number_of_nodes_per_community, probability_matrix
@@ -29,12 +28,15 @@ class Node2VecEmbedTest(unittest.TestCase):
     #             graph.add_edge(s, t, weight=1)
     #             graph_as_strings.add_edge(str(s), str(t), weight=1)
 
-    #         original_embedding = gc.embed.node2vec_embed(graph, random_seed=1)
-    #         string_embedding = gc.embed.node2vec_embed(graph_as_strings, random_seed=1)
+        original_embedding = gc.embed.node2vec_embed(graph, random_seed=random_seed)
+        string_embedding = gc.embed.node2vec_embed(
+            graph_as_strings, random_seed=random_seed
+        )
 
-    #         k = KMeans(n_clusters=2)
-    #         original_labels = k.fit_predict(original_embedding[0])
-    #         string_labels = k.fit_predict(string_embedding[0])
+        k = KMeans(n_clusters=2, random_state=random_seed)
+
+        original_labels = k.fit_predict(original_embedding[0])
+        string_labels = k.fit_predict(string_embedding[0])
 
     #         expected_labels = np.zeros(40, dtype=int)
     #         expected_labels[20:] = 1
@@ -186,3 +188,12 @@ class Node2VecEmbedTest(unittest.TestCase):
         )
 
         self.assertEqual(w, expected_walk_length)
+
+    def test_random_state_is_initialized_in_constructor(self):
+        graph = nx.barbell_graph(25, 2)
+        start_node = "0"
+
+        n2v = gc.embed.n2v._Node2VecGraph(graph, 1, 1)
+        n2v._preprocess_transition_probabilities()
+        walk = n2v.node2vec_walk(5, start_node, None)
+        self.assertGreater(len(walk), 0)

@@ -2,14 +2,18 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import List, Optional
+from typing import Optional, Union
 
 import numpy as np
 from beartype import beartype
 from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
+from graspologic.types import List
+
+from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import average_matrices, is_fully_connected, to_laplacian
 from .base import BaseEmbedMulti
+from .svd import SvdAlgorithmType
 
 
 @beartype
@@ -51,7 +55,9 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
     return vstack(rows, format="csr")
 
 
-def _get_laplacian_matrices(graphs):
+def _get_laplacian_matrices(
+    graphs: Union[np.ndarray, List[GraphRepresentation]]
+) -> Union[np.ndarray, List[np.ndarray]]:
     """
     Helper function to convert graph adjacency matrices to graph Laplacian
 
@@ -65,6 +71,7 @@ def _get_laplacian_matrices(graphs):
     out : list
         List of array-like with shapes (n_vertices, n_vertices).
     """
+    out: Union[np.ndarray, List[np.ndarray]]
     if isinstance(graphs, list):
         out = [to_laplacian(g) for g in graphs]
     elif isinstance(graphs, np.ndarray):
@@ -74,7 +81,9 @@ def _get_laplacian_matrices(graphs):
     return out
 
 
-def _get_omni_matrix(graphs):
+def _get_omni_matrix(
+    graphs: Union[AdjacencyMatrix, List[AdjacencyMatrix]]
+) -> np.ndarray:
     """
     Helper function for creating the omnibus matrix.
 
@@ -89,7 +98,7 @@ def _get_omni_matrix(graphs):
         Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)
     """
     if isspmatrix_csr(graphs[0]):
-        return _get_omnibus_matrix_sparse(graphs)
+        return _get_omnibus_matrix_sparse(graphs)  # type: ignore
 
     shape = graphs[0].shape
     n = shape[0]  # number of vertices
@@ -207,15 +216,15 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     def __init__(
         self,
-        n_components=None,
-        n_elbows=2,
-        algorithm="randomized",
-        n_iter=5,
-        check_lcc=True,
-        diag_aug=True,
-        concat=False,
+        n_components: Optional[int] = None,
+        n_elbows: Optional[int] = 2,
+        algorithm: SvdAlgorithmType = "randomized",
+        n_iter: int = 5,
+        check_lcc: bool = True,
+        diag_aug: bool = True,
+        concat: bool = False,
         svd_seed: Optional[int] = None,
-        lse=False,
+        lse: bool = False,
     ):
         super().__init__(
             n_components=n_components,
@@ -229,7 +238,7 @@ class OmnibusEmbed(BaseEmbedMulti):
         )
         self.lse = lse
 
-    def fit(self, graphs, y=None):
+    def fit(self, graphs, y=None):  # type: ignore
         """
         Fit the model with graphs.
 
@@ -282,7 +291,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         return self
 
-    def fit_transform(self, graphs, y=None):
+    def fit_transform(self, graphs, y=None):  # type: ignore
         """
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.

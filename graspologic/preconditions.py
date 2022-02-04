@@ -2,9 +2,11 @@
 # Licensed under the MIT license.
 
 import numbers
-from typing import Any, Tuple, Union
+from typing import Any, Union
 
 import networkx as nx
+
+from graspologic.types import Tuple
 
 
 def check_argument_types(
@@ -55,7 +57,7 @@ def check_optional_argument_types(
     check_argument_types(value, required_types, message)
 
 
-def check_argument(check: bool, message: str):
+def check_argument(check: bool, message: str) -> None:
     """
     Raises a ValueError if the provided check is false
 

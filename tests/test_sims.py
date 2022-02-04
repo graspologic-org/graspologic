@@ -4,6 +4,7 @@
 import unittest
 
 import numpy as np
+import pytest
 
 from graspologic.simulations import *
 from graspologic.utils.utils import is_loopless, is_symmetric, symmetrize
@@ -778,7 +779,7 @@ class TestWSBM(unittest.TestCase):
             dc = -1 * np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)
 
-        with self.assertWarns(UserWarning):
+        with pytest.warns(UserWarning):
             # Check that probabilities sum to 1 in each block
             dc = np.ones(sum(self.n))
             sbm(self.n, self.Psy, dc=dc)
@@ -882,6 +883,14 @@ class TestRDPG(unittest.TestCase):
         g = rdpg(X, rescale=True, loops=False, directed=False)
         self.assertTrue(is_symmetric(g))
         self.assertTrue(is_loopless(g))
+
+    def test_weight_function_args_can_be_none(self):
+        def weight_fn(size):
+            return size
+
+        X = np.array([[1, 1], [1, 1], [1, 1], [1, 0], [1, 0]])
+        A = rdpg(X, wt=weight_fn)
+        self.assertTrue(A.shape, (5, 5))
 
 
 class TestMMSBM(unittest.TestCase):

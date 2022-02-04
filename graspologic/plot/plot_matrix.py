@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+# type: ignore
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -484,7 +486,7 @@ def sort_meta(length, meta, group, group_order=["size"], item_order=None):
     return inds, meta
 
 
-def matrixplot(
+def matrixplot(  # type: ignore
     data,
     ax=None,
     col_meta=None,
@@ -874,7 +876,7 @@ def matrixplot(
     return ax, divider
 
 
-def adjplot(
+def adjplot(  # type: ignore
     data,
     ax=None,
     meta=None,

@@ -3,14 +3,23 @@
 # original code can be found here
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
+import numbers
 import operator
+from typing import Any, Optional, Union
 
 import numpy as np
-from scipy._lib._util import check_random_state
 from scipy.optimize import OptimizeResult, linear_sum_assignment
+from typing_extensions import Literal
+
+from graspologic.types import Dict, Tuple
 
 
-def quadratic_assignment(A, B, method="faq", options=None):
+def quadratic_assignment(
+    A: np.ndarray,
+    B: np.ndarray,
+    method: Literal["faq"] = "faq",
+    options: Optional[Dict[str, Any]] = None,
+) -> OptimizeResult:
     r"""
     Approximates solution to the quadratic assignment problem and
     the graph matching problem.
@@ -35,10 +44,9 @@ def quadratic_assignment(A, B, method="faq", options=None):
         The square matrix :math:`A` in the objective function above.
     B : 2d-array, square
         The square matrix :math:`B` in the objective function above.
-    method :  str in {'faq', '2opt'} (default: 'faq')
+    method :  str in {'faq'} (default: 'faq')
         The algorithm used to solve the problem.
         :ref:`'faq' <optimize.qap-faq>` (default) and
-        :ref:`'2opt' <optimize.qap-2opt>` are available.
     options : dict, optional
         A dictionary of solver options. All solvers support the following:
         partial_match : 2d-array of integers, optional, (default = None)
@@ -160,20 +168,24 @@ def quadratic_assignment(A, B, method="faq", options=None):
     if options is None:
         options = {}
 
-    method = method.lower()
+    method_key = method.lower()
     methods = {"faq": _quadratic_assignment_faq}
-    if method not in methods:
-        raise ValueError(f"method {method} must be in {methods}.")
-    res = methods[method](A, B, **options)
+    if method_key not in methods:
+        raise ValueError(f"method {method_key} must be in {list(methods.keys())}.")
+    res = methods[method_key](A, B, **options)
     return res
 
 
-def _calc_score(A, B, S, perm):
+def _calc_score(
+    A: np.ndarray, B: np.ndarray, S: np.ndarray, perm: np.ndarray
+) -> np.ndarray:
     # equivalent to objective function but avoids matmul
     return np.sum(A * B[perm][:, perm]) + np.sum(S[np.arange(len(S)), perm])
 
 
-def _common_input_validation(A, B, partial_match):
+def _common_input_validation(
+    A: np.ndarray, B: np.ndarray, partial_match: Optional[np.ndarray]
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     A = np.atleast_2d(A)
     B = np.atleast_2d(B)
 
@@ -212,17 +224,17 @@ def _common_input_validation(A, B, partial_match):
 
 
 def _quadratic_assignment_faq(
-    A,
-    B,
-    maximize=False,
-    partial_match=None,
-    S=None,
-    rng=None,
-    P0="barycenter",
-    shuffle_input=False,
-    maxiter=30,
-    tol=0.03,
-):
+    A: np.ndarray,
+    B: np.ndarray,
+    maximize: bool = False,
+    partial_match: Optional[np.ndarray] = None,
+    S: Optional[np.ndarray] = None,
+    rng: Optional[Union[int, np.random.RandomState, np.random.Generator]] = None,
+    P0: Union[Literal["barycenter", "randomized"], np.ndarray] = "barycenter",
+    shuffle_input: bool = False,
+    maxiter: int = 30,
+    tol: float = 0.03,
+) -> OptimizeResult:
     r"""
     Solve the quadratic assignment problem (approximately).
     This function solves the Quadratic Assignment Problem (QAP) and the
@@ -375,7 +387,7 @@ def _quadratic_assignment_faq(
     maxiter = operator.index(maxiter)
 
     # ValueError check
-    A, B, partial_match = _common_input_validation(A, B, partial_match)
+    A, B, partial_match_value = _common_input_validation(A, B, partial_match)
 
     msg = None
     if isinstance(P0, str) and P0 not in {"barycenter", "randomized"}:
@@ -384,48 +396,52 @@ def _quadratic_assignment_faq(
         msg = "'maxiter' must be a positive integer"
     elif tol <= 0:
         msg = "'tol' must be a positive float"
-    elif S.shape[0] != S.shape[1]:
-        msg = "`S` must be square"
-    elif S.ndim != 2:
-        msg = "`S` must have exactly two dimensions"
-    elif S.shape != A.shape:
-        msg = "`S`, `A`, and `B` matrices must be of equal size"
     if msg is not None:
         raise ValueError(msg)
 
+    if not isinstance(S, np.ndarray):
+        raise ValueError("`S` must be an ndarray")
+    elif S.shape != (S.shape[0], S.shape[0]):
+        raise ValueError("`S` must be square")
+    elif S.shape != A.shape:
+        raise ValueError("`S`, `A`, and `B` matrices must be of equal size")
+    else:
+        s_value = S
+
     rng = check_random_state(rng)
     n = A.shape[0]  # number of vertices in graphs
-    n_seeds = partial_match.shape[0]  # number of seeds
+    n_seeds = partial_match_value.shape[0]  # number of seeds
     n_unseed = n - n_seeds
 
     # check outlier cases
-    if n == 0 or partial_match.shape[0] == n:
+    if n == 0 or partial_match_value.shape[0] == n:
         # Cannot assume partial_match is sorted.
-        partial_match = np.row_stack(sorted(partial_match, key=lambda x: x[0]))
-        score = _calc_score(A, B, S, partial_match[:, 1])
-        res = {"col_ind": partial_match[:, 1], "fun": score, "nit": 0}
+        sort_inds = np.argsort(partial_match_value[:, 0])
+        partial_match_value = partial_match_value[sort_inds]
+        score = _calc_score(A, B, s_value, partial_match_value[:, 1])
+        res = {"col_ind": partial_match_value[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
 
     obj_func_scalar = 1
     if maximize:
         obj_func_scalar = -1
 
-    nonseed_B = np.setdiff1d(range(n), partial_match[:, 1])
+    nonseed_B = np.setdiff1d(range(n), partial_match_value[:, 1])
     perm_S = np.copy(nonseed_B)
     if shuffle_input:
         nonseed_B = rng.permutation(nonseed_B)
         # shuffle_input to avoid results from inputs that were already matched
 
-    nonseed_A = np.setdiff1d(range(n), partial_match[:, 0])
-    perm_A = np.concatenate([partial_match[:, 0], nonseed_A])
-    perm_B = np.concatenate([partial_match[:, 1], nonseed_B])
+    nonseed_A = np.setdiff1d(range(n), partial_match_value[:, 0])
+    perm_A = np.concatenate([partial_match_value[:, 0], nonseed_A])
+    perm_B = np.concatenate([partial_match_value[:, 1], nonseed_B])
 
-    S = S[:, perm_B]
+    s_value = s_value[:, perm_B]
 
     # definitions according to Seeded Graph Matching [2].
     A11, A12, A21, A22 = _split_matrix(A[perm_A][:, perm_A], n_seeds)
     B11, B12, B21, B22 = _split_matrix(B[perm_B][:, perm_B], n_seeds)
-    S22 = S[perm_S, n_seeds:]
+    S22 = s_value[perm_S, n_seeds:]
 
     # [1] Algorithm 1 Line 1 - choose initialization
     if isinstance(P0, str):
@@ -499,14 +515,14 @@ def _quadratic_assignment_faq(
     unshuffled_perm = np.zeros(n, dtype=int)
     unshuffled_perm[perm_A] = perm_B[perm]
 
-    score = _calc_score(A, B, S, unshuffled_perm)
+    score = _calc_score(A, B, s_value, unshuffled_perm)
 
     res = {"col_ind": unshuffled_perm, "fun": score, "nit": n_iter}
 
     return OptimizeResult(res)
 
 
-def _check_init_input(P0, n):
+def _check_init_input(P0: np.ndarray, n: int) -> None:
     row_sum = np.sum(P0, axis=0)
     col_sum = np.sum(P0, axis=1)
     tol = 1e-3
@@ -523,13 +539,15 @@ def _check_init_input(P0, n):
         raise ValueError(msg)
 
 
-def _split_matrix(X, n):
+def _split_matrix(
+    X: np.ndarray, n: int
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     # definitions according to Seeded Graph Matching [2].
     upper, lower = X[:n], X[n:]
     return upper[:, :n], upper[:, n:], lower[:, :n], lower[:, n:]
 
 
-def _doubly_stochastic(P, tol=1e-3):
+def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
     # Adapted from @btaba implementation
     # https://github.com/btaba/sinkhorn_knopp
     # of Sinkhorn-Knopp algorithm
@@ -552,3 +570,37 @@ def _doubly_stochastic(P, tol=1e-3):
         P_eps = r[:, None] * P * c
 
     return P_eps
+
+
+# copy-pasted from scipy scipy._lib._util
+# which was copy-pasted from scikit-learn utils/validation.py
+# this was just modified to add proper typing for returns
+# also, shouldn't have been importing private function from scipy anyway
+def check_random_state(
+    seed: Union[None, int, np.random.RandomState, np.random.Generator]
+) -> Union[np.random.RandomState, np.random.Generator]:
+    """Turn seed into a np.random.RandomState instance
+
+    If seed is None (or np.random), return the RandomState singleton used
+    by np.random.
+    If seed is an int, return a new RandomState instance seeded with seed.
+    If seed is already a RandomState instance, return it.
+    If seed is a new-style np.random.Generator, return it.
+    Otherwise raise ValueError.
+    """
+    if seed is None or seed is np.random:
+        return np.random.mtrand._rand
+    if isinstance(seed, (numbers.Integral, np.integer)):
+        int_seed: int = int(seed)  # necessary for typing/mypy
+        return np.random.RandomState(int_seed)
+    if isinstance(seed, np.random.RandomState):
+        return seed
+    try:
+        # Generator is only available in numpy >= 1.17
+        if isinstance(seed, np.random.Generator):
+            return seed
+    except AttributeError:
+        pass
+    raise ValueError(
+        "%r cannot be used to seed a numpy.random.RandomState" " instance" % seed
+    )

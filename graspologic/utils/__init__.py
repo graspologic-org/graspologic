@@ -3,6 +3,7 @@
 
 from .ptr import pass_to_ranks
 from .utils import (
+    LaplacianFormType,
     augment_diagonal,
     average_matrices,
     binarize,
@@ -37,6 +38,7 @@ __all__ = [
     "symmetrize",
     "remove_loops",
     "to_laplacian",
+    "LaplacianFormType",
     "is_fully_connected",
     "largest_connected_component",
     "multigraph_lcc_union",
