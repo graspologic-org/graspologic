@@ -1,13 +1,21 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from typing import Optional, Union
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import ParameterGrid
+from typing_extensions import Literal
+
+from graspologic.types import List
 
 from .base import BaseCluster
+
+GaussianInitParamsType = Literal["random", "kmeans"]
+GaussianCovarianceType = Literal["spherical", "diag", "tied", "full"]
 
 
 class GaussianCluster(BaseCluster):
@@ -99,15 +107,19 @@ class GaussianCluster(BaseCluster):
 
     def __init__(
         self,
-        min_components=2,
-        max_components=None,
-        covariance_type="all",
-        tol=1e-3,
-        reg_covar=1e-6,
-        max_iter=100,
-        n_init=1,
-        init_params="kmeans",
-        random_state=None,
+        min_components: int = 2,
+        max_components: Optional[int] = None,
+        covariance_type: Union[
+            Literal["all", GaussianCovarianceType],
+            List[GaussianCovarianceType],
+            np.ndarray,
+        ] = "all",
+        tol: float = 1e-3,
+        reg_covar: float = 1e-6,
+        max_iter: int = 100,
+        n_init: int = 1,
+        init_params: GaussianInitParamsType = "kmeans",
+        random_state: Optional[Union[int, np.random.RandomState]] = None,
     ):
         if isinstance(min_components, int):
             if min_components <= 0:
@@ -168,7 +180,7 @@ class GaussianCluster(BaseCluster):
         self.init_params = init_params
         self.random_state = random_state
 
-    def fit(self, X, y=None):
+    def fit(self, X: np.ndarray, y: Optional[np.ndarray] = None) -> "GaussianCluster":
         """
         Fits gaussian mixure model to the data.
         Estimate model parameters with the EM algorithm.
@@ -216,7 +228,7 @@ class GaussianCluster(BaseCluster):
         # Get parameters
         random_state = self.random_state
 
-        param_grid = dict(
+        param_grid_values = dict(
             covariance_type=self.covariance_type,
             n_components=range(lower_ncomponents, upper_ncomponents + 1),
             tol=[self.tol],
@@ -227,11 +239,11 @@ class GaussianCluster(BaseCluster):
             random_state=[random_state],
         )
 
-        param_grid = list(ParameterGrid(param_grid))
+        param_grid = list(ParameterGrid(param_grid_values))
 
-        models = [[] for _ in range(n_mixture_components)]
-        bics = [[] for _ in range(n_mixture_components)]
-        aris = [[] for _ in range(n_mixture_components)]
+        models: List[List[GaussianMixture]] = [[] for _ in range(n_mixture_components)]
+        bics: List[List[float]] = [[] for _ in range(n_mixture_components)]
+        aris: List[List[float]] = [[] for _ in range(n_mixture_components)]
 
         for i, params in enumerate(param_grid):
             model = GaussianMixture(**params)

@@ -3,10 +3,12 @@
 
 import logging
 import random
-from typing import Any, Callable, List, NamedTuple, Optional, Tuple, Union
+from typing import Any, Callable, NamedTuple, Optional, Union
 
 import networkx as nx
 import numpy as np
+
+from graspologic.types import List, Tuple
 
 LARGER_THAN_INCLUSIVE = "larger_than_inclusive"
 LARGER_THAN_EXCLUSIVE = "larger_than_exclusive"

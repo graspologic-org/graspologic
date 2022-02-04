@@ -83,6 +83,9 @@ class TestGrid(unittest.TestCase):
         self.assertEqual(254, stats[0][1], "empty cells")
         self.assertEqual(6, stats[1][1], "one item in cell")
         self.assertEqual(4, stats[2][1], "two items in cell")
+        self.assertEqual(
+            [(0, 254), (1, 6), (2, 4)], stats, "grid cell stats are in expected format"
+        )
 
 
 if __name__ == "__main__":

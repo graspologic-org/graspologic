@@ -16,5 +16,9 @@ Leiden and Hierarchical Leiden
 .. autofunction:: leiden
 
 .. autoclass:: HierarchicalCluster
+    :members:
+
+.. autoclass:: HierarchicalClusters
+    :members:
 
 .. autofunction:: hierarchical_leiden

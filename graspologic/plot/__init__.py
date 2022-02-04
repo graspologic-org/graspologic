@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+# type: ignore
+
 import sys
 
 import matplotlib as mpl
