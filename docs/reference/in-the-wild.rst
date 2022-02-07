@@ -12,6 +12,18 @@ Papers
   empirically justified for analysis of connectome data," using graspologic for most 
   analysis and examples.
 
+* `Graph matching via optimal transport <https://arxiv.org/abs/2111.05366>`_:
+  Authors in the NeuroData group improved on a state-of-the-art technique for graph matching, making the algorithm faster and more accurate on
+  larger and less-correlated networks.
+  
+Educational materials
+"""""""""""""""""""""
+* `Network data science <https://bdpedigo.github.io/networks-course>`_: 
+  A short course on network data science (using many tools in `graspologic`) taught at Johns Hopkins University.
+  
+* `Hands-on Network Machine Learning with Scikit-Learn and Graspologic <http://docs.neurodata.io/graph-stats-book>`:
+  A JupyterBook (in progress) on network machine learning based on the tools in `graspologic` and `scikit-learn`. Written
+  by authors in the NeuroData group.
 
 Blog posts
 """"""""""

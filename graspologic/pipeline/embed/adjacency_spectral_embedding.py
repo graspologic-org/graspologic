@@ -9,6 +9,7 @@ import numpy as np
 from beartype import beartype
 
 from graspologic.embed import AdjacencySpectralEmbed
+from graspologic.embed.base import SvdAlgorithmType
 from graspologic.preconditions import check_argument, is_real_weighted
 from graspologic.utils import (
     augment_diagonal,
@@ -27,7 +28,7 @@ def adjacency_spectral_embedding(
     graph: Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
-    svd_solver_algorithm: str = "randomized",
+    svd_solver_algorithm: SvdAlgorithmType = "randomized",
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
@@ -153,7 +154,7 @@ def adjacency_spectral_embedding(
     check_argument(svd_solver_iterations >= 1, "svd_solver_iterations must be positive")
 
     check_argument(
-        svd_seed is None or 0 <= svd_seed <= 2 ** 32 - 1,
+        svd_seed is None or 0 <= svd_seed <= 2**32 - 1,
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
@@ -164,6 +165,7 @@ def adjacency_spectral_embedding(
         "accordingly",
     )
 
+    used_weight_attribute: Optional[str] = weight_attribute
     if not is_real_weighted(graph, weight_attribute=weight_attribute):
         warnings.warn(
             f"Graphs with edges that do not have a real numeric weight set for every "
@@ -172,14 +174,14 @@ def adjacency_spectral_embedding(
             f"please add a '{weight_attribute}' attribute to every edge with a real, "
             f"numeric value (e.g. an integer or a float) and call this function again."
         )
-        weight_attribute = None  # this supercedes what the user said, because
+        used_weight_attribute = None  # this supercedes what the user said, because
         # not all of the weights are real numbers, if they exist at all
         # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
 
     node_labels = np.array(list(graph.nodes()))
 
     graph_as_csr = nx.to_scipy_sparse_matrix(
-        graph, weight=weight_attribute, nodelist=node_labels
+        graph, weight=used_weight_attribute, nodelist=node_labels
     )
 
     if not is_fully_connected(graph):
@@ -201,19 +203,22 @@ def adjacency_spectral_embedding(
         diag_aug=False,
     )
     results = embedder.fit_transform(augmented_graph)
+    results_arr: np.ndarray
 
     if elbow_cut is None:
-        if graph.is_directed():
-            results = np.concatenate(results, axis=1)
+        if isinstance(results, tuple) or graph.is_directed():
+            results_arr = np.concatenate(results, axis=1)
+        else:
+            results_arr = results
     else:
         column_index = _index_of_elbow(embedder.singular_values_, elbow_cut)
-        if graph.is_directed():
+        if isinstance(results, tuple):
             left, right = results
             left = left[:, :column_index]
             right = right[:, :column_index]
-            results = np.concatenate((left, right), axis=1)
+            results_arr = np.concatenate((left, right), axis=1)
         else:
-            results = results[:, :column_index]
+            results_arr = results[:, :column_index]
 
-    embeddings = Embeddings(node_labels, results)
+    embeddings = Embeddings(node_labels, results_arr)
     return embeddings

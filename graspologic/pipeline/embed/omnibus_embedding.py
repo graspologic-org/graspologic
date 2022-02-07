@@ -2,14 +2,16 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import Hashable, List, Optional, Set, Tuple, Union
+from typing import Any, Hashable, Optional, Union
 
 import networkx as nx
 import numpy as np
 from beartype import beartype
 
 from graspologic.embed import OmnibusEmbed
+from graspologic.embed.base import SvdAlgorithmType
 from graspologic.preconditions import check_argument, is_real_weighted
+from graspologic.types import List, Set, Tuple
 from graspologic.utils import (
     augment_diagonal,
     largest_connected_component,
@@ -27,7 +29,7 @@ def omnibus_embedding_pairwise(
     graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
-    svd_solver_algorithm: str = "randomized",
+    svd_solver_algorithm: SvdAlgorithmType = "randomized",
     svd_solver_iterations: int = 5,
     svd_seed: Optional[int] = None,
     weight_attribute: str = "weight",
@@ -148,11 +150,11 @@ def omnibus_embedding_pairwise(
     check_argument(svd_solver_iterations >= 1, "svd_solver_iterations must be positive")
 
     check_argument(
-        svd_seed is None or 0 <= svd_seed <= 2 ** 32 - 1,
+        svd_seed is None or 0 <= svd_seed <= 2**32 - 1,
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 
-    weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
+    used_weight_attribute = _graphs_precondition_checks(graphs, weight_attribute)
     perform_augment_diagonal = not use_laplacian
 
     graph_embeddings = []
@@ -162,8 +164,10 @@ def omnibus_embedding_pairwise(
     for graph in graphs[1:]:
         union_graph.add_edges_from(graph.edges())
 
-    union_graph_lcc = largest_connected_component(union_graph)
-    union_graph_lcc_nodes = set(list(union_graph_lcc.nodes()))
+    union_graph_lcc: Union[
+        nx.Graph, nx.Digraph, nx.OrderedGraph, nx.OrderedDiGraph
+    ] = largest_connected_component(union_graph)
+    union_graph_lcc_nodes: Set[Any] = set(list(union_graph_lcc.nodes()))
 
     union_node_ids = np.array(list(union_graph_lcc_nodes))
 
@@ -181,13 +185,13 @@ def omnibus_embedding_pairwise(
         previous_graph_augmented = _augment_graph(
             previous_graph,
             union_graph_lcc_nodes,
-            weight_attribute,
+            used_weight_attribute,
             perform_augment_diagonal=perform_augment_diagonal,
         )
         current_graph_augmented = _augment_graph(
             current_graph,
             union_graph_lcc_nodes,
-            weight_attribute,
+            used_weight_attribute,
             perform_augment_diagonal=perform_augment_diagonal,
         )
 
@@ -230,6 +234,7 @@ def _graphs_precondition_checks(
     weight_attribute: str,
 ) -> Optional[str]:
     is_directed = graphs[0].is_directed()
+    used_weight_attribute: Optional[str] = weight_attribute
 
     for graph in graphs:
         check_argument(
@@ -252,11 +257,11 @@ def _graphs_precondition_checks(
                 f"please add a '{weight_attribute}' attribute to every edge with a real, "
                 f"numeric value (e.g. an integer or a float) and call this function again."
             )
-            weight_attribute = None  # this supercedes what the user said, because
+            used_weight_attribute = None  # this supercedes what the user said, because
             # not all of the weights are real numbers, if they exist at all
             # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
 
-    return weight_attribute
+    return used_weight_attribute
 
 
 def _elbow_cut_if_needed(
@@ -265,21 +270,24 @@ def _elbow_cut_if_needed(
     singular_values: np.ndarray,
     embedding: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
 ) -> np.ndarray:
+    embedding_arr: np.ndarray
     if elbow_cut is None:
-        if is_directed:
-            embedding = np.concatenate(embedding, axis=1)
+        if isinstance(embedding, tuple) or is_directed:
+            embedding_arr = np.concatenate(embedding, axis=1)
+        else:
+            embedding_arr = embedding
     else:
         column_index = _index_of_elbow(singular_values, elbow_cut)
 
-        if is_directed:
+        if isinstance(embedding, tuple) or is_directed:
             left, right = embedding
             left = left[:, :column_index]
             right = right[:, :column_index]
-            embedding = np.concatenate((left, right), axis=1)
+            embedding_arr = np.concatenate((left, right), axis=1)
         else:
-            embedding = embedding[:, :column_index]
+            embedding_arr = embedding[:, :column_index]
 
-    return embedding
+    return embedding_arr
 
 
 def _augment_graph(
@@ -292,11 +300,12 @@ def _augment_graph(
         graph, weight=weight_attribute, nodelist=node_ids
     )
 
-    graphs_loops_removed = remove_loops(graph_sparse)
-    graphs_ranked = pass_to_ranks(graphs_loops_removed)
+    graphs_loops_removed: np.ndarray = remove_loops(graph_sparse)
+    graphs_ranked: np.ndarray = pass_to_ranks(graphs_loops_removed)
 
     if perform_augment_diagonal:
-        return augment_diagonal(graphs_ranked)
+        graphs_diag_augmented: np.ndarray = augment_diagonal(graphs_ranked)
+        return graphs_diag_augmented
 
     return graphs_ranked
 
