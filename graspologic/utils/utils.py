@@ -1153,6 +1153,18 @@ def remap_node_ids(
     return graph_remapped, node_id_dict
 
 
+def simple_edge_swap(A: np.array):
+    # performs degree preserving edge swap on simple graph
+
+    # make edge list from adjacency matrix
+    edge_list = []
+    for i in range(len(A)):
+        for j in range(i, len(A)):
+            if A[i, j] != 0:
+                edge_list.append([i, j])
+    return edge_list
+
+
 def suppress_common_warnings() -> None:
     """
     Suppresses common warnings that occur when using graspologic.
