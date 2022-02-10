@@ -4,7 +4,7 @@
 import unittest
 
 import numpy as np
-from beartype.roar import BeartypeCallHintPepParamException
+from beartype.roar import BeartypeCallHintParamViolation
 
 from graspologic.pipeline.embed import Embeddings
 
@@ -46,11 +46,11 @@ class TestEmbeddings(unittest.TestCase):
             np.testing.assert_array_equal(expected[key], view[key])
 
     def test_argument_types(self):
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             Embeddings(None, None)
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             Embeddings(np.array(["hello"]), None)
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             Embeddings(["hello"], [1.0])
         with self.assertRaises(ValueError):
             Embeddings(np.array(["hello"]), np.array([[1.1, 1.2], [2.1, 2.2]]))

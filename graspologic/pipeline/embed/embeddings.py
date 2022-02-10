@@ -56,7 +56,7 @@ class Embeddings:
 
         Raises
         ------
-        beartype.roar.BeartypeCallHintPepParamException if the types are invalid
+        beartype.roar.BeartypeCallHintParamViolation if the types are invalid
         ValueError if the row count of labels does not equal the row count of embeddings
         """
         if labels.shape[0] != embeddings.shape[0]:

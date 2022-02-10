@@ -5,7 +5,7 @@ import unittest
 
 import networkx as nx
 import numpy as np
-from beartype.roar import BeartypeCallHintPepParamException
+from beartype.roar import BeartypeCallHintParamViolation
 
 from graspologic.pipeline.embed import omnibus_embedding_pairwise
 
@@ -24,7 +24,7 @@ class TestOmnibusEmbedding(unittest.TestCase):
         }
 
     def test_argument_validation(self):
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             omnibus_embedding_pairwise(graphs=[1])
 
         with self.assertRaises(ValueError):
@@ -35,7 +35,7 @@ class TestOmnibusEmbedding(unittest.TestCase):
         # dimensions
         dimensions = [None, 1.3, "1"]
         for dimension in dimensions:
-            with self.assertRaises(BeartypeCallHintPepParamException):
+            with self.assertRaises(BeartypeCallHintParamViolation):
                 params = self._default_parameters()
                 params["dimensions"] = dimension
                 params["graphs"] = self.graphs
@@ -44,19 +44,19 @@ class TestOmnibusEmbedding(unittest.TestCase):
         # elbow_cuts
         elbow_cuts = ["3", 1.3]
         for elbow_cut in elbow_cuts:
-            with self.assertRaises(BeartypeCallHintPepParamException):
+            with self.assertRaises(BeartypeCallHintParamViolation):
                 params = self._default_parameters()
                 params["elbow_cut"] = elbow_cut
                 params["graphs"] = self.graphs
                 omnibus_embedding_pairwise(**params)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             params = self._default_parameters()
             params["svd_solver_algorithm"] = 1
             params["graphs"] = self.graphs
             omnibus_embedding_pairwise(**params)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             params = self._default_parameters()
             params["svd_solver_algorithm"] = "sandwich"
             params["graphs"] = self.graphs
@@ -65,7 +65,7 @@ class TestOmnibusEmbedding(unittest.TestCase):
         # svd_solver_iterations
         svd_solver_iterations = [None, "5", 5.1]
         for ssi in svd_solver_iterations:
-            with self.assertRaises(BeartypeCallHintPepParamException):
+            with self.assertRaises(BeartypeCallHintParamViolation):
                 params = self._default_parameters()
                 params["svd_solver_iterations"] = ssi
                 params["graphs"] = self.graphs
@@ -74,7 +74,7 @@ class TestOmnibusEmbedding(unittest.TestCase):
         # svd_seed
         svd_seeds = ["5", 5.1]
         for svd_seed in svd_seeds:
-            with self.assertRaises(BeartypeCallHintPepParamException):
+            with self.assertRaises(BeartypeCallHintParamViolation):
                 params = self._default_parameters()
                 params["svd_seed"] = svd_seed
                 params["graphs"] = self.graphs
