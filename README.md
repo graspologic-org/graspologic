@@ -39,7 +39,6 @@ And across the following **x86_64** versions of Python:
 - 3.7
 - 3.8
 - 3.9
-- 3.10
 
 If you try to use `graspologic` for a different platform than the ones listed and notice any unexpected behavior,
 please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users
