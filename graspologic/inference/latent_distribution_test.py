@@ -203,7 +203,7 @@ def latent_distribution_test(
             d must be same. n_components attribute is ignored in this case.
 
     Returns
-    ----------
+    -------
     stat : float
         The observed difference between the embedded latent positions of the
         two input graphs.
