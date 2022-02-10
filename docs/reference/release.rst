@@ -6,7 +6,7 @@ Release Log
 graspologic 1.0.0
 -----------------
 - Removed Python 3.6 support
-- Officially added Python 3.9 and 3.10 support
+- Officially added Python 3.9 support
 - Fixed a type in an error message 
   `#904 <https://github.com/microsoft/graspologic/pull/904>`
 - Added support for arbitrarily indexed node data for networkplot 
