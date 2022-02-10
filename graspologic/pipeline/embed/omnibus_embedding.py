@@ -107,7 +107,7 @@ def omnibus_embedding_pairwise(
 
     Raises
     ------
-    beartype.roar.BeartypeCallHintPepParamException if parameters do not match type hints
+    beartype.roar.BeartypeCallHintParamViolation if parameters do not match type hints
     ValueError if values are not within appropriate ranges or allowed values
 
     See Also

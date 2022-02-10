@@ -274,7 +274,7 @@ def leiden(
     ------
     ValueError
     TypeError
-    BeartypeCallHintPepParamException
+    BeartypeCallHintParamViolation
 
     See Also
     --------
@@ -539,7 +539,7 @@ def hierarchical_leiden(
     ------
     ValueError
     TypeError
-    BeartypeCallHintPepParamException
+    BeartypeCallHintParamViolation
 
     See Also
     --------
