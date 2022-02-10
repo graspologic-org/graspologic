@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.omni &mdash; graspologic 1.0.0dev1791934871 documentation</title>
+  <title>graspologic.embed.omni &mdash; graspologic 1.0.0dev1826536333 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1791934871
+                1.0.0dev1826536333
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -474,7 +474,7 @@
 <span class="sd">       Conference on (pp. 964-967). IEEE.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="OmnibusEmbed.__init__"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_elbows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
@@ -496,9 +496,9 @@
             <span class="n">concat</span><span class="o">=</span><span class="n">concat</span><span class="p">,</span>
             <span class="n">svd_seed</span><span class="o">=</span><span class="n">svd_seed</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lse</span> <span class="o">=</span> <span class="n">lse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lse</span> <span class="o">=</span> <span class="n">lse</span></div>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+<div class="viewcode-block" id="OmnibusEmbed.fit"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs.</span>
 
@@ -549,9 +549,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">n_graphs_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+<div class="viewcode-block" id="OmnibusEmbed.fit_transform"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs and apply the embedding on graphs.</span>
 <span class="sd">        n_components is either automatically determined or based on user input.</span>
@@ -572,7 +572,7 @@
 <span class="sd">            If graphs were directed and ``concat`` is True, left and right (out and in) latent positions are concatenated.</span>
 <span class="sd">            In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.rdpg &mdash; graspologic 1.0.0dev1791934871 documentation</title>
+  <title>graspologic.models.rdpg &mdash; graspologic 1.0.0dev1826536333 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1791934871
+                1.0.0dev1826536333
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -349,7 +349,7 @@
 <span class="sd">           pp.918-930.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="RDPGEstimator.__init__"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.RDPGEstimator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -373,9 +373,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span> <span class="o">=</span> <span class="n">n_components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ase_kws</span> <span class="o">=</span> <span class="n">ase_kws</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diag_aug_weight</span> <span class="o">=</span> <span class="n">diag_aug_weight</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">plus_c_weight</span> <span class="o">=</span> <span class="n">plus_c_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plus_c_weight</span> <span class="o">=</span> <span class="n">plus_c_weight</span></div>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+<div class="viewcode-block" id="RDPGEstimator.fit"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.RDPGEstimator.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RDPGEstimator&quot;</span><span class="p">:</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="n">import_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
@@ -402,7 +402,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="p">:</span>
             <span class="n">p_mat</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">p_mat</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p_mat_</span> <span class="o">=</span> <span class="n">p_mat</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="k">def</span> <span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>

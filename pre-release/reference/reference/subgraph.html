@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Subgraph &mdash; graspologic 1.0.0dev1791934871 documentation</title>
+  <title>Subgraph &mdash; graspologic 1.0.0dev1826536333 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1791934871
+                1.0.0dev1826536333
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -333,6 +333,89 @@ The coherent estimator finds the signal-subgraph, constrained by the number of e
 </ol>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.subgraph.SignalSubgraph.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/subgraph/sg.html#SignalSubgraph.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.subgraph.SignalSubgraph.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the signal-subgraph estimator according to the constraints given.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>graphs: array-like, shape (n_vertices, n_vertices, s_samples)</strong></p>
+<blockquote>
+<div><p>A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.</p>
+</div></blockquote>
+<p><strong>labels: vector, length (s_samples)</strong></p>
+<blockquote>
+<div><p>A vector of class labels. There must be a maximum of two classes.</p>
+</div></blockquote>
+<p><strong>constraints: int or vector</strong></p>
+<blockquote>
+<div><p>The constraints that will be imposed onto the estimated signal-subgraph.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is an int, <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is the number of edges in the signal-subgraph.
+If <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is a vector, the first element of <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is the number of edges
+in the signal-subgraph, and the second element of <code class="docutils literal notranslate"><span class="pre">constraints</span></code>
+is the number of vertices that the signal-subgraph must be incident to.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>self: returns an instance of self</dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graphs</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>]</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.subgraph.SignalSubgraph" title="graspologic.subgraph.sg.SignalSubgraph">graspologic.subgraph.sg.SignalSubgraph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.subgraph.SignalSubgraph.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/subgraph/sg.html#SignalSubgraph.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.subgraph.SignalSubgraph.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to return the indices of the signal-subgraph. If <code class="docutils literal notranslate"><span class="pre">return_mask</span></code> is True, also returns a mask for the signal-subgraph.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>graphs: array-like, shape (n_vertices, n_vertices, s_samples)</strong></p>
+<blockquote>
+<div><p>A series of labeled (n_vertices, n_vertices) unweighted graph samples. If undirected, the upper or lower triangle matrices should be used.</p>
+</div></blockquote>
+<p><strong>labels: vector, length (s_samples)</strong></p>
+<blockquote>
+<div><p>A vector of class labels. There must be a maximum of two classes.</p>
+</div></blockquote>
+<p><strong>constraints: int or vector</strong></p>
+<blockquote>
+<div><p>The constraints that will be imposed onto the estimated signal-subgraph.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is an int, <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is the number of edges in the signal-subgraph.
+If <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is a vector, the first element of <code class="docutils literal notranslate"><span class="pre">constraints</span></code> is the number of edges
+in the signal-subgraph, and the second element of <code class="docutils literal notranslate"><span class="pre">constraints</span></code>
+is the number of vertices that the signal-subgraph must be incident to.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sigsub: tuple</p>
+<blockquote>
+<div><p>Contains an array of row indices and an array of column indices.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graphs</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>]</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

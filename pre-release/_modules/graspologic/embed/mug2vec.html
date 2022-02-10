@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.mug2vec &mdash; graspologic 1.0.0dev1791934871 documentation</title>
+  <title>graspologic.embed.mug2vec &mdash; graspologic 1.0.0dev1826536333 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0dev1791934871
+                1.0.0dev1826536333
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -353,7 +353,7 @@
 <span class="sd">    graspologic.embed.select_dimension</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="mug2vec.__init__"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.mug2vec.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pass_to_ranks</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
             <span class="s2">&quot;simple-nonzero&quot;</span><span class="p">,</span> <span class="s2">&quot;simple-all&quot;</span><span class="p">,</span> <span class="s2">&quot;zero-boost&quot;</span>
@@ -369,7 +369,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">omnibus_n_elbows</span> <span class="o">=</span> <span class="n">omnibus_n_elbows</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cmds_components</span> <span class="o">=</span> <span class="n">cmds_components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cmds_n_elbows</span> <span class="o">=</span> <span class="n">cmds_n_elbows</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">svd_seed</span> <span class="o">=</span> <span class="n">svd_seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svd_seed</span> <span class="o">=</span> <span class="n">svd_seed</span></div>
 
     <span class="k">def</span> <span class="nf">_check_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
@@ -384,7 +384,7 @@
                     <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> must be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+<div class="viewcode-block" id="mug2vec.fit"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.mug2vec.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;mug2vec&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -426,9 +426,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">embeddings_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">omnibus_embedding</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cmds_components_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embeddings_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span>
+<div class="viewcode-block" id="mug2vec.fit_transform"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.mug2vec.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -449,7 +449,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">embeddings_</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">embeddings_</span></div></div>
 </pre></div>
 
            </div>
