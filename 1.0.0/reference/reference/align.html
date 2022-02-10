@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aligning &mdash; graspologic 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Clustering" href="cluster.html" />
+    <link rel="prev" title="Reference" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> graspologic
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#latent-position-models">Latent position models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="index.html">Reference</a> &raquo;</li>
+      <li>Aligning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/reference/reference/align.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="aligning">
+<h1>Aligning<a class="headerlink" href="#aligning" title="Permalink to this headline">¶</a></h1>
+<section id="sign-flips">
+<h2>Sign flips<a class="headerlink" href="#sign-flips" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">SignFlips</span></span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flips the signs of all entries in one dataset, <code class="docutils literal notranslate"><span class="pre">X</span></code> along some of the
+dimensions. In particular, it does so in a way that brings this dataset to
+the same orthant as the second dataset, <code class="docutils literal notranslate"><span class="pre">Y</span></code>, according to some criterion,
+computed along each dimension. The two critera currently available are the
+median and the maximum (in magnitude) value along each dimension.</p>
+<p>This module can also be used to bring the dataset to the first orthant
+(i.e. with all criteras being positive) by providing the identity matrix as
+the second dataset.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>criterion</strong> : string, {'median' (default), 'max'}, optional</p>
+<blockquote>
+<div><p>String describing the criterion used to choose whether to flip signs.
+Two options are currently supported:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>'median'</dt><dd><p>Uses the median along each dimension</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'max'</dt><dd><p>Uses the maximum (in magintude) along each dimension</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><p><strong>Q_</strong> : array, size (d, d)</p>
+<blockquote>
+<div><p>Final orthogonal matrix, used to modify <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'median'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips.set_criterion_function">
+<span class="sig-name descname"><span class="pre">set_criterion_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.set_criterion_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.set_criterion_function" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
+first dataset with the second.</p>
+<p>In sign flips, <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> is an diagonal orthogonal matrices (i.e. a
+matrix with 1 or -1 in each entry on diagonal and 0 everywhere else)
+picked such that all dimensions of <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Y</span></code> are in the same orthant using some critera (median or max magnitude).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
+(axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+<p><strong>Y</strong> : np.ndarray, shape (m, d)</p>
+<blockquote>
+<div><p>Target dataset, must have same number of dimensions (axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">returns an instance of self</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>Y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.align.SignFlips" title="graspologic.align.sign_flips.SignFlips">graspologic.align.sign_flips.SignFlips</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
+first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
+using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
+(axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+<p><strong>Y</strong> : np.ndarray, shape (m, d)</p>
+<blockquote>
+<div><p>Target dataset, must have same number of dimensions (axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>X_prime</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>First dataset of vectors, aligned to second. Equal to
+<code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>Y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
+<blockquote>
+<div><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> : dict</p>
+<blockquote>
+<div><p>Parameter names mapped to their values.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**params</strong> : dict</p>
+<blockquote>
+<div><p>Estimator parameters.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
+<blockquote>
+<div><p>Estimator instance.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SignFlips.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>. This may
+be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
+For example, additional samples from the same dataset.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape(m, d)</p>
+<blockquote>
+<div><p>Dataset to be transformed, must have same number of dimensions
+(axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> that were passed to fit.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>X_prime</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>First dataset of vectors, aligned to second. Equal to
+<code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="orthogonal-procrustes">
+<h2>Orthogonal Procrustes<a class="headerlink" href="#orthogonal-procrustes" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">OrthogonalProcrustes</span></span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the matrix solution of the classical orthogonal Procrustes <a class="reference internal" href="#r70b5933f300f-1" id="id1">[1]</a>
+problem, which is that given two matrices <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> of equal shape
+(n, d), find an orthogonal matrix that most closely maps <code class="docutils literal notranslate"><span class="pre">X</span></code> to
+<code class="docutils literal notranslate"><span class="pre">Y</span></code>. Subsequently, uses that matrix to transform either the original <code class="docutils literal notranslate"><span class="pre">X</span></code>,
+or a different dataset in the same space.</p>
+<p>Note that when used to match two datasets, this method unlike
+<a class="reference internal" href="#graspologic.align.SeedlessProcrustes" title="graspologic.align.SeedlessProcrustes"><code class="xref py py-class docutils literal notranslate"><span class="pre">SeedlessProcrustes</span></code></a>, not only requires that the
+datasets have the same number of entries, but also that there is some
+correspondence between the entries. In graph embeddings, this usually
+corresponds to the assumption that the vertex <span class="math notranslate nohighlight">\(i\)</span> in graph <code class="docutils literal notranslate"><span class="pre">X</span></code> has the same
+latent position as the vertex <span class="math notranslate nohighlight">\(i\)</span> in graph <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><p><strong>Q_</strong> : array, size (d, d)</p>
+<blockquote>
+<div><p>Final orthogonal matrix, used to modify <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+<p><strong>score_</strong> : float</p>
+<blockquote>
+<div><p>Final value of the objective function: <span class="math notranslate nohighlight">\(|| X Q - Y ||_F\)</span>
+Lower means the datasets have been matched together better.</p>
+</div></blockquote>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Formally, minimizes <span class="math notranslate nohighlight">\(|| X Q - Y ||_F\)</span>, which has a closed form
+solution, whenever <span class="math notranslate nohighlight">\(Q\)</span> is constrained to be an orthogonal matrix,
+that is a matrix that satisfies <span class="math notranslate nohighlight">\(Q^T Q = Q Q^T = I\)</span>. For the more
+details, including the proof of the closed-form solution see <a class="reference internal" href="#r70b5933f300f-1" id="id2">[1]</a>.</p>
+<p>Implementation-wise, this class is a wrapper of the
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.orthogonal_procrustes.html#scipy.linalg.orthogonal_procrustes" title="(in SciPy v1.8.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.orthogonal_procrustes()</span></code></a>, which itself uses an algorithm
+described in find the optimal solution algorithm <a class="reference internal" href="#r70b5933f300f-2" id="id3">[2]</a>.</p>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r70b5933f300f-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
+<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem">https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem</a></p>
+</dd>
+<dt class="label" id="r70b5933f300f-2"><span class="brackets"><a class="fn-backref" href="#id3">2</a></span></dt>
+<dd><p>Peter H. Schonemann, &quot;A generalized solution of the orthogonal
+Procrustes problem&quot;, Psychometrica -- Vol. 31, No. 1, March, 1996.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
+first dataset with the second.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have the same shape as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+<p><strong>Y</strong> : np.ndarray, shape (m, d)</p>
+<blockquote>
+<div><p>Target dataset, must have the same shape as <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">returns an instance of self</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>Y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.align.OrthogonalProcrustes" title="graspologic.align.orthogonal_procrustes.OrthogonalProcrustes">graspologic.align.orthogonal_procrustes.OrthogonalProcrustes</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
+first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
+using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have the same shape as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+<p><strong>Y</strong> : np.ndarray, shape (m, d)</p>
+<blockquote>
+<div><p>Target dataset, must have the same shape as <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>X_prime</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>First dataset of vectors, aligned to second. Equal to
+<code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>Y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
+<blockquote>
+<div><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> : dict</p>
+<blockquote>
+<div><p>Parameter names mapped to their values.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**params</strong> : dict</p>
+<blockquote>
+<div><p>Estimator parameters.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
+<blockquote>
+<div><p>Estimator instance.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>. This may
+be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
+For example, additional samples from the same dataset.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape(m, d)</p>
+<blockquote>
+<div><p>Dataset to be transformed, must have same number of dimensions
+(axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> that were passed to fit.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>X_prime</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>First dataset of vectors, aligned to second. Equal to
+<code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="seedless-procrustes">
+<h2>Seedless Procrustes<a class="headerlink" href="#seedless-procrustes" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">SeedlessProcrustes</span></span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matches two datasets using an orthogonal matrix. Unlike
+<a class="reference internal" href="#graspologic.align.OrthogonalProcrustes" title="graspologic.align.OrthogonalProcrustes"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrthogonalProcrustes</span></code></a>, this does not require a
+matching between entries. It can even be used in the settings where the two
+datasets do not have the same number of entries.</p>
+<p>In graph setting, it is used to align the embeddings of two different
+graphs, when it requires some simultaneous inference task and no 1-1
+matching between the vertices of the two graphs can be established, for
+example, inside of the test for the equivalence of the latent distributions
+(see: <code class="xref py py-class docutils literal notranslate"><span class="pre">LatentDistributionTest</span></code>).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>optimal_transport_lambda</strong> : float (default=0.1), optional</p>
+<blockquote>
+<div><p>Regularization term of the Sinkhorn optimal transport algorithm.</p>
+</div></blockquote>
+<p><strong>optimal_transport_eps</strong> : float (default=0.01), optional</p>
+<blockquote>
+<div><p>Tolerance parameter for the each Sinkhorn optimal transport algorithm.
+I.e. tolerance for each &quot;E-step&quot;.</p>
+</div></blockquote>
+<p><strong>optimal_transport_num_reps</strong> : int (default=1000), optional</p>
+<blockquote>
+<div><p>Number of repetitions in each iteration of the iterative optimal
+transport problem. I.e. maximum number of repetitions in each &quot;E-step&quot;.</p>
+</div></blockquote>
+<p><strong>iterative_num_reps</strong> : int (default=100), optional</p>
+<blockquote>
+<div><p>Number of reps in each iteration of the iterative optimal transport
+problem. I.e. maxumum number of total iterations the whole &quot;EM&quot;
+algorithm.</p>
+</div></blockquote>
+<p><strong>init</strong> : string, {'2d' (default), 'sign_flips', 'custom'}, optional</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>'2d'</dt><dd><p>Uses <span class="math notranslate nohighlight">\(2^d\)</span> different restarts, where <span class="math notranslate nohighlight">\(d\)</span> is the
+dimension of the datasets. In particular, tries all matrices that
+are simultaneously diagonal and orthogonal. In other words, these
+are diagonal matrices with all entries on the diagonal being either
++1 or -1. This is motivated by the fact that spectral graph
+embeddings have two types of orthogonal non-identifiability, one of
+which is captured by the orthogonal diagonal matrices. The final
+result is picked based on the final values of the objective
+function. For more on this, see <a class="reference internal" href="#r60780f5e411a-2" id="id6">[2]</a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'sign_flips'</dt><dd><p>Initial alignment done by making the median value in each dimension
+have the same sign. The motivation is similar to that in '2d',
+except this is a heuristic that can save time, but can sometimes
+yield suboptimal results.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'custom'</dt><dd><p>Expects either an initial guess for <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> or an initial guess
+for <code class="xref py py-attr docutils literal notranslate"><span class="pre">P_</span></code>, but not both. See <code class="docutils literal notranslate"><span class="pre">initial_Q</span></code> and <code class="docutils literal notranslate"><span class="pre">initial_P</span></code>,
+respectively. If neither is provided, initializes <code class="docutils literal notranslate"><span class="pre">initial_Q</span></code> to an
+identity with an appropriate number of dimensions.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>initial_Q</strong> : np.ndarray, shape (d, d) or None, optional (default=None)</p>
+<blockquote>
+<div><p>An initial guess for the alignment matrix, <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>, if such exists.
+Only one of <code class="docutils literal notranslate"><span class="pre">initial_Q</span></code>, <code class="docutils literal notranslate"><span class="pre">initial_P</span></code> can be provided at the same time,
+and only if <code class="docutils literal notranslate"><span class="pre">init</span></code> argument is set to 'custom'. If None, and
+<code class="docutils literal notranslate"><span class="pre">initial_P</span></code> is also None - initializes <code class="docutils literal notranslate"><span class="pre">initial_Q</span></code> to identity matrix.
+Must be an orthogonal matrix, if provided.</p>
+</div></blockquote>
+<p><strong>initial_P</strong> : np.ndarray, shape (n, m) or None, optional (default=None)</p>
+<blockquote>
+<div><p>Initial guess for the optimal transport matrix, <code class="xref py py-attr docutils literal notranslate"><span class="pre">P_</span></code>, if such
+exists. Only one of <code class="docutils literal notranslate"><span class="pre">initial_Q</span></code>, <code class="docutils literal notranslate"><span class="pre">initial_P</span></code> can be provided at the
+same time, and only if <code class="docutils literal notranslate"><span class="pre">init</span></code> argument is set to 'custom'. If None, and
+<code class="docutils literal notranslate"><span class="pre">initial_Q</span></code> is also None - initializes <code class="docutils literal notranslate"><span class="pre">initial_Q</span></code> to identity matrix.
+Must be a soft assignment matrix if provided (rows sum up to 1/n, cols
+sum up to 1/m.)</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><p><strong>Q_</strong> : array, size (d, d)</p>
+<blockquote>
+<div><p>Final orthogonal matrix, used to modify <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+<p><strong>P_</strong> : array, size (n, m) where n and m are the sizes of two datasets</p>
+<blockquote>
+<div><p>Final matrix of optimal transports, represent soft matching weights
+from points in one dataset to the other, normalized such that all rows
+sum to 1/n and all columns sum to 1/m.</p>
+</div></blockquote>
+<p><strong>score_</strong> : float</p>
+<blockquote>
+<div><p>Final value of the objective function: <span class="math notranslate nohighlight">\(|| X Q - P Y ||_F\)</span>
+Lower means the datasets have been matched together better.</p>
+</div></blockquote>
+<p><strong>selected_initial_Q_</strong> : array, size (d, d)</p>
+<blockquote>
+<div><p>Initial orthogonal matrix which was used as the initialization.
+If <code class="docutils literal notranslate"><span class="pre">init</span></code> was set to '2d' or 'sign_flips', then it is the adaptively
+selected matrix.
+If <code class="docutils literal notranslate"><span class="pre">init</span></code> was set to 'custom', and <code class="docutils literal notranslate"><span class="pre">initial_Q</span></code> was provided, then equal
+to that. If it was not provided, but <code class="docutils literal notranslate"><span class="pre">initial_P</span></code> was, then it is the
+matrix after the first procrustes performed. If neither was provided,
+then it is the identity matrix.</p>
+</div></blockquote>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>In essence, the goal of this procedure is to simultaneously obtain a, not
+necessarily 1-to-1, correspondence between the vertices of the two data
+sets, and an orthogonal alignment between two datasets. If the two datasets
+are represented with matrices <span class="math notranslate nohighlight">\(X \in M_{n, d}\)</span> and
+<span class="math notranslate nohighlight">\(Y \in M_{m, d}\)</span>, then the correspondence is a matrix
+<span class="math notranslate nohighlight">\(P \in M_{n, m}\)</span> that is soft assignment matrix (that is, its rows
+sum to <span class="math notranslate nohighlight">\(1/n\)</span>, and columns sum to <span class="math notranslate nohighlight">\(1/m\)</span>) and the orthogonal
+alignment is an orthogonal matrix <span class="math notranslate nohighlight">\(Q \in M_{d, d}\)</span> (an orthogonal
+matrix is any matrix that satisfies <span class="math notranslate nohighlight">\(Q^T Q = Q Q^T = I\)</span>). The global
+objective function is <span class="math notranslate nohighlight">\(|| X Q - P Y ||_F\)</span>.</p>
+<p>Note that both <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(PY\)</span> are matrices in <span class="math notranslate nohighlight">\(M_{n, d}\)</span>.
+Thus, if one knew <span class="math notranslate nohighlight">\(P\)</span>, it would be simple to obtain an estimate for
+<span class="math notranslate nohighlight">\(Q\)</span>, using the regular orthogonal procrustes. On the other hand, if
+<span class="math notranslate nohighlight">\(Q\)</span> was known, then <span class="math notranslate nohighlight">\(XQ\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> could be thought of
+distributions over a finite number of masses, each with weight <span class="math notranslate nohighlight">\(1/n\)</span>
+or <span class="math notranslate nohighlight">\(1/m\)</span>, respectively. These distributions could be &quot;matched&quot; via
+solving an optimal transport problem.</p>
+<p>However, both <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(P\)</span> are simultaneously unknown here. So
+the algorithm performs a sequence of alternating steps, obtaining
+iteratively improving estimates of <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(P\)</span>, similarly to an
+expectation-maximization (EM) procedure. It is not known whether this
+procedure is formally an EM, but the analogy can be drawn as follows: after
+obtaining an initial guess of of <span class="math notranslate nohighlight">\(\hat{Q}_{0}\)</span>, obtaining an
+assignment matrix <span class="math notranslate nohighlight">\(\hat{P}_{i+1} | \hat{Q}_{i}\)</span> (&quot;E-step&quot;) is done by
+solving an optimal transport problem via Sinkhorn algorithm, whereas
+obtaining an orthogonal alignment matrix <span class="math notranslate nohighlight">\(Q_{i+1} | P_{i}\)</span> (&quot;M-step&quot;)
+is done via regular orthogonal procurstes. These alternating steps are
+performed until <code class="docutils literal notranslate"><span class="pre">iterative_num_reps</span></code> is reached.</p>
+<p>For more on how the initial guess can be performed, see <code class="docutils literal notranslate"><span class="pre">init</span></code>.</p>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r60780f5e411a-1"><span class="brackets">1</span></dt>
+<dd><p>Agterberg, J., Tang, M., Priebe., C. E. (2020).
+&quot;Nonparametric Two-Sample Hypothesis Testing for Random Graphs with Negative and Repeated Eigenvalues&quot;
+arXiv:2012.09828</p>
+</dd>
+<dt class="label" id="r60780f5e411a-2"><span class="brackets"><a class="fn-backref" href="#id6">2</a></span></dt>
+<dd><p>Agterberg, J., Tang, M., Priebe., C. E. (2020).
+&quot;On Two Distinct Sources of Nonidentifiability in Latent Position Random Graph Models&quot;
+arXiv:2003.14250</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimal_transport_lambda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterative_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>optimal_transport_lambda</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>optimal_transport_eps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>optimal_transport_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>iterative_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>initial_Q</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
+<li><p><strong>initial_P</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the two datasets to learn the matrix <cite>self.Q_</cite> that aligns the
+first dataset with the second.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
+(axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+<p><strong>Y</strong> : np.ndarray, shape (m, d)</p>
+<blockquote>
+<div><p>Target dataset, must have same number of dimensions (axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">returns an instance of self</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>Y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.align.SeedlessProcrustes" title="graspologic.align.seedless_procrustes.SeedlessProcrustes">graspologic.align.seedless_procrustes.SeedlessProcrustes</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
+first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
+using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
+(axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+<p><strong>Y</strong> : np.ndarray, shape (m, d)</p>
+<blockquote>
+<div><p>Target dataset, must have same number of dimensions (axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>X_prime</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>First dataset of vectors, aligned to second. Equal to
+<code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>Y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
+<blockquote>
+<div><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> : dict</p>
+<blockquote>
+<div><p>Parameter names mapped to their values.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**params</strong> : dict</p>
+<blockquote>
+<div><p>Estimator parameters.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
+<blockquote>
+<div><p>Estimator instance.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>. This may
+be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
+For example, additional samples from the same dataset.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> : np.ndarray, shape(m, d)</p>
+<blockquote>
+<div><p>Dataset to be transformed, must have same number of dimensions
+(axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> that were passed to fit.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>X_prime</strong> : np.ndarray, shape (n, d)</p>
+<blockquote>
+<div><p>First dataset of vectors, aligned to second. Equal to
+<code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cluster.html" class="btn btn-neutral float-right" title="Clustering" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
