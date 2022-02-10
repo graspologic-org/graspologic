@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.mase &mdash; graspologic 0.3.1 documentation</title>
+  <title>graspologic.embed.mase &mdash; graspologic 1.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -53,10 +53,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
@@ -265,7 +267,7 @@
 
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">is_almost_symmetric</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseEmbedMulti</span>
-<span class="kn">from</span> <span class="nn">.svd</span> <span class="kn">import</span> <span class="n">select_dimension</span><span class="p">,</span> <span class="n">select_svd</span>
+<span class="kn">from</span> <span class="nn">.svd</span> <span class="kn">import</span> <span class="n">SvdAlgorithmType</span><span class="p">,</span> <span class="n">select_dimension</span><span class="p">,</span> <span class="n">select_svd</span>
 
 
 <div class="viewcode-block" id="MultipleASE"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.MultipleASE">[docs]</a><span class="k">class</span> <span class="nc">MultipleASE</span><span class="p">(</span><span class="n">BaseEmbedMulti</span><span class="p">):</span>
@@ -367,15 +369,15 @@
 <span class="sd">    to ``n_components`` of :attr:`latent_right_`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="MultipleASE.__init__"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.MultipleASE.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">n_elbows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
-        <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-        <span class="n">scaled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">diag_aug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">concat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_elbows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="p">:</span> <span class="n">SvdAlgorithmType</span> <span class="o">=</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
+        <span class="n">n_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">scaled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">diag_aug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">concat</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">svd_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scaled</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
@@ -391,9 +393,9 @@
             <span class="n">concat</span><span class="o">=</span><span class="n">concat</span><span class="p">,</span>
             <span class="n">svd_seed</span><span class="o">=</span><span class="n">svd_seed</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scaled</span> <span class="o">=</span> <span class="n">scaled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaled</span> <span class="o">=</span> <span class="n">scaled</span></div>
 
-    <span class="k">def</span> <span class="nf">_reduce_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_reduce_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># first embed into log2(n_vertices) for each graph</span>
             <span class="n">n_components</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_</span><span class="p">))))</span>
@@ -464,7 +466,7 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">Uhat</span><span class="p">,</span> <span class="n">Vhat</span><span class="p">,</span> <span class="n">sing_vals_left</span><span class="p">,</span> <span class="n">sing_vals_right</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MultipleASE.fit"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.MultipleASE.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs.</span>
 
@@ -501,9 +503,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">scores_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">Uhat</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">graph</span> <span class="o">@</span> <span class="n">Uhat</span> <span class="k">for</span> <span class="n">graph</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">singular_values_</span> <span class="o">=</span> <span class="n">sing_vals_left</span>
 
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MultipleASE.fit_transform"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.MultipleASE.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs and apply the embedding on graphs.</span>
 <span class="sd">        n_components is either automatically determined or based on user input.</span>
@@ -523,7 +525,7 @@
 <span class="sd">            The first corresponds to the left latent positions, and the second to the right latent positions.</span>
 <span class="sd">            When ``concat`` is True left and right (out and in) latent positions are concatenated along axis 1.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

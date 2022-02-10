@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.utils.ptr &mdash; graspologic 0.3.1 documentation</title>
+  <title>graspologic.utils.ptr &mdash; graspologic 1.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -53,10 +53,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
@@ -262,11 +264,14 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">rankdata</span>
 
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">GraphRepresentation</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">import_graph</span><span class="p">,</span> <span class="n">is_loopless</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">is_unweighted</span><span class="p">,</span> <span class="n">symmetrize</span>
 
 
-<div class="viewcode-block" id="pass_to_ranks"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.pass_to_ranks">[docs]</a><span class="k">def</span> <span class="nf">pass_to_ranks</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;simple-nonzero&quot;</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="pass_to_ranks"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.pass_to_ranks">[docs]</a><span class="k">def</span> <span class="nf">pass_to_ranks</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;simple-nonzero&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GraphRepresentation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rescales edge weights of an adjacency matrix based on their relative rank in</span>
 <span class="sd">    the graph.</span>
 
@@ -280,11 +285,11 @@
 <span class="sd">        - &#39;simple-nonzero&#39;</span>
 <span class="sd">            assigns ranks to all non-zero edges, settling ties using</span>
 <span class="sd">            the average. Ranks are then scaled by</span>
-<span class="sd">            :math:`\frac{rank(\text{non-zero edges})}{\text{total non-zero edges} + 1}`</span>
+<span class="sd">            :math:`\\frac{rank(\\text{non-zero edges})}{\\text{total non-zero edges} + 1}`</span>
 <span class="sd">        - &#39;simple-all&#39;</span>
 <span class="sd">            assigns ranks to all non-zero edges, settling ties using</span>
 <span class="sd">            the average. Ranks are then scaled by</span>
-<span class="sd">            :math:`\frac{rank(\text{non-zero edges})}{n^2 + 1}`</span>
+<span class="sd">            :math:`\\frac{rank(\\text{non-zero edges})}{n^2 + 1}`</span>
 <span class="sd">            where n is the number of nodes</span>
 <span class="sd">        - &#39;zero-boost&#39;</span>
 <span class="sd">            preserves the edge weight for all 0s, but ranks the other</span>

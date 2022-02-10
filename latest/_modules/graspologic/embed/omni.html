@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.omni &mdash; graspologic 0.3.1 documentation</title>
+  <title>graspologic.embed.omni &mdash; graspologic 1.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -53,10 +53,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
@@ -260,14 +262,18 @@
 <span class="c1"># Licensed under the MIT License.</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">isspmatrix_csr</span><span class="p">,</span> <span class="n">vstack</span>
 
+<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">GraphRepresentation</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">average_matrices</span><span class="p">,</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">to_laplacian</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseEmbedMulti</span>
+<span class="kn">from</span> <span class="nn">.svd</span> <span class="kn">import</span> <span class="n">SvdAlgorithmType</span>
 
 
 <span class="nd">@beartype</span>
@@ -309,7 +315,9 @@
     <span class="k">return</span> <span class="n">vstack</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_get_laplacian_matrices</span><span class="p">(</span><span class="n">graphs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_get_laplacian_matrices</span><span class="p">(</span>
+    <span class="n">graphs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function to convert graph adjacency matrices to graph Laplacian</span>
 
@@ -323,6 +331,7 @@
 <span class="sd">    out : list</span>
 <span class="sd">        List of array-like with shapes (n_vertices, n_vertices).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graphs</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_laplacian</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">]</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graphs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
@@ -332,7 +341,9 @@
     <span class="k">return</span> <span class="n">out</span>
 
 
-<span class="k">def</span> <span class="nf">_get_omni_matrix</span><span class="p">(</span><span class="n">graphs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_get_omni_matrix</span><span class="p">(</span>
+    <span class="n">graphs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function for creating the omnibus matrix.</span>
 
@@ -347,7 +358,7 @@
 <span class="sd">        Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">graphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="k">return</span> <span class="n">_get_omnibus_matrix_sparse</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_get_omnibus_matrix_sparse</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="n">shape</span> <span class="o">=</span> <span class="n">graphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># number of vertices</span>
@@ -463,17 +474,17 @@
 <span class="sd">       Conference on (pp. 964-967). IEEE.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="OmnibusEmbed.__init__"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">n_elbows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
-        <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-        <span class="n">check_lcc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">diag_aug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">concat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_elbows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="p">:</span> <span class="n">SvdAlgorithmType</span> <span class="o">=</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
+        <span class="n">n_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">check_lcc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">diag_aug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">concat</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">svd_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">lse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">lse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span>
@@ -485,9 +496,9 @@
             <span class="n">concat</span><span class="o">=</span><span class="n">concat</span><span class="p">,</span>
             <span class="n">svd_seed</span><span class="o">=</span><span class="n">svd_seed</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lse</span> <span class="o">=</span> <span class="n">lse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lse</span> <span class="o">=</span> <span class="n">lse</span></div>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="OmnibusEmbed.fit"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs.</span>
 
@@ -538,9 +549,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">n_graphs_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="OmnibusEmbed.fit_transform"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs and apply the embedding on graphs.</span>
 <span class="sd">        n_components is either automatically determined or based on user input.</span>
@@ -561,7 +572,7 @@
 <span class="sd">            If graphs were directed and ``concat`` is True, left and right (out and in) latent positions are concatenated.</span>
 <span class="sd">            In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

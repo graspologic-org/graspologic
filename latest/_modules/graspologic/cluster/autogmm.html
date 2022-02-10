@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.cluster.autogmm &mdash; graspologic 0.3.1 documentation</title>
+  <title>graspologic.cluster.autogmm &mdash; graspologic 1.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -53,10 +53,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
@@ -260,6 +262,7 @@
 <span class="c1"># Licensed under the MIT License.</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -274,8 +277,14 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">ParameterGrid</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_scalar</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseCluster</span>
+
+<span class="n">ParamGridType</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+<span class="n">CovarianceType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="s2">&quot;tied&quot;</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">,</span> <span class="s2">&quot;spherical&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="AutoGMMCluster"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster">[docs]</a><span class="k">class</span> <span class="nc">AutoGMMCluster</span><span class="p">(</span><span class="n">BaseCluster</span><span class="p">):</span>
@@ -471,21 +480,21 @@
 <span class="sd">       Statistical Association, 93(441):294–302, 1998.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="AutoGMMCluster.__init__"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">min_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">max_components</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">affinity</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">linkage</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">covariance_type</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">label_init</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">kmeans_n_init</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">selection_criteria</span><span class="o">=</span><span class="s2">&quot;bic&quot;</span><span class="p">,</span>
-        <span class="n">max_agglom_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
-        <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_components</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">max_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">affinity</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="n">linkage</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="n">covariance_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">label_init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">kmeans_n_init</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">selection_criteria</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bic&quot;</span><span class="p">,</span>
+        <span class="n">max_agglom_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_components</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">min_components</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -627,6 +636,8 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`max_agglom_size` must be an int or None&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">max_agglom_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_agglom_size</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must use at least 2 points for `max_agglom_size`&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`n_jobs` must be an int or None&quot;</span><span class="p">)</span>
 
         <span class="n">check_scalar</span><span class="p">(</span><span class="n">kmeans_n_init</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;kmeans_n_init&quot;</span><span class="p">,</span> <span class="n">target_type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">min_val</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -642,9 +653,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selection_criteria</span> <span class="o">=</span> <span class="n">selection_criteria</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_agglom_size</span> <span class="o">=</span> <span class="n">max_agglom_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
 
-    <span class="k">def</span> <span class="nf">_fit_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">X_subset</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">agg_clustering</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_fit_cluster</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">X_subset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">ParamGridType</span><span class="p">,</span>
+        <span class="n">agg_clustering</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">label_init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_init</span>
         <span class="k">if</span> <span class="n">label_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">onehot</span> <span class="o">=</span> <span class="n">_labels_to_onehot</span><span class="p">(</span><span class="n">label_init</span><span class="p">)</span>
@@ -719,7 +738,7 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">results</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AutoGMMCluster.fit"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;AutoGMMCluster&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits gaussian mixture model to the data.</span>
 <span class="sd">        Initialize with agglomerative clustering then</span>
@@ -779,23 +798,25 @@
                 <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;n_samples must be the same as the length of label_init&quot;</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-        <span class="n">param_grid</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">param_grid_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">affinity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affinity</span><span class="p">,</span>
             <span class="n">linkage</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">linkage</span><span class="p">,</span>
             <span class="n">covariance_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariance_type</span><span class="p">,</span>
             <span class="n">n_components</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">lower_ncomponents</span><span class="p">,</span> <span class="n">upper_ncomponents</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">param_grid</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ParameterGrid</span><span class="p">(</span><span class="n">param_grid</span><span class="p">))</span>
+        <span class="n">param_grid</span><span class="p">:</span> <span class="n">ParamGridType</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ParameterGrid</span><span class="p">(</span><span class="n">param_grid_values</span><span class="p">))</span>
 
-        <span class="n">param_grid_ag</span><span class="p">,</span> <span class="n">param_grid</span> <span class="o">=</span> <span class="n">_process_paramgrid</span><span class="p">(</span>
+        <span class="n">param_grid_ag</span><span class="p">,</span> <span class="n">processed_param_grid</span> <span class="o">=</span> <span class="n">_process_paramgrid</span><span class="p">(</span>
             <span class="n">param_grid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kmeans_n_init</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_init</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
-            <span class="n">seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">param_grid</span><span class="p">))</span>
+            <span class="n">seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">processed_param_grid</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">seeds</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">param_grid</span><span class="p">)</span>
+            <span class="n">seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_param_grid</span><span class="p">))</span>
 
         <span class="n">n</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_agglom_size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_agglom_size</span><span class="p">:</span>
@@ -817,7 +838,7 @@
                     <span class="p">)</span>
                     <span class="n">ag_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hierarchical_labels</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">_fit_for_data</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_fit_for_data</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">ParamGridType</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
             <span class="n">n_clusters</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;n_components&quot;</span><span class="p">]</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;affinity&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="n">param_grid_ag</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -827,7 +848,8 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_cluster</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">X_subset</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">agg_clustering</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)(</span>
-            <span class="n">delayed</span><span class="p">(</span><span class="n">_fit_for_data</span><span class="p">)(</span><span class="n">p</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">seed</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">seeds</span><span class="p">)</span>
+            <span class="n">delayed</span><span class="p">(</span><span class="n">_fit_for_data</span><span class="p">)(</span><span class="n">p</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">seed</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">processed_param_grid</span><span class="p">,</span> <span class="n">seeds</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
 
@@ -844,10 +866,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ari_</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_idx</span><span class="p">,</span> <span class="s2">&quot;ari&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_idx</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
-<span class="k">def</span> <span class="nf">_increase_reg</span><span class="p">(</span><span class="n">reg</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_increase_reg</span><span class="p">(</span><span class="n">reg</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Increase regularization factor by factor of 10.</span>
 
@@ -868,7 +890,9 @@
     <span class="k">return</span> <span class="n">reg</span>
 
 
-<span class="k">def</span> <span class="nf">_onehot_to_initial_params</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">onehot</span><span class="p">,</span> <span class="n">cov_type</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_onehot_to_initial_params</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">onehot</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cov_type</span><span class="p">:</span> <span class="n">CovarianceType</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes cluster weights, cluster means and cluster precisions from</span>
 <span class="sd">    a given clustering.</span>
@@ -902,7 +926,7 @@
     <span class="k">return</span> <span class="n">weights</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">precisions</span>
 
 
-<span class="k">def</span> <span class="nf">_labels_to_onehot</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_labels_to_onehot</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts labels to one-hot format.</span>
 
@@ -924,7 +948,9 @@
     <span class="k">return</span> <span class="n">onehot</span>
 
 
-<span class="k">def</span> <span class="nf">_process_paramgrid</span><span class="p">(</span><span class="n">paramgrid</span><span class="p">,</span> <span class="n">kmeans_n_init</span><span class="p">,</span> <span class="n">label_init</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_process_paramgrid</span><span class="p">(</span>
+    <span class="n">paramgrid</span><span class="p">:</span> <span class="n">ParamGridType</span><span class="p">,</span> <span class="n">kmeans_n_init</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">label_init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ParamGridType</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">ParamGridType</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes combinations of affinity and linkage that are not possible.</span>
 
@@ -979,7 +1005,9 @@
     <span class="k">return</span> <span class="n">ag_params_processed</span><span class="p">,</span> <span class="n">paramgrid_processed</span>
 
 
-<span class="k">def</span> <span class="nf">_hierarchical_labels</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">min_components</span><span class="p">,</span> <span class="n">max_components</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_hierarchical_labels</span><span class="p">(</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">min_components</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_components</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">hierarchical_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">merge_start</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">-</span> <span class="n">max_components</span> <span class="o">-</span> <span class="mi">1</span>

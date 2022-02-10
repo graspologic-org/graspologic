@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inference &mdash; graspologic 0.3.1 documentation</title>
+  <title>Inference &mdash; graspologic 1.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,8 +16,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                0.3.1
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -58,10 +58,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to graspologic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../in-the-wild.html">graspologic in the wild</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#educational-materials">Educational materials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#blog-posts">Blog posts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
@@ -370,16 +372,16 @@ Supply -1 to use all cores available.</p>
 </div></blockquote>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>p_value</strong> : float</p>
-<blockquote>
-<div><p>The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'</p>
-</div></blockquote>
-<p><strong>sample_T_statistic</strong> : float</p>
+<dd class="field-even"><p><strong>stat</strong> : float</p>
 <blockquote>
 <div><p>The observed difference between the embedded positions of the two input graphs
 after an alignment (the type of alignment depends on <code class="docutils literal notranslate"><span class="pre">test_case</span></code>)</p>
 </div></blockquote>
-<p><strong>misc_stats</strong> : dictionary</p>
+<p><strong>pvalue</strong> : float</p>
+<blockquote>
+<div><p>The overall p value from the test; this is the max of 'p_value_1' and 'p_value_2'</p>
+</div></blockquote>
+<p><strong>misc_dict</strong> : dictionary</p>
 <blockquote>
 <div><p>A collection of other statistics obtained from the latent position test</p>
 <ul class="simple">
@@ -398,6 +400,20 @@ distributions are generated</p>
 </li>
 </ul>
 </div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.6.2)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.6.2)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>embedding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'ase'</em><em>, </em><em>'omnibus'</em><em>]</em>) -- </p></li>
+<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>test_case</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'rotation'</em><em>, </em><em>'scalar-rotation'</em><em>, </em><em>'diagonal-rotation'</em><em>]</em>) -- </p></li>
+<li><p><strong>n_bootstraps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>graspologic.inference.latent_position_test.lpt_result</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -439,7 +455,7 @@ Expected variable type and shape depends on input_graph attribute</p>
 <div><p>Backend hypothesis test to use, one of [&quot;cca&quot;, &quot;dcorr&quot;, &quot;hhg&quot;, &quot;rv&quot;, &quot;hsic&quot;, &quot;mgc&quot;].
 These tests are typically used for independence testing, but here they
 are used for a two-sample hypothesis test on the latent positions of
-two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
+two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </div></blockquote>
 <p><strong>metric</strong> : str or function (default=&quot;euclidean&quot;)</p>
 <blockquote>
@@ -460,7 +476,7 @@ then it should behave similarly to either
 <code class="docutils literal notranslate"><span class="pre">&quot;jaccard&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kulsinski&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mahalanobis&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;minkowski&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;rogerstanimoto&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;russellrao&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;seuclidean&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;sokalmichener&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sokalsneath&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sqeuclidean&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.7.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
+<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
 details on these metrics.</p></li>
 </ul>
 </div></blockquote>
@@ -484,7 +500,7 @@ This argument is ignored if <code class="docutils literal notranslate"><span cla
 <p><strong>n_bootstraps</strong> : int (default=200)</p>
 <blockquote>
 <div><p>Number of bootstrap iterations for the backend hypothesis test.
-See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
+See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </div></blockquote>
 <p><strong>random_state</strong> : {None, int, <cite>~np.random.RandomState</cite>, <cite>~np.random.Generator</cite>}</p>
 <blockquote>
@@ -607,16 +623,16 @@ d must be same. n_components attribute is ignored in this case.</p>
 </div></blockquote>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>p_value</strong> : float</p>
-<blockquote>
-<div><p>The overall p value from the test.</p>
-</div></blockquote>
-<p><strong>sample_T_statistic</strong> : float</p>
+<dd class="field-even"><p><strong>stat</strong> : float</p>
 <blockquote>
 <div><p>The observed difference between the embedded latent positions of the
 two input graphs.</p>
 </div></blockquote>
-<p><strong>misc_stats</strong> : dictionary</p>
+<p><strong>pvalue</strong> : float</p>
+<blockquote>
+<div><p>The overall p value from the test.</p>
+</div></blockquote>
+<p><strong>misc_dict</strong> : dictionary</p>
 <blockquote>
 <div><p>A collection of other statistics obtained from the latent position test</p>
 <ul class="simple">
@@ -637,6 +653,26 @@ two input graphs.</p>
 </li>
 </ul>
 </div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.6.2)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.6.2)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>test</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'cca'</em><em>, </em><em>'dcorr'</em><em>, </em><em>'hhg'</em><em>, </em><em>'rv'</em><em>, </em><em>'hsic'</em><em>, </em><em>'mgc'</em><em>]</em>) -- </p></li>
+<li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em>]</em>) -- </p></li>
+<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>n_bootstraps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.22)"><em>numpy.random.mtrand.RandomState</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="(in NumPy v1.22)"><em>numpy.random._generator.Generator</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>size_correction</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>pooled</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>align_type</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'sign_flips'</em><em>, </em><em>'seedless_procrustes'</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>align_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
+<li><p><strong>input_graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>graspologic.inference.latent_distribution_test.ldt_result</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
