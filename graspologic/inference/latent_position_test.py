@@ -88,7 +88,7 @@ def latent_position_test(
         Supply -1 to use all cores available.
 
     Returns
-    ----------
+    -------
     stat : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
