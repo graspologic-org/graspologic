@@ -63,7 +63,7 @@ class TestPlot(unittest.TestCase):
         figsize = "bad figsize"
         with self.assertRaises(TypeError):
             heatmap(X, figsize=figsize)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, figsize=figsize)
 
@@ -82,7 +82,7 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, title=title)
         with self.assertRaises(TypeError):
             pairplot(X, title=title)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, title=title)
 
@@ -94,7 +94,7 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, context=context)
         with self.assertRaises(TypeError):
             pairplot(X, context=context)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, context=context)
 
@@ -117,7 +117,7 @@ class TestPlot(unittest.TestCase):
                 gridplot([X], grid_labels, font_scale=font_scale)
             with self.assertRaises(TypeError):
                 pairplot(X, font_scale=font_scale)
-            with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+            with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
                 with self.assertRaises(TypeError):
                     networkplot(adjacency=X, x=x, y=y, font_scale=font_scale)
 
@@ -283,7 +283,7 @@ class TestPlot(unittest.TestCase):
         X = er_np(15, 0.5)
         x = np.random.rand(15, 1)
         y = np.random.rand(15, 1)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency="test", x=x, y=y)
 
