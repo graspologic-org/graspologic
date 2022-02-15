@@ -10,6 +10,7 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import scipy.sparse
+import random
 from beartype import beartype
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
@@ -1162,7 +1163,64 @@ def simple_edge_swap(A: np.array):
         for j in range(i, len(A)):
             if A[i, j] != 0:
                 edge_list.append([i, j])
-    return edge_list
+    #row_inds, col_inds = np.nonzero(A)
+    #print(edge_list)
+    #print(row_inds)
+    #print(col_inds)
+
+    # choose two indices at random
+    rng = np.random.default_rng(np.random.randint(12345))
+    num_edges = list(range(len(edge_list)))
+    orig_inds = rng.choice(num_edges, size=2, replace=False)
+    #print(orig_inds)
+
+    # 50% chance of first type of edge swap, 50% for other
+    u, v = edge_list[orig_inds[0]]
+    choice = 0
+    if np.random.rand() < 0.5:
+        x, y = edge_list[orig_inds[1]]
+    else:
+        y, x = edge_list[orig_inds[1]]
+    #print(u, v, x, y)
+
+    # ensures no initial loops
+    if u == v or x == y:
+        print("initial loops")
+        return False
+
+    # ensures no loops after swap (must be swap on 4 distinct nodes)
+    if u == x or v == y:
+        print("loops after swap")
+        return False
+
+    # save edge values
+    w_uv = A[u, v]
+    w_xy = A[x, y]
+    w_ux = A[u, x]
+    w_vy = A[v, y]
+
+    # ensures no initial multigraphs
+    if w_uv > 1 or w_xy > 1:
+        print("initial multigraph")
+        return False
+
+    # ensures no multigraphs after swap
+    if w_ux >= 1 or w_vy >= 1:
+        print("multigraph after swap")
+        return False
+
+    # perform the swap
+    A[u, v] += -1
+    A[v, u] += -1
+    A[x, y] += -1
+    A[y, x] += -1
+
+    A[u, x] += 1
+    A[x, u] += 1
+    A[v, y] += 1
+    A[y, v] += 1
+
+    return True
 
 
 def suppress_common_warnings() -> None:

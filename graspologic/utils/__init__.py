@@ -24,6 +24,7 @@ from .utils import (
     remove_loops,
     remove_vertices,
     symmetrize,
+    simple_edge_swap,
     to_laplacian,
 )
 
@@ -51,4 +52,5 @@ __all__ = [
     "remove_vertices",
     "remap_labels",
     "remap_node_ids",
+    "simple_edge_swap",
 ]
