@@ -1167,7 +1167,11 @@ def simple_edge_swap(A: np.array):
     # print(edge_list)
     # print(row_inds)
     # print(col_inds)
-
+    # ensures there are at least two edges in the graph
+    row_inds, _ = np.nonzero(A)
+    if row_inds < 2:
+        print("graph has less than two edges")
+        return False
     # choose two indices at random
     rng = np.random.default_rng(np.random.randint(12345))
     num_edges = list(range(len(edge_list)))
@@ -1181,7 +1185,6 @@ def simple_edge_swap(A: np.array):
         x, y = edge_list[orig_inds[1]]
     else:
         y, x = edge_list[orig_inds[1]]
-    # print(u, v, x, y)
     """
     # ensures no initial loops
     if u == v or x == y:
