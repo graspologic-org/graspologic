@@ -1163,16 +1163,16 @@ def simple_edge_swap(A: np.array):
         for j in range(i, len(A)):
             if A[i, j] != 0:
                 edge_list.append([i, j])
-    #row_inds, col_inds = np.nonzero(A)
-    #print(edge_list)
-    #print(row_inds)
-    #print(col_inds)
+    # row_inds, col_inds = np.nonzero(A)
+    # print(edge_list)
+    # print(row_inds)
+    # print(col_inds)
 
     # choose two indices at random
     rng = np.random.default_rng(np.random.randint(12345))
     num_edges = list(range(len(edge_list)))
     orig_inds = rng.choice(num_edges, size=2, replace=False)
-    #print(orig_inds)
+    # print(orig_inds)
 
     # 50% chance of first type of edge swap, 50% for other
     u, v = edge_list[orig_inds[0]]
@@ -1181,12 +1181,13 @@ def simple_edge_swap(A: np.array):
         x, y = edge_list[orig_inds[1]]
     else:
         y, x = edge_list[orig_inds[1]]
-    #print(u, v, x, y)
-
+    # print(u, v, x, y)
+    """
     # ensures no initial loops
     if u == v or x == y:
         print("initial loops")
         return False
+    """
 
     # ensures no loops after swap (must be swap on 4 distinct nodes)
     if u == x or v == y:
