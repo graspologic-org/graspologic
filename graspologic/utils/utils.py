@@ -1244,6 +1244,66 @@ def simple_edge_swap_scipy(A: np.array):
     # convert to lil_matrix
     B = lil_matrix(A)
 
+    # ensures there are at least two edges in the undirected graph
+    if B.nnz < 4:
+        print("graph has less than two edges")
+        return False
+
+    # choose two indices at random
+    rng = np.random.default_rng(np.random.randint(12345))
+    num_edges = list(range(B.nnz))
+    orig_inds = rng.choice(num_edges, size=2, replace=False)
+    print(orig_inds)
+
+    C = B.nonzero()
+    u, v = C[0][orig_inds[0]], C[1][orig_inds[0]]
+    # 50% chance of first type of edge swap, 50% for other
+
+    choice = 0
+    if np.random.rand() < 0.5:
+        x, y = C[0][orig_inds[1]], C[1][orig_inds[1]]
+    else:
+        y, x = C[0][orig_inds[1]], C[1][orig_inds[0]]
+
+    # ensures no initial loops
+    if u == v or x == y:
+        print("initial loops")
+        return False
+
+    # ensures no loops after swap (must be swap on 4 distinct nodes)
+    if u == x or v == y:
+        print("loops after swap")
+        return False
+
+    # save edge values
+    w_uv = A[u, v]
+    w_xy = A[x, y]
+    w_ux = A[u, x]
+    w_vy = A[v, y]
+
+    # ensures no initial multigraphs
+    if w_uv > 1 or w_xy > 1:
+        print("initial multigraph")
+        return False
+
+    # ensures no multigraphs after swap
+    if w_ux >= 1 or w_vy >= 1:
+        print("multigraph after swap")
+        return False
+
+    # perform the swap
+    A[u, v] += -1
+    A[v, u] += -1
+    A[x, y] += -1
+    A[y, x] += -1
+
+    A[u, x] += 1
+    A[x, u] += 1
+    A[v, y] += 1
+    A[y, v] += 1
+
+    return True
+
 
 def suppress_common_warnings() -> None:
     """
