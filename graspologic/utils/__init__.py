@@ -25,6 +25,7 @@ from .utils import (
     remove_vertices,
     symmetrize,
     simple_edge_swap,
+    simple_edge_swap_scipy,
     to_laplacian,
 )
 
@@ -53,4 +54,5 @@ __all__ = [
     "remap_labels",
     "remap_node_ids",
     "simple_edge_swap",
+    "simple_edge_swap_scipy",
 ]
