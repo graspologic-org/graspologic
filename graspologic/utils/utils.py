@@ -1250,7 +1250,7 @@ def simple_edge_swap_scipy(A: np.array):
         return False
 
     # choose two indices at random
-    rng = np.random.default_rng(np.random.randint(12345))
+    rng = np.random.default_rng(np.random.randint(1234))
     num_edges = list(range(B.nnz))
     orig_inds = rng.choice(num_edges, size=2, replace=False)
     print(orig_inds)
@@ -1258,13 +1258,13 @@ def simple_edge_swap_scipy(A: np.array):
     C = B.nonzero()
     u, v = C[0][orig_inds[0]], C[1][orig_inds[0]]
     # 50% chance of first type of edge swap, 50% for other
-
+    print(u, v)
     choice = 0
     if np.random.rand() < 0.5:
         x, y = C[0][orig_inds[1]], C[1][orig_inds[1]]
     else:
-        y, x = C[0][orig_inds[1]], C[1][orig_inds[0]]
-
+        y, x = C[0][orig_inds[1]], C[1][orig_inds[1]]
+    print(x, y)
     # ensures no initial loops
     if u == v or x == y:
         print("initial loops")
