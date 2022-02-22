@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
+from tkinter import N
 import warnings
 from functools import reduce
 from pathlib import Path
@@ -13,7 +14,7 @@ import scipy.sparse
 import random
 from beartype import beartype
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
+from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr, lil_matrix
 from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
@@ -1159,17 +1160,28 @@ def simple_edge_swap(A: np.array):
 
     # make edge list from adjacency matrix
     edge_list = []
-    for i in range(len(A)):
-        for j in range(i, len(A)):
-            if A[i, j] != 0:
-                edge_list.append([i, j])
+    row_inds, col_inds = np.nonzero(A)
+    print(row_inds)
+    print(col_inds)
+    for m, n in zip(row_inds, col_inds):
+        edge_list.append([m, n])
+    print(edge_list)
+    """
+    if choose_sparse == False:
+        edge_list = []
+        for i in range(len(A)):
+            for j in range(i, len(A)):
+                if A[i, j] != 0:
+                    edge_list.append([i, j])
+    """
+
     # row_inds, col_inds = np.nonzero(A)
     # print(edge_list)
     # print(row_inds)
     # print(col_inds)
-    # ensures there are at least two edges in the graph
-    row_inds, _ = np.nonzero(A)
-    if len(row_inds) < 2:
+
+    # ensures there are at least two edges in the undirected graph
+    if len(edge_list) < 4:
         print("graph has less than two edges")
         return False
 
@@ -1186,12 +1198,11 @@ def simple_edge_swap(A: np.array):
         x, y = edge_list[orig_inds[1]]
     else:
         y, x = edge_list[orig_inds[1]]
-    """
+
     # ensures no initial loops
     if u == v or x == y:
         print("initial loops")
         return False
-    """
 
     # ensures no loops after swap (must be swap on 4 distinct nodes)
     if u == x or v == y:
@@ -1226,6 +1237,12 @@ def simple_edge_swap(A: np.array):
     A[y, v] += 1
 
     return True
+
+
+def simple_edge_swap_scipy(A: np.array):
+
+    # convert to lil_matrix
+    B = lil_matrix(A)
 
 
 def suppress_common_warnings() -> None:
