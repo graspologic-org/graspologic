@@ -26,6 +26,8 @@ from .utils import (
     symmetrize,
     simple_edge_swap_setup,
     scipy_edge_swap_setup,
+    simple_checks_swap,
+    scipy_checks_swap,
     to_laplacian,
 )
 
@@ -55,4 +57,6 @@ __all__ = [
     "remap_node_ids",
     "simple_edge_swap_setup",
     "scipy_edge_swap_setup",
+    "simple_checks_swap",
+    "scipy_checks_swap",
 ]
