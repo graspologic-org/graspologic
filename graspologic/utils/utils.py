@@ -1156,7 +1156,7 @@ def remap_node_ids(
     return graph_remapped, node_id_dict
 
 
-def simple_edge_swap(A: np.array):
+def simple_edge_swap_setup(A: np.array):
     # performs degree preserving edge swap on simple graph
 
     # make edge list from adjacency matrix
@@ -1170,7 +1170,6 @@ def simple_edge_swap(A: np.array):
 
     # choose two indices at random
     rng = np.random.default_rng(np.random.randint(12345))
-    num_edges = list(range(len(edge_list)))
     orig_inds = rng.choice(len(edge_list), size=2, replace=False)
 
     u, v = edge_list[orig_inds[0]]
@@ -1183,21 +1182,18 @@ def simple_edge_swap(A: np.array):
     else:
         y, x = edge_list[orig_inds[1]]
     """
-    # print("{}, {}".format(u, v))
-    # print("{}, {}".format(x, y))
-    return checks_swap(A, len(edge_list), u, v, x, y)
+
+    return A, len(edge_list), u, v, x, y
 
 
-def simple_edge_swap_scipy(A: np.array):
+def scipy_edge_swap_setup(A: np.array):
 
     # convert to lil_matrix
     B = lil_matrix(A)
 
     # choose two indices at random
     rng = np.random.default_rng(np.random.randint(1234))
-    num_edges = list(range(B.nnz))
     orig_inds = rng.choice(B.nnz, size=2, replace=False)
-    # print(orig_inds)
 
     C = B.nonzero()
     u, v = C[0][orig_inds[0]], C[1][orig_inds[0]]
@@ -1211,14 +1207,11 @@ def simple_edge_swap_scipy(A: np.array):
         y, x = C[0][orig_inds[1]], C[1][orig_inds[1]]
     """
 
-    # print(u, v)
-    # print(x, y)
-
-    return checks_swap(A, B.nnz, u, v, x, y)
+    return B, u, v, x, y
 
 
 @jit(nopython=True, nogil=True)
-def checks_swap(A: np.array, num_edges: int, u: int, v: int, x: int, y: int):
+def simple_checks_swap(A: np.array, num_edges: int, u: int, v: int, x: int, y: int):
 
     # checks if there are at 2 edges in the graph
     if num_edges < 2:
@@ -1252,17 +1245,53 @@ def checks_swap(A: np.array, num_edges: int, u: int, v: int, x: int, y: int):
         return A
 
     # perform the swap
-    A[u, v] += -1
-    # A[v, u] += -1
-    A[x, y] += -1
-    # A[y, x] += -1
+    A[u, v] = 0
+    A[x, y] = 0
 
-    A[u, x] += 1
-    # A[x, u] += 1
-    A[v, y] += 1
-    # A[y, v] += 1
-    # print("success!")
+    A[u, x] = 1
+    A[v, y] = 1
     return A
+
+
+def scipy_checks_swap(B: lil_matrix, u: int, v: int, x: int, y: int):
+    # checks if there are at 2 edges in the graph
+    if B.nnz < 2:
+        # print("graph has less than two edges")
+        return B
+
+    # ensures no initial loops
+    if u == v or x == y:
+        # print("initial loops")
+        return B
+
+    # ensures no loops after swap
+    if u == x or v == y:
+        # print("loops after swap")
+        return B
+
+    # save edge values
+    w_uv = B[u, v]
+    w_xy = B[x, y]
+    w_ux = B[u, x]
+    w_vy = B[v, y]
+
+    # ensures no initial multigraphs
+    if w_uv > 1 or w_xy > 1:
+        # print("initial multigraph")
+        return B
+
+    # ensures no multigraphs after swap
+    if w_ux >= 1 or w_vy >= 1:
+        # print("multigraph after swap")
+        return B
+
+    # perform the swap
+    B[u, v] = 0
+    B[x, y] = 0
+
+    B[u, x] = 1
+    B[v, y] = 1
+    return B
 
 
 def suppress_common_warnings() -> None:
