@@ -1156,35 +1156,105 @@ def remap_node_ids(
     return graph_remapped, node_id_dict
 
 
-def simple_edge_swap_setup(A: np.array):
+def edge_swap_setup(adjacency):
+    if type(adjacency) == np.array or type(adjacency) == np.ndarray:
+        edge_list = []
+        row_inds, col_inds = np.nonzero(adjacency)
+        for m, n in zip(row_inds, col_inds):
+            edge_list.append([m, n])
+
+        edge_list = np.array(edge_list)
+        return adjacency, edge_list
+
+    elif type(adjacency) == lil_matrix:
+        edge_list = np.array(adjacency.nonzero())
+        return adjacency, edge_list
+
+
+def checks_swap(adjacency, edge_list: np.array):
+    if type(adjacency) == np.array or type(adjacency) == np.ndarray:
+        adjacency, edge_list = simple_checks_swap(adjacency, edge_list)
+        return adjacency, edge_list
+
+    elif type(adjacency) == lil_matrix:
+        # checks if there are at 2 edges in the graph
+        if adjacency.nnz < 2:
+            # print("graph has less than two edges")
+            return adjacency, edge_list
+
+        # choose two indices at random
+        rng = np.random.default_rng(np.random.randint(1234))
+        orig_inds = rng.choice(adjacency.nnz, size=2, replace=False)
+
+        u, v = edge_list[0][orig_inds[0]], edge_list[1][orig_inds[0]]
+        x, y = edge_list[0][orig_inds[1]], edge_list[1][orig_inds[1]]
+        # ensures no initial loops
+        if u == v or x == y:
+            # print("initial loops")
+            return adjacency, edge_list
+
+        # ensures no loops after swap
+        if u == x or v == y:
+            # print("loops after swap")
+            return adjacency, edge_list
+
+        # save edge values
+        w_uv = adjacency[u, v]
+        w_xy = adjacency[x, y]
+        w_ux = adjacency[u, x]
+        w_vy = adjacency[v, y]
+
+        # ensures no initial multigraphs
+        if w_uv > 1 or w_xy > 1:
+            # print("initial multigraph")
+            return adjacency, edge_list
+
+        # ensures no multigraphs after swap
+        if w_ux >= 1 or w_vy >= 1:
+            # print("multigraph after swap")
+            return adjacency, edge_list
+
+        # perform the swap
+        adjacency[u, v] = 0
+        adjacency[x, y] = 0
+
+        adjacency[u, x] = 1
+        adjacency[v, y] = 1
+
+        edge_list[0][orig_inds[0]], edge_list[1][orig_inds[0]] = u, x
+        edge_list[0][orig_inds[1]], edge_list[1][orig_inds[1]] = v, y
+        return adjacency, edge_list
+
+
+def simple_edge_swap_setup(adjacency: np.array):
     # performs degree preserving edge swap on simple graph
 
     # make edge list from adjacency matrix
     edge_list = []
-    row_inds, col_inds = np.nonzero(A)
+    row_inds, col_inds = np.nonzero(adjacency)
     for m, n in zip(row_inds, col_inds):
         edge_list.append([m, n])
 
     edge_list = np.array(edge_list)
-    return A, edge_list
+    return adjacency, edge_list
 
 
-def scipy_edge_swap_setup(A: np.array):
+def scipy_edge_swap_setup(adjacency: np.array):
 
     # convert to lil_matrix
-    B = lil_matrix(A)
-    C = np.array(B.nonzero())
+    adjacency = lil_matrix(adjacency)
+    edge_list = np.array(adjacency.nonzero())
 
-    return B, C
+    return adjacency, edge_list
 
 
 @jit(nopython=True, nogil=True)
-def simple_checks_swap(A: np.array, edge_list: np.array):
+def simple_checks_swap(adjacency: np.array, edge_list: np.array):
 
     # checks if there are at 2 edges in the graph
     if len(edge_list) < 2:
         # print("graph has less than two edges")
-        return A, edge_list
+        return adjacency, edge_list
 
     # choose two indices at random
     seed(np.random.randint(12345))
@@ -1195,90 +1265,90 @@ def simple_checks_swap(A: np.array, edge_list: np.array):
     # ensures no initial loops
     if u == v or x == y:
         # print("initial loops")
-        return A, edge_list
+        return adjacency, edge_list
 
     # ensures no loops after swap (must be swap on 4 distinct nodes)
     if u == x or v == y:
         # print("loops after swap")
-        return A, edge_list
+        return adjacency, edge_list
 
     # save edge values
-    w_uv = A[u, v]
-    w_xy = A[x, y]
-    w_ux = A[u, x]
-    w_vy = A[v, y]
+    w_uv = adjacency[u, v]
+    w_xy = adjacency[x, y]
+    w_ux = adjacency[u, x]
+    w_vy = adjacency[v, y]
 
     # ensures no initial multigraphs
     if w_uv > 1 or w_xy > 1:
         # print("initial multigraph")
-        return A, edge_list
+        return adjacency, edge_list
 
     # ensures no multigraphs after swap
     if w_ux >= 1 or w_vy >= 1:
         # print("multigraph after swap")
-        return A, edge_list
+        return adjacency, edge_list
 
     # perform the swap
-    A[u, v] = 0
-    A[x, y] = 0
+    adjacency[u, v] = 0
+    adjacency[x, y] = 0
 
-    A[u, x] = 1
-    A[v, y] = 1
+    adjacency[u, x] = 1
+    adjacency[v, y] = 1
 
     # DO EDGE LIST STUFF
     edge_list[orig_inds[0]] = [u, x]
     edge_list[orig_inds[1]] = [v, y]
-    return A, edge_list
+    return adjacency, edge_list
 
 
-def scipy_checks_swap(B: lil_matrix, C: np.array):
+def scipy_checks_swap(adjacency: lil_matrix, edge_list: np.array):
     # checks if there are at 2 edges in the graph
-    if B.nnz < 2:
+    if adjacency.nnz < 2:
         # print("graph has less than two edges")
-        return B, C
+        return adjacency, edge_list
 
     # choose two indices at random
     rng = np.random.default_rng(np.random.randint(1234))
-    orig_inds = rng.choice(B.nnz, size=2, replace=False)
+    orig_inds = rng.choice(adjacency.nnz, size=2, replace=False)
 
-    u, v = C[0][orig_inds[0]], C[1][orig_inds[0]]
-    x, y = C[0][orig_inds[1]], C[1][orig_inds[1]]
+    u, v = edge_list[0][orig_inds[0]], edge_list[1][orig_inds[0]]
+    x, y = edge_list[0][orig_inds[1]], edge_list[1][orig_inds[1]]
     # ensures no initial loops
     if u == v or x == y:
         # print("initial loops")
-        return B, C
+        return adjacency, edge_list
 
     # ensures no loops after swap
     if u == x or v == y:
         # print("loops after swap")
-        return B, C
+        return adjacency, edge_list
 
     # save edge values
-    w_uv = B[u, v]
-    w_xy = B[x, y]
-    w_ux = B[u, x]
-    w_vy = B[v, y]
+    w_uv = adjacency[u, v]
+    w_xy = adjacency[x, y]
+    w_ux = adjacency[u, x]
+    w_vy = adjacency[v, y]
 
     # ensures no initial multigraphs
     if w_uv > 1 or w_xy > 1:
         # print("initial multigraph")
-        return B, C
+        return adjacency, edge_list
 
     # ensures no multigraphs after swap
     if w_ux >= 1 or w_vy >= 1:
         # print("multigraph after swap")
-        return B, C
+        return adjacency, edge_list
 
     # perform the swap
-    B[u, v] = 0
-    B[x, y] = 0
+    adjacency[u, v] = 0
+    adjacency[x, y] = 0
 
-    B[u, x] = 1
-    B[v, y] = 1
+    adjacency[u, x] = 1
+    adjacency[v, y] = 1
 
-    C[0][orig_inds[0]], C[1][orig_inds[0]] = u, x
-    C[0][orig_inds[1]], C[1][orig_inds[1]] = v, y
-    return B, C
+    edge_list[0][orig_inds[0]], edge_list[1][orig_inds[0]] = u, x
+    edge_list[0][orig_inds[1]], edge_list[1][orig_inds[1]] = v, y
+    return adjacency, edge_list
 
 
 @njit
