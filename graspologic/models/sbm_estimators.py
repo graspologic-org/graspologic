@@ -209,7 +209,7 @@ class SBMEstimator(BaseGraphEstimator):
 
         if not self.loops:
             graph = remove_loops(graph)
-        block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
+        block_p = _calculate_block_p(graph, block_inds, block_vert_inds, loops=self.loops)
 
         if not self.directed:
             block_p = symmetrize(block_p)
@@ -409,7 +409,7 @@ class DCSBMEstimator(BaseGraphEstimator):
 
         if not self.loops:
             graph = graph - np.diag(np.diag(graph))
-        block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
+        block_p = _calculate_block_p(graph, block_inds, block_vert_inds, loops=self.loops)
 
         out_degree = np.count_nonzero(graph, axis=1).astype(float)
         in_degree = np.count_nonzero(graph, axis=0).astype(float)
@@ -484,12 +484,14 @@ def _calculate_block_p(
     block_inds: Collection[int],
     block_vert_inds: List[int],
     return_counts: bool = False,
+    loops: bool = False,
 ) -> np.ndarray:
     """
     graph : input n x n graph
     block_inds : list of length n_communities
     block_vert_inds : list of list, for each block index, gives every node in that block
     return_counts : whether to calculate counts rather than proportions
+    loops : whether self loops are possible in the graph
     """
 
     n_blocks = len(block_inds)
@@ -502,6 +504,10 @@ def _calculate_block_p(
         from_inds = block_vert_inds[from_block]
         to_inds = block_vert_inds[to_block]
         block = graph[from_inds, :][:, to_inds]
+        # if a block is from a community to itself, self loops are possible, so remove
+        # them from the computation to avoid underbias
+        if from_block == to_block and not loops:
+            block = block[~np.eye(block.shape[0], dtype=bool)]
         if return_counts:
             p = np.count_nonzero(block)
         else:
