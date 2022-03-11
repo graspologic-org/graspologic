@@ -5,6 +5,7 @@ from .base import BaseGraphEstimator
 from .er import DCEREstimator, EREstimator
 from .rdpg import RDPGEstimator
 from .sbm_estimators import DCSBMEstimator, SBMEstimator
+from .siem import SIEMEStimator
 
 __all__ = [
     "BaseGraphEstimator",
@@ -13,4 +14,5 @@ __all__ = [
     "SBMEstimator",
     "DCSBMEstimator",
     "RDPGEstimator",
+    "SIEMEstimator",
 ]
