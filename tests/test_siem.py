@@ -57,6 +57,7 @@ def diag_edges(n):
                 edge_clust[i, j] = 2
     return edge_clust
 
+
 class Test_SBM_Fit(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -71,62 +72,41 @@ class Test_SBM_Fit(unittest.TestCase):
         model = SIEMEstimator(directed=False)
         clust_mtx = model.edgeclust_from_commvec(self.y)
         model.fit(self.A, clust_mtx)
-        
-        self.assertTrue(
-            np.allclose(model.clust_p_["(1, 1)"], 0.5, atol=0.03)
-        )
-        self.assertTrue(
-            np.allclose(model.clust_p_["(1, 2)"], 0.3, atol=0.03)
-        )
-        self.assertTrue(
-            np.allclose(model.clust_p_["(2, 2)"], 0.5, atol=0.03)
-        )
 
-        self.assertTrue(
-            "(2, 1)" not in model.clust_p_.keys()
-        )
+        self.assertTrue(np.allclose(model.clust_p_["(1, 1)"], 0.5, atol=0.03))
+        self.assertTrue(np.allclose(model.clust_p_["(1, 2)"], 0.3, atol=0.03))
+        self.assertTrue(np.allclose(model.clust_p_["(2, 2)"], 0.5, atol=0.03))
 
-        self.assertTrue(
-            len(model.clust_p_.keys()) == 3
-        )
+        self.assertTrue("(2, 1)" not in model.clust_p_.keys())
+
+        self.assertTrue(len(model.clust_p_.keys()) == 3)
 
     def test_dir_case(self):
-        model = SIEMEstimator(directed=True)        
+        model = SIEMEstimator(directed=True)
         clust_mtx = model.edgeclust_from_commvec(self.y)
         model.fit(self.A, clust_mtx)
-        
-        self.assertTrue(
-            np.allclose(model.clust_p_["(1, 1)"], 0.5, atol=0.02)
-        )
-        self.assertTrue(
-            np.allclose(model.clust_p_["(1, 2)"], 0.3, atol=0.02)
-        )
-        self.assertTrue(
-            np.allclose(model.clust_p_["(2, 1)"], 0.3, atol=0.02)
-        )
-        self.assertTrue(
-            np.allclose(model.clust_p_["(2, 2)"], 0.5, atol=0.02)
-        )
-        self.assertTrue(
-            model.clust_p_["(1, 2)"] != model.clust_p_["(2, 1)"]
-        )
 
-        self.assertTrue(
-            len(model.clust_p_.keys()) == 4
-        )
-    
+        self.assertTrue(np.allclose(model.clust_p_["(1, 1)"], 0.5, atol=0.02))
+        self.assertTrue(np.allclose(model.clust_p_["(1, 2)"], 0.3, atol=0.02))
+        self.assertTrue(np.allclose(model.clust_p_["(2, 1)"], 0.3, atol=0.02))
+        self.assertTrue(np.allclose(model.clust_p_["(2, 2)"], 0.5, atol=0.02))
+        self.assertTrue(model.clust_p_["(1, 2)"] != model.clust_p_["(2, 1)"])
+
+        self.assertTrue(len(model.clust_p_.keys()) == 4)
+
     def test_sbm_siem_equivalence(self):
         model_siem = SIEMEstimator(directed=True, loops=False)
         clust_mtx = model_siem.edgeclust_from_commvec(self.y)
         model_siem.fit(self.A, clust_mtx)
         model_sbm = SBMEstimator(directed=True, loops=False)
         model_sbm.fit(self.A, self.y)
-        for i in range(1,2):
-            for j in range(1,2):
+        for i in range(1, 2):
+            for j in range(1, 2):
                 clustname = "({:d}, {:d})".format(i, j)
                 self.assertTrue(
-                    np.equal(model_siem.clust_p_[clustname], 
-                             model_sbm.block_p_[i-1, j-1])
+                    np.equal(
+                        model_siem.clust_p_[clustname], model_sbm.block_p_[i - 1, j - 1]
+                    )
                 )
 
 
@@ -200,7 +180,7 @@ class Test_Model_Fit(unittest.TestCase):
         model = deepcopy(self.model)
         model.fit(graph, self.modular_edges)
         # fitting twice causes warning
-        #with self.assertWarns(Warning):
+        # with self.assertWarns(Warning):
         #    model_double = deepcopy(model)
         #    model_double.fit(graph, self.modular_edges)
         pass
@@ -226,7 +206,8 @@ class Test_Model_Summary(unittest.TestCase):
         model = deepcopy(self.model)
         model.fit(graph, self.modular_edges)
         msum = model.summarize(
-            {"loc": np.mean, "scale": np.std}, {"loc": {}, "scale": {}},
+            {"loc": np.mean, "scale": np.std},
+            {"loc": {}, "scale": {}},
         )
         self.assertTrue(np.allclose(msum[1.0]["loc"], 0, atol=0.02))
         self.assertTrue(np.allclose(msum[1.0]["scale"], 1, atol=0.05))
