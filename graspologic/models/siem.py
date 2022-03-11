@@ -21,10 +21,11 @@ from ..utils import (
 from .base import BaseGraphEstimator, _calculate_p
 from scipy.stats import mannwhitneyu
 
+
 class SIEMEstimator(BaseGraphEstimator):
     """
     Stochastic Independent Edge Model
-    
+
     Parameters
     ----------
     directed : bool, default = True
@@ -35,17 +36,17 @@ class SIEMEstimator(BaseGraphEstimator):
 
     loops : bool, default = True
     Whether the network should be interpreted to have loops (or not).
-    If the network is taken to be loopless, the diagonal of the 
+    If the network is taken to be loopless, the diagonal of the
     ``edge_clust`` will be ignored when computing properties about
     the network edge clusters.
 
     Attributes
     ----------
     model : dict
-    
+
     a dictionary of community names to a dictionary of edge indices and weights.
 
-    K : int 
+    K : int
     the number of unique communities in the network.
 
     n_vertices : int
@@ -57,7 +58,7 @@ class SIEMEstimator(BaseGraphEstimator):
     """
 
     def __init__(
-        self, 
+        self,
         directed: bool = True,
         loops: bool = False,
     ):
@@ -68,7 +69,7 @@ class SIEMEstimator(BaseGraphEstimator):
 
     def fit(
         self,
-        graph: GraphRepresentation, 
+        graph: GraphRepresentation,
         edge_clust: np.ndarray,
     ) -> None:
         """
@@ -88,7 +89,7 @@ class SIEMEstimator(BaseGraphEstimator):
         self.n_vertices_ = graph.shape[0]
         if self._has_been_fit:
             warnings.warn("A model has already been fit. Overwriting previous model...")
-        
+
         if not np.ndarray.all(np.isfinite(graph)):
             raise ValueError("`graph` has non-finite entries.")
         if graph.shape[0] != graph.shape[1]:
@@ -110,11 +111,13 @@ class SIEMEstimator(BaseGraphEstimator):
             np.fill_diagonal(bool_mtx, False)
 
         self.clust_names_ = np.unique(edge_clust[bool_mtx])
-        
+
         siem = {
-            x: {"edges": np.where(np.logical_and(edge_clust == x, bool_mtx)), 
+            x: {
+                "edges": np.where(np.logical_and(edge_clust == x, bool_mtx)),
                 "weights": graph[np.logical_and(edge_clust == x, bool_mtx)],
-                "prob": _calculate_p(graph[np.logical_and(edge_clust == x, bool_mtx)])}
+                "prob": _calculate_p(graph[np.logical_and(edge_clust == x, bool_mtx)]),
+            }
             for x in self.clust_names_
         }
         self.model = siem
@@ -125,10 +128,7 @@ class SIEMEstimator(BaseGraphEstimator):
         self._has_been_fit = True
         return
 
-    def edgeclust_from_commvec(
-        self,
-        y : np.ndarray
-    ) -> np.ndarray:
+    def edgeclust_from_commvec(self, y: np.ndarray) -> np.ndarray:
         """
         A function which takes a vector of labels for an SBM and converts it
         to an analogous SIEM edge cluster matrix.
@@ -137,7 +137,7 @@ class SIEMEstimator(BaseGraphEstimator):
         ----------
         y : array_like, length n_vertices
         the labels vector for the nodes in the graph, with K unique entries.
-        
+
         loops : bool, default=False
         whether the network has loops.
 
@@ -159,13 +159,13 @@ class SIEMEstimator(BaseGraphEstimator):
         return edge_clusts_
 
     def summarize(
-        self, 
-        wts : dict, 
-        wtargs : dict,
+        self,
+        wts: dict,
+        wtargs: dict,
     ) -> dict:
         """
         Allows users to compute summary statistics for each edge community in the model.
-        
+
         Parameters
         ----------
         wts: dict of Callable
@@ -217,15 +217,15 @@ class SIEMEstimator(BaseGraphEstimator):
         return summary
 
     def compare(
-        self, 
-        c1 : str, 
-        c2 : str, 
-        method : Callable = mannwhitneyu, 
-        methodargs : dict = None,
+        self,
+        c1: str,
+        c2: str,
+        method: Callable = mannwhitneyu,
+        methodargs: dict = None,
     ):
         """
         A function for comparing two edge communities for a difference after a model has been fit.
-        
+
         Parameters
         ----------
         c1: str
@@ -243,7 +243,7 @@ class SIEMEstimator(BaseGraphEstimator):
 
         Returns
         -------
-        The comparison method applied to the two communities. The return type depends on the 
+        The comparison method applied to the two communities. The return type depends on the
         comparison method which is applied.
         """
         if not self._has_been_fit:
@@ -266,10 +266,11 @@ class SIEMEstimator(BaseGraphEstimator):
             self.model[c1]["weights"], self.model[c2]["weights"], **methodargs
         )
 
+
 def _clust_to_full(
-    edge_clust : np.ndarray,
-    edge_p_ : dict,
-    clust_names : list,
+    edge_clust: np.ndarray,
+    edge_p_: dict,
+    clust_names: list,
 ) -> np.ndarray:
     """
     "blows up" a k element dictionary to a probability matrix
