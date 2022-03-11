@@ -24,11 +24,6 @@ from scipy.stats import mannwhitneyu
 class SIEMEstimator(BaseGraphEstimator):
     """
     Stochastic Independent Edge Model
-
-    There is no argument for ``loops`` because the diagonal is assumed
-    to be ommitted from the ``edge_clust`` if loops are not relevant. 
-    There is no argument for ``directed`` because the lower triangle is
-    assumed to be omitted if the network is undirected.
     
     Parameters
     ----------
@@ -37,6 +32,12 @@ class SIEMEstimator(BaseGraphEstimator):
     If the network is taken to be directed, *only* the upper triangle
     of the ``edge_clust`` will be used in computation of the network's
     properties.
+
+    loops : bool, default = True
+    Whether the network should be interpreted to have loops (or not).
+    If the network is taken to be loopless, the diagonal of the 
+    ``edge_clust`` will be ignored when computing properties about
+    the network edge clusters.
 
     Attributes
     ----------
@@ -57,7 +58,8 @@ class SIEMEstimator(BaseGraphEstimator):
 
     def __init__(
         self, 
-        directed: bool = True
+        directed: bool = True,
+        loops: bool = False,
     ):
         super().__init__(directed=directed, loops=loops)
         self.model = {}
@@ -67,7 +69,7 @@ class SIEMEstimator(BaseGraphEstimator):
     def fit(
         self,
         graph: GraphRepresentation, 
-        edge_clust: array_like,
+        edge_clust: np.ndarray,
     ) -> None:
         """
         Fits an SIEM to a graph.
@@ -82,6 +84,8 @@ class SIEMEstimator(BaseGraphEstimator):
             of `graph`.
         """
         graph = import_graph(graph)
+        if self._has_been_fit:
+            warnings.warn("A model has already been fit. Overwriting previous model...")
         
         self.n_vertices = graph.shape[0]
         if not np.ndarray.all(np.isfinite(graph)):
@@ -98,30 +102,31 @@ class SIEMEstimator(BaseGraphEstimator):
                 graph.shape[0], edge_clust.shape[0]
             )
             raise ValueError(msg)
-        bool_mtx = np.ones((n_vertices, n_vertices), dtype=bool)
+        bool_mtx = np.ones((self.n_vertices, self.n_vertices), dtype=bool)
         if not self.directed:
             bool_mtx[np.tril_indices(n_vertices, k=0)] = False
+        if not self.loops:
+            np.fill_diagonal(bool_mtx, False)
 
         self.cluster_names = np.unique(edge_clust)
+        self.cluster_names = self.cluster_names[~np.isnan(self.cluster_names)]
         siem = {
-            x: {"edges": np.where(edge_clust == x & bool_mtx), 
-                "weights": graph[edge_clust == x & bool_mtx],
-                "prob": np.mean(graph[edge_clust == x] != 0 & bool_mtx)}
+            x: {"edges": np.where(np.logical_and(edge_clust == x, bool_mtx)), 
+                "weights": graph[np.logical_and(edge_clust == x, bool_mtx)],
+                "prob": np.mean(graph[np.logical_and(edge_clust == x, bool_mtx)] != 0)}
             for x in self.cluster_names
         }
         self.model = siem
         self.k_clusters = len(self.model.keys())
         self.clust_p_ = {x: siem[x]["prob"] for x in siem.keys()}
         self.edge_clust = edge_clust
-        self.p_mat_ = _clust_to_full(self.edge_clust, self.clust_p)
-        if self._has_been_fit:
-            warnings.warn("A model has already been fit. Overwriting previous model...")
+        self.p_mat_ = _clust_to_full(self.edge_clust, self.clust_p_, self.cluster_names)
         self._has_been_fit = True
         return
 
     def edgeclust_from_commvec(
         self,
-        y : array_like,
+        y : np.ndarray,
         loops : bool = False,
     ) -> np.ndarray:
         """
@@ -149,7 +154,7 @@ class SIEMEstimator(BaseGraphEstimator):
             clustname = "({:s}, {:s})".format(clust[0], clust[1])
             edge_clusts_[y == clust[0], y == clust[1]] = clustname
         if not loops:
-            np.diag(edge_clusts_) = np.nan
+            np.fill_diagonal(edge_clusts_, np.nan)
         return edge_clusts_
 
     def summarize(
@@ -263,6 +268,7 @@ class SIEMEstimator(BaseGraphEstimator):
 def _clust_to_full(
     edge_clust : np.ndarray,
     edge_p_ : dict,
+    clust_names : list,
 ) -> np.ndarray:
     """
     "blows up" a k element dictionary to a probability matrix
