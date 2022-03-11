@@ -643,6 +643,7 @@ def sbm(
         return A, labels
     return A
 
+
 def siem(
     edge_clust,
     p,
@@ -653,9 +654,9 @@ def siem(
     return_labels=False,
 ):
     """
-    Samples a graph from the structured independent edge model (SIEM) 
+    Samples a graph from the structured independent edge model (SIEM)
     SIEM produces a graph with specified communities, in which each community can
-    have different sizes and edge probabilities. 
+    have different sizes and edge probabilities.
     Read more in the :ref:`tutorials <simulations_tutorials>`
     Parameters
     ----------
@@ -685,7 +686,7 @@ def siem(
         for edge cluster i. Default of None results in a binary graph
     wtargs: dictionary or array-like, shape (k_clusters)
         if Wt is an object, ``wtargs`` corresponds to the trailing arguments
-        to pass to the weight function. If ``wt`` is an array-like, ``wtargs[i]`` 
+        to pass to the weight function. If ``wt`` is an array-like, ``wtargs[i]``
         corresponds to trailing arguments to pass to ``wt[i]``.
     return_labels: boolean, optional (default=True)
         whether to return the cluster labels of each edge.
@@ -823,6 +824,7 @@ def siem(
     if return_labels:
         return (A, edge_clust)
     return A
+
 
 def rdpg(
     X: np.ndarray,
