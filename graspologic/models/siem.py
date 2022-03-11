@@ -24,17 +24,19 @@ from scipy.stats import mannwhitneyu
 class SIEMEstimator(BaseGraphEstimator):
     """
     Stochastic Independent Edge Model
+
+    There is no argument for ``loops`` because the diagonal is assumed
+    to be ommitted from the ``edge_clust`` if loops are not relevant. 
+    There is no argument for ``directed`` because the lower triangle is
+    assumed to be omitted if the network is undirected.
     
     Parameters
     ----------
-    directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt, 
-        this determines whether to force symmetry upon the block probability matrix fit
-        for the SBM. It will also determine whether graphs sampled from the model are 
-        directed. 
-    loops : boolean, optional (default=False)
-        Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in 
-        the graph where a node connects to itself. 
+    directed : bool, default = True
+    Whether the network should be interpreted to be directed (or not).
+    If the network is taken to be directed, *only* the upper triangle
+    of the ``edge_clust`` will be used in computation of the network's
+    properties.
 
     Attributes
     ----------
@@ -55,8 +57,7 @@ class SIEMEstimator(BaseGraphEstimator):
 
     def __init__(
         self, 
-        directed: bool = True, 
-        loops: bool =False
+        directed: bool = True
     ):
         super().__init__(directed=directed, loops=loops)
         self.model = {}
@@ -66,7 +67,7 @@ class SIEMEstimator(BaseGraphEstimator):
     def fit(
         self,
         graph: GraphRepresentation, 
-        edge_comm: array_like,
+        edge_clust: array_like,
     ) -> None:
         """
         Fits an SIEM to a graph.
@@ -76,39 +77,80 @@ class SIEMEstimator(BaseGraphEstimator):
         graph : array_like or networkx.Graph
             Input graph to fit
 
-        edge_comm : array_like, shape graph.shape
+        edge_clust : array_like, shape graph.shape
             A matrix giving the community assignments for each edge within the adjacency matrix
             of `graph`.
         """
         graph = import_graph(graph)
-
+        
         self.n_vertices = graph.shape[0]
         if not np.ndarray.all(np.isfinite(graph)):
             raise ValueError("`graph` has non-finite entries.")
         if graph.shape[0] != graph.shape[1]:
             raise ValueError("`graph` is not a square adjacency matrix.")
-        if edge_comm.shape[0] != edge_comm.shape[1]:
-            raise ValueError("`edge_comm` is not a square matrix.")
-        if not graph.shape == edge_comm.shape:
+        if edge_clust.shape[0] != edge_clust.shape[1]:
+            raise ValueError("`edge_clust` is not a square matrix.")
+        if not graph.shape == edge_clust.shape:
             msg = """
             Your edge communities do not have the same number of vertices as the graph.
             Graph has %d vertices; edge community has %d vertices.
             """.format(
-                graph.shape[0], edge_comm.shape[0]
+                graph.shape[0], edge_clust.shape[0]
             )
             raise ValueError(msg)
+        bool_mtx = np.ones((n_vertices, n_vertices), dtype=bool)
+        if not self.directed:
+            bool_mtx[np.tril_indices(n_vertices, k=0)] = False
 
+        self.cluster_names = np.unique(edge_clust)
         siem = {
-            x: {"edges": np.where(edge_comm == x), "weights": graph[edge_comm == x]}
-            for x in np.unique(edge_comm)
+            x: {"edges": np.where(edge_clust == x & bool_mtx), 
+                "weights": graph[edge_clust == x & bool_mtx],
+                "prob": np.mean(graph[edge_clust == x] != 0 & bool_mtx)}
+            for x in self.cluster_names
         }
         self.model = siem
-        self.K = len(self.model.keys())
-        self.graph = graph
+        self.k_clusters = len(self.model.keys())
+        self.clust_p_ = {x: siem[x]["prob"] for x in siem.keys()}
+        self.edge_clust = edge_clust
+        self.p_mat_ = _clust_to_full(self.edge_clust, self.clust_p)
         if self._has_been_fit:
             warnings.warn("A model has already been fit. Overwriting previous model...")
         self._has_been_fit = True
         return
+
+    def edgeclust_from_commvec(
+        self,
+        y : array_like,
+        loops : bool = False,
+    ) -> np.ndarray:
+        """
+        A function which takes a vector of labels for an SBM and converts it
+        to an analogous SIEM edge cluster matrix.
+
+        Parameters
+        ----------
+        y : array_like, length n_vertices
+        the labels vector for the nodes in the graph, with K unique entries.
+        
+        loops : bool, default=False
+        whether the network has loops.
+
+        Returns
+        -------
+        edge_clusts_ : np.ndarray, shape (n_vertices, n_vertices)
+        a matrix which indicates the assigned cluster name for each node
+        in the network. The entries will be strings ``(comm1, comm2)``, which are
+        from the cartesian product of the unique entries in ``y``.
+        """
+        edge_clusts_ = np.ndarray((len(y), len(y)), dtype=object)
+        edge_clust_names = cartesian_product(y, y)
+        for clust in edge_clust_names:
+            clustname = "({:s}, {:s})".format(clust[0], clust[1])
+            edge_clusts_[y == clust[0], y == clust[1]] = clustname
+        if not loops:
+            np.diag(edge_clusts_) = np.nan
+        return edge_clusts_
 
     def summarize(
         self, 
@@ -159,12 +201,12 @@ class SIEMEstimator(BaseGraphEstimator):
         wt_mod = {key: (wt, wtargs[key]) for key, wt in wts.items()}
 
         summary = {}
-        for edge_comm in self.model.keys():
-            summary[edge_comm] = {}
+        for edge_clust in self.model.keys():
+            summary[edge_clust] = {}
             for wt_name, (wt, wtarg) in wt_mod.items():
                 # and store the summary statistic for this community
-                summary[edge_comm][wt_name] = wt(
-                    self.model[edge_comm]["weights"], **wtarg
+                summary[edge_clust][wt_name] = wt(
+                    self.model[edge_clust]["weights"], **wtarg
                 )
         return summary
 
@@ -218,3 +260,19 @@ class SIEMEstimator(BaseGraphEstimator):
             self.model[c1]["weights"], self.model[c2]["weights"], **methodargs
         )
 
+def _clust_to_full(
+    edge_clust : np.ndarray,
+    edge_p_ : dict,
+) -> np.ndarray:
+    """
+    "blows up" a k element dictionary to a probability matrix
+
+    edge_clust : np.ndarray of shape (n_vertices, n_vertices)
+    with k_clusters unique entries
+    edge_p_ : dict
+    with k_clusters keys
+    """
+    p_mat = np.zeros(edge_clust.shape)
+    for x in np.unique(edge_clust):
+        p_mat[edge_clust == x] = edge_p_[x]
+    return p_mat
