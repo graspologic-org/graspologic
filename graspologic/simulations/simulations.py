@@ -644,9 +644,8 @@ def sbm(
     return A
 
 def siem(
-    n,
-    p,
     edge_clust,
+    p,
     directed=False,
     loops=False,
     wt=None,
@@ -660,8 +659,12 @@ def siem(
     Read more in the :ref:`tutorials <simulations_tutorials>`
     Parameters
     ----------
-    n: int
-        Number of vertices
+    edge_clust: array-like shape (n, n)
+        a square 2d numpy array or square numpy matrix of the edge cluster each edge is assigned to.
+        All edges should be assigned a single cluster, taking values in the integers ``1:k_clusters``
+        where ``k_clusters`` is the total number of unique clusters. Note that ``edge_clust`` is expected to respect succeeding
+        options passed in; particularly, directedness and loopiness. If loops is False, the entire diagonal of
+        ``edge_clust`` should be 0.
     p: float or list of floats (k_clusters)
         Probability of an edge existing within the corresponding edge clusters.
         If a float, a probability, or a float greater than or equal to zero and less than or equal to 1.
@@ -669,12 +672,6 @@ def siem(
         If a list of floats of length K, each entry ``p[i]`` should be a float greater than or equal to zero
         and less than or equal to 1, where ``p[i]`` indicates the probability of an edge existing in the ith edge
         cluster.
-    edge_clust: array-like shape (n, n)
-        a square 2d numpy array or square numpy matrix of the edge cluster each edge is assigned to.
-        All edges should be assigned a single cluster, taking values in the integers ``1:k_clusters``
-        where ``k_clusters`` is the total number of unique clusters. Note that ``edge_clust`` is expected to respect succeeding
-        options passed in; particularly, directedness and loopiness. If loops is False, the entire diagonal of
-        ``edge_clust`` should be 0.
     directed: boolean, optional (default=False)
         If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
         matrix will be asymmetric.
@@ -689,7 +686,7 @@ def siem(
     wtargs: dictionary or array-like, shape (k_clusters)
         if Wt is an object, ``wtargs`` corresponds to the trailing arguments
         to pass to the weight function. If ``wt`` is an array-like, ``wtargs[i]`` 
-        corresponds to trailing arguments to pass to ``Wt[i]``.
+        corresponds to trailing arguments to pass to ``wt[i]``.
     return_labels: boolean, optional (default=True)
         whether to return the cluster labels of each edge.
     Returns
@@ -708,10 +705,6 @@ def siem(
         raise TypeError(
             "`directed` should be a boolean. You passed %s.".format(type(directed))
         )
-    # Check n
-    if not isinstance(n, (int)):
-        msg = "n must be a int, not {}.".format(type(n))
-        raise TypeError(msg)
     # Check edge_clust
     if not isinstance(edge_clust, np.ndarray):
         msg = "edge_clust must be a square numpy array or matrix."
