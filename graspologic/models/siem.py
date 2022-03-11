@@ -84,10 +84,11 @@ class SIEMEstimator(BaseGraphEstimator):
             of `graph`.
         """
         graph = import_graph(graph)
+
+        self.n_vertices_ = graph.shape[0]
         if self._has_been_fit:
             warnings.warn("A model has already been fit. Overwriting previous model...")
         
-        self.n_vertices = graph.shape[0]
         if not np.ndarray.all(np.isfinite(graph)):
             raise ValueError("`graph` has non-finite entries.")
         if graph.shape[0] != graph.shape[1]:
@@ -102,32 +103,31 @@ class SIEMEstimator(BaseGraphEstimator):
                 graph.shape[0], edge_clust.shape[0]
             )
             raise ValueError(msg)
-        bool_mtx = np.ones((self.n_vertices, self.n_vertices), dtype=bool)
+        bool_mtx = np.ones((self.n_vertices_, self.n_vertices_), dtype=bool)
         if not self.directed:
-            bool_mtx[np.tril_indices(n_vertices, k=0)] = False
+            bool_mtx[np.tril_indices(self.n_vertices_, k=0)] = False
         if not self.loops:
             np.fill_diagonal(bool_mtx, False)
 
-        self.cluster_names = np.unique(edge_clust)
-        self.cluster_names = self.cluster_names[~np.isnan(self.cluster_names)]
+        self.clust_names_ = np.unique(edge_clust[bool_mtx])
+        
         siem = {
             x: {"edges": np.where(np.logical_and(edge_clust == x, bool_mtx)), 
                 "weights": graph[np.logical_and(edge_clust == x, bool_mtx)],
-                "prob": np.mean(graph[np.logical_and(edge_clust == x, bool_mtx)] != 0)}
-            for x in self.cluster_names
+                "prob": _calculate_p(graph[np.logical_and(edge_clust == x, bool_mtx)])}
+            for x in self.clust_names_
         }
         self.model = siem
         self.k_clusters = len(self.model.keys())
         self.clust_p_ = {x: siem[x]["prob"] for x in siem.keys()}
         self.edge_clust = edge_clust
-        self.p_mat_ = _clust_to_full(self.edge_clust, self.clust_p_, self.cluster_names)
+        self.p_mat_ = _clust_to_full(self.edge_clust, self.clust_p_, self.clust_names_)
         self._has_been_fit = True
         return
 
     def edgeclust_from_commvec(
         self,
-        y : np.ndarray,
-        loops : bool = False,
+        y : np.ndarray
     ) -> np.ndarray:
         """
         A function which takes a vector of labels for an SBM and converts it
@@ -148,12 +148,13 @@ class SIEMEstimator(BaseGraphEstimator):
         in the network. The entries will be strings ``(comm1, comm2)``, which are
         from the cartesian product of the unique entries in ``y``.
         """
-        edge_clusts_ = np.ndarray((len(y), len(y)), dtype=object)
+        edge_clusts_ = np.ndarray((len(y), len(y)), dtype="<U22")
         edge_clust_names = cartesian_product(y, y)
         for clust in edge_clust_names:
-            clustname = "({:s}, {:s})".format(clust[0], clust[1])
-            edge_clusts_[y == clust[0], y == clust[1]] = clustname
-        if not loops:
+            clustname = "({:s}, {:s})".format(str(clust[0]), str(clust[1]))
+            submtx = np.outer(np.array(y) == clust[0], np.array(y) == clust[1])
+            edge_clusts_[submtx] = clustname
+        if not self.loops:
             np.fill_diagonal(edge_clusts_, np.nan)
         return edge_clusts_
 
@@ -279,6 +280,6 @@ def _clust_to_full(
     with k_clusters keys
     """
     p_mat = np.zeros(edge_clust.shape)
-    for x in np.unique(edge_clust):
+    for x in clust_names:
         p_mat[edge_clust == x] = edge_p_[x]
     return p_mat

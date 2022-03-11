@@ -1,6 +1,6 @@
 import unittest
-from graspologic.simulations import siem
-from graspologic.models import SIEMEstimator
+from graspologic.simulations import siem, sbm
+from graspologic.models import SIEMEstimator, SBMEstimator
 import numpy as np
 from copy import deepcopy
 
@@ -56,6 +56,78 @@ def diag_edges(n):
             else:
                 edge_comm[i, j] = 2
     return edge_comm
+
+class Test_SBM_Fit(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.n = 100
+        cls.ns = [50, 50]
+        cls.block_p = [[0.5, 0.3], [0.3, 0.5]]
+        np.random.seed(1)
+        cls.A = sbm(cls.ns, cls.block_p, directed=True, loops=False)
+        cls.y = [1 for i in range(0, cls.ns[0])] + [2 for i in range(0, cls.ns[1])]
+
+    def test_ud_case(self):
+        model = SIEMEstimator(directed=False)
+        clust_mtx = model.edgeclust_from_commvec(self.y)
+        model.fit(self.A, clust_mtx)
+        
+        self.assertTrue(
+            np.allclose(model.clust_p_["(1, 1)"], 0.5, atol=0.03)
+        )
+        self.assertTrue(
+            np.allclose(model.clust_p_["(1, 2)"], 0.3, atol=0.03)
+        )
+        self.assertTrue(
+            np.allclose(model.clust_p_["(2, 2)"], 0.5, atol=0.03)
+        )
+
+        self.assertTrue(
+            "(2, 1)" not in model.clust_p_.keys()
+        )
+
+        self.assertTrue(
+            len(model.clust_p_.keys()) == 3
+        )
+
+    def test_dir_case(self):
+        model = SIEMEstimator(directed=True)        
+        clust_mtx = model.edgeclust_from_commvec(self.y)
+        model.fit(self.A, clust_mtx)
+        
+        self.assertTrue(
+            np.allclose(model.clust_p_["(1, 1)"], 0.5, atol=0.02)
+        )
+        self.assertTrue(
+            np.allclose(model.clust_p_["(1, 2)"], 0.3, atol=0.02)
+        )
+        self.assertTrue(
+            np.allclose(model.clust_p_["(2, 1)"], 0.3, atol=0.02)
+        )
+        self.assertTrue(
+            np.allclose(model.clust_p_["(2, 2)"], 0.5, atol=0.02)
+        )
+        self.assertTrue(
+            model.clust_p_["(1, 2)"] != model.clust_p_["(2, 1)"]
+        )
+
+        self.assertTrue(
+            len(model.clust_p_.keys()) == 4
+        )
+    
+    def test_sbm_siem_equivalence(self):
+        model_siem = SIEMEstimator(directed=True, loops=False)
+        clust_mtx = model_siem.edgeclust_from_commvec(self.y)
+        model_siem.fit(self.A, clust_mtx)
+        model_sbm = SBMEstimator(directed=True, loops=False)
+        model_sbm.fit(self.A, self.y)
+        for i in range(1,2):
+            for j in range(1,2):
+                clustname = "({:d}, {:d})".format(i, j)
+                self.assertTrue(
+                    np.equal(model_siem.clust_p_[clustname], 
+                             model_sbm.block_p_[i-1, j-1])
+                )
 
 
 class Test_Model_Fit(unittest.TestCase):
