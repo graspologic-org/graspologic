@@ -209,7 +209,9 @@ class SBMEstimator(BaseGraphEstimator):
 
         if not self.loops:
             graph = remove_loops(graph)
-        block_p = _calculate_block_p(graph, block_inds, block_vert_inds, loops=self.loops)
+        block_p = _calculate_block_p(
+            graph, block_inds, block_vert_inds, loops=self.loops
+        )
 
         if not self.directed:
             block_p = symmetrize(block_p)
@@ -409,7 +411,9 @@ class DCSBMEstimator(BaseGraphEstimator):
 
         if not self.loops:
             graph = graph - np.diag(np.diag(graph))
-        block_p = _calculate_block_p(graph, block_inds, block_vert_inds, loops=self.loops)
+        block_p = _calculate_block_p(
+            graph, block_inds, block_vert_inds, loops=self.loops
+        )
 
         out_degree = np.count_nonzero(graph, axis=1).astype(float)
         in_degree = np.count_nonzero(graph, axis=0).astype(float)
