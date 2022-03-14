@@ -203,7 +203,7 @@ class Test_Model_Summary(unittest.TestCase):
             wt=[np.random.normal, np.random.normal],
             wtargs=[{"loc": 0, "scale": 1}, {"loc": 2, "scale": 1}],
         )
-        
+
         model = deepcopy(self.model)
         model.fit(graph, self.modular_edges)
         msum = model.summarize(
