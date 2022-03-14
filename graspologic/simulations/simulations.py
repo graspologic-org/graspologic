@@ -367,11 +367,11 @@ def sbm(
     wt: object or array-like, shape (n_communities, n_communities)
         if ``wt`` is an object, a weight function to use globally over
         the sbm for assigning weights. 1 indicates to produce a binary
-        graph. If ``wt`` is an array-like, a weight function for each of
-        the edge communities. ``wt[i, j]`` corresponds to the weight function
-        between communities i and j. If the entry is a function, should
-        accept an argument for size. An entry of ``wt[i, j] = 1`` will produce a
-        binary subgraph over the i, j community.
+        graph. If ``wt`` is an array-like, a weight function for each pair of node
+        communities. ``wt[k, l]`` corresponds to the weight function
+        between communities k and l. If the entry is a function, should
+        accept an argument for size. An entry of ``wt[k, l] = 1`` will produce a
+        binary subgraph over the k, l community pair.
 
     wtargs: dictionary or array-like, shape (n_communities, n_communities)
         if ``wt`` is an object, ``wtargs`` corresponds to the trailing arguments
@@ -645,17 +645,17 @@ def sbm(
 
 
 def siem(
-    edge_clust,
-    p,
-    directed=False,
-    loops=False,
-    wt=None,
-    wtargs=None,
-    return_labels=False,
-):
+    edge_clust: np.ndarray,
+    p: object,
+    directed: bool = False,
+    loops: bool = False,
+    wt: Union[int, np.ndarray, List[int]] = 1,
+    wtargs: Optional[Union[np.ndarray, Dict[str, Any]]] = None,
+    return_labels: bool = False,
+) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Samples a graph from the structured independent edge model (SIEM)
-    SIEM produces a graph with specified communities, in which each community can
+    SIEM produces a graph with specified clusters, in which each cluster can
     have different sizes and edge probabilities.
     Read more in the :ref:`tutorials <simulations_tutorials>`
     Parameters
@@ -681,13 +681,17 @@ def siem(
         are sampled in the diagonal.
     wt: object or array-like, shape (k_clusters)
         if ``wt`` is an object, a weight function to use globally over
-        the siem for assigning weights. If ``wt`` is a list, a weight function for each of
-        the edge clusters to use for connection strengths ``wt[i]`` corresponds to the weight function
-        for edge cluster i. Default of None results in a binary graph
+        the siem for assigning weights. 1 indicates to produce a binary
+        graph. If ``wt`` is an array-like, a weight function for each of
+        the edge clusters. ``wt[k]`` corresponds to the weight function
+        for edge cluster k. If the entry is a function, should
+        accept an argument for size. An entry of ``wt[k] = 1`` will produce a
+        binary subgraph over the k edge cluster.
+
     wtargs: dictionary or array-like, shape (k_clusters)
-        if Wt is an object, ``wtargs`` corresponds to the trailing arguments
-        to pass to the weight function. If ``wt`` is an array-like, ``wtargs[i]``
-        corresponds to trailing arguments to pass to ``wt[i]``.
+        if ``wt`` is an object, ``wtargs`` corresponds to the trailing arguments
+        to pass to the weight function. If Wt is an array-like, ``wtargs[k]``
+        corresponds to trailing arguments to pass to ``wt[k]``.
     return_labels: boolean, optional (default=True)
         whether to return the cluster labels of each edge.
     Returns
@@ -710,17 +714,13 @@ def siem(
     if not isinstance(edge_clust, np.ndarray):
         msg = "edge_clust must be a square numpy array or matrix."
         raise TypeError(msg)
-    try:
-        if np.any(edge_clust != edge_clust.astype(int)):
-            msg = "edge_clust must contain only natural numbers. Contains non-integers."
-            raise ValueError(msg)
-    except ValueError as err:
-        err.message = (
-            "edge_clust must contain only natural numbers. Contains non-numerics."
-        )
-        raise
+
+    if np.any(edge_clust != edge_clust.astype(int)):
+        msg = "edge_clust must contain only natural numbers. Contains non-integers."
+        raise ValueError(msg)
+
     edge_clust = edge_clust.astype(int)
-    K = edge_clust.max()  # number of communities
+    K = edge_clust.max()  # number of clusters
     if loops:
         if edge_clust.min() != 1:
             msg = "`edge_clust` should all be numbered sequentially from 1:K. The minimum is not 1."
@@ -735,7 +735,7 @@ def siem(
             raise ValueError(msg)
         if np.any(np.diagonal(edge_clust) != 0):
             msg = """You requested a loopless graph, but assigned a diagonal element to a 
-            non-zero community. All diagonal elements of `edge_clust` should be zero if
+            non-zero cluster. All diagonal elements of `edge_clust` should be zero if
             `loops` is False."""
             raise ValueError(msg)
         if len(np.unique(edge_clust)) != K + 1:
@@ -770,54 +770,49 @@ def siem(
             msg = "Values in p must be in between 0 and 1."
             raise ValueError(msg)
         elif len(p) != K:
-            msg = "# of Probabilities in `p` and # of Communities in `edge_clust` Don't match up."
+            msg = "# of Probabilities in `p` and # of clusters in `edge_clust` Don't match up."
             raise ValueError(msg)
+
     # Check wt and wtargs
-    if (wt is not None) and (wtargs is None):
-        raise TypeError(
-            "wtargs should be a dictionary or a list of dictionaries. It is of type None."
-        )
-    if (wt is not None) and (wtargs is not None):
-        if callable(wt):
-            # extend the function to size of K
-            wt = np.full(K, wt, dtype=object)
-            if isinstance(wtargs, dict):
-                wtargs = np.full(K, wtargs, dtype=object)
-            else:
-                for wtarg in wtargs:
-                    if not isinstance(wtarg, dict):
-                        raise TypeError(
-                            "wtarg should be a dictionary or a list of dictionaries."
-                        )
-        elif isinstance(wt, list):
-            if all(callable(x) for x in wt):
-                # if not object, check dimensions
-                if not isinstance(wtargs, list):
-                    raise TypeError(
-                        "Since wt is a list, wtargs should be a list of dictionaries."
-                    )
-                if len(wt) != K:
-                    msg = "wt must have size K, not {}".format(len(wt))
-                    raise ValueError(msg)
-                if len(wtargs) != K:
-                    msg = "wtargs must have size K, not {}".format(len(wtargs))
-                    raise ValueError(msg)
-            else:
-                msg = "wt must contain all callable objects."
-                raise TypeError(msg)
-        else:
-            msg = "wt must be a callable object or list of callable objects"
+    if not np.issubdtype(type(wt), np.number) and not callable(wt):
+        if not isinstance(wt, (list, np.ndarray)):
+            msg = "wt must be a numeric, list, or np.array, not {}".format(type(wt))
             raise TypeError(msg)
+        if not isinstance(wtargs, (list, np.ndarray)):
+            msg = "wtargs must be a numeric, list, or np.array, not {}".format(
+                type(wtargs)
+            )
+            raise TypeError(msg)
+
+        wt = np.array(wt, dtype=object)
+        wtargs = np.array(wtargs, dtype=object)
+        # if not number, check dimensions
+        if wt.shape != (K):
+            msg = "wt must have size len(n), not {}".format(wt.shape)
+            raise ValueError(msg)
+        if wtargs.shape != (K):
+            msg = "wtargs must have size len(n), not {}".format(wtargs.shape)
+            raise ValueError(msg)
+        # check if each element is a function
+        for element in wt.ravel():
+            if not callable(element):
+                msg = "{} is not a callable function.".format(element)
+                raise TypeError(msg)
+    else:
+        wt = np.full(p.shape, wt, dtype=object)
+        wtargs = np.full(p.shape, wtargs, dtype=object)
 
     # End Checks, begin simulation
     A = np.zeros((n, n))
     for i in range(1, K + 1):
         edge_clust_i = edge_clust == i
         A[np.where(edge_clust_i)] = bernoulli.rvs(p[i - 1], size=edge_clust_i.sum())
-
-        if wt is not None:
-            for k, l in zip(*np.where(edge_clust_i)):
-                A[k, l] = A[k, l] * wt[i - 1](**wtargs[i - 1])
+        block_wt = wt[i - 1]
+        block_wtargs = wtargs[i - 1]
+        if type(block_wt) is not int:
+            edge_clust_nz = np.logical_and(edge_clust_i, A > 0)
+            ewts = block_wt(size=edge_clust_nz.sum(), **block_wtargs)
+            A[edge_clust_nz] = ewts
     # if not directed, just look at upper triangle and duplicate
     if not directed:
         A = symmetrize(A, method="triu")

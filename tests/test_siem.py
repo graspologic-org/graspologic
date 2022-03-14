@@ -125,18 +125,18 @@ class Test_Model_Fit(unittest.TestCase):
         model = deepcopy(self.model)
         model.fit(graph, self.modular_edges)
         # check that weights saved are appropriate
-        self.assertTrue(set(model.model.keys()) == set([1.0, 2.0]))
+        self.assertTrue(set(model.model_.keys()) == set([1.0, 2.0]))
         self.assertTrue(
-            np.allclose((model.model[1.0]["weights"]).mean(), p[0], atol=0.02)
+            np.allclose((model.model_[1.0]["weights"]).mean(), p[0], atol=0.02)
         )
         self.assertTrue(
-            np.allclose((model.model[2.0]["weights"]).mean(), p[1], atol=0.02)
+            np.allclose((model.model_[2.0]["weights"]).mean(), p[1], atol=0.02)
         )
         # check that the edges indexed for the particular communities are appropriate
-        self.assertTrue(model.model[1.0]["edges"]) == np.where(
+        self.assertTrue(model.model_[1.0]["edges"]) == np.where(
             graph[self.modular_edges == 1]
         )
-        self.assertTrue(model.model[2.0]["edges"]) == np.where(
+        self.assertTrue(model.model_[2.0]["edges"]) == np.where(
             graph[self.modular_edges == 2]
         )
         pass
@@ -203,15 +203,16 @@ class Test_Model_Summary(unittest.TestCase):
             wt=[np.random.normal, np.random.normal],
             wtargs=[{"loc": 0, "scale": 1}, {"loc": 2, "scale": 1}],
         )
+        
         model = deepcopy(self.model)
         model.fit(graph, self.modular_edges)
         msum = model.summarize(
             {"loc": np.mean, "scale": np.std},
             {"loc": {}, "scale": {}},
         )
-        self.assertTrue(np.allclose(msum[1.0]["loc"], 0, atol=0.02))
+        self.assertTrue(np.allclose(msum[1.0]["loc"], 0, atol=0.03))
         self.assertTrue(np.allclose(msum[1.0]["scale"], 1, atol=0.05))
-        self.assertTrue(np.allclose(msum[2.0]["loc"], 2, atol=0.02))
+        self.assertTrue(np.allclose(msum[2.0]["loc"], 2, atol=0.03))
         self.assertTrue(np.allclose(msum[2.0]["scale"], 1, atol=0.05))
         pass
 

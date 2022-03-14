@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 from typing import Any, Collection, Optional
+import warnings
 
 import numpy as np
 from sklearn.utils import check_X_y
@@ -42,14 +43,34 @@ class SIEMEstimator(BaseGraphEstimator):
 
     Attributes
     ----------
-    model : dict
+    model_ : dict
+        a dictionary of cluster names to a dictionary of edge indices, weights,
+        and probabilities. Edge indices of edges in the cluster are in key ``"edges"``,
+        weights are in ``"weights"``, and probabilities are in ``"probs"``.
 
-    a dictionary of community names to a dictionary of edge indices and weights.
+    p_mat_ : np.ndarray, shape (n_verts, n_verts)
+        Probability matrix :math:`P` for the fit model, from which graphs could be
+        sampled.
 
-    K : int
-    the number of unique communities in the network.
+    edge_clust_ : np.ndarray, shape (n_verts, n_verts)
+        Edge cluster assignment matrix :math:`T` for the fit model, where entry :math:`T_{ij}`
+        indicates the cluster assignment of edge :math:`(i,j)`.
 
-    n_vertices : int
+    clust_names_ : list
+        The names of each sequential cluster.
+
+    clust_p_ : np.ndarray, shape (k_clusters,)
+        The block probability vector :math:`\vec{p}`, where the element :math:`p_k`
+        represents the probability of an edge which is assigned to block :math:`k`.
+
+    k_clusters_ : int
+        the number of unique clusters in the network.
+
+    has_been_fit_ : bool
+        a boolean indicating whether the model has been fit yet. if the model has not been fit,
+        many post-hoc summary statistics cannot be run.
+
+    n_verts_ : int
     the number of vertices in the graph.
 
     See also
@@ -63,15 +84,13 @@ class SIEMEstimator(BaseGraphEstimator):
         loops: bool = False,
     ):
         super().__init__(directed=directed, loops=loops)
-        self.model = {}
-        self.K = None
-        self._has_been_fit = False
+        self._has_been_fit_ = False  # type: bool
 
     def fit(
         self,
         graph: GraphRepresentation,
-        edge_clust: np.ndarray,
-    ) -> None:
+        y: Optional[Any] = None,
+    ) -> BaseGraphEstimator:
         """
         Fits an SIEM to a graph.
 
@@ -80,53 +99,57 @@ class SIEMEstimator(BaseGraphEstimator):
         graph : array_like or networkx.Graph
             Input graph to fit
 
-        edge_clust : array_like, shape graph.shape
-            A matrix giving the community assignments for each edge within the adjacency matrix
-            of `graph`.
+        y : array_like, shape graph.shape
+            A matrix giving the cluster assignments for each edge within the adjacency matrix
+            of `graph`. Each entry :math:`y_{ij}` indicates the the edge cluster assignment of
+            edge :math:`(i,j)`.
         """
         graph = import_graph(graph)
 
-        self.n_vertices_ = graph.shape[0]
-        if self._has_been_fit:
+        self.n_verts_ = graph.shape[0]
+        if self._has_been_fit_:
             warnings.warn("A model has already been fit. Overwriting previous model...")
-
+        if y is None:
+            raise ValueError(
+                "`y` must be supplied. Unsupervised SIEM does not exist (yet!)."
+            )
         if not np.ndarray.all(np.isfinite(graph)):
             raise ValueError("`graph` has non-finite entries.")
         if graph.shape[0] != graph.shape[1]:
             raise ValueError("`graph` is not a square adjacency matrix.")
-        if edge_clust.shape[0] != edge_clust.shape[1]:
-            raise ValueError("`edge_clust` is not a square matrix.")
-        if not graph.shape == edge_clust.shape:
+        if y.shape[0] != y.shape[1]:
+            raise ValueError("`y` is not a square matrix.")
+        if not graph.shape == y.shape:
             msg = """
-            Your edge communities do not have the same number of vertices as the graph.
-            Graph has %d vertices; edge community has %d vertices.
+            Your edge clusters do not have the same number of vertices as the graph.
+            Graph has {:d} vertices; edge clusters have {:d} vertices.
             """.format(
-                graph.shape[0], edge_clust.shape[0]
+                graph.shape[0], y.shape[0]
             )
             raise ValueError(msg)
-        bool_mtx = np.ones((self.n_vertices_, self.n_vertices_), dtype=bool)
+        bool_mtx = np.ones((self.n_verts_, self.n_verts_), dtype=bool)
         if not self.directed:
-            bool_mtx[np.tril_indices(self.n_vertices_, k=0)] = False
+            bool_mtx[np.tril_indices(self.n_verts_, k=0)] = False
         if not self.loops:
             np.fill_diagonal(bool_mtx, False)
 
-        self.clust_names_ = np.unique(edge_clust[bool_mtx])
+        self.clust_names_ = np.unique(y[bool_mtx])
 
         siem = {
             x: {
-                "edges": np.where(np.logical_and(edge_clust == x, bool_mtx)),
-                "weights": graph[np.logical_and(edge_clust == x, bool_mtx)],
-                "prob": _calculate_p(graph[np.logical_and(edge_clust == x, bool_mtx)]),
+                "edges": np.where(np.logical_and(y == x, bool_mtx)),
+                "weights": graph[np.logical_and(y == x, bool_mtx)],
+                "prob": _calculate_p(graph[np.logical_and(y == x, bool_mtx)]),
             }
             for x in self.clust_names_
         }
-        self.model = siem
-        self.k_clusters = len(self.model.keys())
+        self.model_ = siem
+        self.k_clusters_ = len(self.model_.keys())
         self.clust_p_ = {x: siem[x]["prob"] for x in siem.keys()}
-        self.edge_clust = edge_clust
-        self.p_mat_ = _clust_to_full(self.edge_clust, self.clust_p_, self.clust_names_)
-        self._has_been_fit = True
-        return
+        self.edge_clust_ = y
+        self.p_mat_ = _clust_to_full(self.edge_clust_, self.clust_p_, self.clust_names_)
+        self._has_been_fit_ = True
+        return self
 
     def edgeclust_from_commvec(self, y: np.ndarray) -> np.ndarray:
         """
@@ -135,20 +158,20 @@ class SIEMEstimator(BaseGraphEstimator):
 
         Parameters
         ----------
-        y : array_like, length n_vertices
-        the labels vector for the nodes in the graph, with K unique entries.
-
+        y : array_like, length graph.shape[0], optional
+            Categorical labels for the block assignments of the graph, with K
+            unique entries.
         loops : bool, default=False
-        whether the network has loops.
+            whether the network has loops.
 
         Returns
         -------
         edge_clusts_ : np.ndarray, shape (n_vertices, n_vertices)
-        a matrix which indicates the assigned cluster name for each node
-        in the network. The entries will be strings ``(comm1, comm2)``, which are
-        from the cartesian product of the unique entries in ``y``.
+            a matrix which indicates the assigned cluster name for each node
+            in the network. The entries will be strings ``(comm1, comm2)``, which are
+            from the cartesian product of the unique entries in ``y``.
         """
-        edge_clusts_ = np.ndarray((len(y), len(y)), dtype="<U22")
+        edge_clusts_ = np.ndarray((len(y), len(y)), dtype="<U22")  # type: np.ndarray
         edge_clust_names = cartesian_product(y, y)
         for clust in edge_clust_names:
             clustname = "({:s}, {:s})".format(str(clust[0]), str(clust[1]))
@@ -162,30 +185,30 @@ class SIEMEstimator(BaseGraphEstimator):
         self,
         wts: dict,
         wtargs: dict,
-    ) -> dict:
+    ) -> Dict[object, object]:
         """
-        Allows users to compute summary statistics for each edge community in the model.
+        Allows users to compute summary statistics for each edge cluster in the model.
 
         Parameters
         ----------
-        wts: dict of Callable
-            A dictionary of summary statistics to compute for each edge community within the model.
+        wts : dict of Callable
+            A dictionary of summary statistics to compute for each edge cluster within the model.
             The keys should be the name of the summary statistic, and each entry should be a callable
             function accepting an unnamed argument for a vector or 1-d array as the first argument.
             Keys are names of the summary statistic, and values are the callable objects themselves.
-        wtargs: dict of dictionaries
+        wtargs : dict of dict
             A dictionary of dictionaries, where keys correspond to the names of summary statistics,
             and values are dictionaries of the trailing, named, parameters desired for the summary function. The
             keys of `wts` and `wtargs` should be identical.
 
         Returns
         -------
-        summary: dictionary of summary statistics
-            A dictionary where keys are edge community names, and values are a dictionary of summary statistics
-            associated with each community.
+        summary : dict of object
+            A dictionary where keys are edge cluster names, and values are a dictionary of summary statistics
+            associated with each cluster.
         """
         # check that model has been fit
-        if not self._has_been_fit:
+        if not self._has_been_fit_:
             raise UnboundLocalError(
                 "You must fit a model with `fit()` before summarizing the model."
             )
@@ -206,13 +229,13 @@ class SIEMEstimator(BaseGraphEstimator):
         # equivalent of zipping the two dictionaries together
         wt_mod = {key: (wt, wtargs[key]) for key, wt in wts.items()}
 
-        summary = {}
-        for edge_clust in self.model.keys():
+        summary = {}  # type: Dict
+        for edge_clust in self.model_.keys():
             summary[edge_clust] = {}
             for wt_name, (wt, wtarg) in wt_mod.items():
-                # and store the summary statistic for this community
+                # and store the summary statistic for this cluster
                 summary[edge_clust][wt_name] = wt(
-                    self.model[edge_clust]["weights"], **wtarg
+                    self.model_[edge_clust]["weights"], **wtarg
                 )
         return summary
 
@@ -221,18 +244,18 @@ class SIEMEstimator(BaseGraphEstimator):
         c1: str,
         c2: str,
         method: Callable = mannwhitneyu,
-        methodargs: dict = None,
-    ):
+        methodargs: dict = {},
+    ) -> object:
         """
-        A function for comparing two edge communities for a difference after a model has been fit.
+        A function for comparing two edge clusters for a difference after a model has been fit.
 
         Parameters
         ----------
         c1: str
-            A key in the model, from `self.model.keys()`, to be treated as the first entry
+            A key in the model, from `self.model_.keys()`, to be treated as the first entry
             to the comparison method.
         c2: str
-            A key in the model, from `self.model.keys()`, to be treated as the second
+            A key in the model, from `self.model_.keys()`, to be treated as the second
             entry to the comparison method.
         method: Callable
             A callable object to use for comparing the two objects. Should accept two unnamed
@@ -243,16 +266,16 @@ class SIEMEstimator(BaseGraphEstimator):
 
         Returns
         -------
-        The comparison method applied to the two communities. The return type depends on the
+        The comparison method applied to the two clusters. The return type depends on the
         comparison method which is applied.
         """
-        if not self._has_been_fit:
+        if not self._has_been_fit_:
             raise UnboundLocalError(
-                "You must fit a model with `fit()` before comparing communities in the model."
+                "You must fit a model with `fit()` before comparing clusters in the model."
             )
-        if not c1 in self.model.keys():
+        if not c1 in self.model_.keys():
             raise ValueError("`c1` is not a key for the model.")
-        if not c2 in self.model.keys():
+        if not c2 in self.model_.keys():
             raise ValueError("`c2` is not a key for the model.")
         if not callable(method):
             raise TypeError("`method` should be a callable object.")
@@ -263,7 +286,7 @@ class SIEMEstimator(BaseGraphEstimator):
                 )
             )
         return method(
-            self.model[c1]["weights"], self.model[c2]["weights"], **methodargs
+            self.model_[c1]["weights"], self.model_[c2]["weights"], **methodargs
         )
 
 
