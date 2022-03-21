@@ -7,6 +7,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
+from scipy.sparse import lil_matrix
 
 from graspologic.models import (
     DCEREstimator,
@@ -14,6 +15,7 @@ from graspologic.models import (
     EREstimator,
     RDPGEstimator,
     SBMEstimator,
+    _do_some_edge_swaps,
 )
 from graspologic.simulations import er_np, sample_edges, sbm
 from graspologic.utils import cartesian_product, is_symmetric
@@ -588,6 +590,19 @@ def _test_score(estimator, p_mat, graph):
     lik = np.log(lik)
     assert_allclose(lik, estimator.score_samples(graph))
     assert np.sum(lik) == estimator.score(graph)
+
+
+class TestEdgeSwaps(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.A = er_np(100, 0.5)
+        cls.B = lil_matrix(cls.A)
+
+    def test_numpy_edge_swap(self):
+        _do_some_edge_swaps(self.A)
+
+    def test_scipy_edge_swap(self):
+        _do_some_edge_swaps(self.B)
 
 
 def hardy_weinberg(theta):

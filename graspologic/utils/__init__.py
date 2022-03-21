@@ -24,12 +24,6 @@ from .utils import (
     remove_loops,
     remove_vertices,
     symmetrize,
-    edge_swap_setup,
-    checks_swap,
-    simple_edge_swap_setup,
-    scipy_edge_swap_setup,
-    numpy_checks_swap,
-    scipy_checks_swap,
     to_laplacian,
 )
 
@@ -57,10 +51,4 @@ __all__ = [
     "remove_vertices",
     "remap_labels",
     "remap_node_ids",
-    "edge_swap_setup",
-    "checks_swap",
-    "simple_edge_swap_setup",
-    "scipy_edge_swap_setup",
-    "numpy_checks_swap",
-    "scipy_checks_swap",
 ]

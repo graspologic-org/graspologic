@@ -700,21 +700,5 @@ class TestRemapNodeIds(unittest.TestCase):
         self._assert_graphs_are_equivalent(graph, new_graph, new_node_ids)
 
 
-class TestEdgeSwaps(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.A = np.random.randint(0, 2, (8, 8))
-
-    def test_simple_edge_swap(self):
-        B, num_edges, u, v, x, y = gus.simple_edge_swap_setup(self.A)
-        for i in range(10):
-            gus.simple_checks_swap(B, num_edges, u, v, x, y)
-
-    def test_scipy_edge_swap(self):
-        B, u, v, x, y = gus.scipy_edge_swap_setup(self.A)
-        for i in range(10):
-            gus.scipy_checks_swap(B, u, v, x, y)
-
-
 if __name__ == "__main__":
     unittest.main()
