@@ -349,11 +349,11 @@ class SeedlessProcrustes(BaseAlign):
         m, _ = Y.shape
 
         if self.init == "2d":
-            P_matrices = np.zeros((2 ** d, n, m))
-            Q_matrices = np.zeros((2 ** d, d, d))
-            objectives = np.zeros(2 ** d)
+            P_matrices = np.zeros((2**d, n, m))
+            Q_matrices = np.zeros((2**d, d, d))
+            objectives = np.zeros(2**d)
             # try 2^d different initializations
-            for i in range(2 ** d):
+            for i in range(2**d):
                 initial_Q = _sign_flip_matrix_from_int(i, d)
                 P_matrices[i], Q_matrices[i] = P, Q = self._iterative_ot(
                     X, Y, initial_Q

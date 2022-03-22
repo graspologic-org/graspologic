@@ -63,8 +63,15 @@ autosummary_generate = True
 
 # -- sphinx.ext.autodoc
 autoclass_content = "both"
-autodoc_default_flags = ["members", "inherited-members"]
-autodoc_member_order = "bysource"  # default is alphabetical
+autodoc_default_options = {
+    'members': True,
+    'inherited-members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+}
+autodoc_class_signature = "separated"
+autodoc_typehints = "description"
 
 # -- sphinx.ext.intersphinx
 intersphinx_mapping = {
@@ -75,7 +82,7 @@ intersphinx_mapping = {
     "networkx": ("https://networkx.org/documentation/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
-    "python": ("https://docs.python.org/3", None),
+    "python": ("https://docs.python.org/3.9", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "seaborn": ("https://seaborn.pydata.org", None),
     "sklearn": ("https://scikit-learn.org/dev", None),

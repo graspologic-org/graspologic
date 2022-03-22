@@ -107,7 +107,7 @@ def omnibus_embedding_pairwise(
 
     Raises
     ------
-    beartype.roar.BeartypeCallHintPepParamException if parameters do not match type hints
+    beartype.roar.BeartypeCallHintParamViolation if parameters do not match type hints
     ValueError if values are not within appropriate ranges or allowed values
 
     See Also
@@ -150,7 +150,7 @@ def omnibus_embedding_pairwise(
     check_argument(svd_solver_iterations >= 1, "svd_solver_iterations must be positive")
 
     check_argument(
-        svd_seed is None or 0 <= svd_seed <= 2 ** 32 - 1,
+        svd_seed is None or 0 <= svd_seed <= 2**32 - 1,
         "svd_seed must be a nonnegative, 32-bit integer",
     )
 

@@ -17,3 +17,4 @@ Gaussian Mixture Models Clustering
 Hierarchical Clustering
 ----------------------------------
 .. autoclass:: DivisiveCluster
+    :no-inherited-members:

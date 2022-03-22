@@ -212,12 +212,12 @@ def _learn_embeddings(
     # Documentation - https://radimrehurek.com/gensim/models/word2vec.html
     model = Word2Vec(
         walks,
-        size=dimensions,
+        vector_size=dimensions,
         window=window_size,
         min_count=0,
         sg=1,  # Training algorithm: 1 for skip-gram; otherwise CBOW
         workers=workers,
-        iter=iterations,
+        epochs=iterations,
         seed=random_seed,
     )
 

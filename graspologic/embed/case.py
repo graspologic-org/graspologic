@@ -202,7 +202,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
 
         # just use the ratio of the leading eigenvalues for the
         # tuning parameter, or the closest value in its possible range.
-        self.alpha_ = np.float_(L_top / YYt_top)
+        self.alpha_ = L_top / YYt_top
 
         return self
 

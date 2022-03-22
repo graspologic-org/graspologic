@@ -612,7 +612,3 @@ def hardy_weinberg(theta):
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
     return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
-
-
-if __name__ == "__main__":
-    unittest.main()

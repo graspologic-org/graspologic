@@ -73,7 +73,7 @@ class SBMEstimator(BaseGraphEstimator):
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is input,
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are
         directed.
@@ -226,7 +226,7 @@ class SBMEstimator(BaseGraphEstimator):
         n_blocks: int = self.block_p_.shape[0]
         n_parameters = 0
         if self.directed:
-            n_parameters += n_blocks ** 2
+            n_parameters += n_blocks**2
         else:
             n_parameters += int(n_blocks * (n_blocks + 1) / 2)
         if hasattr(self, "vertex_assignments_"):
@@ -266,7 +266,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is input,
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are
         directed.
@@ -445,7 +445,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         n_blocks: int = self.block_p_.shape[0]
         n_parameters = 0
         if self.directed:
-            n_parameters += n_blocks ** 2  # B matrix
+            n_parameters += n_blocks**2  # B matrix
         else:
             n_parameters += int(n_blocks * (n_blocks + 1) / 2)  # Undirected B matrix
         if hasattr(self, "vertex_assignments_"):

@@ -88,7 +88,7 @@ def latent_position_test(
         Supply -1 to use all cores available.
 
     Returns
-    ----------
+    -------
     stat : float
         The observed difference between the embedded positions of the two input graphs
         after an alignment (the type of alignment depends on ``test_case``)
@@ -232,8 +232,8 @@ def _difference_norm(
             X1 = X1 / np.linalg.norm(X1, ord="fro")
             X2 = X2 / np.linalg.norm(X2, ord="fro")
         elif test_case == "diagonal-rotation":
-            normX1 = np.sum(X1 ** 2, axis=1)
-            normX2 = np.sum(X2 ** 2, axis=1)
+            normX1 = np.sum(X1**2, axis=1)
+            normX2 = np.sum(X2**2, axis=1)
             normX1[normX1 <= 1e-15] = 1
             normX2[normX2 <= 1e-15] = 1
             X1 = X1 / np.sqrt(normX1[:, None])
