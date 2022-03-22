@@ -1,24 +1,28 @@
 import numpy as np
 import numba as nb
 from scipy.sparse import lil_matrix
+from graspologic.types import Tuple
+from typing import Union
 
 
 class EdgeSwap:
-    def __init__(self, adjacency):
+    def __init__(self, adjacency: Union[np.ndarray, lil_matrix]):
         self.adjacency = adjacency
 
-    def _do_setup(self):
+    def _do_setup(self) -> np.ndarray:
         row_inds, col_inds = np.nonzero(self.adjacency)
         edge_list = np.stack((row_inds, col_inds)).T
-        return self.adjacency, edge_list
+        return edge_list
 
-    def _true_edge_swap(self, edge_list):
+    def _true_edge_swap(self, edge_list: np.ndarray) -> np.ndarray:
         self.adjacency, edge_list = self._edge_swap(self.adjacency, edge_list)
-        return self.adjacency, edge_list
+        return edge_list
 
     @staticmethod
     @nb.jit
-    def _edge_swap(adjacency, edge_list):
+    def _edge_swap(
+        adjacency: Union[np.ndarray, lil_matrix], edge_list: np.ndarray
+    ) -> Tuple[Union[np.ndarray, lil_matrix], np.ndarray]:
         # checks if there are at 2 edges in the graph
         if len(edge_list) < 2:
             # print("graph has less than two edges")
@@ -69,10 +73,12 @@ class EdgeSwap:
         edge_list[orig_inds[1]] = [v, y]
         return adjacency, edge_list
 
-    def _do_some_edge_swaps(self, n_swaps=1):
-        self.adjacency, edge_list = self._do_setup()
+    def _do_some_edge_swaps(
+        self, n_swaps: int = 1
+    ) -> Tuple[Union[np.ndarray, lil_matrix], np.ndarray]:
+        edge_list = self._do_setup()
 
         for swap in range(n_swaps):
-            self.adjacency, edge_list = self._true_edge_swap(edge_list)
+            edge_list = self._true_edge_swap(edge_list)
 
         return self.adjacency, edge_list
