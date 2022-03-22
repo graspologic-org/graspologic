@@ -15,7 +15,7 @@ from graspologic.models import (
     EREstimator,
     RDPGEstimator,
     SBMEstimator,
-    _do_some_edge_swaps,
+    EdgeSwap,
 )
 from graspologic.simulations import er_np, sample_edges, sbm
 from graspologic.utils import cartesian_product, is_symmetric
@@ -599,10 +599,12 @@ class TestEdgeSwaps(unittest.TestCase):
         cls.B = lil_matrix(cls.A)
 
     def test_numpy_edge_swap(self):
-        _do_some_edge_swaps(self.A)
+        Swapper = EdgeSwap(self.A)
+        Swapper._do_some_edge_swaps(self.A)
 
     def test_scipy_edge_swap(self):
-        _do_some_edge_swaps(self.B)
+        Swapper = EdgeSwap(self.B)
+        Swapper._do_some_edge_swaps(self.B)
 
 
 def hardy_weinberg(theta):
