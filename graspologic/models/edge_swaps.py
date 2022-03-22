@@ -7,15 +7,6 @@ class EdgeSwap:
     def __init__(self, adjacency):
         self.adjacency = adjacency
 
-    def __no_jit__(self, *dargs, **dkwargs):
-        def decorate(func):
-            def call(*args, **kwargs):
-                return func(*args, **kwargs)
-
-            return call
-
-        return decorate
-
     def _do_setup(self):
         row_inds, col_inds = np.nonzero(self.adjacency)
         edge_list = np.stack((row_inds, col_inds)).T
