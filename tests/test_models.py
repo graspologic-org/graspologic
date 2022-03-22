@@ -600,11 +600,11 @@ class TestEdgeSwaps(unittest.TestCase):
 
     def test_numpy_edge_swap(self):
         Swapper = EdgeSwap(self.A)
-        Swapper._do_some_edge_swaps(self.A)
+        Swapper._do_some_edge_swaps()
 
     def test_scipy_edge_swap(self):
         Swapper = EdgeSwap(self.B)
-        Swapper._do_some_edge_swaps(self.B)
+        Swapper._do_some_edge_swaps()
 
 
 def hardy_weinberg(theta):
@@ -612,3 +612,7 @@ def hardy_weinberg(theta):
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
     return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from tkinter import N
 import warnings
 from functools import reduce
 from pathlib import Path
@@ -11,11 +10,9 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import scipy.sparse
-import random
 from beartype import beartype
-from numba import jit, njit
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr, lil_matrix
+from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
 from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d

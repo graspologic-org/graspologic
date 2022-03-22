@@ -698,7 +698,3 @@ class TestRemapNodeIds(unittest.TestCase):
         new_graph, new_node_ids = gus.remap_node_ids(graph)
 
         self._assert_graphs_are_equivalent(graph, new_graph, new_node_ids)
-
-
-if __name__ == "__main__":
-    unittest.main()
