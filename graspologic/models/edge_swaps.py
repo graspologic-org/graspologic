@@ -1,8 +1,10 @@
-import numpy as np
-import numba as nb
-from scipy.sparse import lil_matrix
-from graspologic.types import Tuple
 from typing import Union
+
+import numba as nb
+import numpy as np
+from scipy.sparse import lil_matrix
+
+from graspologic.types import Tuple
 
 
 class EdgeSwap:

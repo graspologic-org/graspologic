@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 from .base import BaseGraphEstimator
+from .edge_swaps import EdgeSwap
 from .er import DCEREstimator, EREstimator
 from .rdpg import RDPGEstimator
 from .sbm_estimators import DCSBMEstimator, SBMEstimator
-from .edge_swaps import EdgeSwap
 
 __all__ = [
     "BaseGraphEstimator",

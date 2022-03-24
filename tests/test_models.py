@@ -5,17 +5,17 @@ import unittest
 
 import numpy as np
 from numpy.testing import assert_allclose
+from scipy.sparse import lil_matrix
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
-from scipy.sparse import lil_matrix
 
 from graspologic.models import (
     DCEREstimator,
     DCSBMEstimator,
+    EdgeSwap,
     EREstimator,
     RDPGEstimator,
     SBMEstimator,
-    EdgeSwap,
 )
 from graspologic.simulations import er_np, sample_edges, sbm
 from graspologic.utils import cartesian_product, is_symmetric
@@ -422,15 +422,15 @@ class TestDCSBM(unittest.TestCase):
         labels = self.labels
         e = DCSBMEstimator(directed=True)
         e.fit(graph)
-        assert e._n_parameters() == (n_verts + n_class - 1 + n_class**2)
+        assert e._n_parameters() == (n_verts + n_class - 1 + n_class ** 2)
 
         e = DCSBMEstimator(directed=True)
         e.fit(graph, y=labels)
-        assert e._n_parameters() == (n_verts + n_class**2)
+        assert e._n_parameters() == (n_verts + n_class ** 2)
 
         e = DCSBMEstimator(directed=True, degree_directed=True)
         e.fit(graph, y=labels)
-        assert e._n_parameters() == (2 * n_verts + n_class**2)
+        assert e._n_parameters() == (2 * n_verts + n_class ** 2)
 
         e = DCSBMEstimator(directed=False)
         e.fit(graph, y=labels)
@@ -611,4 +611,4 @@ def hardy_weinberg(theta):
     """
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
-    return np.array([theta**2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
+    return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
