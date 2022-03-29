@@ -1,6 +1,6 @@
+import warnings
 from typing import Union
 
-import warnings
 import numba as nb
 import numpy as np
 from scipy.sparse import lil_matrix
