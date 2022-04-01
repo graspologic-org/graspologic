@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 1.0.1dev1830724708 documentation</title>
+  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 1.0.1dev2077804594 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev1830724708
+                1.0.1dev2077804594
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -553,13 +553,22 @@ div.rendered_html tbody tr:hover {
 <h2>Load the Duke mouse brain dataset<a class="headerlink" href="#Load-the-Duke-mouse-brain-dataset" title="Permalink to this headline">¶</a></h2>
 <p>Dataset of 32 mouse connectomes derived from whole-brain diffusion magnetic resonance imaging of four distinct mouse genotypes: BTBR T+ Itpr3tf/J (BTBR), C57BL/6J(B6), CAST/EiJ (CAST), and DBA/2J (DBA2). For each strain, connectomes were generated from eight age-matched mice (N = 8 per strain), with a sex distribution of four males and four females. Each connectome was parcellated using asymmetric Waxholm Space, yielding a vertex set with a total of 332 regions of interest (ROIs) symmetrically
 distributed across the left and right hemispheres. Within a given hemisphere, there are seven superstructures consisting up multiple ROIs, resulting in a total of 14 distinct communities in each connectome.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.datasets</span> <span class="kn">import</span> <span class="n">load_mice</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.12/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -893,6 +902,14 @@ number of permutations would be around <span class="math notranslate nohighlight
     </tr>
     <tr>
       <th>1</th>
+      <td>Amygdalopiriform_Transition_Area (R)</td>
+      <td>0.526762</td>
+      <td>0.003984</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>Piriform_Cortex (R)</td>
       <td>0.603432</td>
       <td>0.003984</td>
@@ -900,7 +917,7 @@ number of permutations would be around <span class="math notranslate nohighlight
       <td>False</td>
     </tr>
     <tr>
-      <th>2</th>
+      <th>3</th>
       <td>Presubiculum (R)</td>
       <td>0.292116</td>
       <td>0.003984</td>
@@ -908,17 +925,9 @@ number of permutations would be around <span class="math notranslate nohighlight
       <td>False</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>4</th>
       <td>Perirhinal_Cortex (R)</td>
       <td>0.806250</td>
-      <td>0.003984</td>
-      <td>1.0</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Parasubiculum (R)</td>
-      <td>0.573180</td>
       <td>0.003984</td>
       <td>1.0</td>
       <td>False</td>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stochastic Block Model (SBM) &mdash; graspologic 1.0.1dev1830724708 documentation</title>
+  <title>Stochastic Block Model (SBM) &mdash; graspologic 1.0.1dev2077804594 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev1830724708
+                1.0.1dev2077804594
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -535,7 +535,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Stochastic-Block-Model-(SBM)">
 <h1>Stochastic Block Model (SBM)<a class="headerlink" href="#Stochastic-Block-Model-(SBM)" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -546,6 +546,15 @@ div.rendered_html tbody tr:hover {
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.12/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <p>Unlike <a class="reference internal" href="erdos_renyi.html"><span class="doc">Erdos-Renyi (ER) models</span></a>, a Stochastic Block Model (SBM) produces graphs containing communities: disjoint subgraphs characterized by differing edge probabilities for vertices within and between communities <a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_block_model">(1)</a>.</p>
 <p>SBM is parametrized by the number of vertices in each community <span class="math notranslate nohighlight">\(n\)</span>, and a block probability matrix <span class="math notranslate nohighlight">\(P \in \mathbb{R}^{n x n}\)</span> where each element specifies the probability of an edge in a particular block. One can think of SBM as a collection of ER graphs where each block corresponds to an ER graph.</p>

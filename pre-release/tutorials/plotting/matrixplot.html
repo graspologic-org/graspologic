@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrixplot and Adjplot: Visualize and sort matrices with metadata &mdash; graspologic 1.0.1dev1830724708 documentation</title>
+  <title>Matrixplot and Adjplot: Visualize and sort matrices with metadata &mdash; graspologic 1.0.1dev2077804594 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev1830724708
+                1.0.1dev2077804594
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -537,7 +537,7 @@ div.rendered_html tbody tr:hover {
 <h1>Matrixplot and Adjplot: Visualize and sort matrices with metadata<a class="headerlink" href="#Matrixplot-and-Adjplot:-Visualize-and-sort-matrices-with-metadata" title="Permalink to this headline">¶</a></h1>
 <p>This guide introduces <code class="docutils literal notranslate"><span class="pre">Matrixplot</span></code> and <code class="docutils literal notranslate"><span class="pre">Adjplot</span></code>. They allow the user to sort a matrix according to some metadata and plot it as either a heatmap or a scattermap. These functions also allows the user to add color or tick axes to indicate the separation between different groups or attributes.</p>
 <p>Note: <code class="docutils literal notranslate"><span class="pre">Matrixplot</span></code> and <code class="docutils literal notranslate"><span class="pre">Adjplot</span></code> have almost identical inputs/functionality. <code class="docutils literal notranslate"><span class="pre">Adjplot</span></code> is just a convenient wrapper around <code class="docutils literal notranslate"><span class="pre">Matrixplot</span></code> which assumes the matrix to be plotted is square and has the same row and column metadata.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -549,6 +549,15 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <br/></pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.12/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <section id="Simulate-a-binary-graph-using-stochastic-block-model">
 <h2>Simulate a binary graph using stochastic block model<a class="headerlink" href="#Simulate-a-binary-graph-using-stochastic-block-model" title="Permalink to this headline">¶</a></h2>
@@ -639,7 +648,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f58047b5880&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0027824220&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -683,7 +692,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f5800d576d0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f00246ad520&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -722,7 +731,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f5800d33430&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f00246212b0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -759,7 +768,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f5800bdeee0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0027cb41c0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -804,7 +813,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f580488feb0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f002870e460&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -884,7 +893,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f5800ac7d30&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f0027f45910&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -920,7 +929,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f5800881940&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f00242aa760&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -956,7 +965,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f5800820af0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f00240ff760&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -996,7 +1005,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f5800538580&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f001df139d0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1032,7 +1041,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f58049438e0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f001dd18a00&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1071,7 +1080,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f580008b4c0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f001db0bc40&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1111,7 +1120,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f57f9f05e50&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f001dad3490&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1154,7 +1163,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f57f9c90730&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f001d732d30&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1195,7 +1204,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f57f9b84f10&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f001d61f790&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1243,7 +1252,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;AxesSubplot:&gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f57f9adbdc0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f001d566730&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
