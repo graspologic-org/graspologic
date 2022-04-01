@@ -11,11 +11,47 @@ warnings.filterwarnings("ignore")
 
 
 class EdgeSwap:
+    """
+    Degree Preserving Edge Swaps
+
+    This class allows for performing degree preserving edge swaps on graphs
+    with fixed degree sequences.
+
+    Attributes
+    ----------
+    adjacency : Union[np.ndarray, lil_matrix], shape (n_verts, n_verts)
+        The initial adjacency matrix in which edge swaps are performed on it
+
+    edge_list : np.ndarray, shape (n_verts, 2)
+        The corresponding edge_list of adjacency
+
+
+    References
+    ----------
+    .. [1] Fosdick, B. K., Larremore, D. B., Nishimura, J., & Ugander, J. (2018).
+           Configuring random graph models with fixed degree sequences.
+           Siam Review, 60(2), 315-355.
+
+    .. [2] Carstens, C. J., & Horadam, K. J. (2017).
+           Switching edges to randomize networks: what goes wrong and how to fix it.
+           Journal of Complex Networks, 5(3), 337-351.
+
+    .. [3] https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py
+    """
+
     def __init__(self, adjacency: Union[np.ndarray, lil_matrix]):
         self.adjacency = adjacency
         self.edge_list = self._do_setup()
 
     def _do_setup(self) -> np.ndarray:
+        """
+        Computes the edge_list from the adjancency matrix
+
+        Returns
+        -------
+        edge_list : np.ndarray, shape (n_verts, 2)
+            The corresponding edge_list of adjacency
+        """
         row_inds, col_inds = np.nonzero(self.adjacency)
         edge_list = np.stack((row_inds, col_inds)).T
         return edge_list
@@ -23,14 +59,41 @@ class EdgeSwap:
     @staticmethod
     @nb.jit
     def _edge_swap(
-        adjacency: Union[np.ndarray, lil_matrix], edge_list: np.ndarray, a: int = 1234
+        adjacency: Union[np.ndarray, lil_matrix],
+        edge_list: np.ndarray,
+        seed: int = 1234,
     ) -> Tuple[Union[np.ndarray, lil_matrix], np.ndarray]:
+        """
+        Performs the edge swap on the adjacency matrix. If adjacency is
+        np.ndarray, then nopython=True is used in numba, but if adjacency
+        is lil_matrix, then forceobj=True is used in numba
+
+        Parameters
+        ----------
+        adjacency : Union[np.ndarray, lil_matrix], shape (n_verts, n_verts)
+            The initial adjacency matrix in which edge swaps are performed on it
+
+        edge_list : np.ndarray, shape (n_verts, 2)
+            The corresponding edge_list of adjacency
+
+        seed : int (default 1234), optional
+            The seed with which we seed the process of choosing two random edges
+            from the graph
+
+        Returns
+        -------
+        adjacency : Union[np.ndarray, lil_matrix] shape (n_verts, n_verts)
+            The adjancency matrix after an edge swap is performed on the graph
+
+        edge_list : np.ndarray (n_verts, 2)
+            The edge_list after an edge swap is perfomed on the graph
+        """
         # checks if there are at 2 edges in the graph
         if len(edge_list) < 2:
             return adjacency, edge_list
 
         # choose two indices at random
-        np.random.seed(a)
+        np.random.seed(seed)
         orig_inds = np.random.choice(len(edge_list), size=2, replace=False)
 
         u, v = edge_list[orig_inds[0]]
@@ -73,7 +136,22 @@ class EdgeSwap:
     def _do_some_edge_swaps(
         self, n_swaps: int = 10
     ) -> Tuple[Union[np.ndarray, lil_matrix], np.ndarray]:
+        """
+        Performs a number of edge swaps on the graph
 
+        Parameters
+        ----------
+        n_swaps : int (default 10), optional
+            The number of edge swaps to be performed
+
+        Returns
+        -------
+        self.adjacency : Union[np.ndarray, lil_matrix] shape (n_verts, n_verts)
+            The adjancency matrix after a number of edge swaps are performed on the graph
+
+        self.edge_list : np.ndarray (n_verts, 2)
+            The edge_list after a number of edge swaps are perfomed on the graph
+        """
         for swap in range(n_swaps):
             self.adjacency, self.edge_list = self._edge_swap(
                 self.adjacency, self.edge_list
