@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.sbm_estimators &mdash; graspologic 1.0.1dev2077804594 documentation</title>
+  <title>graspologic.models.sbm_estimators &mdash; graspologic 1.0.1dev2162524833 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2077804594
+                1.0.1dev2162524833
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -469,7 +469,9 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="p">:</span>
             <span class="n">graph</span> <span class="o">=</span> <span class="n">remove_loops</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">)</span>
+        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loops</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
             <span class="n">block_p</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">block_p</span><span class="p">)</span>
@@ -669,7 +671,9 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="p">:</span>
             <span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
-        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">)</span>
+        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loops</span>
+        <span class="p">)</span>
 
         <span class="n">out_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">in_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -744,12 +748,14 @@
     <span class="n">block_inds</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="n">block_vert_inds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="n">return_counts</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    graph : input n x n graph</span>
 <span class="sd">    block_inds : list of length n_communities</span>
 <span class="sd">    block_vert_inds : list of list, for each block index, gives every node in that block</span>
 <span class="sd">    return_counts : whether to calculate counts rather than proportions</span>
+<span class="sd">    loops : whether self loops are possible in the graph</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">n_blocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">block_inds</span><span class="p">)</span>
@@ -762,6 +768,10 @@
         <span class="n">from_inds</span> <span class="o">=</span> <span class="n">block_vert_inds</span><span class="p">[</span><span class="n">from_block</span><span class="p">]</span>
         <span class="n">to_inds</span> <span class="o">=</span> <span class="n">block_vert_inds</span><span class="p">[</span><span class="n">to_block</span><span class="p">]</span>
         <span class="n">block</span> <span class="o">=</span> <span class="n">graph</span><span class="p">[</span><span class="n">from_inds</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">to_inds</span><span class="p">]</span>
+        <span class="c1"># if a block is from a community to itself, self loops are possible, so remove</span>
+        <span class="c1"># them from the computation to avoid underbias</span>
+        <span class="k">if</span> <span class="n">from_block</span> <span class="o">==</span> <span class="n">to_block</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">loops</span><span class="p">:</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">return_counts</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
