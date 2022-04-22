@@ -1,29 +1,36 @@
+from asyncore import loop
 import warnings
+from numba.core.errors import NumbaWarning
 from typing import Union
 
 import numba as nb
 import numpy as np
-from scipy.sparse import lil_matrix
+from beartype import beartype
+from scipy.sparse import csr_matrix, SparseEfficiencyWarning
 
+from graspologic.preconditions import check_argument
 from graspologic.types import Tuple
+from graspologic.utils.utils import is_loopless, is_unweighted
 
-warnings.filterwarnings("ignore")
 
+warnings.simplefilter("ignore", category=NumbaWarning)
+warnings.simplefilter("ignore", category=SparseEfficiencyWarning)
 
+# Code based on: https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py
 class EdgeSwap:
     """
     Degree Preserving Edge Swaps
 
-    This class allows for performing degree preserving edge swaps on graphs
-    with fixed degree sequences.
+    This class allows for performing degree preserving edge swaps to
+    generate new networks with a fixed degree sequence.
 
     Attributes
     ----------
-    adjacency : Union[np.ndarray, lil_matrix], shape (n_verts, n_verts)
+    adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
         The initial adjacency matrix in which edge swaps are performed on it
 
     edge_list : np.ndarray, shape (n_verts, 2)
-        The corresponding edge_list of adjacency
+        The corresponding edge_list for the input network
 
 
     References
@@ -39,9 +46,28 @@ class EdgeSwap:
     .. [3] https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py
     """
 
-    def __init__(self, adjacency: Union[np.ndarray, lil_matrix]):
+    @beartype
+    def __init__(self, adjacency: Union[np.ndarray, csr_matrix]):
+
+        weight_check = is_unweighted(adjacency)
+        check_argument(weight_check == True, "adjacency must be unweighted")
+
+        loop_check = False
+        if isinstance(adjacency, np.ndarray):
+            loop_check = not is_loopless(adjacency)
+
+        else:
+            for i in range(adjacency.shape[0]):
+                if int(adjacency[i, i]) != 0:
+                    loop_check = True
+                    break
+
+        check_argument(loop_check == False, "adjacency cannot have loops")
         self.adjacency = adjacency
-        self.edge_list = self._do_setup()
+
+        edge_list = self._do_setup()
+        check_argument(len(edge_list >= 2), "there must be at least 2 edges")
+        self.edge_list = edge_list
 
     def _do_setup(self) -> np.ndarray:
         """
@@ -59,18 +85,18 @@ class EdgeSwap:
     @staticmethod
     @nb.jit
     def _edge_swap(
-        adjacency: Union[np.ndarray, lil_matrix],
+        adjacency: Union[np.ndarray, csr_matrix],
         edge_list: np.ndarray,
         seed: int = 1234,
-    ) -> Tuple[Union[np.ndarray, lil_matrix], np.ndarray]:
+    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
         """
         Performs the edge swap on the adjacency matrix. If adjacency is
         np.ndarray, then nopython=True is used in numba, but if adjacency
-        is lil_matrix, then forceobj=True is used in numba
+        is csr_matrix, then forceobj=True is used in numba
 
         Parameters
         ----------
-        adjacency : Union[np.ndarray, lil_matrix], shape (n_verts, n_verts)
+        adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
             The initial adjacency matrix in which edge swaps are performed on it
 
         edge_list : np.ndarray, shape (n_verts, 2)
@@ -82,18 +108,15 @@ class EdgeSwap:
 
         Returns
         -------
-        adjacency : Union[np.ndarray, lil_matrix] shape (n_verts, n_verts)
+        adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
             The adjancency matrix after an edge swap is performed on the graph
 
         edge_list : np.ndarray (n_verts, 2)
             The edge_list after an edge swap is perfomed on the graph
         """
-        # checks if there are at 2 edges in the graph
-        if len(edge_list) < 2:
-            return adjacency, edge_list
 
         # choose two indices at random
-        np.random.seed(seed)
+        # np.random.seed(seed)
         orig_inds = np.random.choice(len(edge_list), size=2, replace=False)
 
         u, v = edge_list[orig_inds[0]]
@@ -133,28 +156,30 @@ class EdgeSwap:
         edge_list[orig_inds[1]] = [v, y]
         return adjacency, edge_list
 
-    def _do_some_edge_swaps(
-        self, n_swaps: int = 10
-    ) -> Tuple[Union[np.ndarray, lil_matrix], np.ndarray]:
+    def swap_edges(
+        self,
+        n_swaps: int = 1,
+    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
         """
         Performs a number of edge swaps on the graph
 
         Parameters
         ----------
-        n_swaps : int (default 10), optional
+        n_swaps : int (default 1), optional
             The number of edge swaps to be performed
 
         Returns
         -------
-        self.adjacency : Union[np.ndarray, lil_matrix] shape (n_verts, n_verts)
+        self.adjacency : np.ndarray OR csr.matrix, shape (n_verts, n_verts)
             The adjancency matrix after a number of edge swaps are performed on the graph
 
         self.edge_list : np.ndarray (n_verts, 2)
             The edge_list after a number of edge swaps are perfomed on the graph
         """
+        seed = np.random.randint(123)
         for swap in range(n_swaps):
             self.adjacency, self.edge_list = self._edge_swap(
-                self.adjacency, self.edge_list
+                self.adjacency, self.edge_list, seed
             )
 
         return self.adjacency, self.edge_list
