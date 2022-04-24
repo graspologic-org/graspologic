@@ -85,9 +85,7 @@ class EdgeSwap:
     @staticmethod
     @nb.jit
     def _edge_swap(
-        adjacency: Union[np.ndarray, csr_matrix],
-        edge_list: np.ndarray,
-        seed: int = 1234,
+        adjacency: Union[np.ndarray, csr_matrix], edge_list: np.ndarray
     ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
         """
         Performs the edge swap on the adjacency matrix. If adjacency is
@@ -116,7 +114,6 @@ class EdgeSwap:
         """
 
         # choose two indices at random
-        # np.random.seed(seed)
         orig_inds = np.random.choice(len(edge_list), size=2, replace=False)
 
         u, v = edge_list[orig_inds[0]]
@@ -157,8 +154,7 @@ class EdgeSwap:
         return adjacency, edge_list
 
     def swap_edges(
-        self,
-        n_swaps: int = 1,
+        self, n_swaps: int = 1, seed: int = 1234
     ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
         """
         Performs a number of edge swaps on the graph
@@ -176,10 +172,10 @@ class EdgeSwap:
         self.edge_list : np.ndarray (n_verts, 2)
             The edge_list after a number of edge swaps are perfomed on the graph
         """
-        seed = np.random.randint(123)
+        np.random.randint(seed)
         for swap in range(n_swaps):
             self.adjacency, self.edge_list = self._edge_swap(
-                self.adjacency, self.edge_list, seed
+                self.adjacency, self.edge_list
             )
 
         return self.adjacency, self.edge_list

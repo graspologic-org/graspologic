@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 from numpy.testing import assert_allclose
-from scipy.sparse import lil_matrix
+from scipy.sparse import csr_matrix
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
@@ -422,15 +422,15 @@ class TestDCSBM(unittest.TestCase):
         labels = self.labels
         e = DCSBMEstimator(directed=True)
         e.fit(graph)
-        assert e._n_parameters() == (n_verts + n_class - 1 + n_class**2)
+        assert e._n_parameters() == (n_verts + n_class - 1 + n_class ** 2)
 
         e = DCSBMEstimator(directed=True)
         e.fit(graph, y=labels)
-        assert e._n_parameters() == (n_verts + n_class**2)
+        assert e._n_parameters() == (n_verts + n_class ** 2)
 
         e = DCSBMEstimator(directed=True, degree_directed=True)
         e.fit(graph, y=labels)
-        assert e._n_parameters() == (2 * n_verts + n_class**2)
+        assert e._n_parameters() == (2 * n_verts + n_class ** 2)
 
         e = DCSBMEstimator(directed=False)
         e.fit(graph, y=labels)
@@ -596,19 +596,22 @@ class TestEdgeSwaps(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.A = er_np(100, 0.5)
-        cls.B = lil_matrix(cls.A)
+        cls.B = csr_matrix(cls.A)
 
     def test_numpy_edge_swap(self):
         Swapper = EdgeSwap(self.A)
-        Swapper._do_some_edge_swaps()
+        Swapper.swap_edges()
 
     def test_scipy_edge_swap(self):
         Swapper = EdgeSwap(self.B)
-        Swapper._do_some_edge_swaps()
+        Swapper.swap_edges()
 
 
 def hardy_weinberg(theta):
     """
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
-    return np.array([theta**2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
+    return np.array([theta ** 2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
+
+if __name__ == "__main__":
+    unittest.main()
