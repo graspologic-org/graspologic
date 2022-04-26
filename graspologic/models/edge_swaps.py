@@ -1,17 +1,17 @@
-from asyncore import loop
 import warnings
-from numba.core.errors import NumbaWarning
+from asyncore import loop
 from typing import Union
 
+import networkx as nx
 import numba as nb
 import numpy as np
 from beartype import beartype
-from scipy.sparse import csr_matrix, SparseEfficiencyWarning
+from numba.core.errors import NumbaWarning
+from scipy.sparse import SparseEfficiencyWarning, csr_matrix
 
 from graspologic.preconditions import check_argument
 from graspologic.types import Tuple
 from graspologic.utils.utils import is_loopless, is_unweighted
-
 
 warnings.simplefilter("ignore", category=NumbaWarning)
 warnings.simplefilter("ignore", category=SparseEfficiencyWarning)
@@ -49,20 +49,33 @@ class EdgeSwap:
     @beartype
     def __init__(self, adjacency: Union[np.ndarray, csr_matrix]):
 
+        # check if graph is unweighted
         weight_check = is_unweighted(adjacency)
         check_argument(weight_check == True, "adjacency must be unweighted")
 
         loop_check = False
+        direct_check = False
         if isinstance(adjacency, np.ndarray):
+            # check if graph has loops
             loop_check = not is_loopless(adjacency)
 
+            # check if graph is directed
+            nx_graph = nx.from_numpy_array(adjacency)
+            direct_check = nx.is_directed(nx_graph)
+
         else:
+            # check if graph has loops
             for i in range(adjacency.shape[0]):
                 if int(adjacency[i, i]) != 0:
                     loop_check = True
                     break
 
+            # check if graph is directed
+            nx_graph = nx.from_scipy_sparse_matrix(adjacency)
+            direct_check = nx.is_directed(nx_graph)
+
         check_argument(loop_check == False, "adjacency cannot have loops")
+        check_argument(direct_check == False, "adjacency must be undirected")
         self.adjacency = adjacency
 
         edge_list = self._do_setup()
@@ -78,8 +91,19 @@ class EdgeSwap:
         edge_list : np.ndarray, shape (n_verts, 2)
             The corresponding edge_list of adjacency
         """
-        row_inds, col_inds = np.nonzero(self.adjacency)
-        edge_list = np.stack((row_inds, col_inds)).T
+
+        if isinstance(self.adjacency, np.ndarray):
+            adj_length = len(self.adjacency)
+
+        else:
+            adj_length = self.adjacency.get_shape()[0]
+        edge_list = []
+
+        for i in range(adj_length):
+            for j in range(i, adj_length):
+                if self.adjacency[i, j] == 1:
+                    edge_list.append([i, j])
+        edge_list = np.array(edge_list)
         return edge_list
 
     @staticmethod
@@ -117,7 +141,12 @@ class EdgeSwap:
         orig_inds = np.random.choice(len(edge_list), size=2, replace=False)
 
         u, v = edge_list[orig_inds[0]]
-        x, y = edge_list[orig_inds[1]]
+
+        # two types of swap orientations for undirected graph
+        if np.random.rand() < 0.5:
+            x, y = edge_list[orig_inds[1]]
+        else:
+            y, x = edge_list[orig_inds[1]]
 
         # ensures no initial loops
         if u == v or x == y:
@@ -143,10 +172,14 @@ class EdgeSwap:
 
         # perform the swap
         adjacency[u, v] = 0
+        adjacency[v, u] = 0
         adjacency[x, y] = 0
+        adjacency[y, x] = 0
 
         adjacency[u, x] = 1
+        adjacency[x, u] = 1
         adjacency[v, y] = 1
+        adjacency[y, v] = 1
 
         # DO EDGE LIST STUFF
         edge_list[orig_inds[0]] = [u, x]
