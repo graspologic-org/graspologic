@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.simulations.simulations &mdash; graspologic 1.0.1dev2162524833 documentation</title>
+  <title>graspologic.simulations.simulations &mdash; graspologic 1.0.1dev2235907146 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2162524833
+                1.0.1dev2235907146
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -1260,7 +1260,7 @@
     <span class="c1"># Naming convention follows paper listed in references.</span>
     <span class="n">mm_vectors</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">alpha_checked</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
-    <span class="n">mm_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">mm_vectors</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+    <span class="n">mm_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">mm_vectors</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">))</span>
 
     <span class="c1"># labels:(n,n) matrix with all membership indicators for initiators and receivers</span>
     <span class="c1"># instead of storing the indicator vector, argmax is directly computed</span>

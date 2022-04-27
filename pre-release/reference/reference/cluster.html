@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clustering &mdash; graspologic 1.0.1dev2162524833 documentation</title>
+  <title>Clustering &mdash; graspologic 1.0.1dev2235907146 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2162524833
+                1.0.1dev2235907146
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -481,7 +481,7 @@ ARI scores.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.KMeansCluster.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list">
@@ -778,7 +778,7 @@ ARI scores.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.GaussianCluster.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list">
@@ -933,8 +933,8 @@ If a string, it must be one of:</p>
 <p><strong>random_state</strong> : int, RandomState instance or None, optional (default=None)</p>
 <blockquote>
 <div><p>There is randomness in k-means initialization of
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>. This parameter is passed to
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> to control the random state.
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>. This parameter is passed to
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> to control the random state.
 If int, random_state is used as the random number generator seed;
 If RandomState instance, random_state is the random number generator;
 If None, the random number generator is the RandomState instance used
@@ -949,7 +949,7 @@ unique labels given here.</p>
 <p><strong>kmeans_n_init</strong> : int, optional (default = 1)</p>
 <blockquote>
 <div><p>If <code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code> is larger than 1 and <code class="docutils literal notranslate"><span class="pre">label_init</span></code> is None, additional
-<code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code>-1 runs of <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>
+<code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code>-1 runs of <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>
 initialized with k-means will be performed
 for all covariance parameters in <code class="docutils literal notranslate"><span class="pre">covariance_type</span></code>.</p>
 </div></blockquote>
@@ -1035,7 +1035,7 @@ nan if y is not given</p>
 <blockquote>
 <div><p>ARI from the model with the best bic/aic, nan if no y is given</p>
 </div></blockquote>
-<p><strong>model_</strong> : <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a></p>
+<p><strong>model_</strong> : <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a></p>
 <blockquote>
 <div><p>object with the best bic/aic</p>
 </div></blockquote>
@@ -1219,7 +1219,7 @@ ARI scores.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.AutoGMMCluster.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list">
