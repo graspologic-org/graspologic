@@ -1,6 +1,6 @@
 import warnings
 from asyncore import loop
-from typing import Union
+from typing import List, Union
 
 import networkx as nx
 import numba as nb
@@ -82,7 +82,7 @@ class EdgeSwap:
         check_argument(len(edge_list) >= 2, "there must be at least 2 edges")
         self.edge_list = edge_list
 
-    def _do_setup(self) -> np.array:
+    def _do_setup(self) -> List:
         """
         Computes the edge_list from the adjancency matrix
 
@@ -103,14 +103,13 @@ class EdgeSwap:
             for j in range(i, adj_length):
                 if self.adjacency[i, j] == 1:
                     edge_list.append([i, j])
-        edge_list = np.array(edge_list)
         return edge_list
 
     @staticmethod
     @nb.jit
     def _edge_swap(
-        adjacency: Union[np.ndarray, csr_matrix], edge_list: np.array
-    ) -> Tuple[Union[np.ndarray, csr_matrix], np.array]:
+        adjacency: Union[np.ndarray, csr_matrix], edge_list: List
+    ) -> Tuple[Union[np.ndarray, csr_matrix], List]:
         """
         Performs the edge swap on the adjacency matrix. If adjacency is
         np.ndarray, then nopython=True is used in numba, but if adjacency
@@ -188,7 +187,7 @@ class EdgeSwap:
 
     def swap_edges(
         self, n_swaps: int = 1, seed: int = 1234
-    ) -> Tuple[Union[np.ndarray, csr_matrix], np.array]:
+    ) -> Tuple[Union[np.ndarray, csr_matrix], List]:
         """
         Performs a number of edge swaps on the graph
 
