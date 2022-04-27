@@ -1000,7 +1000,7 @@ def mmsbm(
     # Naming convention follows paper listed in references.
     mm_vectors = rng.dirichlet(alpha_checked, n)
 
-    mm_vectors = np.array(sorted(mm_vectors, key=lambda x: np.argmax(x)))
+    mm_vectors = np.array(sorted(mm_vectors, key=np.argmax))
 
     # labels:(n,n) matrix with all membership indicators for initiators and receivers
     # instead of storing the indicator vector, argmax is directly computed
