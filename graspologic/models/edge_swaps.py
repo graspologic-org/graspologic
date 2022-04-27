@@ -79,10 +79,10 @@ class EdgeSwap:
         self.adjacency = adjacency
 
         edge_list = self._do_setup()
-        check_argument(len(edge_list >= 2), "there must be at least 2 edges")
+        check_argument(len(edge_list) >= 2, "there must be at least 2 edges")
         self.edge_list = edge_list
 
-    def _do_setup(self) -> np.ndarray:
+    def _do_setup(self) -> np.array:
         """
         Computes the edge_list from the adjancency matrix
 
@@ -109,8 +109,8 @@ class EdgeSwap:
     @staticmethod
     @nb.jit
     def _edge_swap(
-        adjacency: Union[np.ndarray, csr_matrix], edge_list: np.ndarray
-    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
+        adjacency: Union[np.ndarray, csr_matrix], edge_list: np.array
+    ) -> Tuple[Union[np.ndarray, csr_matrix], np.array]:
         """
         Performs the edge swap on the adjacency matrix. If adjacency is
         np.ndarray, then nopython=True is used in numba, but if adjacency
@@ -188,7 +188,7 @@ class EdgeSwap:
 
     def swap_edges(
         self, n_swaps: int = 1, seed: int = 1234
-    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
+    ) -> Tuple[Union[np.ndarray, csr_matrix], np.array]:
         """
         Performs a number of edge swaps on the graph
 
