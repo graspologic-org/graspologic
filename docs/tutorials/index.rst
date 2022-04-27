@@ -10,12 +10,14 @@ Models
 ======
 This tutorial presents several random graph models: the Erdos-Renyi (ER) model, degree-corrected ER model,
 stochastic block model (SBM), degree-corrected SBM, and random dot product graph model. These models provide a basis for studying random graphs. All models are shown fit to the same dataset.
+This tutorial also demonstrates how to sample graphs of the same degree sequence using degree preserving edge swaps
 
 .. toctree::
    :maxdepth: 1
    :titlesonly:
 
    models/models
+   models/dpes
 
 .. _simulations_tutorials:
 
