@@ -3,6 +3,7 @@
 
 import unittest
 
+import networkx as nx
 import numpy as np
 from numpy.testing import assert_allclose
 from scipy.sparse import csr_matrix
@@ -12,7 +13,7 @@ from sklearn.metrics import adjusted_rand_score
 from graspologic.models import (
     DCEREstimator,
     DCSBMEstimator,
-    EdgeSwap,
+    EdgeSwapper,
     EREstimator,
     RDPGEstimator,
     SBMEstimator,
@@ -597,18 +598,22 @@ class TestEdgeSwaps(unittest.TestCase):
     def setUpClass(cls):
         cls.A = er_np(100, 0.5)
         cls.B = csr_matrix(cls.A)
+        cls.C = nx.from_numpy_array(cls.A)
+        cls.D = nx.from_scipy_sparse_matrix(cls.B)
 
     def test_numpy_edge_swap(self):
-        Swapper = EdgeSwap(self.A)
-        Swapper.swap_edges()
-
-    def test_scipy_edge_swap(self):
-        Swapper = EdgeSwap(self.B)
-        Swapper.swap_edges()
-
+        Swapper = EdgeSwapper(self.A)
+        swapped_er, _ = Swapper.swap_edges(n_swaps = 100)
+        swapped_er_nx = nx.from_numpy_array(swapped_er)
+        print(self.C.degree())
+        print(swapped_er_nx.degree())
+        assert list(self.C.degree()) == list(swapped_er_nx.degree())
 
 def hardy_weinberg(theta):
     """
     Maps a value from [0, 1] to the hardy weinberg curve.
     """
     return np.array([theta**2, 2 * theta * (1 - theta), (1 - theta) ** 2]).T
+
+if __name__ == "__main__":
+    unittest.main()
