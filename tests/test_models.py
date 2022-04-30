@@ -603,9 +603,10 @@ class TestEdgeSwaps(unittest.TestCase):
 
     def test_numpy_edge_swap(self):
         Swapper = EdgeSwapper(self.A)
-        swapped_er, _ = Swapper.swap_edges(n_swaps = 100)
+        swapped_er, _ = Swapper.swap_edges(n_swaps=100)
         swapped_er_nx = nx.from_numpy_array(swapped_er)
         assert list(self.C.degree()) == list(swapped_er_nx.degree())
+
 
 def hardy_weinberg(theta):
     """
