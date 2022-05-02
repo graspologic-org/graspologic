@@ -1,6 +1,6 @@
 import warnings
 from asyncore import loop
-from typing import List, Union, Optional
+from typing import List, Optional, Union
 
 import networkx as nx
 import numba as nb
@@ -13,8 +13,8 @@ from graspologic.preconditions import check_argument
 from graspologic.types import Tuple
 from graspologic.utils.utils import is_loopless, is_unweighted
 
-#warnings.simplefilter("ignore", category=NumbaWarning)
-#warnings.simplefilter("ignore", category=SparseEfficiencyWarning)
+# warnings.simplefilter("ignore", category=NumbaWarning)
+# warnings.simplefilter("ignore", category=SparseEfficiencyWarning)
 
 # Code based on: https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py
 class EdgeSwapper:
@@ -22,7 +22,7 @@ class EdgeSwapper:
     Degree Preserving Edge Swaps
 
     This class allows for performing degree preserving edge swaps to
-    generate new networks with the same degree sequence as the input network. 
+    generate new networks with the same degree sequence as the input network.
 
     Attributes
     ----------
@@ -61,19 +61,19 @@ class EdgeSwapper:
 
             # check if graph is directed
             nx_graph = nx.from_numpy_array(adjacency)
-            direct_check = not(nx.is_directed(nx_graph))
+            direct_check = not (nx.is_directed(nx_graph))
 
         else:
             # check if graph has loops
             for i in range(adjacency.shape[0]):
                 if int(adjacency[i, i]) != 0:
-                    print('yo')
+                    print("yo")
                     loop_check = False
                     break
 
             # check if graph is directed
             nx_graph = nx.from_scipy_sparse_matrix(adjacency)
-            direct_check = not(nx.is_directed(nx_graph))
+            direct_check = not (nx.is_directed(nx_graph))
 
         check_argument(loop_check, "adjacency cannot have loops")
         check_argument(direct_check, "adjacency must be undirected")
@@ -93,12 +93,12 @@ class EdgeSwapper:
             The corresponding edge_list of adjacency
         """
 
-        #get edges for upper triangle of undirected graph
+        # get edges for upper triangle of undirected graph
         row_inds, col_inds = np.nonzero(self.adjacency)
         upper = row_inds < col_inds
         row_inds = row_inds[upper]
         col_inds = col_inds[upper]
-        edge_list = np.stack((row_inds, col_inds)).T       
+        edge_list = np.stack((row_inds, col_inds)).T
         return edge_list
 
     @staticmethod
@@ -197,7 +197,7 @@ class EdgeSwapper:
         self.edge_list : np.ndarray (n_verts, 2)
             The edge_list after a number of edge swaps are perfomed on the graph
         """
-        if(seed is not None):
+        if seed is not None:
             np.random.randint(seed)
 
         for swap in range(n_swaps):
