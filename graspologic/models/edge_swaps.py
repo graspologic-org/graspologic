@@ -13,8 +13,6 @@ from graspologic.preconditions import check_argument
 from graspologic.types import Tuple
 from graspologic.utils.utils import is_loopless, is_symmetric, is_unweighted
 
-# warnings.simplefilter("ignore", category=NumbaWarning)
-# warnings.simplefilter("ignore", category=SparseEfficiencyWarning)
 
 # Code based on: https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py
 class EdgeSwapper:
