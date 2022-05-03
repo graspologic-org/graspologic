@@ -25,7 +25,7 @@ class EdgeSwapper:
     Attributes
     ----------
     adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
-        The initial adjacency matrix in which edge swaps are performed on it
+        The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.
 
     edge_list : np.ndarray, shape (n_verts, 2)
         The corresponding edge_list for the input network
