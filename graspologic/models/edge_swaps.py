@@ -10,7 +10,7 @@ from numba.core.errors import NumbaWarning
 from scipy.sparse import SparseEfficiencyWarning, csr_matrix
 
 from graspologic.preconditions import check_argument
-from graspologic.types import Tuple, AdjacencyMatrix
+from graspologic.types import AdjacencyMatrix, Tuple
 from graspologic.utils.utils import is_loopless, is_symmetric, is_unweighted
 
 
@@ -45,7 +45,7 @@ class EdgeSwapper:
     """
 
     @beartype
-    def __init__(self, adjacency: AdjacencyMatrix):
+    def __init__(self, adjacency: Union[np.ndarray, csr_matrix]):
 
         # check if graph is unweighted
         weight_check = is_unweighted(adjacency)
@@ -101,7 +101,7 @@ class EdgeSwapper:
     @nb.jit
     def _edge_swap(
         adjacency: AdjacencyMatrix, edge_list: np.ndarray
-    ) -> Tuple[AdjacencyMatrix, np.ndarray]:
+    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
         """
         Performs the edge swap on the adjacency matrix. If adjacency is
         np.ndarray, then nopython=True is used in numba, but if adjacency
@@ -173,7 +173,7 @@ class EdgeSwapper:
 
     def swap_edges(
         self, n_swaps: int = 1, seed: Optional[int] = None
-    ) -> Tuple[AdjacencyMatrix, np.ndarray]:
+    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
         """
         Performs a number of edge swaps on the graph
 
