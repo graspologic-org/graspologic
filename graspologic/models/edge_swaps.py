@@ -28,7 +28,7 @@ class EdgeSwapper:
         The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.
 
     edge_list : np.ndarray, shape (n_verts, 2)
-        The corresponding edge_list for the input network
+        The corresponding edgelist for the input network
 
 
     References
