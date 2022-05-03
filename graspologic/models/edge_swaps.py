@@ -192,7 +192,7 @@ class EdgeSwapper:
         """
         if seed is not None:
             np.random.randint(seed)
-        
+
         for swap in range(n_swaps):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
