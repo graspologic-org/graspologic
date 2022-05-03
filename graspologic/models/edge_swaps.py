@@ -10,7 +10,7 @@ from numba.core.errors import NumbaWarning
 from scipy.sparse import SparseEfficiencyWarning, csr_matrix
 
 from graspologic.preconditions import check_argument
-from graspologic.types import Tuple
+from graspologic.types import Tuple, AdjacencyMatrix
 from graspologic.utils.utils import is_loopless, is_symmetric, is_unweighted
 
 
@@ -45,7 +45,7 @@ class EdgeSwapper:
     """
 
     @beartype
-    def __init__(self, adjacency: Union[np.ndarray, csr_matrix]):
+    def __init__(self, adjacency: AdjacencyMatrix):
 
         # check if graph is unweighted
         weight_check = is_unweighted(adjacency)
@@ -59,7 +59,6 @@ class EdgeSwapper:
 
             # check if graph is directed
             direct_check = is_symmetric(adjacency)
-            print(direct_check)
 
         else:
             # check if graph has loops
@@ -101,8 +100,8 @@ class EdgeSwapper:
     @staticmethod
     @nb.jit
     def _edge_swap(
-        adjacency: Union[np.ndarray, csr_matrix], edge_list: np.ndarray
-    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
+        adjacency: AdjacencyMatrix, edge_list: np.ndarray
+    ) -> Tuple[AdjacencyMatrix, np.ndarray]:
         """
         Performs the edge swap on the adjacency matrix. If adjacency is
         np.ndarray, then nopython=True is used in numba, but if adjacency
@@ -128,9 +127,6 @@ class EdgeSwapper:
         edge_list : np.ndarray (n_verts, 2)
             The edge_list after an edge swap is perfomed on the graph
         """
-
-        warnings.warn("deprecation", NumbaWarning)
-        warnings.warn("sparse efficiency", SparseEfficiencyWarning)
 
         # choose two indices at random
         orig_inds = np.random.choice(len(edge_list), size=2, replace=False)
@@ -177,7 +173,7 @@ class EdgeSwapper:
 
     def swap_edges(
         self, n_swaps: int = 1, seed: Optional[int] = None
-    ) -> Tuple[Union[np.ndarray, csr_matrix], np.ndarray]:
+    ) -> Tuple[AdjacencyMatrix, np.ndarray]:
         """
         Performs a number of edge swaps on the graph
 
@@ -196,7 +192,7 @@ class EdgeSwapper:
         """
         if seed is not None:
             np.random.randint(seed)
-
+        
         for swap in range(n_swaps):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
