@@ -11,7 +11,7 @@ from scipy.sparse import SparseEfficiencyWarning, csr_matrix
 
 from graspologic.preconditions import check_argument
 from graspologic.types import Tuple
-from graspologic.utils.utils import is_loopless, is_unweighted
+from graspologic.utils.utils import is_loopless, is_unweighted, is_symmetric
 
 # warnings.simplefilter("ignore", category=NumbaWarning)
 # warnings.simplefilter("ignore", category=SparseEfficiencyWarning)
@@ -60,20 +60,19 @@ class EdgeSwapper:
             loop_check = is_loopless(adjacency)
 
             # check if graph is directed
-            nx_graph = nx.from_numpy_array(adjacency)
-            direct_check = not (nx.is_directed(nx_graph))
+            direct_check = is_symmetric(adjacency)
+            print(direct_check)
 
         else:
             # check if graph has loops
             for i in range(adjacency.shape[0]):
                 if int(adjacency[i, i]) != 0:
-                    print("yo")
                     loop_check = False
                     break
 
             # check if graph is directed
-            nx_graph = nx.from_scipy_sparse_matrix(adjacency)
-            direct_check = not (nx.is_directed(nx_graph))
+            np_graph = adjacency.toarray()
+            direct_check = is_symmetric(np_graph)
 
         check_argument(loop_check, "adjacency cannot have loops")
         check_argument(direct_check, "adjacency must be undirected")
