@@ -1,13 +1,11 @@
 import warnings
-from asyncore import loop
-from typing import List, Optional, Union
+from typing import Optional
 
-import networkx as nx
 import numba as nb
 import numpy as np
 from beartype import beartype
 from numba.core.errors import NumbaWarning
-from scipy.sparse import SparseEfficiencyWarning, csr_matrix
+from scipy.sparse import SparseEfficiencyWarning
 
 from graspologic.preconditions import check_argument
 from graspologic.types import AdjacencyMatrix, Tuple
