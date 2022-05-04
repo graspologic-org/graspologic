@@ -9,7 +9,7 @@ from scipy.sparse import SparseEfficiencyWarning
 
 from graspologic.preconditions import check_argument
 from graspologic.types import AdjacencyMatrix, Tuple
-from graspologic.utils.utils import is_loopless, is_symmetric, is_unweighted
+from graspologic.utils import is_loopless, is_symmetric, is_unweighted, import_graph
 
 
 # Code based on: https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py
@@ -54,7 +54,7 @@ class EdgeSwapper:
         direct_check = is_symmetric(adjacency)
         check_argument(direct_check, "adjacency must be undirected")
 
-        self.adjacency = adjacency.copy()
+        self.adjacency = import_graph(adjacency, copy=True)
 
         edge_list = self._do_setup()
         check_argument(len(edge_list) >= 2, "there must be at least 2 edges")
