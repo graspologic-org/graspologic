@@ -53,8 +53,8 @@ class EdgeSwapper:
 
         direct_check = is_symmetric(adjacency)
         check_argument(direct_check, "adjacency must be undirected")
-        
-        self.adjacency = adjacency
+
+        self.adjacency = adjacency.copy()
 
         edge_list = self._do_setup()
         check_argument(len(edge_list) >= 2, "there must be at least 2 edges")
@@ -170,11 +170,12 @@ class EdgeSwapper:
         if seed is not None:
             np.random.randint(seed)
 
-        for swap in range(n_swaps):
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                self.adjacency, self.edge_list = self._edge_swap(
-                    self.adjacency, self.edge_list
-                )
+        # with warnings.catch_warnings():
+        # warnings.filterwarnings("ignore", category=NumbaWarning)
+        # warnings.filterwarnings("ignore", category=SparseEfficiencyWarning)
+        for _ in range(n_swaps):
+            self.adjacency, self.edge_list = self._edge_swap(
+                self.adjacency, self.edge_list
+            )
 
         return self.adjacency, self.edge_list
