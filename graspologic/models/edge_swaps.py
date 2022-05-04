@@ -5,7 +5,7 @@ import numba as nb
 import numpy as np
 from beartype import beartype
 from numba.core.errors import NumbaWarning
-from scipy.sparse import SparseEfficiencyWarning
+from scipy.sparse import SparseEfficiencyWarning, csr_matrix, lil_matrix
 
 from graspologic.preconditions import check_argument
 from graspologic.types import AdjacencyMatrix, Tuple
@@ -54,7 +54,13 @@ class EdgeSwapper:
         direct_check = is_symmetric(adjacency)
         check_argument(direct_check, "adjacency must be undirected")
 
-        self.adjacency = import_graph(adjacency, copy=True)
+        adjacency = import_graph(adjacency, copy=True)
+
+        # more efficient for manipulations which change sparsity structure
+        if isinstance(adjacency, csr_matrix):
+            adjacency = lil_matrix(adjacency)
+
+        self.adjacency = adjacency
 
         edge_list = self._do_setup()
         check_argument(len(edge_list) >= 2, "there must be at least 2 edges")
@@ -171,11 +177,14 @@ class EdgeSwapper:
             np.random.randint(seed)
 
         # with warnings.catch_warnings():
-        # warnings.filterwarnings("ignore", category=NumbaWarning)
-        # warnings.filterwarnings("ignore", category=SparseEfficiencyWarning)
+        #     warnings.filterwarnings("ignore", category=NumbaWarning)
+        #     warnings.filterwarnings("ignore", category=SparseEfficiencyWarning)
         for _ in range(n_swaps):
             self.adjacency, self.edge_list = self._edge_swap(
                 self.adjacency, self.edge_list
             )
 
-        return self.adjacency, self.edge_list
+        adjacency = self.adjacency
+        if isinstance(adjacency, csr_matrix):
+            adjacency = csr_matrix(adjacency)
+        return adjacency, self.edge_list
