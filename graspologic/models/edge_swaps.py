@@ -48,23 +48,12 @@ class EdgeSwapper:
         weight_check = is_unweighted(adjacency)
         check_argument(weight_check, "adjacency must be unweighted")
 
-        loop_check = True
-        direct_check = True
-        if isinstance(adjacency, np.ndarray):
-            loop_check = is_loopless(adjacency)
-            direct_check = is_symmetric(adjacency)
-
-        else:
-            # check if graph has loops
-            for i in range(adjacency.shape[0]):
-                if int(adjacency[i, i]) != 0:
-                    loop_check = False
-                    break
-
-            direct_check = is_symmetric(adjacency)
-
+        loop_check = is_loopless(adjacency)
         check_argument(loop_check, "adjacency cannot have loops")
+
+        direct_check = is_symmetric(adjacency)
         check_argument(direct_check, "adjacency must be undirected")
+        
         self.adjacency = adjacency
 
         edge_list = self._do_setup()
