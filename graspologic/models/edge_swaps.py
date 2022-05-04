@@ -45,17 +45,13 @@ class EdgeSwapper:
     @beartype
     def __init__(self, adjacency: AdjacencyMatrix):
 
-        # check if graph is unweighted
         weight_check = is_unweighted(adjacency)
         check_argument(weight_check, "adjacency must be unweighted")
 
         loop_check = True
         direct_check = True
         if isinstance(adjacency, np.ndarray):
-            # check if graph has loops
             loop_check = is_loopless(adjacency)
-
-            # check if graph is directed
             direct_check = is_symmetric(adjacency)
 
         else:
@@ -65,9 +61,7 @@ class EdgeSwapper:
                     loop_check = False
                     break
 
-            # check if graph is directed
-            np_graph = adjacency.toarray()
-            direct_check = is_symmetric(np_graph)
+            direct_check = is_symmetric(adjacency)
 
         check_argument(loop_check, "adjacency cannot have loops")
         check_argument(direct_check, "adjacency must be undirected")
