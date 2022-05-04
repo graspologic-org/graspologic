@@ -113,10 +113,6 @@ class EdgeSwapper:
         edge_list : np.ndarray, shape (n_verts, 2)
             The corresponding edge_list of adjacency
 
-        seed : int (default 1234), optional
-            The seed with which we seed the process of choosing two random edges
-            from the graph
-
         Returns
         -------
         adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
