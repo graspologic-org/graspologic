@@ -106,12 +106,10 @@ class EdgeSwapper:
         self.edge_list : np.ndarray (n_verts, 2)
             The edge_list after a number of edge swaps are perfomed on the graph
         """
-        if seed is not None:
-            np.random.randint(seed)
 
         for _ in range(n_swaps):
             self.adjacency, self.edge_list = self._edge_swap_function(
-                self.adjacency, self.edge_list
+                self.adjacency, self.edge_list, seed
             )
 
         adjacency = self.adjacency
@@ -122,7 +120,7 @@ class EdgeSwapper:
 
 
 def _edge_swap(
-    adjacency: AdjacencyMatrix, edge_list: np.ndarray
+    adjacency: AdjacencyMatrix, edge_list: np.ndarray, seed: Optional[int] = None
 ) -> Tuple[AdjacencyMatrix, np.ndarray]:
     """
     Performs the edge swap on the adjacency matrix. If adjacency is
@@ -145,6 +143,9 @@ def _edge_swap(
     edge_list : np.ndarray (n_verts, 2)
         The edge_list after an edge swap is perfomed on the graph
     """
+    if seed is not None:
+        np.random.seed(seed)
+    
     # choose two indices at random
     # NOTE: using np.random here for current numba compatibility
     orig_inds = np.random.choice(len(edge_list), size=2, replace=False)
