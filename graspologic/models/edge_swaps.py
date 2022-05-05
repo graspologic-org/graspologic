@@ -115,7 +115,7 @@ class EdgeSwapper:
             )
 
         adjacency = self.adjacency
-        if isinstance(adjacency, csr_matrix):
+        if isinstance(adjacency, lil_matrix):
             adjacency = csr_matrix(adjacency)
 
         return adjacency, self.edge_list
