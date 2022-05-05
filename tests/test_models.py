@@ -613,12 +613,12 @@ class TestEdgeSwaps(unittest.TestCase):
         swapped_csr = swapped_csr.toarray()
         swapped_csr_nx = nx.from_numpy_array(swapped_csr)
         assert list(self.D.degree()) == list(swapped_csr_nx.degree())
-    
+
     def test_rep_numpy(self):
         Swapper = EdgeSwapper(self.A)
         swapped_er_1, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
         swapped_er_2, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
-        assert((swapped_er_1 == swapped_er_2).all())
+        assert (swapped_er_1 == swapped_er_2).all()
 
     def test_rep_scipy(self):
         Swapper = EdgeSwapper(self.B)
@@ -626,7 +626,8 @@ class TestEdgeSwaps(unittest.TestCase):
         swapped_csr_2, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
         swapped_csr_1 = swapped_csr_1.toarray()
         swapped_csr_2 = swapped_csr_2.toarray()
-        assert((swapped_csr_1 == swapped_csr_2).all())
+        assert (swapped_csr_1 == swapped_csr_2).all()
+
 
 def hardy_weinberg(theta):
     """

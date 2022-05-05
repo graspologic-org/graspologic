@@ -145,7 +145,7 @@ def _edge_swap(
     """
     if seed is not None:
         np.random.seed(seed)
-    
+
     # choose two indices at random
     # NOTE: using np.random here for current numba compatibility
     orig_inds = np.random.choice(len(edge_list), size=2, replace=False)
