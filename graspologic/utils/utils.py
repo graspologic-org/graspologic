@@ -208,7 +208,8 @@ def is_symmetric(X: np.ndarray) -> bool:
 
 
 def is_loopless(X: np.ndarray) -> bool:
-    return not np.any(np.diag(X) != 0)
+    diag_indices = np.diag_indices_from(X)
+    return not np.any(X[diag_indices] != 0)
 
 
 def is_unweighted(

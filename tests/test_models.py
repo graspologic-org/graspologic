@@ -3,14 +3,17 @@
 
 import unittest
 
+import networkx as nx
 import numpy as np
 from numpy.testing import assert_allclose
+from scipy.sparse import csr_matrix
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
 from graspologic.models import (
     DCEREstimator,
     DCSBMEstimator,
+    EdgeSwapper,
     EREstimator,
     RDPGEstimator,
     SBMEstimator,
@@ -588,6 +591,42 @@ def _test_score(estimator, p_mat, graph):
     lik = np.log(lik)
     assert_allclose(lik, estimator.score_samples(graph))
     assert np.sum(lik) == estimator.score(graph)
+
+
+class TestEdgeSwaps(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.A = er_np(100, 0.5)
+        cls.B = csr_matrix(cls.A)
+        cls.C = nx.from_numpy_array(cls.A)
+        cls.D = nx.from_scipy_sparse_matrix(cls.B)
+
+    def test_numpy_edge_swap(self):
+        Swapper = EdgeSwapper(self.A)
+        swapped_er, _ = Swapper.swap_edges(n_swaps=100)
+        swapped_er_nx = nx.from_numpy_array(swapped_er)
+        assert list(self.C.degree()) == list(swapped_er_nx.degree())
+
+    def test_scipy_edge_swap(self):
+        Swapper = EdgeSwapper(self.B)
+        swapped_csr, _ = Swapper.swap_edges(n_swaps=100)
+        swapped_csr = swapped_csr.toarray()
+        swapped_csr_nx = nx.from_numpy_array(swapped_csr)
+        assert list(self.D.degree()) == list(swapped_csr_nx.degree())
+
+    def test_rep_numpy(self):
+        Swapper = EdgeSwapper(self.A)
+        swapped_er_1, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
+        swapped_er_2, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
+        assert (swapped_er_1 == swapped_er_2).all()
+
+    def test_rep_scipy(self):
+        Swapper = EdgeSwapper(self.B)
+        swapped_csr_1, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
+        swapped_csr_2, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
+        swapped_csr_1 = swapped_csr_1.toarray()
+        swapped_csr_2 = swapped_csr_2.toarray()
+        assert (swapped_csr_1 == swapped_csr_2).all()
 
 
 def hardy_weinberg(theta):
