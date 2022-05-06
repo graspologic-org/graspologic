@@ -56,7 +56,7 @@ class EdgeSwapper:
         direct_check = is_symmetric(adjacency)
         check_argument(direct_check, "adjacency must be undirected")
 
-        max_seed = np.iinfo(np.uint32).max
+        max_seed = np.iinfo(np.int32).max
         if seed is None:
             seed = np.random.randint(max_seed)
         seed = check_scalar(seed, "seed", int, min_val=0, max_val=max_seed)
@@ -117,7 +117,7 @@ class EdgeSwapper:
 
         # Note: for some reason could not get reproducibility w/o setting seed
         # inside of the _edge_swap_function itself
-        max_seed = np.iinfo(np.uint32).max
+        max_seed = np.iinfo(np.int32).max
         for _ in range(n_swaps):
             self.adjacency, self.edge_list = self._edge_swap_function(
                 self.adjacency,
