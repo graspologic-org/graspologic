@@ -4,6 +4,7 @@ import numba as nb
 import numpy as np
 from beartype import beartype
 from scipy.sparse import csr_matrix, lil_matrix
+from sklearn.utils import check_scalar
 
 from graspologic.preconditions import check_argument
 from graspologic.types import AdjacencyMatrix, Tuple
@@ -26,6 +27,9 @@ class EdgeSwapper:
     edge_list : np.ndarray, shape (n_verts, 2)
         The corresponding edgelist for the input network
 
+    seed: int, optional
+        Random seed to make outputs reproducible, must be positive
+
 
     References
     ----------
@@ -41,7 +45,7 @@ class EdgeSwapper:
     """
 
     @beartype
-    def __init__(self, adjacency: AdjacencyMatrix):
+    def __init__(self, adjacency: AdjacencyMatrix, seed: Optional[int] = None):
 
         weight_check = is_unweighted(adjacency)
         check_argument(weight_check, "adjacency must be unweighted")
@@ -51,6 +55,14 @@ class EdgeSwapper:
 
         direct_check = is_symmetric(adjacency)
         check_argument(direct_check, "adjacency must be undirected")
+
+        max_seed = np.iinfo(np.uint32).max
+        if seed is None:
+            seed = np.random.randint(max_seed, dtype=np.int64)
+        seed = check_scalar(
+            seed, "seed", (int, np.integer), min_val=0, max_val=max_seed
+        )
+        self._rng = np.random.default_rng(seed)
 
         adjacency = import_graph(adjacency, copy=True)
 
@@ -87,9 +99,7 @@ class EdgeSwapper:
         edge_list = np.stack((row_inds, col_inds)).T
         return edge_list
 
-    def swap_edges(
-        self, n_swaps: int = 1, seed: Optional[int] = None
-    ) -> Tuple[AdjacencyMatrix, np.ndarray]:
+    def swap_edges(self, n_swaps: int = 1) -> Tuple[AdjacencyMatrix, np.ndarray]:
         """
         Performs a number of edge swaps on the graph
 
@@ -100,23 +110,30 @@ class EdgeSwapper:
 
         Returns
         -------
-        self.adjacency : np.ndarray OR csr.matrix, shape (n_verts, n_verts)
+        adjacency : np.ndarray OR csr.matrix, shape (n_verts, n_verts)
             The adjancency matrix after a number of edge swaps are performed on the graph
 
-        self.edge_list : np.ndarray (n_verts, 2)
+        edge_list : np.ndarray (n_verts, 2)
             The edge_list after a number of edge swaps are perfomed on the graph
         """
 
+        # Note: for some reason could not get reproducibility w/o setting seed
+        # inside of the _edge_swap_function itself
+        max_seed = np.iinfo(np.int32).max
         for _ in range(n_swaps):
             self.adjacency, self.edge_list = self._edge_swap_function(
-                self.adjacency, self.edge_list, seed
+                self.adjacency,
+                self.edge_list,
+                seed=self._rng.integers(max_seed),
             )
 
         adjacency = self.adjacency
         if isinstance(adjacency, lil_matrix):
             adjacency = csr_matrix(adjacency)
+        else:
+            adjacency = adjacency.copy()
 
-        return adjacency, self.edge_list
+        return adjacency, self.edge_list.copy()
 
 
 def _edge_swap(
@@ -135,6 +152,9 @@ def _edge_swap(
     edge_list : np.ndarray, shape (n_verts, 2)
         The corresponding edge_list of adjacency
 
+    seed: int, optional
+        Random seed to make outputs reproducible, must be positive
+
     Returns
     -------
     adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
@@ -143,6 +163,8 @@ def _edge_swap(
     edge_list : np.ndarray (n_verts, 2)
         The edge_list after an edge swap is perfomed on the graph
     """
+
+    # need to use np.random here instead of the generator for numba compatibility
     if seed is not None:
         np.random.seed(seed)
 

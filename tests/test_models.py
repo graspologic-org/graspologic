@@ -596,7 +596,7 @@ def _test_score(estimator, p_mat, graph):
 class TestEdgeSwaps(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.A = er_np(100, 0.5)
+        cls.A = er_np(20, 0.5)
         cls.B = csr_matrix(cls.A)
         cls.C = nx.from_numpy_array(cls.A)
         cls.D = nx.from_scipy_sparse_matrix(cls.B)
@@ -615,18 +615,27 @@ class TestEdgeSwaps(unittest.TestCase):
         assert list(self.D.degree()) == list(swapped_csr_nx.degree())
 
     def test_rep_numpy(self):
-        Swapper = EdgeSwapper(self.A)
-        swapped_er_1, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
-        swapped_er_2, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
+        Swapper = EdgeSwapper(self.A, seed=1234)
+        swapped_er_1, _ = Swapper.swap_edges(n_swaps=100)
+        Swapper = EdgeSwapper(self.A, seed=1234)
+        swapped_er_2, _ = Swapper.swap_edges(n_swaps=100)
         assert (swapped_er_1 == swapped_er_2).all()
 
     def test_rep_scipy(self):
-        Swapper = EdgeSwapper(self.B)
-        swapped_csr_1, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
-        swapped_csr_2, _ = Swapper.swap_edges(n_swaps=100, seed=1234)
+        Swapper = EdgeSwapper(self.B, seed=1234)
+        swapped_csr_1, _ = Swapper.swap_edges(n_swaps=100)
+        Swapper = EdgeSwapper(self.B, seed=1234)
+        swapped_csr_2, _ = Swapper.swap_edges(n_swaps=100)
         swapped_csr_1 = swapped_csr_1.toarray()
         swapped_csr_2 = swapped_csr_2.toarray()
         assert (swapped_csr_1 == swapped_csr_2).all()
+
+    def test_rep_agrees(self):
+        Swapper = EdgeSwapper(self.A, seed=1234)
+        swapped_numpy, _ = Swapper.swap_edges(n_swaps=100)
+        Swapper = EdgeSwapper(self.B, seed=1234)
+        swapped_scipy, _ = Swapper.swap_edges(n_swaps=100)
+        assert (swapped_numpy == swapped_scipy.toarray()).all()
 
 
 def hardy_weinberg(theta):
