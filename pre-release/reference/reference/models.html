@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Models &mdash; graspologic 1.0.1dev2277763751 documentation</title>
+  <title>Models &mdash; graspologic 1.0.1dev2302696469 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2277763751
+                1.0.1dev2302696469
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
@@ -1946,6 +1947,92 @@ possible to update each component of a nested object.</p>
 <blockquote>
 <div><p>Estimator instance.</p>
 </div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="edge-swapping-configuration-models">
+<h2>Edge swapping (configuration models)<a class="headerlink" href="#edge-swapping-configuration-models" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.models.EdgeSwapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">EdgeSwapper</span></span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Degree Preserving Edge Swaps</p>
+<p>This class allows for performing degree preserving edge swaps to
+generate new networks with the same degree sequence as the input network.</p>
+<dl class="field-list">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><p><strong>adjacency</strong> : np.ndarray OR csr_matrix, shape (n_verts, n_verts)</p>
+<blockquote>
+<div><p>The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.</p>
+</div></blockquote>
+<p><strong>edge_list</strong> : np.ndarray, shape (n_verts, 2)</p>
+<blockquote>
+<div><p>The corresponding edgelist for the input network</p>
+</div></blockquote>
+<p><strong>seed: int, optional</strong></p>
+<blockquote>
+<div><p>Random seed to make outputs reproducible, must be positive</p>
+</div></blockquote>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r638fba4089a1-1"><span class="brackets">1</span></dt>
+<dd><p>Fosdick, B. K., Larremore, D. B., Nishimura, J., &amp; Ugander, J. (2018).
+Configuring random graph models with fixed degree sequences.
+Siam Review, 60(2), 315-355.</p>
+</dd>
+<dt class="label" id="r638fba4089a1-2"><span class="brackets">2</span></dt>
+<dd><p>Carstens, C. J., &amp; Horadam, K. J. (2017).
+Switching edges to randomize networks: what goes wrong and how to fix it.
+Journal of Complex Networks, 5(3), 337-351.</p>
+</dd>
+<dt class="label" id="r638fba4089a1-3"><span class="brackets">3</span></dt>
+<dd><p><a class="reference external" href="https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py">https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py</a></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EdgeSwapper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adjacency</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EdgeSwapper.swap_edges">
+<span class="sig-name descname"><span class="pre">swap_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_swaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper.swap_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper.swap_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a number of edge swaps on the graph</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_swaps</strong> : int (default 1), optional</p>
+<blockquote>
+<div><p>The number of edge swaps to be performed</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>adjacency</strong> : np.ndarray OR csr.matrix, shape (n_verts, n_verts)</p>
+<blockquote>
+<div><p>The adjancency matrix after a number of edge swaps are performed on the graph</p>
+</div></blockquote>
+<p><strong>edge_list</strong> : np.ndarray (n_verts, 2)</p>
+<blockquote>
+<div><p>The edge_list after a number of edge swaps are perfomed on the graph</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_swaps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)">scipy.sparse._csr.csr_matrix</a>], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a>]</p>
 </dd>
 </dl>
 </dd></dl>

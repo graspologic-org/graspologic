@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Degree Preserving Edge Swaps &mdash; graspologic 1.0.1dev2277763751 documentation</title>
+  <title>Degree Preserving Edge Swaps &mdash; graspologic 1.0.1dev2302696469 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -33,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2277763751
+                1.0.1dev2302696469
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -591,8 +592,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
-<span class="n">swapped_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">swapper</span><span class="o">.</span><span class="n">swap_edges</span><span class="p">(</span><span class="n">n_swaps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
+<span class="n">swapped_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">swapper</span><span class="o">.</span><span class="n">swap_edges</span><span class="p">(</span><span class="n">n_swaps</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">heatmap</span><span class="p">(</span><span class="n">swapped_adj</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Drosophila right MB swapped&#39;</span><span class="p">,</span>
         <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
@@ -634,8 +635,8 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">adj</span><span class="p">))</span>
-<span class="n">swapped_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">swapper</span><span class="o">.</span><span class="n">swap_edges</span><span class="p">(</span><span class="n">n_swaps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">adj</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
+<span class="n">swapped_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">swapper</span><span class="o">.</span><span class="n">swap_edges</span><span class="p">(</span><span class="n">n_swaps</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
 <span class="n">swapped_g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">swapped_adj</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">degree</span><span class="p">())</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">swapped_g</span><span class="o">.</span><span class="n">degree</span><span class="p">()))</span>
