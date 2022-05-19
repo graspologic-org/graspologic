@@ -14,7 +14,7 @@ from graspologic.types import AdjacencyMatrix
 from typing import Optional, Union, Literal
 from graspologic.types import List
 from beartype import beartype
-
+import warnings
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
@@ -22,7 +22,7 @@ InitMethodType = Literal["barycenter", "rand", "randomized"]
 RandomStateType = Optional[Union[int, np.random.RandomState, np.random.Generator]]
 ArrayLikeOfIndexes = Union[List[int], np.ndarray]
 MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
-Scalar = Union[int, float, np.integer, np.float]
+Scalar = Union[int, float, np.integer]
 Int = Union[int, np.integer]
 
 
@@ -78,10 +78,11 @@ class GraphMatchSolver(BaseEstimator):
         maxiter: Int = 30,
         tol: Scalar = 0.01,
         transport: bool = False,
+        use_numba: bool = True,
         transport_regularizer: Scalar = 100,
         transport_tolerance: Scalar = 5e-2,
         transport_implementation: Literal["pot", "ds"] = "pot",
-        transport_maxiter: Int = 500,
+        transport_maxiter: Int = 1000,
     ):
         # TODO more input checking
         self.rng = check_random_state(rng)
@@ -139,20 +140,18 @@ class GraphMatchSolver(BaseEstimator):
         AB = _check_input_matrix(AB)
         BA = _check_input_matrix(BA)
 
-        # TODO check all have same number of layers
-
+        self._compute_gradient = _compute_gradient
+        self._compute_coefficients = _compute_coefficients
         if isinstance(A[0], csr_matrix):
             self._sparse = True
-            self._compute_gradient = _compute_gradient
-            self._compute_coefficients = _compute_coefficients
         else:
             self._sparse = False
-            self._compute_gradient = njit(_compute_gradient)
-            self._compute_coefficients = njit(_compute_coefficients)
+            if use_numba:
+                self._compute_gradient = _compute_gradient_numba
+                self._compute_coefficients = _compute_coefficients_numba
 
         n_seeds = len(partial_match)
         self.n_seeds = n_seeds
-
         # set up so that seeds are first and we can grab subgraphs easily
         # TODO could also do this slightly more efficiently just w/ smart indexing?
         nonseed_A = np.setdiff1d(range(A[0].shape[0]), partial_match[:, 0])
@@ -294,14 +293,25 @@ class GraphMatchSolver(BaseEstimator):
         lamb = reg / np.max(np.abs(P))
         if self.transport_implementation == "pot":
             ones = np.ones(P.shape[0])
-            P_eps = sinkhorn(
+            P_eps, log = sinkhorn(
                 ones,
                 ones,
                 P,
                 power / lamb,
-                stopInnerThr=self.transport_tolerance,
+                stopThr=self.transport_tolerance,
                 numItermax=self.transport_maxiter,
+                log=True,
+                warn=False,
             )
+            if log["niter"] == self.transport_maxiter - 1:
+                warnings.warn(
+                    "Sinkhorn-Knopp algorithm for solving linear sum transport "
+                    f"problem did not converge. The final error was {log['err'][-1]} "
+                    f"and the `transport_tolerance` was {self.transport_tolerance}. "
+                    "You may want to consider increasing "
+                    "`transport_regularizer`, increasing `transport_maxiter`, or this "
+                    "could be the result of `transport_tolerance` set too small."
+                )
         elif self.transport_implementation == "ds":
             P = np.exp(lamb * power * P)
             P_eps = _doubly_stochastic(
@@ -408,7 +418,7 @@ def _compute_gradient(P, A, B, AB, BA, const_sum):
     return grad
 
 
-#
+_compute_gradient_numba = njit(_compute_gradient)
 
 
 def _compute_coefficients(
@@ -438,6 +448,9 @@ def _compute_coefficients(
     b += np.sum(S * R)  # equivalent to S.T @ R
 
     return a, b
+
+
+_compute_coefficients_numba = njit(_compute_coefficients)
 
 
 # REF: https://github.com/microsoft/graspologic/blob/dev/graspologic/match/qap.py
