@@ -109,6 +109,7 @@ class GraphMatchSolver(BaseEstimator):
             self._seeded = False
         else:
             self._seeded = True
+            warnings.warn("Warning: seeding functionality is a work in progress.")
         self.partial_match = partial_match
 
         # TODO input validation
