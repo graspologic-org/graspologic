@@ -61,6 +61,24 @@ def write_status(f, msg, level):
 
 
 class GraphMatchSolver(BaseEstimator):
+    """GraphMatchSolver
+
+    This is a draft implementation of a class for solving the graph matching/quadratic
+    assignment problems and various extensions thereof. This solver supports:
+    - the original FAQ algorithm
+    - seeded matching (though this is a work in progress and may only work in some cases)
+    - multilayer matching, a generalization where each graph is a multigraph
+    - GOAT, which is a modification of the original FAQ algorithm
+    - bisected graph matching, allowing for connections between the graphs
+    - matching of sparse matrices
+    - matching using numba compilation for dense matrices
+    - a similarity term between networks
+
+    This class will ultimately be cleaned up and included in graspologic, likely with
+    a functional wrapper.
+
+    """
+
     @beartype
     def __init__(
         self,
@@ -170,7 +188,7 @@ class GraphMatchSolver(BaseEstimator):
         BA = _permute_multilayer(BA, perm_A, rows=False, columns=True)
         BA = _permute_multilayer(BA, perm_B, rows=True, columns=False)
 
-        # split into subgraphs of seed-to-seed, seed-to-nonseed, etc.
+        # split into subgraphs of seed-to-seed (ss), seed-to-nonseed (sn), etc.
         # main thing being permuted has no subscript
         self.A_ss, self.A_sn, self.A_ns, self.A = _split_matrix(A, n_seeds)
         self.B_ss, self.B_sn, self.B_ns, self.B = _split_matrix(B, n_seeds)
@@ -453,7 +471,7 @@ def _compute_coefficients(
 
 _compute_coefficients_numba = njit(_compute_coefficients)
 
-
+# TODO: replace use of this function with sinkhorn in POT
 # REF: https://github.com/microsoft/graspologic/blob/dev/graspologic/match/qap.py
 def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
     # Adapted from @btaba implementation
@@ -483,7 +501,6 @@ def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
 def _split_matrix(
     matrices: np.ndarray, n: int, single_layer: bool = False
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    # definitions according to Seeded Graph Matching [2].
     if single_layer:
         matrices = [matrices]
     n_layers = len(matrices)
