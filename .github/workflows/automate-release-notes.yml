@@ -1,4 +1,4 @@
-name: graspologic Publish
+name: graspologic Build Release Notes
 on:
   push:
     paths:
