@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Collection, Optional
+from typing import Any, Optional
 
 import numpy as np
 from sklearn.utils import check_X_y
@@ -440,7 +440,8 @@ class DCSBMEstimator(BaseGraphEstimator):
         p_mat = p_mat * np.outer(degree_corrections[:, 0], degree_corrections[:, -1])
 
         if not self.loops:
-            p_mat -= np.diag(np.diag(p_mat))
+            # there seems to be a bug in numpy around __isub__ here?
+            p_mat -= np.diag(np.diag(p_mat))  # type: ignore
         self.p_mat_ = p_mat
         self.block_p_ = block_p
         return self
@@ -458,7 +459,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         return n_parameters
 
 
-def _get_block_indices(y: np.ndarray) -> Tuple[List[int], Collection[int], np.ndarray]:
+def _get_block_indices(y: np.ndarray) -> Tuple[List[np.ndarray], range, np.ndarray]:
     """
     y is a length n_verts vector of labels
 
@@ -485,8 +486,8 @@ def _get_block_indices(y: np.ndarray) -> Tuple[List[int], Collection[int], np.nd
 
 def _calculate_block_p(
     graph: np.ndarray,
-    block_inds: Collection[int],
-    block_vert_inds: List[int],
+    block_inds: range,
+    block_vert_inds: List[np.ndarray],
     return_counts: bool = False,
     loops: bool = False,
 ) -> np.ndarray:
