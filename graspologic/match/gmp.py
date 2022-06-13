@@ -237,26 +237,25 @@ class GraphMatch(BaseEstimator):
         seeds_B = column_or_1d(seeds_B)
         partial_match = np.column_stack((seeds_A, seeds_B))
 
-        if S is None:
-            S = np.zeros((A.shape[0], B.shape[1]))
-        S = np.atleast_2d(S)
+        _S = S if S is not None else np.zeros((A.shape[0], B.shape[1]))
+        _S = np.atleast_2d(_S)
 
         msg = None
-        if S.ndim != 2:
+        if _S.ndim != 2:
             msg = "`S` must have exactly two dimensions"
-        elif A.shape[0] != S.shape[0] or B.shape[0] != S.shape[1]:
+        elif A.shape[0] != _S.shape[0] or B.shape[0] != _S.shape[1]:
             msg = "`S` must be of shape (n_A, n_B)"
         if msg is not None:
             raise ValueError(msg)
 
         # pads A and B according to section 2.5 of [2]
         if A.shape[0] != B.shape[0]:
-            A, B, S = _adj_pad(A, B, S, self.padding)
+            A, B, _S = _adj_pad(A, B, _S, self.padding)
 
         options = {
             "maximize": self.gmp,
             "partial_match": partial_match,
-            "S": S,
+            "S": _S,
             "P0": self.init,
             "shuffle_input": self.shuffle_input,
             "maxiter": self.max_iter,
