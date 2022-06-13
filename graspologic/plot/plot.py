@@ -471,17 +471,16 @@ def gridplot(
         msg = "X must be a list, not {}.".format(type(X))
         raise TypeError(msg)
 
-    if labels is None:
-        labels = np.arange(len(X))
+    _labels = np.array(labels) if labels is not None else np.arange(len(X))
 
-    check_consistent_length(X, labels)
+    check_consistent_length(X, _labels)
 
     graphs = _process_graphs(
         X, inner_hier_labels, outer_hier_labels, transform, sort_nodes
     )
 
     if isinstance(palette, str):
-        palette = sns.color_palette(palette, desat=0.75, n_colors=len(labels))
+        palette = sns.color_palette(palette, desat=0.75, n_colors=_labels.shape[0])
 
     dfs = []
     for idx, graph in enumerate(graphs):
@@ -491,7 +490,7 @@ def gridplot(
             np.vstack([rdx + 0.5, cdx + 0.5, weights]).T,
             columns=["rdx", "cdx", "Weights"],
         )
-        df[legend_name] = [labels[idx]] * len(cdx)
+        df[legend_name] = [_labels[idx]] * len(cdx)
         dfs.append(df)
 
     df = pd.concat(dfs, axis=0)
@@ -1144,14 +1143,16 @@ def edgeplot(
     check_array(X)
     check_consistent_length((X, labels))
     edges = X.ravel()
-    labels = np.tile(labels, (1, X.shape[1]))
-    labels = labels.ravel()  # type: ignore
+    _labels: np.ndarray = (
+        np.tile(labels, (1, X.shape[1])) if labels is not None else np.array([])
+    )
+    _labels = _labels.ravel()  # type: ignore
     if nonzero:
-        labels = labels[edges != 0]
+        _labels = _labels[edges != 0]
         edges = edges[edges != 0]
     ax = _distplot(
         edges,
-        labels=labels,
+        labels=_labels,
         title=title,
         context=context,
         font_scale=font_scale,
@@ -1525,7 +1526,7 @@ def _get_freqs(
     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
 
     # for each group of outer labels, calculate the boundaries of the inner labels
-    inner_freq = np.array([])
+    inner_freq: np.ndarray = np.array([])
     for i in range(outer_freq.size):
         start_ind = outer_freq_cumsum[i]
         stop_ind = outer_freq_cumsum[i + 1]
