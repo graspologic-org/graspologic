@@ -21,7 +21,7 @@ jobs:
           echo "GRASPOLOGIC_TAG=v`python setup.py --version`" >> $GITHUB_ENV
       - name: Create release.rst file
         run: |
-          python buildReleaseNotes.py
+          python github/scripts/build_release_notes.py
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
