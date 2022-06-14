@@ -1,4 +1,14 @@
 name: graspologic Publish Release Notes
+<<<<<<< HEAD
+=======
+on:
+  push:
+    paths:
+      - 'setup.cfg'
+    branches:
+      - 'main'
+      - 'dev'
+>>>>>>> bd5d3918866da65f57a7994d8e9e99fda049496a
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -27,4 +37,8 @@ jobs:
 
           git add -A
           git commit -m "Release Notes PR"
+<<<<<<< HEAD
           git push
+=======
+          git push
+>>>>>>> bd5d3918866da65f57a7994d8e9e99fda049496a
