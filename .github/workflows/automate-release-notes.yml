@@ -1,11 +1,6 @@
 name: graspologic Publish Release Notes
 on:
-  push:
-    paths:
-      - 'setup.cfg'
-    branches:
-      - 'main'
-      - 'dev'
+  workflow_dispatch
 jobs:
   publish:
     runs-on: ubuntu-latest
