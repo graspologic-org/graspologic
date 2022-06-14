@@ -1,4 +1,5 @@
 name: graspologic Publish Release Notes
+on: workflow_dispatch
 jobs:
   publish:
     runs-on: ubuntu-latest
