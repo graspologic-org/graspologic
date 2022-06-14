@@ -1,14 +1,4 @@
 name: graspologic Publish Release Notes
-<<<<<<< HEAD
-=======
-on:
-  push:
-    paths:
-      - 'setup.cfg'
-    branches:
-      - 'main'
-      - 'dev'
->>>>>>> bd5d3918866da65f57a7994d8e9e99fda049496a
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -29,7 +19,7 @@ jobs:
           echo "GRASPOLOGIC_TAG=v`python setup.py --version`" >> $GITHUB_ENV
       - name: Create release.rst file
         run: |
-          python buildReleaseNotes.py
+          python ./github/scripts/build_release_notes.py
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
@@ -37,8 +27,5 @@ jobs:
 
           git add -A
           git commit -m "Release Notes PR"
-<<<<<<< HEAD
           git push
-=======
-          git push
->>>>>>> bd5d3918866da65f57a7994d8e9e99fda049496a
+
