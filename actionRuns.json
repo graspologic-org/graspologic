@@ -1,6 +1,255 @@
 {
-  "total_count": 16,
+  "total_count": 17,
   "workflow_runs": [
+    {
+      "id": 2497200434,
+      "name": "graspologic Publish",
+      "node_id": "WFR_kwLOCM7Erc6U2EEy",
+      "head_branch": "dev",
+      "head_sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
+      "path": ".github/workflows/publish.yml",
+      "run_number": 17,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 19155124,
+      "check_suite_id": 6931498249,
+      "check_suite_node_id": "CS_kwDOCM7Erc8AAAABnSZFCQ",
+      "url": "https://api.github.com/repos/microsoft/graspologic/actions/runs/2497200434",
+      "html_url": "https://github.com/microsoft/graspologic/actions/runs/2497200434",
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/vishalbelsare/graspologic/pulls/31",
+          "id": 837894408,
+          "number": 31,
+          "head": {
+            "ref": "dev",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
+            "repo": {
+              "id": 147768493,
+              "url": "https://api.github.com/repos/microsoft/graspologic",
+              "name": "graspologic"
+            }
+          },
+          "base": {
+            "ref": "dev",
+            "sha": "a8048f1631f2f0676555cc3f04796bf6053a6496",
+            "repo": {
+              "id": 394734680,
+              "url": "https://api.github.com/repos/vishalbelsare/graspologic",
+              "name": "graspologic"
+            }
+          }
+        }
+      ],
+      "created_at": "2022-06-14T18:04:04Z",
+      "updated_at": "2022-06-14T18:57:07Z",
+      "actor": {
+        "login": "daxpryce",
+        "id": 899411,
+        "node_id": "MDQ6VXNlcjg5OTQxMQ==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/899411?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/daxpryce",
+        "html_url": "https://github.com/daxpryce",
+        "followers_url": "https://api.github.com/users/daxpryce/followers",
+        "following_url": "https://api.github.com/users/daxpryce/following{/other_user}",
+        "gists_url": "https://api.github.com/users/daxpryce/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/daxpryce/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/daxpryce/subscriptions",
+        "organizations_url": "https://api.github.com/users/daxpryce/orgs",
+        "repos_url": "https://api.github.com/users/daxpryce/repos",
+        "events_url": "https://api.github.com/users/daxpryce/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/daxpryce/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "run_attempt": 1,
+      "referenced_workflows": [
+        {
+          "path": "microsoft/graspologic/.github/workflows/build.yml@49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
+          "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
+          "ref": "refs/heads/dev"
+        }
+      ],
+      "run_started_at": "2022-06-14T18:04:04Z",
+      "triggering_actor": {
+        "login": "daxpryce",
+        "id": 899411,
+        "node_id": "MDQ6VXNlcjg5OTQxMQ==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/899411?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/daxpryce",
+        "html_url": "https://github.com/daxpryce",
+        "followers_url": "https://api.github.com/users/daxpryce/followers",
+        "following_url": "https://api.github.com/users/daxpryce/following{/other_user}",
+        "gists_url": "https://api.github.com/users/daxpryce/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/daxpryce/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/daxpryce/subscriptions",
+        "organizations_url": "https://api.github.com/users/daxpryce/orgs",
+        "repos_url": "https://api.github.com/users/daxpryce/repos",
+        "events_url": "https://api.github.com/users/daxpryce/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/daxpryce/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "jobs_url": "https://api.github.com/repos/microsoft/graspologic/actions/runs/2497200434/jobs",
+      "logs_url": "https://api.github.com/repos/microsoft/graspologic/actions/runs/2497200434/logs",
+      "check_suite_url": "https://api.github.com/repos/microsoft/graspologic/check-suites/6931498249",
+      "artifacts_url": "https://api.github.com/repos/microsoft/graspologic/actions/runs/2497200434/artifacts",
+      "cancel_url": "https://api.github.com/repos/microsoft/graspologic/actions/runs/2497200434/cancel",
+      "rerun_url": "https://api.github.com/repos/microsoft/graspologic/actions/runs/2497200434/rerun",
+      "previous_attempt_url": null,
+      "workflow_url": "https://api.github.com/repos/microsoft/graspologic/actions/workflows/19155124",
+      "head_commit": {
+        "id": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
+        "tree_id": "8a03bfb2a1a575a257b518a53ef1fc01a7e7297d",
+        "message": "NO MORE TYPE CHECK ERRORS however I'm not confident that this is the logic we want",
+        "timestamp": "2022-06-14T18:04:01Z",
+        "author": {
+          "name": "Dax Pryce",
+          "email": "daxpryce@microsoft.com"
+        },
+        "committer": {
+          "name": "Dax Pryce",
+          "email": "github@dax.pryce.io"
+        }
+      },
+      "repository": {
+        "id": 147768493,
+        "node_id": "MDEwOlJlcG9zaXRvcnkxNDc3Njg0OTM=",
+        "name": "graspologic",
+        "full_name": "microsoft/graspologic",
+        "private": false,
+        "owner": {
+          "login": "microsoft",
+          "id": 6154722,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjYxNTQ3MjI=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/6154722?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/microsoft",
+          "html_url": "https://github.com/microsoft",
+          "followers_url": "https://api.github.com/users/microsoft/followers",
+          "following_url": "https://api.github.com/users/microsoft/following{/other_user}",
+          "gists_url": "https://api.github.com/users/microsoft/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/microsoft/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/microsoft/subscriptions",
+          "organizations_url": "https://api.github.com/users/microsoft/orgs",
+          "repos_url": "https://api.github.com/users/microsoft/repos",
+          "events_url": "https://api.github.com/users/microsoft/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/microsoft/received_events",
+          "type": "Organization",
+          "site_admin": false
+        },
+        "html_url": "https://github.com/microsoft/graspologic",
+        "description": "Python package for graph statistics",
+        "fork": false,
+        "url": "https://api.github.com/repos/microsoft/graspologic",
+        "forks_url": "https://api.github.com/repos/microsoft/graspologic/forks",
+        "keys_url": "https://api.github.com/repos/microsoft/graspologic/keys{/key_id}",
+        "collaborators_url": "https://api.github.com/repos/microsoft/graspologic/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/microsoft/graspologic/teams",
+        "hooks_url": "https://api.github.com/repos/microsoft/graspologic/hooks",
+        "issue_events_url": "https://api.github.com/repos/microsoft/graspologic/issues/events{/number}",
+        "events_url": "https://api.github.com/repos/microsoft/graspologic/events",
+        "assignees_url": "https://api.github.com/repos/microsoft/graspologic/assignees{/user}",
+        "branches_url": "https://api.github.com/repos/microsoft/graspologic/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/microsoft/graspologic/tags",
+        "blobs_url": "https://api.github.com/repos/microsoft/graspologic/git/blobs{/sha}",
+        "git_tags_url": "https://api.github.com/repos/microsoft/graspologic/git/tags{/sha}",
+        "git_refs_url": "https://api.github.com/repos/microsoft/graspologic/git/refs{/sha}",
+        "trees_url": "https://api.github.com/repos/microsoft/graspologic/git/trees{/sha}",
+        "statuses_url": "https://api.github.com/repos/microsoft/graspologic/statuses/{sha}",
+        "languages_url": "https://api.github.com/repos/microsoft/graspologic/languages",
+        "stargazers_url": "https://api.github.com/repos/microsoft/graspologic/stargazers",
+        "contributors_url": "https://api.github.com/repos/microsoft/graspologic/contributors",
+        "subscribers_url": "https://api.github.com/repos/microsoft/graspologic/subscribers",
+        "subscription_url": "https://api.github.com/repos/microsoft/graspologic/subscription",
+        "commits_url": "https://api.github.com/repos/microsoft/graspologic/commits{/sha}",
+        "git_commits_url": "https://api.github.com/repos/microsoft/graspologic/git/commits{/sha}",
+        "comments_url": "https://api.github.com/repos/microsoft/graspologic/comments{/number}",
+        "issue_comment_url": "https://api.github.com/repos/microsoft/graspologic/issues/comments{/number}",
+        "contents_url": "https://api.github.com/repos/microsoft/graspologic/contents/{+path}",
+        "compare_url": "https://api.github.com/repos/microsoft/graspologic/compare/{base}...{head}",
+        "merges_url": "https://api.github.com/repos/microsoft/graspologic/merges",
+        "archive_url": "https://api.github.com/repos/microsoft/graspologic/{archive_format}{/ref}",
+        "downloads_url": "https://api.github.com/repos/microsoft/graspologic/downloads",
+        "issues_url": "https://api.github.com/repos/microsoft/graspologic/issues{/number}",
+        "pulls_url": "https://api.github.com/repos/microsoft/graspologic/pulls{/number}",
+        "milestones_url": "https://api.github.com/repos/microsoft/graspologic/milestones{/number}",
+        "notifications_url": "https://api.github.com/repos/microsoft/graspologic/notifications{?since,all,participating}",
+        "labels_url": "https://api.github.com/repos/microsoft/graspologic/labels{/name}",
+        "releases_url": "https://api.github.com/repos/microsoft/graspologic/releases{/id}",
+        "deployments_url": "https://api.github.com/repos/microsoft/graspologic/deployments"
+      },
+      "head_repository": {
+        "id": 147768493,
+        "node_id": "MDEwOlJlcG9zaXRvcnkxNDc3Njg0OTM=",
+        "name": "graspologic",
+        "full_name": "microsoft/graspologic",
+        "private": false,
+        "owner": {
+          "login": "microsoft",
+          "id": 6154722,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjYxNTQ3MjI=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/6154722?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/microsoft",
+          "html_url": "https://github.com/microsoft",
+          "followers_url": "https://api.github.com/users/microsoft/followers",
+          "following_url": "https://api.github.com/users/microsoft/following{/other_user}",
+          "gists_url": "https://api.github.com/users/microsoft/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/microsoft/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/microsoft/subscriptions",
+          "organizations_url": "https://api.github.com/users/microsoft/orgs",
+          "repos_url": "https://api.github.com/users/microsoft/repos",
+          "events_url": "https://api.github.com/users/microsoft/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/microsoft/received_events",
+          "type": "Organization",
+          "site_admin": false
+        },
+        "html_url": "https://github.com/microsoft/graspologic",
+        "description": "Python package for graph statistics",
+        "fork": false,
+        "url": "https://api.github.com/repos/microsoft/graspologic",
+        "forks_url": "https://api.github.com/repos/microsoft/graspologic/forks",
+        "keys_url": "https://api.github.com/repos/microsoft/graspologic/keys{/key_id}",
+        "collaborators_url": "https://api.github.com/repos/microsoft/graspologic/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/microsoft/graspologic/teams",
+        "hooks_url": "https://api.github.com/repos/microsoft/graspologic/hooks",
+        "issue_events_url": "https://api.github.com/repos/microsoft/graspologic/issues/events{/number}",
+        "events_url": "https://api.github.com/repos/microsoft/graspologic/events",
+        "assignees_url": "https://api.github.com/repos/microsoft/graspologic/assignees{/user}",
+        "branches_url": "https://api.github.com/repos/microsoft/graspologic/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/microsoft/graspologic/tags",
+        "blobs_url": "https://api.github.com/repos/microsoft/graspologic/git/blobs{/sha}",
+        "git_tags_url": "https://api.github.com/repos/microsoft/graspologic/git/tags{/sha}",
+        "git_refs_url": "https://api.github.com/repos/microsoft/graspologic/git/refs{/sha}",
+        "trees_url": "https://api.github.com/repos/microsoft/graspologic/git/trees{/sha}",
+        "statuses_url": "https://api.github.com/repos/microsoft/graspologic/statuses/{sha}",
+        "languages_url": "https://api.github.com/repos/microsoft/graspologic/languages",
+        "stargazers_url": "https://api.github.com/repos/microsoft/graspologic/stargazers",
+        "contributors_url": "https://api.github.com/repos/microsoft/graspologic/contributors",
+        "subscribers_url": "https://api.github.com/repos/microsoft/graspologic/subscribers",
+        "subscription_url": "https://api.github.com/repos/microsoft/graspologic/subscription",
+        "commits_url": "https://api.github.com/repos/microsoft/graspologic/commits{/sha}",
+        "git_commits_url": "https://api.github.com/repos/microsoft/graspologic/git/commits{/sha}",
+        "comments_url": "https://api.github.com/repos/microsoft/graspologic/comments{/number}",
+        "issue_comment_url": "https://api.github.com/repos/microsoft/graspologic/issues/comments{/number}",
+        "contents_url": "https://api.github.com/repos/microsoft/graspologic/contents/{+path}",
+        "compare_url": "https://api.github.com/repos/microsoft/graspologic/compare/{base}...{head}",
+        "merges_url": "https://api.github.com/repos/microsoft/graspologic/merges",
+        "archive_url": "https://api.github.com/repos/microsoft/graspologic/{archive_format}{/ref}",
+        "downloads_url": "https://api.github.com/repos/microsoft/graspologic/downloads",
+        "issues_url": "https://api.github.com/repos/microsoft/graspologic/issues{/number}",
+        "pulls_url": "https://api.github.com/repos/microsoft/graspologic/pulls{/number}",
+        "milestones_url": "https://api.github.com/repos/microsoft/graspologic/milestones{/number}",
+        "notifications_url": "https://api.github.com/repos/microsoft/graspologic/notifications{?since,all,participating}",
+        "labels_url": "https://api.github.com/repos/microsoft/graspologic/labels{/name}",
+        "releases_url": "https://api.github.com/repos/microsoft/graspologic/releases{/id}",
+        "deployments_url": "https://api.github.com/repos/microsoft/graspologic/deployments"
+      }
+    },
     {
       "id": 2353350773,
       "name": "graspologic Publish",
@@ -247,7 +496,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -492,7 +741,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -737,7 +986,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -982,7 +1231,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -1227,7 +1476,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -1472,7 +1721,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -1717,7 +1966,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -1962,7 +2211,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -2430,7 +2679,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -2898,7 +3147,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -3143,7 +3392,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -3388,7 +3637,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
@@ -3633,7 +3882,7 @@
           "number": 31,
           "head": {
             "ref": "dev",
-            "sha": "0d404caaa706f7bfbad694879c2e0d14bf3baaef",
+            "sha": "49d6929f14b57d74ba80f903a7aad19f5e4dafa2",
             "repo": {
               "id": 147768493,
               "url": "https://api.github.com/repos/microsoft/graspologic",
