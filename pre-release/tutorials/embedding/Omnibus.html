@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Omnibus Embedding for Multiple Graphs &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Omnibus Embedding for Multiple Graphs &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -536,7 +545,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Omnibus-Embedding-for-Multiple-Graphs">
-<h1>Omnibus Embedding for Multiple Graphs<a class="headerlink" href="#Omnibus-Embedding-for-Multiple-Graphs" title="Permalink to this headline">¶</a></h1>
+<h1>Omnibus Embedding for Multiple Graphs<a class="headerlink" href="#Omnibus-Embedding-for-Multiple-Graphs" title="Permalink to this heading">¶</a></h1>
 <p>This demo shows you how to simultaneously embed two graphs using omnibus embedding from two graphs sampled from different stochastic block models (SBM). We will also compare the results to that of adjacency spectral embedding, and show why it is useful to embed the graphs simultaneously.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -551,7 +560,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">
-<h2>Simulate two different graphs using stochastic block models (SBM)<a class="headerlink" href="#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)" title="Permalink to this headline">¶</a></h2>
+<h2>Simulate two different graphs using stochastic block models (SBM)<a class="headerlink" href="#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)" title="Permalink to this heading">¶</a></h2>
 <p>We sample 2-block SBMs (undirected, no self-loops) with 50 vertices, each block containing 25 vertices (n = [25, 25]), and the following block probabilities:</p>
 <p><span class="math">\begin{align*}
 P_1 =
@@ -584,7 +593,7 @@ P_2 = \begin{bmatrix}0.3 & 0.1\\
 </div>
 </section>
 <section id="Visualize-the-graphs-using-heatmap">
-<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this heading">¶</a></h2>
 <p>We visualize the sampled graphs using heatmap function. Heatmap will plot the adjacency matrix, where the colors represent the weight of the edge. In this case, we have binary graphs so the values will be either 0 or 1.</p>
 <p>There is clear block structure to the graphs, and we see that the second, lower right, block of <span class="math notranslate nohighlight">\(G_1\)</span> has more edges than that of <span class="math notranslate nohighlight">\(G_2\)</span>.</p>
 <div class="nbinput docutils container">
@@ -612,7 +621,7 @@ P_2 = \begin{bmatrix}0.3 & 0.1\\
 </div>
 </section>
 <section id="Embed-the-two-graphs-using-omnibus-embedding">
-<h2>Embed the two graphs using omnibus embedding<a class="headerlink" href="#Embed-the-two-graphs-using-omnibus-embedding" title="Permalink to this headline">¶</a></h2>
+<h2>Embed the two graphs using omnibus embedding<a class="headerlink" href="#Embed-the-two-graphs-using-omnibus-embedding" title="Permalink to this heading">¶</a></h2>
 <p>The purpose of embedding graphs is to obtain a Euclidean representation, sometimes called latent positions, of the adjacency matrices. Again, we assume that the probability matrix of a graph is given by <span class="math notranslate nohighlight">\(P = XX^T\)</span> and we are trying to estimate <span class="math notranslate nohighlight">\(X\)</span>. The benefit of omnibus embedding is that the latent positions of all embedded graphs live in the same canonical space, thus eliminating the need to align the results.</p>
 <p>We use all of the default parameters. Underneath, the select_dimension algorithm will automatically find the optimal embedding dimension for us. In this example, we get the following estimate,</p>
 <p><span class="math">\begin{align*}
@@ -646,7 +655,7 @@ P_2 = \begin{bmatrix}0.3 & 0.1\\
 </div>
 </section>
 <section id="Visualize-the-latent-positions">
-<h2>Visualize the latent positions<a class="headerlink" href="#Visualize-the-latent-positions" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize the latent positions<a class="headerlink" href="#Visualize-the-latent-positions" title="Permalink to this heading">¶</a></h2>
 <p>Since the two graphs have clear block structures, we should see two “clusters” when we visualize the latent positions. The vertices that form the first block should be close together since they have the same block probabilities, while those that form the second block should be further apart since they have different block probabilities.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Layouts &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Layouts &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -31,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -289,9 +290,9 @@
 }
 </style>
 <section id="layouts">
-<h1>Layouts<a class="headerlink" href="#layouts" title="Permalink to this headline">¶</a></h1>
+<h1>Layouts<a class="headerlink" href="#layouts" title="Permalink to this heading">¶</a></h1>
 <section id="nodeposition">
-<h2>NodePosition<a class="headerlink" href="#nodeposition" title="Permalink to this headline">¶</a></h2>
+<h2>NodePosition<a class="headerlink" href="#nodeposition" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.layouts.NodePosition">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">NodePosition</span></span><a class="reference internal" href="../../_modules/graspologic/layouts/classes.html#NodePosition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.NodePosition" title="Permalink to this definition">¶</a></dt>
@@ -361,7 +362,7 @@
 
 </section>
 <section id="automatic-graph-layout">
-<h2>Automatic Graph Layout<a class="headerlink" href="#automatic-graph-layout" title="Permalink to this headline">¶</a></h2>
+<h2>Automatic Graph Layout<a class="headerlink" href="#automatic-graph-layout" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="graspologic.layouts.layout_tsne">
 <span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">layout_tsne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust_overlaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/auto.html#layout_tsne"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.layout_tsne" title="Permalink to this definition">¶</a></dt>
@@ -380,7 +381,7 @@ overlap removal phase. Lastly, a global partitioning algorithm
 component and the partition ID is included with each node position.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a></p>
+<dd class="field-odd"><p><strong>graph</strong> : <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a></p>
 <blockquote>
 <div><p>The graph to generate a layout for. This graph may have edges pruned if the
 count is too high and only the largest connected component will be used to
@@ -440,7 +441,7 @@ the largest connected component. The NodePosition object contains:
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>perplexity</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>n_iter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>max_edges</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
@@ -450,7 +451,7 @@ the largest connected component. The NodePosition object contains:
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)">networkx.classes.graph.Graph</a>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition">graspologic.layouts.classes.NodePosition</a>]]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a>]]</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
@@ -480,7 +481,7 @@ overlap removal phase. Lastly, a global partitioning algorithm
 component and the partition ID is included with each node position.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a></p>
+<dd class="field-odd"><p><strong>graph</strong> : <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a></p>
 <blockquote>
 <div><p>The graph to generate a layout for. This graph may have edges pruned if the
 count is too high and only the largest connected component will be used to
@@ -540,7 +541,7 @@ the largest connected component. The NodePosition object contains:
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>min_dist</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>n_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>max_edges</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
@@ -550,7 +551,7 @@ the largest connected component. The NodePosition object contains:
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)">networkx.classes.graph.Graph</a>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition">graspologic.layouts.classes.NodePosition</a>]]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a>]]</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
@@ -569,7 +570,7 @@ on Neighbor Embeddings along the Attraction-Repulsion Spectrum. ArXiv e-prints
 
 </section>
 <section id="colors">
-<h2>Colors<a class="headerlink" href="#colors" title="Permalink to this headline">¶</a></h2>
+<h2>Colors<a class="headerlink" href="#colors" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="graspologic.layouts.categorical_colors">
 <span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">categorical_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partitions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/colors.html#categorical_colors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.categorical_colors" title="Permalink to this definition">¶</a></dt>
@@ -680,7 +681,7 @@ provided for the node as it relates to the total range of all values.</p>
 
 </section>
 <section id="rendering">
-<h2>Rendering<a class="headerlink" href="#rendering" title="Permalink to this headline">¶</a></h2>
+<h2>Rendering<a class="headerlink" href="#rendering" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="graspologic.layouts.save_graph">
 <span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">save_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_line_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.55</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_line_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/render.html#save_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.save_graph" title="Permalink to this definition">¶</a></dt>
@@ -755,8 +756,8 @@ for a list of allowed values . Default is <code class="docutils literal notransl
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
-<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a>) -- </p></li>
-<li><p><strong>positions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>graspologic.layouts.classes.NodePosition</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>positions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a><em>]</em>) -- </p></li>
 <li><p><strong>node_colors</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
 <li><p><strong>vertex_line_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>vertex_alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
@@ -843,8 +844,8 @@ for a list of allowed values . Default is <code class="docutils literal notransl
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a>) -- </p></li>
-<li><p><strong>positions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>graspologic.layouts.classes.NodePosition</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>positions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a><em>]</em>) -- </p></li>
 <li><p><strong>node_colors</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
 <li><p><strong>vertex_line_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>vertex_alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>

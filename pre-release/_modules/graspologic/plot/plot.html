@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.plot.plot &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>graspologic.plot.plot &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -28,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -693,7 +694,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;matplotlib:tutorials/colors/colormaps&gt;`</span>
 <span class="sd">    alpha : float [0, 1], default : 0.7</span>
 <span class="sd">        Alpha value of plotted gridplot points</span>
 <span class="sd">    sizes : length 2 tuple, default: (10, 200)</span>
@@ -733,17 +734,16 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;X must be a list, not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+    <span class="n">_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
 
-    <span class="n">check_consistent_length</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+    <span class="n">check_consistent_length</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">_labels</span><span class="p">)</span>
 
     <span class="n">graphs</span> <span class="o">=</span> <span class="n">_process_graphs</span><span class="p">(</span>
         <span class="n">X</span><span class="p">,</span> <span class="n">inner_hier_labels</span><span class="p">,</span> <span class="n">outer_hier_labels</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">sort_nodes</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="n">desat</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="n">desat</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="n">_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">graph</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graphs</span><span class="p">):</span>
@@ -753,7 +753,7 @@
             <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">rdx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">cdx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">weights</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rdx&quot;</span><span class="p">,</span> <span class="s2">&quot;cdx&quot;</span><span class="p">,</span> <span class="s2">&quot;Weights&quot;</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="n">legend_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cdx</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">legend_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cdx</span><span class="p">)</span>
         <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -859,14 +859,14 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;matplotlib:tutorials/colors/colormaps&gt;`.</span>
 <span class="sd">    alpha : float, optional, default: 0.7</span>
 <span class="sd">        Opacity value of plotter markers between 0 and 1</span>
 <span class="sd">    size : float or int, optional, default: 50</span>
 <span class="sd">        Size of plotted markers.</span>
 <span class="sd">    marker : string, optional, default: &#39;.&#39;</span>
 <span class="sd">        Matplotlib marker specifier, see the marker options at</span>
-<span class="sd">        :doc:`Matplotlib style marker specification &lt;api/markers_api&gt;`</span>
+<span class="sd">        :doc:`Matplotlib style marker specification &lt;matplotlib:api/markers_api&gt;`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_common_inputs</span><span class="p">(</span>
         <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
@@ -1322,7 +1322,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;matplotlib:tutorials/colors/colormaps&gt;`.</span>
 <span class="sd">    figsize : tuple of length 2, default (10, 5)</span>
 <span class="sd">        Size of the figure (width, height)</span>
 
@@ -1391,7 +1391,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;matplotlib:tutorials/colors/colormaps&gt;`.</span>
 <span class="sd">    figsize : tuple of length 2, default (10, 5)</span>
 <span class="sd">        Size of the figure (width, height)</span>
 
@@ -1406,14 +1406,16 @@
     <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">check_consistent_length</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">labels</span><span class="p">))</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+    <span class="n">_labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="p">)</span>
+    <span class="n">_labels</span> <span class="o">=</span> <span class="n">_labels</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
     <span class="k">if</span> <span class="n">nonzero</span><span class="p">:</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">edges</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">_labels</span> <span class="o">=</span> <span class="n">_labels</span><span class="p">[</span><span class="n">edges</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">edges</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">_distplot</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="n">_labels</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
         <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
         <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span><span class="p">,</span>
@@ -1787,7 +1789,7 @@
     <span class="n">outer_freq_cumsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">outer_freq</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()))</span>
 
     <span class="c1"># for each group of outer labels, calculate the boundaries of the inner labels</span>
-    <span class="n">inner_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">inner_freq</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">outer_freq</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
         <span class="n">start_ind</span> <span class="o">=</span> <span class="n">outer_freq_cumsum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">stop_ind</span> <span class="o">=</span> <span class="n">outer_freq_cumsum</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>

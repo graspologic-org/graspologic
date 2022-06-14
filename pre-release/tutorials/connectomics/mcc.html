@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -32,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -479,6 +480,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -487,10 +489,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -502,12 +508,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -535,7 +544,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Methods-for-Multiscale-Comparative-Connectomics">
-<h1>Methods for Multiscale Comparative Connectomics<a class="headerlink" href="#Methods-for-Multiscale-Comparative-Connectomics" title="Permalink to this headline">¶</a></h1>
+<h1>Methods for Multiscale Comparative Connectomics<a class="headerlink" href="#Methods-for-Multiscale-Comparative-Connectomics" title="Permalink to this heading">¶</a></h1>
 <p>This demo shows you how to use methods in <code class="docutils literal notranslate"><span class="pre">graspologic</span></code> to analyze patterns in brain connectivity in connectomics datasets. We specifically demonstrate methods for identifying differences in edges and vertices across subjects.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -552,7 +561,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Load-the-Duke-mouse-brain-dataset">
-<h2>Load the Duke mouse brain dataset<a class="headerlink" href="#Load-the-Duke-mouse-brain-dataset" title="Permalink to this headline">¶</a></h2>
+<h2>Load the Duke mouse brain dataset<a class="headerlink" href="#Load-the-Duke-mouse-brain-dataset" title="Permalink to this heading">¶</a></h2>
 <p>Dataset of 32 mouse connectomes derived from whole-brain diffusion magnetic resonance imaging of four distinct mouse genotypes: BTBR T+ Itpr3tf/J (BTBR), C57BL/6J(B6), CAST/EiJ (CAST), and DBA/2J (DBA2). For each strain, connectomes were generated from eight age-matched mice (N = 8 per strain), with a sex distribution of four males and four females. Each connectome was parcellated using asymmetric Waxholm Space, yielding a vertex set with a total of 332 regions of interest (ROIs) symmetrically
 distributed across the left and right hemispheres. Within a given hemisphere, there are seven superstructures consisting up multiple ROIs, resulting in a total of 14 distinct communities in each connectome.</p>
 <div class="nbinput docutils container">
@@ -604,7 +613,7 @@ distributed across the left and right hemispheres. Within a given hemisphere, th
 </div>
 </section>
 <section id="Identifying-Signal-Edges">
-<h2>Identifying Signal Edges<a class="headerlink" href="#Identifying-Signal-Edges" title="Permalink to this headline">¶</a></h2>
+<h2>Identifying Signal Edges<a class="headerlink" href="#Identifying-Signal-Edges" title="Permalink to this heading">¶</a></h2>
 <p>The simplest approach for comparing connectomes is to treat them as a <em>bag of edges</em> without considering interactions between the edges. Serially performing univariate statistical analyses at each edge enables the discovery of <em>signal edges</em> whose neurological connectivity differs across categorical or dimensional phenotypes. Here, we demonstrate the possibility of using Distance Correlation (<code class="docutils literal notranslate"><span class="pre">Dcorr</span></code>), a nonparametric universally consistent test, to detect changes in edges.</p>
 <p>In this model, we assume that each edge in the connectome is independently and identically sampled from some distribution <span class="math notranslate nohighlight">\(F_i\)</span>, where <span class="math notranslate nohighlight">\(i\)</span> represents the group to which the given connectome belongs. In this setting the groups are the mouse genotypes. <code class="docutils literal notranslate"><span class="pre">Dcorr</span></code> allows us to test the following hypothesis:</p>
 <p><span class="math">\begin{align*}
@@ -775,7 +784,7 @@ H_A:\ &\exists \ j \neq j' \text{ s.t. } F_j \neq F_{j'}
 <p>Note that none of the edges achieve significance at <span class="math notranslate nohighlight">\(\alpha=0.05\)</span> following Holm-Bonferroni correction. We might expect this, given that we are correcting for <span class="math notranslate nohighlight">\(N=54,946\)</span> tests. Instead of the magnitude, the <strong>ranking of the p-values</strong> can be used to determine signal edges.</p>
 </section>
 <section id="Identifying-Signal-Vertices">
-<h2>Identifying Signal Vertices<a class="headerlink" href="#Identifying-Signal-Vertices" title="Permalink to this headline">¶</a></h2>
+<h2>Identifying Signal Vertices<a class="headerlink" href="#Identifying-Signal-Vertices" title="Permalink to this heading">¶</a></h2>
 <p>A sample of connectomes can be jointly embedded in a low-dimensional Euclidean space using the omnibus embedding (<code class="docutils literal notranslate"><span class="pre">omni</span></code>). A host of machine learning tasks can be accomplished with this joint embedded representation of the connectome, such as clustering or classification of vertices. Here, we use the embedding to formulate a statistical test that can be used to identify vertices that are strongly associated with given phenotypes. According to a Central Limit Theorem for <code class="docutils literal notranslate"><span class="pre">omni</span></code>, these latent
 positions are universally consistent and asymptotically normal.</p>
 <div class="nbinput nblast docutils container">
@@ -981,7 +990,7 @@ number of permutations would be around <span class="math notranslate nohighlight
 </div>
 </section>
 <section id="Whole-brain-Comparisons">
-<h2>Whole-brain Comparisons<a class="headerlink" href="#Whole-brain-Comparisons" title="Permalink to this headline">¶</a></h2>
+<h2>Whole-brain Comparisons<a class="headerlink" href="#Whole-brain-Comparisons" title="Permalink to this heading">¶</a></h2>
 <p>We can use the results of the omnibus embedding to perform whole-brain comparisons across subjects from different phenotypes.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.subgraph.sg &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>graspologic.subgraph.sg &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -28,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -384,11 +385,11 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraints</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">)):</span>  <span class="c1"># incoherent</span>
             <span class="n">nedges</span> <span class="o">=</span> <span class="n">constraints</span>
-            <span class="n">sigsub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span>
+            <span class="n">_sigsub_dstack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">sigmat</span><span class="o">.</span><span class="n">ravel</span><span class="p">()),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sigmat</span><span class="p">))</span>
             <span class="p">)</span>
-            <span class="n">sigsub</span> <span class="o">=</span> <span class="n">sigsub</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">nedges</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="n">sigsub</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sigsub</span><span class="p">))</span>
+            <span class="n">_sigsub</span> <span class="o">=</span> <span class="n">_sigsub_dstack</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">nedges</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">sigsub</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">_sigsub</span><span class="p">))</span>
 
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">constraints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># coherent</span>
             <span class="n">nedges</span> <span class="o">=</span> <span class="n">constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -418,13 +419,13 @@
                     <span class="n">indsp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span>
                         <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">blank</span><span class="o">.</span><span class="n">ravel</span><span class="p">()),</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">blank</span><span class="p">))</span>
                     <span class="p">)</span>
-                    <span class="n">sigsub</span> <span class="o">=</span> <span class="n">indsp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">nedges</span><span class="p">,</span> <span class="p">:]</span>
-                    <span class="n">sigsub</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sigsub</span><span class="p">))</span>
+                    <span class="n">_sigsub</span> <span class="o">=</span> <span class="n">indsp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">nedges</span><span class="p">,</span> <span class="p">:]</span>
+                    <span class="n">sigsub</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">_sigsub</span><span class="p">))</span>
                     <span class="n">wconv</span> <span class="o">=</span> <span class="mi">1</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">wcounter</span> <span class="o">=</span> <span class="n">wcounter</span> <span class="o">+</span> <span class="mi">1</span>
                     <span class="k">if</span> <span class="n">wcounter</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">wset</span><span class="p">):</span>
-                        <span class="n">sigsub</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">sigsub</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
                         <span class="n">wconv</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Input constraints must be an int for the incoherent signal-subgraph estimator, or a vector of length 2 for the coherent subgraph estimator.&quot;</span>

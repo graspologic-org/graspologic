@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spectral Vertex Nomination &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Spectral Vertex Nomination &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -536,7 +545,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Spectral-Vertex-Nomination">
-<h1>Spectral Vertex Nomination<a class="headerlink" href="#Spectral-Vertex-Nomination" title="Permalink to this headline">¶</a></h1>
+<h1>Spectral Vertex Nomination<a class="headerlink" href="#Spectral-Vertex-Nomination" title="Permalink to this heading">¶</a></h1>
 <p>This demo shows how to use the Spectral Vertex Nomination (SVN) class. We will use SVN to nominate vertices in a Stochastic Block Model (SBM)</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -554,7 +563,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="What-is-Spectral-Vertex-Nomination?">
-<h2>What is Spectral Vertex Nomination?<a class="headerlink" href="#What-is-Spectral-Vertex-Nomination?" title="Permalink to this headline">¶</a></h2>
+<h2>What is Spectral Vertex Nomination?<a class="headerlink" href="#What-is-Spectral-Vertex-Nomination?" title="Permalink to this heading">¶</a></h2>
 <p>Given a graph <span class="math notranslate nohighlight">\(G=(V,E)\)</span> and a subset of <span class="math notranslate nohighlight">\(V\)</span> called <span class="math notranslate nohighlight">\(S\)</span> (the “seed”), Single Graph Vertex Nomination is the problem of ranking all <span class="math notranslate nohighlight">\(V\)</span> ordered by degree of relation to members of <span class="math notranslate nohighlight">\(S\)</span>. Spectral Vertex Nomination (SVN) solves the Vertex Nomination problem by embedding a graph’s adjacency matrix into a low dimensional euclidean space, then using distance based methods to establish relationship between vertices. (See embedding tutorials)</p>
 <p>SVN has the advantage of being extremely efficient on very large graphs, and requires very little prior knowledge of a graph’s properties or structure. However, it does somewhat conflate the notion of community membership with vertex similarity. This might not be appropriate for all vertex nomination use cases. Synthetic SBM data, with inherently defined communities, is therefore a good setting for demonstrating SVN.</p>
 <div class="nbinput docutils container">

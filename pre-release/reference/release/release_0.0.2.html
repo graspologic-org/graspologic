@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Release Notes: GraSPy 0.0.2 &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Release Notes: GraSPy 0.0.2 &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -31,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -290,14 +291,14 @@
 }
 </style>
 <section id="release-notes-graspy-0-0-2">
-<h1>Release Notes: GraSPy 0.0.2<a class="headerlink" href="#release-notes-graspy-0-0-2" title="Permalink to this headline">¶</a></h1>
+<h1>Release Notes: GraSPy 0.0.2<a class="headerlink" href="#release-notes-graspy-0-0-2" title="Permalink to this heading">¶</a></h1>
 <p>We're happy to announce the release of GraSPy 0.0.2! GraSPy is a Python package for
 understanding the properties of random graphs that arise from modern datasets, such as social networks
 and brain networks.</p>
 <p>For more information, please visit our <a class="reference external" href="http://graspy.neurodata.io/">website</a>
 and our <a class="reference external" href="https://graspy.neurodata.io/tutorial.html">tutorials</a>.</p>
 <section id="highlights">
-<h2>Highlights<a class="headerlink" href="#highlights" title="Permalink to this headline">¶</a></h2>
+<h2>Highlights<a class="headerlink" href="#highlights" title="Permalink to this heading">¶</a></h2>
 <p>This release is the result of 3 months of work with over 16 pull requests by 5 contributors. Highlights include:</p>
 <ul class="simple">
 <li><p>Nonparametric hypothesis testing method for testing two non-vertex matched graphs.</p></li>
@@ -308,7 +309,7 @@ and our <a class="reference external" href="https://graspy.neurodata.io/tutorial
 </ul>
 </section>
 <section id="improvements">
-<h2>Improvements<a class="headerlink" href="#improvements" title="Permalink to this headline">¶</a></h2>
+<h2>Improvements<a class="headerlink" href="#improvements" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Embedding methods are now fully sklearn-compliant. This is tested via <code class="docutils literal notranslate"><span class="pre">check_estimator</span></code> function in sklearn.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gridplot</span></code> and <code class="docutils literal notranslate"><span class="pre">heatmap</span></code> can now plot hierchical labels.</p></li>
@@ -321,7 +322,7 @@ and our <a class="reference external" href="https://graspy.neurodata.io/tutorial
 </ul>
 </section>
 <section id="api-changes">
-<h2>API Changes<a class="headerlink" href="#api-changes" title="Permalink to this headline">¶</a></h2>
+<h2>API Changes<a class="headerlink" href="#api-changes" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">check_lcc</span></code> argument in <code class="docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code>, <code class="docutils literal notranslate"><span class="pre">LaplacianSpectralEmbed</span></code>, and <code class="docutils literal notranslate"><span class="pre">OmnibusEmbed</span></code> classes, which checks if input graph(s) are fully connected when <code class="docutils literal notranslate"><span class="pre">check_lcc</span></code> is True.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gridplot</span></code> and <code class="docutils literal notranslate"><span class="pre">heatmap</span></code> now have a <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">outer_hier_labels</span></code>, which are used for hierarchical labeling of nodes.</p></li>
@@ -330,11 +331,11 @@ and our <a class="reference external" href="https://graspy.neurodata.io/tutorial
 </ul>
 </section>
 <section id="deprecations">
-<h2>Deprecations<a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
+<h2>Deprecations<a class="headerlink" href="#deprecations" title="Permalink to this heading">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="contributors-to-this-release">
-<h2>Contributors to this release<a class="headerlink" href="#contributors-to-this-release" title="Permalink to this headline">¶</a></h2>
+<h2>Contributors to this release<a class="headerlink" href="#contributors-to-this-release" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/bdpedigo">Benjamin Pedigo</a></p></li>
 <li><p><a class="reference external" href="https://github.com/j1c">Jaewon Chung</a></p></li>

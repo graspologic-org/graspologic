@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multiple Adjacency Spectral Embedding (MASE) &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Multiple Adjacency Spectral Embedding (MASE) &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -536,7 +545,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Multiple-Adjacency-Spectral-Embedding-(MASE)">
-<h1>Multiple Adjacency Spectral Embedding (MASE)<a class="headerlink" href="#Multiple-Adjacency-Spectral-Embedding-(MASE)" title="Permalink to this headline">¶</a></h1>
+<h1>Multiple Adjacency Spectral Embedding (MASE)<a class="headerlink" href="#Multiple-Adjacency-Spectral-Embedding-(MASE)" title="Permalink to this heading">¶</a></h1>
 <p>Multiple Adjacency Spectral Embedding (MASE) is an extension of Adjacency Spectral Embedding (see ASE <a class="reference external" href="https://graspy.neurodata.io/tutorials/embedding/adjacencyspectralembed">tutorial</a>) for an arbitrary number of graphs. Once graphs are embedded, the low-dimensional Euclidean representation can be used to visualize the latent positions of vertices, perform inference, etc.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -549,11 +558,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Replicating-Omnibus-Embedding-Tutorial">
-<h2>Replicating Omnibus Embedding Tutorial<a class="headerlink" href="#Replicating-Omnibus-Embedding-Tutorial" title="Permalink to this headline">¶</a></h2>
+<h2>Replicating Omnibus Embedding Tutorial<a class="headerlink" href="#Replicating-Omnibus-Embedding-Tutorial" title="Permalink to this heading">¶</a></h2>
 <p>In order to demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">MultipleASE</span></code> class, we will use a simple example: two 2-block stochastic block models (SBMs) with different block probabilities. Indeed, we will use the same models as in the omnibus <a class="reference external" href="https://graspy.neurodata.io/tutorials/embedding/omnibus">tutorial</a> to facilitate direct comparison.</p>
 </section>
 <section id="Simulate-two-different-graphs-using-stochastic-block-models-(SBM)">
-<h2>Simulate two different graphs using stochastic block models (SBM)<a class="headerlink" href="#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)" title="Permalink to this headline">¶</a></h2>
+<h2>Simulate two different graphs using stochastic block models (SBM)<a class="headerlink" href="#Simulate-two-different-graphs-using-stochastic-block-models-(SBM)" title="Permalink to this heading">¶</a></h2>
 <p>We sample two 2-block SBMs (undirected, no self-loops) with 50 vertices, each block containing 25 vertices (<span class="math notranslate nohighlight">\(n = [25, 25]\)</span>), and with the following block connectivity matrices:</p>
 <p><span class="math">\begin{align*}
 B_1 =
@@ -594,7 +603,7 @@ B_2 = \begin{bmatrix}0.3 & 0.1\\
 </div>
 </section>
 <section id="Visualize-the-graphs-using-heatmap">
-<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this heading">¶</a></h2>
 <p>We visualize the sampled graphs using the <code class="docutils literal notranslate"><span class="pre">heatmap()</span></code> function. <code class="docutils literal notranslate"><span class="pre">heatmap()</span></code> will plot the adjacency matrix, where the colors represent the weight of each edge. In this case, we have binary graphs so the values will be either 0 or 1.</p>
 <p>We see that there is clear block structure to the graphs. Furthermore, the lower right quarter of <span class="math notranslate nohighlight">\(G_1\)</span>, representing the within-group connections for the second group, is more dense than that of <span class="math notranslate nohighlight">\(G_2\)</span>.</p>
 <div class="nbinput docutils container">
@@ -624,7 +633,7 @@ B_2 = \begin{bmatrix}0.3 & 0.1\\
 </div>
 </section>
 <section id="Embed-the-two-graphs-using-MASE">
-<h2>Embed the two graphs using MASE<a class="headerlink" href="#Embed-the-two-graphs-using-MASE" title="Permalink to this headline">¶</a></h2>
+<h2>Embed the two graphs using MASE<a class="headerlink" href="#Embed-the-two-graphs-using-MASE" title="Permalink to this heading">¶</a></h2>
 <p>Just as ASE fits a single input graph to the Random Dot Product Graph (RDPG) model, MASE fits many input graphs to the common subspace independent-edge (COSIE) model, which is an extension of the RDPG model to multiple graphs. The COSIE model assumes that all of the graphs have important shared properties, but can also have meaningful differences. As a result, COSIE decomposes the set of graphs into a set of shared latent positions <span class="math notranslate nohighlight">\(V\)</span> that describe similarities, and a set of score
 matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that describe how each individual graph is different. Mathematically, for the adjacency matrix of an undirected graph <span class="math notranslate nohighlight">\(A^{(i)}\)</span>,</p>
 <div class="math notranslate nohighlight">
@@ -652,7 +661,7 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </div>
 </section>
 <section id="Visualize-Common-Latent-Positions">
-<h2>Visualize Common Latent Positions<a class="headerlink" href="#Visualize-Common-Latent-Positions" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize Common Latent Positions<a class="headerlink" href="#Visualize-Common-Latent-Positions" title="Permalink to this heading">¶</a></h2>
 <p>Since the two graphs have clear block structures, with higher within-block probabilities than between-block, we see two distinct “clusters” when we visualize the shared latent positions.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -687,7 +696,7 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </div>
 </section>
 <section id="Recover-Original-Communities">
-<h2>Recover Original Communities<a class="headerlink" href="#Recover-Original-Communities" title="Permalink to this headline">¶</a></h2>
+<h2>Recover Original Communities<a class="headerlink" href="#Recover-Original-Communities" title="Permalink to this heading">¶</a></h2>
 <p>We can apply a simple clustering algorithm (kmeans) to recover the original communities.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -718,7 +727,7 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 <p>Even with only one graph sampled from each SBM, we can perfectly recover the two communities!</p>
 </section>
 <section id="Sampling-More-Graphs">
-<h2>Sampling More Graphs<a class="headerlink" href="#Sampling-More-Graphs" title="Permalink to this headline">¶</a></h2>
+<h2>Sampling More Graphs<a class="headerlink" href="#Sampling-More-Graphs" title="Permalink to this heading">¶</a></h2>
 <p>We can recover a more accurate representation of the two SBM populations with more sample graphs. Let’s try with 100 graphs sampled from each.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -733,7 +742,7 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </div>
 </section>
 <section id="Visualizing-Common-Latent-Subspace">
-<h2>Visualizing Common Latent Subspace<a class="headerlink" href="#Visualizing-Common-Latent-Subspace" title="Permalink to this headline">¶</a></h2>
+<h2>Visualizing Common Latent Subspace<a class="headerlink" href="#Visualizing-Common-Latent-Subspace" title="Permalink to this heading">¶</a></h2>
 <p>Now, the clustering is even more distinct, as we would expect with more samples.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -752,7 +761,7 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </div>
 </section>
 <section id="Visualize-Score-Matrices">
-<h2>Visualize Score Matrices<a class="headerlink" href="#Visualize-Score-Matrices" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize Score Matrices<a class="headerlink" href="#Visualize-Score-Matrices" title="Permalink to this heading">¶</a></h2>
 <p>Now that we have more samples, we can apply the same process to visualize the individual score matrices. Note, since the score matrices are symmetric, <span class="math notranslate nohighlight">\(2 \times 2\)</span> matrices, we only need a 3-dimensional vector to represent each. In this case, we can clearly see two distinct clusters: one for the score matrices from the first SBM population another for the score matrices from the second.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -787,7 +796,7 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </div>
 </section>
 <section id="Recover-Original-SBM-Membership">
-<h2>Recover Original SBM Membership<a class="headerlink" href="#Recover-Original-SBM-Membership" title="Permalink to this headline">¶</a></h2>
+<h2>Recover Original SBM Membership<a class="headerlink" href="#Recover-Original-SBM-Membership" title="Permalink to this heading">¶</a></h2>
 <p>As before, we can apply a simple clustering algorithm (kmeans) to recover from which SBM population each graph was generated.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:

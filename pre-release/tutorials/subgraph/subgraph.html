@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Signal Subgraph Estimators &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Signal Subgraph Estimators &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -536,9 +545,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Signal-Subgraph-Estimators">
-<h1>Signal Subgraph Estimators<a class="headerlink" href="#Signal-Subgraph-Estimators" title="Permalink to this headline">¶</a></h1>
+<h1>Signal Subgraph Estimators<a class="headerlink" href="#Signal-Subgraph-Estimators" title="Permalink to this heading">¶</a></h1>
 <section id="This-tutorial-will-introduce-the-following-signal-subgraph-estimators:">
-<h2>This tutorial will introduce the following signal-subgraph estimators:<a class="headerlink" href="#This-tutorial-will-introduce-the-following-signal-subgraph-estimators:" title="Permalink to this headline">¶</a></h2>
+<h2>This tutorial will introduce the following signal-subgraph estimators:<a class="headerlink" href="#This-tutorial-will-introduce-the-following-signal-subgraph-estimators:" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Incoherent subgraph estimator</p></li>
 <li><p>Coherent subgraph estimator</p></li>
@@ -563,7 +572,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <section id="Preliminaries">
-<h3>Preliminaries<a class="headerlink" href="#Preliminaries" title="Permalink to this headline">¶</a></h3>
+<h3>Preliminaries<a class="headerlink" href="#Preliminaries" title="Permalink to this heading">¶</a></h3>
 <p>The general graph model is characterized by <span class="math notranslate nohighlight">\(M_V(m,s;\pi,p,q)\)</span>, where:</p>
 <p><span class="math notranslate nohighlight">\(V\)</span> - the number of vertices in the graph</p>
 <p><span class="math notranslate nohighlight">\(n\)</span> - the number of graph samples</p>
@@ -575,7 +584,7 @@ div.rendered_html tbody tr:hover {
 <p>The signal-subgraph is a subset of edges with distinct class-conditional likelihood parameters. The signal-subgraph estimator evaluates a test statistic for each edge in the graph and selects <span class="math notranslate nohighlight">\(s\)</span> edges with the lowest test statistic, where <span class="math notranslate nohighlight">\(s\)</span> is the desired size of the signal-subgraph.</p>
 <p>The estimator that is used to find the signal-subgraph determines certain properties of the resulting subgraph. Both estimators use <span class="math notranslate nohighlight">\(s\)</span> to determine the size of the resulting subgraph. <span class="math notranslate nohighlight">\(m\)</span> is only used for the coherent estimator, which constrains the subgraph to <span class="math notranslate nohighlight">\(m\)</span> vertices.</p>
 <section id="Incoherent-Signal-Subgraph-Estimator">
-<h4>Incoherent Signal-Subgraph Estimator<a class="headerlink" href="#Incoherent-Signal-Subgraph-Estimator" title="Permalink to this headline">¶</a></h4>
+<h4>Incoherent Signal-Subgraph Estimator<a class="headerlink" href="#Incoherent-Signal-Subgraph-Estimator" title="Permalink to this heading">¶</a></h4>
 <p>For this example we will randomly select 20 edges from a graph with 70 vertices. These edges will have distinct class-conditional edge probabilities, and the graphs will be sampled from the model <span class="math notranslate nohighlight">\(M_{70}(20; 0.5, 0.8, 0.1)\)</span>, with <span class="math notranslate nohighlight">\(n = 100\)</span>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -627,7 +636,7 @@ div.rendered_html tbody tr:hover {
 <p>Note that because <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span> are sufficiently distinct and <span class="math notranslate nohighlight">\(n\)</span> is sufficiently large, the Expected and Estimated signal-subgraphs should match exactly.</p>
 </section>
 <section id="id1">
-<h4>Incoherent Signal-Subgraph Estimator<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h4>Incoherent Signal-Subgraph Estimator<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
 <p>Once again, we will randomly select 20 edges from a graph with 70 vertices. These edges will have distinct class-conditional edge probabilities, but the graphs will be sampled from the model <span class="math notranslate nohighlight">\(M_{70}(1, 20; 0.5, 0.8, 0.1)\)</span>, with <span class="math notranslate nohighlight">\(n = 100\)</span>.</p>
 <p>The estimated signal-subgraph will have 20 edges, constrained so that each edge must be incident to the same vertex. First, we will use the same expected signal-subgraph as the previous example.</p>
 <div class="nbinput docutils container">

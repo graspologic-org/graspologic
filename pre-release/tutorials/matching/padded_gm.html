@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Padded Graph Matching &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Padded Graph Matching &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -556,7 +565,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <section id="Padded-Graph-Matching">
-<h1>Padded Graph Matching<a class="headerlink" href="#Padded-Graph-Matching" title="Permalink to this headline">¶</a></h1>
+<h1>Padded Graph Matching<a class="headerlink" href="#Padded-Graph-Matching" title="Permalink to this heading">¶</a></h1>
 <p>Consider the scenario where one would like to match graphs <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> with <span class="math notranslate nohighlight">\(n_1\)</span> and <span class="math notranslate nohighlight">\(n_2\)</span> nodes, respectively, where <span class="math notranslate nohighlight">\(n_1 &lt; n_2\)</span>. The most straightforward fashion to ‘pad’ <span class="math notranslate nohighlight">\(A\)</span>, such that <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> have the same shape, is to add <span class="math notranslate nohighlight">\(n_2 - n_1\)</span> isolated nodes to <span class="math notranslate nohighlight">\(A\)</span> (represented as empty row/columns in the adjacency matrix). This padding scheme is known as <span class="math notranslate nohighlight">\(\textit{naive padding}\)</span>, substituting
 <span class="math notranslate nohighlight">\(A \oplus 0_{(n_2-n_1)x(n_2-n_1)}\)</span> and <span class="math notranslate nohighlight">\(B\)</span> in place of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, respectively.</p>
 <p>The effect of this is that one matches <span class="math notranslate nohighlight">\(A\)</span> to the best subgraph of <span class="math notranslate nohighlight">\(B\)</span>. That is, the isolated vertices added to <span class="math notranslate nohighlight">\(A\)</span> through padding have an affinity to the low-density subgraphs of <span class="math notranslate nohighlight">\(B\)</span>, in effect giving the isolates a false signal.</p>
@@ -574,7 +583,7 @@ div.rendered_html tbody tr:hover {
 <p>The goal of the matching in this case is to recover <span class="math notranslate nohighlight">\(G_1\)</span> by matching the right most figure below and <span class="math notranslate nohighlight">\(G_2\)</span>. That is, we seek to recover the shared community structure common between two graphs of differing shapes.</p>
 <p>[1] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe, “Seeded graph matching”, Pattern Recognit. 87 (2019) 203–215</p>
 <section id="SBM-correlated-graph-pairs">
-<h2>SBM correlated graph pairs<a class="headerlink" href="#SBM-correlated-graph-pairs" title="Permalink to this headline">¶</a></h2>
+<h2>SBM correlated graph pairs<a class="headerlink" href="#SBM-correlated-graph-pairs" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -629,7 +638,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Naive-vs-Adopted-Padding">
-<h2>Naive vs Adopted Padding<a class="headerlink" href="#Naive-vs-Adopted-Padding" title="Permalink to this headline">¶</a></h2>
+<h2>Naive vs Adopted Padding<a class="headerlink" href="#Naive-vs-Adopted-Padding" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -663,7 +672,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Match ratio of nodes remaining in G1, with naive padding: 0.12333333333333334
+Match ratio of nodes remaining in G1, with naive padding: 0.15333333333333332
 Match ratio of nodes remaining in G1, with adopted padding: 1.0
 </pre></div></div>
 </div>

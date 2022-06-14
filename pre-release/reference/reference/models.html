@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Models &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Models &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -291,9 +292,9 @@
 }
 </style>
 <section id="models">
-<h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
+<h1>Models<a class="headerlink" href="#models" title="Permalink to this heading">¶</a></h1>
 <section id="erdos-reyni-models">
-<h2>Erdos-Reyni models<a class="headerlink" href="#erdos-reyni-models" title="Permalink to this headline">¶</a></h2>
+<h2>Erdos-Reyni models<a class="headerlink" href="#erdos-reyni-models" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.models.EREstimator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">EREstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/er.html#EREstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EREstimator" title="Permalink to this definition">¶</a></dt>
@@ -377,12 +378,12 @@ estimated.</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#graspologic.models.EREstimator" title="graspologic.models.er.EREstimator">graspologic.models.er.EREstimator</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#graspologic.models.EREstimator" title="graspologic.models.er.EREstimator"><em>EREstimator</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -407,7 +408,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -456,7 +457,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -490,7 +491,7 @@ array will still be returned.</p>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -516,7 +517,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -552,12 +553,12 @@ result in poorly behaved likelihoods depending on the model.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -588,12 +589,12 @@ possible to update each component of a nested object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="graspologic.models.EREstimator.block_p_">
-<span class="sig-name descname"><span class="pre">block_p_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#graspologic.models.EREstimator.block_p_" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">block_p_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.EREstimator.block_p_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="graspologic.models.EREstimator.vertex_assignments_">
-<span class="sig-name descname"><span class="pre">vertex_assignments_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#graspologic.models.EREstimator.vertex_assignments_" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">vertex_assignments_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.EREstimator.vertex_assignments_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -707,12 +708,12 @@ estimated.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.DCEREstimator" title="graspologic.models.er.DCEREstimator">graspologic.models.er.DCEREstimator</a></p>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.DCEREstimator" title="graspologic.models.er.DCEREstimator"><em>DCEREstimator</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -737,7 +738,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -786,7 +787,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -820,7 +821,7 @@ array will still be returned.</p>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -846,7 +847,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -882,12 +883,12 @@ result in poorly behaved likelihoods depending on the model.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -920,7 +921,7 @@ possible to update each component of a nested object.</p>
 
 </section>
 <section id="stochastic-block-models">
-<h2>Stochastic block models<a class="headerlink" href="#stochastic-block-models" title="Permalink to this headline">¶</a></h2>
+<h2>Stochastic block models<a class="headerlink" href="#stochastic-block-models" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.models.SBMEstimator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">SBMEstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/sbm_estimators.html#SBMEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.SBMEstimator" title="Permalink to this definition">¶</a></dt>
@@ -1009,12 +1010,12 @@ blockmodels: First steps. Social networks, 5(2), 109-137.</p>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="graspologic.models.SBMEstimator.block_p_">
-<span class="sig-name descname"><span class="pre">block_p_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#graspologic.models.SBMEstimator.block_p_" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">block_p_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.SBMEstimator.block_p_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="graspologic.models.SBMEstimator.vertex_assignments_">
-<span class="sig-name descname"><span class="pre">vertex_assignments_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#graspologic.models.SBMEstimator.vertex_assignments_" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">vertex_assignments_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.SBMEstimator.vertex_assignments_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1054,12 +1055,12 @@ estimated.</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#graspologic.models.SBMEstimator" title="graspologic.models.sbm_estimators.SBMEstimator">graspologic.models.sbm_estimators.SBMEstimator</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#graspologic.models.SBMEstimator" title="graspologic.models.sbm_estimators.SBMEstimator"><em>SBMEstimator</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1084,7 +1085,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1133,7 +1134,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1167,7 +1168,7 @@ array will still be returned.</p>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1193,7 +1194,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1229,12 +1230,12 @@ result in poorly behaved likelihoods depending on the model.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1422,12 +1423,12 @@ estimated.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.DCSBMEstimator" title="graspologic.models.sbm_estimators.DCSBMEstimator">graspologic.models.sbm_estimators.DCSBMEstimator</a></p>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.DCSBMEstimator" title="graspologic.models.sbm_estimators.DCSBMEstimator"><em>DCSBMEstimator</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1452,7 +1453,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1501,7 +1502,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1535,7 +1536,7 @@ array will still be returned.</p>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1561,7 +1562,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1597,12 +1598,12 @@ result in poorly behaved likelihoods depending on the model.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1635,7 +1636,7 @@ possible to update each component of a nested object.</p>
 
 </section>
 <section id="latent-position-models">
-<h2>Latent position models<a class="headerlink" href="#latent-position-models" title="Permalink to this headline">¶</a></h2>
+<h2>Latent position models<a class="headerlink" href="#latent-position-models" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.models.RDPGEstimator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">RDPGEstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/rdpg.html#RDPGEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.RDPGEstimator" title="Permalink to this definition">¶</a></dt>
@@ -1742,12 +1743,12 @@ pp.918-930.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8)"><em>networkx.classes.graph.Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.4)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.RDPGEstimator" title="graspologic.models.rdpg.RDPGEstimator">graspologic.models.rdpg.RDPGEstimator</a></p>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.RDPGEstimator" title="graspologic.models.rdpg.RDPGEstimator"><em>RDPGEstimator</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1772,7 +1773,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1821,7 +1822,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1855,7 +1856,7 @@ array will still be returned.</p>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1881,7 +1882,7 @@ fit model.</p>
 </div></blockquote>
 </dd>
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
@@ -1917,12 +1918,12 @@ result in poorly behaved likelihoods depending on the model.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1955,7 +1956,7 @@ possible to update each component of a nested object.</p>
 
 </section>
 <section id="edge-swapping-configuration-models">
-<h2>Edge swapping (configuration models)<a class="headerlink" href="#edge-swapping-configuration-models" title="Permalink to this headline">¶</a></h2>
+<h2>Edge swapping (configuration models)<a class="headerlink" href="#edge-swapping-configuration-models" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.models.EdgeSwapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">EdgeSwapper</span></span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper" title="Permalink to this definition">¶</a></dt>
@@ -2000,7 +2001,7 @@ Journal of Complex Networks, 5(3), 337-351.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>adjacency</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)"><em>scipy.sparse._csr.csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>adjacency</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.1)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
 <li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -2032,7 +2033,7 @@ Journal of Complex Networks, 5(3), 337-351.</p>
 <dd class="field-odd"><p><strong>n_swaps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.0)">scipy.sparse._csr.csr_matrix</a>], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.8.1)"><em>csr_matrix</em></a>], <em>ndarray</em>]</p>
 </dd>
 </dl>
 </dd></dl>

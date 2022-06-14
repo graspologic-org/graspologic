@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Out-of-Sample (OOS) Embedding &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Out-of-Sample (OOS) Embedding &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -536,7 +545,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Out-of-Sample-(OOS)-Embedding">
-<h1>Out-of-Sample (OOS) Embedding<a class="headerlink" href="#Out-of-Sample-(OOS)-Embedding" title="Permalink to this headline">¶</a></h1>
+<h1>Out-of-Sample (OOS) Embedding<a class="headerlink" href="#Out-of-Sample-(OOS)-Embedding" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
 <div class="line">Suppose we’ve embedded the nodes of a graph into Euclidean space using Adjacency Spectral Embedding (ASE) or Laplacian Spectral Embeding (LSE).</div>
 <div class="line">Then, suppose we gain access to new nodes not seen in the original graph. We sometimes wish to determine their latent positions without the computationally-expensive task of re-embedding an entirely new adjacency matrix.</div>
@@ -584,7 +593,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <section id="Undirected-out-of-sample-prediction">
-<h2>Undirected out-of-sample prediction<a class="headerlink" href="#Undirected-out-of-sample-prediction" title="Permalink to this headline">¶</a></h2>
+<h2>Undirected out-of-sample prediction<a class="headerlink" href="#Undirected-out-of-sample-prediction" title="Permalink to this heading">¶</a></h2>
 <p>Here, we embed an undirected two-block stochastic block model with ASE. We then use its transform method to find an out-of-sample prediction for both a single vertex and multiple vertices.</p>
 <p>We begin by generating data.</p>
 <div class="nbinput docutils container">
@@ -618,7 +627,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Embedding-(ASE)">
-<h3>Embedding (ASE)<a class="headerlink" href="#Embedding-(ASE)" title="Permalink to this headline">¶</a></h3>
+<h3>Embedding (ASE)<a class="headerlink" href="#Embedding-(ASE)" title="Permalink to this heading">¶</a></h3>
 <p>We then generate an embedding with ASE, and we use its <code class="docutils literal notranslate"><span class="pre">transform</span></code> method to determine our best estimate for the latent position of the out-of-sample vertex.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -644,7 +653,7 @@ array([ 0.69563801, -0.59472394])
 </pre></div></div>
 </div>
 <section id="Plotting-out-of-sample-embedding">
-<h4>Plotting out-of-sample embedding<a class="headerlink" href="#Plotting-out-of-sample-embedding" title="Permalink to this headline">¶</a></h4>
+<h4>Plotting out-of-sample embedding<a class="headerlink" href="#Plotting-out-of-sample-embedding" title="Permalink to this heading">¶</a></h4>
 <div class="line-block">
 <div class="line">Here, we plot the original latent positions as well as the out-of-sample vertices. Note that the out-of-sample vertices are near their expected latent positions despite not having been run through the original embedding.</div>
 <div class="line">In this plot, the stars are the out-of-sample latent positions, and the dots are the in-sample latent positions.</div>
@@ -688,7 +697,7 @@ array([ 0.69563801, -0.59472394])
 </section>
 </section>
 <section id="Embeding-(LSE)">
-<h3>Embeding (LSE)<a class="headerlink" href="#Embeding-(LSE)" title="Permalink to this headline">¶</a></h3>
+<h3>Embeding (LSE)<a class="headerlink" href="#Embeding-(LSE)" title="Permalink to this heading">¶</a></h3>
 <p>Similarly, we can also use Laplacian Spectral Embedding (LSE). We generate an embedding with its transform method to determine our best estimate for the latent position of the out-of-sample vertex.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -730,7 +739,7 @@ array([[ 0.07091005, -0.06055902]])
 </div>
 </section>
 <section id="Passing-in-multiple-out-of-sample-vertices">
-<h3>Passing in multiple out-of-sample vertices<a class="headerlink" href="#Passing-in-multiple-out-of-sample-vertices" title="Permalink to this headline">¶</a></h3>
+<h3>Passing in multiple out-of-sample vertices<a class="headerlink" href="#Passing-in-multiple-out-of-sample-vertices" title="Permalink to this heading">¶</a></h3>
 <p>You can pass a 2d numpy array into <code class="docutils literal notranslate"><span class="pre">transform</span></code>. The rows are the out-of-sample vertices, and the columns are their edges to the in-sample vertices.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -826,7 +835,7 @@ The out-of-sample prediction output has dimensions (2, 2)
 </section>
 </section>
 <section id="Directed-out-of-sample-prediction">
-<h2>Directed out-of-sample prediction<a class="headerlink" href="#Directed-out-of-sample-prediction" title="Permalink to this headline">¶</a></h2>
+<h2>Directed out-of-sample prediction<a class="headerlink" href="#Directed-out-of-sample-prediction" title="Permalink to this heading">¶</a></h2>
 <p>Not all graphs are undirected. When finding out-of-sample latent positions for directed graphs, <span class="math notranslate nohighlight">\(A \in \textbf{R}^{n \times n}\)</span> is not symmetric. <span class="math notranslate nohighlight">\(A_{i,j}\)</span> represents the edge from node <span class="math notranslate nohighlight">\(i\)</span> to node <span class="math notranslate nohighlight">\(j\)</span>, whereas <span class="math notranslate nohighlight">\(A_{j, i}\)</span> represents the edge from node <span class="math notranslate nohighlight">\(j\)</span> to node <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <div class="line-block">
 <div class="line">To account for this, we pass a tuple (out_oos, in_oos) into the <code class="docutils literal notranslate"><span class="pre">transform</span></code> method. It then outputs a tuple of (out_latent_prediction, in_latent_prediction).</div>
@@ -887,7 +896,7 @@ in latent positions:
 </pre></div></div>
 </div>
 <section id="Plotting-directed-ASE-latent-predictions">
-<h3>Plotting directed ASE latent predictions<a class="headerlink" href="#Plotting-directed-ASE-latent-predictions" title="Permalink to this headline">¶</a></h3>
+<h3>Plotting directed ASE latent predictions<a class="headerlink" href="#Plotting-directed-ASE-latent-predictions" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -903,7 +912,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fc3a0804370&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7fe2e77806a0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -953,7 +962,7 @@ in latent positions:
 </div>
 </section>
 <section id="Plotting-directed-LSE-latent-predictions">
-<h3>Plotting directed LSE latent predictions<a class="headerlink" href="#Plotting-directed-LSE-latent-predictions" title="Permalink to this headline">¶</a></h3>
+<h3>Plotting directed LSE latent predictions<a class="headerlink" href="#Plotting-directed-LSE-latent-predictions" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -969,7 +978,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fc39b719130&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7fe2e242d340&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -989,7 +998,7 @@ in latent positions:
 </section>
 </section>
 <section id="Weighted-out-of-sample-prediction">
-<h2>Weighted out-of-sample prediction<a class="headerlink" href="#Weighted-out-of-sample-prediction" title="Permalink to this headline">¶</a></h2>
+<h2>Weighted out-of-sample prediction<a class="headerlink" href="#Weighted-out-of-sample-prediction" title="Permalink to this heading">¶</a></h2>
 <p>Weighted graphs work as well. Here, we generate a directed, weighted graph and estimate the latent positions for multiple out-of-sample vertices.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -1047,7 +1056,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fc3a09f9e20&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7fe2e723c0d0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1084,7 +1093,7 @@ in latent positions:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7fc3a0c4e400&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7fe2e26e1880&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">

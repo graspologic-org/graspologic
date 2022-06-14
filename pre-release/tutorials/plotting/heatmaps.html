@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heatmap: Visualizing a Graph &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Heatmap: Visualizing a Graph &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -536,7 +545,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Heatmap:-Visualizing-a-Graph">
-<h1>Heatmap: Visualizing a Graph<a class="headerlink" href="#Heatmap:-Visualizing-a-Graph" title="Permalink to this headline">¶</a></h1>
+<h1>Heatmap: Visualizing a Graph<a class="headerlink" href="#Heatmap:-Visualizing-a-Graph" title="Permalink to this heading">¶</a></h1>
 <p>This example shows how to visualize graphs using a heatmap.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -559,9 +568,9 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <section id="Plotting-graphs-using-heatmap">
-<h2>Plotting graphs using heatmap<a class="headerlink" href="#Plotting-graphs-using-heatmap" title="Permalink to this headline">¶</a></h2>
+<h2>Plotting graphs using heatmap<a class="headerlink" href="#Plotting-graphs-using-heatmap" title="Permalink to this heading">¶</a></h2>
 <section id="Simulate-graphs-using-weighted-stochastic-block-models">
-<h3>Simulate graphs using weighted stochastic block models<a class="headerlink" href="#Simulate-graphs-using-weighted-stochastic-block-models" title="Permalink to this headline">¶</a></h3>
+<h3>Simulate graphs using weighted stochastic block models<a class="headerlink" href="#Simulate-graphs-using-weighted-stochastic-block-models" title="Permalink to this heading">¶</a></h3>
 <p>The 2-block model is defined as below:</p>
 <p><span class="math">\begin{align*}
 P = \begin{bmatrix}0.8 & 0.2 \\
@@ -592,7 +601,7 @@ P = \begin{bmatrix}0.8 & 0.2 \\
 </section>
 </section>
 <section id="Plot-the-simulated-weighted-SBMs">
-<h2>Plot the simulated weighted SBMs<a class="headerlink" href="#Plot-the-simulated-weighted-SBMs" title="Permalink to this headline">¶</a></h2>
+<h2>Plot the simulated weighted SBMs<a class="headerlink" href="#Plot-the-simulated-weighted-SBMs" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -630,7 +639,7 @@ P = \begin{bmatrix}0.8 & 0.2 \\
 </div>
 </div>
 <section id="You-can-also-change-color-maps">
-<h3>You can also change color maps<a class="headerlink" href="#You-can-also-change-color-maps" title="Permalink to this headline">¶</a></h3>
+<h3>You can also change color maps<a class="headerlink" href="#You-can-also-change-color-maps" title="Permalink to this heading">¶</a></h3>
 <p>See <a class="reference external" href="https://matplotlib.org/tutorials/colors/colormaps.html">here</a> for a list of colormaps</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -652,7 +661,7 @@ P = \begin{bmatrix}0.8 & 0.2 \\
 </section>
 </section>
 <section id="Data-transformations">
-<h2>Data transformations<a class="headerlink" href="#Data-transformations" title="Permalink to this headline">¶</a></h2>
+<h2>Data transformations<a class="headerlink" href="#Data-transformations" title="Permalink to this heading">¶</a></h2>
 <p>When your graphs have values that span a large range, it is often useful to transform the data in order to visualize it properly. Below, we use a real graph which is estimated from the a structural MRI scan. The data is provided by <a class="reference external" href="http://dx.doi.org/10.15387/fcp_indi.corr.hnu1">HNU1</a>.</p>
 <p>The data ranges from 0 to 44813, and visualizing without a transformation will emphasize the large weights. Both log and pass-to-ranks transforms provide better visualizations of the graph.</p>
 <div class="nbinput docutils container">
@@ -674,7 +683,7 @@ P = \begin{bmatrix}0.8 & 0.2 \\
 </pre></div></div>
 </div>
 <section id="Without-transform">
-<h3>Without transform<a class="headerlink" href="#Without-transform" title="Permalink to this headline">¶</a></h3>
+<h3>Without transform<a class="headerlink" href="#Without-transform" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -693,7 +702,7 @@ P = \begin{bmatrix}0.8 & 0.2 \\
 </div>
 </section>
 <section id="With-log-transform">
-<h3>With log transform<a class="headerlink" href="#With-log-transform" title="Permalink to this headline">¶</a></h3>
+<h3>With log transform<a class="headerlink" href="#With-log-transform" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -712,7 +721,7 @@ P = \begin{bmatrix}0.8 & 0.2 \\
 </div>
 </section>
 <section id="With-pass-to-ranks">
-<h3>With pass to ranks<a class="headerlink" href="#With-pass-to-ranks" title="Permalink to this headline">¶</a></h3>
+<h3>With pass to ranks<a class="headerlink" href="#With-pass-to-ranks" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>

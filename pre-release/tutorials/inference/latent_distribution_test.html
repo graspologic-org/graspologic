@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Latent Distribution Two-Graph Testing &mdash; graspologic 1.0.1dev2302696469 documentation</title>
+  <title>Latent Distribution Two-Graph Testing &mdash; graspologic 1.0.1dev2497200434 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2302696469
+                1.0.1dev2497200434
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -480,6 +481,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -488,10 +490,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -503,12 +509,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -536,7 +545,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Latent-Distribution-Two-Graph-Testing">
-<h1>Latent Distribution Two-Graph Testing<a class="headerlink" href="#Latent-Distribution-Two-Graph-Testing" title="Permalink to this headline">¶</a></h1>
+<h1>Latent Distribution Two-Graph Testing<a class="headerlink" href="#Latent-Distribution-Two-Graph-Testing" title="Permalink to this heading">¶</a></h1>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -565,7 +574,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <section id="Generate-a-stochastic-block-model-graph">
-<h2>Generate a stochastic block model graph<a class="headerlink" href="#Generate-a-stochastic-block-model-graph" title="Permalink to this headline">¶</a></h2>
+<h2>Generate a stochastic block model graph<a class="headerlink" href="#Generate-a-stochastic-block-model-graph" title="Permalink to this heading">¶</a></h2>
 <p>We generate a 2-block stochastic blockmodel (SBM) graph and embed it using Adjacency Spectral Embedding (ASE).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -626,7 +635,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Latent-distribution-test-where-null-is-true">
-<h2>Latent distribution test where null is true<a class="headerlink" href="#Latent-distribution-test-where-null-is-true" title="Permalink to this headline">¶</a></h2>
+<h2>Latent distribution test where null is true<a class="headerlink" href="#Latent-distribution-test-where-null-is-true" title="Permalink to this heading">¶</a></h2>
 <p>We want to know whether the latent positions of the two graphs above were generated from the same latent distribution. In other words, we are testing</p>
 <div class="math notranslate nohighlight">
 \[H_0:F_{X_1} = F_{X_2} Q\]</div>
@@ -638,7 +647,7 @@ div.rendered_html tbody tr:hover {
 <p>In this tutorial, we will use the latent distribution test on unmatched graphs. This means there is not an alignment between each node of the two graphs.</p>
 </section>
 <section id="Plots-of-Null-Distribution-for-Dcorr-and-MGC">
-<h2>Plots of Null Distribution for Dcorr and MGC<a class="headerlink" href="#Plots-of-Null-Distribution-for-Dcorr-and-MGC" title="Permalink to this headline">¶</a></h2>
+<h2>Plots of Null Distribution for Dcorr and MGC<a class="headerlink" href="#Plots-of-Null-Distribution-for-Dcorr-and-MGC" title="Permalink to this heading">¶</a></h2>
 <p>The class supports the following independence tests documented <a class="reference external" href="https://hyppo.neurodata.io/reference/independence.html">here</a>, as well as any distance function.</p>
 <p>We plot the null distribution (blue), test statistic (red), and p-value (title) of the Dcorr and MGC independence tests using euclidean distance.</p>
 <div class="nbinput docutils container">
@@ -722,7 +731,7 @@ div.rendered_html tbody tr:hover {
 <p>We see that the test static is small, resulting in p-values above 0.05. Thus, we cannot reject the null hypothesis that the two graphs come from the same generating distributions.</p>
 </section>
 <section id="Latent-distribution-test-where-null-is-false">
-<h2>Latent distribution test where null is false<a class="headerlink" href="#Latent-distribution-test-where-null-is-false" title="Permalink to this headline">¶</a></h2>
+<h2>Latent distribution test where null is false<a class="headerlink" href="#Latent-distribution-test-where-null-is-false" title="Permalink to this heading">¶</a></h2>
 <p>We generate a third SBM with different interblock probability, and run a latent distribution test comaring the first graph with the new one.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -772,7 +781,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Plot-of-Null-Distribution">
-<h2>Plot of Null Distribution<a class="headerlink" href="#Plot-of-Null-Distribution" title="Permalink to this headline">¶</a></h2>
+<h2>Plot of Null Distribution<a class="headerlink" href="#Plot-of-Null-Distribution" title="Permalink to this heading">¶</a></h2>
 <p>We plot the null distribution shown in blue and the test statistic shown red vertical line. We see that the test static is small, resulting in p-value of 0. Thus, we reject the null hypothesis that the two graphs come from the same generating distributions.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
