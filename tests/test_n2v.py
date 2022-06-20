@@ -6,11 +6,14 @@ import unittest
 import networkx as nx
 import numpy as np
 
-import graspologic.embed.n2v as n2v
-from graspologic.embed.n2v import _Node2VecGraph
+from graspologic.embed import Node2VecEmbed
+
+import graspologic.pipeline.embed.n2v as n2v
+from graspologic.pipeline.embed.n2v import _Node2VecGraph
 
 
 class Node2VecEmbedTest(unittest.TestCase):
+
     def test_node2vec_embedding_correct_shape_is_returned(self):
         import io
 
@@ -31,6 +34,25 @@ class Node2VecEmbedTest(unittest.TestCase):
 
         # vocab list should have exactly 34 elements
         self.assertEqual(len(vocab_list), 34)
+
+    def test_node2vec_object_oriented_interface(self):
+        import io
+
+        graph = nx.read_edgelist(
+            io.StringIO(_edge_list), nodetype=int, create_using=nx.DiGraph()
+        )
+
+        model_fun = n2v.node2vec_embed(graph)
+        model_matrix_1: np.ndarray = model_fun[0]
+        vocab_list_1 = model_fun[1]
+
+        n2v_obj = Node2VecEmbed()
+        model_oo = n2v_obj.fit_transform(graph)
+        model_matrix_2: np.ndarray = model_oo[0]
+        vocab_list_2 = model_oo[1]
+
+        self.assertEqual(np.all(model_matrix_1 == model_matrix_2))
+        self.assertEqual(vocab_list_1, vocab_list_2)
 
     def test_node2vec_embedding_florentine_graph_correct_shape_is_returned(self):
         graph = nx.florentine_families_graph()
