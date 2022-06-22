@@ -17,6 +17,7 @@ from ..types import GraphRepresentation
 from ..utils import import_graph
 from ..pipeline.embed.n2v_embedding import node2vec_embed
 
+
 class Node2VecEmbed(BaseEstimator):
     """
     Class for computing node2vec embeddings from a given graph. Will follow the word2vec
@@ -85,7 +86,9 @@ class Node2VecEmbed(BaseEstimator):
     .. [1] Aditya Grover and Jure Leskovec  "node2vec: Scalable Feature Learning for
         Networks." Knowledge Discovery and Data Mining, 2016.
     """
-    def __init__(self,
+
+    def __init__(
+        self,
         num_walks: int = 10,
         walk_length: int = 40,
         return_hyperparameter: float = 1.0,
@@ -109,14 +112,13 @@ class Node2VecEmbed(BaseEstimator):
         if not isinstance(interpolate_walk_lengths_by_node_degree, bool):
             msg = "Parameter `interpolate_walk_lengths_by_node_degree` is expected to be type bool"
             raise TypeError(msg)
-        self.interpolate_walk_lengths_by_node_degree = interpolate_walk_lengths_by_node_degree
+        self.interpolate_walk_lengths_by_node_degree = (
+            interpolate_walk_lengths_by_node_degree
+        )
         self.labels = None
 
     def fit_transform(
-        self,
-        graph: GraphRepresentation,
-        *args: Any,
-        **kwargs: Any
+        self, graph: GraphRepresentation, *args: Any, **kwargs: Any
     ) -> "Node2VecEmbed":
         """
         Fit Node2Vec model to an input graph.
@@ -133,22 +135,24 @@ class Node2VecEmbed(BaseEstimator):
         self : object
             Returns an instance of self.
         """
-        if not isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
+        if not isinstance(
+            graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)
+        ):
             graph = import_graph(graph)
             graph = nx.from_numpy_matrix(graph)
 
         Xemb, labels = node2vec_embed(
             graph,
-            num_walks = self.num_walks,
-            walk_length = self.walk_length,
-            return_hyperparameter = self.return_hyperparameter,
-            inout_hyperparameter = self.inout_hyperparameter,
-            dimensions = self.dimensions,
-            window_size = self.window_size,
-            workers = self.workers,
-            iterations = self.iterations,
-            interpolate_walk_lengths_by_node_degree = self.interpolate_walk_lengths_by_node_degree,
-            random_seed = self.random_seed
+            num_walks=self.num_walks,
+            walk_length=self.walk_length,
+            return_hyperparameter=self.return_hyperparameter,
+            inout_hyperparameter=self.inout_hyperparameter,
+            dimensions=self.dimensions,
+            window_size=self.window_size,
+            workers=self.workers,
+            iterations=self.iterations,
+            interpolate_walk_lengths_by_node_degree=self.interpolate_walk_lengths_by_node_degree,
+            random_seed=self.random_seed,
         )
 
         self.n_features_in_ = Xemb.shape[0]
@@ -157,18 +161,8 @@ class Node2VecEmbed(BaseEstimator):
 
         return Xemb
 
-    def fit(
-        self,
-        graph: GraphRepresentation,
-        *args: Any,
-        **kwargs: Any
-    ):
+    def fit(self, graph: GraphRepresentation, *args: Any, **kwargs: Any):
         raise NotImplementedError("Use `fit_transform` method instead.")
 
-    def transform(
-        self,
-        graph: GraphRepresentation,
-        *args: Any,
-        **kwargs: Any
-    ):
+    def transform(self, graph: GraphRepresentation, *args: Any, **kwargs: Any):
         raise NotImplementedError("Use `fit_transform` method instead.")

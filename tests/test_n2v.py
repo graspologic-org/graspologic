@@ -13,7 +13,6 @@ from graspologic.pipeline.embed.n2v_embedding import _Node2VecGraph
 
 
 class Node2VecEmbedTest(unittest.TestCase):
-
     def test_node2vec_embedding_correct_shape_is_returned(self):
         import io
 
@@ -51,7 +50,7 @@ class Node2VecEmbedTest(unittest.TestCase):
         model_matrix_2: np.ndarray = model_oo
         vocab_list_2 = n2v_obj.labels
 
-        self.assertEqual(np.all(model_matrix_1.shape == model_matrix_2.shape))
+        self.assertTrue(np.all(model_matrix_1.shape == model_matrix_2.shape))
         self.assertEqual(vocab_list_1, vocab_list_2)
 
     def test_node2vec_embedding_florentine_graph_correct_shape_is_returned(self):
