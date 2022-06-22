@@ -3,6 +3,7 @@
 
 from typing import Any, Optional, Union
 
+import numpy as np
 import networkx as nx
 
 from sklearn.base import BaseEstimator
@@ -113,7 +114,7 @@ class Node2VecEmbed(BaseEstimator):
 
     def fit_transform(
         self, graph: GraphRepresentation, *args: Any, **kwargs: Any
-    ) -> "Node2VecEmbed":
+    ) -> np.ndarray:
         """
         Fit Node2Vec model to an input graph.
 
