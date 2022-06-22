@@ -13,7 +13,7 @@ from sklearn.manifold import TSNE
 
 from graspologic.types import Dict, List, Tuple
 
-from ..embed import node2vec_embed
+from ..pipeline.embed import node2vec_embed
 from ..partition import leiden
 from ..preconditions import is_real_weighted
 from ..preprocessing import cut_edges_by_weight, histogram_edge_weight

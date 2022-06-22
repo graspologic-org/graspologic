@@ -8,8 +8,8 @@ from .lse import LaplacianSpectralEmbed
 from .mase import MultipleASE
 from .mds import ClassicalMDS
 from .mug2vec import mug2vec
-from .n2v import Node2VecEmbed
 from .omni import OmnibusEmbed
+from .n2v import Node2VecEmbed
 from .svd import select_dimension, select_svd
 
 __all__ = [

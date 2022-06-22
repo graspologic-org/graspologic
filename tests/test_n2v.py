@@ -8,8 +8,8 @@ import numpy as np
 
 from graspologic.embed import Node2VecEmbed
 
-import graspologic.pipeline.embed.n2v as n2v
-from graspologic.pipeline.embed.n2v import _Node2VecGraph
+import graspologic.pipeline.embed.n2v_embedding as n2v
+from graspologic.pipeline.embed.n2v_embedding import _Node2VecGraph
 
 
 class Node2VecEmbedTest(unittest.TestCase):
@@ -48,10 +48,10 @@ class Node2VecEmbedTest(unittest.TestCase):
 
         n2v_obj = Node2VecEmbed()
         model_oo = n2v_obj.fit_transform(graph)
-        model_matrix_2: np.ndarray = model_oo[0]
-        vocab_list_2 = model_oo[1]
+        model_matrix_2: np.ndarray = model_oo
+        vocab_list_2 = n2v_obj.labels
 
-        self.assertEqual(np.all(model_matrix_1 == model_matrix_2))
+        self.assertEqual(np.all(model_matrix_1.shape == model_matrix_2.shape))
         self.assertEqual(vocab_list_1, vocab_list_2)
 
     def test_node2vec_embedding_florentine_graph_correct_shape_is_returned(self):
