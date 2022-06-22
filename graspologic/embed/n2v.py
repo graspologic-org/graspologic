@@ -1,16 +1,10 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import logging
-import math
-import time
 from typing import Any, Optional, Union
 
 import networkx as nx
-import numpy as np
-from gensim.models import Word2Vec
 
-from graspologic.types import List, Tuple
 from sklearn.base import BaseEstimator
 
 from ..types import GraphRepresentation
@@ -19,7 +13,7 @@ from ..pipeline.embed.n2v_embedding import node2vec_embed
 
 
 class Node2VecEmbed(BaseEstimator):
-    """
+    r"""
     Class for computing node2vec embeddings from a given graph. Will follow the word2vec
     algorithm to create the embedding.
 
