@@ -1,20 +1,19 @@
 import time
+import warnings
 from functools import wraps
+from typing import Literal, Optional, Union
 
 import numpy as np
-from graspologic.types import Tuple
+from beartype import beartype
 from numba import njit
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
+from scipy.sparse import csr_matrix
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
-from scipy.sparse import csr_matrix
 
-from graspologic.types import AdjacencyMatrix
-from typing import Optional, Union, Literal
-from graspologic.types import List
-from beartype import beartype
-import warnings
+from graspologic.types import AdjacencyMatrix, List, Tuple
+
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
@@ -127,7 +126,6 @@ class GraphMatchSolver(BaseEstimator):
             self._seeded = False
         else:
             self._seeded = True
-            warnings.warn("Warning: seeding functionality is a work in progress.")
         self.partial_match = partial_match
 
         # TODO input validation
