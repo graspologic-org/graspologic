@@ -382,7 +382,7 @@ def _get_induced_subgraph(
         The list containing all the vertices in the induced subgraph.
     """
     # Note all nodes are zero based in this implementation, i.e the first node is 0
-    dists = [[node]]
+    dists: List[Union[List[int], np.ndarray]] = [[node]]
     dists_conglom = [node]
     for ii in range(1, order + 1):
         clst = []
