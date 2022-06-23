@@ -145,30 +145,27 @@ class GraphMatchSolver(BaseEstimator):
         A = _check_input_matrix(A)
         B = _check_input_matrix(B)
 
+        # get some useful sizes
         self.n_A = A[0].shape[0]
         self.n_B = B[0].shape[0]
         self.n_layers = len(A)
-
-        if AB is None:
-            AB = np.zeros((self.n_layers, self.n_A, self.n_B))
-        if BA is None:
-            BA = np.zeros((self.n_layers, self.n_B, self.n_A))
-
-        AB = _check_input_matrix(AB)
-        BA = _check_input_matrix(BA)
-
-        self._compute_gradient = _compute_gradient
-        self._compute_coefficients = _compute_coefficients
-        if isinstance(A[0], csr_matrix):
-            self._sparse = True
-        else:
-            self._sparse = False
-            if use_numba:
-                self._compute_gradient = _compute_gradient_numba
-                self._compute_coefficients = _compute_coefficients_numba
-
         n_seeds = len(partial_match)
         self.n_seeds = n_seeds
+
+        # check for between-graph terms
+        if AB is None:
+            AB = np.zeros((self.n_layers, self.n_A, self.n_B))
+        else:
+            AB = _check_input_matrix(AB)
+        if BA is None:
+            BA = np.zeros((self.n_layers, self.n_B, self.n_A))
+        else:
+            BA = _check_input_matrix(BA)
+
+        # check for similarity term
+        if similarity is None:
+            similarity = np.zeros((self.n_A, self.n_B))
+
         # set up so that seeds are first and we can grab subgraphs easily
         # TODO could also do this slightly more efficiently just w/ smart indexing?
         nonseed_A = np.setdiff1d(range(A[0].shape[0]), partial_match[:, 0])
@@ -195,13 +192,22 @@ class GraphMatchSolver(BaseEstimator):
 
         self.n_unseed = self.B[0].shape[0]
 
-        if similarity is None:
-            similarity = np.zeros((self.n_A, self.n_B))
-
         similarity = similarity[perm_A][:, perm_B]
         self.S_ss, self.S_sn, self.S_ns, self.S = _split_matrix(
             similarity, n_seeds, single_layer=True
         )
+
+        # decide whether to use numba/sparse
+        self._compute_gradient = _compute_gradient
+        self._compute_coefficients = _compute_coefficients
+        # TODO probably should base this on "ALL" instead of first one being sparse
+        if isinstance(A[0], csr_matrix):
+            self._sparse = True
+        else:
+            self._sparse = False
+            if use_numba:
+                self._compute_gradient = _compute_gradient_numba
+                self._compute_coefficients = _compute_coefficients_numba
 
     def solve(self):
         self.n_iter = 0
