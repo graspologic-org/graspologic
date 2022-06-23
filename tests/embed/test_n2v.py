@@ -9,6 +9,7 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
 
 import graspologic as gc
+import graspologic.pipeline.embed.n2v_embedding as n2v
 
 
 class Node2VecEmbedTest(unittest.TestCase):
@@ -28,8 +29,10 @@ class Node2VecEmbedTest(unittest.TestCase):
             graph.add_edge(s, t, weight=1)
             graph_as_strings.add_edge(str(s), str(t), weight=1)
 
-        original_embedding = gc.embed.node2vec_embed(graph, random_seed=random_seed)
-        string_embedding = gc.embed.node2vec_embed(
+        original_embedding = gc.pipeline.embed.n2v_embedding.node2vec_embed(
+            graph, random_seed=random_seed
+        )
+        string_embedding = gc.pipeline.embed.n2v_embedding.node2vec_embed(
             graph_as_strings, random_seed=random_seed
         )
 
@@ -63,8 +66,12 @@ class Node2VecEmbedTest(unittest.TestCase):
             graph_directed.add_edge(s, t, weight=1)
             graph_directed.add_edge(t, s, weight=1)
 
-        undirected_embedding = gc.embed.node2vec_embed(graph, random_seed=1)
-        directed_embedding = gc.embed.node2vec_embed(graph_directed, random_seed=1)
+        undirected_embedding = gc.pipeline.embed.n2v_embedding.node2vec_embed(
+            graph, random_seed=1
+        )
+        directed_embedding = gc.pipeline.embed.n2v_embedding.node2vec_embed(
+            graph_directed, random_seed=1
+        )
 
         k = KMeans(n_clusters=2, random_state=1234)
         undirected_labels = k.fit_predict(undirected_embedding[0])
@@ -85,9 +92,9 @@ class Node2VecEmbedTest(unittest.TestCase):
         for s, t in g.edges():
             g.add_edge(s, t, weight=1)
 
-        embedding = gc.embed.node2vec_embed(g, random_seed=1)
+        embedding = gc.pipeline.embed.n2v_embedding.node2vec_embed(g, random_seed=1)
 
-        embedding2 = gc.embed.node2vec_embed(g, random_seed=1)
+        embedding2 = gc.pipeline.embed.n2v_embedding.node2vec_embed(g, random_seed=1)
 
         np.testing.assert_array_equal(embedding[0], embedding2[0])
 
@@ -96,7 +103,7 @@ class Node2VecEmbedTest(unittest.TestCase):
         for s, t in graph.edges():
             graph.add_edge(s, t, weight=1)
 
-        model = gc.embed.node2vec_embed(graph)
+        model = gc.pipeline.embed.n2v_embedding.node2vec_embed(graph)
         model_matrix: np.ndarray = model[0]
         vocab_list = model[1]
         self.assertIsNotNone(model)
@@ -115,7 +122,7 @@ class Node2VecEmbedTest(unittest.TestCase):
     ):
         graph = nx.florentine_families_graph()
 
-        model = gc.embed.node2vec_embed(graph)
+        model = gc.pipeline.embed.n2v_embedding.node2vec_embed(graph)
         model_matrix: np.ndarray = model[0]
         vocab_list = model[1]
         self.assertIsNotNone(model)
@@ -133,7 +140,7 @@ class Node2VecEmbedTest(unittest.TestCase):
         graph = nx.florentine_families_graph()
         node_ids = list(graph.nodes())
 
-        embedding, labels = gc.embed.node2vec_embed(graph)
+        embedding, labels = gc.pipeline.embed.n2v_embedding.node2vec_embed(graph)
 
         for i in range(len(node_ids)):
             self.assertEqual(node_ids[i], labels[i])
@@ -143,7 +150,7 @@ class Node2VecEmbedTest(unittest.TestCase):
         for s, t in graph.edges():
             graph.add_edge(s, t, weight=1)
 
-        model = gc.embed.node2vec_embed(graph)
+        model = gc.pipeline.embed.n2v_embedding.node2vec_embed(graph)
         model_matrix: np.ndarray = model[0]
         vocab_list = model[1]
         self.assertIsNotNone(model)
@@ -160,7 +167,7 @@ class Node2VecEmbedTest(unittest.TestCase):
     def test_get_walk_length_lower_defaults_to_1(self):
         expected_walk_length = 1
 
-        g = gc.embed.n2v._Node2VecGraph(nx.Graph(), 1, 1)
+        g = n2v._Node2VecGraph(nx.Graph(), 1, 1)
         w = g._get_walk_length_interpolated(
             degree=0, percentiles=[1, 2, 3, 4, 10, 100], max_walk_length=10
         )
@@ -170,7 +177,7 @@ class Node2VecEmbedTest(unittest.TestCase):
     def test_get_walk_length_higher_default_to_walk_length(self):
         expected_walk_length = 100
 
-        g = gc.embed.n2v._Node2VecGraph(nx.Graph(), 1, 1)
+        g = n2v._Node2VecGraph(nx.Graph(), 1, 1)
         w = g._get_walk_length_interpolated(
             degree=10,
             percentiles=[2, 3, 4, 5, 6, 7, 8, 9],
@@ -182,7 +189,7 @@ class Node2VecEmbedTest(unittest.TestCase):
     def test_get_walk_length_in_middle_selects_interpolated_bucket(self):
         expected_walk_length = 5
 
-        g = gc.embed.n2v._Node2VecGraph(nx.Graph(), 1, 1)
+        g = n2v._Node2VecGraph(nx.Graph(), 1, 1)
         w = g._get_walk_length_interpolated(
             degree=5, percentiles=[2, 3, 4, 5, 6, 7, 8, 9], max_walk_length=10
         )
@@ -193,7 +200,7 @@ class Node2VecEmbedTest(unittest.TestCase):
         graph = nx.barbell_graph(25, 2)
         start_node = "0"
 
-        n2v = gc.embed.n2v._Node2VecGraph(graph, 1, 1)
-        n2v._preprocess_transition_probabilities()
-        walk = n2v.node2vec_walk(5, start_node, None)
+        n2v_mod = n2v._Node2VecGraph(graph, 1, 1)
+        n2v_mod._preprocess_transition_probabilities()
+        walk = n2v_mod.node2vec_walk(5, start_node, None)
         self.assertGreater(len(walk), 0)
