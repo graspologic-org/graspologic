@@ -132,15 +132,6 @@ class GraphMatchSolver(BaseEstimator):
         # TODO seeds
         # A, B, partial_match = _common_input_validation(A, B, partial_match)
 
-        # TODO similarity
-        # if S is None:
-        #     S = np.zeros((A.shape[0], B.shape[1]))
-        # S = np.atleast_2d(S)
-
-        # TODO padding
-
-        # TODO make B always bigger
-
         # convert everything to make sure they are 3D arrays (first dim is layer)
         A = _check_input_matrix(A)
         B = _check_input_matrix(B)
@@ -166,12 +157,21 @@ class GraphMatchSolver(BaseEstimator):
         if similarity is None:
             similarity = np.zeros((self.n_A, self.n_B))
 
+        # TODO padding here
+        # TODO make B always bigger
+
         # set up so that seeds are first and we can grab subgraphs easily
         # TODO could also do this slightly more efficiently just w/ smart indexing?
+        # TODO I think this is kind making the assumption that the input partial_match
+        # is sorted
+        sort_inds = np.argsort(partial_match[:, 0])
+        partial_match = partial_match[sort_inds]
         nonseed_A = np.setdiff1d(range(A[0].shape[0]), partial_match[:, 0])
         nonseed_B = np.setdiff1d(range(B[0].shape[0]), partial_match[:, 1])
         perm_A = np.concatenate([partial_match[:, 0], nonseed_A])
         perm_B = np.concatenate([partial_match[:, 1], nonseed_B])
+        self.perm_A = perm_A
+        self.perm_B = perm_B
         self._undo_perm_A = np.argsort(perm_A)
         self._undo_perm_B = np.argsort(perm_B)
 
@@ -182,6 +182,7 @@ class GraphMatchSolver(BaseEstimator):
         AB = _permute_multilayer(AB, perm_B, rows=False, columns=True)
         BA = _permute_multilayer(BA, perm_A, rows=False, columns=True)
         BA = _permute_multilayer(BA, perm_B, rows=True, columns=False)
+        S = similarity[perm_A][:, perm_B]
 
         # split into subgraphs of seed-to-seed (ss), seed-to-nonseed (sn), etc.
         # main thing being permuted has no subscript
@@ -192,9 +193,8 @@ class GraphMatchSolver(BaseEstimator):
 
         self.n_unseed = self.B[0].shape[0]
 
-        similarity = similarity[perm_A][:, perm_B]
         self.S_ss, self.S_sn, self.S_ns, self.S = _split_matrix(
-            similarity, n_seeds, single_layer=True
+            S, n_seeds, single_layer=True
         )
 
         # decide whether to use numba/sparse
@@ -299,6 +299,11 @@ class GraphMatchSolver(BaseEstimator):
         return Q
 
     def linear_sum_assignment(self, P):
+        """This is a modified version of LAP which (in expectation) does not care
+        about the order of the inputs. This matters because scipy LAP settles ties
+        (which do come up) based on the ordering of the inputs. This can lead to
+        artificially high matching accuracy when the user inputs data which is in the
+        correct permutation, for example."""
         row_perm = self.rng.permutation(P.shape[1])
         undo_row_perm = np.argsort(row_perm)
         P_perm = P[row_perm]
@@ -375,9 +380,18 @@ class GraphMatchSolver(BaseEstimator):
         self.P_final_ = P
 
         permutation = self.linear_sum_assignment(P)
-        permutation += len(self.partial_match[:, 1])  # TODO this is not robust
-        permutation = np.concatenate((self.partial_match[:, 1], permutation))
-        self.permutation_ = permutation
+        permutation = np.concatenate(
+            (np.arange(self.n_seeds), permutation + self.n_seeds)
+        )
+        # not_seeds = np.setdiff1d(np.arange(self.n_B), self.partial_match[:, 1])
+
+        final_permutation = np.empty(self.n_B, dtype=int)
+        final_permutation[self.perm_A] = self.perm_B[permutation]
+        # final_permutation[self.partial_match[:, 0]] = self.partial_match[:, 1]
+        # final_permutation[not_seeds] = permutation
+        # permutation += len(self.partial_match[:, 1])  # TODO this is not robust
+        # permutation = np.concatenate((self.partial_match[:, 1], not_seeds[permutation]))
+        self.permutation_ = final_permutation
 
         score = self.compute_score(permutation)
         self.score_ = score
