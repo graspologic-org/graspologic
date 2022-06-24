@@ -437,7 +437,7 @@ def _compute_gradient(
     B: MultilayerAdjacency,
     AB: MultilayerAdjacency,
     BA: MultilayerAdjacency,
-    const_sum: MultilayerAdjacency,
+    const_sum: np.ndarray,
 ) -> np.ndarray:
     n_layers = len(A)
     grad = const_sum
@@ -518,6 +518,10 @@ def _split_multilayer_matrix(
     seed_to_nonseed = []
     nonseed_to_seed = []
     nonseed_to_nonseed = []
+    # seed_to_seed = nList()
+    # seed_to_nonseed = nList()
+    # nonseed_to_seed = nList()
+    # nonseed_to_nonseed = nList()
     for i in range(n_layers):
         matrix = matrices[i]
         ss, sn, ns, nn = _split_matrix(matrix, n)
