@@ -1,9 +1,7 @@
-from ast import Call
-from subprocess import call
 import time
 import warnings
 from functools import wraps
-from typing import Literal, Optional, Union, Callable
+from typing import Callable, Literal, Optional, Union
 
 import numpy as np
 from beartype import beartype
@@ -15,7 +13,6 @@ from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 
 from graspologic.types import AdjacencyMatrix, List, Tuple
-
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
@@ -186,16 +183,18 @@ class GraphMatchSolver(BaseEstimator):
 
         # split into subgraphs of seed-to-seed (ss), seed-to-nonseed (sn), etc.
         # main thing being permuted has no subscript
-        self.A_ss, self.A_sn, self.A_ns, self.A = _split_matrix(A, n_seeds)
-        self.B_ss, self.B_sn, self.B_ns, self.B = _split_matrix(B, n_seeds)
-        self.AB_ss, self.AB_sn, self.AB_ns, self.AB = _split_matrix(AB, n_seeds)
-        self.BA_ss, self.BA_sn, self.BA_ns, self.BA = _split_matrix(BA, n_seeds)
+        self.A_ss, self.A_sn, self.A_ns, self.A = _split_multilayer_matrix(A, n_seeds)
+        self.B_ss, self.B_sn, self.B_ns, self.B = _split_multilayer_matrix(B, n_seeds)
+        self.AB_ss, self.AB_sn, self.AB_ns, self.AB = _split_multilayer_matrix(
+            AB, n_seeds
+        )
+        self.BA_ss, self.BA_sn, self.BA_ns, self.BA = _split_multilayer_matrix(
+            BA, n_seeds
+        )
 
         self.n_unseed = self.B[0].shape[0]
 
-        self.S_ss, self.S_sn, self.S_ns, self.S = _split_matrix(
-            S, n_seeds, single_layer=True
-        )
+        self.S_ss, self.S_sn, self.S_ns, self.S = _split_matrix(S, n_seeds)
 
         # decide whether to use numba/sparse
         self._compute_gradient = _compute_gradient
@@ -243,12 +242,16 @@ class GraphMatchSolver(BaseEstimator):
             n_unseed = self.n_unseed
             rng = self.rng
             J = np.ones((n_unseed, n_unseed)) / n_unseed
-            # DO linear combo from barycenter
-            K = rng.uniform(size=(n_unseed, n_unseed))
-            # Sinkhorn balancing
-            ones = np.ones(n_unseed)
-            K = sinkhorn(ones, ones, K, reg=0, numItermax=1000, stopThr=1e-3)
-            P = J * self.init + K * (1 - self.init)  # TODO check how defined in paper
+            if self.init < 1:
+                # DO linear combo from barycenter
+                K = rng.uniform(size=(n_unseed, n_unseed))
+                # Sinkhorn balancing
+                K = _doubly_stochastic(K)
+                P = J * self.init + K * (
+                    1 - self.init
+                )  # TODO check how defined in paper
+            else:
+                P = J
         elif isinstance(self.init, np.ndarray):
             raise NotImplementedError()
             # TODO fix below
@@ -263,22 +266,28 @@ class GraphMatchSolver(BaseEstimator):
 
     @write_status("Computing constant terms", 2)
     def compute_constant_terms(self) -> None:
-        self.constant_sum = np.zeros((self.n_layers, self.n_B, self.n_B))
+        self.constant_sum = np.zeros((self.n_unseed, self.n_unseed))
         if self._seeded:
             n_layers = len(self.A)
-            ipsi = []
-            contra = []
             for i in range(n_layers):
-                ipsi.append(
-                    self.A_ns[i] @ self.B_ns[i].T + self.A_sn[i].T @ self.B_sn[i]
+                self.constant_sum += (
+                    self.A_ns[i] @ self.B_ns[i].T  # ipsi
+                    + self.A_sn[i].T @ self.B_sn[i]  # ipsi
+                    + self.AB_ns[i] @ self.BA_ns[i].T  # contra
+                    + self.BA_sn[i].T @ self.AB_sn[i]  # contra
                 )
-                contra.append(
-                    self.AB_ns[i] @ self.BA_ns[i].T + self.BA_sn[i].T @ self.AB_sn[i]
-                )
-            self.ipsi_constant_sum = np.array(ipsi)
-            self.contra_constant_sum = np.array(contra)
-            self.constant_sum = self.ipsi_constant_sum + self.contra_constant_sum
         self.constant_sum += self.S
+
+        # self.constant_sum = constant_sum
+        # contra.append()
+        #     self.ipsi_constant_sum = np.array(ipsi)
+        #     self.contra_constant_sum = np.array(contra)
+        #     self.constant_sum = self.ipsi_constant_sum + self.contra_constant_sum
+        # print("constant_sum")
+        # print(type(self.constant_sum))
+        # print("S")
+        # print(type(self.S))
+        # self.constant_sum = np.array(self.constant_sum) + np.array(self.S)
 
     @write_status("Computing gradient", 2)
     def compute_gradient(self, P: np.ndarray) -> np.ndarray:
@@ -448,15 +457,15 @@ def _compute_gradient(
     const_sum: MultilayerAdjacency,
 ) -> np.ndarray:
     n_layers = len(A)
-    grad = np.zeros_like(P)
+    grad = const_sum
     for i in range(n_layers):
         grad += (
             A[i] @ P @ B[i].T
             + A[i].T @ P @ B[i]
             + AB[i] @ P.T @ BA[i].T
             + BA[i].T @ P.T @ AB[i]
-            + const_sum[i]
         )
+
     return grad
 
 
@@ -510,26 +519,59 @@ _compute_coefficients_numba = njit(_compute_coefficients)
 
 
 def _split_matrix(
-    matrices: MultilayerAdjacency, n: int, single_layer: bool = False
+    matrix: AdjacencyMatrix, n: int
+) -> Tuple[AdjacencyMatrix, AdjacencyMatrix, AdjacencyMatrix, AdjacencyMatrix]:
+    upper, lower = matrix[:n], matrix[n:]
+    return upper[:, :n], upper[:, n:], lower[:, :n], lower[:, n:]
+
+
+def _split_multilayer_matrix(
+    matrices: MultilayerAdjacency, n: int
 ) -> Tuple[
     MultilayerAdjacency, MultilayerAdjacency, MultilayerAdjacency, MultilayerAdjacency
 ]:
-    if single_layer:
-        matrices = [matrices]
     n_layers = len(matrices)
     seed_to_seed = []
     seed_to_nonseed = []
     nonseed_to_seed = []
     nonseed_to_nonseed = []
     for i in range(n_layers):
-        X = matrices[i]
-        upper, lower = X[:n], X[n:]
-        seed_to_seed.append(upper[:, :n])
-        seed_to_nonseed.append(upper[:, n:])
-        nonseed_to_seed.append(lower[:, :n])
-        nonseed_to_nonseed.append(lower[:, n:])
-    # seed_to_seed = np.array(seed_to_seed)
-    # seed_to_nonseed = np.array(seed_to_nonseed)
-    # nonseed_to_seed = np.array(nonseed_to_seed)
-    # nonseed_to_nonseed = np.array(nonseed_to_nonseed)
+        matrix = matrices[i]
+        ss, sn, ns, nn = _split_matrix(matrix, n)
+        seed_to_seed.append(ss)
+        seed_to_nonseed.append(sn)
+        nonseed_to_seed.append(ns)
+        nonseed_to_nonseed.append(nn)
     return seed_to_seed, seed_to_nonseed, nonseed_to_seed, nonseed_to_nonseed
+
+    # if isinstance(X, np.ndarray):
+    # _seed_to_seed = np.array(seed_to_seed)
+    # _seed_to_nonseed = np.array(seed_to_nonseed)
+    # _nonseed_to_seed = np.array(nonseed_to_seed)
+    # _nonseed_to_nonseed = np.array(nonseed_to_nonseed)
+    # return _seed_to_seed, _seed_to_nonseed, _nonseed_to_seed, _nonseed_to_nonseed
+
+
+def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
+    # Adapted from @btaba implementation
+    # https://github.com/btaba/sinkhorn_knopp
+    # of Sinkhorn-Knopp algorithm
+    # https://projecteuclid.org/euclid.pjm/1102992505
+
+    max_iter = 1000
+    c = 1 / P.sum(axis=0)
+    r = 1 / (P @ c)
+    P_eps = P
+
+    for _ in range(max_iter):
+        if (np.abs(P_eps.sum(axis=1) - 1) < tol).all() and (
+            np.abs(P_eps.sum(axis=0) - 1) < tol
+        ).all():
+            # All column/row sums ~= 1 within threshold
+            break
+
+        c = 1 / (r @ P)
+        r = 1 / (P @ c)
+        P_eps = r[:, None] * P * c
+
+    return P_eps
