@@ -565,7 +565,7 @@ class AutoGMMCluster(BaseCluster):
             subset_idxs = np.random.choice(np.arange(0, n), self.max_agglom_size)
             X_subset = X[subset_idxs, :]
 
-        ag_labels = []
+        ag_labels: List[np.ndarray] = []
         if self.label_init is None:
             for p_ag in param_grid_ag:
                 if p_ag["affinity"] != "none":
@@ -580,6 +580,7 @@ class AutoGMMCluster(BaseCluster):
 
         def _fit_for_data(p: ParamGridType, seed: int) -> Dict[str, Any]:
             n_clusters = p[1]["n_components"]
+            agg_clustering: Union[List[int], np.ndarray]
             if (p[0]["affinity"] != "none") and (self.label_init is None):
                 index = param_grid_ag.index(p[0])
                 agg_clustering = ag_labels[index][:, n_clusters - self.min_components]
