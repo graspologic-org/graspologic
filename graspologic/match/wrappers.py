@@ -1,6 +1,7 @@
-from typing import Literal, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
+from typing_extensions import Literal
 
 from graspologic.types import AdjacencyMatrix, Dict, List, Tuple
 

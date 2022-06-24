@@ -1,16 +1,17 @@
 import time
 import warnings
 from functools import wraps
-from typing import Callable, Literal, Optional, Union
+from typing import Callable, Optional, Union
 
 import numpy as np
 from beartype import beartype
 from numba import njit
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array, csr_matrix
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
+from typing_extensions import Literal
 
 from graspologic.types import AdjacencyMatrix, List, Tuple
 
@@ -156,6 +157,7 @@ class GraphMatchSolver(BaseEstimator):
 
         # TODO padding here
         # TODO make B always bigger
+        # if self.n_A < self.n_B:
 
         # set up so that seeds are first and we can grab subgraphs easily
         # TODO could also do this slightly more efficiently just w/ smart indexing?
@@ -409,8 +411,9 @@ def _permute_multilayer(
 
 def _check_input_matrix(A: MultilayerAdjacency) -> MultilayerAdjacency:
     if isinstance(A, np.ndarray) and (np.ndim(A) == 2):
-        A = np.expand_dims(A, axis=0)
-        A = A.astype(float)
+        A = [A]
+        # A = np.expand_dims(A, axis=0)
+        # A = A.astype(float)
     elif isinstance(A, csr_matrix):
         A = [A]
     elif isinstance(A, list):
@@ -475,7 +478,8 @@ def _compute_coefficients(
     R = P - Q
     # TODO make these "smart" traces like in the scipy code, couldn't hurt
     # though I don't know how much Numba cares
-
+    # TODO can also refactor to not repeat multiplications like the old code but I was
+    # finding it harder to follow that way.
     n_layers = len(A)
     a_cross = 0
     b_cross = 0
@@ -562,3 +566,49 @@ def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
         P_eps = r[:, None] * P * c
 
     return P_eps
+
+
+def _multilayer_adj_pad(
+    matrices: np.ndarray, n: int, method: PaddingType
+) -> List[AdjacencyMatrix]:
+    new_matrices = []
+    for matrix in matrices:
+        new_matrices.append(_adj_pad(matrix))
+    return new_matrices
+
+
+def _adj_pad(
+    matrix: AdjacencyMatrix, method: PaddingType
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    if isinstance(matrix, (csr_matrix, csr_array)):
+        msg = (
+            "Using adopted padding method with a sparse adjacency representation; this "
+            "will convert the matrix to a dense representation and likely remove any "
+            "speedup from the sparse representation."
+        )
+        warnings.warn(msg)
+        matrix = np.array(matrix)
+    n = matrix.shape[0]
+    if method == "adopted":
+        matrix = 2 * matrix - np.ones((n, n))
+
+    # def pad(X: np.ndarray, n: np.ndarray) -> np.ndarray:
+    #     X_pad = np.zeros((n[1], n[1]))
+    #     X_pad[: n[0], : n[0]] = X
+    #     return X_pad
+
+    # A_n = A.shape[0]
+    # B_n = B.shape[0]
+    # n = np.sort([A_n, B_n])
+
+    # B = 2 * B - np.ones((B_n, B_n))
+
+    S_pad = np.zeros((n[1], n[1]))
+    S_pad[:A_n, :B_n] = S
+
+    if A.shape[0] == n[0]:
+        A = pad(A, n)
+    else:
+        B = pad(B, n)
+
+    return A, B, S_pad
