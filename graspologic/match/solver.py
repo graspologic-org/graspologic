@@ -12,7 +12,6 @@ from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix
 from sklearn.base import BaseEstimator
-from sklearn.metrics import pair_confusion_matrix
 from sklearn.utils import check_random_state
 
 from graspologic.types import AdjacencyMatrix, List, Tuple
@@ -363,14 +362,14 @@ class GraphMatchSolver(BaseEstimator):
         if a * self.obj_func_scalar > 0 and 0 <= -b / (2 * a) <= 1:
             alpha = -b / (2 * a)
         else:
-            alpha = np.argmin([0, (b + a) * self.obj_func_scalar])
+            alpha = float(np.argmin([0, (b + a) * self.obj_func_scalar]))
         return alpha
 
-    def check_converged(self, P, P_new):
+    def check_converged(self, P: np.ndarray, P_new: np.ndarray) -> bool:
         return np.linalg.norm(P - P_new) / np.sqrt(self.n_unseed) < self.tol
 
     @write_status("Finalizing assignment", 1)
-    def finalize(self, P):
+    def finalize(self, P: np.ndarray) -> None:
         self.P_final_ = P
 
         permutation = self.linear_sum_assignment(P)
@@ -390,10 +389,10 @@ class GraphMatchSolver(BaseEstimator):
         score = self.compute_score(permutation)
         self.score_ = score
 
-    def compute_score(*args):
-        return 0
+    def compute_score(self, permutation: np.ndarray) -> float:
+        return 0.0
 
-    def status(self):
+    def status(self) -> str:
         if self.n_iter > 0:
             return f"[Iteration: {self.n_iter}]"
         else:
@@ -416,7 +415,7 @@ def _permute_multilayer(
     return adjacency
 
 
-def _check_input_matrix(A):
+def _check_input_matrix(A: MultilayerAdjacency) -> MultilayerAdjacency:
     if isinstance(A, np.ndarray) and (np.ndim(A) == 2):
         A = np.expand_dims(A, axis=0)
         A = A.astype(float)
@@ -440,8 +439,15 @@ def _check_input_matrix(A):
     return A
 
 
-def _compute_gradient(P, A, B, AB, BA, const_sum):
-    n_layers = A.shape[0]
+def _compute_gradient(
+    P: np.ndarray,
+    A: MultilayerAdjacency,
+    B: MultilayerAdjacency,
+    AB: MultilayerAdjacency,
+    BA: MultilayerAdjacency,
+    const_sum: MultilayerAdjacency,
+) -> np.ndarray:
+    n_layers = len(A)
     grad = np.zeros_like(P)
     for i in range(n_layers):
         grad += (
@@ -458,13 +464,27 @@ _compute_gradient_numba = njit(_compute_gradient)
 
 
 def _compute_coefficients(
-    P, Q, A, B, AB, BA, A_ns, A_sn, B_ns, B_sn, AB_ns, AB_sn, BA_ns, BA_sn, S
-):
+    P: np.ndarray,
+    Q: np.ndarray,
+    A: MultilayerAdjacency,
+    B: MultilayerAdjacency,
+    AB: MultilayerAdjacency,
+    BA: MultilayerAdjacency,
+    A_ns: MultilayerAdjacency,
+    A_sn: MultilayerAdjacency,
+    B_ns: MultilayerAdjacency,
+    B_sn: MultilayerAdjacency,
+    AB_ns: MultilayerAdjacency,
+    AB_sn: MultilayerAdjacency,
+    BA_ns: MultilayerAdjacency,
+    BA_sn: MultilayerAdjacency,
+    S: AdjacencyMatrix,
+) -> Tuple[float, float]:
     R = P - Q
     # TODO make these "smart" traces like in the scipy code, couldn't hurt
     # though I don't know how much Numba cares
 
-    n_layers = A.shape[0]
+    n_layers = len(A)
     a_cross = 0
     b_cross = 0
     a_intra = 0
@@ -508,8 +528,8 @@ def _split_matrix(
         seed_to_nonseed.append(upper[:, n:])
         nonseed_to_seed.append(lower[:, :n])
         nonseed_to_nonseed.append(lower[:, n:])
-    seed_to_seed = np.array(seed_to_seed)
-    seed_to_nonseed = np.array(seed_to_nonseed)
-    nonseed_to_seed = np.array(nonseed_to_seed)
-    nonseed_to_nonseed = np.array(nonseed_to_nonseed)
+    # seed_to_seed = np.array(seed_to_seed)
+    # seed_to_nonseed = np.array(seed_to_nonseed)
+    # nonseed_to_seed = np.array(nonseed_to_seed)
+    # nonseed_to_nonseed = np.array(nonseed_to_nonseed)
     return seed_to_seed, seed_to_nonseed, nonseed_to_seed, nonseed_to_nonseed
