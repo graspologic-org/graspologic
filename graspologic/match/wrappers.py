@@ -40,3 +40,4 @@ def graph_match(
     pass
 
 
+def soft_graph_match(A, B, ...)
