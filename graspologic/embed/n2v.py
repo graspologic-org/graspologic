@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, List
 
 import numpy as np
 import networkx as nx
@@ -110,7 +110,7 @@ class Node2VecEmbed(BaseEstimator):
         self.interpolate_walk_lengths_by_node_degree = (
             interpolate_walk_lengths_by_node_degree
         )
-        self.labels = None
+        self.labels : List[int] = []
 
     def fit_transform(
         self, graph: GraphRepresentation, *args: Any, **kwargs: Any
@@ -156,8 +156,8 @@ class Node2VecEmbed(BaseEstimator):
 
         return Xemb
 
-    def fit(self, graph: GraphRepresentation, *args: Any, **kwargs: Any):
+    def fit(self, graph: GraphRepresentation, *args: Any, **kwargs: Any) -> None:
         raise NotImplementedError("Use `fit_transform` method instead.")
 
-    def transform(self, graph: GraphRepresentation, *args: Any, **kwargs: Any):
+    def transform(self, graph: GraphRepresentation, *args: Any, **kwargs: Any) -> None:
         raise NotImplementedError("Use `fit_transform` method instead.")
