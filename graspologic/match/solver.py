@@ -278,17 +278,6 @@ class GraphMatchSolver(BaseEstimator):
                 )
         self.constant_sum += self.S
 
-        # self.constant_sum = constant_sum
-        # contra.append()
-        #     self.ipsi_constant_sum = np.array(ipsi)
-        #     self.contra_constant_sum = np.array(contra)
-        #     self.constant_sum = self.ipsi_constant_sum + self.contra_constant_sum
-        # print("constant_sum")
-        # print(type(self.constant_sum))
-        # print("S")
-        # print(type(self.S))
-        # self.constant_sum = np.array(self.constant_sum) + np.array(self.S)
-
     @write_status("Computing gradient", 2)
     def compute_gradient(self, P: np.ndarray) -> np.ndarray:
         gradient = self._compute_gradient(
@@ -385,14 +374,8 @@ class GraphMatchSolver(BaseEstimator):
         permutation = np.concatenate(
             (np.arange(self.n_seeds), permutation + self.n_seeds)
         )
-        # not_seeds = np.setdiff1d(np.arange(self.n_B), self.seeds[:, 1])
-
         final_permutation = np.empty(self.n_B, dtype=int)
         final_permutation[self.perm_A] = self.perm_B[permutation]
-        # final_permutation[self.seeds[:, 0]] = self.seeds[:, 1]
-        # final_permutation[not_seeds] = permutation
-        # permutation += len(self.seeds[:, 1])  # TODO this is not robust
-        # permutation = np.concatenate((self.seeds[:, 1], not_seeds[permutation]))
         self.permutation_ = final_permutation
 
         score = self.compute_score(permutation)
