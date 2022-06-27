@@ -63,20 +63,27 @@ autosummary_generate = True
 
 # -- sphinx.ext.autodoc
 autoclass_content = "both"
-autodoc_default_flags = ["members", "inherited-members"]
-autodoc_member_order = "bysource"  # default is alphabetical
+autodoc_default_options = {
+    'members': True,
+    'inherited-members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+}
+autodoc_class_signature = "separated"
+autodoc_typehints = "description"
 
 # -- sphinx.ext.intersphinx
 intersphinx_mapping = {
     "anytree": ("https://anytree.readthedocs.io/en/latest/", None),
     "hyppo": ("https://hyppo.neurodata.io", None),
     "joblib": ("https://joblib.readthedocs.io/en/latest/", None),
-    "matplotlib": ("https://matplotlib.org", None),
+    "matplotlib": ("https://matplotlib.org/stable/", None),
     "networkx": ("https://networkx.org/documentation/stable", None),
-    "numpy": ("https://numpy.org/doc/stable", None),
+    "numpy": ("https://matplotlib.org/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
     "python": ("https://docs.python.org/3.9", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
     "seaborn": ("https://seaborn.pydata.org", None),
     "sklearn": ("https://scikit-learn.org/dev", None),
 }

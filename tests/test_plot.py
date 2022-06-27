@@ -63,7 +63,7 @@ class TestPlot(unittest.TestCase):
         figsize = "bad figsize"
         with self.assertRaises(TypeError):
             heatmap(X, figsize=figsize)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, figsize=figsize)
 
@@ -82,7 +82,7 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, title=title)
         with self.assertRaises(TypeError):
             pairplot(X, title=title)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, title=title)
 
@@ -94,7 +94,7 @@ class TestPlot(unittest.TestCase):
             gridplot([X], grid_labels, context=context)
         with self.assertRaises(TypeError):
             pairplot(X, context=context)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, context=context)
 
@@ -117,7 +117,7 @@ class TestPlot(unittest.TestCase):
                 gridplot([X], grid_labels, font_scale=font_scale)
             with self.assertRaises(TypeError):
                 pairplot(X, font_scale=font_scale)
-            with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+            with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
                 with self.assertRaises(TypeError):
                     networkplot(adjacency=X, x=x, y=y, font_scale=font_scale)
 
@@ -280,10 +280,10 @@ class TestPlot(unittest.TestCase):
         _test_pairplot_with_gmm_outputs(covariance_type="spherical")
 
     def test_networkplot_inputs(self):
-        X = np.random.rand(15, 3)
+        X = er_np(15, 0.5)
         x = np.random.rand(15, 1)
         y = np.random.rand(15, 1)
-        with self.assertRaises(beartype.roar.BeartypeCallHintPepParamException):
+        with self.assertRaises(beartype.roar.BeartypeCallHintParamViolation):
             with self.assertRaises(TypeError):
                 networkplot(adjacency="test", x=x, y=y)
 
@@ -328,8 +328,8 @@ class TestPlot(unittest.TestCase):
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, legend=4)
 
-    def test_networkplot_outputs(self):
-        X = np.random.rand(15, 3)
+    def test_networkplot_outputs_int(self):
+        X = er_np(15, 0.5)
         xarray = np.random.rand(15, 1)
         yarray = np.random.rand(15, 1)
         xstring = "source"
@@ -362,6 +362,30 @@ class TestPlot(unittest.TestCase):
             edge_alpha=0.4,
             edge_linewidth=0.6,
             ax=ax,
+        )
+
+    def test_networkplot_outputs_str(self):
+        X = er_np(15, 0.7)
+        node_df = pd.DataFrame(index=["node {}".format(i) for i in range(15)])
+        node_df.loc[:, "source"] = np.random.rand(15, 1)
+        node_df.loc[:, "target"] = np.random.rand(15, 1)
+        node_df.loc[:, "hue"] = np.random.randint(2, size=15)
+        palette = {0: (0.8, 0.4, 0.2), 1: (0, 0.9, 0.4)}
+        size = np.random.rand(15)
+        sizes = (10, 200)
+
+        fig = networkplot(
+            adjacency=X,
+            x="source",
+            y="target",
+            node_data=node_df,
+            node_hue="hue",
+            palette=palette,
+            node_size=size,
+            node_sizes=sizes,
+            node_alpha=0.5,
+            edge_alpha=0.4,
+            edge_linewidth=0.6,
         )
 
     def test_sort_inds(self):

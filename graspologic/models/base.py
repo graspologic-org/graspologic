@@ -83,7 +83,9 @@ class BaseGraphEstimator(BaseEstimator):
             Mean square error for the model's fit P matrix
         """
         check_is_fitted(self, "p_mat_")
-        return np.linalg.norm(graph - self.p_mat_) ** 2
+        return float(
+            np.linalg.norm(graph - self.p_mat_) ** 2
+        )  # this should have been fine without the float
 
     def score_samples(
         self, graph: np.ndarray, clip: Optional[float] = None

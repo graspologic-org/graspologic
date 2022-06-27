@@ -21,3 +21,8 @@ Latent position models
 ----------------------
 
 .. autoclass:: RDPGEstimator
+
+Edge swapping (configuration models)
+------------------------------------
+
+.. autoclass:: EdgeSwapper

@@ -247,8 +247,10 @@ class BaseSpectralEmbed(BaseEstimator):
     def transform(self, X):  # type: ignore
         """
         Obtain latent positions from an adjacency matrix or matrix of out-of-sample
-        vertices. For more details on transforming out-of-sample vertices, see the
-        :ref:`tutorials <embed_tutorials>`. For mathematical background, see [2].
+        vertices. For more details on transforming out-of-sample vertices, see `Out-of-Sample (OOS) Embedding
+        <https://microsoft.github.io/graspologic/latest/tutorials/embedding/OutOfSampleEmbed.html>`_
+
+        For mathematical background, see [2].
 
         Parameters
         ----------
@@ -293,8 +295,8 @@ class BaseSpectralEmbed(BaseEstimator):
         References
         ----------
         .. [1] Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  "A
-        Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
-        Journal of the American Statistical Association, Vol. 107(499), 2012
+            Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,"
+            Journal of the American Statistical Association, Vol. 107(499), 2012
 
         .. [2] Levin, K., Roosta-Khorasani, F., Mahoney, M. W., & Priebe, C. E. (2018).
             Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
@@ -401,7 +403,7 @@ class BaseEmbedMulti(BaseSpectralEmbed):
         self.diag_aug = diag_aug
 
     def _check_input_graphs(
-        self, graphs: List[GraphRepresentation]
+        self, graphs: Union[List[GraphRepresentation], np.ndarray]
     ) -> Union[AdjacencyMatrix, List[AdjacencyMatrix]]:
         """
         Checks if all graphs in list have same shapes.
@@ -426,6 +428,8 @@ class BaseEmbedMulti(BaseSpectralEmbed):
             If all graphs do not have same shape, or input list is empty or has
             one element.
         """
+        out: Union[List[AdjacencyMatrix], np.ndarray]
+
         # Convert input to np.arrays
         # This check is needed because np.stack will always duplicate array in memory.
         if isinstance(graphs, (list, tuple)):

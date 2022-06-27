@@ -70,7 +70,6 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         randomized svd solver for deterministic, albeit pseudo-randomized behavior.
 
 
-
     Attributes
     ----------
     n_features_in_: int

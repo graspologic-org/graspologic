@@ -3,11 +3,11 @@
 # original code can be found here
 # https://github.com/scipy/scipy/blob/master/scipy/optimize/_qap.py
 
+import numbers
 import operator
 from typing import Any, Optional, Union
 
 import numpy as np
-from scipy._lib._util import check_random_state
 from scipy.optimize import OptimizeResult, linear_sum_assignment
 from typing_extensions import Literal
 
@@ -189,9 +189,11 @@ def _common_input_validation(
     A = np.atleast_2d(A)
     B = np.atleast_2d(B)
 
-    if partial_match is None:
-        partial_match = np.array([[], []]).T
-    partial_match = np.atleast_2d(partial_match).astype(int)
+    _partial_match = (
+        partial_match if partial_match is not None else np.array([[], []]).T
+    )
+
+    _partial_match = np.atleast_2d(_partial_match).astype(int)
 
     msg = None
     if A.shape[0] != A.shape[1]:
@@ -202,25 +204,25 @@ def _common_input_validation(
         msg = "`A` and `B` must have exactly two dimensions"
     elif A.shape != B.shape:
         msg = "`A` and `B` matrices must be of equal size"
-    elif partial_match.shape[0] > A.shape[0]:
+    elif _partial_match.shape[0] > A.shape[0]:
         msg = "`partial_match` can have only as many seeds as there are nodes"
-    elif partial_match.shape[1] != 2:
+    elif _partial_match.shape[1] != 2:
         msg = "`partial_match` must have two columns"
-    elif partial_match.ndim != 2:
+    elif _partial_match.ndim != 2:
         msg = "`partial_match` must have exactly two dimensions"
-    elif (partial_match < 0).any():
+    elif (_partial_match < 0).any():
         msg = "`partial_match` must contain only positive indices"
-    elif (partial_match >= len(A)).any():
+    elif (_partial_match >= len(A)).any():
         msg = "`partial_match` entries must be less than number of nodes"
-    elif not len(set(partial_match[:, 0])) == len(partial_match[:, 0]) or not len(
-        set(partial_match[:, 1])
-    ) == len(partial_match[:, 1]):
+    elif not len(set(_partial_match[:, 0])) == len(_partial_match[:, 0]) or not len(
+        set(_partial_match[:, 1])
+    ) == len(_partial_match[:, 1]):
         msg = "`partial_match` column entries must be unique"
 
     if msg is not None:
         raise ValueError(msg)
 
-    return A, B, partial_match
+    return A, B, _partial_match
 
 
 def _quadratic_assignment_faq(
@@ -416,9 +418,8 @@ def _quadratic_assignment_faq(
     # check outlier cases
     if n == 0 or partial_match_value.shape[0] == n:
         # Cannot assume partial_match is sorted.
-        partial_match_value = np.row_stack(
-            sorted(partial_match_value, key=lambda x: x[0])
-        )
+        sort_inds = np.argsort(partial_match_value[:, 0])
+        partial_match_value = partial_match_value[sort_inds]
         score = _calc_score(A, B, s_value, partial_match_value[:, 1])
         res = {"col_ind": partial_match_value[:, 1], "fun": score, "nit": 0}
         return OptimizeResult(res)
@@ -459,11 +460,11 @@ def _quadratic_assignment_faq(
             K = _doubly_stochastic(K)
             P = J * 0.5 + K * 0.5
     elif isinstance(P0, np.ndarray):
-        P0 = np.atleast_2d(P0)
-        _check_init_input(P0, n_unseed)
+        _P0 = np.atleast_2d(P0)
+        _check_init_input(_P0, n_unseed)
         invert_inds = np.argsort(nonseed_B)
         perm_nonseed_B = np.argsort(invert_inds)
-        P = P0[:, perm_nonseed_B]
+        P = _P0[:, perm_nonseed_B]
     else:
         msg = "`init` must either be of type str or np.ndarray."
         raise TypeError(msg)
@@ -571,3 +572,37 @@ def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
         P_eps = r[:, None] * P * c
 
     return P_eps
+
+
+# copy-pasted from scipy scipy._lib._util
+# which was copy-pasted from scikit-learn utils/validation.py
+# this was just modified to add proper typing for returns
+# also, shouldn't have been importing private function from scipy anyway
+def check_random_state(
+    seed: Union[None, int, np.random.RandomState, np.random.Generator]
+) -> Union[np.random.RandomState, np.random.Generator]:
+    """Turn seed into a np.random.RandomState instance
+
+    If seed is None (or np.random), return the RandomState singleton used
+    by np.random.
+    If seed is an int, return a new RandomState instance seeded with seed.
+    If seed is already a RandomState instance, return it.
+    If seed is a new-style np.random.Generator, return it.
+    Otherwise raise ValueError.
+    """
+    if seed is None or seed is np.random:
+        return np.random.mtrand._rand
+    if isinstance(seed, (numbers.Integral, np.integer)):
+        int_seed: int = int(seed)  # necessary for typing/mypy
+        return np.random.RandomState(int_seed)
+    if isinstance(seed, np.random.RandomState):
+        return seed
+    try:
+        # Generator is only available in numpy >= 1.17
+        if isinstance(seed, np.random.Generator):
+            return seed
+    except AttributeError:
+        pass
+    raise ValueError(
+        "%r cannot be used to seed a numpy.random.RandomState" " instance" % seed
+    )

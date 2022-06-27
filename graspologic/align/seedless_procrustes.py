@@ -319,12 +319,11 @@ class SeedlessProcrustes(BaseAlign):
         Y: np.ndarray,
         Q: Optional[np.ndarray] = None,
         P: Optional[np.ndarray] = None,
-    ) -> Union[float, np.ndarray]:
-        if Q is None:
-            Q = self.Q_
-        if P is None:
-            P = self.P_
-        return np.linalg.norm(X @ Q - P @ Y, ord="fro")
+    ) -> np.floating:
+        _Q = Q if Q is not None else self.Q_
+        _P = P if P is not None else self.P_
+
+        return np.linalg.norm(X @ _Q - _P @ Y, ord="fro")
 
     def fit(self, X: np.ndarray, Y: np.ndarray) -> "SeedlessProcrustes":
         """
@@ -349,11 +348,11 @@ class SeedlessProcrustes(BaseAlign):
         m, _ = Y.shape
 
         if self.init == "2d":
-            P_matrices = np.zeros((2 ** d, n, m))
-            Q_matrices = np.zeros((2 ** d, d, d))
-            objectives = np.zeros(2 ** d)
+            P_matrices = np.zeros((2**d, n, m))
+            Q_matrices = np.zeros((2**d, d, d))
+            objectives = np.zeros(2**d)
             # try 2^d different initializations
-            for i in range(2 ** d):
+            for i in range(2**d):
                 initial_Q = _sign_flip_matrix_from_int(i, d)
                 P_matrices[i], Q_matrices[i] = P, Q = self._iterative_ot(
                     X, Y, initial_Q

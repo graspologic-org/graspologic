@@ -50,7 +50,7 @@ def _nx_to_edge_list(
     check_argument(
         isinstance(graph, nx.Graph)
         and not (graph.is_directed() or graph.is_multigraph()),
-        "Only undirected networkx graphs are supported",
+        "Only undirected non-multi-graph networkx graphs are supported",
     )
     native_safe: List[Tuple[str, str, float]] = []
     edge_iter = (
@@ -274,7 +274,7 @@ def leiden(
     ------
     ValueError
     TypeError
-    BeartypeCallHintPepParamException
+    BeartypeCallHintParamViolation
 
     See Also
     --------
@@ -539,7 +539,7 @@ def hierarchical_leiden(
     ------
     ValueError
     TypeError
-    BeartypeCallHintPepParamException
+    BeartypeCallHintParamViolation
 
     See Also
     --------

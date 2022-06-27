@@ -8,7 +8,7 @@ import networkx as nx
 import numpy as np
 import pytest
 import scipy
-from beartype.roar import BeartypeCallHintPepParamException
+from beartype.roar import BeartypeCallHintParamViolation
 
 from graspologic.partition import (
     HierarchicalCluster,
@@ -91,7 +91,7 @@ class TestLeiden(unittest.TestCase):
         graph.add_edge("2", "3", weight=4.0)
 
         leiden(graph=graph, **good_args)
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["starting_communities"] = 123
             leiden(graph=graph, **args)
@@ -100,7 +100,7 @@ class TestLeiden(unittest.TestCase):
         args["starting_communities"] = None
         leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["extra_forced_iterations"] = 1234.003
             leiden(graph=graph, **args)
@@ -110,7 +110,7 @@ class TestLeiden(unittest.TestCase):
             args["extra_forced_iterations"] = -4003
             leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["resolution"] = "leiden"
             leiden(graph=graph, **args)
@@ -120,7 +120,7 @@ class TestLeiden(unittest.TestCase):
             args["resolution"] = 0
             leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["randomness"] = "leiden"
             leiden(graph=graph, **args)
@@ -130,12 +130,12 @@ class TestLeiden(unittest.TestCase):
             args["randomness"] = 0
             leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["use_modularity"] = 1234
             leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["trials"] = "hotdog"
             leiden(graph=graph, **args)
@@ -151,7 +151,7 @@ class TestLeiden(unittest.TestCase):
         args["random_seed"] = None
         leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["random_seed"] = "leiden"
             leiden(graph=graph, **args)
@@ -161,23 +161,23 @@ class TestLeiden(unittest.TestCase):
             args["random_seed"] = -1
             leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["is_weighted"] = "leiden"
             leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["weight_default"] = "leiden"
             leiden(graph=graph, **args)
 
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["check_directed"] = "leiden"
             leiden(graph=graph, **args)
 
         # one extra parameter hierarchical needs
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             args = good_args.copy()
             args["max_cluster_size"] = "leiden"
             hierarchical_leiden(graph=graph, **args)
@@ -349,7 +349,7 @@ class TestValidEdgeList(unittest.TestCase):
 
     def test_assert_list_does_not_contain_tuples(self):
         edges = ["invalid"]
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             _edge_list_to_edge_list(
                 edges=edges,
                 identifier=_IdentityMapper(),
@@ -357,7 +357,7 @@ class TestValidEdgeList(unittest.TestCase):
 
     def test_assert_list_contains_misshapen_tuple(self):
         edges = [(1, 2, 1.0, 1.0)]
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             _edge_list_to_edge_list(
                 edges=edges,
                 identifier=_IdentityMapper(),
@@ -365,7 +365,7 @@ class TestValidEdgeList(unittest.TestCase):
 
     def test_assert_wrong_types_in_tuples(self):
         edges = [(True, 4, "sandwich")]
-        with self.assertRaises(BeartypeCallHintPepParamException):
+        with self.assertRaises(BeartypeCallHintParamViolation):
             _edge_list_to_edge_list(
                 edges=edges,
                 identifier=_IdentityMapper(),
