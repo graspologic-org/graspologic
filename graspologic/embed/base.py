@@ -14,12 +14,8 @@ from typing_extensions import Literal
 from graspologic.types import List, Tuple
 
 from ..types import AdjacencyMatrix, GraphRepresentation
-from ..utils import (
-    augment_diagonal,
-    import_graph,
-    is_almost_symmetric,
-    is_fully_connected,
-)
+from ..utils import (augment_diagonal, import_graph, is_almost_symmetric,
+                     is_fully_connected)
 from .svd import SvdAlgorithmType, select_svd
 
 

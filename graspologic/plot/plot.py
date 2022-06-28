@@ -23,11 +23,8 @@ from sklearn.utils import check_array, check_consistent_length, check_X_y
 from graspologic.types import Dict, List, Tuple
 
 from ..embed import select_svd
-from ..preconditions import (
-    check_argument,
-    check_argument_types,
-    check_optional_argument_types,
-)
+from ..preconditions import (check_argument, check_argument_types,
+                             check_optional_argument_types)
 from ..types import GraphRepresentation
 from ..utils import import_graph, pass_to_ranks
 

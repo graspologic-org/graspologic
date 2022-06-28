@@ -5,10 +5,7 @@ import unittest
 
 from graspologic.layouts.nooverlap._node import _Node
 from graspologic.layouts.nooverlap._quad_node import (
-    _QuadNode,
-    is_overlap,
-    is_overlapping_any_node_and_index,
-)
+    _QuadNode, is_overlap, is_overlapping_any_node_and_index)
 
 
 class TestOverlapCheck(unittest.TestCase):

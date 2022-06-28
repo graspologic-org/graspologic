@@ -2,30 +2,14 @@
 # Licensed under the MIT License.
 
 from .ptr import pass_to_ranks
-from .utils import (
-    LaplacianFormType,
-    augment_diagonal,
-    average_matrices,
-    binarize,
-    cartesian_product,
-    fit_plug_in_variance_estimator,
-    import_edgelist,
-    import_graph,
-    is_almost_symmetric,
-    is_fully_connected,
-    is_loopless,
-    is_symmetric,
-    is_unweighted,
-    largest_connected_component,
-    multigraph_lcc_intersection,
-    multigraph_lcc_union,
-    remap_labels,
-    remap_node_ids,
-    remove_loops,
-    remove_vertices,
-    symmetrize,
-    to_laplacian,
-)
+from .utils import (LaplacianFormType, augment_diagonal, average_matrices,
+                    binarize, cartesian_product,
+                    fit_plug_in_variance_estimator, import_edgelist,
+                    import_graph, is_almost_symmetric, is_fully_connected,
+                    is_loopless, is_symmetric, is_unweighted,
+                    largest_connected_component, multigraph_lcc_intersection,
+                    multigraph_lcc_union, remap_labels, remap_node_ids,
+                    remove_loops, remove_vertices, symmetrize, to_laplacian)
 
 __all__ = [
     "average_matrices",

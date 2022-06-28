@@ -9,7 +9,8 @@ import numpy as np
 from graspologic.align import SignFlips
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.match import GraphMatch as GMP
-from graspologic.match.qap import _quadratic_assignment_faq, quadratic_assignment
+from graspologic.match.qap import (_quadratic_assignment_faq,
+                                   quadratic_assignment)
 from graspologic.simulations import er_np, sbm_corr
 
 np.random.seed(1)

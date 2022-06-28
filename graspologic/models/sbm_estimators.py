@@ -11,14 +11,8 @@ from graspologic.types import Dict, List, Tuple
 from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
 from ..types import GraphRepresentation
-from ..utils import (
-    augment_diagonal,
-    cartesian_product,
-    import_graph,
-    is_unweighted,
-    remove_loops,
-    symmetrize,
-)
+from ..utils import (augment_diagonal, cartesian_product, import_graph,
+                     is_unweighted, remove_loops, symmetrize)
 from .base import BaseGraphEstimator, _calculate_p
 
 

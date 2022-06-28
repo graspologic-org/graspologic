@@ -7,16 +7,8 @@ import sys
 
 import matplotlib as mpl
 
-from .plot import (
-    degreeplot,
-    edgeplot,
-    gridplot,
-    heatmap,
-    networkplot,
-    pairplot,
-    pairplot_with_gmm,
-    screeplot,
-)
+from .plot import (degreeplot, edgeplot, gridplot, heatmap, networkplot,
+                   pairplot, pairplot_with_gmm, screeplot)
 from .plot_matrix import adjplot, matrixplot
 
 __all__ = [

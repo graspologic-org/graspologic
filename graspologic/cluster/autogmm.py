@@ -11,10 +11,8 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.metrics import adjusted_rand_score
 from sklearn.mixture import GaussianMixture
-from sklearn.mixture._gaussian_mixture import (
-    _compute_precision_cholesky,
-    _estimate_gaussian_parameters,
-)
+from sklearn.mixture._gaussian_mixture import (_compute_precision_cholesky,
+                                               _estimate_gaussian_parameters)
 from sklearn.model_selection import ParameterGrid
 from sklearn.utils import check_scalar
 from typing_extensions import Literal

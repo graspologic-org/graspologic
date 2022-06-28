@@ -10,14 +10,8 @@ from scipy.sparse import csr_matrix
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
-from graspologic.models import (
-    DCEREstimator,
-    DCSBMEstimator,
-    EdgeSwapper,
-    EREstimator,
-    RDPGEstimator,
-    SBMEstimator,
-)
+from graspologic.models import (DCEREstimator, DCSBMEstimator, EdgeSwapper,
+                                EREstimator, RDPGEstimator, SBMEstimator)
 from graspologic.simulations import er_np, sample_edges, sbm
 from graspologic.utils import cartesian_product, is_symmetric
 

@@ -1,13 +1,15 @@
 # Copied and modified from https://stackoverflow.com/questions/15001888/conditional-toctree-in-sphinx
 
 import re
+
 from sphinx.directives.other import TocTree
 
 
 def setup(app):
-    app.add_config_value('toc_filter_exclude', [], 'html')
-    app.add_directive('toctree-filt', TocTreeFilt)
-    return {'version': '1.0.0'}
+    app.add_config_value("toc_filter_exclude", [], "html")
+    app.add_directive("toctree-filt", TocTreeFilt)
+    return {"version": "1.0.0"}
+
 
 class TocTreeFilt(TocTree):
     """
@@ -21,7 +23,8 @@ class TocTreeFilt(TocTree):
     form `:secret:ultra-api` or `:draft:new-features` will be excuded from
     the final table of contents. Entries without a prefix are always included.
     """
-    hasPat = re.compile('\s*(.*)$')
+
+    hasPat = re.compile("\s*(.*)$")
 
     # Remove any entries in the content that we dont want and strip
     # out any filter prefixes that we want but obviously don't want the

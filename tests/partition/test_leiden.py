@@ -10,19 +10,12 @@ import pytest
 import scipy
 from beartype.roar import BeartypeCallHintParamViolation
 
-from graspologic.partition import (
-    HierarchicalCluster,
-    HierarchicalClusters,
-    hierarchical_leiden,
-    leiden,
-)
-from graspologic.partition.leiden import (
-    _adjacency_matrix_to_edge_list,
-    _edge_list_to_edge_list,
-    _from_native,
-    _IdentityMapper,
-    _nx_to_edge_list,
-)
+from graspologic.partition import (HierarchicalCluster, HierarchicalClusters,
+                                   hierarchical_leiden, leiden)
+from graspologic.partition.leiden import (_adjacency_matrix_to_edge_list,
+                                          _edge_list_to_edge_list,
+                                          _from_native, _IdentityMapper,
+                                          _nx_to_edge_list)
 from tests.utils import data_file
 
 

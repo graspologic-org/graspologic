@@ -10,14 +10,8 @@ import pandas as pd
 from scipy.sparse import csr_matrix
 from sklearn.mixture import GaussianMixture
 
-from graspologic.plot.plot import (
-    _sort_inds,
-    gridplot,
-    heatmap,
-    networkplot,
-    pairplot,
-    pairplot_with_gmm,
-)
+from graspologic.plot.plot import (_sort_inds, gridplot, heatmap, networkplot,
+                                   pairplot, pairplot_with_gmm)
 from graspologic.simulations.simulations import er_np, sbm
 
 

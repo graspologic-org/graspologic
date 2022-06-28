@@ -5,11 +5,9 @@ import unittest
 
 from graspologic.layouts import NodePosition
 from graspologic.layouts.nooverlap._node import _Node
-from graspologic.layouts.nooverlap._quad_node import (
-    _QuadNode,
-    move_point_on_line,
-    node_positions_overlap,
-)
+from graspologic.layouts.nooverlap._quad_node import (_QuadNode,
+                                                      move_point_on_line,
+                                                      node_positions_overlap)
 from graspologic.layouts.nooverlap.nooverlap import remove_overlaps
 
 

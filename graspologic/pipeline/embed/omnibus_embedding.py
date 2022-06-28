@@ -12,12 +12,8 @@ from graspologic.embed import OmnibusEmbed
 from graspologic.embed.base import SvdAlgorithmType
 from graspologic.preconditions import check_argument, is_real_weighted
 from graspologic.types import List, Set, Tuple
-from graspologic.utils import (
-    augment_diagonal,
-    largest_connected_component,
-    pass_to_ranks,
-    remove_loops,
-)
+from graspologic.utils import (augment_diagonal, largest_connected_component,
+                               pass_to_ranks, remove_loops)
 
 from . import __SVD_SOLVER_TYPES
 from ._elbow import _index_of_elbow

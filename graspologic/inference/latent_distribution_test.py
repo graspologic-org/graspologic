@@ -7,7 +7,8 @@ import numpy as np
 from hyppo.ksample import KSample
 from joblib import Parallel, delayed
 from scipy import stats
-from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
+from sklearn.metrics.pairwise import (PAIRED_DISTANCES,
+                                      PAIRWISE_KERNEL_FUNCTIONS)
 from sklearn.utils import check_array, check_random_state
 from typing_extensions import Literal
 

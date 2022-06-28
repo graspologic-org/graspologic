@@ -5,7 +5,8 @@ import numpy as np
 from scipy.stats import rankdata
 
 from ..types import GraphRepresentation
-from .utils import import_graph, is_loopless, is_symmetric, is_unweighted, symmetrize
+from .utils import (import_graph, is_loopless, is_symmetric, is_unweighted,
+                    symmetrize)
 
 
 def pass_to_ranks(

@@ -8,10 +8,9 @@ from sklearn.utils import check_scalar
 
 from graspologic.preconditions import check_argument
 from graspologic.types import AdjacencyMatrix, Tuple
-from graspologic.utils import import_graph, is_loopless, is_symmetric, is_unweighted
+from graspologic.utils import (import_graph, is_loopless, is_symmetric,
+                               is_unweighted)
 
-
-_edge_swap_numba = nb.jit(_edge_swap)
 
 
 # Code based on: https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py
@@ -214,3 +213,6 @@ def _edge_swap(
     edge_list[orig_inds[0]] = [u, x]
     edge_list[orig_inds[1]] = [v, y]
     return adjacency, edge_list
+
+
+_edge_swap_numba = nb.jit(_edge_swap)
