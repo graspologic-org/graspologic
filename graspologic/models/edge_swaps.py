@@ -10,6 +10,28 @@ from graspologic.preconditions import check_argument
 from graspologic.types import AdjacencyMatrix, Tuple
 from graspologic.utils import import_graph, is_loopless, is_symmetric, is_unweighted
 
+global nbjit_result
+global nbjit_ran = False
+
+def _edge_swap_numba(edge_swap):
+    if not nbjit_ran:
+        nbjit_result = nb.jit(edge_swap)
+    return nbjit_result
+
+
+
+#def _edge_swap_numba():
+    #_edge_swap_numba_var = nb.jit(_edge_swap)
+
+#Line 85: self._edge_swap_function = _edge_swap_numba_var
+
+#fix: define global var with results of nb.jit(_edge_swap)
+    #define global var = bool with val of if edge swap has been run
+    #if edge swap has not been run --> global var = nb.jit()
+
+
+
+
 
 
 def _edge_swap_numba():
@@ -79,7 +101,11 @@ class EdgeSwapper:
         else:
             # for numpy input, use numba for JIT compilation
             # NOTE: not convinced numba is helping much here, look into optimizing
+<<<<<<< HEAD
             self._edge_swap_function = _edge_swap_numba_var
+=======
+            self._edge_swap_function = _edge_swap_numba(_edge_swap)
+>>>>>>> d05ef3609627050919f4fa45c1d50dd9d7f1e011
 
         self.adjacency = adjacency
 
