@@ -189,9 +189,11 @@ def _common_input_validation(
     A = np.atleast_2d(A)
     B = np.atleast_2d(B)
 
-    if partial_match is None:
-        partial_match = np.array([[], []]).T
-    partial_match = np.atleast_2d(partial_match).astype(int)
+    _partial_match = (
+        partial_match if partial_match is not None else np.array([[], []]).T
+    )
+
+    _partial_match = np.atleast_2d(_partial_match).astype(int)
 
     msg = None
     if A.shape[0] != A.shape[1]:
@@ -202,25 +204,25 @@ def _common_input_validation(
         msg = "`A` and `B` must have exactly two dimensions"
     elif A.shape != B.shape:
         msg = "`A` and `B` matrices must be of equal size"
-    elif partial_match.shape[0] > A.shape[0]:
+    elif _partial_match.shape[0] > A.shape[0]:
         msg = "`partial_match` can have only as many seeds as there are nodes"
-    elif partial_match.shape[1] != 2:
+    elif _partial_match.shape[1] != 2:
         msg = "`partial_match` must have two columns"
-    elif partial_match.ndim != 2:
+    elif _partial_match.ndim != 2:
         msg = "`partial_match` must have exactly two dimensions"
-    elif (partial_match < 0).any():
+    elif (_partial_match < 0).any():
         msg = "`partial_match` must contain only positive indices"
-    elif (partial_match >= len(A)).any():
+    elif (_partial_match >= len(A)).any():
         msg = "`partial_match` entries must be less than number of nodes"
-    elif not len(set(partial_match[:, 0])) == len(partial_match[:, 0]) or not len(
-        set(partial_match[:, 1])
-    ) == len(partial_match[:, 1]):
+    elif not len(set(_partial_match[:, 0])) == len(_partial_match[:, 0]) or not len(
+        set(_partial_match[:, 1])
+    ) == len(_partial_match[:, 1]):
         msg = "`partial_match` column entries must be unique"
 
     if msg is not None:
         raise ValueError(msg)
 
-    return A, B, partial_match
+    return A, B, _partial_match
 
 
 def _quadratic_assignment_faq(
@@ -458,11 +460,11 @@ def _quadratic_assignment_faq(
             K = _doubly_stochastic(K)
             P = J * 0.5 + K * 0.5
     elif isinstance(P0, np.ndarray):
-        P0 = np.atleast_2d(P0)
-        _check_init_input(P0, n_unseed)
+        _P0 = np.atleast_2d(P0)
+        _check_init_input(_P0, n_unseed)
         invert_inds = np.argsort(nonseed_B)
         perm_nonseed_B = np.argsort(invert_inds)
-        P = P0[:, perm_nonseed_B]
+        P = _P0[:, perm_nonseed_B]
     else:
         msg = "`init` must either be of type str or np.ndarray."
         raise TypeError(msg)
