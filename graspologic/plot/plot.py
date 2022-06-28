@@ -431,7 +431,7 @@ def gridplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`
     alpha : float [0, 1], default : 0.7
         Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
@@ -471,17 +471,16 @@ def gridplot(
         msg = "X must be a list, not {}.".format(type(X))
         raise TypeError(msg)
 
-    if labels is None:
-        labels = np.arange(len(X))
+    _labels = np.array(labels) if labels is not None else np.arange(len(X))
 
-    check_consistent_length(X, labels)
+    check_consistent_length(X, _labels)
 
     graphs = _process_graphs(
         X, inner_hier_labels, outer_hier_labels, transform, sort_nodes
     )
 
     if isinstance(palette, str):
-        palette = sns.color_palette(palette, desat=0.75, n_colors=len(labels))
+        palette = sns.color_palette(palette, desat=0.75, n_colors=_labels.shape[0])
 
     dfs = []
     for idx, graph in enumerate(graphs):
@@ -491,7 +490,7 @@ def gridplot(
             np.vstack([rdx + 0.5, cdx + 0.5, weights]).T,
             columns=["rdx", "cdx", "Weights"],
         )
-        df[legend_name] = [labels[idx]] * len(cdx)
+        df[legend_name] = [_labels[idx]] * len(cdx)
         dfs.append(df)
 
     df = pd.concat(dfs, axis=0)
@@ -597,14 +596,14 @@ def pairplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     size : float or int, optional, default: 50
         Size of plotted markers.
     marker : string, optional, default: '.'
         Matplotlib marker specifier, see the marker options at
-        :doc:`Matplotlib style marker specification <api/markers_api>`
+        :doc:`Matplotlib style marker specification <matplotlib:api/markers_api>`
     """
     _check_common_inputs(
         height=height,
@@ -1060,7 +1059,7 @@ def degreeplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
@@ -1129,7 +1128,7 @@ def edgeplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
+        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
@@ -1144,14 +1143,16 @@ def edgeplot(
     check_array(X)
     check_consistent_length((X, labels))
     edges = X.ravel()
-    labels = np.tile(labels, (1, X.shape[1]))
-    labels = labels.ravel()  # type: ignore
+    _labels: np.ndarray = (
+        np.tile(labels, (1, X.shape[1])) if labels is not None else np.array([])
+    )
+    _labels = _labels.ravel()  # type: ignore
     if nonzero:
-        labels = labels[edges != 0]
+        _labels = _labels[edges != 0]
         edges = edges[edges != 0]
     ax = _distplot(
         edges,
-        labels=labels,
+        labels=_labels,
         title=title,
         context=context,
         font_scale=font_scale,
@@ -1398,6 +1399,8 @@ def networkplot(
         )
         ax.add_collection(lc)
         ax.set(xticks=[], yticks=[])
+        ax.set_xlabel("")
+        ax.set_ylabel("")
 
     return ax
 
@@ -1525,7 +1528,7 @@ def _get_freqs(
     outer_freq_cumsum = np.hstack((0, outer_freq.cumsum()))
 
     # for each group of outer labels, calculate the boundaries of the inner labels
-    inner_freq = np.array([])
+    inner_freq: np.ndarray = np.array([])
     for i in range(outer_freq.size):
         start_ind = outer_freq_cumsum[i]
         stop_ind = outer_freq_cumsum[i + 1]
