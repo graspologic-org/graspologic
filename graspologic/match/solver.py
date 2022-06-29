@@ -426,7 +426,10 @@ class GraphMatchSolver(BaseEstimator):
     def finalize(self, P: np.ndarray, rng: np.random.Generator) -> None:
         self.convex_solution_ = P
 
+        # project back onto the feasible region (permutations)
         permutation = self.linear_sum_assignment(P, rng)
+
+        # deal with seed-nonseed sorting from the initialization
         permutation = np.concatenate(
             (np.arange(self.n_seeds), permutation + self.n_seeds)
         )
@@ -434,7 +437,7 @@ class GraphMatchSolver(BaseEstimator):
         final_permutation[self.perm_A] = self.perm_B[permutation]
         self.permutation_ = final_permutation
 
-        # TODO deal with un-padding
+        # deal with un-padding
         matching = np.column_stack((np.arange(self.n), final_permutation))
         if self.padded:
             if self._padded_B:
@@ -444,6 +447,7 @@ class GraphMatchSolver(BaseEstimator):
 
         self.matching_ = matching
 
+        # compute the objective function value for evaluation
         score = self.compute_score(final_permutation)
         self.score_ = score
 
