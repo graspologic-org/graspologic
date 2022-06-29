@@ -76,6 +76,7 @@ def graph_match(
         similarity=similarity,
         partial_match=partial_match,
         init=init,
+        init_perturbation=init_perturbation,
         verbose=solver_verbose,
         shuffle_input=shuffle_input,
         padding=padding,
