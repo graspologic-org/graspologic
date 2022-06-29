@@ -8,22 +8,37 @@ from beartype import beartype
 from numba import njit
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_array, csr_matrix
+from scipy.sparse import csr_matrix
+
+from packaging import version
+from scipy import __version__ as scipy_version
+
+if version.parse(scipy_version) >= version.parse("1.8.0"):
+    from scipy.sparse import csr_array
+else:
+    # HACK: what should this be?
+    csr_array = csr_matrix
+
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 from typing_extensions import Literal
 
-from graspologic.types import AdjacencyMatrix, List, Tuple, RngType
+from graspologic.types import List, Tuple, RngType
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
 # InitMethodType = Literal["barycenter", "rand", "randomized"]
 InitType = Union[Literal["barycenter"], np.ndarray]
+
+# redefining since I don't want to add csr_array for ALL code in graspologic yet
+AdjacencyMatrix = Union[np.ndarray, csr_matrix, csr_array]
+
 # RandomStateType = Optional[Union[int, np.random.RandomState, np.random.Generator]]
 ArrayLikeOfIndexes = Union[List[int], np.ndarray]
 MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
 Scalar = Union[int, float, np.integer]
 Int = Union[int, np.integer]
+
 
 
 def parametrized(dec: Callable) -> Callable:
