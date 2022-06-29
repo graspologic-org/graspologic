@@ -13,12 +13,13 @@ from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 from typing_extensions import Literal
 
-from graspologic.types import AdjacencyMatrix, List, Tuple
+from graspologic.types import AdjacencyMatrix, List, Tuple, RngType
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
-InitMethodType = Literal["barycenter", "rand", "randomized"]
-RandomStateType = Optional[Union[int, np.random.RandomState, np.random.Generator]]
+# InitMethodType = Literal["barycenter", "rand", "randomized"]
+InitType = Union[Literal["barycenter"], np.ndarray]
+# RandomStateType = Optional[Union[int, np.random.RandomState, np.random.Generator]]
 ArrayLikeOfIndexes = Union[List[int], np.ndarray]
 MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
 Scalar = Union[int, float, np.integer]
@@ -87,8 +88,8 @@ class GraphMatchSolver(BaseEstimator):
         BA: Optional[MultilayerAdjacency] = None,
         similarity: Optional[AdjacencyMatrix] = None,
         partial_match: Optional[np.ndarray] = None,
-        rng: Optional[RandomStateType] = None,
-        init: Optional[Scalar] = 1.0,
+        init: InitType = "barycenter",
+        init_perturbation: Scalar = 0.0,
         verbose: Int = False,  # 0 is nothing, 1 is loops, 2 is loops + sub, 3, is loops + sub + timing
         shuffle_input: bool = True,
         padding: PaddingType = "naive",
@@ -102,8 +103,9 @@ class GraphMatchSolver(BaseEstimator):
         transport_maxiter: Int = 1000,
     ):
         # TODO more input checking
-        self.rng = check_random_state(rng)
+        # self.rng = check_random_state(rng)
         self.init = init
+        self.init_perturbation = init_perturbation
         self.verbose = verbose
         self.shuffle_input = shuffle_input
         self.maximize = maximize
@@ -225,60 +227,68 @@ class GraphMatchSolver(BaseEstimator):
                 self._compute_gradient = _compute_gradient_numba
                 self._compute_coefficients = _compute_coefficients_numba
 
-    def solve(self) -> None:
-        self.n_iter = 0
+    def solve(self, rng: Optional[np.random.Generator] = None) -> None:
+        rng = np.random.default_rng(rng)
+
+        self.n_iter_ = 0
         self.check_outlier_cases()
 
-        P = self.initialize()
+        P = self.initialize(rng)
         self.compute_constant_terms()
         for n_iter in range(self.maxiter):
-            self.n_iter = n_iter + 1
+            self.n_iter_ = n_iter + 1
 
             gradient = self.compute_gradient(P)
-            Q = self.compute_step_direction(gradient)
+            Q = self.compute_step_direction(gradient, rng)
             alpha = self.compute_step_size(P, Q)
 
             # take a step in this direction
             P_new = alpha * P + (1 - alpha) * Q
 
             if self.check_converged(P, P_new):
-                self.converged = True
+                self.converged_ = True
                 P = P_new
                 break
             P = P_new
 
-        self.finalize(P)
+        self.finalize(P, rng)
 
     # TODO
     def check_outlier_cases(self) -> None:
         pass
 
     @write_status("Initializing", 1)
-    def initialize(self) -> np.ndarray:
-        if isinstance(self.init, float):
-            n_unseed = self.n_unseed
-            rng = self.rng
-            J = np.ones((n_unseed, n_unseed)) / n_unseed
-            if self.init < 1:
-                # DO linear combo from barycenter
-                K = rng.uniform(size=(n_unseed, n_unseed))
-                # Sinkhorn balancing
-                K = _doubly_stochastic(K)
-                P = J * self.init + K * (
-                    1 - self.init
-                )  # TODO check how defined in paper
-            else:
-                P = J
-        elif isinstance(self.init, np.ndarray):
-            raise NotImplementedError()
+    def initialize(self, rng: np.random.Generator) -> np.ndarray:
+        # user custom initialization
+        if isinstance(self.init, np.ndarray):
+            # TODO check if doubly convex?
             # TODO fix below
             # P0 = np.atleast_2d(P0)
             # _check_init_input(P0, n_unseed)
-            # invert_inds = np.argsort(nonseed_B)
-            # perm_nonseed_B = np.argsort(invert_inds)
-            # P = P0[:, perm_nonseed_B]
+            J = self.init
+        # else, just a flat, uninformative initializaiton, also called the barycenter
+        # (of the set of doubly stochastic matrices)
+        else:
+            n_unseed = self.n_unseed
+            J = np.full((n_unseed, n_unseed), 1 / n_unseed)
 
-        self.converged = False
+        if self.init_perturbation > 0:
+            # create a random doubly stochastic matrix
+            # TODO unsure if this is actually uniform over the Birkoff polytope
+            # I suspect it is not. Not even sure if humankind knows how to generate such
+            # a matrix efficiently...
+
+            # start with random (uniform 0-1 values) matrix
+            K = rng.uniform(size=(n_unseed, n_unseed))
+            # use Sinkhorn algo. to project to closest doubly stochastic
+            K = _doubly_stochastic(K)
+
+            # to a convex combination with either barycenter or input initialization
+            P = J * (1 - self.init_perturbation) + K * (self.init_perturbation)
+        else:
+            P = J
+
+        self.converged_ = False
         return P
 
     @write_status("Computing constant terms", 2)
@@ -303,23 +313,27 @@ class GraphMatchSolver(BaseEstimator):
         return gradient
 
     @write_status("Solving assignment problem", 2)
-    def compute_step_direction(self, gradient: np.ndarray) -> np.ndarray:
+    def compute_step_direction(
+        self, gradient: np.ndarray, rng: np.random.Generator
+    ) -> np.ndarray:
         # [1] Algorithm 1 Line 4 - get direction Q by solving Eq. 8
         if self.transport:
             Q = self.linear_sum_transport(gradient)
         else:
-            permutation = self.linear_sum_assignment(gradient)
+            permutation = self.linear_sum_assignment(gradient, rng)
             Q = np.eye(self.n_unseed)[permutation]
         return Q
 
-    def linear_sum_assignment(self, P: np.ndarray) -> np.ndarray:
+    def linear_sum_assignment(
+        self, P: np.ndarray, rng: np.random.Generator
+    ) -> np.ndarray:
         """This is a modified version of LAP which (in expectation) does not care
         about the order of the inputs. This matters because scipy LAP settles ties
         (which do come up) based on the ordering of the inputs. This can lead to
         artificially high matching accuracy when the user inputs data which is in the
         correct permutation, for example."""
-        if self.shuffle:
-            row_perm = self.rng.permutation(P.shape[0])
+        if self.shuffle_input:
+            row_perm = rng.permutation(P.shape[0])
         else:
             row_perm = np.arange(P.shape[0])
         undo_row_perm = np.argsort(row_perm)
@@ -387,10 +401,10 @@ class GraphMatchSolver(BaseEstimator):
         return np.linalg.norm(P - P_new) / np.sqrt(self.n_unseed) < self.tol
 
     @write_status("Finalizing assignment", 1)
-    def finalize(self, P: np.ndarray) -> None:
-        self.P_final_ = P
+    def finalize(self, P: np.ndarray, rng: np.random.Generator) -> None:
+        self.convex_solution_ = P
 
-        permutation = self.linear_sum_assignment(P)
+        permutation = self.linear_sum_assignment(P, rng)
         permutation = np.concatenate(
             (np.arange(self.n_seeds), permutation + self.n_seeds)
         )
@@ -406,7 +420,7 @@ class GraphMatchSolver(BaseEstimator):
             else:
                 matching = matching[: self.n_A]
 
-        self.matching = matching
+        self.matching_ = matching
 
         score = self.compute_score(permutation)
         self.score_ = score
@@ -415,8 +429,8 @@ class GraphMatchSolver(BaseEstimator):
         return 0.0
 
     def status(self) -> str:
-        if self.n_iter > 0:
-            return f"[Iteration: {self.n_iter}]"
+        if self.n_iter_ > 0:
+            return f"[Iteration: {self.n_iter_}]"
         else:
             return "[Pre-loop]"
 

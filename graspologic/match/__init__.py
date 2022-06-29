@@ -3,5 +3,6 @@
 
 from .gmp import GraphMatch
 from .solver import GraphMatchSolver
+from .wrappers import graph_match
 
-__all__ = ["GraphMatch", "GraphMatchSolver"]
+__all__ = ["graph_match", "GraphMatch", "GraphMatchSolver"]
