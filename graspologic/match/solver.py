@@ -40,7 +40,6 @@ Scalar = Union[int, float, np.integer]
 Int = Union[int, np.integer]
 
 
-
 def parametrized(dec: Callable) -> Callable:
     def layer(*args, **kwargs) -> Callable:  # type: ignore
         def repl(f: Callable) -> Callable:
