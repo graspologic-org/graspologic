@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -8,7 +8,7 @@ from sklearn.utils import check_scalar
 from typing_extensions import Literal
 
 from graspologic.match.solver import GraphMatchSolver
-from graspologic.types import AdjacencyMatrix, Dict, List, RngType, Tuple
+from graspologic.types import AdjacencyMatrix, Dict, List, RngType
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
@@ -45,7 +45,7 @@ def graph_match(
     transport_regularizer: Scalar = 100,
     transport_tolerance: Scalar = 5e-2,
     transport_maxiter: Int = 1000,
-) -> Tuple[np.ndarray, np.ndarray, Dict]:
+) -> MatchResult:
 
     if use_numba:
         raise NotImplementedError("Still working on numba implementation")
@@ -63,7 +63,7 @@ def graph_match(
 
     if n_init > 1:
         parallel_verbose = verbose
-        solver_verbose = 0
+        solver_verbose: Int = 0
     else:
         parallel_verbose = 0
         solver_verbose = verbose
@@ -90,13 +90,13 @@ def graph_match(
         transport_maxiter=transport_maxiter,
     )
 
-    def run_single_graph_matching(seed):
+    def run_single_graph_matching(seed: RngType) -> MatchResult:
         solver.solve(seed)
         matching = solver.matching_
         indices_A = matching[:, 0]
         indices_B = matching[:, 1]
         score = solver.score_
-        misc = {}
+        misc: Dict[str, Any] = {}
         misc["score"] = score
         misc["n_iter"] = solver.n_iter_
         misc["convex_solution"] = solver.convex_solution_

@@ -7,11 +7,10 @@ import numpy as np
 from beartype import beartype
 from numba import njit
 from ot import sinkhorn
-from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_matrix
-
 from packaging import version
 from scipy import __version__ as scipy_version
+from scipy.optimize import linear_sum_assignment
+from scipy.sparse import csr_matrix
 
 if version.parse(scipy_version) >= version.parse("1.8.0"):
     from scipy.sparse import csr_array
@@ -20,10 +19,9 @@ else:
     csr_array = csr_matrix
 
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_random_state
 from typing_extensions import Literal
 
-from graspologic.types import List, Tuple, RngType
+from graspologic.types import List, RngType, Tuple
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
@@ -251,7 +249,7 @@ class GraphMatchSolver(BaseEstimator):
                 self._compute_gradient = _compute_gradient_numba
                 self._compute_coefficients = _compute_coefficients_numba
 
-    def solve(self, rng: Optional[np.random.Generator] = None) -> None:
+    def solve(self, rng: RngType = None) -> None:
         rng = np.random.default_rng(rng)
 
         self.n_iter_ = 0
@@ -453,13 +451,20 @@ class GraphMatchSolver(BaseEstimator):
         score = 0.0
         n_layers = self.n_layers
         for layer in range(n_layers):
-            score += np.linalg.norm(
-                self.A[layer] - self.B[layer][permutation][:, permutation]
+            # casting explicitly to float here because mypy was yelling:
+            # 'Incompatible types in assignment (expression has type "floating[Any]",
+            # variable has type "float")'
+            score += float(
+                np.linalg.norm(
+                    self.A[layer] - self.B[layer][permutation][:, permutation]
+                )
             )
-            score += np.linalg.norm(
-                self.AB[layer][:, permutation] - self.BA[layer][permutation]
+            score += float(
+                np.linalg.norm(
+                    self.AB[layer][:, permutation] - self.BA[layer][permutation]
+                )
             )
-            score += np.trace(self.S[:, permutation])
+            score += float(np.trace(self.S[:, permutation]))
         return score
 
     def status(self) -> str:
@@ -644,14 +649,14 @@ def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
 
 
 def _multilayer_adj_pad(
-    matrices: np.ndarray, n_padded: int, method: PaddingType
-) -> List[AdjacencyMatrix]:
+    matrices: MultilayerAdjacency, n_padded: int, method: PaddingType
+) -> MultilayerAdjacency:
     n1 = matrices[0].shape[0]
     n2 = matrices[0].shape[1]
     if (n1 == n_padded) and (n2 == n_padded):
         return matrices
     else:
-        new_matrices = []
+        new_matrices: List[AdjacencyMatrix] = []
         for matrix in matrices:
             new_matrices.append(_adj_pad(matrix, n_padded, method))
         return new_matrices
