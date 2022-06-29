@@ -12,11 +12,12 @@ from graspologic.types import AdjacencyMatrix, Dict, List, RngType, Tuple
 
 # Type aliases
 PaddingType = Literal["adopted", "naive"]
-InitMethodType = Union[float, Literal["barycenter", "random"]]
+# InitMethodType = Union[float, Literal["barycenter", "random"]]
 ArrayLikeOfIndexes = Union[List[int], np.ndarray]
 MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
 Scalar = Union[int, float, np.integer]
 Int = Union[int, np.integer]
+InitType = Union[Literal["barycenter"], np.ndarray]
 
 MatchResult = namedtuple("MatchResult", ["indices_A", "indices_B", "score", "misc"])
 
@@ -28,7 +29,8 @@ def graph_match(
     similarity: Optional[AdjacencyMatrix] = None,
     AtoB: Optional[MultilayerAdjacency] = None,
     BtoA: Optional[MultilayerAdjacency] = None,
-    init: InitMethodType = "barycenter",
+    init: InitType = "barycenter",
+    init_perturbation: Scalar = 0.0,
     n_init: Int = 1,
     shuffle_input: bool = True,
     maximize: bool = True,

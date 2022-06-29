@@ -176,6 +176,12 @@ class GraphMatchSolver(BaseEstimator):
         if similarity is None:
             similarity = np.zeros((self.n, self.n))
 
+        self.A = A
+        self.B = B
+        self.AB = AB
+        self.BA = BA
+        self.S = similarity
+
         # set up so that seeds are first and we can grab subgraphs easily
         # TODO could also do this slightly more efficiently just w/ smart indexing?
         # TODO I think this is kind making the assumption that the input seeds
@@ -202,18 +208,22 @@ class GraphMatchSolver(BaseEstimator):
 
         # split into subgraphs of seed-to-seed (ss), seed-to-nonseed (sn), etc.
         # main thing being permuted has no subscript
-        self.A_ss, self.A_sn, self.A_ns, self.A = _split_multilayer_matrix(A, n_seeds)
-        self.B_ss, self.B_sn, self.B_ns, self.B = _split_multilayer_matrix(B, n_seeds)
-        self.AB_ss, self.AB_sn, self.AB_ns, self.AB = _split_multilayer_matrix(
+        self.A_ss, self.A_sn, self.A_ns, self.A_nn = _split_multilayer_matrix(
+            A, n_seeds
+        )
+        self.B_ss, self.B_sn, self.B_ns, self.B_nn = _split_multilayer_matrix(
+            B, n_seeds
+        )
+        self.AB_ss, self.AB_sn, self.AB_ns, self.AB_nn = _split_multilayer_matrix(
             AB, n_seeds
         )
-        self.BA_ss, self.BA_sn, self.BA_ns, self.BA = _split_multilayer_matrix(
+        self.BA_ss, self.BA_sn, self.BA_ns, self.BA_nn = _split_multilayer_matrix(
             BA, n_seeds
         )
 
-        self.n_unseed = self.B[0].shape[0]
+        self.n_unseed = self.B_nn[0].shape[0]
 
-        self.S_ss, self.S_sn, self.S_ns, self.S = _split_matrix(S, n_seeds)
+        self.S_ss, self.S_sn, self.S_ns, self.S_nn = _split_matrix(S, n_seeds)
 
         # decide whether to use numba/sparse
         self._compute_gradient = _compute_gradient
@@ -295,7 +305,7 @@ class GraphMatchSolver(BaseEstimator):
     def compute_constant_terms(self) -> None:
         self.constant_sum = np.zeros((self.n_unseed, self.n_unseed))
         if self._seeded:
-            n_layers = len(self.A)
+            n_layers = len(self.A_nn)
             for i in range(n_layers):
                 self.constant_sum += (
                     self.A_ns[i] @ self.B_ns[i].T  # ipsi
@@ -303,12 +313,12 @@ class GraphMatchSolver(BaseEstimator):
                     + self.AB_ns[i] @ self.BA_ns[i].T  # contra
                     + self.BA_sn[i].T @ self.AB_sn[i]  # contra
                 )
-        self.constant_sum += self.S
+        self.constant_sum += self.S_nn
 
     @write_status("Computing gradient", 2)
     def compute_gradient(self, P: np.ndarray) -> np.ndarray:
         gradient = self._compute_gradient(
-            P, self.A, self.B, self.AB, self.BA, self.constant_sum
+            P, self.A_nn, self.B_nn, self.AB_nn, self.BA_nn, self.constant_sum
         )
         return gradient
 
@@ -377,10 +387,10 @@ class GraphMatchSolver(BaseEstimator):
         a, b = self._compute_coefficients(
             P,
             Q,
-            self.A,
-            self.B,
-            self.AB,
-            self.BA,
+            self.A_nn,
+            self.B_nn,
+            self.AB_nn,
+            self.BA_nn,
             self.A_ns,
             self.A_sn,
             self.B_ns,
@@ -389,7 +399,7 @@ class GraphMatchSolver(BaseEstimator):
             self.AB_sn,
             self.BA_ns,
             self.BA_sn,
-            self.S,
+            self.S_nn,
         )
         if a * self.obj_func_scalar > 0 and 0 <= -b / (2 * a) <= 1:
             alpha = -b / (2 * a)
@@ -422,11 +432,21 @@ class GraphMatchSolver(BaseEstimator):
 
         self.matching_ = matching
 
-        score = self.compute_score(permutation)
+        score = self.compute_score(final_permutation)
         self.score_ = score
 
     def compute_score(self, permutation: np.ndarray) -> float:
-        return 0.0
+        score = 0.0
+        n_layers = self.n_layers
+        for layer in range(n_layers):
+            score += np.linalg.norm(
+                self.A[layer] - self.B[layer][permutation][:, permutation]
+            )
+            score += np.linalg.norm(
+                self.AB[layer][:, permutation] - self.BA[layer][permutation]
+            )
+            score += np.trace(self.S[:, permutation])
+        return score
 
     def status(self) -> str:
         if self.n_iter_ > 0:
