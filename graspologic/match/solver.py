@@ -91,11 +91,12 @@ class GraphMatchSolver(BaseEstimator):
         init: Optional[Scalar] = 1.0,
         verbose: Int = False,  # 0 is nothing, 1 is loops, 2 is loops + sub, 3, is loops + sub + timing
         shuffle_input: bool = True,
+        padding: PaddingType = "naive",
         maximize: bool = True,
         maxiter: Int = 30,
-        tol: Scalar = 0.01,
+        tol: Scalar = 0.03,
         transport: bool = False,
-        use_numba: bool = True,
+        use_numba: bool = False,
         transport_regularizer: Scalar = 100,
         transport_tolerance: Scalar = 5e-2,
         transport_maxiter: Int = 1000,
@@ -108,6 +109,7 @@ class GraphMatchSolver(BaseEstimator):
         self.maximize = maximize
         self.maxiter = maxiter
         self.tol = tol
+        self.padding = padding
 
         self.transport = transport
         self.transport_regularizer = transport_regularizer
@@ -151,13 +153,26 @@ class GraphMatchSolver(BaseEstimator):
         else:
             BA = _check_input_matrix(BA)
 
-        # check for similarity term
-        if similarity is None:
-            similarity = np.zeros((self.n_A, self.n_B))
-
         # TODO padding here
         # TODO make B always bigger
-        # if self.n_A < self.n_B:
+        if self.n_A != self.n_B:
+            self.n = np.max((self.n_A, self.n_B))
+            A = _multilayer_adj_pad(A, n_padded=self.n, method=self.padding)
+            B = _multilayer_adj_pad(B, n_padded=self.n, method=self.padding)
+            AB = _multilayer_adj_pad(AB, n_padded=self.n, method=self.padding)
+            BA = _multilayer_adj_pad(BA, n_padded=self.n, method=self.padding)
+            self.padded = True
+            if self.n_A > self.n_B:
+                self._padded_B = True
+            else:
+                self._padded_B = False
+        else:
+            self.padded = False
+            self.n = self.n_A
+
+        # check for similarity term
+        if similarity is None:
+            similarity = np.zeros((self.n, self.n))
 
         # set up so that seeds are first and we can grab subgraphs easily
         # TODO could also do this slightly more efficiently just w/ smart indexing?
@@ -165,8 +180,8 @@ class GraphMatchSolver(BaseEstimator):
         # is sorted
         sort_inds = np.argsort(seeds[:, 0])
         seeds = seeds[sort_inds]
-        nonseed_A = np.setdiff1d(np.arange(A[0].shape[0]), seeds[:, 0])
-        nonseed_B = np.setdiff1d(range(B[0].shape[0]), seeds[:, 1])
+        nonseed_A = np.setdiff1d(np.arange(self.n), seeds[:, 0])
+        nonseed_B = np.setdiff1d(np.arange(self.n), seeds[:, 1])
         perm_A = np.concatenate([seeds[:, 0], nonseed_A])
         perm_B = np.concatenate([seeds[:, 1], nonseed_B])
         self.perm_A = perm_A
@@ -303,7 +318,10 @@ class GraphMatchSolver(BaseEstimator):
         (which do come up) based on the ordering of the inputs. This can lead to
         artificially high matching accuracy when the user inputs data which is in the
         correct permutation, for example."""
-        row_perm = self.rng.permutation(P.shape[1])
+        if self.shuffle:
+            row_perm = self.rng.permutation(P.shape[0])
+        else:
+            row_perm = np.arange(P.shape[0])
         undo_row_perm = np.argsort(row_perm)
         P_perm = P[row_perm]
         _, permutation = linear_sum_assignment(P_perm, maximize=self.maximize)
@@ -376,9 +394,19 @@ class GraphMatchSolver(BaseEstimator):
         permutation = np.concatenate(
             (np.arange(self.n_seeds), permutation + self.n_seeds)
         )
-        final_permutation = np.empty(self.n_B, dtype=int)
+        final_permutation = np.empty(self.n, dtype=int)
         final_permutation[self.perm_A] = self.perm_B[permutation]
         self.permutation_ = final_permutation
+
+        # TODO deal with un-padding
+        matching = np.column_stack((np.arange(self.n), final_permutation))
+        if self.padded:
+            if self._padded_B:
+                matching = matching[matching[:, 1] < self.n_B]
+            else:
+                matching = matching[: self.n_A]
+
+        self.matching = matching
 
         score = self.compute_score(permutation)
         self.score_ = score
@@ -443,7 +471,7 @@ def _compute_gradient(
     const_sum: np.ndarray,
 ) -> np.ndarray:
     n_layers = len(A)
-    grad = const_sum
+    grad = const_sum.copy()
     for i in range(n_layers):
         grad += (
             A[i] @ P @ B[i].T
@@ -451,7 +479,6 @@ def _compute_gradient(
             + AB[i] @ P.T @ BA[i].T
             + BA[i].T @ P.T @ AB[i]
         )
-
     return grad
 
 
@@ -569,46 +596,39 @@ def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
 
 
 def _multilayer_adj_pad(
-    matrices: np.ndarray, n: int, method: PaddingType
+    matrices: np.ndarray, n_padded: int, method: PaddingType
 ) -> List[AdjacencyMatrix]:
-    new_matrices = []
-    for matrix in matrices:
-        new_matrices.append(_adj_pad(matrix))
-    return new_matrices
+    n1 = matrices[0].shape[0]
+    n2 = matrices[0].shape[1]
+    if (n1 == n_padded) and (n2 == n_padded):
+        return matrices
+    else:
+        new_matrices = []
+        for matrix in matrices:
+            new_matrices.append(_adj_pad(matrix, n_padded, method))
+        return new_matrices
 
 
 def _adj_pad(
-    matrix: AdjacencyMatrix, method: PaddingType
+    matrix: AdjacencyMatrix, n_padded: Int, method: PaddingType
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    if isinstance(matrix, (csr_matrix, csr_array)):
+    if isinstance(matrix, (csr_matrix, csr_array)) and (method == "adopted"):
         msg = (
             "Using adopted padding method with a sparse adjacency representation; this "
             "will convert the matrix to a dense representation and likely remove any "
             "speedup from the sparse representation."
         )
         warnings.warn(msg)
-        matrix = np.array(matrix)
-    n = matrix.shape[0]
+        matrix = matrix.toarray()
+
     if method == "adopted":
-        matrix = 2 * matrix - np.ones((n, n))
+        matrix = 2 * matrix - np.ones(matrix.shape)
 
-    # def pad(X: np.ndarray, n: np.ndarray) -> np.ndarray:
-    #     X_pad = np.zeros((n[1], n[1]))
-    #     X_pad[: n[0], : n[0]] = X
-    #     return X_pad
-
-    # A_n = A.shape[0]
-    # B_n = B.shape[0]
-    # n = np.sort([A_n, B_n])
-
-    # B = 2 * B - np.ones((B_n, B_n))
-
-    S_pad = np.zeros((n[1], n[1]))
-    S_pad[:A_n, :B_n] = S
-
-    if A.shape[0] == n[0]:
-        A = pad(A, n)
+    if (method == "naive") and isinstance(matrix, (csr_matrix, csr_array)):
+        matrix_padded = csr_array((n_padded, n_padded))
     else:
-        B = pad(B, n)
+        matrix_padded = np.zeros((n_padded, n_padded))
 
-    return A, B, S_pad
+    matrix_padded[: matrix.shape[0], : matrix.shape[1]] = matrix
+
+    return matrix_padded
