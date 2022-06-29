@@ -1,23 +1,22 @@
 from collections import namedtuple
-from typing import Any, Optional, Union
+from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
-from typing_extensions import Literal
 
 from graspologic.match.solver import GraphMatchSolver
-from graspologic.types import AdjacencyMatrix, Dict, List, RngType
+from graspologic.types import Dict, RngType
 
-# Type aliases
-PaddingType = Literal["adopted", "naive"]
-# InitMethodType = Union[float, Literal["barycenter", "random"]]
-ArrayLikeOfIndexes = Union[List[int], np.ndarray]
-MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
-Scalar = Union[int, float, np.integer]
-Int = Union[int, np.integer]
-InitType = Union[Literal["barycenter"], np.ndarray]
+from .types import (
+    AdjacencyMatrix,
+    InitType,
+    Int,
+    MultilayerAdjacency,
+    PaddingType,
+    Scalar,
+)
 
 MatchResult = namedtuple("MatchResult", ["indices_A", "indices_B", "score", "misc"])
 

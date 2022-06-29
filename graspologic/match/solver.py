@@ -1,7 +1,7 @@
 import time
 import warnings
 from functools import wraps
-from typing import Callable, Optional, Union
+from typing import Callable, Optional
 
 import numpy as np
 from beartype import beartype
@@ -19,23 +19,17 @@ else:
     csr_array = csr_matrix
 
 from sklearn.base import BaseEstimator
-from typing_extensions import Literal
 
 from graspologic.types import List, RngType, Tuple
 
-# Type aliases
-PaddingType = Literal["adopted", "naive"]
-# InitMethodType = Literal["barycenter", "rand", "randomized"]
-InitType = Union[Literal["barycenter"], np.ndarray]
-
-# redefining since I don't want to add csr_array for ALL code in graspologic yet
-AdjacencyMatrix = Union[np.ndarray, csr_matrix, csr_array]
-
-# RandomStateType = Optional[Union[int, np.random.RandomState, np.random.Generator]]
-ArrayLikeOfIndexes = Union[List[int], np.ndarray]
-MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
-Scalar = Union[int, float, np.integer]
-Int = Union[int, np.integer]
+from .types import (
+    AdjacencyMatrix,
+    InitType,
+    Int,
+    MultilayerAdjacency,
+    PaddingType,
+    Scalar,
+)
 
 
 def parametrized(dec: Callable) -> Callable:
