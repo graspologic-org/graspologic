@@ -11,7 +11,6 @@ from graspologic.align import SignFlips
 from graspologic.embed import AdjacencySpectralEmbed
 from graspologic.match import GraphMatch as GMP
 from graspologic.match import graph_match
-from graspologic.match.qap import _quadratic_assignment_faq, quadratic_assignment
 from graspologic.simulations import er_np, sbm_corr
 
 np.random.seed(1)
@@ -49,7 +48,7 @@ B = [
 A, B = np.array(A), np.array(B)
 
 
-class TestGMP(unittest.TestCase):
+class TestGraphMatch(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         # cls.A = A
