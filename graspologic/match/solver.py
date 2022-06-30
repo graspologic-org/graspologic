@@ -110,22 +110,24 @@ class GraphMatchSolver(BaseEstimator):
         transport_max_iter: Int = 1000,
     ):
         # TODO more input checking
-        # self.rng = check_random_state(rng)
         self.init = init
-        self.init_perturbation = check_scalar(
+        check_scalar(
             init_perturbation,
             name="init_perturbation",
             target_type=(float, int),
             min_val=0,
             max_val=1,
         )
+        self.init_perturbation = init_perturbation
         self.verbose = verbose
         self.shuffle_input = shuffle_input
         self.maximize = maximize
-        self.max_iter = check_scalar(
+        check_scalar(
             max_iter, name="max_iter", target_type=int, min_val=1
         )
-        self.tol = check_scalar(tol, name="tol", target_type=(int, float), min_val=0)
+        self.max_iter = max_iter
+        check_scalar(tol, name="tol", target_type=(int, float), min_val=0)
+        self.tol = tol
         self.padding = padding
 
         self.transport = transport
@@ -198,8 +200,8 @@ class GraphMatchSolver(BaseEstimator):
         if S is None:
             S = np.zeros((self.n, self.n))
 
-        _compare_dimensions(A, S, "row", "row", "A", "S")
-        _compare_dimensions(B, S, "row", "column", "B", "S")
+        _compare_dimensions(A, [S], "row", "row", "A", "S")
+        _compare_dimensions(B, [S], "row", "column", "B", "S")
 
         self.A = A
         self.B = B
@@ -738,7 +740,9 @@ def _check_partial_match(
         msg = "`partial_match` must contain only positive indices"
     elif (_partial_match[:, 0] >= n1).any() or (_partial_match[:, 1] >= n2).any():
         msg = "`partial_match` entries must be less than number of nodes"
-    elif (seeds1_counts.max() > 1) or (seeds2_counts.max() > 1):
+    elif (len(_partial_match) > 0) and (
+        (seeds1_counts.max() > 1) or (seeds2_counts.max() > 1)
+    ):
         msg = "`partial_match` column entries must be unique"
 
     if msg is not None:
