@@ -212,4 +212,5 @@ def _edge_swap(
     edge_list[orig_inds[1]] = [v, y]
     return adjacency, edge_list
 
+
 _edge_swap_numba = nb.jit(_edge_swap)
