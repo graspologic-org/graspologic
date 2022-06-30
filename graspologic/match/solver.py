@@ -11,6 +11,7 @@ from packaging import version
 from scipy import __version__ as scipy_version
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix
+from sklearn.utils import check_scalar
 
 if version.parse(scipy_version) >= version.parse("1.8.0"):
     from scipy.sparse import csr_array
@@ -92,7 +93,7 @@ class GraphMatchSolver(BaseEstimator):
         B: MultilayerAdjacency,
         AB: Optional[MultilayerAdjacency] = None,
         BA: Optional[MultilayerAdjacency] = None,
-        similarity: Optional[AdjacencyMatrix] = None,
+        S: Optional[AdjacencyMatrix] = None,
         partial_match: Optional[np.ndarray] = None,
         init: InitType = "barycenter",
         init_perturbation: Scalar = 0.0,
@@ -111,12 +112,20 @@ class GraphMatchSolver(BaseEstimator):
         # TODO more input checking
         # self.rng = check_random_state(rng)
         self.init = init
-        self.init_perturbation = init_perturbation
+        self.init_perturbation = check_scalar(
+            init_perturbation,
+            name="init_perturbation",
+            target_type=(float, int),
+            min_val=0,
+            max_val=1,
+        )
         self.verbose = verbose
         self.shuffle_input = shuffle_input
         self.maximize = maximize
-        self.max_iter = max_iter
-        self.tol = tol
+        self.max_iter = check_scalar(
+            max_iter, name="max_iter", target_type=int, min_val=1
+        )
+        self.tol = check_scalar(tol, name="tol", target_type=(int, float), min_val=0)
         self.padding = padding
 
         self.transport = transport
@@ -129,17 +138,6 @@ class GraphMatchSolver(BaseEstimator):
         else:
             self.obj_func_scalar = 1
 
-        if partial_match is None:
-            seeds = np.array([[], []]).astype(int).T
-            self._seeded = False
-        else:
-            self._seeded = True
-            seeds = partial_match
-
-        # TODO input validation
-        # TODO seeds
-        # A, B, seeds = _common_input_validation(A, B, seeds)
-
         # convert everything to make sure they are 3D arrays (first dim is layer)
         A = _check_input_matrix(A)
         B = _check_input_matrix(B)
@@ -148,10 +146,20 @@ class GraphMatchSolver(BaseEstimator):
         self.n_A = A[0].shape[0]
         self.n_B = B[0].shape[0]
         self.n_layers = len(A)
+        # TODO check both have same number of layers
+
+        if partial_match is None:
+            self._seeded = False
+        else:
+            self._seeded = True
+
+        seeds = _check_partial_match(partial_match, self.n_A, self.n_B)
+
         n_seeds = len(seeds)
         self.n_seeds = n_seeds
 
         # check for between-graph terms
+        # TODO maybe these should default to sparse matrices?
         if AB is None:
             AB = np.zeros((self.n_layers, self.n_A, self.n_B))
         else:
@@ -161,8 +169,16 @@ class GraphMatchSolver(BaseEstimator):
         else:
             BA = _check_input_matrix(BA)
 
-        # TODO padding here
-        # TODO make B always bigger
+        # check all input dims
+        # can safely assume that the first matrix in each is representative of dimension
+        # because of check done in _check_input_matrix
+        _compare_dimensions(A, A, "row", "column", "A", "A")
+        _compare_dimensions(B, B, "row", "column", "B", "B")
+        _compare_dimensions(A, AB, "row", "row", "A", "AB")
+        _compare_dimensions(B, AB, "row", "column", "B", "AB")
+        _compare_dimensions(A, BA, "row", "column", "A", "BA")
+        _compare_dimensions(B, BA, "row", "row", "B", "BA")
+
         if self.n_A != self.n_B:
             self.n = np.max((self.n_A, self.n_B))
             A = _multilayer_adj_pad(A, n_padded=self.n, method=self.padding)
@@ -179,19 +195,20 @@ class GraphMatchSolver(BaseEstimator):
             self.n = self.n_A
 
         # check for similarity term
-        if similarity is None:
-            similarity = np.zeros((self.n, self.n))
+        if S is None:
+            S = np.zeros((self.n, self.n))
+
+        _compare_dimensions(A, S, "row", "row", "A", "S")
+        _compare_dimensions(B, S, "row", "column", "B", "S")
 
         self.A = A
         self.B = B
         self.AB = AB
         self.BA = BA
-        self.S = similarity
+        self.S = S
 
         # set up so that seeds are first and we can grab subgraphs easily
         # TODO could also do this slightly more efficiently just w/ smart indexing?
-        # TODO I think this is kind making the assumption that the input seeds
-        # is sorted
         sort_inds = np.argsort(seeds[:, 0])
         seeds = seeds[sort_inds]
         nonseed_A = np.setdiff1d(np.arange(self.n), seeds[:, 0])
@@ -210,7 +227,7 @@ class GraphMatchSolver(BaseEstimator):
         AB = _permute_multilayer(AB, perm_B, rows=False, columns=True)
         BA = _permute_multilayer(BA, perm_A, rows=False, columns=True)
         BA = _permute_multilayer(BA, perm_B, rows=True, columns=False)
-        S = similarity[perm_A][:, perm_B]
+        S = S[perm_A][:, perm_B]
 
         # split into subgraphs of seed-to-seed (ss), seed-to-nonseed (sn), etc.
         # main thing being permuted has no subscript
@@ -493,7 +510,7 @@ def _check_input_matrix(A: MultilayerAdjacency) -> MultilayerAdjacency:
         A = [A]
         # A = np.expand_dims(A, axis=0)
         # A = A.astype(float)
-    elif isinstance(A, csr_matrix):
+    elif isinstance(A, (csr_matrix, csr_array)):
         A = [A]
     elif isinstance(A, list):
         # iterate over to make sure they're all same shape
@@ -683,3 +700,48 @@ def _adj_pad(
     matrix_padded[: matrix.shape[0], : matrix.shape[1]] = matrix
 
     return matrix_padded
+
+
+def _compare_dimensions(A, B, dimension_A, dimension_B, name1, name2):
+    matrix_A = A[0]
+    matrix_B = B[0]
+    dim_index_A = 0 if dimension_A == "row" else 1
+    dim_index_B = 0 if dimension_B == "row" else 1
+    if not (matrix_A.shape[dim_index_A] == matrix_B.shape[dim_index_B]):
+        msg = (
+            f"Input matrix/matrices `{name1}` number of {dimension_A}s must match "
+            f"`{name2}` number of {dimension_B}s."
+        )
+        raise ValueError(msg)
+
+
+def _check_partial_match(
+    partial_match: Optional[np.ndarray], n1: int, n2: int
+) -> np.ndarray:
+    _partial_match = (
+        partial_match if partial_match is not None else np.array([[], []]).T
+    )
+
+    _partial_match = np.atleast_2d(_partial_match).astype(int)
+
+    _, seeds1_counts = np.unique(_partial_match[:, 0], return_counts=True)
+    _, seeds2_counts = np.unique(_partial_match[:, 1], return_counts=True)
+
+    msg = None
+    if _partial_match.shape[0] > min(n1, n2):
+        msg = "`partial_match` can have only as many seeds as there are nodes"
+    elif _partial_match.shape[1] != 2:
+        msg = "`partial_match` must have two columns"
+    elif _partial_match.ndim != 2:
+        msg = "`partial_match` must have exactly two dimensions"
+    elif (_partial_match < 0).any():
+        msg = "`partial_match` must contain only positive indices"
+    elif (_partial_match[:, 0] >= n1).any() or (_partial_match[:, 1] >= n2).any():
+        msg = "`partial_match` entries must be less than number of nodes"
+    elif (seeds1_counts.max() > 1) or (seeds2_counts.max() > 1):
+        msg = "`partial_match` column entries must be unique"
+
+    if msg is not None:
+        raise ValueError(msg)
+
+    return _partial_match
