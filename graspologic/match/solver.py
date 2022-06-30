@@ -145,7 +145,7 @@ class GraphMatchSolver(BaseEstimator):
             self.obj_func_scalar = 1
 
         # convert everything to make sure they are 3D arrays (first dim is layer)
-        A = _check_input_matrix(A)
+        A = _check_input_matrix(A, n_layers=None)
         self.n_layers = len(A)
         B = _check_input_matrix(B, n_layers=self.n_layers)
         if len(A) != len(B):

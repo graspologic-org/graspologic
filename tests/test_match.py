@@ -110,7 +110,8 @@ class TestGraphMatch(unittest.TestCase):
         seeds1 = [4, 8, 10]
         seeds2 = [pi[z] for z in seeds1]
         partial_match = np.column_stack((seeds1, seeds2))
-        _, _, score, _ = graph_match(A, B, partial_match=partial_match)
+        _, _, score, _ = graph_match(A, B, partial_match=partial_match, maximize=False)
+
         # chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
         self.assertTrue(11156 <= score < 21000)
 
