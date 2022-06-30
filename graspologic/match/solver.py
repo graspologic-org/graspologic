@@ -100,13 +100,13 @@ class GraphMatchSolver(BaseEstimator):
         shuffle_input: bool = True,
         padding: PaddingType = "naive",
         maximize: bool = True,
-        maxiter: Int = 30,
+        max_iter: Int = 30,
         tol: Scalar = 0.03,
         transport: bool = False,
         use_numba: bool = False,
         transport_regularizer: Scalar = 100,
         transport_tolerance: Scalar = 5e-2,
-        transport_maxiter: Int = 1000,
+        transport_max_iter: Int = 1000,
     ):
         # TODO more input checking
         # self.rng = check_random_state(rng)
@@ -115,14 +115,14 @@ class GraphMatchSolver(BaseEstimator):
         self.verbose = verbose
         self.shuffle_input = shuffle_input
         self.maximize = maximize
-        self.maxiter = maxiter
+        self.max_iter = max_iter
         self.tol = tol
         self.padding = padding
 
         self.transport = transport
         self.transport_regularizer = transport_regularizer
         self.transport_tolerance = transport_tolerance
-        self.transport_maxiter = transport_maxiter
+        self.transport_max_iter = transport_max_iter
 
         if maximize:
             self.obj_func_scalar = -1
@@ -251,7 +251,7 @@ class GraphMatchSolver(BaseEstimator):
 
         P = self.initialize(rng)
         self.compute_constant_terms()
-        for n_iter in range(self.maxiter):
+        for n_iter in range(self.max_iter):
             self.n_iter_ = n_iter + 1
 
             gradient = self.compute_gradient(P)
@@ -373,17 +373,17 @@ class GraphMatchSolver(BaseEstimator):
             P,
             power / lamb,
             stopThr=self.transport_tolerance,
-            numItermax=self.transport_maxiter,
+            numItermax=self.transport_max_iter,
             log=True,
             warn=False,
         )
-        if log["niter"] == self.transport_maxiter - 1:
+        if log["niter"] == self.transport_max_iter - 1:
             warnings.warn(
                 "Sinkhorn-Knopp algorithm for solving linear sum transport "
                 f"problem did not converge. The final error was {log['err'][-1]} "
                 f"and the `transport_tolerance` was {self.transport_tolerance}. "
                 "You may want to consider increasing "
-                "`transport_regularizer`, increasing `transport_maxiter`, or this "
+                "`transport_regularizer`, increasing `transport_max_iter`, or this "
                 "could be the result of `transport_tolerance` set too small."
             )
         return P_eps
