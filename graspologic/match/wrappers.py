@@ -37,7 +37,7 @@ def graph_match(
     maximize: bool = True,
     padding: PaddingType = "adopted",
     n_jobs: Optional[Int] = None,
-    maxiter: Int = 30,
+    max_iter: Int = 30,
     tol: Scalar = 0.01,
     verbose: Int = 0,
     rng: Optional[RngType] = None,
@@ -45,7 +45,7 @@ def graph_match(
     transport: bool = False,
     transport_regularizer: Scalar = 100,
     transport_tolerance: Scalar = 5e-2,
-    transport_maxiter: Int = 1000,
+    transport_max_iter: Int = 1000,
 ) -> MatchResult:
 
     if use_numba:
@@ -82,13 +82,13 @@ def graph_match(
         shuffle_input=shuffle_input,
         padding=padding,
         maximize=maximize,
-        maxiter=maxiter,
+        max_iter=max_iter,
         tol=tol,
         use_numba=use_numba,
         transport=transport,
         transport_regularizer=transport_regularizer,
         transport_tolerance=transport_tolerance,
-        transport_maxiter=transport_maxiter,
+        transport_max_iter=transport_max_iter,
     )
 
     def run_single_graph_matching(seed: RngType) -> MatchResult:
