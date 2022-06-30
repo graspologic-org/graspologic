@@ -100,22 +100,6 @@ class TestGMP(unittest.TestCase):
         with self.assertRaises(ValueError):
             # size of similarity must fit with A, B
             graph_match(np.identity(3), np.identity(3), S=np.identity(4))
-        with self.assertRaises(ValueError):
-            GMP().fit(
-                np.random.random((4, 4)),
-                np.random.random((4, 4)),
-                np.arange(2),
-                np.arange(2),
-                np.random.random((3, 3)),
-            )
-        with self.assertRaises(ValueError):
-            GMP().fit(
-                np.random.random((3, 3)),
-                np.random.random((4, 4)),
-                np.arange(2),
-                np.arange(2),
-                np.random.random((4, 4)),
-            )
 
     def _get_AB(self):
 
@@ -257,27 +241,3 @@ class TestGMP(unittest.TestCase):
         res = self.barygm.fit(A1, A2, S=S)
 
         self.assertTrue(0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n))
-
-
-class TestQuadraticAssignment(unittest.TestCase):
-    def test_quadratic_assignment_does_not_accept_method_2opt(self):
-        arr = np.ones((2, 2))
-        with self.assertRaises(ValueError):
-            quadratic_assignment(arr, arr, method="2opt")
-
-    def test_quadratic_assignment_faq_requires_non_empty_S_argument(self):
-        arr = np.ones((2, 2))
-        with self.assertRaises(ValueError):
-            _quadratic_assignment_faq(arr, arr)
-
-    def test_quadratic_assignment_faq_requires_square_S_argument(self):
-        arr = np.ones((2, 2))
-        with self.assertRaises(ValueError):
-            _quadratic_assignment_faq(arr, arr, S=np.ones((2, 2, 2)))
-
-    def test_quadratic_assignment_faq_requires_S_argument_with_same_dimensions_as_A_and_B(
-        self,
-    ):
-        arr = np.ones((2, 2))
-        with self.assertRaises(ValueError):
-            _quadratic_assignment_faq(arr, arr, S=np.ones((3, 3)))
