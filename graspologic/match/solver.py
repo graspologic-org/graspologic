@@ -130,8 +130,13 @@ class GraphMatchSolver(BaseEstimator):
 
         self.transport = transport
         self.transport_regularizer = transport_regularizer
-
+        check_scalar(
+            transport_tol, name="transport_tol", target_type=(int, float), min_val=0
+        )
         self.transport_tol = transport_tol
+        check_scalar(
+            transport_max_iter, name="transport_max_iter", target_type=int, min_val=1
+        )
         self.transport_max_iter = transport_max_iter
 
         if maximize:
@@ -141,13 +146,14 @@ class GraphMatchSolver(BaseEstimator):
 
         # convert everything to make sure they are 3D arrays (first dim is layer)
         A = _check_input_matrix(A)
-        B = _check_input_matrix(B)
+        self.n_layers = len(A)
+        B = _check_input_matrix(B, n_layers=self.n_layers)
+        if len(A) != len(B):
+            raise ValueError("`A` and `B` must have same number of layers.")
 
         # get some useful sizes
         self.n_A = A[0].shape[0]
         self.n_B = B[0].shape[0]
-        self.n_layers = len(A)
-        # TODO check both have same number of layers
 
         if partial_match is None:
             self._seeded = False
@@ -164,11 +170,11 @@ class GraphMatchSolver(BaseEstimator):
         if AB is None:
             AB = np.zeros((self.n_layers, self.n_A, self.n_B))
         else:
-            AB = _check_input_matrix(AB)
+            AB = _check_input_matrix(AB, n_layers=self.n_layers)
         if BA is None:
             BA = np.zeros((self.n_layers, self.n_B, self.n_A))
         else:
-            BA = _check_input_matrix(BA)
+            BA = _check_input_matrix(BA, n_layers=self.n_layers)
 
         # check all input dims
         # can safely assume that the first matrix in each is representative of dimension
@@ -180,6 +186,7 @@ class GraphMatchSolver(BaseEstimator):
         _compare_dimensions(A, BA, "row", "column", "A", "BA")
         _compare_dimensions(B, BA, "row", "row", "B", "BA")
 
+        # padding for unequally sized inputs
         if self.n_A != self.n_B:
             self.n = np.max((self.n_A, self.n_B))
             A = _multilayer_adj_pad(A, n_padded=self.n, method=self.padding)
@@ -506,7 +513,9 @@ def _permute_multilayer(
     return adjacency
 
 
-def _check_input_matrix(A: MultilayerAdjacency) -> MultilayerAdjacency:
+def _check_input_matrix(
+    A: MultilayerAdjacency, n_layers: Optional[int]
+) -> MultilayerAdjacency:
     if isinstance(A, np.ndarray) and (np.ndim(A) == 2):
         A = [A]
         # A = np.expand_dims(A, axis=0)
@@ -528,6 +537,12 @@ def _check_input_matrix(A: MultilayerAdjacency) -> MultilayerAdjacency:
             A = np.array(A, dtype=float)
         elif isinstance(A[0], csr_matrix):
             pass
+    if (n_layers is not None) and (len(A) != n_layers):
+        msg = (
+            "Input multilayer matrices (A, B, AB, BA) must have the same "
+            "number of layers."
+        )
+        raise ValueError(msg)
     return A
 
 
