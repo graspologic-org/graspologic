@@ -1,9 +1,9 @@
 from collections import namedtuple
 from typing import Any, Optional
-from beartype import beartype
 
 import numpy as np
 import pandas as pd
+from beartype import beartype
 from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
 
