@@ -44,7 +44,7 @@ def graph_match(
     use_numba: bool = False,
     transport: bool = False,
     transport_regularizer: Scalar = 100,
-    transport_tolerance: Scalar = 5e-2,
+    transport_tol: Scalar = 5e-2,
     transport_max_iter: Int = 1000,
 ) -> MatchResult:
 
@@ -87,7 +87,7 @@ def graph_match(
         use_numba=use_numba,
         transport=transport,
         transport_regularizer=transport_regularizer,
-        transport_tolerance=transport_tolerance,
+        transport_tol=transport_tol,
         transport_max_iter=transport_max_iter,
     )
 

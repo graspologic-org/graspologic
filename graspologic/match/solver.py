@@ -106,7 +106,7 @@ class GraphMatchSolver(BaseEstimator):
         transport: bool = False,
         use_numba: bool = False,
         transport_regularizer: Scalar = 100,
-        transport_tolerance: Scalar = 5e-2,
+        transport_tol: Scalar = 5e-2,
         transport_max_iter: Int = 1000,
     ):
         # TODO more input checking
@@ -122,9 +122,7 @@ class GraphMatchSolver(BaseEstimator):
         self.verbose = verbose
         self.shuffle_input = shuffle_input
         self.maximize = maximize
-        check_scalar(
-            max_iter, name="max_iter", target_type=int, min_val=1
-        )
+        check_scalar(max_iter, name="max_iter", target_type=int, min_val=1)
         self.max_iter = max_iter
         check_scalar(tol, name="tol", target_type=(int, float), min_val=0)
         self.tol = tol
@@ -132,7 +130,8 @@ class GraphMatchSolver(BaseEstimator):
 
         self.transport = transport
         self.transport_regularizer = transport_regularizer
-        self.transport_tolerance = transport_tolerance
+
+        self.transport_tol = transport_tol
         self.transport_max_iter = transport_max_iter
 
         if maximize:
@@ -391,7 +390,7 @@ class GraphMatchSolver(BaseEstimator):
             ones,
             P,
             power / lamb,
-            stopThr=self.transport_tolerance,
+            stopThr=self.transport_tol,
             numItermax=self.transport_max_iter,
             log=True,
             warn=False,
@@ -400,10 +399,10 @@ class GraphMatchSolver(BaseEstimator):
             warnings.warn(
                 "Sinkhorn-Knopp algorithm for solving linear sum transport "
                 f"problem did not converge. The final error was {log['err'][-1]} "
-                f"and the `transport_tolerance` was {self.transport_tolerance}. "
+                f"and the `transport_tol` was {self.transport_tol}. "
                 "You may want to consider increasing "
                 "`transport_regularizer`, increasing `transport_max_iter`, or this "
-                "could be the result of `transport_tolerance` set too small."
+                "could be the result of `transport_tol` set too small."
             )
         return P_eps
 
