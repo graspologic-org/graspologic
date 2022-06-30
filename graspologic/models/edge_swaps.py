@@ -73,7 +73,7 @@ class EdgeSwapper:
         else:
             # for numpy input, use numba for JIT compilation
             # NOTE: not convinced numba is helping much here, look into optimizing
-            self._edge_swap_function = nb.jit(_edge_swap)
+            self._edge_swap_function = _edge_swap_numba
 
         self.adjacency = adjacency
 
@@ -211,3 +211,5 @@ def _edge_swap(
     edge_list[orig_inds[0]] = [u, x]
     edge_list[orig_inds[1]] = [v, y]
     return adjacency, edge_list
+
+_edge_swap_numba = nb.jit(_edge_swap)
