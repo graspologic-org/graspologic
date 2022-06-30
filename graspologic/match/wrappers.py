@@ -1,5 +1,6 @@
 from collections import namedtuple
 from typing import Any, Optional
+from beartype import beartype
 
 import numpy as np
 import pandas as pd
@@ -21,6 +22,7 @@ from .types import (
 MatchResult = namedtuple("MatchResult", ["indices_A", "indices_B", "score", "misc"])
 
 
+@beartype
 def graph_match(
     A: MultilayerAdjacency,
     B: MultilayerAdjacency,
