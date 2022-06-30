@@ -100,40 +100,36 @@ class TestGraphMatch(unittest.TestCase):
             # size of similarity must fit with A, B
             graph_match(np.identity(3), np.identity(3), S=np.identity(4))
 
-    def _get_AB(self):
-
-        return A, B
-
     def test_barycenter_SGM(self):
         # minimize such that we achieve some number close to the optimum,
         # though strictly greater than or equal
         # results vary due to random shuffle within GraphMatch
 
-        A, B = self._get_AB()
         n = A.shape[0]
         pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
-        W1 = [4, 8, 10]
-        W2 = [pi[z] for z in W1]
-        chr12c = self.barycenter.fit(A, B, W1, W2)
-        score = chr12c.score_
+        seeds1 = [4, 8, 10]
+        seeds2 = [pi[z] for z in seeds1]
+        partial_match = np.column_stack((seeds1, seeds2))
+        _, _, score, _ = graph_match(A, B, partial_match=partial_match)
+        # chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
         self.assertTrue(11156 <= score < 21000)
 
-        W1 = np.sort(random.sample(list(range(n)), n - 1))
-        W2 = [pi[z] for z in W1]
-        chr12c = self.barycenter.fit(A, B, W1, W2)
+        seeds1 = np.sort(random.sample(list(range(n)), n - 1))
+        seeds2 = [pi[z] for z in seeds1]
+        chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
         score = chr12c.score_
         self.assertEqual(11156, score)
 
-        W1 = np.array(range(n))
-        W2 = pi
-        chr12c = self.barycenter.fit(A, B, W1, W2)
+        seeds1 = np.array(range(n))
+        seeds2 = pi
+        chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
         score = chr12c.score_
         np.testing.assert_array_equal(chr12c.perm_inds_, pi)
         self.assertTrue(11156, score)
 
-        W1 = np.random.permutation(n)
-        W2 = [pi[z] for z in W1]
-        chr12c = self.barycenter.fit(A, B, W1, W2)
+        seeds1 = np.random.permutation(n)
+        seeds2 = [pi[z] for z in seeds1]
+        chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
         score = chr12c.score_
         np.testing.assert_array_equal(chr12c.perm_inds_, pi)
         self.assertTrue(11156, score)
@@ -146,9 +142,9 @@ class TestGraphMatch(unittest.TestCase):
 
         n = A.shape[0]
         pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
-        W1 = [4, 8, 10]
-        W2 = [pi[z] for z in W1]
-        chr12c = self.rand.fit(A, B, W1, W2)
+        seeds1 = [4, 8, 10]
+        seeds2 = [pi[z] for z in seeds1]
+        chr12c = self.rand.fit(A, B, seeds1, seeds2)
         score = chr12c.score_
         self.assertTrue(11156 <= score < 12500)
 
