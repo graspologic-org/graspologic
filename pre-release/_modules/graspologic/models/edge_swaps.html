@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.edge_swaps &mdash; graspologic 1.0.1dev2592254491 documentation</title>
+  <title>graspologic.models.edge_swaps &mdash; graspologic 1.0.1dev2596765261 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2592254491
+                1.0.1dev2596765261
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -336,7 +336,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># for numpy input, use numba for JIT compilation</span>
             <span class="c1"># NOTE: not convinced numba is helping much here, look into optimizing</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_edge_swap_function</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">_edge_swap</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edge_swap_function</span> <span class="o">=</span> <span class="n">_edge_swap_numba</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">adjacency</span> <span class="o">=</span> <span class="n">adjacency</span>
 
@@ -474,6 +474,9 @@
     <span class="n">edge_list</span><span class="p">[</span><span class="n">orig_inds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
     <span class="n">edge_list</span><span class="p">[</span><span class="n">orig_inds</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">adjacency</span><span class="p">,</span> <span class="n">edge_list</span>
+
+
+<span class="n">_edge_swap_numba</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">_edge_swap</span><span class="p">)</span>
 </pre></div>
 
            </div>
