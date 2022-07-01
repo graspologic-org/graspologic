@@ -19,7 +19,7 @@ from .types import (
     Scalar,
 )
 
-MatchResult = namedtuple("MatchResult", ["indices_A", "indices_B", "score", "miscs"])
+MatchResult = namedtuple("MatchResult", ["indices_A", "indices_B", "score", "misc"])
 
 
 @beartype
@@ -196,7 +196,7 @@ def graph_match(
         score : float
             Objective function value at the end of optimization
 
-        miscs : list of dict
+        misc : list of dict
             List of length ``n_init`` containing information about each run. Fields for
             each run are ``score``, ``n_iter``, ``convex_solution``, and ``converged``.
     """
