@@ -219,6 +219,7 @@ class GraphMatchSolver(BaseEstimator):
         # TODO could also do this slightly more efficiently just w/ smart indexing?
         sort_inds = np.argsort(seeds[:, 0])
         seeds = seeds[sort_inds]
+        self.seeds = seeds
         nonseed_A = np.setdiff1d(np.arange(self.n), seeds[:, 0])
         nonseed_B = np.setdiff1d(np.arange(self.n), seeds[:, 1])
         perm_A = np.concatenate([seeds[:, 0], nonseed_A])
@@ -272,31 +273,29 @@ class GraphMatchSolver(BaseEstimator):
         rng = np.random.default_rng(rng)
 
         self.n_iter_ = 0
-        self.check_outlier_cases()
+        if self.n_seeds == self.n:  # all seeded, break
+            P = np.empty((0, 0))
+            self.converged_ = True
+        else:
+            P = self.initialize(rng)
+            self.compute_constant_terms()
+            for n_iter in range(self.max_iter):
+                self.n_iter_ = n_iter + 1
 
-        P = self.initialize(rng)
-        self.compute_constant_terms()
-        for n_iter in range(self.max_iter):
-            self.n_iter_ = n_iter + 1
+                gradient = self.compute_gradient(P)
+                Q = self.compute_step_direction(gradient, rng)
+                alpha = self.compute_step_size(P, Q)
 
-            gradient = self.compute_gradient(P)
-            Q = self.compute_step_direction(gradient, rng)
-            alpha = self.compute_step_size(P, Q)
+                # take a step in this direction
+                P_new = alpha * P + (1 - alpha) * Q
 
-            # take a step in this direction
-            P_new = alpha * P + (1 - alpha) * Q
-
-            if self.check_converged(P, P_new):
-                self.converged_ = True
+                if self.check_converged(P, P_new):
+                    self.converged_ = True
+                    P = P_new
+                    break
                 P = P_new
-                break
-            P = P_new
 
         self.finalize(P, rng)
-
-    # TODO
-    def check_outlier_cases(self) -> None:
-        pass
 
     @write_status("Initializing", 1)
     def initialize(self, rng: np.random.Generator) -> np.ndarray:
@@ -448,7 +447,10 @@ class GraphMatchSolver(BaseEstimator):
         self.convex_solution_ = P
 
         # project back onto the feasible region (permutations)
-        permutation = self.linear_sum_assignment(P, rng, maximize=True)
+        if P.shape != (0, 0):
+            permutation = self.linear_sum_assignment(P, rng, maximize=True)
+        else:  # the case where input was all seeded
+            permutation = np.array([], dtype=int)
 
         # deal with seed-nonseed sorting from the initialization
         permutation = np.concatenate(
@@ -456,7 +458,6 @@ class GraphMatchSolver(BaseEstimator):
         )
         final_permutation = np.empty(self.n, dtype=int)
         final_permutation[self.perm_A] = self.perm_B[permutation]
-        self.permutation_ = final_permutation
 
         # deal with un-padding
         matching = np.column_stack((np.arange(self.n), final_permutation))
