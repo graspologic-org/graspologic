@@ -203,11 +203,10 @@ class TestGraphMatch(unittest.TestCase):
         custom_init = np.eye(n)
         custom_init = custom_init[pi]
 
-        gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
-        gm.fit(A, B)
+        _, indices_B, score, _ = graph_match(A, B, init=custom_init, maximize=False)
 
-        self.assertTrue((gm.perm_inds_ == pi).all())
-        self.assertEqual(gm.score_, 11156)
+        self.assertTrue((indices_B == pi).all())
+        self.assertEqual(score, 11156)
         # we had thought about doing the test
         # `assert gm.n_iter_ == 1`
         # but note that GM doesn't necessarily converge in 1 iteration here
