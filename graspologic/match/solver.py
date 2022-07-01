@@ -469,7 +469,7 @@ class GraphMatchSolver(BaseEstimator):
         self.matching_ = matching
 
         # compute the objective function value for evaluation
-        score = self.compute_score(final_permutation)
+        score = self.compute_score(matching[:, 1])
         self.score_ = score
 
     def compute_score(self, permutation: np.ndarray) -> float:
@@ -492,6 +492,7 @@ class GraphMatchSolver(BaseEstimator):
                 ** 2
             )
             score += float(np.trace(self.S[:, permutation]))
+        score = np.sum(self.A[0] * self.B[0][permutation][:, permutation])
         return score
 
     def status(self) -> str:
@@ -507,14 +508,16 @@ def _permute_multilayer(
     rows: bool = True,
     columns: bool = True,
 ) -> MultilayerAdjacency:
+    new_adjacency = []
     for layer_index in range(len(adjacency)):
         layer = adjacency[layer_index]
         if rows:
             layer = layer[permutation]
         if columns:
             layer = layer[:, permutation]
-        adjacency[layer_index] = layer
-    return adjacency
+        # new_adjacency[layer_index] = layer
+        new_adjacency.append(layer)
+    return new_adjacency
 
 
 def _check_input_matrix(
@@ -722,7 +725,14 @@ def _adj_pad(
     return matrix_padded
 
 
-def _compare_dimensions(A, B, dimension_A, dimension_B, name1, name2):
+def _compare_dimensions(
+    A: MultilayerAdjacency,
+    B: MultilayerAdjacency,
+    dimension_A: str,
+    dimension_B: str,
+    name1: str,
+    name2: str,
+) -> None:
     matrix_A = A[0]
     matrix_B = B[0]
     dim_index_A = 0 if dimension_A == "row" else 1
