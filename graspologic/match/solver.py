@@ -366,7 +366,7 @@ class GraphMatchSolver(BaseEstimator):
         return Q
 
     def linear_sum_assignment(
-        self, P: np.ndarray, rng: np.random.Generator
+        self, P: np.ndarray, rng: np.random.Generator, maximize: Optional[bool] = None
     ) -> np.ndarray:
         """This is a modified version of LAP which (in expectation) does not care
         about the order of the inputs. This matters because scipy LAP settles ties
@@ -379,7 +379,9 @@ class GraphMatchSolver(BaseEstimator):
             row_perm = np.arange(P.shape[0])
         undo_row_perm = np.argsort(row_perm)
         P_perm = P[row_perm]
-        _, permutation = linear_sum_assignment(P_perm, maximize=self.maximize)
+        if maximize is None:
+            maximize = self.maximize
+        _, permutation = linear_sum_assignment(P_perm, maximize=maximize)
         return permutation[undo_row_perm]
 
     def linear_sum_transport(
@@ -446,7 +448,7 @@ class GraphMatchSolver(BaseEstimator):
         self.convex_solution_ = P
 
         # project back onto the feasible region (permutations)
-        permutation = self.linear_sum_assignment(P, rng)
+        permutation = self.linear_sum_assignment(P, rng, maximize=True)
 
         # deal with seed-nonseed sorting from the initialization
         permutation = np.concatenate(
@@ -481,11 +483,13 @@ class GraphMatchSolver(BaseEstimator):
                 np.linalg.norm(
                     self.A[layer] - self.B[layer][permutation][:, permutation]
                 )
+                ** 2
             )
             score += float(
                 np.linalg.norm(
                     self.AB[layer][:, permutation] - self.BA[layer][permutation]
                 )
+                ** 2
             )
             score += float(np.trace(self.S[:, permutation]))
         return score
