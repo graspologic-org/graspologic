@@ -111,28 +111,30 @@ class TestGraphMatch(unittest.TestCase):
         seeds2 = [pi[z] for z in seeds1]
         partial_match = np.column_stack((seeds1, seeds2))
         _, _, score, _ = graph_match(A, B, partial_match=partial_match, maximize=False)
-
-        # chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
         self.assertTrue(11156 <= score < 21000)
 
         seeds1 = np.sort(random.sample(list(range(n)), n - 1))
         seeds2 = [pi[z] for z in seeds1]
-        chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
-        score = chr12c.score_
+        partial_match = np.column_stack((seeds1, seeds2))
+        _, _, score, _ = graph_match(A, B, partial_match=partial_match, maximize=False)
         self.assertEqual(11156, score)
 
         seeds1 = np.array(range(n))
         seeds2 = pi
-        chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
-        score = chr12c.score_
-        np.testing.assert_array_equal(chr12c.perm_inds_, pi)
+        partial_match = np.column_stack((seeds1, seeds2))
+        _, indices_B, score, _ = graph_match(
+            A, B, partial_match=partial_match, maximize=False
+        )
+        np.testing.assert_array_equal(indices_B, pi)
         self.assertTrue(11156, score)
 
         seeds1 = np.random.permutation(n)
         seeds2 = [pi[z] for z in seeds1]
-        chr12c = self.barycenter.fit(A, B, seeds1, seeds2)
-        score = chr12c.score_
-        np.testing.assert_array_equal(chr12c.perm_inds_, pi)
+        partial_match = np.column_stack((seeds1, seeds2))
+        _, indices_B, score, _ = graph_match(
+            A, B, partial_match=partial_match, maximize=False
+        )
+        np.testing.assert_array_equal(indices_B, pi)
         self.assertTrue(11156, score)
 
     def test_rand_SGM(self):

@@ -469,7 +469,7 @@ class GraphMatchSolver(BaseEstimator):
         self.matching_ = matching
 
         # compute the objective function value for evaluation
-        score = self.compute_score(matching[:, 1])
+        score = self.compute_score(final_permutation)
         self.score_ = score
 
     def compute_score(self, permutation: np.ndarray) -> float:
@@ -479,20 +479,23 @@ class GraphMatchSolver(BaseEstimator):
             # casting explicitly to float here because mypy was yelling:
             # 'Incompatible types in assignment (expression has type "floating[Any]",
             # variable has type "float")'
-            score += float(
-                np.linalg.norm(
-                    self.A[layer] - self.B[layer][permutation][:, permutation]
-                )
-                ** 2
+            score += np.sum(self.A[layer] * self.B[layer][permutation][:, permutation])
+            score += np.sum(
+                self.AB[layer][:, permutation] * self.BA[layer][permutation]
             )
-            score += float(
-                np.linalg.norm(
-                    self.AB[layer][:, permutation] - self.BA[layer][permutation]
-                )
-                ** 2
-            )
+            # score += float(
+            #     np.linalg.norm(
+            #         self.A[layer] - self.B[layer][permutation][:, permutation]
+            #     )
+            #     ** 2
+            # )
+            # score += float(
+            #     np.linalg.norm(
+            #         self.AB[layer][:, permutation] - self.BA[layer][permutation]
+            #     )
+            #     ** 2
+            # )
             score += float(np.trace(self.S[:, permutation]))
-        score = np.sum(self.A[0] * self.B[0][permutation][:, permutation])
         return score
 
     def status(self) -> str:
