@@ -183,6 +183,20 @@ class TestGraphMatch(unittest.TestCase):
         self.assertTrue(np.array_equal(indices_A, np.arange(n - 2)))
         self.assertTrue(np.array_equal(indices_B, np.arange(n - 2)))
 
+    def test_reproducibility(self):
+        np.random.seed(888)
+        n = 10
+        p = 0.2
+        A = er_np(n=n, p=p)
+        B = A.copy()
+        permutation = np.random.permutation(n)
+        B = B[permutation][:, permutation]
+        _, indices_B, _, _ = graph_match(A, B, rng=999)
+        for i in range(10):
+            # this fails w/o rng set here; i.e. there is variance
+            _, indices_B_repeat, _, _ = graph_match(A, B, rng=999)
+            self.assertTrue(np.array_equal(indices_B, indices_B_repeat))
+
     def test_custom_init(self):
         n = len(A)
         pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n

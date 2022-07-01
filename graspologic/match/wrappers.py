@@ -2,7 +2,6 @@ from collections import namedtuple
 from typing import Any, Optional
 
 import numpy as np
-import pandas as pd
 from beartype import beartype
 from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
@@ -207,7 +206,7 @@ def graph_match(
     max_seed = np.iinfo(np.uint32).max
 
     if (rng is not None) and (not isinstance(rng, np.random.Generator)):
-        rng = check_scalar(rng, "rng", (int, np.integer), min_val=0, max_val=max_seed)
+        check_scalar(rng, "rng", (int, np.integer), min_val=0, max_val=max_seed)
     # otherwise the input is None or a random Generator - these can be passed in to
     # default_rng safely
 
@@ -260,7 +259,6 @@ def graph_match(
     seeds = rng.integers(max_seed, size=n_init)
     parallel = Parallel(n_jobs=n_jobs, verbose=parallel_verbose)
     results = parallel(delayed(run_single_graph_matching)(seed) for seed in seeds)
-    # results = [run_single_graph_matching(seeds)]
 
     # get the indices for the best run
     best_func = max if maximize else min
