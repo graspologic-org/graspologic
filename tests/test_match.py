@@ -136,7 +136,6 @@ class TestGraphMatch(unittest.TestCase):
         self.assertTrue(11156, score)
 
     def test_rand_SGM(self):
-        A, B = self._get_AB()
         chr12c = self.rand.fit(A, B)
         score = chr12c.score_
         self.assertTrue(11156 <= score < 13500)
@@ -150,7 +149,6 @@ class TestGraphMatch(unittest.TestCase):
         self.assertTrue(11156 <= score < 12500)
 
     def test_parallel(self):
-        A, B = self._get_AB()
         gmp = GMP(gmp=False, n_init=2, n_jobs=2)
         gmp.fit(A, B)
         score = gmp.score_
@@ -168,7 +166,6 @@ class TestGraphMatch(unittest.TestCase):
         self.assertTrue(0.95 <= (sum(res.perm_inds_ == np.arange(n)) / n))
 
     def test_custom_init(self):
-        A, B = self._get_AB()
         n = len(A)
         pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
         custom_init = np.eye(n)
@@ -188,7 +185,6 @@ class TestGraphMatch(unittest.TestCase):
         # iterations
 
     def test_custom_init_seeds(self):
-        A, B = self._get_AB()
         n = len(A)
         pi_original = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - 1
         pi = np.array([5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - 1
