@@ -160,21 +160,28 @@ class TestGraphMatch(unittest.TestCase):
         self.assertTrue(11156 <= score < 12500)
 
     def test_parallel(self):
-        gmp = GMP(gmp=False, n_init=2, n_jobs=2)
-        gmp.fit(A, B)
-        score = gmp.score_
+        _, _, score, _ = graph_match(
+            A,
+            B,
+            maximize=False,
+            n_init=2,
+            n_jobs=2,
+            rng=888,
+        )
         self.assertTrue(11156 <= score < 13500)
 
     def test_padding(self):
+        np.random.seed(888)
         n = 50
         p = 0.4
 
-        G1 = er_np(n=n, p=p)
-        G2 = G1[:-2, :-2]  # remove two nodes
-        gmp_adopted = GMP(padding="adopted")
-        res = gmp_adopted.fit(G1, G2)
+        A = er_np(n=n, p=p)
+        B = A[:-2, :-2]  # remove two nodes
 
-        self.assertTrue(0.95 <= (sum(res.perm_inds_ == np.arange(n)) / n))
+        indices_A, indices_B, _, _ = graph_match(A, B, rng=888, padding="adopted")
+
+        self.assertTrue(np.array_equal(indices_A, np.arange(n - 2)))
+        self.assertTrue(np.array_equal(indices_B, np.arange(n - 2)))
 
     def test_custom_init(self):
         n = len(A)
