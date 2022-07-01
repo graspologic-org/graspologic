@@ -225,14 +225,24 @@ class TestGraphMatch(unittest.TestCase):
         # use seed 0 in A to 7 in B
         seeds_A = [0]
         seeds_B = [6]
+        seeds = np.column_stack((seeds_A, seeds_B))
         custom_init = np.eye(n - 1)
         custom_init = custom_init[pi]
 
-        gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
-        gm.fit(A, B, seeds_A=seeds_A, seeds_B=seeds_B)
+        # gm = GMP(n_init=1, init=custom_init, max_iter=30, shuffle_input=True, gmp=False)
+        # gm.fit(A, B, seeds_A=seeds_A, seeds_B=seeds_B)
+        _, indices_B, score, _ = graph_match(
+            A,
+            B,
+            partial_match=seeds,
+            n_init=1,
+            init=custom_init,
+            max_iter=30,
+            maximize=False,
+        )
 
-        self.assertTrue((gm.perm_inds_ == pi_original).all())
-        self.assertEqual(gm.score_, 11156)
+        self.assertTrue((indices_B == pi_original).all())
+        self.assertEqual(score, 11156)
 
     def test_sim(self):
         n = 150
