@@ -25,8 +25,6 @@ MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
 
 PaddingType = Literal["adopted", "naive"]
 
-InitType = Union[Literal["barycenter"], np.ndarray]
-
 Scalar = Union[int, float, np.integer]
 
 Int = Union[int, np.integer]

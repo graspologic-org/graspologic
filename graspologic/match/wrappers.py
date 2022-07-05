@@ -11,14 +11,7 @@ from sklearn.utils import check_scalar
 from graspologic.match.solver import GraphMatchSolver
 from graspologic.types import Dict, List, RngType
 
-from .types import (
-    AdjacencyMatrix,
-    InitType,
-    Int,
-    MultilayerAdjacency,
-    PaddingType,
-    Scalar,
-)
+from .types import AdjacencyMatrix, Int, MultilayerAdjacency, PaddingType, Scalar
 
 
 class MatchResult(NamedTuple):

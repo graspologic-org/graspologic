@@ -22,18 +22,10 @@ else:
     # HACK: what should this be?
     csr_array = csr_matrix
 
-from sklearn.base import BaseEstimator
 
 from graspologic.types import List, RngType, Tuple
 
-from .types import (
-    AdjacencyMatrix,
-    InitType,
-    Int,
-    MultilayerAdjacency,
-    PaddingType,
-    Scalar,
-)
+from .types import AdjacencyMatrix, Int, MultilayerAdjacency, PaddingType, Scalar
 
 
 def parametrized(dec: Callable) -> Callable:
