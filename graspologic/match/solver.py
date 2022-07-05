@@ -26,7 +26,7 @@ from .types import (
 )
 
 
-def parametrized(dec: Callable) -> Callable:
+def parameterized(dec: Callable) -> Callable:
     def layer(*args, **kwargs) -> Callable:  # type: ignore
         def repl(f: Callable) -> Callable:
             return dec(f, *args, **kwargs)
@@ -36,7 +36,7 @@ def parametrized(dec: Callable) -> Callable:
     return layer
 
 
-@parametrized
+@parameterized
 def write_status(f: Callable, msg: str, level: int) -> Callable:
     @wraps(f)
     def wrap(*args, **kw):  # type: ignore
