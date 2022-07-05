@@ -176,7 +176,7 @@ def graph_match(
         connectomes," bioRxiv 2022.05.19.492713 (2022)
 
     .. [3] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
-        Seeded graph matching, Pattern Recognit. 87 (2019) 203–215
+        "Seeded graph matching," Pattern Recognit. 87 (2019) 203–215
 
     .. [4] A. Saad-Eldin, B.D. Pedigo, C.E. Priebe, J.T. Vogelstein "Graph Matching via
        Optimal Transport," arXiv 2111.05366 (2021)
