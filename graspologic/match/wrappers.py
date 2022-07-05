@@ -8,7 +8,7 @@ from beartype import beartype
 from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
 
-from graspologic.match.solver import GraphMatchSolver
+from graspologic.match.solver import _GraphMatchSolver
 from graspologic.types import Dict, List, RngType
 
 from .types import AdjacencyMatrix, Int, MultilayerAdjacency, PaddingType, Scalar
@@ -242,7 +242,7 @@ def graph_match(
         parallel_verbose = 0
         solver_verbose = verbose
 
-    solver = GraphMatchSolver(
+    solver = _GraphMatchSolver(
         A=A,
         B=B,
         AB=AB,

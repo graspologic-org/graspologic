@@ -60,7 +60,7 @@ def write_status(f: Callable, msg: str, level: int) -> Callable:
     return wrap
 
 
-class GraphMatchSolver:
+class _GraphMatchSolver:
     @beartype
     def __init__(
         self,
