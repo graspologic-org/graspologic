@@ -1,8 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from collections import namedtuple
-from typing import Any, Optional
+from typing import Any, NamedTuple, Optional
 
 import numpy as np
 from beartype import beartype
@@ -10,7 +9,7 @@ from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
 
 from graspologic.match.solver import GraphMatchSolver
-from graspologic.types import Dict, RngType
+from graspologic.types import Dict, List, RngType
 
 from .types import (
     AdjacencyMatrix,
@@ -21,7 +20,30 @@ from .types import (
     Scalar,
 )
 
-MatchResult = namedtuple("MatchResult", ["indices_A", "indices_B", "score", "misc"])
+
+class MatchResult(NamedTuple):
+    indices_A: np.ndarray
+    """
+    Sorted indices in ``A`` which were matched.
+    """
+
+    indices_B: np.ndarray
+    """
+    Indices in ``B`` which were matched. Element ``indices_B[i]`` was matched
+    to element ``indices_A[i]``. ``indices_B`` can also be thought of as a 
+    permutation of the nodes of ``B`` with respect to ``A``.
+    """
+
+    score: float
+    """
+    Objective function value at the end of optimization.
+    """
+
+    misc: List[Dict[str, Any]]
+    """
+    List of length ``n_init`` containing information about each run. Fields for
+    each run are ``score``, ``n_iter``, ``convex_solution``, and ``converged``.
+    """
 
 
 @beartype
@@ -190,13 +212,15 @@ def graph_match(
         ``MatchResult`` containing the following fields.
 
         indices_A : ndarray
-            Indices in ``A`` which were matched.
+            Sorted indices in ``A`` which were matched.
 
         indices_B : ndarray
-            Indices in ``B`` which were matched.
+            Indices in ``B`` which were matched. Element ``indices_B[i]`` was matched
+            to element ``indices_A[i]``. ``indices_B`` can also be thought of as a
+            permutation of the nodes of ``B`` with respect to ``A``.
 
         score : float
-            Objective function value at the end of optimization
+            Objective function value at the end of optimization.
 
         misc : list of dict
             List of length ``n_init`` containing information about each run. Fields for
@@ -257,7 +281,7 @@ def graph_match(
         misc["n_iter"] = solver.n_iter_
         misc["convex_solution"] = solver.convex_solution_
         misc["converged"] = solver.converged_
-        return MatchResult(indices_A, indices_B, score, misc)
+        return MatchResult(indices_A, indices_B, score, [misc])
 
     seeds = rng.integers(max_seed, size=n_init)
     parallel = Parallel(n_jobs=n_jobs, verbose=parallel_verbose)
@@ -268,7 +292,7 @@ def graph_match(
     best_result = best_func(results, key=lambda x: x.score)
 
     # also collate various extra info about all of the runs
-    miscs = [x.misc for x in results]
+    miscs = [x.misc[0] for x in results]
 
     return MatchResult(
         best_result.indices_A, best_result.indices_B, best_result.score, miscs
