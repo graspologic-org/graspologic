@@ -54,7 +54,7 @@ def graph_match(
     BA: Optional[MultilayerAdjacency] = None,
     S: Optional[AdjacencyMatrix] = None,
     partial_match: Optional[np.ndarray] = None,
-    init: InitType = "barycenter",
+    init: Optional[np.ndarray] = None,
     init_perturbation: Scalar = 0.0,
     n_init: Int = 1,
     shuffle_input: bool = True,
@@ -110,8 +110,9 @@ def graph_match(
         first column represents indices of the objects in ``A``, and the second column
         represents their corresponding matches in ``B``.
 
-    init : "barycenter" or ndarray of shape (n_unseed, n_unseed), default="barycenter"
-        Initialization for the algorithm. "barycenter" is most commonly used and
+    init : ndarray of shape (n_unseed, n_unseed), default=None
+        Initialization for the algorithm. Setting to None specifies the "barycenter",
+        which is the most commonly used initialization and
         represents an uninformative (flat) initialization. If a ndarray, then this
         matrix must be square and have size equal to the number of unseeded (not
         already matched in ``partial_match``) nodes.

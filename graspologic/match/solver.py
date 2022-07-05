@@ -70,25 +70,7 @@ def write_status(f: Callable, msg: str, level: int) -> Callable:
     return wrap
 
 
-class GraphMatchSolver(BaseEstimator):
-    """GraphMatchSolver
-
-    This is a draft implementation of a class for solving the graph matching/quadratic
-    assignment problems and various extensions thereof. This solver supports:
-    - the original FAQ algorithm
-    - seeded matching (though this is a work in progress and may only work in some cases)
-    - multilayer matching, a generalization where each graph is a multigraph
-    - GOAT, which is a modification of the original FAQ algorithm
-    - bisected graph matching, allowing for connections between the graphs
-    - matching of sparse matrices
-    - matching using numba compilation for dense matrices
-    - a similarity term between networks
-
-    This class will ultimately be cleaned up and included in graspologic, likely with
-    a functional wrapper.
-
-    """
-
+class GraphMatchSolver:
     @beartype
     def __init__(
         self,
@@ -98,7 +80,7 @@ class GraphMatchSolver(BaseEstimator):
         BA: Optional[MultilayerAdjacency] = None,
         S: Optional[AdjacencyMatrix] = None,
         partial_match: Optional[np.ndarray] = None,
-        init: InitType = "barycenter",
+        init: Optional[np.ndarray] = None,
         init_perturbation: Scalar = 0.0,
         verbose: Int = False,  # 0 is nothing, 1 is loops, 2 is loops + sub, 3, is loops + sub + timing
         shuffle_input: bool = True,
@@ -112,7 +94,7 @@ class GraphMatchSolver(BaseEstimator):
         transport_tol: Scalar = 5e-2,
         transport_max_iter: Int = 1000,
     ):
-        # TODO more input checking
+        # TODO check if init is doubly stochastic
         self.init = init
         check_scalar(
             init_perturbation,
@@ -304,7 +286,6 @@ class GraphMatchSolver(BaseEstimator):
     def initialize(self, rng: np.random.Generator) -> np.ndarray:
         # user custom initialization
         if isinstance(self.init, np.ndarray):
-            # TODO check if doubly convex?
             # TODO fix below
             # P0 = np.atleast_2d(P0)
             # _check_init_input(P0, n_unseed)
