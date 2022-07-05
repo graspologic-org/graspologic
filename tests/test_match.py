@@ -8,7 +8,7 @@ import numpy as np
 from beartype.roar import BeartypeCallHintParamViolation
 
 from graspologic.match import graph_match
-from graspologic.simulations import er_np, er_corr
+from graspologic.simulations import er_corr, er_np
 
 np.random.seed(1)
 
