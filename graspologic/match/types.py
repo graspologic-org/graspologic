@@ -11,7 +11,6 @@ from scipy.sparse import csr_matrix
 if version.parse(scipy_version) >= version.parse("1.8.0"):
     from scipy.sparse import csr_array
 else:
-    # HACK: what should this be?
     csr_array = csr_matrix
 
 from typing_extensions import Literal

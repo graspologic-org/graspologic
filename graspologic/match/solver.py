@@ -10,22 +10,20 @@ import numpy as np
 from beartype import beartype
 from numba import njit
 from ot import sinkhorn
-from packaging import version
-from scipy import __version__ as scipy_version
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix
 from sklearn.utils import check_scalar
 
-if version.parse(scipy_version) >= version.parse("1.8.0"):
-    from scipy.sparse import csr_array
-else:
-    # HACK: what should this be?
-    csr_array = csr_matrix
-
-
 from graspologic.types import List, RngType, Tuple
 
-from .types import AdjacencyMatrix, Int, MultilayerAdjacency, PaddingType, Scalar
+from .types import (
+    AdjacencyMatrix,
+    Int,
+    MultilayerAdjacency,
+    PaddingType,
+    Scalar,
+    csr_array,
+)
 
 
 def parametrized(dec: Callable) -> Callable:
