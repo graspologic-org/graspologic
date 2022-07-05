@@ -7,11 +7,8 @@ import unittest
 import numpy as np
 from beartype.roar import BeartypeCallHintParamViolation
 
-from graspologic.align import SignFlips
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.match import GraphMatch as GMP
 from graspologic.match import graph_match
-from graspologic.simulations import er_np, sbm_corr
+from graspologic.simulations import er_np, er_corr
 
 np.random.seed(1)
 
@@ -49,14 +46,6 @@ A, B = np.array(A), np.array(B)
 
 
 class TestGraphMatch(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        # cls.A = A
-        # cls.B = B
-        cls.barycenter = GMP(gmp=False)
-        cls.rand = GMP(n_init=100, init="rand", gmp=False)
-        cls.barygm = GMP(gmp=True)
-
     def test_SGM_inputs(self):
         with self.assertRaises(BeartypeCallHintParamViolation):
             graph_match(A, B, n_init=-1.5)
@@ -244,33 +233,34 @@ class TestGraphMatch(unittest.TestCase):
         self.assertTrue((indices_B == pi_original).all())
         self.assertEqual(score, 11156)
 
-    def test_sim(self):
-        n = 150
-        rho = 0.9
-        n_per_block = int(n / 3)
-        n_blocks = 3
-        block_members = np.array(n_blocks * [n_per_block])
-        block_probs = np.array(
-            [[0.2, 0.01, 0.01], [0.01, 0.1, 0.01], [0.01, 0.01, 0.2]]
-        )
-        directed = False
-        loops = False
-        A1, A2 = sbm_corr(
-            block_members, block_probs, rho, directed=directed, loops=loops
-        )
-        ase = AdjacencySpectralEmbed(n_components=3, algorithm="truncated")
-        x1 = ase.fit_transform(A1)
-        x2 = ase.fit_transform(A2)
-        xh1 = SignFlips().fit_transform(x1, x2)
-        S = xh1 @ x2.T
-        res = self.barygm.fit(A1, A2, S=S)
+    def test_similarity_term(self):
+        rng = np.random.default_rng(888)
+        np.random.seed(888)
+        n = 10
+        n_seeds = 1
+        lamb = 0.8  # is diagnostic in the sense that w/ lamb=0, this test fails
+        n_sims = 10
+        mean_match_ratio = 0.0
+        for _ in range(n_sims):
+            A, B = er_corr(n, 0.3, 0.8, directed=True)
+            perm = rng.permutation(n)
+            undo_perm = np.argsort(perm)
+            B = B[perm][:, perm]
 
-        self.assertTrue(0.7 <= (sum(res.perm_inds_ == np.arange(n)) / n))
+            seeds_A = np.random.choice(n, replace=False, size=n_seeds)
+            seeds_B = np.argsort(perm)[seeds_A]
+            partial_match = np.stack((seeds_A, seeds_B)).T
+            non_seeds_A = np.setdiff1d(np.arange(n), seeds_A)
 
-        A1 = A1[:-1, :-1]
-        xh1 = xh1[:-1, :]
-        S = xh1 @ x2.T
+            S = lamb * np.eye(B.shape[0])
+            S = np.random.uniform(0, 1, (n, n)) + S
+            S = S[:, perm]
 
-        res = self.barygm.fit(A1, A2, S=S)
+            _, indices_B, _, _ = graph_match(
+                A, B, S=S, partial_match=partial_match, use_numba=False
+            )
+            mean_match_ratio += (
+                indices_B[non_seeds_A] == undo_perm[non_seeds_A]
+            ).mean() / n_sims
 
-        self.assertTrue(0.6 <= (sum(res.perm_inds_ == np.arange(n)) / n))
+        self.assertTrue(mean_match_ratio >= 0.999)
