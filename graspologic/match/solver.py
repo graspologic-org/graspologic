@@ -487,18 +487,6 @@ class GraphMatchSolver(BaseEstimator):
             score += np.sum(
                 self.AB[layer][:, permutation] * self.BA[layer][permutation]
             )
-            # score += float(
-            #     np.linalg.norm(
-            #         self.A[layer] - self.B[layer][permutation][:, permutation]
-            #     )
-            #     ** 2
-            # )
-            # score += float(
-            #     np.linalg.norm(
-            #         self.AB[layer][:, permutation] - self.BA[layer][permutation]
-            #     )
-            #     ** 2
-            # )
             score += float(np.trace(self.S[:, permutation]))
         return score
 
@@ -522,7 +510,6 @@ def _permute_multilayer(
             layer = layer[permutation]
         if columns:
             layer = layer[:, permutation]
-        # new_adjacency[layer_index] = layer
         new_adjacency.append(layer)
     return new_adjacency
 
@@ -532,8 +519,6 @@ def _check_input_matrix(
 ) -> MultilayerAdjacency:
     if isinstance(A, np.ndarray) and (np.ndim(A) == 2):
         A = [A]
-        # A = np.expand_dims(A, axis=0)
-        # A = A.astype(float)
     elif isinstance(A, (csr_matrix, csr_array)):
         A = [A]
     elif isinstance(A, list):
@@ -647,10 +632,7 @@ def _split_multilayer_matrix(
     seed_to_nonseed = []
     nonseed_to_seed = []
     nonseed_to_nonseed = []
-    # seed_to_seed = nList()
-    # seed_to_nonseed = nList()
-    # nonseed_to_seed = nList()
-    # nonseed_to_nonseed = nList()
+
     for i in range(n_layers):
         matrix = matrices[i]
         ss, sn, ns, nn = _split_matrix(matrix, n)
@@ -659,13 +641,6 @@ def _split_multilayer_matrix(
         nonseed_to_seed.append(ns)
         nonseed_to_nonseed.append(nn)
     return seed_to_seed, seed_to_nonseed, nonseed_to_seed, nonseed_to_nonseed
-
-    # if isinstance(X, np.ndarray):
-    # _seed_to_seed = np.array(seed_to_seed)
-    # _seed_to_nonseed = np.array(seed_to_nonseed)
-    # _nonseed_to_seed = np.array(nonseed_to_seed)
-    # _nonseed_to_nonseed = np.array(nonseed_to_nonseed)
-    # return _seed_to_seed, _seed_to_nonseed, _nonseed_to_seed, _nonseed_to_nonseed
 
 
 def _doubly_stochastic(P: np.ndarray, tol: float = 1e-3) -> np.ndarray:
