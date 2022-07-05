@@ -127,7 +127,7 @@ def graph_match(
 
     maximize : bool, default=True
         Whether to maximize the objective function (graph matching problem) or minimize
-        it (quadradic assignment problem).
+        it (quadratic assignment problem).
 
     padding : {"naive", "adopted"}, default="naive"
         Specification of a padding scheme if ``A`` and ``B`` are not of equal size. See
