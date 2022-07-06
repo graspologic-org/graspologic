@@ -398,7 +398,7 @@ def to_laplacian(
         - 'R-DAD'
             Computes :math:`L = D_o(r)^{-1/2} A D_i(r)^{-1/2}`
             where :math:`D_o(r)^{-1/2} = D_o^{-1/2} + regularizer \times I` and likewise for :math:`D_i^{-1/2}`
-            
+
     regularizer: int, float or None, optional (default=None)
         Constant to add to the degree vector(s). If None, average node degree is added.
         If int or float, must be >= 0. Only used when ``form`` is 'R-DAD'.
