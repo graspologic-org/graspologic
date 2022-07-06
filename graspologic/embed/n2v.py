@@ -4,6 +4,7 @@
 import logging
 import math
 import time
+import warnings
 from typing import Any, Optional, Union
 
 import networkx as nx
@@ -142,6 +143,10 @@ def node2vec_embed(
 
     labels = list(node2vec_graph.original_graph.nodes())
     remapped_labels = node2vec_graph.label_map_to_string
+    isolated_nodes = [x for x in nx.isolates(node2vec_graph.original_graph)]
+    if len(isolated_nodes) > 0:
+        warnings.warn(f"Isolated nodes found: {isolated_nodes}")
+        labels = list(np.setdiff1d(labels, isolated_nodes))
 
     return (
         np.array([model.wv.get_vector(remapped_labels[node]) for node in labels]),
