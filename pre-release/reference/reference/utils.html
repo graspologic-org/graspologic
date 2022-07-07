@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utility &mdash; graspologic 1.0.1dev2625604012 documentation</title>
+  <title>Utility &mdash; graspologic 1.0.1dev2631037346 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2625604012
+                1.0.1dev2631037346
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -365,9 +365,8 @@ by the type of graph (loopless or looped, directed or undirected).</p>
 <dt class="sig sig-object py" id="graspologic.utils.to_laplacian">
 <span class="sig-prename descclassname"><span class="pre">graspologic.utils.</span></span><span class="sig-name descname"><span class="pre">to_laplacian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DAD'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/utils/utils.html#to_laplacian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.utils.to_laplacian" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to convert graph adjacency matrix to graph Laplacian.</p>
-<p>Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal
-matrix of degrees of each node raised to the -1/2 power, I is the
-identity matrix, and A is the adjacency matrix.</p>
+<p>Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal matrix
+of degrees of each node, I is the identity matrix, and A is the adjacency matrix.</p>
 <p>R-DAD is regularized Laplacian: where <span class="math notranslate nohighlight">\(D_t = D + regularizer \times I\)</span>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -380,18 +379,18 @@ scipy.sparse.csr_matrix, or an object of type networkx.Graph.</p>
 <blockquote>
 <div><ul class="simple">
 <li><dl class="simple">
-<dt>'I-DAD'</dt><dd><p>Computes <span class="math notranslate nohighlight">\(L = I - D_i A D_i\)</span></p>
+<dt>'I-DAD'</dt><dd><p>Computes <span class="math notranslate nohighlight">\(L = I - D_i^{-1/2} A D_i^{-1/2}\)</span></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'DAD'</dt><dd><p>Computes <span class="math notranslate nohighlight">\(L = D_o A D_i\)</span></p>
+<dt>'DAD'</dt><dd><p>Computes <span class="math notranslate nohighlight">\(L = D_o^{-1/2} A D_i^{-1/2}\)</span></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'R-DAD'</dt><dd><p>Computes <span class="math notranslate nohighlight">\(L = D_o^r A D_i^r\)</span>
-where <span class="math notranslate nohighlight">\(D_o^r = D_o + regularizer \times I\)</span> and likewise for <span class="math notranslate nohighlight">\(D_i\)</span></p>
+<dt>'R-DAD'</dt><dd><p>Computes <span class="math notranslate nohighlight">\(L = D_o(r)^{-1/2} A D_i(r)^{-1/2}\)</span>
+where <span class="math notranslate nohighlight">\(D_o(r)^{-1/2} = D_o^{-1/2} + regularizer \times I\)</span> and likewise for <span class="math notranslate nohighlight">\(D_i(r)^{-1/2}\)</span></p>
 </dd>
 </dl>
 </li>
