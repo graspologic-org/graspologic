@@ -143,11 +143,11 @@ class _GraphMatchSolver:
         # check for between-graph terms
         # TODO maybe these should default to sparse matrices?
         if AB is None:
-            AB = np.zeros((self.n_layers, self.n_A, self.n_B))
+            AB = self.n_layers * [csr_array((self.n_A, self.n_B))]
         else:
             AB = _check_input_matrix(AB, n_layers=self.n_layers)
         if BA is None:
-            BA = np.zeros((self.n_layers, self.n_B, self.n_A))
+            BA = self.n_layers * [csr_array((self.n_B, self.n_A))]
         else:
             BA = _check_input_matrix(BA, n_layers=self.n_layers)
 
@@ -179,7 +179,7 @@ class _GraphMatchSolver:
 
         # check for similarity term
         if S is None:
-            S = np.zeros((self.n, self.n))
+            S = csr_array((self.n, self.n))
 
         _compare_dimensions(A, [S], "row", "row", "A", "S")
         _compare_dimensions(B, [S], "row", "column", "B", "S")
@@ -458,7 +458,7 @@ class _GraphMatchSolver:
             score += np.sum(
                 self.AB[layer][:, permutation] * self.BA[layer][permutation]
             )
-            score += float(np.trace(self.S[:, permutation]))
+            score += float(self.S[:, permutation].trace())
         return score
 
     def status(self) -> str:
