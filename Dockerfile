@@ -7,6 +7,7 @@ RUN mkdir /tmp/numba_cache && \
 ENV NUMBA_CACHE_DIR=/tmp/numba_cache
 
 RUN pip install numba==0.55.1 llvmlite
+RUN pip install typing-extensions hyppo==0.3.0
 RUN git clone https://github.com/microsoft/graspologic.git /graspologic && \
     cd /graspologic && \
     python setup.py install
