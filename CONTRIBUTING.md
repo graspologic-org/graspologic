@@ -153,7 +153,7 @@ After you have made changes to the `graspologic` code, you should use several
 tools to help make sure your changes meet the standards for our repository.
 
 #### Code formatting
-It's important to us that you follow the standards of our project.  Please use `black` and `isort` so that the format of your code is compatible with our project. Format your code prior to committing using one of the following methods:
+Please use `black` and `isort` so that the format of your code is compatible with our project. Format your code prior to committing using one of the following methods:
 ```bash
 # Run "black" and "isort" using Make
 make format
@@ -166,7 +166,11 @@ isort graspologic/ tests/
 ```
 
 #### Type checking
-Validate your typehinting by running: 
+Validate your typehinting by running:
+```bash
+make type-check
+```
+OR
 ```bash
 mypy ./graspologic
 ```
@@ -174,12 +178,34 @@ mypy ./graspologic
 #### Unit testing 
 To check if your code runs correctly, we recommend using unit testing that locally tests your code by implementing test cases. Execute these unit tests by running:
 ```bash
+make test
+```
+OR
+```bash
 pytest tests
 ```
 
 #### Creating documentation
-Create compatible documentation with the use of [sphinx](https://www.sphinx-doc.org/en/master/usage/index.html) by running:
-``` bash
+Build the documentation with the use of [sphinx](https://www.sphinx-doc.org/en/master/usage/index.html) by running:
+```bash
+make docs
+```
+OR
+```bash
+sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
+```
+Please verify that the built documentation looks appropriate. You can view the `html`
+from the `docs/_build/html` folder; click on `index.html` to see what the homepage would
+look like and navigate from there.
+
+If you have made any changes that could affect the tutorials, please also build them.
+This can take a bit longer because the code in each notebook actually needs to execute.
+You can build the documentation and tutorials by running:
+```bash
+make docsWithTutorials
+```
+OR
+```bash
 sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
 ```
 
