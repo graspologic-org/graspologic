@@ -147,7 +147,10 @@ numpydoc guidelines. Refer to the
 
   - For new features, we advocate using [TDD](https://en.wikipedia.org/wiki/Test-driven_development) wherever possible.
 
-### Checking Code
+### Checking code
+
+After you have made changes to the `graspologic` code, you should use several
+tools to help make sure your changes meet the standards for our repository.
 
 #### Code formatting
 It's important to us that you follow the standards of our project.  Please use `black` and `isort` so that the format of your code is compatible with our project. Format your code prior to committing using one of the following methods:
