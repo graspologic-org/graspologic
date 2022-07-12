@@ -87,7 +87,7 @@ branch using a virtual environment. Steps:
    Always use a `feature` branch. Pull requests directly to either `dev` or `main` will be rejected
    until you create a feature branch based on `dev`.
 
-4. From the project root, create a virtual environment and install all development dependencies. Examples using various terminals are provided below. These examples use Python 3.8 but you may use any Python version supported by graspologic.
+4. From the project root, create a [virtual environment](https://docs.python.org/3/library/venv.html) and install all development dependencies. Examples using various terminals are provided below. These examples use Python 3.8 but you may use any Python version supported by graspologic.
 
    **Bash**
     ```bash
