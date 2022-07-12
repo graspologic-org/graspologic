@@ -64,14 +64,14 @@ follow these guidelines! This will make it a lot faster for us to respond to you
 
 ## Setting up for development
 
-The preferred workflow for contributing to Graspologic is to fork the main repository on GitHub, clone, and develop on a
+The preferred workflow for contributing to `graspologic` is to fork the main repository on GitHub, clone, and develop on a
 branch using a virtual environment. Steps: 
 
 1. Fork the [project repository](https://github.com/microsoft/graspologic) by clicking on the ‘Fork’ button near the top
    right of the page. This creates a copy of the code under your GitHub user account. For more details on how to
    fork a repository see [this guide](https://help.github.com/articles/fork-a-repo/).
 
-2. Clone your fork of the Graspologic repo from your GitHub account to your local disk:
+2. Clone your fork of the `graspologic` repo from your GitHub account to your local disk:
 
    ```bash
    git clone git@github.com:YourGithubAccount/graspologic.git
