@@ -60,7 +60,9 @@ follow these guidelines! This will make it a lot faster for us to respond to you
   [Creating and highlighting code blocks](https://help.github.com/articles/creating-and-highlighting-code-blocks)
   for more details.
 
-# Getting Set Up
+# Contributing code
+
+## Getting Set Up
 
 The preferred workflow for contributing to Graspologic is to fork the main repository on GitHub, clone, and develop on a
 branch using a virtual environment. Steps: 
@@ -124,81 +126,63 @@ branch using a virtual environment. Steps:
    pip install -r requirements.txt
    ```
 
-5. Install all graspologic files in "editable" mode and all dependencies by calling:
-    ```bash
-    pip install -e .
-    ```
+## Code Changes
 
-6. Install dependencies `black` and `isort` to automatically format code. You can run the formatter by calling:
-    ```bash
-    pip install black isort
-    black path/to/your_module.py
-    isort path/to/your_module.py
-    ```
-
-7. Install the `pytest` dependency to ensure all tests pass locally. Install the necessary
-  packages by calling: 
-
-    ```bash
-    pip install pytest pytest-cov
-    pytest
-    ```
-
-# Code Changes
-
-## Writing Code
+### Writing Code
 - Make sure to follow the coding guidelines outlined below:
   - Uniformly formatted code makes it easier to share code ownership. Graspologic package closely follows the official Python guidelines detailed in [PEP8](https://www.python.org/dev/peps/pep-0008/) that detail how code should be formatted and indented. Please read it and follow it.
-  - All new functions should have PEP-compliant type hints and "@beartype" annotations.  This allows us a reasonable level of confidence that arguments passed into the API are what we expect them to be without sacrificing runtime speed. See https://github.com/beartype/beartype for more information.
+  - In order to make sure all code is formatted seamlessly and uniformly, we use [black](https://github.com/psf/black) to automatically format our code.
+  - All new functions should have PEP-compliant type hints and [@beartype](https://github.com/beartype/beartype) decorator.  This allows us a reasonable level of confidence that arguments passed into the API are what we expect them to be without sacrificing runtime speed.
 - All public methods should have informative [`docstrings`](https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md#docstring-guidelines) with sample usage presented as doctests when appropriate.
-  - Properly formatted docstrings are required for documentation generation by Sphinx. The graspologic package closely 
-follows the numpydoc guidelines. Please read and follow the 
-[numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html#overview) guidelines. Refer to the 
+  - Properly formatted docstrings are required for documentation generation by [sphinx](https://www.sphinx-doc.org/en/master/usage/index.html). The graspologic package closely 
+follows the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html#overview) guidelines. Please read and follow the 
+numpydoc guidelines. Refer to the 
 [example.py](https://numpydoc.readthedocs.io/en/latest/example.html#example) provided by numpydoc.
 - If proposing a new method, include at least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
-- If your feature is complex enough that a doctest is insufficient to fully showcase the utility, consider creating a 
-  Jupyter notebook to illustrate use instead.
-- All functions and classes should be rigorously typed with Python 3.5+ 
-[`typehinting`](https://docs.python.org/3/library/typing.html). Validate your typehinting by running: 
+- If your feature is complex enough, consider creating a Jupyter notebook tutorial to illustrate its use instead. Tutorial Jupyter notebooks can be added to the docs [here](https://github.com/microsoft/graspologic/tree/dev/docs/tutorials).
+- All functions and classes should be rigorously typed with Python 3.5+ [`typehinting`](https://docs.python.org/3/library/typing.html). 
+- All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
 
-  ```bash
-  mypy ./graspologic
-  ```
+  - It's important to write unit tests for your bug fix and your features. When fixing a bug, first create a test that explicitly exercises the bug and results in a test case failure.  Then create the fix and run the test again to verify your results.
 
+  - For new features, we advocate using [TDD](https://en.wikipedia.org/wiki/Test-driven_development) wherever possible.
 
-## Checking Code
+### Checking Code
 
+#### Code formatting
+It's important to us that you follow the standards of our project.  Please use `black` and `isort` so that the format of your code is compatible with our project. Format your code prior to committing using one of the following methods:
+```bash
+# Run "black" and "isort" using Make
+make format
+```
+OR
+```bash
+# Run "black" and "isort"
+black graspologic/ tests/
+isort graspologic/ tests/
+```
 
- - Unit testing
-    
-    All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
+#### Type checking
+Validate your typehinting by running: 
+```bash
+mypy ./graspologic
+```
 
-    It's important to write unit tests for your bug fix and your features. When fixing a bug, first create a test that explicitly exercises the bug and results in a test case failure.  Then create the fix and run the test again to verify your results.
+#### Unit testing 
+To check if your code runs correctly, we recommend using unit testing that locally tests your code by implementing test cases. Execute these unit tests by running:
+```bash
+pytest tests
+```
 
-    For new features, we advocate using [TDD](https://en.wikipedia.org/wiki/Test-driven_development) wherever possible.
+#### Creating documentation
+Create compatible documentation with the use of [sphinx](https://www.sphinx-doc.org/en/master/usage/index.html) by running:
+``` bash
+sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
+```
 
-    We also explicitly ask that you hew toward the `unittest` Python module for conformance.  This will ensure it plays nicely with most common IDEs on the market.
+## Publishing Changes
 
-- Code formatting
-  
-  It's important to us that you follow the standards of our project.  Please use `black` and `isort` prior to
-   committing.
-
-   ```bash
-   # Run "black" and "isort" using Make
-   make format
-   ```
-        OR
-   ```bash
-   # Run "black" and "isort" using Tests/
-   black graspologic/ tests/
-   isort graspologic/ tests/
-   ```
-
-
-# Publishing Changes
-
-## Useful Git Commands
+### Useful Git Commands
 When working on a new feature, develop the feature on your feature branch. Add changed files using `git add` and then `git commit` files:
 
    ```bash
@@ -211,17 +195,19 @@ When working on a new feature, develop the feature on your feature branch. Add c
    git push -u origin my-feature
    ```
 
-## Creating a pull request
+### Creating a pull request
 
 We recommend that your pull request complies with the following rules before it is submitted: 
 
 - Make sure that the base repository and head repository, as well as the "base" file and "compare" file, are pointing to the correct locations
-- Give your pull request (PR) a helpful title that summarizes what your contribution does. We are using PR titles to automatically generate release notes; examples of helpful PR title formats include: 
+- Give your pull request (PR) a helpful title, set in the past tense, that summarizes what your contribution does. We are using PR titles to automatically generate release notes; examples of helpful PR title formats include: 
    - `Added Feature[Set] {Title|Short Descriptor} in ModuleOrPackageName`
    - `Fixed bug in [ClassName.method_name|ModuleOrPackageName.function_name] where ShortDescription`
    - `Updated [ClassName[.method_name]|ModuleOrPackageName.function_name] to ShortDescription`
 - Link your pull request to the issue (see: [closing keywords](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) for an easy way of linking your issue)
-- Include a breif description of the changes you made in the code in the "write" box provided in the pull request page
+- Include a brief description of the changes you made in the code in the "write" box provided in the pull request page
+
+Once submitted, your PR will undergo automated tests that ensure its compilability and compatibility with our project. For debugging tests that raise errors online but passed locally, one can look at [this file](https://github.com/microsoft/graspologic/blob/dev/.github/workflows/build.yml) to see Github's exact execution.
 
 
 
