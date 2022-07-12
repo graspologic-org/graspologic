@@ -62,7 +62,7 @@ follow these guidelines! This will make it a lot faster for us to respond to you
 
 # Contributing code
 
-## Getting Set Up
+## Setting up for development
 
 The preferred workflow for contributing to Graspologic is to fork the main repository on GitHub, clone, and develop on a
 branch using a virtual environment. Steps: 
