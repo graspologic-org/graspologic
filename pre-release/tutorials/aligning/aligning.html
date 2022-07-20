@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aligning &mdash; graspologic 1.0.1dev2706341430 documentation</title>
+  <title>Aligning &mdash; graspologic 1.0.1dev2706608227 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2706341430
+                1.0.1dev2706608227
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -546,7 +546,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Aligning">
 <h1>Aligning<a class="headerlink" href="#Aligning" title="Permalink to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">align</span></code> is a module that can be used to align two different datasets. In particular, all three currently existing classes, namely <code class="docutils literal notranslate"><span class="pre">SignFlips</span></code>, regular <code class="docutils literal notranslate"><span class="pre">OrthogonalProcrustes</span></code>, and <code class="docutils literal notranslate"><span class="pre">SeedlessProcrustes</span></code> are aimed at correcting an orthogonal transformation of the data, the exact form of which is unknwon. The motivation for this are orthogonal non-identifiabilities, which are common when dealing with various embedding methods, whether in statistical graphs or other domains. Noted that if two
+<p><code class="docutils literal notranslate"><span class="pre">align</span></code> is a module that can be used to align two different datasets. In particular, all three currently existing classes, namely <code class="docutils literal notranslate"><span class="pre">SignFlips</span></code>, regular <code class="docutils literal notranslate"><span class="pre">OrthogonalProcrustes</span></code>, and <code class="docutils literal notranslate"><span class="pre">SeedlessProcrustes</span></code> are aimed at correcting an orthogonal transformation of the data, the exact form of which is unknown. The motivation for this are orthogonal non-identifiabilities, which are common when dealing with various embedding methods, whether in statistical graphs or other domains. Noted that if two
 graphs are embedded using omnibus embedding - they don’t need to be aligned.</p>
 <p>Recall that an orthogonal matrix is any matrix <span class="math notranslate nohighlight">\(Q\)</span> such that <span class="math notranslate nohighlight">\(Q^T Q = Q Q^T = I\)</span>. For all alignment methods, the main idea is to infer an orthogonal matrix <span class="math notranslate nohighlight">\(Q\)</span> from the input data sets <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, and subsequently use <span class="math notranslate nohighlight">\(Q\)</span> in order to align <span class="math notranslate nohighlight">\(X\)</span> to <span class="math notranslate nohighlight">\(Y\)</span>, by transforming <span class="math notranslate nohighlight">\(X\)</span> as <span class="math notranslate nohighlight">\(\hat{X} = X Q\)</span>. The major differences among classes in <code class="docutils literal notranslate"><span class="pre">align</span></code> come from the settings in which they are applicable, as well as additional assumptions made on the
 matrix <span class="math notranslate nohighlight">\(Q\)</span>.</p>
