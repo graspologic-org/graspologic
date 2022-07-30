@@ -1414,7 +1414,7 @@ def screeplot(
     figsize: Tuple[int, int] = (10, 5),
     cumulative: bool = True,
     show_first: Optional[int] = None,
-    show_elbow: Optional[bool] = False,
+    show_elbow: Optional[Union[bool, int]] = False,
 ) -> matplotlib.pyplot.Axes:
     r"""
     Plots the distribution of singular values for a matrix, either showing the
