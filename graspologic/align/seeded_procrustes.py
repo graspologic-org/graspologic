@@ -71,14 +71,6 @@ class SeededProcrustes(BaseAlign):
     indeses in ``X`` and ``Y``.
     """
 
-    def __init__(
-        self,
-        X: ,
-        Y,
-        seeds
-    ):
-
-
     def fit(
         self,
         X,
