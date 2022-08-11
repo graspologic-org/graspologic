@@ -138,14 +138,24 @@ class _GraphMatchSolver:
         n_seeds = len(seeds)
         self.n_seeds = n_seeds
 
+        if (self.n_A != self.n_B) and padding == "adopted":
+            contra_sparse = False
+        else:
+            contra_sparse = True
         # check for between-graph terms
-        # TODO maybe these should default to sparse matrices?
+        # default to sparse if possible since all 0s
         if AB is None:
-            AB = self.n_layers * [csr_array((self.n_A, self.n_B))]
+            if contra_sparse:
+                AB = self.n_layers * [csr_array((self.n_A, self.n_B))]
+            else:
+                AB = self.n_layers * [np.zeros((self.n_A, self.n_B))]
         else:
             AB = _check_input_matrix(AB, n_layers=self.n_layers)
         if BA is None:
-            BA = self.n_layers * [csr_array((self.n_B, self.n_A))]
+            if contra_sparse:
+                BA = self.n_layers * [csr_array((self.n_B, self.n_A))]
+            else:
+                BA = self.n_layers * [np.zeros((self.n_B, self.n_A))]
         else:
             BA = _check_input_matrix(BA, n_layers=self.n_layers)
 
