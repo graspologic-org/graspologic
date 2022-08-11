@@ -8,7 +8,6 @@ from typing import Callable, Optional
 
 import numpy as np
 from beartype import beartype
-from numba import njit
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix
@@ -79,7 +78,6 @@ class _GraphMatchSolver:
         max_iter: Int = 30,
         tol: Scalar = 0.03,
         transport: bool = False,
-        use_numba: bool = False,
         transport_regularizer: Scalar = 100,
         transport_tol: Scalar = 5e-2,
         transport_max_iter: Int = 1000,
@@ -232,7 +230,7 @@ class _GraphMatchSolver:
 
         self.S_ss, self.S_sn, self.S_ns, self.S_nn = _split_matrix(S, n_seeds)
 
-        # decide whether to use numba/sparse
+        # decide whether to use sparse
         self._compute_gradient = _compute_gradient
         self._compute_coefficients = _compute_coefficients
         # TODO probably should base this on "ALL" instead of first one being sparse
@@ -240,9 +238,6 @@ class _GraphMatchSolver:
             self._sparse = True
         else:
             self._sparse = False
-            if use_numba:
-                self._compute_gradient = _compute_gradient_numba
-                self._compute_coefficients = _compute_coefficients_numba
 
     def solve(self, rng: RngType = None) -> None:
         rng = np.random.default_rng(rng)
@@ -536,9 +531,6 @@ def _compute_gradient(
     return grad
 
 
-_compute_gradient_numba = njit(_compute_gradient)
-
-
 def _compute_coefficients(
     P: np.ndarray,
     Q: np.ndarray,
@@ -581,9 +573,6 @@ def _compute_coefficients(
     b += np.sum(S * R)  # equivalent to S.T @ R
 
     return a, b
-
-
-_compute_coefficients_numba = njit(_compute_coefficients)
 
 
 def _split_matrix(

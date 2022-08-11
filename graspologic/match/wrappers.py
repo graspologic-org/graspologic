@@ -58,7 +58,6 @@ def graph_match(
     tol: Scalar = 0.01,
     verbose: Int = 0,
     rng: Optional[RngType] = None,
-    use_numba: bool = False,
     transport: bool = False,
     transport_regularizer: Scalar = 100,
     transport_tol: Scalar = 5e-2,
@@ -160,11 +159,6 @@ def graph_match(
         Allows the specification of a random seed (positive integer) or a
         :class:`np.random.Generator` object to ensure reproducibility.
 
-    use_numba : bool, default=False
-        [WIP, not currently able to be set to True] Allows for numba compilation of
-        some of the underlying code, which can speed up operations. Only compatible with
-        ndarray inputs, not sparse matrices.
-
     transport : bool, default=False
         Whether to enable use of regularized optimal transport for determining the step
         direction as described in [4]. May improve accuracy/speed, especially for large
@@ -220,9 +214,6 @@ def graph_match(
             List of length ``n_init`` containing information about each run. Fields for
             each run are ``score``, ``n_iter``, ``convex_solution``, and ``converged``.
     """
-
-    if use_numba:
-        raise NotImplementedError("Still working on numba implementation")
 
     max_seed = np.iinfo(np.uint32).max
 
