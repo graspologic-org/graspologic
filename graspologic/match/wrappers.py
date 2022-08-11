@@ -248,7 +248,6 @@ def graph_match(
         maximize=maximize,
         max_iter=max_iter,
         tol=tol,
-        use_numba=use_numba,
         transport=transport,
         transport_regularizer=transport_regularizer,
         transport_tol=transport_tol,
