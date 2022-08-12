@@ -1,4 +1,3 @@
-from functools import partial
 import itertools
 import warnings
 from typing import Any, Optional, Union
