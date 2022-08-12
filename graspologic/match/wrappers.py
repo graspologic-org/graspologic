@@ -70,13 +70,16 @@ def graph_match(
     This algorithm can be thought of as finding an alignment of the vertices of two
     graphs which minimizes the number of induced edge disagreements, or, in the case
     of weighted graphs, the sum of squared differences of edge weight disagreements.
-    Various extensions to the original FAQ algorithm are also included in this function.
+    Various extensions to the original FAQ algorithm are also included in this function
+    ([2-5]).
 
 
     Parameters
     ----------
     A : {ndarray, csr_matrix, csr_array} of shape (n, n), or a list thereof
-        The first (potentially multilayer) adjacency matrix to be matched.
+        The first (potentially multilayer) adjacency matrix to be matched. Multiplex
+        networks (e.g. a network with multiple edge types) can be used by inputting a 
+        list of the adjacency matrices for each edge type.
 
     B : {ndarray, csr_matrix, csr_array} of shape (m, m), or a list thereof
         The second (potentially multilayer) adjacency matrix to be matched. Must have
@@ -85,11 +88,11 @@ def graph_match(
 
     AB : {ndarray, csr_matrix, csr_array} of shape (n, m), or a list thereof, default=None
         A (potentially multilayer) matrix representing connections from the objects
-        indexed in ``A`` to those in ``B``.
+        indexed in ``A`` to those in ``B``, used for bisected graph matching (see [2]).
 
     BA : {ndarray, csr_matrix, csr_array} of shape (m, n), or a list thereof, default=None
         A (potentially multilayer) matrix representing connections from the objects
-        indexed in ``B`` to those in ``A``.
+        indexed in ``B`` to those in ``A``, used for bisected graph matching (see [2]).
 
     S : {ndarray, csr_matrix, csr_array} of shape (n, m), default=None
         A matrix representing the similarity of objects indexed in ``A`` to each object
@@ -131,7 +134,8 @@ def graph_match(
     padding : {"naive", "adopted"}, default="naive"
         Specification of a padding scheme if ``A`` and ``B`` are not of equal size. See
         the `padded graph matching tutorial <https://microsoft.github.io/graspologic/tutorials/matching/padded_gm.html>`_
-        or [3] for more explanation.
+        or [3] for more explanation. Adopted padding has not been tested for weighted
+        networks; use with caution.
 
     n_jobs : int, default=None
         The number of jobs to run in parallel. Parallelization is over the
@@ -177,26 +181,6 @@ def graph_match(
         Setting this value higher may provide more precise solutions at the cost of
         longer computation time.
 
-    References
-    ----------
-    .. [1] J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,
-        E.T. Harley, D.E. Fishkind, R.J. Vogelstein, and C.E. Priebe, “Fast
-        approximate quadratic programming for graph matching,” PLOS one, vol. 10,
-        no. 4, p. e0121002, 2015.
-
-    .. [2] B.D. Pedigo, M. Winding, C.E. Priebe, J.T. Vogelstein, "Bisected graph
-        matching improves automated pairing of bilaterally homologous neurons from
-        connectomes," bioRxiv 2022.05.19.492713 (2022)
-
-    .. [3] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
-        "Seeded graph matching," Pattern Recognit. 87 (2019) 203–215
-
-    .. [4] A. Saad-Eldin, B.D. Pedigo, C.E. Priebe, J.T. Vogelstein "Graph Matching via
-       Optimal Transport," arXiv 2111.05366 (2021)
-
-    .. [5] K. Pantazis, D.L. Sussman, Y. Park, Z. Li, C.E. Priebe, V. Lyzinski,
-       "Multiplex graph matching matched filters," Applied Network Science (2022)
-
     Returns
     -------
     res: MatchResult
@@ -216,6 +200,47 @@ def graph_match(
         misc : list of dict
             List of length ``n_init`` containing information about each run. Fields for
             each run are ``score``, ``n_iter``, ``convex_solution``, and ``converged``.
+
+    Notes
+    -----
+    Many extensions [2-5] to the original FAQ algorithm are included in this function. 
+    The full objective function which this function aims to solve can be written as
+
+    .. math:: f(P) = - \sum_{k=1}^K \|A^{(k)} - PB^{(k)}P^T\|_F^2 - \sum_{k=1}^K \|(AB)^{(k)}P^T - P(BA)^{(k)}\|_F^2 + trace(SP^T)
+
+    where :math:`P` is a permutation matrix we are trying to learn, :math:`A^{(k)}` is the adjacency
+    matrix in network :math:`A` for the :math:`k`-th edge type (and likewise for B), :math:`(AB)^{(k)}`
+    (with a slight abuse of notation, but for consistency with the code) is an adjacency
+    matrix representing a subgraph of any connections which go from objects in :math:`A` to 
+    those in :math:`B` (and defined likewise for :math:`(BA)`), and :math:`S` is a 
+    similarity matrix indexing the similarity of each object in :math:`A` to each object
+    in :math:`B`.
+
+    If ``partial_match`` is used, then the above will be maximized/minimized over the
+    set of permutations which respect this partial matching of the two networks.
+
+    If ``maximize``, this function will attempt to maximize :math:`f(P)` (solve the graph 
+    matching problem); otherwise, it will be minimized.
+
+    References
+    ----------
+    .. [1] J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,
+        E.T. Harley, D.E. Fishkind, R.J. Vogelstein, and C.E. Priebe, “Fast
+        approximate quadratic programming for graph matching,” PLOS one, vol. 10,
+        no. 4, p. e0121002, 2015.
+
+    .. [2] B.D. Pedigo, M. Winding, C.E. Priebe, J.T. Vogelstein, "Bisected graph
+        matching improves automated pairing of bilaterally homologous neurons from
+        connectomes," bioRxiv 2022.05.19.492713 (2022)
+
+    .. [3] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
+        "Seeded graph matching," Pattern Recognit. 87 (2019) 203–215
+
+    .. [4] A. Saad-Eldin, B.D. Pedigo, C.E. Priebe, J.T. Vogelstein "Graph Matching via
+       Optimal Transport," arXiv 2111.05366 (2021)
+
+    .. [5] K. Pantazis, D.L. Sussman, Y. Park, Z. Li, C.E. Priebe, V. Lyzinski,
+       "Multiplex graph matching matched filters," Applied Network Science (2022)
     """
 
     max_seed = np.iinfo(np.uint32).max
