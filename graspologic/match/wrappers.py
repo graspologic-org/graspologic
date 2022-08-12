@@ -194,6 +194,9 @@ def graph_match(
     .. [4] A. Saad-Eldin, B.D. Pedigo, C.E. Priebe, J.T. Vogelstein "Graph Matching via
        Optimal Transport," arXiv 2111.05366 (2021)
 
+    .. [5] K. Pantazis, D.L. Sussman, Y. Park, Z. Li, C.E. Priebe, V. Lyzinski,
+       "Multiplex graph matching matched filters," Applied Network Science (2022)
+
     Returns
     -------
     res: MatchResult
