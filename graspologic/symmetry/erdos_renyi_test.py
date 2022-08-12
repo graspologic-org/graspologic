@@ -1,6 +1,6 @@
 import numpy as np
 
-from .sbm import group_connection_test, group_connection_test_paired
+from .group_connection_test import group_connection_test, group_connection_test_paired
 
 
 def _squeeze_value(old_misc, new_misc, old_key, new_key):

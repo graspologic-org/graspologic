@@ -1,10 +1,10 @@
 from scipy.sparse import csr_matrix
 
-from graspologic.bilateral_connectome.sbm import (
+from graspologic.symmetry.group_connection_test import (
     group_connection_test,
     group_connection_test_paired,
 )
-from graspologic.bilateral_connectome.er import (
+from graspologic.symmetry.erdos_renyi_test import (
     erdos_renyi_test,
     erdos_renyi_test_paired,
 )
