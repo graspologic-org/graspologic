@@ -463,7 +463,9 @@ class _GraphMatchSolver:
             score += np.sum(
                 self.AB[layer][:, permutation] * self.BA[layer][permutation]
             )
-            score += float(np.trace(self.S[:, permutation]))
+            # for some reason, trace was not working on Py 3.7
+            # this is equivalent to trace(SP^T)
+            score += float(np.sum(self.S[np.arange(self.S.shape[0]), permutation]))
         return score
 
     def status(self) -> str:
