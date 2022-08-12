@@ -256,9 +256,7 @@ class TestGraphMatch(unittest.TestCase):
             S = np.random.uniform(0, 1, (n, n)) + S
             S = S[:, perm]
 
-            _, indices_B, _, _ = graph_match(
-                A, B, S=S, partial_match=partial_match, use_numba=False
-            )
+            _, indices_B, _, _ = graph_match(A, B, S=S, partial_match=partial_match)
             mean_match_ratio += (
                 indices_B[non_seeds_A] == undo_perm[non_seeds_A]
             ).mean() / n_sims
