@@ -1,3 +1,4 @@
+from functools import partial
 import itertools
 import warnings
 from typing import Any, Optional, Union
@@ -7,7 +8,7 @@ from sklearn.base import BaseEstimator
 
 from graspologic.types import Dict, List
 
-from ..match import GraphMatch as GMP
+from ..match import graph_match
 
 # Type aliases
 SeedsType = Union[np.ndarray, List[List[int]]]
@@ -164,6 +165,15 @@ class VNviaSGM(BaseEstimator):
         elif A.shape[0] != A.shape[1] or B.shape[0] != B.shape[1]:
             msg = '"A" and "B" must be square'
             raise ValueError(msg)
+        elif A.shape[0] > B.shape[0]:
+            # NOTE: the new graph_match function can absolutely handle the reverse case.
+            # However, it would require me to appropriately deal with the nodes of A
+            # which are not matched, and I dont have time to figure out what this class
+            # is doing right now. Further, I think with the old code using GraphMatch
+            # this would have raised a silent bug in this case, so I think this is
+            # at least an improvement.
+            msg = '"A" is larger than "B"; please reverse the ordering of these inputs.'
+            raise ValueError(msg)
 
         if not isinstance(voi, int):
             msg = '"voi" must be an integer'
@@ -288,18 +298,17 @@ class VNviaSGM(BaseEstimator):
         # explanation
         self.n_seeds_ = len(close_seeds)
         seeds_fin = np.arange(self.n_seeds_)
+        partial_match = np.column_stack((seeds_fin, seeds_fin))
 
         # Call the SGM algorithm using user set parameters and generate a prob
         # vector for the voi.
-        sgm = GMP(
-            **self.graph_match_kws,
-        )
-
         prob_vector = np.zeros((max(SG_1.shape[0], SG_2.shape[0]) - self.n_seeds_))
 
         for ii in range(self.n_init):
-            sgm.fit(SG_1, SG_2, seeds_A=seeds_fin, seeds_B=seeds_fin)
-            prob_vector[sgm.perm_inds_[self.n_seeds_] - self.n_seeds_] += 1.0
+            _, perm_inds, _, _ = graph_match(
+                SG_1, SG_2, partial_match=partial_match, **self.graph_match_kws
+            )
+            prob_vector[perm_inds[self.n_seeds_] - self.n_seeds_] += 1.0
 
         prob_vector /= self.n_init
 
