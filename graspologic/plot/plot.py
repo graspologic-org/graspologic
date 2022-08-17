@@ -1446,6 +1446,7 @@ def screeplot(
     -------
     ax : matplotlib axis object
         Output plot
+
     References
     ----------
     .. [1] Zhu, M. and Ghodsi, A. (2006).
