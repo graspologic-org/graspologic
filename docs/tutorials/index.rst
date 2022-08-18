@@ -82,6 +82,8 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
 
    inference/latent_position_test
    inference/latent_distribution_test
+   inference/erdos_renyi_test
+   inference/group_connection_test
 
 .. _plot_tutorials:
 

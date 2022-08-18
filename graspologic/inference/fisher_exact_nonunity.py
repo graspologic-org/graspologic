@@ -15,13 +15,13 @@ def fisher_exact_nonunity(table, alternative="two-sided", null_ratio=1):
     table : array_like of ints
         A 2x2 contingency table, meeting the criteria discussed above.
     alternative : {'two-sided', 'less', 'greater'}, optional
-        This parameter defines the alternative hypothesis for the statistical test. "two-sided", the default, tests whether the second 
-        network's density is greater or less than the first network's density. If "less" or "greater" is selected, then the function 
-        performs a one-sided test to determine whether the second network's density is strictly less than- or strictly greater than the 
+        This parameter defines the alternative hypothesis for the statistical test. "two-sided", the default, tests whether the second
+        network's density is greater or less than the first network's density. If "less" or "greater" is selected, then the function
+        performs a one-sided test to determine whether the second network's density is strictly less than- or strictly greater than the
         first network's.
     null_ratio : float, optional (default=1)
-        A (possibly non-unity) null probability ratio. This parameter can be set to a value other than 1 to test a null hypothesis that 
-        the odds ratio for the second network is a fixed multiple of the first network's odd ratio. 
+        A (possibly non-unity) null probability ratio. This parameter can be set to a value other than 1 to test a null hypothesis that
+        the odds ratio for the second network is a fixed multiple of the first network's odd ratio.
 
     Returns
     -------
@@ -30,13 +30,13 @@ def fisher_exact_nonunity(table, alternative="two-sided", null_ratio=1):
         odds ratio variable returns (odds for network 1)/(odds for network 2).
     p_value : float
         The probability of obtaining a contingency table at least as extreme as the one actually observed, assuming the null hypothesis is
-        correct. 
+        correct.
 
 
     Notes
     -----
     For further information regarding fisher's exact test, see https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html.
-    
+
     """
     dist = nchypergeom_fisher
 

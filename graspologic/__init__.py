@@ -16,7 +16,6 @@ import graspologic.preprocessing
 import graspologic.simulations
 import graspologic.subgraph
 import graspologic.utils
-import graspologic.symmetry
 from graspologic.types import *
 from graspologic.version import __version
 

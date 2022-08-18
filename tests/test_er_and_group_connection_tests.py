@@ -1,12 +1,10 @@
 from scipy.sparse import csr_matrix
 
-from graspologic.symmetry.group_connection_test import (
-    group_connection_test,
-    group_connection_test_paired,
+from graspologic.inference.group_connection_test import (
+    group_connection_test
 )
-from graspologic.symmetry.erdos_renyi_test import (
-    erdos_renyi_test,
-    erdos_renyi_test_paired,
+from graspologic.inference.erdos_renyi_test import (
+    erdos_renyi_test
 )
 from graspologic.simulations import er_np, sbm
 
@@ -20,8 +18,8 @@ class TestGroupConnection(unittest.TestCase):
         np.random.seed(123)
         B1 = np.array([[0.5, 0.2], [0.2, 0.5]])
         B2 = np.array([[0.7, 0.2], [0.2, 0.7]])
-        A1, labels1 = sbm([250,250], B1, return_labels=True)
-        A2, labels2 = sbm([250,250], B2, return_labels=True)
+        A1, labels1 = sbm([250, 250], B1, return_labels=True)
+        A2, labels2 = sbm([250, 250], B2, return_labels=True)
         with self.assertRaises(ValueError):
             group_connection_test(A1, A2, labels1, labels2, method=5)
 
@@ -29,21 +27,6 @@ class TestGroupConnection(unittest.TestCase):
             group_connection_test(A1, A2, labels1, labels2, method="hello")
 
         stat, pvalue, misc = group_connection_test(A1, A2, labels1, labels2)
-        self.assertTrue(pvalue > 0.05)
-        self.assertTrue(pvalue <= 0.05)
-
-
-class TestGroupConnectionPaired(unittest.TestCase):
-    def test_gcpairedtest_works(self):
-        np.random.seed(123)
-        B = np.array([[0.5, 0.2], [0.2, 0.5]])
-        A1, labels = sbm([250,250], B, return_labels=True)
-        A2 = sbm([250,250], B)
-        A3 = sbm([200,200], B)
-        with self.assertRaises(ValueError):
-            group_connection_test_paired(A1, A3, labels)
-
-        stat, pvalue, misc = group_connection_test_paired(A1, A2, labels)
         self.assertTrue(pvalue > 0.05)
         self.assertTrue(pvalue <= 0.05)
 

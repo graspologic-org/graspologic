@@ -1,6 +1,6 @@
 import numpy as np
 
-from .group_connection_test import group_connection_test, group_connection_test_paired
+from .group_connection_test import group_connection_test
 
 
 def _squeeze_value(old_misc, new_misc, old_key, new_key):
@@ -43,8 +43,7 @@ def erdos_renyi_test(A1, A2, method="fisher"):
         This returns a statistic calculated by group_connection_test when combining p-values for multiple group-to-group comparisons. This
         won't be too meaningful or useful for the Erdos-Renyi test.
     pvalue: float
-        The computed probability that the null hypothesis (i.e. p1=p2) is correct given the observed pair of networks. A value below 0.05
-        is required by convention in order to deduce statistical significance.
+        The computed probability of the observed network distributions assuming the null hypothesis (i.e. p1 = p2) is correct.
     er_misc: dict
         Dictionary containing a number of computed statistics for the network comparison performed:
             "probability1" = float
@@ -89,43 +88,3 @@ def erdos_renyi_test(A1, A2, method="fisher"):
         _squeeze_value(sbm_misc, er_misc, old_key, new_key)
 
     return stat, pvalue, er_misc
-
-
-def erdos_renyi_test_paired(A1, A2):
-    """
-    Performs the Erdos-Renyi test on paired data, i.e. where there is a known node-to-node correspondence between the two networks.
-
-    Parameters:
-    -----------
-    A1: np.array, int
-        The adjacency matrix for network 1.
-    A2: np. array, int
-        Same, but for network 2.
-
-    Returns:
-    --------
-    stat: float
-        This contains the a statistic computed by the algorithm for comining p-values. Again, not too useful for the Erdos-Renyi test.
-    pvalue: float
-        The combined p-value for the total network-to-network comparison using the Erdos-Renyi model, calculated using Tippett's method.
-    misc: dict
-        Dictionary containing a few miscellaneous statistics computed by the function.
-            "both" = n_both, int
-                The number of locations in the adjacency matrix where a "1" appears in both A1 and A2, i.e. the number of locations where
-                an edge appears in both network 1 and network 2.
-            "only1" = only1, int
-                The number of locations where an edge appears in network 1 but not network 2.
-            "only2" = only2, int
-                The number of locations where an edge appears in network 2 but not network 1.
-            "neither" = neither
-                The number of locations where there is no edge in either network.
-    """
-    stat, pvalue, sbm_misc = group_connection_test_paired(
-        A1, A2, labels=np.ones(A1.shape[0])
-    )
-    misc = {}
-    misc["both"] = sbm_misc["both"].loc[1, 1]
-    misc["neither"] = sbm_misc["neither"].loc[1, 1]
-    misc["only1"] = sbm_misc["only1"].loc[1, 1]
-    misc["only2"] = sbm_misc["only2"].loc[1, 1]
-    return stat, pvalue, misc

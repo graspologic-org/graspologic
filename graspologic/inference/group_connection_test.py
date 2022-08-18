@@ -5,9 +5,9 @@ import pandas as pd
 from graspologic.utils import remove_loops
 from statsmodels.stats.multitest import multipletests
 
-from .binomial import binom_2samp, binom_2samp_paired
-from .combine import combine_pvalues
+from .binomial import binom_2samp
 from .utils import compute_density_adjustment
+from scipy.stats import combine_pvalues as scipy_combine_pvalues
 from beartype import beartype
 
 SBMResult = namedtuple(
@@ -173,11 +173,13 @@ def group_connection_test(
         will raise an error.
     combine_method: str, optional
         Specifies the statistical method for combining p-values. Default is "tippett" for Tippett's method, but the user can also enter
-        "fisher" to use Fisher's method. Any other entry will cause an error.
+        any other method supported by scipy_combine_pvalues("fisher","pearson","mudholkar_george", or "stouffer").Tippett's method is
+        recommended, but the user may use one of the others as desired and appropriate. For further information, see
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.combine_pvalues.html.
     correct_method: str, optional
         Specifies the statistical method for correcting for multiple comparisons. Since this function is performing many comparisons
         between subsets of the data, the probability of observing a "statistically significant" result by pure chance is increased. A
-        correction is performed to adjust for this phenomenon. Default value is "bonferroni" to use Bonferroni correction method, but
+        correction is performed to adjust for this phenomenon. Default value is "holm" to use the Holm-Bonferroni correction method, but
         many others are possible (see https://www.statsmodels.org/dev/generated/statsmodels.stats.multitest.multipletests.html)
     alpha: float, optional
         The value to be used when testing the statistical significance of the results. By default, this is the conventional value of 0.05
@@ -234,9 +236,6 @@ def group_connection_test(
 
     Notes
     ------
-    Default value of "correct_method" in the bilateral-connectome repository is "holm". I changed this to "bonferroni" because that is
-    the method chosen in the paper.
-
     The function name has been changed to group_connection_test to match the chosen language in the paper.
     """
 
@@ -322,120 +321,5 @@ def group_connection_test(
         stat = np.inf
         pvalue = 0.0
     else:
-        stat, pvalue = combine_pvalues(run_pvalues, method=combine_method)
-    return stat, pvalue, misc
-
-
-def offdiag_indices_from(arr):
-    """
-    Helper function for isolating the off-diagonal indices from a matrix.
-    """
-    upper_rows, upper_cols = np.triu_indices_from(arr, k=1)
-    lower_rows, lower_cols = np.tril_indices_from(arr, k=-1)
-    rows = np.concatenate((upper_rows, lower_rows))
-    cols = np.concatenate((upper_cols, lower_cols))
-    return rows, cols
-
-
-def group_connection_test_paired(
-    A1,
-    A2,
-    labels,
-):
-    """
-    Very similar to the above, except this function performs a paired version of the group connection test, meaning that there is a node-
-    to-node correspondence between the two networks. This function currently only determines the p-value for the overall group-to-group
-    comparison, and does not compute the individual, corrected group-to-group p-values. This function uses Tippett's method for combining
-    p-values.
-
-    Parameters
-    -----------
-    A1: np.array, int
-        The adjacency matrix for the first network. This is a square matrix with side length corresponding to the number of nodes in the
-        network. Entries in the matrix are either 1, denoting an edge, or 0, denoting the absence of an edge.
-    A2: np.array, int
-        The adjacency matrix for the second network.
-    labels: array-like, int
-        The group labels for the nodes in the networks (which are presumed to be identical for both networks.)
-
-    Returns
-    --------
-    stat: float
-        This contains the a statistic computed by the algorithm for comining p-values. For Tippett's method,
-        this is the least of the p values.
-    pvalue: float
-        The combined p-value for the total network-to-network comparison using the SBM model, calculated using Tippett's method.
-    misc: dict
-        Dictionary containing a few miscellaneous statistics computed by the function.
-            "both" = n_both, int
-                The number of locations in the adjacency matrix where a "1" appears in both A1 and A2, i.e. the number of locations where
-                an edge appears in both network 1 and network 2.
-            "only1" = only1, int
-                The number of locations where an edge appears in network 1 but not network 2.
-            "only2" = only2, int
-                The number of locations where an edge appears in network 2 but not network 1.
-            "neither" = neither
-                The number of locations where there is no edge in either network.
-            "uncorrected_pvalues" = uncorrected_pvalues, dataframe
-                A matrix containing the uncorrected p-values for each group-to-group comparison.
-            "n_tests" = n_tests, int
-                The number of group-to-group comparisons performed.
-    """
-    index, group_indices, group_counts = np.unique(
-        labels, return_counts=True, return_inverse=True
-    )
-
-    if A1.shape != A2.shape:
-        raise ValueError("Matrices must be of equal size to use paired test")
-    K = len(index)
-
-    empty = np.empty((K, K), dtype=float)
-    uncorrected_pvalues = _make_adjacency_dataframe(empty.copy(), index)
-    stats = _make_adjacency_dataframe(empty.copy(), index)
-    empty = np.empty((K, K), dtype=int)
-    both = _make_adjacency_dataframe(empty.copy(), index)
-    neither = _make_adjacency_dataframe(empty.copy(), index)
-    only1 = _make_adjacency_dataframe(empty.copy(), index)
-    only2 = _make_adjacency_dataframe(empty.copy(), index)
-
-    for i, source_group in enumerate(index):
-        source_mask = group_indices == i
-        for j, target_group in enumerate(index):
-            target_mask = group_indices == j
-            A1_subgraph = A1[source_mask][:, target_mask]
-            A2_subgraph = A2[source_mask][:, target_mask]
-
-            if i == j:
-                rows, cols = offdiag_indices_from(A1_subgraph)
-
-                edges1 = A1_subgraph[rows, cols]
-                edges2 = A2_subgraph[rows, cols]
-            else:
-                r1, c1 = A1_subgraph.shape
-                r2, c2 = A2_subgraph.shape
-
-                edges1 = A1_subgraph.reshape((r1 * c1, 1))
-                edges2 = A2_subgraph.reshape((r2 * c2, 1))
-
-            curr_stat, curr_pvalue, curr_misc = binom_2samp_paired(edges1, edges2)
-
-            stats.loc[source_group, target_group] = curr_stat
-            uncorrected_pvalues.loc[source_group, target_group] = curr_pvalue
-            both.loc[source_group, target_group] = curr_misc["n_both"]
-            neither.loc[source_group, target_group] = curr_misc["n_neither"]
-            only1.loc[source_group, target_group] = curr_misc["n_only1"]
-            only2.loc[source_group, target_group] = curr_misc["n_only2"]
-
-    misc = {}
-    misc["both"] = both
-    misc["neither"] = neither
-    misc["only1"] = only1
-    misc["only2"] = only2
-    misc["uncorrected_pvalues"] = uncorrected_pvalues
-
-    run_pvalues = uncorrected_pvalues.values
-    run_pvalues = run_pvalues[~np.isnan(run_pvalues)]
-    stat, pvalue = combine_pvalues(run_pvalues, method="tippett")
-    n_tests = len(run_pvalues)
-    misc["n_tests"] = n_tests
+        stat, pvalue = scipy_combine_pvalues(run_pvalues, method=combine_method)
     return stat, pvalue, misc
