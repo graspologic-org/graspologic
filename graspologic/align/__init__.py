@@ -8,7 +8,7 @@ from .sign_flips import SignFlips
 
 __all__ = [
     "OrthogonalProcrustes",
+    "SeededProcrustes",
     "SeedlessProcrustes",
     "SignFlips",
-    "SeededProcrustes",
 ]
