@@ -2,15 +2,14 @@ import numpy as np
 from beartype import beartype
 from sklearn.utils import check_scalar
 
+from .base import BaseAlign
 from .orthogonal_procrustes import OrthogonalProcrustes
 from .seedless_procrustes import SeedlessProcrustes
-
-from .base import BaseAlign
 
 
 class SeededProcrustes(BaseAlign):
     """
-    Aligns two datasets when a partial matching of entries 
+    Aligns two datasets when a partial matching of entries
     between the two datasets is known.
 
     Attributes
@@ -36,14 +35,15 @@ class SeededProcrustes(BaseAlign):
 
     Notes
     -----
-    This method uses orthogonal procrustes on the data for which a 1-to-1 matching 
+    This method uses orthogonal procrustes on the data for which a 1-to-1 matching
     of elements is known, and then passes this as an initial guess to seedless procrustes.
-    
+
     See also
     ---------
-    For more on the implementation of Orthogonal Procrustes see :class:`~graspologic.align.OrthogonalProcrustes`  
+    For more on the implementation of Orthogonal Procrustes see :class:`~graspologic.align.OrthogonalProcrustes`
     For more on the implementation of Seedless Procrustes see :class:`~graspologic.align.SeedlessProcrustes`
     """
+
     @beartype
     def __init__(
         self,
@@ -55,14 +55,14 @@ class SeededProcrustes(BaseAlign):
         check_scalar(
             optimal_transport_lambda,
             name="optimal_transport_lambda",
-            target_type=(float,int),
+            target_type=(float, int),
             min_val=0,
         )
         self.optimal_transport_lambda = optimal_transport_lambda
         check_scalar(
             optimal_transport_eps,
             name="optimal_transport_eps",
-            target_type=(float,int),
+            target_type=(float, int),
             min_val=0,
         )
         self.optimal_transport_eps = optimal_transport_eps
@@ -119,9 +119,35 @@ class SeededProcrustes(BaseAlign):
             optimal_transport_num_reps=100,
             iterative_num_reps=10,
         )
-        procruster.fit(X, Y) 
+        procruster.fit(X, Y)
         self.Q_ = procruster.Q_
         return self
+
+    def fit_transform(
+        self, X: np.ndarray, Y: np.ndarray, seeds: np.ndarray
+    ) -> np.ndarray:
+        """
+        Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_`
+        that aligns the first dataset with the second. Then, transforms the first dataset ``X``
+        using the learned matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_`.
+
+        Parameters
+        ----------
+        X : np.ndarray, shape (n, d)
+            Dataset to be mapped to ``Y``, must have the same shape as ``Y``.
+
+        Y : np.ndarray, shape (m, d)
+            Target dataset, must have the same shape as ``X``.
+
+        Returns
+        -------
+        X_prime : np.ndarray, shape (n, d)
+            First dataset of vectors, aligned to second. Equal to
+            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
+        """
+        self.fit(X, Y, seeds)
+        return self.transform(X)
+
 
 def _find_Q_from_pairs(X: np.ndarray, Y: np.ndarray, seeds: np.ndarray) -> np.ndarray:
     """
@@ -144,33 +170,10 @@ def _find_Q_from_pairs(X: np.ndarray, Y: np.ndarray, seeds: np.ndarray) -> np.nd
     -------
     Q : An estimate of the orthogonal alignment learned from the seeded elements
     """
-    paired_inds1 = seeds[:, 0]  
-    paired_inds2 = seeds[:, 1]  
-    Xp = X[paired_inds1, :]  
-    Yp = Y[paired_inds2, :]  
-    op = OrthogonalProcrustes() 
-    op.fit(Xp, Yp) 
-    return op.Q_  
-
-def fit_transform(self, X: np.ndarray, Y: np.ndarray, seeds: np.ndarray) -> np.ndarray:
-    """
-    Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_`
-    that aligns the first dataset with the second. Then, transforms the first dataset ``X``
-    using the learned matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_`.
-
-    Parameters
-    ----------
-    X : np.ndarray, shape (n, d)
-        Dataset to be mapped to ``Y``, must have the same shape as ``Y``.
-
-    Y : np.ndarray, shape (m, d)
-        Target dataset, must have the same shape as ``X``.
-
-    Returns
-    -------
-    X_prime : np.ndarray, shape (n, d)
-        First dataset of vectors, aligned to second. Equal to
-        ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
-    """
-    self.fit(X, Y, seeds)
-    return self.transform(X)
+    paired_inds1 = seeds[:, 0]
+    paired_inds2 = seeds[:, 1]
+    Xp = X[paired_inds1, :]
+    Yp = Y[paired_inds2, :]
+    op = OrthogonalProcrustes()
+    op.fit(Xp, Yp)
+    return op.Q_
