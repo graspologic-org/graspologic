@@ -553,7 +553,6 @@ def _compute_coefficients(
 ) -> Tuple[float, float]:
     R = P - Q
     # TODO make these "smart" traces like in the scipy code, couldn't hurt
-    # though I don't know how much Numba cares
     # TODO can also refactor to not repeat multiplications like the old code but I was
     # finding it harder to follow that way.
     n_layers = len(A)
