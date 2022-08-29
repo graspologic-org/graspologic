@@ -243,11 +243,7 @@ class _GraphMatchSolver:
         # decide whether to use sparse
         self._compute_gradient = _compute_gradient
         self._compute_coefficients = _compute_coefficients
-        # TODO probably should base this on "ALL" instead of first one being sparse
-        if isinstance(A[0], csr_matrix):
-            self._sparse = True
-        else:
-            self._sparse = False
+        
 
     def solve(self, rng: RngType = None) -> None:
         rng = np.random.default_rng(rng)
