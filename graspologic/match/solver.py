@@ -240,11 +240,6 @@ class _GraphMatchSolver:
 
         self.S_ss, self.S_sn, self.S_ns, self.S_nn = _split_matrix(S, n_seeds)
 
-        # decide whether to use sparse
-        self._compute_gradient = _compute_gradient
-        self._compute_coefficients = _compute_coefficients
-        
-
     def solve(self, rng: RngType = None) -> None:
         rng = np.random.default_rng(rng)
 
@@ -322,7 +317,7 @@ class _GraphMatchSolver:
 
     @write_status("Computing gradient", 2)
     def compute_gradient(self, P: np.ndarray) -> np.ndarray:
-        gradient = self._compute_gradient(
+        gradient = _compute_gradient(
             P, self.A_nn, self.B_nn, self.AB_nn, self.BA_nn, self.constant_sum
         )
         return gradient
@@ -391,7 +386,7 @@ class _GraphMatchSolver:
 
     @write_status("Computing step size", 2)
     def compute_step_size(self, P: np.ndarray, Q: np.ndarray) -> float:
-        a, b = self._compute_coefficients(
+        a, b = _compute_coefficients(
             P,
             Q,
             self.A_nn,
