@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.plot.plot &mdash; graspologic 1.0.1dev2842527869 documentation</title>
+  <title>graspologic.plot.plot &mdash; graspologic 1.0.1dev2950838020 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2842527869
+                1.0.1dev2950838020
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -286,6 +286,7 @@
 <span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">select_svd</span>
+<span class="kn">from</span> <span class="nn">..pipeline.embed._elbow</span> <span class="kn">import</span> <span class="n">_index_of_elbow</span>
 <span class="kn">from</span> <span class="nn">..preconditions</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">check_argument</span><span class="p">,</span>
     <span class="n">check_argument_types</span><span class="p">,</span>
@@ -1676,6 +1677,7 @@
     <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
     <span class="n">cumulative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">show_first</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">show_elbow</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the distribution of singular values for a matrix, either showing the</span>
@@ -1698,11 +1700,22 @@
 <span class="sd">        Whether or not to plot a cumulative cdf of singular values</span>
 <span class="sd">    show_first : int or None, default: None</span>
 <span class="sd">        Whether to restrict the plot to the first ``show_first`` components</span>
+<span class="sd">    show_elbow : bool, or int, default: False</span>
+<span class="sd">        Whether to show an elbow (an optimal embedding dimension) estimated</span>
+<span class="sd">        via [1]. An integer is interpreted as a number of likelihood</span>
+<span class="sd">        elbows to return. Must be ``&gt; 1``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    ax : matplotlib axis object</span>
 <span class="sd">        Output plot</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Zhu, M. and Ghodsi, A. (2006).</span>
+<span class="sd">        Automatic dimensionality selection from the scree plot via the use of</span>
+<span class="sd">        profile likelihood. Computational Statistics &amp; Data Analysis, 51(2),</span>
+<span class="sd">        pp.918-930.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_common_inputs</span><span class="p">(</span>
         <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span>
@@ -1727,6 +1740,13 @@
     <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Variance explained&quot;</span>
     <span class="k">with</span> <span class="n">sns</span><span class="o">.</span><span class="n">plotting_context</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show_elbow</span><span class="p">:</span>
+            <span class="n">n_elbows</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">show_elbow</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">n_elbows</span> <span class="o">=</span> <span class="n">show_elbow</span>
+            <span class="n">elb_index</span> <span class="o">=</span> <span class="n">_index_of_elbow</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">n_elbows</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">elb_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">elb_index</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">elb_index</span><span class="p">],</span> <span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
