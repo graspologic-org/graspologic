@@ -129,7 +129,11 @@ def graph_match(
 
     maximize : bool, default=True
         Whether to maximize the objective function (graph matching problem) or minimize
-        it (quadratic assignment problem).
+        it (quadratic assignment problem). ``maximize=True`` corresponds to trying to 
+        find a permutation wherein the input matrices are as similar as possible - for
+        adjacency matrices, this corresponds to maximizing the overlap of the edges of 
+        the two networks. Conversely, ``maximize=False`` would attempt to make this
+        overlap as small as possible.
 
     padding : {"naive", "adopted"}, default="naive"
         Specification of a padding scheme if ``A`` and ``B`` are not of equal size. See
