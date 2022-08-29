@@ -72,7 +72,7 @@ class _GraphMatchSolver:
         partial_match: Optional[PartialMatchType] = None,
         init: Optional[np.ndarray] = None,
         init_perturbation: Scalar = 0.0,
-        verbose: Int = False,  # 0 is nothing, 1 is loops, 2 is loops + sub, 3, is loops + sub + timing
+        verbose: Int = False,
         shuffle_input: bool = True,
         padding: PaddingType = "naive",
         maximize: bool = True,
