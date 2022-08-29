@@ -23,6 +23,7 @@ from sklearn.utils import check_array, check_consistent_length, check_X_y
 from graspologic.types import Dict, List, Tuple
 
 from ..embed import select_svd
+from ..pipeline.embed._elbow import _index_of_elbow
 from ..preconditions import (
     check_argument,
     check_argument_types,
@@ -1413,6 +1414,7 @@ def screeplot(
     figsize: Tuple[int, int] = (10, 5),
     cumulative: bool = True,
     show_first: Optional[int] = None,
+    show_elbow: Optional[Union[bool, int]] = False,
 ) -> matplotlib.pyplot.Axes:
     r"""
     Plots the distribution of singular values for a matrix, either showing the
@@ -1435,11 +1437,22 @@ def screeplot(
         Whether or not to plot a cumulative cdf of singular values
     show_first : int or None, default: None
         Whether to restrict the plot to the first ``show_first`` components
+    show_elbow : bool, or int, default: False
+        Whether to show an elbow (an optimal embedding dimension) estimated
+        via [1]. An integer is interpreted as a number of likelihood
+        elbows to return. Must be ``> 1``.
 
     Returns
     -------
     ax : matplotlib axis object
         Output plot
+
+    References
+    ----------
+    .. [1] Zhu, M. and Ghodsi, A. (2006).
+        Automatic dimensionality selection from the scree plot via the use of
+        profile likelihood. Computational Statistics & Data Analysis, 51(2),
+        pp.918-930.
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -1464,6 +1477,13 @@ def screeplot(
     ylabel = "Variance explained"
     with sns.plotting_context(context=context, font_scale=font_scale):
         plt.plot(y)
+        if show_elbow:
+            n_elbows = 2
+            if isinstance(show_elbow, int):
+                n_elbows = show_elbow
+            elb_index = _index_of_elbow(D, n_elbows)
+            if elb_index < len(y):
+                plt.plot(elb_index, y[elb_index], "rx", markersize=20)
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
