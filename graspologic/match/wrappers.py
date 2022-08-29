@@ -11,7 +11,14 @@ from sklearn.utils import check_scalar
 from graspologic.match.solver import _GraphMatchSolver
 from graspologic.types import Dict, List, RngType
 
-from .types import AdjacencyMatrix, Int, MultilayerAdjacency, PaddingType, Scalar
+from .types import (
+    AdjacencyMatrix,
+    Int,
+    MultilayerAdjacency,
+    PaddingType,
+    PartialMatchType,
+    Scalar,
+)
 
 
 class MatchResult(NamedTuple):
@@ -46,7 +53,7 @@ def graph_match(
     AB: Optional[MultilayerAdjacency] = None,
     BA: Optional[MultilayerAdjacency] = None,
     S: Optional[AdjacencyMatrix] = None,
-    partial_match: Optional[np.ndarray] = None,
+    partial_match: Optional[PartialMatchType] = None,
     init: Optional[np.ndarray] = None,
     init_perturbation: Scalar = 0.0,
     n_init: Int = 1,
@@ -100,8 +107,8 @@ def graph_match(
         how strongly the similarity (linear) term is weighted relative to the adjacency
         (quadratic) terms.
 
-    partial_match : ndarray of shape (n_matches, 2), dtype=int, default=None
-        A matrix of indices specifying known matches to include in the optimization. The
+    partial_match : ndarray of shape (n_matches, 2), dtype=int, or tuple of two array-likes of shape (n_matches,), default=None
+        Indices specifying known matches to include in the optimization. The
         first column represents indices of the objects in ``A``, and the second column
         represents their corresponding matches in ``B``.
 
@@ -129,9 +136,9 @@ def graph_match(
 
     maximize : bool, default=True
         Whether to maximize the objective function (graph matching problem) or minimize
-        it (quadratic assignment problem). ``maximize=True`` corresponds to trying to 
+        it (quadratic assignment problem). ``maximize=True`` corresponds to trying to
         find a permutation wherein the input matrices are as similar as possible - for
-        adjacency matrices, this corresponds to maximizing the overlap of the edges of 
+        adjacency matrices, this corresponds to maximizing the overlap of the edges of
         the two networks. Conversely, ``maximize=False`` would attempt to make this
         overlap as small as possible.
 

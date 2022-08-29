@@ -126,6 +126,20 @@ class TestGraphMatch(unittest.TestCase):
         np.testing.assert_array_equal(indices_B, pi)
         self.assertTrue(11156, score)
 
+    def test_barycenter_SGM_seed_lists(self):
+        # minimize such that we achieve some number close to the optimum,
+        # though strictly greater than or equal
+        # results vary due to random shuffle within GraphMatch
+
+        n = A.shape[0]
+        pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
+        seeds1 = [4, 8, 10]
+        seeds2 = [pi[z] for z in seeds1]
+        _, _, score, _ = graph_match(
+            A, B, partial_match=(seeds1, seeds2), maximize=False
+        )
+        self.assertTrue(11156 <= score < 21000)
+
     def test_rand_SGM(self):
         _, _, score, _ = graph_match(
             A, B, n_init=50, maximize=False, init_perturbation=0.5, rng=888

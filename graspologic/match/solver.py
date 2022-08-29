@@ -4,7 +4,7 @@
 import time
 import warnings
 from functools import wraps
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 
 import numpy as np
 from beartype import beartype
@@ -20,6 +20,7 @@ from .types import (
     Int,
     MultilayerAdjacency,
     PaddingType,
+    PartialMatchType,
     Scalar,
     csr_array,
 )
@@ -68,7 +69,7 @@ class _GraphMatchSolver:
         AB: Optional[MultilayerAdjacency] = None,
         BA: Optional[MultilayerAdjacency] = None,
         S: Optional[AdjacencyMatrix] = None,
-        partial_match: Optional[np.ndarray] = None,
+        partial_match: Optional[PartialMatchType] = None,
         init: Optional[np.ndarray] = None,
         init_perturbation: Scalar = 0.0,
         verbose: Int = False,  # 0 is nothing, 1 is loops, 2 is loops + sub, 3, is loops + sub + timing
@@ -690,11 +691,15 @@ def _compare_dimensions(
 
 
 def _check_partial_match(
-    partial_match: Optional[np.ndarray], n1: int, n2: int
+    partial_match: Optional[Union[np.ndarray, Tuple]], n1: int, n2: int
 ) -> np.ndarray:
-    _partial_match = (
-        partial_match if partial_match is not None else np.array([[], []]).T
-    )
+
+    if partial_match is None:
+        _partial_match = np.array([[], []]).T
+    elif isinstance(partial_match, tuple):
+        _partial_match = np.column_stack(partial_match)
+    else:
+        _partial_match = partial_match
 
     _partial_match = np.atleast_2d(_partial_match).astype(int)
 

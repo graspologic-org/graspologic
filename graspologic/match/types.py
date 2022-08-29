@@ -15,7 +15,7 @@ else:
 
 from typing_extensions import Literal
 
-from graspologic.types import List
+from graspologic.types import List, Tuple
 
 # redefining since I don't want to add csr_array for ALL code in graspologic yet
 AdjacencyMatrix = Union[np.ndarray, csr_matrix, csr_array]
@@ -27,3 +27,5 @@ PaddingType = Literal["adopted", "naive"]
 Scalar = Union[int, float, np.integer]
 
 Int = Union[int, np.integer]
+
+PartialMatchType = Union[np.ndarray, Tuple]
