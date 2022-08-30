@@ -273,9 +273,7 @@ class _GraphMatchSolver:
     def initialize(self, rng: np.random.Generator) -> np.ndarray:
         # user custom initialization
         if isinstance(self.init, np.ndarray):
-            # TODO fix below
-            # P0 = np.atleast_2d(P0)
-            # _check_init_input(P0, n_unseed)
+            _check_init_input(self.init, self.n_unseed)
             J = self.init
         # else, just a flat, uninformative initializaiton, also called the barycenter
         # (of the set of doubly stochastic matrices)
@@ -699,7 +697,7 @@ def _check_partial_match(
     elif isinstance(partial_match, tuple):
         _partial_match = np.column_stack(partial_match)
     else:
-        _partial_match = partial_match
+        _partial_match = np.array(partial_match)
 
     _partial_match = np.atleast_2d(_partial_match).astype(int)
 
@@ -726,3 +724,23 @@ def _check_partial_match(
         raise ValueError(msg)
 
     return _partial_match
+
+
+def _check_init_input(init: np.ndarray, n: int) -> None:
+    if init.ndim != 2:
+        msg = "`init` matrix must be 2d"
+        raise ValueError(msg)
+    row_sum = np.sum(init, axis=0)
+    col_sum = np.sum(init, axis=1)
+    tol = 1e-3
+    msg = None
+    if init.shape != (n, n):
+        msg = "`init` matrix must be n x n, where n is the number of non-seeded nodes"
+    elif (
+        (~np.isclose(row_sum, 1, atol=tol)).any()
+        or (~np.isclose(col_sum, 1, atol=tol)).any()
+        or (init < 0).any()
+    ):
+        msg = "`init` matrix must be doubly stochastic"
+    if msg is not None:
+        raise ValueError(msg)

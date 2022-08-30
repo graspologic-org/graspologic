@@ -218,6 +218,17 @@ class TestGraphMatch(unittest.TestCase):
         # but we do indeed recover the correct permutation after a small number of
         # iterations
 
+    def test_wrong_custom_init(self):
+        n = len(A)
+
+        custom_init = np.full(n, 1 / n)
+        with self.assertRaises(ValueError):
+            _, indices_B, score, _ = graph_match(A, B, init=custom_init, maximize=False)
+
+        custom_init = np.full((n, n), 1)
+        with self.assertRaises(ValueError):
+            _, indices_B, score, _ = graph_match(A, B, init=custom_init, maximize=False)
+
     def test_custom_init_seeds(self):
         n = len(A)
         pi_original = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - 1
