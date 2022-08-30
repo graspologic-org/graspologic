@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Padded Graph Matching &mdash; graspologic 1.0.1dev2950838020 documentation</title>
+  <title>Padded Graph Matching &mdash; graspologic 2.0.0dev2958452356 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2950838020
+                2.0.0dev2958452356
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -544,33 +544,13 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">graspologic</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
-</pre></div></div>
-</div>
 <section id="Padded-Graph-Matching">
 <h1>Padded Graph Matching<a class="headerlink" href="#Padded-Graph-Matching" title="Permalink to this heading">¶</a></h1>
 <p>Consider the scenario where one would like to match graphs <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> with <span class="math notranslate nohighlight">\(n_1\)</span> and <span class="math notranslate nohighlight">\(n_2\)</span> nodes, respectively, where <span class="math notranslate nohighlight">\(n_1 &lt; n_2\)</span>. The most straightforward fashion to ‘pad’ <span class="math notranslate nohighlight">\(A\)</span>, such that <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> have the same shape, is to add <span class="math notranslate nohighlight">\(n_2 - n_1\)</span> isolated nodes to <span class="math notranslate nohighlight">\(A\)</span> (represented as empty row/columns in the adjacency matrix). This padding scheme is known as <span class="math notranslate nohighlight">\(\textit{naive padding}\)</span>, substituting
 <span class="math notranslate nohighlight">\(A \oplus 0_{(n_2-n_1)x(n_2-n_1)}\)</span> and <span class="math notranslate nohighlight">\(B\)</span> in place of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, respectively.</p>
 <p>The effect of this is that one matches <span class="math notranslate nohighlight">\(A\)</span> to the best subgraph of <span class="math notranslate nohighlight">\(B\)</span>. That is, the isolated vertices added to <span class="math notranslate nohighlight">\(A\)</span> through padding have an affinity to the low-density subgraphs of <span class="math notranslate nohighlight">\(B\)</span>, in effect giving the isolates a false signal.</p>
 <p>Instead, we may desire to match <span class="math notranslate nohighlight">\(A\)</span> to the best fitting induced subgraph of <span class="math notranslate nohighlight">\(B\)</span>. This padding scheme is known as <span class="math notranslate nohighlight">\(\textit{adopted padding}\)</span>, and is achieved by substituting <span class="math notranslate nohighlight">\(\tilde{A} \oplus 0_{(n_2-n_1)x(n_2-n_1)}\)</span> and <span class="math notranslate nohighlight">\(\tilde{B}\)</span> in place of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, respectively, where <span class="math notranslate nohighlight">\(\tilde{A} = 2A - 1_{n_1}1_{n_1}^T\)</span> and <span class="math notranslate nohighlight">\(\tilde{B} = 2B - 1_{n_2}1_{n_2}^T\)</span>.</p>
-<p>To demonstrate the difference between the two padding schemes, we sample two graph’s <span class="math notranslate nohighlight">\(G_1'\)</span> and <span class="math notranslate nohighlight">\(G_2\)</span>, each having 400 vertices, from a <span class="math notranslate nohighlight">\(0.5 \sim SBM(4,b,\Lambda)\)</span>, where b assigns 100 vertices to each of the k = 4 blocks, and</p>
+<p>To demonstrate the difference between the two padding schemes, we sample two graph’s <span class="math notranslate nohighlight">\(G_1\)</span> and <span class="math notranslate nohighlight">\(G_2'\)</span>, each having 400 vertices, from a <span class="math notranslate nohighlight">\(0.5 \sim SBM(4,b,\Lambda)\)</span>, where b assigns 100 vertices to each of the k = 4 blocks, and</p>
 <p><span class="math">\begin{align*}
 \Lambda &= \begin{bmatrix}
 0.9 & 0.4 & 0.3 & 0.2\\
@@ -579,92 +559,116 @@ div.rendered_html tbody tr:hover {
 0.2 & 0.3 & 0.4 & 0.7
 \end{bmatrix}\\
 \end{align*}</span></p>
-<p>We realize <span class="math notranslate nohighlight">\(G_1\)</span> from <span class="math notranslate nohighlight">\(G_1'\)</span> by removing 25 nodes from each block of <span class="math notranslate nohighlight">\(G_1'\)</span>, yielding a 300 node graph (example adapted from section 2.5 of [1]).</p>
-<p>The goal of the matching in this case is to recover <span class="math notranslate nohighlight">\(G_1\)</span> by matching the right most figure below and <span class="math notranslate nohighlight">\(G_2\)</span>. That is, we seek to recover the shared community structure common between two graphs of differing shapes.</p>
+<p>We create <span class="math notranslate nohighlight">\(G_2\)</span> from <span class="math notranslate nohighlight">\(G_2'\)</span> by removing 25 nodes from each block of <span class="math notranslate nohighlight">\(G_2'\)</span>, yielding a 300 node graph (example adapted from section 2.5 of [1]).</p>
+<p>The goal of the matching in this case is to recover <span class="math notranslate nohighlight">\(G_2\)</span> by matching the right most figure below and <span class="math notranslate nohighlight">\(G_1\)</span>. That is, we seek to recover the shared community structure common between two graphs of differing shapes.</p>
 <p>[1] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe, “Seeded graph matching”, Pattern Recognit. 87 (2019) 203–215</p>
 <section id="SBM-correlated-graph-pairs">
 <h2>SBM correlated graph pairs<a class="headerlink" href="#SBM-correlated-graph-pairs" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulating G1&#39;, G2, deleting 25 vertices</span>
-<span class="kn">from</span> <span class="nn">graspologic.match</span> <span class="kn">import</span> <span class="n">GraphMatch</span> <span class="k">as</span> <span class="n">GMP</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">graspologic.match</span> <span class="kn">import</span> <span class="n">graph_match</span>
 <span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">sbm_corr</span>
 <span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
+
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">directed</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">loops</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">block_probs</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span>
-                <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.3</span><span class="p">],</span>
-                <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">0.4</span><span class="p">],</span>
-                <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.7</span><span class="p">]]</span>
-<span class="n">n</span> <span class="o">=</span><span class="mi">100</span>
+<span class="n">block_probs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+<span class="p">]</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">n_blocks</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">rho</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="n">block_members</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_blocks</span> <span class="o">*</span> <span class="p">[</span><span class="n">n</span><span class="p">])</span>
 <span class="n">n_verts</span> <span class="o">=</span> <span class="n">block_members</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="n">G1p</span><span class="p">,</span> <span class="n">G2</span> <span class="o">=</span> <span class="n">sbm_corr</span><span class="p">(</span><span class="n">block_members</span><span class="p">,</span><span class="n">block_probs</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="p">)</span>
-<span class="n">G1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">300</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">G1p</span><span class="p">)</span>
+<span class="n">G1</span><span class="p">,</span> <span class="n">G2_full</span> <span class="o">=</span> <span class="n">sbm_corr</span><span class="p">(</span><span class="n">block_members</span><span class="p">,</span> <span class="n">block_probs</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="p">)</span>
 
-<span class="n">step1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="mi">75</span>
-<span class="n">step2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">75</span>
-<span class="n">step3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">step1</span><span class="p">)):</span>
-    <span class="n">block1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">step1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">step1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">25</span><span class="p">)</span>
-    <span class="n">c</span><span class="p">[</span><span class="n">block1</span><span class="p">,:]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="n">c</span><span class="p">[:,</span> <span class="n">block1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">step3</span><span class="p">)):</span>
-        <span class="n">G1</span><span class="p">[</span><span class="n">step2</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">step2</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">step2</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">step2</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">G1p</span><span class="p">[</span><span class="n">step3</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">step1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">step3</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">step1</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+<span class="n">keep_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">75</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">175</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">275</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">375</span><span class="p">))</span>
+<span class="p">)</span>
 
-<span class="n">topleft_G1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">400</span><span class="p">,</span><span class="mi">400</span><span class="p">))</span>
-<span class="n">topleft_G1</span><span class="p">[:</span><span class="mi">300</span><span class="p">,:</span><span class="mi">300</span><span class="p">]</span> <span class="o">=</span> <span class="n">G1</span>
+<span class="n">G2</span> <span class="o">=</span> <span class="n">G2_full</span><span class="p">[</span><span class="n">keep_indices</span><span class="p">][:,</span> <span class="n">keep_indices</span><span class="p">]</span>
+
+<span class="n">G2_deleted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">G2_deleted</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">keep_indices</span><span class="p">,</span> <span class="n">keep_indices</span><span class="p">)]</span> <span class="o">=</span> <span class="n">G2</span>
+
+<span class="n">topleft_G2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+<span class="n">topleft_G2</span><span class="p">[:</span><span class="mi">300</span><span class="p">,</span> <span class="p">:</span><span class="mi">300</span><span class="p">]</span> <span class="o">=</span> <span class="n">G2</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-<span class="n">heatmap</span><span class="p">(</span><span class="n">G1p</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G1&#39;&quot;</span><span class="p">)</span>
-<span class="n">heatmap</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G2&quot;</span><span class="p">)</span>
-<span class="n">heatmap</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G1&quot;</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">heatmap</span><span class="p">(</span><span class="n">topleft_G1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G1 (to top left corner)&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G1&#39;&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2_full</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G2 (before deletions)&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2_deleted</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G2 (after deletions)&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">heatmap</span><span class="p">(</span><span class="n">topleft_G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;G2 (to top left corner)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_matching_padded_gm_4_0.png" src="../../_images/tutorials_matching_padded_gm_4_0.png" />
+<img alt="../../_images/tutorials_matching_padded_gm_3_1.png" src="../../_images/tutorials_matching_padded_gm_3_1.png" />
 </div>
 </div>
 </section>
 <section id="Naive-vs-Adopted-Padding">
 <h2>Naive vs Adopted Padding<a class="headerlink" href="#Naive-vs-Adopted-Padding" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">seed2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">G2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">seed1</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="mi">75</span><span class="p">)</span> <span class="o">*</span> <span class="mi">25</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seed2</span><span class="p">]</span>
 
-<span class="n">gmp_naive</span> <span class="o">=</span> <span class="n">GMP</span><span class="p">(</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;naive&#39;</span><span class="p">)</span>
-<span class="n">seed1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span><span class="mi">8</span><span class="p">)</span>
-<span class="n">seed2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mi">75</span><span class="p">)</span><span class="o">*</span><span class="mi">25</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seed1</span><span class="p">]</span>
-<span class="n">gmp_naive</span> <span class="o">=</span> <span class="n">gmp_naive</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">G1</span><span class="p">,</span> <span class="n">seed2</span><span class="p">,</span> <span class="n">seed1</span><span class="p">)</span>
-<span class="n">G1_naive</span> <span class="o">=</span> <span class="n">topleft_G1</span><span class="p">[</span><span class="n">gmp_naive</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">][:,</span> <span class="n">gmp_naive</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">]</span>
+<span class="n">partial_match</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">seed1</span><span class="p">,</span> <span class="n">seed2</span><span class="p">))</span>
 
-<span class="n">gmp_adopted</span> <span class="o">=</span> <span class="n">GMP</span><span class="p">(</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;adopted&#39;</span><span class="p">)</span>
-<span class="n">gmp_adopted</span> <span class="o">=</span> <span class="n">gmp_adopted</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">G1</span><span class="p">,</span> <span class="n">seed2</span><span class="p">,</span> <span class="n">seed1</span><span class="p">)</span>
-<span class="n">G1_adopted</span> <span class="o">=</span> <span class="n">topleft_G1</span><span class="p">[</span><span class="n">gmp_adopted</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">][:,</span> <span class="n">gmp_adopted</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">]</span>
+<span class="n">naive_indices1</span><span class="p">,</span> <span class="n">naive_indices2</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">graph_match</span><span class="p">(</span>
+    <span class="n">G1</span><span class="p">,</span> <span class="n">G2</span><span class="p">,</span> <span class="n">partial_match</span><span class="o">=</span><span class="n">partial_match</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;naive&quot;</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">rng</span>
+<span class="p">)</span>
+<span class="n">G2_naive</span> <span class="o">=</span> <span class="n">G2</span><span class="p">[</span><span class="n">naive_indices2</span><span class="p">][:,</span> <span class="n">naive_indices2</span><span class="p">]</span>
+<span class="n">G2_naive_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">G2_naive_full</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">naive_indices1</span><span class="p">,</span> <span class="n">naive_indices1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">G2_naive</span>
+
+<span class="n">adopted_indices1</span><span class="p">,</span> <span class="n">adopted_indices2</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">graph_match</span><span class="p">(</span>
+    <span class="n">G1</span><span class="p">,</span> <span class="n">G2</span><span class="p">,</span> <span class="n">partial_match</span><span class="o">=</span><span class="n">partial_match</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;adopted&quot;</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">rng</span>
+<span class="p">)</span>
+<span class="n">G2_adopted</span> <span class="o">=</span> <span class="n">G2</span><span class="p">[</span><span class="n">adopted_indices2</span><span class="p">][:,</span> <span class="n">adopted_indices2</span><span class="p">]</span>
+<span class="n">G2_adopted_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">G2_adopted_full</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">adopted_indices1</span><span class="p">,</span> <span class="n">adopted_indices1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">G2_adopted</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">heatmap</span><span class="p">(</span><span class="n">G1_naive</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Naive Padding&quot;</span><span class="p">)</span>
-<span class="n">heatmap</span><span class="p">(</span><span class="n">G1_adopted</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Adopted Padding&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2_naive_full</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Naive Padding&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2_adopted_full</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Adopted Padding&quot;</span><span class="p">)</span>
 
-<span class="n">naive_matching</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">gmp_naive</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">100</span> <span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="mi">75</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_blocks</span><span class="p">)])</span>
-<span class="n">adopted_matching</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">gmp_adopted</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">100</span> <span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="mi">75</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_blocks</span><span class="p">)])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Match ratio of nodes remaining in G1, with naive padding: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">naive_matching</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">300</span><span class="p">))</span><span class="o">/</span><span class="mi">300</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Match ratio of nodes remaining in G1, with adopted padding: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">adopted_matching</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">300</span><span class="p">))</span><span class="o">/</span><span class="mi">300</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
+<span class="k">def</span> <span class="nf">compute_match_ratio</span><span class="p">(</span><span class="n">indices1</span><span class="p">,</span> <span class="n">indices2</span><span class="p">):</span>
+    <span class="n">match_ratio</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indices2</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">indices1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">keep_indices</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">indices2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">match_ratio</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">match_ratio</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Matching accuracy with naive padding: </span><span class="si">{</span><span class="n">compute_match_ratio</span><span class="p">(</span><span class="n">naive_indices1</span><span class="p">,</span> <span class="n">naive_indices2</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Matching accuracy with adopted padding: </span><span class="si">{</span><span class="n">compute_match_ratio</span><span class="p">(</span><span class="n">adopted_indices1</span><span class="p">,</span> <span class="n">adopted_indices2</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -672,18 +676,18 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Match ratio of nodes remaining in G1, with naive padding: 0.09666666666666666
-Match ratio of nodes remaining in G1, with adopted padding: 1.0
+Matching accuracy with naive padding: 0.01
+Matching accuracy with adopted padding: 1.00
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_matching_padded_gm_6_1.png" src="../../_images/tutorials_matching_padded_gm_6_1.png" />
+<img alt="../../_images/tutorials_matching_padded_gm_5_1.png" src="../../_images/tutorials_matching_padded_gm_5_1.png" />
 </div>
 </div>
-<p>We observe that the two padding schemes perform as expected. The naive scheme permutes <span class="math notranslate nohighlight">\(G_1\)</span> such that it matches a subgraph of <span class="math notranslate nohighlight">\(G_2\)</span>, specifically the subgraph of the first three blocks. Additionally, (almost) all isolated vertices of <span class="math notranslate nohighlight">\(G_1\)</span> are permuted to the fourth block of <span class="math notranslate nohighlight">\(G_2\)</span>.</p>
+<p>We observe that the two padding schemes perform as expected. The naive scheme permutes <span class="math notranslate nohighlight">\(G_2\)</span> such that it matches a subgraph of <span class="math notranslate nohighlight">\(G_1\)</span>, specifically the subgraph of the first three blocks. Additionally, (almost) all isolated vertices of <span class="math notranslate nohighlight">\(G_2\)</span> are permuted to the fourth block of <span class="math notranslate nohighlight">\(G_1\)</span>.</p>
 <p>On the other hand, we see that adopted padding preserves the common block structure between <span class="math notranslate nohighlight">\(G_1\)</span> and <span class="math notranslate nohighlight">\(G_2\)</span>.</p>
 </section>
 </section>

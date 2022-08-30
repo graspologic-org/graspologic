@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nomination &mdash; graspologic 1.0.1dev2950838020 documentation</title>
+  <title>Nomination &mdash; graspologic 2.0.0dev2958452356 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.1dev2950838020
+                2.0.0dev2958452356
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -578,7 +578,7 @@ possible to update each component of a nested object.</p>
 <dd><p>This class implements Vertex Nomination via Seeded Graph Matching (VNviaSGM) with
 the algorithm described in [1].</p>
 <p>Rather than providing a 1-1 matching for the vertices of two graphs, as in
-<a class="reference internal" href="match.html#graspologic.match.GraphMatch" title="graspologic.match.GraphMatch"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code></a>, VNviaSGM ranks the potential matches for a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code>, VNviaSGM ranks the potential matches for a
 vertex of interst (VOI) in one to graph to the vertices in another graph, based on
 probability of matching.</p>
 <dl class="field-list">
@@ -613,7 +613,7 @@ then all nominations computed will be returned.</p>
 <blockquote>
 <div><p>Gives users the option to pass custom arguments to the graph matching
 algorithm. Format should be {'arg_name': arg_value, ...}. See
-<a class="reference internal" href="match.html#graspologic.match.GraphMatch" title="graspologic.match.GraphMatch"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code></a></p>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code></p>
 </div></blockquote>
 </dd>
 <dt class="field-even">Attributes</dt>
@@ -637,7 +637,7 @@ is thrown and <code class="docutils literal notranslate"><span class="pre">nomin
 <p>All the seeds that are close enough are then used to generate subgraphs in both
 <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>. These subgraphs are matched using several random initializations
 of the seeded graph matching algorithm (SGM), and a nomination list is returned.
-See <a class="reference internal" href="match.html#graspologic.match.GraphMatch" title="graspologic.match.GraphMatch"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code></a> for SGM docs</p>
+See <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code> for SGM docs</p>
 <p class="rubric">References</p>
 <dl class="citation">
 <dt class="label" id="r9555ba47fdc0-1"><span class="brackets">1</span></dt>
