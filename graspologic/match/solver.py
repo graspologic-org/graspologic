@@ -692,6 +692,7 @@ def _check_partial_match(
     partial_match: Optional[Union[np.ndarray, Tuple]], n1: int, n2: int
 ) -> np.ndarray:
 
+    _partial_match: np.ndarray
     if partial_match is None:
         _partial_match = np.array([[], []]).T
     elif isinstance(partial_match, tuple):
