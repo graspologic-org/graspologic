@@ -733,7 +733,7 @@ def _check_init_input(init: np.ndarray, n: int) -> None:
     row_sum = np.sum(init, axis=0)
     col_sum = np.sum(init, axis=1)
     tol = 1e-3
-    msg = None
+    msg = ""
     if init.shape != (n, n):
         msg = "`init` matrix must be n x n, where n is the number of non-seeded nodes"
     elif (
@@ -742,5 +742,5 @@ def _check_init_input(init: np.ndarray, n: int) -> None:
         or (init < 0).any()
     ):
         msg = "`init` matrix must be doubly stochastic"
-    if msg is not None:
+    if msg != "":
         raise ValueError(msg)
