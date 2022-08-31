@@ -82,11 +82,9 @@ class SeededProcrustes(BaseAlign):
         self.iterative_num_reps = iterative_num_reps
         super().__init__()
 
+    @beartype
     def fit(
-        self,
-        X,
-        Y,
-        seeds,
+        self, X: np.ndarray, Y: np.ndarray, seeds: np.ndarray
     ) -> "SeededProcrustes":
         """
         Uses the two datasets to learn the matrix `self.Q_` that aligns the
@@ -115,14 +113,16 @@ class SeededProcrustes(BaseAlign):
         procruster = SeedlessProcrustes(
             init="custom",
             initial_Q=init_Q,
-            optimal_transport_eps=1.0,
-            optimal_transport_num_reps=100,
-            iterative_num_reps=10,
+            optimal_transport_lambda=self.optimal_transport_lambda,
+            optimal_transport_eps=self.optimal_transport_eps,
+            optimal_transport_num_reps=self.optimal_transport_num_reps,
+            iterative_num_reps=self.iterative_num_reps,
         )
         procruster.fit(X, Y)
         self.Q_ = procruster.Q_
         return self
 
+    @beartype
     def fit_transform(
         self, X: np.ndarray, Y: np.ndarray, seeds: np.ndarray
     ) -> np.ndarray:
