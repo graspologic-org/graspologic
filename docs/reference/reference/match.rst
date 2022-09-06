@@ -5,4 +5,4 @@ Matching
 
 Graph Matching
 --------------------
-.. autoclass:: GraphMatch
+.. autofunction:: graph_match
