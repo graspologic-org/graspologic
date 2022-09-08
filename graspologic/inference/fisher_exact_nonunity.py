@@ -1,5 +1,5 @@
-from scipy.stats import nchypergeom_fisher
 import numpy as np
+from scipy.stats import nchypergeom_fisher
 
 
 def fisher_exact_nonunity(table, alternative="two-sided", null_ratio=1):

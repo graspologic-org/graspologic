@@ -10,6 +10,6 @@ Two-graph hypothesis testing
 
 .. autofunction:: latent_distribution_test
 
-.. autofunction:: erdos_renyi_test
+.. autofunction:: density_test
     
 .. autofunction:: group_connection_test

@@ -1,21 +1,26 @@
 from collections import namedtuple
+from typing import Union
 
 import numpy as np
 import pandas as pd
-from graspologic.utils import remove_loops
+from beartype import beartype
+from scipy.stats import combine_pvalues as scipy_combine_pvalues
 from statsmodels.stats.multitest import multipletests
 
+from graspologic.utils import remove_loops
+
+from ..types import AdjacencyMatrix, GraphRepresentation
 from .binomial import binom_2samp
 from .utils import compute_density_adjustment
-from scipy.stats import combine_pvalues as scipy_combine_pvalues
-from beartype import beartype
+
+labelstype = Union[np.ndarray, list[int]]
 
 SBMResult = namedtuple(
     "sbm_result", ["probabilities", "observed", "possible", "group_counts"]
 )
 
 
-def fit_sbm(A, labels, loops=False):
+def fit_sbm(A: AdjacencyMatrix, labels: labelstype, loops: bool = False) -> namedtuple:
 
     """
     Fits a stochastic block model to data for a given network with known group identities. Required inputs are the adjacency matrix for the
@@ -112,7 +117,7 @@ def fit_sbm(A, labels, loops=False):
     return SBMResult(B_hat, n_observed, n_possible, counts_labels)
 
 
-def _make_adjacency_dataframe(data, index):
+def _make_adjacency_dataframe(data: GraphRepresentation, index: labelstype):
     """
     Helper function to convert data with a given index into a dataframe data structure.
     """
@@ -123,16 +128,16 @@ def _make_adjacency_dataframe(data, index):
 
 
 def group_connection_test(
-    A1,
-    A2,
-    labels1,
-    labels2,
-    density_adjustment=False,
-    method="fisher",
-    combine_method="tippett",
-    correct_method="bonferroni",
-    alpha=0.05,
-):
+    A1: GraphRepresentation,
+    A2: GraphRepresentation,
+    labels1: labelstype,
+    labels2: labelstype,
+    density_adjustment: bool = False,
+    method: str = "fisher",
+    combine_method: str = "tippett",
+    correct_method: str = "bonferroni",
+    alpha: float = 0.05,
+) -> tuple[float, float, dict]:
 
     """
     Compares two sets of group-to-group connection data for two networks, to assess whether the data are statistically different. To do this,
@@ -242,11 +247,15 @@ def group_connection_test(
     B1, n_observed1, n_possible1, group_counts1 = fit_sbm(A1, labels1)
     B2, n_observed2, n_possible2, group_counts2 = fit_sbm(A2, labels2)
 
-    # TODO fix this up
-    assert n_observed1.index.equals(n_observed2.index)
-    assert n_observed1.columns.equals(n_observed2.columns)
-    assert n_possible1.index.equals(n_possible2.index)
-    assert n_observed1.columns.equals(n_possible2.columns)
+    if not n_observed1.index.equals(n_observed2.index):
+        raise ValueError()
+    elif not n_observed1.columns.equals(n_observed2.columns):
+        raise ValueError()
+    elif not n_possible1.index.equals(n_possible2.index):
+        raise ValueError()
+    elif not n_observed1.columns.equals(n_observed2.columns):
+        raise ValueError()
+
     index = n_observed1.index.copy()
 
     if n_observed1.shape[0] != n_observed2.shape[0]:

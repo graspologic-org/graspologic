@@ -3,8 +3,8 @@ from scipy.sparse import csr_matrix
 from graspologic.inference.group_connection_test import (
     group_connection_test
 )
-from graspologic.inference.erdos_renyi_test import (
-    erdos_renyi_test
+from graspologic.inference.density_test import (
+    density_test
 )
 from graspologic.simulations import er_np, sbm
 
@@ -37,8 +37,8 @@ class TestER(unittest.TestCase):
         A1 = er_np(500, 0.6)
         A2 = er_np(400, 0.55)
         with self.assertRaises(ValueError):
-            erdos_renyi_test(A1, A2, method="hello")
-        stat, pvalue, er_misc = erdos_renyi_test(A1, A2)
+            density_test(A1, A2, method="hello")
+        stat, pvalue, er_misc = density_test(A1, A2)
         self.assertTrue(pvalue > 0.05)
         self.assertTrue(pvalue <= 0.05)
 

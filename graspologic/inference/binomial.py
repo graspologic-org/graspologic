@@ -1,8 +1,8 @@
 import numpy as np
-from scipy.stats import chi2_contingency, fisher_exact, boschloo_exact
+from scipy.sparse import csr_matrix
+from scipy.stats import boschloo_exact, chi2_contingency, fisher_exact
 from statsmodels.stats.contingency_tables import mcnemar
 from statsmodels.stats.proportion import test_proportions_2indep
-from scipy.sparse import csr_matrix
 
 from .fisher_exact_nonunity import fisher_exact_nonunity
 

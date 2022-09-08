@@ -1,9 +1,12 @@
 import numpy as np
 
+from ..types import GraphRepresentation
 from .group_connection_test import group_connection_test
 
 
-def _squeeze_value(old_misc, new_misc, old_key, new_key):
+def _squeeze_value(
+    old_misc: dict, new_misc: dict, old_key: list[str], new_key: list[str]
+):
 
     """
     Helper function to rename the keys for a dictionary variable. Takes the old and new dictionaries, and the old and new keys, as
@@ -14,13 +17,16 @@ def _squeeze_value(old_misc, new_misc, old_key, new_key):
     new_misc[new_key] = variable
 
 
-def erdos_renyi_test(A1, A2, method="fisher"):
+def density_test(
+    A1: GraphRepresentation, A2: GraphRepresentation, method: str = "fisher"
+) -> tuple[float, float, dict]:
 
     """
-    This function performs the Erdos-Renyi test to compare the adjacency matrices for two networks. Under the Erdos-Renyi model, it is
-    assumed that the probability of an edge existing between any two adjacent nodes is equal to some constant p. This function tests
-    whether the probability of an edge in network 1 is statistically different from that in network 2. In other words, it tests a null
-    hypothesis that p1, the edge probability for network 1, is equal to p2, the edge probability for network 2.
+    This function uses the Erdos-Renyi model to perform a density test to compare the adjacency matrices for two networks.
+    Under the Erdos-Renyi model, it is assumed that the probability of an edge existing between any two adjacent nodes is equal to some
+    constant p. This function tests whether the probability of an edge in network 1 is statistically different from that in network 2.
+    In other words, it tests a null hypothesis that p1, the edge probability for network 1, is equal to p2, the edge probability for
+    network 2.
 
     The Erdos-Renyi model is essentially a special case of stochastic block model where all nodes belong to the same group. Thus, to
     perform the required calculations, this function calls group_connection_test, but assigns all nodes to a single group. For further
