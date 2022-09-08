@@ -64,11 +64,19 @@ autosummary_generate = True
 # -- sphinx.ext.autodoc
 autoclass_content = "both"
 autodoc_default_options = {
+<<<<<<< HEAD
     "members": True,
     "inherited-members": True,
     "member-order": "bysource",
     "special-members": "__init__",
     "undoc-members": True,
+=======
+    'members': True,
+    'inherited-members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+>>>>>>> a23a5cb7dca485c36883b3c693de0bc75a0dab24
 }
 autodoc_class_signature = "separated"
 autodoc_typehints = "description"
