@@ -65,17 +65,23 @@ autosummary_generate = True
 autoclass_content = "both"
 autodoc_default_options = {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "members": True,
     "inherited-members": True,
     "member-order": "bysource",
     "special-members": "__init__",
     "undoc-members": True,
 =======
+=======
+>>>>>>> a23a5cb7dca485c36883b3c693de0bc75a0dab24
     'members': True,
     'inherited-members': True,
     'member-order': 'bysource',
     'special-members': '__init__',
     'undoc-members': True,
+<<<<<<< HEAD
+>>>>>>> a23a5cb7dca485c36883b3c693de0bc75a0dab24
+=======
 >>>>>>> a23a5cb7dca485c36883b3c693de0bc75a0dab24
 }
 autodoc_class_signature = "separated"
