@@ -13,17 +13,17 @@ from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix
 from sklearn.utils import check_scalar
 
-from graspologic.types import List, RngType, Tuple
-
-from .types import (
+from graspologic.types import (
     AdjacencyMatrix,
     Int,
-    MultilayerAdjacency,
-    PaddingType,
-    PartialMatchType,
+    List,
+    RngType,
     Scalar,
+    Tuple,
     csr_array,
 )
+
+from .types import MultilayerAdjacency, PaddingType, PartialMatchType
 
 
 def parameterized(dec: Callable) -> Callable:

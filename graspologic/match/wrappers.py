@@ -9,16 +9,9 @@ from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
 
 from graspologic.match.solver import _GraphMatchSolver
-from graspologic.types import Dict, List, RngType
+from graspologic.types import AdjacencyMatrix, Dict, Int, List, RngType, Scalar
 
-from .types import (
-    AdjacencyMatrix,
-    Int,
-    MultilayerAdjacency,
-    PaddingType,
-    PartialMatchType,
-    Scalar,
-)
+from .types import MultilayerAdjacency, PaddingType, PartialMatchType
 
 
 class MatchResult(NamedTuple):
