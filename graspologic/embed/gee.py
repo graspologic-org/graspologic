@@ -60,10 +60,10 @@ def _initialize_projection(features: np.ndarray) -> np.ndarray:
     return W
 
 
-class GraphEncoderEmbedding(BaseEstimator):
+class GraphEncoderEmbed(BaseEstimator):
     def __init__(self, laplacian: bool = False) -> None:
         """
-        Implements the Graph Encoder Embedding of [1]_, which transforms an input 
+        Implements the Graph Encoder Embedding of [1]_, which transforms an input
         network and a matrix of node features into a low-dimensional embedding space.
 
         Parameters
@@ -82,7 +82,7 @@ class GraphEncoderEmbedding(BaseEstimator):
 
     def fit(
         self, adjacency: AdjacencyMatrix, features: np.ndarray
-    ) -> "GraphEncoderEmbedding":
+    ) -> "GraphEncoderEmbed":
         """Fit the embedding model to the input data.
 
         Parameters

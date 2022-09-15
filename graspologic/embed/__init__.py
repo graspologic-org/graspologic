@@ -4,7 +4,7 @@
 from .ase import AdjacencySpectralEmbed
 from .base import BaseSpectralEmbed
 from .case import CovariateAssistedEmbed
-from .gee import GraphEncoderEmbedding
+from .gee import GraphEncoderEmbed
 from .lse import LaplacianSpectralEmbed
 from .mase import MultipleASE
 from .mds import ClassicalMDS
@@ -18,7 +18,9 @@ __all__ = [
     "BaseSpectralEmbed",
     "ClassicalMDS",
     "CovariateAssistedEmbed",
+    "GraphEncoderEmbed",
     "LaplacianSpectralEmbed",
+    "mug2vec",
     "MultipleASE",
     "node2vec_embed",
     "OmnibusEmbed",
