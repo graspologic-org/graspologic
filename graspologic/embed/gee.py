@@ -47,6 +47,15 @@ def _scale_weights(
     # TODO implement regularized laplacian
     degrees_out = np.sum(adjacency, axis=1)
     degrees_in = np.sum(adjacency, axis=0)
+
+    # regularized laplacian
+    degrees_out += degrees_out.mean()
+    degrees_in += degrees_in.mean()
+
+    # # may have some cases where these are 0, so set to 1 avoid dividing by 0
+    # # doesn't actually mater since these never get multiplied
+    # degrees_out[degrees_out == 0] = 1
+    # degrees_in[degrees_in == 0] = 1
     degrees_out_root = 1 / np.sqrt(degrees_out)
     degrees_in_root = 1 / np.sqrt(degrees_in)
 
@@ -98,6 +107,7 @@ class GraphEncoderEmbed(BaseEstimator):
         GraphEncoderEmbedding
             The fitted embedding model
         """
+
         sources, targets, weights = _get_edges(adjacency)
 
         if self.laplacian:
