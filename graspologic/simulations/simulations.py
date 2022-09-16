@@ -313,11 +313,11 @@ def er_nm(
     # choose M of them
     triu = np.random.choice(triu, size=m, replace=False)
     # unravel back
-    triu = np.unravel_index(triu, A.shape)
+    _triu = np.unravel_index(triu, A.shape)
     # check weight function
     if callable(wt):
         wt = wt(size=m, **wtargs)
-    A[triu] = wt
+    A[_triu] = wt
 
     if not directed:
         A = symmetrize(A, method="triu")
@@ -630,8 +630,8 @@ def sbm(
                 triu = triu[pchoice < block_p]
             if type(block_wt) is not int:
                 block_wt = block_wt(size=len(triu), **block_wtargs)
-            triu = np.unravel_index(triu, A.shape)
-            A[triu] = block_wt
+            _triu = np.unravel_index(triu, A.shape)
+            A[_triu] = block_wt
 
     if not loops:
         A = A - np.diag(np.diag(A))
@@ -983,8 +983,7 @@ def mmsbm(
     if not isinstance(rng, np.random.Generator):
         msg = "rng must be <class 'numpy.random.Generator'> not {}.".format(type(rng))
         raise TypeError(msg)
-    elif rng == None:
-        rng = np.random.default_rng()
+    _rng = rng if rng is not None else np.random.default_rng()
 
     if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
@@ -1000,14 +999,14 @@ def mmsbm(
     # Naming convention follows paper listed in references.
     mm_vectors = rng.dirichlet(alpha_checked, n)
 
-    mm_vectors = np.array(sorted(mm_vectors, key=lambda x: np.argmax(x)))
+    mm_vectors = np.array(sorted(mm_vectors, key=np.argmax))
 
     # labels:(n,n) matrix with all membership indicators for initiators and receivers
     # instead of storing the indicator vector, argmax is directly computed
     # check docstrings for more info.
     labels = np.apply_along_axis(
         lambda p_vector: np.argmax(
-            rng.multinomial(n=1, pvals=p_vector, size=n), axis=1
+            _rng.multinomial(n=1, pvals=p_vector, size=n), axis=1
         ),
         axis=1,
         arr=mm_vectors,

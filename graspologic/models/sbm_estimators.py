@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Collection, Optional
+from typing import Any, Optional
 
 import numpy as np
 from sklearn.utils import check_X_y
@@ -73,7 +73,7 @@ class SBMEstimator(BaseGraphEstimator):
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is input,
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are
         directed.
@@ -209,7 +209,9 @@ class SBMEstimator(BaseGraphEstimator):
 
         if not self.loops:
             graph = remove_loops(graph)
-        block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
+        block_p = _calculate_block_p(
+            graph, block_inds, block_vert_inds, loops=self.loops
+        )
 
         if not self.directed:
             block_p = symmetrize(block_p)
@@ -266,7 +268,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     Parameters
     ----------
     directed : boolean, optional (default=True)
-        Whether to treat the input graph as directed. Even if a directed graph is inupt,
+        Whether to treat the input graph as directed. Even if a directed graph is input,
         this determines whether to force symmetry upon the block probability matrix fit
         for the SBM. It will also determine whether graphs sampled from the model are
         directed.
@@ -409,7 +411,9 @@ class DCSBMEstimator(BaseGraphEstimator):
 
         if not self.loops:
             graph = graph - np.diag(np.diag(graph))
-        block_p = _calculate_block_p(graph, block_inds, block_vert_inds)
+        block_p = _calculate_block_p(
+            graph, block_inds, block_vert_inds, loops=self.loops
+        )
 
         out_degree = np.count_nonzero(graph, axis=1).astype(float)
         in_degree = np.count_nonzero(graph, axis=0).astype(float)
@@ -436,7 +440,8 @@ class DCSBMEstimator(BaseGraphEstimator):
         p_mat = p_mat * np.outer(degree_corrections[:, 0], degree_corrections[:, -1])
 
         if not self.loops:
-            p_mat -= np.diag(np.diag(p_mat))
+            # there seems to be a bug in numpy around __isub__ here?
+            p_mat -= np.diag(np.diag(p_mat))  # type: ignore
         self.p_mat_ = p_mat
         self.block_p_ = block_p
         return self
@@ -454,7 +459,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         return n_parameters
 
 
-def _get_block_indices(y: np.ndarray) -> Tuple[List[int], Collection[int], np.ndarray]:
+def _get_block_indices(y: np.ndarray) -> Tuple[List[np.ndarray], range, np.ndarray]:
     """
     y is a length n_verts vector of labels
 
@@ -481,15 +486,17 @@ def _get_block_indices(y: np.ndarray) -> Tuple[List[int], Collection[int], np.nd
 
 def _calculate_block_p(
     graph: np.ndarray,
-    block_inds: Collection[int],
-    block_vert_inds: List[int],
+    block_inds: range,
+    block_vert_inds: List[np.ndarray],
     return_counts: bool = False,
+    loops: bool = False,
 ) -> np.ndarray:
     """
     graph : input n x n graph
     block_inds : list of length n_communities
     block_vert_inds : list of list, for each block index, gives every node in that block
     return_counts : whether to calculate counts rather than proportions
+    loops : whether self loops are possible in the graph
     """
 
     n_blocks = len(block_inds)
@@ -502,6 +509,10 @@ def _calculate_block_p(
         from_inds = block_vert_inds[from_block]
         to_inds = block_vert_inds[to_block]
         block = graph[from_inds, :][:, to_inds]
+        # if a block is from a community to itself, self loops are possible, so remove
+        # them from the computation to avoid underbias
+        if from_block == to_block and not loops:
+            block = block[~np.eye(block.shape[0], dtype=bool)]
         if return_counts:
             p = np.count_nonzero(block)
         else:

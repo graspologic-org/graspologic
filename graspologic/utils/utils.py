@@ -208,7 +208,8 @@ def is_symmetric(X: np.ndarray) -> bool:
 
 
 def is_loopless(X: np.ndarray) -> bool:
-    return not np.any(np.diag(X) != 0)
+    diag_indices = np.diag_indices_from(X)
+    return not np.any(X[diag_indices] != 0)
 
 
 def is_unweighted(
@@ -377,9 +378,8 @@ def to_laplacian(
     r"""
     A function to convert graph adjacency matrix to graph Laplacian.
 
-    Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal
-    matrix of degrees of each node raised to the -1/2 power, I is the
-    identity matrix, and A is the adjacency matrix.
+    Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal matrix
+    of degrees of each node, I is the identity matrix, and A is the adjacency matrix.
 
     R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer \times I`.
 
@@ -392,12 +392,12 @@ def to_laplacian(
     form: {'I-DAD', 'DAD' (default), 'R-DAD'}, string, optional
 
         - 'I-DAD'
-            Computes :math:`L = I - D_i A D_i`
+            Computes :math:`L = I - D_i^{-1/2} A D_i^{-1/2}`
         - 'DAD'
-            Computes :math:`L = D_o A D_i`
+            Computes :math:`L = D_o^{-1/2} A D_i^{-1/2}`
         - 'R-DAD'
-            Computes :math:`L = D_o^r A D_i^r`
-            where :math:`D_o^r = D_o + regularizer \times I` and likewise for :math:`D_i`
+            Computes :math:`L = D_o(r)^{-1/2} A D_i(r)^{-1/2}`
+            where :math:`D_o(r)^{-1/2} = D_o^{-1/2} + regularizer \times I` and likewise for :math:`D_i(r)^{-1/2}`
 
     regularizer: int, float or None, optional (default=None)
         Constant to add to the degree vector(s). If None, average node degree is added.

@@ -240,7 +240,7 @@ def _difference_norm(
             X2 = X2 / np.sqrt(normX2[:, None])
         aligner = OrthogonalProcrustes()
         X1 = aligner.fit_transform(X1, X2)
-    return np.linalg.norm(X1 - X2)
+    return float(np.linalg.norm(X1 - X2))
 
 
 def _embed(

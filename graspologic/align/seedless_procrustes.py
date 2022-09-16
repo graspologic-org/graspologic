@@ -319,12 +319,11 @@ class SeedlessProcrustes(BaseAlign):
         Y: np.ndarray,
         Q: Optional[np.ndarray] = None,
         P: Optional[np.ndarray] = None,
-    ) -> Union[float, np.ndarray]:
-        if Q is None:
-            Q = self.Q_
-        if P is None:
-            P = self.P_
-        return np.linalg.norm(X @ Q - P @ Y, ord="fro")
+    ) -> np.floating:
+        _Q = Q if Q is not None else self.Q_
+        _P = P if P is not None else self.P_
+
+        return np.linalg.norm(X @ _Q - _P @ Y, ord="fro")
 
     def fit(self, X: np.ndarray, Y: np.ndarray) -> "SeedlessProcrustes":
         """
