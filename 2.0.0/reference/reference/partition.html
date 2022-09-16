@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partition &mdash; graspologic 2.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Preconditions" href="preconditions.html" />
+    <link rel="prev" title="Nomination" href="nominate.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> graspologic
+          </a>
+              <div class="version">
+                2.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="index.html">Reference</a> &raquo;</li>
+      <li>Partition</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/reference/reference/partition.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="partition">
+<h1>Partition<a class="headerlink" href="#partition" title="Permalink to this heading">¶</a></h1>
+<section id="modularity-and-component-modularity">
+<h2>Modularity and Component Modularity<a class="headerlink" href="#modularity-and-component-modularity" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.partition.modularity">
+<span class="sig-prename descclassname"><span class="pre">graspologic.partition.</span></span><span class="sig-name descname"><span class="pre">modularity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partitions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/modularity.html#modularity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.modularity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an undirected graph and a dictionary of vertices to community ids, calculate
+the modularity.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>graph</strong> : nx.Graph</p>
+<blockquote>
+<div><p>An undirected graph</p>
+</div></blockquote>
+<p><strong>partitions</strong> : Dict[Any, int]</p>
+<blockquote>
+<div><p>A dictionary representing a community partitioning scheme with the keys being
+the vertex and the value being a community id.</p>
+</div></blockquote>
+<p><strong>weight_attribute</strong> : str</p>
+<blockquote>
+<div><p>The edge data attribute on the graph that contains a float weight for the edge.</p>
+</div></blockquote>
+<p><strong>resolution</strong> : float</p>
+<blockquote>
+<div><p>The resolution to use when calculating the modularity.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>float</p>
+<blockquote>
+<div><p>The sum of the modularity of each of the communities.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p>TypeError</p>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is not a networkx Graph or
+If <code class="docutils literal notranslate"><span class="pre">partitions</span></code> is not a dictionary or
+If <code class="docutils literal notranslate"><span class="pre">resolution</span></code> is not a float</p>
+</div></blockquote>
+<p>ValueError</p>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is unweighted
+If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is directed
+If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is a multigraph</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>partitions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r6dbcf07920a4-1"><span class="brackets">1</span></dt>
+<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Modularity_(networks">https://en.wikipedia.org/wiki/Modularity_(networks</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.partition.modularity_components">
+<span class="sig-prename descclassname"><span class="pre">graspologic.partition.</span></span><span class="sig-name descname"><span class="pre">modularity_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partitions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/modularity.html#modularity_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.modularity_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an undirected, weighted graph and a community partition dictionary,
+calculates a modularity quantum for each community ID. The sum of these quanta
+is the modularity of the graph and partitions provided.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>graph</strong> : nx.Graph</p>
+<blockquote>
+<div><p>An undirected graph</p>
+</div></blockquote>
+<p><strong>partitions</strong> : Dict[Any, int]</p>
+<blockquote>
+<div><p>A dictionary representing a community partitioning scheme with the keys being
+the vertex and the value being a community id.</p>
+</div></blockquote>
+<p><strong>weight_attribute</strong> : str</p>
+<blockquote>
+<div><p>The edge data attribute on the graph that contains a float weight for the edge.</p>
+</div></blockquote>
+<p><strong>resolution</strong> : float</p>
+<blockquote>
+<div><p>The resolution to use when calculating the modularity.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dict[int, float]</p>
+<blockquote>
+<div><p>A dictionary of the community id to the modularity component of that community</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p>TypeError</p>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is not a networkx Graph or
+If <code class="docutils literal notranslate"><span class="pre">partitions</span></code> is not a dictionary or
+If <code class="docutils literal notranslate"><span class="pre">resolution</span></code> is not a float</p>
+</div></blockquote>
+<p>ValueError</p>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is unweighted
+If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is directed
+If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is a multigraph</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>partitions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="leiden-and-hierarchical-leiden">
+<h2>Leiden and Hierarchical Leiden<a class="headerlink" href="#leiden-and-hierarchical-leiden" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.partition.leiden">
+<span class="sig-prename descclassname"><span class="pre">graspologic.partition.</span></span><span class="sig-name descname"><span class="pre">leiden</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starting_communities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_forced_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randomness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_modularity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_weighted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#leiden"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.leiden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leiden is a global network partitioning algorithm. Given a graph, it will iterate
+through the network node by node, and test for an improvement in our quality
+maximization function by speculatively joining partitions of each neighboring node.</p>
+<p>This process continues until no moves are made that increases the partitioning
+quality.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>graph</strong> : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</p>
+<blockquote>
+<div><p>A graph representation, whether a weighted edge list referencing an undirected
+graph, an undirected networkx graph, or an undirected adjacency matrix in either
+numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
+regarding node ids used.</p>
+</div></blockquote>
+<p><strong>starting_communities</strong> : Optional[Dict[Any, int]]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. An optional community mapping dictionary that contains a node
+id mapping to the community it belongs to. Please see the Notes section regarding
+node ids used.</p>
+<p>If no community map is provided, the default behavior is to create a node
+community identity map, where every node is in their own community.</p>
+</div></blockquote>
+<p><strong>extra_forced_iterations</strong> : int</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>. Leiden will run until a maximum quality score has been found
+for the node clustering and no nodes are moved to a new cluster in another
+iteration. As there is an element of randomness to the Leiden algorithm, it is
+sometimes useful to set <code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> to a number larger than 0
+where the process is forced to attempt further refinement.</p>
+</div></blockquote>
+<p><strong>resolution</strong> : Union[int, float]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. Higher resolution values lead to more communities and lower
+resolution values leads to fewer communities. Must be greater than 0.</p>
+</div></blockquote>
+<p><strong>randomness</strong> : Union[int, float]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0.001</span></code>. The larger the randomness value, the more exploration of
+the partition space is possible. This is a major difference from the Louvain
+algorithm, which is purely greedy in the partition exploration.</p>
+</div></blockquote>
+<p><strong>use_modularity</strong> : bool</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will use a Constant Potts Model (CPM).</p>
+</div></blockquote>
+<p><strong>random_seed</strong> : Optional[int]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can provide an optional seed to the PRNG used in Leiden for
+deterministic output.</p>
+</div></blockquote>
+<p><strong>weight_attribute</strong> : str</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>. Only used when creating a weighed edge list of tuples
+when the source graph is a networkx graph. This attribute corresponds to the
+edge data dict key.</p>
+</div></blockquote>
+<p><strong>is_weighted</strong> : Optional[bool]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Only used when creating a weighted edge list of tuples
+when the source graph is an adjacency matrix. The
+<code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.utils.is_unweighted()</span></code> function will scan these
+matrices and attempt to determine whether it is weighted or not. This flag can
+short circuit this test and the values in the adjacency matrix will be treated
+as weights.</p>
+</div></blockquote>
+<p><strong>weight_default</strong> : Union[int, float]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. If the graph is a networkx graph and the graph does not have
+a fully weighted sequence of edges, this default will be used. If the adjacency
+matrix is found or specified to be unweighted, this weight_default will be used
+for every edge.</p>
+</div></blockquote>
+<p><strong>check_directed</strong> : bool</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If the graph is an adjacency matrix, we will attempt to
+ascertain whether it is directed or undirected. As our leiden implementation is
+only known to work with an undirected graph, this function will raise an error
+if it is found to be a directed graph. If you know it is undirected and wish to
+avoid this scan, you can set this value to <code class="docutils literal notranslate"><span class="pre">False</span></code> and only the lower triangle
+of the adjacency matrix will be used to generate the weighted edge list.</p>
+</div></blockquote>
+<p><strong>trials</strong> : int</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1</span></code>. Runs leiden <code class="docutils literal notranslate"><span class="pre">trials</span></code> times, keeping the best partitioning
+as judged by the quality maximization function (default: modularity, see
+<code class="docutils literal notranslate"><span class="pre">use_modularity</span></code> parameter for details). This differs from
+<code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> by starting over from scratch each for each trial,
+while <code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> attempts to make microscopic adjustments from
+the &quot;final&quot; state.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dict[Any, int]</p>
+<blockquote>
+<div><p>The results of running leiden over the provided graph, a dictionary containing
+mappings of node -&gt; community id. Isolate nodes in the input graph are not returned
+in the result.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd></dd>
+<dt>TypeError</dt><dd></dd>
+<dt>BeartypeCallHintParamViolation</dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>starting_communities</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>extra_forced_iterations</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>randomness</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>use_modularity</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>random_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>is_weighted</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>]</em>) -- </p></li>
+<li><p><strong>weight_default</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>check_directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>trials</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>]</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.utils.is_unweighted</span></code></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>No two different nodes are allowed to encode to the <strong>same</strong> str representation,
+e.g. node_a id of <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> and node_b id of <code class="docutils literal notranslate"><span class="pre">1</span></code> are different object types
+but str(node_a) == str(node_b). This collision will result in a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>This function is implemented in the <cite>graspologic-native</cite> Python module, a module
+written in Rust for Python.</p>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r219aaf71962c-1"><span class="brackets">1</span></dt>
+<dd><p>Traag, V.A.; Waltman, L.; Van, Eck N.J. &quot;From Louvain to Leiden:
+guaranteeing well-connected communities&quot;, Scientific Reports, Vol. 9, 2019</p>
+</dd>
+<dt class="label" id="r219aaf71962c-2"><span class="brackets">2</span></dt>
+<dd><p><a class="reference external" href="https://github.com/microsoft/graspologic-native">https://github.com/microsoft/graspologic-native</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.partition.</span></span><span class="sig-name descname"><span class="pre">HierarchicalCluster</span></span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#HierarchicalCluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.HierarchicalCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new instance of HierarchicalCluster(node, cluster, parent_cluster, level, is_final_cluster)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.node">
+<span class="sig-name descname"><span class="pre">node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a></em><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node id</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.cluster">
+<span class="sig-name descname"><span class="pre">cluster</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></em><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leiden cluster id</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.parent_cluster">
+<span class="sig-name descname"><span class="pre">parent_cluster</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.parent_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only used when level != 0, but will indicate the previous cluster id that this node was in</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.level">
+<span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></em><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each time a community has a higher population than we would like, we create a subnetwork 
+of that community and process it again to break it into smaller chunks. Each time we 
+detect this, the level increases by 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.is_final_cluster">
+<span class="sig-name descname"><span class="pre">is_final_cluster</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.is_final_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether this is the terminal cluster in the hierarchical leiden process or not</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_cluster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_final_cluster</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.__new__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new instance of HierarchicalCluster(node, cluster, parent_cluster, level, is_final_cluster)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
+<li><p><strong>cluster</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>parent_cluster</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>is_final_cluster</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of occurrences of value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalCluster.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">sys.maxsize</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalCluster.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return first index of value.</p>
+<p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.partition.</span></span><span class="sig-name descname"><span class="pre">HierarchicalClusters</span></span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#HierarchicalClusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.HierarchicalClusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>HierarchicalClusters is a subclass of Python's <a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> class with two
+helper methods for retrieving dictionary views of the first and final
+level of hierarchical clustering in dictionary form.  The rest of the
+HierarchicalCluster entries in this list can be seen as a transition
+state log of our <a class="reference internal" href="#graspologic.partition.hierarchical_leiden" title="graspologic.partition.hierarchical_leiden"><code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.partition.hierarchical_leiden()</span></code></a> process
+as it continuously tries to break down communities over a certain size,
+with the two helper methods on this list providing you the starting point
+community map and ending point community map.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.__new__">
+<span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.__new__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append object to the end of the list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all items from list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a shallow copy of the list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of occurrences of value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend list by appending elements from the iterable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">sys.maxsize</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return first index of value.</p>
+<p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert object before index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove and return item at index (default last).</p>
+<p>Raises IndexError if list is empty or index is out of range.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove first occurrence of value.</p>
+<p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.reverse">
+<span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse <em>IN PLACE</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.sort">
+<span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort the list in ascending order and return None.</p>
+<p>The sort is in-place (i.e. the list itself is modified) and stable (i.e. the
+order of two equal elements is maintained).</p>
+<p>If a key function is given, apply it once to each list item and sort them,
+ascending or descending, according to their function values.</p>
+<p>The reverse flag can be set to sort in descending order.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.first_level_hierarchical_clustering">
+<span class="sig-name descname"><span class="pre">first_level_hierarchical_clustering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#HierarchicalClusters.first_level_hierarchical_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.first_level_hierarchical_clustering" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict[Any, int]</p>
+<blockquote>
+<div><p>The initial leiden algorithm clustering results as a dictionary
+of node id to community id.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.final_level_hierarchical_clustering">
+<span class="sig-name descname"><span class="pre">final_level_hierarchical_clustering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#HierarchicalClusters.final_level_hierarchical_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.final_level_hierarchical_clustering" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict[Any, int]</p>
+<blockquote>
+<div><p>The last leiden algorithm clustering results as a dictionary
+of node id to community id.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.partition.hierarchical_leiden">
+<span class="sig-prename descclassname"><span class="pre">graspologic.partition.</span></span><span class="sig-name descname"><span class="pre">hierarchical_leiden</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starting_communities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_forced_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randomness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_modularity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_weighted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#hierarchical_leiden"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.hierarchical_leiden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leiden is a global network partitioning algorithm. Given a graph, it will iterate
+through the network node by node, and test for an improvement in our quality
+maximization function by speculatively joining partitions of each neighboring node.</p>
+<p>This process continues until no moves are made that increases the partitioning
+quality.</p>
+<p>Unlike the function <a class="reference internal" href="#graspologic.partition.leiden" title="graspologic.partition.leiden"><code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.partition.leiden()</span></code></a>, this function does not
+stop after maximization has been achieved. On some large graphs, it's useful to
+identify particularly large communities whose membership counts exceed
+<code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> and induce a subnetwork solely out of that community. This
+subnetwork is then treated as a wholly separate entity, leiden is run over it, and
+the new, smaller communities are then mapped into the original community map space.</p>
+<p>The results also differ substantially; the returned List[HierarchicalCluster] is
+more of a log of state at each level. All HierarchicalClusters at level 0 should be
+considered to be the results of running <a class="reference internal" href="#graspologic.partition.leiden" title="graspologic.partition.leiden"><code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.partition.leiden()</span></code></a>. Every
+community whose membership is greater than <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> will then
+also have entries where level == 1, and so on until no communities are greater in
+population than <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> OR we are unable to break them down any
+further.</p>
+<p>Once a node's membership registration in a community cannot be changed any further,
+it is marked with the flag
+<code class="docutils literal notranslate"><span class="pre">graspologic.partition.HierarchicalCluster.is_final_cluster</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>graph</strong> : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</p>
+<blockquote>
+<div><p>A graph representation, whether a weighted edge list referencing an undirected
+graph, an undirected networkx graph, or an undirected adjacency matrix in either
+numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
+regarding node ids used.</p>
+</div></blockquote>
+<p><strong>max_cluster_size</strong> : int</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>. Any partition or cluster with
+membership &gt;= <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> will be isolated into a subnetwork. This
+subnetwork will be used for a new leiden global partition mapping, which will
+then be remapped back into the global space after completion. Once all
+clusters with membership &gt;= <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> have been completed, the level
+increases and the partition scheme is scanned again for any new clusters with
+membership &gt;= <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> and the process continues until every
+cluster's membership is &lt; <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> or if they cannot be broken into
+more than one new community.</p>
+</div></blockquote>
+<p><strong>starting_communities</strong> : Optional[Dict[Any, int]]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. An optional community mapping dictionary that contains a node
+id mapping to the community it belongs to. Please see the Notes section regarding
+node ids used.</p>
+<p>If no community map is provided, the default behavior is to create a node
+community identity map, where every node is in their own community.</p>
+</div></blockquote>
+<p><strong>extra_forced_iterations</strong> : int</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>. Leiden will run until a maximum quality score has been found
+for the node clustering and no nodes are moved to a new cluster in another
+iteration. As there is an element of randomness to the Leiden algorithm, it is
+sometimes useful to set <code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> to a number larger than 0
+where the entire process is forced to attempt further refinement.</p>
+</div></blockquote>
+<p><strong>resolution</strong> : Union[int, float]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. Higher resolution values lead to more communities and lower
+resolution values leads to fewer communities. Must be greater than 0.</p>
+</div></blockquote>
+<p><strong>randomness</strong> : Union[int, float]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0.001</span></code>. The larger the randomness value, the more exploration of
+the partition space is possible. This is a major difference from the Louvain
+algorithm, which is purely greedy in the partition exploration.</p>
+</div></blockquote>
+<p><strong>use_modularity</strong> : bool</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will use a Constant Potts Model (CPM).</p>
+</div></blockquote>
+<p><strong>random_seed</strong> : Optional[int]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can provide an optional seed to the PRNG used in Leiden
+for deterministic output.</p>
+</div></blockquote>
+<p><strong>weight_attribute</strong> : str</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>. Only used when creating a weighed edge list of tuples
+when the source graph is a networkx graph. This attribute corresponds to the
+edge data dict key.</p>
+</div></blockquote>
+<p><strong>is_weighted</strong> : Optional[bool]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Only used when creating a weighted edge list of tuples
+when the source graph is an adjacency matrix. The
+<code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.utils.is_unweighted()</span></code> function will scan these
+matrices and attempt to determine whether it is weighted or not. This flag can
+short circuit this test and the values in the adjacency matrix will be treated
+as weights.</p>
+</div></blockquote>
+<p><strong>weight_default</strong> : Union[int, float]</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. If the graph is a networkx graph and the graph does not
+have a fully weighted sequence of edges, this default will be used. If the
+adjacency matrix is found or specified to be unweighted, this weight_default
+will be used for every edge.</p>
+</div></blockquote>
+<p><strong>check_directed</strong> : bool</p>
+<blockquote>
+<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If the graph is an adjacency matrix, we will attempt to
+ascertain whether it is directed or undirected. As our leiden implementation is
+only known to work with an undirected graph, this function will raise an error
+if it is found to be a directed graph. If you know it is undirected and wish to
+avoid this scan, you can set this value to <code class="docutils literal notranslate"><span class="pre">False</span></code> and only the lower triangle
+of the adjacency matrix will be used to generate the weighted edge list.</p>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HierarchicalClusters</p>
+<blockquote>
+<div><p>The results of running hierarchical leiden over the provided graph, a list of
+HierarchicalClusters identifying the state of every node and cluster at each
+level. Isolate nodes in the input graph are not returned in the result.</p>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd></dd>
+<dt>TypeError</dt><dd></dd>
+<dt>BeartypeCallHintParamViolation</dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em><em>]</em><em>]</em><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>max_cluster_size</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>starting_communities</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>extra_forced_iterations</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>randomness</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>use_modularity</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>random_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>is_weighted</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>]</em>) -- </p></li>
+<li><p><strong>weight_default</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>check_directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#graspologic.partition.HierarchicalClusters" title="graspologic.partition.leiden.HierarchicalClusters"><em>HierarchicalClusters</em></a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.utils.is_unweighted</span></code></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>No two different nodes are allowed to encode to the <strong>same</strong> str representation,
+e.g. node_a id of <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> and node_b id of <code class="docutils literal notranslate"><span class="pre">1</span></code> are different object types
+but str(node_a) == str(node_b). This collision will result in a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>This function is implemented in the <cite>graspologic-native</cite> Python module, a module
+written in Rust for Python.</p>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r1f2e0d65450e-1"><span class="brackets">1</span></dt>
+<dd><p>Traag, V.A.; Waltman, L.; Van, Eck N.J. &quot;From Louvain to Leiden:
+guaranteeing well-connected communities&quot;,Scientific Reports, Vol. 9, 2019</p>
+</dd>
+<dt class="label" id="r1f2e0d65450e-2"><span class="brackets">2</span></dt>
+<dd><p><a class="reference external" href="https://github.com/microsoft/graspologic-native">https://github.com/microsoft/graspologic-native</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nominate.html" class="btn btn-neutral float-left" title="Nomination" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="preconditions.html" class="btn btn-neutral float-right" title="Preconditions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
