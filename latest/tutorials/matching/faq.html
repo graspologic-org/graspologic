@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction to Graph Matching &mdash; graspologic 1.0.0 documentation</title>
+  <title>Introduction to Graph Matching &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul>
@@ -478,6 +482,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -486,10 +491,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -501,12 +510,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -534,7 +546,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Introduction-to-Graph-Matching">
-<h1>Introduction to Graph Matching<a class="headerlink" href="#Introduction-to-Graph-Matching" title="Permalink to this headline">¶</a></h1>
+<h1>Introduction to Graph Matching<a class="headerlink" href="#Introduction-to-Graph-Matching" title="Permalink to this heading">¶</a></h1>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -565,14 +577,23 @@ div.rendered_html tbody tr:hover {
 <p>Since the GMP objective function is the negation of the QAP objective function, any algorithm that solves one can solve the other.</p>
 <p>This class is an implementation of the Fast Approximate Quadratic Assignment Problem (FAQ), an algorithm designed to efficiently and accurately solve the QAP, as well as GMP.</p>
 <p>[1] Optimierung, Diskrete &amp; Er, Rainer &amp; Ela, A &amp; Burkard, Rainer &amp; Dragoti-Cela, Eranda &amp; Pardalos, Panos &amp; Pitsoulis, Leonidas. (1998). The Quadratic Assignment Problem. Handbook of Combinatorial Optimization. 10.1007/978-1-4613-0303-9_27.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.match</span> <span class="kn">import</span> <span class="n">GraphMatch</span> <span class="k">as</span> <span class="n">GMP</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.match</span> <span class="kn">import</span> <span class="n">graph_match</span>
 <span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">er_np</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <p>For the sake of this tutorial, we will use FAQ to solve the GMP for two graphs where we know a solution exists. Below, we sample a binary graph (undirected and no self-loops) <span class="math notranslate nohighlight">\(G_1 \sim ER_{NP}(50, 0.3)\)</span>. Then, we randomly shuffle the nodes of <span class="math notranslate nohighlight">\(G_1\)</span> to initiate <span class="math notranslate nohighlight">\(G_2\)</span>. The number of edge disagreements as a result of the node shuffle is printed below.</p>
 <div class="nbinput docutils container">
@@ -598,13 +619,14 @@ div.rendered_html tbody tr:hover {
 Number of edge disagreements:  1012.0
 </pre></div></div>
 </div>
-<section id="Visualize-the-graphs-using-heat-mapping">
-<h2>Visualize the graphs using heat mapping<a class="headerlink" href="#Visualize-the-graphs-using-heat-mapping" title="Permalink to this headline">¶</a></h2>
+<section id="Visualize-the-adjacency-matrices">
+<h2>Visualize the adjacency matrices<a class="headerlink" href="#Visualize-the-adjacency-matrices" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
+
 <span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;G1 [ER-NP(50, 0.3) Simulation]&#39;</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">heatmap</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;G2 [G1 Randomly Shuffled]&#39;</span><span class="p">)</span>
 </pre></div>
@@ -624,14 +646,13 @@ Number of edge disagreements:  1012.0
 <img alt="../../_images/tutorials_matching_faq_7_1.png" src="../../_images/tutorials_matching_faq_7_1.png" />
 </div>
 </div>
-<p>Below, we create a model to solve GMP. The model is then fitted for the two graphs <span class="math notranslate nohighlight">\(G_1\)</span> and <span class="math notranslate nohighlight">\(G_2\)</span>. One of the option for the algorithm is the starting position of <span class="math notranslate nohighlight">\(P\)</span>. In this case, the class default of barycenter intialization is used, or the flat doubly stochastic matrix. The number of edge disagreements is printed below. With zero edge disagreements, we see that FAQ is successful in unshuffling the graph.</p>
+<p>Below, we solve the GMP using the <code class="docutils literal notranslate"><span class="pre">graph_match</span></code> function. The number of edge disagreements after optimization is printed below. With zero edge disagreements, we see that FAQ is successful in unshuffling the graph.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gmp</span> <span class="o">=</span> <span class="n">GMP</span><span class="p">()</span>
-<span class="n">gmp</span> <span class="o">=</span> <span class="n">gmp</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span><span class="n">G2</span><span class="p">)</span>
-<span class="n">G2</span> <span class="o">=</span> <span class="n">G2</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">gmp</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">,</span> <span class="n">gmp</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">)]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">perm_inds</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">graph_match</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">G2</span><span class="p">)</span>
+<span class="n">G2</span> <span class="o">=</span> <span class="n">G2</span><span class="p">[</span><span class="n">perm_inds</span><span class="p">][:,</span> <span class="n">perm_inds</span><span class="p">]</span> <span class="c1"># permute both rows and columns to preserve adjacency</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of edge disagreements: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">G1</span><span class="o">-</span><span class="n">G2</span><span class="p">)))</span>
 </pre></div>
 </div>
@@ -643,29 +664,6 @@ Number of edge disagreements:  1012.0
 <div class="highlight"><pre>
 Number of edge disagreements:  0.0
 </pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;G1[ER-NP(50, 0.3) Simulation]&#39;</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">heatmap</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;G2[ER-NP(50, 0.3) Randomly Shuffled] unshuffled&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/tutorials_matching_faq_10_0.png" src="../../_images/tutorials_matching_faq_10_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/tutorials_matching_faq_10_1.png" src="../../_images/tutorials_matching_faq_10_1.png" />
-</div>
 </div>
 </section>
 </section>

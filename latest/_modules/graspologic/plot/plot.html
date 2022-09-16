@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.plot.plot &mdash; graspologic 1.0.0 documentation</title>
+  <title>graspologic.plot.plot &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -28,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -58,6 +59,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -112,6 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
@@ -162,6 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
@@ -283,6 +287,7 @@
 <span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">select_svd</span>
+<span class="kn">from</span> <span class="nn">..pipeline.embed._elbow</span> <span class="kn">import</span> <span class="n">_index_of_elbow</span>
 <span class="kn">from</span> <span class="nn">..preconditions</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">check_argument</span><span class="p">,</span>
     <span class="n">check_argument_types</span><span class="p">,</span>
@@ -691,7 +696,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`</span>
 <span class="sd">    alpha : float [0, 1], default : 0.7</span>
 <span class="sd">        Alpha value of plotted gridplot points</span>
 <span class="sd">    sizes : length 2 tuple, default: (10, 200)</span>
@@ -731,17 +736,16 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;X must be a list, not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+    <span class="n">_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
 
-    <span class="n">check_consistent_length</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+    <span class="n">check_consistent_length</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">_labels</span><span class="p">)</span>
 
     <span class="n">graphs</span> <span class="o">=</span> <span class="n">_process_graphs</span><span class="p">(</span>
         <span class="n">X</span><span class="p">,</span> <span class="n">inner_hier_labels</span><span class="p">,</span> <span class="n">outer_hier_labels</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">sort_nodes</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="n">desat</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="n">desat</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="n">_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">graph</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graphs</span><span class="p">):</span>
@@ -751,7 +755,7 @@
             <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">rdx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">cdx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">weights</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rdx&quot;</span><span class="p">,</span> <span class="s2">&quot;cdx&quot;</span><span class="p">,</span> <span class="s2">&quot;Weights&quot;</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="n">legend_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cdx</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">legend_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cdx</span><span class="p">)</span>
         <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1404,14 +1408,16 @@
     <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">check_consistent_length</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">labels</span><span class="p">))</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+    <span class="n">_labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="p">)</span>
+    <span class="n">_labels</span> <span class="o">=</span> <span class="n">_labels</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
     <span class="k">if</span> <span class="n">nonzero</span><span class="p">:</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">edges</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">_labels</span> <span class="o">=</span> <span class="n">_labels</span><span class="p">[</span><span class="n">edges</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">edges</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">_distplot</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="n">_labels</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
         <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
         <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span><span class="p">,</span>
@@ -1658,6 +1664,8 @@
         <span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">lc</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ax</span>
 
@@ -1670,6 +1678,7 @@
     <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
     <span class="n">cumulative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">show_first</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">show_elbow</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the distribution of singular values for a matrix, either showing the</span>
@@ -1692,11 +1701,22 @@
 <span class="sd">        Whether or not to plot a cumulative cdf of singular values</span>
 <span class="sd">    show_first : int or None, default: None</span>
 <span class="sd">        Whether to restrict the plot to the first ``show_first`` components</span>
+<span class="sd">    show_elbow : bool, or int, default: False</span>
+<span class="sd">        Whether to show an elbow (an optimal embedding dimension) estimated</span>
+<span class="sd">        via [1]. An integer is interpreted as a number of likelihood</span>
+<span class="sd">        elbows to return. Must be ``&gt; 1``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    ax : matplotlib axis object</span>
 <span class="sd">        Output plot</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Zhu, M. and Ghodsi, A. (2006).</span>
+<span class="sd">        Automatic dimensionality selection from the scree plot via the use of</span>
+<span class="sd">        profile likelihood. Computational Statistics &amp; Data Analysis, 51(2),</span>
+<span class="sd">        pp.918-930.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_common_inputs</span><span class="p">(</span>
         <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span>
@@ -1721,6 +1741,13 @@
     <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Variance explained&quot;</span>
     <span class="k">with</span> <span class="n">sns</span><span class="o">.</span><span class="n">plotting_context</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show_elbow</span><span class="p">:</span>
+            <span class="n">n_elbows</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">show_elbow</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">n_elbows</span> <span class="o">=</span> <span class="n">show_elbow</span>
+            <span class="n">elb_index</span> <span class="o">=</span> <span class="n">_index_of_elbow</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">n_elbows</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">elb_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">elb_index</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">elb_index</span><span class="p">],</span> <span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
@@ -1785,7 +1812,7 @@
     <span class="n">outer_freq_cumsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">outer_freq</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()))</span>
 
     <span class="c1"># for each group of outer labels, calculate the boundaries of the inner labels</span>
-    <span class="n">inner_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">inner_freq</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">outer_freq</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
         <span class="n">start_ind</span> <span class="o">=</span> <span class="n">outer_freq_cumsum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">stop_ind</span> <span class="o">=</span> <span class="n">outer_freq_cumsum</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>

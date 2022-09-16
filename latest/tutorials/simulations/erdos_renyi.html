@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Erdos-Renyi (ER) Model &mdash; graspologic 1.0.0 documentation</title>
+  <title>Erdos-Renyi (ER) Model &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -22,7 +23,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Stochastic Block Model (SBM)" href="sbm.html" />
-    <link rel="prev" title="Random Graph Models" href="../models/models.html" /> 
+    <link rel="prev" title="Degree Preserving Edge Swaps" href="../models/edge_swaps.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul class="current">
@@ -478,6 +482,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -486,10 +491,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -501,12 +510,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -534,8 +546,8 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Erdos-Renyi-(ER)-Model">
-<h1>Erdos-Renyi (ER) Model<a class="headerlink" href="#Erdos-Renyi-(ER)-Model" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput nblast docutils container">
+<h1>Erdos-Renyi (ER) Model<a class="headerlink" href="#Erdos-Renyi-(ER)-Model" title="Permalink to this heading">¶</a></h1>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -546,6 +558,15 @@ div.rendered_html tbody tr:hover {
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <p>Erdos-Renyi (ER) graphs are the simplest generative model. We assume that each edge for all pairs of vertices is sampled independently from all the edges. There are two ways to parameterize the model:</p>
 <ol class="arabic simple">
@@ -570,7 +591,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Visualize-the-graphs-using-heatmap">
-<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -598,7 +619,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Weighted-ER-Graphs">
-<h2>Weighted ER Graphs<a class="headerlink" href="#Weighted-ER-Graphs" title="Permalink to this headline">¶</a></h2>
+<h2>Weighted ER Graphs<a class="headerlink" href="#Weighted-ER-Graphs" title="Permalink to this heading">¶</a></h2>
 <p>Both <code class="docutils literal notranslate"><span class="pre">er_np()</span></code> and <code class="docutils literal notranslate"><span class="pre">er_nm()</span></code> functions provide ways to sample weights for all edges that were sampled via a probability distribution function. In order to sample with weights, we provide a probability distribution function with corresponding keyword arguments for the distribution function.</p>
 <p>Below we sample <span class="math notranslate nohighlight">\(G_1 \sim ER_{NP}(50, 0.2)\)</span> where the weights are distributed normally with <span class="math notranslate nohighlight">\(\mu = 0,~\sigma^2 = 1\)</span>.</p>
 <div class="nbinput nblast docutils container">
@@ -614,7 +635,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Visualize-the-graph-using-heatmap">
-<h2>Visualize the graph using heatmap<a class="headerlink" href="#Visualize-the-graph-using-heatmap" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize the graph using heatmap<a class="headerlink" href="#Visualize-the-graph-using-heatmap" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -637,7 +658,7 @@ div.rendered_html tbody tr:hover {
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../models/models.html" class="btn btn-neutral float-left" title="Random Graph Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../models/edge_swaps.html" class="btn btn-neutral float-left" title="Degree Preserving Edge Swaps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="sbm.html" class="btn btn-neutral float-right" title="Stochastic Block Model (SBM)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

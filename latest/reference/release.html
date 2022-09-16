@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Release Log &mdash; graspologic 1.0.0 documentation</title>
+  <title>Release Log &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -31,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -61,6 +62,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -115,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="reference/nominate.html">Nomination</a><ul>
@@ -165,6 +168,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#simulations">Simulations</a><ul>
@@ -286,9 +290,48 @@
 }
 </style>
 <section id="release-log">
-<h1>Release Log<a class="headerlink" href="#release-log" title="Permalink to this headline">¶</a></h1>
+<h1>Release Log<a class="headerlink" href="#release-log" title="Permalink to this heading">¶</a></h1>
+<section id="graspologic-2-0-0">
+<h2>graspologic 2.0.0<a class="headerlink" href="#graspologic-2-0-0" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Refactored graph matching code and added many new features
+<cite>#960 &lt;https://github.com/microsoft/graspologic/pull/960&gt;</cite></p></li>
+<li><p>Added elbow marker to screeplot in plot module
+<cite>#979 &lt;https://github.com/microsoft/graspologic/pull/979&gt;</cite></p></li>
+<li><p>Fixed mug2vec behavior for directed graphs
+<cite>#968 &lt;https://github.com/microsoft/graspologic/pull/968&gt;</cite></p></li>
+<li><p>Fixed typo in aligning tutorial
+<cite>#974 &lt;https://github.com/microsoft/graspologic/pull/974&gt;</cite></p></li>
+<li><p>Added sex labels to mice dataset
+<cite>#967 &lt;https://github.com/microsoft/graspologic/pull/967&gt;</cite></p></li>
+<li><p>Made improvements to contributing guidelines
+<cite>#973 &lt;https://github.com/microsoft/graspologic/pull/973&gt;</cite></p></li>
+<li><p>Corrected notation in documentation of to_laplacians
+<cite>#969 &lt;https://github.com/microsoft/graspologic/pull/969&gt;</cite></p></li>
+<li><p>Fixed isolated nodes handling in node2vec
+<cite>#953 &lt;https://github.com/microsoft/graspologic/pull/953&gt;</cite></p></li>
+<li><p>Fixed repeated numba compilation in EdgeSwapper
+<cite>#965 &lt;https://github.com/microsoft/graspologic/pull/965&gt;</cite></p></li>
+<li><p>Fixed intersphinx bug
+<cite>#963 &lt;https://github.com/microsoft/graspologic/pull/963&gt;</cite></p></li>
+<li><p>Removed default axis labels in networkplot
+<cite>#954 &lt;https://github.com/microsoft/graspologic/pull/954&gt;</cite></p></li>
+<li><p>Fixed reproducibility in EdgeSwapper and added to docs
+<cite>#945 &lt;https://github.com/microsoft/graspologic/pull/945&gt;</cite></p></li>
+<li><p>Added Degree Preserving Edge Swaps
+<cite>#935 &lt;https://github.com/microsoft/graspologic/pull/935&gt;</cite></p></li>
+<li><p>Fixed mypy issue
+<cite>#943 &lt;https://github.com/microsoft/graspologic/pull/943&gt;</cite></p></li>
+<li><p>Fixed loops bug in SBM and DCSBM model fitting
+<cite>#930 &lt;https://github.com/microsoft/graspologic/pull/930&gt;</cite></p></li>
+<li><p>Added error message in Leiden when given a multigraph was incorrect
+<cite>#926 &lt;https://github.com/microsoft/graspologic/pull/926&gt;</cite></p></li>
+<li><p>Fixed typos in ER and SBM models
+<cite>#920 &lt;https://github.com/microsoft/graspologic/pull/920&gt;</cite></p></li>
+</ul>
+</section>
 <section id="graspologic-1-0-0">
-<h2>graspologic 1.0.0<a class="headerlink" href="#graspologic-1-0-0" title="Permalink to this headline">¶</a></h2>
+<h2>graspologic 1.0.0<a class="headerlink" href="#graspologic-1-0-0" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Removed Python 3.6 support</p></li>
 <li><p>Officially added Python 3.9 support</p></li>
@@ -321,7 +364,7 @@ setup-python <cite>#913 &lt;https://github.com/microsoft/graspologic/pull/913&gt
 </ul>
 </section>
 <section id="graspologic-0-3-0">
-<h2>graspologic 0.3.0<a class="headerlink" href="#graspologic-0-3-0" title="Permalink to this headline">¶</a></h2>
+<h2>graspologic 0.3.0<a class="headerlink" href="#graspologic-0-3-0" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Fixed imports for hyppo &gt;= 0.2.0
 <a class="reference external" href="https://github.com/microsoft/graspologic/pull/785">#785</a></p></li>
@@ -373,7 +416,7 @@ production settings <a class="reference external" href="https://github.com/micro
 </ul>
 </section>
 <section id="graspologic-0-2-0">
-<h2>graspologic 0.2.0<a class="headerlink" href="#graspologic-0-2-0" title="Permalink to this headline">¶</a></h2>
+<h2>graspologic 0.2.0<a class="headerlink" href="#graspologic-0-2-0" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Documentation fixes and updates
 <a class="reference external" href="https://github.com/microsoft/graspologic/pull/729">#729</a> and
@@ -401,7 +444,7 @@ fix)</p></li>
 </ul>
 </section>
 <section id="graspologic-0-1-0">
-<h2>graspologic 0.1.0<a class="headerlink" href="#graspologic-0-1-0" title="Permalink to this headline">¶</a></h2>
+<h2>graspologic 0.1.0<a class="headerlink" href="#graspologic-0-1-0" title="Permalink to this heading">¶</a></h2>
 <p>This release represents the first release of the <code class="docutils literal notranslate"><span class="pre">GraSPy</span></code> and <a class="reference external" href="https://github.com/microsoft/topologic">topologic</a> libraries
 merger!</p>
 <p>In addition to all of the features that <code class="docutils literal notranslate"><span class="pre">GraSPy</span></code> had in <a class="reference internal" href="release/release_0.3.html#last-graspy-label"><span class="std std-ref">Release Notes: GraSPy 0.3</span></a>,
@@ -412,7 +455,7 @@ many to go into.</p>
 <a class="reference external" href="https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTORS.md">contributors</a>!</p>
 </section>
 <section id="previous-graspy-releases">
-<h2>Previous GraSPy Releases<a class="headerlink" href="#previous-graspy-releases" title="Permalink to this headline">¶</a></h2>
+<h2>Previous GraSPy Releases<a class="headerlink" href="#previous-graspy-releases" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="release/graspy_releases.html">GraSPy Release Log</a></li>

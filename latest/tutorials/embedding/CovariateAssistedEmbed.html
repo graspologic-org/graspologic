@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Covariate-Assisted Embedding &mdash; graspologic 1.0.0 documentation</title>
+  <title>Covariate-Assisted Embedding &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul>
@@ -478,6 +482,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -486,10 +491,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -501,12 +510,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -534,12 +546,12 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Covariate-Assisted-Embedding">
-<h1>Covariate-Assisted Embedding<a class="headerlink" href="#Covariate-Assisted-Embedding" title="Permalink to this headline">¶</a></h1>
+<h1>Covariate-Assisted Embedding<a class="headerlink" href="#Covariate-Assisted-Embedding" title="Permalink to this heading">¶</a></h1>
 <p>In many network problems, our network might be more than just the information contained in its adjacency matrix - we might have extra information in the form of a set of covariates for each node. Covariate-Assisted Embedding (CASE) uses both these covariates and our adjacency matrix to create and embed a new representation of our network.</p>
 <p>There are two primary reasons that we might want to explore using node covariates in addition to topological structure. First, they might improve our embedding if the latent structure of our covariates lines up with the latent structure of our adjacency matrix. Second, figuring out what the clusters of an embedding actually mean can sometimes be difficult - and covariates can create a natural structure.</p>
 <p>To illustrate CASE, we’ll use a model in which some of our community information is in the covariates and some is in our adjacency matrix. we’ll generate an SBM with three communities, with the first and second communities indistinguishable, then a set of covariates, with the second and third communities indistinguishable. Using CASE, we can find an embedding that lets us find distinct community structure.</p>
 <section id="SBM">
-<h2>SBM<a class="headerlink" href="#SBM" title="Permalink to this headline">¶</a></h2>
+<h2>SBM<a class="headerlink" href="#SBM" title="Permalink to this heading">¶</a></h2>
 <p>First, we sample a 3-block SBM with 1500 nodes, 500 nodes per community. We’ll use the following block probability matrix:</p>
 <p><span class="math">\begin{align*}
 B =
@@ -627,7 +639,7 @@ B =
 <span class="k">def</span> <span class="nf">plot_latents</span><span class="p">(</span><span class="n">latent_positions</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-    <span class="n">plot</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">latent_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">latent_positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">latent_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">latent_positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
                            <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;Set1&quot;</span><span class="p">)</span>
     <span class="n">plot</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -651,7 +663,7 @@ B =
 <p>As you can see, we’d have a tough time clustering this. It would be nice if we could use extra information to more clearly distinguish between communities 0 and 1. We don’t have this information in our adjacency matrix: it needs to come from our covariates.</p>
 </section>
 <section id="Covariates">
-<h2>Covariates<a class="headerlink" href="#Covariates" title="Permalink to this headline">¶</a></h2>
+<h2>Covariates<a class="headerlink" href="#Covariates" title="Permalink to this heading">¶</a></h2>
 <p>Here, we sample a matrix of covariates <span class="math notranslate nohighlight">\(Y\)</span>. Each node is associated with its own group of 30 covariates. The <span class="math notranslate nohighlight">\(i_{th}\)</span> row of <span class="math notranslate nohighlight">\(Y\)</span> contains the covariates associated with node <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <p>Covariates in community 1 will be drawn from a <span class="math notranslate nohighlight">\(Beta(2,5)\)</span> distribution, whereas covariates in communities 2 or 3 will be drawn from a <span class="math notranslate nohighlight">\(Beta(2,2)\)</span> distribution.</p>
 <div class="nbinput nblast docutils container">
@@ -738,7 +750,7 @@ B =
 </div>
 <p>Instead of the first and second communities being indistinguishable, the second and third now are. We’d like to see full separation between all three communities, so we need some kind of representation of our network that allows us to use both the information in the adjacency matrix and the information in the covariates.</p>
 <section id="CASE">
-<h3>CASE<a class="headerlink" href="#CASE" title="Permalink to this headline">¶</a></h3>
+<h3>CASE<a class="headerlink" href="#CASE" title="Permalink to this heading">¶</a></h3>
 <p>Covariate-Assisted Spectral Embedding is a simple way of combining our network and our covariates into a single model. In the most straightforward version of CASE, we sum the network’s regularized Laplacian matrix <span class="math notranslate nohighlight">\(L\)</span> and a function of our covariate matrix <span class="math notranslate nohighlight">\(YY^\top\)</span>. Here, <span class="math notranslate nohighlight">\(Y\)</span> is just our covariate matrix, in which row <span class="math notranslate nohighlight">\(i\)</span> contains the covariates associated with node <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[L + \alpha YY^\top\]</div>
@@ -769,7 +781,7 @@ B =
 </section>
 </section>
 <section id="Exploring-Possible-Weights">
-<h2>Exploring Possible Weights<a class="headerlink" href="#Exploring-Possible-Weights" title="Permalink to this headline">¶</a></h2>
+<h2>Exploring Possible Weights<a class="headerlink" href="#Exploring-Possible-Weights" title="Permalink to this heading">¶</a></h2>
 <p>Rather than simply letting the weight <span class="math notranslate nohighlight">\(\alpha\)</span> be set automatically, you can also set a custom value. Below is a comparison of potential <span class="math notranslate nohighlight">\(\alpha\)</span> values in our experimental setup. There are 9 possible <span class="math notranslate nohighlight">\(\alpha\)</span> values, ranging between <span class="math notranslate nohighlight">\(10^{-5}\)</span> and 100.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -798,7 +810,7 @@ B =
 <p>If we were to set the weight manually, it looks like we’d want a weight around 0.5. In practice, if the default weight is producing undesirable results, a shrewd data scientist could find a good weight by clustering with k-means or a GMM, then performing a line search (for example, <code class="docutils literal notranslate"><span class="pre">minimize_scalar</span></code> in scipy’s <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html">optimize</a> module) on some metric which optimizes cluster separation, like BIC or sklearn’s <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html">silhouette
 score</a>.</p>
 <section id="Non-Assortative-Graphs">
-<h3>Non-Assortative Graphs<a class="headerlink" href="#Non-Assortative-Graphs" title="Permalink to this headline">¶</a></h3>
+<h3>Non-Assortative Graphs<a class="headerlink" href="#Non-Assortative-Graphs" title="Permalink to this heading">¶</a></h3>
 <p>If your graph is <strong>non-assortative</strong> - meaning, the between-block probabilities are greater than the within-block probabilities - it’s better to square our Laplacian. This gets rid of a lot of annoying negative eigenvalues, and we end up embedding <span class="math notranslate nohighlight">\(LL + aYY^\top\)</span>. Below, you can see the embedding in the non-assortative case. In practice, if you don’t know whether your graph is assortative or non-assortative, you can try both algorithms and use whichever one works best.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:

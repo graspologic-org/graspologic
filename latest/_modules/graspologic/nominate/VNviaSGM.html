@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.nominate.VNviaSGM &mdash; graspologic 1.0.0 documentation</title>
+  <title>graspologic.nominate.VNviaSGM &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -28,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -58,6 +59,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -112,6 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
@@ -162,6 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
@@ -267,7 +271,7 @@
 
 <span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">..match</span> <span class="kn">import</span> <span class="n">GraphMatch</span> <span class="k">as</span> <span class="n">GMP</span>
+<span class="kn">from</span> <span class="nn">..match</span> <span class="kn">import</span> <span class="n">graph_match</span>
 
 <span class="c1"># Type aliases</span>
 <span class="n">SeedsType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span>
@@ -424,6 +428,15 @@
         <span class="k">elif</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;A&quot; and &quot;B&quot; must be square&#39;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="c1"># NOTE: the new graph_match function can absolutely handle the reverse case.</span>
+            <span class="c1"># However, it would require me to appropriately deal with the nodes of A</span>
+            <span class="c1"># which are not matched, and I dont have time to figure out what this class</span>
+            <span class="c1"># is doing right now. Further, I think with the old code using GraphMatch</span>
+            <span class="c1"># this would have raised a silent bug in this case, so I think this is</span>
+            <span class="c1"># at least an improvement.</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;A&quot; is larger than &quot;B&quot;; please reverse the ordering of these inputs.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voi</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;voi&quot; must be an integer&#39;</span>
@@ -548,18 +561,17 @@
         <span class="c1"># explanation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">close_seeds</span><span class="p">)</span>
         <span class="n">seeds_fin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">)</span>
+        <span class="n">partial_match</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">seeds_fin</span><span class="p">,</span> <span class="n">seeds_fin</span><span class="p">))</span>
 
         <span class="c1"># Call the SGM algorithm using user set parameters and generate a prob</span>
         <span class="c1"># vector for the voi.</span>
-        <span class="n">sgm</span> <span class="o">=</span> <span class="n">GMP</span><span class="p">(</span>
-            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_match_kws</span><span class="p">,</span>
-        <span class="p">)</span>
-
         <span class="n">prob_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">max</span><span class="p">(</span><span class="n">SG_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">SG_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_init</span><span class="p">):</span>
-            <span class="n">sgm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">SG_1</span><span class="p">,</span> <span class="n">SG_2</span><span class="p">,</span> <span class="n">seeds_A</span><span class="o">=</span><span class="n">seeds_fin</span><span class="p">,</span> <span class="n">seeds_B</span><span class="o">=</span><span class="n">seeds_fin</span><span class="p">)</span>
-            <span class="n">prob_vector</span><span class="p">[</span><span class="n">sgm</span><span class="o">.</span><span class="n">perm_inds_</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">perm_inds</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">graph_match</span><span class="p">(</span>
+                <span class="n">SG_1</span><span class="p">,</span> <span class="n">SG_2</span><span class="p">,</span> <span class="n">partial_match</span><span class="o">=</span><span class="n">partial_match</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_match_kws</span>
+            <span class="p">)</span>
+            <span class="n">prob_vector</span><span class="p">[</span><span class="n">perm_inds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span>
 
         <span class="n">prob_vector</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_init</span>
 
@@ -642,7 +654,7 @@
 <span class="sd">        The list containing all the vertices in the induced subgraph.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Note all nodes are zero based in this implementation, i.e the first node is 0</span>
-    <span class="n">dists</span> <span class="o">=</span> <span class="p">[[</span><span class="n">node</span><span class="p">]]</span>
+    <span class="n">dists</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">node</span><span class="p">]]</span>
     <span class="n">dists_conglom</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
         <span class="n">clst</span> <span class="o">=</span> <span class="p">[]</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Latent Position Two-Graph Testing &mdash; graspologic 1.0.0 documentation</title>
+  <title>Latent Position Two-Graph Testing &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul>
@@ -478,6 +482,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -486,10 +491,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -501,12 +510,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -534,8 +546,8 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Latent-Position-Two-Graph-Testing">
-<h1>Latent Position Two-Graph Testing<a class="headerlink" href="#Latent-Position-Two-Graph-Testing" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput nblast docutils container">
+<h1>Latent Position Two-Graph Testing<a class="headerlink" href="#Latent-Position-Two-Graph-Testing" title="Permalink to this heading">¶</a></h1>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -552,8 +564,17 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
+</div>
 <section id="Generate-a-stochastic-block-model-graph-to-model-as-a-random-dot-product-graph">
-<h2>Generate a stochastic block model graph to model as a random dot product graph<a class="headerlink" href="#Generate-a-stochastic-block-model-graph-to-model-as-a-random-dot-product-graph" title="Permalink to this headline">¶</a></h2>
+<h2>Generate a stochastic block model graph to model as a random dot product graph<a class="headerlink" href="#Generate-a-stochastic-block-model-graph-to-model-as-a-random-dot-product-graph" title="Permalink to this heading">¶</a></h2>
 <p>To start, we generate a binary stochastic block model graph (SBM). An SBM is composed of ‘communities’ or ‘blocks,’ where a node’s block membership in a graph determines its probability of connection to the other nodes in the graph.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -577,15 +598,54 @@ div.rendered_html tbody tr:hover {
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_inference_latent_position_test_3_0.png" src="../../_images/tutorials_inference_latent_position_test_3_0.png" />
+<img alt="../../_images/tutorials_inference_latent_position_test_3_1.png" src="../../_images/tutorials_inference_latent_position_test_3_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_inference_latent_position_test_3_1.png" src="../../_images/tutorials_inference_latent_position_test_3_1.png" />
+<img alt="../../_images/tutorials_inference_latent_position_test_3_2.png" src="../../_images/tutorials_inference_latent_position_test_3_2.png" />
 </div>
 </div>
 <p>In the adjacency matrix above, there is a clearly defined block structrure corresponding to the 4 communities in the graph that we established. Below it, we see the <strong>adjacency spectral embedding (ASE)</strong> of this graph. <span class="math notranslate nohighlight">\(\text{ASE}(A)\)</span> recovers an estimate of the <strong>latent positions</strong> of <span class="math notranslate nohighlight">\(A\)</span>. Latent positions refer to the idea of a <strong>random dot product graph (RDPG)</strong> which can be modeled as follows:</p>
@@ -595,7 +655,7 @@ div.rendered_html tbody tr:hover {
 <p>In the above embedding, we see 4 clusters of nodes corresponding to the 4 blocks that we prescribed. ASE recovers the fact that all of the nodes in a block have similar latent positions. So, RDPGs can also model an SBM graph.</p>
 </section>
 <section id="Sample-new-RDPGs-from-this-latent-position">
-<h2>Sample new RDPGs from this latent position<a class="headerlink" href="#Sample-new-RDPGs-from-this-latent-position" title="Permalink to this headline">¶</a></h2>
+<h2>Sample new RDPGs from this latent position<a class="headerlink" href="#Sample-new-RDPGs-from-this-latent-position" title="Permalink to this heading">¶</a></h2>
 <p>Given the estimate of <span class="math notranslate nohighlight">\(X\)</span>, we now sample two new RDPGs from the same latent position above</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -623,9 +683,73 @@ div.rendered_html tbody tr:hover {
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
-<img alt="../../_images/tutorials_inference_latent_position_test_6_0.png" src="../../_images/tutorials_inference_latent_position_test_6_0.png" />
-</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+</pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -641,17 +765,24 @@ div.rendered_html tbody tr:hover {
 <img alt="../../_images/tutorials_inference_latent_position_test_6_2.png" src="../../_images/tutorials_inference_latent_position_test_6_2.png" />
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/tutorials_inference_latent_position_test_6_3.png" src="../../_images/tutorials_inference_latent_position_test_6_3.png" />
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_inference_latent_position_test_6_4.png" src="../../_images/tutorials_inference_latent_position_test_6_4.png" />
+</div>
+</div>
 <p>Qualitatively, both of the simulated RDPGs above match the behavior we would expect, with 4 clear blocks and the corresponding 4 clusters in the embedded space. But, can we say they were generated from the same latent positions?</p>
 </section>
 <section id="Latent-position-test-where-null-is-true">
-<h2>Latent position test where null is true<a class="headerlink" href="#Latent-position-test-where-null-is-true" title="Permalink to this headline">¶</a></h2>
+<h2>Latent position test where null is true<a class="headerlink" href="#Latent-position-test-where-null-is-true" title="Permalink to this heading">¶</a></h2>
 <p>Now, we want to know whether the above two graphs were generated from the same latent position. We know that they were, so the test should predict that the differences between Sampled RDPG 1 and 2 (up to a rotation, see below) are no greater than those differences observed by chance. In this case, we will use the <code class="docutils literal notranslate"><span class="pre">latent_position_test</span></code> in <code class="docutils literal notranslate"><span class="pre">graspologic</span></code> because we know the true alignment between the vertices of the two graphs we are testing. In other words, node <span class="math notranslate nohighlight">\(i\)</span> in graph 1 can be
 thought of as equivalent to node <span class="math notranslate nohighlight">\(i\)</span> in graph 2 because of the way we generated these graphs.</p>
 <p>In other words, we are testing</p>
@@ -684,7 +815,7 @@ p = 0.801980198019802
 <p>We see that the corresponding p-value is high, indicating that the observed differences between latent positions of Sampled RDPG 1 and 2 are likely due to chance</p>
 </section>
 <section id="Matched-test-where-the-null-is-false">
-<h2>Matched test where the null is false<a class="headerlink" href="#Matched-test-where-the-null-is-false" title="Permalink to this headline">¶</a></h2>
+<h2>Matched test where the null is false<a class="headerlink" href="#Matched-test-where-the-null-is-false" title="Permalink to this heading">¶</a></h2>
 <p>Now, we distort the latent position of one of the sampled graphs by adding noise. The matched test should have a low p-value, indicating that we should reject the null hypothesis</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -712,9 +843,73 @@ p = 0.801980198019802
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
-<img alt="../../_images/tutorials_inference_latent_position_test_13_0.png" src="../../_images/tutorials_inference_latent_position_test_13_0.png" />
-</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1507: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=vector, **plot_kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/axisgrid.py:1609: UserWarning: Ignoring `palette` because no `hue` variable has been assigned.
+  func(x=x, y=y, **kwargs)
+</pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -730,11 +925,18 @@ p = 0.801980198019802
 <img alt="../../_images/tutorials_inference_latent_position_test_13_2.png" src="../../_images/tutorials_inference_latent_position_test_13_2.png" />
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/tutorials_inference_latent_position_test_13_3.png" src="../../_images/tutorials_inference_latent_position_test_13_3.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_inference_latent_position_test_13_4.png" src="../../_images/tutorials_inference_latent_position_test_13_4.png" />
 </div>
 </div>
 <div class="nbinput docutils container">

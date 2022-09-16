@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matching &mdash; graspologic 1.0.0 documentation</title>
+  <title>Matching &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
@@ -289,303 +293,242 @@
 }
 </style>
 <section id="matching">
-<h1>Matching<a class="headerlink" href="#matching" title="Permalink to this headline">¶</a></h1>
+<h1>Matching<a class="headerlink" href="#matching" title="Permalink to this heading">¶</a></h1>
 <section id="graph-matching">
-<h2>Graph Matching<a class="headerlink" href="#graph-matching" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="graspologic.match.GraphMatch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.match.</span></span><span class="sig-name descname"><span class="pre">GraphMatch</span></span><a class="reference internal" href="../../_modules/graspologic/match/gmp.html#GraphMatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.match.GraphMatch" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class solves the Graph Matching Problem and the Quadratic Assignment Problem
-(QAP) through an implementation of the Fast Approximate QAP Algorithm (FAQ) (these
-two problems are the same up to a sign change) [1].</p>
+<h2>Graph Matching<a class="headerlink" href="#graph-matching" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.match.graph_match">
+<span class="sig-prename descclassname"><span class="pre">graspologic.match.</span></span><span class="sig-name descname"><span class="pre">graph_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_perturbation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'naive'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transport_regularizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transport_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transport_max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/match/wrappers.html#graph_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.match.graph_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to solve the Graph Matching Problem or the Quadratic Assignment Problem
+(QAP) through an implementation of the Fast Approximate QAP (FAQ) Algorithm [1].</p>
 <p>This algorithm can be thought of as finding an alignment of the vertices of two
 graphs which minimizes the number of induced edge disagreements, or, in the case
 of weighted graphs, the sum of squared differences of edge weight disagreements.
-The option to add seeds (known vertex correspondence between some nodes) is also
-available [2].</p>
+Various extensions to the original FAQ algorithm are also included in this function
+([2-5]).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_init</strong> : int, positive (default = 1)</p>
+<dd class="field-odd"><p><strong>A</strong> : {ndarray, csr_matrix, csr_array} of shape (n, n), or a list thereof</p>
 <blockquote>
-<div><p>Number of random initializations of the starting permutation matrix that
-the FAQ algorithm will undergo.</p>
+<div><p>The first (potentially multilayer) adjacency matrix to be matched. Multiplex
+networks (e.g. a network with multiple edge types) can be used by inputting a
+list of the adjacency matrices for each edge type.</p>
 </div></blockquote>
-<p><strong>init</strong> : string (default = 'barycenter') or 2d-array</p>
+<p><strong>B</strong> : {ndarray, csr_matrix, csr_array} of shape (m, m), or a list thereof</p>
 <blockquote>
-<div><p>The initial position chosen.</p>
-<p>&quot;barycenter&quot; : the non-informative “flat doubly stochastic matrix,”
-<span class="math notranslate nohighlight">\(J=1 \times 1^T /n\)</span> , i.e the barycenter of the feasible region. This can
-be thought of as the doubly stochastic matrix from which any permutation is
-equally likely.</p>
-<p>&quot;rand&quot; : some random point near <span class="math notranslate nohighlight">\(J, (J+K)/2\)</span>, where K is some random
-doubly stochastic matrix.</p>
-<p>If 2d-array, <code class="docutils literal notranslate"><span class="pre">init</span></code> must be <span class="math notranslate nohighlight">\(m' x m'\)</span>, where <span class="math notranslate nohighlight">\(m'\)</span> is the number of
-nonseeded vertices of <code class="docutils literal notranslate"><span class="pre">B</span></code>. This initial position repesents a permutation or
-assignment of the nonseeded vertices of <code class="docutils literal notranslate"><span class="pre">B</span></code>, and thus must be doubly
-stochastic (all of its rows and columns must sum to 1). Note that if using
-seeds, this permutation/assignment is taken with respect to the nonseeded
-vertices in the order in which they were input, even when
-<code class="docutils literal notranslate"><span class="pre">shuffle_input</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
+<div><p>The second (potentially multilayer) adjacency matrix to be matched. Must have
+the same number of layers as <code class="docutils literal notranslate"><span class="pre">A</span></code>, but need not have the same size
+(see <code class="docutils literal notranslate"><span class="pre">padding</span></code>).</p>
 </div></blockquote>
-<p><strong>max_iter</strong> : int, positive (default = 30)</p>
+<p><strong>AB</strong> : {ndarray, csr_matrix, csr_array} of shape (n, m), or a list thereof, default=None</p>
 <blockquote>
-<div><p>Integer specifying the max number of Franke-Wolfe iterations.
-FAQ typically converges with modest number of iterations.</p>
+<div><p>A (potentially multilayer) matrix representing connections from the objects
+indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to those in <code class="docutils literal notranslate"><span class="pre">B</span></code>, used for bisected graph matching (see [2]).</p>
 </div></blockquote>
-<p><strong>shuffle_input</strong> : bool (default = True)</p>
+<p><strong>BA</strong> : {ndarray, csr_matrix, csr_array} of shape (m, n), or a list thereof, default=None</p>
 <blockquote>
-<div><p>Gives users the option to shuffle the nodes of A matrix to avoid results
-from inputs that were already matched.</p>
+<div><p>A (potentially multilayer) matrix representing connections from the objects
+indexed in <code class="docutils literal notranslate"><span class="pre">B</span></code> to those in <code class="docutils literal notranslate"><span class="pre">A</span></code>, used for bisected graph matching (see [2]).</p>
 </div></blockquote>
-<p><strong>eps</strong> : float (default = 0.03)</p>
+<p><strong>S</strong> : {ndarray, csr_matrix, csr_array} of shape (n, m), default=None</p>
 <blockquote>
-<div><p>A positive, threshold stopping criteria such that FW continues to iterate
-while Frobenius norm of <span class="math notranslate nohighlight">\((P_{i}-P_{i+1}) &gt; \text{eps}\)</span></p>
+<div><p>A matrix representing the similarity of objects indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to each object
+indexed in <code class="docutils literal notranslate"><span class="pre">B</span></code>. Note that the scale (i.e. the norm) of this matrix will affect
+how strongly the similarity (linear) term is weighted relative to the adjacency
+(quadratic) terms.</p>
 </div></blockquote>
-<p><strong>gmp</strong> : bool (default = True)</p>
+<p><strong>partial_match</strong> : ndarray of shape (n_matches, 2), dtype=int, or tuple of two array-likes of shape (n_matches,), default=None</p>
 <blockquote>
-<div><p>Gives users the option to solve QAP rather than the Graph Matching Problem
-(GMP). This is accomplished through a negation of the objective function.</p>
+<div><p>Indices specifying known matches to include in the optimization. The
+first column represents indices of the objects in <code class="docutils literal notranslate"><span class="pre">A</span></code>, and the second column
+represents their corresponding matches in <code class="docutils literal notranslate"><span class="pre">B</span></code>.</p>
 </div></blockquote>
-<p><strong>padding</strong> : string (default = 'adopted')</p>
+<p><strong>init</strong> : ndarray of shape (n_unseed, n_unseed), default=None</p>
 <blockquote>
-<div><p>Allows user to specify padding scheme if <cite>A</cite> and <cite>B</cite> are not of equal size.
-Say that <cite>A</cite> and <cite>B</cite> have <span class="math notranslate nohighlight">\(n_1\)</span> and <span class="math notranslate nohighlight">\(n_2\)</span> nodes, respectively, and
-<span class="math notranslate nohighlight">\(n_1 &lt; n_2\)</span>.</p>
-<p>&quot;adopted&quot; : matches <cite>A</cite> to the best fitting induced subgraph of <cite>B</cite>. Reduces the
-affinity between isolated vertices added to <cite>A</cite> through padding and low-density
-subgraphs of <cite>B</cite>.</p>
-<p>&quot;naive&quot; : matches <cite>A</cite> to the best fitting subgraph of <cite>B</cite>.</p>
+<div><p>Initialization for the algorithm. Setting to None specifies the &quot;barycenter&quot;,
+which is the most commonly used initialization and
+represents an uninformative (flat) initialization. If a ndarray, then this
+matrix must be square and have size equal to the number of unseeded (not
+already matched in <code class="docutils literal notranslate"><span class="pre">partial_match</span></code>) nodes.</p>
 </div></blockquote>
-<p><strong>random_state</strong> : {None, int, <cite>~np.random.RandomState</cite>, <cite>~np.random.Generator</cite>}</p>
+<p><strong>init_perturbation</strong> : float, default=0.0</p>
 <blockquote>
-<div><p>This parameter defines the object to use for drawing random
-variates.
-If <cite>random_state</cite> is <code class="docutils literal notranslate"><span class="pre">None</span></code> the <cite>~np.random.RandomState</cite> singleton is
-used.
-If <cite>random_state</cite> is an int, a new <code class="docutils literal notranslate"><span class="pre">RandomState</span></code> instance is used,
-seeded with <cite>random_state</cite>.
-If <cite>random_state</cite> is already a <code class="docutils literal notranslate"><span class="pre">RandomState</span></code> or <code class="docutils literal notranslate"><span class="pre">Generator</span></code>
-instance, then that object is used.
-Default is None.</p>
+<div><p>Weight of the random perturbation from <code class="docutils literal notranslate"><span class="pre">init</span></code> that the initialization will
+undergo. Must be between 0 and 1.</p>
 </div></blockquote>
-<p><strong>n_jobs</strong> : int or None, (default = None)</p>
+<p><strong>n_init</strong> : int, default=1</p>
+<blockquote>
+<div><p>Number of initializations/runs of the algorithm to repeat. The solution with
+the best objective function value over all initializations is kept. Increasing
+<code class="docutils literal notranslate"><span class="pre">n_init</span></code> can improve performance but will take longer.</p>
+</div></blockquote>
+<p><strong>shuffle_input</strong> : bool, default=True</p>
+<blockquote>
+<div><p>Whether to shuffle the order of the inputs internally during optimization. This
+option is recommended to be kept to True besides for testing purposes; it
+alleviates a dependence of the solution on the (arbitrary) ordering of the
+input rows/columns.</p>
+</div></blockquote>
+<p><strong>maximize</strong> : bool, default=True</p>
+<blockquote>
+<div><p>Whether to maximize the objective function (graph matching problem) or minimize
+it (quadratic assignment problem). <code class="docutils literal notranslate"><span class="pre">maximize=True</span></code> corresponds to trying to
+find a permutation wherein the input matrices are as similar as possible - for
+adjacency matrices, this corresponds to maximizing the overlap of the edges of
+the two networks. Conversely, <code class="docutils literal notranslate"><span class="pre">maximize=False</span></code> would attempt to make this
+overlap as small as possible.</p>
+</div></blockquote>
+<p><strong>padding</strong> : {&quot;naive&quot;, &quot;adopted&quot;}, default=&quot;naive&quot;</p>
+<blockquote>
+<div><p>Specification of a padding scheme if <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> are not of equal size. See
+the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/matching/padded_gm.html">padded graph matching tutorial</a>
+or [3] for more explanation. Adopted padding has not been tested for weighted
+networks; use with caution.</p>
+</div></blockquote>
+<p><strong>n_jobs</strong> : int, default=None</p>
 <blockquote>
 <div><p>The number of jobs to run in parallel. Parallelization is over the
 initializations, so only relevant when <code class="docutils literal notranslate"><span class="pre">n_init</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>. None means 1 unless in a
 joblib.parallel_backend context. -1 means using all processors. See
-<a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.Parallel.html#joblib.Parallel" title="(in joblib v1.2.0.dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">joblib.Parallel</span></code></a> for more details.</p>
+<a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.Parallel.html#joblib.Parallel" title="(in joblib v1.3.0.dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">joblib.Parallel</span></code></a> for more details.</p>
+</div></blockquote>
+<p><strong>max_iter</strong> : int, default=30</p>
+<blockquote>
+<div><p>Must be 1 or greater, specifying the max number of iterations for the algorithm.
+Setting this value higher may provide more precise solutions at the cost of
+longer computation time.</p>
+</div></blockquote>
+<p><strong>tol</strong> : float, default=0.01</p>
+<blockquote>
+<div><p>Stopping tolerance for the FAQ algorithm. Setting this value smaller may provide
+more precise solutions at the cost of longer computation time.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : int, default=0</p>
+<blockquote>
+<div><p>A positive number specifying the level of verbosity for status updates in the
+algorithm's progress. If <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> &gt; 1, then this parameter behaves as the
+<code class="docutils literal notranslate"><span class="pre">verbose</span></code> parameter for <a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.Parallel.html#joblib.Parallel" title="(in joblib v1.3.0.dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">joblib.Parallel</span></code></a>. Otherwise, will print
+increasing levels of information about the algorithm's progress for each
+initialization.</p>
+</div></blockquote>
+<p><strong>rng</strong> : int or np.random.Generator, default=None</p>
+<blockquote>
+<div><p>Allows the specification of a random seed (positive integer) or a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">np.random.Generator</span></code> object to ensure reproducibility.</p>
+</div></blockquote>
+<p><strong>transport</strong> : bool, default=False</p>
+<blockquote>
+<div><p>Whether to enable use of regularized optimal transport for determining the step
+direction as described in [4]. May improve accuracy/speed, especially for large
+inputs and data where the correlation between edges is not close to 1.</p>
+</div></blockquote>
+<p><strong>transport_regularizer</strong> : int or float, default=100</p>
+<blockquote>
+<div><p>Strength of the entropic regularization in the optimal transport solver.</p>
+</div></blockquote>
+<p><strong>transport_tol</strong> : int or float, default=0.05,</p>
+<blockquote>
+<div><p>Must be positive. Stopping tolerance for the optimal transport solver. Setting
+this value smaller may provide more precise solutions at the cost of longer
+computation time.</p>
+</div></blockquote>
+<p><strong>transport_max_iter</strong> : int, default=1000</p>
+<blockquote>
+<div><p>Must be positive. Maximum number of iterations for the optimal transport solver.
+Setting this value higher may provide more precise solutions at the cost of
+longer computation time.</p>
 </div></blockquote>
 </dd>
-<dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>perm_inds_</strong> : array, size (n,) where n is the number of vertices in the fitted graphs.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>res: MatchResult</p>
 <blockquote>
-<div><p>The indices of the optimal permutation (with the fixed seeds given) on the nodes of B,
-to best minimize the objective function <span class="math notranslate nohighlight">\(f(P) = \text{trace}(A^T PBP^T)
-+ \text{trace}(S^T P)\)</span>.</p>
-</div></blockquote>
-<p><strong>score_</strong> : float</p>
-<blockquote>
-<div><p>The objective function value of for the optimal permutation found.</p>
-</div></blockquote>
-<p><strong>n_iter_</strong> : int</p>
-<blockquote>
-<div><p>Number of Frank-Wolfe iterations run. If <code class="docutils literal notranslate"><span class="pre">n_init</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">n_iter_</span></code> reflects the number of
-iterations performed at the initialization returned.</p>
-</div></blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">MatchResult</span></code> containing the following fields.</p>
+<dl class="simple">
+<dt>indices_A<span class="classifier">ndarray</span></dt><dd><p>Sorted indices in <code class="docutils literal notranslate"><span class="pre">A</span></code> which were matched.</p>
+</dd>
+<dt>indices_B<span class="classifier">ndarray</span></dt><dd><p>Indices in <code class="docutils literal notranslate"><span class="pre">B</span></code> which were matched. Element <code class="docutils literal notranslate"><span class="pre">indices_B[i]</span></code> was matched
+to element <code class="docutils literal notranslate"><span class="pre">indices_A[i]</span></code>. <code class="docutils literal notranslate"><span class="pre">indices_B</span></code> can also be thought of as a
+permutation of the nodes of <code class="docutils literal notranslate"><span class="pre">B</span></code> with respect to <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
+</dd>
+<dt>score<span class="classifier">float</span></dt><dd><p>Objective function value at the end of optimization.</p>
+</dd>
+<dt>misc<span class="classifier">list of dict</span></dt><dd><p>List of length <code class="docutils literal notranslate"><span class="pre">n_init</span></code> containing information about each run. Fields for
+each run are <code class="docutils literal notranslate"><span class="pre">score</span></code>, <code class="docutils literal notranslate"><span class="pre">n_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">convex_solution</span></code>, and <code class="docutils literal notranslate"><span class="pre">converged</span></code>.</p>
 </dd>
 </dl>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em>) -- </p></li>
+<li><p><strong>B</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em>) -- </p></li>
+<li><p><strong>AB</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>BA</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>partial_match</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><em>ndarray</em><em>]</em>) -- </p></li>
+<li><p><strong>init_perturbation</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+<li><p><strong>n_init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+<li><p><strong>shuffle_input</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>maximize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>padding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'adopted'</em><em>, </em><em>'naive'</em><em>]</em>) -- </p></li>
+<li><p><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>integer</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+<li><p><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+<li><p><strong>rng</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>integer</em><em>, </em><em>Generator</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>transport</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>transport_regularizer</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+<li><p><strong>transport_tol</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+<li><p><strong>transport_max_iter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><em>MatchResult</em></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Many extensions [2-5] to the original FAQ algorithm are included in this function.
+The full objective function which this function aims to solve can be written as</p>
+<div class="math notranslate nohighlight">
+\[f(P) = - \sum_{k=1}^K \|A^{(k)} - PB^{(k)}P^T\|_F^2 - \sum_{k=1}^K \|(AB)^{(k)}P^T - P(BA)^{(k)}\|_F^2 + trace(SP^T)\]</div>
+<p>where <span class="math notranslate nohighlight">\(P\)</span> is a permutation matrix we are trying to learn, <span class="math notranslate nohighlight">\(A^{(k)}\)</span> is the adjacency
+matrix in network <span class="math notranslate nohighlight">\(A\)</span> for the <span class="math notranslate nohighlight">\(k\)</span>-th edge type (and likewise for B), <span class="math notranslate nohighlight">\((AB)^{(k)}\)</span>
+(with a slight abuse of notation, but for consistency with the code) is an adjacency
+matrix representing a subgraph of any connections which go from objects in <span class="math notranslate nohighlight">\(A\)</span> to
+those in <span class="math notranslate nohighlight">\(B\)</span> (and defined likewise for <span class="math notranslate nohighlight">\((BA)\)</span>), and <span class="math notranslate nohighlight">\(S\)</span> is a
+similarity matrix indexing the similarity of each object in <span class="math notranslate nohighlight">\(A\)</span> to each object
+in <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">partial_match</span></code> is used, then the above will be maximized/minimized over the
+set of permutations which respect this partial matching of the two networks.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">maximize</span></code>, this function will attempt to maximize <span class="math notranslate nohighlight">\(f(P)\)</span> (solve the graph
+matching problem); otherwise, it will be minimized.</p>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="refcf056df51c-1"><span class="brackets">1</span></dt>
+<dt class="label" id="r1aa0fdd21dd3-1"><span class="brackets">1</span></dt>
 <dd><p>J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,
 E.T. Harley, D.E. Fishkind, R.J. Vogelstein, and C.E. Priebe, “Fast
 approximate quadratic programming for graph matching,” PLOS one, vol. 10,
 no. 4, p. e0121002, 2015.</p>
 </dd>
-<dt class="label" id="refcf056df51c-2"><span class="brackets">2</span></dt>
+<dt class="label" id="r1aa0fdd21dd3-2"><span class="brackets">2</span></dt>
+<dd><p>B.D. Pedigo, M. Winding, C.E. Priebe, J.T. Vogelstein, &quot;Bisected graph
+matching improves automated pairing of bilaterally homologous neurons from
+connectomes,&quot; bioRxiv 2022.05.19.492713 (2022)</p>
+</dd>
+<dt class="label" id="r1aa0fdd21dd3-3"><span class="brackets">3</span></dt>
 <dd><p>D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,
-Seeded graph matching, Pattern Recognit. 87 (2019) 203–215</p>
+&quot;Seeded graph matching,&quot; Pattern Recognit. 87 (2019) 203–215</p>
+</dd>
+<dt class="label" id="r1aa0fdd21dd3-4"><span class="brackets">4</span></dt>
+<dd><p>A. Saad-Eldin, B.D. Pedigo, C.E. Priebe, J.T. Vogelstein &quot;Graph Matching via
+Optimal Transport,&quot; arXiv 2111.05366 (2021)</p>
+</dd>
+<dt class="label" id="r1aa0fdd21dd3-5"><span class="brackets">5</span></dt>
+<dd><p>K. Pantazis, D.L. Sussman, Y. Park, Z. Li, C.E. Priebe, V. Lyzinski,
+&quot;Multiplex graph matching matched filters,&quot; Applied Network Science (2022)</p>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="graspologic.match.GraphMatch.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'barycenter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'adopted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/match/gmp.html#GraphMatch.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.match.GraphMatch.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'barycenter'</em><em>, </em><em>'rand'</em><em>, </em><em>'randomized'</em><em>]</em><em>, </em><em>numpy.ndarray</em><em>]</em>) -- </p></li>
-<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>shuffle_input</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
-<li><p><strong>gmp</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>padding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'adopted'</em><em>, </em><em>'naive'</em><em>]</em>) -- </p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.22)"><em>numpy.random.mtrand.RandomState</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="(in NumPy v1.22)"><em>numpy.random._generator.Generator</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="graspologic.match.GraphMatch.init">
-<span class="sig-name descname"><span class="pre">init</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'barycenter'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'rand'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'randomized'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#graspologic.match.GraphMatch.init" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="graspologic.match.GraphMatch.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds_A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds_B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/match/gmp.html#GraphMatch.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.match.GraphMatch.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits the model with two assigned adjacency matrices</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>A</strong> : 2d-array, square</p>
-<blockquote>
-<div><p>A square adjacency matrix</p>
-</div></blockquote>
-<p><strong>B</strong> : 2d-array, square</p>
-<blockquote>
-<div><p>A square adjacency matrix</p>
-</div></blockquote>
-<p><strong>seeds_A</strong> : 1d-array, shape (m , 1) where m &lt;= number of nodes (default = [])</p>
-<blockquote>
-<div><p>An array where each entry is an index of a node in <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
-</div></blockquote>
-<p><strong>seeds_B</strong> : 1d-array, shape (m , 1) where m &lt;= number of nodes (default = [])</p>
-<blockquote>
-<div><p>An array where each entry is an index of a node in <cite>B</cite> The elements of
-<code class="docutils literal notranslate"><span class="pre">seeds_A</span></code> and <code class="docutils literal notranslate"><span class="pre">seeds_B</span></code> are vertices which are known to be matched, that is,
-<code class="docutils literal notranslate"><span class="pre">seeds_A[i]</span></code> is matched to vertex <code class="docutils literal notranslate"><span class="pre">seeds_B[i]</span></code>.</p>
-</div></blockquote>
-<p><strong>S</strong> : 2d-array, square</p>
-<blockquote>
-<div><p>A similarity matrix. Should be shape (n_A , n_B), the number of nodes in
-<code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>, respectively.</p>
-<p>Note: the scale of <code class="docutils literal notranslate"><span class="pre">S</span></code> affects the weight placed on the term
-<span class="math notranslate nohighlight">\(\text{trace}(S^T P)\)</span> relative to <span class="math notranslate nohighlight">\(\text{trace}(A^T PBP^T)\)</span>
-during the optimization process.</p>
-</div></blockquote>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>self</strong><span class="classifier">returns an instance of self</span></dt><dd></dd>
-</dl>
-</dd>
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>A</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
-<li><p><strong>B</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
-<li><p><strong>seeds_A</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
-<li><p><strong>seeds_B</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
-<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#graspologic.match.GraphMatch" title="graspologic.match.gmp.GraphMatch">graspologic.match.gmp.GraphMatch</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="graspologic.match.GraphMatch.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.match.GraphMatch.get_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
-contained subobjects that are estimators.</p>
-</div></blockquote>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="graspologic.match.GraphMatch.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.match.GraphMatch.set_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the parameters of this estimator.</p>
-<p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
-parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
-possible to update each component of a nested object.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="graspologic.match.GraphMatch.fit_predict">
-<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds_A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds_B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/match/gmp.html#GraphMatch.fit_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.match.GraphMatch.fit_predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits the model with two assigned adjacency matrices, returning optimal
-permutation indices</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>A</strong> : 2d-array, square</p>
-<blockquote>
-<div><p>A square adjacency matrix</p>
-</div></blockquote>
-<p><strong>B</strong> : 2d-array, square</p>
-<blockquote>
-<div><p>A square adjacency matrix</p>
-</div></blockquote>
-<p><strong>seeds_A</strong> : 1d-array, shape (m , 1) where m &lt;= number of nodes (default = [])</p>
-<blockquote>
-<div><p>An array where each entry is an index of a node in <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
-</div></blockquote>
-<p><strong>seeds_B</strong> : 1d-array, shape (m , 1) where m &lt;= number of nodes (default = [])</p>
-<blockquote>
-<div><p>An array where each entry is an index of a node in <code class="docutils literal notranslate"><span class="pre">B</span></code> The elements of
-<code class="docutils literal notranslate"><span class="pre">seeds_A</span></code> and <code class="docutils literal notranslate"><span class="pre">seeds_B</span></code> are vertices which are known to be matched, that is,
-<code class="docutils literal notranslate"><span class="pre">seeds_A[i]</span></code> is matched to vertex <code class="docutils literal notranslate"><span class="pre">seeds_B[i]</span></code>.</p>
-</div></blockquote>
-<p><strong>S</strong> : 2d-array, square</p>
-<blockquote>
-<div><p>A similarity matrix. Should be shape (n_A , n_B), the number of nodes in
-<code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>, respectively.</p>
-<p>Note: the scale of <cite>S</cite> affects the weight placed on the term
-<span class="math notranslate nohighlight">\(\text{trace}(S^T P)\)</span> relative to <span class="math notranslate nohighlight">\(\text{trace}(A^T PBP^T)\)</span>
-during the optimization process.</p>
-</div></blockquote>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>perm_inds_</strong> : 1-d array, some shuffling of [0, n_vert)</p>
-<blockquote>
-<div><p>The optimal permutation indices to minimize the objective function</p>
-</div></blockquote>
-</dd>
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>A</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
-<li><p><strong>B</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) -- </p></li>
-<li><p><strong>seeds_A</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
-<li><p><strong>seeds_B</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
-<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em>]</em>) -- </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>

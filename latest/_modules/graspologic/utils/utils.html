@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.utils.utils &mdash; graspologic 1.0.0 documentation</title>
+  <title>graspologic.utils.utils &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -28,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -58,6 +59,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -112,6 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
@@ -162,6 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
@@ -468,7 +472,8 @@
 
 
 <span class="k">def</span> <span class="nf">is_loopless</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">return</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">diag_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag_indices_from</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">diag_indices</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">is_unweighted</span><span class="p">(</span>
@@ -637,9 +642,8 @@
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function to convert graph adjacency matrix to graph Laplacian.</span>
 
-<span class="sd">    Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal</span>
-<span class="sd">    matrix of degrees of each node raised to the -1/2 power, I is the</span>
-<span class="sd">    identity matrix, and A is the adjacency matrix.</span>
+<span class="sd">    Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal matrix</span>
+<span class="sd">    of degrees of each node, I is the identity matrix, and A is the adjacency matrix.</span>
 
 <span class="sd">    R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer \times I`.</span>
 
@@ -652,12 +656,12 @@
 <span class="sd">    form: {&#39;I-DAD&#39;, &#39;DAD&#39; (default), &#39;R-DAD&#39;}, string, optional</span>
 
 <span class="sd">        - &#39;I-DAD&#39;</span>
-<span class="sd">            Computes :math:`L = I - D_i A D_i`</span>
+<span class="sd">            Computes :math:`L = I - D_i^{-1/2} A D_i^{-1/2}`</span>
 <span class="sd">        - &#39;DAD&#39;</span>
-<span class="sd">            Computes :math:`L = D_o A D_i`</span>
+<span class="sd">            Computes :math:`L = D_o^{-1/2} A D_i^{-1/2}`</span>
 <span class="sd">        - &#39;R-DAD&#39;</span>
-<span class="sd">            Computes :math:`L = D_o^r A D_i^r`</span>
-<span class="sd">            where :math:`D_o^r = D_o + regularizer \times I` and likewise for :math:`D_i`</span>
+<span class="sd">            Computes :math:`L = D_o(r)^{-1/2} A D_i(r)^{-1/2}`</span>
+<span class="sd">            where :math:`D_o(r)^{-1/2} = D_o^{-1/2} + regularizer \times I` and likewise for :math:`D_i(r)^{-1/2}`</span>
 
 <span class="sd">    regularizer: int, float or None, optional (default=None)</span>
 <span class="sd">        Constant to add to the degree vector(s). If None, average node degree is added.</span>

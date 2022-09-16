@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Release Notes: GraSPy 0.0.3 &mdash; graspologic 1.0.0 documentation</title>
+  <title>Release Notes: GraSPy 0.0.3 &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -31,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -61,6 +62,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../release.html">Release Log</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -115,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/nominate.html">Nomination</a><ul>
@@ -165,6 +168,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
@@ -288,14 +292,14 @@
 }
 </style>
 <section id="release-notes-graspy-0-0-3">
-<h1>Release Notes: GraSPy 0.0.3<a class="headerlink" href="#release-notes-graspy-0-0-3" title="Permalink to this headline">¶</a></h1>
+<h1>Release Notes: GraSPy 0.0.3<a class="headerlink" href="#release-notes-graspy-0-0-3" title="Permalink to this heading">¶</a></h1>
 <p>We're happy to announce the release of GraSPy 0.0.3! GraSPy is a Python package for
 understanding the properties of random graphs that arise from modern datasets, such as
 social networks and brain networks.</p>
 <p>For more information, please visit our <a class="reference external" href="http://graspy.neurodata.io/">website</a>
 and our <a class="reference external" href="https://graspy.neurodata.io/tutorial.html">tutorials</a>.</p>
 <section id="highlights">
-<h2>Highlights<a class="headerlink" href="#highlights" title="Permalink to this headline">¶</a></h2>
+<h2>Highlights<a class="headerlink" href="#highlights" title="Permalink to this heading">¶</a></h2>
 <p>This release is the result of over 2 months of work with over 16 pull requests by
 4 contributors. Highlights include:</p>
 <ul class="simple">
@@ -306,7 +310,7 @@ and our <a class="reference external" href="https://graspy.neurodata.io/tutorial
 </ul>
 </section>
 <section id="improvements">
-<h2>Improvements<a class="headerlink" href="#improvements" title="Permalink to this headline">¶</a></h2>
+<h2>Improvements<a class="headerlink" href="#improvements" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Added badges to Github for arxiv paper and number of downloads</p></li>
 <li><p>Remove author headers for individual source files</p></li>
@@ -317,7 +321,7 @@ and our <a class="reference external" href="https://graspy.neurodata.io/tutorial
 </ul>
 </section>
 <section id="api-changes">
-<h2>API Changes<a class="headerlink" href="#api-changes" title="Permalink to this headline">¶</a></h2>
+<h2>API Changes<a class="headerlink" href="#api-changes" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">SemiparametricTest</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">LatentPositionTest</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">NonparametricTest</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">LatentDistributionTest</span></code></p></li>
@@ -325,14 +329,14 @@ and our <a class="reference external" href="https://graspy.neurodata.io/tutorial
 </ul>
 </section>
 <section id="deprecations">
-<h2>Deprecations<a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
+<h2>Deprecations<a class="headerlink" href="#deprecations" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The notebooks folder was removed from <code class="docutils literal notranslate"><span class="pre">GraSPy</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">SemiparametricTest</span></code> and <code class="docutils literal notranslate"><span class="pre">NonparametricTest</span></code> renamed (see above)</p></li>
 </ul>
 </section>
 <section id="contributors-to-this-release">
-<h2>Contributors to this release<a class="headerlink" href="#contributors-to-this-release" title="Permalink to this headline">¶</a></h2>
+<h2>Contributors to this release<a class="headerlink" href="#contributors-to-this-release" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/bdpedigo">Benjamin Pedigo</a></p></li>
 <li><p><a class="reference external" href="https://github.com/j1c">Jaewon Chung</a></p></li>

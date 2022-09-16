@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic in the wild &mdash; graspologic 1.0.0 documentation</title>
+  <title>graspologic in the wild &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -31,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -61,6 +62,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -115,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="reference/nominate.html">Nomination</a><ul>
@@ -165,6 +168,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#simulations">Simulations</a><ul>
@@ -286,11 +290,11 @@
 }
 </style>
 <section id="graspologic-in-the-wild">
-<h1>graspologic in the wild<a class="headerlink" href="#graspologic-in-the-wild" title="Permalink to this headline">¶</a></h1>
+<h1>graspologic in the wild<a class="headerlink" href="#graspologic-in-the-wild" title="Permalink to this heading">¶</a></h1>
 <p>Below we include some examples of graspologic being used in projects. Feel free to make
 a pull request if you'd like to add to this list!</p>
 <section id="papers">
-<h2>Papers<a class="headerlink" href="#papers" title="Permalink to this headline">¶</a></h2>
+<h2>Papers<a class="headerlink" href="#papers" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.annualreviews.org/doi/abs/10.1146/annurev-statistics-042720-023234">Statistical connectomics</a>:
 Authors in the NeuroData group at Johns Hopkins University &quot;provide an overview from the perspective of statistical network science of
@@ -303,7 +307,7 @@ larger and less-correlated networks.</p></li>
 </ul>
 </section>
 <section id="educational-materials">
-<h2>Educational materials<a class="headerlink" href="#educational-materials" title="Permalink to this headline">¶</a></h2>
+<h2>Educational materials<a class="headerlink" href="#educational-materials" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://bdpedigo.github.io/networks-course">Network data science</a>:
 A short course on network data science (using many tools in <cite>graspologic</cite>) taught at Johns Hopkins University.</p></li>
@@ -313,7 +317,7 @@ by authors in the NeuroData group.</p></li>
 </ul>
 </section>
 <section id="blog-posts">
-<h2>Blog posts<a class="headerlink" href="#blog-posts" title="Permalink to this headline">¶</a></h2>
+<h2>Blog posts<a class="headerlink" href="#blog-posts" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.microsoft.com/en-us/research/blog/advancing-organizational-science-using-network-machine-learning-to-measure-innovation-in-the-workplace">Advancing organizational science using network machine learning to measure innovation in the workplace</a>:
 Researchers at Microsoft Research and collaborators used tools from graspologic (network

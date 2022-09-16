@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Correlated Random Dot Product Graph (RDPG) Graph Pair &mdash; graspologic 1.0.0 documentation</title>
+  <title>Correlated Random Dot Product Graph (RDPG) Graph Pair &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul class="current">
@@ -478,6 +482,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -486,10 +491,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -501,12 +510,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -534,8 +546,8 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Correlated-Random-Dot-Product-Graph-(RDPG)-Graph-Pair">
-<h1>Correlated Random Dot Product Graph (RDPG) Graph Pair<a class="headerlink" href="#Correlated-Random-Dot-Product-Graph-(RDPG)-Graph-Pair" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput nblast docutils container">
+<h1>Correlated Random Dot Product Graph (RDPG) Graph Pair<a class="headerlink" href="#Correlated-Random-Dot-Product-Graph-(RDPG)-Graph-Pair" title="Permalink to this heading">¶</a></h1>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -547,6 +559,15 @@ div.rendered_html tbody tr:hover {
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;talk&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <p>RDPG is a latent position generative model. An explanation of the uncorrelated model is in the <a class="reference external" href="https://graspy.neurodata.io/tutorials/simulations/rdpg.html">tutorial</a>.</p>
 <p>Here, we want to generate a pair of graphs with the same latent positions but with correlation between edges.</p>
@@ -592,7 +613,7 @@ array([[0.33, 0.33, 0.33, ..., 0.09, 0.09, 0.09],
 </pre></div></div>
 </div>
 <section id="Visualize-the-graphs-using-heatmap">
-<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this heading">¶</a></h2>
 <p>Here, we define <em>difference rate</em> to be the number of edges between the two graphs which are not the same (exist or not exist) out of all potential edges (roughly <span class="math notranslate nohighlight">\(n^2\)</span>)</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -626,7 +647,7 @@ Difference rate is  0.1438
 </div>
 </section>
 <section id="Compare-it-to-the-correlated-SBM-graph-pair">
-<h2>Compare it to the correlated SBM graph pair<a class="headerlink" href="#Compare-it-to-the-correlated-SBM-graph-pair" title="Permalink to this headline">¶</a></h2>
+<h2>Compare it to the correlated SBM graph pair<a class="headerlink" href="#Compare-it-to-the-correlated-SBM-graph-pair" title="Permalink to this heading">¶</a></h2>
 <p>Below, we sample a two-block SBM graph pair (undirected and no self-loops) G1 and G2 with the following parameters:</p>
 <p><span class="math">\begin{align*}
 n &= [50, 50]\\
@@ -682,7 +703,7 @@ Difference rate with sbm_corr function is  0.145
 <p>We can see the difference between G1 and G2 with both functions are similar.</p>
 </section>
 <section id="Varying-the-correlation">
-<h2>Varying the correlation<a class="headerlink" href="#Varying-the-correlation" title="Permalink to this headline">¶</a></h2>
+<h2>Varying the correlation<a class="headerlink" href="#Varying-the-correlation" title="Permalink to this heading">¶</a></h2>
 <p>We change the correlation between the graph pairs from -0.5 to 0.9 and see the difference between graph 1 and graph 2:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:

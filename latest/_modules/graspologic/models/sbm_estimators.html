@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.sbm_estimators &mdash; graspologic 1.0.0 documentation</title>
+  <title>graspologic.models.sbm_estimators &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,6 +13,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -28,7 +29,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -58,6 +59,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -112,6 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
@@ -162,6 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
@@ -261,7 +265,7 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_X_y</span>
@@ -333,7 +337,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    directed : boolean, optional (default=True)</span>
-<span class="sd">        Whether to treat the input graph as directed. Even if a directed graph is inupt,</span>
+<span class="sd">        Whether to treat the input graph as directed. Even if a directed graph is input,</span>
 <span class="sd">        this determines whether to force symmetry upon the block probability matrix fit</span>
 <span class="sd">        for the SBM. It will also determine whether graphs sampled from the model are</span>
 <span class="sd">        directed.</span>
@@ -469,7 +473,9 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="p">:</span>
             <span class="n">graph</span> <span class="o">=</span> <span class="n">remove_loops</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">)</span>
+        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loops</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
             <span class="n">block_p</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">block_p</span><span class="p">)</span>
@@ -526,7 +532,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    directed : boolean, optional (default=True)</span>
-<span class="sd">        Whether to treat the input graph as directed. Even if a directed graph is inupt,</span>
+<span class="sd">        Whether to treat the input graph as directed. Even if a directed graph is input,</span>
 <span class="sd">        this determines whether to force symmetry upon the block probability matrix fit</span>
 <span class="sd">        for the SBM. It will also determine whether graphs sampled from the model are</span>
 <span class="sd">        directed.</span>
@@ -669,7 +675,9 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="p">:</span>
             <span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
-        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">)</span>
+        <span class="n">block_p</span> <span class="o">=</span> <span class="n">_calculate_block_p</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_vert_inds</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loops</span>
+        <span class="p">)</span>
 
         <span class="n">out_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">in_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -696,7 +704,8 @@
         <span class="n">p_mat</span> <span class="o">=</span> <span class="n">p_mat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">degree_corrections</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">degree_corrections</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="p">:</span>
-            <span class="n">p_mat</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">p_mat</span><span class="p">))</span>
+            <span class="c1"># there seems to be a bug in numpy around __isub__ here?</span>
+            <span class="n">p_mat</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">p_mat</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p_mat_</span> <span class="o">=</span> <span class="n">p_mat</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span> <span class="o">=</span> <span class="n">block_p</span>
         <span class="k">return</span> <span class="bp">self</span></div>
@@ -714,7 +723,7 @@
         <span class="k">return</span> <span class="n">n_parameters</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_block_indices</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_get_block_indices</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="nb">range</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    y is a length n_verts vector of labels</span>
 
@@ -741,15 +750,17 @@
 
 <span class="k">def</span> <span class="nf">_calculate_block_p</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">block_inds</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
-    <span class="n">block_vert_inds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">block_inds</span><span class="p">:</span> <span class="nb">range</span><span class="p">,</span>
+    <span class="n">block_vert_inds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">return_counts</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    graph : input n x n graph</span>
 <span class="sd">    block_inds : list of length n_communities</span>
 <span class="sd">    block_vert_inds : list of list, for each block index, gives every node in that block</span>
 <span class="sd">    return_counts : whether to calculate counts rather than proportions</span>
+<span class="sd">    loops : whether self loops are possible in the graph</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">n_blocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">block_inds</span><span class="p">)</span>
@@ -762,6 +773,10 @@
         <span class="n">from_inds</span> <span class="o">=</span> <span class="n">block_vert_inds</span><span class="p">[</span><span class="n">from_block</span><span class="p">]</span>
         <span class="n">to_inds</span> <span class="o">=</span> <span class="n">block_vert_inds</span><span class="p">[</span><span class="n">to_block</span><span class="p">]</span>
         <span class="n">block</span> <span class="o">=</span> <span class="n">graph</span><span class="p">[</span><span class="n">from_inds</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">to_inds</span><span class="p">]</span>
+        <span class="c1"># if a block is from a community to itself, self loops are possible, so remove</span>
+        <span class="c1"># them from the computation to avoid underbias</span>
+        <span class="k">if</span> <span class="n">from_block</span> <span class="o">==</span> <span class="n">to_block</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">loops</span><span class="p">:</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">return_counts</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>

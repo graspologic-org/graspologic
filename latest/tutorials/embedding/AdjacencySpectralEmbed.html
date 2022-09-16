@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adjacency Spectral Embed &mdash; graspologic 1.0.0 documentation</title>
+  <title>Adjacency Spectral Embed &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul>
@@ -478,6 +482,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -486,10 +491,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -501,12 +510,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -534,9 +546,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Adjacency-Spectral-Embed">
-<h1>Adjacency Spectral Embed<a class="headerlink" href="#Adjacency-Spectral-Embed" title="Permalink to this headline">¶</a></h1>
+<h1>Adjacency Spectral Embed<a class="headerlink" href="#Adjacency-Spectral-Embed" title="Permalink to this heading">¶</a></h1>
 <p>This demo shows how to use the Adjacency Spectral Embed (ASE) class. We will then use ASE to show how two communities from a stochastic block model graph can be found in the embedded space using k-means.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -558,8 +570,17 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
+</div>
 <section id="Data-Generation">
-<h2>Data Generation<a class="headerlink" href="#Data-Generation" title="Permalink to this headline">¶</a></h2>
+<h2>Data Generation<a class="headerlink" href="#Data-Generation" title="Permalink to this heading">¶</a></h2>
 <p>ASE is a method for estimating the latent positions of a network modeled as a Random Dot Product Graph (RDPG). This embedding is both a form of dimensionality reduction for a graph and a way of fitting a generative model to graph data. We first generate two 2-block SBMs: one directed, and one undirected.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -591,7 +612,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Embedding:-Undirected-Case">
-<h2>Embedding: Undirected Case<a class="headerlink" href="#Embedding:-Undirected-Case" title="Permalink to this headline">¶</a></h2>
+<h2>Embedding: Undirected Case<a class="headerlink" href="#Embedding:-Undirected-Case" title="Permalink to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line">We now use the AdjacencySpectralEmbed class to embed the adjacency matrix into lower-dimensional space.</div>
 <div class="line">If no parameters are given to the AdjacencySpectralEmbed class, it will automatically choose the number of dimensions to embed into.</div>
@@ -618,7 +639,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Embedding:-Directed-Case">
-<h2>Embedding: Directed Case<a class="headerlink" href="#Embedding:-Directed-Case" title="Permalink to this headline">¶</a></h2>
+<h2>Embedding: Directed Case<a class="headerlink" href="#Embedding:-Directed-Case" title="Permalink to this heading">¶</a></h2>
 <p>If the graph is directed, we will get two outputs roughly corresponding to the “out” and “in” latent positions, since these are no longer the same.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -650,7 +671,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Dimension-specification">
-<h2>Dimension specification<a class="headerlink" href="#Dimension-specification" title="Permalink to this headline">¶</a></h2>
+<h2>Dimension specification<a class="headerlink" href="#Dimension-specification" title="Permalink to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line">One can also specify the parameters for embedding.</div>
 <div class="line">Here, we specify the number of embedded dimensions and change the SVD solver used to compute the embedding.</div>
@@ -674,7 +695,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;seaborn.axisgrid.PairGrid at 0x7f58a4811250&gt;
+&lt;seaborn.axisgrid.PairGrid at 0x7f76f4d17e80&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -686,7 +707,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Clustering-in-the-embedded-space">
-<h2>Clustering in the embedded space<a class="headerlink" href="#Clustering-in-the-embedded-space" title="Permalink to this headline">¶</a></h2>
+<h2>Clustering in the embedded space<a class="headerlink" href="#Clustering-in-the-embedded-space" title="Permalink to this heading">¶</a></h2>
 <p>Now, we will use the Euclidian representation of the graph to apply a standard clustering algorithm like k-means. We start with an SBM model where the 2 blocks have the exact same connection probabilities (effectively giving us an ER model graph). In this case, k-means will not be able to distinguish among the two embedded blocks. As the connections between the blocks become more distinct, the clustering will improve. For each graph, we plot its adjacency matrix, the predicted k-means cluster
 labels in the embedded space, and the error as a function of the true labels. Adjusted Rand Index (ARI) is a measure of clustering accuracy, where 1 is perfect clustering relative to ground truth. Error rate is simply the proportion of correctly labeled nodes.</p>
 <div class="nbinput docutils container">

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mixed Membership Stochastic Blockmodel (MMSBM) &mdash; graspologic 1.0.0 documentation</title>
+  <title>Mixed Membership Stochastic Blockmodel (MMSBM) &mdash; graspologic 2.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +34,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                1.0.0
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
@@ -167,6 +170,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul class="current">
@@ -478,6 +482,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -486,10 +491,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -501,12 +510,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -534,8 +546,8 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Mixed-Membership-Stochastic-Blockmodel-(MMSBM)">
-<h1>Mixed Membership Stochastic Blockmodel (MMSBM)<a class="headerlink" href="#Mixed-Membership-Stochastic-Blockmodel-(MMSBM)" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput nblast docutils container">
+<h1>Mixed Membership Stochastic Blockmodel (MMSBM)<a class="headerlink" href="#Mixed-Membership-Stochastic-Blockmodel-(MMSBM)" title="Permalink to this heading">¶</a></h1>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -546,6 +558,15 @@ div.rendered_html tbody tr:hover {
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
 </div>
 <p>Unlike <a class="reference internal" href="sbm.html"><span class="doc">Stochastic Block Models (SBM)</span></a>, Mixed Membership Stochastic Blockmodels (MMSBM) allow nodes to pertain to multiple communities when interacting with other nodes.</p>
 <p>Given a network with <span class="math notranslate nohighlight">\(k\)</span> communities, an MMSBM is parametrized by the number of nodes <span class="math notranslate nohighlight">\(n\)</span> of the graph, a block connectivity matrix <span class="math notranslate nohighlight">\(B \in \mathbb{R}^{k x k}\)</span> where each element specifies the probability of interaction between nodes based upon their community membership, and a vector <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> which controls the mixed-membership allowed for each node.</p>
@@ -576,7 +597,7 @@ P &= \begin{bmatrix}
 </div>
 </div>
 <section id="Visualize-the-graph-using-heatmap">
-<h2>Visualize the graph using heatmap<a class="headerlink" href="#Visualize-the-graph-using-heatmap" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize the graph using heatmap<a class="headerlink" href="#Visualize-the-graph-using-heatmap" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -596,7 +617,7 @@ P &= \begin{bmatrix}
 </div>
 </section>
 <section id="Generating-various-types-of-graphs">
-<h2>Generating various types of graphs<a class="headerlink" href="#Generating-various-types-of-graphs" title="Permalink to this headline">¶</a></h2>
+<h2>Generating various types of graphs<a class="headerlink" href="#Generating-various-types-of-graphs" title="Permalink to this heading">¶</a></h2>
 <p>Each node <span class="math notranslate nohighlight">\(p\)</span> is assigned a membership vector <span class="math notranslate nohighlight">\(\vec{\pi}_p \in \mathbb{R}^{k}\)</span> sampled from a <a class="reference external" href="https://en.wikipedia.org/wiki/Dirichlet_distribution">Dirichlet distribution</a>: <span class="math">\begin{align*}
 \vec{\pi}_p \sim \mbox{Dir}(\vec{\alpha})\\
 \end{align*}</span></p>
@@ -608,7 +629,7 @@ P &= \begin{bmatrix}
 <p>According to <span class="math notranslate nohighlight">\(\vec{\pi}_p\)</span>, node <span class="math notranslate nohighlight">\(p\)</span> will always behave as if pertaining to the first community when interacting with other nodes, while node <span class="math notranslate nohighlight">\(q\)</span> will interact 25% of the time as if belonging to community 1, 25% of the time as if belonging to community 2, etc.</p>
 <p>Therefore, controlling these membership vectors by varying the parameter <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> allows generation of various types of graphs.</p>
 <section id="Generating-Erdos-Renyi-(ER)-graphs">
-<h3>Generating Erdos-Renyi (ER) graphs<a class="headerlink" href="#Generating-Erdos-Renyi-(ER)-graphs" title="Permalink to this headline">¶</a></h3>
+<h3>Generating Erdos-Renyi (ER) graphs<a class="headerlink" href="#Generating-Erdos-Renyi-(ER)-graphs" title="Permalink to this heading">¶</a></h3>
 <p>To generate <a class="reference internal" href="erdos_renyi.html"><span class="doc">Erdos-Renyi (ER)</span></a>, one of the <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> entries can be set to be much greater than the others.</p>
 <p>For example, consider the two graphs (undirected, no self-loops) parameterized by:</p>
 <p><span class="math">\begin{align*}
@@ -643,7 +664,7 @@ P &= \begin{bmatrix}
 </div>
 </section>
 <section id="Visualize-the-graphs-using-heatmap">
-<h3>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this headline">¶</a></h3>
+<h3>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -669,7 +690,7 @@ P &= \begin{bmatrix}
 </div>
 </section>
 <section id="Differences-with-Stochastic-Block-Model-(SBM)-graphs">
-<h3>Differences with Stochastic Block Model (SBM) graphs<a class="headerlink" href="#Differences-with-Stochastic-Block-Model-(SBM)-graphs" title="Permalink to this headline">¶</a></h3>
+<h3>Differences with Stochastic Block Model (SBM) graphs<a class="headerlink" href="#Differences-with-Stochastic-Block-Model-(SBM)-graphs" title="Permalink to this heading">¶</a></h3>
 <p>According to the <a class="reference internal" href="sbm.html"><span class="doc">Stochastic Block Models (SBM)</span></a>, each node in a graph can only pertain to one community. Therefore, one way to recreate such model with an MMSBM is to set all the entries of <span class="math notranslate nohighlight">\(\vec{\alpha}\)</span> equal to the same value. The closer the value is to <span class="math notranslate nohighlight">\(0\)</span> the more the simulated graphs will appear similar to an SBM, the closer the value is to <span class="math notranslate nohighlight">\(1\)</span> the more uniform the graph will look, thus losing the community structure dictated by the SBM.</p>
 <p>To show this we sample a four-block SBM (undirected, no self-loops) graph with following parameters: <span class="math">\begin{align*}
 n &= \begin{bmatrix} 50 & 50 & 50 & 50 \end{bmatrix}\\
@@ -702,7 +723,7 @@ B &=\begin{bmatrix} 0.8 & 0.2 & 0.2 & 0.2 \\ 0.2 & 0.8 & 0.2 & 0.2 \\ 0.2 & 0.2 
 </div>
 </section>
 <section id="Plot-SBM-and-MMSBM-graphs-using-heatmap">
-<h3>Plot SBM and MMSBM graphs using heatmap<a class="headerlink" href="#Plot-SBM-and-MMSBM-graphs-using-heatmap" title="Permalink to this headline">¶</a></h3>
+<h3>Plot SBM and MMSBM graphs using heatmap<a class="headerlink" href="#Plot-SBM-and-MMSBM-graphs-using-heatmap" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
