@@ -10,6 +10,7 @@ from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
+from scipy.sparse import csr_array, csr_matrix
 
 # an explanation, for those who come in the later times:
 # the following is because when type hinting first came out, Python 3.6 up to 3.8
@@ -32,18 +33,6 @@ if sys.version_info >= (3, 9):
     from builtins import tuple as Tuple
 else:
     from typing import Dict, List, Set, Tuple
-
-# SciPy sparse array types were added in 1.8.0, and are the preferred implementation
-# going forward. We will use them if they are available, and fall back to the old
-# scipy.sparse.csr_matrix if they are not.
-from packaging import version
-from scipy import __version__ as scipy_version
-from scipy.sparse import csr_matrix
-
-if version.parse(scipy_version) >= version.parse("1.8.0"):
-    from scipy.sparse import csr_array
-else:
-    csr_array = csr_matrix
 
 
 AdjacencyMatrix = Union[np.ndarray, csr_matrix, csr_array]
