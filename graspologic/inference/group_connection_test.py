@@ -16,11 +16,13 @@ from .utils import compute_density_adjustment
 labelstype = Union[np.ndarray, list[int]]
 
 SBMResult = namedtuple(
-    "sbm_result", ["probabilities", "observed", "possible", "group_counts"]
+    "SBMResult", ["probabilities", "observed", "possible", "group_counts"]
 )
 
 
-def fit_sbm(A: AdjacencyMatrix, labels: labelstype, loops: bool = False) -> namedtuple:
+def fit_sbm(
+    A: AdjacencyMatrix, labels: labelstype, loops: bool = False
+) -> tuple[GraphRepresentation, pd.DataFrame, pd.DataFrame, pd.series]:
 
     """
     Fits a stochastic block model to data for a given network with known group identities. Required inputs are the adjacency matrix for the
@@ -96,16 +98,16 @@ def fit_sbm(A: AdjacencyMatrix, labels: labelstype, loops: bool = False) -> name
         .fillna(0.0)
     )
 
-    n_possible = np.outer(counts_labels, counts_labels)
+    num_possible = np.outer(counts_labels, counts_labels)
 
     if not loops:
         # then there would have been n fewer possible edges
-        n_possible[np.arange(K), np.arange(K)] = (
-            n_possible[np.arange(K), np.arange(K)] - counts_labels
+        num_possible[np.arange(K), np.arange(K)] = (
+            num_possible[np.arange(K), np.arange(K)] - counts_labels
         )
 
     n_possible = pd.DataFrame(
-        data=n_possible, index=unique_labels, columns=unique_labels
+        data=num_possible, index=unique_labels, columns=unique_labels
     )
     n_possible.index.name = "source"
     n_possible.columns.name = "target"
@@ -117,7 +119,9 @@ def fit_sbm(A: AdjacencyMatrix, labels: labelstype, loops: bool = False) -> name
     return SBMResult(B_hat, n_observed, n_possible, counts_labels)
 
 
-def _make_adjacency_dataframe(data: GraphRepresentation, index: labelstype)->pd.DataFrame:
+def _make_adjacency_dataframe(
+    data: GraphRepresentation, index: labelstype
+) -> pd.DataFrame:
     """
     Helper function to convert data with a given index into a dataframe data structure.
     """
@@ -193,7 +197,7 @@ def group_connection_test(
     Returns
     -------
     stat: float
-        This contains the a statistic computed by the method chosen for combining p values (i.e. "combine_method"). For Tippett's method,
+        This contains the statistic computed by the method chosen for combining p values (i.e. "combine_method"). For Tippett's method,
         this is the least of the p values. For Fisher's method, this is the test statistic computed as -2*sum(log(p-values)).
     pvalue: float
         The combined p-value for the total network-to-network comparison using the SBM model, calculated using the chosen combine_method.
@@ -263,11 +267,13 @@ def group_connection_test(
 
     K = n_observed1.shape[0]
 
-    uncorrected_pvalues = np.empty((K, K), dtype=float)
-    uncorrected_pvalues = _make_adjacency_dataframe(uncorrected_pvalues, index)
+    uncorrected_pvalues_temp = np.empty(
+        (K, K), dtype=float
+    )  # had to make a new variable to keep mypy happy
+    uncorrected_pvalues = _make_adjacency_dataframe(uncorrected_pvalues_temp, index)
 
-    stats = np.empty((K, K), dtype=float)
-    stats = _make_adjacency_dataframe(stats, index)
+    stats_temp = np.empty((K, K), dtype=float)
+    stats = _make_adjacency_dataframe(stats_temp, index)
 
     if density_adjustment:
         adjustment_factor = compute_density_adjustment(A1, A2)
@@ -330,5 +336,6 @@ def group_connection_test(
         stat = np.inf
         pvalue = 0.0
     else:
+        print(run_pvalues)
         stat, pvalue = scipy_combine_pvalues(run_pvalues, method=combine_method)
     return stat, pvalue, misc

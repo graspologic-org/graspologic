@@ -137,8 +137,8 @@ def binom_2samp_paired(
     # n_only_x2 = ((~x1) & x2).sum()
     n_only_x2 = np.sum(x2 - x1 == 1)
 
-    cont_table = [[n_both, n_only_x2], [n_only_x1, n_neither]]
-    cont_table = np.array(cont_table)
+    cont_table = np.array([[n_both, n_only_x2], [n_only_x1, n_neither]])
+    # cont_table = np.array(cont_table)
 
     bunch = mcnemar(cont_table)
     stat = bunch.statistic

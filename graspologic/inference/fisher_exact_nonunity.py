@@ -1,6 +1,7 @@
+from typing import Union
+
 import numpy as np
 from scipy.stats import nchypergeom_fisher
-from typing import Union
 
 from ..types import GraphRepresentation
 
@@ -69,7 +70,7 @@ def fisher_exact_nonunity(
 
     rv = dist(n1 + n2, n1, n, null_ratio)
 
-    def binary_search(n: int, n1: int, n2: int, side: str)->int:
+    def binary_search(n: int, n1: int, n2: int, side: str) -> int:
         """Binary search for where to begin halves in two-sided test."""
         if side == "upper":
             minval = mode

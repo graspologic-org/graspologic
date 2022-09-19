@@ -4,19 +4,6 @@ from ..types import GraphRepresentation
 from .group_connection_test import group_connection_test
 
 
-def _squeeze_value(
-    old_misc: dict, new_misc: dict, old_key: list[str], new_key: list[str]
-):
-
-    """
-    Helper function to rename the keys for a dictionary variable. Takes the old and new dictionaries, and the old and new keys, as
-    arguments, and returns the new dictionary, which uses the new keys to index the data.
-    """
-    variable = old_misc[old_key]
-    variable = variable.values[0, 0]
-    new_misc[new_key] = variable
-
-
 def density_test(
     A1: GraphRepresentation, A2: GraphRepresentation, method: str = "fisher"
 ) -> tuple[float, float, dict]:
@@ -54,7 +41,7 @@ def density_test(
         Dictionary containing a number of computed statistics for the network comparison performed:
             "probability1" = float
                 This contains the computed probability of an edge between nodes in network 1. In other words, this is p1
-            "probabilities2" = float
+            "probability2" = float
                 This contains p2, i.e. the computed network density of network 2.
             "observed1" = n_observed1, dataframe
                 The total number of edge connections for network 1.
@@ -66,31 +53,16 @@ def density_test(
                 Same as above, but for network 2.
 
     """
-    stat, pvalue, sbm_misc = group_connection_test(
+    stat, pvalue, er_misc = group_connection_test(
         A1,
         A2,
         labels1=np.ones(A1.shape[0]),
         labels2=np.ones(A2.shape[0]),
         method=method,
     )
-    old_keys = [
-        "probabilities1",
-        "probabilities2",
-        "observed1",
-        "observed2",
-        "possible1",
-        "possible2",
-    ]
-    new_keys = [
-        "probability1",
-        "probability2",
-        "observed1",
-        "observed2",
-        "possible1",
-        "possible2",
-    ]
-    er_misc = {}
-    for old_key, new_key in zip(old_keys, new_keys):
-        _squeeze_value(sbm_misc, er_misc, old_key, new_key)
+    er_misc["probability1"] = er_misc["probabilities1"]
+    del er_misc["probabilities1"]
+    er_misc["probability2"] = er_misc["probabilities2"]
+    del er_misc["probabilities2"]
 
     return stat, pvalue, er_misc

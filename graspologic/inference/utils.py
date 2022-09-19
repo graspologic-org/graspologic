@@ -31,7 +31,9 @@ def compute_density(adjacency: AdjacencyMatrix, loops: bool = False) -> float:
     return n_edges / n_possible
 
 
-def compute_density_adjustment(adjacency1: AdjacencyMatrix, adjacency2: AdjacencyMatrix)->float:
+def compute_density_adjustment(
+    adjacency1: AdjacencyMatrix, adjacency2: AdjacencyMatrix
+) -> float:
 
     """
     Computes the density adjustment to be used when testing the hypothesis that the density of one network is equal to a fixed parameter
