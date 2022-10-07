@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import numpy as np
 from scipy.stats import chi2_contingency, fisher_exact
 from statsmodels.stats.contingency_tables import mcnemar
@@ -5,10 +7,12 @@ from statsmodels.stats.contingency_tables import mcnemar
 from ..types import AdjacencyMatrix, GraphRepresentation
 from .fisher_exact_nonunity import fisher_exact_nonunity
 
+BinomialResult = namedtuple("BinomialResult", ["stat", "pvalue"])
+
 
 def binom_2samp(
     x1: int, n1: int, x2: int, n2: int, null_ratio: float = 1.0, method: str = "fisher"
-) -> tuple[float, float]:
+) -> BinomialResult:
     """
     This function computes the likelihood that two binomial samples are drown from identical underlying
     distributions. Null hypothesis is that the success probability for each sample is identical (i.e.
@@ -40,12 +44,14 @@ def binom_2samp(
 
     Returns
     -------
-    stat: float
-        The odds ratio for the provided data, representing the prior probability of a "success" (in this
-        case, the odds of an edge occurring between two nodes)
-    pvalue: float
-        The computed probability of the observed dataset assuming the null hypothesis (p1=p2) is true. By
-        convention, a pvalue < 0.05 represents a statistically significant result.
+    BinomialResult: namedtuple
+    This namedtuple contains the following data:
+        stat: float
+            The odds ratio for the provided data, representing the prior probability of a "success" (in this
+          case, the odds of an edge occurring between two nodes)
+       pvalue: float
+           The computed probability of the observed dataset assuming the null hypothesis (p1=p2) is true. By
+           convention, a pvalue < 0.05 represents a statistically significant result.
 
     Raises
     ------
@@ -83,71 +89,4 @@ def binom_2samp(
     else:
         raise ValueError()
 
-    return stat, pvalue
-
-
-def binom_2samp_paired(
-    x1: GraphRepresentation, x2: GraphRepresentation
-) -> tuple[float, float, dict]:
-    """
-    Similar to the above, except this function applies in the case where the two binomial samples are
-    paired. In the case of graph comparisons, this could involve, e.g., an identical underlying set of
-    nodes but two different sets of edges. Again, the goal is to assess the probability of the observed
-    samples assuming the underlying binomial distribution is equal for both measured samples.
-
-    Parameters
-    ----------
-    x1 : array, shape varies
-        An array of either zeroes or ones representing either succcesses (edge present) or failures (edge
-        absent) for the first sample for all possible edges between nodes in the underlying graph. The
-        size will correspond to the size of the graph or subgraph upon which the test is being performed
-        (this is supplied by the user).
-    x2 : array, shape varies but must equal shape of x1
-        Same as x1, but for the second sample. The shape of this array must match the shape of the array
-        for sample 1 in order for paired testing to be possible.
-
-    Returns
-    -------
-    stat: float
-        A statistic computed as part of McNemar's test. Returns the smaller of n_only_x1 and n_only_x2,
-        where these values represent the number of 1s present in one array and absent from the other.
-    pvalue: float
-        The computed probability of the observed dataset assuming the null hypothesis (p1=p2) is true. By
-        convention, a pvalue < 0.05 represents a statistically significant result.
-    misc:  dict
-        Dictionary containing a few miscellaneous statistics computed by the function:
-            "n_both" contains the number of locations where a 1 appears in both x1 and x2
-            "n_neither" contains the number of locations where a 0 appears in both x1 and x2
-            "n_only1" contains the number of locations where a 1 appears in x1 but not x2
-            "n_only2" contains the number of locations where a 1 appears in x2 but not x1
-
-    """
-
-    # x1 = x1.astype(bool)
-    # x2 = x2.astype(bool)
-
-    # TODO these two don't actually matter at all for McNemar's test...
-    # n_both = (x1 & x2).sum()
-    n_both = np.sum(x1 + x2 == 2)
-    # n_neither = ((~x1) & (~x2)).sum()
-    n_neither = np.sum(x1 + x2 == 0)
-
-    # n_only_x1 = (x1 & (~x2)).sum()
-    n_only_x1 = np.sum(x1 - x2 == 1)
-    # n_only_x2 = ((~x1) & x2).sum()
-    n_only_x2 = np.sum(x2 - x1 == 1)
-
-    cont_table = np.array([[n_both, n_only_x2], [n_only_x1, n_neither]])
-    # cont_table = np.array(cont_table)
-
-    bunch = mcnemar(cont_table)
-    stat = bunch.statistic
-    pvalue = bunch.pvalue
-
-    misc = {}
-    misc["n_both"] = n_both
-    misc["n_neither"] = n_neither
-    misc["n_only1"] = n_only_x1
-    misc["n_only2"] = n_only_x2
-
-    return stat, pvalue, misc
+    return BinomialResult(stat, pvalue)

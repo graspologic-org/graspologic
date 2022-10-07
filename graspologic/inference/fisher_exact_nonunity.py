@@ -1,3 +1,4 @@
+from collections import namedtuple
 from typing import Union
 
 import numpy as np
@@ -5,10 +6,12 @@ from scipy.stats import nchypergeom_fisher
 
 from ..types import GraphRepresentation
 
+FisherResult = namedtuple("FisherResult", ["oddsratio", "pvalue"])
+
 
 def fisher_exact_nonunity(
     table: GraphRepresentation, alternative: str = "two-sided", null_ratio: float = 1.0
-) -> tuple[float, float]:
+) -> FisherResult:
     """
     Perform a Fisher exact test on a 2x2 contingency table. When testing whether two networks are statistically distinct, the rows of the
     table correspond to the two networks, and the columns correspond to the number of actual edges and the number of places where an edge
@@ -31,6 +34,8 @@ def fisher_exact_nonunity(
 
     Returns
     -------
+    FisherResult: namedtuple
+        A namedtuple containing the following data:
     oddsratio : float
         The odds for network 1 are calculated as (edge present)/(edge absent). The odds for network 2 are computed the same way, and the
         odds ratio variable returns (odds for network 1)/(odds for network 2).
@@ -143,4 +148,4 @@ def fisher_exact_nonunity(
 
     pvalue = min(pvalue, 1.0)
 
-    return oddsratio, pvalue
+    return FisherResult(oddsratio, pvalue)

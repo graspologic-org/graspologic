@@ -1,12 +1,16 @@
+from collections import namedtuple
+
 import numpy as np
 
 from ..types import GraphRepresentation
 from .group_connection_test import group_connection_test
 
+DensityTestResult = namedtuple("DensityTestResult", ["stat", "pvalue", "er_misc"])
+
 
 def density_test(
     A1: GraphRepresentation, A2: GraphRepresentation, method: str = "fisher"
-) -> tuple[float, float, dict]:
+) -> DensityTestResult:
 
     """
     This function uses the Erdos-Renyi model to perform a density test to compare the adjacency matrices for two networks.
@@ -32,20 +36,22 @@ def density_test(
 
     Returns
     --------
-    stat: float
-        This returns a statistic calculated by group_connection_test when combining p-values for multiple group-to-group comparisons. This
-        won't be too meaningful or useful for the Erdos-Renyi test.
-    pvalue: float
-        The computed probability of the observed network distributions assuming the null hypothesis (i.e. p1 = p2) is correct.
-    er_misc: dict
-        Dictionary containing a number of computed statistics for the network comparison performed:
+    DensityTestResult: namedtuple
+        This named tuple returns the following data:
+        stat: float
+          This returns a statistic calculated by group_connection_test when combining p-values for multiple group-to-group comparisons. This
+          won't be too meaningful or useful for the Erdos-Renyi test.
+       pvalue: float
+            The computed probability of the observed network distributions assuming the null hypothesis (i.e. p1 = p2) is correct.
+         er_misc: dict
+            Dictionary containing a number of computed statistics for the network comparison performed:
             "probability1" = float
                 This contains the computed probability of an edge between nodes in network 1. In other words, this is p1
             "probability2" = float
                 This contains p2, i.e. the computed network density of network 2.
             "observed1" = n_observed1, dataframe
                 The total number of edge connections for network 1.
-            "observe2" = n_observed2, dataframe
+            "observed2" = n_observed2, dataframe
                 Same as above, but for network 2.
             "possible1" = n_possible1, dataframe
                 The total number of possible edges for network 1.
