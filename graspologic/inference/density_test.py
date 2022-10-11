@@ -71,4 +71,4 @@ def density_test(
     er_misc["probability2"] = er_misc["probabilities2"]
     del er_misc["probabilities2"]
 
-    return stat, pvalue, er_misc
+    return DensityTestResult(stat, pvalue, er_misc)

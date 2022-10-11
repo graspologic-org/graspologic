@@ -75,7 +75,7 @@ def binom_2samp(
     """
     if x1 == 0 or x2 == 0:
         # logging.warn("One or more counts were 0, not running test and returning nan")
-        return np.nan, np.nan
+        return BinomialResult(np.nan, np.nan)
     if null_ratio != 1 and method != "fisher":
         raise ValueError("Non-unity null odds only works with Fisher's exact test")
 

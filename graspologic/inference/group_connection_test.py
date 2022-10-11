@@ -252,7 +252,6 @@ def group_connection_test(
 
     B1, n_observed1, n_possible1, group_counts1 = fit_sbm(A1, labels1)
     B2, n_observed2, n_possible2, group_counts2 = fit_sbm(A2, labels2)
-
     if not n_observed1.index.equals(n_observed2.index):
         raise ValueError()
     elif not n_observed1.columns.equals(n_observed2.columns):
@@ -338,6 +337,5 @@ def group_connection_test(
         stat = np.inf
         pvalue = 0.0
     else:
-        print(run_pvalues)
         stat, pvalue = scipy_combine_pvalues(run_pvalues, method=combine_method)
     return GroupTestResult(stat, pvalue, misc)

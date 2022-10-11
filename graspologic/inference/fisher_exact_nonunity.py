@@ -62,7 +62,7 @@ def fisher_exact_nonunity(
     if 0 in c.sum(axis=0) or 0 in c.sum(axis=1):
         # If both values in a row or column are zero, the p-value is 1 and
         # the odds ratio is NaN.
-        return np.nan, 1.0
+        return FisherResult(np.nan, 1.0)
 
     if c[1, 0] > 0 and c[0, 1] > 0:
         oddsratio = c[0, 0] * c[1, 1] / (c[1, 0] * c[0, 1])
@@ -126,19 +126,19 @@ def fisher_exact_nonunity(
 
         epsilon = 1 - 1e-4
         if np.abs(pexact - pmode) / np.maximum(pexact, pmode) <= 1 - epsilon:
-            return oddsratio, 1.0
+            return FisherResult(oddsratio, 1.0)
 
         elif c[0, 0] < mode:
             plower = dist.cdf(c[0, 0], n1 + n2, n1, n, null_ratio)
             if dist.pmf(n, n1 + n2, n1, n, null_ratio) > pexact / epsilon:
-                return oddsratio, plower
+                return FisherResult(oddsratio, plower)
 
             guess = binary_search(n, n1, n2, "upper")
             pvalue = plower + dist.sf(guess - 1, n1 + n2, n1, n, null_ratio)
         else:
             pupper = dist.sf(c[0, 0] - 1, n1 + n2, n1, n, null_ratio)
             if dist.pmf(0, n1 + n2, n1, n, null_ratio) > pexact / epsilon:
-                return oddsratio, pupper
+                return FisherResult(oddsratio, pupper)
 
             guess = binary_search(n, n1, n2, "lower")
             pvalue = pupper + dist.cdf(guess, n1 + n2, n1, n, null_ratio)
