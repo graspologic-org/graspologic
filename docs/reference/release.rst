@@ -3,6 +3,43 @@
 Release Log
 ===========
 
+graspologic 2.0.0
+-----------------
+- Refactored graph matching code and added many new features
+  `#960 <https://github.com/microsoft/graspologic/pull/960>`
+- Added elbow marker to screeplot in plot module
+  `#979 <https://github.com/microsoft/graspologic/pull/979>`
+- Fixed mug2vec behavior for directed graphs
+  `#968 <https://github.com/microsoft/graspologic/pull/968>`
+- Fixed typo in aligning tutorial
+  `#974 <https://github.com/microsoft/graspologic/pull/974>`
+- Added sex labels to mice dataset
+  `#967 <https://github.com/microsoft/graspologic/pull/967>`
+- Made improvements to contributing guidelines
+  `#973 <https://github.com/microsoft/graspologic/pull/973>`
+- Corrected notation in documentation of to_laplacians
+  `#969 <https://github.com/microsoft/graspologic/pull/969>`
+- Fixed isolated nodes handling in node2vec
+  `#953 <https://github.com/microsoft/graspologic/pull/953>`
+- Fixed repeated numba compilation in EdgeSwapper
+  `#965 <https://github.com/microsoft/graspologic/pull/965>`
+- Fixed intersphinx bug
+  `#963 <https://github.com/microsoft/graspologic/pull/963>`
+- Removed default axis labels in networkplot
+  `#954 <https://github.com/microsoft/graspologic/pull/954>`
+- Fixed reproducibility in EdgeSwapper and added to docs
+  `#945 <https://github.com/microsoft/graspologic/pull/945>` 
+- Added Degree Preserving Edge Swaps
+  `#935 <https://github.com/microsoft/graspologic/pull/935>`
+- Fixed mypy issue
+  `#943 <https://github.com/microsoft/graspologic/pull/943>`
+- Fixed loops bug in SBM and DCSBM model fitting
+  `#930 <https://github.com/microsoft/graspologic/pull/930>` 
+- Added error message in Leiden when given a multigraph was incorrect
+  `#926 <https://github.com/microsoft/graspologic/pull/926>`
+- Fixed typos in ER and SBM models
+  `#920 <https://github.com/microsoft/graspologic/pull/920>`
+
 graspologic 1.0.0
 -----------------
 - Removed Python 3.6 support
