@@ -1,5 +1,5 @@
-from binascii import a2b_base64
 import unittest
+from binascii import a2b_base64
 
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -78,7 +78,7 @@ class TestGroupConnection(unittest.TestCase):
         with self.assertRaises(ValueError):
             group_connection_test(A1, A2, labels1, labels2, combine_method=12)
         with self.assertRaises(ValueError):
-            group_connection_test(A1, A2, labels1, labels2, correct_method='happy')
+            group_connection_test(A1, A2, labels1, labels2, correct_method="happy")
         with self.assertRaises(TypeError):
             group_connection_test(A1, A2, labels1, labels2, alpha="apple")
 

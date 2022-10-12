@@ -24,7 +24,7 @@ def density_test(
     information regarding the group_connection_test function, consult the documentation for the .sbm file in this package.
 
     Parameters
-    ------------
+    ----------
     A1: np. array, int
         The adjacency matrix for network 1. Contains either a 0 or 1 at each location in the array, where a 1 denotes an edge and a 0 denotes
         the absence of an edge.
@@ -35,7 +35,7 @@ def density_test(
         which uses Fisher's exact test, but the user may also enter "chi2" to use a chi-squared test. Any other entry will give an error.
 
     Returns
-    --------
+    -------
     DensityTestResult: namedtuple
         This named tuple returns the following data:
         stat: float
