@@ -63,7 +63,7 @@ def density_test(
 
     Notes
     -----
-    This test makes several assumptions about the data and test (which could easily be 
+    This test makes several assumptions about the data and test (which could easily be
     loosened in future versions):
         - We assume that the networks are directed. If the networks are undirected (and
         the adjacency matrices are thus symmetric), then edges would be counted twice,
@@ -73,7 +73,7 @@ def density_test(
         - We assume that the networks are loopless, that is we do not consider the
         probability of an edge existing between a node and itself. This can be weakened
         and made an option in future versions.
-        - We only implement the alternative hypothesis of "not equals" (two-sided); 
+        - We only implement the alternative hypothesis of "not equals" (two-sided);
         future versions could implement the one-sided alternative hypotheses.
     """
     stat, pvalue, misc = group_connection_test(
