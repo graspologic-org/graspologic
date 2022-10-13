@@ -129,6 +129,7 @@ def _make_adjacency_dataframe(data: AdjacencyMatrix, index: labelstype) -> pd.Da
     return df
 
 
+@beartype
 def group_connection_test(
     A1: AdjacencyMatrix,
     A2: AdjacencyMatrix,

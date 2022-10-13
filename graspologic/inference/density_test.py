@@ -4,10 +4,12 @@ import numpy as np
 
 from ..types import AdjacencyMatrix
 from .group_connection_test import group_connection_test
+from beartype import beartype
 
 DensityTestResult = namedtuple("DensityTestResult", ["stat", "pvalue", "er_misc"])
 
 
+@beartype
 def density_test(
     A1: AdjacencyMatrix, A2: AdjacencyMatrix, method: str = "fisher"
 ) -> DensityTestResult:
