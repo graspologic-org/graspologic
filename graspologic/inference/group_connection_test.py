@@ -143,110 +143,121 @@ def group_connection_test(
 ) -> GroupTestResult:
 
     """
-     Compares two sets of group-to-group connection data for two networks, to assess whether the data are statistically different. To do this,
-     the function first compares each individual group-to-group connection to determine whether there is a statistically significant
-     difference in the connection densities for each group-to-group pair. This is accomplished using Fisher's exact test (or another test
-     selected by the user) to compare the number of observed edges versus the number of possible edges in each network. Once p values for all
-     group-to-group connections are determined, the p-values are combined into a single p-value that encapsulates whether the two networks,
-     as a whole, are statistically different. This procedure is described in greater detail in [#BEN'S PAPER].
+    Compares two sets of group-to-group connection data for two networks, to assess
+    whether the data are statistically different. To do this,
+    the function first compares each individual group-to-group connection to determine
+    whether there is a statistically significant
+    difference in the connection densities for each group-to-group pair. This is
+    accomplished using Fisher's exact test (or another test
+    selected by the user) to compare the number of observed edges versus the number of
+    possible edges in each network. Once p values for all
+    group-to-group connections are determined, the p-values are combined into a single
+    p-value that encapsulates whether the two networks,
+    as a whole, are statistically different. This procedure is described in greater
+    detail in [#BEN'S PAPER].
 
-     This function requires the group labels in both networks to be known and identical, although the exact number of nodes belonging to each
-     group does not need to be identical.
+    This function requires the group labels in both networks to be known and identical,
+    although the exact number of nodes belonging to each
+    group does not need to be identical.
 
-     This function also permits the user to test whether one network is a fixed multiple more dense or less dense than the other network. This
-     procedure is referred to as the "density-adjusted group connection test" in [#BEN'S PAPER]. To do this, the user simply includes the
-     argument density_adjustment=True. The function will then automatically compute the hypothesized density ratio for the two networks and
-     determines whether to reject or fail to reject to hypothesis that one network's density is a fixed multiple of the other network's density.
+    This function also permits the user to test whether one network is a fixed multiple
+    more dense or less dense than the other network. This
+    procedure is referred to as the "density-adjusted group connection test" in
+    [#BEN'S PAPER]. To do this, the user simply includes the
+    argument density_adjustment=True. The function will then automatically compute the
+    hypothesized density ratio for the two networks and
+    determines whether to reject or fail to reject to hypothesis that one network's
+    density is a fixed multiple of the other network's density.
 
 
-     Parameters
-     -----------
-     A1: np.array, int shape(num_nodes,num_nodes)
-         The adjacency matrix for the first network at issue. Entries are either 1 (edge present) or 0 (edge absent). This is a square
-         matrix with side length equal to the number of nodes in the network.
-     A2 np.array, int shape(num_nodes,num_nodes)
-         The adjacency matrix for the second network at issue. Same properties as above.
-     labels1: array-like, int shape(num_nodes,1)
-         This variable contains the group labels for each node in network 1.
-     labels2: array-like, int shape(num_nodes,1)
-         This variable contains the group labels for each node in network 2.
-     density_adjustment: boolean, optional
-         This variable instructs the function whether to perform the density adjustment procedure alluded to above. If this variable is set
-         to "true", the function will test the null hypothesis that the group-to-group connection density of one network is a fixed multiple
-         of the density of that of the other network. If the variable is set to "false", which is the default setting, no density adjustment
-         will be perform and the function will test the null hypothesis that the two networks have equal group-to-group connection densities.
-     method: str, optional
-         Specifies the statistical test to be performed to compare the group-to-group connection densities. By default, this performs
-         Fisher's exact test, but the user may also enter "chi2" to perform the chi-squared test. Any entry other than "fisher" or "chi2"
-         will raise an error.
-     combine_method: str, optional
-         Specifies the statistical method for combining p-values. Default is "tippett" for Tippett's method, but the user can also enter
-         any other method supported by scipy_combine_pvalues("fisher","pearson","mudholkar_george", or "stouffer").Tippett's method is
-         recommended, but the user may use one of the others as desired and appropriate. For further information, see
-         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.combine_pvalues.html.
-     correct_method: str, optional
-         Specifies the statistical method for correcting for multiple comparisons. Since this function is performing many comparisons
-         between subsets of the data, the probability of observing a "statistically significant" result by pure chance is increased. A
-         correction is performed to adjust for this phenomenon. Default value is "holm" to use the Holm-Bonferroni correction method, but
-         many others are possible (see https://www.statsmodels.org/dev/generated/statsmodels.stats.multitest.multipletests.html)
-     alpha: float, optional
-         The value to be used when testing the statistical significance of the results. By default, this is the conventional value of 0.05
-         but any value on the interval [0,1] can be entered.
+    Parameters
+    ----------
+    A1: np.array, int shape(num_nodes,num_nodes)
+        The adjacency matrix for the first network at issue. Entries are either 1 (edge present) or 0 (edge absent). This is a square
+        matrix with side length equal to the number of nodes in the network.
+    A2 np.array, int shape(num_nodes,num_nodes)
+        The adjacency matrix for the second network at issue. Same properties as above.
+    labels1: array-like, int shape(num_nodes,1)
+        This variable contains the group labels for each node in network 1.
+    labels2: array-like, int shape(num_nodes,1)
+        This variable contains the group labels for each node in network 2.
+    density_adjustment: boolean, optional
+        This variable instructs the function whether to perform the density adjustment procedure alluded to above. If this variable is set
+        to "true", the function will test the null hypothesis that the group-to-group connection density of one network is a fixed multiple
+        of the density of that of the other network. If the variable is set to "false", which is the default setting, no density adjustment
+        will be perform and the function will test the null hypothesis that the two networks have equal group-to-group connection densities.
+    method: str, optional
+        Specifies the statistical test to be performed to compare the group-to-group connection densities. By default, this performs
+        Fisher's exact test, but the user may also enter "chi2" to perform the chi-squared test. Any entry other than "fisher" or "chi2"
+        will raise an error.
+    combine_method: str, optional
+        Specifies the statistical method for combining p-values. Default is "tippett" for Tippett's method, but the user can also enter
+        any other method supported by scipy_combine_pvalues("fisher","pearson","mudholkar_george", or "stouffer").Tippett's method is
+        recommended, but the user may use one of the others as desired and appropriate. For further information, see
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.combine_pvalues.html.
+    correct_method: str, optional
+        Specifies the statistical method for correcting for multiple comparisons. Since this function is performing many comparisons
+        between subsets of the data, the probability of observing a "statistically significant" result by pure chance is increased. A
+        correction is performed to adjust for this phenomenon. Default value is "holm" to use the Holm-Bonferroni correction method, but
+        many others are possible (see https://www.statsmodels.org/dev/generated/statsmodels.stats.multitest.multipletests.html)
+    alpha: float, optional
+        The value to be used when testing the statistical significance of the results. By default, this is the conventional value of 0.05
+        but any value on the interval [0,1] can be entered.
 
-     Returns
-     -------
+    Returns
+    -------
     GroupTestResult: namedtuple
-     A tuple containing the following data:
-     stat: float
-         This contains the statistic computed by the method chosen for combining p values (i.e. "combine_method"). For Tippett's method,
-         this is the least of the p values. For Fisher's method, this is the test statistic computed as -2*sum(log(p-values)).
-     pvalue: float
-         The combined p-value for the total network-to-network comparison using the SBM model, calculated using the chosen combine_method.
-     misc: dict
-         A dictionary containing a number of statistics relating to the individual group-to-group connection comparisons.
-             "uncorrected_pvalues" = uncorrected_pvalues, array-like, float
-                 The p-values for each group-to-group connection comparison, before correction for multiple comparisons.
-             "stats" = stats, array-like, float.
-                 The odds ratio for the provided data, representing the prior probability of a "success" (in this
-                 case, the odds of an edge occurring between two nodes).
-             "probabilities1" = B1, array-like, float
-                 This contains the B_hat values computed in fit_sbm above for network 1, i.e. the hypothesized group connection density for
-                 each group-to-group connection for network 1.
-             "probabilities2" = B2, array-like, float
-                 Same as above, but for network 2.
-             "observed1" = n_observed1, dataframe
-                 The total number of observed group-to-group edge connections for network 1.
-             "observed2" = n_observed2, dataframe
-                 Same as above, but for network 2.
-             "possible1" = n_possible1, dataframe
-                 The total number of possible edges for each group-to-group pair in network 1.
-             "possible2" = n_possible2, dataframe
-                 Same as above, but for network 2.
-             "group_counts1" = group_counts1, pd.series
-                 Contains total number of nodes corresponding to each group label for network 1.
-             "group_counts2" = group_counts2, pd.series
-                 Same as above, for network 2
-             "null_ratio" = adjustment_factor, float
-                 If the "density adjustment" parameter is set to "true", this variable contains the null hypothesis for the quotient of
-                 odds ratios for the group-to-group connection densities for the two networks. In other words, it contains the hypothesized
-                 factor by which network 1 is "more dense" or "less dense" than network 2. If "density adjustment" is set to "false", this
-                 simply returns a value of 1.0.
-             "n_tests" = n_tests, integer
-                 This variable contains the number of group-to-group comparisons performed by the function.
-             "rejections" = rejections, dataframe
-                 Contains a square matrix of boolean variables. The side length of the matrix is equal to the number of distinct group
-                 labels. An entry in the matrix is "true" if the null hypothesis, i.e. that the group-to-group connection density
-                 corresponding to the row and column of the matrix is equal for both networks (with or without a density adjustment factor),
-                 is rejected. In simpler terms, an entry is only "true" if the group-to-group density is statistically different between
-                 the two networks for the connection from the group corresponding to the row of the matrix to the group corresponding to the
-                 column of the matrix.
-             "corrected_pvalues" = corrected_pvalues, dataframe
-                 Contains the p-values for the group-to-group connection densities after correction using the chosen correction_method.
+        A tuple containing the following data:
+        stat: float
+            This contains the statistic computed by the method chosen for combining p values (i.e. "combine_method"). For Tippett's method,
+            this is the least of the p values. For Fisher's method, this is the test statistic computed as -2*sum(log(p-values)).
+        pvalue: float
+            The combined p-value for the total network-to-network comparison using the SBM model, calculated using the chosen combine_method.
+        misc: dict
+            A dictionary containing a number of statistics relating to the individual group-to-group connection comparisons.
+                "uncorrected_pvalues" = uncorrected_pvalues, array-like, float
+                    The p-values for each group-to-group connection comparison, before correction for multiple comparisons.
+                "stats" = stats, array-like, float.
+                    The odds ratio for the provided data, representing the prior probability of a "success" (in this
+                    case, the odds of an edge occurring between two nodes).
+                "probabilities1" = B1, array-like, float
+                    This contains the B_hat values computed in fit_sbm above for network 1, i.e. the hypothesized group connection density for
+                    each group-to-group connection for network 1.
+                "probabilities2" = B2, array-like, float
+                    Same as above, but for network 2.
+                "observed1" = n_observed1, dataframe
+                    The total number of observed group-to-group edge connections for network 1.
+                "observed2" = n_observed2, dataframe
+                    Same as above, but for network 2.
+                "possible1" = n_possible1, dataframe
+                    The total number of possible edges for each group-to-group pair in network 1.
+                "possible2" = n_possible2, dataframe
+                    Same as above, but for network 2.
+                "group_counts1" = group_counts1, pd.series
+                    Contains total number of nodes corresponding to each group label for network 1.
+                "group_counts2" = group_counts2, pd.series
+                    Same as above, for network 2
+                "null_ratio" = adjustment_factor, float
+                    If the "density adjustment" parameter is set to "true", this variable contains the null hypothesis for the quotient of
+                    odds ratios for the group-to-group connection densities for the two networks. In other words, it contains the hypothesized
+                    factor by which network 1 is "more dense" or "less dense" than network 2. If "density adjustment" is set to "false", this
+                    simply returns a value of 1.0.
+                "n_tests" = n_tests, integer
+                    This variable contains the number of group-to-group comparisons performed by the function.
+                "rejections" = rejections, dataframe
+                    Contains a square matrix of boolean variables. The side length of the matrix is equal to the number of distinct group
+                    labels. An entry in the matrix is "true" if the null hypothesis, i.e. that the group-to-group connection density
+                    corresponding to the row and column of the matrix is equal for both networks (with or without a density adjustment factor),
+                    is rejected. In simpler terms, an entry is only "true" if the group-to-group density is statistically different between
+                    the two networks for the connection from the group corresponding to the row of the matrix to the group corresponding to the
+                    column of the matrix.
+                "corrected_pvalues" = corrected_pvalues, dataframe
+                    Contains the p-values for the group-to-group connection densities after correction using the chosen correction_method.
 
-
-     Notes
-     ------
-     The function name has been changed to group_connection_test to match the chosen language in the paper.
+    Notes
+    -----
+    The function name has been changed to group_connection_test to match the chosen
+    language in the paper.
     """
 
     B1, n_observed1, n_possible1, group_counts1 = fit_sbm(A1, labels1)
