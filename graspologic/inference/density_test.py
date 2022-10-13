@@ -41,6 +41,7 @@ def density_test(
     -------
     DensityTestResult: namedtuple
         This named tuple returns the following data:
+
         stat: float
             The statistic for the test specified by ``method``.
         pvalue: float
@@ -48,33 +49,37 @@ def density_test(
         misc: dict
             Dictionary containing a number of computed statistics for the network
             comparison performed:
-            "probability1" = float
-                The probability of an edge (density) in network 1 (p1).
-            "probability2" = float
-                The probability of an edge (density) in network 2 (p2).
-            "observed1" = n_observed1, dataframe
-                The total number of edge connections for network 1.
-            "observed2" = n_observed2, dataframe
-                The total number of edge connections for network 2.
-            "possible1" = n_possible1, dataframe
-                The total number of possible edges for network 1.
-            "possible2" = n_possible2, dataframe
-                The total number of possible edges for network 1.
+
+                "probability1" = float
+                    The probability of an edge (density) in network 1 (p1).
+                "probability2" = float
+                    The probability of an edge (density) in network 2 (p2).
+                "observed1" = n_observed1, dataframe
+                    The total number of edge connections for network 1.
+                "observed2" = n_observed2, dataframe
+                    The total number of edge connections for network 2.
+                "possible1" = n_possible1, dataframe
+                    The total number of possible edges for network 1.
+                "possible2" = n_possible2, dataframe
+                    The total number of possible edges for network 1.
 
     Notes
     -----
     This test makes several assumptions about the data and test (which could easily be
     loosened in future versions):
-        - We assume that the networks are directed. If the networks are undirected (and
-        the adjacency matrices are thus symmetric), then edges would be counted twice,
-        which would lead to an incorrect calculation of the edge probability. We believe
-        passing in the upper or lower triangle of the adjacency matrix would solve this,
-        but this has not been tested.
-        - We assume that the networks are loopless, that is we do not consider the
-        probability of an edge existing between a node and itself. This can be weakened
-        and made an option in future versions.
-        - We only implement the alternative hypothesis of "not equals" (two-sided);
-        future versions could implement the one-sided alternative hypotheses.
+            
+            We assume that the networks are directed. If the networks are undirected (and
+            the adjacency matrices are thus symmetric), then edges would be counted twice,
+            which would lead to an incorrect calculation of the edge probability. We believe
+            passing in the upper or lower triangle of the adjacency matrix would solve this,
+            but this has not been tested.
+            
+            We assume that the networks are loopless, that is we do not consider the
+            probability of an edge existing between a node and itself. This can be weakened
+            and made an option in future versions.
+            
+            We only implement the alternative hypothesis of "not equals" (two-sided);
+            future versions could implement the one-sided alternative hypotheses.
     """
     stat, pvalue, misc = group_connection_test(
         A1,

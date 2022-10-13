@@ -13,7 +13,7 @@ from ..types import AdjacencyMatrix, List
 from .binomial import binom_2samp
 from .utils import compute_density_adjustment
 
-labelstype = Union[np.ndarray, List[int]]
+Labels = Union[np.ndarray, List]
 
 SBMResult = namedtuple(
     "SBMResult", ["probabilities", "observed", "possible", "group_counts"]
@@ -22,7 +22,7 @@ SBMResult = namedtuple(
 GroupTestResult = namedtuple("GroupTestResult", ["stat", "pvalue", "misc"])
 
 
-def fit_sbm(A: AdjacencyMatrix, labels: labelstype, loops: bool = False) -> SBMResult:
+def fit_sbm(A: AdjacencyMatrix, labels: Labels, loops: bool = False) -> SBMResult:
 
     """
     Fits a stochastic block model to data for a given network with known group
@@ -133,7 +133,7 @@ def fit_sbm(A: AdjacencyMatrix, labels: labelstype, loops: bool = False) -> SBMR
     return SBMResult(B_hat, n_observed, n_possible, counts_labels)
 
 
-def _make_adjacency_dataframe(data: AdjacencyMatrix, index: labelstype) -> pd.DataFrame:
+def _make_adjacency_dataframe(data: AdjacencyMatrix, index: Labels) -> pd.DataFrame:
     """
     Helper function to convert data with a given index into a dataframe data structure.
     """
@@ -147,8 +147,8 @@ def _make_adjacency_dataframe(data: AdjacencyMatrix, index: labelstype) -> pd.Da
 def group_connection_test(
     A1: AdjacencyMatrix,
     A2: AdjacencyMatrix,
-    labels1: labelstype,
-    labels2: labelstype,
+    labels1: Labels,
+    labels2: Labels,
     density_adjustment: bool = False,
     method: str = "fisher",
     combine_method: str = "tippett",
@@ -220,6 +220,7 @@ def group_connection_test(
     -------
     GroupTestResult: namedtuple
         A tuple containing the following data:
+
         stat: float
             This contains the statistic computed by the method chosen for combining
             p-values (i.e. "combine_method"). For Tippett's method,
@@ -231,6 +232,7 @@ def group_connection_test(
         misc: dict
             A dictionary containing a number of statistics relating to the individual
             group-to-group connection comparisons.
+
                 "uncorrected_pvalues" = uncorrected_pvalues, array-like, float
                     The p-values for each group-to-group connection comparison, before
                     correction for multiple comparisons.
