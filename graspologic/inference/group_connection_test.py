@@ -9,11 +9,11 @@ from statsmodels.stats.multitest import multipletests
 
 from graspologic.utils import remove_loops
 
-from ..types import AdjacencyMatrix
+from ..types import AdjacencyMatrix, List
 from .binomial import binom_2samp
 from .utils import compute_density_adjustment
 
-labelstype = Union[np.ndarray, list[int]]
+labelstype = Union[np.ndarray, List[int]]
 
 SBMResult = namedtuple(
     "SBMResult", ["probabilities", "observed", "possible", "group_counts"]
