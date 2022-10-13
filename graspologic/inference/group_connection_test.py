@@ -173,48 +173,39 @@ def group_connection_test(
     Parameters
     ----------
     A1: np.array, int shape(num_nodes,num_nodes)
-        The adjacency matrix for the first network at issue. Entries are either 1 (edge
-        present) or 0 (edge absent). This is a square
-        matrix with side length equal to the number of nodes in the network.
+        The adjacency matrix for network 1. Will be treated as a binary network,
+        regardless of whether it was weighted.
     A2 np.array, int shape(num_nodes,num_nodes)
-        The adjacency matrix for the second network at issue. Same properties as above.
+        The adjacency matrix for network 1. Will be treated as a binary network,
+        regardless of whether it was weighted.
     labels1: array-like, int shape(num_nodes,1)
-        This variable contains the group labels for each node in network 1.
+        The group labels for each node in network 1.
     labels2: array-like, int shape(num_nodes,1)
-        This variable contains the group labels for each node in network 2.
+        The group labels for each node in network 2.
     density_adjustment: boolean, optional
-        This variable instructs the function whether to perform the density adjustment
-        procedure alluded to above. If this variable is set
-        to "true", the function will test the null hypothesis that the group-to-group
-        connection density of one network is a fixed multiple
-        of the density of that of the other network. If the variable is set to "false",
-        which is the default setting, no density adjustment
-        will be perform and the function will test the null hypothesis that the two
-        networks have equal group-to-group connection densities.
+        Whether to perform a density adjustment procedure. If ``True``, will test the
+        null hypothesis that the group-to-group connection probabilities of one network
+        are a constant multiple of those of the other network. Otherwise, no density
+        adjustment will be performed.
     method: str, optional
-        Specifies the statistical test to be performed to compare the group-to-group
-        connection densities. By default, this performs
+        Specifies the statistical test to be performed to compare each of the
+        group-to-group connection probabilities. By default, this performs
         Fisher's exact test, but the user may also enter "chi2" to perform the
-        chi-squared test. Any entry other than "fisher" or "chi2"
-        will raise an error.
+        chi-squared test.
     combine_method: str, optional
-        Specifies the statistical method for combining p-values. Default is "tippett"
-        for Tippett's method, but the user can also enter any other method supported by
-        :func:`scipy.stats.combine_pvalues`. Tippett's method is recommended, but the
-        user may use one of the others as desired and appropriate.
+        Specifies the method for combining p-values. Default is "tippett"
+        for Tippett's method (recommended), but the user can also enter any other
+        method supported by :func:`scipy.stats.combine_pvalues`.
     correct_method: str, optional
-        Specifies the statistical method for correcting for multiple comparisons. Since
-        this function is performing many comparisons
-        between subsets of the data, the probability of observing a "statistically
-        significant" result by pure chance is increased. A
-        correction is performed to adjust for this phenomenon. Default value is "holm"
-        to use the Holm-Bonferroni correction method, but
-        many others are possible
-        (see :func:`statsmodels.stats.multitest.multipletests`).
+        Specifies the method for correcting for multiple comparisons. Default value is
+        "holm" to use the Holm-Bonferroni correction method, but
+        many others are possible (see :func:`statsmodels.stats.multitest.multipletests`
+        for more details and options).
     alpha: float, optional
-        The value to be used when testing the statistical significance of the results.
-        By default, this is the conventional value of 0.05
-        but any value on the interval [0,1] can be entered.
+        The value to be used when evaluating the statistical significance of the results.
+        By default, this is the conventional value of 0.05 but any value on the
+        interval [0,1] can be entered. This only affects the results in
+        ``misc['rejections']``.
 
     Returns
     -------
@@ -222,13 +213,13 @@ def group_connection_test(
         A tuple containing the following data:
 
         stat: float
-            This contains the statistic computed by the method chosen for combining
-            p-values (i.e. "combine_method"). For Tippett's method,
-            this is the least of the p values. For Fisher's method, this is the test
-            statistic computed as -2*sum(log(p-values)).
+            The statistic computed by the method chosen for combining
+            p-values (see ``combine_method``).
         pvalue: float
-            The combined p-value for the total network-to-network comparison using the
-            SBM model, calculated using the chosen combine_method.
+            The p-value for the overall network-to-network comparison using under a
+            stochastic block model assumption. Note that this is the p-value for the
+            comparison of the entire group-to-group connection matrices
+            (i.e., :math:`B_1` and :math:`B_2`).
         misc: dict
             A dictionary containing a number of statistics relating to the individual
             group-to-group connection comparisons.
@@ -236,10 +227,9 @@ def group_connection_test(
                 "uncorrected_pvalues" = uncorrected_pvalues, array-like, float
                     The p-values for each group-to-group connection comparison, before
                     correction for multiple comparisons.
-                "stats" = stats, array-like, float.
-                    The odds ratio for the provided data, representing the prior
-                    probability of a "success" (in this
-                    case, the odds of an edge occurring between two nodes).
+                "stats", pd.DataFrame
+                    The test statistics for each of the group-to-group comparisons,
+                    depending on ``method``.
                 "probabilities1" = B1, array-like, float
                     This contains the B_hat values computed in fit_sbm above for
                     network 1, i.e. the hypothesized group connection density for

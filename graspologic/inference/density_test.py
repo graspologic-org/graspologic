@@ -25,10 +25,10 @@ def density_test(
 
     Parameters
     ----------
-    A1: np. array, int
+    A1: np.array, int
         The adjacency matrix for network 1. Will be treated as a binary network,
         regardless of whether it was weighted.
-    A2: np. array, int
+    A2: np.array, int
         Adjacency matrix for network 2. Will be treated as a binary network,
         regardless of whether it was weighted.
     method: string, optional, default="fisher"
@@ -50,17 +50,17 @@ def density_test(
             Dictionary containing a number of computed statistics for the network
             comparison performed:
 
-                "probability1" = float
+                "probability1", float
                     The probability of an edge (density) in network 1 (p1).
-                "probability2" = float
+                "probability2", float
                     The probability of an edge (density) in network 2 (p2).
-                "observed1" = n_observed1, dataframe
+                "observed1", pd.DataFrame
                     The total number of edge connections for network 1.
-                "observed2" = n_observed2, dataframe
+                "observed2", pd.DataFrame
                     The total number of edge connections for network 2.
-                "possible1" = n_possible1, dataframe
+                "possible1", pd.DataFrame
                     The total number of possible edges for network 1.
-                "possible2" = n_possible2, dataframe
+                "possible2", pd.DataFrame
                     The total number of possible edges for network 1.
 
     Notes
