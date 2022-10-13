@@ -9,7 +9,7 @@ from statsmodels.stats.multitest import multipletests
 
 from graspologic.utils import remove_loops
 
-from ..types import AdjacencyMatrix, GraphRepresentation
+from ..types import AdjacencyMatrix
 from .binomial import binom_2samp
 from .utils import compute_density_adjustment
 
@@ -119,9 +119,7 @@ def fit_sbm(A: AdjacencyMatrix, labels: labelstype, loops: bool = False) -> SBMR
     return SBMResult(B_hat, n_observed, n_possible, counts_labels)
 
 
-def _make_adjacency_dataframe(
-    data: GraphRepresentation, index: labelstype
-) -> pd.DataFrame:
+def _make_adjacency_dataframe(data: AdjacencyMatrix, index: labelstype) -> pd.DataFrame:
     """
     Helper function to convert data with a given index into a dataframe data structure.
     """
@@ -132,8 +130,8 @@ def _make_adjacency_dataframe(
 
 
 def group_connection_test(
-    A1: GraphRepresentation,
-    A2: GraphRepresentation,
+    A1: AdjacencyMatrix,
+    A2: AdjacencyMatrix,
     labels1: labelstype,
     labels2: labelstype,
     density_adjustment: bool = False,

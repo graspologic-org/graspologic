@@ -2,14 +2,14 @@ from collections import namedtuple
 
 import numpy as np
 
-from ..types import GraphRepresentation
+from ..types import AdjacencyMatrix
 from .group_connection_test import group_connection_test
 
 DensityTestResult = namedtuple("DensityTestResult", ["stat", "pvalue", "er_misc"])
 
 
 def density_test(
-    A1: GraphRepresentation, A2: GraphRepresentation, method: str = "fisher"
+    A1: AdjacencyMatrix, A2: AdjacencyMatrix, method: str = "fisher"
 ) -> DensityTestResult:
 
     """
