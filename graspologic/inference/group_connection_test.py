@@ -209,7 +209,8 @@ def group_connection_test(
         significant" result by pure chance is increased. A
         correction is performed to adjust for this phenomenon. Default value is "holm"
         to use the Holm-Bonferroni correction method, but
-        many others are possible (see https://www.statsmodels.org/dev/generated/statsmodels.stats.multitest.multipletests.html)
+        many others are possible
+        (see :func:`statsmodels.stats.multitest.multipletests`).
     alpha: float, optional
         The value to be used when testing the statistical significance of the results.
         By default, this is the conventional value of 0.05
