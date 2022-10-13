@@ -15,7 +15,7 @@ or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any addi
 
 # Issue Submission (Bug or Feature)
 
-We use GitHub issues to track all bugs and feature requests; feel free to open an issue if you have found a bug or wish 
+We use GitHub issues to track all bugs and feature requests. Feel free to open an issue if you have found a bug or wish 
 to see a feature implemented. Please also feel free to tag one of the core 
 contributors (see our [Roles page](https://github.com/microsoft/graspologic/blob/dev/ROLES.md)).
 
