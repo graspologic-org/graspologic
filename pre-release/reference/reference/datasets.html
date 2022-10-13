@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Datasets &mdash; graspologic 2.0.1dev3070390439 documentation</title>
+  <title>Datasets &mdash; graspologic 2.0.1dev3244127424 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -32,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3070390439
+                2.0.1dev3244127424
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -130,7 +131,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -151,7 +158,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -303,24 +320,22 @@ brain which is involved in sensory integration and processing.
 This connectome was observed by electron microscopy and then
 individial neurons were reconstructed; synaptic partnerships
 between these neurons became the edges of the graph.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>return_labels</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>whether to have a second return value which is an array of
+<dd class="field-odd"><dl class="simple">
+<dt><strong>return_labels</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>whether to have a second return value which is an array of
 cell type labels for each node in the adjacency matrix</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Adjacency matrix of the connectome</p>
-</div></blockquote>
-<p><strong>labels</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Only returned if <code class="docutils literal notranslate"><span class="pre">return_labels</span></code> is true. Array of
+<dd class="field-even"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Adjacency matrix of the connectome</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">np.ndarray</span></dt><dd><p>Only returned if <code class="docutils literal notranslate"><span class="pre">return_labels</span></code> is true. Array of
 string labels for each cell (vertex)</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>return_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p>
@@ -349,24 +364,22 @@ brain which is involved in sensory integration and processing.
 This connectome was observed by electron microscopy and then
 individial neurons were reconstructed; synaptic partnerships
 between these neurons became the edges of the graph.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>return_labels</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>whether to have a second return value which is an array of
+<dd class="field-odd"><dl class="simple">
+<dt><strong>return_labels</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>whether to have a second return value which is an array of
 cell type labels for each node in the adjacency matrix</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Adjacency matrix of the connectome</p>
-</div></blockquote>
-<p><strong>labels</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Only returned if <code class="docutils literal notranslate"><span class="pre">return_labels</span></code> is true. Array of
+<dd class="field-even"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Adjacency matrix of the connectome</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">np.ndarray</span></dt><dd><p>Only returned if <code class="docutils literal notranslate"><span class="pre">return_labels</span></code> is true. Array of
 string labels for each cell (vertex)</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>return_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p>
@@ -405,9 +418,8 @@ hemisphere, there are seven superstructures consisting up multiple ROIs,
 resulting in a total of 14 distinct communities in each connectome.</p>
 <dl class="field-list">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>data</strong> : <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.Bunch.html#sklearn.utils.Bunch" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bunch</span></code></a></p>
-<blockquote>
-<div><p>Dictionary-like object, with the following attributes.</p>
+<dd class="field-odd"><dl>
+<dt><strong>data</strong><span class="classifier"><a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.Bunch.html#sklearn.utils.Bunch" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bunch</span></code></a></span></dt><dd><p>Dictionary-like object, with the following attributes.</p>
 <dl class="simple">
 <dt>graphs<span class="classifier">list of np.ndarray</span></dt><dd><p>List of adjacency matrices of the connectome</p>
 </dd>
@@ -424,7 +436,8 @@ resulting in a total of 14 distinct communities in each connectome.</p>
 <dt>meta<span class="classifier">Dictionary</span></dt><dd><p>Dictionary with meta information about the dataset (n_subjects and n_vertices)</p>
 </dd>
 </dl>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.Bunch.html#sklearn.utils.Bunch" title="(in scikit-learn v1.2)"><em>Bunch</em></a></p>

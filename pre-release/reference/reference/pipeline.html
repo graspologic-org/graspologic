@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pipeline &mdash; graspologic 2.0.1dev3070390439 documentation</title>
+  <title>Pipeline &mdash; graspologic 2.0.1dev3244127424 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3070390439
+                2.0.1dev3244127424
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -132,7 +133,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-graspologic.pipeline.embed">Embed</a></li>
@@ -153,7 +160,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -316,13 +333,13 @@ it automatically maps all node ids of any hashable type to <code class="docutils
 <p>In other words, if you can use it as a key in a dictionary, it will work.</p>
 <p>By default, the main method it provides, <code class="docutils literal notranslate"><span class="pre">add_edge</span></code>, will sum edge weights
 if the edge already exists.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>directed</strong> : bool (default=False)</p>
-<blockquote>
-<div><p>Used to create either a <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a> or
-<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code></a> object.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">bool (default=False)</span></dt><dd><p>Used to create either a <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a> or
+<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code></a> object.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <dl class="py method">
@@ -345,31 +362,23 @@ and target id are converted to a unique <code class="docutils literal notranslat
 <code class="docutils literal notranslate"><span class="pre">sum_weight</span></code> argument is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the weights are summed.</p>
 <p>Otherwise, the last weight provided will be used as the edge's weight.</p>
 <p>Any other attributes specified will be added to the edge's data dictionary.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>source</strong> : Any</p>
-<blockquote>
-<div><p>source node id</p>
-</div></blockquote>
-<p><strong>target</strong> : Any</p>
-<blockquote>
-<div><p>target node id</p>
-</div></blockquote>
-<p><strong>weight</strong> : Union[int, float] (default=1.0)</p>
-<blockquote>
-<div><p>The weight for the edge. If none is provided, the weight is defaulted to 1.</p>
-</div></blockquote>
-<p><strong>sum_weight</strong> : bool (default=True)</p>
-<blockquote>
-<div><p>If an edge between the <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> already exist, should we
+<dd class="field-odd"><dl class="simple">
+<dt><strong>source</strong><span class="classifier">Any</span></dt><dd><p>source node id</p>
+</dd>
+<dt><strong>target</strong><span class="classifier">Any</span></dt><dd><p>target node id</p>
+</dd>
+<dt><strong>weight</strong><span class="classifier">Union[int, float] (default=1.0)</span></dt><dd><p>The weight for the edge. If none is provided, the weight is defaulted to 1.</p>
+</dd>
+<dt><strong>sum_weight</strong><span class="classifier">bool (default=True)</span></dt><dd><p>If an edge between the <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> already exist, should we
 sum the edge weights or overwrite the edge weight with the provided
 <code class="docutils literal notranslate"><span class="pre">weight</span></code> value.</p>
-</div></blockquote>
-<p><strong>attributes</strong> : kwargs</p>
-<blockquote>
-<div><p>The attributes kwargs are presumed to be attributes that should be added
+</dd>
+<dt><strong>attributes</strong><span class="classifier">kwargs</span></dt><dd><p>The attributes kwargs are presumed to be attributes that should be added
 to the edge dictionary for <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
@@ -389,20 +398,20 @@ to the edge dictionary for <code class="docutils literal notranslate"><span clas
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.pipeline.GraphBuilder.build">
 <span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/pipeline/graph_builder.html#GraphBuilder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.pipeline.GraphBuilder.build" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], List[Any]]</p>
-<blockquote>
-<div><p>The returned tuple is either an undirected or directed graph, depending on
+<dd class="field-odd"><dl class="simple">
+<dt>Tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], List[Any]]</dt><dd><p>The returned tuple is either an undirected or directed graph, depending on
 the constructor argument <code class="docutils literal notranslate"><span class="pre">directed</span></code>. The second value in the tuple is a
 dictionary of original node ids to their assigned integer ids. The third
 and final value in the tuple is a List of original node ids, where the
 index corresponds to the assigned integer and the value is the corresponding
 original ID.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>]]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -436,18 +445,16 @@ that are generated by our embedding functions.</p>
 <span class="go">array([6, 4, 2, 0, 8])</span>
 </pre></div>
 </div>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>labels</strong> : np.ndarray</p>
-<blockquote>
-<div><p>The node labels that are positionally correlated with the embeddings.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">np.ndarray</span></dt><dd><p>The node labels that are positionally correlated with the embeddings.
 The dtype of labels is any object stored in a networkx Graph object,
 though type uniformity will be required</p>
-</div></blockquote>
-<p><strong>embeddings</strong> : np.ndarray</p>
-<blockquote>
-<div><p>The embedded values generated by the embedding technique.</p>
-</div></blockquote>
+</dd>
+<dt><strong>embeddings</strong><span class="classifier">np.ndarray</span></dt><dd><p>The embedded values generated by the embedding technique.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><dl class="simple">
@@ -476,18 +483,16 @@ that are generated by our embedding functions.</p>
 <span class="go">array([6, 4, 2, 0, 8])</span>
 </pre></div>
 </div>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>labels</strong> : np.ndarray</p>
-<blockquote>
-<div><p>The node labels that are positionally correlated with the embeddings.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">np.ndarray</span></dt><dd><p>The node labels that are positionally correlated with the embeddings.
 The dtype of labels is any object stored in a networkx Graph object,
 though type uniformity will be required</p>
-</div></blockquote>
-<p><strong>embeddings</strong> : np.ndarray</p>
-<blockquote>
-<div><p>The embedded values generated by the embedding technique.</p>
-</div></blockquote>
+</dd>
+<dt><strong>embeddings</strong><span class="classifier">np.ndarray</span></dt><dd><p>The embedded values generated by the embedding technique.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><dl class="simple">
@@ -553,9 +558,8 @@ which is beneficial in minimizing anomalous results if some edge weights are
 extremely atypical of the rest of the graph.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]</p>
-<blockquote>
-<div><p>An undirected or directed graph. The graph <strong>must</strong>:</p>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]</span></dt><dd><p>An undirected or directed graph. The graph <strong>must</strong>:</p>
 <ul class="simple">
 <li><p>be fully numerically weighted (every edge must have a real, numeric weight
 or else it will be treated as an unweighted graph)</p></li>
@@ -564,10 +568,8 @@ multigraph you must first decide how you want to handle the weights of the
 edges between two nodes, whether summed, averaged, last-wins,
 maximum-weight-only, etc)</p></li>
 </ul>
-</div></blockquote>
-<p><strong>dimensions</strong> : int (default=100)</p>
-<blockquote>
-<div><p>Dimensions to use for the svd solver.
+</dd>
+<dt><strong>dimensions</strong><span class="classifier">int (default=100)</span></dt><dd><p>Dimensions to use for the svd solver.
 For undirected graphs, if <code class="docutils literal notranslate"><span class="pre">elbow_cut==None</span></code>, you will receive an embedding
 that has <code class="docutils literal notranslate"><span class="pre">nodes</span></code> rows and <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> columns.
 For directed graphs, if <code class="docutils literal notranslate"><span class="pre">elbow_cut==None</span></code>, you will receive an embedding that
@@ -575,18 +577,14 @@ has <code class="docutils literal notranslate"><span class="pre">nodes</span></c
 If <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code> is specified to be not <code class="docutils literal notranslate"><span class="pre">None</span></code>, we will cut the embedding at
 <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code> elbow, but the provided <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> will be used in the
 creation of the SVD.</p>
-</div></blockquote>
-<p><strong>elbow_cut</strong> : Optional[int] (default=None)</p>
-<blockquote>
-<div><p>Using a process described by Zhu &amp; Ghodsi in their paper &quot;Automatic
+</dd>
+<dt><strong>elbow_cut</strong><span class="classifier">Optional[int] (default=None)</span></dt><dd><p>Using a process described by Zhu &amp; Ghodsi in their paper &quot;Automatic
 dimensionality selection from the scree plot via the use of profile likelihood&quot;,
 truncate the dimensionality of the return on the <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code>-th elbow.
 By default this value is <code class="docutils literal notranslate"><span class="pre">None</span></code> but can be used to reduce the dimensionality
 of the returned tensors.</p>
-</div></blockquote>
-<p><strong>svd_solver_algorithm</strong> : str (default=&quot;randomized&quot;)</p>
-<blockquote>
-<div><p>allowed values: {'randomized', 'full', 'truncated'}</p>
+</dd>
+<dt><strong>svd_solver_algorithm</strong><span class="classifier">str (default=&quot;randomized&quot;)</span></dt><dd><p>allowed values: {'randomized', 'full', 'truncated'}</p>
 <p>SVD solver to use:</p>
 <blockquote>
 <div><ul class="simple">
@@ -597,33 +595,28 @@ of the returned tensors.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-</div></blockquote>
-<p><strong>svd_solver_iterations</strong> : int (default=5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>svd_solver_iterations</strong><span class="classifier">int (default=5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : Optional[int] (default=None)</p>
-<blockquote>
-<div><p>Used to seed the PRNG used in the <code class="docutils literal notranslate"><span class="pre">randomized</span></code> svd solver algorithm.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str (default=&quot;weight&quot;)</p>
-<blockquote>
-<div><p>The edge dictionary key that contains the weight of the edge.</p>
-</div></blockquote>
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">Optional[int] (default=None)</span></dt><dd><p>Used to seed the PRNG used in the <code class="docutils literal notranslate"><span class="pre">randomized</span></code> svd solver algorithm.</p>
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str (default=&quot;weight&quot;)</span></dt><dd><p>The edge dictionary key that contains the weight of the edge.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
@@ -638,7 +631,7 @@ to handle sparse matrices that may have large slowly decaying spectrum.</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.6)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.6)"><em>OrderedDiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.7)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.7)"><em>OrderedDiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>svd_solver_algorithm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'full'</em><em>, </em><em>'truncated'</em><em>, </em><em>'randomized'</em><em>, </em><em>'eigsh'</em><em>]</em>) -- </p></li>
@@ -702,9 +695,8 @@ which is beneficial in minimizing anomalous results if some edge weights are
 extremely atypical of the rest of the graph.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]</p>
-<blockquote>
-<div><p>An undirected or directed graph. The graph <strong>must</strong>:</p>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]</span></dt><dd><p>An undirected or directed graph. The graph <strong>must</strong>:</p>
 <ul class="simple">
 <li><p>be fully numerically weighted (every edge must have a real, numeric weight
 or else it will be treated as an unweighted graph)</p></li>
@@ -713,16 +705,12 @@ multigraph you must first decide how you want to handle the weights of the
 edges between two nodes, whether summed, averaged, last-wins,
 maximum-weight-only, etc)</p></li>
 </ul>
-</div></blockquote>
-<p><strong>form</strong> : str (default=&quot;R-DAD&quot;)</p>
-<blockquote>
-<div><p>Specifies the type of Laplacian normalization to use. Allowed values are:
+</dd>
+<dt><strong>form</strong><span class="classifier">str (default=&quot;R-DAD&quot;)</span></dt><dd><p>Specifies the type of Laplacian normalization to use. Allowed values are:
 { &quot;DAD&quot;, &quot;I-DAD&quot;, &quot;R-DAD&quot; }.  See
 <a class="reference internal" href="utils.html#graspologic.utils.to_laplacian" title="graspologic.utils.to_laplacian"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_laplacian()</span></code></a> for more details regarding form.</p>
-</div></blockquote>
-<p><strong>dimensions</strong> : int (default=100)</p>
-<blockquote>
-<div><p>Dimensions to use for the svd solver.
+</dd>
+<dt><strong>dimensions</strong><span class="classifier">int (default=100)</span></dt><dd><p>Dimensions to use for the svd solver.
 For undirected graphs, if <code class="docutils literal notranslate"><span class="pre">elbow_cut==None</span></code>, you will receive an embedding
 that has <code class="docutils literal notranslate"><span class="pre">nodes</span></code> rows and <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> columns.
 For directed graphs, if <code class="docutils literal notranslate"><span class="pre">elbow_cut==None</span></code>, you will receive an embedding that
@@ -730,18 +718,14 @@ has <code class="docutils literal notranslate"><span class="pre">nodes</span></c
 If <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code> is specified to be not <code class="docutils literal notranslate"><span class="pre">None</span></code>, we will cut the embedding at
 <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code> elbow, but the provided <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> will be used in the
 creation of the SVD.</p>
-</div></blockquote>
-<p><strong>elbow_cut</strong> : Optional[int] (default=None)</p>
-<blockquote>
-<div><p>Using a process described by Zhu &amp; Ghodsi in their paper &quot;Automatic
+</dd>
+<dt><strong>elbow_cut</strong><span class="classifier">Optional[int] (default=None)</span></dt><dd><p>Using a process described by Zhu &amp; Ghodsi in their paper &quot;Automatic
 dimensionality selection from the scree plot via the use of profile likelihood&quot;,
 truncate the dimensionality of the return on the <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code>-th elbow.
 By default this value is <code class="docutils literal notranslate"><span class="pre">None</span></code> but can be used to reduce the dimensionality
 of the returned tensors.</p>
-</div></blockquote>
-<p><strong>svd_solver_algorithm</strong> : str (default=&quot;randomized&quot;)</p>
-<blockquote>
-<div><p>allowed values: {'randomized', 'full', 'truncated'}</p>
+</dd>
+<dt><strong>svd_solver_algorithm</strong><span class="classifier">str (default=&quot;randomized&quot;)</span></dt><dd><p>allowed values: {'randomized', 'full', 'truncated'}</p>
 <p>SVD solver to use:</p>
 <blockquote>
 <div><ul class="simple">
@@ -752,39 +736,32 @@ of the returned tensors.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-</div></blockquote>
-<p><strong>svd_solver_iterations</strong> : int (default=5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>svd_solver_iterations</strong><span class="classifier">int (default=5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : Optional[int] (default=None)</p>
-<blockquote>
-<div><p>Used to seed the PRNG used in the <code class="docutils literal notranslate"><span class="pre">randomized</span></code> svd solver algorithm.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str (default=&quot;weight&quot;)</p>
-<blockquote>
-<div><p>The edge dictionary key that contains the weight of the edge.</p>
-</div></blockquote>
-<p><strong>regularizer</strong> : Optional[numbers.Real] (default=None)</p>
-<blockquote>
-<div><p>Only used when form=&quot;R-DAD&quot;. Must be None or nonnegative.
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">Optional[int] (default=None)</span></dt><dd><p>Used to seed the PRNG used in the <code class="docutils literal notranslate"><span class="pre">randomized</span></code> svd solver algorithm.</p>
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str (default=&quot;weight&quot;)</span></dt><dd><p>The edge dictionary key that contains the weight of the edge.</p>
+</dd>
+<dt><strong>regularizer</strong><span class="classifier">Optional[numbers.Real] (default=None)</span></dt><dd><p>Only used when form=&quot;R-DAD&quot;. Must be None or nonnegative.
 Constant to be added to the diagonal of degree matrix. If None, average
 node degree is added. If int or float, must be &gt;= 0.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
@@ -799,7 +776,7 @@ node degree is added. If int or float, must be &gt;= 0.</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.6)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.6)"><em>OrderedDiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.7)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.7)"><em>OrderedDiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>form</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'I-DAD'</em><em>, </em><em>'DAD'</em><em>, </em><em>'R-DAD'</em><em>]</em>) -- </p></li>
 <li><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
@@ -870,9 +847,8 @@ which is beneficial in minimizing anomalous results if some edge weights are
 extremely atypical of the rest of the graph.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graphs</strong> : List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]]</p>
-<blockquote>
-<div><p>A list of undirected or directed graphs. The graphs <strong>must</strong>:</p>
+<dd class="field-odd"><dl>
+<dt><strong>graphs</strong><span class="classifier">List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]]</span></dt><dd><p>A list of undirected or directed graphs. The graphs <strong>must</strong>:</p>
 <ul class="simple">
 <li><p>be fully numerically weighted (every edge must have a real, numeric weight
 or else it will be treated as an unweighted graph)</p></li>
@@ -881,10 +857,8 @@ multigraph you must first decide how you want to handle the weights of the
 edges between two nodes, whether summed, averaged, last-wins,
 maximum-weight-only, etc)</p></li>
 </ul>
-</div></blockquote>
-<p><strong>dimensions</strong> : int (default=100)</p>
-<blockquote>
-<div><p>Dimensions to use for the svd solver.
+</dd>
+<dt><strong>dimensions</strong><span class="classifier">int (default=100)</span></dt><dd><p>Dimensions to use for the svd solver.
 For undirected graphs, if <code class="docutils literal notranslate"><span class="pre">elbow_cut==None</span></code>, you will receive an embedding
 that has <code class="docutils literal notranslate"><span class="pre">nodes</span></code> rows and <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> columns.
 For directed graphs, if <code class="docutils literal notranslate"><span class="pre">elbow_cut==None</span></code>, you will receive an embedding that
@@ -892,18 +866,14 @@ has <code class="docutils literal notranslate"><span class="pre">nodes</span></c
 If <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code> is specified to be not <code class="docutils literal notranslate"><span class="pre">None</span></code>, we will cut the embedding at
 <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code> elbow, but the provided <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> will be used in the
 creation of the SVD.</p>
-</div></blockquote>
-<p><strong>elbow_cut</strong> : Optional[int] (default=None)</p>
-<blockquote>
-<div><p>Using a process described by Zhu &amp; Ghodsi in their paper &quot;Automatic
+</dd>
+<dt><strong>elbow_cut</strong><span class="classifier">Optional[int] (default=None)</span></dt><dd><p>Using a process described by Zhu &amp; Ghodsi in their paper &quot;Automatic
 dimensionality selection from the scree plot via the use of profile likelihood&quot;,
 truncate the dimensionality of the return on the <code class="docutils literal notranslate"><span class="pre">elbow_cut</span></code>-th elbow.
 By default this value is <code class="docutils literal notranslate"><span class="pre">None</span></code> but can be used to reduce the dimensionality
 of the returned tensors.</p>
-</div></blockquote>
-<p><strong>svd_solver_algorithm</strong> : str (default=&quot;randomized&quot;)</p>
-<blockquote>
-<div><p>allowed values: {'randomized', 'full', 'truncated'}</p>
+</dd>
+<dt><strong>svd_solver_algorithm</strong><span class="classifier">str (default=&quot;randomized&quot;)</span></dt><dd><p>allowed values: {'randomized', 'full', 'truncated'}</p>
 <p>SVD solver to use:</p>
 <blockquote>
 <div><ul class="simple">
@@ -914,39 +884,32 @@ of the returned tensors.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-</div></blockquote>
-<p><strong>svd_solver_iterations</strong> : int (default=5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>svd_solver_iterations</strong><span class="classifier">int (default=5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : Optional[int] (default=None)</p>
-<blockquote>
-<div><p>Used to seed the PRNG used in the <code class="docutils literal notranslate"><span class="pre">randomized</span></code> svd solver algorithm.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str (default=&quot;weight&quot;)</p>
-<blockquote>
-<div><p>The edge dictionary key that contains the weight of the edge.</p>
-</div></blockquote>
-<p><strong>use_laplacian</strong> : bool (default=False)</p>
-<blockquote>
-<div><p>Determine whether to use the Laplacian matrix of each graph in order to
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">Optional[int] (default=None)</span></dt><dd><p>Used to seed the PRNG used in the <code class="docutils literal notranslate"><span class="pre">randomized</span></code> svd solver algorithm.</p>
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str (default=&quot;weight&quot;)</span></dt><dd><p>The edge dictionary key that contains the weight of the edge.</p>
+</dd>
+<dt><strong>use_laplacian</strong><span class="classifier">bool (default=False)</span></dt><dd><p>Determine whether to use the Laplacian matrix of each graph in order to
 calculate the omnibus embedding using the Laplacian spectral embedding
 technique.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
@@ -961,7 +924,7 @@ technique.</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.6)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.6)"><em>OrderedDiGraph</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.7)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.7)"><em>OrderedDiGraph</em></a><em>]</em><em>]</em>) -- </p></li>
 <li><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>svd_solver_algorithm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'full'</em><em>, </em><em>'truncated'</em><em>, </em><em>'randomized'</em><em>, </em><em>'eigsh'</em><em>]</em>) -- </p></li>

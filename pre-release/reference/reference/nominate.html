@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nomination &mdash; graspologic 2.0.1dev3070390439 documentation</title>
+  <title>Nomination &mdash; graspologic 2.0.1dev3244127424 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3070390439
+                2.0.1dev3244127424
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -132,7 +133,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -153,7 +160,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -308,11 +325,10 @@ this problem by embedding <span class="math notranslate nohighlight">\(G\)</span
 ), and then generating a nomination list by some distance based algorithm. In the
 simple unattributed case, for each seed vertex <span class="math notranslate nohighlight">\(u\)</span>, the other vertices are
 ranked in order of euclidean distance from <span class="math notranslate nohighlight">\(u\)</span>.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_graph: bool, default = True</strong></p>
-<blockquote>
-<div><p>Flag whether to expect two full graphs, or the embeddings.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>input_graph: bool, default = True</strong></dt><dd><p>Flag whether to expect two full graphs, or the embeddings.</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>True</dt><dd><p>.fit and .fit_predict() expect graphs as adjacency matrix, provided as
@@ -328,34 +344,27 @@ of size (n, d).</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>embedder: str or BaseSpectralEmbed, default = 'ASE'</strong></p>
-<blockquote>
-<div><p>May provide either a embed object or a string indicating which embedding method
+</dd>
+<dt><strong>embedder: str or BaseSpectralEmbed, default = 'ASE'</strong></dt><dd><p>May provide either a embed object or a string indicating which embedding method
 to use, which may be either:
 &quot;ASE&quot; for <a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a> or
 &quot;LSE&quot; for <a class="reference internal" href="embed.html#graspologic.embed.LaplacianSpectralEmbed" title="graspologic.embed.LaplacianSpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaplacianSpectralEmbed</span></code></a>.</p>
-</div></blockquote>
-<p><strong>n_neighbors: int, default=None</strong></p>
-<blockquote>
-<div><p>The number of vertices to nominate for each seed.</p>
-</div></blockquote>
-<p><strong>metric</strong> : str, default = 'euclidean'</p>
-<blockquote>
-<div><p>Distance metric to use when finding the nearest neighbors, all sklearn metrics
+</dd>
+<dt><strong>n_neighbors: int, default=None</strong></dt><dd><p>The number of vertices to nominate for each seed.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, default = 'euclidean'</span></dt><dd><p>Distance metric to use when finding the nearest neighbors, all sklearn metrics
 available.</p>
-</div></blockquote>
-<p><strong>metric_params</strong> : dict, default = None</p>
-<blockquote>
-<div><p>Arguments for the sklearn <cite>DistanceMetric</cite> specified via <cite>metric</cite> parameter.</p>
-</div></blockquote>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, default = None</span></dt><dd><p>Arguments for the sklearn <cite>DistanceMetric</cite> specified via <cite>metric</cite> parameter.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>nearest_neighbors_</strong> : sklearn.neighbors.NearestNeighbors</p>
-<blockquote>
-<div><p>A fit sklearn <cite>NearestNeighbors</cite> classifier used to find closest vertices to
+<dd class="field-even"><dl class="simple">
+<dt><strong>nearest_neighbors_</strong><span class="classifier">sklearn.neighbors.NearestNeighbors</span></dt><dd><p>A fit sklearn <cite>NearestNeighbors</cite> classifier used to find closest vertices to
 each seed.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">References</p>
@@ -394,11 +403,10 @@ Statistics &amp; Data Analysis, Volume 145, 2020.
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/nominate/spectralVN.html#SpectralVertexNomination.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.nominate.SpectralVertexNomination.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs the embedding if not provided, then calculates the pairwise distance
 from each seed to each vertex in graph.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : np.ndarray</p>
-<blockquote>
-<div><ul class="simple">
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">np.ndarray</span></dt><dd><ul class="simple">
 <li><dl class="simple">
 <dt>If <cite>input_graph</cite> is True</dt><dd><p>Expects a graph as an adjacency matrix, i.e. an ndarray of shape (n, n).
 Will be embedded using the specified embedder.</p>
@@ -411,17 +419,16 @@ Will be embedded using the specified embedder.</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>y</strong> : NoneType</p>
-<blockquote>
-<div><p>Included by sklearn convention.</p>
-</div></blockquote>
+</dd>
+<dt><strong>y</strong><span class="classifier">NoneType</span></dt><dd><p>Included by sklearn convention.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -439,27 +446,25 @@ Will be embedded using the specified embedder.</p>
 <dt class="sig sig-object py" id="graspologic.nominate.SpectralVertexNomination.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/nominate/spectralVN.html#SpectralVertexNomination.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.nominate.SpectralVertexNomination.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Nominates vertices for each seed vertex. Methodology is distance based ranking.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>y</strong> : np.ndarray</p>
-<blockquote>
-<div><p>The indices of the seed vertices. Should be a dim 1 array with length less
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">np.ndarray</span></dt><dd><p>The indices of the seed vertices. Should be a dim 1 array with length less
 than <span class="math notranslate nohighlight">\(|V|\)</span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>Nomination List</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Shape is <code class="docutils literal notranslate"><span class="pre">(number_vertices,</span> <span class="pre">number_vertices_in_seed)</span></code> . Each
+<dd class="field-even"><dl class="simple">
+<dt><strong>Nomination List</strong><span class="classifier">np.ndarray</span></dt><dd><p>Shape is <code class="docutils literal notranslate"><span class="pre">(number_vertices,</span> <span class="pre">number_vertices_in_seed)</span></code> . Each
 column is a seed vertex, and the rows of each
 column are a list of vertex indexes from the original adjacency
 matrix in order degree of match.</p>
-</div></blockquote>
-<p><strong>Distance Matrix</strong> : np.ndarray</p>
-<blockquote>
-<div><p>The matrix of distances associated with each element of the
+</dd>
+<dt><strong>Distance Matrix</strong><span class="classifier">np.ndarray</span></dt><dd><p>The matrix of distances associated with each element of the
 nomination list.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>, </em><em>ndarray</em><em>]</em>) -- </p>
@@ -474,11 +479,10 @@ nomination list.</p>
 <dt class="sig sig-object py" id="graspologic.nominate.SpectralVertexNomination.fit_predict">
 <span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/nominate/spectralVN.html#SpectralVertexNomination.fit_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.nominate.SpectralVertexNomination.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calls this class' fit and then predict methods.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : np.ndarray</p>
-<blockquote>
-<div><ul class="simple">
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">np.ndarray</span></dt><dd><ul class="simple">
 <li><dl class="simple">
 <dt>If <cite>input_graph</cite> is True</dt><dd><p>Expects a graph as an adjacency matrix, i.e. an ndarray of shape (n, n).
 Will be embedded using the specified embedder.</p>
@@ -491,25 +495,22 @@ Will be embedded using the specified embedder.</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>y</strong> : np.ndarray.</p>
-<blockquote>
-<div><p>List of unattributed seed vertex indices.</p>
-</div></blockquote>
+</dd>
+<dt><strong>y</strong><span class="classifier">np.ndarray.</span></dt><dd><p>List of unattributed seed vertex indices.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>Nomination List</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Shape is <code class="docutils literal notranslate"><span class="pre">(number_vertices,</span> <span class="pre">number_vertices_in_seed)</span></code> . Each
+<dd class="field-even"><dl class="simple">
+<dt><strong>Nomination List</strong><span class="classifier">np.ndarray</span></dt><dd><p>Shape is <code class="docutils literal notranslate"><span class="pre">(number_vertices,</span> <span class="pre">number_vertices_in_seed)</span></code> . Each
 column is a seed vertex, and the rows of each
 column are a list of vertex indexes from the original adjacency
 matrix in order degree of match.</p>
-</div></blockquote>
-<p><strong>Distance Matrix</strong> : np.ndarray</p>
-<blockquote>
-<div><p>The matrix of distances associated with each element of the
+</dd>
+<dt><strong>Distance Matrix</strong><span class="classifier">np.ndarray</span></dt><dd><p>The matrix of distances associated with each element of the
 nomination list.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -527,19 +528,19 @@ nomination list.</p>
 <dt class="sig sig-object py" id="graspologic.nominate.SpectralVertexNomination.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.nominate.SpectralVertexNomination.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -552,18 +553,18 @@ contained subobjects that are estimators.</p>
 (such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -582,53 +583,43 @@ the algorithm described in [1].</p>
 <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code>, VNviaSGM ranks the potential matches for a
 vertex of interst (VOI) in one to graph to the vertices in another graph, based on
 probability of matching.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>order_voi_subgraph: int, positive (default = 1)</strong></p>
-<blockquote>
-<div><p>Order used to create induced subgraph on <code class="docutils literal notranslate"><span class="pre">A</span></code> about VOI where the max distance
+<dd class="field-odd"><dl class="simple">
+<dt><strong>order_voi_subgraph: int, positive (default = 1)</strong></dt><dd><p>Order used to create induced subgraph on <code class="docutils literal notranslate"><span class="pre">A</span></code> about VOI where the max distance
 between VOI and other nodes is <code class="docutils literal notranslate"><span class="pre">order_voi_subgraph</span></code>. This induced subgraph
 will be used to determine what seeds are used when the SGM algorithm is called.
 If no seeds are in this subgraph about VOI, then a UserWarning is thrown, and
 <code class="docutils literal notranslate"><span class="pre">nomination_list_</span></code> is None.</p>
-</div></blockquote>
-<p><strong>order_seeds_subgraph: int, positive (default = 1)</strong></p>
-<blockquote>
-<div><p>Order used to  create induced subgraphs on <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>. These subgraphs
+</dd>
+<dt><strong>order_seeds_subgraph: int, positive (default = 1)</strong></dt><dd><p>Order used to  create induced subgraphs on <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>. These subgraphs
 are centered about the seeds that were determined by the subgraph generated
 by <code class="docutils literal notranslate"><span class="pre">order_voi_subgraph</span></code>. These two subgraphs will be passed into the SGM
 algorithm.</p>
-</div></blockquote>
-<p><strong>n_init: int, positive (default = 100)</strong></p>
-<blockquote>
-<div><p>Number of random initializations of the seeded graph matching algorithm (SGM).
+</dd>
+<dt><strong>n_init: int, positive (default = 100)</strong></dt><dd><p>Number of random initializations of the seeded graph matching algorithm (SGM).
 Increasing the number of restarts will make the probabilities returned more
 precise.</p>
-</div></blockquote>
-<p><strong>max_nominations: int (default = None)</strong></p>
-<blockquote>
-<div><p>Max number of nominations to include in the nomination list. If None is passed,
+</dd>
+<dt><strong>max_nominations: int (default = None)</strong></dt><dd><p>Max number of nominations to include in the nomination list. If None is passed,
 then all nominations computed will be returned.</p>
-</div></blockquote>
-<p><strong>graph_match_kws</strong> : dict (default = {})</p>
-<blockquote>
-<div><p>Gives users the option to pass custom arguments to the graph matching
+</dd>
+<dt><strong>graph_match_kws</strong><span class="classifier">dict (default = {})</span></dt><dd><p>Gives users the option to pass custom arguments to the graph matching
 algorithm. Format should be {'arg_name': arg_value, ...}. See
 <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMatch</span></code></p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_seeds_: int</strong></p>
-<blockquote>
-<div><p>Number of seeds passed in <cite>seedsA</cite> that occured in the induced subgraph about
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_seeds_: int</strong></dt><dd><p>Number of seeds passed in <cite>seedsA</cite> that occured in the induced subgraph about
 VOI</p>
-</div></blockquote>
-<p><strong>nomination_list_: 2d-array</strong></p>
-<blockquote>
-<div><p>An array containing vertex nominations in the form nomination
+</dd>
+<dt><strong>nomination_list_: 2d-array</strong></dt><dd><p>An array containing vertex nominations in the form nomination
 list = [[j, p_val],...] where p_val is the probability that the VOI matches
 to node j in graph B (sorted by descending probability)</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -672,27 +663,21 @@ graph matching. Stat Anal Data Min: The ASA Data Sci Journal. 2020; 13: 229–
 <dt class="sig sig-object py" id="graspologic.nominate.VNviaSGM.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/nominate/VNviaSGM.html#VNviaSGM.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.nominate.VNviaSGM.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fits the model to two graphs.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>A: 2d-array, square</strong></p>
-<blockquote>
-<div><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is known</p>
-</div></blockquote>
-<p><strong>B: 2d-array, square</strong></p>
-<blockquote>
-<div><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is not known</p>
-</div></blockquote>
-<p><strong>voi: int</strong></p>
-<blockquote>
-<div><p>Vertex of interest</p>
-</div></blockquote>
-<p><strong>seeds: list, 2d-array</strong></p>
-<blockquote>
-<div><p>List of length two, of form <cite>[seedsA, seedsB]</cite>. The elements of <cite>seedsA</cite>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A: 2d-array, square</strong></dt><dd><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is known</p>
+</dd>
+<dt><strong>B: 2d-array, square</strong></dt><dd><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is not known</p>
+</dd>
+<dt><strong>voi: int</strong></dt><dd><p>Vertex of interest</p>
+</dd>
+<dt><strong>seeds: list, 2d-array</strong></dt><dd><p>List of length two, of form <cite>[seedsA, seedsB]</cite>. The elements of <cite>seedsA</cite>
 and <cite>seedsB</cite> are vertex indices from <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>, respectively, which
 are known to be matched; that is, vertex <cite>seedsA[i]</cite> is matched to vertex
 <cite>seedsB[i]</cite>. Note: <cite>len(seedsA)==len(seedsB)</cite>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
@@ -717,33 +702,27 @@ are known to be matched; that is, vertex <cite>seedsA[i]</cite> is matched to ve
 <dt class="sig sig-object py" id="graspologic.nominate.VNviaSGM.fit_predict">
 <span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/nominate/VNviaSGM.html#VNviaSGM.fit_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.nominate.VNviaSGM.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fits model to two adjacency matrices and returns nomination list</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>A: 2d-array, square</strong></p>
-<blockquote>
-<div><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is known</p>
-</div></blockquote>
-<p><strong>B: 2d-array, square</strong></p>
-<blockquote>
-<div><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is not known</p>
-</div></blockquote>
-<p><strong>voi: int</strong></p>
-<blockquote>
-<div><p>Vertex of interest</p>
-</div></blockquote>
-<p><strong>seeds: list, 2d-array</strong></p>
-<blockquote>
-<div><p>List of length two, of form <cite>[seedsA, seedsB]</cite>. The elements of <cite>seedsA</cite>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A: 2d-array, square</strong></dt><dd><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is known</p>
+</dd>
+<dt><strong>B: 2d-array, square</strong></dt><dd><p>Adjacency matrix, the graph where <code class="docutils literal notranslate"><span class="pre">voi</span></code> is not known</p>
+</dd>
+<dt><strong>voi: int</strong></dt><dd><p>Vertex of interest</p>
+</dd>
+<dt><strong>seeds: list, 2d-array</strong></dt><dd><p>List of length two, of form <cite>[seedsA, seedsB]</cite>. The elements of <cite>seedsA</cite>
 and <cite>seedsB</cite> are vertex indices from <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>, respectively, which
 are known to be matched; that is, vertex <cite>seedsA[i]</cite> is matched to
 vertex <cite>seedsB[i]</cite>. Note: <cite>len(seedsA)==len(seedsB)</cite>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>nomination_list_</strong> : 2d-array</p>
-<blockquote>
-<div><p>The nomination list.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>nomination_list_</strong><span class="classifier">2d-array</span></dt><dd><p>The nomination list.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -763,19 +742,19 @@ vertex <cite>seedsB[i]</cite>. Note: <cite>len(seedsA)==len(seedsB)</cite>.</p>
 <dt class="sig sig-object py" id="graspologic.nominate.VNviaSGM.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.nominate.VNviaSGM.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -788,18 +767,18 @@ contained subobjects that are estimators.</p>
 (such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

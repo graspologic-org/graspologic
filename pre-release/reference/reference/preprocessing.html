@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preprocessing &mdash; graspologic 2.0.1dev3070390439 documentation</title>
+  <title>Preprocessing &mdash; graspologic 2.0.1dev3244127424 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3070390439
+                2.0.1dev3244127424
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -132,7 +133,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -153,7 +160,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -380,19 +397,14 @@ minimal and maximal edges as well as each edge in between.</p>
 <dt class="sig sig-object py" id="graspologic.preprocessing.cut_edges_by_weight">
 <span class="sig-prename descclassname"><span class="pre">graspologic.preprocessing.</span></span><span class="sig-name descname"><span class="pre">cut_edges_by_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_process</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_isolates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/preprocessing/graph_cuts.html#cut_edges_by_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.preprocessing.cut_edges_by_weight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Thresholds edges (removing them from the graph and returning a copy) by weight.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>The graph that will be copied and pruned.</p>
-</div></blockquote>
-<p><strong>cut_threshold</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>The threshold for making cuts based on weight.</p>
-</div></blockquote>
-<p><strong>cut_process</strong> : str</p>
-<blockquote>
-<div><p>Describes how we should make the cut; cut all edges larger or smaller than the
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.DiGraph]</span></dt><dd><p>The graph that will be copied and pruned.</p>
+</dd>
+<dt><strong>cut_threshold</strong><span class="classifier">Union[int, float]</span></dt><dd><p>The threshold for making cuts based on weight.</p>
+</dd>
+<dt><strong>cut_process</strong><span class="classifier">str</span></dt><dd><p>Describes how we should make the cut; cut all edges larger or smaller than the
 cut_threshold, and whether exclusive or inclusive. Allowed values are</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">larger_than_inclusive</span></code></p></li>
@@ -400,27 +412,24 @@ cut_threshold, and whether exclusive or inclusive. Allowed values are</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">smaller_than_inclusive</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">smaller_than_exclusive</span></code></p></li>
 </ul>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str</p>
-<blockquote>
-<div><p>The weight attribute name in the edge's data dictionary. Default is <cite>weight</cite>.</p>
-</div></blockquote>
-<p><strong>prune_isolates</strong> : bool</p>
-<blockquote>
-<div><p>If true, remove any vertex that no longer has an edge.  Note that this only
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str</span></dt><dd><p>The weight attribute name in the edge's data dictionary. Default is <cite>weight</cite>.</p>
+</dd>
+<dt><strong>prune_isolates</strong><span class="classifier">bool</span></dt><dd><p>If true, remove any vertex that no longer has an edge.  Note that this only
 prunes vertices which have edges to be pruned; any isolate vertex prior to any
 edge cut will be retained.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>Pruned copy of the same type of graph provided</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>Union[nx.Graph, nx.DiGraph]</dt><dd><p>Pruned copy of the same type of graph provided</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>cut_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 <li><p><strong>cut_process</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
@@ -428,7 +437,7 @@ edge cut will be retained.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a>]</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -444,19 +453,14 @@ with the vertices outside of the cut_threshold.</p>
 <p>The betweenness centrality calculation can take advantage of networkx'
 implementation of randomized sampling by providing num_random_samples (or k, in
 networkx betweenness_centrality nomenclature).</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>The graph that will be copied and pruned.</p>
-</div></blockquote>
-<p><strong>cut_threshold</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>The threshold for making cuts based on weight.</p>
-</div></blockquote>
-<p><strong>cut_process</strong> : str</p>
-<blockquote>
-<div><p>Describes how we should make the cut; cut all edges larger or smaller than the
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.DiGraph]</span></dt><dd><p>The graph that will be copied and pruned.</p>
+</dd>
+<dt><strong>cut_threshold</strong><span class="classifier">Union[int, float]</span></dt><dd><p>The threshold for making cuts based on weight.</p>
+</dd>
+<dt><strong>cut_process</strong><span class="classifier">str</span></dt><dd><p>Describes how we should make the cut; cut all edges larger or smaller than the
 cut_threshold, and whether exclusive or inclusive. Allowed values are</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">larger_than_inclusive</span></code></p></li>
@@ -464,45 +468,36 @@ cut_threshold, and whether exclusive or inclusive. Allowed values are</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">smaller_than_inclusive</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">smaller_than_exclusive</span></code></p></li>
 </ul>
-</div></blockquote>
-<p><strong>num_random_samples</strong> : Optional[int]</p>
-<blockquote>
-<div><p>Use num_random_samples for vertex samples to <em>estimate</em> betweenness.
+</dd>
+<dt><strong>num_random_samples</strong><span class="classifier">Optional[int]</span></dt><dd><p>Use num_random_samples for vertex samples to <em>estimate</em> betweenness.
 num_random_samples should be &lt;= len(graph.nodes). The larger num_random_samples
 is, the better the approximation. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-</div></blockquote>
-<p><strong>normalized</strong> : bool</p>
-<blockquote>
-<div><p>If True the betweenness values are normalized by <span class="math notranslate nohighlight">\(2/((n-1)(n-2))\)</span> for
+</dd>
+<dt><strong>normalized</strong><span class="classifier">bool</span></dt><dd><p>If True the betweenness values are normalized by <span class="math notranslate nohighlight">\(2/((n-1)(n-2))\)</span> for
 undirected graphs, and <span class="math notranslate nohighlight">\(1/((n-1)(n-2))\)</span> for directed graphs where n is
 the number of vertices in the graph. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : Optional[str]</p>
-<blockquote>
-<div><p>If None, all edge weights are considered equal. Otherwise holds the name of the
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">Optional[str]</span></dt><dd><p>If None, all edge weights are considered equal. Otherwise holds the name of the
 edge attribute used as weight. Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code></p>
-</div></blockquote>
-<p><strong>include_endpoints</strong> : bool</p>
-<blockquote>
-<div><p>If True include the endpoints in the shortest path counts.  Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</div></blockquote>
-<p><strong>random_seed</strong> : Optional[Union[int, random.Random, np.random.RandomState]]</p>
-<blockquote>
-<div><p>Random seed or preconfigured random instance to be used for selecting random
+</dd>
+<dt><strong>include_endpoints</strong><span class="classifier">bool</span></dt><dd><p>If True include the endpoints in the shortest path counts.  Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">Optional[Union[int, random.Random, np.random.RandomState]]</span></dt><dd><p>Random seed or preconfigured random instance to be used for selecting random
 samples. Only used if num_random_samples is set. None will generate a new
 random state. Specifying a random state will provide consistent results between
 runs.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>Pruned copy of the same type of graph provided</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>Union[nx.Graph, nx.DiGraph]</dt><dd><p>Pruned copy of the same type of graph provided</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>cut_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 <li><p><strong>cut_process</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>num_random_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
@@ -513,13 +508,13 @@ runs.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a>]</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference external" href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.betweenness_centrality.html#networkx.algorithms.centrality.betweenness_centrality" title="(in NetworkX v2.8.6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.algorithms.centrality.betweenness_centrality</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.betweenness_centrality.html#networkx.algorithms.centrality.betweenness_centrality" title="(in NetworkX v2.8.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.algorithms.centrality.betweenness_centrality</span></code></a></dt><dd></dd>
 </dl>
 </div>
 </dd></dl>
@@ -529,19 +524,14 @@ runs.</p>
 <span class="sig-prename descclassname"><span class="pre">graspologic.preprocessing.</span></span><span class="sig-name descname"><span class="pre">cut_vertices_by_degree_centrality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_process</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/preprocessing/graph_cuts.html#cut_vertices_by_degree_centrality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.preprocessing.cut_vertices_by_degree_centrality" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a graph and a cut_threshold and a cut_process, return a copy of the graph
 with the vertices outside of the cut_threshold.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>The graph that will be copied and pruned.</p>
-</div></blockquote>
-<p><strong>cut_threshold</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>The threshold for making cuts based on weight.</p>
-</div></blockquote>
-<p><strong>cut_process</strong> : str</p>
-<blockquote>
-<div><p>Describes how we should make the cut; cut all edges larger or smaller than the
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.DiGraph]</span></dt><dd><p>The graph that will be copied and pruned.</p>
+</dd>
+<dt><strong>cut_threshold</strong><span class="classifier">Union[int, float]</span></dt><dd><p>The threshold for making cuts based on weight.</p>
+</dd>
+<dt><strong>cut_process</strong><span class="classifier">str</span></dt><dd><p>Describes how we should make the cut; cut all edges larger or smaller than the
 cut_threshold, and whether exclusive or inclusive. Allowed values are</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">larger_than_inclusive</span></code></p></li>
@@ -549,23 +539,24 @@ cut_threshold, and whether exclusive or inclusive. Allowed values are</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">smaller_than_inclusive</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">smaller_than_exclusive</span></code></p></li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>Pruned copy of the same type of graph provided</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>Union[nx.Graph, nx.DiGraph]</dt><dd><p>Pruned copy of the same type of graph provided</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>cut_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
 <li><p><strong>cut_process</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -581,13 +572,10 @@ implementation of randomized sampling by providing num_random_samples (or <code 
 in networkx betweenness_centrality nomenclature).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>The graph. No changes will be made to it.</p>
-</div></blockquote>
-<p><strong>bin_directive</strong> : Union[int, List[Union[float, int]], numpy.ndarray, str]</p>
-<blockquote>
-<div><p>Is passed directly through to numpy's &quot;histogram&quot; (and thus,
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.DiGraph]</span></dt><dd><p>The graph. No changes will be made to it.</p>
+</dd>
+<dt><strong>bin_directive</strong><span class="classifier">Union[int, List[Union[float, int]], numpy.ndarray, str]</span></dt><dd><p>Is passed directly through to numpy's &quot;histogram&quot; (and thus,
 &quot;histogram_bin_edges&quot;) functions.</p>
 <p>See: <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.histogram_bin_edges()</span></code></p>
 <p>In short: if an int is provided, we use <code class="docutils literal notranslate"><span class="pre">bin_directive</span></code> number of equal
@@ -596,46 +584,37 @@ range bins.</p>
 whatever size you prefer</p>
 <p>Note that the <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> should be ndim=1 and the values should be
 float or int.</p>
-</div></blockquote>
-<p><strong>num_random_samples</strong> : Optional[int]</p>
-<blockquote>
-<div><p>Use num_random_samples for vertex samples to <em>estimate</em> betweeness.
+</dd>
+<dt><strong>num_random_samples</strong><span class="classifier">Optional[int]</span></dt><dd><p>Use num_random_samples for vertex samples to <em>estimate</em> betweeness.
 num_random_samples should be &lt;= len(graph.nodes). The larger num_random_samples
 is, the better the approximation. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-</div></blockquote>
-<p><strong>normalized</strong> : bool</p>
-<blockquote>
-<div><p>If True the betweenness values are normalized by <span class="math notranslate nohighlight">\(2/((n-1)(n-2))\)</span> for
+</dd>
+<dt><strong>normalized</strong><span class="classifier">bool</span></dt><dd><p>If True the betweenness values are normalized by <span class="math notranslate nohighlight">\(2/((n-1)(n-2))\)</span> for
 undirected graphs, and  <span class="math notranslate nohighlight">\(1/((n-1)(n-2))\)</span> for directed graphs where n is
 the number of vertices in the graph. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : Optional[str]</p>
-<blockquote>
-<div><p>If None, all edge weights are considered equal. Otherwise holds the name of the
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">Optional[str]</span></dt><dd><p>If None, all edge weights are considered equal. Otherwise holds the name of the
 edge attribute used as weight. Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code></p>
-</div></blockquote>
-<p><strong>include_endpoints</strong> : bool</p>
-<blockquote>
-<div><p>If True include the endpoints in the shortest path counts.  Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</div></blockquote>
-<p><strong>random_seed</strong> : Optional[Union[int, random.Random, np.random.RandomState]]</p>
-<blockquote>
-<div><p>Random seed or preconfigured random instance to be used for selecting random
+</dd>
+<dt><strong>include_endpoints</strong><span class="classifier">bool</span></dt><dd><p>If True include the endpoints in the shortest path counts.  Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">Optional[Union[int, random.Random, np.random.RandomState]]</span></dt><dd><p>Random seed or preconfigured random instance to be used for selecting random
 samples. Only used if num_random_samples is set. None will generate a new
 random state. Specifying a random state will provide consistent results between
 runs.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="#graspologic.preprocessing.DefinedHistogram" title="graspologic.preprocessing.DefinedHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefinedHistogram</span></code></a></p>
-<blockquote>
-<div><p>A named tuple that contains the histogram and the bin_edges used in the
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference internal" href="#graspologic.preprocessing.DefinedHistogram" title="graspologic.preprocessing.DefinedHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefinedHistogram</span></code></a></dt><dd><p>A named tuple that contains the histogram and the bin_edges used in the
 histogram</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>bin_directive</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
 <li><p><strong>num_random_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>normalized</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
@@ -651,7 +630,7 @@ histogram</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference external" href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.betweenness_centrality.html#networkx.algorithms.centrality.betweenness_centrality" title="(in NetworkX v2.8.6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.algorithms.centrality.betweenness_centrality</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.betweenness_centrality.html#networkx.algorithms.centrality.betweenness_centrality" title="(in NetworkX v2.8.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.algorithms.centrality.betweenness_centrality</span></code></a></dt><dd></dd>
 </dl>
 </div>
 </dd></dl>
@@ -664,13 +643,10 @@ Histogram function is fundamentally proxied through to numpy's <cite>histogram</
 and bin selection follows <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.histogram()</span></code> processes.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>The graph. No changes will be made to it.</p>
-</div></blockquote>
-<p><strong>bin_directive</strong> : Union[int, List[Union[float, int]], numpy.ndarray, str]</p>
-<blockquote>
-<div><p>Is passed directly through to numpy's &quot;histogram&quot; (and thus,
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.DiGraph]</span></dt><dd><p>The graph. No changes will be made to it.</p>
+</dd>
+<dt><strong>bin_directive</strong><span class="classifier">Union[int, List[Union[float, int]], numpy.ndarray, str]</span></dt><dd><p>Is passed directly through to numpy's &quot;histogram&quot; (and thus,
 &quot;histogram_bin_edges&quot;) functions.</p>
 <p>See: <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.histogram_bin_edges()</span></code></p>
 <p>In short: if an int is provided, we use <code class="docutils literal notranslate"><span class="pre">bin_directive</span></code> number of equal range
@@ -679,18 +655,19 @@ bins.</p>
 whatever size you prefer</p>
 <p>Note that the <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> should be ndim=1 and the values should be
 float or int.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="#graspologic.preprocessing.DefinedHistogram" title="graspologic.preprocessing.DefinedHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefinedHistogram</span></code></a></p>
-<blockquote>
-<div><p>A named tuple that contains the histogram and the bin_edges used in the
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference internal" href="#graspologic.preprocessing.DefinedHistogram" title="graspologic.preprocessing.DefinedHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefinedHistogram</span></code></a></dt><dd><p>A named tuple that contains the histogram and the bin_edges used in the
 histogram</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>bin_directive</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -708,13 +685,10 @@ is fundamentally proxied through to numpy's <cite>histogram</cite> function, and
 follows <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.histogram()</span></code> processes.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : nx.Graph</p>
-<blockquote>
-<div><p>The graph. No changes will be made to it.</p>
-</div></blockquote>
-<p><strong>bin_directive</strong> : Union[int, List[Union[float, int]], numpy.ndarray, str]</p>
-<blockquote>
-<div><p>Is passed directly through to numpy's &quot;histogram&quot; (and thus,
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">nx.Graph</span></dt><dd><p>The graph. No changes will be made to it.</p>
+</dd>
+<dt><strong>bin_directive</strong><span class="classifier">Union[int, List[Union[float, int]], numpy.ndarray, str]</span></dt><dd><p>Is passed directly through to numpy's &quot;histogram&quot; (and thus,
 &quot;histogram_bin_edges&quot;) functions.</p>
 <p>See: <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.histogram_bin_edges()</span></code></p>
 <p>In short: if an int is provided, we use <code class="docutils literal notranslate"><span class="pre">bin_directive</span></code> number of equal range
@@ -723,22 +697,21 @@ bins.</p>
 whatever size you prefer</p>
 <p>Note that the <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> should be ndim=1 and the values should be
 float or int.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str</p>
-<blockquote>
-<div><p>The weight attribute name in the data dictionary. Default is <cite>weight</cite>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str</span></dt><dd><p>The weight attribute name in the data dictionary. Default is <cite>weight</cite>.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="#graspologic.preprocessing.DefinedHistogram" title="graspologic.preprocessing.DefinedHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefinedHistogram</span></code></a></p>
-<blockquote>
-<div><p>A named tuple that contains the histogram and the bin_edges used in the
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference internal" href="#graspologic.preprocessing.DefinedHistogram" title="graspologic.preprocessing.DefinedHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefinedHistogram</span></code></a></dt><dd><p>A named tuple that contains the histogram and the bin_edges used in the
 histogram</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.7)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>bin_directive</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>

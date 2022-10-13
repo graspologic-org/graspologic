@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulations &mdash; graspologic 2.0.1dev3070390439 documentation</title>
+  <title>Simulations &mdash; graspologic 2.0.1dev3244127424 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3070390439
+                2.0.1dev3244127424
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -132,7 +133,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -153,7 +160,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -301,40 +318,27 @@
 <p>Erdos Renyi (n, p) graph is a simple graph with n vertices and a probability
 p of edges being connected.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n: int</strong></p>
-<blockquote>
-<div><p>Number of vertices</p>
-</div></blockquote>
-<p><strong>p: float</strong></p>
-<blockquote>
-<div><p>Probability of an edge existing between two vertices, between 0 and 1.</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n: int</strong></dt><dd><p>Number of vertices</p>
+</dd>
+<dt><strong>p: float</strong></dt><dd><p>Probability of an edge existing between two vertices, between 0 and 1.</p>
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
+</dd>
+<dt><strong>loops: boolean, optional (default=False)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
 are sampled in the diagonal.</p>
-</div></blockquote>
-<p><strong>wt: object, optional (default=1)</strong></p>
-<blockquote>
-<div><p>Weight function for each of the edges, taking only a size argument.
+</dd>
+<dt><strong>wt: object, optional (default=1)</strong></dt><dd><p>Weight function for each of the edges, taking only a size argument.
 This weight function will be randomly assigned for selected edges.
 If 1, graph produced is binary.</p>
-</div></blockquote>
-<p><strong>wtargs: dictionary, optional (default=None)</strong></p>
-<blockquote>
-<div><p>Optional arguments for parameters that can be passed
+</dd>
+<dt><strong>wtargs: dictionary, optional (default=None)</strong></dt><dd><p>Optional arguments for parameters that can be passed
 to weight function <code class="docutils literal notranslate"><span class="pre">wt</span></code>.</p>
-</div></blockquote>
-<p><strong>dc: function or array-like, shape (n_vertices)</strong></p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">dc</span></code> is used to generate a degree-corrected Erdos Renyi Model in
+</dd>
+<dt><strong>dc: function or array-like, shape (n_vertices)</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">dc</span></code> is used to generate a degree-corrected Erdos Renyi Model in
 which each node in the graph has a parameter to specify its expected degree
 relative to other nodes.</p>
 <ul class="simple">
@@ -353,20 +357,19 @@ vertex is the node's relative expected degree.</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>dc_kws: dictionary</strong></p>
-<blockquote>
-<div><p>Ignored if <code class="docutils literal notranslate"><span class="pre">dc</span></code> is none or array of scalar.
+</dd>
+<dt><strong>dc_kws: dictionary</strong></dt><dd><p>Ignored if <code class="docutils literal notranslate"><span class="pre">dc</span></code> is none or array of scalar.
 If <code class="docutils literal notranslate"><span class="pre">dc</span></code> is a function, <code class="docutils literal notranslate"><span class="pre">dc_kws</span></code> corresponds to its named arguments.
 If not specified, in either case all functions will assume their default
 parameters.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>A</strong> : ndarray, shape (n, n)</p>
-<blockquote>
-<div><p>Sampled adjacency matrix</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">ndarray, shape (n, n)</span></dt><dd><p>Sampled adjacency matrix</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -417,43 +420,33 @@ parameters.</p>
 <p>Erdos Renyi (n, m) graph is a simple graph with n vertices and exactly m
 number of total edges.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n: int</strong></p>
-<blockquote>
-<div><p>Number of vertices</p>
-</div></blockquote>
-<p><strong>m: int</strong></p>
-<blockquote>
-<div><p>Number of edges, a value between 1 and <span class="math notranslate nohighlight">\(n^2\)</span>.</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n: int</strong></dt><dd><p>Number of vertices</p>
+</dd>
+<dt><strong>m: int</strong></dt><dd><p>Number of edges, a value between 1 and <span class="math notranslate nohighlight">\(n^2\)</span>.</p>
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
+</dd>
+<dt><strong>loops: boolean, optional (default=False)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
 are sampled in the diagonal.</p>
-</div></blockquote>
-<p><strong>wt: object, optional (default=1)</strong></p>
-<blockquote>
-<div><p>Weight function for each of the edges, taking only a size argument.
+</dd>
+<dt><strong>wt: object, optional (default=1)</strong></dt><dd><p>Weight function for each of the edges, taking only a size argument.
 This weight function will be randomly assigned for selected edges.
 If 1, graph produced is binary.</p>
-</div></blockquote>
-<p><strong>wtargs: dictionary, optional (default=None)</strong></p>
-<blockquote>
-<div><p>Optional arguments for parameters that can be passed
+</dd>
+<dt><strong>wtargs: dictionary, optional (default=None)</strong></dt><dd><p>Optional arguments for parameters that can be passed
 to weight function <code class="docutils literal notranslate"><span class="pre">wt</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A: ndarray, shape (n, n)</p>
-<blockquote>
-<div><p>Sampled adjacency matrix</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>A: ndarray, shape (n, n)</dt><dd><p>Sampled adjacency matrix</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -502,47 +495,34 @@ to weight function <code class="docutils literal notranslate"><span class="pre">
 <p>SBM produces a graph with specified communities, in which each community can
 have different sizes and edge probabilities.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html">Stochastic Block Model (SBM) Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n: list of int, shape (n_communities)</strong></p>
-<blockquote>
-<div><p>Number of vertices in each community. Communities are assigned n[0], n[1], ...</p>
-</div></blockquote>
-<p><strong>p: array-like, shape (n_communities, n_communities)</strong></p>
-<blockquote>
-<div><p>Probability of an edge between each of the communities, where <code class="docutils literal notranslate"><span class="pre">p[i,</span> <span class="pre">j]</span></code> indicates
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n: list of int, shape (n_communities)</strong></dt><dd><p>Number of vertices in each community. Communities are assigned n[0], n[1], ...</p>
+</dd>
+<dt><strong>p: array-like, shape (n_communities, n_communities)</strong></dt><dd><p>Probability of an edge between each of the communities, where <code class="docutils literal notranslate"><span class="pre">p[i,</span> <span class="pre">j]</span></code> indicates
 the probability of a connection between edges in communities <code class="docutils literal notranslate"><span class="pre">[i,</span> <span class="pre">j]</span></code>.
 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">p[i,</span> <span class="pre">j]</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> for all <code class="docutils literal notranslate"><span class="pre">i,</span> <span class="pre">j</span></code>.</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
+</dd>
+<dt><strong>loops: boolean, optional (default=False)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
 are sampled in the diagonal.</p>
-</div></blockquote>
-<p><strong>wt: object or array-like, shape (n_communities, n_communities)</strong></p>
-<blockquote>
-<div><p>if <code class="docutils literal notranslate"><span class="pre">wt</span></code> is an object, a weight function to use globally over
+</dd>
+<dt><strong>wt: object or array-like, shape (n_communities, n_communities)</strong></dt><dd><p>if <code class="docutils literal notranslate"><span class="pre">wt</span></code> is an object, a weight function to use globally over
 the sbm for assigning weights. 1 indicates to produce a binary
 graph. If <code class="docutils literal notranslate"><span class="pre">wt</span></code> is an array-like, a weight function for each of
 the edge communities. <code class="docutils literal notranslate"><span class="pre">wt[i,</span> <span class="pre">j]</span></code> corresponds to the weight function
 between communities i and j. If the entry is a function, should
 accept an argument for size. An entry of <code class="docutils literal notranslate"><span class="pre">wt[i,</span> <span class="pre">j]</span> <span class="pre">=</span> <span class="pre">1</span></code> will produce a
 binary subgraph over the i, j community.</p>
-</div></blockquote>
-<p><strong>wtargs: dictionary or array-like, shape (n_communities, n_communities)</strong></p>
-<blockquote>
-<div><p>if <code class="docutils literal notranslate"><span class="pre">wt</span></code> is an object, <code class="docutils literal notranslate"><span class="pre">wtargs</span></code> corresponds to the trailing arguments
+</dd>
+<dt><strong>wtargs: dictionary or array-like, shape (n_communities, n_communities)</strong></dt><dd><p>if <code class="docutils literal notranslate"><span class="pre">wt</span></code> is an object, <code class="docutils literal notranslate"><span class="pre">wtargs</span></code> corresponds to the trailing arguments
 to pass to the weight function. If Wt is an array-like, <code class="docutils literal notranslate"><span class="pre">wtargs[i,</span> <span class="pre">j]</span></code>
 corresponds to trailing arguments to pass to <code class="docutils literal notranslate"><span class="pre">wt[i,</span> <span class="pre">j]</span></code>.</p>
-</div></blockquote>
-<p><strong>dc: function or array-like, shape (n_vertices) or (n_communities), optional</strong></p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">dc</span></code> is used to generate a degree-corrected stochastic block model [1] in
+</dd>
+<dt><strong>dc: function or array-like, shape (n_vertices) or (n_communities), optional</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">dc</span></code> is used to generate a degree-corrected stochastic block model [1] in
 which each node in the graph has a parameter to specify its expected degree
 relative to other nodes within its community.</p>
 <ul class="simple">
@@ -567,33 +547,28 @@ vertex is the node's relative expected degree within its community.</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>dc_kws: dictionary or array-like, shape (n_communities), optional</strong></p>
-<blockquote>
-<div><p>Ignored if <code class="docutils literal notranslate"><span class="pre">dc</span></code> is none or array of scalar.
+</dd>
+<dt><strong>dc_kws: dictionary or array-like, shape (n_communities), optional</strong></dt><dd><p>Ignored if <code class="docutils literal notranslate"><span class="pre">dc</span></code> is none or array of scalar.
 If <code class="docutils literal notranslate"><span class="pre">dc</span></code> is a function, <code class="docutils literal notranslate"><span class="pre">dc_kws</span></code> corresponds to its named arguments.
 If <code class="docutils literal notranslate"><span class="pre">dc</span></code> is an array-like of functions, <code class="docutils literal notranslate"><span class="pre">dc_kws</span></code> should be an array-like, shape
 (n_communities), of dictionary. Each dictionary is the named arguments
 for the corresponding function for that community.
 If not specified, in either case all functions will assume their default
 parameters.</p>
-</div></blockquote>
-<p><strong>return_labels: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, only output is adjacency matrix. Otherwise, an additional output will
+</dd>
+<dt><strong>return_labels: boolean, optional (default=False)</strong></dt><dd><p>If False, only output is adjacency matrix. Otherwise, an additional output will
 be an array with length equal to the number of vertices in the graph, where each
 entry in the array labels which block a vertex in the graph is in.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A: ndarray, shape (sum(n), sum(n))</p>
-<blockquote>
-<div><p>Sampled adjacency matrix</p>
-</div></blockquote>
-<p>labels: ndarray, shape (sum(n))</p>
-<blockquote>
-<div><p>Label vector</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>A: ndarray, shape (sum(n), sum(n))</dt><dd><p>Sampled adjacency matrix</p>
+</dd>
+<dt>labels: ndarray, shape (sum(n))</dt><dd><p>Label vector</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -665,53 +640,41 @@ matrix to get probabilities between 0 and 1, or remove loops.
 A binary random graph is then sampled from the P matrix described
 by X (and possibly Y).</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X: np.ndarray, shape (n_vertices, n_dimensions)</strong></p>
-<blockquote>
-<div><p>latent position from which to generate a P matrix
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X: np.ndarray, shape (n_vertices, n_dimensions)</strong></dt><dd><p>latent position from which to generate a P matrix
 if Y is given, interpreted as the left latent position</p>
-</div></blockquote>
-<p><strong>Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional</strong></p>
-<blockquote>
-<div><p>right latent position from which to generate a P matrix</p>
-</div></blockquote>
-<p><strong>rescale: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>when <code class="docutils literal notranslate"><span class="pre">rescale</span></code> is True, will subtract the minimum value in
+</dd>
+<dt><strong>Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional</strong></dt><dd><p>right latent position from which to generate a P matrix</p>
+</dd>
+<dt><strong>rescale: boolean, optional (default=False)</strong></dt><dd><p>when <code class="docutils literal notranslate"><span class="pre">rescale</span></code> is True, will subtract the minimum value in
 P (if it is below 0) and divide by the maximum (if it is
 above 1) to ensure that P has entries between 0 and 1. If
 False, elements of P outside of [0, 1] will be clipped</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Diagonal elements in P
+</dd>
+<dt><strong>loops: boolean, optional (default=False)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Diagonal elements in P
 matrix are removed prior to rescaling (see above) which may affect behavior.
 Otherwise, edges are sampled in the diagonal.</p>
-</div></blockquote>
-<p><strong>wt: object, optional (default=1)</strong></p>
-<blockquote>
-<div><p>Weight function for each of the edges, taking only a size argument.
+</dd>
+<dt><strong>wt: object, optional (default=1)</strong></dt><dd><p>Weight function for each of the edges, taking only a size argument.
 This weight function will be randomly assigned for selected edges.
 If 1, graph produced is binary.</p>
-</div></blockquote>
-<p><strong>wtargs: dictionary, optional (default=None)</strong></p>
-<blockquote>
-<div><p>Optional arguments for parameters that can be passed
+</dd>
+<dt><strong>wtargs: dictionary, optional (default=None)</strong></dt><dd><p>Optional arguments for parameters that can be passed
 to weight function <code class="docutils literal notranslate"><span class="pre">wt</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A: ndarray (n_vertices, n_vertices)</p>
-<blockquote>
-<div><p>A matrix representing the probabilities of connections between
+<dd class="field-even"><dl class="simple">
+<dt>A: ndarray (n_vertices, n_vertices)</dt><dd><p>A matrix representing the probabilities of connections between
 vertices in a random graph based on their latent positions</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -771,40 +734,30 @@ Journal of the American Statistical Association, Vol. 107(499), 2012</p>
 <span class="sig-prename descclassname"><span class="pre">graspologic.simulations.</span></span><span class="sig-name descname"><span class="pre">er_corr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/simulations/simulations_corr.html#er_corr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.simulations.er_corr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a pair of correlated graphs with specified edge probability
 Both G1 and G2 are binary matrices.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n: int</strong></p>
-<blockquote>
-<div><p>Number of vertices</p>
-</div></blockquote>
-<p><strong>p: float</strong></p>
-<blockquote>
-<div><p>Probability of an edge existing between two vertices, between 0 and 1.</p>
-</div></blockquote>
-<p><strong>r: float</strong></p>
-<blockquote>
-<div><p>The value of the correlation between the same vertices in two graphs.</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n: int</strong></dt><dd><p>Number of vertices</p>
+</dd>
+<dt><strong>p: float</strong></dt><dd><p>Probability of an edge existing between two vertices, between 0 and 1.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>The value of the correlation between the same vertices in two graphs.</p>
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
+</dd>
+<dt><strong>loops: boolean, optional (default=False)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
 are sampled in the diagonal.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>G1: ndarray (n_vertices, n_vertices)</p>
-<blockquote>
-<div><p>Adjacency matrix the same size as P representing a random graph.</p>
-</div></blockquote>
-<p>G2: ndarray (n_vertices, n_vertices)</p>
-<blockquote>
-<div><p>Adjacency matrix the same size as P representing a random graph.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>G1: ndarray (n_vertices, n_vertices)</dt><dd><p>Adjacency matrix the same size as P representing a random graph.</p>
+</dd>
+<dt>G2: ndarray (n_vertices, n_vertices)</dt><dd><p>Adjacency matrix the same size as P representing a random graph.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -846,42 +799,32 @@ are sampled in the diagonal.</p>
 <span class="sig-prename descclassname"><span class="pre">graspologic.simulations.</span></span><span class="sig-name descname"><span class="pre">sbm_corr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/simulations/simulations_corr.html#sbm_corr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.simulations.sbm_corr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a pair of correlated graphs with specified edge probability
 Both G1 and G2 are binary matrices.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n: list of int, shape (n_communities)</strong></p>
-<blockquote>
-<div><p>Number of vertices in each community. Communities are assigned n[0], n[1], ...</p>
-</div></blockquote>
-<p><strong>p: array-like, shape (n_communities, n_communities)</strong></p>
-<blockquote>
-<div><p>Probability of an edge between each of the communities, where <code class="docutils literal notranslate"><span class="pre">p[i,</span> <span class="pre">j]</span></code> indicates
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n: list of int, shape (n_communities)</strong></dt><dd><p>Number of vertices in each community. Communities are assigned n[0], n[1], ...</p>
+</dd>
+<dt><strong>p: array-like, shape (n_communities, n_communities)</strong></dt><dd><p>Probability of an edge between each of the communities, where <code class="docutils literal notranslate"><span class="pre">p[i,</span> <span class="pre">j]</span></code> indicates
 the probability of a connection between edges in communities <code class="docutils literal notranslate"><span class="pre">[i,</span> <span class="pre">j]</span></code>.
 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">p[i,</span> <span class="pre">j]</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> for all <code class="docutils literal notranslate"><span class="pre">i,</span> <span class="pre">j</span></code>.</p>
-</div></blockquote>
-<p><strong>r: float</strong></p>
-<blockquote>
-<div><p>Probability of the correlation between the same vertices in two graphs.</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Probability of the correlation between the same vertices in two graphs.</p>
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
+</dd>
+<dt><strong>loops: boolean, optional (default=False)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
 are sampled in the diagonal.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>G1: ndarray (n_vertices, n_vertices)</p>
-<blockquote>
-<div><p>Adjacency matrix the same size as P representing a random graph.</p>
-</div></blockquote>
-<p>G2: ndarray (n_vertices, n_vertices)</p>
-<blockquote>
-<div><p>Adjacency matrix the same size as P representing a random graph.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>G1: ndarray (n_vertices, n_vertices)</dt><dd><p>Adjacency matrix the same size as P representing a random graph.</p>
+</dd>
+<dt>G2: ndarray (n_vertices, n_vertices)</dt><dd><p>Adjacency matrix the same size as P representing a random graph.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -935,51 +878,39 @@ matrix to get probabilities between 0 and 1, or remove loops.
 A binary random graph is then sampled from the P matrix described
 by X (and possibly Y).</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X: np.ndarray, shape (n_vertices, n_dimensions)</strong></p>
-<blockquote>
-<div><p>latent position from which to generate a P matrix
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X: np.ndarray, shape (n_vertices, n_dimensions)</strong></dt><dd><p>latent position from which to generate a P matrix
 if Y is given, interpreted as the left latent position</p>
-</div></blockquote>
-<p><strong>Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional</strong></p>
-<blockquote>
-<div><p>right latent position from which to generate a P matrix</p>
-</div></blockquote>
-<p><strong>r: float</strong></p>
-<blockquote>
-<div><p>The value of the correlation between the same vertices in two graphs.</p>
-</div></blockquote>
-<p><strong>rescale: boolean, optional (default=True)</strong></p>
-<blockquote>
-<div><p>when <code class="docutils literal notranslate"><span class="pre">rescale</span></code> is True, will subtract the minimum value in
+</dd>
+<dt><strong>Y: np.ndarray, shape (n_vertices, n_dimensions) or None, optional</strong></dt><dd><p>right latent position from which to generate a P matrix</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>The value of the correlation between the same vertices in two graphs.</p>
+</dd>
+<dt><strong>rescale: boolean, optional (default=True)</strong></dt><dd><p>when <code class="docutils literal notranslate"><span class="pre">rescale</span></code> is True, will subtract the minimum value in
 P (if it is below 0) and divide by the maximum (if it is
 above 1) to ensure that P has entries between 0 and 1. If
 False, elements of P outside of [0, 1] will be clipped.</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=True)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Diagonal elements in P
+</dd>
+<dt><strong>loops: boolean, optional (default=True)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Diagonal elements in P
 matrix are removed prior to rescaling (see above) which may affect behavior.
 Otherwise, edges are sampled in the diagonal.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>G1: ndarray (n_vertices, n_vertices)</p>
-<blockquote>
-<div><p>A matrix representing the probabilities of connections between
+<dd class="field-even"><dl class="simple">
+<dt>G1: ndarray (n_vertices, n_vertices)</dt><dd><p>A matrix representing the probabilities of connections between
 vertices in a random graph based on their latent positions</p>
-</div></blockquote>
-<p>G2: ndarray (n_vertices, n_vertices)</p>
-<blockquote>
-<div><p>A matrix representing the probabilities of connections between
+</dd>
+<dt>G2: ndarray (n_vertices, n_vertices)</dt><dd><p>A matrix representing the probabilities of connections between
 vertices in a random graph based on their latent positions</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1038,61 +969,47 @@ probabilities for that node of pertaining to each community when interacting wit
 another node. Each node's membership is determined according to those probabilities.
 Finally, interactions are sampled according to the assigned memberships.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM) Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n: int</strong></p>
-<blockquote>
-<div><p>Number of vertices of the graph.</p>
-</div></blockquote>
-<p><strong>p: array-like, shape (n_communities, n_communities)</strong></p>
-<blockquote>
-<div><p>Probability of an edge between each of the communities, where <code class="docutils literal notranslate"><span class="pre">p[i,</span> <span class="pre">j]</span></code>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n: int</strong></dt><dd><p>Number of vertices of the graph.</p>
+</dd>
+<dt><strong>p: array-like, shape (n_communities, n_communities)</strong></dt><dd><p>Probability of an edge between each of the communities, where <code class="docutils literal notranslate"><span class="pre">p[i,</span> <span class="pre">j]</span></code>
 indicates the probability of a connection between edges in communities
 <span class="math notranslate nohighlight">\((i, j)\)</span>.
 0 &lt; <code class="docutils literal notranslate"><span class="pre">p[i,</span> <span class="pre">j]</span></code> &lt; 1 for all <span class="math notranslate nohighlight">\(i, j\)</span>.</p>
-</div></blockquote>
-<p><strong>alpha: array-like, shape (n_communities,)</strong></p>
-<blockquote>
-<div><p>Parameter alpha of the Dirichlet distribution used
+</dd>
+<dt><strong>alpha: array-like, shape (n_communities,)</strong></dt><dd><p>Parameter alpha of the Dirichlet distribution used
 to sample the mixed-membership vectors for each node.
 <code class="docutils literal notranslate"><span class="pre">alpha[i]</span></code> &gt; 0 for all <span class="math notranslate nohighlight">\(i\)</span>.</p>
-</div></blockquote>
-<p><strong>rng: numpy.random.Generator, optional (default = None)</strong></p>
-<blockquote>
-<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.Generator</span></code> object to sample from distributions.
+</dd>
+<dt><strong>rng: numpy.random.Generator, optional (default = None)</strong></dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.Generator</span></code> object to sample from distributions.
 If None, the random number generator is the Generator object constructed
 by <code class="docutils literal notranslate"><span class="pre">np.random.default_rng()</span></code>.</p>
-</div></blockquote>
-<p><strong>directed: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
+</dd>
+<dt><strong>directed: boolean, optional (default=False)</strong></dt><dd><p>If False, output adjacency matrix will be symmetric. Otherwise, output adjacency
 matrix will be asymmetric.</p>
-</div></blockquote>
-<p><strong>loops: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
+</dd>
+<dt><strong>loops: boolean, optional (default=False)</strong></dt><dd><p>If False, no edges will be sampled in the diagonal. Otherwise, edges
 are sampled in the diagonal.</p>
-</div></blockquote>
-<p><strong>return_labels: boolean, optional (default=False)</strong></p>
-<blockquote>
-<div><p>If False, the only output is the adjacency matrix.
+</dd>
+<dt><strong>return_labels: boolean, optional (default=False)</strong></dt><dd><p>If False, the only output is the adjacency matrix.
 If True, output is a tuple. The first element of the tuple is the adjacency
 matrix. The second element is a matrix in which the <span class="math notranslate nohighlight">\((i^{th}, j^{th})\)</span>
 entry indicates the membership assigned to node i when interacting with node j.
 Community 1 is labeled with a 0, community 2 with 1, etc.
 -1 indicates that no community was assigned for that interaction.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A: ndarray, shape (n, n)</p>
-<blockquote>
-<div><p>Sampled adjacency matrix</p>
-</div></blockquote>
-<p>labels: ndarray, shape (n, n), optional</p>
-<blockquote>
-<div><p>Array containing the membership assigned to each node when interacting with
+<dd class="field-even"><dl class="simple">
+<dt>A: ndarray, shape (n, n)</dt><dd><p>Sampled adjacency matrix</p>
+</dd>
+<dt>labels: ndarray, shape (n, n), optional</dt><dd><p>Array containing the membership assigned to each node when interacting with
 another node.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
