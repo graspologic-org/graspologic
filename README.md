@@ -7,18 +7,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## `graspologic` is a package for graph statistical algorithms.
-
-- [graspologic](#graspologic)
-  - [`graspologic` is a package for graph statistical algorithms.](#graspologic-is-a-package-for-graph-statistical-algorithms)
+<!-- no toc -->
 - [Overview](#overview)
 - [Documentation](#documentation)
 - [System Requirements](#system-requirements)
-  - [Hardware requirements](#hardware-requirements)
-  - [Software requirements](#software-requirements)
-    - [OS Requirements](#os-requirements)
 - [Installation Guide](#installation-guide)
-  - [Install from pip](#install-from-pip)
-  - [Install from Github](#install-from-github)
 - [Contributing](#contributing)
 - [License](#license)
 - [Issues](#issues)
