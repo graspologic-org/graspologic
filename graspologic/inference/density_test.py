@@ -88,6 +88,13 @@ def density_test(
 
             We only implement the alternative hypothesis of "not equals" (two-sided);
             future versions could implement the one-sided alternative hypotheses.
+
+    References
+    ----------
+    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E., 
+           Vogelstein, J.T., (2022). "Generative network modeling reveals quantitative 
+           definitions of bilateral symmetry exhibited by a whole insect brain 
+           connectome," In preparation.
     """
     stat, pvalue, misc = group_connection_test(
         A1,
