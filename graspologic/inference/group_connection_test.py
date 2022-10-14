@@ -40,12 +40,12 @@ def fit_sbm(A: AdjacencyMatrix, labels: Labels, loops: bool = False) -> SBMResul
 
     Parameters
     ----------
-    A: np.array, int shape(num_nodes,num_nodes)
+    A: np.array, int shape(n1,n1)
         The adjacency matrix for the network at issue. Entries are either 1
         (edge present) or 0 (edge absent). This is a square matrix with
         side length equal to the number of nodes in the network.
 
-    labels: array-like, int shape(num_nodes,1)
+    labels: array-like, int shape(n1,1)
         The group labels corresponding to each node in the network. This is a
         one-dimensional array with a number of entries equal to the
         number of nodes in the network.
@@ -172,15 +172,15 @@ def group_connection_test(
 
     Parameters
     ----------
-    A1: np.array, int shape(num_nodes,num_nodes)
+    A1: np.array, shape(n1,n1)
         The adjacency matrix for network 1. Will be treated as a binary network,
         regardless of whether it was weighted.
-    A2 np.array, int shape(num_nodes,num_nodes)
-        The adjacency matrix for network 1. Will be treated as a binary network,
+    A2 np.array, shape(n2,n2)
+        The adjacency matrix for network 2. Will be treated as a binary network,
         regardless of whether it was weighted.
-    labels1: array-like, int shape(num_nodes,1)
+    labels1: array-like, shape (n1,)
         The group labels for each node in network 1.
-    labels2: array-like, int shape(num_nodes,1)
+    labels2: array-like, shape (n2,)
         The group labels for each node in network 2.
     density_adjustment: boolean, optional
         Whether to perform a density adjustment procedure. If ``True``, will test the
