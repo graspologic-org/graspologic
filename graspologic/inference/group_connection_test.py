@@ -10,7 +10,7 @@ from statsmodels.stats.multitest import multipletests
 
 from ..types import AdjacencyMatrix, List
 from ..utils import import_graph, is_loopless, is_symmetric, is_unweighted, remove_loops
-from .binomial import binom_2samp
+from .binomial import BinomialTestMethod, binom_2samp
 from .utils import compute_density_adjustment
 
 Labels = Union[np.ndarray, List]
@@ -150,7 +150,7 @@ def group_connection_test(
     labels1: Labels,
     labels2: Labels,
     density_adjustment: bool = False,
-    method: str = "fisher",
+    method: BinomialTestMethod = "fisher",
     combine_method: str = "tippett",
     correct_method: str = "bonferroni",
     alpha: float = 0.05,
@@ -356,22 +356,22 @@ def group_connection_test(
 
     if is_symmetric(A1) or is_symmetric(A2):
         msg = (
-            "This test assumes that the networks are directed, ",
-            "but one or both adjacency matrices are symmetric.",
+            "This test assumes that the networks are directed, "
+            "but one or both adjacency matrices are symmetric."
         )
         warnings.warn(msg)
     if (not is_unweighted(A1)) or (not is_unweighted(A2)):
         msg = (
-            "This test assumes that the networks are unweighted, ",
-            "but one or both adjacency matrices are weighted.",
-            "Test will be run on the binarized version of these adjacency matrices.",
+            "This test assumes that the networks are unweighted, "
+            "but one or both adjacency matrices are weighted."
+            "Test will be run on the binarized version of these adjacency matrices."
         )
         warnings.warn(msg)
     if (not is_loopless(A1)) or (not is_loopless(A2)):
         msg = (
-            "This test assumes that the networks are loopless, ",
-            "but one or both adjacency matrices have self-loops.",
-            "Test will be run on the loopless version of these adjacency matrices.",
+            "This test assumes that the networks are loopless, "
+            "but one or both adjacency matrices have self-loops."
+            "Test will be run on the loopless version of these adjacency matrices."
         )
         warnings.warn(msg)
 
