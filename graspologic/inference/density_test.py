@@ -1,11 +1,11 @@
 from collections import namedtuple
 
 import numpy as np
+from beartype import beartype
 
 from ..types import AdjacencyMatrix
-from .group_connection_test import group_connection_test
 from .binomial import BinomialTestMethod
-from beartype import beartype
+from .group_connection_test import group_connection_test
 
 DensityTestResult = namedtuple("DensityTestResult", ["stat", "pvalue", "misc"])
 
