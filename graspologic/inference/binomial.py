@@ -3,9 +3,7 @@ from typing import Literal
 
 import numpy as np
 from scipy.stats import chi2_contingency, fisher_exact
-from statsmodels.stats.contingency_tables import mcnemar
 
-from ..types import AdjacencyMatrix, GraphRepresentation
 from .fisher_exact_nonunity import fisher_exact_nonunity
 
 BinomialResult = namedtuple("BinomialResult", ["stat", "pvalue"])
