@@ -1,15 +1,15 @@
+import warnings
 from collections import namedtuple
 from typing import Union
 
 import numpy as np
 import pandas as pd
 from beartype import beartype
-from scipy.stats import combine_pvalues as scipy_combine_pvalues
+from scipy.stats import combine_pvalues
 from statsmodels.stats.multitest import multipletests
 
-from graspologic.utils import remove_loops
-
 from ..types import AdjacencyMatrix, List
+from ..utils import import_graph, is_loopless, is_symmetric, is_unweighted, remove_loops
 from .binomial import binom_2samp
 from .utils import compute_density_adjustment
 
@@ -351,6 +351,30 @@ def group_connection_test(
            connectome," In preparation.
     """
 
+    A1 = import_graph(A1)
+    A2 = import_graph(A2)
+
+    if is_symmetric(A1) or is_symmetric(A2):
+        msg = (
+            "This test assumes that the networks are directed, ",
+            "but one or both adjacency matrices are symmetric.",
+        )
+        warnings.warn(msg)
+    if (not is_unweighted(A1)) or (not is_unweighted(A2)):
+        msg = (
+            "This test assumes that the networks are unweighted, ",
+            "but one or both adjacency matrices are weighted.",
+            "Test will be run on the binarized version of these adjacency matrices.",
+        )
+        warnings.warn(msg)
+    if (not is_loopless(A1)) or (not is_loopless(A2)):
+        msg = (
+            "This test assumes that the networks are loopless, ",
+            "but one or both adjacency matrices have self-loops.",
+            "Test will be run on the loopless version of these adjacency matrices.",
+        )
+        warnings.warn(msg)
+
     B1, n_observed1, n_possible1, group_counts1 = fit_sbm(A1, labels1)
     B2, n_observed2, n_possible2, group_counts2 = fit_sbm(A2, labels2)
     if not n_observed1.index.equals(n_observed2.index):
@@ -438,5 +462,5 @@ def group_connection_test(
         stat = np.inf
         pvalue = 0.0
     else:
-        stat, pvalue = scipy_combine_pvalues(run_pvalues, method=combine_method)
+        stat, pvalue = combine_pvalues(run_pvalues, method=combine_method)
     return GroupTestResult(stat, pvalue, misc)
