@@ -155,8 +155,7 @@ def group_connection_test(
     correct_method: str = "bonferroni",
     alpha: float = 0.05,
 ) -> GroupTestResult:
-
-    """
+    r"""
     Compares two networks by testing whether edge probabilities between groups are
     significantly different for the two networks under a stochastic block model
     assumption.
@@ -280,17 +279,42 @@ def group_connection_test(
 
     Notes
     -----
-    To do this,
-    the function first compares each individual group-to-group connection to determine
-    whether there is a statistically significant
-    difference in the connection densities for each group-to-group pair. This is
-    accomplished using Fisher's exact test (or another test
-    selected by the user) to compare the number of observed edges versus the number of
-    possible edges in each network. Once p values for all
-    group-to-group connections are determined, the p-values are combined into a single
-    p-value that encapsulates whether the two networks,
-    as a whole, are statistically different. This procedure is described in greater
-    detail in [#BEN'S PAPER].
+    Under a stochastic block model assumption, the probability of observing an edge from 
+    any node in group :math:`i` to any node in group :math:`j` is given by 
+    :math:`B_{ij}`, where :math:`B` is a :math:`K \times K` matrix of connection 
+    probabilities if there are :math:`K` groups. This test assumes that both networks
+    came from a stochastic block model with the same number of groups, and a fixed 
+    assignment of nodes to groups. The null hypothesis is that the group-to-group
+    connection probabilities are the same
+
+    .. math:: H_0: B_1 = B_2
+
+    The alternative hypothesis is that they are not the same
+
+    .. math:: H_A: B_1 \neq B_2
+
+    Note that this alternative includes the case where even just one of these
+    group-to-group connection probabilities are different between the two networks. The
+    test is conducted by first comparing each group-to-group connection via its own 
+    test, i.e.,
+
+    .. math:: H_0: {B_{1}}_{ij} = {B_{2}}_{ij}
+
+    .. math:: H_A: {B_{1}}_{ij} \neq {B_{2}}_{ij}
+
+    The p-values for each of these individual comparisons are stored in 
+    ``misc['uncorrected_pvalues']``, and after multiple comparisons correction, in 
+    ``misc['corrected_pvalues']``. The test statistic and p-value returned by this 
+    test are for the overall comparison of the entire group-to-group connection 
+    matrices. These are computed by appropriately combining the p-values for each of 
+    the individual comparisons. For more details, see [1]_.
+
+    References
+    ----------
+    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E., 
+           Vogelstein, J.T., (2022). "Generative network modeling reveals quantitative 
+           definitions of bilateral symmetry exhibited by a whole insect brain 
+           connectome," In preparation.
     """
 
     B1, n_observed1, n_possible1, group_counts1 = fit_sbm(A1, labels1)
