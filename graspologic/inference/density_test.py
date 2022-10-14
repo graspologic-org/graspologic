@@ -76,24 +76,24 @@ def density_test(
     This test makes several assumptions about the data and test (which could easily be
     loosened in future versions):
 
-            We assume that the networks are directed. If the networks are undirected (and
-            the adjacency matrices are thus symmetric), then edges would be counted twice,
-            which would lead to an incorrect calculation of the edge probability. We believe
-            passing in the upper or lower triangle of the adjacency matrix would solve this,
-            but this has not been tested.
+            We assume that the networks are directed. If the networks are undirected
+            (and the adjacency matrices are thus symmetric), then edges would be counted
+            twice, which would lead to an incorrect calculation of the edge probability.
+            We believe passing in the upper or lower triangle of the adjacency matrix
+            would solve this, but this has not been tested.
 
             We assume that the networks are loopless, that is we do not consider the
-            probability of an edge existing between a node and itself. This can be weakened
-            and made an option in future versions.
+            probability of an edge existing between a node and itself. This can be
+            weakened and made an option in future versions.
 
             We only implement the alternative hypothesis of "not equals" (two-sided);
             future versions could implement the one-sided alternative hypotheses.
 
     References
     ----------
-    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E., 
-           Vogelstein, J.T., (2022). "Generative network modeling reveals quantitative 
-           definitions of bilateral symmetry exhibited by a whole insect brain 
+    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E.,
+           Vogelstein, J.T., (2022). "Generative network modeling reveals quantitative
+           definitions of bilateral symmetry exhibited by a whole insect brain
            connectome," In preparation.
     """
     stat, pvalue, misc = group_connection_test(

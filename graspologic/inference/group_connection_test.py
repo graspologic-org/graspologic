@@ -192,19 +192,19 @@ def group_connection_test(
         Fisher's exact test, but the user may also enter "chi2" to perform the
         chi-squared test.
     combine_method: str, optional
-        Specifies the method for combining p-values. Default is "tippett"
-        for Tippett's method (recommended), but the user can also enter any other
-        method supported by :func:`scipy.stats.combine_pvalues`.
+        Specifies the method for combining p-values (see Notes and [1]_ for more
+        details). Default is "tippett" for Tippett's method (recommended), but the user
+        can also enter any other method supported by
+        :func:`scipy.stats.combine_pvalues`.
     correct_method: str, optional
         Specifies the method for correcting for multiple comparisons. Default value is
         "holm" to use the Holm-Bonferroni correction method, but
         many others are possible (see :func:`statsmodels.stats.multitest.multipletests`
         for more details and options).
     alpha: float, optional
-        The value to be used when evaluating the statistical significance of the results.
-        By default, this is the conventional value of 0.05 but any value on the
-        interval [0,1] can be entered. This only affects the results in
-        ``misc['rejections']``.
+        The significance threshold. By default, this is the conventional value of
+        0.05 but any value on the interval :math:`[0,1]` can be entered. This only
+        affects the results in ``misc['rejections']``.
 
     Returns
     -------
@@ -223,34 +223,34 @@ def group_connection_test(
             A dictionary containing a number of statistics relating to the individual
             group-to-group connection comparisons.
 
-                "uncorrected_pvalues" = uncorrected_pvalues, array-like, float
+                "uncorrected_pvalues", pd.DataFrame
                     The p-values for each group-to-group connection comparison, before
                     correction for multiple comparisons.
                 "stats", pd.DataFrame
                     The test statistics for each of the group-to-group comparisons,
                     depending on ``method``.
-                "probabilities1" = B1, array-like, float
+                "probabilities1", pd.DataFrame
                     This contains the B_hat values computed in fit_sbm above for
                     network 1, i.e. the hypothesized group connection density for
                     each group-to-group connection for network 1.
-                "probabilities2" = B2, array-like, float
+                "probabilities2", pd.DataFrame
                     Same as above, but for network 2.
-                "observed1" = n_observed1, dataframe
+                "observed1", pd.DataFrame
                     The total number of observed group-to-group edge connections for
                     network 1.
-                "observed2" = n_observed2, dataframe
+                "observed2", pd.DataFrame
                     Same as above, but for network 2.
-                "possible1" = n_possible1, dataframe
+                "possible1", pd.DataFrame
                     The total number of possible edges for each group-to-group pair in
                     network 1.
-                "possible2" = n_possible2, dataframe
+                "possible2", pd.DataFrame
                     Same as above, but for network 2.
-                "group_counts1" = group_counts1, pd.series
+                "group_counts1", pd.Series
                     Contains total number of nodes corresponding to each group label for
                     network 1.
-                "group_counts2" = group_counts2, pd.series
+                "group_counts2", pd.Series
                     Same as above, for network 2
-                "null_ratio" = adjustment_factor, float
+                "null_ratio", float
                     If the "density adjustment" parameter is set to "true", this
                     variable contains the null hypothesis for the quotient of
                     odds ratios for the group-to-group connection densities for the two
@@ -258,10 +258,10 @@ def group_connection_test(
                     factor by which network 1 is "more dense" or "less dense" than
                     network 2. If "density adjustment" is set to "false", this
                     simply returns a value of 1.0.
-                "n_tests" = n_tests, integer
+                "n_tests", int
                     This variable contains the number of group-to-group comparisons
                     performed by the function.
-                "rejections" = rejections, dataframe
+                "rejections", pd.DataFrame
                     Contains a square matrix of boolean variables. The side length of
                     the matrix is equal to the number of distinct group
                     labels. An entry in the matrix is "true" if the null hypothesis,
@@ -273,17 +273,17 @@ def group_connection_test(
                     the two networks for the connection from the group corresponding to
                     the row of the matrix to the group corresponding to the
                     column of the matrix.
-                "corrected_pvalues" = corrected_pvalues, dataframe
+                "corrected_pvalues", pd.DataFrame
                     Contains the p-values for the group-to-group connection densities
                     after correction using the chosen correction_method.
 
     Notes
     -----
-    Under a stochastic block model assumption, the probability of observing an edge from 
-    any node in group :math:`i` to any node in group :math:`j` is given by 
-    :math:`B_{ij}`, where :math:`B` is a :math:`K \times K` matrix of connection 
+    Under a stochastic block model assumption, the probability of observing an edge from
+    any node in group :math:`i` to any node in group :math:`j` is given by
+    :math:`B_{ij}`, where :math:`B` is a :math:`K \times K` matrix of connection
     probabilities if there are :math:`K` groups. This test assumes that both networks
-    came from a stochastic block model with the same number of groups, and a fixed 
+    came from a stochastic block model with the same number of groups, and a fixed
     assignment of nodes to groups. The null hypothesis is that the group-to-group
     connection probabilities are the same
 
@@ -295,25 +295,59 @@ def group_connection_test(
 
     Note that this alternative includes the case where even just one of these
     group-to-group connection probabilities are different between the two networks. The
-    test is conducted by first comparing each group-to-group connection via its own 
+    test is conducted by first comparing each group-to-group connection via its own
     test, i.e.,
 
     .. math:: H_0: {B_{1}}_{ij} = {B_{2}}_{ij}
 
     .. math:: H_A: {B_{1}}_{ij} \neq {B_{2}}_{ij}
 
-    The p-values for each of these individual comparisons are stored in 
-    ``misc['uncorrected_pvalues']``, and after multiple comparisons correction, in 
-    ``misc['corrected_pvalues']``. The test statistic and p-value returned by this 
-    test are for the overall comparison of the entire group-to-group connection 
-    matrices. These are computed by appropriately combining the p-values for each of 
+    The p-values for each of these individual comparisons are stored in
+    ``misc['uncorrected_pvalues']``, and after multiple comparisons correction, in
+    ``misc['corrected_pvalues']``. The test statistic and p-value returned by this
+    test are for the overall comparison of the entire group-to-group connection
+    matrices. These are computed by appropriately combining the p-values for each of
     the individual comparisons. For more details, see [1]_.
+
+    When ``density_adjustment`` is set to ``True``, the null hypothesis is adjusted to
+    account for the fact that the group-to-group connection densities may be different
+    only up to a multiplicative factor which sets the densities of the two networks
+    the same in expectation. In other words, the null and alternative hypotheses are
+    adjusted to be
+
+    .. math:: H_0: B_1 = c B_2
+
+    .. math:: H_A: B_1 \neq c B_2
+
+    where :math:`c` is a constant which sets the densities of the two networks the same.
+
+    Note that in cases where one of the networks has no edges in a particular
+    group-to-group connection, it is nonsensical to run a statistical test for that
+    particular connection. In these cases, the p-values for that individual comparison
+    are set to ``np.nan``, and that test is not included in the overall test statistic
+    or multiple comparison correction.
+
+    This test makes several assumptions about the data and test (which could easily be
+    loosened in future versions):
+
+            We assume that the networks are directed. If the networks are undirected
+            (and the adjacency matrices are thus symmetric), then edges would be counted
+            twice, which would lead to an incorrect calculation of the edge probability.
+            We believe passing in the upper or lower triangle of the adjacency matrix
+            would solve this, but this has not been tested.
+
+            We assume that the networks are loopless, that is we do not consider the
+            probability of an edge existing between a node and itself. This can be
+            weakened and made an option in future versions.
+
+            We only implement the alternative hypothesis of "not equals" (two-sided);
+            future versions could implement the one-sided alternative hypotheses.
 
     References
     ----------
-    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E., 
-           Vogelstein, J.T., (2022). "Generative network modeling reveals quantitative 
-           definitions of bilateral symmetry exhibited by a whole insect brain 
+    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E.,
+           Vogelstein, J.T., (2022). "Generative network modeling reveals quantitative
+           definitions of bilateral symmetry exhibited by a whole insect brain
            connectome," In preparation.
     """
 
