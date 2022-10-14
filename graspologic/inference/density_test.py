@@ -4,6 +4,7 @@ import numpy as np
 
 from ..types import AdjacencyMatrix
 from .group_connection_test import group_connection_test
+from .binomial import BinomialTestMethod
 from beartype import beartype
 
 DensityTestResult = namedtuple("DensityTestResult", ["stat", "pvalue", "misc"])
@@ -11,17 +12,11 @@ DensityTestResult = namedtuple("DensityTestResult", ["stat", "pvalue", "misc"])
 
 @beartype
 def density_test(
-    A1: AdjacencyMatrix, A2: AdjacencyMatrix, method: str = "fisher"
+    A1: AdjacencyMatrix, A2: AdjacencyMatrix, method: BinomialTestMethod = "fisher"
 ) -> DensityTestResult:
-
-    """
-    This function uses the Erdos-Renyi model to perform a density test to compare the
-    adjacency matrices for two networks. Under the Erdos-Renyi model, it is assumed that
-    the probability of an edge existing between any two nodes is some constant, p.
-    This function tests whether the probability of an edge in network 1 is
-    statistically different from that in network 2. In other words, it tests a null
-    hypothesis that p1, the edge probability for network 1, is equal to p2, the edge
-    probability for network 2.
+    r"""
+    Compares two networks by testing whether the global connection probabilities
+    (densites) for the two networks are equal under an Erdos-Renyi model assumption.
 
     Parameters
     ----------
@@ -51,9 +46,9 @@ def density_test(
             comparison performed:
 
                 "probability1", float
-                    The probability of an edge (density) in network 1 (p1).
+                    The probability of an edge (density) in network 1 (:math:`p_1`).
                 "probability2", float
-                    The probability of an edge (density) in network 2 (p2).
+                    The probability of an edge (density) in network 2 (:math:`p_2`).
                 "observed1", pd.DataFrame
                     The total number of edge connections for network 1.
                 "observed2", pd.DataFrame
@@ -63,21 +58,34 @@ def density_test(
                 "possible2", pd.DataFrame
                     The total number of possible edges for network 1.
 
+
     Notes
     -----
+    Under the Erdos-Renyi model, edges are generated independently with probability
+    :math:`p`. :math:`p` is also known as the network density. This function tests
+    whether the probability of an edge in network 1 (:math:`p_1`) is significantly
+    different from that in network 2 (:math:`p_2`), by assuming that both networks came
+    from an Erdos-Renyi model. In other words, the null hypothesis is
+
+    .. math:: H_0: p_1 = p_2
+
+    And the alternative hypothesis is
+
+    .. math:: H_A: p_1 \neq p_2
+
     This test makes several assumptions about the data and test (which could easily be
     loosened in future versions):
-            
+
             We assume that the networks are directed. If the networks are undirected (and
             the adjacency matrices are thus symmetric), then edges would be counted twice,
             which would lead to an incorrect calculation of the edge probability. We believe
             passing in the upper or lower triangle of the adjacency matrix would solve this,
             but this has not been tested.
-            
+
             We assume that the networks are loopless, that is we do not consider the
             probability of an edge existing between a node and itself. This can be weakened
             and made an option in future versions.
-            
+
             We only implement the alternative hypothesis of "not equals" (two-sided);
             future versions could implement the one-sided alternative hypotheses.
     """

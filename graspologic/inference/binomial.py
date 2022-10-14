@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import Literal
 
 import numpy as np
 from scipy.stats import chi2_contingency, fisher_exact
@@ -8,10 +9,16 @@ from ..types import AdjacencyMatrix, GraphRepresentation
 from .fisher_exact_nonunity import fisher_exact_nonunity
 
 BinomialResult = namedtuple("BinomialResult", ["stat", "pvalue"])
+BinomialTestMethod = Literal["fisher", "chi2"]
 
 
 def binom_2samp(
-    x1: int, n1: int, x2: int, n2: int, null_ratio: float = 1.0, method: str = "fisher"
+    x1: int,
+    n1: int,
+    x2: int,
+    n2: int,
+    null_ratio: float = 1.0,
+    method: BinomialTestMethod = "fisher",
 ) -> BinomialResult:
     """
     This function computes the likelihood that two binomial samples are drown from identical underlying
