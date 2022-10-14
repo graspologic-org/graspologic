@@ -40,7 +40,7 @@ def binom_2samp(
         The number of possible edges between nodes in graph 2 (i.e. the edge count if the graph were complete)
     null_ratio : float, optional
         Optional parameter for testing whether p1 is a fixed ratio larger or smaller than p2, i.e. p1 = cp2,
-        where c is the null_ratio. Defatault is 1.0. This parameter can only be !=1 if the chosen statistical
+        where c is the null_ratio. Default is 1.0. This parameter can only be !=1 if the chosen statistical
         test is Fisher's exact test.
     method : str, optional
         Defines the statistical test to be run in order to reject or fail to reject the null hypothesis.
