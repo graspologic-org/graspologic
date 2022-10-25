@@ -58,31 +58,6 @@ class TestGroupConnection(unittest.TestCase):
         stat, pvalue, misc = group_connection_test(sA1, sA2, labels1, labels2)
         self.assertTrue(pvalue <= 0.05)
 
-    def test_bad_kwargs(self):
-        B1 = np.array([[0.8, 0.6], [0.6, 0.8]])
-        B2 = np.array([[0.87, 0.66], [0.66, 0.87]])
-        A1, labels1 = sbm([50, 50], B1, return_labels=True)
-        A2, labels2 = sbm([60, 60], B2, return_labels=True)
-        with self.assertRaises(ValueError):
-            group_connection_test(A1, A2, labels1, labels2, method=5)
-        with self.assertRaises(ValueError):
-            group_connection_test(A1, A2, labels1, labels2, method="hello")
-        with self.assertRaises(TypeError):
-            group_connection_test("apple", A2, labels1, labels2)
-        with self.assertRaises(TypeError):
-            group_connection_test(A1, "banana", labels1, labels2)
-        with self.assertRaises(ValueError):
-            group_connection_test(A1, A2, "orange", labels2)
-        with self.assertRaises(ValueError):
-            group_connection_test(A1, A2, labels1, "grape")
-        with self.assertRaises(ValueError):
-            group_connection_test(A1, A2, labels1, labels2, combine_method=12)
-        with self.assertRaises(ValueError):
-            group_connection_test(A1, A2, labels1, labels2, correct_method="happy")
-        with self.assertRaises(TypeError):
-            group_connection_test(A1, A2, labels1, labels2, alpha="apple")
-
-
 class TestER(unittest.TestCase):
     def test_er(self):
         np.random.seed(234)
@@ -106,12 +81,6 @@ class TestER(unittest.TestCase):
         self.assertTrue(er_misc["observed1"].to_numpy() == np.count_nonzero(A1))
         self.assertTrue(er_misc["observed2"].to_numpy() == np.count_nonzero(A2))
 
-    def test_bad_kwargs(self):
-        np.random.seed(234)
-        A1 = er_np(500, 0.6)
-        A2 = er_np(400, 0.8)
-        with self.assertRaises(ValueError):
-            density_test(A1, A2, method=5)
 
 
 if __name__ == "__main__":
