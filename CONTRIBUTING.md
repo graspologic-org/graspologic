@@ -71,7 +71,7 @@ branch using a virtual environment. Steps:
    right of the page. This creates a copy of the code under your GitHub user account. For more details on how to
    fork a repository see [this guide](https://help.github.com/articles/fork-a-repo/).
 
-2. Clone your fork of the `graspologic` repo from your GitHub account to your local disk:
+2. Clone your fork of the `graspologic` repo from your GitHub account to your local disk. Do this by typing the following into command prompt or the equivelant on your operating system:
 
    ```bash
    git clone git@github.com:YourGithubAccount/graspologic.git
@@ -87,8 +87,7 @@ branch using a virtual environment. Steps:
    Always use a `feature` branch. Pull requests directly to either `dev` or `main` will be rejected
    until you create a feature branch based on `dev`.
 
-4. From the project root, create a [virtual environment](https://docs.python.org/3/library/venv.html) and install all development dependencies. Examples using various terminals are provided below. These examples use Python 3.8 but you may use any Python version supported by graspologic. These commands should install `graspologic` in editable mode, as well as
-all of its dependencies and several tools you need for developing `graspologic`.
+4. From the project root, create a [virtual environment](https://docs.python.org/3/library/venv.html) and install all development dependencies. Examples using various terminals are provided below. These examples use Python 3.8 but you may use any Python version supported by graspologic. If using Python 3.8 does not work feel free to type the same command simply using "Python" instead of "Python 3.8".These commands should install `graspologic` in editable mode, as well asall of its dependencies and several tools you need for developing `graspologic`. These commands assume that your operating system has already activated virtual environments which will allow virtual environments to be created. 
 
    **Bash**
     ```bash
