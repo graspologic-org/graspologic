@@ -648,7 +648,7 @@ def _multilayer_adj_pad(
 
 def _adj_pad(
     matrix: AdjacencyMatrix, n_padded: Int, method: PaddingType
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> np.ndarray:
     if isinstance(matrix, (csr_matrix, csr_array)) and (method == "adopted"):
         msg = (
             "Using adopted padding method with a sparse adjacency representation; this "
