@@ -189,6 +189,9 @@ class _GraphMatchSolver:
         # check for similarity term
         if S is None:
             S = csr_array((self.n, self.n))
+        else:
+            if self.padded == True:
+                S = _adj_pad(S, n_padded=self.n, method=self.padding)
 
         _compare_dimensions(A, [S], "row", "row", "A", "S")
         _compare_dimensions(B, [S], "row", "column", "B", "S")
