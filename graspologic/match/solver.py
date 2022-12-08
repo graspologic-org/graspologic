@@ -169,7 +169,7 @@ class _GraphMatchSolver:
         _compare_dimensions(B, AB, "row", "column", "B", "AB")
         _compare_dimensions(A, BA, "row", "column", "A", "BA")
         _compare_dimensions(B, BA, "row", "row", "B", "BA")
-        if S is not None: 
+        if S is not None:
             _compare_dimensions(A, S, "row", "row", "A", "S")
             _compare_dimensions(B, S, "column", "column", "B", "S")
 
