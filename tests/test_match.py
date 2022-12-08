@@ -287,3 +287,18 @@ class TestGraphMatch(unittest.TestCase):
             ).mean() / n_sims
 
         self.assertTrue(mean_match_ratio >= 0.999)
+
+    def test_similatiry_padded(self):
+        np.random.seed(88)
+        A = np.random.rand(10, 10)
+        B = np.random.rand(11, 11)
+        S = np.eye(10, 11) * 10
+
+        _, perm_B, _, misc = graph_match(A, B, S=S)
+        self.assertEqual((perm_B == np.arange(10)).mean(), 1.0)
+
+        # want to make sure obj func value is the same as if we hadn't padded S,
+        # should be since we use naive padding only
+        score = misc[0]["score"]
+        out_score = np.sum(A * B[perm_B][:, perm_B]) + np.trace(S[:, perm_B])
+        self.assertEqual(score, out_score)
