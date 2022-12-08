@@ -170,8 +170,8 @@ class _GraphMatchSolver:
         _compare_dimensions(A, BA, "row", "column", "A", "BA")
         _compare_dimensions(B, BA, "row", "row", "B", "BA")
         if S is not None:
-            _compare_dimensions(A, S, "row", "row", "A", "S")
-            _compare_dimensions(B, S, "column", "column", "B", "S")
+            _compare_dimensions(A, [S], "row", "row", "A", "S")
+            _compare_dimensions(B, [S], "column", "column", "B", "S")
 
         # padding for unequally sized inputs
         if self.n_A != self.n_B:
@@ -196,7 +196,7 @@ class _GraphMatchSolver:
             S = _adj_pad(S, n_padded=self.n, method="naive")
 
         _compare_dimensions(A, [S], "row", "row", "A", "S")
-        _compare_dimensions(B, [S], "row", "column", "B", "S")
+        _compare_dimensions(B, [S], "column", "column", "B", "S")
 
         self.A = A
         self.B = B
