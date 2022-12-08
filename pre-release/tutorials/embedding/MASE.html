@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multiple Adjacency Spectral Embedding (MASE) &mdash; graspologic 2.0.1dev3252523757 documentation</title>
+  <title>Multiple Adjacency Spectral Embedding (MASE) &mdash; graspologic 2.0.1dev3652300495 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3252523757
+                2.0.1dev3652300495
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -272,9 +272,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Tutorials</a> &raquo;</li>
-      <li>Multiple Adjacency Spectral Embedding (MASE)</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Multiple Adjacency Spectral Embedding (MASE)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/tutorials/embedding/MASE.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -394,10 +394,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -615,7 +616,7 @@ B_2 = \begin{bmatrix}0.3 & 0.1\\
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/opt/hostedtoolcache/Python/3.8.14/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
 </pre></div></div>
 </div>
@@ -735,11 +736,20 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/sklearn/cluster/_kmeans.py:870: FutureWarning: The default value of `n_init` will change from 10 to &#39;auto&#39; in 1.4. Set the value of `n_init` explicitly to suppress the warning
+  warnings.warn(
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_embedding_MASE_19_0.png" src="../../_images/tutorials_embedding_MASE_19_0.png" />
+<img alt="../../_images/tutorials_embedding_MASE_19_1.png" src="../../_images/tutorials_embedding_MASE_19_1.png" />
 </div>
 </div>
 <p>Even with only one graph sampled from each SBM, we can perfectly recover the two communities!</p>
@@ -837,11 +847,20 @@ matrices <span class="math notranslate nohighlight">\(R^{(i)}\)</span> that desc
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/sklearn/cluster/_kmeans.py:870: FutureWarning: The default value of `n_init` will change from 10 to &#39;auto&#39; in 1.4. Set the value of `n_init` explicitly to suppress the warning
+  warnings.warn(
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_embedding_MASE_32_0.png" src="../../_images/tutorials_embedding_MASE_32_0.png" />
+<img alt="../../_images/tutorials_embedding_MASE_32_1.png" src="../../_images/tutorials_embedding_MASE_32_1.png" />
 </div>
 </div>
 <p>With this method we can perfectly recover the original SBM population to which each graph belongs!</p>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inference &mdash; graspologic 2.0.1dev3252523757 documentation</title>
+  <title>Inference &mdash; graspologic 2.0.1dev3652300495 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3252523757
+                2.0.1dev3652300495
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -272,10 +272,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
-          <li><a href="index.html">Reference</a> &raquo;</li>
-      <li>Inference</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Inference</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/reference/reference/inference.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -410,8 +410,8 @@ distributions are generated</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.2)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>]</em>) -- </p></li>
-<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.2)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>embedding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'ase'</em><em>, </em><em>'omnibus'</em><em>]</em>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>test_case</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'rotation'</em><em>, </em><em>'scalar-rotation'</em><em>, </em><em>'diagonal-rotation'</em><em>]</em>) -- </p></li>
@@ -465,10 +465,10 @@ two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/a
 Kernel metrics (e.g. &quot;gaussian&quot;) must be used with kernel-based HSIC test
 and distances (e.g. &quot;euclidean&quot;) with all other tests. If a callable,
 then it should behave similarly to either
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise_distances.html#sklearn.metrics.pairwise_distances" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise_distances()</span></code></a> or to
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise.pairwise_kernels.html#sklearn.metrics.pairwise.pairwise_kernels" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise.pairwise_kernels()</span></code></a>.</p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise_distances.html#sklearn.metrics.pairwise_distances" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise_distances()</span></code></a> or to
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise.pairwise_kernels.html#sklearn.metrics.pairwise.pairwise_kernels" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise.pairwise_kernels()</span></code></a>.</p>
 <p>Valid strings for distance <code class="docutils literal notranslate"><span class="pre">metric</span></code> are, as defined in
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise_distances.html#sklearn.metrics.pairwise_distances" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise_distances()</span></code></a>,</p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise_distances.html#sklearn.metrics.pairwise_distances" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise_distances()</span></code></a>,</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>From scikit-learn: [<code class="docutils literal notranslate"><span class="pre">&quot;euclidean&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cityblock&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cosine&quot;</span></code>,
@@ -478,12 +478,12 @@ then it should behave similarly to either
 <code class="docutils literal notranslate"><span class="pre">&quot;jaccard&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kulsinski&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mahalanobis&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;minkowski&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;rogerstanimoto&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;russellrao&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;seuclidean&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;sokalmichener&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sokalsneath&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sqeuclidean&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.9.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
+<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.9.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
 details on these metrics.</p></li>
 </ul>
 </div></blockquote>
 <p>Valid strings for kernel <code class="docutils literal notranslate"><span class="pre">metric</span></code> are, as defined in
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise.pairwise_kernels.html#sklearn.metrics.pairwise.pairwise_kernels" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise.pairwise_kernels()</span></code></a>,</p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.metrics.pairwise.pairwise_kernels.html#sklearn.metrics.pairwise.pairwise_kernels" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise.pairwise_kernels()</span></code></a>,</p>
 <blockquote>
 <div><p>[<code class="docutils literal notranslate"><span class="pre">&quot;additive_chi2&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;chi2&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;poly&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;polynomial&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;rbf&quot;</span></code>,
@@ -637,8 +637,8 @@ two input graphs.</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.2)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>]</em>) -- </p></li>
-<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.2)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.7)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>test</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'cca'</em><em>, </em><em>'dcorr'</em><em>, </em><em>'hhg'</em><em>, </em><em>'rv'</em><em>, </em><em>'hsic'</em><em>, </em><em>'mgc'</em><em>]</em>) -- </p></li>
 <li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em>]</em>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
