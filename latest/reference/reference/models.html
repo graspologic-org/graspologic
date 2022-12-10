@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Models &mdash; graspologic 2.0.0 documentation</title>
+  <title>Models &mdash; graspologic 2.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.0
+                2.0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -64,6 +65,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
@@ -132,7 +134,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -153,7 +161,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -255,10 +273,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
-          <li><a href="index.html">Reference</a> &raquo;</li>
-      <li>Models</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Models</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/reference/reference/models.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -305,32 +323,28 @@ of any potential edge in the graph existing is the same for any two nodes <span 
 and <span class="math notranslate nohighlight">\(j\)</span>.</p>
 <p><span class="math notranslate nohighlight">\(P_{ij} = p\)</span> for all i, j</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>directed</strong> : boolean, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
 this determines whether to force symmetry upon the block probability matrix fit
 for the SBM. It will also determine whether graphs sampled from the model are
 directed.</p>
-</div></blockquote>
-<p><strong>loops</strong> : boolean, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
 the graph where a node connects to itself.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>p_</strong> : float</p>
-<blockquote>
-<div><p>Value between 0 and 1 (inclusive) representing the probability of any edge in
+<dd class="field-even"><dl class="simple">
+<dt><strong>p_</strong><span class="classifier">float</span></dt><dd><p>Value between 0 and 1 (inclusive) representing the probability of any edge in
 the ER graph model</p>
-</div></blockquote>
-<p><strong>p_mat_</strong> : np.ndarray, shape (n_verts, n_verts)</p>
-<blockquote>
-<div><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
 sampled.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -366,20 +380,18 @@ sampled.</p>
 <dd><p>Fit the SBM to a graph, optionally with known block labels</p>
 <p>If y is <cite>None</cite>, the block assignments for each vertex will first be
 estimated.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : array_like or networkx.Graph</p>
-<blockquote>
-<div><p>Input graph to fit</p>
-</div></blockquote>
-<p><strong>y</strong> : array_like, length graph.shape[0], optional</p>
-<blockquote>
-<div><p>Categorical labels for the block assignments of the graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -395,18 +407,18 @@ estimated.</p>
 <dd><p>Bayesian information criterion for the current model on the input graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>bic</strong> : float</p>
-<blockquote>
-<div><p>The lower the better</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -421,19 +433,19 @@ fit model.</p>
 <dt class="sig sig-object py" id="graspologic.models.EREstimator.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -444,18 +456,18 @@ contained subobjects that are estimators.</p>
 <dd><p>Compute mean square error for the current model on the input graph</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mse</strong> : float</p>
-<blockquote>
-<div><p>Mean square error for the model's fit P matrix</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -473,20 +485,20 @@ fit model.</p>
 <p>Can only be called after the the model has been fit</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_samples</strong> : int (default 1), optional</p>
-<blockquote>
-<div><p>The number of graphs to sample</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>graphs</strong> : np.array (n_samples, n_verts, n_verts)</p>
-<blockquote>
-<div><p>Array of sampled graphs, where the first dimension
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
 indexes each sample, and the other dimensions represent
 (n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
 <p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
 array will still be returned.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
@@ -504,18 +516,18 @@ array will still be returned.</p>
 given graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>score</strong> : float</p>
-<blockquote>
-<div><p>sum of log-loglikelihoods for each potential edge in input graph</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -534,23 +546,21 @@ fit model.</p>
 fit model.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
-<p><strong>clip</strong> : scalar or None, optional (default=None)</p>
-<blockquote>
-<div><p>Values for which to clip probability matrix, entries less than c or more
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
 than 1 - c are set to c or 1 - c, respectively.
 If None, values will not be clipped in the likelihood calculation, which may
 result in poorly behaved likelihoods depending on the model.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sample_scores</strong> : np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</p>
-<blockquote>
-<div><p>log-likelihood per potential edge in the graph</p>
-</div></blockquote>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -569,21 +579,21 @@ result in poorly behaved likelihoods depending on the model.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -609,44 +619,36 @@ which each node has an additional &quot;promiscuity&quot; parameter <span class=
 determines its expected degree in the graph.</p>
 <p><span class="math notranslate nohighlight">\(P_{ij} = \theta_i \theta_j p\)</span></p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>directed</strong> : boolean, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
 this determines whether to force symmetry upon the block probability matrix fit
 for the SBM. It will also determine whether graphs sampled from the model are
 directed.</p>
-</div></blockquote>
-<p><strong>loops</strong> : boolean, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
 the graph where a node connects to itself.</p>
-</div></blockquote>
-<p><strong>degree_directed</strong> : boolean</p>
-<blockquote>
-<div><p>Whether to allow seperate degree correction parameters for the in and out degree
+</dd>
+<dt><strong>degree_directed</strong><span class="classifier">boolean</span></dt><dd><p>Whether to allow seperate degree correction parameters for the in and out degree
 of each node. Ignored if <code class="docutils literal notranslate"><span class="pre">directed</span></code> is False.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>p_</strong> : float</p>
-<blockquote>
-<div><p>The <span class="math notranslate nohighlight">\(p\)</span> parameter as described in the above model, which weights the
+<dd class="field-even"><dl class="simple">
+<dt><strong>p_</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(p\)</span> parameter as described in the above model, which weights the
 overall probability of connections between any two nodes.</p>
-</div></blockquote>
-<p><strong>p_mat_</strong> : np.ndarray, shape (n_verts, n_verts)</p>
-<blockquote>
-<div><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
 sampled.</p>
-</div></blockquote>
-<p><strong>degree_corrections_</strong> : np.ndarray, shape (n_verts, 1) or (n_verts, 2)</p>
-<blockquote>
-<div><p>Degree correction vector(s) <span class="math notranslate nohighlight">\(\theta\)</span>. If <code class="docutils literal notranslate"><span class="pre">degree_directed</span></code> parameter was
+</dd>
+<dt><strong>degree_corrections_</strong><span class="classifier">np.ndarray, shape (n_verts, 1) or (n_verts, 2)</span></dt><dd><p>Degree correction vector(s) <span class="math notranslate nohighlight">\(\theta\)</span>. If <code class="docutils literal notranslate"><span class="pre">degree_directed</span></code> parameter was
 False, then will be of shape (n_verts, 1) and element <cite>i</cite> represents the degree
 correction for node <span class="math notranslate nohighlight">\(i\)</span>. Otherwise, the first column contains out degree
 corrections and the second column contains in degree corrections.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -692,24 +694,22 @@ structure in networks. Physical review E, 83(1), 016107.</p>
 estimated.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : array_like or networkx.Graph</p>
-<blockquote>
-<div><p>Input graph to fit</p>
-</div></blockquote>
-<p><strong>y</strong> : array_like, length graph.shape[0], optional</p>
-<blockquote>
-<div><p>Categorical labels for the block assignments of the graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : <code class="docutils literal notranslate"><span class="pre">DCSBMEstimator</span></code> object</p>
-<blockquote>
-<div><p>Fitted instance of self</p>
-</div></blockquote>
+<dd class="field-even"><dl>
+<dt><strong>self</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">DCSBMEstimator</span></code> object</span></dt><dd><p>Fitted instance of self</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -725,18 +725,18 @@ estimated.</p>
 <dd><p>Bayesian information criterion for the current model on the input graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>bic</strong> : float</p>
-<blockquote>
-<div><p>The lower the better</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -751,19 +751,19 @@ fit model.</p>
 <dt class="sig sig-object py" id="graspologic.models.DCEREstimator.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -774,18 +774,18 @@ contained subobjects that are estimators.</p>
 <dd><p>Compute mean square error for the current model on the input graph</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mse</strong> : float</p>
-<blockquote>
-<div><p>Mean square error for the model's fit P matrix</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -803,20 +803,20 @@ fit model.</p>
 <p>Can only be called after the the model has been fit</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_samples</strong> : int (default 1), optional</p>
-<blockquote>
-<div><p>The number of graphs to sample</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>graphs</strong> : np.array (n_samples, n_verts, n_verts)</p>
-<blockquote>
-<div><p>Array of sampled graphs, where the first dimension
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
 indexes each sample, and the other dimensions represent
 (n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
 <p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
 array will still be returned.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
@@ -834,18 +834,18 @@ array will still be returned.</p>
 given graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>score</strong> : float</p>
-<blockquote>
-<div><p>sum of log-loglikelihoods for each potential edge in input graph</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -864,23 +864,21 @@ fit model.</p>
 fit model.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
-<p><strong>clip</strong> : scalar or None, optional (default=None)</p>
-<blockquote>
-<div><p>Values for which to clip probability matrix, entries less than c or more
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
 than 1 - c are set to c or 1 - c, respectively.
 If None, values will not be clipped in the likelihood calculation, which may
 result in poorly behaved likelihoods depending on the model.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sample_scores</strong> : np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</p>
-<blockquote>
-<div><p>log-likelihood per potential edge in the graph</p>
-</div></blockquote>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -899,21 +897,21 @@ result in poorly behaved likelihoods depending on the model.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -935,64 +933,46 @@ and <span class="math notranslate nohighlight">\(j\)</span> belong to:</p>
 <p>where <span class="math notranslate nohighlight">\(B \in \mathbb{[0, 1]}^{K x K}\)</span> and <span class="math notranslate nohighlight">\(\tau\)</span> is an <cite>n_nodes</cite>
 length vector specifying which block each node belongs to.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html">Stochastic Block Model (SBM) Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>directed</strong> : boolean, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
 this determines whether to force symmetry upon the block probability matrix fit
 for the SBM. It will also determine whether graphs sampled from the model are
 directed.</p>
-</div></blockquote>
-<p><strong>loops</strong> : boolean, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
 the graph where a node connects to itself.</p>
-</div></blockquote>
-<p><strong>n_components</strong> : int, optional (default=None)</p>
-<blockquote>
-<div><p>Desired dimensionality of embedding for clustering to find communities.
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>Desired dimensionality of embedding for clustering to find communities.
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions
 will be chosen by <a class="reference internal" href="embed.html#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>.</p>
-</div></blockquote>
-<p><strong>min_comm</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The minimum number of communities (blocks) to consider.</p>
-</div></blockquote>
-<p><strong>max_comm</strong> : int, optional (default=10)</p>
-<blockquote>
-<div><p>The maximum number of communities (blocks) to consider (inclusive).</p>
-</div></blockquote>
-<p><strong>cluster_kws</strong> : dict, optional (default={})</p>
-<blockquote>
-<div><p>Additional kwargs passed down to <a class="reference internal" href="cluster.html#graspologic.cluster.GaussianCluster" title="graspologic.cluster.GaussianCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianCluster</span></code></a></p>
-</div></blockquote>
-<p><strong>embed_kws</strong> : dict, optional (default={})</p>
-<blockquote>
-<div><p>Additional kwargs passed down to <a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a></p>
-</div></blockquote>
+</dd>
+<dt><strong>min_comm</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The minimum number of communities (blocks) to consider.</p>
+</dd>
+<dt><strong>max_comm</strong><span class="classifier">int, optional (default=10)</span></dt><dd><p>The maximum number of communities (blocks) to consider (inclusive).</p>
+</dd>
+<dt><strong>cluster_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="cluster.html#graspologic.cluster.GaussianCluster" title="graspologic.cluster.GaussianCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianCluster</span></code></a></p>
+</dd>
+<dt><strong>embed_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a></p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>block_p_</strong> : np.ndarray, shape (n_blocks, n_blocks)</p>
-<blockquote>
-<div><p>The block probability matrix <span class="math notranslate nohighlight">\(B\)</span>, where the element <span class="math notranslate nohighlight">\(B_{i, j}\)</span>
+<dd class="field-even"><dl class="simple">
+<dt><strong>block_p_</strong><span class="classifier">np.ndarray, shape (n_blocks, n_blocks)</span></dt><dd><p>The block probability matrix <span class="math notranslate nohighlight">\(B\)</span>, where the element <span class="math notranslate nohighlight">\(B_{i, j}\)</span>
 represents the probability of an edge between block <span class="math notranslate nohighlight">\(i\)</span> and block
 <span class="math notranslate nohighlight">\(j\)</span>.</p>
-</div></blockquote>
-<p><strong>p_mat_</strong> : np.ndarray, shape (n_verts, n_verts)</p>
-<blockquote>
-<div><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
 sampled.</p>
-</div></blockquote>
-<p><strong>vertex_assignments_</strong> : np.ndarray, shape (n_verts)</p>
-<blockquote>
-<div><p>A vector of integer labels corresponding to the predicted block that each node
+</dd>
+<dt><strong>vertex_assignments_</strong><span class="classifier">np.ndarray, shape (n_verts)</span></dt><dd><p>A vector of integer labels corresponding to the predicted block that each node
 belongs to if <code class="docutils literal notranslate"><span class="pre">y</span></code> was not passed during the call to <a class="reference internal" href="#graspologic.models.SBMEstimator.fit" title="graspologic.models.SBMEstimator.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a>.</p>
-</div></blockquote>
-<p><strong>block_weights_</strong> : np.ndarray, shape (n_blocks)</p>
-<blockquote>
-<div><p>Contains the proportion of nodes that belong to each block in the fit model.</p>
-</div></blockquote>
+</dd>
+<dt><strong>block_weights_</strong><span class="classifier">np.ndarray, shape (n_blocks)</span></dt><dd><p>Contains the proportion of nodes that belong to each block in the fit model.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1043,20 +1023,18 @@ blockmodels: First steps. Social networks, 5(2), 109-137.</p>
 <dd><p>Fit the SBM to a graph, optionally with known block labels</p>
 <p>If y is <cite>None</cite>, the block assignments for each vertex will first be
 estimated.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : array_like or networkx.Graph</p>
-<blockquote>
-<div><p>Input graph to fit</p>
-</div></blockquote>
-<p><strong>y</strong> : array_like, length graph.shape[0], optional</p>
-<blockquote>
-<div><p>Categorical labels for the block assignments of the graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -1072,18 +1050,18 @@ estimated.</p>
 <dd><p>Bayesian information criterion for the current model on the input graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>bic</strong> : float</p>
-<blockquote>
-<div><p>The lower the better</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1098,19 +1076,19 @@ fit model.</p>
 <dt class="sig sig-object py" id="graspologic.models.SBMEstimator.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1121,18 +1099,18 @@ contained subobjects that are estimators.</p>
 <dd><p>Compute mean square error for the current model on the input graph</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mse</strong> : float</p>
-<blockquote>
-<div><p>Mean square error for the model's fit P matrix</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1150,20 +1128,20 @@ fit model.</p>
 <p>Can only be called after the the model has been fit</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_samples</strong> : int (default 1), optional</p>
-<blockquote>
-<div><p>The number of graphs to sample</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>graphs</strong> : np.array (n_samples, n_verts, n_verts)</p>
-<blockquote>
-<div><p>Array of sampled graphs, where the first dimension
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
 indexes each sample, and the other dimensions represent
 (n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
 <p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
 array will still be returned.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
@@ -1181,18 +1159,18 @@ array will still be returned.</p>
 given graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>score</strong> : float</p>
-<blockquote>
-<div><p>sum of log-loglikelihoods for each potential edge in input graph</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1211,23 +1189,21 @@ fit model.</p>
 fit model.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
-<p><strong>clip</strong> : scalar or None, optional (default=None)</p>
-<blockquote>
-<div><p>Values for which to clip probability matrix, entries less than c or more
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
 than 1 - c are set to c or 1 - c, respectively.
 If None, values will not be clipped in the likelihood calculation, which may
 result in poorly behaved likelihoods depending on the model.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sample_scores</strong> : np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</p>
-<blockquote>
-<div><p>log-likelihood per potential edge in the graph</p>
-</div></blockquote>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1246,21 +1222,21 @@ result in poorly behaved likelihoods depending on the model.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1288,77 +1264,55 @@ parameter to be different for the in and out degree of each node:</p>
 <p><span class="math notranslate nohighlight">\(P_{ij} = \theta_i \eta_j B_{\tau_i \tau_j}\)</span></p>
 <p>where <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\eta\)</span> need not be the same.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html">Stochastic Block Model (SBM) Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>directed</strong> : boolean, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
 this determines whether to force symmetry upon the block probability matrix fit
 for the SBM. It will also determine whether graphs sampled from the model are
 directed.</p>
-</div></blockquote>
-<p><strong>degree_directed</strong> : boolean, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to fit an &quot;in&quot; and &quot;out&quot; degree correction for each node. In the
+</dd>
+<dt><strong>degree_directed</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to fit an &quot;in&quot; and &quot;out&quot; degree correction for each node. In the
 degree_directed case, the fit model can have a different expected in and out
 degree for each node.</p>
-</div></blockquote>
-<p><strong>loops</strong> : boolean, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
 the graph where a node connects to itself.</p>
-</div></blockquote>
-<p><strong>n_components</strong> : int, optional (default=None)</p>
-<blockquote>
-<div><p>Desired dimensionality of embedding for clustering to find communities.
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>Desired dimensionality of embedding for clustering to find communities.
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions
 will be chosen by <a class="reference internal" href="embed.html#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>.</p>
-</div></blockquote>
-<p><strong>min_comm</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The minimum number of communities (blocks) to consider.</p>
-</div></blockquote>
-<p><strong>max_comm</strong> : int, optional (default=10)</p>
-<blockquote>
-<div><p>The maximum number of communities (blocks) to consider (inclusive).</p>
-</div></blockquote>
-<p><strong>cluster_kws</strong> : dict, optional (default={})</p>
-<blockquote>
-<div><p>Additional kwargs passed down to <a class="reference internal" href="cluster.html#graspologic.cluster.GaussianCluster" title="graspologic.cluster.GaussianCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianCluster</span></code></a></p>
-</div></blockquote>
-<p><strong>embed_kws</strong> : dict, optional (default={})</p>
-<blockquote>
-<div><p>Additional kwargs passed down to <a class="reference internal" href="embed.html#graspologic.embed.LaplacianSpectralEmbed" title="graspologic.embed.LaplacianSpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaplacianSpectralEmbed</span></code></a></p>
-</div></blockquote>
+</dd>
+<dt><strong>min_comm</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The minimum number of communities (blocks) to consider.</p>
+</dd>
+<dt><strong>max_comm</strong><span class="classifier">int, optional (default=10)</span></dt><dd><p>The maximum number of communities (blocks) to consider (inclusive).</p>
+</dd>
+<dt><strong>cluster_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="cluster.html#graspologic.cluster.GaussianCluster" title="graspologic.cluster.GaussianCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianCluster</span></code></a></p>
+</dd>
+<dt><strong>embed_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="embed.html#graspologic.embed.LaplacianSpectralEmbed" title="graspologic.embed.LaplacianSpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaplacianSpectralEmbed</span></code></a></p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>block_p_</strong> : np.ndarray, shape (n_blocks, n_blocks)</p>
-<blockquote>
-<div><p>The block probability matrix <span class="math notranslate nohighlight">\(B\)</span>, where the element <span class="math notranslate nohighlight">\(B_{i, j}\)</span>
+<dd class="field-even"><dl class="simple">
+<dt><strong>block_p_</strong><span class="classifier">np.ndarray, shape (n_blocks, n_blocks)</span></dt><dd><p>The block probability matrix <span class="math notranslate nohighlight">\(B\)</span>, where the element <span class="math notranslate nohighlight">\(B_{i, j}\)</span>
 represents the expected number of edges between block <span class="math notranslate nohighlight">\(i\)</span> and block
 <span class="math notranslate nohighlight">\(j\)</span>.</p>
-</div></blockquote>
-<p><strong>p_mat_</strong> : np.ndarray, shape (n_verts, n_verts)</p>
-<blockquote>
-<div><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
 sampled.</p>
-</div></blockquote>
-<p><strong>degree_corrections_</strong> : np.ndarray, shape (n_verts, 1) or (n_verts, 2)</p>
-<blockquote>
-<div><p>Degree correction vector(s) <span class="math notranslate nohighlight">\(\theta\)</span>. If <code class="docutils literal notranslate"><span class="pre">degree_directed</span></code> parameter was
+</dd>
+<dt><strong>degree_corrections_</strong><span class="classifier">np.ndarray, shape (n_verts, 1) or (n_verts, 2)</span></dt><dd><p>Degree correction vector(s) <span class="math notranslate nohighlight">\(\theta\)</span>. If <code class="docutils literal notranslate"><span class="pre">degree_directed</span></code> parameter was
 False, then will be of shape (n_verts, 1) and element <span class="math notranslate nohighlight">\(i\)</span> represents the
 degree correction for node <span class="math notranslate nohighlight">\(i\)</span>. Otherwise, the first column contains out
 degree corrections and the second column contains in degree corrections.</p>
-</div></blockquote>
-<p><strong>vertex_assignments_</strong> : np.ndarray, shape (n_verts)</p>
-<blockquote>
-<div><p>A vector of integer labels corresponding to the predicted block that each node
+</dd>
+<dt><strong>vertex_assignments_</strong><span class="classifier">np.ndarray, shape (n_verts)</span></dt><dd><p>A vector of integer labels corresponding to the predicted block that each node
 belongs to if <code class="docutils literal notranslate"><span class="pre">y</span></code> was not passed during the call to <a class="reference internal" href="#graspologic.models.DCSBMEstimator.fit" title="graspologic.models.DCSBMEstimator.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a>.</p>
-</div></blockquote>
-<p><strong>block_weights_</strong> : np.ndarray, shape (n_blocks)</p>
-<blockquote>
-<div><p>Contains the proportion of nodes that belong to each block in the fit model.</p>
-</div></blockquote>
+</dd>
+<dt><strong>block_weights_</strong><span class="classifier">np.ndarray, shape (n_blocks)</span></dt><dd><p>Contains the proportion of nodes that belong to each block in the fit model.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1407,24 +1361,22 @@ structure in networks. Physical review E, 83(1), 016107.</p>
 estimated.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : array_like or networkx.Graph</p>
-<blockquote>
-<div><p>Input graph to fit</p>
-</div></blockquote>
-<p><strong>y</strong> : array_like, length graph.shape[0], optional</p>
-<blockquote>
-<div><p>Categorical labels for the block assignments of the graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : <code class="docutils literal notranslate"><span class="pre">DCSBMEstimator</span></code> object</p>
-<blockquote>
-<div><p>Fitted instance of self</p>
-</div></blockquote>
+<dd class="field-even"><dl>
+<dt><strong>self</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">DCSBMEstimator</span></code> object</span></dt><dd><p>Fitted instance of self</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -1440,18 +1392,18 @@ estimated.</p>
 <dd><p>Bayesian information criterion for the current model on the input graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>bic</strong> : float</p>
-<blockquote>
-<div><p>The lower the better</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1466,19 +1418,19 @@ fit model.</p>
 <dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1489,18 +1441,18 @@ contained subobjects that are estimators.</p>
 <dd><p>Compute mean square error for the current model on the input graph</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mse</strong> : float</p>
-<blockquote>
-<div><p>Mean square error for the model's fit P matrix</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1518,20 +1470,20 @@ fit model.</p>
 <p>Can only be called after the the model has been fit</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_samples</strong> : int (default 1), optional</p>
-<blockquote>
-<div><p>The number of graphs to sample</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>graphs</strong> : np.array (n_samples, n_verts, n_verts)</p>
-<blockquote>
-<div><p>Array of sampled graphs, where the first dimension
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
 indexes each sample, and the other dimensions represent
 (n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
 <p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
 array will still be returned.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
@@ -1549,18 +1501,18 @@ array will still be returned.</p>
 given graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>score</strong> : float</p>
-<blockquote>
-<div><p>sum of log-loglikelihoods for each potential edge in input graph</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1579,23 +1531,21 @@ fit model.</p>
 fit model.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
-<p><strong>clip</strong> : scalar or None, optional (default=None)</p>
-<blockquote>
-<div><p>Values for which to clip probability matrix, entries less than c or more
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
 than 1 - c are set to c or 1 - c, respectively.
 If None, values will not be clipped in the likelihood calculation, which may
 result in poorly behaved likelihoods depending on the model.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sample_scores</strong> : np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</p>
-<blockquote>
-<div><p>log-likelihood per potential edge in the graph</p>
-</div></blockquote>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1614,21 +1564,21 @@ result in poorly behaved likelihoods depending on the model.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1653,49 +1603,39 @@ the right latent position of node <span class="math notranslate nohighlight">\(j
 is undirected, then <span class="math notranslate nohighlight">\(x_i = y_i\)</span>. Latent positions can be estimated via
 <a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a>.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model Tutorial</a></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>loops</strong> : boolean, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+<dd class="field-odd"><dl class="simple">
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
 the graph where a node connects to itself.</p>
-</div></blockquote>
-<p><strong>n_components</strong> : int, optional (default=None)</p>
-<blockquote>
-<div><p>The dimensionality of the latent space used to model the graph. If None, the
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>The dimensionality of the latent space used to model the graph. If None, the
 method of Zhu and Godsie will be used to select an embedding dimension.</p>
-</div></blockquote>
-<p><strong>ase_kws</strong> : dict, optional (default={})</p>
-<blockquote>
-<div><p>Dictionary of keyword arguments passed down to
+</dd>
+<dt><strong>ase_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Dictionary of keyword arguments passed down to
 <a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a>, which is used to fit the model.</p>
-</div></blockquote>
-<p><strong>diag_aug_weight</strong> : int or float, optional (default=1)</p>
-<blockquote>
-<div><p>Weighting used for diagonal augmentation, which is a form of regularization for
+</dd>
+<dt><strong>diag_aug_weight</strong><span class="classifier">int or float, optional (default=1)</span></dt><dd><p>Weighting used for diagonal augmentation, which is a form of regularization for
 fitting the RDPG model.</p>
-</div></blockquote>
-<p><strong>plus_c_weight</strong> : int or float, optional (default=1)</p>
-<blockquote>
-<div><p>Weighting used for a constant scalar added to the adjacency matrix before
+</dd>
+<dt><strong>plus_c_weight</strong><span class="classifier">int or float, optional (default=1)</span></dt><dd><p>Weighting used for a constant scalar added to the adjacency matrix before
 embedding as a form of regularization.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>latent_</strong> : tuple, length 2, or np.ndarray, shape (n_verts, n_components)</p>
-<blockquote>
-<div><p>The fit latent positions for the RDPG model. If a tuple, then the graph that was
+<dd class="field-even"><dl class="simple">
+<dt><strong>latent_</strong><span class="classifier">tuple, length 2, or np.ndarray, shape (n_verts, n_components)</span></dt><dd><p>The fit latent positions for the RDPG model. If a tuple, then the graph that was
 input to fit was directed, and the first and second elements of the tuple are
 the left and right latent positions, respectively. The left and right latent
 positions will both be of shape (n_verts, n_components). If <code class="xref py py-attr docutils literal notranslate"><span class="pre">latent_</span></code> is an
 array, then the graph that was input to fit was undirected and the left and
 right latent positions are the same.</p>
-</div></blockquote>
-<p><strong>p_mat_</strong> : np.ndarray, shape (n_verts, n_verts)</p>
-<blockquote>
-<div><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
 sampled.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1744,7 +1684,7 @@ pp.918-930.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -1760,18 +1700,18 @@ pp.918-930.</p>
 <dd><p>Bayesian information criterion for the current model on the input graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>bic</strong> : float</p>
-<blockquote>
-<div><p>The lower the better</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1786,19 +1726,19 @@ fit model.</p>
 <dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1809,18 +1749,18 @@ contained subobjects that are estimators.</p>
 <dd><p>Compute mean square error for the current model on the input graph</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mse</strong> : float</p>
-<blockquote>
-<div><p>Mean square error for the model's fit P matrix</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1838,20 +1778,20 @@ fit model.</p>
 <p>Can only be called after the the model has been fit</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_samples</strong> : int (default 1), optional</p>
-<blockquote>
-<div><p>The number of graphs to sample</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>graphs</strong> : np.array (n_samples, n_verts, n_verts)</p>
-<blockquote>
-<div><p>Array of sampled graphs, where the first dimension
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
 indexes each sample, and the other dimensions represent
 (n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
 <p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
 array will still be returned.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
@@ -1869,18 +1809,18 @@ array will still be returned.</p>
 given graph.</p>
 <p>Note that this implicitly assumes the input graph is indexed like the
 fit model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>score</strong> : float</p>
-<blockquote>
-<div><p>sum of log-loglikelihoods for each potential edge in input graph</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
@@ -1899,23 +1839,21 @@ fit model.</p>
 fit model.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : np.ndarray</p>
-<blockquote>
-<div><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
-</div></blockquote>
-<p><strong>clip</strong> : scalar or None, optional (default=None)</p>
-<blockquote>
-<div><p>Values for which to clip probability matrix, entries less than c or more
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
 than 1 - c are set to c or 1 - c, respectively.
 If None, values will not be clipped in the likelihood calculation, which may
 result in poorly behaved likelihoods depending on the model.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>sample_scores</strong> : np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</p>
-<blockquote>
-<div><p>log-likelihood per potential edge in the graph</p>
-</div></blockquote>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1934,21 +1872,21 @@ result in poorly behaved likelihoods depending on the model.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1964,20 +1902,16 @@ possible to update each component of a nested object.</p>
 <dd><p>Degree Preserving Edge Swaps</p>
 <p>This class allows for performing degree preserving edge swaps to
 generate new networks with the same degree sequence as the input network.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><p><strong>adjacency</strong> : np.ndarray OR csr_matrix, shape (n_verts, n_verts)</p>
-<blockquote>
-<div><p>The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.</p>
-</div></blockquote>
-<p><strong>edge_list</strong> : np.ndarray, shape (n_verts, 2)</p>
-<blockquote>
-<div><p>The corresponding edgelist for the input network</p>
-</div></blockquote>
-<p><strong>seed: int, optional</strong></p>
-<blockquote>
-<div><p>Random seed to make outputs reproducible, must be positive</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>adjacency</strong><span class="classifier">np.ndarray OR csr_matrix, shape (n_verts, n_verts)</span></dt><dd><p>The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.</p>
+</dd>
+<dt><strong>edge_list</strong><span class="classifier">np.ndarray, shape (n_verts, 2)</span></dt><dd><p>The corresponding edgelist for the input network</p>
+</dd>
+<dt><strong>seed: int, optional</strong></dt><dd><p>Random seed to make outputs reproducible, must be positive</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">References</p>
@@ -2002,7 +1936,7 @@ Journal of Complex Networks, 5(3), 337-351.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>adjacency</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>adjacency</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
 <li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -2013,28 +1947,26 @@ Journal of Complex Networks, 5(3), 337-351.</p>
 <dt class="sig sig-object py" id="graspologic.models.EdgeSwapper.swap_edges">
 <span class="sig-name descname"><span class="pre">swap_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_swaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper.swap_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper.swap_edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a number of edge swaps on the graph</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_swaps</strong> : int (default 1), optional</p>
-<blockquote>
-<div><p>The number of edge swaps to be performed</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_swaps</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of edge swaps to be performed</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>adjacency</strong> : np.ndarray OR csr.matrix, shape (n_verts, n_verts)</p>
-<blockquote>
-<div><p>The adjancency matrix after a number of edge swaps are performed on the graph</p>
-</div></blockquote>
-<p><strong>edge_list</strong> : np.ndarray (n_verts, 2)</p>
-<blockquote>
-<div><p>The edge_list after a number of edge swaps are perfomed on the graph</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>adjacency</strong><span class="classifier">np.ndarray OR csr.matrix, shape (n_verts, n_verts)</span></dt><dd><p>The adjancency matrix after a number of edge swaps are performed on the graph</p>
+</dd>
+<dt><strong>edge_list</strong><span class="classifier">np.ndarray (n_verts, 2)</span></dt><dd><p>The edge_list after a number of edge swaps are perfomed on the graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>n_swaps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a>], <em>ndarray</em>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a>], <em>ndarray</em>]</p>
 </dd>
 </dl>
 </dd></dl>

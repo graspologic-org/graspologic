@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Partition &mdash; graspologic 2.0.0 documentation</title>
+  <title>Partition &mdash; graspologic 2.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -32,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.0
+                2.0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -62,6 +63,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
@@ -130,7 +132,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -151,7 +159,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -253,10 +271,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
-          <li><a href="index.html">Reference</a> &raquo;</li>
-      <li>Partition</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Partition</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/reference/reference/partition.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -299,49 +317,41 @@
 <span class="sig-prename descclassname"><span class="pre">graspologic.partition.</span></span><span class="sig-name descname"><span class="pre">modularity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partitions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/modularity.html#modularity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.modularity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given an undirected graph and a dictionary of vertices to community ids, calculate
 the modularity.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : nx.Graph</p>
-<blockquote>
-<div><p>An undirected graph</p>
-</div></blockquote>
-<p><strong>partitions</strong> : Dict[Any, int]</p>
-<blockquote>
-<div><p>A dictionary representing a community partitioning scheme with the keys being
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">nx.Graph</span></dt><dd><p>An undirected graph</p>
+</dd>
+<dt><strong>partitions</strong><span class="classifier">Dict[Any, int]</span></dt><dd><p>A dictionary representing a community partitioning scheme with the keys being
 the vertex and the value being a community id.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str</p>
-<blockquote>
-<div><p>The edge data attribute on the graph that contains a float weight for the edge.</p>
-</div></blockquote>
-<p><strong>resolution</strong> : float</p>
-<blockquote>
-<div><p>The resolution to use when calculating the modularity.</p>
-</div></blockquote>
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str</span></dt><dd><p>The edge data attribute on the graph that contains a float weight for the edge.</p>
+</dd>
+<dt><strong>resolution</strong><span class="classifier">float</span></dt><dd><p>The resolution to use when calculating the modularity.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>float</p>
-<blockquote>
-<div><p>The sum of the modularity of each of the communities.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>The sum of the modularity of each of the communities.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p>TypeError</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is not a networkx Graph or
+<dd class="field-odd"><dl class="simple">
+<dt>TypeError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is not a networkx Graph or
 If <code class="docutils literal notranslate"><span class="pre">partitions</span></code> is not a dictionary or
 If <code class="docutils literal notranslate"><span class="pre">resolution</span></code> is not a float</p>
-</div></blockquote>
-<p>ValueError</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is unweighted
+</dd>
+<dt>ValueError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is unweighted
 If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is directed
 If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is a multigraph</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>partitions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
@@ -365,49 +375,41 @@ If <code class="docutils literal notranslate"><span class="pre">graph</span></co
 <dd><p>Given an undirected, weighted graph and a community partition dictionary,
 calculates a modularity quantum for each community ID. The sum of these quanta
 is the modularity of the graph and partitions provided.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : nx.Graph</p>
-<blockquote>
-<div><p>An undirected graph</p>
-</div></blockquote>
-<p><strong>partitions</strong> : Dict[Any, int]</p>
-<blockquote>
-<div><p>A dictionary representing a community partitioning scheme with the keys being
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">nx.Graph</span></dt><dd><p>An undirected graph</p>
+</dd>
+<dt><strong>partitions</strong><span class="classifier">Dict[Any, int]</span></dt><dd><p>A dictionary representing a community partitioning scheme with the keys being
 the vertex and the value being a community id.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str</p>
-<blockquote>
-<div><p>The edge data attribute on the graph that contains a float weight for the edge.</p>
-</div></blockquote>
-<p><strong>resolution</strong> : float</p>
-<blockquote>
-<div><p>The resolution to use when calculating the modularity.</p>
-</div></blockquote>
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str</span></dt><dd><p>The edge data attribute on the graph that contains a float weight for the edge.</p>
+</dd>
+<dt><strong>resolution</strong><span class="classifier">float</span></dt><dd><p>The resolution to use when calculating the modularity.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Dict[int, float]</p>
-<blockquote>
-<div><p>A dictionary of the community id to the modularity component of that community</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt>Dict[int, float]</dt><dd><p>A dictionary of the community id to the modularity component of that community</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p>TypeError</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is not a networkx Graph or
+<dd class="field-odd"><dl class="simple">
+<dt>TypeError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is not a networkx Graph or
 If <code class="docutils literal notranslate"><span class="pre">partitions</span></code> is not a dictionary or
 If <code class="docutils literal notranslate"><span class="pre">resolution</span></code> is not a float</p>
-</div></blockquote>
-<p>ValueError</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is unweighted
+</dd>
+<dt>ValueError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is unweighted
 If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is directed
 If <code class="docutils literal notranslate"><span class="pre">graph</span></code> is a multigraph</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>partitions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
@@ -432,97 +434,75 @@ maximization function by speculatively joining partitions of each neighboring no
 quality.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</p>
-<blockquote>
-<div><p>A graph representation, whether a weighted edge list referencing an undirected
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</span></dt><dd><p>A graph representation, whether a weighted edge list referencing an undirected
 graph, an undirected networkx graph, or an undirected adjacency matrix in either
 numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
 regarding node ids used.</p>
-</div></blockquote>
-<p><strong>starting_communities</strong> : Optional[Dict[Any, int]]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. An optional community mapping dictionary that contains a node
+</dd>
+<dt><strong>starting_communities</strong><span class="classifier">Optional[Dict[Any, int]]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. An optional community mapping dictionary that contains a node
 id mapping to the community it belongs to. Please see the Notes section regarding
 node ids used.</p>
 <p>If no community map is provided, the default behavior is to create a node
 community identity map, where every node is in their own community.</p>
-</div></blockquote>
-<p><strong>extra_forced_iterations</strong> : int</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>. Leiden will run until a maximum quality score has been found
+</dd>
+<dt><strong>extra_forced_iterations</strong><span class="classifier">int</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>. Leiden will run until a maximum quality score has been found
 for the node clustering and no nodes are moved to a new cluster in another
 iteration. As there is an element of randomness to the Leiden algorithm, it is
 sometimes useful to set <code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> to a number larger than 0
 where the process is forced to attempt further refinement.</p>
-</div></blockquote>
-<p><strong>resolution</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. Higher resolution values lead to more communities and lower
+</dd>
+<dt><strong>resolution</strong><span class="classifier">Union[int, float]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. Higher resolution values lead to more communities and lower
 resolution values leads to fewer communities. Must be greater than 0.</p>
-</div></blockquote>
-<p><strong>randomness</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0.001</span></code>. The larger the randomness value, the more exploration of
+</dd>
+<dt><strong>randomness</strong><span class="classifier">Union[int, float]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">0.001</span></code>. The larger the randomness value, the more exploration of
 the partition space is possible. This is a major difference from the Louvain
 algorithm, which is purely greedy in the partition exploration.</p>
-</div></blockquote>
-<p><strong>use_modularity</strong> : bool</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will use a Constant Potts Model (CPM).</p>
-</div></blockquote>
-<p><strong>random_seed</strong> : Optional[int]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can provide an optional seed to the PRNG used in Leiden for
+</dd>
+<dt><strong>use_modularity</strong><span class="classifier">bool</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will use a Constant Potts Model (CPM).</p>
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">Optional[int]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can provide an optional seed to the PRNG used in Leiden for
 deterministic output.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>. Only used when creating a weighed edge list of tuples
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>. Only used when creating a weighed edge list of tuples
 when the source graph is a networkx graph. This attribute corresponds to the
 edge data dict key.</p>
-</div></blockquote>
-<p><strong>is_weighted</strong> : Optional[bool]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Only used when creating a weighted edge list of tuples
+</dd>
+<dt><strong>is_weighted</strong><span class="classifier">Optional[bool]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Only used when creating a weighted edge list of tuples
 when the source graph is an adjacency matrix. The
 <code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.utils.is_unweighted()</span></code> function will scan these
 matrices and attempt to determine whether it is weighted or not. This flag can
 short circuit this test and the values in the adjacency matrix will be treated
 as weights.</p>
-</div></blockquote>
-<p><strong>weight_default</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. If the graph is a networkx graph and the graph does not have
+</dd>
+<dt><strong>weight_default</strong><span class="classifier">Union[int, float]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. If the graph is a networkx graph and the graph does not have
 a fully weighted sequence of edges, this default will be used. If the adjacency
 matrix is found or specified to be unweighted, this weight_default will be used
 for every edge.</p>
-</div></blockquote>
-<p><strong>check_directed</strong> : bool</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If the graph is an adjacency matrix, we will attempt to
+</dd>
+<dt><strong>check_directed</strong><span class="classifier">bool</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If the graph is an adjacency matrix, we will attempt to
 ascertain whether it is directed or undirected. As our leiden implementation is
 only known to work with an undirected graph, this function will raise an error
 if it is found to be a directed graph. If you know it is undirected and wish to
 avoid this scan, you can set this value to <code class="docutils literal notranslate"><span class="pre">False</span></code> and only the lower triangle
 of the adjacency matrix will be used to generate the weighted edge list.</p>
-</div></blockquote>
-<p><strong>trials</strong> : int</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1</span></code>. Runs leiden <code class="docutils literal notranslate"><span class="pre">trials</span></code> times, keeping the best partitioning
+</dd>
+<dt><strong>trials</strong><span class="classifier">int</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">1</span></code>. Runs leiden <code class="docutils literal notranslate"><span class="pre">trials</span></code> times, keeping the best partitioning
 as judged by the quality maximization function (default: modularity, see
 <code class="docutils literal notranslate"><span class="pre">use_modularity</span></code> parameter for details). This differs from
 <code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> by starting over from scratch each for each trial,
 while <code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> attempts to make microscopic adjustments from
 the &quot;final&quot; state.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Dict[Any, int]</p>
-<blockquote>
-<div><p>The results of running leiden over the provided graph, a dictionary containing
+<dd class="field-even"><dl class="simple">
+<dt>Dict[Any, int]</dt><dd><p>The results of running leiden over the provided graph, a dictionary containing
 mappings of node -&gt; community id. Isolate nodes in the input graph are not returned
 in the result.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><dl class="simple">
@@ -533,7 +513,7 @@ in the result.</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>starting_communities</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
 <li><p><strong>extra_forced_iterations</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
@@ -741,13 +721,13 @@ ascending or descending, according to their function values.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.first_level_hierarchical_clustering">
 <span class="sig-name descname"><span class="pre">first_level_hierarchical_clustering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#HierarchicalClusters.first_level_hierarchical_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.first_level_hierarchical_clustering" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Dict[Any, int]</p>
-<blockquote>
-<div><p>The initial leiden algorithm clustering results as a dictionary
+<dd class="field-odd"><dl class="simple">
+<dt>Dict[Any, int]</dt><dd><p>The initial leiden algorithm clustering results as a dictionary
 of node id to community id.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>]</p>
@@ -758,13 +738,13 @@ of node id to community id.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.partition.HierarchicalClusters.final_level_hierarchical_clustering">
 <span class="sig-name descname"><span class="pre">final_level_hierarchical_clustering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/partition/leiden.html#HierarchicalClusters.final_level_hierarchical_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.partition.HierarchicalClusters.final_level_hierarchical_clustering" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Dict[Any, int]</p>
-<blockquote>
-<div><p>The last leiden algorithm clustering results as a dictionary
+<dd class="field-odd"><dl class="simple">
+<dt>Dict[Any, int]</dt><dd><p>The last leiden algorithm clustering results as a dictionary
 of node id to community id.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>]</p>
@@ -800,16 +780,13 @@ it is marked with the flag
 <code class="docutils literal notranslate"><span class="pre">graspologic.partition.HierarchicalCluster.is_final_cluster</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</p>
-<blockquote>
-<div><p>A graph representation, whether a weighted edge list referencing an undirected
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</span></dt><dd><p>A graph representation, whether a weighted edge list referencing an undirected
 graph, an undirected networkx graph, or an undirected adjacency matrix in either
 numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
 regarding node ids used.</p>
-</div></blockquote>
-<p><strong>max_cluster_size</strong> : int</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>. Any partition or cluster with
+</dd>
+<dt><strong>max_cluster_size</strong><span class="classifier">int</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">1000</span></code>. Any partition or cluster with
 membership &gt;= <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> will be isolated into a subnetwork. This
 subnetwork will be used for a new leiden global partition mapping, which will
 then be remapped back into the global space after completion. Once all
@@ -818,82 +795,63 @@ increases and the partition scheme is scanned again for any new clusters with
 membership &gt;= <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> and the process continues until every
 cluster's membership is &lt; <code class="docutils literal notranslate"><span class="pre">max_cluster_size</span></code> or if they cannot be broken into
 more than one new community.</p>
-</div></blockquote>
-<p><strong>starting_communities</strong> : Optional[Dict[Any, int]]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. An optional community mapping dictionary that contains a node
+</dd>
+<dt><strong>starting_communities</strong><span class="classifier">Optional[Dict[Any, int]]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. An optional community mapping dictionary that contains a node
 id mapping to the community it belongs to. Please see the Notes section regarding
 node ids used.</p>
 <p>If no community map is provided, the default behavior is to create a node
 community identity map, where every node is in their own community.</p>
-</div></blockquote>
-<p><strong>extra_forced_iterations</strong> : int</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>. Leiden will run until a maximum quality score has been found
+</dd>
+<dt><strong>extra_forced_iterations</strong><span class="classifier">int</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>. Leiden will run until a maximum quality score has been found
 for the node clustering and no nodes are moved to a new cluster in another
 iteration. As there is an element of randomness to the Leiden algorithm, it is
 sometimes useful to set <code class="docutils literal notranslate"><span class="pre">extra_forced_iterations</span></code> to a number larger than 0
 where the entire process is forced to attempt further refinement.</p>
-</div></blockquote>
-<p><strong>resolution</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. Higher resolution values lead to more communities and lower
+</dd>
+<dt><strong>resolution</strong><span class="classifier">Union[int, float]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. Higher resolution values lead to more communities and lower
 resolution values leads to fewer communities. Must be greater than 0.</p>
-</div></blockquote>
-<p><strong>randomness</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">0.001</span></code>. The larger the randomness value, the more exploration of
+</dd>
+<dt><strong>randomness</strong><span class="classifier">Union[int, float]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">0.001</span></code>. The larger the randomness value, the more exploration of
 the partition space is possible. This is a major difference from the Louvain
 algorithm, which is purely greedy in the partition exploration.</p>
-</div></blockquote>
-<p><strong>use_modularity</strong> : bool</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will use a Constant Potts Model (CPM).</p>
-</div></blockquote>
-<p><strong>random_seed</strong> : Optional[int]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can provide an optional seed to the PRNG used in Leiden
+</dd>
+<dt><strong>use_modularity</strong><span class="classifier">bool</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will use a Constant Potts Model (CPM).</p>
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">Optional[int]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can provide an optional seed to the PRNG used in Leiden
 for deterministic output.</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>. Only used when creating a weighed edge list of tuples
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>. Only used when creating a weighed edge list of tuples
 when the source graph is a networkx graph. This attribute corresponds to the
 edge data dict key.</p>
-</div></blockquote>
-<p><strong>is_weighted</strong> : Optional[bool]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Only used when creating a weighted edge list of tuples
+</dd>
+<dt><strong>is_weighted</strong><span class="classifier">Optional[bool]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. Only used when creating a weighted edge list of tuples
 when the source graph is an adjacency matrix. The
 <code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.utils.is_unweighted()</span></code> function will scan these
 matrices and attempt to determine whether it is weighted or not. This flag can
 short circuit this test and the values in the adjacency matrix will be treated
 as weights.</p>
-</div></blockquote>
-<p><strong>weight_default</strong> : Union[int, float]</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. If the graph is a networkx graph and the graph does not
+</dd>
+<dt><strong>weight_default</strong><span class="classifier">Union[int, float]</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. If the graph is a networkx graph and the graph does not
 have a fully weighted sequence of edges, this default will be used. If the
 adjacency matrix is found or specified to be unweighted, this weight_default
 will be used for every edge.</p>
-</div></blockquote>
-<p><strong>check_directed</strong> : bool</p>
-<blockquote>
-<div><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If the graph is an adjacency matrix, we will attempt to
+</dd>
+<dt><strong>check_directed</strong><span class="classifier">bool</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If the graph is an adjacency matrix, we will attempt to
 ascertain whether it is directed or undirected. As our leiden implementation is
 only known to work with an undirected graph, this function will raise an error
 if it is found to be a directed graph. If you know it is undirected and wish to
 avoid this scan, you can set this value to <code class="docutils literal notranslate"><span class="pre">False</span></code> and only the lower triangle
 of the adjacency matrix will be used to generate the weighted edge list.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>HierarchicalClusters</p>
-<blockquote>
-<div><p>The results of running hierarchical leiden over the provided graph, a list of
+<dd class="field-even"><dl class="simple">
+<dt>HierarchicalClusters</dt><dd><p>The results of running hierarchical leiden over the provided graph, a list of
 HierarchicalClusters identifying the state of every node and cluster at each
 level. Isolate nodes in the input graph are not returned in the result.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><dl class="simple">
@@ -904,7 +862,7 @@ level. Isolate nodes in the input graph are not returned in the result.</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em><em>]</em><em>]</em><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em><em>]</em><em>]</em><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
 <li><p><strong>max_cluster_size</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>starting_communities</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
 <li><p><strong>extra_forced_iterations</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>

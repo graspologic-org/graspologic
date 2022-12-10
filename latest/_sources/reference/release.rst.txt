@@ -3,6 +3,15 @@
 Release Log
 ===========
 
+graspologic 2.0.1
+-----------------
+- Fixed bug with a matplotlib version incompatibility
+  `#996 <https://github.com/microsoft/graspologic/pull/996>`
+- Fixed graph matching with similarity matrix of unequal dimensions
+  `#1002 <https://github.com/microsoft/graspologic/pull/1002>`
+- Fixed bug with missing typing-extensions dependency
+  `#999 <https://github.com/microsoft/graspologic/pull/999>`
+
 graspologic 2.0.0
 -----------------
 - Refactored graph matching code and added many new features

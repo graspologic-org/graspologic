@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preconditions &mdash; graspologic 2.0.0 documentation</title>
+  <title>Preconditions &mdash; graspologic 2.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -32,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.0
+                2.0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -62,6 +63,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
@@ -130,7 +132,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Preconditions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -151,7 +159,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -253,10 +271,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
-          <li><a href="index.html">Reference</a> &raquo;</li>
-      <li>Preconditions</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Preconditions</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/reference/reference/preconditions.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -296,20 +314,16 @@
 <dt class="sig sig-object py" id="graspologic.preconditions.check_argument_types">
 <span class="sig-prename descclassname"><span class="pre">graspologic.preconditions.</span></span><span class="sig-name descname"><span class="pre">check_argument_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/preconditions.html#check_argument_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.preconditions.check_argument_types" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raises a TypeError if the provided <code class="docutils literal notranslate"><span class="pre">value</span></code> is not one of the <code class="docutils literal notranslate"><span class="pre">required_types</span></code></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> : Any</p>
-<blockquote>
-<div><p>The argument to test for valid type</p>
-</div></blockquote>
-<p><strong>required_types</strong> : Union[type, Tuple[type, ...]]</p>
-<blockquote>
-<div><p>A type or a n-ary tuple of types to test for validity</p>
-</div></blockquote>
-<p><strong>message</strong> : str</p>
-<blockquote>
-<div><p>The message to use as the body of the TypeError</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>value</strong><span class="classifier">Any</span></dt><dd><p>The argument to test for valid type</p>
+</dd>
+<dt><strong>required_types</strong><span class="classifier">Union[type, Tuple[type, ...]]</span></dt><dd><p>A type or a n-ary tuple of types to test for validity</p>
+</dd>
+<dt><strong>message</strong><span class="classifier">str</span></dt><dd><p>The message to use as the body of the TypeError</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><dl class="simple">
@@ -334,20 +348,16 @@
 <span class="sig-prename descclassname"><span class="pre">graspologic.preconditions.</span></span><span class="sig-name descname"><span class="pre">check_optional_argument_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/preconditions.html#check_optional_argument_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.preconditions.check_optional_argument_types" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raises a TypeError if the provided <code class="docutils literal notranslate"><span class="pre">value</span></code> is not one of the <code class="docutils literal notranslate"><span class="pre">required_types</span></code>,
 unless it is None.  A None value is treated as a valid type.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> : Any</p>
-<blockquote>
-<div><p>The argument to test for valid type</p>
-</div></blockquote>
-<p><strong>required_types</strong> : Union[type, Tuple[type, ...]]</p>
-<blockquote>
-<div><p>A type or a n-ary tuple of types to test for validity</p>
-</div></blockquote>
-<p><strong>message</strong> : str</p>
-<blockquote>
-<div><p>The message to use as the body of the TypeError</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>value</strong><span class="classifier">Any</span></dt><dd><p>The argument to test for valid type</p>
+</dd>
+<dt><strong>required_types</strong><span class="classifier">Union[type, Tuple[type, ...]]</span></dt><dd><p>A type or a n-ary tuple of types to test for validity</p>
+</dd>
+<dt><strong>message</strong><span class="classifier">str</span></dt><dd><p>The message to use as the body of the TypeError</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><dl class="simple">
@@ -379,20 +389,16 @@ unless it is None.  A None value is treated as a valid type.</p>
 <span class="gr">ValueError</span>: <span class="n">x must be less than 5</span>
 </pre></div>
 </div>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> : Any</p>
-<blockquote>
-<div><p>The argument to test for valid type</p>
-</div></blockquote>
-<p><strong>required_types</strong> : Union[type, Tuple[type, ...]]</p>
-<blockquote>
-<div><p>A type or a n-ary tuple of types to test for validity</p>
-</div></blockquote>
-<p><strong>message</strong> : str</p>
-<blockquote>
-<div><p>The message to use as the body of the TypeError</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>value</strong><span class="classifier">Any</span></dt><dd><p>The argument to test for valid type</p>
+</dd>
+<dt><strong>required_types</strong><span class="classifier">Union[type, Tuple[type, ...]]</span></dt><dd><p>A type or a n-ary tuple of types to test for validity</p>
+</dd>
+<dt><strong>message</strong><span class="classifier">str</span></dt><dd><p>The message to use as the body of the TypeError</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><dl class="simple">
@@ -422,27 +428,25 @@ unless it is None.  A None value is treated as a valid type.</p>
 </ul>
 </div></blockquote>
 <p>If any edge fails this test, it returns <code class="docutils literal notranslate"><span class="pre">False</span></code>, else <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : Union[nx.Graph, nx.DiGraph]</p>
-<blockquote>
-<div><p>The networkx graph to test</p>
-</div></blockquote>
-<p><strong>weight_attribute</strong> : str (default=&quot;weight&quot;)</p>
-<blockquote>
-<div><p>The edge dictionary data attribute that holds the weight. Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.DiGraph]</span></dt><dd><p>The networkx graph to test</p>
+</dd>
+<dt><strong>weight_attribute</strong><span class="classifier">str (default=&quot;weight&quot;)</span></dt><dd><p>The edge dictionary data attribute that holds the weight. Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>bool</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if every edge has a numeric <code class="docutils literal notranslate"><span class="pre">weight_attribute</span></code> weight, <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if every edge has a numeric <code class="docutils literal notranslate"><span class="pre">weight_attribute</span></code> weight, <code class="docutils literal notranslate"><span class="pre">False</span></code> if
 any edge fails this test</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.8)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>
 </dd>

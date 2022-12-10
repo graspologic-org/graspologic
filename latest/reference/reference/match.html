@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matching &mdash; graspologic 2.0.0 documentation</title>
+  <title>Matching &mdash; graspologic 2.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.0
+                2.0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -64,6 +65,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
@@ -132,7 +134,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -153,7 +161,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -255,10 +273,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
-          <li><a href="index.html">Reference</a> &raquo;</li>
-      <li>Matching</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Matching</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/reference/reference/match.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -308,141 +326,100 @@ Various extensions to the original FAQ algorithm are also included in this funct
 ([2-5]).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>A</strong> : {ndarray, csr_matrix, csr_array} of shape (n, n), or a list thereof</p>
-<blockquote>
-<div><p>The first (potentially multilayer) adjacency matrix to be matched. Multiplex
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (n, n), or a list thereof</span></dt><dd><p>The first (potentially multilayer) adjacency matrix to be matched. Multiplex
 networks (e.g. a network with multiple edge types) can be used by inputting a
 list of the adjacency matrices for each edge type.</p>
-</div></blockquote>
-<p><strong>B</strong> : {ndarray, csr_matrix, csr_array} of shape (m, m), or a list thereof</p>
-<blockquote>
-<div><p>The second (potentially multilayer) adjacency matrix to be matched. Must have
+</dd>
+<dt><strong>B</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (m, m), or a list thereof</span></dt><dd><p>The second (potentially multilayer) adjacency matrix to be matched. Must have
 the same number of layers as <code class="docutils literal notranslate"><span class="pre">A</span></code>, but need not have the same size
 (see <code class="docutils literal notranslate"><span class="pre">padding</span></code>).</p>
-</div></blockquote>
-<p><strong>AB</strong> : {ndarray, csr_matrix, csr_array} of shape (n, m), or a list thereof, default=None</p>
-<blockquote>
-<div><p>A (potentially multilayer) matrix representing connections from the objects
+</dd>
+<dt><strong>AB</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (n, m), or a list thereof, default=None</span></dt><dd><p>A (potentially multilayer) matrix representing connections from the objects
 indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to those in <code class="docutils literal notranslate"><span class="pre">B</span></code>, used for bisected graph matching (see [2]).</p>
-</div></blockquote>
-<p><strong>BA</strong> : {ndarray, csr_matrix, csr_array} of shape (m, n), or a list thereof, default=None</p>
-<blockquote>
-<div><p>A (potentially multilayer) matrix representing connections from the objects
+</dd>
+<dt><strong>BA</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (m, n), or a list thereof, default=None</span></dt><dd><p>A (potentially multilayer) matrix representing connections from the objects
 indexed in <code class="docutils literal notranslate"><span class="pre">B</span></code> to those in <code class="docutils literal notranslate"><span class="pre">A</span></code>, used for bisected graph matching (see [2]).</p>
-</div></blockquote>
-<p><strong>S</strong> : {ndarray, csr_matrix, csr_array} of shape (n, m), default=None</p>
-<blockquote>
-<div><p>A matrix representing the similarity of objects indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to each object
+</dd>
+<dt><strong>S</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (n, m), default=None</span></dt><dd><p>A matrix representing the similarity of objects indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to each object
 indexed in <code class="docutils literal notranslate"><span class="pre">B</span></code>. Note that the scale (i.e. the norm) of this matrix will affect
 how strongly the similarity (linear) term is weighted relative to the adjacency
 (quadratic) terms.</p>
-</div></blockquote>
-<p><strong>partial_match</strong> : ndarray of shape (n_matches, 2), dtype=int, or tuple of two array-likes of shape (n_matches,), default=None</p>
-<blockquote>
-<div><p>Indices specifying known matches to include in the optimization. The
+</dd>
+<dt><strong>partial_match</strong><span class="classifier">ndarray of shape (n_matches, 2), dtype=int, or tuple of two array-likes of shape (n_matches,), default=None</span></dt><dd><p>Indices specifying known matches to include in the optimization. The
 first column represents indices of the objects in <code class="docutils literal notranslate"><span class="pre">A</span></code>, and the second column
 represents their corresponding matches in <code class="docutils literal notranslate"><span class="pre">B</span></code>.</p>
-</div></blockquote>
-<p><strong>init</strong> : ndarray of shape (n_unseed, n_unseed), default=None</p>
-<blockquote>
-<div><p>Initialization for the algorithm. Setting to None specifies the &quot;barycenter&quot;,
+</dd>
+<dt><strong>init</strong><span class="classifier">ndarray of shape (n_unseed, n_unseed), default=None</span></dt><dd><p>Initialization for the algorithm. Setting to None specifies the &quot;barycenter&quot;,
 which is the most commonly used initialization and
 represents an uninformative (flat) initialization. If a ndarray, then this
 matrix must be square and have size equal to the number of unseeded (not
 already matched in <code class="docutils literal notranslate"><span class="pre">partial_match</span></code>) nodes.</p>
-</div></blockquote>
-<p><strong>init_perturbation</strong> : float, default=0.0</p>
-<blockquote>
-<div><p>Weight of the random perturbation from <code class="docutils literal notranslate"><span class="pre">init</span></code> that the initialization will
+</dd>
+<dt><strong>init_perturbation</strong><span class="classifier">float, default=0.0</span></dt><dd><p>Weight of the random perturbation from <code class="docutils literal notranslate"><span class="pre">init</span></code> that the initialization will
 undergo. Must be between 0 and 1.</p>
-</div></blockquote>
-<p><strong>n_init</strong> : int, default=1</p>
-<blockquote>
-<div><p>Number of initializations/runs of the algorithm to repeat. The solution with
+</dd>
+<dt><strong>n_init</strong><span class="classifier">int, default=1</span></dt><dd><p>Number of initializations/runs of the algorithm to repeat. The solution with
 the best objective function value over all initializations is kept. Increasing
 <code class="docutils literal notranslate"><span class="pre">n_init</span></code> can improve performance but will take longer.</p>
-</div></blockquote>
-<p><strong>shuffle_input</strong> : bool, default=True</p>
-<blockquote>
-<div><p>Whether to shuffle the order of the inputs internally during optimization. This
+</dd>
+<dt><strong>shuffle_input</strong><span class="classifier">bool, default=True</span></dt><dd><p>Whether to shuffle the order of the inputs internally during optimization. This
 option is recommended to be kept to True besides for testing purposes; it
 alleviates a dependence of the solution on the (arbitrary) ordering of the
 input rows/columns.</p>
-</div></blockquote>
-<p><strong>maximize</strong> : bool, default=True</p>
-<blockquote>
-<div><p>Whether to maximize the objective function (graph matching problem) or minimize
+</dd>
+<dt><strong>maximize</strong><span class="classifier">bool, default=True</span></dt><dd><p>Whether to maximize the objective function (graph matching problem) or minimize
 it (quadratic assignment problem). <code class="docutils literal notranslate"><span class="pre">maximize=True</span></code> corresponds to trying to
 find a permutation wherein the input matrices are as similar as possible - for
 adjacency matrices, this corresponds to maximizing the overlap of the edges of
 the two networks. Conversely, <code class="docutils literal notranslate"><span class="pre">maximize=False</span></code> would attempt to make this
 overlap as small as possible.</p>
-</div></blockquote>
-<p><strong>padding</strong> : {&quot;naive&quot;, &quot;adopted&quot;}, default=&quot;naive&quot;</p>
-<blockquote>
-<div><p>Specification of a padding scheme if <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> are not of equal size. See
+</dd>
+<dt><strong>padding</strong><span class="classifier">{&quot;naive&quot;, &quot;adopted&quot;}, default=&quot;naive&quot;</span></dt><dd><p>Specification of a padding scheme if <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> are not of equal size. See
 the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/matching/padded_gm.html">padded graph matching tutorial</a>
 or [3] for more explanation. Adopted padding has not been tested for weighted
 networks; use with caution.</p>
-</div></blockquote>
-<p><strong>n_jobs</strong> : int, default=None</p>
-<blockquote>
-<div><p>The number of jobs to run in parallel. Parallelization is over the
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, default=None</span></dt><dd><p>The number of jobs to run in parallel. Parallelization is over the
 initializations, so only relevant when <code class="docutils literal notranslate"><span class="pre">n_init</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>. None means 1 unless in a
 joblib.parallel_backend context. -1 means using all processors. See
 <a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.Parallel.html#joblib.Parallel" title="(in joblib v1.3.0.dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">joblib.Parallel</span></code></a> for more details.</p>
-</div></blockquote>
-<p><strong>max_iter</strong> : int, default=30</p>
-<blockquote>
-<div><p>Must be 1 or greater, specifying the max number of iterations for the algorithm.
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int, default=30</span></dt><dd><p>Must be 1 or greater, specifying the max number of iterations for the algorithm.
 Setting this value higher may provide more precise solutions at the cost of
 longer computation time.</p>
-</div></blockquote>
-<p><strong>tol</strong> : float, default=0.01</p>
-<blockquote>
-<div><p>Stopping tolerance for the FAQ algorithm. Setting this value smaller may provide
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, default=0.01</span></dt><dd><p>Stopping tolerance for the FAQ algorithm. Setting this value smaller may provide
 more precise solutions at the cost of longer computation time.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : int, default=0</p>
-<blockquote>
-<div><p>A positive number specifying the level of verbosity for status updates in the
+</dd>
+<dt><strong>verbose</strong><span class="classifier">int, default=0</span></dt><dd><p>A positive number specifying the level of verbosity for status updates in the
 algorithm's progress. If <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> &gt; 1, then this parameter behaves as the
 <code class="docutils literal notranslate"><span class="pre">verbose</span></code> parameter for <a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.Parallel.html#joblib.Parallel" title="(in joblib v1.3.0.dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">joblib.Parallel</span></code></a>. Otherwise, will print
 increasing levels of information about the algorithm's progress for each
 initialization.</p>
-</div></blockquote>
-<p><strong>rng</strong> : int or np.random.Generator, default=None</p>
-<blockquote>
-<div><p>Allows the specification of a random seed (positive integer) or a
+</dd>
+<dt><strong>rng</strong><span class="classifier">int or np.random.Generator, default=None</span></dt><dd><p>Allows the specification of a random seed (positive integer) or a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">np.random.Generator</span></code> object to ensure reproducibility.</p>
-</div></blockquote>
-<p><strong>transport</strong> : bool, default=False</p>
-<blockquote>
-<div><p>Whether to enable use of regularized optimal transport for determining the step
+</dd>
+<dt><strong>transport</strong><span class="classifier">bool, default=False</span></dt><dd><p>Whether to enable use of regularized optimal transport for determining the step
 direction as described in [4]. May improve accuracy/speed, especially for large
 inputs and data where the correlation between edges is not close to 1.</p>
-</div></blockquote>
-<p><strong>transport_regularizer</strong> : int or float, default=100</p>
-<blockquote>
-<div><p>Strength of the entropic regularization in the optimal transport solver.</p>
-</div></blockquote>
-<p><strong>transport_tol</strong> : int or float, default=0.05,</p>
-<blockquote>
-<div><p>Must be positive. Stopping tolerance for the optimal transport solver. Setting
+</dd>
+<dt><strong>transport_regularizer</strong><span class="classifier">int or float, default=100</span></dt><dd><p>Strength of the entropic regularization in the optimal transport solver.</p>
+</dd>
+<dt><strong>transport_tol</strong><span class="classifier">int or float, default=0.05,</span></dt><dd><p>Must be positive. Stopping tolerance for the optimal transport solver. Setting
 this value smaller may provide more precise solutions at the cost of longer
 computation time.</p>
-</div></blockquote>
-<p><strong>transport_max_iter</strong> : int, default=1000</p>
-<blockquote>
-<div><p>Must be positive. Maximum number of iterations for the optimal transport solver.
+</dd>
+<dt><strong>transport_max_iter</strong><span class="classifier">int, default=1000</span></dt><dd><p>Must be positive. Maximum number of iterations for the optimal transport solver.
 Setting this value higher may provide more precise solutions at the cost of
 longer computation time.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>res: MatchResult</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">MatchResult</span></code> containing the following fields.</p>
+<dd class="field-even"><dl>
+<dt>res: MatchResult</dt><dd><p><code class="docutils literal notranslate"><span class="pre">MatchResult</span></code> containing the following fields.</p>
 <dl class="simple">
 <dt>indices_A<span class="classifier">ndarray</span></dt><dd><p>Sorted indices in <code class="docutils literal notranslate"><span class="pre">A</span></code> which were matched.</p>
 </dd>
@@ -456,15 +433,16 @@ permutation of the nodes of <code class="docutils literal notranslate"><span cla
 each run are <code class="docutils literal notranslate"><span class="pre">score</span></code>, <code class="docutils literal notranslate"><span class="pre">n_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">convex_solution</span></code>, and <code class="docutils literal notranslate"><span class="pre">converged</span></code>.</p>
 </dd>
 </dl>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em>) -- </p></li>
-<li><p><strong>B</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em>) -- </p></li>
-<li><p><strong>AB</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>BA</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.1)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>A</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em>) -- </p></li>
+<li><p><strong>B</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em>) -- </p></li>
+<li><p><strong>AB</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>BA</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.9.3)"><em>csr_array</em></a><em>]</em><em>]</em>) -- </p></li>
 <li><p><strong>partial_match</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>]</em><em>]</em>) -- </p></li>
 <li><p><strong>init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><em>ndarray</em><em>]</em>) -- </p></li>
 <li><p><strong>init_perturbation</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>integer</em><em>]</em>) -- </p></li>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clustering &mdash; graspologic 2.0.0 documentation</title>
+  <title>Clustering &mdash; graspologic 2.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -32,7 +33,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.0
+                2.0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -62,6 +63,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
@@ -130,7 +132,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -151,7 +159,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -253,10 +271,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
-          <li><a href="index.html">Reference</a> &raquo;</li>
-      <li>Clustering</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Clustering</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/reference/reference/cluster.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -305,40 +323,32 @@
 When the true labels are known, the best model is given by the model with highest
 adjusted Rand index (ARI).
 Otherwise, the best model is given by the model with highest silhouette score.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>max_clusters</strong> : int, default=2.</p>
-<blockquote>
-<div><p>The maximum number of clusters to consider. Must be <code class="docutils literal notranslate"><span class="pre">&gt;=2</span></code>.</p>
-</div></blockquote>
-<p><strong>random_state</strong> : int, RandomState instance or None, optional (default=None)</p>
-<blockquote>
-<div><p>If int, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the random number generator;
+<dd class="field-odd"><dl class="simple">
+<dt><strong>max_clusters</strong><span class="classifier">int, default=2.</span></dt><dd><p>The maximum number of clusters to consider. Must be <code class="docutils literal notranslate"><span class="pre">&gt;=2</span></code>.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int, RandomState instance or None, optional (default=None)</span></dt><dd><p>If int, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the random number generator;
 If RandomState instance, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the random number generator;
 If None, the random number generator is the RandomState instance used
 by <code class="docutils literal notranslate"><span class="pre">np.random</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_clusters_</strong> : int</p>
-<blockquote>
-<div><p>Optimal number of clusters. If y is given, it is based on largest
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_clusters_</strong><span class="classifier">int</span></dt><dd><p>Optimal number of clusters. If y is given, it is based on largest
 ARI. Otherwise, it is based on highest silhouette score.</p>
-</div></blockquote>
-<p><strong>model_</strong> : KMeans object</p>
-<blockquote>
-<div><p>Fitted KMeans object fitted with <code class="docutils literal notranslate"><span class="pre">n_clusters_</span></code>.</p>
-</div></blockquote>
-<p><strong>silhouette_</strong> : list</p>
-<blockquote>
-<div><p>List of silhouette scores computed for all possible number
+</dd>
+<dt><strong>model_</strong><span class="classifier">KMeans object</span></dt><dd><p>Fitted KMeans object fitted with <code class="docutils literal notranslate"><span class="pre">n_clusters_</span></code>.</p>
+</dd>
+<dt><strong>silhouette_</strong><span class="classifier">list</span></dt><dd><p>List of silhouette scores computed for all possible number
 of clusters given by <code class="docutils literal notranslate"><span class="pre">range(2,</span> <span class="pre">max_clusters)</span></code>.</p>
-</div></blockquote>
-<p><strong>ari_</strong> : list</p>
-<blockquote>
-<div><p>Only computed when y is given. List of ARI values computed for
+</dd>
+<dt><strong>ari_</strong><span class="classifier">list</span></dt><dd><p>Only computed when y is given. List of ARI values computed for
 all possible number of clusters given by <code class="docutils literal notranslate"><span class="pre">range(2,</span> <span class="pre">max_clusters)</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -360,17 +370,15 @@ all possible number of clusters given by <code class="docutils literal notransla
 <dt class="sig sig-object py" id="graspologic.cluster.KMeansCluster.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/kclust.html#KMeansCluster.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.KMeansCluster.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fits kmeans model to the data.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples,), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for <cite>X</cite> if available. Used to compute ARI scores.</p>
-</div></blockquote>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples,), optional (default=None)</span></dt><dd><p>List of labels for <cite>X</cite> if available. Used to compute ARI scores.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
@@ -393,24 +401,22 @@ corresponds to a single data point.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.KMeansCluster.fit_predict">
 <span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.KMeansCluster.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the models and predict clusters based on best model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples,), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples,), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array, shape (n_samples,)</p>
-<blockquote>
-<div><p>Component labels.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array, shape (n_samples,)</span></dt><dd><p>Component labels.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -428,19 +434,19 @@ ARI scores.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.KMeansCluster.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.KMeansCluster.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -449,24 +455,22 @@ contained subobjects that are estimators.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.KMeansCluster.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.KMeansCluster.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict clusters based on best model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples, ), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples, ), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array, shape (n_samples,)</p>
-<blockquote>
-<div><p>Component labels.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array, shape (n_samples,)</span></dt><dd><p>Component labels.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -485,21 +489,21 @@ ARI scores.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.KMeansCluster.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -519,21 +523,16 @@ distribution. It computes all possible models from one component to
 <code class="docutils literal notranslate"><span class="pre">max_components</span></code>. The best model is given by the lowest BIC score.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>min_components</strong> : int, default=2.</p>
-<blockquote>
-<div><p>The minimum number of mixture components to consider (unless
+<dd class="field-odd"><dl>
+<dt><strong>min_components</strong><span class="classifier">int, default=2.</span></dt><dd><p>The minimum number of mixture components to consider (unless
 <code class="docutils literal notranslate"><span class="pre">max_components</span></code> is None, in which case this is the maximum number of
 components to consider). If <code class="docutils literal notranslate"><span class="pre">max_componens</span></code> is not None, <code class="docutils literal notranslate"><span class="pre">min_components</span></code>
 must be less than or equal to <code class="docutils literal notranslate"><span class="pre">max_components</span></code>.</p>
-</div></blockquote>
-<p><strong>max_components</strong> : int or None, default=None.</p>
-<blockquote>
-<div><p>The maximum number of mixture components to consider. Must be greater
+</dd>
+<dt><strong>max_components</strong><span class="classifier">int or None, default=None.</span></dt><dd><p>The maximum number of mixture components to consider. Must be greater
 than or equal to <code class="docutils literal notranslate"><span class="pre">min_components</span></code>.</p>
-</div></blockquote>
-<p><strong>covariance_type</strong> : {'all' (default), 'full', 'tied', 'diag', 'spherical'}, optional</p>
-<blockquote>
-<div><p>String or list/array describing the type of covariance parameters to use.
+</dd>
+<dt><strong>covariance_type</strong><span class="classifier">{'all' (default), 'full', 'tied', 'diag', 'spherical'}, optional</span></dt><dd><p>String or list/array describing the type of covariance parameters to use.
 If a string, it must be one of:</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -566,69 +565,50 @@ If a string, it must be one of:</p>
 <dt>If a list/array, it must be a list/array of strings containing only</dt><dd><p>'spherical', 'tied', 'diag', and/or 'full'.</p>
 </dd>
 </dl>
-</div></blockquote>
-<p><strong>tol</strong> : float, defaults to 1e-3.</p>
-<blockquote>
-<div><p>The convergence threshold. EM iterations will stop when the
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, defaults to 1e-3.</span></dt><dd><p>The convergence threshold. EM iterations will stop when the
 lower bound average gain is below this threshold.</p>
-</div></blockquote>
-<p><strong>reg_covar</strong> : float, defaults to 1e-6.</p>
-<blockquote>
-<div><p>Non-negative regularization added to the diagonal of covariance.
+</dd>
+<dt><strong>reg_covar</strong><span class="classifier">float, defaults to 1e-6.</span></dt><dd><p>Non-negative regularization added to the diagonal of covariance.
 Allows to assure that the covariance matrices are all positive.</p>
-</div></blockquote>
-<p><strong>max_iter</strong> : int, defaults to 100.</p>
-<blockquote>
-<div><p>The number of EM iterations to perform.</p>
-</div></blockquote>
-<p><strong>n_init</strong> : int, defaults to 1.</p>
-<blockquote>
-<div><p>The number of initializations to perform. The best results are kept.</p>
-</div></blockquote>
-<p><strong>init_params</strong> : {'kmeans', 'random'}, defaults to 'kmeans'.</p>
-<blockquote>
-<div><p>The method used to initialize the weights, the means and the
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int, defaults to 100.</span></dt><dd><p>The number of EM iterations to perform.</p>
+</dd>
+<dt><strong>n_init</strong><span class="classifier">int, defaults to 1.</span></dt><dd><p>The number of initializations to perform. The best results are kept.</p>
+</dd>
+<dt><strong>init_params</strong><span class="classifier">{'kmeans', 'random'}, defaults to 'kmeans'.</span></dt><dd><p>The method used to initialize the weights, the means and the
 precisions.
 Must be one of:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;kmeans&#39;</span> <span class="p">:</span> <span class="n">responsibilities</span> <span class="n">are</span> <span class="n">initialized</span> <span class="n">using</span> <span class="n">kmeans</span><span class="o">.</span>
 <span class="s1">&#39;random&#39;</span> <span class="p">:</span> <span class="n">responsibilities</span> <span class="n">are</span> <span class="n">initialized</span> <span class="n">randomly</span><span class="o">.</span>
 </pre></div>
 </div>
-</div></blockquote>
-<p><strong>random_state</strong> : int, RandomState instance or None, optional (default=None)</p>
-<blockquote>
-<div><p>If int, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the random number generator;
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int, RandomState instance or None, optional (default=None)</span></dt><dd><p>If int, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the random number generator;
 If RandomState instance, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the random number generator;
 If None, the random number generator is the RandomState instance used
 by <code class="docutils literal notranslate"><span class="pre">np.random</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_components_</strong> : int</p>
-<blockquote>
-<div><p>Optimal number of components based on BIC.</p>
-</div></blockquote>
-<p><strong>covariance_type_</strong> : str</p>
-<blockquote>
-<div><p>Optimal covariance type based on BIC.</p>
-</div></blockquote>
-<p><strong>model_</strong> : GaussianMixture object</p>
-<blockquote>
-<div><p>Fitted GaussianMixture object fitted with optimal number of components
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_components_</strong><span class="classifier">int</span></dt><dd><p>Optimal number of components based on BIC.</p>
+</dd>
+<dt><strong>covariance_type_</strong><span class="classifier">str</span></dt><dd><p>Optimal covariance type based on BIC.</p>
+</dd>
+<dt><strong>model_</strong><span class="classifier">GaussianMixture object</span></dt><dd><p>Fitted GaussianMixture object fitted with optimal number of components
 and optimal covariance structure.</p>
-</div></blockquote>
-<p><strong>bic_</strong> : pandas.DataFrame</p>
-<blockquote>
-<div><p>A pandas DataFrame of BIC values computed for all possible number of clusters
+</dd>
+<dt><strong>bic_</strong><span class="classifier">pandas.DataFrame</span></dt><dd><p>A pandas DataFrame of BIC values computed for all possible number of clusters
 given by <code class="docutils literal notranslate"><span class="pre">range(min_components,</span> <span class="pre">max_components</span> <span class="pre">+</span> <span class="pre">1)</span></code> and all covariance
 structures given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">covariance_type</span></code>.</p>
-</div></blockquote>
-<p><strong>ari_</strong> : pandas.DataFrame</p>
-<blockquote>
-<div><p>Only computed when y is given. Pandas Dataframe containing ARI values computed
+</dd>
+<dt><strong>ari_</strong><span class="classifier">pandas.DataFrame</span></dt><dd><p>Only computed when y is given. Pandas Dataframe containing ARI values computed
 for all possible number of clusters given by <code class="docutils literal notranslate"><span class="pre">range(min_components,</span>
 <span class="pre">max_components)</span></code> and all covariance structures given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">covariance_type</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <dl class="py method">
@@ -656,18 +636,16 @@ for all possible number of clusters given by <code class="docutils literal notra
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/gclust.html#GaussianCluster.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.GaussianCluster.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fits gaussian mixure model to the data.
 Estimate model parameters with the EM algorithm.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples,), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples,), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
@@ -690,24 +668,22 @@ ARI scores.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.GaussianCluster.fit_predict">
 <span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.GaussianCluster.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the models and predict clusters based on best model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples,), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples,), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array, shape (n_samples,)</p>
-<blockquote>
-<div><p>Component labels.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array, shape (n_samples,)</span></dt><dd><p>Component labels.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -725,19 +701,19 @@ ARI scores.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.GaussianCluster.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.GaussianCluster.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -746,24 +722,22 @@ contained subobjects that are estimators.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.GaussianCluster.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.GaussianCluster.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict clusters based on best model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples, ), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples, ), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array, shape (n_samples,)</p>
-<blockquote>
-<div><p>Component labels.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array, shape (n_samples,)</span></dt><dd><p>Component labels.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -782,21 +756,21 @@ ARI scores.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.GaussianCluster.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -813,25 +787,20 @@ cluster numbers are used and the clustering with the best selection
 criterion (bic/aic) is chosen.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>min_components</strong> : int, default=2.</p>
-<blockquote>
-<div><p>The minimum number of mixture components to consider (unless
+<dd class="field-odd"><dl>
+<dt><strong>min_components</strong><span class="classifier">int, default=2.</span></dt><dd><p>The minimum number of mixture components to consider (unless
 <code class="docutils literal notranslate"><span class="pre">max_components</span></code> is None, in which case this is the maximum number of
 components to consider). If <code class="docutils literal notranslate"><span class="pre">max_components</span></code> is not None, <code class="docutils literal notranslate"><span class="pre">min_components</span></code>
 must be less than or equal to <code class="docutils literal notranslate"><span class="pre">max_components</span></code>.
 If <code class="docutils literal notranslate"><span class="pre">label_init</span></code> is given, min_components must match number of unique labels
 in <code class="docutils literal notranslate"><span class="pre">label_init</span></code>.</p>
-</div></blockquote>
-<p><strong>max_components</strong> : int or None, default=10.</p>
-<blockquote>
-<div><p>The maximum number of mixture components to consider. Must be greater
+</dd>
+<dt><strong>max_components</strong><span class="classifier">int or None, default=10.</span></dt><dd><p>The maximum number of mixture components to consider. Must be greater
 than or equal to min_components.
 If label_init is given, min_components must match number of unique labels
 in label_init.</p>
-</div></blockquote>
-<p><strong>affinity</strong> : {'euclidean','manhattan','cosine','none', 'all' (default)}, optional</p>
-<blockquote>
-<div><p>String or list/array describing the type of affinities to use in agglomeration.
+</dd>
+<dt><strong>affinity</strong><span class="classifier">{'euclidean','manhattan','cosine','none', 'all' (default)}, optional</span></dt><dd><p>String or list/array describing the type of affinities to use in agglomeration.
 If a string, it must be one of:</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -865,10 +834,8 @@ If a string, it must be one of:</p>
 <p>Note that cosine similarity can only work when all of the rows are not the zero vector.
 If the input matrix has a zero row, cosine similarity will be skipped and a warning will
 be thrown.</p>
-</div></blockquote>
-<p><strong>linkage</strong> : {'ward','complete','average','single', 'all' (default)}, optional</p>
-<blockquote>
-<div><p>String or list/array describing the type of linkages to use in agglomeration.
+</dd>
+<dt><strong>linkage</strong><span class="classifier">{'ward','complete','average','single', 'all' (default)}, optional</span></dt><dd><p>String or list/array describing the type of linkages to use in agglomeration.
 If a string, it must be one of:</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -899,10 +866,8 @@ If a string, it must be one of:</p>
 </ul>
 <p>If a list/array, it must be a list/array of strings containing only
 'ward', 'complete', 'average', and/or 'single'.</p>
-</div></blockquote>
-<p><strong>covariance_type</strong> : {'full', 'tied', 'diag', 'spherical', 'all' (default)} , optional</p>
-<blockquote>
-<div><p>String or list/array describing the type of covariance parameters to use.
+</dd>
+<dt><strong>covariance_type</strong><span class="classifier">{'full', 'tied', 'diag', 'spherical', 'all' (default)} , optional</span></dt><dd><p>String or list/array describing the type of covariance parameters to use.
 If a string, it must be one of:</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -933,64 +898,48 @@ If a string, it must be one of:</p>
 </ul>
 <p>If a list/array, it must be a list/array of strings containing only
 'spherical', 'tied', 'diag', and/or 'spherical'.</p>
-</div></blockquote>
-<p><strong>random_state</strong> : int, RandomState instance or None, optional (default=None)</p>
-<blockquote>
-<div><p>There is randomness in k-means initialization of
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>. This parameter is passed to
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> to control the random state.
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int, RandomState instance or None, optional (default=None)</span></dt><dd><p>There is randomness in k-means initialization of
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>. This parameter is passed to
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> to control the random state.
 If int, random_state is used as the random number generator seed;
 If RandomState instance, random_state is the random number generator;
 If None, the random number generator is the RandomState instance used
 by <code class="docutils literal notranslate"><span class="pre">np.random</span></code>.</p>
-</div></blockquote>
-<p><strong>label_init</strong> : array-like, shape (n_samples,), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for samples if available. Used to initialize the model.
+</dd>
+<dt><strong>label_init</strong><span class="classifier">array-like, shape (n_samples,), optional (default=None)</span></dt><dd><p>List of labels for samples if available. Used to initialize the model.
 If provided, min_components and <code class="docutils literal notranslate"><span class="pre">max_components</span></code> must match the number of
 unique labels given here.</p>
-</div></blockquote>
-<p><strong>kmeans_n_init</strong> : int, optional (default = 1)</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code> is larger than 1 and <code class="docutils literal notranslate"><span class="pre">label_init</span></code> is None, additional
-<code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code>-1 runs of <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>
+</dd>
+<dt><strong>kmeans_n_init</strong><span class="classifier">int, optional (default = 1)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code> is larger than 1 and <code class="docutils literal notranslate"><span class="pre">label_init</span></code> is None, additional
+<code class="docutils literal notranslate"><span class="pre">kmeans_n_init</span></code>-1 runs of <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a>
 initialized with k-means will be performed
 for all covariance parameters in <code class="docutils literal notranslate"><span class="pre">covariance_type</span></code>.</p>
-</div></blockquote>
-<p><strong>max_iter</strong> : int, optional (default = 100).</p>
-<blockquote>
-<div><p>The maximum number of EM iterations to perform.</p>
-</div></blockquote>
-<p><strong>selection_criteria</strong> : str {&quot;bic&quot; or &quot;aic&quot;}, optional, (default=&quot;bic&quot;)</p>
-<blockquote>
-<div><p>select the best model based on Bayesian Information Criterion (bic) or
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int, optional (default = 100).</span></dt><dd><p>The maximum number of EM iterations to perform.</p>
+</dd>
+<dt><strong>selection_criteria</strong><span class="classifier">str {&quot;bic&quot; or &quot;aic&quot;}, optional, (default=&quot;bic&quot;)</span></dt><dd><p>select the best model based on Bayesian Information Criterion (bic) or
 Aikake Information Criterion (aic)</p>
-</div></blockquote>
-<p><strong>verbose</strong> : int, optional (default = 0)</p>
-<blockquote>
-<div><p>Enable verbose output. If 1 then it prints the current initialization and each
+</dd>
+<dt><strong>verbose</strong><span class="classifier">int, optional (default = 0)</span></dt><dd><p>Enable verbose output. If 1 then it prints the current initialization and each
 iteration step. If greater than 1 then it prints also the log probability and
 the time needed for each step.</p>
-</div></blockquote>
-<p><strong>max_agglom_size</strong> : int or None, optional (default = 2000)</p>
-<blockquote>
-<div><p>The maximum number of datapoints on which to do agglomerative clustering as the
+</dd>
+<dt><strong>max_agglom_size</strong><span class="classifier">int or None, optional (default = 2000)</span></dt><dd><p>The maximum number of datapoints on which to do agglomerative clustering as the
 initialization to GMM. If the number of datapoints is larger than this value,
 a random subset of the data is used for agglomerative initialization. If None,
 all data is used for agglomerative clustering for initialization.</p>
-</div></blockquote>
-<p><strong>n_jobs</strong> : int or None, optional (default = None)</p>
-<blockquote>
-<div><p>The number of jobs to use for the computation. This works by computing each of
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int or None, optional (default = None)</span></dt><dd><p>The number of jobs to use for the computation. This works by computing each of
 the initialization runs in parallel. None means 1 unless in a
 <code class="docutils literal notranslate"><span class="pre">joblib.parallel_backend</span> <span class="pre">context</span></code>. -1 means using all processors.
 See <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-n-jobs">https://scikit-learn.org/stable/glossary.html#term-n-jobs</a> for more details.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>results_</strong> : pandas.DataFrame</p>
-<blockquote>
-<div><p>Contains exhaustive information about all the clustering runs.
+<dd class="field-even"><dl>
+<dt><strong>results_</strong><span class="classifier">pandas.DataFrame</span></dt><dd><p>Contains exhaustive information about all the clustering runs.
 Columns are:</p>
 <dl class="simple">
 <dt>'model'<span class="classifier">GaussianMixture object</span></dt><dd><p>GMM clustering fit to the data</p>
@@ -1011,38 +960,23 @@ nan if y is not given</p>
 <dt>'reg_covar'<span class="classifier">float</span></dt><dd><p>regularization used in GMM</p>
 </dd>
 </dl>
-</div></blockquote>
-<dl class="simple">
+</dd>
 <dt><strong>criter_</strong><span class="classifier">the best (lowest) Bayesian Information Criterion</span></dt><dd></dd>
+<dt><strong>n_components_</strong><span class="classifier">int</span></dt><dd><p>number of clusters in the model with the best bic/aic</p>
+</dd>
+<dt><strong>covariance_type_</strong><span class="classifier">str</span></dt><dd><p>covariance type in the model with the best bic/aic</p>
+</dd>
+<dt><strong>affinity_</strong><span class="classifier">str</span></dt><dd><p>affinity used in the model with the best bic/aic</p>
+</dd>
+<dt><strong>linkage_</strong><span class="classifier">str</span></dt><dd><p>linkage used in the model with the best bic/aic</p>
+</dd>
+<dt><strong>reg_covar_</strong><span class="classifier">float</span></dt><dd><p>regularization used in the model with the best bic/aic</p>
+</dd>
+<dt><strong>ari_</strong><span class="classifier">float</span></dt><dd><p>ARI from the model with the best bic/aic, nan if no y is given</p>
+</dd>
+<dt><strong>model_</strong><span class="classifier"><a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a></span></dt><dd><p>object with the best bic/aic</p>
+</dd>
 </dl>
-<p><strong>n_components_</strong> : int</p>
-<blockquote>
-<div><p>number of clusters in the model with the best bic/aic</p>
-</div></blockquote>
-<p><strong>covariance_type_</strong> : str</p>
-<blockquote>
-<div><p>covariance type in the model with the best bic/aic</p>
-</div></blockquote>
-<p><strong>affinity_</strong> : str</p>
-<blockquote>
-<div><p>affinity used in the model with the best bic/aic</p>
-</div></blockquote>
-<p><strong>linkage_</strong> : str</p>
-<blockquote>
-<div><p>linkage used in the model with the best bic/aic</p>
-</div></blockquote>
-<p><strong>reg_covar_</strong> : float</p>
-<blockquote>
-<div><p>regularization used in the model with the best bic/aic</p>
-</div></blockquote>
-<p><strong>ari_</strong> : float</p>
-<blockquote>
-<div><p>ARI from the model with the best bic/aic, nan if no y is given</p>
-</div></blockquote>
-<p><strong>model_</strong> : <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a></p>
-<blockquote>
-<div><p>object with the best bic/aic</p>
-</div></blockquote>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1096,24 +1030,22 @@ Statistical Association, 93(441):294–302, 1998.</p>
 <dd><p>Fits gaussian mixture model to the data.
 Initialize with agglomerative clustering then
 estimate model parameters with EM algorithm.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples,), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples,), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1131,24 +1063,22 @@ ARI scores.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.AutoGMMCluster.fit_predict">
 <span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.AutoGMMCluster.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the models and predict clusters based on best model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples,), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples,), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array, shape (n_samples,)</p>
-<blockquote>
-<div><p>Component labels.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array, shape (n_samples,)</span></dt><dd><p>Component labels.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1166,19 +1096,19 @@ ARI scores.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.AutoGMMCluster.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.AutoGMMCluster.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1187,24 +1117,22 @@ contained subobjects that are estimators.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.AutoGMMCluster.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.AutoGMMCluster.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict clusters based on best model.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>List of n_features-dimensional data points. Each row
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>List of n_features-dimensional data points. Each row
 corresponds to a single data point.</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like, shape (n_samples, ), optional (default=None)</p>
-<blockquote>
-<div><p>List of labels for X if available. Used to compute
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like, shape (n_samples, ), optional (default=None)</span></dt><dd><p>List of labels for X if available. Used to compute
 ARI scores.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array, shape (n_samples,)</p>
-<blockquote>
-<div><p>Component labels.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array, shape (n_samples,)</span></dt><dd><p>Component labels.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1223,21 +1151,21 @@ ARI scores.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.cluster.AutoGMMCluster.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1252,51 +1180,39 @@ possible to update each component of a nested object.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.cluster.</span></span><span class="sig-name descname"><span class="pre">DivisiveCluster</span></span><a class="reference internal" href="../../_modules/graspologic/cluster/divisive_cluster.html#DivisiveCluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.DivisiveCluster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively clusters data based on a chosen clustering algorithm.
 This algorithm implements a &quot;divisive&quot; or &quot;top-down&quot; approach.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cluster_method</strong> : str {&quot;gmm&quot;, &quot;kmeans&quot;}, defaults to &quot;gmm&quot;.</p>
-<blockquote>
-<div><p>The underlying clustering method to apply. If &quot;gmm&quot; will use
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cluster_method</strong><span class="classifier">str {&quot;gmm&quot;, &quot;kmeans&quot;}, defaults to &quot;gmm&quot;.</span></dt><dd><p>The underlying clustering method to apply. If &quot;gmm&quot; will use
 <a class="reference internal" href="#graspologic.cluster.AutoGMMCluster" title="graspologic.cluster.AutoGMMCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">AutoGMMCluster</span></code></a>. If &quot;kmeans&quot;, will use
 <a class="reference internal" href="#graspologic.cluster.KMeansCluster" title="graspologic.cluster.KMeansCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">KMeansCluster</span></code></a>.</p>
-</div></blockquote>
-<p><strong>min_components</strong> : int, defaults to 1.</p>
-<blockquote>
-<div><p>The minimum number of mixture components/clusters to consider
+</dd>
+<dt><strong>min_components</strong><span class="classifier">int, defaults to 1.</span></dt><dd><p>The minimum number of mixture components/clusters to consider
 for the first split if &quot;gmm&quot; is selected as <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code>;
 and is set to 1 for later splits.
 If <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code> is &quot;kmeans&quot;, it is set to 2 for all splits.</p>
-</div></blockquote>
-<p><strong>max_components</strong> : int, defaults to 2.</p>
-<blockquote>
-<div><p>The maximum number of mixture components/clusters to consider
+</dd>
+<dt><strong>max_components</strong><span class="classifier">int, defaults to 2.</span></dt><dd><p>The maximum number of mixture components/clusters to consider
 at each split.</p>
-</div></blockquote>
-<p><strong>min_split</strong> : int, defaults to 1.</p>
-<blockquote>
-<div><p>The minimum size of a cluster for it to be considered to be split again.</p>
-</div></blockquote>
-<p><strong>max_level</strong> : int, defaults to 4.</p>
-<blockquote>
-<div><p>The maximum number of times to recursively cluster the data.</p>
-</div></blockquote>
-<p><strong>delta_criter</strong> : float, non-negative, defaults to 0.</p>
-<blockquote>
-<div><p>The smallest difference between selection criterion values of a new
+</dd>
+<dt><strong>min_split</strong><span class="classifier">int, defaults to 1.</span></dt><dd><p>The minimum size of a cluster for it to be considered to be split again.</p>
+</dd>
+<dt><strong>max_level</strong><span class="classifier">int, defaults to 4.</span></dt><dd><p>The maximum number of times to recursively cluster the data.</p>
+</dd>
+<dt><strong>delta_criter</strong><span class="classifier">float, non-negative, defaults to 0.</span></dt><dd><p>The smallest difference between selection criterion values of a new
 model and the current model that is required to accept the new model.
 Applicable only if <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code> is &quot;gmm&quot;.</p>
-</div></blockquote>
-<p><strong>cluster_kws</strong> : dict, defaults to {}</p>
-<blockquote>
-<div><p>Keyword arguments (except <code class="docutils literal notranslate"><span class="pre">min_components</span></code> and <code class="docutils literal notranslate"><span class="pre">max_components</span></code>) for chosen
+</dd>
+<dt><strong>cluster_kws</strong><span class="classifier">dict, defaults to {}</span></dt><dd><p>Keyword arguments (except <code class="docutils literal notranslate"><span class="pre">min_components</span></code> and <code class="docutils literal notranslate"><span class="pre">max_components</span></code>) for chosen
 clustering method.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>model_</strong> : GaussianMixture or KMeans object</p>
-<blockquote>
-<div><p>Fitted clustering object based on which <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code> was used.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>model_</strong><span class="classifier">GaussianMixture or KMeans object</span></dt><dd><p>Fitted clustering object based on which <code class="docutils literal notranslate"><span class="pre">cluster_method</span></code> was used.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1349,17 +1265,17 @@ Engineering, 4(1), 13-26.</p>
 <dt class="sig sig-object py" id="graspologic.cluster.DivisiveCluster.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/divisive_cluster.html#DivisiveCluster.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.DivisiveCluster.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fits clustering models to the data as well as resulting clusters</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>) -- </p>
@@ -1375,29 +1291,25 @@ Engineering, 4(1), 13-26.</p>
 <span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/divisive_cluster.html#DivisiveCluster.fit_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.DivisiveCluster.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fits clustering models to the data as well as resulting clusters
 and using fitted models to predict a hierarchy of labels</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd></dd>
-</dl>
-<p><strong>fcluster: bool, default=False</strong></p>
-<blockquote>
-<div><p>if True, returned labels will be re-numbered so that each column
+<dt><strong>fcluster: bool, default=False</strong></dt><dd><p>if True, returned labels will be re-numbered so that each column
 of labels represents a flat clustering at current level,
 and each label corresponds to a cluster indexed the same as
 the corresponding node in the overall clustering dendrogram</p>
-</div></blockquote>
-<p><strong>level: int, optional (default=None)</strong></p>
-<blockquote>
-<div><p>the level of a single flat clustering to generate
+</dd>
+<dt><strong>level: int, optional (default=None)</strong></dt><dd><p>the level of a single flat clustering to generate
 only available if <code class="docutils literal notranslate"><span class="pre">fcluster</span></code> is True</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array_label, shape (n_samples, n_levels)</p>
-<blockquote>
-<div><p>if no level specified; otherwise, shape (n_samples,)</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array_label, shape (n_samples, n_levels)</span></dt><dd><p>if no level specified; otherwise, shape (n_samples,)</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1416,29 +1328,25 @@ only available if <code class="docutils literal notranslate"><span class="pre">f
 <dt class="sig sig-object py" id="graspologic.cluster.DivisiveCluster.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/cluster/divisive_cluster.html#DivisiveCluster.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.cluster.DivisiveCluster.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts a hierarchy of labels based on fitted models</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd></dd>
-</dl>
-<p><strong>fcluster: bool, default=False</strong></p>
-<blockquote>
-<div><p>if True, returned labels will be re-numbered so that each column
+<dt><strong>fcluster: bool, default=False</strong></dt><dd><p>if True, returned labels will be re-numbered so that each column
 of labels represents a flat clustering at current level,
 and each label corresponds to a cluster indexed the same as
 the corresponding node in the overall clustering dendrogram</p>
-</div></blockquote>
-<p><strong>level: int, optional (default=None)</strong></p>
-<blockquote>
-<div><p>the level of a single flat clustering to generate
+</dd>
+<dt><strong>level: int, optional (default=None)</strong></dt><dd><p>the level of a single flat clustering to generate
 only available if <code class="docutils literal notranslate"><span class="pre">fcluster</span></code> is True</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>labels</strong> : array-like, shape (n_samples, n_levels)</p>
-<blockquote>
-<div><p>if no level specified; otherwise, shape (n_samples,)</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">array-like, shape (n_samples, n_levels)</span></dt><dd><p>if no level specified; otherwise, shape (n_samples,)</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

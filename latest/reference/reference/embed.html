@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Embedding &mdash; graspologic 2.0.0 documentation</title>
+  <title>Embedding &mdash; graspologic 2.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +35,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.0
+                2.0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -64,6 +65,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
@@ -132,7 +134,13 @@
 <li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
@@ -153,7 +161,17 @@
 <li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
 </ul>
@@ -255,10 +273,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
-          <li><a href="index.html">Reference</a> &raquo;</li>
-      <li>Embedding</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Embedding</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/reference/reference/embed.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -301,53 +319,41 @@
 <span class="sig-prename descclassname"><span class="pre">graspologic.embed.</span></span><span class="sig-name descname"><span class="pre">select_dimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_elbows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_likelihoods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/svd.html#select_dimension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.select_dimension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates profile likelihood from array based on Zhu and Godsie method.
 Elbows correspond to the optimal embedding dimension.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : 1d or 2d array-like</p>
-<blockquote>
-<div><p>Input array generate profile likelihoods for. If 1d-array, it should be
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">1d or 2d array-like</span></dt><dd><p>Input array generate profile likelihoods for. If 1d-array, it should be
 sorted in decreasing order. If 2d-array, shape should be
 (n_samples, n_features).</p>
-</div></blockquote>
-<p><strong>n_components</strong> : int, optional, default: None.</p>
-<blockquote>
-<div><p>Number of components to embed. If None, <code class="docutils literal notranslate"><span class="pre">n_components</span> <span class="pre">=</span>
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int, optional, default: None.</span></dt><dd><p>Number of components to embed. If None, <code class="docutils literal notranslate"><span class="pre">n_components</span> <span class="pre">=</span>
 <span class="pre">floor(log2(min(n_samples,</span> <span class="pre">n_features)))</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">X</span></code> is 1d-array.</p>
-</div></blockquote>
-<p><strong>n_elbows</strong> : int, optional, default: 2.</p>
-<blockquote>
-<div><p>Number of likelihood elbows to return. Must be <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">1</span></code>.</p>
-</div></blockquote>
-<p><strong>threshold</strong> : float, int, optional, default: None</p>
-<blockquote>
-<div><p>If given, only consider the singular values that are <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">threshold</span></code>. Must
+</dd>
+<dt><strong>n_elbows</strong><span class="classifier">int, optional, default: 2.</span></dt><dd><p>Number of likelihood elbows to return. Must be <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">1</span></code>.</p>
+</dd>
+<dt><strong>threshold</strong><span class="classifier">float, int, optional, default: None</span></dt><dd><p>If given, only consider the singular values that are <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">threshold</span></code>. Must
 be <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">0</span></code>.</p>
-</div></blockquote>
-<p><strong>return_likelihoods</strong> : bool, optional, default: False</p>
-<blockquote>
-<div><p>If True, returns the all likelihoods associated with each elbow.</p>
-</div></blockquote>
+</dd>
+<dt><strong>return_likelihoods</strong><span class="classifier">bool, optional, default: False</span></dt><dd><p>If True, returns the all likelihoods associated with each elbow.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>elbows</strong> : list</p>
-<blockquote>
-<div><p>Elbows indicate subsequent optimal embedding dimensions. Number of
+<dd class="field-even"><dl class="simple">
+<dt><strong>elbows</strong><span class="classifier">list</span></dt><dd><p>Elbows indicate subsequent optimal embedding dimensions. Number of
 elbows may be less than <code class="docutils literal notranslate"><span class="pre">n_elbows</span></code> if there are not enough singular
 values.</p>
-</div></blockquote>
-<p><strong>sing_vals</strong> : list</p>
-<blockquote>
-<div><p>The singular values associated with each elbow.</p>
-</div></blockquote>
-<p><strong>likelihoods</strong> : list of array-like</p>
-<blockquote>
-<div><p>Array of likelihoods of the corresponding to each elbow. Only returned
+</dd>
+<dt><strong>sing_vals</strong><span class="classifier">list</span></dt><dd><p>The singular values associated with each elbow.</p>
+</dd>
+<dt><strong>likelihoods</strong><span class="classifier">list of array-like</span></dt><dd><p>Array of likelihoods of the corresponding to each elbow. Only returned
 if <code class="docutils literal notranslate"><span class="pre">return_likelihoods</span></code> is True.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>X</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>n_elbows</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
@@ -381,81 +387,67 @@ SciPy's wrapper for LAPACK or Sklearn's implementation of randomized SVD.</p>
 if number of target dimension is not specified.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like, shape (n_samples, n_features)</p>
-<blockquote>
-<div><p>The data to perform svd on.</p>
-</div></blockquote>
-<p><strong>n_components</strong> : int or None, default = None</p>
-<blockquote>
-<div><p>Desired dimensionality of output data. If &quot;full&quot;,
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>The data to perform svd on.</p>
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int or None, default = None</span></dt><dd><p>Desired dimensionality of output data. If &quot;full&quot;,
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">min(X.shape)</span></code>. Otherwise, <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be
 <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions will be chosen by
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a> using <code class="docutils literal notranslate"><span class="pre">n_elbows</span></code> argument.</p>
-</div></blockquote>
-<p><strong>n_elbows</strong> : int, optional, default: 2</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
+</dd>
+<dt><strong>n_elbows</strong><span class="classifier">int, optional, default: 2</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>. Otherwise, ignored.</p>
-</div></blockquote>
-<p><strong>algorithm</strong> : {'randomized' (default), 'full', 'truncated'}, optional</p>
-<blockquote>
-<div><p>SVD solver to use:</p>
+</dd>
+<dt><strong>algorithm</strong><span class="classifier">{'randomized' (default), 'full', 'truncated'}, optional</span></dt><dd><p>SVD solver to use:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>'randomized'</dt><dd><p>Computes randomized svd using
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>'eigsh'</dt><dd><p>Computes svd of a real, symmetric square matrix using
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.eigsh.html#scipy.sparse.linalg.eigsh" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.eigsh()</span></code></a>. Extremely fast for these types of
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.eigsh.html#scipy.sparse.linalg.eigsh" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.eigsh()</span></code></a>. Extremely fast for these types of
 matrices.</p>
 </dd>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>n_iter</strong> : int, optional (default = 5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>n_iter</strong><span class="classifier">int, optional (default = 5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-<blockquote>
-<div><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</span></dt><dd><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
 randomized svd solver for deterministic, albeit pseudo-randomized behavior.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>U</strong> : array-like, shape (n_samples, n_components)</p>
-<blockquote>
-<div><p>Left singular vectors corresponding to singular values.</p>
-</div></blockquote>
-<p><strong>D</strong> : array-like, shape (n_components)</p>
-<blockquote>
-<div><p>Singular values in decreasing order, as a 1d array.</p>
-</div></blockquote>
-<p><strong>V</strong> : array-like, shape (n_components, n_samples)</p>
-<blockquote>
-<div><p>Right singular vectors corresponding to singular values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>U</strong><span class="classifier">array-like, shape (n_samples, n_components)</span></dt><dd><p>Left singular vectors corresponding to singular values.</p>
+</dd>
+<dt><strong>D</strong><span class="classifier">array-like, shape (n_components)</span></dt><dd><p>Singular values in decreasing order, as a 1d array.</p>
+</dd>
+<dt><strong>V</strong><span class="classifier">array-like, shape (n_components, n_samples)</span></dt><dd><p>Right singular vectors corresponding to singular values.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>X</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>n_elbows</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>algorithm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'full'</em><em>, </em><em>'truncated'</em><em>, </em><em>'randomized'</em><em>, </em><em>'eigsh'</em><em>]</em>) -- </p></li>
@@ -492,91 +484,71 @@ dimensions automatically (see <a class="reference internal" href="#graspologic.e
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embedding Tutorial</a></p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_components</strong> : int or None, default = None</p>
-<blockquote>
-<div><p>Desired dimensionality of output data. If &quot;full&quot;,
+<dd class="field-odd"><dl>
+<dt><strong>n_components</strong><span class="classifier">int or None, default = None</span></dt><dd><p>Desired dimensionality of output data. If &quot;full&quot;,
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">min(X.shape)</span></code>. Otherwise, <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be
 <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions will be chosen by
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a> using <code class="docutils literal notranslate"><span class="pre">n_elbows</span></code> argument.</p>
-</div></blockquote>
-<p><strong>n_elbows</strong> : int, optional, default: 2</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
+</dd>
+<dt><strong>n_elbows</strong><span class="classifier">int, optional, default: 2</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>. Otherwise, ignored.</p>
-</div></blockquote>
-<p><strong>algorithm</strong> : {'randomized' (default), 'full', 'truncated'}, optional</p>
-<blockquote>
-<div><p>SVD solver to use:</p>
+</dd>
+<dt><strong>algorithm</strong><span class="classifier">{'randomized' (default), 'full', 'truncated'}, optional</span></dt><dd><p>SVD solver to use:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>'randomized'</dt><dd><p>Computes randomized svd using
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>n_iter</strong> : int, optional (default = 5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>n_iter</strong><span class="classifier">int, optional (default = 5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>check_lcc</strong> : bool , optional (default = True)</p>
-<blockquote>
-<div><p>Whether to check if input graph is connected. May result in non-optimal
+</dd>
+<dt><strong>check_lcc</strong><span class="classifier">bool , optional (default = True)</span></dt><dd><p>Whether to check if input graph is connected. May result in non-optimal
 results if the graph is unconnected. If True and input is unconnected,
 a UserWarning is thrown. Not checking for connectedness may result in
 faster computation.</p>
-</div></blockquote>
-<p><strong>diag_aug</strong> : bool, optional (default = True)</p>
-<blockquote>
-<div><p>Whether to replace the main diagonal of the adjacency matrix with a vector
+</dd>
+<dt><strong>diag_aug</strong><span class="classifier">bool, optional (default = True)</span></dt><dd><p>Whether to replace the main diagonal of the adjacency matrix with a vector
 corresponding to the degree (or sum of edge weights for a weighted network)
 before embedding. Empirically, this produces latent position estimates closer
 to the ground truth.</p>
-</div></blockquote>
-<p><strong>concat</strong> : bool, optional (default False)</p>
-<blockquote>
-<div><p>If graph is directed, whether to concatenate left and right (out and in) latent
+</dd>
+<dt><strong>concat</strong><span class="classifier">bool, optional (default False)</span></dt><dd><p>If graph is directed, whether to concatenate left and right (out and in) latent
 positions along axis 1.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-<blockquote>
-<div><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</span></dt><dd><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
 randomized svd solver for deterministic, albeit pseudo-randomized behavior.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_features_in_: int</strong></p>
-<blockquote>
-<div><p>Number of features passed to the
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_features_in_: int</strong></dt><dd><p>Number of features passed to the
 <a class="reference internal" href="#graspologic.embed.AdjacencySpectralEmbed.fit" title="graspologic.embed.AdjacencySpectralEmbed.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a> method.</p>
-</div></blockquote>
-<p><strong>latent_left_</strong> : array, shape (n_samples, n_components)</p>
-<blockquote>
-<div><p>Estimated left latent positions of the graph.</p>
-</div></blockquote>
-<p><strong>latent_right_</strong> : array, shape (n_samples, n_components), or None</p>
-<blockquote>
-<div><p>Only computed when the graph is directed, or adjacency matrix is assymetric.
+</dd>
+<dt><strong>latent_left_</strong><span class="classifier">array, shape (n_samples, n_components)</span></dt><dd><p>Estimated left latent positions of the graph.</p>
+</dd>
+<dt><strong>latent_right_</strong><span class="classifier">array, shape (n_samples, n_components), or None</span></dt><dd><p>Only computed when the graph is directed, or adjacency matrix is assymetric.
 Estimated right latent positions of the graph. Otherwise, None.</p>
-</div></blockquote>
-<p><strong>singular_values_</strong> : array, shape (n_components)</p>
-<blockquote>
-<div><p>Singular values associated with the latent position matrices.</p>
-</div></blockquote>
+</dd>
+<dt><strong>singular_values_</strong><span class="classifier">array, shape (n_components)</span></dt><dd><p>Singular values associated with the latent position matrices.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -634,25 +606,23 @@ of Machine Learning Research, 80, 2975-2984.</p>
 <dt class="sig sig-object py" id="graspologic.embed.AdjacencySpectralEmbed.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/ase.html#AdjacencySpectralEmbed.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.AdjacencySpectralEmbed.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit ASE model to input graph</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : array-like, scipy.sparse.csr_matrix, or networkx.Graph</p>
-<blockquote>
-<div><p>Input graph to embed.</p>
-</div></blockquote>
-<dl class="simple">
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array-like, scipy.sparse.csr_matrix, or networkx.Graph</span></dt><dd><p>Input graph to embed.</p>
+</dd>
 <dt><strong>y: Ignored</strong></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
 <li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
@@ -669,26 +639,26 @@ of Machine Learning Research, 80, 2975-2984.</p>
 <span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.AdjacencySpectralEmbed.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model with graphs and apply the transformation.</p>
 <p>n_dimension is either automatically determined or based on user input.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph: np.ndarray or networkx.Graph</strong></p>
-<blockquote>
-<div><p>Input graph to embed.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph: np.ndarray or networkx.Graph</strong></dt><dd><p>Input graph to embed.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray OR length 2 tuple of np.ndarray.</p>
-<blockquote>
-<div><p>If undirected then returns single np.ndarray of latent position,
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">np.ndarray OR length 2 tuple of np.ndarray.</span></dt><dd><p>If undirected then returns single np.ndarray of latent position,
 shape(n_vertices, n_components). If directed, <code class="docutils literal notranslate"><span class="pre">concat</span></code> is True then
 concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
 If directed, <code class="docutils literal notranslate"><span class="pre">concat</span></code> is False then tuple of the latent matrices. Each of
 shape (n_vertices, n_components).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
 <li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
@@ -704,19 +674,19 @@ shape (n_vertices, n_components).</p>
 <dt class="sig sig-object py" id="graspologic.embed.AdjacencySpectralEmbed.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.AdjacencySpectralEmbed.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -726,21 +696,21 @@ contained subobjects that are estimators.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.AdjacencySpectralEmbed.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -753,21 +723,20 @@ vertices. For more details on transforming out-of-sample vertices, see <a class=
 <p>For mathematical background, see [2].</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like or tuple, original shape or (n_oos_vertices, n_vertices).</p>
-<blockquote>
-<div><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like or tuple, original shape or (n_oos_vertices, n_vertices).</span></dt><dd><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
 If <code class="docutils literal notranslate"><span class="pre">X</span></code> is the original fitted matrix, returns a matrix close to
 <code class="docutils literal notranslate"><span class="pre">self.fit_transform(X)</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an out-of-sample matrix, n_oos_vertices is the number
 of new vertices, and n_vertices is the number of vertices in the
 original graph. If tuple, graph is directed and <code class="docutils literal notranslate"><span class="pre">X[0]</span></code> contains
 edges from out-of-sample vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray OR length 2 tuple of np.ndarray</p>
-<blockquote>
-<div><p>Array of latent positions, shape (n_oos_vertices, n_components) or
+<dd class="field-even"><dl>
+<dt><strong>out</strong><span class="classifier">np.ndarray OR length 2 tuple of np.ndarray</span></dt><dd><p>Array of latent positions, shape (n_oos_vertices, n_components) or
 (n_vertices, n_components). Transforms the fitted matrix if it was passed
 in.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an array or tuple containing adjacency vectors corresponding to
@@ -777,7 +746,8 @@ If undirected, returns array.
 If directed, returns <code class="docutils literal notranslate"><span class="pre">(X_out,</span> <span class="pre">X_in)</span></code>, where <code class="docutils literal notranslate"><span class="pre">X_out</span></code> contains
 latent positions corresponding to nodes with edges from out-of-sample
 vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -815,94 +785,72 @@ the dimensionality to the specified <code class="docutils literal notranslate"><
 unspecified, can find a number of dimensions automatically.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>form</strong> : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional</p>
-<blockquote>
-<div><p>Specifies the type of Laplacian normalization to use. See
+<dd class="field-odd"><dl class="simple">
+<dt><strong>form</strong><span class="classifier">{'DAD' (default), 'I-DAD', 'R-DAD'}, optional</span></dt><dd><p>Specifies the type of Laplacian normalization to use. See
 <a class="reference internal" href="utils.html#graspologic.utils.to_laplacian" title="graspologic.utils.to_laplacian"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_laplacian()</span></code></a> for more details regarding form.</p>
-</div></blockquote>
-<p><strong>n_components</strong> : int or None, default = None</p>
-<blockquote>
-<div><p>Desired dimensionality of output data. If &quot;full&quot;,
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int or None, default = None</span></dt><dd><p>Desired dimensionality of output data. If &quot;full&quot;,
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">min(X.shape)</span></code>. Otherwise, <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be
 <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions will be chosen by
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a> using <code class="docutils literal notranslate"><span class="pre">n_elbows</span></code> argument.</p>
-</div></blockquote>
-<p><strong>n_elbows</strong> : int, optional, default: 2</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
+</dd>
+<dt><strong>n_elbows</strong><span class="classifier">int, optional, default: 2</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>. Otherwise, ignored.</p>
-</div></blockquote>
-<p><strong>algorithm</strong> : {'randomized' (default), 'full', 'truncated'}, optional</p>
-<blockquote>
-<div><p>SVD solver to use:</p>
+</dd>
+<dt><strong>algorithm</strong><span class="classifier">{'randomized' (default), 'full', 'truncated'}, optional</span></dt><dd><p>SVD solver to use:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>'randomized'</dt><dd><p>Computes randomized svd using
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a></p>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>n_iter</strong> : int, optional (default = 5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>n_iter</strong><span class="classifier">int, optional (default = 5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>check_lcc</strong> : bool , optional (defult = True)</p>
-<blockquote>
-<div><p>Whether to check if input graph is connected. May result in non-optimal
+</dd>
+<dt><strong>check_lcc</strong><span class="classifier">bool , optional (defult = True)</span></dt><dd><p>Whether to check if input graph is connected. May result in non-optimal
 results if the graph is unconnected. If True and input is unconnected,
 a UserWarning is thrown. Not checking for connectedness may result in
 faster computation.</p>
-</div></blockquote>
-<p><strong>regularizer: int, float or None, optional (default=None)</strong></p>
-<blockquote>
-<div><p>Constant to be added to the diagonal of degree matrix. If None, average
+</dd>
+<dt><strong>regularizer: int, float or None, optional (default=None)</strong></dt><dd><p>Constant to be added to the diagonal of degree matrix. If None, average
 node degree is added. If int or float, must be &gt;= 0. Only used when
 <code class="docutils literal notranslate"><span class="pre">form</span></code> is 'R-DAD'.</p>
-</div></blockquote>
-<p><strong>concat</strong> : bool, optional (default False)</p>
-<blockquote>
-<div><p>If graph is directed, whether to concatenate left and right (out and in) latent
+</dd>
+<dt><strong>concat</strong><span class="classifier">bool, optional (default False)</span></dt><dd><p>If graph is directed, whether to concatenate left and right (out and in) latent
 positions along axis 1.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_features_in_: int</strong></p>
-<blockquote>
-<div><p>Number of features passed to the
+<dd class="field-even"><dl>
+<dt><strong>n_features_in_: int</strong></dt><dd><p>Number of features passed to the
 <a class="reference internal" href="#graspologic.embed.LaplacianSpectralEmbed.fit" title="graspologic.embed.LaplacianSpectralEmbed.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a> method.</p>
-</div></blockquote>
-<p><strong>latent_left_</strong> : array, shape (n_samples, n_components)</p>
-<blockquote>
-<div><p>Estimated left latent positions of the graph.</p>
-</div></blockquote>
-<p><strong>latent_right_</strong> : array, shape (n_samples, n_components), or None</p>
-<blockquote>
-<div><p>Only computed when the graph is directed, or adjacency matrix is assymetric.
+</dd>
+<dt><strong>latent_left_</strong><span class="classifier">array, shape (n_samples, n_components)</span></dt><dd><p>Estimated left latent positions of the graph.</p>
+</dd>
+<dt><strong>latent_right_</strong><span class="classifier">array, shape (n_samples, n_components), or None</span></dt><dd><p>Only computed when the graph is directed, or adjacency matrix is assymetric.
 Estimated right latent positions of the graph. Otherwise, None.</p>
-</div></blockquote>
-<p><strong>singular_values_</strong> : array, shape (n_components)</p>
-<blockquote>
-<div><p>Singular values associated with the latent position matrices.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-<blockquote>
-<div><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
+</dd>
+<dt><strong>singular_values_</strong><span class="classifier">array, shape (n_components)</span></dt><dd><p>Singular values associated with the latent position matrices.</p>
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</span></dt><dd><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
 randomized svd solver for deterministic, albeit pseudo-randomized behavior.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -966,22 +914,22 @@ Vol. 39(4), pp. 1878-1915, 2011.</p>
 <p>By default, uses the Laplacian normalization of the form:</p>
 <div class="math notranslate nohighlight">
 \[L = D^{-1/2} A D^{-1/2}\]</div>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> : array-like, scipy.sparse.csr_matrix, or networkx.Graph</p>
-<blockquote>
-<div><p>Input graph to embed. see graspologic.utils.import_graph</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array-like, scipy.sparse.csr_matrix, or networkx.Graph</span></dt><dd><p>Input graph to embed. see graspologic.utils.import_graph</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
 <li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
@@ -998,26 +946,26 @@ Vol. 39(4), pp. 1878-1915, 2011.</p>
 <span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.LaplacianSpectralEmbed.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model with graphs and apply the transformation.</p>
 <p>n_dimension is either automatically determined or based on user input.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph: np.ndarray or networkx.Graph</strong></p>
-<blockquote>
-<div><p>Input graph to embed.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph: np.ndarray or networkx.Graph</strong></dt><dd><p>Input graph to embed.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray OR length 2 tuple of np.ndarray.</p>
-<blockquote>
-<div><p>If undirected then returns single np.ndarray of latent position,
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">np.ndarray OR length 2 tuple of np.ndarray.</span></dt><dd><p>If undirected then returns single np.ndarray of latent position,
 shape(n_vertices, n_components). If directed, <code class="docutils literal notranslate"><span class="pre">concat</span></code> is True then
 concatenate latent matrices on axis 1, shape(n_vertices, 2*n_components).
 If directed, <code class="docutils literal notranslate"><span class="pre">concat</span></code> is False then tuple of the latent matrices. Each of
 shape (n_vertices, n_components).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 <li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
 <li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
@@ -1033,19 +981,19 @@ shape (n_vertices, n_components).</p>
 <dt class="sig sig-object py" id="graspologic.embed.LaplacianSpectralEmbed.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.LaplacianSpectralEmbed.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1055,21 +1003,21 @@ contained subobjects that are estimators.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.LaplacianSpectralEmbed.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1082,21 +1030,20 @@ vertices. For more details on transforming out-of-sample vertices, see <a class=
 <p>For mathematical background, see [2].</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like or tuple, original shape or (n_oos_vertices, n_vertices).</p>
-<blockquote>
-<div><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like or tuple, original shape or (n_oos_vertices, n_vertices).</span></dt><dd><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
 If <code class="docutils literal notranslate"><span class="pre">X</span></code> is the original fitted matrix, returns a matrix close to
 <code class="docutils literal notranslate"><span class="pre">self.fit_transform(X)</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an out-of-sample matrix, n_oos_vertices is the number
 of new vertices, and n_vertices is the number of vertices in the
 original graph. If tuple, graph is directed and <code class="docutils literal notranslate"><span class="pre">X[0]</span></code> contains
 edges from out-of-sample vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray OR length 2 tuple of np.ndarray</p>
-<blockquote>
-<div><p>Array of latent positions, shape (n_oos_vertices, n_components) or
+<dd class="field-even"><dl>
+<dt><strong>out</strong><span class="classifier">np.ndarray OR length 2 tuple of np.ndarray</span></dt><dd><p>Array of latent positions, shape (n_oos_vertices, n_components) or
 (n_vertices, n_components). Transforms the fitted matrix if it was passed
 in.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an array or tuple containing adjacency vectors corresponding to
@@ -1106,7 +1053,8 @@ If undirected, returns array.
 If directed, returns <code class="docutils literal notranslate"><span class="pre">(X_out,</span> <span class="pre">X_in)</span></code>, where <code class="docutils literal notranslate"><span class="pre">X_out</span></code> contains
 latent positions corresponding to nodes with edges from out-of-sample
 vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1139,51 +1087,32 @@ of Machine Learning Research, 80, 2975-2984</p>
 <span class="sig-prename descclassname"><span class="pre">graspologic.embed.</span></span><span class="sig-name descname"><span class="pre">node2vec_embed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_walks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">walk_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_hyperparameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inout_hyperparameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate_walk_lengths_by_node_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/n2v.html#node2vec_embed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.node2vec_embed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a node2vec embedding from a given graph. Will follow the word2vec
 algorithm to create the embedding.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph: Union[nx.Graph, nx.DiGraph]</strong></p>
-<blockquote>
-<div><p>A networkx graph or digraph.  A multigraph should be turned into a
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph: Union[nx.Graph, nx.DiGraph]</strong></dt><dd><p>A networkx graph or digraph.  A multigraph should be turned into a
 non-multigraph so that the calling user properly handles the multi-edges
 (i.e. aggregate weights or take last edge weight). If the graph is unweighted,
 the weight of each edge will default to 1.</p>
-</div></blockquote>
-<p><strong>num_walks</strong> : int</p>
-<blockquote>
-<div><p>Number of walks per source. Default is 10.</p>
-</div></blockquote>
-<p><strong>walk_length: int</strong></p>
-<blockquote>
-<div><p>Length of walk per source. Default is 40.</p>
-</div></blockquote>
-<p><strong>return_hyperparameter</strong> : float</p>
-<blockquote>
-<div><p>Return hyperparameter (p). Default is 1.0</p>
-</div></blockquote>
-<p><strong>inout_hyperparameter</strong> : float</p>
-<blockquote>
-<div><p>Inout hyperparameter (q). Default is 1.0</p>
-</div></blockquote>
-<p><strong>dimensions</strong> : int</p>
-<blockquote>
-<div><p>Dimensionality of the word vectors. Default is 128.</p>
-</div></blockquote>
-<p><strong>window_size</strong> : int</p>
-<blockquote>
-<div><p>Maximum distance between the current and predicted word within a sentence.
+</dd>
+<dt><strong>num_walks</strong><span class="classifier">int</span></dt><dd><p>Number of walks per source. Default is 10.</p>
+</dd>
+<dt><strong>walk_length: int</strong></dt><dd><p>Length of walk per source. Default is 40.</p>
+</dd>
+<dt><strong>return_hyperparameter</strong><span class="classifier">float</span></dt><dd><p>Return hyperparameter (p). Default is 1.0</p>
+</dd>
+<dt><strong>inout_hyperparameter</strong><span class="classifier">float</span></dt><dd><p>Inout hyperparameter (q). Default is 1.0</p>
+</dd>
+<dt><strong>dimensions</strong><span class="classifier">int</span></dt><dd><p>Dimensionality of the word vectors. Default is 128.</p>
+</dd>
+<dt><strong>window_size</strong><span class="classifier">int</span></dt><dd><p>Maximum distance between the current and predicted word within a sentence.
 Default is 2.</p>
-</div></blockquote>
-<p><strong>workers</strong> : int</p>
-<blockquote>
-<div><p>Use these many worker threads to train the model. Default is 8.</p>
-</div></blockquote>
-<p><strong>iterations</strong> : int</p>
-<blockquote>
-<div><p>Number of epochs in stochastic gradient descent (SGD). Default is 3.</p>
-</div></blockquote>
-<p><strong>interpolate_walk_lengths_by_node_degree</strong> : bool</p>
-<blockquote>
-<div><p>Use a dynamic walk length that corresponds to each nodes
+</dd>
+<dt><strong>workers</strong><span class="classifier">int</span></dt><dd><p>Use these many worker threads to train the model. Default is 8.</p>
+</dd>
+<dt><strong>iterations</strong><span class="classifier">int</span></dt><dd><p>Number of epochs in stochastic gradient descent (SGD). Default is 3.</p>
+</dd>
+<dt><strong>interpolate_walk_lengths_by_node_degree</strong><span class="classifier">bool</span></dt><dd><p>Use a dynamic walk length that corresponds to each nodes
 degree. If the node is in the bottom 20 percentile, default to a walk length of
 1. If it is in the top 10 percentile, use <code class="docutils literal notranslate"><span class="pre">walk_length</span></code>. If it is in the
 20-80 percentiles, linearly interpolate between 1 and <code class="docutils literal notranslate"><span class="pre">walk_length</span></code>.
@@ -1192,28 +1121,27 @@ low degree node has the same number of walks as a high degree node (which it
 will if this setting is not on), then the lower degree nodes will take a
 smaller breadth of random walks when compared to the high degree nodes. This
 will result in your lower degree walks dominating your higher degree nodes.</p>
-</div></blockquote>
-<p><strong>random_seed</strong> : int</p>
-<blockquote>
-<div><p>Seed to be used for reproducible results. Default is None and will produce a
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">int</span></dt><dd><p>Seed to be used for reproducible results. Default is None and will produce a
 random output. Note that for a fully deterministically-reproducible run, you
 must also limit to a single worker thread (<cite>workers=1</cite>), to eliminate ordering
 jitter from OS thread scheduling. In addition the environment variable
 <code class="docutils literal notranslate"><span class="pre">PYTHONHASHSEED</span></code> must be set to control hash randomization.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tuple[np.array, List[Any]]</p>
-<blockquote>
-<div><p>A tuple containing a matrix, with each row index corresponding to the embedding
+<dd class="field-even"><dl class="simple">
+<dt>Tuple[np.array, List[Any]]</dt><dd><p>A tuple containing a matrix, with each row index corresponding to the embedding
 for each node. The tuple also contains a vector containing the corresponding
 vertex labels for each row in the matrix. The matrix and vector are
 positionally correlated.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.6)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.8)"><em>DiGraph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>num_walks</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>walk_length</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>return_hyperparameter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
@@ -1262,97 +1190,73 @@ using adjacency spectral embedding.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs Tutorial</a></p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_components</strong> : int or None, default = None</p>
-<blockquote>
-<div><p>Desired dimensionality of output data. If &quot;full&quot;,
+<dd class="field-odd"><dl>
+<dt><strong>n_components</strong><span class="classifier">int or None, default = None</span></dt><dd><p>Desired dimensionality of output data. If &quot;full&quot;,
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">min(X.shape)</span></code>. Otherwise, <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be
 <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions will be chosen by
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a> using <code class="docutils literal notranslate"><span class="pre">n_elbows</span></code> argument.</p>
-</div></blockquote>
-<p><strong>n_elbows</strong> : int, optional, default: 2</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
+</dd>
+<dt><strong>n_elbows</strong><span class="classifier">int, optional, default: 2</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>. Otherwise, ignored.</p>
-</div></blockquote>
-<p><strong>algorithm</strong> : {'randomized' (default), 'full', 'truncated'}, optional</p>
-<blockquote>
-<div><p>SVD solver to use:</p>
+</dd>
+<dt><strong>algorithm</strong><span class="classifier">{'randomized' (default), 'full', 'truncated'}, optional</span></dt><dd><p>SVD solver to use:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>'randomized'</dt><dd><p>Computes randomized svd using
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a></p>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>n_iter</strong> : int, optional (default = 5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>n_iter</strong><span class="classifier">int, optional (default = 5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>check_lcc</strong> : bool , optional (defult = True)</p>
-<blockquote>
-<div><p>Whether to check if the average of all input graphs are connected. May result
+</dd>
+<dt><strong>check_lcc</strong><span class="classifier">bool , optional (defult = True)</span></dt><dd><p>Whether to check if the average of all input graphs are connected. May result
 in non-optimal results if the average graph is unconnected. If True and average
 graph is unconnected, a UserWarning is thrown.</p>
-</div></blockquote>
-<p><strong>diag_aug</strong> : bool, optional (default = True)</p>
-<blockquote>
-<div><p>Whether to replace the main diagonal of each adjacency matrices with
+</dd>
+<dt><strong>diag_aug</strong><span class="classifier">bool, optional (default = True)</span></dt><dd><p>Whether to replace the main diagonal of each adjacency matrices with
 a vector corresponding to the degree (or sum of edge weights for a
 weighted network) before embedding.</p>
-</div></blockquote>
-<p><strong>concat</strong> : bool, optional (default = False)</p>
-<blockquote>
-<div><p>If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+</dd>
+<dt><strong>concat</strong><span class="classifier">bool, optional (default = False)</span></dt><dd><p>If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
 along axis 1.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : int or None (default = <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-<blockquote>
-<div><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">int or None (default = <code class="docutils literal notranslate"><span class="pre">None</span></code>)</span></dt><dd><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
 randomized svd solver for deterministic, albeit pseudo-randomized behavior.</p>
-</div></blockquote>
-<p><strong>lse</strong> : bool, optional (default = False)</p>
-<blockquote>
-<div><p>Whether to construct the Omni matrix use the laplacian matrices
+</dd>
+<dt><strong>lse</strong><span class="classifier">bool, optional (default = False)</span></dt><dd><p>Whether to construct the Omni matrix use the laplacian matrices
 of the graphs and embed the Omni matrix with LSE</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_graphs_</strong> : int</p>
-<blockquote>
-<div><p>Number of graphs</p>
-</div></blockquote>
-<p><strong>n_vertices_</strong> : int</p>
-<blockquote>
-<div><p>Number of vertices in each graph</p>
-</div></blockquote>
-<p><strong>latent_left_</strong> : array, shape (n_graphs, n_vertices, n_components)</p>
-<blockquote>
-<div><p>Estimated left latent positions of the graph.</p>
-</div></blockquote>
-<p><strong>latent_right_</strong> : array, shape (n_graphs, n_vertices, n_components), or None</p>
-<blockquote>
-<div><p>Only computed when the graph is directed, or adjacency matrix is
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_graphs_</strong><span class="classifier">int</span></dt><dd><p>Number of graphs</p>
+</dd>
+<dt><strong>n_vertices_</strong><span class="classifier">int</span></dt><dd><p>Number of vertices in each graph</p>
+</dd>
+<dt><strong>latent_left_</strong><span class="classifier">array, shape (n_graphs, n_vertices, n_components)</span></dt><dd><p>Estimated left latent positions of the graph.</p>
+</dd>
+<dt><strong>latent_right_</strong><span class="classifier">array, shape (n_graphs, n_vertices, n_components), or None</span></dt><dd><p>Only computed when the graph is directed, or adjacency matrix is
 asymmetric. Estimated right latent positions of the graph. Otherwise,
 None.</p>
-</div></blockquote>
-<p><strong>singular_values_</strong> : array, shape (n_components)</p>
-<blockquote>
-<div><p>Singular values associated with the latent position matrices.</p>
-</div></blockquote>
+</dd>
+<dt><strong>singular_values_</strong><span class="classifier">array, shape (n_components)</span></dt><dd><p>Singular values associated with the latent position matrices.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1395,20 +1299,20 @@ Conference on (pp. 964-967). IEEE.</p>
 <dt class="sig sig-object py" id="graspologic.embed.OmnibusEmbed.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/omni.html#OmnibusEmbed.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.OmnibusEmbed.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model with graphs.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graphs</strong> : list of nx.Graph or ndarray, or csr_matrix</p>
-<blockquote>
-<div><p>If list of nx.Graph, each Graph must contain same number of nodes.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graphs</strong><span class="classifier">list of nx.Graph or ndarray, or csr_matrix</span></dt><dd><p>If list of nx.Graph, each Graph must contain same number of nodes.
 If list of ndarray, each array must have shape (n_vertices, n_vertices).
 If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1418,24 +1322,24 @@ If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
 <span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/omni.html#OmnibusEmbed.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.OmnibusEmbed.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model with graphs and apply the embedding on graphs.
 n_components is either automatically determined or based on user input.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graphs</strong> : list of nx.Graph or ndarray, or ndarray</p>
-<blockquote>
-<div><p>If list of nx.Graph, each Graph must contain same number of nodes.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graphs</strong><span class="classifier">list of nx.Graph or ndarray, or ndarray</span></dt><dd><p>If list of nx.Graph, each Graph must contain same number of nodes.
 If list of ndarray, each array must have shape (n_vertices, n_vertices).
 If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray or length 2 tuple of np.ndarray.</p>
-<blockquote>
-<div><p>If input graphs were symmetric, ndarray of shape (n_graphs, n_vertices, n_components).
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">np.ndarray or length 2 tuple of np.ndarray.</span></dt><dd><p>If input graphs were symmetric, ndarray of shape (n_graphs, n_vertices, n_components).
 If graphs were directed and <code class="docutils literal notranslate"><span class="pre">concat</span></code> is False, returns tuple of two arrays (same shape as above).
 The first corresponds to the left latent positions, and the second to the right latent positions.
 If graphs were directed and <code class="docutils literal notranslate"><span class="pre">concat</span></code> is True, left and right (out and in) latent positions are concatenated.
 In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1444,19 +1348,19 @@ In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is retur
 <dt class="sig sig-object py" id="graspologic.embed.OmnibusEmbed.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.OmnibusEmbed.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1466,21 +1370,21 @@ contained subobjects that are estimators.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.OmnibusEmbed.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1493,21 +1397,20 @@ vertices. For more details on transforming out-of-sample vertices, see <a class=
 <p>For mathematical background, see [2].</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like or tuple, original shape or (n_oos_vertices, n_vertices).</p>
-<blockquote>
-<div><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like or tuple, original shape or (n_oos_vertices, n_vertices).</span></dt><dd><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
 If <code class="docutils literal notranslate"><span class="pre">X</span></code> is the original fitted matrix, returns a matrix close to
 <code class="docutils literal notranslate"><span class="pre">self.fit_transform(X)</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an out-of-sample matrix, n_oos_vertices is the number
 of new vertices, and n_vertices is the number of vertices in the
 original graph. If tuple, graph is directed and <code class="docutils literal notranslate"><span class="pre">X[0]</span></code> contains
 edges from out-of-sample vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray OR length 2 tuple of np.ndarray</p>
-<blockquote>
-<div><p>Array of latent positions, shape (n_oos_vertices, n_components) or
+<dd class="field-even"><dl>
+<dt><strong>out</strong><span class="classifier">np.ndarray OR length 2 tuple of np.ndarray</span></dt><dd><p>Array of latent positions, shape (n_oos_vertices, n_components) or
 (n_vertices, n_components). Transforms the fitted matrix if it was passed
 in.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an array or tuple containing adjacency vectors corresponding to
@@ -1517,7 +1420,8 @@ If undirected, returns array.
 If directed, returns <code class="docutils literal notranslate"><span class="pre">(X_out,</span> <span class="pre">X_in)</span></code>, where <code class="docutils literal notranslate"><span class="pre">X_out</span></code> contains
 latent positions corresponding to nodes with edges from out-of-sample
 vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1564,99 +1468,75 @@ common latent position matrices <span class="math notranslate nohighlight">\(U\)
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE) Tutorial</a></p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_components</strong> : int or None, default = None</p>
-<blockquote>
-<div><p>Desired dimensionality of output data. If &quot;full&quot;,
+<dd class="field-odd"><dl>
+<dt><strong>n_components</strong><span class="classifier">int or None, default = None</span></dt><dd><p>Desired dimensionality of output data. If &quot;full&quot;,
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">min(X.shape)</span></code>. Otherwise, <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be
 <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions will be chosen by
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a> using <code class="docutils literal notranslate"><span class="pre">n_elbows</span></code> argument.</p>
-</div></blockquote>
-<p><strong>n_elbows</strong> : int, optional, default: 2</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
+</dd>
+<dt><strong>n_elbows</strong><span class="classifier">int, optional, default: 2</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>. Otherwise, ignored.</p>
-</div></blockquote>
-<p><strong>algorithm</strong> : {'randomized' (default), 'full', 'truncated'}, optional</p>
-<blockquote>
-<div><p>SVD solver to use:</p>
+</dd>
+<dt><strong>algorithm</strong><span class="classifier">{'randomized' (default), 'full', 'truncated'}, optional</span></dt><dd><p>SVD solver to use:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>'randomized'</dt><dd><p>Computes randomized svd using
-<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
+<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.extmath.randomized_svd.html#sklearn.utils.extmath.randomized_svd" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.extmath.randomized_svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a></p>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>n_iter</strong> : int, optional (default = 5)</p>
-<blockquote>
-<div><p>Number of iterations for randomized SVD solver. Not used by 'full' or
+</dd>
+<dt><strong>n_iter</strong><span class="classifier">int, optional (default = 5)</span></dt><dd><p>Number of iterations for randomized SVD solver. Not used by 'full' or
 'truncated'. The default is larger than the default in randomized_svd
 to handle sparse matrices that may have large slowly decaying spectrum.</p>
-</div></blockquote>
-<p><strong>scaled</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to scale individual eigenvectors with eigenvalues in first embedding
+</dd>
+<dt><strong>scaled</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to scale individual eigenvectors with eigenvalues in first embedding
 stage.</p>
-</div></blockquote>
-<p><strong>diag_aug</strong> : bool, optional (default = True)</p>
-<blockquote>
-<div><p>Whether to replace the main diagonal of each adjacency matrices with
+</dd>
+<dt><strong>diag_aug</strong><span class="classifier">bool, optional (default = True)</span></dt><dd><p>Whether to replace the main diagonal of each adjacency matrices with
 a vector corresponding to the degree (or sum of edge weights for a
 weighted network) before embedding.</p>
-</div></blockquote>
-<p><strong>concat</strong> : bool, optional (default False)</p>
-<blockquote>
-<div><p>If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
+</dd>
+<dt><strong>concat</strong><span class="classifier">bool, optional (default False)</span></dt><dd><p>If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
 along axis 1.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-<blockquote>
-<div><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</span></dt><dd><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;randomized&quot;</span></code>; allows you to seed the
 randomized svd solver for deterministic, albeit pseudo-randomized behavior.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_graphs_</strong> : int</p>
-<blockquote>
-<div><p>Number of graphs</p>
-</div></blockquote>
-<p><strong>n_vertices_</strong> : int</p>
-<blockquote>
-<div><p>Number of vertices in each graph</p>
-</div></blockquote>
-<p><strong>latent_left_</strong> : array, shape (n_samples, n_components)</p>
-<blockquote>
-<div><p>Estimated left latent positions of the graph.</p>
-</div></blockquote>
-<p><strong>latent_right_</strong> : array, shape (n_samples, n_components), or None</p>
-<blockquote>
-<div><p>Estimated right latent positions of the graph. Only computed when the an input
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_graphs_</strong><span class="classifier">int</span></dt><dd><p>Number of graphs</p>
+</dd>
+<dt><strong>n_vertices_</strong><span class="classifier">int</span></dt><dd><p>Number of vertices in each graph</p>
+</dd>
+<dt><strong>latent_left_</strong><span class="classifier">array, shape (n_samples, n_components)</span></dt><dd><p>Estimated left latent positions of the graph.</p>
+</dd>
+<dt><strong>latent_right_</strong><span class="classifier">array, shape (n_samples, n_components), or None</span></dt><dd><p>Estimated right latent positions of the graph. Only computed when the an input
 graph is directed, or adjacency matrix is assymetric. Otherwise, None.</p>
-</div></blockquote>
-<p><strong>scores_</strong> : array, shape (n_samples, n_components, n_components)</p>
-<blockquote>
-<div><p>Estimated <span class="math notranslate nohighlight">\(\hat{R}\)</span> matrices for each input graph.</p>
-</div></blockquote>
-<p><strong>singular_values_</strong> : array, shape (n_components) OR length 2 tuple of arrays</p>
-<blockquote>
-<div><p>If input graph is undirected, equal to the singular values of the concatenated
+</dd>
+<dt><strong>scores_</strong><span class="classifier">array, shape (n_samples, n_components, n_components)</span></dt><dd><p>Estimated <span class="math notranslate nohighlight">\(\hat{R}\)</span> matrices for each input graph.</p>
+</dd>
+<dt><strong>singular_values_</strong><span class="classifier">array, shape (n_components) OR length 2 tuple of arrays</span></dt><dd><p>If input graph is undirected, equal to the singular values of the concatenated
 adjacency spectral embeddings. If input graph is directed, <code class="xref py py-attr docutils literal notranslate"><span class="pre">singular_values_</span></code>
 is a tuple of length 2, where <code class="xref py py-attr docutils literal notranslate"><span class="pre">singular_values_[0]</span></code> corresponds to
 the singular values of the concatenated left adjacency spectral embeddings,
 and <code class="xref py py-attr docutils literal notranslate"><span class="pre">singular_values_[1]</span></code> corresponds to
 the singular values of the concatenated right adjacency spectral embeddings.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1685,20 +1565,20 @@ to <code class="docutils literal notranslate"><span class="pre">n_components</sp
 <dt class="sig sig-object py" id="graspologic.embed.MultipleASE.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/mase.html#MultipleASE.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.MultipleASE.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model with graphs.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graphs</strong> : list of nx.Graph, ndarray or scipy.sparse.csr_matrix</p>
-<blockquote>
-<div><p>If list of nx.Graph, each Graph must contain same number of nodes.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graphs</strong><span class="classifier">list of nx.Graph, ndarray or scipy.sparse.csr_matrix</span></dt><dd><p>If list of nx.Graph, each Graph must contain same number of nodes.
 If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
 If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1708,23 +1588,23 @@ If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
 <span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/mase.html#MultipleASE.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.MultipleASE.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model with graphs and apply the embedding on graphs.
 n_components is either automatically determined or based on user input.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graphs</strong> : list of nx.Graph, ndarray or scipy.sparse.csr_matrix</p>
-<blockquote>
-<div><p>If list of nx.Graph, each Graph must contain same number of nodes.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graphs</strong><span class="classifier">list of nx.Graph, ndarray or scipy.sparse.csr_matrix</span></dt><dd><p>If list of nx.Graph, each Graph must contain same number of nodes.
 If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
 If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray or length 2 tuple of np.ndarray.</p>
-<blockquote>
-<div><p>If input graphs were symmetric shape (n_vertices, n_components).
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">np.ndarray or length 2 tuple of np.ndarray.</span></dt><dd><p>If input graphs were symmetric shape (n_vertices, n_components).
 If graphs were directed and <code class="docutils literal notranslate"><span class="pre">concat</span></code> is False, returns tuple of two arrays (same shape as above).
 The first corresponds to the left latent positions, and the second to the right latent positions.
 When <code class="docutils literal notranslate"><span class="pre">concat</span></code> is True left and right (out and in) latent positions are concatenated along axis 1.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1733,19 +1613,19 @@ When <code class="docutils literal notranslate"><span class="pre">concat</span><
 <dt class="sig sig-object py" id="graspologic.embed.MultipleASE.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.MultipleASE.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1755,21 +1635,21 @@ contained subobjects that are estimators.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.MultipleASE.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1782,21 +1662,20 @@ vertices. For more details on transforming out-of-sample vertices, see <a class=
 <p>For mathematical background, see [2].</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array-like or tuple, original shape or (n_oos_vertices, n_vertices).</p>
-<blockquote>
-<div><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like or tuple, original shape or (n_oos_vertices, n_vertices).</span></dt><dd><p>The original fitted matrix (&quot;graph&quot; in fit) or new out-of-sample data.
 If <code class="docutils literal notranslate"><span class="pre">X</span></code> is the original fitted matrix, returns a matrix close to
 <code class="docutils literal notranslate"><span class="pre">self.fit_transform(X)</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an out-of-sample matrix, n_oos_vertices is the number
 of new vertices, and n_vertices is the number of vertices in the
 original graph. If tuple, graph is directed and <code class="docutils literal notranslate"><span class="pre">X[0]</span></code> contains
 edges from out-of-sample vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>out</strong> : np.ndarray OR length 2 tuple of np.ndarray</p>
-<blockquote>
-<div><p>Array of latent positions, shape (n_oos_vertices, n_components) or
+<dd class="field-even"><dl>
+<dt><strong>out</strong><span class="classifier">np.ndarray OR length 2 tuple of np.ndarray</span></dt><dd><p>Array of latent positions, shape (n_oos_vertices, n_components) or
 (n_vertices, n_components). Transforms the fitted matrix if it was passed
 in.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">X</span></code> is an array or tuple containing adjacency vectors corresponding to
@@ -1806,7 +1685,8 @@ If undirected, returns array.
 If directed, returns <code class="docutils literal notranslate"><span class="pre">(X_out,</span> <span class="pre">X_in)</span></code>, where <code class="docutils literal notranslate"><span class="pre">X_out</span></code> contains
 latent positions corresponding to nodes with edges from out-of-sample
 vertices to in-sample vertices.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1850,9 +1730,8 @@ Euclidean distance between each pair of graph embeddings from omnibus embedding,
 followed by an eigen decomposition.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pass_to_ranks: {'simple-nonzero' (default), 'simple-all', 'zero-boost'} string, or None</strong></p>
-<blockquote>
-<div><ul class="simple">
+<dd class="field-odd"><dl>
+<dt><strong>pass_to_ranks: {'simple-nonzero' (default), 'simple-all', 'zero-boost'} string, or None</strong></dt><dd><ul class="simple">
 <li><dl class="simple">
 <dt>'simple-nonzero'</dt><dd><p>assigns ranks to all non-zero edges, settling ties using
 the average. Ranks are then scaled by
@@ -1884,41 +1763,32 @@ by the type of graph (loopless or looped, directed or undirected).</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-<p><strong>omnibus_components, cmds_components</strong> : int or None, default = None</p>
-<blockquote>
-<div><p>Desired dimensionality of output data. If &quot;full&quot;,
+</dd>
+<dt><strong>omnibus_components, cmds_components</strong><span class="classifier">int or None, default = None</span></dt><dd><p>Desired dimensionality of output data. If &quot;full&quot;,
 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">min(X.shape)</span></code>. Otherwise, <code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be
 <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions will be chosen by
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a> using <code class="docutils literal notranslate"><span class="pre">n_elbows</span></code> argument.</p>
-</div></blockquote>
-<p><strong>omnibus_n_elbows, cmds_n_elbows: int, optional, default: 2</strong></p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
+</dd>
+<dt><strong>omnibus_n_elbows, cmds_n_elbows: int, optional, default: 2</strong></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>. Otherwise, ignored.</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-<blockquote>
-<div><p>Allows you to seed the randomized svd solver used in the Omnibus embedding
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</span></dt><dd><p>Allows you to seed the randomized svd solver used in the Omnibus embedding
 for deterministic, albeit pseudo-randomized behavior.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>omnibus_n_components_</strong> : int</p>
-<blockquote>
-<div><p>Equals the parameter <code class="docutils literal notranslate"><span class="pre">n_components</span></code>. If input <code class="docutils literal notranslate"><span class="pre">n_components</span></code> was None,
+<dd class="field-even"><dl class="simple">
+<dt><strong>omnibus_n_components_</strong><span class="classifier">int</span></dt><dd><p>Equals the parameter <code class="docutils literal notranslate"><span class="pre">n_components</span></code>. If input <code class="docutils literal notranslate"><span class="pre">n_components</span></code> was None,
 then equals the optimal embedding dimension.</p>
-</div></blockquote>
-<p><strong>cmds_n_components_</strong> : int</p>
-<blockquote>
-<div><p>Equals the parameter <code class="docutils literal notranslate"><span class="pre">n_components</span></code>. If input <code class="docutils literal notranslate"><span class="pre">n_components</span></code> was None,
+</dd>
+<dt><strong>cmds_n_components_</strong><span class="classifier">int</span></dt><dd><p>Equals the parameter <code class="docutils literal notranslate"><span class="pre">n_components</span></code>. If input <code class="docutils literal notranslate"><span class="pre">n_components</span></code> was None,
 then equals the optimal embedding dimension.</p>
-</div></blockquote>
-<p><strong>embeddings_</strong> : array, shape (n_components, n_features)</p>
-<blockquote>
-<div><p>Embeddings from the pipeline. Each graph is a point in <code class="docutils literal notranslate"><span class="pre">n_features</span></code>
+</dd>
+<dt><strong>embeddings_</strong><span class="classifier">array, shape (n_components, n_features)</span></dt><dd><p>Embeddings from the pipeline. Each graph is a point in <code class="docutils literal notranslate"><span class="pre">n_features</span></code>
 dimensions.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1954,15 +1824,13 @@ dimensions.</p>
 <dt class="sig sig-object py" id="graspologic.embed.mug2vec.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/mug2vec.html#mug2vec.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.mug2vec.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a vector for each graph.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graphs</strong> : list of nx.Graph or ndarray, or ndarray</p>
-<blockquote>
-<div><p>If list of nx.Graph, each Graph must contain same number of nodes.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graphs</strong><span class="classifier">list of nx.Graph or ndarray, or ndarray</span></dt><dd><p>If list of nx.Graph, each Graph must contain same number of nodes.
 If list of ndarray, each array must have shape (n_vertices, n_vertices).
 If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
-</div></blockquote>
-<dl class="simple">
+</dd>
 <dt><strong>y</strong><span class="classifier">Ignored</span></dt><dd></dd>
 </dl>
 </dd>
@@ -1973,7 +1841,7 @@ If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -1987,15 +1855,13 @@ If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
 <dt class="sig sig-object py" id="graspologic.embed.mug2vec.fit_transform">
 <span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/mug2vec.html#mug2vec.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.mug2vec.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a vector for each graph.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graphs</strong> : list of nx.Graph or ndarray, or ndarray</p>
-<blockquote>
-<div><p>If list of nx.Graph, each Graph must contain same number of nodes.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graphs</strong><span class="classifier">list of nx.Graph or ndarray, or ndarray</span></dt><dd><p>If list of nx.Graph, each Graph must contain same number of nodes.
 If list of ndarray, each array must have shape (n_vertices, n_vertices).
 If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
-</div></blockquote>
-<dl class="simple">
+</dd>
 <dt><strong>y</strong><span class="classifier">Ignored</span></dt><dd></dd>
 </dl>
 </dd>
@@ -2006,7 +1872,7 @@ If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.1)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.6)"><em>Graph</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.3)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>]</em><em>]</em>) -- </p></li>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
@@ -2020,19 +1886,19 @@ If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</p>
 <dt class="sig sig-object py" id="graspologic.embed.mug2vec.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.mug2vec.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -2042,21 +1908,21 @@ contained subobjects that are estimators.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.mug2vec.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -2074,19 +1940,14 @@ possible to update each component of a nested object.</p>
 respect well the distances in the original high-dimensional space.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_components</strong> : int, or None (default=None)</p>
-<blockquote>
-<div><p>Number of components to keep. If None, then it will run
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_components</strong><span class="classifier">int, or None (default=None)</span></dt><dd><p>Number of components to keep. If None, then it will run
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a> to find the optimal embedding dimension.</p>
-</div></blockquote>
-<p><strong>n_elbows</strong> : int, or None (default=2)</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
+</dd>
+<dt><strong>n_elbows</strong><span class="classifier">int, or None (default=2)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">n_components</span></code> is None, then compute the optimal embedding dimension using
 <a class="reference internal" href="#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>. Otherwise, ignored.</p>
-</div></blockquote>
-<p><strong>dissimilarity</strong> : 'euclidean' | 'precomputed', optional, default: 'euclidean'</p>
-<blockquote>
-<div><p>Dissimilarity measure to use:</p>
+</dd>
+<dt><strong>dissimilarity</strong><span class="classifier">'euclidean' | 'precomputed', optional, default: 'euclidean'</span></dt><dd><p>Dissimilarity measure to use:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>'euclidean'</dt><dd><p>Pairwise Euclidean distances between points in the dataset.</p>
@@ -2100,35 +1961,26 @@ respect well the distances in the original high-dimensional space.</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><p><strong>n_components_</strong> : int</p>
-<blockquote>
-<div><p>Equals the parameter <code class="docutils literal notranslate"><span class="pre">n_components</span></code>. If input <code class="docutils literal notranslate"><span class="pre">n_components</span></code> was None,
+<dd class="field-even"><dl>
+<dt><strong>n_components_</strong><span class="classifier">int</span></dt><dd><p>Equals the parameter <code class="docutils literal notranslate"><span class="pre">n_components</span></code>. If input <code class="docutils literal notranslate"><span class="pre">n_components</span></code> was None,
 then equals the optimal embedding dimension.</p>
-</div></blockquote>
-<p><strong>n_features_in_: int</strong></p>
-<blockquote>
-<div><p>Number of features passed to the <a class="reference internal" href="#graspologic.embed.ClassicalMDS.fit" title="graspologic.embed.ClassicalMDS.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a> method.</p>
-</div></blockquote>
-<p><strong>components_</strong> : array, shape (n_components, n_features)</p>
-<blockquote>
-<div><p>Principal axes in feature space.</p>
-</div></blockquote>
-<p><strong>singular_values_</strong> : array, shape (n_components,)</p>
-<blockquote>
-<div><p>The singular values corresponding to each of the selected components.</p>
-</div></blockquote>
-<p><strong>dissimilarity_matrix_</strong> : array, shape (n_features, n_features)</p>
-<blockquote>
-<div><p>Dissimilarity matrix</p>
-</div></blockquote>
-<p><strong>svd_seed</strong> : int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-<blockquote>
-<div><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">n_components!=1</span></code>; allows you to seed the
+</dd>
+<dt><strong>n_features_in_: int</strong></dt><dd><p>Number of features passed to the <a class="reference internal" href="#graspologic.embed.ClassicalMDS.fit" title="graspologic.embed.ClassicalMDS.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a> method.</p>
+</dd>
+<dt><strong>components_</strong><span class="classifier">array, shape (n_components, n_features)</span></dt><dd><p>Principal axes in feature space.</p>
+</dd>
+<dt><strong>singular_values_</strong><span class="classifier">array, shape (n_components,)</span></dt><dd><p>The singular values corresponding to each of the selected components.</p>
+</dd>
+<dt><strong>dissimilarity_matrix_</strong><span class="classifier">array, shape (n_features, n_features)</span></dt><dd><p>Dissimilarity matrix</p>
+</dd>
+<dt><strong>svd_seed</strong><span class="classifier">int or None (default <code class="docutils literal notranslate"><span class="pre">None</span></code>)</span></dt><dd><p>Only applicable for <code class="docutils literal notranslate"><span class="pre">n_components!=1</span></code>; allows you to seed the
 randomized svd solver for deterministic, albeit pseudo-randomized behavior.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -2162,22 +2014,22 @@ Aalborg University, Denmark 46.5 (2003).</p>
 <dt class="sig sig-object py" id="graspologic.embed.ClassicalMDS.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/mds.html#ClassicalMDS.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.ClassicalMDS.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model with X.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : array_like</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">dissimilarity=='precomputed'</span></code>, the input should be the
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array_like</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">dissimilarity=='precomputed'</span></code>, the input should be the
 dissimilarity matrix with shape (n_samples, n_samples). If
 <code class="docutils literal notranslate"><span class="pre">dissimilarity=='euclidean'</span></code>, then the input should be 2d-array
 with shape (n_samples, n_features) or a 3d-array with shape
 (n_samples, n_features_1, n_features_2).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : object</p>
-<blockquote>
-<div><p>Returns an instance of self.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Returns an instance of self.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2195,23 +2047,23 @@ with shape (n_samples, n_features) or a 3d-array with shape
 <dt class="sig sig-object py" id="graspologic.embed.ClassicalMDS.fit_transform">
 <span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/embed/mds.html#ClassicalMDS.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.embed.ClassicalMDS.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the data from X, and returns the embedded coordinates.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> : nd-array</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">dissimilarity=='precomputed'</span></code>, the input should be the
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">nd-array</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">dissimilarity=='precomputed'</span></code>, the input should be the
 dissimilarity matrix with shape (n_samples, n_samples). If
 <code class="docutils literal notranslate"><span class="pre">dissimilarity=='euclidean'</span></code>, then the input should be array
 with shape (n_samples, n_features) or a nd-array with shape
 (n_samples, n_features_1, n_features_2, ..., n_features_d). First
 axis of nd-array must be <code class="docutils literal notranslate"><span class="pre">n_samples</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>X_new</strong> : array-like, shape (n_samples, n_components)</p>
-<blockquote>
-<div><p>Embedded input.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">array-like, shape (n_samples, n_components)</span></dt><dd><p>Embedded input.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2229,19 +2081,19 @@ axis of nd-array must be <code class="docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="graspologic.embed.ClassicalMDS.get_params">
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.ClassicalMDS.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>deep</strong> : bool, default=True</p>
-<blockquote>
-<div><p>If True, will return the parameters for this estimator and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>params</strong> : dict</p>
-<blockquote>
-<div><p>Parameter names mapped to their values.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -2251,21 +2103,21 @@ contained subobjects that are estimators.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.embed.ClassicalMDS.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**params</strong> : dict</p>
-<blockquote>
-<div><p>Estimator parameters.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong> : estimator instance</p>
-<blockquote>
-<div><p>Estimator instance.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
