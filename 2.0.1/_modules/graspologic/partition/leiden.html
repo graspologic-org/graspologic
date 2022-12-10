@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graspologic.partition.leiden &mdash; graspologic 2.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> graspologic
+          </a>
+              <div class="version">
+                2.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">graspologic.partition.leiden</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graspologic.partition.leiden</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) Microsoft Corporation.</span>
+<span class="c1"># Licensed under the MIT license.</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">graspologic_native</span> <span class="k">as</span> <span class="nn">gn</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+
+<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">..preconditions</span> <span class="kn">import</span> <span class="n">check_argument</span>
+
+
+<span class="k">class</span> <span class="nc">_IdentityMapper</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">as_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">mapped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">as_str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mapped</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># we could conceivably address this by also using the hashcode of the value and</span>
+            <span class="c1"># storing submaps but that is not super likely to occur</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;str(value) results in a collision between distinct values&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">[</span><span class="n">as_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped</span>
+        <span class="k">return</span> <span class="n">as_str</span>
+
+    <span class="k">def</span> <span class="nf">original</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">[</span><span class="n">as_str</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">)</span>
+
+
+<span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">_nx_to_edge_list</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+    <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span><span class="p">,</span>
+    <span class="n">is_weighted</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">weight_default</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+    <span class="n">check_argument</span><span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">is_directed</span><span class="p">()</span> <span class="ow">or</span> <span class="n">graph</span><span class="o">.</span><span class="n">is_multigraph</span><span class="p">()),</span>
+        <span class="s2">&quot;Only undirected non-multi-graph networkx graphs are supported&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">native_safe</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">edge_iter</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_weighted</span> <span class="ow">is</span> <span class="kc">True</span>
+        <span class="k">else</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">weight_default</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">edge_iter</span><span class="p">:</span>
+        <span class="n">source_str</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">target_str</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">native_safe</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">source_str</span><span class="p">,</span> <span class="n">target_str</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">weight</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(),</span> <span class="n">native_safe</span>
+
+
+<span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">_adjacency_matrix_to_edge_list</span><span class="p">(</span>
+    <span class="n">matrix</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span>
+    <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span><span class="p">,</span>
+    <span class="n">check_directed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">is_weighted</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">weight_default</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+    <span class="n">check_argument</span><span class="p">(</span>
+        <span class="n">check_directed</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_almost_symmetric</span><span class="p">(</span><span class="n">matrix</span><span class="p">),</span>
+        <span class="s2">&quot;leiden only supports undirected graphs and the adjacency matrix provided &quot;</span>
+        <span class="s2">&quot;was found to be directed&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be &quot;</span>
+            <span class="s2">&quot;adjacency matrices with n x n shape&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">is_weighted</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">is_weighted</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_unweighted</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+
+    <span class="n">native_safe</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">target</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">weight</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_weighted</span> <span class="ow">and</span> <span class="n">weight</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">weight</span> <span class="o">=</span> <span class="n">weight_default</span>
+                    <span class="n">native_safe</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">weight</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)):</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">source_str</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">target_str</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">source</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">native_safe</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">source_str</span><span class="p">,</span> <span class="n">target_str</span><span class="p">,</span> <span class="n">weight</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">native_safe</span>
+
+
+<span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">_edge_list_to_edge_list</span><span class="p">(</span>
+    <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span> <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+    <span class="n">native_safe</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">temp_node_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">source_str</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">target_str</span> <span class="o">=</span> <span class="n">identifier</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">weight_as_float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">source_str</span> <span class="o">!=</span> <span class="n">target_str</span><span class="p">:</span>
+            <span class="n">native_safe</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">source_str</span><span class="p">,</span> <span class="n">target_str</span><span class="p">,</span> <span class="n">weight_as_float</span><span class="p">))</span>
+            <span class="n">temp_node_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">source_str</span><span class="p">)</span>
+            <span class="n">temp_node_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">target_str</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp_node_set</span><span class="p">),</span> <span class="n">native_safe</span>
+
+
+<span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">_community_python_to_native</span><span class="p">(</span>
+    <span class="n">starting_communities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">identity</span><span class="p">:</span> <span class="n">_IdentityMapper</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">starting_communities</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">native_safe</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="n">partition</span><span class="p">)</span> <span class="ow">in</span> <span class="n">starting_communities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">node_id_as_str</span> <span class="o">=</span> <span class="n">identity</span><span class="p">(</span><span class="n">node_id</span><span class="p">)</span>
+        <span class="n">native_safe</span><span class="p">[</span><span class="n">node_id_as_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">partition</span>
+    <span class="k">return</span> <span class="n">native_safe</span>
+
+
+<span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">_community_native_to_python</span><span class="p">(</span>
+    <span class="n">communities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">identity</span><span class="p">:</span> <span class="n">_IdentityMapper</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">identity</span><span class="o">.</span><span class="n">original</span><span class="p">(</span><span class="n">node_id_as_str</span><span class="p">):</span> <span class="n">partition</span>
+        <span class="k">for</span> <span class="n">node_id_as_str</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="n">communities</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+
+
+<span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">_validate_common_arguments</span><span class="p">(</span>
+    <span class="n">extra_forced_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">randomness</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">check_argument</span><span class="p">(</span>
+        <span class="n">extra_forced_iterations</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;extra_forced_iterations must be a non negative integer&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">check_argument</span><span class="p">(</span><span class="n">resolution</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;resolution must be a positive float&quot;</span><span class="p">)</span>
+    <span class="n">check_argument</span><span class="p">(</span><span class="n">randomness</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;randomness must be a positive float&quot;</span><span class="p">)</span>
+    <span class="n">check_argument</span><span class="p">(</span>
+        <span class="n">random_seed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">random_seed</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;random_seed must be a positive integer (the native PRNG implementation is&quot;</span>
+        <span class="s2">&quot; an unsigned 64 bit integer)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="leiden"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.leiden">[docs]</a><span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">leiden</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span>
+        <span class="n">GraphRepresentation</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">starting_communities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">extra_forced_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">randomness</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">use_modularity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+    <span class="n">is_weighted</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight_default</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">check_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">trials</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Leiden is a global network partitioning algorithm. Given a graph, it will iterate</span>
+<span class="sd">    through the network node by node, and test for an improvement in our quality</span>
+<span class="sd">    maximization function by speculatively joining partitions of each neighboring node.</span>
+
+<span class="sd">    This process continues until no moves are made that increases the partitioning</span>
+<span class="sd">    quality.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</span>
+<span class="sd">        A graph representation, whether a weighted edge list referencing an undirected</span>
+<span class="sd">        graph, an undirected networkx graph, or an undirected adjacency matrix in either</span>
+<span class="sd">        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section</span>
+<span class="sd">        regarding node ids used.</span>
+<span class="sd">    starting_communities : Optional[Dict[Any, int]]</span>
+<span class="sd">        Default is ``None``. An optional community mapping dictionary that contains a node</span>
+<span class="sd">        id mapping to the community it belongs to. Please see the Notes section regarding</span>
+<span class="sd">        node ids used.</span>
+
+<span class="sd">        If no community map is provided, the default behavior is to create a node</span>
+<span class="sd">        community identity map, where every node is in their own community.</span>
+<span class="sd">    extra_forced_iterations : int</span>
+<span class="sd">        Default is ``0``. Leiden will run until a maximum quality score has been found</span>
+<span class="sd">        for the node clustering and no nodes are moved to a new cluster in another</span>
+<span class="sd">        iteration. As there is an element of randomness to the Leiden algorithm, it is</span>
+<span class="sd">        sometimes useful to set ``extra_forced_iterations`` to a number larger than 0</span>
+<span class="sd">        where the process is forced to attempt further refinement.</span>
+<span class="sd">    resolution : Union[int, float]</span>
+<span class="sd">        Default is ``1.0``. Higher resolution values lead to more communities and lower</span>
+<span class="sd">        resolution values leads to fewer communities. Must be greater than 0.</span>
+<span class="sd">    randomness : Union[int, float]</span>
+<span class="sd">        Default is ``0.001``. The larger the randomness value, the more exploration of</span>
+<span class="sd">        the partition space is possible. This is a major difference from the Louvain</span>
+<span class="sd">        algorithm, which is purely greedy in the partition exploration.</span>
+<span class="sd">    use_modularity : bool</span>
+<span class="sd">        Default is ``True``. If ``False``, will use a Constant Potts Model (CPM).</span>
+<span class="sd">    random_seed : Optional[int]</span>
+<span class="sd">        Default is ``None``. Can provide an optional seed to the PRNG used in Leiden for</span>
+<span class="sd">        deterministic output.</span>
+<span class="sd">    weight_attribute : str</span>
+<span class="sd">        Default is ``weight``. Only used when creating a weighed edge list of tuples</span>
+<span class="sd">        when the source graph is a networkx graph. This attribute corresponds to the</span>
+<span class="sd">        edge data dict key.</span>
+<span class="sd">    is_weighted : Optional[bool]</span>
+<span class="sd">        Default is ``None``. Only used when creating a weighted edge list of tuples</span>
+<span class="sd">        when the source graph is an adjacency matrix. The</span>
+<span class="sd">        :func:`graspologic.utils.is_unweighted` function will scan these</span>
+<span class="sd">        matrices and attempt to determine whether it is weighted or not. This flag can</span>
+<span class="sd">        short circuit this test and the values in the adjacency matrix will be treated</span>
+<span class="sd">        as weights.</span>
+<span class="sd">    weight_default : Union[int, float]</span>
+<span class="sd">        Default is ``1.0``. If the graph is a networkx graph and the graph does not have</span>
+<span class="sd">        a fully weighted sequence of edges, this default will be used. If the adjacency</span>
+<span class="sd">        matrix is found or specified to be unweighted, this weight_default will be used</span>
+<span class="sd">        for every edge.</span>
+<span class="sd">    check_directed : bool</span>
+<span class="sd">        Default is ``True``. If the graph is an adjacency matrix, we will attempt to</span>
+<span class="sd">        ascertain whether it is directed or undirected. As our leiden implementation is</span>
+<span class="sd">        only known to work with an undirected graph, this function will raise an error</span>
+<span class="sd">        if it is found to be a directed graph. If you know it is undirected and wish to</span>
+<span class="sd">        avoid this scan, you can set this value to ``False`` and only the lower triangle</span>
+<span class="sd">        of the adjacency matrix will be used to generate the weighted edge list.</span>
+<span class="sd">    trials : int</span>
+<span class="sd">        Default is ``1``. Runs leiden ``trials`` times, keeping the best partitioning</span>
+<span class="sd">        as judged by the quality maximization function (default: modularity, see</span>
+<span class="sd">        ``use_modularity`` parameter for details). This differs from</span>
+<span class="sd">        ``extra_forced_iterations`` by starting over from scratch each for each trial,</span>
+<span class="sd">        while ``extra_forced_iterations`` attempts to make microscopic adjustments from</span>
+<span class="sd">        the &quot;final&quot; state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[Any, int]</span>
+<span class="sd">        The results of running leiden over the provided graph, a dictionary containing</span>
+<span class="sd">        mappings of node -&gt; community id. Isolate nodes in the input graph are not returned</span>
+<span class="sd">        in the result.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">    TypeError</span>
+<span class="sd">    BeartypeCallHintParamViolation</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    graspologic.utils.is_unweighted</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Traag, V.A.; Waltman, L.; Van, Eck N.J. &quot;From Louvain to Leiden:</span>
+<span class="sd">         guaranteeing well-connected communities&quot;, Scientific Reports, Vol. 9, 2019</span>
+<span class="sd">    .. [2] https://github.com/microsoft/graspologic-native</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    No two different nodes are allowed to encode to the **same** str representation,</span>
+<span class="sd">    e.g. node_a id of ``&quot;1&quot;`` and node_b id of ``1`` are different object types</span>
+<span class="sd">    but str(node_a) == str(node_b). This collision will result in a ``ValueError``</span>
+
+<span class="sd">    This function is implemented in the `graspologic-native` Python module, a module</span>
+<span class="sd">    written in Rust for Python.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_validate_common_arguments</span><span class="p">(</span>
+        <span class="n">extra_forced_iterations</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="p">,</span>
+        <span class="n">randomness</span><span class="p">,</span>
+        <span class="n">random_seed</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">check_argument</span><span class="p">(</span><span class="n">trials</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Trials must be a positive integer&quot;</span><span class="p">)</span>
+
+    <span class="n">identifier</span> <span class="o">=</span> <span class="n">_IdentityMapper</span><span class="p">()</span>
+    <span class="n">node_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+        <span class="n">node_count</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">_nx_to_edge_list</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">is_weighted</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="p">,</span> <span class="n">weight_default</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">node_count</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">_edge_list_to_edge_list</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">node_count</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">_adjacency_matrix_to_edge_list</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">check_directed</span><span class="p">,</span> <span class="n">is_weighted</span><span class="p">,</span> <span class="n">weight_default</span>
+        <span class="p">)</span>
+
+    <span class="n">native_friendly_communities</span> <span class="o">=</span> <span class="n">_community_python_to_native</span><span class="p">(</span>
+        <span class="n">starting_communities</span><span class="p">,</span> <span class="n">identifier</span>
+    <span class="p">)</span>
+
+    <span class="n">_quality</span><span class="p">,</span> <span class="n">native_partitions</span> <span class="o">=</span> <span class="n">gn</span><span class="o">.</span><span class="n">leiden</span><span class="p">(</span>
+        <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
+        <span class="n">starting_communities</span><span class="o">=</span><span class="n">native_friendly_communities</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+        <span class="n">randomness</span><span class="o">=</span><span class="n">randomness</span><span class="p">,</span>
+        <span class="n">iterations</span><span class="o">=</span><span class="n">extra_forced_iterations</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">use_modularity</span><span class="o">=</span><span class="n">use_modularity</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+        <span class="n">trials</span><span class="o">=</span><span class="n">trials</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">proper_partitions</span> <span class="o">=</span> <span class="n">_community_native_to_python</span><span class="p">(</span><span class="n">native_partitions</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">proper_partitions</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">node_count</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Leiden partitions do not contain all nodes from the input graph because input graph &quot;</span>
+            <span class="s2">&quot;contained isolate nodes.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">proper_partitions</span></div>
+
+
+<div class="viewcode-block" id="HierarchicalCluster"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalCluster">[docs]</a><span class="k">class</span> <span class="nc">HierarchicalCluster</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="sd">&quot;&quot;&quot;Node id&quot;&quot;&quot;</span>
+    <span class="n">cluster</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="sd">&quot;&quot;&quot;Leiden cluster id&quot;&quot;&quot;</span>
+    <span class="n">parent_cluster</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;Only used when level != 0, but will indicate the previous cluster id that this node was in&quot;&quot;&quot;</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Each time a community has a higher population than we would like, we create a subnetwork </span>
+<span class="sd">    of that community and process it again to break it into smaller chunks. Each time we </span>
+<span class="sd">    detect this, the level increases by 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">is_final_cluster</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Whether this is the terminal cluster in the hierarchical leiden process or not</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="HierarchicalClusters"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters">[docs]</a><span class="k">class</span> <span class="nc">HierarchicalClusters</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">HierarchicalCluster</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    HierarchicalClusters is a subclass of Python&#39;s :class:`list` class with two</span>
+<span class="sd">    helper methods for retrieving dictionary views of the first and final</span>
+<span class="sd">    level of hierarchical clustering in dictionary form.  The rest of the</span>
+<span class="sd">    HierarchicalCluster entries in this list can be seen as a transition</span>
+<span class="sd">    state log of our :func:`graspologic.partition.hierarchical_leiden` process</span>
+<span class="sd">    as it continuously tries to break down communities over a certain size,</span>
+<span class="sd">    with the two helper methods on this list providing you the starting point</span>
+<span class="sd">    community map and ending point community map.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="HierarchicalClusters.first_level_hierarchical_clustering"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters.first_level_hierarchical_clustering">[docs]</a>    <span class="k">def</span> <span class="nf">first_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[Any, int]</span>
+<span class="sd">            The initial leiden algorithm clustering results as a dictionary</span>
+<span class="sd">            of node id to community id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">entry</span><span class="o">.</span><span class="n">node</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">cluster</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="HierarchicalClusters.final_level_hierarchical_clustering"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters.final_level_hierarchical_clustering">[docs]</a>    <span class="k">def</span> <span class="nf">final_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[Any, int]</span>
+<span class="sd">            The last leiden algorithm clustering results as a dictionary</span>
+<span class="sd">            of node id to community id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">entry</span><span class="o">.</span><span class="n">node</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">cluster</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_final_cluster</span><span class="p">}</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_from_native</span><span class="p">(</span>
+    <span class="n">native_cluster</span><span class="p">:</span> <span class="n">gn</span><span class="o">.</span><span class="n">HierarchicalCluster</span><span class="p">,</span>
+    <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HierarchicalCluster</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">native_cluster</span><span class="p">,</span> <span class="n">gn</span><span class="o">.</span><span class="n">HierarchicalCluster</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;This class method is only valid for graspologic_native.HierarchicalCluster&quot;</span>
+        <span class="p">)</span>
+    <span class="n">node_id</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">original</span><span class="p">(</span><span class="n">native_cluster</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HierarchicalCluster</span><span class="p">(</span>
+        <span class="n">node</span><span class="o">=</span><span class="n">node_id</span><span class="p">,</span>
+        <span class="n">cluster</span><span class="o">=</span><span class="n">native_cluster</span><span class="o">.</span><span class="n">cluster</span><span class="p">,</span>
+        <span class="n">parent_cluster</span><span class="o">=</span><span class="n">native_cluster</span><span class="o">.</span><span class="n">parent_cluster</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">native_cluster</span><span class="o">.</span><span class="n">level</span><span class="p">,</span>
+        <span class="n">is_final_cluster</span><span class="o">=</span><span class="n">native_cluster</span><span class="o">.</span><span class="n">is_final_cluster</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="hierarchical_leiden"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.hierarchical_leiden">[docs]</a><span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">hierarchical_leiden</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">max_cluster_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">starting_communities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">extra_forced_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">randomness</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">use_modularity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+    <span class="n">is_weighted</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight_default</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">check_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HierarchicalClusters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Leiden is a global network partitioning algorithm. Given a graph, it will iterate</span>
+<span class="sd">    through the network node by node, and test for an improvement in our quality</span>
+<span class="sd">    maximization function by speculatively joining partitions of each neighboring node.</span>
+
+<span class="sd">    This process continues until no moves are made that increases the partitioning</span>
+<span class="sd">    quality.</span>
+
+<span class="sd">    Unlike the function :func:`graspologic.partition.leiden`, this function does not</span>
+<span class="sd">    stop after maximization has been achieved. On some large graphs, it&#39;s useful to</span>
+<span class="sd">    identify particularly large communities whose membership counts exceed</span>
+<span class="sd">    ``max_cluster_size`` and induce a subnetwork solely out of that community. This</span>
+<span class="sd">    subnetwork is then treated as a wholly separate entity, leiden is run over it, and</span>
+<span class="sd">    the new, smaller communities are then mapped into the original community map space.</span>
+
+<span class="sd">    The results also differ substantially; the returned List[HierarchicalCluster] is</span>
+<span class="sd">    more of a log of state at each level. All HierarchicalClusters at level 0 should be</span>
+<span class="sd">    considered to be the results of running :func:`graspologic.partition.leiden`. Every</span>
+<span class="sd">    community whose membership is greater than ``max_cluster_size`` will then</span>
+<span class="sd">    also have entries where level == 1, and so on until no communities are greater in</span>
+<span class="sd">    population than ``max_cluster_size`` OR we are unable to break them down any</span>
+<span class="sd">    further.</span>
+
+<span class="sd">    Once a node&#39;s membership registration in a community cannot be changed any further,</span>
+<span class="sd">    it is marked with the flag</span>
+<span class="sd">    ``graspologic.partition.HierarchicalCluster.is_final_cluster = True``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</span>
+<span class="sd">        A graph representation, whether a weighted edge list referencing an undirected</span>
+<span class="sd">        graph, an undirected networkx graph, or an undirected adjacency matrix in either</span>
+<span class="sd">        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section</span>
+<span class="sd">        regarding node ids used.</span>
+<span class="sd">    max_cluster_size : int</span>
+<span class="sd">        Default is ``1000``. Any partition or cluster with</span>
+<span class="sd">        membership &gt;= ``max_cluster_size`` will be isolated into a subnetwork. This</span>
+<span class="sd">        subnetwork will be used for a new leiden global partition mapping, which will</span>
+<span class="sd">        then be remapped back into the global space after completion. Once all</span>
+<span class="sd">        clusters with membership &gt;= ``max_cluster_size`` have been completed, the level</span>
+<span class="sd">        increases and the partition scheme is scanned again for any new clusters with</span>
+<span class="sd">        membership &gt;= ``max_cluster_size`` and the process continues until every</span>
+<span class="sd">        cluster&#39;s membership is &lt; ``max_cluster_size`` or if they cannot be broken into</span>
+<span class="sd">        more than one new community.</span>
+<span class="sd">    starting_communities : Optional[Dict[Any, int]]</span>
+<span class="sd">        Default is ``None``. An optional community mapping dictionary that contains a node</span>
+<span class="sd">        id mapping to the community it belongs to. Please see the Notes section regarding</span>
+<span class="sd">        node ids used.</span>
+
+<span class="sd">        If no community map is provided, the default behavior is to create a node</span>
+<span class="sd">        community identity map, where every node is in their own community.</span>
+<span class="sd">    extra_forced_iterations : int</span>
+<span class="sd">        Default is ``0``. Leiden will run until a maximum quality score has been found</span>
+<span class="sd">        for the node clustering and no nodes are moved to a new cluster in another</span>
+<span class="sd">        iteration. As there is an element of randomness to the Leiden algorithm, it is</span>
+<span class="sd">        sometimes useful to set ``extra_forced_iterations`` to a number larger than 0</span>
+<span class="sd">        where the entire process is forced to attempt further refinement.</span>
+<span class="sd">    resolution : Union[int, float]</span>
+<span class="sd">        Default is ``1.0``. Higher resolution values lead to more communities and lower</span>
+<span class="sd">        resolution values leads to fewer communities. Must be greater than 0.</span>
+<span class="sd">    randomness : Union[int, float]</span>
+<span class="sd">        Default is ``0.001``. The larger the randomness value, the more exploration of</span>
+<span class="sd">        the partition space is possible. This is a major difference from the Louvain</span>
+<span class="sd">        algorithm, which is purely greedy in the partition exploration.</span>
+<span class="sd">    use_modularity : bool</span>
+<span class="sd">        Default is ``True``. If ``False``, will use a Constant Potts Model (CPM).</span>
+<span class="sd">    random_seed : Optional[int]</span>
+<span class="sd">        Default is ``None``. Can provide an optional seed to the PRNG used in Leiden</span>
+<span class="sd">        for deterministic output.</span>
+<span class="sd">    weight_attribute : str</span>
+<span class="sd">        Default is ``weight``. Only used when creating a weighed edge list of tuples</span>
+<span class="sd">        when the source graph is a networkx graph. This attribute corresponds to the</span>
+<span class="sd">        edge data dict key.</span>
+<span class="sd">    is_weighted : Optional[bool]</span>
+<span class="sd">        Default is ``None``. Only used when creating a weighted edge list of tuples</span>
+<span class="sd">        when the source graph is an adjacency matrix. The</span>
+<span class="sd">        :func:`graspologic.utils.is_unweighted` function will scan these</span>
+<span class="sd">        matrices and attempt to determine whether it is weighted or not. This flag can</span>
+<span class="sd">        short circuit this test and the values in the adjacency matrix will be treated</span>
+<span class="sd">        as weights.</span>
+<span class="sd">    weight_default : Union[int, float]</span>
+<span class="sd">        Default is ``1.0``. If the graph is a networkx graph and the graph does not</span>
+<span class="sd">        have a fully weighted sequence of edges, this default will be used. If the</span>
+<span class="sd">        adjacency matrix is found or specified to be unweighted, this weight_default</span>
+<span class="sd">        will be used for every edge.</span>
+<span class="sd">    check_directed : bool</span>
+<span class="sd">        Default is ``True``. If the graph is an adjacency matrix, we will attempt to</span>
+<span class="sd">        ascertain whether it is directed or undirected. As our leiden implementation is</span>
+<span class="sd">        only known to work with an undirected graph, this function will raise an error</span>
+<span class="sd">        if it is found to be a directed graph. If you know it is undirected and wish to</span>
+<span class="sd">        avoid this scan, you can set this value to ``False`` and only the lower triangle</span>
+<span class="sd">        of the adjacency matrix will be used to generate the weighted edge list.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    HierarchicalClusters</span>
+<span class="sd">        The results of running hierarchical leiden over the provided graph, a list of</span>
+<span class="sd">        HierarchicalClusters identifying the state of every node and cluster at each</span>
+<span class="sd">        level. Isolate nodes in the input graph are not returned in the result.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">    TypeError</span>
+<span class="sd">    BeartypeCallHintParamViolation</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    graspologic.utils.is_unweighted</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Traag, V.A.; Waltman, L.; Van, Eck N.J. &quot;From Louvain to Leiden:</span>
+<span class="sd">        guaranteeing well-connected communities&quot;,Scientific Reports, Vol. 9, 2019</span>
+<span class="sd">    .. [2] https://github.com/microsoft/graspologic-native</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    No two different nodes are allowed to encode to the **same** str representation,</span>
+<span class="sd">    e.g. node_a id of ``&quot;1&quot;`` and node_b id of ``1`` are different object types</span>
+<span class="sd">    but str(node_a) == str(node_b). This collision will result in a ``ValueError``</span>
+
+<span class="sd">    This function is implemented in the `graspologic-native` Python module, a module</span>
+<span class="sd">    written in Rust for Python.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_validate_common_arguments</span><span class="p">(</span>
+        <span class="n">extra_forced_iterations</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="p">,</span>
+        <span class="n">randomness</span><span class="p">,</span>
+        <span class="n">random_seed</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">check_argument</span><span class="p">(</span><span class="n">max_cluster_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;max_cluster_size must be a positive int&quot;</span><span class="p">)</span>
+
+    <span class="n">identifier</span> <span class="o">=</span> <span class="n">_IdentityMapper</span><span class="p">()</span>
+    <span class="n">node_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+        <span class="n">node_count</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">_nx_to_edge_list</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">is_weighted</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="p">,</span> <span class="n">weight_default</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">node_count</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">_edge_list_to_edge_list</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">node_count</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">_adjacency_matrix_to_edge_list</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">check_directed</span><span class="p">,</span> <span class="n">is_weighted</span><span class="p">,</span> <span class="n">weight_default</span>
+        <span class="p">)</span>
+
+    <span class="n">native_friendly_communities</span> <span class="o">=</span> <span class="n">_community_python_to_native</span><span class="p">(</span>
+        <span class="n">starting_communities</span><span class="p">,</span> <span class="n">identifier</span>
+    <span class="p">)</span>
+
+    <span class="n">hierarchical_clusters_native</span> <span class="o">=</span> <span class="n">gn</span><span class="o">.</span><span class="n">hierarchical_leiden</span><span class="p">(</span>
+        <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
+        <span class="n">starting_communities</span><span class="o">=</span><span class="n">native_friendly_communities</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+        <span class="n">randomness</span><span class="o">=</span><span class="n">randomness</span><span class="p">,</span>
+        <span class="n">iterations</span><span class="o">=</span><span class="n">extra_forced_iterations</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">use_modularity</span><span class="o">=</span><span class="n">use_modularity</span><span class="p">,</span>
+        <span class="n">max_cluster_size</span><span class="o">=</span><span class="n">max_cluster_size</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">result_partitions</span> <span class="o">=</span> <span class="n">HierarchicalClusters</span><span class="p">()</span>
+    <span class="n">all_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">hierarchical_clusters_native</span><span class="p">:</span>
+        <span class="n">partition</span> <span class="o">=</span> <span class="n">_from_native</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+        <span class="n">result_partitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">partition</span><span class="p">)</span>
+        <span class="n">all_nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_nodes</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">node_count</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Leiden partitions do not contain all nodes from the input graph because input graph &quot;</span>
+            <span class="s2">&quot;contained isolate nodes.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result_partitions</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
