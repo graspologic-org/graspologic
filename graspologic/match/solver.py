@@ -169,6 +169,9 @@ class _GraphMatchSolver:
         _compare_dimensions(B, AB, "row", "column", "B", "AB")
         _compare_dimensions(A, BA, "row", "column", "A", "BA")
         _compare_dimensions(B, BA, "row", "row", "B", "BA")
+        if S is not None:
+            _compare_dimensions(A, [S], "row", "row", "A", "S")
+            _compare_dimensions(B, [S], "column", "column", "B", "S")
 
         # padding for unequally sized inputs
         if self.n_A != self.n_B:
@@ -189,9 +192,11 @@ class _GraphMatchSolver:
         # check for similarity term
         if S is None:
             S = csr_array((self.n, self.n))
+        elif self.padded:
+            S = _adj_pad(S, n_padded=self.n, method="naive")
 
         _compare_dimensions(A, [S], "row", "row", "A", "S")
-        _compare_dimensions(B, [S], "row", "column", "B", "S")
+        _compare_dimensions(B, [S], "column", "column", "B", "S")
 
         self.A = A
         self.B = B
@@ -643,9 +648,7 @@ def _multilayer_adj_pad(
         return new_matrices
 
 
-def _adj_pad(
-    matrix: AdjacencyMatrix, n_padded: Int, method: PaddingType
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def _adj_pad(matrix: AdjacencyMatrix, n_padded: Int, method: PaddingType) -> np.ndarray:
     if isinstance(matrix, (csr_matrix, csr_array)) and (method == "adopted"):
         msg = (
             "Using adopted padding method with a sparse adjacency representation; this "
