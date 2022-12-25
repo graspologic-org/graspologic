@@ -1,0 +1,7 @@
+[BUG] Fixes reproducibility in EdgeSwapper and adds to docs (#945)
+Added Degree Preserving Edge Swaps (#935)
+fix mypy issue (#943)
+Fixed loops bug in SBM and DCSBM model fitting  (#930)
+Error message in Leiden when given a multigraph was incorrect (#926)
+Fixed typos in models/er.py & models/sbm_estimators.py (#920)
+[WIP] Added release notes (#914)
