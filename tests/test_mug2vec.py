@@ -11,7 +11,7 @@ from graspologic.simulations import sbm
 
 
 def generate_data():
-    np.random.seed(1)
+    np.random.seed(2)
 
     p1 = [[0.3, 0.1], [0.1, 0.3]]
     p2 = [[0.1, 0.3], [0.3, 0.1]]

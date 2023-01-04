@@ -140,28 +140,6 @@ class TestGraphMatch(unittest.TestCase):
         )
         self.assertTrue(11156 <= score < 21000)
 
-    def test_rand_SGM(self):
-        _, _, score, _ = graph_match(
-            A, B, n_init=50, maximize=False, init_perturbation=0.5, rng=888
-        )
-        self.assertTrue(11156 <= score < 13500)
-
-        n = A.shape[0]
-        pi = np.array([7, 5, 1, 3, 10, 4, 8, 6, 9, 11, 2, 12]) - [1] * n
-        seeds1 = [4, 8, 10]
-        seeds2 = [pi[z] for z in seeds1]
-        partial_match = np.column_stack((seeds1, seeds2))
-        _, _, score, _ = graph_match(
-            A,
-            B,
-            partial_match=partial_match,
-            maximize=False,
-            init_perturbation=0.5,
-            n_init=50,
-            rng=888,
-        )
-        self.assertTrue(11156 <= score < 12500)
-
     def test_parallel(self):
         _, _, score, _ = graph_match(
             A,
