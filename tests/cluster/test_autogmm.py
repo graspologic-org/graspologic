@@ -142,7 +142,6 @@ class TestAutoGMM(unittest.TestCase):
             AutoGMM = AutoGMMCluster(min_components=3, affinity="all")
             AutoGMM.fit(X)
 
-
     def test_no_y(self):
         np.random.seed(1)
 

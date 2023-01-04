@@ -50,7 +50,9 @@ def _test_sbm_er_binary(self, method, P, directed=False, sparse=False, *args, **
 
     verts_per_community = [50, 50]
 
-    sbm_sample, labels_sbm = sbm(verts_per_community, P, directed=directed, return_labels=True)
+    sbm_sample, labels_sbm = sbm(
+        verts_per_community, P, directed=directed, return_labels=True
+    )
 
     if sparse:
         sbm_sample = csr_matrix(sbm_sample)
