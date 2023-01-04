@@ -1,3 +1,4 @@
+<!-- omit in toc -->
 # graspologic
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 [![PyPI version](https://img.shields.io/pypi/v/graspologic.svg)](https://pypi.org/project/graspologic/)
@@ -7,17 +8,10 @@
 
 ## `graspologic` is a package for graph statistical algorithms.
 
-- [graspologic](#graspologic)
-  - [`graspologic` is a package for graph statistical algorithms.](#graspologic-is-a-package-for-graph-statistical-algorithms)
 - [Overview](#overview)
 - [Documentation](#documentation)
 - [System Requirements](#system-requirements)
-  - [Hardware requirements](#hardware-requirements)
-  - [Software requirements](#software-requirements)
-    - [OS Requirements](#os-requirements)
 - [Installation Guide](#installation-guide)
-  - [Install from pip](#install-from-pip)
-  - [Install from Github](#install-from-github)
 - [Contributing](#contributing)
 - [License](#license)
 - [Issues](#issues)
@@ -32,10 +26,13 @@ The official documentation with usage is at https://microsoft.github.io/graspolo
 Please visit the [tutorial section](https://microsoft.github.io/graspologic/latest/tutorials/index.html) in the official website for more in depth usage.
 
 # System Requirements
+<!-- omit in toc -->
 ## Hardware requirements
 `graspologic` package requires only a standard computer with enough RAM to support the in-memory operations.
 
+<!-- omit in toc -->
 ## Software requirements
+<!-- omit in toc -->
 ### OS Requirements
 `graspologic` is tested on the following OSes:
 - Linux x64
@@ -52,11 +49,13 @@ please feel free to [raise an issue](https://github.com/microsoft/graspologic/is
 if we have concrete examples of things not working!
 
 # Installation Guide
+<!-- omit in toc -->
 ## Install from pip
 ```
 pip install graspologic
 ```
 
+<!-- omit in toc -->
 ## Install from Github
 ```
 git clone https://github.com/microsoft/graspologic
