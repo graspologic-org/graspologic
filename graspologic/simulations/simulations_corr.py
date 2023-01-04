@@ -10,14 +10,14 @@ from graspologic.types import List, Tuple
 
 
 def check_dirloop(directed: bool, loops: bool) -> None:
-    if not isinstance(directed, bool):
+    if type(directed) is not bool:
         raise TypeError("directed is not of type bool.")
-    if not isinstance(loops, bool):
+    if type(loops) is not bool:
         raise TypeError("loops is not of type bool.")
 
 
 def check_r(r: float) -> None:
-    if not np.issubdtype(type(r), np.floating):
+    if type(r) is not float:
         raise TypeError("r is not of type float.")
     elif r < -1 or r > 1:
         msg = "r must between -1 and 1."
@@ -35,15 +35,13 @@ def check_rel_er(p: float, r: float) -> None:
 
 
 def check_rel_sbm(p: np.ndarray, r: float) -> None:
-    for i in range(np.array(p).shape[0]):
-        for j in range(np.array(p).shape[1]):
-            if p[i][j] + r * (1 - p[i][j]) < 0:
-                msg = "p + r * (1 - p) should be bigger than 0"
-                raise ValueError(msg)
-
-            elif p[i][j] * (1 - r) < 0:
-                msg = "p * (1 - r) should be bigger than 0"
-                raise ValueError(msg)
+    for i in np.array(p).flat:
+        if i + r * (1 - i) < 0:
+            msg = "p + r * (1 - p) should be bigger than 0"
+            raise ValueError(msg)
+        elif i * (1 - r) < 0:
+            msg = "p * (1 - r) should be bigger than 0"
+            raise ValueError(msg)
 
 
 def sample_edges_corr(
