@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.match.wrappers &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.match.wrappers &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -305,24 +305,24 @@
 
 <span class="k">class</span> <span class="nc">MatchResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="n">indices_A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sorted indices in ``A`` which were matched.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">indices_B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Indices in ``B`` which were matched. Element ``indices_B[i]`` was matched</span>
 <span class="sd">    to element ``indices_A[i]``. ``indices_B`` can also be thought of as a </span>
 <span class="sd">    permutation of the nodes of ``B`` with respect to ``A``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">score</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Objective function value at the end of optimization.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">misc</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    List of length ``n_init`` containing information about each run. Fields for</span>
 <span class="sd">    each run are ``score``, ``n_iter``, ``convex_solution``, and ``converged``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -352,7 +352,7 @@
     <span class="n">transport_tol</span><span class="p">:</span> <span class="n">Scalar</span> <span class="o">=</span> <span class="mf">5e-2</span><span class="p">,</span>
     <span class="n">transport_max_iter</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatchResult</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Attempts to solve the Graph Matching Problem or the Quadratic Assignment Problem</span>
 <span class="sd">    (QAP) through an implementation of the Fast Approximate QAP (FAQ) Algorithm [1].</span>
 

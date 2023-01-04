@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.layouts.render &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.layouts.render &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -295,7 +295,7 @@
 <span class="k">def</span> <span class="nf">_calculate_x_y_domain</span><span class="p">(</span>
     <span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodePosition</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;calculate the overall x/y domain, converting to a square</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate the overall x/y domain, converting to a square</span>
 <span class="sd">    so we can have a consistent scale</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">min_x</span> <span class="o">=</span> <span class="n">min_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
@@ -336,7 +336,7 @@
     <span class="n">spatial_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">dpi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Scale the size again to match the rendered pixel range</span>
 <span class="sd">    we would expect this to be handled by the underlying viz framework, but it isn&#39;t, size is specified</span>
 <span class="sd">    as the bounding box in points of the rendered output, so we need to transform our size to match.</span>
@@ -452,7 +452,7 @@
     <span class="n">arrows</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Renders and displays a graph.</span>
 
 <span class="sd">    Attempts to display it via the platform-specific display library such as TkInter</span>
@@ -533,7 +533,7 @@
     <span class="n">arrows</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Renders a graph to file.</span>
 
 <span class="sd">    Edges will be displayed with the same color as the source node.</span>

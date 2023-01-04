@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.mase &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.embed.mase &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -293,7 +293,7 @@
 
 
 <div class="viewcode-block" id="MultipleASE"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.MultipleASE">[docs]</a><span class="k">class</span> <span class="nc">MultipleASE</span><span class="p">(</span><span class="n">BaseEmbedMulti</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multiple Adjacency Spectral Embedding (MASE) embeds arbitrary number of input</span>
 <span class="sd">    graphs with matched vertex sets.</span>
 
@@ -489,7 +489,7 @@
         <span class="k">return</span> <span class="n">Uhat</span><span class="p">,</span> <span class="n">Vhat</span><span class="p">,</span> <span class="n">sing_vals_left</span><span class="p">,</span> <span class="n">sing_vals_right</span>
 
 <div class="viewcode-block" id="MultipleASE.fit"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.MultipleASE.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs.</span>
 
 <span class="sd">        Parameters</span>
@@ -528,7 +528,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="MultipleASE.fit_transform"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.MultipleASE.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs and apply the embedding on graphs.</span>
 <span class="sd">        n_components is either automatically determined or based on user input.</span>
 

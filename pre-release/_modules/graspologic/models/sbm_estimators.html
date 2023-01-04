@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.sbm_estimators &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.models.sbm_estimators &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -336,7 +336,7 @@
 
 
 <div class="viewcode-block" id="SBMEstimator"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.SBMEstimator">[docs]</a><span class="k">class</span> <span class="nc">SBMEstimator</span><span class="p">(</span><span class="n">BaseGraphEstimator</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stochastic Block Model</span>
 
 <span class="sd">    The stochastic block model (SBM) represents each node as belonging to a block</span>
@@ -434,7 +434,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">embed_kws</span> <span class="o">=</span> <span class="n">embed_kws</span></div>
 
     <span class="k">def</span> <span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Do some kind of clustering algorithm to estimate communities</span>
 
 <span class="sd">        There are many ways to do this, here is one</span>
@@ -456,7 +456,7 @@
 <div class="viewcode-block" id="SBMEstimator.fit"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.SBMEstimator.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SBMEstimator&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the SBM to a graph, optionally with known block labels</span>
 
 <span class="sd">        If y is `None`, the block assignments for each vertex will first be</span>
@@ -519,7 +519,7 @@
 
 
 <div class="viewcode-block" id="DCSBMEstimator"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.DCSBMEstimator">[docs]</a><span class="k">class</span> <span class="nc">DCSBMEstimator</span><span class="p">(</span><span class="n">BaseGraphEstimator</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Degree-corrected Stochastic Block Model</span>
 
 <span class="sd">    The degree-corrected stochastic block model (DCSBM) represents each node as</span>
@@ -663,7 +663,7 @@
 <div class="viewcode-block" id="DCSBMEstimator.fit"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.DCSBMEstimator.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DCSBMEstimator&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the DCSBM to a graph, optionally with known block labels</span>
 
 <span class="sd">        If y is `None`, the block assignments for each vertex will first be</span>
@@ -742,7 +742,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_block_indices</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="nb">range</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    y is a length n_verts vector of labels</span>
 
 <span class="sd">    returns a length n_verts vector in the same order as the input</span>
@@ -773,7 +773,7 @@
     <span class="n">return_counts</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    graph : input n x n graph</span>
 <span class="sd">    block_inds : list of length n_communities</span>
 <span class="sd">    block_vert_inds : list of list, for each block index, gives every node in that block</span>
@@ -806,7 +806,7 @@
 <span class="k">def</span> <span class="nf">_block_to_full</span><span class="p">(</span>
     <span class="n">block_mat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inverse</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;blows up&quot; a k x k matrix, where k is the number of communities,</span>
 <span class="sd">    into a full n x n probability matrix</span>
 

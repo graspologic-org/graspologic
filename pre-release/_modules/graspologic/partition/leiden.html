@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.partition.leiden &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.partition.leiden &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -474,7 +474,7 @@
     <span class="n">check_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">trials</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Leiden is a global network partitioning algorithm. Given a graph, it will iterate</span>
 <span class="sd">    through the network node by node, and test for an improvement in our quality</span>
 <span class="sd">    maximization function by speculatively joining partitions of each neighboring node.</span>
@@ -627,25 +627,25 @@
 
 <div class="viewcode-block" id="HierarchicalCluster"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalCluster">[docs]</a><span class="k">class</span> <span class="nc">HierarchicalCluster</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="n">node</span><span class="p">:</span> <span class="n">Any</span>
-    <span class="sd">&quot;&quot;&quot;Node id&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Node id&quot;&quot;&quot;</span>
     <span class="n">cluster</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="sd">&quot;&quot;&quot;Leiden cluster id&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Leiden cluster id&quot;&quot;&quot;</span>
     <span class="n">parent_cluster</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;Only used when level != 0, but will indicate the previous cluster id that this node was in&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Only used when level != 0, but will indicate the previous cluster id that this node was in&quot;&quot;&quot;</span>
     <span class="n">level</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Each time a community has a higher population than we would like, we create a subnetwork </span>
 <span class="sd">    of that community and process it again to break it into smaller chunks. Each time we </span>
 <span class="sd">    detect this, the level increases by 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">is_final_cluster</span><span class="p">:</span> <span class="nb">bool</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether this is the terminal cluster in the hierarchical leiden process or not</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="HierarchicalClusters"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters">[docs]</a><span class="k">class</span> <span class="nc">HierarchicalClusters</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">HierarchicalCluster</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    HierarchicalClusters is a subclass of Python&#39;s :class:`list` class with two</span>
 <span class="sd">    helper methods for retrieving dictionary views of the first and final</span>
 <span class="sd">    level of hierarchical clustering in dictionary form.  The rest of the</span>
@@ -657,7 +657,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="HierarchicalClusters.first_level_hierarchical_clustering"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters.first_level_hierarchical_clustering">[docs]</a>    <span class="k">def</span> <span class="nf">first_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Dict[Any, int]</span>
@@ -667,7 +667,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">entry</span><span class="o">.</span><span class="n">node</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">cluster</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">}</span></div>
 
 <div class="viewcode-block" id="HierarchicalClusters.final_level_hierarchical_clustering"><a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters.final_level_hierarchical_clustering">[docs]</a>    <span class="k">def</span> <span class="nf">final_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Dict[Any, int]</span>
@@ -716,7 +716,7 @@
     <span class="n">weight_default</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="n">check_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HierarchicalClusters</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Leiden is a global network partitioning algorithm. Given a graph, it will iterate</span>
 <span class="sd">    through the network node by node, and test for an improvement in our quality</span>

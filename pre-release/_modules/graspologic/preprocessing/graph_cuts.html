@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.preprocessing.graph_cuts &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.preprocessing.graph_cuts &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -314,7 +314,7 @@
 
 
 <div class="viewcode-block" id="DefinedHistogram"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.DefinedHistogram">[docs]</a><span class="k">class</span> <span class="nc">DefinedHistogram</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Contains the histogram and the edges of the bins in the histogram.</span>
 <span class="sd">    The bin_edges will have a length 1 greater than the histogram, as it defines the</span>
 <span class="sd">    minimal and maximal edges as well as each edge in between.</span>
@@ -329,7 +329,7 @@
     <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DefinedHistogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a histogram of the edge weights of the provided graph. Histogram function</span>
 <span class="sd">    is fundamentally proxied through to numpy&#39;s `histogram` function, and bin selection</span>
 <span class="sd">    follows :func:`numpy.histogram` processes.</span>
@@ -394,7 +394,7 @@
     <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
     <span class="n">prune_isolates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Thresholds edges (removing them from the graph and returning a copy) by weight.</span>
 
 <span class="sd">    Parameters</span>
@@ -476,7 +476,7 @@
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DefinedHistogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a histogram of the vertex degree centrality of the provided graph.</span>
 <span class="sd">    Histogram function is fundamentally proxied through to numpy&#39;s `histogram` function,</span>
 <span class="sd">    and bin selection follows :func:`numpy.histogram` processes.</span>
@@ -520,7 +520,7 @@
     <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a graph and a cut_threshold and a cut_process, return a copy of the graph</span>
 <span class="sd">    with the vertices outside of the cut_threshold.</span>
 
@@ -563,7 +563,7 @@
     <span class="n">include_endpoints</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DefinedHistogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a histogram of the vertex betweenness centrality of the provided graph.</span>
 <span class="sd">    Histogram function is fundamentally proxied through to numpy&#39;s `histogram` function,</span>
 <span class="sd">    and bin selection follows :func:`numpy.histogram` processes.</span>
@@ -644,7 +644,7 @@
     <span class="n">include_endpoints</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a graph and a cut_threshold and a cut_process, return a copy of the graph</span>
 <span class="sd">    with the vertices outside of the cut_threshold.</span>
 

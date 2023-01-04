@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.pipeline.graph_builder &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.pipeline.graph_builder &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -295,7 +295,7 @@
 
 
 <div class="viewcode-block" id="GraphBuilder"><a class="viewcode-back" href="../../../reference/reference/pipeline.html#graspologic.pipeline.GraphBuilder">[docs]</a><span class="k">class</span> <span class="nc">GraphBuilder</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    GraphBuilder is a simple builder for networkx Graphs. To use less memory,</span>
 <span class="sd">    it automatically maps all node ids of any hashable type to ``int``.</span>
 
@@ -327,7 +327,7 @@
         <span class="n">sum_weight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">attributes</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a weighted edge between the provided source and target. The source</span>
 <span class="sd">        and target id are converted to a unique ``int``.</span>
 
@@ -369,7 +369,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="n">target_id</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="o">**</span><span class="n">attributes</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GraphBuilder.build"><a class="viewcode-back" href="../../../reference/reference/pipeline.html#graspologic.pipeline.GraphBuilder.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], List[Any]]</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.plot.plot_matrix &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.plot.plot_matrix &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -435,7 +435,7 @@
 
 
 <span class="k">def</span> <span class="nf">_remove_shared_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove ax from its sharex and sharey</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Remove ax from the Grouper object</span>
@@ -459,7 +459,7 @@
 
 
 <span class="k">def</span> <span class="nf">draw_colors</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ax_type</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">divider</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;tab10&quot;</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draw colormap onto the axis to separate the data</span>
 
 <span class="sd">    Parameters</span>
@@ -530,7 +530,7 @@
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;heatmap&quot;</span><span class="p">,</span>
     <span class="n">gridline_kws</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draw separators between groups on the plot</span>
 
 <span class="sd">    Parameters</span>
@@ -584,7 +584,7 @@
     <span class="n">group_border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;heatmap&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draw ticks onto the axis of the plot to separate the data</span>
 
 <span class="sd">    Parameters</span>
@@ -647,7 +647,7 @@
 
 
 <span class="k">def</span> <span class="nf">scattermap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draw a matrix using points instead of a heatmap. Helpful for larger, sparse</span>
 <span class="sd">    matrices.</span>
 
@@ -704,7 +704,7 @@
 
 
 <span class="k">def</span> <span class="nf">sort_meta</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">group_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span> <span class="n">item_order</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sort the data and metadata according to the sorting method</span>
 
 <span class="sd">    Parameters</span>
@@ -802,7 +802,7 @@
     <span class="n">highlight_kws</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kws</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sorts and plots a matrix in various ways, and with optional information added to the</span>
 <span class="sd">    margin of the matrix plot.</span>
 
@@ -1182,7 +1182,7 @@
     <span class="n">highlight_kws</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kws</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sorts and plots a square matrix in various ways, and with optional information added</span>
 <span class="sd">    to the margin of the matrix plot.</span>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.edge_swaps &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.models.edge_swaps &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -295,7 +295,7 @@
 
 <span class="c1"># Code based on: https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py</span>
 <div class="viewcode-block" id="EdgeSwapper"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.EdgeSwapper">[docs]</a><span class="k">class</span> <span class="nc">EdgeSwapper</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Degree Preserving Edge Swaps</span>
 
 <span class="sd">    This class allows for performing degree preserving edge swaps to</span>
@@ -364,7 +364,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">edge_list</span> <span class="o">=</span> <span class="n">edge_list</span></div>
 
     <span class="k">def</span> <span class="nf">_do_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the edge_list from the adjancency matrix</span>
 
 <span class="sd">        Returns</span>
@@ -382,7 +382,7 @@
         <span class="k">return</span> <span class="n">edge_list</span>
 
 <div class="viewcode-block" id="EdgeSwapper.swap_edges"><a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.EdgeSwapper.swap_edges">[docs]</a>    <span class="k">def</span> <span class="nf">swap_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_swaps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Performs a number of edge swaps on the graph</span>
 
 <span class="sd">        Parameters</span>
@@ -421,7 +421,7 @@
 <span class="k">def</span> <span class="nf">_edge_swap</span><span class="p">(</span>
     <span class="n">adjacency</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">edge_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs the edge swap on the adjacency matrix. If adjacency is</span>
 <span class="sd">    np.ndarray, then nopython=True is used in numba, but if adjacency</span>
 <span class="sd">    is csr_matrix, then forceobj=True is used in numba</span>

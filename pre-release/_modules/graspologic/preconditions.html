@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.preconditions &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.preconditions &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -294,7 +294,7 @@
 <div class="viewcode-block" id="check_argument_types"><a class="viewcode-back" href="../../reference/reference/preconditions.html#graspologic.preconditions.check_argument_types">[docs]</a><span class="k">def</span> <span class="nf">check_argument_types</span><span class="p">(</span>
     <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">required_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Raises a TypeError if the provided ``value`` is not one of the ``required_types``</span>
 
 <span class="sd">    Parameters</span>
@@ -317,7 +317,7 @@
 <div class="viewcode-block" id="check_optional_argument_types"><a class="viewcode-back" href="../../reference/reference/preconditions.html#graspologic.preconditions.check_optional_argument_types">[docs]</a><span class="k">def</span> <span class="nf">check_optional_argument_types</span><span class="p">(</span>
     <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">required_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Raises a TypeError if the provided ``value`` is not one of the ``required_types``,</span>
 <span class="sd">    unless it is None.  A None value is treated as a valid type.</span>
 
@@ -340,7 +340,7 @@
 
 
 <div class="viewcode-block" id="check_argument"><a class="viewcode-back" href="../../reference/reference/preconditions.html#graspologic.preconditions.check_argument">[docs]</a><span class="k">def</span> <span class="nf">check_argument</span><span class="p">(</span><span class="n">check</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Raises a ValueError if the provided check is false</span>
 
 <span class="sd">    &gt;&gt;&gt; from graspologic import preconditions</span>
@@ -370,7 +370,7 @@
 <div class="viewcode-block" id="is_real_weighted"><a class="viewcode-back" href="../../reference/reference/preconditions.html#graspologic.preconditions.is_real_weighted">[docs]</a><span class="k">def</span> <span class="nf">is_real_weighted</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span> <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checks every edge in ``graph`` to ascertain whether it has:</span>
 
 <span class="sd">        - a ``weight_attribute`` key in the data dictionary for the edge</span>

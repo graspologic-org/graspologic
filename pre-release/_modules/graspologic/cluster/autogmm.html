@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.cluster.autogmm &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.cluster.autogmm &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -310,7 +310,7 @@
 
 
 <div class="viewcode-block" id="AutoGMMCluster"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster">[docs]</a><span class="k">class</span> <span class="nc">AutoGMMCluster</span><span class="p">(</span><span class="n">BaseCluster</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Automatic Gaussian Mixture Model (GMM) selection.</span>
 
 <span class="sd">    Clustering algorithm using a hierarchical agglomerative clustering then Gaussian</span>
@@ -761,7 +761,7 @@
         <span class="k">return</span> <span class="n">results</span>
 
 <div class="viewcode-block" id="AutoGMMCluster.fit"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;AutoGMMCluster&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits gaussian mixture model to the data.</span>
 <span class="sd">        Initialize with agglomerative clustering then</span>
 <span class="sd">        estimate model parameters with EM algorithm.</span>
@@ -893,7 +893,7 @@
 
 
 <span class="k">def</span> <span class="nf">_increase_reg</span><span class="p">(</span><span class="n">reg</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Increase regularization factor by factor of 10.</span>
 
 <span class="sd">    Parameters</span>
@@ -916,7 +916,7 @@
 <span class="k">def</span> <span class="nf">_onehot_to_initial_params</span><span class="p">(</span>
     <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">onehot</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cov_type</span><span class="p">:</span> <span class="n">CovarianceType</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes cluster weights, cluster means and cluster precisions from</span>
 <span class="sd">    a given clustering.</span>
 
@@ -950,7 +950,7 @@
 
 
 <span class="k">def</span> <span class="nf">_labels_to_onehot</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts labels to one-hot format.</span>
 
 <span class="sd">    Parameters</span>
@@ -974,7 +974,7 @@
 <span class="k">def</span> <span class="nf">_process_paramgrid</span><span class="p">(</span>
     <span class="n">paramgrid</span><span class="p">:</span> <span class="n">ParamGridType</span><span class="p">,</span> <span class="n">kmeans_n_init</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">label_init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ParamGridType</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">ParamGridType</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes combinations of affinity and linkage that are not possible.</span>
 
 <span class="sd">    Parameters</span>

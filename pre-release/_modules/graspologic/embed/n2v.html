@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.n2v &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.embed.n2v &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -311,7 +311,7 @@
     <span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a node2vec embedding from a given graph. Will follow the word2vec</span>
 <span class="sd">    algorithm to create the embedding.</span>
 
@@ -420,7 +420,7 @@
 
     <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Completed. Ending time is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">)</span><span class="si">}</span><span class="s2"> Elapsed time is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Completed. Ending time is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">)</span><span class="si">}</span><span class="s2"> Elapsed time is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">end</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node2vec_graph</span><span class="o">.</span><span class="n">original_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
@@ -491,7 +491,7 @@
     <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Word2Vec</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Learn embeddings by optimizing the skip-gram objective using SGD.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">walks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">walk</span><span class="p">))</span> <span class="k">for</span> <span class="n">walk</span> <span class="ow">in</span> <span class="n">walks</span><span class="p">]</span>
@@ -512,7 +512,7 @@
 
 
 <span class="k">class</span> <span class="nc">_Node2VecGraph</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Temporary inner state object for constructing the random walks</span>
 
 <span class="sd">    Parameters</span>
@@ -556,7 +556,7 @@
         <span class="n">start_node</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
         <span class="n">degree_percentiles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Simulate a random walk starting from start node.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
@@ -612,7 +612,7 @@
     <span class="k">def</span> <span class="nf">_get_walk_length_interpolated</span><span class="p">(</span>
         <span class="n">degree</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">percentiles</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">max_walk_length</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a node&#39;s degree, determine the length of a walk that should be used. If the degree is less than the</span>
 <span class="sd">        first element of the percentiles list, default the walk length to 1. Otherwise, if the degree is greater</span>
 <span class="sd">        than the last element of the list, default it to the max_walk_length. If it falls in the middle, do a linear</span>
@@ -647,7 +647,7 @@
         <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">interpolate_walk_lengths_by_node_degree</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Repeatedly simulate random walks from each node.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
@@ -680,7 +680,7 @@
     <span class="k">def</span> <span class="nf">_get_alias_edge</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the alias edge setup lists for a given edge.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
@@ -707,7 +707,7 @@
         <span class="k">return</span> <span class="n">_alias_setup</span><span class="p">(</span><span class="n">normalized_probs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_preprocess_transition_probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Preprocessing of transition probabilities for guiding the random walks.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
@@ -778,7 +778,7 @@
 
 
 <span class="k">def</span> <span class="nf">_alias_setup</span><span class="p">(</span><span class="n">probabilities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute utility lists for non-uniform sampling from discrete distributions.</span>
 <span class="sd">    Refer to</span>
 <span class="sd">     https://lips.cs.princeton.edu/the-alias-method-efficient-sampling-with-many-discrete-outcomes/</span>
@@ -816,7 +816,7 @@
     <span class="n">alias</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
     <span class="n">random_state</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draw sample from a non-uniform discrete distribution using alias sampling.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">number_of_outcomes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)</span>

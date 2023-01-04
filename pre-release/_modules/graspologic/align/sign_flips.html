@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.align.sign_flips &mdash; graspologic 2.0.1dev3659993060 documentation</title>
+  <title>graspologic.align.sign_flips &mdash; graspologic 3.0.0dev3842362016 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="../../../index.html" class="icon icon-home"> graspologic
           </a>
               <div class="version">
-                2.0.1dev3659993060
+                3.0.0dev3842362016
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -289,7 +289,7 @@
 
 
 <div class="viewcode-block" id="SignFlips"><a class="viewcode-back" href="../../../reference/reference/align.html#graspologic.align.SignFlips">[docs]</a><span class="k">class</span> <span class="nc">SignFlips</span><span class="p">(</span><span class="n">BaseAlign</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Flips the signs of all entries in one dataset, ``X`` along some of the</span>
 <span class="sd">    dimensions. In particular, it does so in a way that brings this dataset to</span>
 <span class="sd">    the same orthant as the second dataset, ``Y``, according to some criterion,</span>
@@ -355,7 +355,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">criterion_function_</span> <span class="o">=</span> <span class="n">max_criterion</span></div>
 
 <div class="viewcode-block" id="SignFlips.fit"><a class="viewcode-back" href="../../../reference/reference/align.html#graspologic.align.SignFlips.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SignFlips&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Uses the two datasets to learn the matrix :attr:`~graspologic.align.SignFlips.Q_` that aligns the</span>
 <span class="sd">        first dataset with the second.</span>
 
