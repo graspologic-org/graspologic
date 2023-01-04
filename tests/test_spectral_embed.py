@@ -11,8 +11,8 @@ from numpy.random import normal, poisson
 from numpy.testing import assert_equal
 from scipy.sparse import csr_matrix
 from sklearn.base import clone
-from sklearn.mixture import GaussianMixture
 from sklearn.metrics import adjusted_rand_score, pairwise_distances
+from sklearn.mixture import GaussianMixture
 
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
