@@ -221,6 +221,5 @@ class TestLatentDistributionTest(unittest.TestCase):
         self.assertTrue(ldt_alt[1] <= 0.05)
 
 
-
 if __name__ == "__main__":
     unittest.main()
