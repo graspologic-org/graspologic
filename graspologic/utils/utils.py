@@ -367,7 +367,7 @@ def remove_loops(graph: GraphRepresentation) -> Union[np.ndarray, csr_matrix]:
     return graph
 
 
-LaplacianFormType = Literal["I-DAD", "DAD", "R-DAD"]
+LaplacianFormType = Literal["DAD", "R-DAD"]
 
 
 def to_laplacian(
@@ -378,8 +378,8 @@ def to_laplacian(
     r"""
     A function to convert graph adjacency matrix to graph Laplacian.
 
-    Currently supports I-DAD, DAD, and R-DAD Laplacians, where D is the diagonal matrix
-    of degrees of each node, I is the identity matrix, and A is the adjacency matrix.
+    Currently supports DAD and R-DAD Laplacians, where D is the diagonal matrix
+    of degrees of each node and A is the adjacency matrix.
 
     R-DAD is regularized Laplacian: where :math:`D_t = D + regularizer \times I`.
 
@@ -389,10 +389,8 @@ def to_laplacian(
         Either array-like, (n_vertices, n_vertices) numpy array,
         scipy.sparse.csr_matrix, or an object of type networkx.Graph.
 
-    form: {'I-DAD', 'DAD' (default), 'R-DAD'}, string, optional
+    form: {'DAD' (default), 'R-DAD'}, string, optional
 
-        - 'I-DAD'
-            Computes :math:`L = I - D_i^{-1/2} A D_i^{-1/2}`
         - 'DAD'
             Computes :math:`L = D_o^{-1/2} A D_i^{-1/2}`
         - 'R-DAD'
@@ -432,7 +430,7 @@ def to_laplacian(
 
     """
 
-    valid_inputs = ["I-DAD", "DAD", "R-DAD"]
+    valid_inputs = ["DAD", "R-DAD"]
     if form not in valid_inputs:
         raise TypeError("Unsuported Laplacian normalization")
 
@@ -468,10 +466,7 @@ def to_laplacian(
     in_root = diag(in_root)  # just change to sparse diag for sparse support
     out_root = diag(out_root)
 
-    if form == "I-DAD":
-        L = diag(in_degree) - A
-        L = in_root @ L @ in_root
-    elif form == "DAD" or form == "R-DAD":
+    if form == "DAD" or form == "R-DAD":
         L = out_root @ A @ in_root
     if is_symmetric(A):
         return symmetrize(
