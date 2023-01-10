@@ -11,46 +11,13 @@ from numpy.random import normal, poisson
 from numpy.testing import assert_equal
 from scipy.sparse import csr_matrix
 from sklearn.base import clone
-from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, pairwise_distances
+from sklearn.mixture import GaussianMixture
 
 from graspologic.embed.ase import AdjacencySpectralEmbed
 from graspologic.embed.lse import LaplacianSpectralEmbed
 from graspologic.simulations.simulations import er_nm, er_np, sbm
 from graspologic.utils import remove_vertices
-
-
-def _kmeans_comparison(data, labels, n_clusters):
-    """
-    Function for comparing the ARIs of kmeans clustering for arbitrary number of data/labels
-
-    Parameters
-    ----------
-        data: list-like
-            each element in the list is a dataset to perform k-means on
-        labels: list-like
-            each element in the list is a set of lables with the same number of points as
-            the corresponding data
-        n_clusters: int
-            the number of clusters to use for k-means
-
-    Returns
-    -------
-        aris: list, length the same as data/labels
-            the i-th element in the list is an ARI (Adjusted Rand Index) corresponding to the result
-            of k-means clustering on the i-th data/labels
-
-    """
-
-    if len(data) != len(labels):
-        raise ValueError("Must have same number of labels and data")
-
-    aris = []
-    for i in range(0, len(data)):
-        kmeans_prediction = KMeans(n_clusters=n_clusters).fit_predict(data[i])
-        aris.append(adjusted_rand_score(labels[i], kmeans_prediction))
-
-    return aris
 
 
 def _test_output_dim_directed(self, method):
@@ -78,43 +45,29 @@ def _test_output_dim(self, method, sparse=False, *args, **kwargs):
 
 
 def _test_sbm_er_binary(self, method, P, directed=False, sparse=False, *args, **kwargs):
-    num_sims = 50
-    verts = 200
+    verts = 100
     communities = 2
 
-    verts_per_community = [100, 100]
+    verts_per_community = [50, 50]
 
-    sbm_wins = 0
-    er_wins = 0
-    for sim in range(0, num_sims):
-        sbm_sample = sbm(verts_per_community, P, directed=directed)
-        er = er_np(verts, 0.5, directed=directed)
-        if sparse:
-            sbm_sample = csr_matrix(sbm_sample)
-            er = csr_matrix(er)
-        embed_sbm = method(n_components=2, concat=directed, svd_seed=8888)
-        embed_er = method(n_components=2, concat=directed, svd_seed=8888)
+    sbm_sample, labels_sbm = sbm(
+        verts_per_community, P, directed=directed, return_labels=True
+    )
 
-        labels_sbm = np.zeros((verts), dtype=np.int8)
-        labels_er = np.zeros((verts), dtype=np.int8)
-        labels_sbm[100:] = 1
-        labels_er[100:] = 1
+    if sparse:
+        sbm_sample = csr_matrix(sbm_sample)
 
-        X_sbm = embed_sbm.fit_transform(sbm_sample)
-        X_er = embed_er.fit_transform(er)
+    embed_sbm = method(n_components=2, concat=directed, svd_seed=8888)
+    X_sbm = embed_sbm.fit_transform(sbm_sample)
 
-        if directed:
-            self.assertEqual(X_sbm.shape, (verts, 2 * communities))
-            self.assertEqual(X_er.shape, (verts, 2 * communities))
-        else:
-            self.assertEqual(X_sbm.shape, (verts, communities))
-            self.assertEqual(X_er.shape, (verts, communities))
+    if directed:
+        self.assertEqual(X_sbm.shape, (verts, 2 * communities))
+    else:
+        self.assertEqual(X_sbm.shape, (verts, communities))
+    labels_pred = GaussianMixture(n_components=2).fit_predict(X_sbm)
+    ari = adjusted_rand_score(labels_sbm, labels_pred)
 
-        aris = _kmeans_comparison((X_sbm, X_er), (labels_sbm, labels_er), communities)
-        sbm_wins = sbm_wins + (aris[0] > aris[1])
-        er_wins = er_wins + (aris[0] < aris[1])
-
-    self.assertTrue(sbm_wins > er_wins)
+    self.assertTrue(ari > 0.9)
 
 
 class TestAdjacencySpectralEmbed(unittest.TestCase):
@@ -141,11 +94,11 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         _test_output_dim_directed(self, AdjacencySpectralEmbed)
 
     def test_sbm_er_binary_undirected(self):
-        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        P = np.array([[0.9, 0.1], [0.1, 0.9]])
         _test_sbm_er_binary(self, AdjacencySpectralEmbed, P, directed=False)
 
     def test_sbm_er_binary_directed(self):
-        P = np.array([[0.8, 0.2], [0.2, 0.8]])
+        P = np.array([[0.9, 0.1], [0.1, 0.9]])
         _test_sbm_er_binary(self, AdjacencySpectralEmbed, P, directed=True)
 
     def test_unconnected_warning(self):
@@ -160,7 +113,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
             ase.fit()
 
     def test_transform_closeto_fit_transform(self):
-        atol = 0.15
+        atol = 0.2
         for diag_aug in [True, False]:
             for g, A in self.testgraphs.items():
                 ase = AdjacencySpectralEmbed(

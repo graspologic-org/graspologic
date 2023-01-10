@@ -1,9 +1,9 @@
+<!-- omit in toc -->
 # graspologic
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 [![PyPI version](https://img.shields.io/pypi/v/graspologic.svg)](https://pypi.org/project/graspologic/)
 [![Downloads shield](https://pepy.tech/badge/graspologic)](https://pepy.tech/project/graspologic)
 ![graspologic CI](https://github.com/microsoft/graspologic/workflows/graspologic%20CI/badge.svg)
-[![DOI](https://zenodo.org/badge/147768493.svg)](https://zenodo.org/badge/latestdoi/147768493)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## `graspologic` is a package for graph statistical algorithms.
@@ -15,6 +15,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 - [Issues](#issues)
+- [Citing `graspologic`](#citing-graspologic)
 
 # Overview
 A graph, or network, provides a mathematically intuitive representation of data with some sort of relationship between items. For example, a social network can be represented as a graph by considering all participants in the social network as nodes, with connections representing whether each pair of individuals in the network are friends with one another. Naively, one might apply traditional statistical techniques to a graph, which neglects the spatial arrangement of nodes within the network and is not utilizing all of the information present in the graph. In this package, we provide utilities and algorithms designed for the processing and analysis of graphs with specialized graph statistical algorithms.
@@ -25,10 +26,13 @@ The official documentation with usage is at https://microsoft.github.io/graspolo
 Please visit the [tutorial section](https://microsoft.github.io/graspologic/latest/tutorials/index.html) in the official website for more in depth usage.
 
 # System Requirements
+<!-- omit in toc -->
 ## Hardware requirements
 `graspologic` package requires only a standard computer with enough RAM to support the in-memory operations.
 
+<!-- omit in toc -->
 ## Software requirements
+<!-- omit in toc -->
 ### OS Requirements
 `graspologic` is tested on the following OSes:
 - Linux x64
@@ -36,20 +40,22 @@ Please visit the [tutorial section](https://microsoft.github.io/graspologic/late
 - Windows 10 x64
 
 And across the following **x86_64** versions of Python:
-- 3.7
 - 3.8
 - 3.9
+- 3.10
 
 If you try to use `graspologic` for a different platform than the ones listed and notice any unexpected behavior,
 please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users
 if we have concrete examples of things not working!
 
 # Installation Guide
+<!-- omit in toc -->
 ## Install from pip
 ```
 pip install graspologic
 ```
 
+<!-- omit in toc -->
 ## Install from Github
 ```
 git clone https://github.com/microsoft/graspologic
