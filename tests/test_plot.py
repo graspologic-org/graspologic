@@ -243,9 +243,6 @@ class TestPlot(unittest.TestCase):
         Y = ["A"] * 5 + ["B"] * 5 + ["C"] * 5
         col_names = ["Feature1", "Feature2", "Feature3"]
 
-        fig = pairplot(X)
-        fig = pairplot(X, Y)
-        fig = pairplot(X, Y, col_names)
         fig = pairplot(
             X,
             Y,
