@@ -308,7 +308,7 @@ class TestLeidenIsolates(unittest.TestCase):
 
         self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)
 
-    def test_isolate_nodes_in_csr_matrix_are_not_returned(self):
+    def test_isolate_nodes_in_csr_array_are_not_returned(self):
         sparse_adj_matrix = nx.to_scipy_sparse_array(self.graph)
 
         self.assertEqual(
@@ -524,7 +524,7 @@ class TestValidEdgeList(unittest.TestCase):
                 weight_default=1.0,
             )
 
-        sparse = scipy.sparse.csr_matrix([])
+        sparse = scipy.sparse.csr_array([])
         with self.assertRaises(ValueError):
             _adjacency_matrix_to_edge_list(
                 matrix=sparse,
@@ -546,7 +546,7 @@ class TestValidEdgeList(unittest.TestCase):
             )
         with self.assertRaises(ValueError):
             _adjacency_matrix_to_edge_list(
-                matrix=scipy.sparse.csr_matrix(data),
+                matrix=scipy.sparse.csr_array(data),
                 identifier=_IdentityMapper(),
                 check_directed=True,
                 is_weighted=True,

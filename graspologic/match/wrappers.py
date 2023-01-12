@@ -83,25 +83,25 @@ def graph_match(
 
     Parameters
     ----------
-    A : {ndarray, csr_matrix, csr_array} of shape (n, n), or a list thereof
+    A : {ndarray, csr_array, csr_array} of shape (n, n), or a list thereof
         The first (potentially multilayer) adjacency matrix to be matched. Multiplex
         networks (e.g. a network with multiple edge types) can be used by inputting a
         list of the adjacency matrices for each edge type.
 
-    B : {ndarray, csr_matrix, csr_array} of shape (m, m), or a list thereof
+    B : {ndarray, csr_array, csr_array} of shape (m, m), or a list thereof
         The second (potentially multilayer) adjacency matrix to be matched. Must have
         the same number of layers as ``A``, but need not have the same size
         (see ``padding``).
 
-    AB : {ndarray, csr_matrix, csr_array} of shape (n, m), or a list thereof, default=None
+    AB : {ndarray, csr_array, csr_array} of shape (n, m), or a list thereof, default=None
         A (potentially multilayer) matrix representing connections from the objects
         indexed in ``A`` to those in ``B``, used for bisected graph matching (see [2]).
 
-    BA : {ndarray, csr_matrix, csr_array} of shape (m, n), or a list thereof, default=None
+    BA : {ndarray, csr_array, csr_array} of shape (m, n), or a list thereof, default=None
         A (potentially multilayer) matrix representing connections from the objects
         indexed in ``B`` to those in ``A``, used for bisected graph matching (see [2]).
 
-    S : {ndarray, csr_matrix, csr_array} of shape (n, m), default=None
+    S : {ndarray, csr_array, csr_array} of shape (n, m), default=None
         A matrix representing the similarity of objects indexed in ``A`` to each object
         indexed in ``B``. Note that the scale (i.e. the norm) of this matrix will affect
         how strongly the similarity (linear) term is weighted relative to the adjacency

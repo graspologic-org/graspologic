@@ -6,7 +6,7 @@ from typing import Optional, Union
 
 import numpy as np
 from beartype import beartype
-from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
+from scipy.sparse import csr_array, hstack, isspmatrix_csr, vstack
 
 from graspologic.types import List
 
@@ -17,7 +17,7 @@ from .svd import SvdAlgorithmType
 
 
 @beartype
-def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
+def _get_omnibus_matrix_sparse(matrices: List[csr_array]) -> csr_array:
     """
     Generate the omnibus matrix from a list of sparse adjacency matrices as described by 'A central limit theorem
     for an omnibus embedding of random dot product graphs.'
@@ -244,7 +244,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or csr_matrix
+        graphs : list of nx.Graph or ndarray, or csr_array
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).

@@ -81,7 +81,7 @@ def _adjacency_matrix_to_edge_list(
     shape = matrix.shape
     if len(shape) != 2 or shape[0] != shape[1]:
         raise ValueError(
-            "graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be "
+            "graphs of type np.ndarray or csr.sparse.csr.csr_array should be "
             "adjacency matrices with n x n shape"
         )
 
@@ -205,7 +205,7 @@ def leiden(
     graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]
         A graph representation, whether a weighted edge list referencing an undirected
         graph, an undirected networkx graph, or an undirected adjacency matrix in either
-        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
+        numpy.ndarray or scipy.sparse.csr_array form. Please see the Notes section
         regarding node ids used.
     starting_communities : Optional[Dict[Any, int]]
         Default is ``None``. An optional community mapping dictionary that contains a node
@@ -419,7 +419,7 @@ def hierarchical_leiden(
         List[Tuple[Any, Any, Union[int, float]]],
         nx.Graph,
         np.ndarray,
-        scipy.sparse.csr_matrix,
+        scipy.sparse.csr_array,
     ],
     max_cluster_size: int = 1000,
     starting_communities: Optional[Dict[str, int]] = None,
@@ -466,7 +466,7 @@ def hierarchical_leiden(
     graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]
         A graph representation, whether a weighted edge list referencing an undirected
         graph, an undirected networkx graph, or an undirected adjacency matrix in either
-        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section
+        numpy.ndarray or scipy.sparse.csr_array form. Please see the Notes section
         regarding node ids used.
     max_cluster_size : int
         Default is ``1000``. Any partition or cluster with

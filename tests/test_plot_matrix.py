@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 import pandas as pd
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 
 from graspologic.plot.plot_matrix import adjplot, matrixplot
 from graspologic.simulations.simulations import er_np
@@ -80,7 +80,7 @@ class TestPlotMatrix(unittest.TestCase):
 
     def test_adjplot_sparse(self):
         X = er_np(10, 0.5)
-        adjplot(csr_matrix(X), plot_type="scattermap")
+        adjplot(csr_array(X), plot_type="scattermap")
 
     def test_matrix_inputs(self):
         X = er_np(100, 0.5)
@@ -194,4 +194,4 @@ class TestPlotMatrix(unittest.TestCase):
 
     def test_matrixplot_sparse(self):
         X = er_np(10, 0.5)
-        adjplot(csr_matrix(X), plot_type="scattermap")
+        adjplot(csr_array(X), plot_type="scattermap")
