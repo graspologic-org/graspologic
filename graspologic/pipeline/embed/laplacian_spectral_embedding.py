@@ -17,6 +17,7 @@ from graspologic.utils import is_fully_connected, pass_to_ranks, remove_loops
 from ...utils import LaplacianFormType
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
+from ._types import NxGraphType
 from .embeddings import Embeddings
 
 __FORMS = ["DAD", "I-DAD", "R-DAD"]
@@ -24,7 +25,7 @@ __FORMS = ["DAD", "I-DAD", "R-DAD"]
 
 @beartype
 def laplacian_spectral_embedding(
-    graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    graph: NxGraphType,
     form: LaplacianFormType = "R-DAD",
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,

@@ -20,12 +20,13 @@ from graspologic.utils import (
 
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
+from ._types import NxGraphType
 from .embeddings import Embeddings
 
 
 @beartype
 def adjacency_spectral_embedding(
-    graph: Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph],
+    graph: NxGraphType,
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: SvdAlgorithmType = "randomized",

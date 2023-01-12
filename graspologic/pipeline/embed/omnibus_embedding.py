@@ -21,12 +21,13 @@ from graspologic.utils import (
 
 from . import __SVD_SOLVER_TYPES
 from ._elbow import _index_of_elbow
+from ._types import NxGraphType
 from .embeddings import Embeddings
 
 
 @beartype
 def omnibus_embedding_pairwise(
-    graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
+    graphs: List[NxGraphType],
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: SvdAlgorithmType = "randomized",
@@ -230,7 +231,7 @@ def omnibus_embedding_pairwise(
 
 
 def _graphs_precondition_checks(
-    graphs: List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]],
+    graphs: List[NxGraphType],
     weight_attribute: str,
 ) -> Optional[str]:
     is_directed = graphs[0].is_directed()
@@ -291,7 +292,7 @@ def _elbow_cut_if_needed(
 
 
 def _augment_graph(
-    graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    graph: NxGraphType,
     node_ids: Set[Hashable],
     weight_attribute: Optional[str],
     perform_augment_diagonal: bool = True,
@@ -311,7 +312,7 @@ def _augment_graph(
 
 
 def _sync_nodes(
-    graph_to_reduce: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    graph_to_reduce: NxGraphType,
     set_of_valid_nodes: Set[Hashable],
 ) -> None:
     to_remove = []
