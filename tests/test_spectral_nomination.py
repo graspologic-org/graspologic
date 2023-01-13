@@ -14,7 +14,7 @@ from graspologic.simulations.simulations import sbm
 n_verts = 50
 p = np.array([[0.7, 0.25, 0.2], [0.25, 0.8, 0.3], [0.2, 0.3, 0.85]])
 labels = np.array([0] * n_verts + [1] * n_verts + [2] * n_verts)
-adj = np.array(sbm(3 * [n_verts], p), dtype=np.int)
+adj = np.array(sbm(3 * [n_verts], p), dtype=int)
 embeder = AdjacencySpectralEmbed()
 pre_embeded = embeder.fit_transform(adj)
 
