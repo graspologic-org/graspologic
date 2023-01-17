@@ -149,7 +149,7 @@ def group_connection_test(
     A2: AdjacencyMatrix,
     labels1: Labels,
     labels2: Labels,
-    density_adjustment: bool = False,
+    density_adjustment: Union[bool, float] = False,
     method: BinomialTestMethod = "fisher",
     combine_method: str = "tippett",
     correct_method: str = "bonferroni",
@@ -401,8 +401,11 @@ def group_connection_test(
     stats_temp = np.empty((K, K), dtype=float)
     stats = _make_adjacency_dataframe(stats_temp, index)
 
-    if density_adjustment:
-        adjustment_factor = compute_density_adjustment(A1, A2)
+    if density_adjustment != False:  # cause could be float
+        if density_adjustment == True:
+            adjustment_factor = compute_density_adjustment(A1, A2)
+        else:
+            adjustment_factor = density_adjustment
     else:
         adjustment_factor = 1.0
 

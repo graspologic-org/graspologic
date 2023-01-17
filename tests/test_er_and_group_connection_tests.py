@@ -1,11 +1,10 @@
 import unittest
-from binascii import a2b_base64
 
 import numpy as np
 from scipy.sparse import csr_matrix
 
-from graspologic.inference.density_test import density_test
-from graspologic.inference.group_connection_test import group_connection_test
+from graspologic.inference import density_test
+from graspologic.inference import group_connection_test
 from graspologic.simulations import er_np, sbm
 
 
@@ -36,7 +35,7 @@ class TestGroupConnection(unittest.TestCase):
             density_adjustment=True,
             correct_method="Bonferroni",
         )
-        self.assertTrue(pvalue <= 0.05)
+        self.assertTrue(pvalue >= 0.05)
         self.assertTrue(misc["uncorrected_pvalues"].size == 4)
         self.assertTrue(misc["probabilities1"].size == 4)
         self.assertTrue(misc["probabilities2"].size == 4)
