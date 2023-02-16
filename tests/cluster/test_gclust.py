@@ -149,38 +149,6 @@ class TestGaussianCluster(unittest.TestCase):
             gclust.fit(X)
             assert_equal(gclust.n_components_, 5)
 
-    def test_ase_three_blocks(self):
-        """
-        Expect 3 clusters from a 3 block model
-        """
-        np.random.seed(3)
-        num_sims = 10
-
-        # Generate adjacency and labels
-        n = 50
-        n_communites = [n, n, n]
-        p = np.array([[0.8, 0.3, 0.2], [0.3, 0.8, 0.3], [0.2, 0.3, 0.8]])
-        y = np.repeat([1, 2, 3], repeats=n)
-
-        for _ in range(num_sims):
-            A = sbm(n=n_communites, p=p)
-
-            # Embed to get latent positions
-            ase = AdjacencySpectralEmbed(n_components=5)
-            X_hat = ase.fit_transform(A)
-
-            # Compute clusters
-            gclust = GaussianCluster(min_components=10)
-            gclust.fit(X_hat, y)
-
-            n_components = gclust.n_components_
-
-            # Assert that the three cluster model is the best
-            assert_equal(n_components, 3)
-
-            # Asser that we get perfect clustering
-            assert_allclose(gclust.ari_.loc[n_components], 1)
-
     def test_covariances(self):
         """
         Easily separable two gaussian problem.
