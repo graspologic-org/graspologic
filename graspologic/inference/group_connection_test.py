@@ -11,7 +11,7 @@ from statsmodels.stats.multitest import multipletests
 from ..types import AdjacencyMatrix, List
 from ..utils import import_graph, is_loopless, is_symmetric, is_unweighted, remove_loops
 from .binomial import BinomialTestMethod, binom_2samp
-from .utils import compute_density_adjustment
+from .utils import compute_density
 
 Labels = Union[np.ndarray, List]
 
@@ -403,7 +403,9 @@ def group_connection_test(
 
     if density_adjustment != False:  # cause could be float
         if density_adjustment == True:
-            adjustment_factor = compute_density_adjustment(A1, A2)
+            density1 = compute_density(A1)
+            density2 = compute_density(A2)
+            adjustment_factor = density1 / density2
         else:
             adjustment_factor = density_adjustment
     else:

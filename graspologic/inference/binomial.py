@@ -88,7 +88,12 @@ def binom_2samp(
     if method == "fisher" and null_ratio == 1.0:
         stat, pvalue = fisher_exact(cont_table, alternative="two-sided")
     elif method == "fisher" and null_ratio != 1.0:
-        stat, pvalue = fisher_exact_nonunity(cont_table, null_ratio=null_ratio)
+        p1 = x1 / n1
+        p2 = null_ratio * x2 / n2
+        odds1 = p1 / (1 - p1)
+        odds2 = p2 / (1 - p2)
+        null_odds = odds1 / odds2
+        stat, pvalue = fisher_exact_nonunity(cont_table, null_odds_ratio=null_odds)
     elif method == "chi2":
         stat, pvalue, _, _ = chi2_contingency(cont_table)
     else:
