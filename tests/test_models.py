@@ -565,7 +565,7 @@ class TestEdgeSwaps(unittest.TestCase):
         cls.A = er_np(20, 0.5)
         cls.B = csr_matrix(cls.A)
         cls.C = nx.from_numpy_array(cls.A)
-        cls.D = nx.from_scipy_sparse_matrix(cls.B)
+        cls.D = nx.from_scipy_sparse_array(cls.B)
 
     def test_numpy_edge_swap(self):
         Swapper = EdgeSwapper(self.A)
