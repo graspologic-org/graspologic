@@ -296,7 +296,7 @@ def _augment_graph(
     weight_attribute: Optional[str],
     perform_augment_diagonal: bool = True,
 ) -> np.ndarray:
-    graph_sparse = nx.to_scipy_sparse_matrix(
+    graph_sparse = nx.to_scipy_sparse_array(
         graph, weight=weight_attribute, nodelist=node_ids
     )
 

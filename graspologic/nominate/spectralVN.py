@@ -121,7 +121,6 @@ class SpectralVertexNomination(BaseEstimator):
             )
 
     def _check_params(self) -> None:
-
         if self.n_neighbors is not None and type(self.n_neighbors) is not int:
             raise TypeError("k must be an integer")
         elif self.n_neighbors is not None and self.n_neighbors <= 0:

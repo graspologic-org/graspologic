@@ -46,7 +46,6 @@ class EdgeSwapper:
 
     @beartype
     def __init__(self, adjacency: AdjacencyMatrix, seed: Optional[int] = None):
-
         weight_check = is_unweighted(adjacency)
         check_argument(weight_check, "adjacency must be unweighted")
 

@@ -812,7 +812,6 @@ def matrixplot(  # type: ignore
         # in the opposite order
         rev_group = list(col_group[::-1])
         for i, sc in enumerate(rev_group):
-
             # Add a new axis when needed
             tick_ax = divider.append_axes(
                 "top", size="1%", pad=col_tick_pad[i], sharex=ax
