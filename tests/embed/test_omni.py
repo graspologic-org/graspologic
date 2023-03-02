@@ -39,7 +39,6 @@ def generate_data(n, seed=1, symetric=True):
 
 
 class TestOmni(unittest.TestCase):
-
     # Below tests omni matrix generation code
     def test_omni_matrix_ones_zeros(self):
         # Should get all ones

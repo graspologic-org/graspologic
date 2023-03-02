@@ -122,7 +122,6 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
         max_level: int = 4,
         delta_criter: float = 0,
     ):
-
         _check_common_inputs(min_components, max_components, cluster_kws)
 
         if cluster_method not in ["gmm", "kmeans"]:

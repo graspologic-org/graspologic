@@ -996,7 +996,6 @@ def _distplot(
     xlabel: str = "",
     ylabel: str = "Density",
 ) -> matplotlib.pyplot.Axes:
-
     plt.figure(figsize=figsize)
     ax = plt.gca()
     palette = sns.color_palette(palette)
