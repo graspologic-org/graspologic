@@ -196,7 +196,7 @@ def laplacian_spectral_embedding(
 
     node_labels = np.array(list(graph.nodes()))
 
-    graph_as_csr = nx.to_scipy_sparse_matrix(
+    graph_as_csr = nx.to_scipy_sparse_array(
         graph, weight=used_weight_attribute, nodelist=node_labels
     )
 

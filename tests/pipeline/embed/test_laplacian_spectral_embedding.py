@@ -123,7 +123,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
 
     def test_dimensions(self):
         graph = self.graph.copy()
-        sparse = nx.to_scipy_sparse_matrix(graph)
+        sparse = nx.to_scipy_sparse_array(graph)
         loopless = graspologic.utils.remove_loops(sparse)
         ranked = graspologic.utils.pass_to_ranks(loopless)
         lse = LaplacianSpectralEmbed(
