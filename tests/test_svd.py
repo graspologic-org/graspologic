@@ -36,7 +36,7 @@ class TestSVD(unittest.TestCase):
             ]
         )
         P = X @ X.T
-        A = np.random.binomial(1, P).astype(np.float)
+        A = np.random.binomial(1, P).astype(float)
 
         n_components = 3
 
@@ -75,7 +75,7 @@ class TestSVD(unittest.TestCase):
             ]
         )
         P = X @ X.T
-        A = np.random.binomial(1, P).astype(np.float)
+        A = np.random.binomial(1, P).astype(float)
         A = symmetrize(A, method="triu")
         n_components = 3
 

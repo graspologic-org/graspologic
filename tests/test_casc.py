@@ -13,6 +13,7 @@ from graspologic.simulations import sbm
 
 np.random.seed(5)
 
+
 # UTILITY FUNCTIONS
 def gen_covariates(m1, m2, labels, type, ndim=3):
     n = len(labels)
@@ -107,7 +108,6 @@ def test_labels_match(A, labels, M):
 
 
 def test_wrong_inputs(A, X):
-
     with pytest.raises(ValueError):
         "wrong assortative type"
         CASE(assortative="1")
