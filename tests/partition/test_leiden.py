@@ -35,7 +35,6 @@ class TestHierarchicalCluster(unittest.TestCase):
         # test from_native indirectly through calling graspologic.partition.hierarchical_leiden()
 
     def test_final_hierarchical_clustering(self):
-
         hierarchical_clusters = HierarchicalClusters(
             [
                 HierarchicalCluster("1", 0, None, 0, False),

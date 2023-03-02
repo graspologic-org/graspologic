@@ -55,7 +55,6 @@ class OrthogonalProcrustes(BaseAlign):
     def __init__(
         self,
     ) -> None:
-
         super().__init__()
 
     def fit(self, X: np.ndarray, Y: np.ndarray) -> "OrthogonalProcrustes":

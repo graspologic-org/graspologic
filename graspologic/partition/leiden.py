@@ -138,7 +138,7 @@ def _community_python_to_native(
     if starting_communities is None:
         return None
     native_safe: Dict[str, int] = {}
-    for (node_id, partition) in starting_communities.items():
+    for node_id, partition in starting_communities.items():
         node_id_as_str = identity(node_id)
         native_safe[node_id_as_str] = partition
     return native_safe
@@ -399,7 +399,6 @@ def _from_native(
     native_cluster: gn.HierarchicalCluster,
     identifier: _IdentityMapper,
 ) -> HierarchicalCluster:
-
     if not isinstance(native_cluster, gn.HierarchicalCluster):
         raise TypeError(
             "This class method is only valid for graspologic_native.HierarchicalCluster"
